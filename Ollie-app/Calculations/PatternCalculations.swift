@@ -5,14 +5,46 @@
 //  Pattern analysis calculations for trigger success rates
 
 import Foundation
+import SwiftUI
 
 /// A trigger pattern that may lead to potty events
 struct PatternTrigger: Identifiable, Equatable {
     let id: String
     let name: String       // "Na slaap", "Na eten"
-    let emoji: String      // "😴", "🍽️"
+    let emoji: String      // "😴", "🍽️" (legacy)
+    let iconName: String   // SF Symbol name
+    let iconColor: Color   // Icon tint color
     let outdoorCount: Int
     let indoorCount: Int
+
+    /// Legacy initializer with emoji
+    init(id: String, name: String, emoji: String, outdoorCount: Int, indoorCount: Int) {
+        self.id = id
+        self.name = name
+        self.emoji = emoji
+        self.outdoorCount = outdoorCount
+        self.indoorCount = indoorCount
+
+        // Map emoji to icon
+        switch emoji {
+        case "😴": self.iconName = "moon.fill"; self.iconColor = .ollieSleep
+        case "🍽️": self.iconName = "fork.knife"; self.iconColor = .ollieAccent
+        case "🚶": self.iconName = "figure.walk"; self.iconColor = .ollieAccent
+        case "💧": self.iconName = "cup.and.saucer.fill"; self.iconColor = .ollieInfo
+        case "🎾": self.iconName = "scope"; self.iconColor = .ollieAccent
+        default: self.iconName = "circle.fill"; self.iconColor = .ollieMuted
+        }
+    }
+
+    init(id: String, name: String, iconName: String, iconColor: Color, outdoorCount: Int, indoorCount: Int) {
+        self.id = id
+        self.name = name
+        self.emoji = "" // Legacy
+        self.iconName = iconName
+        self.iconColor = iconColor
+        self.outdoorCount = outdoorCount
+        self.indoorCount = indoorCount
+    }
 
     var totalCount: Int {
         outdoorCount + indoorCount

@@ -5,6 +5,7 @@
 //  Potty prediction calculations ported from web app's predictions.js
 
 import Foundation
+import SwiftUI
 
 /// Urgency level for potty predictions
 enum PottyUrgency: Equatable {
@@ -135,7 +136,7 @@ struct PredictionCalculations {
         )
     }
 
-    /// Get emoji for urgency level
+    /// Get emoji for urgency level (legacy)
     static func emoji(for urgency: PottyUrgency) -> String {
         switch urgency {
         case .justWent:
@@ -152,6 +153,46 @@ struct PredictionCalculations {
             return "⚠️"
         case .unknown:
             return "❓"
+        }
+    }
+
+    /// Get SF Symbol icon name for urgency level
+    static func iconName(for urgency: PottyUrgency) -> String {
+        switch urgency {
+        case .justWent:
+            return "checkmark.circle.fill"
+        case .normal:
+            return "clock.fill"
+        case .attention:
+            return "clock.badge.exclamationmark.fill"
+        case .soon:
+            return "exclamationmark.triangle.fill"
+        case .overdue:
+            return "bell.badge.fill"
+        case .postAccident:
+            return "exclamationmark.triangle.fill"
+        case .unknown:
+            return "questionmark.circle.fill"
+        }
+    }
+
+    /// Get icon color for urgency level
+    static func iconColor(for urgency: PottyUrgency) -> Color {
+        switch urgency {
+        case .justWent:
+            return .ollieSuccess
+        case .normal:
+            return .ollieInfo
+        case .attention:
+            return .ollieAccent
+        case .soon:
+            return .ollieWarning
+        case .overdue:
+            return .ollieDanger
+        case .postAccident:
+            return .ollieDanger
+        case .unknown:
+            return .ollieMuted
         }
     }
 

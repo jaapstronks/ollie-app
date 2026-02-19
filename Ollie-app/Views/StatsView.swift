@@ -3,39 +3,43 @@
 //  Ollie-app
 //
 //  Statistics dashboard showing potty gaps, streaks, and sleep data
+//  Uses liquid glass design for iOS 26 aesthetic
 
 import SwiftUI
 
 /// Full statistics view with all metrics
+/// Uses liquid glass card styling throughout
 struct StatsView: View {
     @ObservedObject var viewModel: TimelineViewModel
+
+    @Environment(\.colorScheme) private var colorScheme
 
     var body: some View {
         NavigationView {
             ScrollView {
-                VStack(spacing: 16) {
+                VStack(spacing: 20) {
                     // Streak section
-                    statsSection(title: "Buiten Streak") {
+                    statsSection(title: "Buiten Streak", icon: "flame.fill", tint: .ollieAccent) {
                         StreakStatsCard(streakInfo: viewModel.streakInfo)
                     }
 
                     // Potty gaps section
-                    statsSection(title: "Plas Intervallen (7 dagen)") {
+                    statsSection(title: "Plas Intervallen (7 dagen)", icon: "chart.bar.fill", tint: .ollieInfo) {
                         GapStatsCard(events: recentEvents)
                     }
 
                     // Today's summary
-                    statsSection(title: "Vandaag") {
+                    statsSection(title: "Vandaag", icon: "calendar", tint: .ollieSuccess) {
                         TodayStatsCard(events: todayEvents)
                     }
 
                     // Sleep summary
-                    statsSection(title: "Slaap Vandaag") {
+                    statsSection(title: "Slaap Vandaag", icon: "moon.fill", tint: .ollieSleep) {
                         SleepStatsCard(events: todayEvents)
                     }
 
                     // Pattern analysis
-                    statsSection(title: "Patronen (7 dagen)") {
+                    statsSection(title: "Patronen (7 dagen)", icon: "waveform.path.ecg", tint: .ollieInfo) {
                         PatternAnalysisCard(analysis: viewModel.patternAnalysis)
                     }
                 }
@@ -56,12 +60,25 @@ struct StatsView: View {
     }
 
     @ViewBuilder
-    private func statsSection<Content: View>(title: String, @ViewBuilder content: () -> Content) -> some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text(title)
-                .font(.headline)
-                .foregroundColor(.secondary)
-                .padding(.horizontal, 4)
+    private func statsSection<Content: View>(
+        title: String,
+        icon: String,
+        tint: Color,
+        @ViewBuilder content: () -> Content
+    ) -> some View {
+        VStack(alignment: .leading, spacing: 10) {
+            // Section header with icon
+            HStack(spacing: 8) {
+                Image(systemName: icon)
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundStyle(tint)
+
+                Text(title)
+                    .font(.subheadline)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(.secondary)
+            }
+            .padding(.horizontal, 4)
 
             content()
         }
@@ -73,6 +90,8 @@ struct StatsView: View {
 struct StreakStatsCard: View {
     let streakInfo: StreakInfo
 
+    @Environment(\.colorScheme) private var colorScheme
+
     var body: some View {
         VStack(spacing: 12) {
             HStack {
@@ -82,8 +101,7 @@ struct StreakStatsCard: View {
                     emoji: StreakCalculations.emoji(for: streakInfo.currentStreak)
                 )
 
-                Divider()
-                    .frame(height: 40)
+                glassSeperator
 
                 StatItem(
                     value: "\(streakInfo.bestStreak)",
@@ -95,12 +113,18 @@ struct StreakStatsCard: View {
             if streakInfo.currentStreak > 0 {
                 Text(StreakCalculations.message(for: streakInfo.currentStreak))
                     .font(.subheadline)
-                    .foregroundColor(.orange)
+                    .fontWeight(.medium)
+                    .foregroundStyle(Color.ollieAccent)
             }
         }
         .padding()
-        .background(Color(.secondarySystemBackground))
-        .cornerRadius(12)
+        .glassCard(tint: .accent)
+    }
+
+    private var glassSeperator: some View {
+        Rectangle()
+            .fill(Color.primary.opacity(colorScheme == .dark ? 0.1 : 0.08))
+            .frame(width: 1, height: 40)
     }
 }
 
@@ -108,6 +132,8 @@ struct StreakStatsCard: View {
 
 struct GapStatsCard: View {
     let events: [PuppyEvent]
+
+    @Environment(\.colorScheme) private var colorScheme
 
     private var gaps: [PottyGap] {
         GapCalculations.recentGaps(events: events, days: 7)
@@ -121,7 +147,7 @@ struct GapStatsCard: View {
         VStack(spacing: 12) {
             if stats.count == 0 {
                 Text("Nog niet genoeg data")
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
                     .padding()
             } else {
                 HStack {
@@ -131,8 +157,7 @@ struct GapStatsCard: View {
                         emoji: "📊"
                     )
 
-                    Divider()
-                        .frame(height: 40)
+                    glassSeperator
 
                     StatItem(
                         value: GapCalculations.formatDuration(stats.avgMinutes),
@@ -141,7 +166,7 @@ struct GapStatsCard: View {
                     )
                 }
 
-                Divider()
+                glassDivider
 
                 HStack {
                     StatItem(
@@ -150,8 +175,7 @@ struct GapStatsCard: View {
                         emoji: "⚡️"
                     )
 
-                    Divider()
-                        .frame(height: 40)
+                    glassSeperator
 
                     StatItem(
                         value: GapCalculations.formatDuration(stats.maxMinutes),
@@ -160,18 +184,18 @@ struct GapStatsCard: View {
                     )
                 }
 
-                Divider()
+                glassDivider
 
                 // Indoor vs outdoor breakdown
                 HStack {
                     Label("\(stats.outdoorCount) buiten", systemImage: "leaf.fill")
-                        .foregroundColor(.green)
+                        .foregroundStyle(Color.ollieSuccess)
                         .font(.subheadline)
 
                     Spacer()
 
                     Label("\(stats.indoorCount) binnen", systemImage: "house.fill")
-                        .foregroundColor(stats.indoorCount > 0 ? .orange : .secondary)
+                        .foregroundStyle(stats.indoorCount > 0 ? Color.ollieDanger : .secondary)
                         .font(.subheadline)
 
                     Spacer()
@@ -179,13 +203,24 @@ struct GapStatsCard: View {
                     Text("\(stats.outdoorPercentage)% buiten")
                         .font(.subheadline)
                         .fontWeight(.semibold)
-                        .foregroundColor(stats.outdoorPercentage >= 80 ? .green : .orange)
+                        .foregroundStyle(stats.outdoorPercentage >= 80 ? Color.ollieSuccess : Color.ollieWarning)
                 }
             }
         }
         .padding()
-        .background(Color(.secondarySystemBackground))
-        .cornerRadius(12)
+        .glassCard(tint: .info)
+    }
+
+    private var glassSeperator: some View {
+        Rectangle()
+            .fill(Color.primary.opacity(colorScheme == .dark ? 0.1 : 0.08))
+            .frame(width: 1, height: 40)
+    }
+
+    private var glassDivider: some View {
+        Rectangle()
+            .fill(Color.primary.opacity(colorScheme == .dark ? 0.08 : 0.06))
+            .frame(height: 1)
     }
 }
 
@@ -193,6 +228,8 @@ struct GapStatsCard: View {
 
 struct TodayStatsCard: View {
     let events: [PuppyEvent]
+
+    @Environment(\.colorScheme) private var colorScheme
 
     private var pottyCount: Int {
         events.filter { $0.type == .plassen }.count
@@ -223,8 +260,7 @@ struct TodayStatsCard: View {
                     emoji: "🚽"
                 )
 
-                Divider()
-                    .frame(height: 40)
+                glassSeperator
 
                 StatItem(
                     value: "\(mealCount)",
@@ -232,8 +268,7 @@ struct TodayStatsCard: View {
                     emoji: "🍽️"
                 )
 
-                Divider()
-                    .frame(height: 40)
+                glassSeperator
 
                 StatItem(
                     value: "\(poopCount)",
@@ -243,26 +278,37 @@ struct TodayStatsCard: View {
             }
 
             if pottyCount > 0 {
-                Divider()
+                glassDivider
 
                 HStack {
                     Label("\(outdoorCount) buiten", systemImage: "leaf.fill")
-                        .foregroundColor(.green)
+                        .foregroundStyle(Color.ollieSuccess)
                         .font(.subheadline)
 
                     Spacer()
 
                     if indoorCount > 0 {
                         Label("\(indoorCount) binnen", systemImage: "house.fill")
-                            .foregroundColor(.orange)
+                            .foregroundStyle(Color.ollieDanger)
                             .font(.subheadline)
                     }
                 }
             }
         }
         .padding()
-        .background(Color(.secondarySystemBackground))
-        .cornerRadius(12)
+        .glassCard(tint: .success)
+    }
+
+    private var glassSeperator: some View {
+        Rectangle()
+            .fill(Color.primary.opacity(colorScheme == .dark ? 0.1 : 0.08))
+            .frame(width: 1, height: 40)
+    }
+
+    private var glassDivider: some View {
+        Rectangle()
+            .fill(Color.primary.opacity(colorScheme == .dark ? 0.08 : 0.06))
+            .frame(height: 1)
     }
 }
 
@@ -271,12 +317,24 @@ struct TodayStatsCard: View {
 struct SleepStatsCard: View {
     let events: [PuppyEvent]
 
+    @Environment(\.colorScheme) private var colorScheme
+
     private var totalSleepMinutes: Int {
         SleepCalculations.totalSleepToday(events: events)
     }
 
     private var sleepSessions: Int {
         events.filter { $0.type == .slapen }.count
+    }
+
+    private var goalMinutes: Int { 18 * 60 }
+
+    private var progress: Double {
+        min(1.0, Double(totalSleepMinutes) / Double(goalMinutes))
+    }
+
+    private var progressColor: Color {
+        progress >= 0.8 ? Color.ollieSuccess : Color.ollieSleep
     }
 
     var body: some View {
@@ -288,8 +346,7 @@ struct SleepStatsCard: View {
                     emoji: "😴"
                 )
 
-                Divider()
-                    .frame(height: 40)
+                glassSeperator
 
                 StatItem(
                     value: "\(sleepSessions)",
@@ -298,39 +355,56 @@ struct SleepStatsCard: View {
                 )
             }
 
-            // Progress toward 18h daily sleep goal
-            let goalMinutes = 18 * 60
-            let progress = min(1.0, Double(totalSleepMinutes) / Double(goalMinutes))
-
-            VStack(alignment: .leading, spacing: 4) {
+            // Progress toward 18h daily sleep goal with glass styling
+            VStack(alignment: .leading, spacing: 6) {
                 HStack {
                     Text("Doel: 18 uur")
                         .font(.caption)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                     Spacer()
                     Text("\(Int(progress * 100))%")
                         .font(.caption)
-                        .fontWeight(.semibold)
-                        .foregroundColor(progress >= 0.8 ? .green : .orange)
+                        .fontWeight(.bold)
+                        .foregroundStyle(progressColor)
                 }
 
+                // Glass progress bar
                 GeometryReader { geometry in
                     ZStack(alignment: .leading) {
-                        RoundedRectangle(cornerRadius: 4)
-                            .fill(Color.gray.opacity(0.2))
-                            .frame(height: 8)
+                        RoundedRectangle(cornerRadius: 5)
+                            .fill(progressColor.opacity(colorScheme == .dark ? 0.15 : 0.1))
+                            .frame(height: 10)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 5)
+                                    .strokeBorder(progressColor.opacity(0.2), lineWidth: 0.5)
+                            )
 
-                        RoundedRectangle(cornerRadius: 4)
-                            .fill(progress >= 0.8 ? Color.green : Color.orange)
-                            .frame(width: geometry.size.width * progress, height: 8)
+                        RoundedRectangle(cornerRadius: 5)
+                            .fill(
+                                LinearGradient(
+                                    colors: [
+                                        progressColor,
+                                        progressColor.opacity(0.8)
+                                    ],
+                                    startPoint: .leading,
+                                    endPoint: .trailing
+                                )
+                            )
+                            .frame(width: geometry.size.width * progress, height: 10)
+                            .shadow(color: progressColor.opacity(0.3), radius: 4, y: 2)
                     }
                 }
-                .frame(height: 8)
+                .frame(height: 10)
             }
         }
         .padding()
-        .background(Color(.secondarySystemBackground))
-        .cornerRadius(12)
+        .glassCard(tint: .sleep)
+    }
+
+    private var glassSeperator: some View {
+        Rectangle()
+            .fill(Color.primary.opacity(colorScheme == .dark ? 0.1 : 0.08))
+            .frame(width: 1, height: 40)
     }
 
     private func formatSleepTime(_ minutes: Int) -> String {
@@ -351,12 +425,44 @@ struct SleepStatsCard: View {
 struct StatItem: View {
     let value: String
     let label: String
-    let emoji: String
+    let iconName: String
+    let iconColor: Color
+
+    /// Legacy initializer with emoji (will be removed)
+    init(value: String, label: String, emoji: String) {
+        self.value = value
+        self.label = label
+        // Map common emoji to icons
+        switch emoji {
+        case "🔥", "🔥🔥", "🔥🔥🔥": self.iconName = "flame.fill"; self.iconColor = .ollieAccent
+        case "💔": self.iconName = "heart.slash.fill"; self.iconColor = .ollieDanger
+        case "👍": self.iconName = "hand.thumbsup.fill"; self.iconColor = .ollieSuccess
+        case "🏆": self.iconName = "trophy.fill"; self.iconColor = .ollieAccent
+        case "📊": self.iconName = "chart.bar.fill"; self.iconColor = .ollieInfo
+        case "📈": self.iconName = "chart.line.uptrend.xyaxis"; self.iconColor = .ollieInfo
+        case "⚡️": self.iconName = "bolt.fill"; self.iconColor = .ollieWarning
+        case "🐢": self.iconName = "tortoise.fill"; self.iconColor = .ollieMuted
+        case "🚽": self.iconName = "drop.fill"; self.iconColor = .ollieInfo
+        case "🍽️": self.iconName = "fork.knife"; self.iconColor = .ollieAccent
+        case "💩": self.iconName = "circle.inset.filled"; self.iconColor = .ollieAccent
+        case "😴": self.iconName = "moon.fill"; self.iconColor = .ollieSleep
+        case "🛏️": self.iconName = "bed.double.fill"; self.iconColor = .ollieSleep
+        default: self.iconName = "circle.fill"; self.iconColor = .ollieMuted
+        }
+    }
+
+    init(value: String, label: String, iconName: String, iconColor: Color) {
+        self.value = value
+        self.label = label
+        self.iconName = iconName
+        self.iconColor = iconColor
+    }
 
     var body: some View {
         VStack(spacing: 4) {
-            Text(emoji)
+            Image(systemName: iconName)
                 .font(.title2)
+                .foregroundStyle(iconColor)
 
             Text(value)
                 .font(.title2)

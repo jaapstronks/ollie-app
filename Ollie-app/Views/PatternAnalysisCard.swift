@@ -43,10 +43,11 @@ struct TriggerRow: View {
 
     var body: some View {
         VStack(spacing: 6) {
-            // Header with emoji, name, and success rate
+            // Header with icon, name, and success rate
             HStack {
-                Text(trigger.emoji)
+                Image(systemName: trigger.iconName)
                     .font(.title3)
+                    .foregroundStyle(trigger.iconColor)
 
                 Text(trigger.name)
                     .font(.subheadline)
@@ -84,13 +85,13 @@ struct TriggerRow: View {
     private var successColor: Color {
         let rate = trigger.successRate
         if rate >= 80 {
-            return .green
+            return .ollieSuccess
         } else if rate >= 60 {
-            return .yellow
+            return .ollieAccent
         } else if rate >= 40 {
-            return .orange
+            return .ollieWarning
         } else {
-            return .red
+            return .ollieDanger
         }
     }
 }
@@ -118,14 +119,15 @@ struct PatternAnalysisCompact: View {
     }
 }
 
-/// Small badge showing trigger emoji and success rate
+/// Small badge showing trigger icon and success rate
 struct CompactTriggerBadge: View {
     let trigger: PatternTrigger
 
     var body: some View {
         HStack(spacing: 4) {
-            Text(trigger.emoji)
+            Image(systemName: trigger.iconName)
                 .font(.caption)
+                .foregroundStyle(trigger.iconColor)
 
             Text("\(trigger.successRate)%")
                 .font(.caption)
@@ -141,13 +143,13 @@ struct CompactTriggerBadge: View {
     private var successColor: Color {
         let rate = trigger.successRate
         if rate >= 80 {
-            return .green
+            return .ollieSuccess
         } else if rate >= 60 {
-            return .yellow
+            return .ollieAccent
         } else if rate >= 40 {
-            return .orange
+            return .ollieWarning
         } else {
-            return .red
+            return .ollieDanger
         }
     }
 }
