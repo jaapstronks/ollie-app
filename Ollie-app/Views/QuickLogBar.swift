@@ -5,20 +5,25 @@
 
 import SwiftUI
 
+/// Bottom bar with quick-log buttons for common events
 struct QuickLogBar: View {
-    let onTap: (EventType) -> Void
+    let onQuickLog: (EventType) -> Void
 
     var body: some View {
         HStack(spacing: 0) {
-            ForEach(Constants.quickLogTypes, id: \.self) { type in
-                QuickLogButton(type: type) {
-                    onTap(type)
-                }
+            ForEach(Constants.quickLogTypes) { type in
+                QuickLogButton(type: type, action: { onQuickLog(type) })
             }
         }
         .padding(.horizontal, 8)
         .padding(.vertical, 12)
-        .background(.ultraThinMaterial)
+        .background(Color(.systemBackground))
+        .overlay(
+            Rectangle()
+                .frame(height: 0.5)
+                .foregroundColor(Color(.separator)),
+            alignment: .top
+        )
     }
 }
 
@@ -26,36 +31,33 @@ struct QuickLogButton: View {
     let type: EventType
     let action: () -> Void
 
-    private var emoji: String {
-        Constants.eventEmoji[type] ?? "📌"
-    }
-
-    private var label: String {
-        Constants.eventLabels[type] ?? type.rawValue
-    }
-
     var body: some View {
-        Button(action: action) {
+        Button {
+            HapticFeedback.medium()
+            action()
+        } label: {
             VStack(spacing: 4) {
-                Text(emoji)
+                Text(type.emoji)
                     .font(.title2)
-                Text(label)
+                Text(type.label)
                     .font(.caption2)
-                    .foregroundStyle(.primary)
+                    .foregroundColor(.secondary)
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, 8)
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
+        .accessibilityLabel("\(type.label) loggen")
+        .accessibilityHint("Dubbeltik om \(type.label.lowercased()) te registreren")
     }
 }
 
 #Preview {
     VStack {
         Spacer()
-        QuickLogBar { type in
-            print("Tapped: \(type)")
-        }
+        QuickLogBar(onQuickLog: { type in
+            print("Quick log: \(type)")
+        })
     }
 }

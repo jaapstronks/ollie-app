@@ -5,75 +5,122 @@
 
 import SwiftUI
 
+/// Single event row in the timeline
 struct EventRow: View {
     let event: PuppyEvent
-
-    private var emoji: String {
-        Constants.eventEmoji[event.type] ?? "📌"
-    }
-
-    private var label: String {
-        Constants.eventLabels[event.type] ?? event.type.rawValue
-    }
-
-    private var timeString: String {
-        DateHelpers.formatTime(event.time)
-    }
-
-    private var locationBadge: String? {
-        guard let location = event.location else { return nil }
-        return location == .buiten ? "buiten" : "binnen"
-    }
 
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
             // Time
-            Text(timeString)
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-                .monospacedDigit()
-                .frame(width: 50, alignment: .leading)
+            Text(event.time.timeString)
+                .font(.caption)
+                .foregroundColor(.secondary)
+                .frame(width: 44, alignment: .trailing)
 
             // Emoji
-            Text(emoji)
+            Text(event.type.emoji)
                 .font(.title2)
 
             // Content
-            VStack(alignment: .leading, spacing: 4) {
-                HStack(spacing: 8) {
-                    Text(label)
+            VStack(alignment: .leading, spacing: 2) {
+                HStack(spacing: 6) {
+                    Text(event.type.label)
                         .font(.body)
                         .fontWeight(.medium)
 
-                    if let badge = locationBadge {
-                        Text(badge)
-                            .font(.caption)
-                            .padding(.horizontal, 6)
-                            .padding(.vertical, 2)
-                            .background(badge == "buiten" ? Color.green.opacity(0.2) : Color.orange.opacity(0.2))
-                            .foregroundStyle(badge == "buiten" ? .green : .orange)
-                            .clipShape(Capsule())
+                    if let location = event.location {
+                        Text("(\(location.label.lowercased()))")
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
                     }
                 }
 
                 if let note = event.note, !note.isEmpty {
                     Text(note)
                         .font(.subheadline)
-                        .foregroundStyle(.secondary)
+                        .foregroundColor(.secondary)
+                        .lineLimit(2)
+                }
+
+                if let who = event.who, !who.isEmpty {
+                    Label(who, systemImage: "person")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+
+                if let exercise = event.exercise {
+                    Label(exercise, systemImage: "figure.walk")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+
+                if let result = event.result {
+                    Label(result, systemImage: "checkmark.circle")
+                        .font(.caption)
+                        .foregroundColor(.green)
+                }
+
+                if let duration = event.durationMin {
+                    Label("\(duration) min", systemImage: "timer")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
                 }
             }
 
             Spacer()
+
+            // Media indicator
+            if event.photo != nil || event.video != nil {
+                Image(systemName: event.video != nil ? "video" : "photo")
+                    .foregroundColor(.secondary)
+            }
         }
-        .padding(.vertical, 8)
+        .padding(.horizontal)
+        .padding(.vertical, 10)
+        .contentShape(Rectangle())
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(accessibilityDescription)
+    }
+
+    private var accessibilityDescription: String {
+        var parts = [event.time.timeString, event.type.label]
+        if let location = event.location {
+            parts.append(location.label)
+        }
+        if let note = event.note, !note.isEmpty {
+            parts.append(note)
+        }
+        if let who = event.who, !who.isEmpty {
+            parts.append("met \(who)")
+        }
+        return parts.joined(separator: ", ")
     }
 }
 
 #Preview {
     VStack {
-        EventRow(event: PuppyEvent(type: .plassen, location: .buiten, note: "Na het wakker worden"))
-        EventRow(event: PuppyEvent(type: .eten))
-        EventRow(event: PuppyEvent(type: .slapen, note: "In de bench"))
+        EventRow(event: PuppyEvent(
+            time: Date(),
+            type: .plassen,
+            location: .buiten,
+            note: "Na het ontbijt"
+        ))
+
+        Divider()
+
+        EventRow(event: PuppyEvent(
+            time: Date(),
+            type: .training,
+            exercise: "Zit",
+            result: "Goed gedaan!"
+        ))
+
+        Divider()
+
+        EventRow(event: PuppyEvent(
+            time: Date(),
+            type: .sociaal,
+            who: "Buurhond Sasha"
+        ))
     }
-    .padding()
 }

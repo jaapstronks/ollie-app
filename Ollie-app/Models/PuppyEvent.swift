@@ -5,8 +5,8 @@
 
 import Foundation
 
-// Event types matching the web app
-enum EventType: String, Codable, CaseIterable, Sendable {
+/// Event types for tracking puppy activities
+enum EventType: String, Codable, CaseIterable, Identifiable {
     case eten
     case drinken
     case plassen
@@ -21,20 +21,71 @@ enum EventType: String, Codable, CaseIterable, Sendable {
     case milestone
     case gedrag
     case gewicht
+
+    var id: String { rawValue }
+
+    var emoji: String {
+        switch self {
+        case .eten: return "🍽️"
+        case .drinken: return "💧"
+        case .plassen: return "🚽"
+        case .poepen: return "💩"
+        case .slapen: return "😴"
+        case .ontwaken: return "☀️"
+        case .uitlaten: return "🚶"
+        case .tuin: return "🌳"
+        case .training: return "🎓"
+        case .bench: return "🏠"
+        case .sociaal: return "🐕"
+        case .milestone: return "🎉"
+        case .gedrag: return "📝"
+        case .gewicht: return "⚖️"
+        }
+    }
+
+    var label: String {
+        switch self {
+        case .eten: return "Eten"
+        case .drinken: return "Drinken"
+        case .plassen: return "Plassen"
+        case .poepen: return "Poepen"
+        case .slapen: return "Slapen"
+        case .ontwaken: return "Wakker"
+        case .uitlaten: return "Uitlaten"
+        case .tuin: return "Tuin"
+        case .training: return "Training"
+        case .bench: return "Bench"
+        case .sociaal: return "Sociaal"
+        case .milestone: return "Mijlpaal"
+        case .gedrag: return "Gedrag"
+        case .gewicht: return "Gewicht"
+        }
+    }
+
+    var requiresLocation: Bool {
+        self == .plassen || self == .poepen
+    }
 }
 
-// Location for potty events
-enum PottyLocation: String, Codable, Sendable {
+/// Location for potty events
+enum EventLocation: String, Codable {
     case buiten
     case binnen
+
+    var label: String {
+        switch self {
+        case .buiten: return "Buiten"
+        case .binnen: return "Binnen"
+        }
+    }
 }
 
-// Main event struct matching JSONL format
-struct PuppyEvent: Codable, Identifiable, Sendable {
-    let id: UUID
-    let time: Date
-    let type: EventType
-    var location: PottyLocation?
+/// A single puppy event, stored as one line in JSONL files
+struct PuppyEvent: Codable, Identifiable {
+    var id: UUID
+    var time: Date
+    var type: EventType
+    var location: EventLocation?
     var note: String?
     var who: String?
     var exercise: String?
@@ -43,60 +94,20 @@ struct PuppyEvent: Codable, Identifiable, Sendable {
     var photo: String?
     var video: String?
 
-    // Custom coding keys to match snake_case JSON
-    enum CodingKeys: String, CodingKey {
-        case time, type, location, note, who, exercise, result, photo, video
-        case durationMin = "duration_min"
-    }
-
-    // Custom decoder to handle ISO 8601 with timezone
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-
-        let timeString = try container.decode(String.self, forKey: .time)
-        let formatter = ISO8601DateFormatter()
-        formatter.formatOptions = [.withInternetDateTime]
-        guard let date = formatter.date(from: timeString) else {
-            throw DecodingError.dataCorruptedError(forKey: .time, in: container, debugDescription: "Invalid date format")
-        }
-        self.time = date
-
-        self.type = try container.decode(EventType.self, forKey: .type)
-        self.location = try container.decodeIfPresent(PottyLocation.self, forKey: .location)
-        self.note = try container.decodeIfPresent(String.self, forKey: .note)
-        self.who = try container.decodeIfPresent(String.self, forKey: .who)
-        self.exercise = try container.decodeIfPresent(String.self, forKey: .exercise)
-        self.result = try container.decodeIfPresent(String.self, forKey: .result)
-        self.durationMin = try container.decodeIfPresent(Int.self, forKey: .durationMin)
-        self.photo = try container.decodeIfPresent(String.self, forKey: .photo)
-        self.video = try container.decodeIfPresent(String.self, forKey: .video)
-        self.id = UUID()
-    }
-
-    // Custom encoder to output ISO 8601 with timezone
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-
-        let formatter = ISO8601DateFormatter()
-        formatter.formatOptions = [.withInternetDateTime]
-        formatter.timeZone = TimeZone.current
-        let timeString = formatter.string(from: time)
-        try container.encode(timeString, forKey: .time)
-
-        try container.encode(type, forKey: .type)
-        try container.encodeIfPresent(location, forKey: .location)
-        try container.encodeIfPresent(note, forKey: .note)
-        try container.encodeIfPresent(who, forKey: .who)
-        try container.encodeIfPresent(exercise, forKey: .exercise)
-        try container.encodeIfPresent(result, forKey: .result)
-        try container.encodeIfPresent(durationMin, forKey: .durationMin)
-        try container.encodeIfPresent(photo, forKey: .photo)
-        try container.encodeIfPresent(video, forKey: .video)
-    }
-
-    // Memberwise initializer for creating events in code
-    init(time: Date = Date(), type: EventType, location: PottyLocation? = nil, note: String? = nil, who: String? = nil, exercise: String? = nil, result: String? = nil, durationMin: Int? = nil, photo: String? = nil, video: String? = nil) {
-        self.id = UUID()
+    init(
+        id: UUID = UUID(),
+        time: Date = Date(),
+        type: EventType,
+        location: EventLocation? = nil,
+        note: String? = nil,
+        who: String? = nil,
+        exercise: String? = nil,
+        result: String? = nil,
+        durationMin: Int? = nil,
+        photo: String? = nil,
+        video: String? = nil
+    ) {
+        self.id = id
         self.time = time
         self.type = type
         self.location = location
@@ -107,5 +118,20 @@ struct PuppyEvent: Codable, Identifiable, Sendable {
         self.durationMin = durationMin
         self.photo = photo
         self.video = video
+    }
+
+    // Custom coding keys for snake_case JSON compatibility
+    enum CodingKeys: String, CodingKey {
+        case id
+        case time
+        case type
+        case location
+        case note
+        case who
+        case exercise
+        case result
+        case durationMin = "duration_min"
+        case photo
+        case video
     }
 }

@@ -5,90 +5,73 @@
 
 import SwiftUI
 
+/// Quick picker for potty location (binnen/buiten)
 struct LocationPickerSheet: View {
     let eventType: EventType
-    let onSelect: (PottyLocation) -> Void
+    let onSelect: (EventLocation) -> Void
     let onCancel: () -> Void
 
-    private var emoji: String {
-        Constants.eventEmoji[eventType] ?? "📌"
-    }
-
-    private var label: String {
-        Constants.eventLabels[eventType] ?? eventType.rawValue
-    }
-
     var body: some View {
-        VStack(spacing: 24) {
-            // Header
-            HStack {
-                Text(emoji)
-                    .font(.largeTitle)
-                Text(label)
-                    .font(.title2)
-                    .fontWeight(.semibold)
-            }
-            .padding(.top, 24)
+        VStack(spacing: 20) {
+            Text("\(eventType.emoji) \(eventType.label)")
+                .font(.headline)
 
             Text("Waar?")
-                .font(.headline)
-                .foregroundStyle(.secondary)
+                .font(.subheadline)
+                .foregroundColor(.secondary)
 
-            // Location buttons
-            HStack(spacing: 16) {
-                Button {
-                    onSelect(.buiten)
-                } label: {
-                    VStack(spacing: 8) {
-                        Text("🌳")
-                            .font(.system(size: 48))
-                        Text("Buiten")
-                            .font(.headline)
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 24)
-                    .background(Color.green.opacity(0.15))
-                    .foregroundStyle(.green)
-                    .clipShape(RoundedRectangle(cornerRadius: 16))
-                }
-                .buttonStyle(.plain)
+            HStack(spacing: 20) {
+                LocationButton(
+                    location: .buiten,
+                    emoji: "🌳",
+                    action: { onSelect(.buiten) }
+                )
 
-                Button {
-                    onSelect(.binnen)
-                } label: {
-                    VStack(spacing: 8) {
-                        Text("🏠")
-                            .font(.system(size: 48))
-                        Text("Binnen")
-                            .font(.headline)
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 24)
-                    .background(Color.orange.opacity(0.15))
-                    .foregroundStyle(.orange)
-                    .clipShape(RoundedRectangle(cornerRadius: 16))
-                }
-                .buttonStyle(.plain)
+                LocationButton(
+                    location: .binnen,
+                    emoji: "🏠",
+                    action: { onSelect(.binnen) }
+                )
             }
-            .padding(.horizontal)
 
             Button("Annuleren", role: .cancel) {
                 onCancel()
             }
-            .padding(.bottom, 24)
+            .foregroundColor(.secondary)
         }
-        .presentationDetents([.height(320)])
-        .presentationDragIndicator(.visible)
+        .padding()
+    }
+}
+
+struct LocationButton: View {
+    let location: EventLocation
+    let emoji: String
+    let action: () -> Void
+
+    var body: some View {
+        Button {
+            HapticFeedback.success()
+            action()
+        } label: {
+            VStack(spacing: 8) {
+                Text(emoji)
+                    .font(.system(size: 40))
+
+                Text(location.label)
+                    .font(.headline)
+            }
+            .frame(width: 100, height: 100)
+            .background(Color(.secondarySystemBackground))
+            .cornerRadius(16)
+        }
+        .buttonStyle(.plain)
     }
 }
 
 #Preview {
-    Text("Preview")
-        .sheet(isPresented: .constant(true)) {
-            LocationPickerSheet(
-                eventType: .plassen,
-                onSelect: { _ in },
-                onCancel: { }
-            )
-        }
+    LocationPickerSheet(
+        eventType: .plassen,
+        onSelect: { _ in },
+        onCancel: {}
+    )
 }
