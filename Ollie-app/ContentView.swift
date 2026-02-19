@@ -2,8 +2,6 @@
 //  ContentView.swift
 //  Ollie-app
 //
-//  Created by Jaap Stronks on 2/19/26.
-//
 
 import SwiftUI
 

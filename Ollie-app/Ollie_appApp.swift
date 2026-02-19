@@ -2,8 +2,6 @@
 //  Ollie_appApp.swift
 //  Ollie-app
 //
-//  Created by Jaap Stronks on 2/19/26.
-//
 
 import SwiftUI
 
@@ -15,6 +13,11 @@ struct OllieApp: App {
 
     init() {
         UserPreferences.registerDefaults()
+
+        // Install seed data for development
+        #if DEBUG
+        SeedData.installSeedDataIfNeeded()
+        #endif
     }
 
     var body: some Scene {
