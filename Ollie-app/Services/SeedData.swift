@@ -6,7 +6,7 @@
 import Foundation
 
 enum SeedData {
-    // Sample events for development/testing
+    /// Install bundled JSONL data files on first launch
     static func installSeedDataIfNeeded() {
         let fileManager = FileManager.default
         let docs = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
@@ -15,63 +15,78 @@ enum SeedData {
         // Create data directory if needed
         try? fileManager.createDirectory(at: dataDir, withIntermediateDirectories: true)
 
-        // Check if we already have data
-        let todayFile = dataDir.appendingPathComponent("\(DateHelpers.formatDateForFile(Date())).jsonl")
-        if fileManager.fileExists(atPath: todayFile.path) {
-            return // Already have data for today
+        // Check if we already have any data files
+        let existingFiles = (try? fileManager.contentsOfDirectory(atPath: dataDir.path)) ?? []
+        let existingJsonlFiles = existingFiles.filter { $0.hasSuffix(".jsonl") }
+
+        if !existingJsonlFiles.isEmpty {
+            print("SeedData: Skipping install - found \(existingJsonlFiles.count) existing files")
+            return // Already have data, don't overwrite
         }
 
-        // Create sample data for today
-        let calendar = Calendar.current
-        let now = Date()
+        print("SeedData: No existing data, will copy bundled files")
 
-        var events: [String] = []
-
-        // Morning events
-        if let time1 = calendar.date(bySettingHour: 7, minute: 0, second: 0, of: now) {
-            events.append(makeEvent(time: time1, type: "ontwaken"))
-        }
-        if let time2 = calendar.date(bySettingHour: 7, minute: 5, second: 0, of: now) {
-            events.append(makeEvent(time: time2, type: "plassen", location: "buiten"))
-        }
-        if let time3 = calendar.date(bySettingHour: 7, minute: 10, second: 0, of: now) {
-            events.append(makeEvent(time: time3, type: "poepen", location: "buiten"))
-        }
-        if let time4 = calendar.date(bySettingHour: 7, minute: 30, second: 0, of: now) {
-            events.append(makeEvent(time: time4, type: "eten"))
-        }
-        if let time5 = calendar.date(bySettingHour: 8, minute: 0, second: 0, of: now) {
-            events.append(makeEvent(time: time5, type: "plassen", location: "buiten", note: "Na het ontbijt"))
-        }
-        if let time6 = calendar.date(bySettingHour: 9, minute: 30, second: 0, of: now) {
-            events.append(makeEvent(time: time6, type: "slapen", note: "Ochtend dutje"))
-        }
-        if let time7 = calendar.date(bySettingHour: 10, minute: 15, second: 0, of: now) {
-            events.append(makeEvent(time: time7, type: "ontwaken"))
-        }
-        if let time8 = calendar.date(bySettingHour: 10, minute: 20, second: 0, of: now) {
-            events.append(makeEvent(time: time8, type: "plassen", location: "buiten"))
-        }
-
-        // Write to file
-        let content = events.joined(separator: "\n") + "\n"
-        try? content.write(to: todayFile, atomically: true, encoding: .utf8)
+        // Copy bundled JSONL files from app bundle
+        copyBundledDataFiles(to: dataDir)
     }
 
-    private static func makeEvent(time: Date, type: String, location: String? = nil, note: String? = nil) -> String {
-        let formatter = ISO8601DateFormatter()
-        formatter.formatOptions = [.withInternetDateTime]
-        formatter.timeZone = TimeZone.current
-        let timeStr = formatter.string(from: time)
+    /// Copy all bundled .jsonl files to the data directory
+    private static func copyBundledDataFiles(to dataDir: URL) {
+        let fileManager = FileManager.default
 
-        var json = "{\"time\":\"\(timeStr)\",\"type\":\"\(type)\""
-        if let loc = location {
-            json += ",\"location\":\"\(loc)\""
+        // Find all .jsonl files in the bundle (try both root and SeedData subdirectory)
+        var bundledFiles: [URL] = []
+
+        // Try root of bundle
+        if let rootFiles = Bundle.main.urls(forResourcesWithExtension: "jsonl", subdirectory: nil) {
+            bundledFiles.append(contentsOf: rootFiles)
         }
-        if let n = note {
-            json += ",\"note\":\"\(n)\""
+
+        // Try SeedData subdirectory
+        if let seedDataFiles = Bundle.main.urls(forResourcesWithExtension: "jsonl", subdirectory: "SeedData") {
+            bundledFiles.append(contentsOf: seedDataFiles)
         }
-        json += "}"
-        return json
+
+        if bundledFiles.isEmpty {
+            print("SeedData: No bundled JSONL files found in bundle")
+            // Debug: list what's in the bundle
+            if let resourcePath = Bundle.main.resourcePath {
+                let contents = try? fileManager.contentsOfDirectory(atPath: resourcePath)
+                print("SeedData: Bundle contents: \(contents ?? [])")
+            }
+            return
+        }
+
+        print("SeedData: Found \(bundledFiles.count) JSONL files to copy")
+
+        for sourceURL in bundledFiles {
+            let fileName = sourceURL.lastPathComponent
+            let destURL = dataDir.appendingPathComponent(fileName)
+
+            do {
+                // Skip if already exists
+                if fileManager.fileExists(atPath: destURL.path) {
+                    print("SeedData: Skipping \(fileName) (already exists)")
+                    continue
+                }
+
+                try fileManager.copyItem(at: sourceURL, to: destURL)
+                print("SeedData: Copied \(fileName)")
+            } catch {
+                print("SeedData: Failed to copy \(fileName): \(error)")
+            }
+        }
+    }
+
+    /// Force reinstall bundled data (useful for testing)
+    static func forceReinstallBundledData() {
+        let fileManager = FileManager.default
+        let docs = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let dataDir = docs.appendingPathComponent("data", isDirectory: true)
+
+        // Create data directory if needed
+        try? fileManager.createDirectory(at: dataDir, withIntermediateDirectories: true)
+
+        copyBundledDataFiles(to: dataDir)
     }
 }

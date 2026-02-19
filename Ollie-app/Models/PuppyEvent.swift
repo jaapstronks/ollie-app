@@ -134,4 +134,23 @@ struct PuppyEvent: Codable, Identifiable {
         case photo
         case video
     }
+
+    // Custom decoder to handle missing id (web app data doesn't include it)
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        // Generate UUID if not present in JSON
+        self.id = try container.decodeIfPresent(UUID.self, forKey: .id) ?? UUID()
+
+        self.time = try container.decode(Date.self, forKey: .time)
+        self.type = try container.decode(EventType.self, forKey: .type)
+        self.location = try container.decodeIfPresent(EventLocation.self, forKey: .location)
+        self.note = try container.decodeIfPresent(String.self, forKey: .note)
+        self.who = try container.decodeIfPresent(String.self, forKey: .who)
+        self.exercise = try container.decodeIfPresent(String.self, forKey: .exercise)
+        self.result = try container.decodeIfPresent(String.self, forKey: .result)
+        self.durationMin = try container.decodeIfPresent(Int.self, forKey: .durationMin)
+        self.photo = try container.decodeIfPresent(String.self, forKey: .photo)
+        self.video = try container.decodeIfPresent(String.self, forKey: .video)
+    }
 }

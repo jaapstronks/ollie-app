@@ -1,0 +1,37 @@
+{"time":"2026-02-19T06:00:00+01:00","type":"ontwaken","note":"Wakker na nacht 5"}
+{"time":"2026-02-19T06:15:00+01:00","type":"uitlaten"}
+{"time":"2026-02-19T06:19:00+01:00","type":"poepen","location":"buiten"}
+{"time":"2026-02-19T06:19:00+01:00","type":"plassen","location":"buiten"}
+{"time":"2026-02-19T06:45:00+01:00","type":"eten"}
+{"time":"2026-02-19T07:03:00+01:00","type":"bench","note":"Zelf in bench gaan liggen, slaapt"}
+{"time":"2026-02-19T08:05:00+01:00","type":"ontwaken"}
+{"time":"2026-02-19T08:10:00+01:00","type":"uitlaten"}
+{"time":"2026-02-19T08:15:00+01:00","type":"sociaal","who":"Buurhond Sasha","reaction":"Enthousiast, neus-aan-neus begroeting in de sneeuw","note":"Kennismaking buurhond Sasha","photo":"https://jaapstronks.s3.us-west-2.amazonaws.com/ollie/photos/2026-02-19-ontmoeting-sasha.jpg"}
+{"time":"2026-02-19T08:15:00+01:00","type":"plassen","location":"buiten"}
+{"time":"2026-02-19T09:08:00+01:00","type":"slapen"}
+{"time":"2026-02-19T09:15:00+01:00","type":"ontwaken"}
+{"time":"2026-02-19T09:25:00+01:00","type":"slapen"}
+{"time":"2026-02-19T10:10:00+01:00","type":"ontwaken"}
+{"time":"2026-02-19T10:15:00+01:00","type":"uitlaten"}
+{"time":"2026-02-19T10:20:00+01:00","type":"poepen","location":"buiten"}
+{"time":"2026-02-19T10:20:00+01:00","type":"plassen","location":"buiten"}
+{"time":"2026-02-19T10:45:00+01:00","type":"eten"}
+{"time":"2026-02-19T11:05:00+01:00","type":"slapen"}
+{"time":"2026-02-19T11:55:00+01:00","type":"ontwaken"}
+{"time":"2026-02-19T12:00:00+01:00","type":"plassen","location":"binnen"}
+{"time":"2026-02-19T12:05:00+01:00","type":"uitlaten"}
+{"time":"2026-02-19T12:37:00+01:00","type":"slapen"}
+{"time":"2026-02-19T14:03:00+01:00","type":"ontwaken"}
+{"time":"2026-02-19T14:05:00+01:00","type":"uitlaten"}
+{"time":"2026-02-19T14:05:00+01:00","type":"plassen","location":"buiten"}
+{"time":"2026-02-19T14:45:00+01:00","type":"eten"}
+{"time":"2026-02-19T15:15:00+01:00","type":"sociaal","note":"Bezoek"}
+{"time":"2026-02-19T15:15:00+01:00","type":"plassen","location":"binnen","note":"Ongelukje in de keuken, druk door bezoek"}
+{"time":"2026-02-19T15:17:00+01:00","type":"slapen"}
+{"time":"2026-02-19T15:35:00+01:00","type":"ontwaken"}
+{"time":"2026-02-19T16:05:00+01:00","type":"slapen"}
+{"time":"2026-02-19T16:45:00+01:00","type":"ontwaken"}
+{"time":"2026-02-19T16:45:00+01:00","type":"uitlaten"}
+{"time":"2026-02-19T16:50:00+01:00","type":"plassen","location":"buiten"}
+{"time":"2026-02-19T17:05:00+01:00","type":"poepen","location":"buiten"}
+{"time":"2026-02-19T17:25:00+01:00","type":"slapen"}

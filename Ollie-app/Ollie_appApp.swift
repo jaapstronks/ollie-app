@@ -14,10 +14,8 @@ struct OllieApp: App {
     init() {
         UserPreferences.registerDefaults()
 
-        // Install seed data for development
-        #if DEBUG
+        // Install bundled seed data on first launch
         SeedData.installSeedDataIfNeeded()
-        #endif
     }
 
     var body: some Scene {

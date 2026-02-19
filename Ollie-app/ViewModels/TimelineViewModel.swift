@@ -17,6 +17,13 @@ class TimelineViewModel: ObservableObject {
     @Published var showingLocationPicker: Bool = false
     @Published var pendingPottyType: EventType?
 
+    // Quick log sheet state (V2: time adjustment)
+    @Published var showingQuickLogSheet: Bool = false
+    @Published var pendingEventType: EventType?
+
+    // All events sheet state (V2: expandable bar)
+    @Published var showingAllEventsSheet: Bool = false
+
     // Confirmation dialog state
     @Published var showingDeleteConfirmation: Bool = false
     @Published var eventToDelete: PuppyEvent?
@@ -76,14 +83,25 @@ class TimelineViewModel: ObservableObject {
     // MARK: - Quick Log
 
     func quickLog(type: EventType) {
-        if type.requiresLocation {
-            pendingPottyType = type
-            showingLocationPicker = true
-        } else {
-            logEvent(type: type)
-        }
+        // V2: All events now go through QuickLogSheet for time adjustment
+        pendingEventType = type
+        showingQuickLogSheet = true
     }
 
+    /// Log event with time, location, and note from QuickLogSheet
+    func logFromQuickSheet(time: Date, location: EventLocation?, note: String?) {
+        guard let type = pendingEventType else { return }
+        logEvent(type: type, time: time, location: location, note: note)
+        pendingEventType = nil
+        showingQuickLogSheet = false
+    }
+
+    func cancelQuickLogSheet() {
+        pendingEventType = nil
+        showingQuickLogSheet = false
+    }
+
+    // Legacy: kept for backwards compatibility
     func logWithLocation(location: EventLocation) {
         guard let type = pendingPottyType else { return }
         logEvent(type: type, location: location)
@@ -101,10 +119,15 @@ class TimelineViewModel: ObservableObject {
         showingLogSheet = true
     }
 
+    func showAllEvents() {
+        showingAllEventsSheet = true
+    }
+
     // MARK: - Event CRUD
 
     func logEvent(
         type: EventType,
+        time: Date = Date(),
         location: EventLocation? = nil,
         note: String? = nil,
         who: String? = nil,
@@ -113,7 +136,7 @@ class TimelineViewModel: ObservableObject {
         durationMin: Int? = nil
     ) {
         let event = PuppyEvent(
-            time: Date(),
+            time: time,
             type: type,
             location: location,
             note: note,
@@ -233,5 +256,82 @@ class TimelineViewModel: ObservableObject {
 
         let remaining = config.defaultGapMinutes - minutesSince
         return max(0, remaining)
+    }
+
+    // MARK: - Sleep Status
+
+    /// Current sleep state (sleeping, awake, or unknown)
+    var currentSleepState: SleepState {
+        let recentEvents = getRecentEvents()
+        return SleepCalculations.currentSleepState(events: recentEvents)
+    }
+
+    // MARK: - Potty Predictions
+
+    /// Current potty prediction with urgency level and triggers
+    var pottyPrediction: PottyPrediction {
+        guard let profile = profileStore.profile else {
+            return PottyPrediction(
+                urgency: .unknown,
+                trigger: .none,
+                expectedGapMinutes: 90,
+                minutesSinceLast: nil,
+                lastWasIndoor: false
+            )
+        }
+
+        let recentEvents = getRecentEvents()
+        return PredictionCalculations.calculatePrediction(
+            events: recentEvents,
+            config: profile.predictionConfig
+        )
+    }
+
+    /// Puppy name for display
+    var puppyName: String {
+        profileStore.profile?.name ?? "Puppy"
+    }
+
+    // MARK: - Streaks
+
+    /// Current streak information
+    var streakInfo: StreakInfo {
+        // Get all events for accurate streak calculation
+        let allEvents = getAllEvents()
+        return StreakCalculations.getStreakInfo(events: allEvents)
+    }
+
+    // MARK: - Daily Digest
+
+    /// Daily digest summary for current date
+    var dailyDigest: DailyDigest {
+        DigestCalculations.generateDigest(
+            events: events,
+            profile: profileStore.profile,
+            date: currentDate
+        )
+    }
+
+    // MARK: - Pattern Analysis
+
+    /// Pattern analysis for last 7 days
+    var patternAnalysis: PatternAnalysis {
+        let sevenDaysAgo = Calendar.current.date(byAdding: .day, value: -7, to: Date())!
+        let recentEvents = eventStore.getEvents(from: sevenDaysAgo, to: Date())
+        return PatternCalculations.analyzePatterns(events: recentEvents, periodDays: 7)
+    }
+
+    /// Get all events (up to 30 days back for streak history)
+    private func getAllEvents() -> [PuppyEvent] {
+        let thirtyDaysAgo = Calendar.current.date(byAdding: .day, value: -30, to: Date())!
+        return eventStore.getEvents(from: thirtyDaysAgo, to: Date())
+    }
+
+    // MARK: - Private Helpers
+
+    /// Get events from today and yesterday (for cross-midnight tracking)
+    private func getRecentEvents() -> [PuppyEvent] {
+        let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: currentDate)!
+        return eventStore.getEvents(from: yesterday, to: currentDate)
     }
 }

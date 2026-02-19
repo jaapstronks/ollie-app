@@ -51,6 +51,18 @@
 			);
 			target = 6768FD442F476789000E6A79 /* OlliewidgetExtension */;
 		};
+		6768FDEC2F478091000E6A79 /* Exceptions for "Ollie-app" folder in "Ollie-app" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"2026-02-14.jsonl",
+				"2026-02-15.jsonl",
+				"2026-02-16.jsonl",
+				"2026-02-17.jsonl",
+				"2026-02-18.jsonl",
+				"2026-02-19.jsonl",
+			);
+			target = 6786FEBF2F470F4300CBFE93 /* Ollie-app */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -64,6 +76,9 @@
 		};
 		6786FEC22F470F4300CBFE93 /* Ollie-app */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				6768FDEC2F478091000E6A79 /* Exceptions for "Ollie-app" folder in "Ollie-app" target */,
+			);
 			path = "Ollie-app";
 			sourceTree = "<group>";
 		};

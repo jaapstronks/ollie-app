@@ -6,6 +6,24 @@
 import Foundation
 import Combine
 
+/// Preview of what will be imported
+struct ImportPreview {
+    let totalDays: Int
+    let dateRange: (start: Date, end: Date)?
+    let localDays: Int
+    let newDays: Int
+    let availableFiles: [String]
+    let localFiles: [String]
+}
+
+/// Progress update during import
+struct ImportProgress {
+    let currentFile: Int
+    let totalFiles: Int
+    let currentFileName: String
+    let eventsImportedSoFar: Int
+}
+
 /// Result of a data import operation
 struct ImportResult {
     var filesImported: Int
@@ -18,17 +36,60 @@ struct ImportResult {
 @MainActor
 class DataImporter: ObservableObject {
     @Published private(set) var isImporting: Bool = false
+    @Published private(set) var isFetchingPreview: Bool = false
     @Published private(set) var progress: String = ""
+    @Published private(set) var importProgress: ImportProgress?
     @Published private(set) var lastResult: ImportResult?
+    @Published private(set) var lastPreview: ImportPreview?
+    @Published private(set) var lastError: String?
 
     private let fileManager = FileManager.default
 
     // MARK: - Public Methods
 
+    /// Fetch preview of what will be imported (without actually importing)
+    func fetchPreview() async throws -> ImportPreview {
+        isFetchingPreview = true
+        lastError = nil
+
+        defer {
+            isFetchingPreview = false
+        }
+
+        // Get list of files from GitHub
+        let files = try await fetchFileList()
+        let jsonlFiles = files.filter { $0.name.hasSuffix(".jsonl") }
+        let availableFileNames = jsonlFiles.map { $0.name }.sorted()
+
+        // Get list of local files
+        let localFileNames = getLocalFileNames()
+
+        // Calculate which files are new
+        let localSet = Set(localFileNames)
+        let newFiles = availableFileNames.filter { !localSet.contains($0) }
+
+        // Parse date range from file names
+        let dateRange = parseDateRange(from: availableFileNames)
+
+        let preview = ImportPreview(
+            totalDays: availableFileNames.count,
+            dateRange: dateRange,
+            localDays: localFileNames.count,
+            newDays: newFiles.count,
+            availableFiles: availableFileNames,
+            localFiles: localFileNames
+        )
+
+        lastPreview = preview
+        return preview
+    }
+
     /// Import all available JSONL files from GitHub
     func importFromGitHub(overwriteExisting: Bool = false) async throws -> ImportResult {
         isImporting = true
+        lastError = nil
         progress = "Bestanden ophalen..."
+        importProgress = nil
 
         defer {
             isImporting = false
@@ -36,7 +97,7 @@ class DataImporter: ObservableObject {
 
         // Step 1: Get list of files from GitHub API
         let files = try await fetchFileList()
-        let jsonlFiles = files.filter { $0.name.hasSuffix(".jsonl") }
+        let jsonlFiles = files.filter { $0.name.hasSuffix(".jsonl") }.sorted { $0.name < $1.name }
 
         progress = "Gevonden: \(jsonlFiles.count) dagen"
 
@@ -45,6 +106,12 @@ class DataImporter: ObservableObject {
 
         for (index, file) in jsonlFiles.enumerated() {
             progress = "Importeren: \(index + 1)/\(jsonlFiles.count)"
+            importProgress = ImportProgress(
+                currentFile: index + 1,
+                totalFiles: jsonlFiles.count,
+                currentFileName: file.name,
+                eventsImportedSoFar: result.eventsImported
+            )
 
             let localURL = dataDirectoryURL.appendingPathComponent(file.name)
 
@@ -68,6 +135,7 @@ class DataImporter: ObservableObject {
         }
 
         progress = "Klaar!"
+        importProgress = nil
         lastResult = result
 
         return result
@@ -134,6 +202,46 @@ class DataImporter: ObservableObject {
         }
 
         return content
+    }
+
+    /// Get list of local JSONL file names
+    private func getLocalFileNames() -> [String] {
+        guard fileManager.fileExists(atPath: dataDirectoryURL.path) else {
+            return []
+        }
+
+        do {
+            let contents = try fileManager.contentsOfDirectory(atPath: dataDirectoryURL.path)
+            return contents.filter { $0.hasSuffix(".jsonl") }.sorted()
+        } catch {
+            return []
+        }
+    }
+
+    /// Parse date range from JSONL file names (format: YYYY-MM-DD.jsonl)
+    private func parseDateRange(from fileNames: [String]) -> (start: Date, end: Date)? {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        formatter.timeZone = TimeZone.current
+
+        let dates = fileNames.compactMap { fileName -> Date? in
+            let datePart = fileName.replacingOccurrences(of: ".jsonl", with: "")
+            return formatter.date(from: datePart)
+        }.sorted()
+
+        guard let first = dates.first, let last = dates.last else {
+            return nil
+        }
+
+        return (start: first, end: last)
+    }
+
+    /// Reset state for new import attempt
+    func reset() {
+        lastError = nil
+        lastPreview = nil
+        lastResult = nil
+        importProgress = nil
     }
 }
 
