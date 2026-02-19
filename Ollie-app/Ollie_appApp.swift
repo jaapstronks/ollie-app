@@ -8,10 +8,21 @@
 import SwiftUI
 
 @main
-struct Ollie_appApp: App {
+struct OllieApp: App {
+    @StateObject private var profileStore = ProfileStore()
+    @StateObject private var eventStore = EventStore()
+    @StateObject private var dataImporter = DataImporter()
+
+    init() {
+        UserPreferences.registerDefaults()
+    }
+
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(profileStore)
+                .environmentObject(eventStore)
+                .environmentObject(dataImporter)
         }
     }
 }

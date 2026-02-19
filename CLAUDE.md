@@ -1,16 +1,32 @@
 # Ollie iOS — Puppy Logbook App
 
 ## Project
-Native iOS app (SwiftUI, Swift) for tracking daily puppy events. Sister project of the [Ollie web PWA](https://github.com/jaapstronks/Ollie). Built for a Golden Retriever puppy born 2025-12-20, home since 2026-02-14.
+Native iOS app (SwiftUI, Swift) for tracking daily puppy events. Sister project of the [Ollie web PWA](https://github.com/jaapstronks/Ollie). Works for any puppy — user creates a profile during onboarding with name, birth date, home date, and size category.
 
 ## Architecture
 
 ### Pattern: MVVM
-- **Models/** — Data types (`PuppyEvent`, `EventType`, enums)
-- **ViewModels/** — Business logic, state management (`TimelineViewModel`, `StatsViewModel`)
+- **Models/** — Data types (`PuppyEvent`, `EventType`, `PuppyProfile`, `MealSchedule`, etc.)
+- **ViewModels/** — Business logic, state management (`TimelineViewModel`)
 - **Views/** — SwiftUI views, composable and small
-- **Services/** — Data persistence, calculations, predictions
+- **Services/** — Data persistence (`EventStore`, `ProfileStore`, `DataImporter`)
 - **Utils/** — Helpers, extensions, constants
+
+### PuppyProfile Model
+Each app instance has a `PuppyProfile` stored in `profile.json`:
+```swift
+struct PuppyProfile: Codable {
+    var name: String
+    var breed: String?
+    var birthDate: Date
+    var homeDate: Date
+    var sizeCategory: SizeCategory  // small, medium, large, extraLarge
+    var mealSchedule: MealSchedule
+    var exerciseConfig: ExerciseConfig
+    var predictionConfig: PredictionConfig
+}
+```
+Profile provides computed properties: `ageInWeeks`, `ageInMonths`, `daysHome`, `maxExerciseMinutes`.
 
 ### Data Model
 Events are stored as JSONL (one JSON object per line), same format as the web app:
@@ -38,12 +54,13 @@ Events are stored as JSONL (one JSON object per line), same format as the web ap
 - No Core Data, no SwiftData — keep it simple
 
 ### Constants
-```swift
-let birthDate = DateComponents(calendar: .current, year: 2025, month: 12, day: 20).date!
-let startDate = DateComponents(calendar: .current, year: 2026, month: 2, day: 14).date!
-let bedtimeHour = 22
-let minNapDurationForPottyTrigger = 15 // minutes
-```
+App-wide constants (non-profile-specific) are in `Utils/Constants.swift`:
+- `dataDirectoryName` — folder for JSONL files
+- `profileFileName` — profile storage file
+- `quickLogTypes` — event types shown in quick-log bar
+- GitHub repo info for data import
+
+User-specific values (birth date, bedtime hour, etc.) come from `PuppyProfile`.
 
 ## UI Language
 Dutch. All labels, buttons, and text in Dutch.
@@ -56,13 +73,17 @@ Dutch. All labels, buttons, and text in Dutch.
 - **Dark mode support** from day one
 
 ## Key Features (in order of priority)
-1. **Event logging** — tap to log, auto-timestamp, optional details
-2. **Timeline view** — today's events with emoji, time, notes
-3. **Day navigation** — swipe or pick date to see other days
-4. **Stats dashboard** — potty gaps, sleep analysis, meal tracking
-5. **Potty predictions** — "time since last plas" + predicted next based on patterns
-6. **Photo attachment** — camera or library, stored with event
-7. **Notifications** — "het is X min geleden sinds laatste plas"
+1. **Onboarding** — new users create puppy profile (name, birth date, home date, size)
+2. **Event logging** — tap to log, auto-timestamp, optional details
+3. **Timeline view** — today's events with emoji, time, notes
+4. **Day navigation** — pick date to see other days
+5. **Quick-log bar** — bottom bar with common event types (plassen, poepen, eten, slapen, etc.)
+6. **Stats dashboard** — potty gaps, sleep analysis, meal tracking
+7. **Potty predictions** — "time since last plas" + predicted next based on patterns
+8. **Data import** — import existing data from GitHub (Ollie web app repo)
+9. **Settings** — view/edit profile, meal schedule, import data
+10. **Photo attachment** — camera or library, stored with event (TODO)
+11. **Notifications** — "het is X min geleden sinds laatste plas" (TODO)
 
 ## Business Logic (port from web app)
 The web app (JS) has battle-tested calculation modules to port:
