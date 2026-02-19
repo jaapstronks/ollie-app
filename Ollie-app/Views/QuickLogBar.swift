@@ -68,8 +68,7 @@ struct QuickLogButton: View {
             action()
         } label: {
             VStack(spacing: 4) {
-                Text(type.emoji)
-                    .font(.title2)
+                EventIcon(type: type, size: 28)
                 Text(type.label)
                     .font(.caption2)
                     .foregroundColor(.secondary)

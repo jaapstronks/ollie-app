@@ -25,9 +25,10 @@ struct PottyStatusCard: View {
     @ViewBuilder
     private var cardContent: some View {
         HStack {
-            // Emoji indicator
-            Text(PredictionCalculations.emoji(for: prediction.urgency))
-                .font(.system(size: 28))
+            // Icon indicator
+            Image(systemName: PredictionCalculations.iconName(for: prediction.urgency))
+                .font(.system(size: 24, weight: .medium))
+                .foregroundStyle(PredictionCalculations.iconColor(for: prediction.urgency))
 
             VStack(alignment: .leading, spacing: 2) {
                 // Main status text
@@ -58,20 +59,7 @@ struct PottyStatusCard: View {
     // MARK: - Computed Properties
 
     private var indicatorColor: Color {
-        switch prediction.urgency {
-        case .justWent:
-            return .green
-        case .normal:
-            return .green
-        case .attention:
-            return .orange
-        case .soon:
-            return .orange
-        case .overdue, .postAccident:
-            return .red
-        case .unknown:
-            return .gray
-        }
+        PredictionCalculations.iconColor(for: prediction.urgency)
     }
 
     private var textColor: Color {
@@ -79,11 +67,11 @@ struct PottyStatusCard: View {
         case .justWent, .normal:
             return .primary
         case .attention:
-            return .orange
+            return .ollieAccent
         case .soon:
-            return .orange
+            return .ollieWarning
         case .overdue, .postAccident:
-            return .red
+            return .ollieDanger
         case .unknown:
             return .secondary
         }
@@ -92,15 +80,15 @@ struct PottyStatusCard: View {
     private var backgroundColor: Color {
         switch prediction.urgency {
         case .justWent:
-            return Color.green.opacity(0.15)
+            return Color.ollieSuccess.opacity(0.15)
         case .normal:
-            return Color.green.opacity(0.1)
+            return Color.ollieSuccess.opacity(0.1)
         case .attention:
-            return Color.orange.opacity(0.1)
+            return Color.ollieAccent.opacity(0.1)
         case .soon:
-            return Color.orange.opacity(0.15)
+            return Color.ollieWarning.opacity(0.15)
         case .overdue, .postAccident:
-            return Color.red.opacity(0.1)
+            return Color.ollieDanger.opacity(0.1)
         case .unknown:
             return Color(.secondarySystemBackground)
         }

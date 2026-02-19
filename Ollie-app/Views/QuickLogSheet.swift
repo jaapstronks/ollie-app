@@ -20,9 +20,8 @@ struct QuickLogSheet: View {
     var body: some View {
         VStack(spacing: 20) {
             // Header
-            HStack {
-                Text(eventType.emoji)
-                    .font(.system(size: 36))
+            HStack(spacing: 12) {
+                EventIcon(type: eventType, size: 36)
                 Text(eventType.label)
                     .font(.title2)
                     .fontWeight(.semibold)
@@ -84,14 +83,12 @@ struct QuickLogSheet: View {
                     HStack(spacing: 16) {
                         LocationToggleButton(
                             location: .buiten,
-                            emoji: "🌳",
                             isSelected: selectedLocation == .buiten,
                             action: { selectedLocation = .buiten }
                         )
 
                         LocationToggleButton(
                             location: .binnen,
-                            emoji: "🏠",
                             isSelected: selectedLocation == .binnen,
                             action: { selectedLocation = .binnen }
                         )
@@ -175,7 +172,6 @@ struct TimeAdjustButton: View {
 
 struct LocationToggleButton: View {
     let location: EventLocation
-    let emoji: String
     let isSelected: Bool
     let action: () -> Void
 
@@ -185,19 +181,19 @@ struct LocationToggleButton: View {
             action()
         } label: {
             VStack(spacing: 6) {
-                Text(emoji)
-                    .font(.system(size: 32))
+                LocationIcon(location: location, size: 32)
 
                 Text(location.label)
                     .font(.subheadline)
                     .fontWeight(isSelected ? .semibold : .regular)
+                    .foregroundStyle(isSelected ? location.iconColor : .primary)
             }
             .frame(width: 80, height: 80)
-            .background(isSelected ? Color.accentColor.opacity(0.15) : Color(.secondarySystemBackground))
+            .background(isSelected ? location.iconColor.opacity(0.15) : Color(.secondarySystemBackground))
             .cornerRadius(12)
             .overlay(
                 RoundedRectangle(cornerRadius: 12)
-                    .stroke(isSelected ? Color.accentColor : Color.clear, lineWidth: 2)
+                    .stroke(isSelected ? location.iconColor : Color.clear, lineWidth: 2)
             )
         }
         .buttonStyle(.plain)

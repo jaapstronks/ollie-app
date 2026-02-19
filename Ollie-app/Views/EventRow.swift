@@ -17,9 +17,8 @@ struct EventRow: View {
                 .foregroundColor(.secondary)
                 .frame(width: 44, alignment: .trailing)
 
-            // Emoji
-            Text(event.type.emoji)
-                .font(.title2)
+            // Icon
+            EventIcon(type: event.type, location: event.location, size: 28)
 
             // Content
             VStack(alignment: .leading, spacing: 2) {

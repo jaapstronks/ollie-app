@@ -22,9 +22,8 @@ struct LogEventSheet: View {
         NavigationStack {
             Form {
                 Section {
-                    HStack {
-                        Text(eventType.emoji)
-                            .font(.largeTitle)
+                    HStack(spacing: 12) {
+                        EventIcon(type: eventType, size: 36)
                         Text(eventType.label)
                             .font(.title2)
                             .fontWeight(.semibold)

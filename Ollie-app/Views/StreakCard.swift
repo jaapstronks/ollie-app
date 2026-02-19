@@ -22,9 +22,10 @@ struct StreakCard: View {
     @ViewBuilder
     private var cardContent: some View {
         HStack {
-            // Emoji indicator
-            Text(StreakCalculations.emoji(for: streakInfo.currentStreak))
-                .font(.system(size: 24))
+            // Icon indicator
+            Image(systemName: StreakCalculations.iconName(for: streakInfo.currentStreak))
+                .font(.system(size: 24, weight: .medium))
+                .foregroundStyle(StreakCalculations.iconColor(for: streakInfo.currentStreak))
 
             VStack(alignment: .leading, spacing: 2) {
                 // Main streak text
@@ -36,7 +37,7 @@ struct StreakCard: View {
                     if streakInfo.isOnFire {
                         Text("op rij!")
                             .font(.headline)
-                            .foregroundColor(.orange)
+                            .foregroundColor(.ollieAccent)
                     }
                 }
 
@@ -92,7 +93,7 @@ struct StreakCard: View {
 
     private var textColor: Color {
         if streakInfo.currentStreak >= 5 {
-            return .orange
+            return .ollieAccent
         } else if streakInfo.currentStreak > 0 {
             return .primary
         } else {
@@ -102,9 +103,9 @@ struct StreakCard: View {
 
     private var backgroundColor: Color {
         if streakInfo.currentStreak >= 5 {
-            return Color.orange.opacity(0.1)
+            return Color.ollieAccent.opacity(0.1)
         } else if streakInfo.currentStreak > 0 {
-            return Color.green.opacity(0.1)
+            return Color.ollieSuccess.opacity(0.1)
         } else {
             return Color(.secondarySystemBackground)
         }
@@ -112,9 +113,9 @@ struct StreakCard: View {
 
     private var progressColor: Color {
         if streakInfo.currentStreak >= 5 {
-            return .orange
+            return .ollieAccent
         } else {
-            return .green
+            return .ollieSuccess
         }
     }
 

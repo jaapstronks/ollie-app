@@ -84,8 +84,7 @@ struct EventTypeButton: View {
             action()
         } label: {
             VStack(spacing: 6) {
-                Text(type.emoji)
-                    .font(.system(size: 28))
+                EventIcon(type: type, size: 28)
 
                 Text(type.label)
                     .font(.caption)

@@ -5,6 +5,7 @@
 //  Streak calculations ported from web app's streaks.js
 
 import Foundation
+import SwiftUI
 
 /// Streak information
 struct StreakInfo: Equatable {
@@ -125,7 +126,7 @@ struct StreakCalculations {
         )
     }
 
-    /// Get emoji for streak count
+    /// Get emoji for streak count (legacy)
     static func emoji(for streak: Int) -> String {
         if streak == 0 {
             return "💔"
@@ -137,6 +138,34 @@ struct StreakCalculations {
             return "🔥🔥"
         } else {
             return "🔥🔥🔥"
+        }
+    }
+
+    /// Get SF Symbol icon name for streak count
+    static func iconName(for streak: Int) -> String {
+        if streak == 0 {
+            return "heart.slash.fill"
+        } else if streak < 3 {
+            return "hand.thumbsup.fill"
+        } else if streak < 5 {
+            return "flame.fill"
+        } else {
+            return "flame.fill"  // Same icon, color intensifies
+        }
+    }
+
+    /// Get icon color for streak count
+    static func iconColor(for streak: Int) -> Color {
+        if streak == 0 {
+            return .ollieDanger
+        } else if streak < 3 {
+            return .ollieSuccess
+        } else if streak < 5 {
+            return .ollieAccent
+        } else if streak < 10 {
+            return .ollieAccent
+        } else {
+            return .ollieAccentDark
         }
     }
 

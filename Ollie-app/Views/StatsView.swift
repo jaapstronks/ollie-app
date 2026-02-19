@@ -95,7 +95,7 @@ struct StreakStatsCard: View {
             if streakInfo.currentStreak > 0 {
                 Text(StreakCalculations.message(for: streakInfo.currentStreak))
                     .font(.subheadline)
-                    .foregroundColor(.orange)
+                    .foregroundColor(.ollieAccent)
             }
         }
         .padding()
@@ -165,13 +165,13 @@ struct GapStatsCard: View {
                 // Indoor vs outdoor breakdown
                 HStack {
                     Label("\(stats.outdoorCount) buiten", systemImage: "leaf.fill")
-                        .foregroundColor(.green)
+                        .foregroundColor(.ollieSuccess)
                         .font(.subheadline)
 
                     Spacer()
 
                     Label("\(stats.indoorCount) binnen", systemImage: "house.fill")
-                        .foregroundColor(stats.indoorCount > 0 ? .orange : .secondary)
+                        .foregroundColor(stats.indoorCount > 0 ? .ollieDanger : .secondary)
                         .font(.subheadline)
 
                     Spacer()
@@ -179,7 +179,7 @@ struct GapStatsCard: View {
                     Text("\(stats.outdoorPercentage)% buiten")
                         .font(.subheadline)
                         .fontWeight(.semibold)
-                        .foregroundColor(stats.outdoorPercentage >= 80 ? .green : .orange)
+                        .foregroundColor(stats.outdoorPercentage >= 80 ? .ollieSuccess : .ollieWarning)
                 }
             }
         }
@@ -247,14 +247,14 @@ struct TodayStatsCard: View {
 
                 HStack {
                     Label("\(outdoorCount) buiten", systemImage: "leaf.fill")
-                        .foregroundColor(.green)
+                        .foregroundColor(.ollieSuccess)
                         .font(.subheadline)
 
                     Spacer()
 
                     if indoorCount > 0 {
                         Label("\(indoorCount) binnen", systemImage: "house.fill")
-                            .foregroundColor(.orange)
+                            .foregroundColor(.ollieDanger)
                             .font(.subheadline)
                     }
                 }
@@ -311,7 +311,7 @@ struct SleepStatsCard: View {
                     Text("\(Int(progress * 100))%")
                         .font(.caption)
                         .fontWeight(.semibold)
-                        .foregroundColor(progress >= 0.8 ? .green : .orange)
+                        .foregroundColor(progress >= 0.8 ? .ollieSuccess : .ollieAccent)
                 }
 
                 GeometryReader { geometry in
@@ -321,7 +321,7 @@ struct SleepStatsCard: View {
                             .frame(height: 8)
 
                         RoundedRectangle(cornerRadius: 4)
-                            .fill(progress >= 0.8 ? Color.green : Color.orange)
+                            .fill(progress >= 0.8 ? Color.ollieSuccess : Color.ollieAccent)
                             .frame(width: geometry.size.width * progress, height: 8)
                     }
                 }
@@ -351,12 +351,44 @@ struct SleepStatsCard: View {
 struct StatItem: View {
     let value: String
     let label: String
-    let emoji: String
+    let iconName: String
+    let iconColor: Color
+
+    /// Legacy initializer with emoji (will be removed)
+    init(value: String, label: String, emoji: String) {
+        self.value = value
+        self.label = label
+        // Map common emoji to icons
+        switch emoji {
+        case "🔥", "🔥🔥", "🔥🔥🔥": self.iconName = "flame.fill"; self.iconColor = .ollieAccent
+        case "💔": self.iconName = "heart.slash.fill"; self.iconColor = .ollieDanger
+        case "👍": self.iconName = "hand.thumbsup.fill"; self.iconColor = .ollieSuccess
+        case "🏆": self.iconName = "trophy.fill"; self.iconColor = .ollieAccent
+        case "📊": self.iconName = "chart.bar.fill"; self.iconColor = .ollieInfo
+        case "📈": self.iconName = "chart.line.uptrend.xyaxis"; self.iconColor = .ollieInfo
+        case "⚡️": self.iconName = "bolt.fill"; self.iconColor = .ollieWarning
+        case "🐢": self.iconName = "tortoise.fill"; self.iconColor = .ollieMuted
+        case "🚽": self.iconName = "drop.fill"; self.iconColor = .ollieInfo
+        case "🍽️": self.iconName = "fork.knife"; self.iconColor = .ollieAccent
+        case "💩": self.iconName = "circle.inset.filled"; self.iconColor = .ollieAccent
+        case "😴": self.iconName = "moon.fill"; self.iconColor = .ollieSleep
+        case "🛏️": self.iconName = "bed.double.fill"; self.iconColor = .ollieSleep
+        default: self.iconName = "circle.fill"; self.iconColor = .ollieMuted
+        }
+    }
+
+    init(value: String, label: String, iconName: String, iconColor: Color) {
+        self.value = value
+        self.label = label
+        self.iconName = iconName
+        self.iconColor = iconColor
+    }
 
     var body: some View {
         VStack(spacing: 4) {
-            Text(emoji)
+            Image(systemName: iconName)
                 .font(.title2)
+                .foregroundStyle(iconColor)
 
             Text(value)
                 .font(.title2)
