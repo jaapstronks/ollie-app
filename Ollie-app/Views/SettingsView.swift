@@ -11,10 +11,12 @@ struct SettingsView: View {
     @ObservedObject var dataImporter: DataImporter
     @ObservedObject var eventStore: EventStore
 
-    @State private var showingImportConfirm = false
+    @State private var showingImportSheet = false
     @State private var importError: String?
     @State private var showingError = false
-    @State private var overwriteExisting = false
+    @State private var showingMealEditor = false
+    @State private var editableMealSchedule: MealSchedule?
+    @AppStorage(UserPreferences.Key.appearanceMode.rawValue) private var appearanceMode = AppearanceMode.system.rawValue
 
     var body: some View {
         NavigationStack {
@@ -23,20 +25,28 @@ struct SettingsView: View {
                     profileSection(profile)
                     statsSection(profile)
                     mealSection(profile)
+                    exerciseSection(profile)
                 }
 
+                appearanceSection
                 dataSection
                 dangerSection
+                debugSection
             }
             .navigationTitle("Instellingen")
         }
-        .alert("Importeren", isPresented: $showingImportConfirm) {
-            Button("Importeren") {
-                startImport()
-            }
-            Button("Annuleren", role: .cancel) {}
-        } message: {
-            Text("Wil je data importeren van GitHub? Dit haalt alle beschikbare dagen op.")
+        .sheet(isPresented: $showingImportSheet) {
+            ImportSheet(
+                dataImporter: dataImporter,
+                onDismiss: {
+                    showingImportSheet = false
+                },
+                onComplete: {
+                    showingImportSheet = false
+                    eventStore.loadEvents(for: Date())
+                }
+            )
+            .presentationDetents([.medium, .large])
         }
         .alert("Fout", isPresented: $showingError) {
             Button("OK") {}
@@ -103,7 +113,7 @@ struct SettingsView: View {
 
     @ViewBuilder
     private func mealSection(_ profile: PuppyProfile) -> some View {
-        Section("Maaltijden (\(profile.mealSchedule.mealsPerDay)x per dag)") {
+        Section {
             ForEach(profile.mealSchedule.portions) { portion in
                 HStack {
                     Text(portion.label)
@@ -119,40 +129,91 @@ struct SettingsView: View {
                     }
                 }
             }
+
+            Button {
+                editableMealSchedule = profile.mealSchedule
+                showingMealEditor = true
+            } label: {
+                Label("Bewerk maaltijden", systemImage: "pencil")
+            }
+        } header: {
+            Text("Maaltijden (\(profile.mealSchedule.mealsPerDay)x per dag)")
+        }
+        .sheet(isPresented: $showingMealEditor) {
+            if let schedule = editableMealSchedule {
+                MealScheduleEditorWrapper(
+                    initialSchedule: schedule,
+                    onSave: { updatedSchedule in
+                        profileStore.updateMealSchedule(updatedSchedule)
+                    }
+                )
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func exerciseSection(_ profile: PuppyProfile) -> some View {
+        Section("Beweging") {
+            HStack {
+                Text("Max beweging")
+                Spacer()
+                Text("\(profile.maxExerciseMinutes) min/wandeling")
+                    .foregroundColor(.secondary)
+            }
+
+            Stepper(value: Binding(
+                get: { profile.exerciseConfig.minutesPerMonthOfAge },
+                set: { newValue in
+                    var config = profile.exerciseConfig
+                    config.minutesPerMonthOfAge = newValue
+                    profileStore.updateExerciseConfig(config)
+                }
+            ), in: 3...10) {
+                HStack {
+                    Text("Minuten per maand leeftijd")
+                    Spacer()
+                    Text("\(profile.exerciseConfig.minutesPerMonthOfAge)")
+                        .foregroundColor(.secondary)
+                }
+            }
+        }
+    }
+
+    private var appearanceSection: some View {
+        Section("Weergave") {
+            Picker("Thema", selection: $appearanceMode) {
+                ForEach(AppearanceMode.allCases) { mode in
+                    Label(mode.label, systemImage: mode.icon)
+                        .tag(mode.rawValue)
+                }
+            }
+            .pickerStyle(.inline)
+            .labelsHidden()
         }
     }
 
     private var dataSection: some View {
         Section("Data") {
-            if dataImporter.isImporting {
-                HStack {
-                    ProgressView()
-                    Text(dataImporter.progress)
-                        .foregroundColor(.secondary)
-                }
-            } else {
-                Button {
-                    showingImportConfirm = true
-                } label: {
-                    Label("Importeer van GitHub", systemImage: "arrow.down.circle")
-                }
+            Button {
+                dataImporter.reset()
+                showingImportSheet = true
+            } label: {
+                Label("Importeer van GitHub", systemImage: "arrow.down.circle")
+            }
 
-                if let result = dataImporter.lastResult {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("Laatste import:")
+            if let result = dataImporter.lastResult {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Laatste import:")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    Text("\(result.filesImported) dagen, \(result.eventsImported) events")
+                        .font(.caption)
+                    if result.skipped > 0 {
+                        Text("\(result.skipped) overgeslagen (bestonden al)")
                             .font(.caption)
                             .foregroundColor(.secondary)
-                        Text("\(result.filesImported) dagen, \(result.eventsImported) events")
-                            .font(.caption)
-                        if result.skipped > 0 {
-                            Text("\(result.skipped) overgeslagen (bestonden al)")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                        }
                     }
                 }
-
-                Toggle("Overschrijf bestaande data", isOn: $overwriteExisting)
             }
         }
     }
@@ -167,20 +228,43 @@ struct SettingsView: View {
         }
     }
 
-    // MARK: - Actions
-
-    private func startImport() {
-        Task {
-            do {
-                _ = try await dataImporter.importFromGitHub(overwriteExisting: overwriteExisting)
-                // Refresh events after import
+    // Debug section for seed data
+    private var debugSection: some View {
+        Section("Debug") {
+            Button {
+                SeedData.forceReinstallBundledData()
                 eventStore.loadEvents(for: Date())
-            } catch {
-                importError = error.localizedDescription
-                showingError = true
+            } label: {
+                Label("Herinstalleer seed data", systemImage: "arrow.clockwise")
             }
+
+            // Show data directory status
+            let dataStatus = getDataDirectoryStatus()
+            Text(dataStatus)
+                .font(.caption)
+                .foregroundColor(.secondary)
         }
     }
+
+    private func getDataDirectoryStatus() -> String {
+        let fileManager = FileManager.default
+        let docs = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let dataDir = docs.appendingPathComponent("data")
+
+        guard fileManager.fileExists(atPath: dataDir.path) else {
+            return "Data folder bestaat niet"
+        }
+
+        let files = (try? fileManager.contentsOfDirectory(atPath: dataDir.path)) ?? []
+        let jsonlFiles = files.filter { $0.hasSuffix(".jsonl") }
+
+        if jsonlFiles.isEmpty {
+            return "Data folder is leeg"
+        }
+
+        return "Gevonden: \(jsonlFiles.count) bestanden\n\(jsonlFiles.joined(separator: ", "))"
+    }
+
 }
 
 #Preview {

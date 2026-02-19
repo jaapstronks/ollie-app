@@ -27,10 +27,23 @@ struct TimelineView: View {
                 onToday: viewModel.goToToday
             )
 
-            // Stats bar
-            StatsBar(
-                timeSinceLastPlas: viewModel.timeSinceLastPlasText
+            // Daily digest summary
+            DigestCard(
+                digest: viewModel.dailyDigest,
+                puppyName: viewModel.puppyName
             )
+
+            // V3: Potty status hero card with smart predictions
+            PottyStatusCard(
+                prediction: viewModel.pottyPrediction,
+                puppyName: viewModel.puppyName
+            )
+
+            // Sleep status card
+            SleepStatusCard(sleepState: viewModel.currentSleepState)
+
+            // Streak card (outdoor potty streak)
+            StreakCard(streakInfo: viewModel.streakInfo)
 
             // Event list with pull-to-refresh
             if viewModel.events.isEmpty {
@@ -50,8 +63,11 @@ struct TimelineView: View {
 
             Spacer()
 
-            // Quick log bar
-            QuickLogBar(onQuickLog: viewModel.quickLog)
+            // Quick log bar (V2: with "+" button)
+            QuickLogBar(
+                onQuickLog: viewModel.quickLog,
+                onShowAllEvents: viewModel.showAllEvents
+            )
         }
         // Swipe gestures for day navigation
         .gesture(
@@ -77,6 +93,18 @@ struct TimelineView: View {
                     dragOffset = 0
                 }
         )
+        // V2: QuickLogSheet with time adjustment for all events
+        .sheet(isPresented: $viewModel.showingQuickLogSheet) {
+            if let type = viewModel.pendingEventType {
+                QuickLogSheet(
+                    eventType: type,
+                    onSave: viewModel.logFromQuickSheet,
+                    onCancel: viewModel.cancelQuickLogSheet
+                )
+                .presentationDetents([type.requiresLocation ? .height(480) : .height(380)])
+            }
+        }
+        // Legacy: kept for backwards compatibility
         .sheet(isPresented: $viewModel.showingLocationPicker) {
             LocationPickerSheet(
                 eventType: viewModel.pendingPottyType ?? .plassen,
@@ -99,6 +127,22 @@ struct TimelineView: View {
                     viewModel.showingLogSheet = false
                 }
             }
+        }
+        // V2: All events sheet
+        .sheet(isPresented: $viewModel.showingAllEventsSheet) {
+            AllEventsSheet(
+                onSelect: { type in
+                    viewModel.showingAllEventsSheet = false
+                    // Small delay to let sheet dismiss before showing new one
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        viewModel.quickLog(type: type)
+                    }
+                },
+                onCancel: {
+                    viewModel.showingAllEventsSheet = false
+                }
+            )
+            .presentationDetents([.medium, .large])
         }
         // Delete confirmation dialog
         .confirmationDialog(

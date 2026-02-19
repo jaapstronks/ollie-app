@@ -13,7 +13,12 @@ struct ContentView: View {
 
     @State private var showOnboarding = false
     @AppStorage(UserPreferences.Key.lastSelectedTab.rawValue) private var selectedTab = 0
+    @AppStorage(UserPreferences.Key.appearanceMode.rawValue) private var appearanceMode = AppearanceMode.system.rawValue
     @State private var showLaunchScreen = true
+
+    private var colorScheme: ColorScheme? {
+        AppearanceMode(rawValue: appearanceMode)?.colorScheme
+    }
 
     var body: some View {
         ZStack {
@@ -52,6 +57,7 @@ struct ContentView: View {
                 }
             }
         }
+        .preferredColorScheme(colorScheme)
     }
 }
 
@@ -90,6 +96,13 @@ struct MainTabView: View {
                 }
                 .tag(0)
 
+            // Stats tab
+            StatsView(viewModel: viewModel)
+                .tabItem {
+                    Label("Stats", systemImage: "chart.bar")
+                }
+                .tag(1)
+
             // Settings tab
             SettingsView(
                 profileStore: profileStore,
@@ -99,7 +112,7 @@ struct MainTabView: View {
             .tabItem {
                 Label("Instellingen", systemImage: "gear")
             }
-            .tag(1)
+            .tag(2)
         }
     }
 }
