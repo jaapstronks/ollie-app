@@ -2,13 +2,18 @@
 //  Ollie_appApp.swift
 //  Ollie-app
 //
-//  Created by Jaap Stronks on 2/19/26.
-//
 
 import SwiftUI
 
 @main
-struct Ollie_appApp: App {
+struct OllieApp: App {
+    init() {
+        // Install seed data for development
+        #if DEBUG
+        SeedData.installSeedDataIfNeeded()
+        #endif
+    }
+
     var body: some Scene {
         WindowGroup {
             ContentView()
