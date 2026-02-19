@@ -184,30 +184,84 @@ struct UndoBanner: View {
     let onUndo: () -> Void
     let onDismiss: () -> Void
 
+    @Environment(\.colorScheme) private var colorScheme
+
     var body: some View {
-        HStack {
+        HStack(spacing: 12) {
+            Image(systemName: "trash")
+                .font(.system(size: 14, weight: .medium))
+                .foregroundStyle(.secondary)
+
             Text(message)
-                .foregroundColor(.white)
+                .font(.subheadline)
+                .foregroundStyle(.primary)
 
             Spacer()
 
             Button("Ongedaan maken") {
                 onUndo()
             }
+            .font(.subheadline)
             .fontWeight(.semibold)
-            .foregroundColor(.yellow)
+            .foregroundStyle(Color.ollieAccent)
 
             Button {
                 onDismiss()
             } label: {
                 Image(systemName: "xmark")
-                    .foregroundColor(.white.opacity(0.7))
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundStyle(.secondary)
+                    .frame(width: 24, height: 24)
+                    .background(
+                        Circle()
+                            .fill(Color.primary.opacity(colorScheme == .dark ? 0.1 : 0.08))
+                    )
             }
         }
-        .padding()
-        .background(Color.black.opacity(0.85))
-        .cornerRadius(12)
+        .padding(.horizontal, 16)
+        .padding(.vertical, 12)
+        .background(glassBackground)
+        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .overlay(glassOverlay)
+        .shadow(color: .black.opacity(colorScheme == .dark ? 0.4 : 0.12), radius: 12, y: 6)
         .padding(.horizontal)
+    }
+
+    @ViewBuilder
+    private var glassBackground: some View {
+        ZStack {
+            if colorScheme == .dark {
+                Color.white.opacity(0.1)
+            } else {
+                Color.white.opacity(0.85)
+            }
+
+            LinearGradient(
+                colors: [
+                    Color.white.opacity(colorScheme == .dark ? 0.1 : 0.3),
+                    Color.clear
+                ],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+        }
+        .background(.ultraThinMaterial)
+    }
+
+    @ViewBuilder
+    private var glassOverlay: some View {
+        RoundedRectangle(cornerRadius: 16, style: .continuous)
+            .strokeBorder(
+                LinearGradient(
+                    colors: [
+                        Color.white.opacity(colorScheme == .dark ? 0.2 : 0.5),
+                        Color.white.opacity(colorScheme == .dark ? 0.05 : 0.1)
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                ),
+                lineWidth: 0.5
+            )
     }
 }
 
@@ -220,32 +274,88 @@ struct DateHeader: View {
     let onNext: () -> Void
     let onToday: () -> Void
 
+    @Environment(\.colorScheme) private var colorScheme
+
     var body: some View {
-        HStack {
+        HStack(spacing: 16) {
+            // Previous day button
             Button(action: onPrevious) {
                 Image(systemName: "chevron.left")
-                    .font(.title2)
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundStyle(.primary)
+                    .frame(width: 36, height: 36)
+                    .background(glassButtonBackground)
+                    .clipShape(Circle())
+                    .overlay(glassButtonOverlay)
             }
+            .buttonStyle(GlassNavButtonStyle())
 
             Spacer()
 
+            // Date title - tappable to go to today
             Button(action: onToday) {
                 Text(title)
                     .font(.headline)
+                    .fontWeight(.semibold)
             }
             .buttonStyle(.plain)
 
             Spacer()
 
+            // Next day button
             Button(action: onNext) {
                 Image(systemName: "chevron.right")
-                    .font(.title2)
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundStyle(.primary)
+                    .frame(width: 36, height: 36)
+                    .background(glassButtonBackground)
+                    .clipShape(Circle())
+                    .overlay(glassButtonOverlay)
             }
+            .buttonStyle(GlassNavButtonStyle())
             .opacity(canGoForward ? 1 : 0.3)
             .disabled(!canGoForward)
         }
-        .padding()
-        .background(Color(.systemBackground))
+        .padding(.horizontal, 20)
+        .padding(.vertical, 12)
+    }
+
+    @ViewBuilder
+    private var glassButtonBackground: some View {
+        ZStack {
+            if colorScheme == .dark {
+                Color.white.opacity(0.08)
+            } else {
+                Color.white.opacity(0.6)
+            }
+        }
+        .background(.thinMaterial)
+    }
+
+    @ViewBuilder
+    private var glassButtonOverlay: some View {
+        Circle()
+            .strokeBorder(
+                LinearGradient(
+                    colors: [
+                        Color.white.opacity(colorScheme == .dark ? 0.15 : 0.4),
+                        Color.white.opacity(colorScheme == .dark ? 0.03 : 0.1)
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                ),
+                lineWidth: 0.5
+            )
+    }
+}
+
+/// Interactive button style for navigation buttons
+struct GlassNavButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .scaleEffect(configuration.isPressed ? 0.9 : 1.0)
+            .opacity(configuration.isPressed ? 0.7 : 1.0)
+            .animation(.spring(response: 0.25, dampingFraction: 0.6), value: configuration.isPressed)
     }
 }
 
