@@ -16,11 +16,13 @@ struct SwipeToCompleteSlider: View {
 
     @State private var dragOffset: CGFloat = 0
     @State private var isComplete = false
+    @State private var showCheckmark = false
+    @State private var checkmarkScale: CGFloat = 0
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
-    /// Threshold percentage of track width to trigger completion
-    private let completionThreshold: CGFloat = 0.75
+    /// Threshold percentage of track width to trigger completion (reduced for faster feel)
+    private let completionThreshold: CGFloat = 0.65
 
     /// Thumb size
     private let thumbSize: CGFloat = 44
@@ -28,7 +30,7 @@ struct SwipeToCompleteSlider: View {
     var body: some View {
         GeometryReader { geometry in
             let trackWidth = geometry.size.width
-            let maxOffset = trackWidth - thumbSize - 8 // 8 = padding on both sides
+            let maxOffset = trackWidth - thumbSize - 8
 
             ZStack(alignment: .leading) {
                 // Track background
@@ -37,7 +39,7 @@ struct SwipeToCompleteSlider: View {
                 // Progress fill
                 progressFill(maxOffset: maxOffset)
 
-                // Label
+                // Label or checkmark
                 sliderLabel(trackWidth: trackWidth)
 
                 // Draggable thumb
@@ -52,7 +54,6 @@ struct SwipeToCompleteSlider: View {
         .accessibilityHint(Strings.Common.doubleTapHint)
         .accessibilityAddTraits(.isButton)
         .accessibilityAction {
-            // VoiceOver double-tap alternative
             complete()
         }
     }
@@ -62,17 +63,14 @@ struct SwipeToCompleteSlider: View {
     @ViewBuilder
     private var trackBackground: some View {
         ZStack {
-            // Base glass layer
             if colorScheme == .dark {
                 Color.white.opacity(0.08)
             } else {
                 Color.white.opacity(0.6)
             }
 
-            // Tint overlay
             tintColor.opacity(colorScheme == .dark ? 0.1 : 0.08)
 
-            // Top highlight
             LinearGradient(
                 colors: [
                     Color.white.opacity(colorScheme == .dark ? 0.08 : 0.25),
@@ -107,15 +105,16 @@ struct SwipeToCompleteSlider: View {
             .fill(
                 LinearGradient(
                     colors: [
-                        tintColor.opacity(0.3),
-                        tintColor.opacity(0.15)
+                        tintColor.opacity(isComplete ? 0.5 : 0.3),
+                        tintColor.opacity(isComplete ? 0.3 : 0.15)
                     ],
                     startPoint: .leading,
                     endPoint: .trailing
                 )
             )
-            .frame(width: max(0, dragOffset + thumbSize + 8))
-            .opacity(progress > 0.1 ? 1 : 0)
+            .frame(width: isComplete ? .infinity : max(0, dragOffset + thumbSize + 8))
+            .frame(maxWidth: isComplete ? .infinity : nil)
+            .opacity(progress > 0.1 || isComplete ? 1 : 0)
     }
 
     @ViewBuilder
@@ -123,7 +122,13 @@ struct SwipeToCompleteSlider: View {
         HStack(spacing: 8) {
             Spacer()
 
-            if !isComplete {
+            if isComplete {
+                // Animated checkmark
+                Image(systemName: "checkmark")
+                    .font(.title2.weight(.bold))
+                    .foregroundStyle(tintColor)
+                    .scaleEffect(checkmarkScale)
+            } else {
                 Image(systemName: "chevron.right.2")
                     .font(.caption)
                     .foregroundStyle(.secondary)
@@ -134,59 +139,59 @@ struct SwipeToCompleteSlider: View {
                     .fontWeight(.medium)
                     .foregroundStyle(.secondary)
                     .opacity(dragOffset > 40 ? 0.5 : 1)
-            } else {
-                Image(systemName: "checkmark")
-                    .font(.body.weight(.semibold))
-                    .foregroundStyle(tintColor)
             }
 
             Spacer()
         }
-        .padding(.leading, thumbSize + 12)
+        .padding(.leading, isComplete ? 0 : thumbSize + 12)
     }
 
     @ViewBuilder
     private func thumb(maxOffset: CGFloat) -> some View {
         ZStack {
-            // Thumb background
             Circle()
                 .fill(
                     LinearGradient(
                         colors: [
-                            tintColor,
-                            tintColor.opacity(0.85)
+                            isComplete ? Color.ollieSuccess : tintColor,
+                            (isComplete ? Color.ollieSuccess : tintColor).opacity(0.85)
                         ],
                         startPoint: .top,
                         endPoint: .bottom
                     )
                 )
-                .shadow(color: tintColor.opacity(0.3), radius: 4, y: 2)
+                .shadow(color: (isComplete ? Color.ollieSuccess : tintColor).opacity(0.4), radius: isComplete ? 8 : 4, y: 2)
 
-            // Icon
             Image(systemName: isComplete ? "checkmark" : icon)
-                .font(.body.weight(.semibold))
+                .font(.body.weight(.bold))
                 .foregroundStyle(.white)
+                .scaleEffect(isComplete ? 1.1 : 1)
         }
         .frame(width: thumbSize, height: thumbSize)
-        .offset(x: 4 + dragOffset)
+        .scaleEffect(isComplete ? 1.15 : 1)
+        .offset(x: isComplete ? (maxOffset / 2) : (4 + dragOffset))
+        .opacity(isComplete ? 0 : 1)
         .gesture(
-            DragGesture()
+            DragGesture(minimumDistance: 5)
                 .onChanged { value in
+                    guard !isComplete else { return }
                     let newOffset = max(0, min(value.translation.width, maxOffset))
                     dragOffset = newOffset
 
-                    // Selection haptic during drag
-                    if Int(newOffset) % 30 == 0 {
-                        HapticFeedback.selection()
+                    // Haptic feedback at key points
+                    let progress = newOffset / maxOffset
+                    if progress > 0.6 && progress < 0.65 {
+                        HapticFeedback.light()
                     }
                 }
-                .onEnded { value in
+                .onEnded { _ in
+                    guard !isComplete else { return }
                     let progress = dragOffset / maxOffset
                     if progress >= completionThreshold {
                         complete()
                     } else {
-                        // Spring back
-                        withAnimation(reduceMotion ? nil : .spring(response: 0.4, dampingFraction: 0.6)) {
+                        // Quick snap back
+                        withAnimation(.spring(response: 0.25, dampingFraction: 0.7)) {
                             dragOffset = 0
                         }
                     }
@@ -199,14 +204,26 @@ struct SwipeToCompleteSlider: View {
     private func complete() {
         guard !isComplete else { return }
 
+        // Immediate haptic
         HapticFeedback.success()
-        withAnimation(reduceMotion ? nil : .spring(response: 0.3, dampingFraction: 0.7)) {
+
+        // Quick completion animation
+        withAnimation(.spring(response: 0.2, dampingFraction: 0.6)) {
             isComplete = true
             dragOffset = 0
         }
 
-        // Call completion after brief delay for visual feedback
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+        // Checkmark pop animation
+        withAnimation(.spring(response: 0.3, dampingFraction: 0.5).delay(0.1)) {
+            checkmarkScale = 1.2
+        }
+
+        withAnimation(.spring(response: 0.2, dampingFraction: 0.7).delay(0.25)) {
+            checkmarkScale = 1.0
+        }
+
+        // Call completion quickly
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
             onComplete()
         }
     }

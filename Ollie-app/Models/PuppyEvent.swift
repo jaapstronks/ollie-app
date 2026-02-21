@@ -22,6 +22,7 @@ enum EventType: String, Codable, CaseIterable, Identifiable {
     case gedrag
     case gewicht
     case moment
+    case medicatie
 
     var id: String { rawValue }
 
@@ -43,6 +44,7 @@ enum EventType: String, Codable, CaseIterable, Identifiable {
         case .gedrag: return "note.text"
         case .gewicht: return "scalemass.fill"
         case .moment: return "camera.fill"
+        case .medicatie: return "pills.fill"
         }
     }
 
@@ -63,6 +65,7 @@ enum EventType: String, Codable, CaseIterable, Identifiable {
         case .gedrag: return Strings.EventType.behavior
         case .gewicht: return Strings.EventType.weight
         case .moment: return Strings.EventType.moment
+        case .medicatie: return Strings.EventType.medication
         }
     }
 

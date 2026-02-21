@@ -43,12 +43,6 @@ struct TodayView: View {
                         .padding(.vertical, 8)
                     }
 
-                    // Day hero - "Day X with Ollie" at top for context
-                    DayHeroCard(
-                        dayNumber: viewModel.dailyDigest.dayNumber,
-                        puppyName: viewModel.puppyName
-                    )
-
                     // Status cards section (only for today)
                     if viewModel.isShowingToday {
                         statusCardsSection
@@ -93,13 +87,22 @@ struct TodayView: View {
 
             Spacer()
 
-            // Date title (tappable to go to today)
+            // Date title with subtle day counter (tappable to go to today)
             Button {
                 viewModel.goToToday()
             } label: {
-                Text(viewModel.dateTitle)
-                    .font(.headline)
-                    .frame(minHeight: 44)
+                VStack(spacing: 2) {
+                    Text(viewModel.dateTitle)
+                        .font(.headline)
+
+                    // Subtle day counter - only show when viewing today
+                    if viewModel.isShowingToday, let dayNumber = viewModel.dailyDigest.dayNumber {
+                        Text("Day \(dayNumber) with \(viewModel.puppyName)")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                .frame(minHeight: 44)
             }
             .buttonStyle(.plain)
             .accessibilityLabel(Strings.Timeline.dateLabel(date: viewModel.dateTitle))
@@ -163,7 +166,9 @@ struct TodayView: View {
                     time: pending.time,
                     scheduledDate: pending.scheduledDate,
                     isOverdue: pending.isOverdue,
-                    onComplete: { viewModel.completeMedication(pending) }
+                    onComplete: { medicationName in
+                        viewModel.completeMedication(pending, medicationName: medicationName)
+                    }
                 )
             }
 

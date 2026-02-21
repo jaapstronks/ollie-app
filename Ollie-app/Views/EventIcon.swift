@@ -74,6 +74,7 @@ extension EventType {
         case .gedrag: return "bolt.fill"
         case .gewicht: return "scalemass.fill"
         case .moment: return "camera.fill"
+        case .medicatie: return "pills.fill"
         }
     }
 
@@ -115,6 +116,8 @@ extension EventType {
             return .ollieInfo // Teal - data/stats
         case .moment:
             return .ollieAccent // Gold - brand accent for photos
+        case .medicatie:
+            return .ollieAccent // Gold - health/care
         }
     }
 }

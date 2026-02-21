@@ -556,14 +556,23 @@ class TimelineViewModel: ObservableObject {
         )
     }
 
-    /// Complete a pending medication
-    func completeMedication(_ pending: PendingMedication) {
+    /// Complete a pending medication and log to timeline
+    func completeMedication(_ pending: PendingMedication, medicationName: String) {
+        // Mark as complete in medication store
         medicationStore?.markComplete(
             medicationId: pending.medication.id,
             timeId: pending.time.id,
             for: currentDate
         )
-        HapticFeedback.success()
+
+        // Log medication event to timeline
+        let event = PuppyEvent(
+            time: Date(),
+            type: .medicatie,
+            note: medicationName
+        )
+        eventStore.addEvent(event)
+
         objectWillChange.send()
     }
 

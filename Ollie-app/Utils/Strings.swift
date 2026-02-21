@@ -111,6 +111,7 @@ enum Strings {
         static let behavior = String(localized: "Behavior")
         static let weight = String(localized: "Weight")
         static let moment = String(localized: "Moment")
+        static let medication = String(localized: "Medication")
     }
 
     // MARK: - Event Locations
