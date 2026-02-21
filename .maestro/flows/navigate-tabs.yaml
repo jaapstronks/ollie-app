@@ -1,0 +1,27 @@
+# Test tab navigation between Today and Insights
+appId: jaapstronks.Ollie-app
+---
+- launchApp
+- waitForAnimationToEnd
+
+# Wait for app to load
+- extendedWaitUntil:
+    visible: "Today|Vandaag"
+    timeout: 5000
+
+# Take screenshot of Today tab
+- takeScreenshot: "screenshots/02-today-tab"
+
+# Navigate to Insights tab
+- tapOn:
+    text: "Insights|Inzichten"
+
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/03-insights-tab"
+
+# Navigate back to Today tab
+- tapOn:
+    text: "Today|Vandaag"
+
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/04-back-to-today"

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		673C41F42F49B3DA004333E6 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = 673C41F32F49B3DA004333E6 /* Sentry */; };
 		6768FD482F476789000E6A79 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6768FD472F476789000E6A79 /* WidgetKit.framework */; };
 		6768FD4A2F476789000E6A79 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6768FD492F476789000E6A79 /* SwiftUI.framework */; };
 		6768FD5B2F476789000E6A79 /* OlliewidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 6768FD452F476789000E6A79 /* OlliewidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -113,6 +114,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				673C41F42F49B3DA004333E6 /* Sentry in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -216,6 +218,7 @@
 			);
 			name = "Ollie-app";
 			packageProductDependencies = (
+				673C41F32F49B3DA004333E6 /* Sentry */,
 			);
 			productName = "Ollie-app";
 			productReference = 6786FEC02F470F4300CBFE93 /* Ollie-app.app */;
@@ -253,6 +256,9 @@
 			);
 			mainGroup = 6786FEB72F470F4300CBFE93;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				673C41F22F49B3DA004333E6 /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 6786FEC12F470F4300CBFE93 /* Products */;
 			projectDirPath = "";
@@ -658,6 +664,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		673C41F22F49B3DA004333E6 /* XCRemoteSwiftPackageReference "sentry-cocoa" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/getsentry/sentry-cocoa";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.5.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		673C41F32F49B3DA004333E6 /* Sentry */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 673C41F22F49B3DA004333E6 /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
+			productName = Sentry;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 6786FEB82F470F4300CBFE93 /* Project object */;
 }

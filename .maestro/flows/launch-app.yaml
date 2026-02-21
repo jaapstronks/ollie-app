@@ -1,0 +1,12 @@
+# Basic app launch test
+appId: jaapstronks.Ollie-app
+---
+- launchApp
+- waitForAnimationToEnd
+
+# Wait for launch screen to dismiss
+- extendedWaitUntil:
+    visible: "Today|Vandaag"
+    timeout: 5000
+
+- takeScreenshot: "screenshots/01-home-screen"

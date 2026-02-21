@@ -1,0 +1,74 @@
+# Complete user journey test - simulates real user interactions
+appId: jaapstronks.Ollie-app
+---
+- launchApp
+- waitForAnimationToEnd
+
+# 1. App launches on Today tab
+- extendedWaitUntil:
+    visible: "Today|Vandaag"
+    timeout: 5000
+- takeScreenshot: "screenshots/journey-01-launch"
+
+# 2. View the timeline/today content (scroll down)
+- scroll
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/journey-02-scrolled-down"
+
+# 3. Scroll back up
+- swipe:
+    start: "50%,30%"
+    end: "50%,80%"
+- waitForAnimationToEnd
+
+# 4. Open FAB quick menu with long press (FAB is in bottom-right corner)
+# Using coordinates: approximately 90% from left, 80% from top (above tab bar)
+- longPressOn:
+    point: "90%,80%"
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/journey-03-fab-menu"
+
+# 5. Dismiss the menu
+- tapOn:
+    point: "20%,30%"
+- waitForAnimationToEnd
+
+# 6. Open event logging sheet (tap FAB)
+- tapOn:
+    point: "90%,80%"
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/journey-04-event-sheet"
+
+# 7. Dismiss the sheet
+- swipe:
+    start: "50%,50%"
+    end: "50%,90%"
+- waitForAnimationToEnd
+
+# 8. Navigate to previous day (swipe right)
+- swipe:
+    start: "20%,50%"
+    end: "80%,50%"
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/journey-05-previous-day"
+
+# 9. Return to today (swipe left)
+- swipe:
+    start: "80%,50%"
+    end: "20%,50%"
+- waitForAnimationToEnd
+
+# 10. Switch to Insights tab
+- tapOn: "Insights|Inzichten"
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/journey-06-insights"
+
+# 11. Scroll insights content
+- scroll
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/journey-07-insights-scrolled"
+
+# 12. Return to Today tab
+- tapOn: "Today|Vandaag"
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/journey-08-back-to-today"

@@ -292,8 +292,8 @@ struct TodayView: View {
                 puppyName: viewModel.puppyName
             )
 
-            // Poop slot tracker
-            PoopStatusCard(status: viewModel.poopSlotStatus)
+            // Poop status tracker
+            PoopStatusCard(status: viewModel.poopStatus)
 
             // Sleep status card
             SleepStatusCard(sleepState: viewModel.currentSleepState)

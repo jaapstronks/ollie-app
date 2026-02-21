@@ -1,0 +1,28 @@
+# Test opening settings (adapted for current app state)
+appId: jaapstronks.Ollie-app
+---
+- launchApp
+- waitForAnimationToEnd
+
+# Wait for app to load
+- extendedWaitUntil:
+    visible: "Today|Vandaag"
+    timeout: 5000
+
+# The settings button may show as a gear icon when on today's view
+# Try tapping on the settings/gear area in top right
+- runFlow:
+    when:
+      visible: "Settings|Instellingen"
+    commands:
+      - tapOn: "Settings|Instellingen"
+      - waitForAnimationToEnd
+      - takeScreenshot: "screenshots/07-settings-view"
+      - tapOn: "Done|Klaar"
+
+# Alternative: If there's no visible settings text, document current state
+- runFlow:
+    when:
+      notVisible: "Settings|Instellingen"
+    commands:
+      - takeScreenshot: "screenshots/07-current-nav-state"

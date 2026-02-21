@@ -1,0 +1,23 @@
+# Complete test suite - runs all flows in sequence
+appId: jaapstronks.Ollie-app
+---
+# Basic app launch
+- runFlow: launch-app.yaml
+
+# Tab navigation
+- runFlow: navigate-tabs.yaml
+
+# Day navigation (swipe gestures)
+- runFlow: day-navigation.yaml
+
+# FAB and quick logging
+- runFlow: fab-quick-log.yaml
+
+# Event logging flow
+- runFlow: event-logging-flow.yaml
+
+# Insights tab
+- runFlow: insights-tab.yaml
+
+# Complete user journey (comprehensive)
+- runFlow: complete-user-journey.yaml

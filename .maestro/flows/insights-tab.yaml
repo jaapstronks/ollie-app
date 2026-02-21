@@ -1,0 +1,39 @@
+# Test Insights tab content and interactions
+appId: jaapstronks.Ollie-app
+---
+- launchApp
+- waitForAnimationToEnd
+
+# Wait for app to load
+- extendedWaitUntil:
+    visible: "Today|Vandaag"
+    timeout: 5000
+
+# Navigate to Insights tab
+- tapOn: "Insights|Inzichten"
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/insights-01-main"
+
+# Scroll down to see more content
+- scroll
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/insights-02-scrolled"
+
+# Scroll more
+- scroll
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/insights-03-more-content"
+
+# Scroll back up
+- swipe:
+    start: "50%,30%"
+    end: "50%,80%"
+- swipe:
+    start: "50%,30%"
+    end: "50%,80%"
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/insights-04-back-to-top"
+
+# Return to Today tab
+- tapOn: "Today|Vandaag"
+- waitForAnimationToEnd
