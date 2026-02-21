@@ -52,7 +52,7 @@ struct TrainingView: View {
             }
         }
         .navigationTitle(Strings.Training.title)
-        .navigationBarTitleDisplayMode(.inline)
+        .navigationBarTitleDisplayMode(.large)
         .onAppear {
             trainingStore.setEventStore(eventStore)
         }
@@ -86,8 +86,9 @@ struct TrainingView: View {
             VStack(alignment: .leading, spacing: 12) {
                 // Section header
                 HStack(spacing: 8) {
-                    Text(category.emoji)
+                    Image(systemName: category.icon)
                         .font(.body)
+                        .foregroundStyle(category.color)
 
                     Text(category.label)
                         .font(.subheadline)

@@ -23,20 +23,26 @@ extension Color {
 
     // MARK: - Semantic Colors
 
-    /// Green — buiten, positive outcomes
+    /// Green — buiten, positive outcomes, social interactions
     static let ollieSuccess = Color(hex: "5BAA6E")
 
     /// Gold — caution, transitions (same as accent)
     static let ollieWarning = Color(hex: "E8A855")
 
-    /// Red — binnen, alerts
+    /// Red — binnen, alerts, urgent
     static let ollieDanger = Color(hex: "D4594E")
 
-    /// Teal — stats, neutral data
+    /// Teal — stats, neutral data, foundations
     static let ollieInfo = Color(hex: "5BA4B5")
 
-    /// Muted blue — sleep events
+    /// Muted blue — sleep, rest, crate
     static let ollieSleep = Color(hex: "7B8CC2")
+
+    /// Purple — training, mental activities, learning
+    static let olliePurple = Color(hex: "9B7BC2")
+
+    /// Rose — milestones, celebrations, care
+    static let ollieRose = Color(hex: "E87B9E")
 
     /// Gray — secondary text, neutral
     /// Adjusted for WCAG 4.5:1 contrast ratio

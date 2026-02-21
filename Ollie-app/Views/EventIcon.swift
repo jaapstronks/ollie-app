@@ -78,37 +78,43 @@ extension EventType {
     }
 
     /// Default icon color (when location doesn't apply)
-    /// Colors match the Ollie brand design system
+    /// Colors match the Ollie semantic color system:
+    /// - Green: positive, outdoor, social
+    /// - Gold: food, attention
+    /// - Blue: rest, sleep, crate
+    /// - Purple: training, learning
+    /// - Rose: milestones, celebrations
+    /// - Teal: data, measurements
     var iconColor: Color {
         switch self {
         case .plassen, .poepen:
             return .ollieMuted // Overridden by location
         case .eten:
-            return .ollieAccent // Warm gold
+            return .ollieAccent // Warm gold - nourishment
         case .drinken:
-            return .ollieInfo // Teal
+            return .ollieInfo // Teal - bodily/data
         case .slapen:
-            return .ollieSleep // Muted blue
+            return .ollieSleep // Blue - rest
         case .ontwaken:
-            return .ollieAccent // Warm gold
+            return .ollieAccent // Warm gold - energy
         case .uitlaten:
-            return .ollieSuccess // Green
+            return .ollieSuccess // Green - outdoor activity
         case .tuin:
-            return .ollieSuccess // Green
+            return .ollieSuccess // Green - outdoor activity
         case .training:
-            return .ollieAccent // Warm gold
+            return .olliePurple // Purple - learning/mental
         case .bench:
-            return .ollieAccentDark // Brown
+            return .ollieSleep // Blue - rest (matches sleep)
         case .sociaal:
-            return .ollieDanger // Red
+            return .ollieSuccess // Green - positive interaction
         case .milestone:
-            return .ollieAccent // Warm gold
+            return .ollieRose // Rose - celebration
         case .gedrag:
-            return .ollieMuted // Gray
+            return .ollieMuted // Gray - neutral observation
         case .gewicht:
-            return .ollieInfo // Teal
+            return .ollieInfo // Teal - data/stats
         case .moment:
-            return .ollieSleep // Muted blue
+            return .ollieAccent // Gold - brand accent for photos
         }
     }
 }
