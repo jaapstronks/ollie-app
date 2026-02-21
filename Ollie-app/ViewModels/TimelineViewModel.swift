@@ -121,6 +121,17 @@ class TimelineViewModel: ObservableObject {
         sheetCoordinator.presentSheet(.quickLog(type))
     }
 
+    /// Quick log with immediate location (used by FAB quick actions)
+    func quickLogWithLocation(type: EventType, location: EventLocation) {
+        guard canLogEvents else {
+            sheetCoordinator.presentSheet(.upgradePrompt)
+            return
+        }
+        // Log immediately with the provided location
+        logEvent(type: type, location: location)
+        HapticFeedback.success()
+    }
+
     /// Log event with time, location, and note from QuickLogSheet
     func logFromQuickSheet(time: Date, location: EventLocation?, note: String?) {
         guard let type = pendingEventType else { return }
@@ -371,6 +382,13 @@ class TimelineViewModel: ObservableObject {
     var currentSleepState: SleepState {
         let recentEvents = getRecentEvents()
         return SleepCalculations.currentSleepState(events: recentEvents)
+    }
+
+    // MARK: - Poop Slot Status
+
+    /// Current poop slot status for the day
+    var poopSlotStatus: PoopSlotStatus {
+        PoopCalculations.calculateStatus(todayEvents: events)
     }
 
     // MARK: - Potty Predictions

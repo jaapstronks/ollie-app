@@ -13,6 +13,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		673C41E92F49ABCD004333E6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6786FEB82F470F4300CBFE93 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6786FEBF2F470F4300CBFE93;
+			remoteInfo = "Ollie-app";
+		};
 		6768FD592F476789000E6A79 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 6786FEB82F470F4300CBFE93 /* Project object */;
@@ -37,6 +44,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		673C41E32F49ABCD004333E6 /* Ollie-appUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Ollie-appUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6768FD452F476789000E6A79 /* OlliewidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = OlliewidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		6768FD472F476789000E6A79 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		6768FD492F476789000E6A79 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
@@ -61,6 +69,11 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		673C41E42F49ABCD004333E6 /* Ollie-appUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "Ollie-appUITests";
+			sourceTree = "<group>";
+		};
 		6768FD4B2F476789000E6A79 /* Olliewidget */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -80,6 +93,13 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		673C41E02F49ABCD004333E6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		6768FD422F476789000E6A79 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -113,6 +133,7 @@
 			children = (
 				6786FEC22F470F4300CBFE93 /* Ollie-app */,
 				6768FD4B2F476789000E6A79 /* Olliewidget */,
+				673C41E42F49ABCD004333E6 /* Ollie-appUITests */,
 				6768FD462F476789000E6A79 /* Frameworks */,
 				6786FEC12F470F4300CBFE93 /* Products */,
 			);
@@ -123,6 +144,7 @@
 			children = (
 				6786FEC02F470F4300CBFE93 /* Ollie-app.app */,
 				6768FD452F476789000E6A79 /* OlliewidgetExtension.appex */,
+				673C41E32F49ABCD004333E6 /* Ollie-appUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -130,6 +152,29 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		673C41E22F49ABCD004333E6 /* Ollie-appUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 673C41EB2F49ABCD004333E6 /* Build configuration list for PBXNativeTarget "Ollie-appUITests" */;
+			buildPhases = (
+				673C41DF2F49ABCD004333E6 /* Sources */,
+				673C41E02F49ABCD004333E6 /* Frameworks */,
+				673C41E12F49ABCD004333E6 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				673C41EA2F49ABCD004333E6 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				673C41E42F49ABCD004333E6 /* Ollie-appUITests */,
+			);
+			name = "Ollie-appUITests";
+			packageProductDependencies = (
+			);
+			productName = "Ollie-appUITests";
+			productReference = 673C41E32F49ABCD004333E6 /* Ollie-appUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 		6768FD442F476789000E6A79 /* OlliewidgetExtension */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6768FD5D2F476789000E6A79 /* Build configuration list for PBXNativeTarget "OlliewidgetExtension" */;
@@ -186,6 +231,10 @@
 				LastSwiftUpdateCheck = 2620;
 				LastUpgradeCheck = 2620;
 				TargetAttributes = {
+					673C41E22F49ABCD004333E6 = {
+						CreatedOnToolsVersion = 26.2;
+						TestTargetID = 6786FEBF2F470F4300CBFE93;
+					};
 					6768FD442F476789000E6A79 = {
 						CreatedOnToolsVersion = 26.2;
 					};
@@ -211,11 +260,19 @@
 			targets = (
 				6786FEBF2F470F4300CBFE93 /* Ollie-app */,
 				6768FD442F476789000E6A79 /* OlliewidgetExtension */,
+				673C41E22F49ABCD004333E6 /* Ollie-appUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		673C41E12F49ABCD004333E6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		6768FD432F476789000E6A79 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -233,6 +290,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		673C41DF2F49ABCD004333E6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		6768FD412F476789000E6A79 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -250,6 +314,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		673C41EA2F49ABCD004333E6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6786FEBF2F470F4300CBFE93 /* Ollie-app */;
+			targetProxy = 673C41E92F49ABCD004333E6 /* PBXContainerItemProxy */;
+		};
 		6768FD5A2F476789000E6A79 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 6768FD442F476789000E6A79 /* OlliewidgetExtension */;
@@ -258,6 +327,46 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		673C41EC2F49ABCD004333E6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = ZA6R83F354;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "jaapstronks.Ollie-appUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "Ollie-app";
+			};
+			name = Debug;
+		};
+		673C41ED2F49ABCD004333E6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = ZA6R83F354;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "jaapstronks.Ollie-appUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "Ollie-app";
+			};
+			name = Release;
+		};
 		6768FD5E2F476789000E6A79 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -512,6 +621,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		673C41EB2F49ABCD004333E6 /* Build configuration list for PBXNativeTarget "Ollie-appUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				673C41EC2F49ABCD004333E6 /* Debug */,
+				673C41ED2F49ABCD004333E6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		6768FD5D2F476789000E6A79 /* Build configuration list for PBXNativeTarget "OlliewidgetExtension" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

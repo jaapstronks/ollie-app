@@ -1,6 +1,6 @@
 # Ollie iOS — Feature Roadmap
 
-*Last updated: 2026-02-20*
+*Last updated: 2026-02-21*
 
 ## Current State
 - Core logging functionality complete
@@ -18,6 +18,147 @@
 
 ## Next Up
 - Basic Widgets (Phase 2.1)
+
+---
+
+## Phase 0: Infrastructure & Quality
+
+Essential infrastructure for production readiness and App Store compliance.
+
+### 0.1 Privacy Manifest ⚠️ REQUIRED
+**Effort:** Low | **Impact:** Critical
+**Deadline:** Required for App Store since May 2024
+
+Apple requires `PrivacyInfo.xcprivacy` declaring data collection and API usage.
+
+**Must declare:**
+- Required reason APIs used (UserDefaults, file timestamps, etc.)
+- Data types collected
+- Tracking status
+
+**Files:** `Ollie-app/PrivacyInfo.xcprivacy`
+
+---
+
+### 0.2 Crash Reporting
+**Effort:** Low | **Impact:** High
+
+Capture crashes and errors in production to fix issues users encounter.
+
+**Options:**
+- Firebase Crashlytics (free, Google ecosystem)
+- Sentry (privacy-focused, EU hosting available)
+- Bugsnag (simple setup)
+
+**Files:**
+- `Services/CrashReporter.swift`
+- SPM dependency
+
+---
+
+### 0.3 Unit Tests
+**Effort:** Medium | **Impact:** High
+
+XCTest target for testing business logic.
+
+**Priority test targets:**
+- `GapCalculations` — potty interval logic
+- `PredictionCalculations` — next potty predictions
+- `SleepCalculations` — nap vs night sleep detection
+- `StreakCalculations` — outdoor streak counting
+- `EventStore` — JSONL parsing/writing
+
+**Files:** New target `Ollie-appTests/`
+
+---
+
+### 0.4 CI/CD Pipeline
+**Effort:** Medium | **Impact:** Medium
+
+GitHub Actions for automated testing and builds.
+
+**Workflows:**
+- Run tests on PR
+- Build verification
+- Optional: TestFlight deployment
+
+**Files:** `.github/workflows/ci.yml`
+
+---
+
+### 0.5 Analytics (Optional)
+**Effort:** Low | **Impact:** Medium
+
+Understand how users interact with the app.
+
+**Privacy-first options:**
+- TelemetryDeck (privacy-focused, EU)
+- Aptabase (open source)
+- PostHog (self-hostable)
+
+**Key events to track:**
+- Onboarding completion rate
+- Most-used event types
+- Feature adoption (stats, predictions)
+
+---
+
+### 0.6 Feature Flags
+**Effort:** Low | **Impact:** Medium
+
+Toggle features without app updates.
+
+**Options:**
+- Firebase Remote Config
+- Simple UserDefaults-based local flags
+- PostHog feature flags
+
+**Use cases:**
+- A/B test onboarding flows
+- Gradual feature rollout
+- Kill switch for problematic features
+
+---
+
+### 0.7 Deep Linking / Universal Links
+**Effort:** Medium | **Impact:** Low
+
+Open specific screens from URLs or notifications.
+
+**Routes:**
+- `ollie://log/plassen` — open quick-log for potty
+- `ollie://stats` — open stats view
+- `ollie://today` — open today view
+
+**Files:**
+- `Utils/DeepLinkHandler.swift`
+- Associated Domains entitlement
+
+---
+
+### 0.8 Force Update Mechanism
+**Effort:** Low | **Impact:** Medium
+
+Require users to update when critical fixes are released.
+
+**Implementation:**
+- Check minimum version from remote config or simple JSON
+- Show blocking alert if current version < minimum
+
+**Files:** `Services/VersionChecker.swift`
+
+---
+
+### 0.9 iPad Optimization
+**Effort:** Medium | **Impact:** Low
+
+Adapt layouts for larger screens.
+
+**Considerations:**
+- Sidebar navigation on iPad
+- Multi-column layouts
+- Keyboard shortcuts
+- Pointer/trackpad support
 
 ---
 
@@ -306,15 +447,20 @@ Search events from iOS Spotlight.
 
 | Priority | Feature | Status | Why |
 |----------|---------|--------|-----|
-| 1 | Haptic feedback | ✅ Done | Quick win, immediate UX improvement |
-| 2 | Basic Widgets | | Most requested, high daily utility |
-| 3 | App Intents | | Enables voice, widgets, shortcuts |
-| 4 | Interactive Widgets | | Killer feature: log without unlocking |
-| 5 | Watch App | | Perfect for walks, hands-free logging |
-| 6 | Live Activities | | Nice-to-have, great for walk tracking |
-| 7 | TipKit | ✅ Done | Helps new users discover features |
-| 8 | Maps | | Niche, high effort |
-| 9 | Spotlight | | Low priority, users won't search often |
+| 0 | Privacy Manifest | ⚠️ | **Required** for App Store submission |
+| 1 | Crash Reporting | | Know when things break in production |
+| 2 | Haptic feedback | ✅ Done | Quick win, immediate UX improvement |
+| 3 | Unit Tests | | Confidence in calculation logic |
+| 4 | Basic Widgets | | Most requested, high daily utility |
+| 5 | App Intents | | Enables voice, widgets, shortcuts |
+| 6 | Interactive Widgets | | Killer feature: log without unlocking |
+| 7 | CI/CD Pipeline | | Automated testing on every PR |
+| 8 | Watch App | | Perfect for walks, hands-free logging |
+| 9 | Live Activities | | Nice-to-have, great for walk tracking |
+| 10 | TipKit | ✅ Done | Helps new users discover features |
+| 11 | Analytics | | Understand user behavior (optional) |
+| 12 | Maps | | Niche, high effort |
+| 13 | Spotlight | | Low priority, users won't search often |
 
 ---
 

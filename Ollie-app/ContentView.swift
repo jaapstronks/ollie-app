@@ -66,6 +66,7 @@ struct ContentView: View {
 }
 
 /// Wrapper view that owns the TimelineViewModel as a @StateObject
+/// New structure: 2 tabs (Today, Insights) + FAB for logging
 struct MainTabView: View {
     @Binding var selectedTab: Int
     let eventStore: EventStore
@@ -76,6 +77,7 @@ struct MainTabView: View {
 
     @StateObject private var viewModel: TimelineViewModel
     @StateObject private var momentsViewModel: MomentsViewModel
+    @State private var showingSettings = false
 
     init(
         selectedTab: Binding<Int>,
@@ -103,39 +105,72 @@ struct MainTabView: View {
     }
 
     var body: some View {
-        TabView(selection: $selectedTab) {
-            // Timeline tab
-            TimelineView(viewModel: viewModel, weatherService: weatherService)
+        ZStack(alignment: .bottom) {
+            // Main tab content
+            TabView(selection: $selectedTab) {
+                // Tab 1: Today (Vandaag)
+                TodayView(
+                    viewModel: viewModel,
+                    weatherService: weatherService,
+                    onSettingsTap: { showingSettings = true }
+                )
                 .tabItem {
-                    Label(Strings.Tabs.journal, systemImage: "list.bullet")
+                    Label(Strings.Tabs.today, systemImage: "calendar")
                 }
                 .tag(0)
 
-            // Stats tab
-            StatsView(viewModel: viewModel)
+                // Tab 2: Insights (Inzichten)
+                InsightsView(
+                    viewModel: viewModel,
+                    momentsViewModel: momentsViewModel
+                )
                 .tabItem {
-                    Label(Strings.Tabs.stats, systemImage: "chart.bar")
+                    Label(Strings.Tabs.insights, systemImage: "chart.bar")
                 }
                 .tag(1)
-
-            // Moments tab
-            MomentsGalleryView(viewModel: momentsViewModel)
-                .tabItem {
-                    Label(Strings.Tabs.moments, systemImage: "photo.on.rectangle")
-                }
-                .tag(2)
-
-            // Settings tab
-            SettingsView(
-                profileStore: profileStore,
-                dataImporter: dataImporter,
-                eventStore: eventStore,
-                notificationService: notificationService
-            )
-            .tabItem {
-                Label(Strings.Tabs.settings, systemImage: "gear")
             }
-            .tag(3)
+
+            // Floating Action Button
+            HStack {
+                Spacer()
+
+                FABButton(
+                    sleepState: viewModel.currentSleepState,
+                    onTap: {
+                        // Open full log sheet
+                        viewModel.showAllEvents()
+                    },
+                    onQuickAction: { eventType, location in
+                        // Quick log with default values
+                        if let location = location {
+                            viewModel.quickLogWithLocation(type: eventType, location: location)
+                        } else {
+                            viewModel.quickLog(type: eventType)
+                        }
+                    }
+                )
+                .padding(.trailing, 16)
+                .padding(.bottom, 60) // Above tab bar
+            }
+        }
+        // Settings sheet (accessed via gear icon in Today view)
+        .sheet(isPresented: $showingSettings) {
+            NavigationStack {
+                SettingsView(
+                    profileStore: profileStore,
+                    dataImporter: dataImporter,
+                    eventStore: eventStore,
+                    notificationService: notificationService
+                )
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button(Strings.Common.done) {
+                            showingSettings = false
+                        }
+                    }
+                }
+            }
         }
     }
 }

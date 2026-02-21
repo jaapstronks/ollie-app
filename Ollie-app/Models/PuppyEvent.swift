@@ -100,6 +100,7 @@ struct PuppyEvent: Codable, Identifiable {
     var latitude: Double?
     var longitude: Double?
     var thumbnailPath: String?
+    var weightKg: Double?  // Weight in kg, for gewicht events
 
     init(
         id: UUID = UUID(),
@@ -115,7 +116,8 @@ struct PuppyEvent: Codable, Identifiable {
         video: String? = nil,
         latitude: Double? = nil,
         longitude: Double? = nil,
-        thumbnailPath: String? = nil
+        thumbnailPath: String? = nil,
+        weightKg: Double? = nil
     ) {
         self.id = id
         self.time = time
@@ -131,6 +133,7 @@ struct PuppyEvent: Codable, Identifiable {
         self.latitude = latitude
         self.longitude = longitude
         self.thumbnailPath = thumbnailPath
+        self.weightKg = weightKg
     }
 
     // Custom coding keys for snake_case JSON compatibility
@@ -149,5 +152,6 @@ struct PuppyEvent: Codable, Identifiable {
         case latitude
         case longitude
         case thumbnailPath = "thumbnail_path"
+        case weightKg = "weight_kg"
     }
 }
