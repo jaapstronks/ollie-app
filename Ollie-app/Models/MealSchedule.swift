@@ -46,27 +46,27 @@ struct MealSchedule: Codable {
             return MealSchedule(
                 mealsPerDay: 4,
                 portions: [
-                    MealPortion(label: "Ontbijt", amount: baseAmount, targetTime: "07:00"),
-                    MealPortion(label: "Lunch", amount: baseAmount, targetTime: "11:00"),
-                    MealPortion(label: "Middag", amount: baseAmount, targetTime: "15:00"),
-                    MealPortion(label: "Avond", amount: baseAmount, targetTime: "19:00")
+                    MealPortion(label: Strings.Meals.breakfast, amount: baseAmount, targetTime: "07:00"),
+                    MealPortion(label: Strings.Meals.lunch, amount: baseAmount, targetTime: "11:00"),
+                    MealPortion(label: Strings.Meals.afternoon, amount: baseAmount, targetTime: "15:00"),
+                    MealPortion(label: Strings.Meals.evening, amount: baseAmount, targetTime: "19:00")
                 ]
             )
         } else if ageWeeks < 24 {
             return MealSchedule(
                 mealsPerDay: 3,
                 portions: [
-                    MealPortion(label: "Ontbijt", amount: baseAmount, targetTime: "07:00"),
-                    MealPortion(label: "Middag", amount: baseAmount, targetTime: "13:00"),
-                    MealPortion(label: "Avond", amount: baseAmount, targetTime: "19:00")
+                    MealPortion(label: Strings.Meals.breakfast, amount: baseAmount, targetTime: "07:00"),
+                    MealPortion(label: Strings.Meals.afternoon, amount: baseAmount, targetTime: "13:00"),
+                    MealPortion(label: Strings.Meals.evening, amount: baseAmount, targetTime: "19:00")
                 ]
             )
         } else {
             return MealSchedule(
                 mealsPerDay: 2,
                 portions: [
-                    MealPortion(label: "Ochtend", amount: baseAmount, targetTime: "07:00"),
-                    MealPortion(label: "Avond", amount: baseAmount, targetTime: "18:00")
+                    MealPortion(label: Strings.Meals.morning, amount: baseAmount, targetTime: "07:00"),
+                    MealPortion(label: Strings.Meals.evening, amount: baseAmount, targetTime: "18:00")
                 ]
             )
         }

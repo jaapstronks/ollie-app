@@ -4,6 +4,7 @@
 //
 
 import SwiftUI
+import UIKit
 
 /// Single event row in the timeline
 struct EventRow: View {
@@ -17,9 +18,8 @@ struct EventRow: View {
                 .foregroundColor(.secondary)
                 .frame(width: 44, alignment: .trailing)
 
-            // Emoji
-            Text(event.type.emoji)
-                .font(.title2)
+            // Event icon
+            EventIcon(type: event.type, location: event.location, size: 28)
 
             // Content
             VStack(alignment: .leading, spacing: 2) {
@@ -69,10 +69,26 @@ struct EventRow: View {
 
             Spacer()
 
-            // Media indicator
-            if event.photo != nil || event.video != nil {
-                Image(systemName: event.video != nil ? "video" : "photo")
-                    .foregroundColor(.secondary)
+            // Thumbnail or media indicator
+            if let thumbnailPath = event.thumbnailPath {
+                HStack(spacing: 8) {
+                    ThumbnailView(relativePath: thumbnailPath)
+                        .frame(width: 40, height: 40)
+                        .clipShape(RoundedRectangle(cornerRadius: 6))
+
+                    Image(systemName: "chevron.right")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+            } else if event.photo != nil || event.video != nil {
+                HStack(spacing: 8) {
+                    Image(systemName: event.video != nil ? "video" : "photo")
+                        .foregroundColor(.secondary)
+
+                    Image(systemName: "chevron.right")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
             }
         }
         .padding(.horizontal)
@@ -80,6 +96,7 @@ struct EventRow: View {
         .contentShape(Rectangle())
         .accessibilityElement(children: .combine)
         .accessibilityLabel(accessibilityDescription)
+        .accessibilityHint(event.photo != nil ? Strings.EventRow.tapToViewPhoto : "")
     }
 
     private var accessibilityDescription: String {
@@ -91,9 +108,46 @@ struct EventRow: View {
             parts.append(note)
         }
         if let who = event.who, !who.isEmpty {
-            parts.append("met \(who)")
+            parts.append(Strings.EventRow.withPerson(who))
         }
         return parts.joined(separator: ", ")
+    }
+}
+
+/// Async thumbnail loader view
+struct ThumbnailView: View {
+    let relativePath: String
+    @State private var image: UIImage?
+
+    private var documentsURL: URL {
+        FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+    }
+
+    var body: some View {
+        Group {
+            if let image = image {
+                Image(uiImage: image)
+                    .resizable()
+                    .scaledToFill()
+            } else {
+                Rectangle()
+                    .fill(Color(.tertiarySystemBackground))
+                    .overlay {
+                        Image(systemName: "photo")
+                            .foregroundColor(.secondary)
+                    }
+            }
+        }
+        .task {
+            loadImage()
+        }
+    }
+
+    private func loadImage() {
+        let url = documentsURL.appendingPathComponent(relativePath)
+        guard let data = try? Data(contentsOf: url),
+              let loaded = UIImage(data: data) else { return }
+        image = loaded
     }
 }
 

@@ -21,44 +21,48 @@ enum EventType: String, Codable, CaseIterable, Identifiable {
     case milestone
     case gedrag
     case gewicht
+    case moment
 
     var id: String { rawValue }
 
-    var emoji: String {
+    /// SF Symbol name for this event type
+    var icon: String {
         switch self {
-        case .eten: return "🍽️"
-        case .drinken: return "💧"
-        case .plassen: return "🚽"
-        case .poepen: return "💩"
-        case .slapen: return "😴"
-        case .ontwaken: return "☀️"
-        case .uitlaten: return "🚶"
-        case .tuin: return "🌳"
-        case .training: return "🎓"
-        case .bench: return "🏠"
-        case .sociaal: return "🐕"
-        case .milestone: return "🎉"
-        case .gedrag: return "📝"
-        case .gewicht: return "⚖️"
+        case .eten: return "fork.knife"
+        case .drinken: return "drop.fill"
+        case .plassen: return "drop.fill"
+        case .poepen: return "circle.inset.filled"
+        case .slapen: return "moon.zzz.fill"
+        case .ontwaken: return "sun.max.fill"
+        case .uitlaten: return "figure.walk"
+        case .tuin: return "leaf.fill"
+        case .training: return "graduationcap.fill"
+        case .bench: return "house.fill"
+        case .sociaal: return "dog.fill"
+        case .milestone: return "star.fill"
+        case .gedrag: return "note.text"
+        case .gewicht: return "scalemass.fill"
+        case .moment: return "camera.fill"
         }
     }
 
     var label: String {
         switch self {
-        case .eten: return "Eten"
-        case .drinken: return "Drinken"
-        case .plassen: return "Plassen"
-        case .poepen: return "Poepen"
-        case .slapen: return "Slapen"
-        case .ontwaken: return "Wakker"
-        case .uitlaten: return "Uitlaten"
-        case .tuin: return "Tuin"
-        case .training: return "Training"
-        case .bench: return "Bench"
-        case .sociaal: return "Sociaal"
-        case .milestone: return "Mijlpaal"
-        case .gedrag: return "Gedrag"
-        case .gewicht: return "Gewicht"
+        case .eten: return Strings.EventType.eat
+        case .drinken: return Strings.EventType.drink
+        case .plassen: return Strings.EventType.pee
+        case .poepen: return Strings.EventType.poop
+        case .slapen: return Strings.EventType.sleep
+        case .ontwaken: return Strings.EventType.wakeUp
+        case .uitlaten: return Strings.EventType.walk
+        case .tuin: return Strings.EventType.garden
+        case .training: return Strings.EventType.training
+        case .bench: return Strings.EventType.crate
+        case .sociaal: return Strings.EventType.social
+        case .milestone: return Strings.EventType.milestone
+        case .gedrag: return Strings.EventType.behavior
+        case .gewicht: return Strings.EventType.weight
+        case .moment: return Strings.EventType.moment
         }
     }
 
@@ -74,8 +78,8 @@ enum EventLocation: String, Codable {
 
     var label: String {
         switch self {
-        case .buiten: return "Buiten"
-        case .binnen: return "Binnen"
+        case .buiten: return Strings.EventLocation.outside
+        case .binnen: return Strings.EventLocation.inside
         }
     }
 }
@@ -93,6 +97,9 @@ struct PuppyEvent: Codable, Identifiable {
     var durationMin: Int?
     var photo: String?
     var video: String?
+    var latitude: Double?
+    var longitude: Double?
+    var thumbnailPath: String?
 
     init(
         id: UUID = UUID(),
@@ -105,7 +112,10 @@ struct PuppyEvent: Codable, Identifiable {
         result: String? = nil,
         durationMin: Int? = nil,
         photo: String? = nil,
-        video: String? = nil
+        video: String? = nil,
+        latitude: Double? = nil,
+        longitude: Double? = nil,
+        thumbnailPath: String? = nil
     ) {
         self.id = id
         self.time = time
@@ -118,6 +128,9 @@ struct PuppyEvent: Codable, Identifiable {
         self.durationMin = durationMin
         self.photo = photo
         self.video = video
+        self.latitude = latitude
+        self.longitude = longitude
+        self.thumbnailPath = thumbnailPath
     }
 
     // Custom coding keys for snake_case JSON compatibility
@@ -133,5 +146,8 @@ struct PuppyEvent: Codable, Identifiable {
         case durationMin = "duration_min"
         case photo
         case video
+        case latitude
+        case longitude
+        case thumbnailPath = "thumbnail_path"
     }
 }

@@ -13,28 +13,29 @@ struct LocationPickerSheet: View {
 
     var body: some View {
         VStack(spacing: 20) {
-            Text("\(eventType.emoji) \(eventType.label)")
-                .font(.headline)
+            HStack(spacing: 8) {
+                EventIcon(type: eventType, size: 28)
+                Text(eventType.label)
+                    .font(.headline)
+            }
 
-            Text("Waar?")
+            Text(Strings.LocationPicker.title)
                 .font(.subheadline)
                 .foregroundColor(.secondary)
 
             HStack(spacing: 20) {
-                LocationButton(
+                LocationButtonIcon(
                     location: .buiten,
-                    emoji: "🌳",
                     action: { onSelect(.buiten) }
                 )
 
-                LocationButton(
+                LocationButtonIcon(
                     location: .binnen,
-                    emoji: "🏠",
                     action: { onSelect(.binnen) }
                 )
             }
 
-            Button("Annuleren", role: .cancel) {
+            Button(Strings.Common.cancel, role: .cancel) {
                 onCancel()
             }
             .foregroundColor(.secondary)
@@ -43,9 +44,8 @@ struct LocationPickerSheet: View {
     }
 }
 
-struct LocationButton: View {
+struct LocationButtonIcon: View {
     let location: EventLocation
-    let emoji: String
     let action: () -> Void
 
     var body: some View {
@@ -54,8 +54,7 @@ struct LocationButton: View {
             action()
         } label: {
             VStack(spacing: 8) {
-                Text(emoji)
-                    .font(.system(size: 40))
+                LocationIcon(location: location, size: 40)
 
                 Text(location.label)
                     .font(.headline)

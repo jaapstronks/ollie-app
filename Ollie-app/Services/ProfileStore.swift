@@ -61,6 +61,27 @@ class ProfileStore: ObservableObject {
         saveProfile(currentProfile)
     }
 
+    /// Update the notification settings
+    func updateNotificationSettings(_ settings: NotificationSettings) {
+        guard var currentProfile = profile else { return }
+        currentProfile.notificationSettings = settings
+        saveProfile(currentProfile)
+    }
+
+    /// Update the walk schedule
+    func updateWalkSchedule(_ schedule: WalkSchedule) {
+        guard var currentProfile = profile else { return }
+        currentProfile.walkSchedule = schedule
+        saveProfile(currentProfile)
+    }
+
+    /// Unlock premium for the current profile
+    func unlockPremium() {
+        guard var currentProfile = profile else { return }
+        currentProfile.isPremiumUnlocked = true
+        saveProfile(currentProfile)
+    }
+
     /// Reset profile (for testing or re-onboarding)
     func resetProfile() {
         profile = nil

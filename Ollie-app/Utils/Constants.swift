@@ -4,6 +4,7 @@
 //
 
 import Foundation
+import CoreGraphics
 
 /// App-wide constants (non-profile-specific)
 enum Constants {
@@ -14,9 +15,10 @@ enum Constants {
     static let profileFileName = "profile.json"
 
     /// Quick-log event types shown in the bottom bar
+    /// Note: plassen/poepen are now combined in a "Toilet" button with modal selection
+    /// slapen/ontwaken toggle based on current sleep state
+    /// eten/uitlaten are shown conditionally based on schedule
     static let quickLogTypes: [EventType] = [
-        .plassen,
-        .poepen,
         .eten,
         .slapen,
         .ontwaken,
@@ -27,4 +29,51 @@ enum Constants {
     static let gitHubOwner = "jaapstronks"
     static let gitHubRepo = "Ollie"
     static let gitHubDataPath = "data"
+
+    /// Media storage
+    static let mediaDirectoryName = "media"
+    static let thumbnailDirectoryName = "thumbnails"
+    static let thumbnailSize: CGFloat = 200
+    static let maxPhotoSize: CGFloat = 1920
+
+    // MARK: - Time Windows
+
+    /// Walk windows: morning (7-9), midday (12-14), evening (17-20)
+    static let walkWindows: [(start: Int, end: Int)] = [(7, 9), (12, 14), (17, 20)]
+
+    /// Night time start hour (23:00)
+    static let nightStartHour = 23
+
+    /// Night time end hour (06:00)
+    static let nightEndHour = 6
+
+    // MARK: - Timing Thresholds
+
+    /// Minutes before meal time to show meal icon
+    static let mealWindowBeforeMinutes = 30
+
+    /// Minutes after meal time to allow logging
+    static let mealWindowAfterMinutes = 60
+
+    /// Seconds since last walk to consider "recent" (2 hours)
+    static let recentWalkThresholdSeconds: TimeInterval = 7200
+
+    /// Seconds for undo banner auto-dismiss (5 seconds)
+    static let undoBannerTimeoutSeconds: TimeInterval = 5
+
+    /// Seconds for sheet transition delay (0.3 seconds)
+    static let sheetTransitionDelay: TimeInterval = 0.3
+
+    // MARK: - Helper Functions
+
+    /// Check if given hour is during night time (23:00 - 06:00)
+    static func isNightTime(hour: Int) -> Bool {
+        hour >= nightStartHour || hour < nightEndHour
+    }
+
+    /// Check if current time is during night hours
+    static func isNightTimeNow() -> Bool {
+        let hour = Calendar.current.component(.hour, from: Date())
+        return isNightTime(hour: hour)
+    }
 }

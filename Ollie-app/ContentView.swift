@@ -10,10 +10,17 @@ struct ContentView: View {
     @EnvironmentObject var profileStore: ProfileStore
     @EnvironmentObject var eventStore: EventStore
     @EnvironmentObject var dataImporter: DataImporter
+    @EnvironmentObject var weatherService: WeatherService
+    @EnvironmentObject var notificationService: NotificationService
 
     @State private var showOnboarding = false
     @AppStorage(UserPreferences.Key.lastSelectedTab.rawValue) private var selectedTab = 0
+    @AppStorage(UserPreferences.Key.appearanceMode.rawValue) private var appearanceMode = AppearanceMode.system.rawValue
     @State private var showLaunchScreen = true
+
+    private var colorScheme: ColorScheme? {
+        AppearanceMode(rawValue: appearanceMode)?.colorScheme
+    }
 
     var body: some View {
         ZStack {
@@ -32,7 +39,9 @@ struct ContentView: View {
                         selectedTab: $selectedTab,
                         eventStore: eventStore,
                         profileStore: profileStore,
-                        dataImporter: dataImporter
+                        dataImporter: dataImporter,
+                        weatherService: weatherService,
+                        notificationService: notificationService
                     )
                 }
             }
@@ -52,6 +61,7 @@ struct ContentView: View {
                 }
             }
         }
+        .preferredColorScheme(colorScheme)
     }
 }
 
@@ -61,45 +71,71 @@ struct MainTabView: View {
     let eventStore: EventStore
     let profileStore: ProfileStore
     let dataImporter: DataImporter
+    @ObservedObject var weatherService: WeatherService
+    @ObservedObject var notificationService: NotificationService
 
     @StateObject private var viewModel: TimelineViewModel
+    @StateObject private var momentsViewModel: MomentsViewModel
 
     init(
         selectedTab: Binding<Int>,
         eventStore: EventStore,
         profileStore: ProfileStore,
-        dataImporter: DataImporter
+        dataImporter: DataImporter,
+        weatherService: WeatherService,
+        notificationService: NotificationService
     ) {
         self._selectedTab = selectedTab
         self.eventStore = eventStore
         self.profileStore = profileStore
         self.dataImporter = dataImporter
+        self.weatherService = weatherService
+        self.notificationService = notificationService
         // StateObject init with autoclosure ensures single creation
         self._viewModel = StateObject(wrappedValue: TimelineViewModel(
             eventStore: eventStore,
-            profileStore: profileStore
+            profileStore: profileStore,
+            notificationService: notificationService
+        ))
+        self._momentsViewModel = StateObject(wrappedValue: MomentsViewModel(
+            eventStore: eventStore
         ))
     }
 
     var body: some View {
         TabView(selection: $selectedTab) {
             // Timeline tab
-            TimelineView(viewModel: viewModel)
+            TimelineView(viewModel: viewModel, weatherService: weatherService)
                 .tabItem {
-                    Label("Dagboek", systemImage: "list.bullet")
+                    Label(Strings.Tabs.journal, systemImage: "list.bullet")
                 }
                 .tag(0)
+
+            // Stats tab
+            StatsView(viewModel: viewModel)
+                .tabItem {
+                    Label(Strings.Tabs.stats, systemImage: "chart.bar")
+                }
+                .tag(1)
+
+            // Moments tab
+            MomentsGalleryView(viewModel: momentsViewModel)
+                .tabItem {
+                    Label(Strings.Tabs.moments, systemImage: "photo.on.rectangle")
+                }
+                .tag(2)
 
             // Settings tab
             SettingsView(
                 profileStore: profileStore,
                 dataImporter: dataImporter,
-                eventStore: eventStore
+                eventStore: eventStore,
+                notificationService: notificationService
             )
             .tabItem {
-                Label("Instellingen", systemImage: "gear")
+                Label(Strings.Tabs.settings, systemImage: "gear")
             }
-            .tag(1)
+            .tag(3)
         }
     }
 }
@@ -109,4 +145,6 @@ struct MainTabView: View {
         .environmentObject(ProfileStore())
         .environmentObject(EventStore())
         .environmentObject(DataImporter())
+        .environmentObject(WeatherService())
+        .environmentObject(NotificationService())
 }

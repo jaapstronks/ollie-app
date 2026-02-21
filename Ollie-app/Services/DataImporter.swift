@@ -28,7 +28,7 @@ class DataImporter: ObservableObject {
     /// Import all available JSONL files from GitHub
     func importFromGitHub(overwriteExisting: Bool = false) async throws -> ImportResult {
         isImporting = true
-        progress = "Bestanden ophalen..."
+        progress = Strings.DataImport.fetchingFiles
 
         defer {
             isImporting = false
@@ -38,13 +38,13 @@ class DataImporter: ObservableObject {
         let files = try await fetchFileList()
         let jsonlFiles = files.filter { $0.name.hasSuffix(".jsonl") }
 
-        progress = "Gevonden: \(jsonlFiles.count) dagen"
+        progress = Strings.DataImport.foundDays(jsonlFiles.count)
 
         // Step 2: Download each file
         var result = ImportResult(filesImported: 0, eventsImported: 0, skipped: 0, errors: [])
 
         for (index, file) in jsonlFiles.enumerated() {
-            progress = "Importeren: \(index + 1)/\(jsonlFiles.count)"
+            progress = Strings.DataImport.downloading(current: index + 1, total: jsonlFiles.count)
 
             let localURL = dataDirectoryURL.appendingPathComponent(file.name)
 
@@ -67,7 +67,7 @@ class DataImporter: ObservableObject {
             }
         }
 
-        progress = "Klaar!"
+        progress = Strings.DataImport.done
         lastResult = result
 
         return result
@@ -145,10 +145,10 @@ enum ImportError: LocalizedError {
 
     var errorDescription: String? {
         switch self {
-        case .apiError: return "Kon GitHub API niet bereiken"
-        case .invalidResponse: return "Ongeldig antwoord van GitHub"
-        case .downloadFailed: return "Download mislukt"
-        case .invalidContent: return "Bestandsinhoud ongeldig"
+        case .apiError: return Strings.DataImport.apiError
+        case .invalidResponse: return Strings.DataImport.invalidResponse
+        case .downloadFailed: return Strings.DataImport.downloadFailed
+        case .invalidContent: return Strings.DataImport.invalidContent
         }
     }
 }

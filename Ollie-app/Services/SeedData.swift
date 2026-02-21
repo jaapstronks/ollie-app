@@ -16,7 +16,7 @@ enum SeedData {
         try? fileManager.createDirectory(at: dataDir, withIntermediateDirectories: true)
 
         // Check if we already have data
-        let todayFile = dataDir.appendingPathComponent("\(DateHelpers.formatDateForFile(Date())).jsonl")
+        let todayFile = dataDir.appendingPathComponent("\(Date().dateString).jsonl")
         if fileManager.fileExists(atPath: todayFile.path) {
             return // Already have data for today
         }
