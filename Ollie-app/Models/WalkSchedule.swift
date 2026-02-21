@@ -11,7 +11,7 @@ struct WalkSchedule: Codable {
 
     struct ScheduledWalk: Codable, Identifiable {
         var id: UUID
-        var label: String       // "Ochtendwandeling", "Middagwandeling", "Avondwandeling"
+        var label: String       // "Morning walk", "Afternoon walk", "Evening walk"
         var targetTime: String  // "08:00", "18:00"
 
         init(id: UUID = UUID(), label: String, targetTime: String) {

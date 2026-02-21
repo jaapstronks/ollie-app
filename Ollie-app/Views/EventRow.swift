@@ -157,7 +157,7 @@ struct ThumbnailView: View {
             time: Date(),
             type: .plassen,
             location: .buiten,
-            note: "Na het ontbijt"
+            note: "After breakfast"
         ))
 
         Divider()
@@ -165,8 +165,8 @@ struct ThumbnailView: View {
         EventRow(event: PuppyEvent(
             time: Date(),
             type: .training,
-            exercise: "Zit",
-            result: "Goed gedaan!"
+            exercise: "Sit",
+            result: "Good job!"
         ))
 
         Divider()
@@ -174,7 +174,7 @@ struct ThumbnailView: View {
         EventRow(event: PuppyEvent(
             time: Date(),
             type: .sociaal,
-            who: "Buurhond Sasha"
+            who: "Neighbor's dog Sasha"
         ))
     }
 }

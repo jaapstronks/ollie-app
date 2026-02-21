@@ -49,6 +49,37 @@ enum Strings {
         static let stats = String(localized: "Stats")
         static let moments = String(localized: "Moments")
         static let settings = String(localized: "Settings")
+        // New 2-tab structure
+        static let today = String(localized: "Today")
+        static let insights = String(localized: "Insights")
+    }
+
+    // MARK: - FAB (Floating Action Button)
+    enum FAB {
+        static let log = String(localized: "Log")
+        static let peeOutside = String(localized: "Pee outside")
+        static let poopOutside = String(localized: "Poop outside")
+        static let eat = String(localized: "Eat")
+        static let sleep = String(localized: "Sleep")
+        static let wakeUp = String(localized: "Wake up")
+        static let walk = String(localized: "Walk")
+        static let training = String(localized: "Training")
+        static let accessibilityLabel = String(localized: "Log event")
+        static let accessibilityHint = String(localized: "Tap to log any event, or hold for quick actions")
+    }
+
+    // MARK: - Insights View
+    enum Insights {
+        static let title = String(localized: "Insights")
+        static let weekOverview = String(localized: "Week Overview")
+        static let trends = String(localized: "Trends")
+        static let explore = String(localized: "Explore")
+        static let training = String(localized: "Training")
+        static let trainingDescription = String(localized: "Track skills & progress")
+        static let health = String(localized: "Health")
+        static let healthDescription = String(localized: "Weight & milestones")
+        static let momentsTitle = String(localized: "Moments")
+        static let momentsDescription = String(localized: "Photos & memories")
     }
 
     // MARK: - Event Types
@@ -268,6 +299,38 @@ enum Strings {
         }
         static func awakeSinceTime(time: String) -> String {
             String(localized: "Awake since: \(time)")
+        }
+    }
+
+    // MARK: - Poop Status Card
+    enum PoopStatus {
+        static let accessibility = String(localized: "Poop status")
+        static let tracking = String(localized: "Poop tracking")
+        static let normal = String(localized: "Normal")
+        static let complete = String(localized: "Done")
+        static let done = String(localized: "Done")
+        static let notYet = String(localized: "Not yet")
+
+        // Slot labels
+        static let morning = String(localized: "Morning")
+        static let lateAfternoon = String(localized: "Late afternoon")
+
+        // Status messages
+        static let allDone = String(localized: "Both poops done")
+        static let morningNotYet = String(localized: "Morning poop not yet")
+        static let morningMissed = String(localized: "Morning poop missed")
+        static let afternoonExpected = String(localized: "Afternoon poop expected — 17:00–19:00")
+        static let afternoonUrgent = String(localized: "Afternoon poop missing! Take her outside")
+
+        // Time since formatting
+        static func minutesAgo(_ minutes: Int) -> String {
+            String(localized: "\(minutes) min ago")
+        }
+        static func hoursAgo(_ hours: Int) -> String {
+            String(localized: "\(hours)h ago")
+        }
+        static func hoursMinutesAgo(hours: Int, minutes: Int) -> String {
+            String(localized: "\(hours)h\(minutes)m ago")
         }
     }
 
@@ -736,6 +799,126 @@ enum Strings {
 
         static let predictionTitle = String(localized: "Prediction")
         static let predictionMessage = String(localized: "The app learns from patterns and predicts when your puppy needs to pee.")
+    }
+
+    // MARK: - Health View
+    enum Health {
+        static let title = String(localized: "Health")
+        static let weight = String(localized: "Weight")
+        static let milestones = String(localized: "Milestones")
+        static let noWeightData = String(localized: "No weight data yet")
+        static let logFirstWeight = String(localized: "Log your first weight measurement")
+        static let logWeight = String(localized: "Log weight")
+        static let currentWeight = String(localized: "Current weight")
+        static let growthCurve = String(localized: "Growth curve")
+        static let referenceRange = String(localized: "Reference range")
+
+        // Weight status
+        static let weightOnTrack = String(localized: "On track")
+        static let weightAboveReference = String(localized: "Above reference")
+        static let weightBelowReference = String(localized: "Below reference")
+
+        // Weight delta
+        static func sinceLast(_ delta: String) -> String {
+            String(localized: "\(delta) since last")
+        }
+        static func sincePrevious(_ delta: String, date: String) -> String {
+            String(localized: "\(delta) since \(date)")
+        }
+
+        // Chart
+        static let weeks = String(localized: "Weeks")
+        static let kg = String(localized: "kg")
+        static let yourPuppy = String(localized: "Your puppy")
+        static let reference = String(localized: "Reference")
+
+        // Milestones
+        static let done = String(localized: "Done")
+        static let nextUp = String(localized: "Next up")
+        static let future = String(localized: "Upcoming")
+        static let overdue = String(localized: "Overdue")
+
+        // Default milestones (Dutch vaccination schedule)
+        static let firstDewormingBreeder = String(localized: "First deworming (breeder)")
+        static let firstVaccination = String(localized: "First vaccination (DHP + Lepto)")
+        static let firstVetVisit = String(localized: "First vet visit")
+        static let firstDewormingHome = String(localized: "First deworming (home)")
+        static let secondVaccination = String(localized: "Second vaccination (DHP + Lepto + Rabies)")
+        static let thirdVaccination = String(localized: "Third vaccination (cocktail)")
+        static let neuteredDiscussion = String(localized: "Spay/neuter discussion with vet")
+        static let yearlyVaccination = String(localized: "Yearly vaccination")
+
+        // Week/month labels
+        static func weekNumber(_ week: Int) -> String {
+            String(localized: "Week \(week)")
+        }
+        static func monthNumber(_ month: Int) -> String {
+            String(localized: "\(month) months")
+        }
+
+        // Weight log sheet
+        static let weightKg = String(localized: "Weight (kg)")
+        static let enterWeight = String(localized: "Enter weight")
+        static let weightPlaceholder = String(localized: "e.g. 8.5")
+    }
+
+    // MARK: - Training
+    enum Training {
+        static let title = String(localized: "Training")
+        static let skillTracker = String(localized: "Skill Tracker")
+
+        // Categories
+        static let categoryFoundations = String(localized: "Foundations")
+        static let categoryBasicCommands = String(localized: "Basic Commands")
+        static let categoryCare = String(localized: "Care")
+        static let categorySafety = String(localized: "Safety")
+        static let categoryImpulseControl = String(localized: "Impulse Control")
+
+        // Status
+        static let statusNotStarted = String(localized: "Not started")
+        static let statusStarted = String(localized: "Started")
+        static let statusPracticing = String(localized: "Practicing")
+        static let statusMastered = String(localized: "Mastered")
+
+        // Week hero card
+        static func weekNumber(_ week: Int) -> String {
+            String(localized: "Week \(week)")
+        }
+        static let focusSkills = String(localized: "Focus skills")
+        static func progressCount(started: Int, total: Int) -> String {
+            String(localized: "\(started)/\(total) started")
+        }
+
+        // Skill card
+        static func sessionCount(_ count: Int) -> String {
+            if count == 1 {
+                return String(localized: "1 session")
+            } else {
+                return String(localized: "\(count) sessions")
+            }
+        }
+        static let locked = String(localized: "Locked")
+        static let requires = String(localized: "Requires")
+        static let howTo = String(localized: "How to train")
+        static let doneWhen = String(localized: "Done when")
+        static let tips = String(localized: "Tips")
+        static let recentSessions = String(localized: "Recent sessions")
+        static let logSession = String(localized: "Log session")
+        static let markMastered = String(localized: "Mark as mastered")
+        static let unmarkMastered = String(localized: "Unmark mastered")
+
+        // Log sheet
+        static let logTrainingSession = String(localized: "Log Training Session")
+        static let duration = String(localized: "Duration")
+        static let durationMinutes = String(localized: "minutes")
+        static let result = String(localized: "Result")
+        static let resultPlaceholder = String(localized: "e.g. Good focus, needed help")
+        static let note = String(localized: "Note")
+        static let notePlaceholder = String(localized: "Optional note...")
+
+        // Empty state
+        static let noSkillsStarted = String(localized: "No skills started yet")
+        static let tapToBegin = String(localized: "Tap a skill to begin training")
     }
 
     // MARK: - Errors

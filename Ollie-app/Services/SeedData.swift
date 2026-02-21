@@ -41,10 +41,10 @@ enum SeedData {
             events.append(makeEvent(time: time4, type: "eten"))
         }
         if let time5 = calendar.date(bySettingHour: 8, minute: 0, second: 0, of: now) {
-            events.append(makeEvent(time: time5, type: "plassen", location: "buiten", note: "Na het ontbijt"))
+            events.append(makeEvent(time: time5, type: "plassen", location: "buiten", note: "After breakfast"))
         }
         if let time6 = calendar.date(bySettingHour: 9, minute: 30, second: 0, of: now) {
-            events.append(makeEvent(time: time6, type: "slapen", note: "Ochtend dutje"))
+            events.append(makeEvent(time: time6, type: "slapen", note: "Morning nap"))
         }
         if let time7 = calendar.date(bySettingHour: 10, minute: 15, second: 0, of: now) {
             events.append(makeEvent(time: time7, type: "ontwaken"))
