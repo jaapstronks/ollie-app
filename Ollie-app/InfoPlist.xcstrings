@@ -41,6 +41,23 @@
         }
       }
     },
+    "NSLocationWhenInUseUsageDescription" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ollie uses your location to save walk spots so you can easily log walks at your favorite places."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ollie gebruikt je locatie om wandelplekken op te slaan zodat je makkelijk wandelingen kunt loggen op je favoriete plekken."
+          }
+        }
+      }
+    },
     "NSPhotoLibraryUsageDescription" : {
       "extractionState" : "manual",
       "localizations" : {

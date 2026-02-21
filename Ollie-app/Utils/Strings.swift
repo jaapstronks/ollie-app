@@ -34,6 +34,11 @@ enum Strings {
         static let weeks = String(localized: "weeks")
         static let days = String(localized: "days")
         static let hours = String(localized: "hours")
+
+        // Relative dates
+        static let today = String(localized: "Today")
+        static let yesterday = String(localized: "Yesterday")
+        static let tomorrow = String(localized: "Tomorrow")
     }
 
     // MARK: - App
@@ -351,9 +356,9 @@ enum Strings {
     enum Streak {
         static let accessibility = String(localized: "Outdoor streak")
         static func outdoorStreak(count: Int) -> String {
-            String(localized: "\(count)x outside")
+            String(localized: "\(count) outdoor in a row")
         }
-        static let inARow = String(localized: "in a row!")
+        static let onFire = String(localized: "On fire!")
         static let streakBroken = String(localized: "Streak broken")
         static func recordTryAgain(count: Int) -> String {
             String(localized: "Record: \(count)x — try again!")
@@ -1207,6 +1212,7 @@ enum Strings {
         static let locationCaptured = String(localized: "Location captured")
         static let optional = String(localized: "(optional)")
         static let walkLocation = String(localized: "Walk location")
+        static let addSpot = String(localized: "Add spot")
 
         // Spot categories
         static let categoryPark = String(localized: "Park")
@@ -1236,11 +1242,26 @@ enum Strings {
         static let openInMaps = String(localized: "Open in Maps")
     }
 
+    // MARK: - Spot Detail
+    enum SpotDetail {
+        static let addSpot = String(localized: "Add Spot")
+        static let visits = String(localized: "Visits")
+        static let created = String(localized: "Created")
+        static let deleteConfirmMessage = String(localized: "This will permanently delete this spot.")
+        static let notesOptional = String(localized: "Notes (optional)")
+        static let recapture = String(localized: "Recapture")
+        static let tryAgain = String(localized: "Try again")
+        static let pickOnMap = String(localized: "Pick on map")
+        static let selectLocation = String(localized: "Select Location")
+        static let moveMapToSelect = String(localized: "Move map to position the pin")
+    }
+
     // MARK: - Walks Tab
     enum WalksTab {
         static let title = String(localized: "Walks")
         static let todaysWalks = String(localized: "Today's walks")
         static let noWalksToday = String(localized: "No walks logged today")
+        static let startWalk = String(localized: "Start a walk")
         static let yourSpots = String(localized: "Your spots")
         static let nearbySpots = String(localized: "Nearby spots")
         static let allSpots = String(localized: "All spots")
