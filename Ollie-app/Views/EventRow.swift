@@ -65,6 +65,13 @@ struct EventRow: View {
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
+
+                // Walk location
+                if event.type == .uitlaten, let spotName = event.spotName {
+                    Label(spotName, systemImage: "mappin.circle.fill")
+                        .font(.caption)
+                        .foregroundStyle(Color.ollieAccent)
+                }
             }
 
             Spacer()
@@ -96,7 +103,8 @@ struct EventRow: View {
         .contentShape(Rectangle())
         .accessibilityElement(children: .combine)
         .accessibilityLabel(accessibilityDescription)
-        .accessibilityHint(event.photo != nil ? Strings.EventRow.tapToViewPhoto : "")
+        .accessibilityHint(event.photo != nil || event.video != nil ? Strings.EventRow.tapToViewMedia : "")
+        .accessibilityIdentifier("EVENT_ROW_\(event.type.rawValue)")
     }
 
     private var accessibilityDescription: String {
@@ -114,14 +122,11 @@ struct EventRow: View {
     }
 }
 
-/// Async thumbnail loader view
+/// Async thumbnail loader view with caching
 struct ThumbnailView: View {
     let relativePath: String
     @State private var image: UIImage?
-
-    private var documentsURL: URL {
-        FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-    }
+    @State private var loadTask: Task<Void, Never>?
 
     var body: some View {
         Group {
@@ -133,21 +138,29 @@ struct ThumbnailView: View {
                 Rectangle()
                     .fill(Color(.tertiarySystemBackground))
                     .overlay {
-                        Image(systemName: "photo")
-                            .foregroundColor(.secondary)
+                        ProgressView()
+                            .scaleEffect(0.6)
                     }
             }
         }
-        .task {
-            loadImage()
+        .task(id: relativePath) {
+            await loadImageAsync()
+        }
+        .onDisappear {
+            // Cancel loading if view disappears (scrolled off screen)
+            loadTask?.cancel()
+            loadTask = nil
         }
     }
 
-    private func loadImage() {
-        let url = documentsURL.appendingPathComponent(relativePath)
-        guard let data = try? Data(contentsOf: url),
-              let loaded = UIImage(data: data) else { return }
-        image = loaded
+    private func loadImageAsync() async {
+        // Load from cache or disk on background thread
+        if let loaded = await ImageCache.shared.loadImage(relativePath: relativePath, isThumbnail: true) {
+            // Only update if task wasn't cancelled
+            if !Task.isCancelled {
+                image = loaded
+            }
+        }
     }
 }
 

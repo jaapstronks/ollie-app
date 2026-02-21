@@ -13,7 +13,6 @@ struct TrainingView: View {
     @StateObject private var trainingStore = TrainingPlanStore()
 
     @State private var selectedSkill: Skill?
-    @State private var showingLogSheet = false
     @State private var scrollToSkillId: String?
 
     @Environment(\.colorScheme) private var colorScheme
@@ -56,22 +55,18 @@ struct TrainingView: View {
         .onAppear {
             trainingStore.setEventStore(eventStore)
         }
-        .sheet(isPresented: $showingLogSheet) {
-            if let skill = selectedSkill {
-                TrainingLogSheet(
-                    skill: skill,
-                    onSave: { event in
-                        eventStore.addEvent(event)
-                        showingLogSheet = false
-                        selectedSkill = nil
-                    },
-                    onCancel: {
-                        showingLogSheet = false
-                        selectedSkill = nil
-                    }
-                )
-                .presentationDetents([.height(500)])
-            }
+        .sheet(item: $selectedSkill) { skill in
+            TrainingLogSheet(
+                skill: skill,
+                onSave: { event in
+                    eventStore.addEvent(event)
+                    selectedSkill = nil
+                },
+                onCancel: {
+                    selectedSkill = nil
+                }
+            )
+            .presentationDetents([.height(500)])
         }
     }
 
@@ -128,7 +123,6 @@ struct TrainingView: View {
                         recentSessions: recentSessions,
                         onLogSession: {
                             selectedSkill = skill
-                            showingLogSheet = true
                         },
                         onToggleMastered: {
                             trainingStore.toggleMastered(skill.id)

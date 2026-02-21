@@ -12,6 +12,7 @@ struct ContentView: View {
     @EnvironmentObject var dataImporter: DataImporter
     @EnvironmentObject var weatherService: WeatherService
     @EnvironmentObject var notificationService: NotificationService
+    @EnvironmentObject var spotStore: SpotStore
 
     @State private var showOnboarding = false
     @AppStorage(UserPreferences.Key.lastSelectedTab.rawValue) private var selectedTab = 0
@@ -41,7 +42,8 @@ struct ContentView: View {
                         profileStore: profileStore,
                         dataImporter: dataImporter,
                         weatherService: weatherService,
-                        notificationService: notificationService
+                        notificationService: notificationService,
+                        spotStore: spotStore
                     )
                 }
             }
@@ -66,7 +68,7 @@ struct ContentView: View {
 }
 
 /// Wrapper view that owns the TimelineViewModel as a @StateObject
-/// New structure: 2 tabs (Today, Insights) + FAB for logging
+/// New structure: 4 tabs (Today, Train, Walks, Plan) + FAB for logging
 struct MainTabView: View {
     @Binding var selectedTab: Int
     let eventStore: EventStore
@@ -74,10 +76,15 @@ struct MainTabView: View {
     let dataImporter: DataImporter
     @ObservedObject var weatherService: WeatherService
     @ObservedObject var notificationService: NotificationService
+    @ObservedObject var spotStore: SpotStore
+    @EnvironmentObject var locationManager: LocationManager
 
     @StateObject private var viewModel: TimelineViewModel
     @StateObject private var momentsViewModel: MomentsViewModel
+    @StateObject private var mediaCaptureViewModel = MediaCaptureViewModel(mediaStore: MediaStore())
     @State private var showingSettings = false
+    @State private var selectedPhotoEvent: PuppyEvent?
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     init(
         selectedTab: Binding<Int>,
@@ -85,7 +92,8 @@ struct MainTabView: View {
         profileStore: ProfileStore,
         dataImporter: DataImporter,
         weatherService: WeatherService,
-        notificationService: NotificationService
+        notificationService: NotificationService,
+        spotStore: SpotStore
     ) {
         self._selectedTab = selectedTab
         self.eventStore = eventStore
@@ -93,6 +101,7 @@ struct MainTabView: View {
         self.dataImporter = dataImporter
         self.weatherService = weatherService
         self.notificationService = notificationService
+        self.spotStore = spotStore
         // StateObject init with autoclosure ensures single creation
         self._viewModel = StateObject(wrappedValue: TimelineViewModel(
             eventStore: eventStore,
@@ -108,7 +117,7 @@ struct MainTabView: View {
         ZStack(alignment: .bottom) {
             // Main tab content
             TabView(selection: $selectedTab) {
-                // Tab 1: Today (Vandaag)
+                // Tab 0: Today
                 TodayView(
                     viewModel: viewModel,
                     weatherService: weatherService,
@@ -119,15 +128,36 @@ struct MainTabView: View {
                 }
                 .tag(0)
 
-                // Tab 2: Insights (Inzichten)
-                InsightsView(
+                // Tab 1: Training
+                NavigationStack {
+                    TrainingView(eventStore: eventStore)
+                }
+                .tabItem {
+                    Label(Strings.Tabs.train, systemImage: "graduationcap.fill")
+                }
+                .tag(1)
+
+                // Tab 2: Walks
+                WalksTabView(
+                    spotStore: spotStore,
+                    weatherService: weatherService,
+                    locationManager: locationManager,
+                    viewModel: viewModel
+                )
+                .tabItem {
+                    Label(Strings.Tabs.walks, systemImage: "figure.walk")
+                }
+                .tag(2)
+
+                // Tab 3: Plan
+                PlanTabView(
                     viewModel: viewModel,
                     momentsViewModel: momentsViewModel
                 )
                 .tabItem {
-                    Label(Strings.Tabs.insights, systemImage: "chart.bar")
+                    Label(Strings.Tabs.plan, systemImage: "calendar.badge.clock")
                 }
-                .tag(1)
+                .tag(3)
             }
 
             // Floating Action Button
@@ -160,7 +190,9 @@ struct MainTabView: View {
                     profileStore: profileStore,
                     dataImporter: dataImporter,
                     eventStore: eventStore,
-                    notificationService: notificationService
+                    notificationService: notificationService,
+                    spotStore: spotStore,
+                    viewModel: viewModel
                 )
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
@@ -172,6 +204,15 @@ struct MainTabView: View {
                 }
             }
         }
+        // All sheets from shared modifier - at MainTabView level for global access
+        .timelineSheetHandling(
+            viewModel: viewModel,
+            mediaCaptureViewModel: mediaCaptureViewModel,
+            selectedPhotoEvent: $selectedPhotoEvent,
+            reduceMotion: reduceMotion,
+            spotStore: spotStore,
+            locationManager: locationManager
+        )
     }
 }
 
@@ -182,4 +223,6 @@ struct MainTabView: View {
         .environmentObject(DataImporter())
         .environmentObject(WeatherService())
         .environmentObject(NotificationService())
+        .environmentObject(SpotStore())
+        .environmentObject(LocationManager())
 }

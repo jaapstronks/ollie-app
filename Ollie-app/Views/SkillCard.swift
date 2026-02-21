@@ -29,80 +29,85 @@ struct SkillCard: View {
             // Expanded content
             if isExpanded && !isLocked {
                 expandedContent
+                    .transition(.opacity.combined(with: .move(edge: .top)))
             }
         }
         .padding()
         .glassStatusCard(tintColor: cardTintColor)
         .opacity(isLocked ? 0.6 : 1.0)
-        .animation(.easeInOut(duration: 0.2), value: isExpanded)
+        .contentShape(Rectangle())
+        .onTapGesture {
+            guard !isLocked else { return }
+            HapticFeedback.light()
+            withAnimation(.easeInOut(duration: 0.2)) {
+                isExpanded.toggle()
+            }
+        }
     }
 
     // MARK: - Collapsed Header
 
     @ViewBuilder
     private var collapsedHeader: some View {
-        Button {
-            if !isLocked {
-                withAnimation(.easeInOut(duration: 0.2)) {
-                    isExpanded.toggle()
-                }
-            }
-        } label: {
-            HStack(spacing: 12) {
-                // Emoji
-                Text(skill.emoji)
-                    .font(.system(size: 28))
-                    .frame(width: 36)
+        HStack(spacing: 12) {
+            // Icon
+            Image(systemName: skill.icon)
+                .font(.system(size: 24))
+                .foregroundStyle(Color.ollieAccent)
+                .frame(width: 36)
 
-                // Name and status
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(skill.name)
-                        .font(.body)
-                        .fontWeight(.semibold)
-                        .foregroundStyle(isLocked ? .secondary : .primary)
+            // Name and status
+            VStack(alignment: .leading, spacing: 2) {
+                Text(skill.name)
+                    .font(.body)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(isLocked ? .secondary : .primary)
 
-                    // Status or locked indicator
-                    if isLocked {
-                        HStack(spacing: 4) {
-                            Image(systemName: "lock.fill")
-                                .font(.caption2)
-                            Text(Strings.Training.locked)
+                // Status or locked indicator
+                if isLocked {
+                    HStack(spacing: 4) {
+                        Image(systemName: "lock.fill")
+                            .font(.caption2)
+                        Text(Strings.Training.locked)
+                            .font(.caption)
+                    }
+                    .foregroundStyle(.secondary)
+                } else {
+                    HStack(spacing: 6) {
+                        // Status badge
+                        statusBadge
+
+                        // Session count
+                        if sessionCount > 0 {
+                            Text("•")
+                                .foregroundStyle(.tertiary)
+                            Text(Strings.Training.sessionCount(sessionCount))
                                 .font(.caption)
-                        }
-                        .foregroundStyle(.secondary)
-                    } else {
-                        HStack(spacing: 6) {
-                            // Status badge
-                            statusBadge
-
-                            // Session count
-                            if sessionCount > 0 {
-                                Text("•")
-                                    .foregroundStyle(.tertiary)
-                                Text(Strings.Training.sessionCount(sessionCount))
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                            }
+                                .foregroundStyle(.secondary)
                         }
                     }
                 }
+            }
 
-                Spacer()
+            Spacer()
 
-                // Expand/collapse indicator or lock
-                if isLocked {
-                    Image(systemName: "lock.fill")
-                        .font(.body)
-                        .foregroundStyle(.tertiary)
-                } else {
-                    Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
-                        .font(.caption)
-                        .fontWeight(.semibold)
-                        .foregroundStyle(.tertiary)
-                }
+            // Expand/collapse indicator or lock
+            if isLocked {
+                Image(systemName: "lock.fill")
+                    .font(.body)
+                    .foregroundStyle(.tertiary)
+            } else {
+                Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
+                    .font(.subheadline)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(.secondary)
+                    .padding(8)
+                    .background(
+                        Circle()
+                            .fill(colorScheme == .dark ? Color.white.opacity(0.08) : Color.black.opacity(0.04))
+                    )
             }
         }
-        .buttonStyle(.plain)
     }
 
     // MARK: - Status Badge
@@ -235,43 +240,23 @@ struct SkillCard: View {
             // Action buttons
             HStack(spacing: 12) {
                 // Log session button
-                Button {
+                TrainingActionButton(
+                    icon: "plus.circle.fill",
+                    title: Strings.Training.logSession,
+                    style: .primary
+                ) {
                     HapticFeedback.selection()
                     onLogSession()
-                } label: {
-                    HStack(spacing: 6) {
-                        Image(systemName: "plus.circle.fill")
-                        Text(Strings.Training.logSession)
-                    }
-                    .font(.subheadline)
-                    .fontWeight(.medium)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 12)
-                    .background(Color.ollieAccent)
-                    .foregroundStyle(.white)
-                    .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
                 }
 
                 // Mark mastered button
-                Button {
+                TrainingActionButton(
+                    icon: status == .mastered ? "checkmark.circle.fill" : "checkmark.circle",
+                    title: status == .mastered ? Strings.Training.unmarkMastered : Strings.Training.markMastered,
+                    style: status == .mastered ? .success : .successOutline
+                ) {
                     HapticFeedback.medium()
                     onToggleMastered()
-                } label: {
-                    HStack(spacing: 6) {
-                        Image(systemName: status == .mastered ? "checkmark.circle.fill" : "checkmark.circle")
-                        Text(status == .mastered ? Strings.Training.unmarkMastered : Strings.Training.markMastered)
-                    }
-                    .font(.subheadline)
-                    .fontWeight(.medium)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 12)
-                    .background(masterButtonBackground)
-                    .foregroundStyle(status == .mastered ? .white : .ollieSuccess)
-                    .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 10, style: .continuous)
-                            .strokeBorder(Color.ollieSuccess, lineWidth: status == .mastered ? 0 : 1)
-                    )
                 }
             }
         }
@@ -290,13 +275,70 @@ struct SkillCard: View {
         case .mastered: return Color.ollieSuccess
         }
     }
+}
+
+// MARK: - Training Action Button
+
+/// A responsive button with immediate press feedback for training actions
+private struct TrainingActionButton: View {
+    let icon: String
+    let title: String
+    let style: Style
+    let action: () -> Void
+
+    @Environment(\.colorScheme) private var colorScheme
+
+    enum Style {
+        case primary
+        case success
+        case successOutline
+    }
+
+    var body: some View {
+        Button {
+            action()
+        } label: {
+            HStack(spacing: 6) {
+                Image(systemName: icon)
+                Text(title)
+            }
+            .font(.subheadline)
+            .fontWeight(.medium)
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 12)
+            .background(backgroundColor)
+            .foregroundStyle(foregroundColor)
+            .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+            .overlay(borderOverlay)
+        }
+        .buttonStyle(ScaleButtonStyle())
+    }
+
+    private var backgroundColor: Color {
+        switch style {
+        case .primary:
+            return Color.ollieAccent
+        case .success:
+            return Color.ollieSuccess
+        case .successOutline:
+            return Color.ollieSuccess.opacity(colorScheme == .dark ? 0.15 : 0.1)
+        }
+    }
+
+    private var foregroundColor: Color {
+        switch style {
+        case .primary, .success:
+            return .white
+        case .successOutline:
+            return .ollieSuccess
+        }
+    }
 
     @ViewBuilder
-    private var masterButtonBackground: some View {
-        if status == .mastered {
-            Color.ollieSuccess
-        } else {
-            Color.ollieSuccess.opacity(colorScheme == .dark ? 0.15 : 0.1)
+    private var borderOverlay: some View {
+        if style == .successOutline {
+            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                .strokeBorder(Color.ollieSuccess, lineWidth: 1)
         }
     }
 }
@@ -314,10 +356,10 @@ struct LockedSkillCard: View {
         VStack(alignment: .leading, spacing: 12) {
             // Header
             HStack(spacing: 12) {
-                Text(skill.emoji)
-                    .font(.system(size: 28))
+                Image(systemName: skill.icon)
+                    .font(.system(size: 24))
+                    .foregroundStyle(.secondary)
                     .frame(width: 36)
-                    .grayscale(0.8)
 
                 VStack(alignment: .leading, spacing: 2) {
                     Text(skill.name)
@@ -353,7 +395,7 @@ struct LockedSkillCard: View {
                     HStack(spacing: 8) {
                         ForEach(missingRequirements) { req in
                             HStack(spacing: 4) {
-                                Text(req.emoji)
+                                Image(systemName: req.icon)
                                     .font(.caption)
                                 Text(req.name)
                                     .font(.caption)
@@ -374,34 +416,34 @@ struct LockedSkillCard: View {
     }
 }
 
+// MARK: - Scale Button Style
+
+/// A button style that provides scale feedback without blocking scroll gestures
+private struct ScaleButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .scaleEffect(configuration.isPressed ? 0.96 : 1.0)
+            .opacity(configuration.isPressed ? 0.85 : 1.0)
+            .animation(.easeOut(duration: 0.1), value: configuration.isPressed)
+    }
+}
+
 // MARK: - Preview
 
-#Preview {
-    let skill = Skill(
-        id: "zit",
-        name: "Sit",
-        emoji: "🐕",
-        description: "The classic sit command. A building block for many other behaviors.",
-        howTo: [
-            "Hold treat above puppy's nose",
-            "Move treat slowly back over their head",
-            "Click and treat the moment bottom touches floor"
-        ],
-        doneWhen: "Your puppy sits on command with just the verbal cue.",
-        tips: [
-            "Don't push their bottom down",
-            "Practice before meals for extra motivation"
-        ],
-        category: .basiscommandos,
-        week: 2,
-        priority: 1,
-        requires: ["luring"]
-    )
+private let previewSkill = Skill(
+    id: "sit",
+    icon: "arrow.down.to.line",
+    category: .basicCommands,
+    week: 2,
+    priority: 1,
+    requires: ["luring"]
+)
 
-    return ScrollView {
+#Preview {
+    ScrollView {
         VStack(spacing: 16) {
             SkillCard(
-                skill: skill,
+                skill: previewSkill,
                 status: .practicing,
                 sessionCount: 6,
                 isLocked: false,
@@ -412,7 +454,7 @@ struct LockedSkillCard: View {
             )
 
             SkillCard(
-                skill: skill,
+                skill: previewSkill,
                 status: .notStarted,
                 sessionCount: 0,
                 isLocked: true,

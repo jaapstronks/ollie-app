@@ -16,14 +16,41 @@ class TimelineViewModel: ObservableObject {
     /// Sheet coordinator for all sheet presentations
     @Published var sheetCoordinator = SheetCoordinator()
 
+    // MARK: - Cached Stats (to avoid recomputation every frame)
+
+    /// Cached pattern analysis (updated when events change)
+    @Published private(set) var cachedPatternAnalysis: PatternAnalysis?
+
+    /// Cached recent events for stats (7 days)
+    @Published private(set) var cachedRecentEvents: [PuppyEvent] = []
+
+    /// Cached week stats for insights view
+    @Published private(set) var cachedWeekStats: [DayStats] = []
+
+    /// Last time stats were computed
+    private var lastStatsUpdate: Date?
+
+    /// Background notification task (stored for cancellation)
+    private var notificationTask: Task<Void, Never>?
+
     let eventStore: EventStore
     let profileStore: ProfileStore
     var notificationService: NotificationService?
+    var spotStore: SpotStore?
+    var locationManager: LocationManager?
 
-    init(eventStore: EventStore, profileStore: ProfileStore, notificationService: NotificationService? = nil) {
+    init(
+        eventStore: EventStore,
+        profileStore: ProfileStore,
+        notificationService: NotificationService? = nil,
+        spotStore: SpotStore? = nil,
+        locationManager: LocationManager? = nil
+    ) {
         self.eventStore = eventStore
         self.profileStore = profileStore
         self.notificationService = notificationService
+        self.spotStore = spotStore
+        self.locationManager = locationManager
         loadEvents()
     }
 
@@ -61,17 +88,17 @@ class TimelineViewModel: ObservableObject {
     }
 
     var canGoForward: Bool {
-        !Calendar.current.isDateInToday(currentDate)
+        !currentDate.isToday
     }
 
     func goToPreviousDay() {
-        currentDate = Calendar.current.date(byAdding: .day, value: -1, to: currentDate)!
+        currentDate = currentDate.addingDays(-1)
         loadEvents()
     }
 
     func goToNextDay() {
         guard canGoForward else { return }
-        currentDate = Calendar.current.date(byAdding: .day, value: 1, to: currentDate)!
+        currentDate = currentDate.addingDays(1)
         loadEvents()
     }
 
@@ -90,6 +117,34 @@ class TimelineViewModel: ObservableObject {
     func loadEvents() {
         eventStore.loadEvents(for: currentDate)
         events = eventStore.events
+        refreshCachedStats()
+    }
+
+    /// Refresh cached stats (debounced, only if data changed)
+    private func refreshCachedStats() {
+        // Debounce: only update if more than 1 second since last update
+        let now = Date()
+        if let lastUpdate = lastStatsUpdate, now.timeIntervalSince(lastUpdate) < 1.0 {
+            return
+        }
+        lastStatsUpdate = now
+
+        // Update cached recent events
+        let sevenDaysAgo = Date().addingDays(-7)
+        cachedRecentEvents = eventStore.getEvents(from: sevenDaysAgo, to: Date())
+
+        // Update cached pattern analysis
+        cachedPatternAnalysis = PatternCalculations.analyzePatterns(
+            events: cachedRecentEvents,
+            periodDays: 7
+        )
+
+        // Update cached week stats
+        cachedWeekStats = WeekCalculations.calculateWeekStats { date in
+            let startOfDay = date.startOfDay
+            let endOfDay = date.addingDays(1).startOfDay
+            return eventStore.getEvents(from: startOfDay, to: endOfDay)
+        }
     }
 
     // MARK: - Premium/Monetization
@@ -262,9 +317,39 @@ class TimelineViewModel: ObservableObject {
         refreshNotifications()
     }
 
+    /// Log a walk event with optional spot information
+    func logWalkEvent(
+        time: Date = Date(),
+        spot: WalkSpot? = nil,
+        latitude: Double? = nil,
+        longitude: Double? = nil,
+        note: String? = nil
+    ) {
+        let event = PuppyEvent(
+            time: time,
+            type: .uitlaten,
+            note: note,
+            latitude: latitude ?? spot?.latitude,
+            longitude: longitude ?? spot?.longitude,
+            spotId: spot?.id,
+            spotName: spot?.name
+        )
+
+        eventStore.addEvent(event)
+        loadEvents()
+        refreshNotifications()
+    }
+
     /// Add a pre-built event (used for photo moments)
     func addEvent(_ event: PuppyEvent) {
         eventStore.addEvent(event)
+        loadEvents()
+        refreshNotifications()
+    }
+
+    /// Update an existing event
+    func updateEvent(_ event: PuppyEvent) {
+        eventStore.updateEvent(event)
         loadEvents()
         refreshNotifications()
     }
@@ -400,7 +485,7 @@ class TimelineViewModel: ObservableObject {
 
     /// Get events from the past N days (for pattern analysis)
     private func getHistoricalEvents(days: Int) -> [PuppyEvent] {
-        let startDate = Calendar.current.date(byAdding: .day, value: -days, to: Date())!
+        let startDate = Date().addingDays(-days)
         return eventStore.getEvents(from: startDate, to: Date())
     }
 
@@ -452,9 +537,14 @@ class TimelineViewModel: ObservableObject {
 
     // MARK: - Pattern Analysis
 
-    /// Pattern analysis for last 7 days
+    /// Pattern analysis for last 7 days (uses cached value for performance)
     var patternAnalysis: PatternAnalysis {
-        let sevenDaysAgo = Calendar.current.date(byAdding: .day, value: -7, to: Date())!
+        // Return cached value if available
+        if let cached = cachedPatternAnalysis {
+            return cached
+        }
+        // Fallback to computing (shouldn't happen often)
+        let sevenDaysAgo = Date().addingDays(-7)
         let recentEvents = eventStore.getEvents(from: sevenDaysAgo, to: Date())
         return PatternCalculations.analyzePatterns(events: recentEvents, periodDays: 7)
     }
@@ -475,12 +565,12 @@ class TimelineViewModel: ObservableObject {
 
     /// Whether current view is showing today
     var isShowingToday: Bool {
-        Calendar.current.isDateInToday(currentDate)
+        currentDate.isToday
     }
 
     /// Get all events (up to 30 days back for streak history)
     private func getAllEvents() -> [PuppyEvent] {
-        let thirtyDaysAgo = Calendar.current.date(byAdding: .day, value: -30, to: Date())!
+        let thirtyDaysAgo = Date().addingDays(-30)
         return eventStore.getEvents(from: thirtyDaysAgo, to: Date())
     }
 
@@ -488,7 +578,7 @@ class TimelineViewModel: ObservableObject {
 
     /// Get events from today and yesterday (for cross-midnight tracking)
     private func getRecentEvents() -> [PuppyEvent] {
-        let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: currentDate)!
+        let yesterday = currentDate.addingDays(-1)
         return eventStore.getEvents(from: yesterday, to: currentDate)
     }
 
@@ -499,7 +589,11 @@ class TimelineViewModel: ObservableObject {
         guard let service = notificationService,
               let profile = profileStore.profile else { return }
 
-        Task {
+        // Cancel any existing notification task to prevent pile-up
+        notificationTask?.cancel()
+
+        notificationTask = Task {
+            guard !Task.isCancelled else { return }
             let recentEvents = getRecentEvents()
             await service.refreshNotifications(events: recentEvents, profile: profile)
         }

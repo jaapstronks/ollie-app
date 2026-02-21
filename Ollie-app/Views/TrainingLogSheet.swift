@@ -131,14 +131,15 @@ struct TrainingLogSheet: View {
     @ViewBuilder
     private var skillHeader: some View {
         HStack(spacing: 12) {
-            // Emoji in circle
+            // Icon in circle
             ZStack {
                 Circle()
                     .fill(Color.ollieAccent.opacity(colorScheme == .dark ? 0.2 : 0.15))
                     .frame(width: 56, height: 56)
 
-                Text(skill.emoji)
-                    .font(.system(size: 28))
+                Image(systemName: skill.icon)
+                    .font(.system(size: 24))
+                    .foregroundStyle(Color.ollieAccent)
             }
 
             VStack(alignment: .leading, spacing: 2) {
@@ -175,23 +176,18 @@ struct TrainingLogSheet: View {
 
 // MARK: - Preview
 
-#Preview {
-    let skill = Skill(
-        id: "zit",
-        name: "Sit",
-        emoji: "🐕",
-        description: "The classic sit command.",
-        howTo: ["Step 1"],
-        doneWhen: "When done",
-        tips: ["Tip 1"],
-        category: .basiscommandos,
-        week: 2,
-        priority: 1,
-        requires: ["luring"]
-    )
+private let previewSkillForTrainingLog = Skill(
+    id: "sit",
+    icon: "arrow.down.to.line",
+    category: .basicCommands,
+    week: 2,
+    priority: 1,
+    requires: ["luring"]
+)
 
-    return TrainingLogSheet(
-        skill: skill,
+#Preview {
+    TrainingLogSheet(
+        skill: previewSkillForTrainingLog,
         onSave: { _ in },
         onCancel: {}
     )

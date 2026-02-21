@@ -1256,6 +1256,14 @@ enum Strings {
         static let moveMapToSelect = String(localized: "Move map to position the pin")
     }
 
+    // MARK: - Edit Walk
+    enum EditWalk {
+        static let title = String(localized: "Edit Walk")
+        static let deleteWalk = String(localized: "Delete Walk")
+        static let deleteConfirmMessage = String(localized: "This will permanently delete this walk.")
+        static let changeSpot = String(localized: "Change")
+    }
+
     // MARK: - Walks Tab
     enum WalksTab {
         static let title = String(localized: "Walks")

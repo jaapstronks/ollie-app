@@ -133,9 +133,7 @@ struct PoopCalculations {
         let hasPattern = pattern.daysAnalyzed >= minDaysForPattern
 
         // Get today's poop events
-        let todayPoops = todayEvents
-            .filter { $0.type == .poepen && Calendar.current.isDateInToday($0.time) }
-            .sorted { $0.time < $1.time }
+        let todayPoops = todayEvents.poop().today().chronological()
 
         let todayCount = todayPoops.count
         let lastPoopTime = todayPoops.last?.time
@@ -192,19 +190,15 @@ struct PoopCalculations {
 
     /// Analyze poop patterns from historical data
     static func analyzePattern(events: [PuppyEvent], currentTime: Date = Date()) -> PoopPattern {
-        let calendar = Calendar.current
-
         // Filter to poop events only, exclude today
-        let poopEvents = events
-            .filter { $0.type == .poepen && !calendar.isDateInToday($0.time) }
-            .sorted { $0.time < $1.time }
+        let allPoops = events.poop()
+        let excludingToday = allPoops.filter { !$0.time.isToday }
+        let poopEvents = excludingToday.chronological()
 
         guard !poopEvents.isEmpty else { return .empty }
 
         // Group by day to calculate daily counts
-        let groupedByDay = Dictionary(grouping: poopEvents) { event in
-            calendar.startOfDay(for: event.time)
-        }
+        let groupedByDay = poopEvents.groupedByDate()
 
         let dailyCounts = groupedByDay.values.map { $0.count }
         let daysAnalyzed = groupedByDay.count
@@ -237,7 +231,7 @@ struct PoopCalculations {
         }
 
         // Calculate walk-poop correlation
-        let walkEvents = events.filter { $0.type == .uitlaten }
+        let walkEvents = events.walks()
         let postWalkPoopRate = calculatePostWalkPoopRate(
             walkEvents: walkEvents,
             poopEvents: poopEvents
@@ -308,9 +302,7 @@ struct PoopCalculations {
         currentTime: Date
     ) -> Bool {
         // Find the most recent walk today
-        let todayWalks = todayEvents
-            .filter { $0.type == .uitlaten }
-            .sorted { $0.time > $1.time }
+        let todayWalks = todayEvents.walks().reverseChronological()
 
         guard let lastWalk = todayWalks.first else { return false }
 

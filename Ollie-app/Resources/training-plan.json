@@ -1,0 +1,142 @@
+{
+  "skills": [
+    {
+      "id": "clicker",
+      "icon": "bell.fill",
+      "category": "foundations",
+      "week": 1,
+      "priority": 1,
+      "requires": []
+    },
+    {
+      "id": "nameRecognition",
+      "icon": "person.text.rectangle",
+      "category": "foundations",
+      "week": 1,
+      "priority": 2,
+      "requires": []
+    },
+    {
+      "id": "luring",
+      "icon": "hand.draw.fill",
+      "category": "foundations",
+      "week": 1,
+      "priority": 3,
+      "requires": []
+    },
+    {
+      "id": "handling",
+      "icon": "hands.sparkles.fill",
+      "category": "care",
+      "week": 1,
+      "priority": 4,
+      "requires": []
+    },
+    {
+      "id": "collarLeash",
+      "icon": "dog.fill",
+      "category": "safety",
+      "week": 1,
+      "priority": 5,
+      "requires": []
+    },
+    {
+      "id": "sit",
+      "icon": "arrow.down.to.line",
+      "category": "basicCommands",
+      "week": 2,
+      "priority": 1,
+      "requires": ["luring"]
+    },
+    {
+      "id": "watchMe",
+      "icon": "eye.fill",
+      "category": "basicCommands",
+      "week": 2,
+      "priority": 2,
+      "requires": []
+    },
+    {
+      "id": "touch",
+      "icon": "hand.point.up.fill",
+      "category": "basicCommands",
+      "week": 2,
+      "priority": 3,
+      "requires": []
+    },
+    {
+      "id": "looseLeash",
+      "icon": "figure.walk",
+      "category": "safety",
+      "week": 3,
+      "priority": 1,
+      "requires": ["collarLeash"]
+    },
+    {
+      "id": "down",
+      "icon": "arrow.down.circle.fill",
+      "category": "basicCommands",
+      "week": 3,
+      "priority": 2,
+      "requires": ["sit"]
+    },
+    {
+      "id": "come",
+      "icon": "figure.walk.arrival",
+      "category": "safety",
+      "week": 3,
+      "priority": 3,
+      "requires": ["nameRecognition", "watchMe"]
+    },
+    {
+      "id": "wait",
+      "icon": "hand.raised.fill",
+      "category": "impulseControl",
+      "week": 4,
+      "priority": 1,
+      "requires": ["sit"]
+    },
+    {
+      "id": "place",
+      "icon": "bed.double.fill",
+      "category": "impulseControl",
+      "week": 4,
+      "priority": 2,
+      "requires": ["down"]
+    },
+    {
+      "id": "stay",
+      "icon": "figure.stand",
+      "category": "impulseControl",
+      "week": 5,
+      "priority": 1,
+      "requires": ["sit", "wait"]
+    }
+  ],
+  "weekPlans": [
+    {
+      "week": 1,
+      "focusSkillIds": ["clicker", "nameRecognition", "luring", "handling", "collarLeash"]
+    },
+    {
+      "week": 2,
+      "focusSkillIds": ["sit", "watchMe", "touch"]
+    },
+    {
+      "week": 3,
+      "focusSkillIds": ["looseLeash", "down", "come"]
+    },
+    {
+      "week": 4,
+      "focusSkillIds": ["wait", "place"]
+    },
+    {
+      "week": 5,
+      "focusSkillIds": ["stay"]
+    },
+    {
+      "week": 6,
+      "focusSkillIds": ["come", "stay", "looseLeash"]
+    }
+  ]
+}

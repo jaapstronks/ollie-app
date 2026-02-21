@@ -16,6 +16,7 @@ struct WalksTabView: View {
 
     @State private var showingAllSpots = false
     @State private var showingAddSpot = false
+    @State private var walkToEdit: PuppyEvent?
 
     @Environment(\.colorScheme) private var colorScheme
 
@@ -55,30 +56,23 @@ struct WalksTabView: View {
             }
             .navigationTitle(Strings.WalksTab.title)
             .navigationBarTitleDisplayMode(.large)
-            .toolbar {
-                ToolbarItem(placement: .primaryAction) {
-                    Menu {
-                        Button {
-                            viewModel.quickLog(type: .uitlaten)
-                        } label: {
-                            Label(Strings.FAB.walk, systemImage: "figure.walk")
-                        }
-
-                        Button {
-                            showingAddSpot = true
-                        } label: {
-                            Label(Strings.WalkLocations.addSpot, systemImage: "mappin.and.ellipse")
-                        }
-                    } label: {
-                        Image(systemName: "plus")
-                    }
-                }
-            }
             .sheet(isPresented: $showingAllSpots) {
                 AllSpotsMapView(spots: spotStore.spots)
             }
             .sheet(isPresented: $showingAddSpot) {
                 AddSpotSheet(spotStore: spotStore, locationManager: locationManager)
+            }
+            .sheet(item: $walkToEdit) { walk in
+                EditWalkSheet(
+                    walk: walk,
+                    spotStore: spotStore,
+                    onSave: { updatedWalk in
+                        viewModel.updateEvent(updatedWalk)
+                    },
+                    onDelete: {
+                        viewModel.deleteEvent(walk)
+                    }
+                )
             }
         }
     }
@@ -167,6 +161,17 @@ struct WalksTabView: View {
 
                     ForEach(todaysWalks) { walk in
                         walkRow(walk)
+                            .contentShape(Rectangle())
+                            .onTapGesture {
+                                walkToEdit = walk
+                            }
+                            .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                                Button(role: .destructive) {
+                                    viewModel.deleteEvent(walk)
+                                } label: {
+                                    Label(Strings.Common.delete, systemImage: "trash")
+                                }
+                            }
                     }
                 }
                 .padding()
@@ -211,6 +216,11 @@ struct WalksTabView: View {
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
+
+            // Chevron to indicate tappable
+            Image(systemName: "chevron.right")
+                .font(.caption)
+                .foregroundStyle(.tertiary)
         }
     }
 

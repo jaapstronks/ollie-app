@@ -60,8 +60,9 @@ struct WeekHeroCard: View {
                             onSkillTap(skill)
                         } label: {
                             HStack(spacing: 6) {
-                                Text(skill.emoji)
-                                    .font(.system(size: 14))
+                                Image(systemName: skill.icon)
+                                    .font(.caption)
+                                    .foregroundStyle(Color.ollieAccent)
                                 Text(skill.name)
                                     .font(.subheadline)
                                     .fontWeight(.medium)
@@ -148,39 +149,29 @@ struct FlowLayout: Layout {
 
 // MARK: - Preview
 
+private let previewSkill1ForHeroCard = Skill(
+    id: "clicker",
+    icon: "bell.fill",
+    category: .foundations,
+    week: 1,
+    priority: 1,
+    requires: []
+)
+
+private let previewSkill2ForHeroCard = Skill(
+    id: "nameRecognition",
+    icon: "person.text.rectangle",
+    category: .foundations,
+    week: 1,
+    priority: 2,
+    requires: []
+)
+
 #Preview {
-    let skill1 = Skill(
-        id: "clicker",
-        name: "Clicker",
-        emoji: "🔔",
-        description: "Learn the clicker",
-        howTo: ["Step 1"],
-        doneWhen: "When done",
-        tips: ["Tip 1"],
-        category: .fundamenten,
-        week: 1,
-        priority: 1,
-        requires: []
-    )
-
-    let skill2 = Skill(
-        id: "naam",
-        name: "Name Recognition",
-        emoji: "📛",
-        description: "Learn the name",
-        howTo: ["Step 1"],
-        doneWhen: "When done",
-        tips: ["Tip 1"],
-        category: .fundamenten,
-        week: 1,
-        priority: 2,
-        requires: []
-    )
-
-    return WeekHeroCard(
+    WeekHeroCard(
         currentWeek: 1,
-        weekTitle: "Foundation Week",
-        focusSkills: [skill1, skill2],
+        weekTitle: Strings.Training.WeekTitles.week1,
+        focusSkills: [previewSkill1ForHeroCard, previewSkill2ForHeroCard],
         progress: (1, 5),
         onSkillTap: { _ in }
     )
