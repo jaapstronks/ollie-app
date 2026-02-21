@@ -31,6 +31,23 @@ class EventStore: ObservableObject {
     private var pendingCloudSaves: [PuppyEvent] = []
     private var pendingCloudDeletes: [PuppyEvent] = []
 
+    /// Cache for events by date string (YYYY-MM-DD) to avoid repeated file I/O
+    private var eventCache: [String: [PuppyEvent]] = [:]
+    private let maxCacheSize = 30 // Keep last 30 days in cache
+
+    /// Background refresh task (stored for cancellation)
+    private var cloudRefreshTask: Task<Void, Never>?
+
+    /// App Group container for shared data with Intents/Widgets
+    private static let appGroupSuiteName = "group.jaapstronks.Ollie"
+
+    /// File coordinator for detecting changes from App Intents
+    private var fileCoordinator: NSFileCoordinator?
+    private var fileMonitorSource: DispatchSourceFileSystemObject?
+
+    /// Flag to track if we've migrated data to App Group
+    private static let migrationCompletedKey = "eventDataMigratedToAppGroup"
+
     init() {
         encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .custom { date, encoder in
@@ -48,13 +65,22 @@ class EventStore: ObservableObject {
             throw DecodingError.dataCorruptedError(in: container, debugDescription: "Invalid date format")
         }
 
+        // Migrate local data to App Group if needed
+        migrateToAppGroupIfNeeded()
+
         setupCloudKitObservers()
+        setupFileMonitoring()
         loadEvents(for: currentDate)
 
         // Initial sync on launch
         Task {
             await initialSync()
         }
+    }
+
+    deinit {
+        // Cancel file monitoring directly since we can't call async methods in deinit
+        fileMonitorSource?.cancel()
     }
 
     // MARK: - Setup
@@ -106,23 +132,36 @@ class EventStore: ObservableObject {
 
     /// Load events for a specific date
     func loadEvents(for date: Date) {
-        currentDate = date
+        // Read events synchronously first
+        let loadedEvents = readEvents(for: date)
 
-        // Load from local cache first (instant)
-        events = readEvents(for: date)
+        // Cancel any existing cloud refresh task
+        cloudRefreshTask?.cancel()
 
-        // Then fetch from CloudKit in background
-        Task {
-            await refreshFromCloud()
+        // Defer published property updates to avoid "Publishing changes from within view updates"
+        Task { @MainActor [weak self] in
+            guard let self = self else { return }
+            self.currentDate = date
+            self.events = loadedEvents
+
+            // Then fetch from CloudKit in background
+            self.cloudRefreshTask = Task {
+                await self.refreshFromCloud()
+            }
         }
     }
 
     /// Refresh current date's events from CloudKit
     func refreshFromCloud() async {
         guard cloudKit.isCloudAvailable else { return }
+        guard !Task.isCancelled else { return }
 
         do {
             let cloudEvents = try await cloudKit.fetchEvents(for: currentDate)
+            guard !Task.isCancelled else { return }
+
+            // Clear cache for this date before merging
+            invalidateCache(for: currentDate)
 
             // Merge with local events
             let localEvents = readEvents(for: currentDate)
@@ -151,8 +190,10 @@ class EventStore: ObservableObject {
         events.append(newEvent)
         events.sort { $0.time > $1.time }
 
-        // Persist to local file (instant, works offline)
-        saveEvents(for: currentDate)
+        // Persist to local file for the event's actual date (not currentDate)
+        // This ensures events are saved correctly even if user is viewing a different day
+        let eventDate = newEvent.time.startOfDay
+        saveEventToFile(newEvent, for: eventDate)
 
         // Update widgets
         updateWidgetData(profile: profile)
@@ -426,7 +467,22 @@ class EventStore: ObservableObject {
         fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
     }
 
+    /// App Group container URL (used for shared access with Intents/Widgets)
+    private var appGroupContainerURL: URL? {
+        fileManager.containerURL(forSecurityApplicationGroupIdentifier: Self.appGroupSuiteName)
+    }
+
+    /// Primary data directory - uses App Group container
     private var dataDirectoryURL: URL {
+        if let container = appGroupContainerURL {
+            return container.appendingPathComponent(Constants.dataDirectoryName, isDirectory: true)
+        }
+        // Fallback to documents directory if App Group not available
+        return documentsURL.appendingPathComponent(Constants.dataDirectoryName, isDirectory: true)
+    }
+
+    /// Legacy data directory in Documents (for migration)
+    private var legacyDataDirectoryURL: URL {
         documentsURL.appendingPathComponent(Constants.dataDirectoryName, isDirectory: true)
     }
 
@@ -440,25 +496,236 @@ class EventStore: ObservableObject {
         }
     }
 
+    // MARK: - App Group Migration
+
+    /// Migrate data from Documents to App Group container (one-time migration)
+    private func migrateToAppGroupIfNeeded() {
+        let defaults = UserDefaults.standard
+
+        // Check if already migrated
+        guard !defaults.bool(forKey: Self.migrationCompletedKey) else { return }
+        guard appGroupContainerURL != nil else {
+            logger.warning("App Group container not available, skipping migration")
+            return
+        }
+
+        // Check if legacy data exists
+        guard fileManager.fileExists(atPath: legacyDataDirectoryURL.path) else {
+            // No legacy data, mark as migrated
+            defaults.set(true, forKey: Self.migrationCompletedKey)
+            return
+        }
+
+        logger.info("Migrating event data to App Group container...")
+
+        // Ensure destination exists
+        ensureDataDirectoryExists()
+
+        // Copy all JSONL files from legacy to App Group
+        do {
+            let legacyFiles = try fileManager.contentsOfDirectory(
+                at: legacyDataDirectoryURL,
+                includingPropertiesForKeys: nil
+            )
+
+            var migratedCount = 0
+            for file in legacyFiles where file.pathExtension == "jsonl" {
+                let destURL = dataDirectoryURL.appendingPathComponent(file.lastPathComponent)
+
+                // If destination exists, merge events; otherwise just copy
+                if fileManager.fileExists(atPath: destURL.path) {
+                    // Merge: read both, combine, write back
+                    try mergeEventFiles(source: file, destination: destURL)
+                } else {
+                    try fileManager.copyItem(at: file, to: destURL)
+                }
+                migratedCount += 1
+            }
+
+            logger.info("Migration complete: \(migratedCount) files migrated")
+            defaults.set(true, forKey: Self.migrationCompletedKey)
+
+        } catch {
+            logger.error("Migration failed: \(error.localizedDescription)")
+        }
+    }
+
+    /// Merge two event files (used during migration to preserve any App Group events)
+    private func mergeEventFiles(source: URL, destination: URL) throws {
+        // Read source events
+        guard let sourceContent = try? String(contentsOf: source, encoding: .utf8) else { return }
+        let sourceLines = sourceContent.components(separatedBy: .newlines).filter { !$0.isEmpty }
+        let sourceEvents: [PuppyEvent] = sourceLines.compactMap { line in
+            guard let data = line.data(using: .utf8) else { return nil }
+            return try? decoder.decode(PuppyEvent.self, from: data)
+        }
+
+        // Read destination events
+        let destContent = (try? String(contentsOf: destination, encoding: .utf8)) ?? ""
+        let destLines = destContent.components(separatedBy: .newlines).filter { !$0.isEmpty }
+        let destEvents: [PuppyEvent] = destLines.compactMap { line in
+            guard let data = line.data(using: .utf8) else { return nil }
+            return try? decoder.decode(PuppyEvent.self, from: data)
+        }
+
+        // Merge by ID (destination wins for conflicts)
+        var merged: [UUID: PuppyEvent] = [:]
+        for event in sourceEvents { merged[event.id] = event }
+        for event in destEvents { merged[event.id] = event }
+
+        // Sort and write
+        let sortedEvents = Array(merged.values).sorted { $0.time > $1.time }
+        let lines = sortedEvents.compactMap { event -> String? in
+            guard let data = try? encoder.encode(event) else { return nil }
+            return String(data: data, encoding: .utf8)
+        }
+        let content = lines.joined(separator: "\n")
+        try content.write(to: destination, atomically: true, encoding: .utf8)
+    }
+
+    // MARK: - File Monitoring
+
+    /// Set up file monitoring to detect changes from App Intents
+    private func setupFileMonitoring() {
+        guard let containerURL = appGroupContainerURL else { return }
+
+        let dataDir = containerURL.appendingPathComponent(Constants.dataDirectoryName)
+
+        // Ensure directory exists before monitoring
+        if !fileManager.fileExists(atPath: dataDir.path) {
+            try? fileManager.createDirectory(at: dataDir, withIntermediateDirectories: true)
+        }
+
+        // Open directory for monitoring
+        let fd = open(dataDir.path, O_EVTONLY)
+        guard fd >= 0 else {
+            logger.warning("Could not open data directory for monitoring")
+            return
+        }
+
+        // Create dispatch source for file system events
+        let source = DispatchSource.makeFileSystemObjectSource(
+            fileDescriptor: fd,
+            eventMask: [.write, .extend, .rename],
+            queue: DispatchQueue.global(qos: .utility)
+        )
+
+        source.setEventHandler { [weak self] in
+            Task { @MainActor in
+                self?.handleFileSystemChange()
+            }
+        }
+
+        source.setCancelHandler {
+            close(fd)
+        }
+
+        source.resume()
+        fileMonitorSource = source
+
+        logger.info("File monitoring set up for App Group data directory")
+    }
+
+    /// Stop file monitoring
+    private func stopFileMonitoring() {
+        fileMonitorSource?.cancel()
+        fileMonitorSource = nil
+    }
+
+    /// Handle file system changes (reload current day's events)
+    private func handleFileSystemChange() {
+        logger.debug("Detected file system change, reloading events")
+
+        // Invalidate cache for current date
+        invalidateCache(for: currentDate)
+
+        // Reload events
+        let reloadedEvents = readEvents(for: currentDate)
+
+        // Only update if different
+        if reloadedEvents.map({ $0.id }) != events.map({ $0.id }) {
+            events = reloadedEvents
+            logger.info("Events updated from file system change")
+        }
+    }
+
     private func readEvents(for date: Date) -> [PuppyEvent] {
+        let cacheKey = date.dateString
+
+        // Check cache first (fast path)
+        if let cached = eventCache[cacheKey] {
+            return cached
+        }
+
+        // Read from disk
         let url = fileURL(for: date)
 
         guard fileManager.fileExists(atPath: url.path),
               let content = try? String(contentsOf: url, encoding: .utf8) else {
+            // Cache empty result to avoid repeated disk checks
+            eventCache[cacheKey] = []
             return []
         }
 
         let lines = content.components(separatedBy: .newlines).filter { !$0.isEmpty }
 
-        return lines.compactMap { line in
+        let events: [PuppyEvent] = lines.compactMap { line in
             guard let data = line.data(using: .utf8) else { return nil }
             return try? decoder.decode(PuppyEvent.self, from: data)
         }.sorted { $0.time > $1.time }
+
+        // Cache result and trim if needed
+        eventCache[cacheKey] = events
+        trimCacheIfNeeded()
+
+        return events
+    }
+
+    /// Remove oldest cache entries if cache is too large
+    private func trimCacheIfNeeded() {
+        guard eventCache.count > maxCacheSize else { return }
+
+        // Sort keys by date (oldest first) and remove excess
+        let sortedKeys = eventCache.keys.sorted()
+        let keysToRemove = sortedKeys.prefix(eventCache.count - maxCacheSize)
+        for key in keysToRemove {
+            eventCache.removeValue(forKey: key)
+        }
+    }
+
+    /// Invalidate cache for a specific date
+    private func invalidateCache(for date: Date) {
+        let cacheKey = date.dateString
+        eventCache.removeValue(forKey: cacheKey)
+    }
+
+    /// Clear entire cache (call when syncing from cloud)
+    private func clearEventCache() {
+        eventCache.removeAll()
     }
 
     private func saveEvents(for date: Date) {
         let eventsForDate = events.filter { Calendar.current.isDate($0.time, inSameDayAs: date) }
         saveEventsLocally(eventsForDate, for: date)
+    }
+
+    /// Save a single event to its date file (reads existing, adds new, rewrites)
+    private func saveEventToFile(_ event: PuppyEvent, for date: Date) {
+        ensureDataDirectoryExists()
+
+        // Read existing events for this date
+        var existingEvents = readEvents(for: date)
+
+        // Replace if event with same ID exists, otherwise append
+        if let index = existingEvents.firstIndex(where: { $0.id == event.id }) {
+            existingEvents[index] = event
+        } else {
+            existingEvents.append(event)
+        }
+
+        // Sort and save
+        existingEvents.sort { $0.time > $1.time }
+        saveEventsLocally(existingEvents, for: date)
     }
 
     private func saveEventsLocally(_ eventsToSave: [PuppyEvent], for date: Date) {
@@ -474,5 +741,8 @@ class EventStore: ObservableObject {
         let url = fileURL(for: date)
 
         try? content.write(to: url, atomically: true, encoding: .utf8)
+
+        // Invalidate cache for this date since we just wrote new data
+        invalidateCache(for: date)
     }
 }
