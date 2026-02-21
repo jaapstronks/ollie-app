@@ -1,5 +1,5 @@
 # Test event logging functionality
-appId: jaapstronks.Ollie-app
+appId: nl.jaapstronks.Ollie
 ---
 - launchApp
 - waitForAnimationToEnd
@@ -11,23 +11,37 @@ appId: jaapstronks.Ollie-app
 
 # Test 1: Open all events sheet via FAB tap
 - tapOn:
-    point: "90%,80%"
+    id: "FAB_BUTTON"
 - waitForAnimationToEnd
+
+# Wait for sheet to appear
+- extendedWaitUntil:
+    visible: "Log event|Gebeurtenis loggen"
+    timeout: 3000
 - takeScreenshot: "screenshots/logging-01-all-events-sheet"
 
-# Dismiss by swiping down
-- swipe:
-    start: "50%,50%"
-    end: "50%,90%"
+# Dismiss by tapping Cancel button (top-left corner of sheet)
+- tapOn:
+    point: "15%,38%"
 - waitForAnimationToEnd
 
-# Test 2: Open quick log menu via long press
+# Wait for sheet to fully dismiss
+- extendedWaitUntil:
+    visible: "Today|Vandaag"
+    timeout: 3000
+
+# Test 2: Open quick log menu via long press on FAB
 - longPressOn:
-    point: "90%,80%"
+    point: "90%,85%"
 - waitForAnimationToEnd
+
+# Wait for quick menu to appear (look for menu items)
+- extendedWaitUntil:
+    visible: "Pee outside|Plas buiten|Eat|Eten"
+    timeout: 3000
 - takeScreenshot: "screenshots/logging-02-quick-menu"
 
-# Dismiss menu by tapping outside
+# Dismiss menu by tapping backdrop
 - tapOn:
     point: "20%,30%"
 - waitForAnimationToEnd

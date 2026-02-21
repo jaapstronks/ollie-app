@@ -77,7 +77,7 @@ struct FABButton: View {
                     .transition(reduceMotion ? .opacity : .scale.combined(with: .opacity))
             }
 
-            // Main FAB button
+            // Main FAB button - always rendered last (on top)
             fabButton
         }
         .animation(reduceMotion ? nil : .spring(response: 0.3, dampingFraction: 0.7), value: isShowingMenu)
@@ -94,27 +94,50 @@ struct FABButton: View {
                 .frame(width: fabSize, height: fabSize)
                 .shadow(color: Color.ollieAccent.opacity(0.4), radius: 8, y: 4)
 
-            // Icon
+            // Icon - changes to X when menu is open
             Image(systemName: isShowingMenu ? "xmark" : "plus")
                 .font(.system(size: 24, weight: .semibold))
                 .foregroundStyle(.white)
                 .rotationEffect(.degrees(isShowingMenu ? 45 : 0))
         }
+        .scaleEffect(isPressed ? 0.9 : 1.0)
+        .animation(reduceMotion ? nil : .spring(response: 0.2, dampingFraction: 0.6), value: isPressed)
         .contentShape(Circle())
-        .onTapGesture {
-            if isShowingMenu {
-                dismissMenu()
-            } else {
-                HapticFeedback.medium()
-                onTap()
-            }
-        }
-        .onLongPressGesture(minimumDuration: 0.4) {
-            HapticFeedback.medium()
-            withAnimation {
-                isShowingMenu = true
-            }
-        }
+        // Use gesture modifier with exclusive gesture to properly handle tap vs long press
+        .gesture(
+            ExclusiveGesture(
+                // Long press gesture - triggers after holding
+                LongPressGesture(minimumDuration: 0.35)
+                    .onEnded { _ in
+                        HapticFeedback.medium()
+                        withAnimation {
+                            isShowingMenu = true
+                        }
+                    },
+                // Tap gesture - triggers immediately on release
+                TapGesture()
+                    .onEnded {
+                        if isShowingMenu {
+                            dismissMenu()
+                        } else {
+                            HapticFeedback.medium()
+                            onTap()
+                        }
+                    }
+            )
+        )
+        // Track pressing state for visual feedback
+        .simultaneousGesture(
+            DragGesture(minimumDistance: 0)
+                .onChanged { _ in
+                    if !isPressed {
+                        isPressed = true
+                    }
+                }
+                .onEnded { _ in
+                    isPressed = false
+                }
+        )
         .accessibilityLabel(Strings.FAB.accessibilityLabel)
         .accessibilityHint(Strings.FAB.accessibilityHint)
         .accessibilityIdentifier("FAB_BUTTON")
@@ -192,16 +215,6 @@ struct FABButton: View {
 }
 
 // MARK: - Button Styles
-
-struct FABButtonStyle: ButtonStyle {
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
-
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .scaleEffect(configuration.isPressed ? 0.9 : 1.0)
-            .animation(reduceMotion ? nil : .spring(response: 0.2, dampingFraction: 0.6), value: configuration.isPressed)
-    }
-}
 
 struct QuickActionButtonStyle: ButtonStyle {
     @Environment(\.colorScheme) private var colorScheme
