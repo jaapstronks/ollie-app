@@ -36,7 +36,7 @@ struct WidgetData: Codable {
 
 /// Reads widget data from shared App Group UserDefaults
 struct WidgetDataReader {
-    static let suiteName = "group.jaapstronks.ollie-app"
+    static let suiteName = "group.jaapstronks.Ollie"
     static let dataKey = "widgetData"
 
     static func read() -> WidgetData? {
@@ -124,66 +124,90 @@ struct PottyWidgetEntryView: View {
     // MARK: - Home Screen Widgets
 
     private var smallWidget: some View {
-        VStack(spacing: 8) {
-            Text("🚽")
-                .font(.system(size: 36))
+        VStack(spacing: 6) {
+            ZStack {
+                Circle()
+                    .fill(urgencyIconBackground)
+                    .frame(width: 52, height: 52)
+
+                Image(systemName: "drop.fill")
+                    .font(.system(size: 24, weight: .semibold))
+                    .foregroundStyle(urgencyIconColor)
+            }
 
             Text(timeText)
-                .font(.title2)
-                .fontWeight(.bold)
+                .font(.system(size: 28, weight: .bold, design: .rounded))
+                .foregroundStyle(.primary)
+                .minimumScaleFactor(0.8)
 
             Text("sinds plas")
-                .font(.caption)
-                .foregroundColor(.secondary)
+                .font(.system(size: 11, weight: .medium))
+                .foregroundStyle(.secondary)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .containerBackground(for: .widget) {
-            LinearGradient(
-                colors: urgencyGradient,
-                startPoint: .top,
-                endPoint: .bottom
-            )
+            ContainerRelativeShape()
+                .fill(backgroundGradient)
         }
     }
 
     private var mediumWidget: some View {
         HStack(spacing: 16) {
-            VStack(spacing: 4) {
-                Text("🚽")
-                    .font(.system(size: 44))
-                Text(entry.data.puppyName)
-                    .font(.caption)
-                    .foregroundColor(.secondary)
+            // Left: Icon with background
+            ZStack {
+                Circle()
+                    .fill(urgencyIconBackground)
+                    .frame(width: 64, height: 64)
+
+                Image(systemName: "drop.fill")
+                    .font(.system(size: 28, weight: .semibold))
+                    .foregroundStyle(urgencyIconColor)
             }
 
             VStack(alignment: .leading, spacing: 4) {
+                Text(entry.data.puppyName)
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundStyle(.secondary)
+                    .textCase(.uppercase)
+                    .tracking(0.5)
+
                 Text(timeText)
-                    .font(.title)
-                    .fontWeight(.bold)
+                    .font(.system(size: 32, weight: .bold, design: .rounded))
+                    .foregroundStyle(.primary)
 
                 Text("sinds laatste plas")
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-
-                if entry.minutesSinceLastPlas > 90 {
-                    HStack(spacing: 4) {
-                        Image(systemName: "exclamationmark.triangle.fill")
-                        Text("Tijd voor een plasje!")
-                    }
-                    .font(.caption)
-                    .foregroundColor(.orange)
-                }
+                    .font(.system(size: 13, weight: .medium))
+                    .foregroundStyle(.secondary)
             }
 
             Spacer()
+
+            // Right: Status indicator
+            if entry.minutesSinceLastPlas > 90 {
+                VStack(spacing: 4) {
+                    Image(systemName: "exclamationmark.circle.fill")
+                        .font(.system(size: 24))
+                        .foregroundStyle(.orange)
+                    Text("Nu")
+                        .font(.system(size: 10, weight: .bold))
+                        .foregroundStyle(.orange)
+                }
+            } else if entry.minutesSinceLastPlas > 0 {
+                VStack(spacing: 4) {
+                    Image(systemName: "checkmark.circle.fill")
+                        .font(.system(size: 24))
+                        .foregroundStyle(.green)
+                    Text("OK")
+                        .font(.system(size: 10, weight: .bold))
+                        .foregroundStyle(.green)
+                }
+            }
         }
-        .padding()
+        .padding(.horizontal, 16)
+        .padding(.vertical, 12)
         .containerBackground(for: .widget) {
-            LinearGradient(
-                colors: urgencyGradient,
-                startPoint: .top,
-                endPoint: .bottom
-            )
+            ContainerRelativeShape()
+                .fill(backgroundGradient)
         }
     }
 
@@ -272,17 +296,62 @@ struct PottyWidgetEntryView: View {
         }
     }
 
+    private var backgroundGradient: LinearGradient {
+        let minutes = entry.minutesSinceLastPlas
+        if minutes > 120 {
+            // Urgent - soft red/coral
+            return LinearGradient(
+                colors: [Color(red: 0.98, green: 0.92, blue: 0.90), Color(red: 0.95, green: 0.85, blue: 0.82)],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        } else if minutes > 90 {
+            // Warning - soft amber
+            return LinearGradient(
+                colors: [Color(red: 1.0, green: 0.96, blue: 0.88), Color(red: 1.0, green: 0.92, blue: 0.80)],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        } else {
+            // Good - soft mint/sage
+            return LinearGradient(
+                colors: [Color(red: 0.92, green: 0.97, blue: 0.94), Color(red: 0.85, green: 0.94, blue: 0.88)],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        }
+    }
+
+    private var urgencyIconBackground: Color {
+        let minutes = entry.minutesSinceLastPlas
+        if minutes > 120 {
+            return Color(red: 0.95, green: 0.75, blue: 0.70).opacity(0.6)
+        } else if minutes > 90 {
+            return Color(red: 1.0, green: 0.88, blue: 0.65).opacity(0.6)
+        } else {
+            return Color(red: 0.70, green: 0.88, blue: 0.78).opacity(0.6)
+        }
+    }
+
+    private var urgencyIconColor: Color {
+        let minutes = entry.minutesSinceLastPlas
+        if minutes > 120 {
+            return Color(red: 0.85, green: 0.30, blue: 0.25)
+        } else if minutes > 90 {
+            return Color(red: 0.90, green: 0.60, blue: 0.10)
+        } else {
+            return Color(red: 0.25, green: 0.65, blue: 0.45)
+        }
+    }
+
     private var urgencyGradient: [Color] {
         let minutes = entry.minutesSinceLastPlas
         if minutes > 120 {
-            // Red gradient - urgent
-            return [Color(red: 1.0, green: 0.6, blue: 0.5), Color(red: 0.9, green: 0.4, blue: 0.3)]
+            return [Color(red: 0.98, green: 0.92, blue: 0.90), Color(red: 0.95, green: 0.85, blue: 0.82)]
         } else if minutes > 90 {
-            // Orange gradient - warning
-            return [Color(red: 1.0, green: 0.76, blue: 0.4), Color(red: 1.0, green: 0.65, blue: 0.3)]
+            return [Color(red: 1.0, green: 0.96, blue: 0.88), Color(red: 1.0, green: 0.92, blue: 0.80)]
         } else {
-            // Green gradient - good
-            return [Color(red: 0.7, green: 0.9, blue: 0.7), Color(red: 0.5, green: 0.8, blue: 0.5)]
+            return [Color(red: 0.92, green: 0.97, blue: 0.94), Color(red: 0.85, green: 0.94, blue: 0.88)]
         }
     }
 }

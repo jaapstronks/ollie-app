@@ -61,27 +61,30 @@ struct StreakWidgetEntryView: View {
     // MARK: - Home Screen Widget
 
     private var smallWidget: some View {
-        VStack(spacing: 8) {
-            Image(systemName: streakIcon)
-                .font(.system(size: 36))
-                .foregroundStyle(streakColor)
+        VStack(spacing: 6) {
+            ZStack {
+                Circle()
+                    .fill(streakIconBackground)
+                    .frame(width: 52, height: 52)
+
+                Image(systemName: streakIcon)
+                    .font(.system(size: 24, weight: .semibold))
+                    .foregroundStyle(streakIconColor)
+            }
 
             Text("\(entry.data.currentStreak)")
-                .font(.system(size: 44, weight: .bold))
-                .foregroundStyle(streakColor)
+                .font(.system(size: 36, weight: .bold, design: .rounded))
+                .foregroundStyle(.primary)
 
             Text(streakLabel)
-                .font(.caption)
-                .foregroundColor(.secondary)
+                .font(.system(size: 11, weight: .medium))
+                .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .containerBackground(for: .widget) {
-            LinearGradient(
-                colors: streakGradient,
-                startPoint: .top,
-                endPoint: .bottom
-            )
+            ContainerRelativeShape()
+                .fill(backgroundGradient)
         }
     }
 
@@ -111,41 +114,72 @@ struct StreakWidgetEntryView: View {
     private var streakIcon: String {
         let streak = entry.data.currentStreak
         if streak == 0 {
-            return "heart.slash.fill"
+            return "xmark.circle.fill"
         } else if streak < 3 {
-            return "hand.thumbsup.fill"
-        } else {
+            return "star.fill"
+        } else if streak < 10 {
             return "flame.fill"
+        } else {
+            return "trophy.fill"
         }
     }
 
-    private var streakColor: Color {
+    private var streakIconColor: Color {
         let streak = entry.data.currentStreak
         if streak == 0 {
-            return .red
+            return Color(red: 0.70, green: 0.35, blue: 0.35)
         } else if streak < 3 {
-            return .green
+            return Color(red: 0.30, green: 0.60, blue: 0.45)
         } else if streak < 10 {
-            return .orange
+            return Color(red: 0.90, green: 0.55, blue: 0.15)
         } else {
-            return .yellow
+            return Color(red: 0.85, green: 0.65, blue: 0.10)
         }
     }
 
-    private var streakGradient: [Color] {
+    private var streakIconBackground: Color {
         let streak = entry.data.currentStreak
         if streak == 0 {
-            // Gray gradient - no streak
-            return [Color(white: 0.9), Color(white: 0.8)]
-        } else if streak < 5 {
-            // Green gradient - building
-            return [Color(red: 0.7, green: 0.9, blue: 0.7), Color(red: 0.5, green: 0.8, blue: 0.5)]
+            return Color(red: 0.90, green: 0.80, blue: 0.80).opacity(0.6)
+        } else if streak < 3 {
+            return Color(red: 0.75, green: 0.90, blue: 0.82).opacity(0.6)
         } else if streak < 10 {
-            // Orange gradient - on fire
-            return [Color(red: 1.0, green: 0.85, blue: 0.5), Color(red: 1.0, green: 0.7, blue: 0.3)]
+            return Color(red: 1.0, green: 0.88, blue: 0.70).opacity(0.6)
         } else {
-            // Gold gradient - champion
-            return [Color(red: 1.0, green: 0.9, blue: 0.5), Color(red: 1.0, green: 0.8, blue: 0.2)]
+            return Color(red: 1.0, green: 0.92, blue: 0.60).opacity(0.6)
+        }
+    }
+
+    private var backgroundGradient: LinearGradient {
+        let streak = entry.data.currentStreak
+        if streak == 0 {
+            // No streak - soft gray
+            return LinearGradient(
+                colors: [Color(red: 0.95, green: 0.95, blue: 0.95), Color(red: 0.90, green: 0.90, blue: 0.90)],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        } else if streak < 5 {
+            // Building - soft mint/green
+            return LinearGradient(
+                colors: [Color(red: 0.92, green: 0.97, blue: 0.94), Color(red: 0.85, green: 0.94, blue: 0.88)],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        } else if streak < 10 {
+            // On fire - soft amber
+            return LinearGradient(
+                colors: [Color(red: 1.0, green: 0.96, blue: 0.88), Color(red: 1.0, green: 0.92, blue: 0.80)],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        } else {
+            // Champion - soft gold
+            return LinearGradient(
+                colors: [Color(red: 1.0, green: 0.97, blue: 0.85), Color(red: 1.0, green: 0.94, blue: 0.75)],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
         }
     }
 
@@ -153,8 +187,6 @@ struct StreakWidgetEntryView: View {
         let streak = entry.data.currentStreak
         if streak == 0 {
             return "Begin opnieuw!"
-        } else if streak == 1 {
-            return "buiten op rij"
         } else {
             return "buiten op rij"
         }

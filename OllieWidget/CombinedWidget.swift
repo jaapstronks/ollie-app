@@ -71,155 +71,165 @@ struct CombinedWidgetEntryView: View {
     private var mediumWidget: some View {
         HStack(spacing: 0) {
             // Left side: Potty timer
-            VStack(spacing: 4) {
-                Text("🚽")
-                    .font(.system(size: 32))
+            VStack(spacing: 6) {
+                ZStack {
+                    Circle()
+                        .fill(pottyIconBackground)
+                        .frame(width: 44, height: 44)
+
+                    Image(systemName: "drop.fill")
+                        .font(.system(size: 20, weight: .semibold))
+                        .foregroundStyle(pottyIconColor)
+                }
 
                 Text(timeText)
-                    .font(.title2)
-                    .fontWeight(.bold)
+                    .font(.system(size: 22, weight: .bold, design: .rounded))
+                    .foregroundStyle(.primary)
 
                 Text("sinds plas")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
+                    .font(.system(size: 10, weight: .medium))
+                    .foregroundStyle(.secondary)
             }
             .frame(maxWidth: .infinity)
-            .padding(.vertical, 8)
+            .padding(.vertical, 10)
 
             // Divider
-            Rectangle()
-                .fill(Color.secondary.opacity(0.3))
+            RoundedRectangle(cornerRadius: 1)
+                .fill(.primary.opacity(0.12))
                 .frame(width: 1)
-                .padding(.vertical, 12)
+                .padding(.vertical, 16)
 
             // Right side: Streak
-            VStack(spacing: 4) {
-                Image(systemName: streakIcon)
-                    .font(.system(size: 32))
-                    .foregroundStyle(streakColor)
+            VStack(spacing: 6) {
+                ZStack {
+                    Circle()
+                        .fill(streakIconBackground)
+                        .frame(width: 44, height: 44)
+
+                    Image(systemName: streakIcon)
+                        .font(.system(size: 20, weight: .semibold))
+                        .foregroundStyle(streakIconColor)
+                }
 
                 Text("\(entry.data.currentStreak)")
-                    .font(.title2)
-                    .fontWeight(.bold)
+                    .font(.system(size: 22, weight: .bold, design: .rounded))
+                    .foregroundStyle(.primary)
 
-                Text("streak")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
+                Text("buiten op rij")
+                    .font(.system(size: 10, weight: .medium))
+                    .foregroundStyle(.secondary)
             }
             .frame(maxWidth: .infinity)
-            .padding(.vertical, 8)
+            .padding(.vertical, 10)
         }
         .containerBackground(for: .widget) {
-            LinearGradient(
-                colors: urgencyGradient,
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
+            ContainerRelativeShape()
+                .fill(backgroundGradient)
         }
     }
 
     // MARK: - Large Widget
 
     private var largeWidget: some View {
-        VStack(spacing: 12) {
+        VStack(spacing: 16) {
             // Header with puppy name
             HStack {
-                Text(entry.data.puppyName)
-                    .font(.headline)
+                HStack(spacing: 6) {
+                    Image(systemName: "pawprint.fill")
+                        .font(.system(size: 12))
+                        .foregroundStyle(.secondary)
+                    Text(entry.data.puppyName)
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundStyle(.primary)
+                }
+
                 Spacer()
+
                 Text("vandaag")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
+                    .font(.system(size: 11, weight: .medium))
+                    .foregroundStyle(.secondary)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 4)
+                    .background(.primary.opacity(0.06), in: Capsule())
             }
-            .padding(.horizontal)
-            .padding(.top, 8)
+            .padding(.horizontal, 16)
+            .padding(.top, 12)
 
             // Main stats row
             HStack(spacing: 0) {
                 // Potty timer
-                VStack(spacing: 4) {
-                    Text("🚽")
-                        .font(.system(size: 40))
+                VStack(spacing: 8) {
+                    ZStack {
+                        Circle()
+                            .fill(pottyIconBackground)
+                            .frame(width: 56, height: 56)
+
+                        Image(systemName: "drop.fill")
+                            .font(.system(size: 26, weight: .semibold))
+                            .foregroundStyle(pottyIconColor)
+                    }
 
                     Text(timeText)
-                        .font(.title)
-                        .fontWeight(.bold)
+                        .font(.system(size: 28, weight: .bold, design: .rounded))
+                        .foregroundStyle(.primary)
 
                     Text("sinds plas")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
+                        .font(.system(size: 11, weight: .medium))
+                        .foregroundStyle(.secondary)
                 }
                 .frame(maxWidth: .infinity)
 
                 // Streak
-                VStack(spacing: 4) {
-                    Image(systemName: streakIcon)
-                        .font(.system(size: 40))
-                        .foregroundStyle(streakColor)
+                VStack(spacing: 8) {
+                    ZStack {
+                        Circle()
+                            .fill(streakIconBackground)
+                            .frame(width: 56, height: 56)
+
+                        Image(systemName: streakIcon)
+                            .font(.system(size: 26, weight: .semibold))
+                            .foregroundStyle(streakIconColor)
+                    }
 
                     Text("\(entry.data.currentStreak)")
-                        .font(.title)
-                        .fontWeight(.bold)
+                        .font(.system(size: 28, weight: .bold, design: .rounded))
+                        .foregroundStyle(.primary)
 
                     Text("buiten op rij")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
+                        .font(.system(size: 11, weight: .medium))
+                        .foregroundStyle(.secondary)
                 }
                 .frame(maxWidth: .infinity)
             }
-            .padding(.vertical, 8)
 
-            Divider()
-                .padding(.horizontal)
-
-            // Today's summary
-            HStack(spacing: 24) {
-                VStack(spacing: 2) {
-                    Text("\(entry.data.todayPottyCount)")
-                        .font(.title2)
-                        .fontWeight(.semibold)
-                    Text("plasjes")
-                        .font(.caption2)
-                        .foregroundColor(.secondary)
-                }
-
-                VStack(spacing: 2) {
-                    Text("\(entry.data.todayOutdoorCount)")
-                        .font(.title2)
-                        .fontWeight(.semibold)
-                    Text("buiten")
-                        .font(.caption2)
-                        .foregroundColor(.secondary)
-                }
-
-                VStack(spacing: 2) {
-                    Text("\(entry.data.bestStreak)")
-                        .font(.title2)
-                        .fontWeight(.semibold)
-                    Text("record")
-                        .font(.caption2)
-                        .foregroundColor(.secondary)
-                }
+            // Today's summary cards
+            HStack(spacing: 12) {
+                StatCard(value: entry.data.todayPottyCount, label: "plasjes", icon: "drop.fill")
+                StatCard(value: entry.data.todayOutdoorCount, label: "buiten", icon: "leaf.fill")
+                StatCard(value: entry.data.bestStreak, label: "record", icon: "trophy.fill")
             }
-            .padding(.bottom, 8)
+            .padding(.horizontal, 16)
+
+            Spacer(minLength: 0)
 
             // Warning message if needed
             if entry.minutesSinceLastPlas > 90 {
-                HStack(spacing: 4) {
-                    Image(systemName: "exclamationmark.triangle.fill")
+                HStack(spacing: 6) {
+                    Image(systemName: "bell.fill")
+                        .font(.system(size: 12))
                     Text("Tijd voor een plasje!")
+                        .font(.system(size: 12, weight: .semibold))
                 }
-                .font(.caption)
-                .foregroundColor(.orange)
-                .padding(.bottom, 8)
+                .foregroundStyle(.orange)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 8)
+                .background(.orange.opacity(0.15), in: Capsule())
+                .padding(.bottom, 12)
             }
         }
         .containerBackground(for: .widget) {
-            LinearGradient(
-                colors: urgencyGradient,
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
+            ContainerRelativeShape()
+                .fill(backgroundGradient)
         }
     }
 
@@ -244,36 +254,115 @@ struct CombinedWidgetEntryView: View {
     private var streakIcon: String {
         let streak = entry.data.currentStreak
         if streak == 0 {
-            return "heart.slash.fill"
+            return "xmark.circle.fill"
         } else if streak < 3 {
-            return "hand.thumbsup.fill"
-        } else {
+            return "star.fill"
+        } else if streak < 10 {
             return "flame.fill"
+        } else {
+            return "trophy.fill"
         }
     }
 
-    private var streakColor: Color {
+    private var streakIconColor: Color {
         let streak = entry.data.currentStreak
         if streak == 0 {
-            return .red
+            return Color(red: 0.70, green: 0.35, blue: 0.35)
         } else if streak < 3 {
-            return .green
+            return Color(red: 0.30, green: 0.60, blue: 0.45)
         } else if streak < 10 {
-            return .orange
+            return Color(red: 0.90, green: 0.55, blue: 0.15)
         } else {
-            return .yellow
+            return Color(red: 0.85, green: 0.65, blue: 0.10)
         }
     }
 
-    private var urgencyGradient: [Color] {
+    private var streakIconBackground: Color {
+        let streak = entry.data.currentStreak
+        if streak == 0 {
+            return Color(red: 0.90, green: 0.80, blue: 0.80).opacity(0.6)
+        } else if streak < 3 {
+            return Color(red: 0.75, green: 0.90, blue: 0.82).opacity(0.6)
+        } else if streak < 10 {
+            return Color(red: 1.0, green: 0.88, blue: 0.70).opacity(0.6)
+        } else {
+            return Color(red: 1.0, green: 0.92, blue: 0.60).opacity(0.6)
+        }
+    }
+
+    private var pottyIconColor: Color {
         let minutes = entry.minutesSinceLastPlas
         if minutes > 120 {
-            return [Color(red: 1.0, green: 0.6, blue: 0.5), Color(red: 0.9, green: 0.4, blue: 0.3)]
+            return Color(red: 0.85, green: 0.30, blue: 0.25)
         } else if minutes > 90 {
-            return [Color(red: 1.0, green: 0.76, blue: 0.4), Color(red: 1.0, green: 0.65, blue: 0.3)]
+            return Color(red: 0.90, green: 0.60, blue: 0.10)
         } else {
-            return [Color(red: 0.7, green: 0.9, blue: 0.7), Color(red: 0.5, green: 0.8, blue: 0.5)]
+            return Color(red: 0.25, green: 0.65, blue: 0.45)
         }
+    }
+
+    private var pottyIconBackground: Color {
+        let minutes = entry.minutesSinceLastPlas
+        if minutes > 120 {
+            return Color(red: 0.95, green: 0.75, blue: 0.70).opacity(0.6)
+        } else if minutes > 90 {
+            return Color(red: 1.0, green: 0.88, blue: 0.65).opacity(0.6)
+        } else {
+            return Color(red: 0.70, green: 0.88, blue: 0.78).opacity(0.6)
+        }
+    }
+
+    private var backgroundGradient: LinearGradient {
+        let minutes = entry.minutesSinceLastPlas
+        if minutes > 120 {
+            // Urgent - soft red/coral
+            return LinearGradient(
+                colors: [Color(red: 0.98, green: 0.92, blue: 0.90), Color(red: 0.95, green: 0.85, blue: 0.82)],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        } else if minutes > 90 {
+            // Warning - soft amber
+            return LinearGradient(
+                colors: [Color(red: 1.0, green: 0.96, blue: 0.88), Color(red: 1.0, green: 0.92, blue: 0.80)],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        } else {
+            // Good - soft mint/sage
+            return LinearGradient(
+                colors: [Color(red: 0.92, green: 0.97, blue: 0.94), Color(red: 0.85, green: 0.94, blue: 0.88)],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        }
+    }
+}
+
+// MARK: - Stat Card Component
+
+private struct StatCard: View {
+    let value: Int
+    let label: String
+    let icon: String
+
+    var body: some View {
+        VStack(spacing: 4) {
+            HStack(spacing: 4) {
+                Image(systemName: icon)
+                    .font(.system(size: 10))
+                    .foregroundStyle(.secondary)
+                Text("\(value)")
+                    .font(.system(size: 16, weight: .bold, design: .rounded))
+                    .foregroundStyle(.primary)
+            }
+            Text(label)
+                .font(.system(size: 9, weight: .medium))
+                .foregroundStyle(.secondary)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 8)
+        .background(.primary.opacity(0.04), in: RoundedRectangle(cornerRadius: 10))
     }
 }
 
