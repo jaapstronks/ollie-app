@@ -38,6 +38,7 @@ struct FABButton: View {
 
     @State private var isShowingMenu = false
     @State private var isPressed = false
+    @State private var didLongPress = false
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
@@ -59,7 +60,7 @@ struct FABButton: View {
     }
 
     var body: some View {
-        ZStack {
+        ZStack(alignment: .bottomTrailing) {
             // Dimmed backdrop when menu is open
             if isShowingMenu {
                 Color.black.opacity(0.3)
@@ -71,13 +72,14 @@ struct FABButton: View {
                     .accessibilityHidden(true)
             }
 
-            // Quick action menu
+            // Quick action menu - positioned above the FAB
             if isShowingMenu {
                 quickActionMenu
                     .transition(reduceMotion ? .opacity : .scale.combined(with: .opacity))
             }
 
-            // Main FAB button - always rendered last (on top)
+            // Main FAB button - stays in bottom-right corner
+            // Shows + when closed, X when menu is open
             fabButton
         }
         .animation(reduceMotion ? nil : .spring(response: 0.3, dampingFraction: 0.7), value: isShowingMenu)
@@ -87,55 +89,44 @@ struct FABButton: View {
 
     @ViewBuilder
     private var fabButton: some View {
-        ZStack {
-            // Background circle
-            Circle()
-                .fill(Color.ollieAccent)
-                .frame(width: fabSize, height: fabSize)
-                .shadow(color: Color.ollieAccent.opacity(0.4), radius: 8, y: 4)
+        Button {
+            // Skip if this tap is from releasing a long press
+            guard !didLongPress else {
+                didLongPress = false
+                return
+            }
 
-            // Icon - changes to X when menu is open
-            Image(systemName: isShowingMenu ? "xmark" : "plus")
-                .font(.system(size: 24, weight: .semibold))
-                .foregroundStyle(.white)
-                .rotationEffect(.degrees(isShowingMenu ? 45 : 0))
+            // Handle tap - open full log sheet or dismiss menu
+            if isShowingMenu {
+                dismissMenu()
+            } else {
+                HapticFeedback.medium()
+                onTap()
+            }
+        } label: {
+            ZStack {
+                // Background circle
+                Circle()
+                    .fill(Color.ollieAccent)
+                    .frame(width: fabSize, height: fabSize)
+                    .shadow(color: Color.ollieAccent.opacity(0.4), radius: 8, y: 4)
+
+                // Icon - changes to X when menu is open
+                Image(systemName: isShowingMenu ? "xmark" : "plus")
+                    .font(.system(size: 24, weight: .semibold))
+                    .foregroundStyle(.white)
+                    .rotationEffect(.degrees(isShowingMenu ? 45 : 0))
+            }
         }
-        .scaleEffect(isPressed ? 0.9 : 1.0)
-        .animation(reduceMotion ? nil : .spring(response: 0.2, dampingFraction: 0.6), value: isPressed)
-        .contentShape(Circle())
-        // Use gesture modifier with exclusive gesture to properly handle tap vs long press
-        .gesture(
-            ExclusiveGesture(
-                // Long press gesture - triggers after holding
-                LongPressGesture(minimumDuration: 0.35)
-                    .onEnded { _ in
-                        HapticFeedback.medium()
-                        withAnimation {
-                            isShowingMenu = true
-                        }
-                    },
-                // Tap gesture - triggers immediately on release
-                TapGesture()
-                    .onEnded {
-                        if isShowingMenu {
-                            dismissMenu()
-                        } else {
-                            HapticFeedback.medium()
-                            onTap()
-                        }
-                    }
-            )
-        )
-        // Track pressing state for visual feedback
+        .buttonStyle(FABMainButtonStyle(isPressed: $isPressed, reduceMotion: reduceMotion))
         .simultaneousGesture(
-            DragGesture(minimumDistance: 0)
-                .onChanged { _ in
-                    if !isPressed {
-                        isPressed = true
-                    }
-                }
+            LongPressGesture(minimumDuration: 0.4)
                 .onEnded { _ in
-                    isPressed = false
+                    didLongPress = true
+                    HapticFeedback.medium()
+                    withAnimation {
+                        isShowingMenu = true
+                    }
                 }
         )
         .accessibilityLabel(Strings.FAB.accessibilityLabel)
@@ -154,6 +145,8 @@ struct FABButton: View {
     @ViewBuilder
     private var quickActionMenu: some View {
         VStack(spacing: 8) {
+            Spacer()
+
             // Glass card container for menu items
             VStack(spacing: 4) {
                 ForEach(availableActions) { action in
@@ -164,13 +157,13 @@ struct FABButton: View {
             .glassBackground(.menu)
             .shadow(color: .black.opacity(colorScheme == .dark ? 0.5 : 0.15), radius: 20, y: 10)
 
-            // Spacer for FAB
+            // Spacer for FAB position
             Spacer()
                 .frame(height: fabSize + 16)
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .trailing)
         .padding(.horizontal, 16)
         .padding(.bottom, 8)
-        .frame(maxHeight: .infinity, alignment: .bottom)
     }
 
     @ViewBuilder
@@ -228,6 +221,21 @@ struct QuickActionButtonStyle: ButtonStyle {
             )
             .scaleEffect(configuration.isPressed ? 0.98 : 1.0)
             .animation(reduceMotion ? nil : .easeOut(duration: 0.15), value: configuration.isPressed)
+    }
+}
+
+/// Button style for main FAB button with press animation
+struct FABMainButtonStyle: ButtonStyle {
+    @Binding var isPressed: Bool
+    let reduceMotion: Bool
+
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .scaleEffect(configuration.isPressed ? 0.9 : 1.0)
+            .animation(reduceMotion ? nil : .spring(response: 0.2, dampingFraction: 0.6), value: configuration.isPressed)
+            .onChange(of: configuration.isPressed) { _, newValue in
+                isPressed = newValue
+            }
     }
 }
 

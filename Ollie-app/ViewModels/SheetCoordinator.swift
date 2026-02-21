@@ -15,8 +15,7 @@ final class SheetCoordinator: ObservableObject {
     // MARK: - Active Sheet Enum
 
     /// All possible sheet types that can be presented
-    enum ActiveSheet: Equatable {
-        case none
+    enum ActiveSheet: Equatable, Identifiable {
         case quickLog(EventType)
         case potty
         case allEvents
@@ -24,14 +23,30 @@ final class SheetCoordinator: ObservableObject {
         case locationPicker(EventType)
         case mediaPicker(MediaPickerSource)
         case logMoment
+        case editEvent(PuppyEvent)
         case upgradePrompt
         case purchaseSuccess
+
+        var id: String {
+            switch self {
+            case .quickLog(let type): return "quickLog-\(type.rawValue)"
+            case .potty: return "potty"
+            case .allEvents: return "allEvents"
+            case .logEvent(let type): return "logEvent-\(type.rawValue)"
+            case .locationPicker(let type): return "locationPicker-\(type.rawValue)"
+            case .mediaPicker(let source): return "mediaPicker-\(source)"
+            case .logMoment: return "logMoment"
+            case .editEvent(let event): return "editEvent-\(event.id.uuidString)"
+            case .upgradePrompt: return "upgradePrompt"
+            case .purchaseSuccess: return "purchaseSuccess"
+            }
+        }
     }
 
     // MARK: - Published State
 
-    /// Current active sheet
-    @Published private(set) var activeSheet: ActiveSheet = .none
+    /// Current active sheet (nil when no sheet is shown)
+    @Published var activeSheet: ActiveSheet?
 
     /// Delete confirmation state (separate from sheets - uses confirmation dialog)
     @Published var showingDeleteConfirmation: Bool = false
@@ -44,97 +59,12 @@ final class SheetCoordinator: ObservableObject {
     /// Undo task for auto-dismiss
     private var undoTask: Task<Void, Never>?
 
-    // MARK: - Computed Bindings for SwiftUI Sheets
-
-    /// Binding for PottyQuickLogSheet
-    var isShowingPotty: Binding<Bool> {
-        Binding(
-            get: { self.activeSheet == .potty },
-            set: { if !$0 { self.dismissSheet() } }
-        )
-    }
-
-    /// Binding for AllEventsSheet
-    var isShowingAllEvents: Binding<Bool> {
-        Binding(
-            get: { self.activeSheet == .allEvents },
-            set: { if !$0 { self.dismissSheet() } }
-        )
-    }
-
-    /// Binding for QuickLogSheet
-    var isShowingQuickLog: Binding<Bool> {
-        Binding(
-            get: {
-                if case .quickLog = self.activeSheet { return true }
-                return false
-            },
-            set: { if !$0 { self.dismissSheet() } }
-        )
-    }
-
-    /// Binding for LogEventSheet
-    var isShowingLogSheet: Binding<Bool> {
-        Binding(
-            get: {
-                if case .logEvent = self.activeSheet { return true }
-                return false
-            },
-            set: { if !$0 { self.dismissSheet() } }
-        )
-    }
-
-    /// Binding for LocationPickerSheet
-    var isShowingLocationPicker: Binding<Bool> {
-        Binding(
-            get: {
-                if case .locationPicker = self.activeSheet { return true }
-                return false
-            },
-            set: { if !$0 { self.dismissSheet() } }
-        )
-    }
-
-    /// Binding for MediaPicker fullscreen cover
-    var isShowingMediaPicker: Binding<Bool> {
-        Binding(
-            get: {
-                if case .mediaPicker = self.activeSheet { return true }
-                return false
-            },
-            set: { if !$0 { self.dismissSheet() } }
-        )
-    }
-
-    /// Binding for LogMomentSheet
-    var isShowingLogMoment: Binding<Bool> {
-        Binding(
-            get: { self.activeSheet == .logMoment },
-            set: { if !$0 { self.dismissSheet() } }
-        )
-    }
-
-    /// Binding for upgrade prompt
-    var isShowingUpgradePrompt: Binding<Bool> {
-        Binding(
-            get: { self.activeSheet == .upgradePrompt },
-            set: { if !$0 { self.dismissSheet() } }
-        )
-    }
-
-    /// Binding for purchase success
-    var isShowingPurchaseSuccess: Binding<Bool> {
-        Binding(
-            get: { self.activeSheet == .purchaseSuccess },
-            set: { if !$0 { self.dismissSheet() } }
-        )
-    }
-
     // MARK: - Sheet Data Accessors
 
     /// Current pending event type for quick log or log event sheets
     var pendingEventType: EventType? {
-        switch activeSheet {
+        guard let sheet = activeSheet else { return nil }
+        switch sheet {
         case .quickLog(let type), .logEvent(let type), .locationPicker(let type):
             return type
         default:
@@ -150,6 +80,12 @@ final class SheetCoordinator: ObservableObject {
         return .camera
     }
 
+    /// Whether media picker is showing (for fullScreenCover)
+    var isShowingMediaPicker: Bool {
+        if case .mediaPicker = activeSheet { return true }
+        return false
+    }
+
     // MARK: - Sheet Presentation
 
     /// Present a sheet, dismissing any currently active sheet
@@ -159,7 +95,7 @@ final class SheetCoordinator: ObservableObject {
 
     /// Dismiss the current sheet
     func dismissSheet() {
-        activeSheet = .none
+        activeSheet = nil
     }
 
     /// Transition from one sheet to another with a delay

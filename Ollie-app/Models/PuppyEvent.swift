@@ -85,7 +85,7 @@ enum EventLocation: String, Codable {
 }
 
 /// A single puppy event, stored as one line in JSONL files
-struct PuppyEvent: Codable, Identifiable {
+struct PuppyEvent: Codable, Identifiable, Equatable {
     var id: UUID
     var time: Date
     var type: EventType
@@ -101,6 +101,8 @@ struct PuppyEvent: Codable, Identifiable {
     var longitude: Double?
     var thumbnailPath: String?
     var weightKg: Double?  // Weight in kg, for gewicht events
+    var spotId: UUID?      // Reference to saved WalkSpot
+    var spotName: String?  // Denormalized spot name for display
 
     init(
         id: UUID = UUID(),
@@ -117,7 +119,9 @@ struct PuppyEvent: Codable, Identifiable {
         latitude: Double? = nil,
         longitude: Double? = nil,
         thumbnailPath: String? = nil,
-        weightKg: Double? = nil
+        weightKg: Double? = nil,
+        spotId: UUID? = nil,
+        spotName: String? = nil
     ) {
         self.id = id
         self.time = time
@@ -134,6 +138,8 @@ struct PuppyEvent: Codable, Identifiable {
         self.longitude = longitude
         self.thumbnailPath = thumbnailPath
         self.weightKg = weightKg
+        self.spotId = spotId
+        self.spotName = spotName
     }
 
     // Custom coding keys for snake_case JSON compatibility
@@ -153,5 +159,7 @@ struct PuppyEvent: Codable, Identifiable {
         case longitude
         case thumbnailPath = "thumbnail_path"
         case weightKg = "weight_kg"
+        case spotId = "spot_id"
+        case spotName = "spot_name"
     }
 }

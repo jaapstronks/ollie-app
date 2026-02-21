@@ -33,6 +33,9 @@ class TimelineViewModel: ObservableObject {
     /// Background notification task (stored for cancellation)
     private var notificationTask: Task<Void, Never>?
 
+    /// Subscription to forward SheetCoordinator changes
+    private var sheetCoordinatorCancellable: AnyCancellable?
+
     let eventStore: EventStore
     let profileStore: ProfileStore
     var notificationService: NotificationService?
@@ -51,10 +54,28 @@ class TimelineViewModel: ObservableObject {
         self.notificationService = notificationService
         self.spotStore = spotStore
         self.locationManager = locationManager
+
+        // Forward SheetCoordinator's objectWillChange to this ViewModel
+        // This ensures views are notified when sheet state changes
+        sheetCoordinatorCancellable = sheetCoordinator.objectWillChange
+            .sink { [weak self] _ in
+                self?.objectWillChange.send()
+            }
+
         loadEvents()
     }
 
     // MARK: - Convenience Accessors for Sheet State
+
+    /// Active sheet binding for SwiftUI sheet(item:) modifier
+    /// This binding is needed because $viewModel.sheetCoordinator.activeSheet
+    /// doesn't properly trigger view updates with nested ObservableObjects
+    var activeSheetBinding: Binding<SheetCoordinator.ActiveSheet?> {
+        Binding(
+            get: { self.sheetCoordinator.activeSheet },
+            set: { self.sheetCoordinator.activeSheet = $0 }
+        )
+    }
 
     /// Pending event type from sheet coordinator
     var pendingEventType: EventType? {
@@ -352,6 +373,11 @@ class TimelineViewModel: ObservableObject {
         eventStore.updateEvent(event)
         loadEvents()
         refreshNotifications()
+    }
+
+    /// Show edit sheet for an event
+    func editEvent(_ event: PuppyEvent) {
+        sheetCoordinator.presentSheet(.editEvent(event))
     }
 
     // MARK: - Delete with Confirmation
