@@ -6,6 +6,9 @@ Port the web app's "Gezondheid" view to iOS. Tracks Ollie's weight over time wit
 ## Priority: Medium-High
 Weight tracking becomes more important as Ollie grows — the growth curve helps spot under/overweight early. Health milestones are time-sensitive (vaccination schedule).
 
+## Where It Lives (App Navigation)
+**Pushed from Inzichten tab** via a navigation link card ("⚖️ Gezondheid →"). This is a detail view, not a tab. See `TODO-app-navigation.md` for the overall structure.
+
 ## Features
 
 ### 1. Weight Tracker
@@ -81,14 +84,11 @@ static let defaultMilestones: [HealthMilestone] = [
 - ○ Future (muted)
 - ⏳ Overdue (orange warning)
 
-### 3. New Tab or Section
-Add "Health" as a section within the existing Stats tab, or as a new tab if tab bar has room. Web app uses a separate "Gezondheid" view.
-
 ## Files to Create/Modify
 - `Models/PuppyEvent.swift` — add `gewicht` type + `weightKg` field
 - `Models/HealthMilestone.swift` — new model
 - `Models/GrowthReference.swift` — new model with reference data
-- `Views/HealthView.swift` — main health view
+- `Views/HealthView.swift` — main health view (pushed from InsightsView)
 - `Views/WeightChartView.swift` — Swift Charts growth curve
 - `Views/HealthTimelineView.swift` — milestones timeline
 - `Views/WeightLogSheet.swift` — quick weight entry
@@ -99,3 +99,4 @@ Add "Health" as a section within the existing Stats tab, or as a new tab if tab 
 - Chart colors: accent color for Ollie's line, muted for reference band
 - Keep the chart interactive: tap a dot to see exact weight + date
 - Empty state: show only reference curve with "Nog geen gewichtsmetingen" message
+- Nav bar title: "Gezondheid" with back button to Inzichten

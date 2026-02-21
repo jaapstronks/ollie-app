@@ -6,6 +6,9 @@ Port the web app's night quick-log panel. During nighttime potty breaks, you wan
 ## Priority: Low-Medium
 Useful but niche — only needed during the early weeks when nighttime potty breaks are frequent. May become less relevant as Ollie grows.
 
+## Where It Lives (App Navigation)
+**Modal presentation over the entire app.** When activated (automatically or manually), it presents a full-screen dark overlay on top of everything — both tabs, FAB, everything. See `TODO-app-navigation.md` for the overall structure.
+
 ## Features
 
 ### 1. Night Mode Detection
@@ -30,15 +33,15 @@ Full-screen dark overlay with minimal UI:
 ### 3. Night Log Queue (Web App Feature)
 The web app queues night events and syncs them later. For the iOS app this is less relevant since events are stored locally, but consider:
 - Offline resilience (already handled by EventStore)
-- Batch review: "Je hebt 3 events gelogd vannacht" summary in the morning
+- Batch review: "Je hebt 3 events gelogd vannacht" summary in the morning digest on the Vandaag tab
 
 ### 4. Auto-Return to Sleep
 After logging, auto-dismiss back to a minimal clock/dark screen after 3 seconds.
 
 ## Files to Create/Modify
-- `Views/NightQuickLogView.swift` — the night mode overlay
+- `Views/NightQuickLogView.swift` — the night mode overlay (presented as fullScreenCover)
 - `Utils/NightModeHelper.swift` — time-based detection
-- Modify `ContentView.swift` or `TimelineView.swift` to present night mode
+- `Ollie_appApp.swift` or `ContentView.swift` — present night mode overlay based on time/toggle
 
 ## Design Notes
 - Think of this as a "quick action sheet" optimized for darkness
@@ -47,3 +50,4 @@ After logging, auto-dismiss back to a minimal clock/dark screen after 3 seconds.
 - Consider reducing screen brightness programmatically (if possible)
 - The web app uses orange-tinted colors for night mode
 - One-tap logging is key — the whole point is speed in the dark
+- Dismiss by tapping a subtle "×" or swiping down

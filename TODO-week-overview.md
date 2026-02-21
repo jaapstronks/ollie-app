@@ -4,7 +4,10 @@
 Port the web app's week grid view — a 7-day table showing daily counts for key metrics, plus a potty trend chart and per-day detail cards.
 
 ## Priority: Medium
-Nice for spotting patterns over the week. Less urgent than health/training since StatsView already covers some of this.
+Nice for spotting patterns over the week.
+
+## Where It Lives (App Navigation)
+**Inline in the Inzichten tab** — the week grid and potty trend chart are top-level content in InsightsView, not a separate pushed view. They're the first things you see when opening the Inzichten tab. See `TODO-app-navigation.md` for the overall structure.
 
 ## Features
 
@@ -53,18 +56,13 @@ Scrollable list of daily cards showing:
 - Date
 - Potty percentage with mini progress bar
 - Chip badges: ✅ X buiten, X binnen, 🚶 X walks, 🎓 X training, 📸 X photos
-- Tap to navigate to that day's timeline
+- Tap to navigate to that day in the Vandaag tab timeline
 
 ## Files to Create/Modify
-- `Views/WeekOverviewView.swift` — main week view
-- `Views/WeekGridView.swift` — the 7-day table component
-- `Views/PottyTrendChart.swift` — Swift Charts trend line
+- `Views/InsightsView.swift` — week grid and trend chart are inline content here
+- `Views/WeekGridView.swift` — the 7-day table as a reusable component
+- `Views/PottyTrendChart.swift` — Swift Charts trend line as a reusable component
 - `Calculations/SleepCalculations.swift` — likely already exists, extend if needed
-
-## Integration
-- This could be a section within StatsView or a separate tab
-- Reuses existing calculation modules (SleepCalculations, etc.)
-- Data comes from EventStore's existing date-based event storage
 
 ## Design Notes
 - The grid works well on mobile — compact layout, easy to scan
@@ -72,3 +70,4 @@ Scrollable list of daily cards showing:
 - Highlight today's column
 - The web app's colored counts (green for good, red for bad) translate well to iOS
 - Consider making it swipeable: swipe left/right to shift the 7-day window
+- These components sit at the top of InsightsView, above the navigation link cards for Training/Health/Moments

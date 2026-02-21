@@ -6,6 +6,9 @@ Port the web app's full training view to iOS. This is a structured 6-week traini
 ## Priority: High
 Training is a daily activity — having the plan and progress in the app means Jaap doesn't have to switch to the web app during training sessions.
 
+## Where It Lives (App Navigation)
+**Pushed from Inzichten tab** via a navigation link card ("🎓 Training →"). This is a detail view, not a tab. See `TODO-app-navigation.md` for the overall structure.
+
 ## Features
 
 ### 1. Training Plan Data
@@ -91,7 +94,7 @@ When starting a training session from this view:
 - `Models/TrainingPlan.swift` — TrainingPlan, Skill, Category, WeekPlan models
 - `Models/SkillStatus.swift` — status enum + calculation logic
 - `Services/TrainingPlanStore.swift` — loads bundled plan, calculates statuses
-- `Views/TrainingView.swift` — main training tab/view
+- `Views/TrainingView.swift` — main training view (pushed from InsightsView)
 - `Views/WeekHeroCard.swift` — current week focus section
 - `Views/SkillCard.swift` — expandable skill card
 - `Views/TrainingLogSheet.swift` — quick session logger
@@ -110,3 +113,4 @@ When starting a training session from this view:
 - Mastered skills: subtle green accent or checkmark
 - The web app's expand/collapse pattern works well on mobile — keep it
 - Consider haptic feedback when marking a skill as mastered 🎉
+- Nav bar title: "Training" with back button to Inzichten

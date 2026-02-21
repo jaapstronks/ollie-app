@@ -6,6 +6,9 @@ Port the web app's PoopTimer component. Ollie poops ~2x/day in predictable time 
 ## Priority: Medium
 Practical daily tool — helps notice when the afternoon poop is missing before it becomes an indoor accident.
 
+## Where It Lives (App Navigation)
+**Status card in the Vandaag tab**, in the status cards section alongside the potty timer and sleep progress cards. See `TODO-app-navigation.md` for the overall structure.
+
 ## Features
 
 ### 1. Poop Slot Model
@@ -47,13 +50,13 @@ Compact card showing:
 If `NotificationService` is set up, consider a push notification at 19:00 if the afternoon slot isn't filled.
 
 ## Files to Create/Modify
-- `Views/PoopStatusCard.swift` — new card component
+- `Views/PoopStatusCard.swift` — new status card component for the Vandaag tab
 - `Calculations/PoopCalculations.swift` — slot checking, time-since calculations
-- `Views/TimelineView.swift` — add PoopStatusCard alongside existing PottyStatusCard
+- `Views/TodayView.swift` — add PoopStatusCard in the status cards section
 
 ## Design Notes
-- Place next to or below the existing PottyStatusCard on the timeline
-- Use the same card style (glass card)
+- Place in the status cards section of the Vandaag tab, alongside PottyStatusCard
+- Use the same glass card style as other status cards
 - Color coding: green (done), orange (attention), red (urgent)
 - The web app hides this at night — do the same
 - Existing `PottyStatusCard` handles the pee timer; this is specifically for poop slots
