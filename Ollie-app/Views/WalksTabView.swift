@@ -52,10 +52,19 @@ struct WalksTabView: View {
                     recentSpotsSection
                 }
                 .padding()
-                .padding(.bottom, 84) // Space for FAB
             }
             .navigationTitle(Strings.WalksTab.title)
             .navigationBarTitleDisplayMode(.large)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        showingAddSpot = true
+                    } label: {
+                        Image(systemName: "plus")
+                    }
+                    .accessibilityLabel(Strings.WalkLocations.addSpot)
+                }
+            }
             .sheet(isPresented: $showingAllSpots) {
                 AllSpotsMapView(spots: spotStore.spots)
             }
@@ -98,6 +107,15 @@ struct WalksTabView: View {
         }
     }
 
+    // MARK: - Walk Suggestion
+
+    private var walkSuggestion: WalkSuggestion? {
+        WalkSuggestionCalculations.calculateNextSuggestion(
+            events: viewModel.events,
+            walkSchedule: viewModel.profileStore.profile?.walkSchedule ?? WalkSchedule.defaultSchedule()
+        )
+    }
+
     // MARK: - Today's Walks Section
 
     @ViewBuilder
@@ -110,17 +128,45 @@ struct WalksTabView: View {
             )
 
             if todaysWalks.isEmpty {
-                // Empty state with call to action
+                // Empty state with smart suggestion
                 VStack(spacing: 16) {
-                    Image(systemName: "figure.walk")
-                        .font(.largeTitle)
-                        .foregroundStyle(.secondary)
+                    // Show next suggested walk time
+                    if let suggestion = walkSuggestion {
+                        HStack(spacing: 12) {
+                            Image(systemName: "clock.badge.questionmark")
+                                .font(.title2)
+                                .foregroundStyle(Color.ollieAccent)
+
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(Strings.Walks.nextWalk)
+                                    .font(.subheadline)
+                                    .fontWeight(.medium)
+                                Text(Strings.Walks.nextWalkSuggestion(time: suggestion.timeString))
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+
+                            Spacer()
+
+                            // Progress indicator
+                            Text(Strings.Walks.walksProgress(
+                                completed: suggestion.walksCompletedToday,
+                                total: suggestion.targetWalksPerDay
+                            ))
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        }
+                        .padding()
+                        .background(Color.ollieAccent.opacity(0.1))
+                        .cornerRadius(10)
+                    }
 
                     Text(Strings.WalksTab.noWalksToday)
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
 
                     Button {
+                        HapticFeedback.light()
                         viewModel.quickLog(type: .uitlaten)
                     } label: {
                         Label(Strings.WalksTab.startWalk, systemImage: "plus")
@@ -134,13 +180,23 @@ struct WalksTabView: View {
                 .padding(.vertical, 24)
                 .glassCard(tint: .accent)
             } else {
-                // Walk summary card
+                // Walk summary card with smart suggestion
                 VStack(spacing: 12) {
+                    // Header with progress
                     HStack {
-                        // Walk count
+                        // Walk count and progress
                         VStack(alignment: .leading, spacing: 4) {
-                            Text(Strings.WalksTab.walksCount(todaysWalks.count))
+                            if let suggestion = walkSuggestion {
+                                Text(Strings.Walks.walksProgress(
+                                    completed: suggestion.walksCompletedToday,
+                                    total: suggestion.targetWalksPerDay
+                                ))
                                 .font(.headline)
+                            } else {
+                                Text(Strings.WalksTab.walksCount(todaysWalks.count))
+                                    .font(.headline)
+                            }
+
                             if totalWalkMinutes > 0 {
                                 Text(Strings.WalksTab.totalDuration(totalWalkMinutes))
                                     .font(.caption)
@@ -150,28 +206,86 @@ struct WalksTabView: View {
 
                         Spacer()
 
-                        // Walk icon
-                        Image(systemName: "figure.walk")
-                            .font(.title)
-                            .foregroundStyle(Color.ollieAccent)
+                        // Progress ring
+                        if let suggestion = walkSuggestion {
+                            ZStack {
+                                Circle()
+                                    .stroke(Color.ollieAccent.opacity(0.2), lineWidth: 4)
+                                Circle()
+                                    .trim(from: 0, to: CGFloat(suggestion.walksCompletedToday) / CGFloat(suggestion.targetWalksPerDay))
+                                    .stroke(Color.ollieAccent, style: StrokeStyle(lineWidth: 4, lineCap: .round))
+                                    .rotationEffect(.degrees(-90))
+                                Image(systemName: "figure.walk")
+                                    .font(.caption)
+                                    .foregroundStyle(Color.ollieAccent)
+                            }
+                            .frame(width: 36, height: 36)
+                        } else {
+                            Image(systemName: "figure.walk")
+                                .font(.title)
+                                .foregroundStyle(Color.ollieAccent)
+                        }
                     }
 
-                    // List of walks
-                    Divider()
+                    // Next walk suggestion (if not all done)
+                    if let suggestion = walkSuggestion {
+                        Divider()
 
-                    ForEach(todaysWalks) { walk in
-                        walkRow(walk)
-                            .contentShape(Rectangle())
-                            .onTapGesture {
-                                walkToEdit = walk
+                        HStack(spacing: 8) {
+                            Image(systemName: suggestion.isOverdue ? "exclamationmark.circle.fill" : "arrow.right.circle")
+                                .font(.caption)
+                                .foregroundStyle(suggestion.isOverdue ? .orange : Color.ollieAccent)
+
+                            Text(Strings.Walks.nextWalk)
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+
+                            Text(suggestion.timeString)
+                                .font(.system(.caption, design: .monospaced))
+                                .fontWeight(.medium)
+                                .foregroundStyle(suggestion.isOverdue ? .orange : .primary)
+
+                            if suggestion.isOverdue {
+                                Text("(\(Strings.Upcoming.overdue))")
+                                    .font(.caption2)
+                                    .foregroundStyle(.orange)
                             }
-                            .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                                Button(role: .destructive) {
-                                    viewModel.deleteEvent(walk)
-                                } label: {
-                                    Label(Strings.Common.delete, systemImage: "trash")
+
+                            Spacer()
+
+                            // Quick log button
+                            Button {
+                                HapticFeedback.light()
+                                viewModel.quickLog(type: .uitlaten)
+                            } label: {
+                                Image(systemName: "plus.circle.fill")
+                                    .font(.title3)
+                                    .foregroundStyle(Color.ollieAccent)
+                            }
+                        }
+                        .padding(8)
+                        .background(suggestion.isOverdue ? Color.orange.opacity(0.1) : Color.ollieAccent.opacity(0.05))
+                        .cornerRadius(8)
+                    }
+
+                    // List of today's walks
+                    if !todaysWalks.isEmpty {
+                        Divider()
+
+                        ForEach(todaysWalks) { walk in
+                            walkRow(walk)
+                                .contentShape(Rectangle())
+                                .onTapGesture {
+                                    walkToEdit = walk
                                 }
-                            }
+                                .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                                    Button(role: .destructive) {
+                                        viewModel.deleteEvent(walk)
+                                    } label: {
+                                        Label(Strings.Common.delete, systemImage: "trash")
+                                    }
+                                }
+                        }
                     }
                 }
                 .padding()
@@ -366,11 +480,7 @@ struct WalksTabView: View {
 struct AllSpotsPreviewMap: View {
     let spots: [WalkSpot]
 
-    @State private var region: MKCoordinateRegion
-
-    init(spots: [WalkSpot]) {
-        self.spots = spots
-
+    private var cameraPosition: MapCameraPosition {
         // Calculate region to fit all spots
         if let first = spots.first {
             var minLat = first.latitude
@@ -390,13 +500,13 @@ struct AllSpotsPreviewMap: View {
             let spanLat = max(0.01, (maxLat - minLat) * 1.5)
             let spanLon = max(0.01, (maxLon - minLon) * 1.5)
 
-            _region = State(initialValue: MKCoordinateRegion(
+            return .region(MKCoordinateRegion(
                 center: CLLocationCoordinate2D(latitude: centerLat, longitude: centerLon),
                 span: MKCoordinateSpan(latitudeDelta: spanLat, longitudeDelta: spanLon)
             ))
         } else {
             // Default to Rotterdam
-            _region = State(initialValue: MKCoordinateRegion(
+            return .region(MKCoordinateRegion(
                 center: CLLocationCoordinate2D(latitude: 51.9225, longitude: 4.4792),
                 span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
             ))
@@ -404,30 +514,22 @@ struct AllSpotsPreviewMap: View {
     }
 
     var body: some View {
-        Map(coordinateRegion: .constant(region), annotationItems: annotations) { item in
-            MapAnnotation(coordinate: item.coordinate) {
-                Image(systemName: item.isFavorite ? "star.circle.fill" : "mappin.circle.fill")
-                    .font(.title3)
-                    .foregroundStyle(item.isFavorite ? .yellow : .ollieAccent)
-                    .background(
-                        Circle()
-                            .fill(.white)
-                            .frame(width: 16, height: 16)
-                    )
+        Map(initialPosition: cameraPosition) {
+            ForEach(spots) { spot in
+                Annotation("", coordinate: CLLocationCoordinate2D(latitude: spot.latitude, longitude: spot.longitude)) {
+                    Image(systemName: spot.isFavorite ? "star.circle.fill" : "mappin.circle.fill")
+                        .font(.title3)
+                        .foregroundStyle(spot.isFavorite ? .yellow : .ollieAccent)
+                        .background(
+                            Circle()
+                                .fill(.white)
+                                .frame(width: 16, height: 16)
+                        )
+                }
             }
         }
+        .mapControlVisibility(.hidden)
         .allowsHitTesting(false)
-    }
-
-    private var annotations: [SpotAnnotation] {
-        spots.map { spot in
-            SpotAnnotation(
-                id: spot.id,
-                name: spot.name,
-                coordinate: CLLocationCoordinate2D(latitude: spot.latitude, longitude: spot.longitude),
-                isFavorite: spot.isFavorite
-            )
-        }
     }
 }
 

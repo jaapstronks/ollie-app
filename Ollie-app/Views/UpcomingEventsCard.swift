@@ -238,6 +238,7 @@ struct UpcomingEventsCard: View {
 
 struct UpcomingCalculations {
     /// Calculate upcoming meals and walks for today
+    /// Uses smart walk suggestions based on actual walk times instead of fixed schedule
     static func calculateUpcoming(
         events: [PuppyEvent],
         mealSchedule: MealSchedule?,
@@ -253,7 +254,7 @@ struct UpcomingCalculations {
 
         var items: [UpcomingItem] = []
 
-        // Calculate upcoming meals
+        // Calculate upcoming meals (unchanged - uses fixed schedule)
         if let schedule = mealSchedule {
             let mealsToday = events.filter { $0.type == .eten }
             let mealCount = mealsToday.count
@@ -278,35 +279,35 @@ struct UpcomingCalculations {
             }
         }
 
-        // Calculate upcoming walks
+        // Calculate smart walk suggestion (only show ONE upcoming walk - the next suggested)
         if let schedule = walkSchedule {
-            let walksToday = events.filter { $0.type == .uitlaten }
-            let walkCount = walksToday.count
-
-            for (index, walk) in schedule.walks.enumerated() {
-                // Skip walks already done
-                if index < walkCount { continue }
-
-                if let scheduledTime = parseTime(walk.targetTime, on: date) {
-                    let isOverdue = scheduledTime < now
-
-                    // Look up weather forecast for this walk time
-                    let forecast = forecasts.first {
-                        calendar.isDate($0.time, equalTo: scheduledTime, toGranularity: .hour)
-                    }
-
-                    items.append(UpcomingItem(
-                        icon: "figure.walk",
-                        label: walk.label,
-                        detail: nil,
-                        targetTime: scheduledTime,
-                        isOverdue: isOverdue,
-                        itemType: .walk,
-                        weatherIcon: forecast?.icon,
-                        temperature: forecast.map { Int($0.temperature) },
-                        rainWarning: forecast?.rainWarning ?? false
-                    ))
+            if let suggestion = WalkSuggestionCalculations.calculateNextSuggestion(
+                events: events,
+                walkSchedule: schedule,
+                date: date
+            ) {
+                // Look up weather forecast for suggested walk time
+                let forecast = forecasts.first {
+                    calendar.isDate($0.time, equalTo: suggestion.suggestedTime, toGranularity: .hour)
                 }
+
+                // Build detail string showing progress
+                let progressDetail = Strings.Walks.walksProgress(
+                    completed: suggestion.walksCompletedToday,
+                    total: suggestion.targetWalksPerDay
+                )
+
+                items.append(UpcomingItem(
+                    icon: "figure.walk",
+                    label: suggestion.label,
+                    detail: progressDetail,
+                    targetTime: suggestion.suggestedTime,
+                    isOverdue: suggestion.isOverdue,
+                    itemType: .walk,
+                    weatherIcon: forecast?.icon,
+                    temperature: forecast.map { Int($0.temperature) },
+                    rainWarning: forecast?.rainWarning ?? false
+                ))
             }
         }
 

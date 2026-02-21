@@ -339,8 +339,10 @@ class NotificationService: ObservableObject {
         }
     }
 
-    // MARK: - Walk Reminders (User-scheduled)
+    // MARK: - Walk Reminders (Dynamic Smart Scheduling)
 
+    /// Schedule walk reminder based on smart suggestion
+    /// Instead of fixed scheduled times, calculates next walk ~2h after last logged walk
     private func scheduleWalkReminders(
         profile: PuppyProfile,
         events: [PuppyEvent]
@@ -349,69 +351,83 @@ class NotificationService: ObservableObject {
         await cancelNotifications(withPrefix: NotificationPrefix.walk)
 
         let minutesBefore = profile.notificationSettings.walkReminders.minutesBefore
-        let todayWalkEvents = events.filter { $0.type == .uitlaten }
 
-        for walk in profile.walkSchedule.walks {
-            guard let (hour, minute) = parseTimeString(walk.targetTime) else { continue }
+        // Use smart walk suggestion instead of fixed schedule
+        guard let suggestion = WalkSuggestionCalculations.calculateNextSuggestion(
+            events: events,
+            walkSchedule: profile.walkSchedule
+        ) else {
+            // No more walks suggested for today (past 22:00 or day complete)
+            return
+        }
 
-            // Check if this walk was already logged today (within 60 min of target time)
-            let walkAlreadyLogged = todayWalkEvents.contains { event in
-                let eventHour = Calendar.current.component(.hour, from: event.time)
-                let eventMinute = Calendar.current.component(.minute, from: event.time)
-                let eventMinutes = eventHour * 60 + eventMinute
-                let targetMinutes = hour * 60 + minute
-                return abs(eventMinutes - targetMinutes) <= 60
+        // Calculate notification time (suggested time minus reminder buffer)
+        let notificationDate = suggestion.suggestedTime.addingTimeInterval(TimeInterval(-minutesBefore * 60))
+        let now = Date()
+
+        // If notification time has already passed
+        if notificationDate <= now {
+            // If suggestion is overdue but within reasonable window, notify soon
+            if suggestion.isOverdue && suggestion.minutesUntilSuggested > -30 {
+                await sendImmediateWalkNotification(profile: profile, suggestion: suggestion)
             }
+            return
+        }
 
-            if walkAlreadyLogged { continue }
+        // Calculate time interval until notification
+        let timeInterval = notificationDate.timeIntervalSince(now)
+        guard timeInterval > 0 else { return }
 
-            // Calculate notification time
-            var notifyMinute = minute - minutesBefore
-            var notifyHour = hour
-            if notifyMinute < 0 {
-                notifyMinute += 60
-                notifyHour -= 1
-            }
-            if notifyHour < 0 {
-                notifyHour += 24
-            }
+        let content = UNMutableNotificationContent()
+        content.title = Strings.PushNotifications.walkTimeTitle
+        content.body = Strings.PushNotifications.walkReminder(name: profile.name)
+        content.sound = .default
 
-            // Check if notification time has already passed today
-            let now = Date()
-            let calendar = Calendar.current
-            let currentHour = calendar.component(.hour, from: now)
-            let currentMinute = calendar.component(.minute, from: now)
-            let currentMinutes = currentHour * 60 + currentMinute
-            let notifyMinutes = notifyHour * 60 + notifyMinute
+        let trigger = UNTimeIntervalNotificationTrigger(
+            timeInterval: timeInterval,
+            repeats: false
+        )
 
-            // Skip if notification time has passed
-            if notifyMinutes <= currentMinutes { continue }
+        let request = UNNotificationRequest(
+            identifier: "\(NotificationPrefix.walk)\(UUID().uuidString)",
+            content: content,
+            trigger: trigger
+        )
 
-            let content = UNMutableNotificationContent()
-            content.title = "Tijd voor een wandeling!"
-            content.body = "\(walk.label) om \(walk.targetTime)"
-            content.sound = .default
+        do {
+            try await notificationCenter.add(request)
+        } catch {
+            print("Failed to schedule smart walk reminder: \(error)")
+        }
+    }
 
-            var dateComponents = DateComponents()
-            dateComponents.hour = notifyHour
-            dateComponents.minute = notifyMinute
+    /// Send immediate notification when walk is due or overdue
+    private func sendImmediateWalkNotification(
+        profile: PuppyProfile,
+        suggestion: WalkSuggestion
+    ) async {
+        let content = UNMutableNotificationContent()
+        content.sound = .default
 
-            let trigger = UNCalendarNotificationTrigger(
-                dateMatching: dateComponents,
-                repeats: false
-            )
+        if suggestion.isOverdue {
+            content.title = Strings.PushNotifications.walkTimeTitle
+            content.body = "\(profile.name) - \(suggestion.label) (\(Strings.Upcoming.overdue))"
+        } else {
+            content.title = Strings.PushNotifications.walkTimeTitle
+            content.body = Strings.PushNotifications.walkReminder(name: profile.name)
+        }
 
-            let request = UNNotificationRequest(
-                identifier: "\(NotificationPrefix.walk)\(walk.id.uuidString)",
-                content: content,
-                trigger: trigger
-            )
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+        let request = UNNotificationRequest(
+            identifier: "\(NotificationPrefix.walk)\(UUID().uuidString)",
+            content: content,
+            trigger: trigger
+        )
 
-            do {
-                try await notificationCenter.add(request)
-            } catch {
-                print("Failed to schedule walk reminder for \(walk.label): \(error)")
-            }
+        do {
+            try await notificationCenter.add(request)
+        } catch {
+            print("Failed to send immediate walk notification: \(error)")
         }
     }
 
