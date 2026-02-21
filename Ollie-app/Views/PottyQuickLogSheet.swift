@@ -64,12 +64,14 @@ struct PottyQuickLogSheet: View {
                 .frame(width: 44, height: 44)
                 .background(Color.ollieInfo.opacity(0.1))
                 .clipShape(Circle())
+                .accessibilityHidden(true)
 
                 Text(Strings.PottyQuickLog.toilet)
                     .font(.title2)
                     .fontWeight(.semibold)
             }
             .padding(.top, 8)
+            .accessibilityAddTraits(.isHeader)
 
             // Potty type selection
             VStack(spacing: 8) {
@@ -97,12 +99,14 @@ struct PottyQuickLogSheet: View {
                     HStack {
                         Image(systemName: "clock")
                             .foregroundColor(.secondary)
+                            .accessibilityHidden(true)
                         Text(selectedTime.timeString)
                             .font(.title3)
                             .fontWeight(.medium)
                         Image(systemName: "chevron.down")
                             .font(.caption)
                             .foregroundColor(.secondary)
+                            .accessibilityHidden(true)
                     }
                     .padding(.horizontal, 16)
                     .padding(.vertical, 10)
@@ -110,13 +114,16 @@ struct PottyQuickLogSheet: View {
                     .cornerRadius(10)
                 }
                 .buttonStyle(.plain)
+                .accessibilityLabel(Strings.PottyQuickLog.timeAccessibility(selectedTime.timeString))
+                .accessibilityHint(Strings.PottyQuickLog.timeAccessibilityHint)
+                .accessibilityIdentifier("POTTY_TIME_PICKER")
 
                 // Quick adjustment buttons
                 HStack(spacing: 10) {
-                    PottyTimeAdjustButton(minutes: -5, selectedTime: $selectedTime)
-                    PottyTimeAdjustButton(minutes: -10, selectedTime: $selectedTime)
-                    PottyTimeAdjustButton(minutes: -15, selectedTime: $selectedTime)
-                    PottyTimeAdjustButton(minutes: -30, selectedTime: $selectedTime)
+                    TimeAdjustButton(minutes: -5, selectedTime: $selectedTime)
+                    TimeAdjustButton(minutes: -10, selectedTime: $selectedTime)
+                    TimeAdjustButton(minutes: -15, selectedTime: $selectedTime)
+                    TimeAdjustButton(minutes: -30, selectedTime: $selectedTime)
                 }
 
                 // Time picker (expandable)
@@ -140,13 +147,13 @@ struct PottyQuickLogSheet: View {
                     .foregroundColor(.secondary)
 
                 HStack(spacing: 16) {
-                    PottyLocationButton(
+                    LocationSelectionButton(
                         location: .buiten,
                         isSelected: selectedLocation == .buiten,
                         action: { selectedLocation = .buiten }
                     )
 
-                    PottyLocationButton(
+                    LocationSelectionButton(
                         location: .binnen,
                         isSelected: selectedLocation == .binnen,
                         action: { selectedLocation = .binnen }
@@ -162,6 +169,9 @@ struct PottyQuickLogSheet: View {
 
                 TextField(Strings.PottyQuickLog.notePlaceholder, text: $note)
                     .textFieldStyle(.roundedBorder)
+                    .accessibilityLabel(Strings.PottyQuickLog.noteOptional)
+                    .accessibilityHint(Strings.QuickLogSheet.noteAccessibilityHint)
+                    .accessibilityIdentifier("POTTY_NOTE_FIELD")
             }
             .padding(.horizontal, 4)
 
@@ -171,6 +181,7 @@ struct PottyQuickLogSheet: View {
                     onCancel()
                 }
                 .foregroundColor(.secondary)
+                .accessibilityIdentifier("POTTY_CANCEL_BUTTON")
 
                 Button {
                     HapticFeedback.success()
@@ -179,6 +190,7 @@ struct PottyQuickLogSheet: View {
                 } label: {
                     HStack {
                         Image(systemName: "checkmark")
+                            .accessibilityHidden(true)
                         Text(Strings.Common.log)
                     }
                     .font(.headline)
@@ -189,14 +201,29 @@ struct PottyQuickLogSheet: View {
                     .cornerRadius(12)
                 }
                 .disabled(!canSave)
+                .accessibilityLabel(Strings.PottyQuickLog.logAccessibility)
+                .accessibilityHint(canSave ? Strings.PottyQuickLog.logAccessibilityHint : Strings.PottyQuickLog.selectRequiredFields)
+                .accessibilityIdentifier("POTTY_LOG_BUTTON")
             }
         }
         .padding()
-        .animation(.easeInOut(duration: 0.2), value: showingTimePicker)
+        .modifier(ReduceMotionAnimation(value: showingTimePicker))
     }
 
     private var canSave: Bool {
         selectedPotty != nil && selectedLocation != nil
+    }
+}
+
+// MARK: - Reduce Motion Support
+
+/// Animation modifier that respects reduce motion setting
+private struct ReduceMotionAnimation<Value: Equatable>: ViewModifier {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    let value: Value
+
+    func body(content: Content) -> some View {
+        content.animation(reduceMotion ? nil : .easeInOut(duration: 0.2), value: value)
     }
 }
 
@@ -215,6 +242,7 @@ struct PottyToggleButton: View {
             VStack(spacing: 6) {
                 pottyIcon
                     .frame(width: 36, height: 36)
+                    .accessibilityHidden(true)
 
                 Text(potty.label)
                     .font(.subheadline)
@@ -231,6 +259,10 @@ struct PottyToggleButton: View {
             )
         }
         .buttonStyle(.plain)
+        .accessibilityLabel(potty.label)
+        .accessibilityHint(Strings.PottyQuickLog.pottyTypeHint(potty.label))
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
+        .accessibilityIdentifier("POTTY_TYPE_\(potty.rawValue.uppercased())")
     }
 
     @ViewBuilder
@@ -257,64 +289,6 @@ struct PottyToggleButton: View {
     }
 }
 
-struct PottyTimeAdjustButton: View {
-    let minutes: Int
-    @Binding var selectedTime: Date
-
-    var body: some View {
-        Button {
-            HapticFeedback.light()
-            if let newTime = Calendar.current.date(byAdding: .minute, value: minutes, to: selectedTime) {
-                selectedTime = newTime
-            }
-        } label: {
-            Text(Strings.PottyQuickLog.minutesAgo(minutes))
-                .font(.subheadline)
-                .fontWeight(.medium)
-                .padding(.horizontal, 12)
-                .padding(.vertical, 8)
-                .background(Color(uiColor: .tertiarySystemBackground))
-                .cornerRadius(8)
-        }
-        .buttonStyle(.plain)
-    }
-}
-
-struct PottyLocationButton: View {
-    let location: EventLocation
-    let isSelected: Bool
-    let action: () -> Void
-
-    var body: some View {
-        Button {
-            HapticFeedback.medium()
-            action()
-        } label: {
-            VStack(spacing: 6) {
-                Image(systemName: location == .buiten ? "sun.max.fill" : "house.fill")
-                    .font(.system(size: 28))
-                    .foregroundStyle(isSelected ? iconColor : .primary)
-
-                Text(location.label)
-                    .font(.subheadline)
-                    .fontWeight(isSelected ? .semibold : .regular)
-                    .foregroundStyle(isSelected ? iconColor : .primary)
-            }
-            .frame(width: 80, height: 80)
-            .background(isSelected ? iconColor.opacity(0.15) : Color(uiColor: .secondarySystemBackground))
-            .cornerRadius(12)
-            .overlay(
-                RoundedRectangle(cornerRadius: 12)
-                    .stroke(isSelected ? iconColor : Color.clear, lineWidth: 2)
-            )
-        }
-        .buttonStyle(.plain)
-    }
-
-    private var iconColor: Color {
-        location == .buiten ? .ollieSuccess : .ollieWarning
-    }
-}
 
 #Preview {
     PottyQuickLogSheet(

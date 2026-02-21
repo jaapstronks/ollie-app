@@ -15,7 +15,6 @@ struct TodayView: View {
     let onSettingsTap: () -> Void
 
     @State private var dragOffset: CGFloat = 0
-    @StateObject private var mediaCaptureViewModel = MediaCaptureViewModel(mediaStore: MediaStore())
     @State private var selectedPhotoEvent: PuppyEvent?
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
@@ -44,25 +43,25 @@ struct TodayView: View {
                         .padding(.vertical, 8)
                     }
 
+                    // Day hero - "Day X with Ollie" at top for context
+                    DayHeroCard(
+                        dayNumber: viewModel.dailyDigest.dayNumber,
+                        puppyName: viewModel.puppyName
+                    )
+
                     // Status cards section (only for today)
                     if viewModel.isShowingToday {
                         statusCardsSection
                     }
 
-                    // Daily digest
-                    DigestCard(
-                        digest: viewModel.dailyDigest,
-                        puppyName: viewModel.puppyName
-                    )
-
-                    // Streak card
+                    // Streak card (motivational - only if there's a streak)
                     StreakCard(streakInfo: viewModel.streakInfo)
 
                     // Timeline section
                     timelineSection
                 }
-                .padding(.horizontal)
-                .padding(.bottom, 100) // Space for FAB
+                .padding()
+                .padding(.bottom, 84) // Space for FAB
             }
             .refreshable {
                 viewModel.loadEvents()
@@ -70,147 +69,6 @@ struct TodayView: View {
         }
         // Swipe gestures for day navigation
         .gesture(dayNavigationGesture)
-        // All sheets from TimelineView
-        .sheet(isPresented: viewModel.sheetCoordinator.isShowingPotty) {
-            PottyQuickLogSheet(
-                onSave: viewModel.logPottyEvent,
-                onCancel: viewModel.cancelPottySheet
-            )
-            .presentationDetents([.height(580)])
-        }
-        .sheet(isPresented: viewModel.sheetCoordinator.isShowingQuickLog) {
-            if let type = viewModel.pendingEventType {
-                QuickLogSheet(
-                    eventType: type,
-                    onSave: viewModel.logFromQuickSheet,
-                    onCancel: viewModel.cancelQuickLogSheet
-                )
-                .presentationDetents([type.requiresLocation ? .height(480) : .height(380)])
-            }
-        }
-        .sheet(isPresented: viewModel.sheetCoordinator.isShowingLocationPicker) {
-            LocationPickerSheet(
-                eventType: viewModel.pendingEventType ?? .plassen,
-                onSelect: viewModel.logWithLocation,
-                onCancel: viewModel.cancelLocationPicker
-            )
-            .presentationDetents([.height(200)])
-        }
-        .sheet(isPresented: viewModel.sheetCoordinator.isShowingLogSheet) {
-            if let type = viewModel.pendingEventType {
-                LogEventSheet(eventType: type) { note, who, exercise, result, durationMin in
-                    viewModel.logEvent(
-                        type: type,
-                        note: note,
-                        who: who,
-                        exercise: exercise,
-                        result: result,
-                        durationMin: durationMin
-                    )
-                    viewModel.sheetCoordinator.dismissSheet()
-                }
-            }
-        }
-        .sheet(isPresented: viewModel.sheetCoordinator.isShowingAllEvents) {
-            AllEventsSheet(
-                onSelect: { type in
-                    viewModel.sheetCoordinator.transitionToSheet(.quickLog(type))
-                },
-                onCancel: {
-                    viewModel.sheetCoordinator.dismissSheet()
-                }
-            )
-            .presentationDetents([.medium, .large])
-        }
-        .fullScreenCover(isPresented: viewModel.sheetCoordinator.isShowingMediaPicker) {
-            MediaPicker(
-                source: viewModel.mediaPickerSource,
-                onImageSelected: { image, data in
-                    mediaCaptureViewModel.processImage(image, originalData: data)
-                    viewModel.dismissMediaPicker()
-                    viewModel.showLogMomentSheet()
-                },
-                onCancel: {
-                    viewModel.dismissMediaPicker()
-                }
-            )
-        }
-        .sheet(isPresented: viewModel.sheetCoordinator.isShowingLogMoment) {
-            LogMomentSheet(
-                viewModel: mediaCaptureViewModel,
-                onSave: { event in
-                    viewModel.addEvent(event)
-                    viewModel.dismissLogMomentSheet()
-                    mediaCaptureViewModel.reset()
-                    HapticFeedback.success()
-                },
-                onCancel: {
-                    viewModel.dismissLogMomentSheet()
-                    mediaCaptureViewModel.reset()
-                }
-            )
-        }
-        .fullScreenCover(item: $selectedPhotoEvent) { event in
-            MediaPreviewView(
-                event: event,
-                onDelete: {
-                    viewModel.deleteEvent(event)
-                    selectedPhotoEvent = nil
-                }
-            )
-        }
-        .sheet(isPresented: viewModel.sheetCoordinator.isShowingUpgradePrompt) {
-            UpgradePromptView(
-                puppyName: viewModel.puppyName,
-                onPurchase: {
-                    Task { await handlePurchase() }
-                },
-                onRestore: {
-                    Task { await StoreKitManager.shared.restorePurchases() }
-                },
-                onDismiss: {
-                    viewModel.sheetCoordinator.dismissSheet()
-                }
-            )
-            .presentationDetents([.large])
-        }
-        .sheet(isPresented: viewModel.sheetCoordinator.isShowingPurchaseSuccess) {
-            PurchaseSuccessView(
-                puppyName: viewModel.puppyName,
-                onDismiss: {
-                    viewModel.sheetCoordinator.dismissSheet()
-                }
-            )
-            .presentationDetents([.medium])
-        }
-        .confirmationDialog(
-            Strings.Timeline.deleteConfirmTitle,
-            isPresented: viewModel.showingDeleteConfirmation,
-            titleVisibility: .visible
-        ) {
-            Button(Strings.Common.delete, role: .destructive) {
-                viewModel.confirmDeleteEvent()
-            }
-            Button(Strings.Common.cancel, role: .cancel) {
-                viewModel.cancelDeleteEvent()
-            }
-        } message: {
-            if let event = viewModel.eventToDelete {
-                Text(Strings.Timeline.deleteConfirmMessage(event: event.type.label, time: event.time.timeString))
-            }
-        }
-        .overlay(alignment: .bottom) {
-            if viewModel.showingUndoBanner {
-                UndoBanner(
-                    message: Strings.Timeline.eventDeleted,
-                    onUndo: viewModel.undoDelete,
-                    onDismiss: viewModel.dismissUndoBanner
-                )
-                .transition(reduceMotion ? .opacity : .move(edge: .bottom).combined(with: .opacity))
-                .padding(.bottom, 100)
-            }
-        }
-        .animation(reduceMotion ? nil : .easeInOut(duration: 0.2), value: viewModel.showingUndoBanner)
         .task {
             await weatherService.fetchForecasts()
         }
@@ -377,22 +235,6 @@ struct TodayView: View {
             }
     }
 
-    // MARK: - Purchase Handling
-
-    private func handlePurchase() async {
-        guard let profileID = viewModel.profileStore.profile?.id else { return }
-
-        do {
-            try await StoreKitManager.shared.purchase(for: profileID)
-            viewModel.profileStore.unlockPremium()
-            viewModel.sheetCoordinator.presentSheet(.purchaseSuccess)
-            HapticFeedback.success()
-        } catch StoreKitError.userCancelled {
-            // User cancelled, do nothing
-        } catch {
-            HapticFeedback.error()
-        }
-    }
 }
 
 // MARK: - Empty Timeline Card

@@ -14,6 +14,8 @@ struct TimelineView: View {
     @StateObject private var mediaCaptureViewModel = MediaCaptureViewModel(mediaStore: MediaStore())
     @State private var selectedPhotoEvent: PuppyEvent?
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @EnvironmentObject private var spotStore: SpotStore
+    @EnvironmentObject private var locationManager: LocationManager
 
     var body: some View {
         VStack(spacing: 0) {
@@ -140,183 +142,18 @@ struct TimelineView: View {
                     dragOffset = 0
                 }
         )
-        // V3: PottyQuickLogSheet for combined plassen/poepen
-        .sheet(isPresented: viewModel.sheetCoordinator.isShowingPotty) {
-            PottyQuickLogSheet(
-                onSave: viewModel.logPottyEvent,
-                onCancel: viewModel.cancelPottySheet
-            )
-            .presentationDetents([.height(580)])
-        }
-        // V2: QuickLogSheet with time adjustment for all events
-        .sheet(isPresented: viewModel.sheetCoordinator.isShowingQuickLog) {
-            if let type = viewModel.pendingEventType {
-                QuickLogSheet(
-                    eventType: type,
-                    onSave: viewModel.logFromQuickSheet,
-                    onCancel: viewModel.cancelQuickLogSheet
-                )
-                .presentationDetents([type.requiresLocation ? .height(480) : .height(380)])
-            }
-        }
-        // Legacy: kept for backwards compatibility
-        .sheet(isPresented: viewModel.sheetCoordinator.isShowingLocationPicker) {
-            LocationPickerSheet(
-                eventType: viewModel.pendingEventType ?? .plassen,
-                onSelect: viewModel.logWithLocation,
-                onCancel: viewModel.cancelLocationPicker
-            )
-            .presentationDetents([.height(200)])
-        }
-        .sheet(isPresented: viewModel.sheetCoordinator.isShowingLogSheet) {
-            if let type = viewModel.pendingEventType {
-                LogEventSheet(eventType: type) { note, who, exercise, result, durationMin in
-                    viewModel.logEvent(
-                        type: type,
-                        note: note,
-                        who: who,
-                        exercise: exercise,
-                        result: result,
-                        durationMin: durationMin
-                    )
-                    viewModel.sheetCoordinator.dismissSheet()
-                }
-            }
-        }
-        // V2: All events sheet - uses transitionToSheet for clean flow
-        .sheet(isPresented: viewModel.sheetCoordinator.isShowingAllEvents) {
-            AllEventsSheet(
-                onSelect: { type in
-                    viewModel.sheetCoordinator.transitionToSheet(.quickLog(type))
-                },
-                onCancel: {
-                    viewModel.sheetCoordinator.dismissSheet()
-                }
-            )
-            .presentationDetents([.medium, .large])
-        }
-        // Media picker for photo moments
-        .fullScreenCover(isPresented: viewModel.sheetCoordinator.isShowingMediaPicker) {
-            MediaPicker(
-                source: viewModel.mediaPickerSource,
-                onImageSelected: { image, data in
-                    mediaCaptureViewModel.processImage(image, originalData: data)
-                    viewModel.dismissMediaPicker()
-                    viewModel.showLogMomentSheet()
-                },
-                onCancel: {
-                    viewModel.dismissMediaPicker()
-                }
-            )
-        }
-        // Log moment sheet
-        .sheet(isPresented: viewModel.sheetCoordinator.isShowingLogMoment) {
-            LogMomentSheet(
-                viewModel: mediaCaptureViewModel,
-                onSave: { event in
-                    viewModel.addEvent(event)
-                    viewModel.dismissLogMomentSheet()
-                    mediaCaptureViewModel.reset()
-                    HapticFeedback.success()
-                },
-                onCancel: {
-                    viewModel.dismissLogMomentSheet()
-                    mediaCaptureViewModel.reset()
-                }
-            )
-        }
-        // Photo preview for tapped events
-        .fullScreenCover(item: $selectedPhotoEvent) { event in
-            MediaPreviewView(
-                event: event,
-                onDelete: {
-                    viewModel.deleteEvent(event)
-                    selectedPhotoEvent = nil
-                }
-            )
-        }
-        // Upgrade prompt sheet
-        .sheet(isPresented: viewModel.sheetCoordinator.isShowingUpgradePrompt) {
-            UpgradePromptView(
-                puppyName: viewModel.puppyName,
-                onPurchase: {
-                    Task {
-                        await handlePurchase()
-                    }
-                },
-                onRestore: {
-                    Task {
-                        await StoreKitManager.shared.restorePurchases()
-                    }
-                },
-                onDismiss: {
-                    viewModel.sheetCoordinator.dismissSheet()
-                }
-            )
-            .presentationDetents([.large])
-        }
-        // Purchase success sheet
-        .sheet(isPresented: viewModel.sheetCoordinator.isShowingPurchaseSuccess) {
-            PurchaseSuccessView(
-                puppyName: viewModel.puppyName,
-                onDismiss: {
-                    viewModel.sheetCoordinator.dismissSheet()
-                }
-            )
-            .presentationDetents([.medium])
-        }
-        // Delete confirmation dialog
-        .confirmationDialog(
-            Strings.Timeline.deleteConfirmTitle,
-            isPresented: viewModel.showingDeleteConfirmation,
-            titleVisibility: .visible
-        ) {
-            Button(Strings.Common.delete, role: .destructive) {
-                viewModel.confirmDeleteEvent()
-            }
-            Button(Strings.Common.cancel, role: .cancel) {
-                viewModel.cancelDeleteEvent()
-            }
-        } message: {
-            if let event = viewModel.eventToDelete {
-                Text(Strings.Timeline.deleteConfirmMessage(event: event.type.label, time: event.time.timeString))
-            }
-        }
-        // Undo banner overlay
-        .overlay(alignment: .bottom) {
-            if viewModel.showingUndoBanner {
-                UndoBanner(
-                    message: Strings.Timeline.eventDeleted,
-                    onUndo: viewModel.undoDelete,
-                    onDismiss: viewModel.dismissUndoBanner
-                )
-                .transition(reduceMotion ? .opacity : .move(edge: .bottom).combined(with: .opacity))
-                .padding(.bottom, 100) // Above quick log bar
-            }
-        }
-        .animation(reduceMotion ? nil : .easeInOut(duration: 0.2), value: viewModel.showingUndoBanner)
+        // All sheets from shared modifier
+        .timelineSheetHandling(
+            viewModel: viewModel,
+            mediaCaptureViewModel: mediaCaptureViewModel,
+            selectedPhotoEvent: $selectedPhotoEvent,
+            reduceMotion: reduceMotion,
+            spotStore: spotStore,
+            locationManager: locationManager
+        )
         .task {
             // Fetch weather on appear
             await weatherService.fetchForecasts()
-        }
-    }
-
-    // MARK: - Purchase Handling
-
-    private func handlePurchase() async {
-        guard let profileID = viewModel.profileStore.profile?.id else { return }
-
-        do {
-            try await StoreKitManager.shared.purchase(for: profileID)
-            // Update profile to reflect premium status
-            viewModel.profileStore.unlockPremium()
-            viewModel.sheetCoordinator.presentSheet(.purchaseSuccess)
-            HapticFeedback.success()
-        } catch StoreKitError.userCancelled {
-            // User cancelled, do nothing
-        } catch {
-            // Show error (StoreKitManager already sets purchaseError)
-            HapticFeedback.error()
         }
     }
 }

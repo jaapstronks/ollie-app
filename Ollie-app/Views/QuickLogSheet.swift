@@ -3,8 +3,10 @@
 //  Ollie-app
 //
 //  V2: Unified logging sheet with time adjustment for all events
+//  V3: Added walk location support
 
 import SwiftUI
+import CoreLocation
 
 /// Sheet for quick logging with time adjustment
 struct QuickLogSheet: View {
@@ -12,10 +14,28 @@ struct QuickLogSheet: View {
     let onSave: (Date, EventLocation?, String?) -> Void
     let onCancel: () -> Void
 
+    // Optional walk location support
+    var spotStore: SpotStore?
+    var locationManager: LocationManager?
+    var onSaveWalk: ((Date, WalkSpot?, Double?, Double?, String?) -> Void)?
+
     @State private var selectedTime: Date = Date()
     @State private var selectedLocation: EventLocation?
     @State private var note: String = ""
     @State private var showingTimePicker: Bool = false
+
+    // Walk location state
+    @State private var selectedSpot: WalkSpot?
+    @State private var capturedLatitude: Double?
+    @State private var capturedLongitude: Double?
+    @State private var showingSpotPicker = false
+    @State private var isCapturingLocation = false
+    @State private var newSpotName = ""
+    @State private var showingSpotNameInput = false
+
+    private var isWalkEvent: Bool {
+        eventType == .uitlaten && spotStore != nil && locationManager != nil
+    }
 
     var body: some View {
         VStack(spacing: 20) {
@@ -73,6 +93,11 @@ struct QuickLogSheet: View {
                 }
             }
 
+            // Walk location section (for walk events)
+            if isWalkEvent {
+                walkLocationSection
+            }
+
             // Location picker (for potty events only)
             if eventType.requiresLocation {
                 VStack(spacing: 8) {
@@ -118,7 +143,7 @@ struct QuickLogSheet: View {
 
                 Button {
                     HapticFeedback.success()
-                    onSave(selectedTime, selectedLocation, note.isEmpty ? nil : note)
+                    saveEvent()
                 } label: {
                     HStack {
                         Image(systemName: "checkmark")
@@ -136,7 +161,138 @@ struct QuickLogSheet: View {
         }
         .padding()
         .animation(.easeInOut(duration: 0.2), value: showingTimePicker)
+        .animation(.easeInOut(duration: 0.2), value: showingSpotNameInput)
+        .sheet(isPresented: $showingSpotPicker) {
+            if let store = spotStore, let locMgr = locationManager {
+                SpotPickerSheet(
+                    spotStore: store,
+                    locationManager: locMgr,
+                    onSelect: { spot in
+                        selectedSpot = spot
+                        capturedLatitude = spot.latitude
+                        capturedLongitude = spot.longitude
+                        showingSpotPicker = false
+                    },
+                    onCancel: {
+                        showingSpotPicker = false
+                    }
+                )
+            }
+        }
     }
+
+    // MARK: - Walk Location Section
+
+    @ViewBuilder
+    private var walkLocationSection: some View {
+        VStack(spacing: 12) {
+            HStack {
+                Text(Strings.WalkLocations.location)
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+                Text(Strings.WalkLocations.optional)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+
+            if showingSpotNameInput, let lat = capturedLatitude, let lon = capturedLongitude {
+                // Name input for new spot
+                VStack(spacing: 10) {
+                    SpotMapView(latitude: lat, longitude: lon)
+                        .frame(height: 80)
+
+                    TextField(Strings.WalkLocations.spotNamePlaceholder, text: $newSpotName)
+                        .textFieldStyle(.roundedBorder)
+
+                    HStack {
+                        Button(Strings.Common.cancel) {
+                            showingSpotNameInput = false
+                            capturedLatitude = nil
+                            capturedLongitude = nil
+                            newSpotName = ""
+                        }
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+
+                        Spacer()
+
+                        Button {
+                            saveNewSpot()
+                        } label: {
+                            Text(Strings.WalkLocations.saveSpot)
+                                .font(.caption)
+                                .fontWeight(.semibold)
+                        }
+                        .disabled(newSpotName.trimmingCharacters(in: .whitespaces).isEmpty)
+                    }
+                }
+                .padding()
+                .background(Color(.secondarySystemBackground))
+                .cornerRadius(12)
+            } else if let spot = selectedSpot {
+                // Selected spot display
+                HStack {
+                    SpotMapView(latitude: spot.latitude, longitude: spot.longitude, spotName: spot.name)
+                        .frame(height: 80)
+                        .frame(maxWidth: .infinity)
+
+                    Button {
+                        selectedSpot = nil
+                        capturedLatitude = nil
+                        capturedLongitude = nil
+                    } label: {
+                        Image(systemName: "xmark.circle.fill")
+                            .foregroundStyle(.secondary)
+                    }
+                }
+            } else {
+                // Location buttons
+                HStack(spacing: 12) {
+                    // "Here" button
+                    Button {
+                        captureHereLocation()
+                    } label: {
+                        HStack {
+                            if isCapturingLocation {
+                                ProgressView()
+                                    .scaleEffect(0.7)
+                            } else {
+                                Image(systemName: "location.fill")
+                            }
+                            Text(Strings.WalkLocations.here)
+                        }
+                        .font(.subheadline)
+                        .fontWeight(.medium)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 12)
+                        .background(Color(.secondarySystemBackground))
+                        .cornerRadius(10)
+                    }
+                    .buttonStyle(.plain)
+                    .disabled(isCapturingLocation)
+
+                    // "Saved spots" button
+                    Button {
+                        showingSpotPicker = true
+                    } label: {
+                        HStack {
+                            Image(systemName: "star.fill")
+                            Text(Strings.WalkLocations.savedSpots)
+                        }
+                        .font(.subheadline)
+                        .fontWeight(.medium)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 12)
+                        .background(Color(.secondarySystemBackground))
+                        .cornerRadius(10)
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+        }
+    }
+
+    // MARK: - Actions
 
     private var canSave: Bool {
         // Potty events require location
@@ -145,66 +301,58 @@ struct QuickLogSheet: View {
         }
         return true
     }
-}
 
-// MARK: - Supporting Views
+    private func saveEvent() {
+        let noteValue = note.isEmpty ? nil : note
 
-struct TimeAdjustButton: View {
-    let minutes: Int
-    @Binding var selectedTime: Date
-
-    var body: some View {
-        Button {
-            HapticFeedback.light()
-            if let newTime = Calendar.current.date(byAdding: .minute, value: minutes, to: selectedTime) {
-                selectedTime = newTime
-            }
-        } label: {
-            Text("\(minutes) min")
-                .font(.subheadline)
-                .fontWeight(.medium)
-                .padding(.horizontal, 12)
-                .padding(.vertical, 8)
-                .background(Color(.tertiarySystemBackground))
-                .cornerRadius(8)
+        if isWalkEvent, let onSaveWalkCallback = onSaveWalk {
+            // Walk event with location support
+            onSaveWalkCallback(selectedTime, selectedSpot, capturedLatitude, capturedLongitude, noteValue)
+        } else {
+            // Regular event
+            onSave(selectedTime, selectedLocation, noteValue)
         }
-        .buttonStyle(.plain)
+    }
+
+    private func captureHereLocation() {
+        guard let locMgr = locationManager else { return }
+
+        isCapturingLocation = true
+
+        Task {
+            do {
+                let location = try await locMgr.requestLocation()
+                capturedLatitude = location.coordinate.latitude
+                capturedLongitude = location.coordinate.longitude
+                showingSpotNameInput = true
+                HapticFeedback.success()
+            } catch {
+                HapticFeedback.error()
+            }
+            isCapturingLocation = false
+        }
+    }
+
+    private func saveNewSpot() {
+        guard let store = spotStore,
+              let lat = capturedLatitude,
+              let lon = capturedLongitude else { return }
+
+        let name = newSpotName.trimmingCharacters(in: .whitespaces)
+        guard !name.isEmpty else { return }
+
+        let spot = store.addSpot(name: name, latitude: lat, longitude: lon)
+        selectedSpot = spot
+        showingSpotNameInput = false
+        newSpotName = ""
+        HapticFeedback.success()
     }
 }
 
-struct LocationToggleButton: View {
-    let location: EventLocation
-    let isSelected: Bool
-    let action: () -> Void
+// MARK: - Type Aliases for Backwards Compatibility
 
-    var body: some View {
-        Button {
-            HapticFeedback.medium()
-            action()
-        } label: {
-            VStack(spacing: 6) {
-                LocationIcon(location: location, size: 32)
-                    .accessibilityHidden(true)
-
-                Text(location.label)
-                    .font(.subheadline)
-                    .fontWeight(isSelected ? .semibold : .regular)
-                    .foregroundStyle(isSelected ? location.iconColor : .primary)
-            }
-            .frame(width: 80, height: 80)
-            .background(isSelected ? location.iconColor.opacity(0.15) : Color(.secondarySystemBackground))
-            .cornerRadius(12)
-            .overlay(
-                RoundedRectangle(cornerRadius: 12)
-                    .stroke(isSelected ? location.iconColor : Color.clear, lineWidth: 2)
-            )
-        }
-        .buttonStyle(.plain)
-        .accessibilityLabel(Strings.QuickLogSheet.locationAccessibility(location.label))
-        .accessibilityAddTraits(.isButton)
-        .accessibilityValue(isSelected ? Strings.QuickLogSheet.selected : "")
-    }
-}
+/// Type alias pointing to shared component
+private typealias LocationToggleButton = LocationSelectionButton
 
 #Preview {
     QuickLogSheet(
@@ -223,5 +371,18 @@ struct LocationToggleButton: View {
             print("Save: \(time), \(location?.rawValue ?? "none"), \(note ?? "")")
         },
         onCancel: {}
+    )
+}
+
+#Preview("Walk with location") {
+    QuickLogSheet(
+        eventType: .uitlaten,
+        onSave: { _, _, _ in },
+        onCancel: {},
+        spotStore: SpotStore(),
+        locationManager: LocationManager(),
+        onSaveWalk: { time, spot, lat, lon, note in
+            print("Walk: \(time), spot: \(spot?.name ?? "none"), lat: \(lat ?? 0), note: \(note ?? "")")
+        }
     )
 }

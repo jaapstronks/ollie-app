@@ -68,6 +68,7 @@ struct FABButton: View {
                         dismissMenu()
                     }
                     .transition(.opacity)
+                    .accessibilityHidden(true)
             }
 
             // Quick action menu
@@ -86,40 +87,43 @@ struct FABButton: View {
 
     @ViewBuilder
     private var fabButton: some View {
-        Button {
+        ZStack {
+            // Background circle
+            Circle()
+                .fill(Color.ollieAccent)
+                .frame(width: fabSize, height: fabSize)
+                .shadow(color: Color.ollieAccent.opacity(0.4), radius: 8, y: 4)
+
+            // Icon
+            Image(systemName: isShowingMenu ? "xmark" : "plus")
+                .font(.system(size: 24, weight: .semibold))
+                .foregroundStyle(.white)
+                .rotationEffect(.degrees(isShowingMenu ? 45 : 0))
+        }
+        .contentShape(Circle())
+        .onTapGesture {
             if isShowingMenu {
                 dismissMenu()
             } else {
+                HapticFeedback.medium()
                 onTap()
             }
-        } label: {
-            ZStack {
-                // Background circle
-                Circle()
-                    .fill(Color.ollieAccent)
-                    .frame(width: fabSize, height: fabSize)
-                    .shadow(color: Color.ollieAccent.opacity(0.4), radius: 8, y: 4)
-
-                // Icon
-                Image(systemName: isShowingMenu ? "xmark" : "plus")
-                    .font(.system(size: 24, weight: .semibold))
-                    .foregroundStyle(.white)
-                    .rotationEffect(.degrees(isShowingMenu ? 45 : 0))
+        }
+        .onLongPressGesture(minimumDuration: 0.4) {
+            HapticFeedback.medium()
+            withAnimation {
+                isShowingMenu = true
             }
         }
-        .buttonStyle(FABButtonStyle())
-        .simultaneousGesture(
-            LongPressGesture(minimumDuration: 0.4)
-                .onEnded { _ in
-                    HapticFeedback.medium()
-                    withAnimation {
-                        isShowingMenu = true
-                    }
-                }
-        )
         .accessibilityLabel(Strings.FAB.accessibilityLabel)
         .accessibilityHint(Strings.FAB.accessibilityHint)
         .accessibilityIdentifier("FAB_BUTTON")
+        .accessibilityAction(named: Strings.FAB.showQuickMenu) {
+            HapticFeedback.medium()
+            withAnimation {
+                isShowingMenu = true
+            }
+        }
     }
 
     // MARK: - Quick Action Menu
@@ -134,9 +138,7 @@ struct FABButton: View {
                 }
             }
             .padding(12)
-            .background(menuBackground)
-            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-            .overlay(menuOverlay)
+            .glassBackground(.menu)
             .shadow(color: .black.opacity(colorScheme == .dark ? 0.5 : 0.15), radius: 20, y: 10)
 
             // Spacer for FAB
@@ -156,18 +158,13 @@ struct FABButton: View {
             onQuickAction(action.type, action.location)
         } label: {
             HStack(spacing: 12) {
-                // Icon circle
-                ZStack {
-                    Circle()
-                        .fill(action.color.opacity(colorScheme == .dark ? 0.2 : 0.15))
-                        .frame(width: menuItemSize, height: menuItemSize)
+                CircleIconView(
+                    icon: .system(action.icon),
+                    color: action.color,
+                    size: menuItemSize,
+                    iconScale: 0.42
+                )
 
-                    Image(systemName: action.icon)
-                        .font(.system(size: 20, weight: .medium))
-                        .foregroundStyle(action.color)
-                }
-
-                // Label
                 Text(action.label)
                     .font(.body)
                     .fontWeight(.medium)
@@ -180,44 +177,9 @@ struct FABButton: View {
             .contentShape(Rectangle())
         }
         .buttonStyle(QuickActionButtonStyle())
-    }
-
-    @ViewBuilder
-    private var menuBackground: some View {
-        ZStack {
-            if colorScheme == .dark {
-                Color.white.opacity(0.08)
-            } else {
-                Color.white.opacity(0.85)
-            }
-
-            LinearGradient(
-                colors: [
-                    Color.white.opacity(colorScheme == .dark ? 0.12 : 0.4),
-                    Color.clear
-                ],
-                startPoint: .top,
-                endPoint: .center
-            )
-        }
-        .background(.ultraThinMaterial)
-    }
-
-    @ViewBuilder
-    private var menuOverlay: some View {
-        RoundedRectangle(cornerRadius: 16, style: .continuous)
-            .strokeBorder(
-                LinearGradient(
-                    colors: [
-                        Color.white.opacity(colorScheme == .dark ? 0.25 : 0.6),
-                        Color.white.opacity(colorScheme == .dark ? 0.05 : 0.15),
-                        Color.clear
-                    ],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                ),
-                lineWidth: 0.5
-            )
+        .accessibilityLabel(action.label)
+        .accessibilityHint(Strings.FAB.quickActionHint(action.label))
+        .accessibilityIdentifier("FAB_QUICK_ACTION_\(action.type.rawValue)")
     }
 
     // MARK: - Helpers

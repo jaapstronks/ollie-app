@@ -338,10 +338,10 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = ZA6R83F354;
+				DEVELOPMENT_TEAM = 56TESV358R;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "jaapstronks.Ollie-appUITests";
+				PRODUCT_BUNDLE_IDENTIFIER = nl.jaapstronks.OllieUI.Tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -358,10 +358,10 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = ZA6R83F354;
+				DEVELOPMENT_TEAM = 56TESV358R;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "jaapstronks.Ollie-appUITests";
+				PRODUCT_BUNDLE_IDENTIFIER = nl.jaapstronks.OllieUI.Tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -381,7 +381,7 @@
 				CODE_SIGN_ENTITLEMENTS = OllieWidget/OllieWidget.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = ZA6R83F354;
+				DEVELOPMENT_TEAM = 56TESV358R;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Olliewidget/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Olliewidget;
@@ -392,7 +392,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "jaapstronks.Ollie-app.Olliewidget";
+				PRODUCT_BUNDLE_IDENTIFIER = nl.jaapstronks.Ollie.widget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -412,7 +412,7 @@
 				CODE_SIGN_ENTITLEMENTS = OllieWidget/OllieWidget.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = ZA6R83F354;
+				DEVELOPMENT_TEAM = 56TESV358R;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Olliewidget/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Olliewidget;
@@ -423,7 +423,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "jaapstronks.Ollie-app.Olliewidget";
+				PRODUCT_BUNDLE_IDENTIFIER = nl.jaapstronks.Ollie.widget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -564,7 +564,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Ollie-app/Ollie-app.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = ZA6R83F354;
+				DEVELOPMENT_TEAM = 56TESV358R;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Ollie-app/Info.plist";
@@ -578,7 +578,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "jaapstronks.Ollie-app";
+				PRODUCT_BUNDLE_IDENTIFIER = nl.jaapstronks.Ollie;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -598,7 +598,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Ollie-app/Ollie-app.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = ZA6R83F354;
+				DEVELOPMENT_TEAM = 56TESV358R;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Ollie-app/Info.plist";
@@ -612,7 +612,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "jaapstronks.Ollie-app";
+				PRODUCT_BUNDLE_IDENTIFIER = nl.jaapstronks.Ollie;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;

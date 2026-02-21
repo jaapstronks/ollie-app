@@ -129,68 +129,26 @@ struct QuickLogBar: View {
                 ForEach(visibleItems, id: \.self) { item in
                     switch item {
                     case .potty:
-                        PottyQuickLogButton(action: onPottyTap)
+                        QuickLogIconButton.potty(action: onPottyTap)
                     case .event(let type):
-                        QuickLogButton(type: type, action: { onQuickLog(type) })
+                        QuickLogIconButton.forEventType(type) { onQuickLog(type) }
                     }
                 }
 
                 // Camera button for photo moments
-                CameraQuickLogButton(action: onCameraTap)
+                QuickLogIconButton.camera(action: onCameraTap)
 
                 // "+" button to show all event types
-                MoreEventsButton(action: onShowAllEvents)
+                QuickLogIconButton.more(action: onShowAllEvents)
             }
             .padding(.horizontal, 12)
             .padding(.vertical, 10)
-            .background(glassBackground)
-            .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
-            .overlay(glassOverlay)
+            .glassBackground(.bar)
             .shadow(color: .black.opacity(colorScheme == .dark ? 0.4 : 0.12), radius: 16, y: 8)
             .padding(.horizontal, 16)
             .padding(.bottom, 8)
             .opacity(canLogEvents ? 1.0 : 0.5)
         }
-    }
-
-    @ViewBuilder
-    private var glassBackground: some View {
-        ZStack {
-            // Base layer
-            if colorScheme == .dark {
-                Color.white.opacity(0.08)
-            } else {
-                Color.white.opacity(0.75)
-            }
-
-            // Top highlight gradient
-            LinearGradient(
-                colors: [
-                    Color.white.opacity(colorScheme == .dark ? 0.12 : 0.4),
-                    Color.clear
-                ],
-                startPoint: .top,
-                endPoint: .center
-            )
-        }
-        .background(.ultraThinMaterial)
-    }
-
-    @ViewBuilder
-    private var glassOverlay: some View {
-        RoundedRectangle(cornerRadius: 20, style: .continuous)
-            .strokeBorder(
-                LinearGradient(
-                    colors: [
-                        Color.white.opacity(colorScheme == .dark ? 0.25 : 0.6),
-                        Color.white.opacity(colorScheme == .dark ? 0.05 : 0.15),
-                        Color.clear
-                    ],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                ),
-                lineWidth: 0.5
-            )
     }
 }
 
@@ -198,190 +156,6 @@ struct QuickLogBar: View {
 private enum QuickLogItem: Hashable {
     case potty
     case event(EventType)
-}
-
-/// Combined potty button (plassen + poepen)
-struct PottyQuickLogButton: View {
-    let action: () -> Void
-
-    @Environment(\.colorScheme) private var colorScheme
-
-    var body: some View {
-        Button {
-            HapticFeedback.medium()
-            action()
-        } label: {
-            VStack(spacing: 4) {
-                // Combined potty icon (drop + circle)
-                HStack(spacing: 2) {
-                    Image(systemName: "drop.fill")
-                        .font(.system(size: 16, weight: .medium))
-                        .foregroundStyle(Color.ollieInfo)
-                    Image(systemName: "circle.inset.filled")
-                        .font(.system(size: 14, weight: .medium))
-                        .foregroundStyle(Color.ollieWarning)
-                }
-                .frame(width: 44, height: 44)
-                .background(
-                    Circle()
-                        .fill(Color.ollieInfo.opacity(colorScheme == .dark ? 0.15 : 0.1))
-                )
-
-                Text(Strings.QuickLog.toilet)
-                    .font(.caption2)
-                    .fontWeight(.medium)
-                    .foregroundStyle(.secondary)
-            }
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 4)
-            .contentShape(Rectangle())
-        }
-        .buttonStyle(GlassQuickLogButtonStyle())
-        .accessibilityLabel(Strings.QuickLog.toiletAccessibility)
-        .accessibilityHint(Strings.QuickLog.toiletAccessibilityHint)
-    }
-}
-
-/// Button to open the all-events sheet
-struct MoreEventsButton: View {
-    let action: () -> Void
-
-    @State private var isPressed = false
-    @Environment(\.colorScheme) private var colorScheme
-
-    var body: some View {
-        Button {
-            HapticFeedback.medium()
-            action()
-        } label: {
-            VStack(spacing: 4) {
-                Image(systemName: "plus")
-                    .font(.system(size: 22, weight: .semibold))
-                    .foregroundStyle(Color.ollieAccent)
-                    .frame(width: 44, height: 44)
-                    .background(
-                        Circle()
-                            .fill(Color.ollieAccent.opacity(colorScheme == .dark ? 0.2 : 0.15))
-                    )
-                    .overlay(
-                        Circle()
-                            .strokeBorder(
-                                Color.ollieAccent.opacity(0.3),
-                                lineWidth: 0.5
-                            )
-                    )
-
-                Text(Strings.QuickLog.more)
-                    .font(.caption2)
-                    .fontWeight(.medium)
-                    .foregroundStyle(.secondary)
-            }
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 4)
-            .contentShape(Rectangle())
-        }
-        .buttonStyle(GlassQuickLogButtonStyle())
-        .accessibilityLabel(Strings.QuickLog.moreAccessibility)
-        .accessibilityHint(Strings.QuickLog.moreAccessibilityHint)
-    }
-}
-
-struct QuickLogButton: View {
-    let type: EventType
-    let action: () -> Void
-
-    @Environment(\.colorScheme) private var colorScheme
-
-    var body: some View {
-        Button {
-            HapticFeedback.medium()
-            action()
-        } label: {
-            VStack(spacing: 4) {
-                EventIcon(type: type, size: 28)
-                    .frame(width: 44, height: 44)
-                    .background(
-                        Circle()
-                            .fill(iconBackgroundColor.opacity(colorScheme == .dark ? 0.15 : 0.1))
-                    )
-
-                Text(type.label)
-                    .font(.caption2)
-                    .fontWeight(.medium)
-                    .foregroundStyle(.secondary)
-            }
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 4)
-            .contentShape(Rectangle())
-        }
-        .buttonStyle(GlassQuickLogButtonStyle())
-        .accessibilityLabel(Strings.QuickLog.logEventAccessibility(type.label))
-        .accessibilityHint(Strings.QuickLog.logEventAccessibilityHint(type.label.lowercased()))
-    }
-
-    private var iconBackgroundColor: Color {
-        switch type {
-        case .plassen, .poepen: return .ollieInfo
-        case .eten, .drinken: return .ollieAccent
-        case .slapen, .ontwaken: return .ollieSleep
-        case .uitlaten, .tuin: return .ollieSuccess
-        default: return .ollieMuted
-        }
-    }
-}
-
-struct CameraQuickLogButton: View {
-    let action: () -> Void
-
-    @Environment(\.colorScheme) private var colorScheme
-
-    var body: some View {
-        Button {
-            HapticFeedback.medium()
-            action()
-        } label: {
-            VStack(spacing: 4) {
-                Image(systemName: "camera.fill")
-                    .font(.system(size: 22, weight: .semibold))
-                    .foregroundStyle(Color.ollieAccent)
-                    .frame(width: 44, height: 44)
-                    .background(
-                        Circle()
-                            .fill(Color.ollieAccent.opacity(colorScheme == .dark ? 0.2 : 0.15))
-                    )
-                    .overlay(
-                        Circle()
-                            .strokeBorder(
-                                Color.ollieAccent.opacity(0.3),
-                                lineWidth: 0.5
-                            )
-                    )
-
-                Text(Strings.QuickLog.photo)
-                    .font(.caption2)
-                    .fontWeight(.medium)
-                    .foregroundStyle(.secondary)
-            }
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 4)
-            .contentShape(Rectangle())
-        }
-        .buttonStyle(GlassQuickLogButtonStyle())
-        .accessibilityLabel(Strings.QuickLog.photoAccessibility)
-        .accessibilityHint(Strings.QuickLog.photoAccessibilityHint)
-    }
-}
-
-/// Interactive button style for quick log buttons
-struct GlassQuickLogButtonStyle: ButtonStyle {
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
-
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .scaleEffect(configuration.isPressed ? 0.92 : 1.0)
-            .opacity(configuration.isPressed ? 0.8 : 1.0)
-            .animation(reduceMotion ? nil : .spring(response: 0.25, dampingFraction: 0.6), value: configuration.isPressed)
-    }
 }
 
 #Preview {

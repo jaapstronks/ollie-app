@@ -53,9 +53,7 @@ struct DigestCard: View {
             .padding(.horizontal, 16)
             .padding(.vertical, 14)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(glassBackground)
-            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-            .overlay(glassOverlay)
+            .glassBackground(.card)
             .padding(.horizontal, 16)
             .padding(.vertical, 4)
             .accessibilityElement(children: .combine)
@@ -72,43 +70,6 @@ struct DigestCard: View {
         return parts.joined(separator: ". ")
     }
 
-    @ViewBuilder
-    private var glassBackground: some View {
-        ZStack {
-            if colorScheme == .dark {
-                Color.white.opacity(0.05)
-            } else {
-                Color.white.opacity(0.7)
-            }
-
-            // Subtle top highlight
-            LinearGradient(
-                colors: [
-                    Color.white.opacity(colorScheme == .dark ? 0.08 : 0.25),
-                    Color.clear
-                ],
-                startPoint: .top,
-                endPoint: .center
-            )
-        }
-        .background(.thinMaterial)
-    }
-
-    @ViewBuilder
-    private var glassOverlay: some View {
-        RoundedRectangle(cornerRadius: 16, style: .continuous)
-            .strokeBorder(
-                LinearGradient(
-                    colors: [
-                        Color.white.opacity(colorScheme == .dark ? 0.12 : 0.35),
-                        Color.white.opacity(colorScheme == .dark ? 0.03 : 0.08)
-                    ],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                ),
-                lineWidth: 0.5
-            )
-    }
 }
 
 /// Flowing text display for digest parts
