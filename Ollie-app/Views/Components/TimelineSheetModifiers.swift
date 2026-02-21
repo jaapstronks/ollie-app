@@ -117,7 +117,26 @@ struct TimelineSheetModifiers: ViewModifier {
         case .allEvents:
             AllEventsSheet(
                 onSelect: { type in
-                    viewModel.sheetCoordinator.transitionToSheet(.quickLog(type))
+                    // Moment events need special handling - go to LogMomentSheet
+                    if type == .moment {
+                        viewModel.sheetCoordinator.transitionToSheet(.logMoment)
+                    } else if type == .uitlaten {
+                        // Walk: check if activity in progress, otherwise show start/log choice
+                        if viewModel.isWalkInProgress {
+                            viewModel.sheetCoordinator.transitionToSheet(.endActivity)
+                        } else {
+                            viewModel.sheetCoordinator.transitionToSheet(.startActivity(.walk))
+                        }
+                    } else if type == .slapen {
+                        // Nap: check if nap in progress, otherwise show start/log choice
+                        if viewModel.isNapInProgress {
+                            viewModel.sheetCoordinator.transitionToSheet(.endActivity)
+                        } else {
+                            viewModel.sheetCoordinator.transitionToSheet(.startActivity(.nap))
+                        }
+                    } else {
+                        viewModel.sheetCoordinator.transitionToSheet(.quickLog(type))
+                    }
                 },
                 onCancel: {
                     viewModel.sheetCoordinator.dismissSheet()
@@ -209,6 +228,54 @@ struct TimelineSheetModifiers: ViewModifier {
                 viewModel.sheetCoordinator.dismissSheet()
             }
             .presentationDetents([.medium, .large])
+
+        case .endSleep(let startTime):
+            EndSleepSheet(
+                sleepStartTime: startTime,
+                onSave: { wakeUpTime in
+                    viewModel.logWakeUp(time: wakeUpTime)
+                },
+                onCancel: {
+                    viewModel.sheetCoordinator.dismissSheet()
+                }
+            )
+            .presentationDetents([.height(420)])
+
+        case .startActivity(let activityType):
+            StartActivitySheet(
+                activityType: activityType,
+                onStartNow: {
+                    viewModel.startActivity(type: activityType)
+                },
+                onLogCompleted: {
+                    // Transition to regular quickLog sheet for retrospective logging
+                    let eventType: EventType = activityType == .walk ? .uitlaten : .slapen
+                    viewModel.sheetCoordinator.transitionToSheet(.quickLog(eventType))
+                },
+                onCancel: {
+                    viewModel.sheetCoordinator.dismissSheet()
+                }
+            )
+            .presentationDetents([.height(350)])
+
+        case .endActivity:
+            if let activity = viewModel.currentActivity {
+                ActivityEndSheet(
+                    activity: activity,
+                    onEnd: { minutesAgo, note in
+                        viewModel.endActivity(minutesAgo: minutesAgo, note: note)
+                    },
+                    onCancel: {
+                        viewModel.sheetCoordinator.dismissSheet()
+                    },
+                    onDiscard: {
+                        viewModel.cancelActivity()
+                    }
+                )
+                .presentationDetents([.height(480)])
+            } else {
+                EmptyView()
+            }
         }
     }
 }

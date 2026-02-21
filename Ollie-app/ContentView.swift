@@ -70,7 +70,7 @@ struct ContentView: View {
 }
 
 /// Wrapper view that owns the TimelineViewModel as a @StateObject
-/// New structure: 4 tabs (Today, Train, Walks, Plan) + FAB for logging
+/// New structure: 5 tabs (Today, Train, Walks, Plan, Stats) + FAB for logging
 struct MainTabView: View {
     @Binding var selectedTab: Int
     let eventStore: EventStore
@@ -120,9 +120,21 @@ struct MainTabView: View {
     }
 
     var body: some View {
-        ZStack(alignment: .bottom) {
-            // Main tab content
-            TabView(selection: $selectedTab) {
+        VStack(spacing: 0) {
+            // Activity banner (visible across all tabs when activity in progress)
+            if let activity = viewModel.currentActivity {
+                CompactActivityBanner(
+                    activity: activity,
+                    onTap: {
+                        selectedTab = 0  // Switch to Today tab
+                        viewModel.sheetCoordinator.presentSheet(.endActivity)
+                    }
+                )
+            }
+
+            ZStack(alignment: .bottom) {
+                // Main tab content
+                TabView(selection: $selectedTab) {
                 // Tab 0: Today
                 TodayView(
                     viewModel: viewModel,
@@ -146,7 +158,6 @@ struct MainTabView: View {
                 // Tab 2: Walks
                 WalksTabView(
                     spotStore: spotStore,
-                    weatherService: weatherService,
                     locationManager: locationManager,
                     viewModel: viewModel
                 )
@@ -164,31 +175,48 @@ struct MainTabView: View {
                     Label(Strings.Tabs.plan, systemImage: "calendar.badge.clock")
                 }
                 .tag(3)
-            }
 
-            // Floating Action Button
-            HStack {
-                Spacer()
-
-                FABButton(
-                    sleepState: viewModel.currentSleepState,
-                    onTap: {
-                        // Open full log sheet
-                        viewModel.showAllEvents()
-                    },
-                    onQuickAction: { eventType, location in
-                        // Quick log with default values
-                        if let location = location {
-                            viewModel.quickLogWithLocation(type: eventType, location: location)
-                        } else {
-                            viewModel.quickLog(type: eventType)
-                        }
-                    }
+                // Tab 4: Stats/Insights
+                InsightsView(
+                    viewModel: viewModel,
+                    momentsViewModel: momentsViewModel
                 )
-                .padding(.trailing, 16)
-                .padding(.bottom, 60) // Above tab bar
+                .tabItem {
+                    Label(Strings.Tabs.stats, systemImage: "chart.bar.fill")
+                }
+                .tag(4)
             }
-        }
+
+            // Floating Action Button (hidden on Walks tab)
+            if selectedTab != 2 {
+                HStack {
+                    Spacer()
+
+                    FABButton(
+                        sleepState: viewModel.currentSleepState,
+                        currentActivity: viewModel.currentActivity,
+                        onTap: {
+                            // Open full log sheet
+                            viewModel.showAllEvents()
+                        },
+                        onQuickAction: { eventType, location in
+                            // Quick log with default values
+                            if let location = location {
+                                viewModel.quickLogWithLocation(type: eventType, location: location)
+                            } else {
+                                viewModel.quickLog(type: eventType)
+                            }
+                        },
+                        onEndActivity: {
+                            viewModel.sheetCoordinator.presentSheet(.endActivity)
+                        }
+                    )
+                    .padding(.trailing, 16)
+                    .padding(.bottom, 60) // Above tab bar
+                }
+            }
+        }  // Close ZStack
+        }  // Close VStack
         // Settings sheet (accessed via gear icon in Today view)
         .sheet(isPresented: $showingSettings) {
             NavigationStack {

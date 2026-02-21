@@ -50,6 +50,7 @@ struct InsightsView: View {
                     exploreSection
                 }
                 .padding()
+                .padding(.bottom, 84) // Space for FAB
             }
             .navigationTitle(Strings.Insights.title)
             .navigationBarTitleDisplayMode(.large)
