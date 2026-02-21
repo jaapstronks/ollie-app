@@ -13,6 +13,7 @@ struct ContentView: View {
     @EnvironmentObject var weatherService: WeatherService
     @EnvironmentObject var notificationService: NotificationService
     @EnvironmentObject var spotStore: SpotStore
+    @EnvironmentObject var medicationStore: MedicationStore
 
     @State private var showOnboarding = false
     @AppStorage(UserPreferences.Key.lastSelectedTab.rawValue) private var selectedTab = 0
@@ -43,7 +44,8 @@ struct ContentView: View {
                         dataImporter: dataImporter,
                         weatherService: weatherService,
                         notificationService: notificationService,
-                        spotStore: spotStore
+                        spotStore: spotStore,
+                        medicationStore: medicationStore
                     )
                 }
             }
@@ -77,6 +79,7 @@ struct MainTabView: View {
     @ObservedObject var weatherService: WeatherService
     @ObservedObject var notificationService: NotificationService
     @ObservedObject var spotStore: SpotStore
+    @ObservedObject var medicationStore: MedicationStore
     @EnvironmentObject var locationManager: LocationManager
 
     @StateObject private var viewModel: TimelineViewModel
@@ -93,7 +96,8 @@ struct MainTabView: View {
         dataImporter: DataImporter,
         weatherService: WeatherService,
         notificationService: NotificationService,
-        spotStore: SpotStore
+        spotStore: SpotStore,
+        medicationStore: MedicationStore
     ) {
         self._selectedTab = selectedTab
         self.eventStore = eventStore
@@ -102,11 +106,13 @@ struct MainTabView: View {
         self.weatherService = weatherService
         self.notificationService = notificationService
         self.spotStore = spotStore
+        self.medicationStore = medicationStore
         // StateObject init with autoclosure ensures single creation
         self._viewModel = StateObject(wrappedValue: TimelineViewModel(
             eventStore: eventStore,
             profileStore: profileStore,
-            notificationService: notificationService
+            notificationService: notificationService,
+            medicationStore: medicationStore
         ))
         self._momentsViewModel = StateObject(wrappedValue: MomentsViewModel(
             eventStore: eventStore
@@ -225,4 +231,5 @@ struct MainTabView: View {
         .environmentObject(NotificationService())
         .environmentObject(SpotStore())
         .environmentObject(LocationManager())
+        .environmentObject(MedicationStore())
 }

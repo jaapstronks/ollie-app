@@ -156,6 +156,17 @@ struct TodayView: View {
             // Sleep status card
             SleepStatusCard(sleepState: viewModel.currentSleepState)
 
+            // Medication reminders
+            ForEach(viewModel.pendingMedications) { pending in
+                MedicationReminderCard(
+                    medication: pending.medication,
+                    time: pending.time,
+                    scheduledDate: pending.scheduledDate,
+                    isOverdue: pending.isOverdue,
+                    onComplete: { viewModel.completeMedication(pending) }
+                )
+            }
+
             // Upcoming events (meals & walks)
             UpcomingEventsCard(
                 items: viewModel.upcomingItems(forecasts: weatherService.forecasts),
@@ -182,23 +193,38 @@ struct TodayView: View {
             if viewModel.events.isEmpty {
                 EmptyTimelineCard()
             } else {
-                // Event cards in timeline
-                ForEach(viewModel.events) { event in
-                    EventRow(event: event)
-                        .onTapGesture {
-                            if event.photo != nil {
-                                selectedPhotoEvent = event
+                // Event cards in timeline - wrapped in List for swipe actions
+                List {
+                    ForEach(viewModel.events) { event in
+                        EventRow(event: event)
+                            .listRowInsets(EdgeInsets())
+                            .listRowSeparator(.hidden)
+                            .listRowBackground(Color.clear)
+                            .onTapGesture {
+                                if event.photo != nil {
+                                    selectedPhotoEvent = event
+                                }
                             }
-                        }
-                        .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                            Button(role: .destructive) {
-                                HapticFeedback.warning()
-                                viewModel.deleteEvent(event)
-                            } label: {
-                                Label(Strings.Common.delete, systemImage: "trash")
+                            .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                                Button(role: .destructive) {
+                                    HapticFeedback.warning()
+                                    viewModel.deleteEvent(event)
+                                } label: {
+                                    Label(Strings.Common.delete, systemImage: "trash")
+                                }
+
+                                Button {
+                                    viewModel.editEvent(event)
+                                } label: {
+                                    Label(Strings.Common.edit, systemImage: "pencil")
+                                }
+                                .tint(.blue)
                             }
-                        }
+                    }
                 }
+                .listStyle(.plain)
+                .scrollDisabled(true)
+                .frame(minHeight: CGFloat(viewModel.events.count * 80))
             }
         }
     }

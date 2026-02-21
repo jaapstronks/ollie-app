@@ -17,9 +17,15 @@ struct OllieApp: App {
     @StateObject private var dataImporter = DataImporter()
     @StateObject private var weatherService = WeatherService()
     @StateObject private var notificationService = NotificationService()
+    @StateObject private var spotStore = SpotStore()
+    @StateObject private var locationManager = LocationManager()
+    @StateObject private var medicationStore = MedicationStore()
     @ObservedObject private var cloudKit = CloudKitService.shared
 
     init() {
+        // Initialize crash reporting first (before any other code that might crash)
+        CrashReporter.start()
+
         UserPreferences.registerDefaults()
 
         // Configure TipKit for contextual tips
@@ -39,6 +45,9 @@ struct OllieApp: App {
                 .environmentObject(dataImporter)
                 .environmentObject(weatherService)
                 .environmentObject(notificationService)
+                .environmentObject(spotStore)
+                .environmentObject(locationManager)
+                .environmentObject(medicationStore)
                 .environmentObject(cloudKit)
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
                     // Sync when app comes to foreground
@@ -49,6 +58,10 @@ struct OllieApp: App {
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
                     // Track app usage for review prompt timing
                     ReviewService.shared.recordAppActive()
+                }
+                .onReceive(NotificationCenter.default.publisher(for: UIApplication.didReceiveMemoryWarningNotification)) { _ in
+                    // Clear image cache on memory warning
+                    ImageCache.shared.handleMemoryWarning()
                 }
         }
     }

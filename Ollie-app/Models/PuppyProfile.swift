@@ -18,6 +18,7 @@ struct PuppyProfile: Codable, Identifiable {
     var predictionConfig: PredictionConfig
     var walkSchedule: WalkSchedule
     var notificationSettings: NotificationSettings
+    var medicationSchedule: MedicationSchedule
 
     // MARK: - Monetization
     var freeStartDate: Date          // Set on profile creation
@@ -111,6 +112,7 @@ struct PuppyProfile: Codable, Identifiable {
             predictionConfig: PredictionConfig.defaultConfig(),
             walkSchedule: WalkSchedule.defaultSchedule(),
             notificationSettings: NotificationSettings.defaultSettings(),
+            medicationSchedule: MedicationSchedule.empty(),
             freeStartDate: Date(),
             isPremiumUnlocked: false
         )
@@ -130,6 +132,7 @@ struct PuppyProfile: Codable, Identifiable {
         predictionConfig: PredictionConfig,
         walkSchedule: WalkSchedule,
         notificationSettings: NotificationSettings,
+        medicationSchedule: MedicationSchedule = MedicationSchedule.empty(),
         freeStartDate: Date = Date(),
         isPremiumUnlocked: Bool = false
     ) {
@@ -144,6 +147,7 @@ struct PuppyProfile: Codable, Identifiable {
         self.predictionConfig = predictionConfig
         self.walkSchedule = walkSchedule
         self.notificationSettings = notificationSettings
+        self.medicationSchedule = medicationSchedule
         self.freeStartDate = freeStartDate
         self.isPremiumUnlocked = isPremiumUnlocked
     }
@@ -154,7 +158,7 @@ struct PuppyProfile: Codable, Identifiable {
         case id
         case name, breed, birthDate, homeDate, sizeCategory
         case mealSchedule, exerciseConfig, predictionConfig
-        case walkSchedule, notificationSettings
+        case walkSchedule, notificationSettings, medicationSchedule
         case freeStartDate, isPremiumUnlocked
     }
 
@@ -173,6 +177,8 @@ struct PuppyProfile: Codable, Identifiable {
         // Migration: use defaults if not present in saved profile
         walkSchedule = try container.decodeIfPresent(WalkSchedule.self, forKey: .walkSchedule) ?? WalkSchedule.defaultSchedule()
         notificationSettings = try container.decodeIfPresent(NotificationSettings.self, forKey: .notificationSettings) ?? NotificationSettings.defaultSettings()
+        // Migration: medicationSchedule defaults to empty for existing profiles
+        medicationSchedule = try container.decodeIfPresent(MedicationSchedule.self, forKey: .medicationSchedule) ?? MedicationSchedule.empty()
         // Migration: monetization fields default to fresh free period for existing users
         freeStartDate = try container.decodeIfPresent(Date.self, forKey: .freeStartDate) ?? Date()
         isPremiumUnlocked = try container.decodeIfPresent(Bool.self, forKey: .isPremiumUnlocked) ?? false
@@ -191,6 +197,7 @@ struct PuppyProfile: Codable, Identifiable {
         try container.encode(predictionConfig, forKey: .predictionConfig)
         try container.encode(walkSchedule, forKey: .walkSchedule)
         try container.encode(notificationSettings, forKey: .notificationSettings)
+        try container.encode(medicationSchedule, forKey: .medicationSchedule)
         try container.encode(freeStartDate, forKey: .freeStartDate)
         try container.encode(isPremiumUnlocked, forKey: .isPremiumUnlocked)
     }

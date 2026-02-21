@@ -41,19 +41,22 @@ class TimelineViewModel: ObservableObject {
     var notificationService: NotificationService?
     var spotStore: SpotStore?
     var locationManager: LocationManager?
+    var medicationStore: MedicationStore?
 
     init(
         eventStore: EventStore,
         profileStore: ProfileStore,
         notificationService: NotificationService? = nil,
         spotStore: SpotStore? = nil,
-        locationManager: LocationManager? = nil
+        locationManager: LocationManager? = nil,
+        medicationStore: MedicationStore? = nil
     ) {
         self.eventStore = eventStore
         self.profileStore = profileStore
         self.notificationService = notificationService
         self.spotStore = spotStore
         self.locationManager = locationManager
+        self.medicationStore = medicationStore
 
         // Forward SheetCoordinator's objectWillChange to this ViewModel
         // This ensures views are notified when sheet state changes
@@ -539,6 +542,29 @@ class TimelineViewModel: ObservableObject {
     /// Puppy name for display
     var puppyName: String {
         profileStore.profile?.name ?? "Puppy"
+    }
+
+    // MARK: - Medications
+
+    /// Pending medications for the current date
+    var pendingMedications: [PendingMedication] {
+        guard let profile = profileStore.profile,
+              let store = medicationStore else { return [] }
+        return store.pendingMedications(
+            schedule: profile.medicationSchedule,
+            for: currentDate
+        )
+    }
+
+    /// Complete a pending medication
+    func completeMedication(_ pending: PendingMedication) {
+        medicationStore?.markComplete(
+            medicationId: pending.medication.id,
+            timeId: pending.time.id,
+            for: currentDate
+        )
+        HapticFeedback.success()
+        objectWillChange.send()
     }
 
     // MARK: - Streaks

@@ -42,6 +42,9 @@ struct SettingsView: View {
                     // Meals (extracted to MealSection.swift)
                     MealSection(profile: profile, profileStore: profileStore)
 
+                    // Medications
+                    medicationsSection
+
                     // Walk spots & Health (kept inline - simple)
                     walkSpotsSection
                     healthSection
@@ -96,6 +99,30 @@ struct SettingsView: View {
     }
 
     // MARK: - Inline Sections (kept for simplicity or local state needs)
+
+    @ViewBuilder
+    private var medicationsSection: some View {
+        Section(Strings.Medications.title) {
+            NavigationLink {
+                MedicationSettingsView(profileStore: profileStore)
+            } label: {
+                HStack {
+                    Label {
+                        Text(Strings.Medications.title)
+                    } icon: {
+                        Image(systemName: "pills.fill")
+                            .foregroundColor(.ollieAccent)
+                    }
+                    Spacer()
+                    let count = profileStore.profile?.medicationSchedule.medications.count ?? 0
+                    if count > 0 {
+                        Text("\(count)")
+                            .foregroundColor(.secondary)
+                    }
+                }
+            }
+        }
+    }
 
     @ViewBuilder
     private var walkSpotsSection: some View {
