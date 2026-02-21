@@ -384,11 +384,24 @@ class TimelineViewModel: ObservableObject {
         return SleepCalculations.currentSleepState(events: recentEvents)
     }
 
-    // MARK: - Poop Slot Status
+    // MARK: - Poop Status
 
-    /// Current poop slot status for the day
-    var poopSlotStatus: PoopSlotStatus {
-        PoopCalculations.calculateStatus(todayEvents: events)
+    /// Current poop status with pattern-based insights
+    var poopStatus: PoopStatus {
+        let ageInWeeks = profileStore.profile?.ageInWeeks ?? 26
+        let historicalEvents = getHistoricalEvents(days: PoopCalculations.patternAnalysisDays)
+
+        return PoopCalculations.calculateStatus(
+            todayEvents: events,
+            historicalEvents: historicalEvents,
+            ageInWeeks: ageInWeeks
+        )
+    }
+
+    /// Get events from the past N days (for pattern analysis)
+    private func getHistoricalEvents(days: Int) -> [PuppyEvent] {
+        let startDate = Calendar.current.date(byAdding: .day, value: -days, to: Date())!
+        return eventStore.getEvents(from: startDate, to: Date())
     }
 
     // MARK: - Potty Predictions

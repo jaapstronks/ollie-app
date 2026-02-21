@@ -305,22 +305,28 @@ enum Strings {
     // MARK: - Poop Status Card
     enum PoopStatus {
         static let accessibility = String(localized: "Poop status")
-        static let tracking = String(localized: "Poop tracking")
-        static let normal = String(localized: "Normal")
-        static let complete = String(localized: "Done")
-        static let done = String(localized: "Done")
-        static let notYet = String(localized: "Not yet")
+        static let title = String(localized: "Poop")
 
-        // Slot labels
-        static let morning = String(localized: "Morning")
-        static let lateAfternoon = String(localized: "Late afternoon")
+        // Count display
+        static func todayCount(_ count: Int, expectedLower: Int, expectedUpper: Int) -> String {
+            String(localized: "\(count) today (expect ~\(expectedLower)-\(expectedUpper))")
+        }
+        static func todayCountSimple(_ count: Int) -> String {
+            String(localized: "\(count) today")
+        }
 
-        // Status messages
-        static let allDone = String(localized: "Both poops done")
-        static let morningNotYet = String(localized: "Morning poop not yet")
-        static let morningMissed = String(localized: "Morning poop missed")
-        static let afternoonExpected = String(localized: "Afternoon poop expected — 17:00–19:00")
-        static let afternoonUrgent = String(localized: "Afternoon poop missing! Take her outside")
+        // Status labels
+        static let good = String(localized: "Good")
+        static let info = String(localized: "Info")
+        static let note = String(localized: "Note")
+
+        // Status messages (subtle, not alarming)
+        static let noPoopYetEarly = String(localized: "No poop yet this morning")
+        static let noPoopYet = String(localized: "No poop yet today")
+        static let walkCompletedNoPoop = String(localized: "Walk done — no poop logged")
+        static let longerThanUsual = String(localized: "Longer gap than usual")
+        static let longGap = String(localized: "Been a while since last poop")
+        static let belowExpected = String(localized: "Below usual for today")
 
         // Time since formatting
         static func minutesAgo(_ minutes: Int) -> String {

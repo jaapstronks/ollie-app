@@ -2,21 +2,21 @@
 //  PoopStatusCard.swift
 //  Ollie-app
 //
-//  Status card showing daily poop slot tracking
+//  Status card showing poop tracking with pattern-based awareness
 //  Uses liquid glass design for iOS 26 aesthetic
 
 import SwiftUI
 
-/// Card showing poop slot status for the day
-/// Uses liquid glass design with semantic tinting
+/// Card showing poop status for the day
+/// Uses liquid glass design with semantic tinting based on urgency
 struct PoopStatusCard: View {
-    let status: PoopSlotStatus
+    let status: PoopStatus
 
     @Environment(\.colorScheme) private var colorScheme
 
     var body: some View {
-        // Hide during night hours or if hidden urgency
-        if status.currentUrgency == .hidden {
+        // Hide during night hours
+        if status.urgency == .hidden {
             EmptyView()
         } else {
             cardContent
@@ -27,22 +27,16 @@ struct PoopStatusCard: View {
 
     @ViewBuilder
     private var cardContent: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            // Header row with icon and status
-            StatusCardHeader(
-                iconName: PoopCalculations.iconName(for: status.currentUrgency),
-                iconColor: PoopCalculations.iconColor(for: status.currentUrgency),
-                tintColor: indicatorColor,
-                title: mainText,
-                titleColor: textColor,
-                subtitle: subtitleText,
-                statusLabel: statusLabel,
-                iconSize: 40
-            )
-
-            // Slot indicators row
-            slotIndicators
-        }
+        StatusCardHeader(
+            iconName: PoopCalculations.iconName(for: status.urgency),
+            iconColor: PoopCalculations.iconColor(for: status.urgency),
+            tintColor: indicatorColor,
+            title: mainText,
+            titleColor: textColor,
+            subtitle: subtitleText,
+            statusLabel: statusLabel,
+            iconSize: 40
+        )
         .padding(.horizontal, 14)
         .padding(.vertical, 12)
         .glassStatusCard(tintColor: indicatorColor)
@@ -51,98 +45,73 @@ struct PoopStatusCard: View {
         .accessibilityValue("\(mainText). \(statusLabel)")
     }
 
-    // MARK: - Slot Indicators
-
-    @ViewBuilder
-    private var slotIndicators: some View {
-        HStack(spacing: 16) {
-            slotIndicator(
-                label: PoopCalculations.morningSlot.label,
-                filled: status.morningFilled
-            )
-
-            slotIndicator(
-                label: PoopCalculations.afternoonSlot.label,
-                filled: status.afternoonFilled
-            )
-
-            Spacer()
-        }
-        .padding(.leading, 54) // Align with text after icon
-    }
-
-    @ViewBuilder
-    private func slotIndicator(label: String, filled: Bool) -> some View {
-        HStack(spacing: 4) {
-            Image(systemName: filled ? "checkmark.circle.fill" : "circle")
-                .font(.system(size: 14))
-                .foregroundStyle(filled ? Color.ollieSuccess : .secondary)
-
-            Text(label)
-                .font(.caption)
-                .foregroundStyle(filled ? .primary : .secondary)
-        }
-        .accessibilityElement(children: .combine)
-        .accessibilityLabel("\(label): \(filled ? Strings.PoopStatus.done : Strings.PoopStatus.notYet)")
-    }
-
     // MARK: - Computed Properties
 
     private var mainText: String {
-        if status.allDone {
-            return Strings.PoopStatus.allDone
+        // Show count with expected range
+        if status.hasPatternData {
+            return Strings.PoopStatus.todayCount(
+                status.todayCount,
+                expectedLower: status.expectedRange.lowerBound,
+                expectedUpper: status.expectedRange.upperBound
+            )
+        } else {
+            return Strings.PoopStatus.todayCountSimple(status.todayCount)
         }
-        return status.alertMessage ?? Strings.PoopStatus.tracking
     }
 
     private var subtitleText: String? {
-        PoopCalculations.formatTimeSince(status.lastPoopTime)
+        // Show message if present, otherwise show time since last
+        if let message = status.message {
+            return message
+        }
+        return PoopCalculations.formatTimeSince(status.lastPoopTime)
     }
 
     private var statusLabel: String {
-        switch status.currentUrgency {
+        switch status.urgency {
         case .hidden:
             return ""
-        case .allDone:
-            return Strings.PoopStatus.complete
-        case .normal:
-            return Strings.PoopStatus.normal
-        case .attention:
-            return Strings.PottyStatus.attention
-        case .urgent:
-            return Strings.PottyStatus.now
+        case .good:
+            return Strings.PoopStatus.good
+        case .info:
+            return Strings.PoopStatus.info
+        case .gentle, .attention:
+            return Strings.PoopStatus.note
         }
     }
 
     private var indicatorColor: Color {
-        PoopCalculations.iconColor(for: status.currentUrgency)
+        PoopCalculations.iconColor(for: status.urgency)
     }
 
     private var textColor: Color {
-        switch status.currentUrgency {
-        case .hidden, .normal:
+        switch status.urgency {
+        case .hidden, .good, .info:
             return .primary
-        case .allDone:
+        case .gentle:
             return .primary
         case .attention:
             return .ollieWarning
-        case .urgent:
-            return .ollieDanger
         }
     }
 }
 
 // MARK: - Previews
 
-#Preview("All Done") {
+#Preview("Good - 2 poops") {
     VStack {
         PoopStatusCard(
-            status: PoopSlotStatus(
-                morningFilled: true,
-                afternoonFilled: true,
+            status: PoopStatus(
+                todayCount: 2,
+                expectedRange: 2...3,
                 lastPoopTime: Date().addingTimeInterval(-3600),
-                currentUrgency: .allDone,
-                alertMessage: nil
+                daytimeMinutesSinceLast: 60,
+                recentWalkWithoutPoop: false,
+                urgency: .good,
+                message: nil,
+                hasPatternData: true,
+                patternDailyMedian: 2.5
             )
         )
         Spacer()
@@ -150,63 +119,79 @@ struct PoopStatusCard: View {
     .padding()
 }
 
-#Preview("Morning Done") {
+#Preview("Info - No poop yet") {
     VStack {
         PoopStatusCard(
-            status: PoopSlotStatus(
-                morningFilled: true,
-                afternoonFilled: false,
-                lastPoopTime: Date().addingTimeInterval(-4 * 3600),
-                currentUrgency: .normal,
-                alertMessage: nil
-            )
-        )
-        Spacer()
-    }
-    .padding()
-}
-
-#Preview("Afternoon Attention") {
-    VStack {
-        PoopStatusCard(
-            status: PoopSlotStatus(
-                morningFilled: true,
-                afternoonFilled: false,
-                lastPoopTime: Date().addingTimeInterval(-6 * 3600),
-                currentUrgency: .attention,
-                alertMessage: Strings.PoopStatus.afternoonExpected
-            )
-        )
-        Spacer()
-    }
-    .padding()
-}
-
-#Preview("Afternoon Urgent") {
-    VStack {
-        PoopStatusCard(
-            status: PoopSlotStatus(
-                morningFilled: true,
-                afternoonFilled: false,
-                lastPoopTime: Date().addingTimeInterval(-8 * 3600),
-                currentUrgency: .urgent,
-                alertMessage: Strings.PoopStatus.afternoonUrgent
-            )
-        )
-        Spacer()
-    }
-    .padding()
-}
-
-#Preview("Morning Not Yet") {
-    VStack {
-        PoopStatusCard(
-            status: PoopSlotStatus(
-                morningFilled: false,
-                afternoonFilled: false,
+            status: PoopStatus(
+                todayCount: 0,
+                expectedRange: 2...4,
                 lastPoopTime: nil,
-                currentUrgency: .normal,
-                alertMessage: Strings.PoopStatus.morningNotYet
+                daytimeMinutesSinceLast: nil,
+                recentWalkWithoutPoop: false,
+                urgency: .info,
+                message: Strings.PoopStatus.noPoopYet,
+                hasPatternData: true,
+                patternDailyMedian: 3.0
+            )
+        )
+        Spacer()
+    }
+    .padding()
+}
+
+#Preview("Gentle - Walk without poop") {
+    VStack {
+        PoopStatusCard(
+            status: PoopStatus(
+                todayCount: 1,
+                expectedRange: 2...3,
+                lastPoopTime: Date().addingTimeInterval(-4 * 3600),
+                daytimeMinutesSinceLast: 240,
+                recentWalkWithoutPoop: true,
+                urgency: .gentle,
+                message: Strings.PoopStatus.walkCompletedNoPoop,
+                hasPatternData: true,
+                patternDailyMedian: 2.5
+            )
+        )
+        Spacer()
+    }
+    .padding()
+}
+
+#Preview("Attention - Long gap") {
+    VStack {
+        PoopStatusCard(
+            status: PoopStatus(
+                todayCount: 1,
+                expectedRange: 2...3,
+                lastPoopTime: Date().addingTimeInterval(-6 * 3600),
+                daytimeMinutesSinceLast: 360,
+                recentWalkWithoutPoop: false,
+                urgency: .attention,
+                message: Strings.PoopStatus.longerThanUsual,
+                hasPatternData: true,
+                patternDailyMedian: 2.5
+            )
+        )
+        Spacer()
+    }
+    .padding()
+}
+
+#Preview("No pattern data yet") {
+    VStack {
+        PoopStatusCard(
+            status: PoopStatus(
+                todayCount: 1,
+                expectedRange: 3...5,
+                lastPoopTime: Date().addingTimeInterval(-2 * 3600),
+                daytimeMinutesSinceLast: 120,
+                recentWalkWithoutPoop: false,
+                urgency: .good,
+                message: nil,
+                hasPatternData: false,
+                patternDailyMedian: nil
             )
         )
         Spacer()
