@@ -72,3 +72,7 @@ crashlytics-build.properties
 .idea/
 .vscode/
 *.sublime-*
+
+# Maestro test reports (generated)
+.maestro/reports/
+.maestro/screenshots/

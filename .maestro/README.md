@@ -2,6 +2,19 @@
 
 This directory contains automated UI tests using Maestro.
 
+## Claude-in-the-Loop Testing
+
+For the full autonomous testing workflow where Claude acts as a QA tester, see **[TESTING-WORKFLOW.md](./TESTING-WORKFLOW.md)**.
+
+Quick start:
+```bash
+# Run tests and generate Claude-parseable report
+./scripts/run-ui-tests.sh -a
+
+# Then in Claude Code:
+# "Read .maestro/reports/latest/test-report.md and review the screenshots"
+```
+
 ## Setup
 
 ### 1. Install Java (required by Maestro)
@@ -46,7 +59,21 @@ maestro test .maestro/flows/
 | `fab-quick-log.yaml` | FAB long-press quick menu |
 | `log-event.yaml` | Open event logging sheet |
 | `settings.yaml` | Open and close settings |
+| `complete-user-journey.yaml` | Comprehensive user journey simulation |
 | `full-test-suite.yaml` | Runs all flows sequentially |
+
+## Scenarios (Feature-Specific Tests)
+
+Scenarios are in `scenarios/` and test specific features:
+
+| Scenario | Description |
+|----------|-------------|
+| `poop-tracker-test.yaml` | Test poop logging and warning display |
+
+Run a scenario:
+```bash
+./scripts/run-ui-tests.sh -s poop-tracker-test
+```
 
 ## Screenshots
 
