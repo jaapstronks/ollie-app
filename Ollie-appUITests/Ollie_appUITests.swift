@@ -120,7 +120,8 @@ final class Ollie_appUITests: XCTestCase {
     @MainActor
     func testNavigateToInsightsTab() throws {
         let tabBar = app.tabBars.firstMatch
-        let insightsTab = tabBar.buttons.element(boundBy: 1)
+        // Insights/Stats tab is now at index 4 (Today=0, Train=1, Walks=2, Plan=3, Stats=4)
+        let insightsTab = tabBar.buttons.element(boundBy: 4)
 
         insightsTab.tap()
         Thread.sleep(forTimeInterval: 0.5)
@@ -132,24 +133,47 @@ final class Ollie_appUITests: XCTestCase {
     @MainActor
     func testNavigateBetweenAllTabs() throws {
         let tabBar = app.tabBars.firstMatch
+        // Tab indices: Today=0, Train=1, Walks=2, Plan=3, Stats=4
         let todayTab = tabBar.buttons.element(boundBy: 0)
-        let insightsTab = tabBar.buttons.element(boundBy: 1)
+        let trainTab = tabBar.buttons.element(boundBy: 1)
+        let walksTab = tabBar.buttons.element(boundBy: 2)
+        let planTab = tabBar.buttons.element(boundBy: 3)
+        let statsTab = tabBar.buttons.element(boundBy: 4)
 
-        // Start on Today
+        // Ensure we start on Today tab (may be on different tab from previous test)
+        ensureOnTodayTab()
         XCTAssertTrue(todayTab.isSelected, "Should start on Today tab")
         takeScreenshot(named: "04-Today-Tab-Initial")
 
-        // Go to Insights
-        insightsTab.tap()
+        // Go to Train
+        trainTab.tap()
         Thread.sleep(forTimeInterval: 0.3)
-        XCTAssertTrue(insightsTab.isSelected)
-        takeScreenshot(named: "05-Insights-Tab")
+        XCTAssertTrue(trainTab.isSelected, "Train tab should be selected")
+        takeScreenshot(named: "05-Train-Tab")
+
+        // Go to Walks
+        walksTab.tap()
+        Thread.sleep(forTimeInterval: 0.3)
+        XCTAssertTrue(walksTab.isSelected, "Walks tab should be selected")
+        takeScreenshot(named: "06-Walks-Tab")
+
+        // Go to Plan
+        planTab.tap()
+        Thread.sleep(forTimeInterval: 0.3)
+        XCTAssertTrue(planTab.isSelected, "Plan tab should be selected")
+        takeScreenshot(named: "07-Plan-Tab")
+
+        // Go to Stats/Insights
+        statsTab.tap()
+        Thread.sleep(forTimeInterval: 0.3)
+        XCTAssertTrue(statsTab.isSelected, "Stats tab should be selected")
+        takeScreenshot(named: "08-Stats-Tab")
 
         // Return to Today
         todayTab.tap()
         Thread.sleep(forTimeInterval: 0.3)
-        XCTAssertTrue(todayTab.isSelected)
-        takeScreenshot(named: "06-Today-Tab-Return")
+        XCTAssertTrue(todayTab.isSelected, "Should return to Today tab")
+        takeScreenshot(named: "09-Today-Tab-Return")
     }
 
     // MARK: - FAB Button Tests
@@ -364,7 +388,8 @@ final class Ollie_appUITests: XCTestCase {
     @MainActor
     func testInsightsTabContent() throws {
         let tabBar = app.tabBars.firstMatch
-        let insightsTab = tabBar.buttons.element(boundBy: 1)
+        // Insights/Stats tab is now at index 4
+        let insightsTab = tabBar.buttons.element(boundBy: 4)
 
         insightsTab.tap()
         Thread.sleep(forTimeInterval: 0.5)
@@ -411,8 +436,8 @@ final class Ollie_appUITests: XCTestCase {
         app.swipeDown()
         Thread.sleep(forTimeInterval: 0.5)
 
-        // 5. Insights Tab
-        app.tabBars.firstMatch.buttons.element(boundBy: 1).tap()
+        // 5. Insights Tab (now at index 4)
+        app.tabBars.firstMatch.buttons.element(boundBy: 4).tap()
         Thread.sleep(forTimeInterval: 0.5)
         takeScreenshot(named: "VR-05-Insights")
 
@@ -446,7 +471,8 @@ final class Ollie_appUITests: XCTestCase {
     func testTabSwitchingPerformance() throws {
         let tabBar = app.tabBars.firstMatch
         let todayTab = tabBar.buttons.element(boundBy: 0)
-        let insightsTab = tabBar.buttons.element(boundBy: 1)
+        // Insights/Stats tab is now at index 4
+        let insightsTab = tabBar.buttons.element(boundBy: 4)
 
         measure {
             insightsTab.tap()
