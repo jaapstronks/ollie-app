@@ -54,7 +54,7 @@ struct WidgetData: Codable {
             mealsExpectedToday: 3,
             lastWalkTime: Date().addingTimeInterval(-2 * 60 * 60),
             nextScheduledWalkTime: Date().addingTimeInterval(30 * 60),
-            puppyName: "Puppy",
+            puppyName: "--",
             lastUpdated: Date()
         )
     }

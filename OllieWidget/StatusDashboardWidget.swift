@@ -718,7 +718,7 @@ struct StatusDashboardWidget: Widget {
         StaticConfiguration(kind: kind, provider: StatusDashboardProvider()) { entry in
             StatusDashboardWidgetEntryView(entry: entry)
         }
-        .configurationDisplayName(String(localized: "Puppy Dashboard"))
+        .configurationDisplayName(String(localized: "Status Dashboard"))
         .description(String(localized: "See sleep status, potty timer, meals, and walks at a glance."))
         .supportedFamilies([.systemMedium, .systemLarge])
     }

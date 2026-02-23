@@ -52,7 +52,7 @@ struct WidgetData: Codable {
             mealsExpectedToday: 3,
             lastWalkTime: Date().addingTimeInterval(-2 * 60 * 60),
             nextScheduledWalkTime: Date().addingTimeInterval(30 * 60),
-            puppyName: "Puppy",
+            puppyName: "--",
             lastUpdated: Date()
         )
     }
@@ -129,7 +129,7 @@ class WidgetDataProvider {
             mealsExpectedToday: mealsExpected,
             lastWalkTime: lastWalk?.time,
             nextScheduledWalkTime: nextWalkTime,
-            puppyName: profile?.name ?? "Puppy",
+            puppyName: profile?.name ?? "--",
             lastUpdated: now
         )
 
@@ -144,19 +144,14 @@ class WidgetDataProvider {
     /// Find the next scheduled time from a list of "HH:mm" strings
     private static func nextScheduledTime(from times: [String], after date: Date) -> Date? {
         let calendar = Calendar.current
-        let currentHour = calendar.component(.hour, from: date)
-        let currentMinute = calendar.component(.minute, from: date)
-        let currentMinutes = currentHour * 60 + currentMinute
+        let currentMinutes = date.hour * 60 + date.minute
 
         // Parse all times and find the next one after current time
         var nextTime: Date? = nil
         var smallestFutureMinutes = Int.max
 
         for timeString in times {
-            let parts = timeString.split(separator: ":")
-            guard parts.count >= 2,
-                  let hour = Int(parts[0]),
-                  let minute = Int(parts[1]) else { continue }
+            guard let (hour, minute) = timeString.parseTimeComponents() else { continue }
 
             let scheduleMinutes = hour * 60 + minute
 
