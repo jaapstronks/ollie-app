@@ -13,23 +13,20 @@ struct SpotMapView: View {
     let longitude: Double
     var spotName: String?
 
-    @State private var region: MKCoordinateRegion
+    private var coordinate: CLLocationCoordinate2D {
+        CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+    }
 
-    init(latitude: Double, longitude: Double, spotName: String? = nil) {
-        self.latitude = latitude
-        self.longitude = longitude
-        self.spotName = spotName
-
-        let center = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
-        _region = State(initialValue: MKCoordinateRegion(
-            center: center,
+    private var cameraPosition: MapCameraPosition {
+        .region(MKCoordinateRegion(
+            center: coordinate,
             span: MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005)
         ))
     }
 
     var body: some View {
-        Map(coordinateRegion: .constant(region), annotationItems: [annotation]) { item in
-            MapAnnotation(coordinate: item.coordinate) {
+        Map(initialPosition: cameraPosition, interactionModes: []) {
+            Annotation(spotName ?? "", coordinate: coordinate) {
                 VStack(spacing: 2) {
                     Image(systemName: "mappin.circle.fill")
                         .font(.title)
@@ -52,22 +49,8 @@ struct SpotMapView: View {
                 }
             }
         }
-        .allowsHitTesting(false) // Non-interactive
         .cornerRadius(12)
     }
-
-    private var annotation: MapAnnotationItem {
-        MapAnnotationItem(
-            id: UUID(),
-            coordinate: CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
-        )
-    }
-}
-
-/// Helper struct for map annotations
-struct MapAnnotationItem: Identifiable {
-    let id: UUID
-    let coordinate: CLLocationCoordinate2D
 }
 
 #Preview {

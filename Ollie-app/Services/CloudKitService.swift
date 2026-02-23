@@ -100,22 +100,12 @@ final class CloudKitService: ObservableObject {
         deviceID = UIDevice.current.identifierForVendor?.uuidString ?? UUID().uuidString
         loadPersistedState()
 
-        // TODO: Remove this flag once CloudKit container is set up in Apple Developer Portal
-        // See TODO-cloudkit-setup.md for instructions
-        let cloudKitEnabled = false
-
-        if !cloudKitEnabled {
-            logger.info("CloudKit disabled - see TODO-cloudkit-setup.md")
-            isCloudAvailable = false
-            syncError = "CloudKit nog niet geconfigureerd"
-            return
-        }
-
         #if targetEnvironment(simulator)
-        // CloudKit often fails on simulator without proper entitlements
-        logger.info("Running on simulator - skipping CloudKit availability check")
-        isCloudAvailable = false
-        syncError = "CloudKit niet beschikbaar op simulator"
+        // CloudKit works on simulator but may have limitations without proper entitlements
+        logger.info("Running on simulator - CloudKit may have limited functionality")
+        Task {
+            await checkCloudAvailability()
+        }
         #else
         Task {
             await checkCloudAvailability()
@@ -127,11 +117,6 @@ final class CloudKitService: ObservableObject {
 
     /// Initial setup - call on app launch
     func setup() async {
-        #if targetEnvironment(simulator)
-        logger.info("Running on simulator - skipping CloudKit setup")
-        return
-        #endif
-
         await checkCloudAvailability()
 
         guard isCloudAvailable else {
@@ -161,31 +146,23 @@ final class CloudKitService: ObservableObject {
 
     /// Check if CloudKit is available
     func checkCloudAvailability() async {
-        #if targetEnvironment(simulator)
-        isCloudAvailable = false
-        syncError = "CloudKit niet beschikbaar op simulator"
-        return
-        #endif
-
         do {
             let status = try await container.accountStatus()
             isCloudAvailable = (status == .available)
 
-            if !isCloudAvailable {
-                switch status {
-                case .couldNotDetermine:
-                    syncError = Strings.CloudSharing.iCloudStatusUnknown
-                case .noAccount:
-                    syncError = Strings.CloudSharing.noICloudAccount
-                case .restricted:
-                    syncError = Strings.CloudSharing.iCloudRestricted
-                case .temporarilyUnavailable:
-                    syncError = Strings.CloudSharing.iCloudTemporarilyUnavailable
-                @unknown default:
-                    syncError = Strings.CloudSharing.iCloudNotAvailable
-                }
-            } else {
+            switch status {
+            case .available:
                 syncError = nil
+            case .couldNotDetermine:
+                syncError = Strings.CloudSharing.iCloudStatusUnknown
+            case .noAccount:
+                syncError = Strings.CloudSharing.noICloudAccount
+            case .restricted:
+                syncError = Strings.CloudSharing.iCloudRestricted
+            case .temporarilyUnavailable:
+                syncError = Strings.CloudSharing.iCloudTemporarilyUnavailable
+            @unknown default:
+                syncError = Strings.CloudSharing.iCloudNotAvailable
             }
         } catch {
             isCloudAvailable = false

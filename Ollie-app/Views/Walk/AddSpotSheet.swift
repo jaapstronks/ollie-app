@@ -184,8 +184,8 @@ struct LocationMapPicker: View {
 
     @Environment(\.dismiss) private var dismiss
 
-    @State private var region: MKCoordinateRegion
-    @State private var selectedCoordinate: CLLocationCoordinate2D?
+    @State private var cameraPosition: MapCameraPosition
+    @State private var selectedCoordinate: CLLocationCoordinate2D
 
     init(
         initialLocation: CLLocationCoordinate2D?,
@@ -196,23 +196,19 @@ struct LocationMapPicker: View {
 
         // Default to provided location or Rotterdam center
         let center = initialLocation ?? CLLocationCoordinate2D(latitude: 51.9225, longitude: 4.4792)
-        _region = State(initialValue: MKCoordinateRegion(
+        _cameraPosition = State(initialValue: .region(MKCoordinateRegion(
             center: center,
             span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
-        ))
-        _selectedCoordinate = State(initialValue: initialLocation)
+        )))
+        _selectedCoordinate = State(initialValue: center)
     }
 
     var body: some View {
         NavigationStack {
             ZStack {
                 // Interactive map
-                Map(
-                    coordinateRegion: $region,
-                    interactionModes: .all,
-                    annotationItems: annotationItems
-                ) { item in
-                    MapAnnotation(coordinate: item.coordinate) {
+                Map(position: $cameraPosition) {
+                    Annotation("", coordinate: selectedCoordinate) {
                         Image(systemName: "mappin.circle.fill")
                             .font(.largeTitle)
                             .foregroundStyle(Color.ollieAccent)
@@ -223,17 +219,10 @@ struct LocationMapPicker: View {
                             )
                     }
                 }
-                .ignoresSafeArea(edges: .bottom)
-                .onTapGesture { location in
-                    // This won't work directly - we need a different approach
+                .onMapCameraChange { context in
+                    selectedCoordinate = context.region.center
                 }
-                .gesture(
-                    DragGesture(minimumDistance: 0)
-                        .onEnded { _ in
-                            // Use center of map as selected location
-                            selectedCoordinate = region.center
-                        }
-                )
+                .ignoresSafeArea(edges: .bottom)
 
                 // Crosshair in center
                 VStack {
@@ -275,19 +264,12 @@ struct LocationMapPicker: View {
 
                 ToolbarItem(placement: .confirmationAction) {
                     Button(Strings.SpotDetail.selectLocation) {
-                        onSelect(region.center)
+                        onSelect(selectedCoordinate)
                         dismiss()
                     }
                 }
             }
         }
-    }
-
-    private var annotationItems: [MapAnnotationItem] {
-        if let coord = selectedCoordinate {
-            return [MapAnnotationItem(id: UUID(), coordinate: coord)]
-        }
-        return []
     }
 }
 

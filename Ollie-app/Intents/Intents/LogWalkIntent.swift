@@ -21,6 +21,7 @@ struct LogWalkIntent: AppIntent {
         }
     }
 
+    @MainActor
     func perform() async throws -> some IntentResult & ProvidesDialog {
         let store = IntentDataStore.shared
 

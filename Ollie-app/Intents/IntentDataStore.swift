@@ -164,27 +164,32 @@ final class IntentDataStore {
 
     /// Check if puppy is currently sleeping (has a sleep event without matching wake up)
     func isCurrentlySleeping() -> Bool {
+        return ongoingSleepEvent() != nil
+    }
+
+    /// Get the ongoing sleep event (if puppy is currently sleeping)
+    func ongoingSleepEvent() -> PuppyEvent? {
         let today = Date()
         let todayEvents = readEvents(for: today)
 
         // Get all sleep/wake events sorted by time (most recent first)
         let sleepWakeEvents = todayEvents.filter { $0.type == .slapen || $0.type == .ontwaken }
 
-        // If the most recent sleep/wake event is a sleep, puppy is sleeping
-        if let mostRecent = sleepWakeEvents.first {
-            return mostRecent.type == .slapen
+        // If the most recent sleep/wake event is a sleep, return it
+        if let mostRecent = sleepWakeEvents.first, mostRecent.type == .slapen {
+            return mostRecent
         }
 
         // Check yesterday too (in case puppy went to sleep last night)
         if let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: today) {
             let yesterdayEvents = readEvents(for: yesterday)
             let yesterdaySleepWake = yesterdayEvents.filter { $0.type == .slapen || $0.type == .ontwaken }
-            if let mostRecent = yesterdaySleepWake.first {
-                return mostRecent.type == .slapen
+            if let mostRecent = yesterdaySleepWake.first, mostRecent.type == .slapen {
+                return mostRecent
             }
         }
 
-        return false
+        return nil
     }
 }
 

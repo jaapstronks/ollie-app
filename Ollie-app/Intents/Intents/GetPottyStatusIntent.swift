@@ -12,6 +12,7 @@ struct GetPottyStatusIntent: AppIntent {
     static var description = IntentDescription("Find out when your puppy last peed")
     static var openAppWhenRun: Bool = false
 
+    @MainActor
     func perform() async throws -> some IntentResult & ProvidesDialog {
         let store = IntentDataStore.shared
 
@@ -48,6 +49,7 @@ struct GetPoopStatusIntent: AppIntent {
     static var description = IntentDescription("Find out when your puppy last pooped")
     static var openAppWhenRun: Bool = false
 
+    @MainActor
     func perform() async throws -> some IntentResult & ProvidesDialog {
         let store = IntentDataStore.shared
 

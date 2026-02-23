@@ -12,6 +12,7 @@ struct LogMealIntent: AppIntent {
     static var description = IntentDescription("Log that your puppy ate")
     static var openAppWhenRun: Bool = false
 
+    @MainActor
     func perform() async throws -> some IntentResult & ProvidesDialog {
         let store = IntentDataStore.shared
 

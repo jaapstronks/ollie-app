@@ -35,7 +35,7 @@ struct WidgetData: Codable {
 /// Provides data to widgets via shared App Group UserDefaults
 class WidgetDataProvider {
     static let shared = WidgetDataProvider()
-    static let suiteName = "group.jaapstronks.ollie-app"
+    static let suiteName = "group.jaapstronks.Ollie"
     static let dataKey = "widgetData"
 
     private let encoder: JSONEncoder

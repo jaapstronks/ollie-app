@@ -118,8 +118,8 @@ struct FavoriteSpotsView: View {
 
     private func openInMaps(_ spot: WalkSpot) {
         let coordinate = CLLocationCoordinate2D(latitude: spot.latitude, longitude: spot.longitude)
-        let placemark = MKPlacemark(coordinate: coordinate)
-        let mapItem = MKMapItem(placemark: placemark)
+        let location = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
+        let mapItem = MKMapItem(location: location, address: nil)
         mapItem.name = spot.name
         mapItem.openInMaps()
     }
@@ -130,11 +130,7 @@ struct AllSpotsMapView: View {
     let spots: [WalkSpot]
     @Environment(\.dismiss) private var dismiss
 
-    @State private var region: MKCoordinateRegion
-
-    init(spots: [WalkSpot]) {
-        self.spots = spots
-
+    private var initialPosition: MapCameraPosition {
         // Calculate region to fit all spots
         if let first = spots.first {
             var minLat = first.latitude
@@ -154,13 +150,13 @@ struct AllSpotsMapView: View {
             let spanLat = max(0.01, (maxLat - minLat) * 1.5)
             let spanLon = max(0.01, (maxLon - minLon) * 1.5)
 
-            _region = State(initialValue: MKCoordinateRegion(
+            return .region(MKCoordinateRegion(
                 center: CLLocationCoordinate2D(latitude: centerLat, longitude: centerLon),
                 span: MKCoordinateSpan(latitudeDelta: spanLat, longitudeDelta: spanLon)
             ))
         } else {
             // Default to Rotterdam
-            _region = State(initialValue: MKCoordinateRegion(
+            return .region(MKCoordinateRegion(
                 center: CLLocationCoordinate2D(latitude: 51.9225, longitude: 4.4792),
                 span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
             ))
@@ -169,25 +165,27 @@ struct AllSpotsMapView: View {
 
     var body: some View {
         NavigationStack {
-            Map(coordinateRegion: $region, annotationItems: annotations) { item in
-                MapAnnotation(coordinate: item.coordinate) {
-                    VStack(spacing: 2) {
-                        Image(systemName: item.isFavorite ? "star.circle.fill" : "mappin.circle.fill")
-                            .font(.title2)
-                            .foregroundStyle(item.isFavorite ? .yellow : .ollieAccent)
-                            .background(
-                                Circle()
-                                    .fill(.white)
-                                    .frame(width: 20, height: 20)
-                            )
+            Map(initialPosition: initialPosition) {
+                ForEach(spots) { spot in
+                    Annotation(spot.name, coordinate: CLLocationCoordinate2D(latitude: spot.latitude, longitude: spot.longitude)) {
+                        VStack(spacing: 2) {
+                            Image(systemName: spot.isFavorite ? "star.circle.fill" : "mappin.circle.fill")
+                                .font(.title2)
+                                .foregroundStyle(spot.isFavorite ? .yellow : .ollieAccent)
+                                .background(
+                                    Circle()
+                                        .fill(.white)
+                                        .frame(width: 20, height: 20)
+                                )
 
-                        Text(item.name)
-                            .font(.caption2)
-                            .fontWeight(.medium)
-                            .padding(.horizontal, 6)
-                            .padding(.vertical, 2)
-                            .background(.ultraThinMaterial)
-                            .cornerRadius(4)
+                            Text(spot.name)
+                                .font(.caption2)
+                                .fontWeight(.medium)
+                                .padding(.horizontal, 6)
+                                .padding(.vertical, 2)
+                                .background(.ultraThinMaterial)
+                                .cornerRadius(4)
+                        }
                     }
                 }
             }
@@ -200,17 +198,6 @@ struct AllSpotsMapView: View {
                     }
                 }
             }
-        }
-    }
-
-    private var annotations: [SpotAnnotation] {
-        spots.map { spot in
-            SpotAnnotation(
-                id: spot.id,
-                name: spot.name,
-                coordinate: CLLocationCoordinate2D(latitude: spot.latitude, longitude: spot.longitude),
-                isFavorite: spot.isFavorite
-            )
         }
     }
 }

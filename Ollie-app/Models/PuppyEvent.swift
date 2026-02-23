@@ -106,6 +106,8 @@ struct PuppyEvent: Codable, Identifiable, Equatable {
     var weightKg: Double?  // Weight in kg, for gewicht events
     var spotId: UUID?      // Reference to saved WalkSpot
     var spotName: String?  // Denormalized spot name for display
+    var parentWalkId: UUID?  // Links potty events to their parent walk
+    var sleepSessionId: UUID?  // Links slapen + ontwaken events into a session
 
     init(
         id: UUID = UUID(),
@@ -124,7 +126,9 @@ struct PuppyEvent: Codable, Identifiable, Equatable {
         thumbnailPath: String? = nil,
         weightKg: Double? = nil,
         spotId: UUID? = nil,
-        spotName: String? = nil
+        spotName: String? = nil,
+        parentWalkId: UUID? = nil,
+        sleepSessionId: UUID? = nil
     ) {
         self.id = id
         self.time = time
@@ -143,6 +147,8 @@ struct PuppyEvent: Codable, Identifiable, Equatable {
         self.weightKg = weightKg
         self.spotId = spotId
         self.spotName = spotName
+        self.parentWalkId = parentWalkId
+        self.sleepSessionId = sleepSessionId
     }
 
     // Custom coding keys for snake_case JSON compatibility
@@ -164,5 +170,7 @@ struct PuppyEvent: Codable, Identifiable, Equatable {
         case weightKg = "weight_kg"
         case spotId = "spot_id"
         case spotName = "spot_name"
+        case parentWalkId = "parent_walk_id"
+        case sleepSessionId = "sleep_session_id"
     }
 }

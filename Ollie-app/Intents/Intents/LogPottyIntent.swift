@@ -22,6 +22,7 @@ struct LogPottyIntent: AppIntent {
         Summary("Log \(\.$pottyType) \(\.$location)")
     }
 
+    @MainActor
     func perform() async throws -> some IntentResult & ProvidesDialog {
         let store = IntentDataStore.shared
 
@@ -58,6 +59,7 @@ struct LogPeeOutsideIntent: AppIntent {
     static var description = IntentDescription("Quickly log that your puppy peed outside")
     static var openAppWhenRun: Bool = false
 
+    @MainActor
     func perform() async throws -> some IntentResult & ProvidesDialog {
         let store = IntentDataStore.shared
 
@@ -90,6 +92,7 @@ struct LogPoopOutsideIntent: AppIntent {
     static var description = IntentDescription("Quickly log that your puppy pooped outside")
     static var openAppWhenRun: Bool = false
 
+    @MainActor
     func perform() async throws -> some IntentResult & ProvidesDialog {
         let store = IntentDataStore.shared
 

@@ -16,6 +16,21 @@ class TimelineViewModel: ObservableObject {
     /// Sheet coordinator for all sheet presentations
     @Published var sheetCoordinator = SheetCoordinator()
 
+    // MARK: - Activity State
+
+    /// Currently in-progress activity (walk or nap)
+    @Published var currentActivity: InProgressActivity?
+
+    /// Whether a walk is currently in progress
+    var isWalkInProgress: Bool {
+        currentActivity?.type == .walk
+    }
+
+    /// Whether a nap is currently in progress
+    var isNapInProgress: Bool {
+        currentActivity?.type == .nap
+    }
+
     // MARK: - Cached Stats (to avoid recomputation every frame)
 
     /// Cached pattern analysis (updated when events change)
@@ -222,6 +237,63 @@ class TimelineViewModel: ObservableObject {
         sheetCoordinator.dismissSheet()
     }
 
+    // MARK: - Activity Tracking (Walks & Naps)
+
+    /// Start a new activity (walk or nap)
+    func startActivity(type: ActivityType) {
+        currentActivity = InProgressActivity(type: type, startTime: Date())
+        sheetCoordinator.dismissSheet()
+        HapticFeedback.success()
+    }
+
+    /// End the current activity
+    func endActivity(minutesAgo: Int, note: String?) {
+        guard let activity = currentActivity else { return }
+
+        let endTime = Date().addingTimeInterval(-Double(minutesAgo) * 60)
+        let duration = Int(endTime.timeIntervalSince(activity.startTime) / 60)
+
+        // Log the appropriate event type
+        let eventType: EventType = activity.type == .walk ? .uitlaten : .slapen
+
+        // Generate sleepSessionId for nap activities to link sleep + wake events
+        let sleepSessionId: UUID? = activity.type == .nap ? UUID() : nil
+
+        logEvent(
+            type: eventType,
+            time: activity.startTime,
+            location: eventType == .uitlaten ? .buiten : nil,
+            note: note,
+            durationMin: max(1, duration),
+            sleepSessionId: sleepSessionId
+        )
+
+        // If it was a nap, also log wake-up with same session ID
+        if activity.type == .nap {
+            logEvent(type: .ontwaken, time: endTime, sleepSessionId: sleepSessionId)
+        }
+
+        currentActivity = nil
+        sheetCoordinator.dismissSheet()
+        HapticFeedback.success()
+    }
+
+    /// Cancel/discard the current activity without logging
+    func cancelActivity() {
+        currentActivity = nil
+        sheetCoordinator.dismissSheet()
+    }
+
+    /// Log a wake-up event at the specified time (for EndSleepSheet)
+    func logWakeUp(time: Date) {
+        // Find the ongoing sleep session ID to link this wake event
+        let recentEvents = getRecentEvents()
+        let sleepSessionId = SleepSession.ongoingSleepSessionId(from: recentEvents)
+        logEvent(type: .ontwaken, time: time, sleepSessionId: sleepSessionId)
+        sheetCoordinator.dismissSheet()
+        HapticFeedback.success()
+    }
+
     // Legacy: kept for backwards compatibility
     func logWithLocation(location: EventLocation) {
         guard let type = pendingEventType else { return }
@@ -323,8 +395,17 @@ class TimelineViewModel: ObservableObject {
         who: String? = nil,
         exercise: String? = nil,
         result: String? = nil,
-        durationMin: Int? = nil
+        durationMin: Int? = nil,
+        sleepSessionId: UUID? = nil
     ) {
+        // Auto-generate sleepSessionId for sleep events
+        let sessionId: UUID?
+        if type == .slapen {
+            sessionId = sleepSessionId ?? UUID()
+        } else {
+            sessionId = sleepSessionId
+        }
+
         let event = PuppyEvent(
             time: time,
             type: type,
@@ -333,7 +414,8 @@ class TimelineViewModel: ObservableObject {
             who: who,
             exercise: exercise,
             result: result,
-            durationMin: durationMin
+            durationMin: durationMin,
+            sleepSessionId: sessionId
         )
 
         eventStore.addEvent(event)

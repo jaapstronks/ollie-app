@@ -195,12 +195,11 @@ struct SpotDetailView: View {
     }
 
     private func openInMaps() {
-        let coordinate = CLLocationCoordinate2D(
+        let location = CLLocation(
             latitude: currentSpot.latitude,
             longitude: currentSpot.longitude
         )
-        let placemark = MKPlacemark(coordinate: coordinate)
-        let mapItem = MKMapItem(placemark: placemark)
+        let mapItem = MKMapItem(location: location, address: nil)
         mapItem.name = currentSpot.name
         mapItem.openInMaps()
     }

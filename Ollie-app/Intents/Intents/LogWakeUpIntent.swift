@@ -12,6 +12,7 @@ struct LogWakeUpIntent: AppIntent {
     static var description = IntentDescription("Log that your puppy woke up")
     static var openAppWhenRun: Bool = false
 
+    @MainActor
     func perform() async throws -> some IntentResult & ProvidesDialog {
         let store = IntentDataStore.shared
 
@@ -23,21 +24,27 @@ struct LogWakeUpIntent: AppIntent {
             return .result(dialog: "Your free trial has ended. Please upgrade in the Ollie app to continue logging.")
         }
 
-        // Check if puppy was sleeping
-        if !store.isCurrentlySleeping() {
+        // Check if puppy was sleeping and get the sleep event for session linking
+        let ongoingSleep = store.ongoingSleepEvent()
+
+        if ongoingSleep == nil {
             return .result(dialog: "\(profile.name) wasn't logged as sleeping. Logging wake up anyway.")
         }
 
+        // Link wake event to the sleep session
+        let sleepSessionId = ongoingSleep?.sleepSessionId ?? ongoingSleep?.id
+
         let event = PuppyEvent(
             time: Date(),
-            type: .ontwaken
+            type: .ontwaken,
+            sleepSessionId: sleepSessionId
         )
 
         do {
             try store.addEvent(event)
 
-            // Calculate sleep duration from last sleep event
-            if let lastSleep = store.lastEvent(ofType: .slapen) {
+            // Calculate sleep duration from the ongoing sleep event
+            if let lastSleep = ongoingSleep {
                 let duration = Int(Date().timeIntervalSince(lastSleep.time) / 60)
                 if duration > 0 {
                     return .result(dialog: "\(profile.name) woke up after \(duration) minutes - logged!")

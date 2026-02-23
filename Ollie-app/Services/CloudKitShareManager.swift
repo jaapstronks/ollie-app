@@ -110,6 +110,8 @@ final class CloudKitShareManager: ObservableObject {
                 status = .pending
             case .removed:
                 status = .removed
+            case .unknown:
+                status = .pending
             @unknown default:
                 status = .pending
             }
