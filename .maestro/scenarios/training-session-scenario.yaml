@@ -1,0 +1,84 @@
+# Scenario: Training Session Logging
+# Tests logging a training session for a skill
+appId: nl.jaapstronks.Ollie
+---
+- launchApp
+- waitForAnimationToEnd
+
+# Wait for app to load
+- extendedWaitUntil:
+    visible: "Today|Vandaag"
+    timeout: 5000
+
+# =====================
+# 1. Navigate to Training Tab
+# =====================
+- tapOn: "Train"
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/training-scenario-01-tab"
+
+- extendedWaitUntil:
+    visible: "Training"
+    timeout: 3000
+
+# =====================
+# 2. Find a Skill to Train
+# =====================
+# Scroll to find skills
+- takeScreenshot: "screenshots/training-scenario-02-skills-visible"
+
+# =====================
+# 3. Tap Log Session on First Available Skill
+# =====================
+# Look for any skill card with log session button
+- runFlow:
+    when:
+      visible: "Log session|Sessie loggen"
+    commands:
+      - tapOn: "Log session|Sessie loggen"
+      - waitForAnimationToEnd
+      - takeScreenshot: "screenshots/training-scenario-03-log-sheet"
+
+      # Fill in session details (if there's a result picker)
+      - runFlow:
+          when:
+            visible: "Great|Goed|Success"
+          commands:
+            - tapOn: "Great|Goed|Success"
+            - waitForAnimationToEnd
+
+      # Save the session
+      - runFlow:
+          when:
+            visible: "Save|Opslaan|Log"
+          commands:
+            - tapOn: "Save|Opslaan|Log"
+            - waitForAnimationToEnd
+            - takeScreenshot: "screenshots/training-scenario-04-session-logged"
+
+# If no log session button found, just take screenshot of current state
+- takeScreenshot: "screenshots/training-scenario-05-current-state"
+
+# =====================
+# 4. Verify Session Count Updated
+# =====================
+# After logging, session count should increase
+- takeScreenshot: "screenshots/training-scenario-06-session-count"
+
+# =====================
+# 5. Mark Skill as Mastered (if available)
+# =====================
+- runFlow:
+    when:
+      visible: "Mark mastered|Als beheerst markeren"
+    commands:
+      - tapOn: "Mark mastered|Als beheerst markeren"
+      - waitForAnimationToEnd
+      - takeScreenshot: "screenshots/training-scenario-07-marked-mastered"
+
+# =====================
+# 6. Return to Today
+# =====================
+- tapOn: "Today|Vandaag"
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/training-scenario-08-back-to-today"

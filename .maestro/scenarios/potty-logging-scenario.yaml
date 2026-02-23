@@ -1,0 +1,63 @@
+# Scenario: Potty Logging Flow
+# Tests the potty logging via quick-log menu
+appId: nl.jaapstronks.Ollie
+---
+- launchApp
+- waitForAnimationToEnd
+
+# Wait for app to load
+- extendedWaitUntil:
+    visible: "Today|Vandaag"
+    timeout: 5000
+- takeScreenshot: "screenshots/potty-scenario-01-start"
+
+# =====================
+# SCENARIO 1: Log Pee Outside (via quick menu)
+# =====================
+- longPressOn:
+    id: "FAB_BUTTON"
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/potty-scenario-02-quick-menu"
+
+- tapOn: "Pee outside|Plas buiten"
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/potty-scenario-03-pee-logged"
+
+# =====================
+# SCENARIO 2: Log Poop Outside (via quick menu)
+# =====================
+- extendedWaitUntil:
+    visible: "Today|Vandaag"
+    timeout: 3000
+
+- longPressOn:
+    id: "FAB_BUTTON"
+- waitForAnimationToEnd
+
+- tapOn: "Poop outside|Poep buiten"
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/potty-scenario-04-poop-logged"
+
+# =====================
+# VERIFY: Check Timeline
+# =====================
+- extendedWaitUntil:
+    visible: "Today|Vandaag"
+    timeout: 3000
+
+# Scroll to see timeline
+- scroll
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/potty-scenario-05-timeline"
+
+# =====================
+# VERIFY: Check Status Cards
+# =====================
+# Scroll back up
+- swipe:
+    start: "50%,30%"
+    end: "50%,80%"
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/potty-scenario-06-status-cards"
+
+# Status cards should reflect recent logging

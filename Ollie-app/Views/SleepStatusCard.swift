@@ -11,8 +11,16 @@ import SwiftUI
 /// Uses liquid glass design with semantic tinting
 struct SleepStatusCard: View {
     let sleepState: SleepState
+    let onWakeUp: (() -> Void)?
+    let onStartNap: (() -> Void)?
 
     @Environment(\.colorScheme) private var colorScheme
+
+    init(sleepState: SleepState, onWakeUp: (() -> Void)? = nil, onStartNap: (() -> Void)? = nil) {
+        self.sleepState = sleepState
+        self.onWakeUp = onWakeUp
+        self.onStartNap = onStartNap
+    }
 
     var body: some View {
         // Hide during night hours (23:00 - 06:00) or if no data
@@ -20,133 +28,56 @@ struct SleepStatusCard: View {
             EmptyView()
         } else {
             cardContent
-                .padding(.horizontal, 16)
                 .padding(.vertical, 4)
         }
     }
 
     @ViewBuilder
     private var cardContent: some View {
-        HStack(spacing: 12) {
-            // Icon with glass circle background
-            Image(systemName: iconName)
-                .font(.system(size: 20, weight: .semibold))
-                .foregroundStyle(indicatorColor)
-                .frame(width: 40, height: 40)
-                .background(iconBackground)
-                .clipShape(Circle())
-                .overlay(iconOverlay)
+        VStack(spacing: 12) {
+            StatusCardHeader(
+                iconName: iconName,
+                iconColor: indicatorColor,
+                tintColor: indicatorColor,
+                title: mainText,
+                titleColor: textColor,
+                subtitle: subtitleText.isEmpty ? nil : subtitleText,
+                statusLabel: statusLabel,
+                iconSize: 40
+            )
 
-            VStack(alignment: .leading, spacing: 3) {
-                // Main status text
-                Text(mainText)
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
-                    .foregroundStyle(textColor)
-
-                // Subtitle with time details
-                Text(subtitleText)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-
-            Spacer()
-
-            // Status pill
-            statusPill
+            // Show contextual action based on sleep state
+            actionButton
         }
         .padding(.horizontal, 14)
         .padding(.vertical, 12)
-        .background(glassBackground)
-        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-        .overlay(glassOverlay)
-    }
-
-    // MARK: - Glass Components
-
-    @ViewBuilder
-    private var iconBackground: some View {
-        ZStack {
-            indicatorColor.opacity(colorScheme == .dark ? 0.2 : 0.15)
-
-            LinearGradient(
-                colors: [
-                    Color.white.opacity(colorScheme == .dark ? 0.1 : 0.3),
-                    Color.clear
-                ],
-                startPoint: .top,
-                endPoint: .bottom
-            )
-        }
+        .glassStatusCard(tintColor: indicatorColor)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(Strings.SleepStatus.title)
+        .accessibilityValue("\(mainText). \(statusLabel)")
     }
 
     @ViewBuilder
-    private var iconOverlay: some View {
-        Circle()
-            .strokeBorder(
-                indicatorColor.opacity(0.3),
-                lineWidth: 0.5
-            )
-    }
-
-    @ViewBuilder
-    private var statusPill: some View {
-        Text(statusLabel)
-            .font(.caption2)
-            .fontWeight(.semibold)
-            .foregroundStyle(indicatorColor)
-            .padding(.horizontal, 10)
-            .padding(.vertical, 5)
-            .background(
-                Capsule()
-                    .fill(indicatorColor.opacity(colorScheme == .dark ? 0.2 : 0.12))
-            )
-            .overlay(
-                Capsule()
-                    .strokeBorder(indicatorColor.opacity(0.2), lineWidth: 0.5)
-            )
-    }
-
-    @ViewBuilder
-    private var glassBackground: some View {
-        ZStack {
-            if colorScheme == .dark {
-                Color.white.opacity(0.05)
-            } else {
-                Color.white.opacity(0.7)
+    private var actionButton: some View {
+        switch sleepState {
+        case .sleeping:
+            if let onWakeUp {
+                Button(action: onWakeUp) {
+                    Label(Strings.SleepStatus.wakeUp, systemImage: "sun.max.fill")
+                }
+                .buttonStyle(.glassPill(tint: .custom(indicatorColor)))
             }
-
-            // Tint
-            indicatorColor.opacity(colorScheme == .dark ? 0.06 : 0.04)
-
-            // Top highlight
-            LinearGradient(
-                colors: [
-                    Color.white.opacity(colorScheme == .dark ? 0.08 : 0.25),
-                    Color.clear
-                ],
-                startPoint: .top,
-                endPoint: .center
-            )
+        case .awake(_, let durationMin):
+            // Show nap button when awake >= 45 minutes
+            if durationMin >= SleepCalculations.awakeWarningMinutes, let onStartNap {
+                Button(action: onStartNap) {
+                    Label(Strings.SleepStatus.startNap, systemImage: "moon.zzz.fill")
+                }
+                .buttonStyle(.glassPill(tint: .custom(indicatorColor)))
+            }
+        case .unknown:
+            EmptyView()
         }
-        .background(.thinMaterial)
-    }
-
-    @ViewBuilder
-    private var glassOverlay: some View {
-        RoundedRectangle(cornerRadius: 16, style: .continuous)
-            .strokeBorder(
-                LinearGradient(
-                    colors: [
-                        Color.white.opacity(colorScheme == .dark ? 0.12 : 0.35),
-                        indicatorColor.opacity(colorScheme == .dark ? 0.08 : 0.05),
-                        Color.clear
-                    ],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                ),
-                lineWidth: 0.5
-            )
     }
 
     // MARK: - Computed Properties
@@ -170,58 +101,42 @@ struct SleepStatusCard: View {
     private var statusLabel: String {
         switch sleepState {
         case .sleeping:
-            return "Slaapt"
+            return Strings.SleepStatus.sleeping
         case .awake(_, let durationMin):
             if durationMin >= SleepCalculations.maxAwakeMinutes {
-                return "Dutje tijd!"
+                return Strings.SleepStatus.napTime
             } else if durationMin >= SleepCalculations.awakeWarningMinutes {
-                return "Let op"
+                return Strings.SleepStatus.attention
             }
-            return "Wakker"
+            return Strings.SleepStatus.awake
         case .unknown:
-            return "Onbekend"
-        }
-    }
-
-    private var emoji: String {
-        switch sleepState {
-        case .sleeping:
-            return "😴"
-        case .awake(_, let durationMin):
-            if durationMin >= SleepCalculations.maxAwakeMinutes {
-                return "⏰"
-            } else if durationMin >= SleepCalculations.awakeWarningMinutes {
-                return "💡"
-            }
-            return "☀️"
-        case .unknown:
-            return "❓"
+            return Strings.PottyStatus.unknown
         }
     }
 
     private var mainText: String {
         switch sleepState {
         case .sleeping(_, let durationMin):
-            return "Slaapt al \(formatDuration(durationMin))"
+            return Strings.SleepStatus.sleepingFor(duration: formatDuration(durationMin))
         case .awake(_, let durationMin):
             if durationMin >= SleepCalculations.maxAwakeMinutes {
-                return "Al \(formatDuration(durationMin)) wakker — tijd voor een dutje!"
+                return Strings.SleepStatus.awakeTooLong(duration: formatDuration(durationMin))
             } else if durationMin >= SleepCalculations.awakeWarningMinutes {
                 let remaining = SleepCalculations.maxAwakeMinutes - durationMin
-                return "\(formatDuration(durationMin)) wakker — over \(remaining) min een dutje?"
+                return Strings.SleepStatus.awakeWithNapSuggestion(duration: formatDuration(durationMin), remaining: remaining)
             }
-            return "Wakker sinds \(formatDuration(durationMin))"
+            return Strings.SleepStatus.awakeSince(duration: formatDuration(durationMin))
         case .unknown:
-            return "Geen slaapdata"
+            return Strings.SleepStatus.noSleepData
         }
     }
 
     private var subtitleText: String {
         switch sleepState {
         case .sleeping(let since, _):
-            return "Begonnen: \(since.timeString)"
+            return Strings.SleepStatus.started(time: since.timeString)
         case .awake(let since, _):
-            return "Wakker sinds: \(since.timeString)"
+            return Strings.SleepStatus.awakeSinceTime(time: since.timeString)
         case .unknown:
             return ""
         }
@@ -276,8 +191,7 @@ struct SleepStatusCard: View {
     }
 
     private var isNightTime: Bool {
-        let hour = Calendar.current.component(.hour, from: Date())
-        return hour >= 23 || hour < 6
+        Constants.isNightTimeNow()
     }
 
     private func formatDuration(_ minutes: Int) -> String {

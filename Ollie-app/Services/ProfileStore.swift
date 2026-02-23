@@ -16,6 +16,9 @@ class ProfileStore: ObservableObject {
     private let encoder: JSONEncoder
     private let decoder: JSONDecoder
 
+    /// App Group suite name for sharing with Intents/Widgets
+    private static let appGroupSuiteName = "group.jaapstronks.Ollie"
+
     init() {
         encoder = JSONEncoder()
         encoder.outputFormatting = .prettyPrinted
@@ -61,11 +64,73 @@ class ProfileStore: ObservableObject {
         saveProfile(currentProfile)
     }
 
+    /// Update the notification settings
+    func updateNotificationSettings(_ settings: NotificationSettings) {
+        guard var currentProfile = profile else { return }
+        currentProfile.notificationSettings = settings
+        saveProfile(currentProfile)
+    }
+
+    /// Update the walk schedule
+    func updateWalkSchedule(_ schedule: WalkSchedule) {
+        guard var currentProfile = profile else { return }
+        currentProfile.walkSchedule = schedule
+        saveProfile(currentProfile)
+    }
+
+    /// Unlock premium for the current profile
+    func unlockPremium() {
+        guard var currentProfile = profile else { return }
+        currentProfile.isPremiumUnlocked = true
+        saveProfile(currentProfile)
+    }
+
     /// Reset profile (for testing or re-onboarding)
     func resetProfile() {
         profile = nil
         let url = profileURL
         try? fileManager.removeItem(at: url)
+    }
+
+    // MARK: - Medication Schedule
+
+    /// Update the medication schedule
+    func updateMedicationSchedule(_ schedule: MedicationSchedule) {
+        guard var currentProfile = profile else { return }
+        currentProfile.medicationSchedule = schedule
+        saveProfile(currentProfile)
+    }
+
+    /// Add a new medication
+    func addMedication(_ medication: Medication) {
+        guard var currentProfile = profile else { return }
+        currentProfile.medicationSchedule.medications.append(medication)
+        saveProfile(currentProfile)
+    }
+
+    /// Update an existing medication
+    func updateMedication(_ medication: Medication) {
+        guard var currentProfile = profile else { return }
+        if let index = currentProfile.medicationSchedule.medications.firstIndex(where: { $0.id == medication.id }) {
+            currentProfile.medicationSchedule.medications[index] = medication
+            saveProfile(currentProfile)
+        }
+    }
+
+    /// Delete a medication by ID
+    func deleteMedication(id: UUID) {
+        guard var currentProfile = profile else { return }
+        currentProfile.medicationSchedule.medications.removeAll { $0.id == id }
+        saveProfile(currentProfile)
+    }
+
+    /// Toggle medication active state
+    func toggleMedicationActive(id: UUID) {
+        guard var currentProfile = profile else { return }
+        if let index = currentProfile.medicationSchedule.medications.firstIndex(where: { $0.id == id }) {
+            currentProfile.medicationSchedule.medications[index].isActive.toggle()
+            saveProfile(currentProfile)
+        }
     }
 
     // MARK: - Private Methods
@@ -90,6 +155,9 @@ class ProfileStore: ObservableObject {
         }
 
         profile = loadedProfile
+
+        // Sync to App Group on load for Intents/Widgets
+        syncToAppGroup()
     }
 
     private func writeProfile() {
@@ -99,5 +167,30 @@ class ProfileStore: ObservableObject {
         }
 
         try? data.write(to: profileURL, options: .atomic)
+
+        // Sync minimal profile to App Group for Intents/Widgets
+        syncToAppGroup()
+    }
+
+    // MARK: - App Group Sync
+
+    /// Syncs a minimal profile to App Group for use by App Intents and Widgets
+    /// Called automatically after any profile save
+    private func syncToAppGroup() {
+        guard let profile = profile else { return }
+
+        let sharedProfile = SharedProfile(from: profile)
+        guard let sharedDefaults = UserDefaults(suiteName: Self.appGroupSuiteName),
+              let data = try? JSONEncoder().encode(sharedProfile) else {
+            return
+        }
+
+        sharedDefaults.set(data, forKey: IntentDataStore.profileKey)
+    }
+
+    /// Force sync the current profile to App Group
+    /// Call this if profile was loaded from elsewhere and needs to be shared
+    func forceAppGroupSync() {
+        syncToAppGroup()
     }
 }

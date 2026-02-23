@@ -73,36 +73,51 @@ extension EventType {
         case .milestone: return "star.fill"
         case .gedrag: return "bolt.fill"
         case .gewicht: return "scalemass.fill"
+        case .moment: return "camera.fill"
+        case .medicatie: return "pills.fill"
         }
     }
 
     /// Default icon color (when location doesn't apply)
+    /// Colors match the Ollie semantic color system:
+    /// - Green: positive, outdoor, social
+    /// - Gold: food, attention
+    /// - Blue: rest, sleep, crate
+    /// - Purple: training, learning
+    /// - Rose: milestones, celebrations
+    /// - Teal: data, measurements
     var iconColor: Color {
         switch self {
         case .plassen, .poepen:
             return .ollieMuted // Overridden by location
         case .eten:
-            return .ollieAccent
+            return .ollieAccent // Warm gold - nourishment
         case .drinken:
-            return .ollieInfo
-        case .slapen, .bench:
-            return .ollieSleep
+            return .ollieInfo // Teal - bodily/data
+        case .slapen:
+            return .ollieSleep // Blue - rest
         case .ontwaken:
-            return .ollieAccent
+            return .ollieAccent // Warm gold - energy
         case .uitlaten:
-            return .ollieAccent
+            return .ollieSuccess // Green - outdoor activity
         case .tuin:
-            return .ollieSuccess
+            return .ollieSuccess // Green - outdoor activity
         case .training:
-            return .ollieAccent
+            return .olliePurple // Purple - learning/mental
+        case .bench:
+            return .ollieSleep // Blue - rest (matches sleep)
         case .sociaal:
-            return .ollieAccent
+            return .ollieSuccess // Green - positive interaction
         case .milestone:
-            return .ollieAccent
+            return .ollieRose // Rose - celebration
         case .gedrag:
-            return .ollieWarning
+            return .ollieMuted // Gray - neutral observation
         case .gewicht:
-            return .ollieMuted
+            return .ollieInfo // Teal - data/stats
+        case .moment:
+            return .ollieAccent // Gold - brand accent for photos
+        case .medicatie:
+            return .ollieAccent // Gold - health/care
         }
     }
 }

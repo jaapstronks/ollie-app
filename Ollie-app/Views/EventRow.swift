@@ -4,6 +4,7 @@
 //
 
 import SwiftUI
+import UIKit
 
 /// Single event row in the timeline
 struct EventRow: View {
@@ -17,7 +18,7 @@ struct EventRow: View {
                 .foregroundColor(.secondary)
                 .frame(width: 44, alignment: .trailing)
 
-            // Icon
+            // Event icon
             EventIcon(type: event.type, location: event.location, size: 28)
 
             // Content
@@ -64,14 +65,37 @@ struct EventRow: View {
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
+
+                // Walk location
+                if event.type == .uitlaten, let spotName = event.spotName {
+                    Label(spotName, systemImage: "mappin.circle.fill")
+                        .font(.caption)
+                        .foregroundStyle(Color.ollieAccent)
+                }
             }
 
             Spacer()
 
-            // Media indicator
-            if event.photo != nil || event.video != nil {
-                Image(systemName: event.video != nil ? "video" : "photo")
-                    .foregroundColor(.secondary)
+            // Thumbnail or media indicator
+            if let thumbnailPath = event.thumbnailPath {
+                HStack(spacing: 8) {
+                    ThumbnailView(relativePath: thumbnailPath)
+                        .frame(width: 40, height: 40)
+                        .clipShape(RoundedRectangle(cornerRadius: 6))
+
+                    Image(systemName: "chevron.right")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+            } else if event.photo != nil || event.video != nil {
+                HStack(spacing: 8) {
+                    Image(systemName: event.video != nil ? "video" : "photo")
+                        .foregroundColor(.secondary)
+
+                    Image(systemName: "chevron.right")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
             }
         }
         .padding(.horizontal)
@@ -79,6 +103,8 @@ struct EventRow: View {
         .contentShape(Rectangle())
         .accessibilityElement(children: .combine)
         .accessibilityLabel(accessibilityDescription)
+        .accessibilityHint(event.photo != nil || event.video != nil ? Strings.EventRow.tapToViewMedia : "")
+        .accessibilityIdentifier("EVENT_ROW_\(event.type.rawValue)")
     }
 
     private var accessibilityDescription: String {
@@ -90,9 +116,51 @@ struct EventRow: View {
             parts.append(note)
         }
         if let who = event.who, !who.isEmpty {
-            parts.append("met \(who)")
+            parts.append(Strings.EventRow.withPerson(who))
         }
         return parts.joined(separator: ", ")
+    }
+}
+
+/// Async thumbnail loader view with caching
+struct ThumbnailView: View {
+    let relativePath: String
+    @State private var image: UIImage?
+    @State private var loadTask: Task<Void, Never>?
+
+    var body: some View {
+        Group {
+            if let image = image {
+                Image(uiImage: image)
+                    .resizable()
+                    .scaledToFill()
+            } else {
+                Rectangle()
+                    .fill(Color(.tertiarySystemBackground))
+                    .overlay {
+                        ProgressView()
+                            .scaleEffect(0.6)
+                    }
+            }
+        }
+        .task(id: relativePath) {
+            await loadImageAsync()
+        }
+        .onDisappear {
+            // Cancel loading if view disappears (scrolled off screen)
+            loadTask?.cancel()
+            loadTask = nil
+        }
+    }
+
+    private func loadImageAsync() async {
+        // Load from cache or disk on background thread
+        if let loaded = await ImageCache.shared.loadImage(relativePath: relativePath, isThumbnail: true) {
+            // Only update if task wasn't cancelled
+            if !Task.isCancelled {
+                image = loaded
+            }
+        }
     }
 }
 
@@ -102,7 +170,7 @@ struct EventRow: View {
             time: Date(),
             type: .plassen,
             location: .buiten,
-            note: "Na het ontbijt"
+            note: "After breakfast"
         ))
 
         Divider()
@@ -110,8 +178,8 @@ struct EventRow: View {
         EventRow(event: PuppyEvent(
             time: Date(),
             type: .training,
-            exercise: "Zit",
-            result: "Goed gedaan!"
+            exercise: "Sit",
+            result: "Good job!"
         ))
 
         Divider()
@@ -119,7 +187,7 @@ struct EventRow: View {
         EventRow(event: PuppyEvent(
             time: Date(),
             type: .sociaal,
-            who: "Buurhond Sasha"
+            who: "Neighbor's dog Sasha"
         ))
     }
 }

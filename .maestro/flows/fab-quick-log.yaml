@@ -1,0 +1,24 @@
+# Test FAB (Floating Action Button) quick logging
+appId: jaapstronks.Ollie-app
+---
+- launchApp
+- waitForAnimationToEnd
+
+# Wait for app to load
+- extendedWaitUntil:
+    visible: "Today|Vandaag"
+    timeout: 5000
+
+# Long press on FAB to open quick menu
+# FAB is positioned in bottom-right corner, above tab bar
+- longPressOn:
+    point: "90%,80%"
+
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/05-fab-menu-open"
+
+# Tap outside to close menu
+- tapOn:
+    point: "50%,30%"
+
+- waitForAnimationToEnd

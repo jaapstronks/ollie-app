@@ -2,8 +2,7 @@
 //  OllieWidgetBundle.swift
 //  OllieWidget
 //
-//  Created by Jaap Stronks on 2/19/26.
-//
+//  Widget bundle registering all Ollie widgets
 
 import WidgetKit
 import SwiftUI
@@ -11,6 +10,8 @@ import SwiftUI
 @main
 struct OllieWidgetBundle: WidgetBundle {
     var body: some Widget {
-        OllieWidget()
+        OllieWidget()      // Potty timer
+        StreakWidget()     // Streak counter
+        CombinedWidget()   // Combined overview
     }
 }

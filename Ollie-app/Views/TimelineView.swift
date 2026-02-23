@@ -4,11 +4,18 @@
 //
 
 import SwiftUI
+import TipKit
 
 /// Main timeline view showing today's events
 struct TimelineView: View {
     @ObservedObject var viewModel: TimelineViewModel
+    @ObservedObject var weatherService: WeatherService
     @State private var dragOffset: CGFloat = 0
+    @StateObject private var mediaCaptureViewModel = MediaCaptureViewModel(mediaStore: MediaStore())
+    @State private var selectedPhotoEvent: PuppyEvent?
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @EnvironmentObject private var spotStore: SpotStore
+    @EnvironmentObject private var locationManager: LocationManager
 
     var body: some View {
         VStack(spacing: 0) {
@@ -27,10 +34,37 @@ struct TimelineView: View {
                 onToday: viewModel.goToToday
             )
 
+            // Trial banner (show during last 7 days of free period)
+            if viewModel.shouldShowTrialBanner {
+                TrialBanner(
+                    daysRemaining: viewModel.freeDaysRemaining,
+                    onTap: { viewModel.sheetCoordinator.presentSheet(.upgradePrompt) }
+                )
+            }
+
+            // Weather section (only show for today)
+            if Calendar.current.isDateInToday(viewModel.currentDate) {
+                WeatherSection(
+                    forecasts: weatherService.upcomingForecasts(hours: 6),
+                    alert: weatherService.smartAlert(predictedPottyTime: viewModel.predictedNextPlasTime),
+                    isLoading: weatherService.isLoading
+                )
+                .padding(.vertical, 8)
+            }
+
             // Daily digest summary
             DigestCard(
                 digest: viewModel.dailyDigest,
                 puppyName: viewModel.puppyName
+            )
+
+            // Upcoming events (meals & walks) - only for today
+            UpcomingEventsCard(
+                items: viewModel.upcomingItems(forecasts: weatherService.forecasts),
+                isToday: viewModel.isShowingToday,
+                onLogEvent: { eventType, suggestedTime in
+                    viewModel.quickLog(type: eventType, suggestedTime: suggestedTime)
+                }
             )
 
             // V3: Potty status hero card with smart predictions
@@ -57,16 +91,23 @@ struct TimelineView: View {
                 EventList(
                     events: viewModel.events,
                     onDelete: viewModel.deleteEvent,
-                    onRefresh: viewModel.loadEvents
+                    onRefresh: viewModel.loadEvents,
+                    onTapPhoto: { event in
+                        selectedPhotoEvent = event
+                    }
                 )
             }
 
             Spacer()
 
-            // Quick log bar (V2: with "+" button)
+            // Quick log bar (V3: smart contextual icons)
             QuickLogBar(
-                onQuickLog: viewModel.quickLog,
-                onShowAllEvents: viewModel.showAllEvents
+                context: viewModel.quickLogContext,
+                canLogEvents: viewModel.canLogEvents,
+                onPottyTap: viewModel.showPottySheet,
+                onQuickLog: { type in viewModel.quickLog(type: type) },
+                onShowAllEvents: viewModel.showAllEvents,
+                onCameraTap: viewModel.openCamera
             )
         }
         // Swipe gestures for day navigation
@@ -80,100 +121,40 @@ struct TimelineView: View {
                     if value.translation.width > threshold {
                         // Swipe right -> previous day
                         HapticFeedback.selection()
-                        withAnimation {
+                        if reduceMotion {
                             viewModel.goToPreviousDay()
+                        } else {
+                            withAnimation {
+                                viewModel.goToPreviousDay()
+                            }
                         }
                     } else if value.translation.width < -threshold && viewModel.canGoForward {
                         // Swipe left -> next day
                         HapticFeedback.selection()
-                        withAnimation {
+                        if reduceMotion {
                             viewModel.goToNextDay()
+                        } else {
+                            withAnimation {
+                                viewModel.goToNextDay()
+                            }
                         }
                     }
                     dragOffset = 0
                 }
         )
-        // V2: QuickLogSheet with time adjustment for all events
-        .sheet(isPresented: $viewModel.showingQuickLogSheet) {
-            if let type = viewModel.pendingEventType {
-                QuickLogSheet(
-                    eventType: type,
-                    onSave: viewModel.logFromQuickSheet,
-                    onCancel: viewModel.cancelQuickLogSheet
-                )
-                .presentationDetents([type.requiresLocation ? .height(480) : .height(380)])
-            }
+        // All sheets from shared modifier
+        .timelineSheetHandling(
+            viewModel: viewModel,
+            mediaCaptureViewModel: mediaCaptureViewModel,
+            selectedPhotoEvent: $selectedPhotoEvent,
+            reduceMotion: reduceMotion,
+            spotStore: spotStore,
+            locationManager: locationManager
+        )
+        .task {
+            // Fetch weather on appear
+            await weatherService.fetchForecasts()
         }
-        // Legacy: kept for backwards compatibility
-        .sheet(isPresented: $viewModel.showingLocationPicker) {
-            LocationPickerSheet(
-                eventType: viewModel.pendingPottyType ?? .plassen,
-                onSelect: viewModel.logWithLocation,
-                onCancel: viewModel.cancelLocationPicker
-            )
-            .presentationDetents([.height(200)])
-        }
-        .sheet(isPresented: $viewModel.showingLogSheet) {
-            if let type = viewModel.selectedEventType {
-                LogEventSheet(eventType: type) { note, who, exercise, result, durationMin in
-                    viewModel.logEvent(
-                        type: type,
-                        note: note,
-                        who: who,
-                        exercise: exercise,
-                        result: result,
-                        durationMin: durationMin
-                    )
-                    viewModel.showingLogSheet = false
-                }
-            }
-        }
-        // V2: All events sheet
-        .sheet(isPresented: $viewModel.showingAllEventsSheet) {
-            AllEventsSheet(
-                onSelect: { type in
-                    viewModel.showingAllEventsSheet = false
-                    // Small delay to let sheet dismiss before showing new one
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                        viewModel.quickLog(type: type)
-                    }
-                },
-                onCancel: {
-                    viewModel.showingAllEventsSheet = false
-                }
-            )
-            .presentationDetents([.medium, .large])
-        }
-        // Delete confirmation dialog
-        .confirmationDialog(
-            "Verwijderen?",
-            isPresented: $viewModel.showingDeleteConfirmation,
-            titleVisibility: .visible
-        ) {
-            Button("Verwijder", role: .destructive) {
-                viewModel.confirmDeleteEvent()
-            }
-            Button("Annuleren", role: .cancel) {
-                viewModel.cancelDeleteEvent()
-            }
-        } message: {
-            if let event = viewModel.eventToDelete {
-                Text("Weet je zeker dat je '\(event.type.label)' van \(event.time.timeString) wilt verwijderen?")
-            }
-        }
-        // Undo banner overlay
-        .overlay(alignment: .bottom) {
-            if viewModel.showingUndoBanner {
-                UndoBanner(
-                    message: "Event verwijderd",
-                    onUndo: viewModel.undoDelete,
-                    onDismiss: viewModel.dismissUndoBanner
-                )
-                .transition(.move(edge: .bottom).combined(with: .opacity))
-                .padding(.bottom, 100) // Above quick log bar
-            }
-        }
-        .animation(.easeInOut(duration: 0.2), value: viewModel.showingUndoBanner)
     }
 }
 
@@ -184,84 +165,35 @@ struct UndoBanner: View {
     let onUndo: () -> Void
     let onDismiss: () -> Void
 
-    @Environment(\.colorScheme) private var colorScheme
-
     var body: some View {
-        HStack(spacing: 12) {
-            Image(systemName: "trash")
-                .font(.system(size: 14, weight: .medium))
-                .foregroundStyle(.secondary)
-
+        HStack {
             Text(message)
-                .font(.subheadline)
-                .foregroundStyle(.primary)
+                .foregroundColor(.white)
 
             Spacer()
 
-            Button("Ongedaan maken") {
+            Button(Strings.Common.undo) {
                 onUndo()
             }
-            .font(.subheadline)
             .fontWeight(.semibold)
-            .foregroundStyle(Color.ollieAccent)
+            .foregroundColor(.yellow)
+            .frame(minWidth: 44, minHeight: 44)
 
             Button {
                 onDismiss()
             } label: {
                 Image(systemName: "xmark")
-                    .font(.system(size: 12, weight: .semibold))
-                    .foregroundStyle(.secondary)
-                    .frame(width: 24, height: 24)
-                    .background(
-                        Circle()
-                            .fill(Color.primary.opacity(colorScheme == .dark ? 0.1 : 0.08))
-                    )
+                    .foregroundColor(.white.opacity(0.7))
+                    .frame(minWidth: 44, minHeight: 44)
             }
         }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 12)
-        .background(glassBackground)
-        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-        .overlay(glassOverlay)
-        .shadow(color: .black.opacity(colorScheme == .dark ? 0.4 : 0.12), radius: 12, y: 6)
+        .padding()
+        .background(Color.black.opacity(0.85))
+        .cornerRadius(12)
         .padding(.horizontal)
-    }
-
-    @ViewBuilder
-    private var glassBackground: some View {
-        ZStack {
-            if colorScheme == .dark {
-                Color.white.opacity(0.1)
-            } else {
-                Color.white.opacity(0.85)
-            }
-
-            LinearGradient(
-                colors: [
-                    Color.white.opacity(colorScheme == .dark ? 0.1 : 0.3),
-                    Color.clear
-                ],
-                startPoint: .top,
-                endPoint: .bottom
-            )
-        }
-        .background(.ultraThinMaterial)
-    }
-
-    @ViewBuilder
-    private var glassOverlay: some View {
-        RoundedRectangle(cornerRadius: 16, style: .continuous)
-            .strokeBorder(
-                LinearGradient(
-                    colors: [
-                        Color.white.opacity(colorScheme == .dark ? 0.2 : 0.5),
-                        Color.white.opacity(colorScheme == .dark ? 0.05 : 0.1)
-                    ],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                ),
-                lineWidth: 0.5
-            )
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(Strings.Timeline.eventDeleted)
+        .accessibilityHint(Strings.Timeline.undoAccessibility)
     }
 }
 
@@ -274,124 +206,190 @@ struct DateHeader: View {
     let onNext: () -> Void
     let onToday: () -> Void
 
-    @Environment(\.colorScheme) private var colorScheme
-
     var body: some View {
-        HStack(spacing: 16) {
-            // Previous day button
+        HStack {
             Button(action: onPrevious) {
                 Image(systemName: "chevron.left")
-                    .font(.system(size: 14, weight: .semibold))
-                    .foregroundStyle(.primary)
-                    .frame(width: 36, height: 36)
-                    .background(glassButtonBackground)
-                    .clipShape(Circle())
-                    .overlay(glassButtonOverlay)
+                    .font(.title2)
+                    .frame(width: 44, height: 44)
+                    .contentShape(Rectangle())
             }
-            .buttonStyle(GlassNavButtonStyle())
+            .accessibilityLabel(Strings.Timeline.previousDay)
 
             Spacer()
 
-            // Date title - tappable to go to today
             Button(action: onToday) {
                 Text(title)
                     .font(.headline)
-                    .fontWeight(.semibold)
+                    .frame(minHeight: 44)
             }
             .buttonStyle(.plain)
+            .accessibilityLabel(Strings.Timeline.dateLabel(date: title))
+            .accessibilityHint(Strings.Timeline.goToTodayHint)
+            .accessibilityAddTraits(.isHeader)
 
             Spacer()
 
-            // Next day button
             Button(action: onNext) {
                 Image(systemName: "chevron.right")
-                    .font(.system(size: 14, weight: .semibold))
-                    .foregroundStyle(.primary)
-                    .frame(width: 36, height: 36)
-                    .background(glassButtonBackground)
-                    .clipShape(Circle())
-                    .overlay(glassButtonOverlay)
+                    .font(.title2)
+                    .frame(width: 44, height: 44)
+                    .contentShape(Rectangle())
             }
-            .buttonStyle(GlassNavButtonStyle())
             .opacity(canGoForward ? 1 : 0.3)
             .disabled(!canGoForward)
+            .accessibilityLabel(Strings.Timeline.nextDay)
         }
-        .padding(.horizontal, 20)
-        .padding(.vertical, 12)
-    }
-
-    @ViewBuilder
-    private var glassButtonBackground: some View {
-        ZStack {
-            if colorScheme == .dark {
-                Color.white.opacity(0.08)
-            } else {
-                Color.white.opacity(0.6)
-            }
-        }
-        .background(.thinMaterial)
-    }
-
-    @ViewBuilder
-    private var glassButtonOverlay: some View {
-        Circle()
-            .strokeBorder(
-                LinearGradient(
-                    colors: [
-                        Color.white.opacity(colorScheme == .dark ? 0.15 : 0.4),
-                        Color.white.opacity(colorScheme == .dark ? 0.03 : 0.1)
-                    ],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                ),
-                lineWidth: 0.5
-            )
+        .padding()
+        .background(Color(.systemBackground))
     }
 }
 
-/// Interactive button style for navigation buttons
-struct GlassNavButtonStyle: ButtonStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .scaleEffect(configuration.isPressed ? 0.9 : 1.0)
-            .opacity(configuration.isPressed ? 0.7 : 1.0)
-            .animation(.spring(response: 0.25, dampingFraction: 0.6), value: configuration.isPressed)
-    }
-}
+/// Unified timeline item - either a regular event or a sleep session
+enum TimelineItem: Identifiable {
+    case event(PuppyEvent)
+    case sleepSession(SleepSession, note: String?)
 
-struct StatsBar: View {
-    let timeSinceLastPlas: String
-
-    var body: some View {
-        HStack {
-            Label(timeSinceLastPlas, systemImage: "clock")
-                .font(.subheadline)
-                .foregroundColor(.secondary)
+    var id: UUID {
+        switch self {
+        case .event(let event): return event.id
+        case .sleepSession(let session, _): return session.id
         }
-        .padding(.horizontal)
-        .padding(.vertical, 8)
-        .background(Color(.secondarySystemBackground))
+    }
+
+    var sortTime: Date {
+        switch self {
+        case .event(let event): return event.time
+        case .sleepSession(let session, _): return session.startTime
+        }
     }
 }
 
 struct EventList: View {
     let events: [PuppyEvent]
     let onDelete: (PuppyEvent) -> Void
+    let onDeleteSession: ((SleepSession) -> Void)?
     let onRefresh: () -> Void
+    let onTapPhoto: (PuppyEvent) -> Void
+
+    private let swipeToDeleteTip = SwipeToDeleteTip()
+
+    init(
+        events: [PuppyEvent],
+        onDelete: @escaping (PuppyEvent) -> Void,
+        onRefresh: @escaping () -> Void,
+        onTapPhoto: @escaping (PuppyEvent) -> Void,
+        onDeleteSession: ((SleepSession) -> Void)? = nil
+    ) {
+        self.events = events
+        self.onDelete = onDelete
+        self.onDeleteSession = onDeleteSession
+        self.onRefresh = onRefresh
+        self.onTapPhoto = onTapPhoto
+    }
+
+    /// Build unified timeline by grouping sleep/wake events into sessions
+    private var timelineItems: [TimelineItem] {
+        // Build sleep sessions
+        let sessions = SleepSession.buildSessions(from: events)
+
+        // Get IDs of events that are part of sessions
+        var sessionEventIds: Set<UUID> = []
+        var sessionNotes: [UUID: String] = [:]
+
+        for session in sessions {
+            sessionEventIds.insert(session.startEventId)
+            if let endId = session.endEventId {
+                sessionEventIds.insert(endId)
+            }
+            // Get note from the sleep event
+            if let sleepEvent = events.first(where: { $0.id == session.startEventId }),
+               let note = sleepEvent.note {
+                sessionNotes[session.id] = note
+            }
+        }
+
+        // Build timeline items
+        var items: [TimelineItem] = []
+
+        // Add non-sleep events
+        for event in events where !sessionEventIds.contains(event.id) {
+            items.append(.event(event))
+        }
+
+        // Add sleep sessions
+        for session in sessions {
+            items.append(.sleepSession(session, note: sessionNotes[session.id]))
+        }
+
+        // Sort by time (most recent first, or oldest first depending on preference)
+        return items.sorted { $0.sortTime < $1.sortTime }
+    }
 
     var body: some View {
         ScrollViewReader { proxy in
             List {
-                ForEach(events) { event in
-                    EventRow(event: event)
-                        .id(event.id)
+                // Tip for swipe-to-delete (shown once at top of list)
+                TipView(swipeToDeleteTip)
+                    .listRowSeparator(.hidden)
+                    .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
+
+                ForEach(timelineItems) { item in
+                    switch item {
+                    case .event(let event):
+                        EventRow(event: event)
+                            .id(event.id)
+                            .listRowInsets(EdgeInsets())
+                            .listRowSeparator(.hidden)
+                            .onTapGesture {
+                                if event.photo != nil {
+                                    onTapPhoto(event)
+                                }
+                            }
+
+                    case .sleepSession(let session, let note):
+                        SleepSessionRow(
+                            session: session,
+                            note: note,
+                            onEditStart: {},
+                            onEditEnd: {},
+                            onDelete: {
+                                if let deleteSession = onDeleteSession {
+                                    deleteSession(session)
+                                } else {
+                                    // Fallback: delete individual events
+                                    if let sleepEvent = events.first(where: { $0.id == session.startEventId }) {
+                                        onDelete(sleepEvent)
+                                    }
+                                    if let endId = session.endEventId,
+                                       let wakeEvent = events.first(where: { $0.id == endId }) {
+                                        onDelete(wakeEvent)
+                                    }
+                                }
+                            }
+                        )
+                        .id(session.id)
                         .listRowInsets(EdgeInsets())
                         .listRowSeparator(.hidden)
+                    }
                 }
                 .onDelete { indexSet in
                     for index in indexSet {
+                        let item = timelineItems[index]
                         HapticFeedback.warning()
-                        onDelete(events[index])
+                        switch item {
+                        case .event(let event):
+                            onDelete(event)
+                        case .sleepSession(let session, _):
+                            // Delete both sleep and wake events
+                            if let sleepEvent = events.first(where: { $0.id == session.startEventId }) {
+                                onDelete(sleepEvent)
+                            }
+                            if let endId = session.endEventId,
+                               let wakeEvent = events.first(where: { $0.id == endId }) {
+                                onDelete(wakeEvent)
+                            }
+                        }
                     }
                 }
             }
@@ -400,10 +398,10 @@ struct EventList: View {
                 onRefresh()
             }
             .onChange(of: events.count) { _, _ in
-                // Scroll to latest event
-                if let lastEvent = events.last {
+                // Scroll to latest item
+                if let lastItem = timelineItems.last {
                     withAnimation {
-                        proxy.scrollTo(lastEvent.id, anchor: .bottom)
+                        proxy.scrollTo(lastItem.id, anchor: .bottom)
                     }
                 }
             }
@@ -412,6 +410,8 @@ struct EventList: View {
 }
 
 struct EmptyTimelineView: View {
+    private let quickLogBarTip = QuickLogBarTip()
+
     var body: some View {
         VStack(spacing: 16) {
             Spacer()
@@ -420,13 +420,17 @@ struct EmptyTimelineView: View {
                 .font(.system(size: 60))
                 .foregroundColor(.secondary)
 
-            Text("Nog geen gebeurtenissen")
+            Text(Strings.Timeline.noEvents)
                 .font(.headline)
                 .foregroundColor(.secondary)
 
-            Text("Tik hieronder om de eerste te loggen")
+            Text(Strings.Timeline.tapToLog)
                 .font(.subheadline)
                 .foregroundColor(.secondary)
+
+            // Tip for using the quick log bar
+            TipView(quickLogBarTip)
+                .padding(.horizontal)
 
             Spacer()
         }
@@ -438,5 +442,6 @@ struct EmptyTimelineView: View {
     let eventStore = EventStore()
     let profileStore = ProfileStore()
     let viewModel = TimelineViewModel(eventStore: eventStore, profileStore: profileStore)
-    return TimelineView(viewModel: viewModel)
+    let weatherService = WeatherService()
+    return TimelineView(viewModel: viewModel, weatherService: weatherService)
 }

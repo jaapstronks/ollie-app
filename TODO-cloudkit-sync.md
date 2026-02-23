@@ -1,13 +1,12 @@
-# TODO: CloudKit Sync (PRIORITY — do before v2 features)
+# TODO: CloudKit Sync
 
-Replace local-only JSONL storage with CloudKit so multiple devices share the same data. Do this BEFORE building v2 features to avoid refactoring the storage layer later.
+## Status: Code Complete - Manual Xcode Setup Required
 
-## Priority Note
-This should be implemented BEFORE TODO-v2.md. The EventStore abstraction is already clean, so this is mostly replacing the backend, not rewriting the app.
+The CloudKit integration code has been implemented. You need to complete the Xcode setup manually.
 
-## Step 0: Enable CloudKit in Xcode
+## Manual Steps Required in Xcode
 
-This must be done manually in Xcode (not via code):
+### Step 1: Enable iCloud Capability
 
 1. Open `Ollie-app.xcodeproj` in Xcode
 2. Click on the **Ollie-app** target (blue icon, top of file navigator)
@@ -20,141 +19,120 @@ This must be done manually in Xcode (not via code):
    - Add: `iCloud.nl.jaapstronks.Ollie`
 7. Xcode will auto-create the container in your Apple Developer account
 
-That's it. Xcode modifies the `.entitlements` file and project settings automatically. Commit those changes.
+### Step 2: Add Background Modes Capability (if not auto-added)
 
-## Step 1: CloudKit Data Model
+1. In **"Signing & Capabilities"** tab, click **"+ Capability"**
+2. Add **"Background Modes"**
+3. Check:
+   - **"Background fetch"**
+   - **"Remote notifications"**
 
-Use a single record type `PuppyEvent` in CloudKit:
+### Step 3: Add Entitlements File to Target
 
-```
-Record Type: PuppyEvent
-Fields:
-  - eventTime (Date/Time)     — the event timestamp
-  - eventType (String)        — "plassen", "eten", etc.
-  - location (String?)        — "buiten" / "binnen"
-  - note (String?)
-  - who (String?)
-  - exercise (String?)
-  - result (String?)
-  - durationMin (Int?)
-  - photo (Asset?)            — for future photo support
-  - video (Asset?)
-  - deviceId (String)         — which device created it (for conflict resolution)
-  - localId (String)          — UUID from local creation (for dedup)
-```
+1. In Xcode, go to **Build Settings** for the Ollie-app target
+2. Search for "Code Signing Entitlements"
+3. Set it to: `Ollie-app/Ollie-app.entitlements`
 
-Use a **CKRecordZone** (custom zone) for the shared data:
-- Zone name: `"OllieEvents"`
-- This enables atomic commits and change tracking
+### Step 4: Build and Test
 
-For sharing between users: use a **CKShare** on the custom zone. This lets Jaap invite Marjolein via iCloud, and both can read/write.
+1. Build the app (`Cmd+B`)
+2. Run on a real device (CloudKit doesn't work fully in Simulator)
+3. Check Console for "CloudKit setup completed successfully"
 
-## Step 2: Refactor EventStore
+## What Was Implemented
 
-Keep the `EventStore` interface the same but swap the backend:
+### Files Created/Modified
 
-```swift
-@MainActor
-final class EventStore {
-    static let shared = EventStore()
-    
-    private let container = CKContainer(identifier: "iCloud.nl.jaapstronks.Ollie")
-    private let zoneName = "OllieEvents"
-    
-    // Keep local cache (JSONL files) as offline fallback
-    // CloudKit is source of truth, local is cache
-    
-    func loadEvents(for date: Date) async -> [PuppyEvent]
-    func saveEvent(_ event: PuppyEvent) async throws
-    func syncFromCloud() async throws
-}
-```
+- **`Services/CloudKitService.swift`** (NEW)
+  - Full CloudKit sync service
+  - Zone management (custom zone "OllieEvents")
+  - Event save/fetch/delete
+  - CKShare support for partner sharing
+  - Change tracking with server tokens
+  - Offline queue for pending operations
+  - Migration of existing local data
 
-**Strategy: local-first with cloud sync**
-1. Save locally first (instant, works offline)
-2. Push to CloudKit in background
-3. Subscribe to CloudKit changes (CKSubscription) for incoming changes from other devices
-4. On app launch: pull latest changes from cloud
+- **`Services/EventStore.swift`** (MODIFIED)
+  - Integrated with CloudKitService
+  - Local-first architecture (save locally, sync to cloud)
+  - Merge logic for local + cloud events
+  - Auto-sync on app launch and foreground
 
-This way the app always feels fast and works offline.
+- **`Views/CloudSharingView.swift`** (NEW)
+  - UICloudSharingController wrapper
+  - ShareSettingsSection for Settings
+  - SyncStatusView component
 
-## Step 3: Sharing Setup
+- **`Views/SettingsView.swift`** (MODIFIED)
+  - Added "Delen" (sharing) section
+  - Added "Synchronisatie" section with sync status
 
-To share data between Jaap and Marjolein:
+- **`Ollie_appApp.swift`** (MODIFIED)
+  - AppDelegate for remote notifications
+  - Foreground sync trigger
 
-```swift
-// Create a CKShare for the OllieEvents zone
-let share = CKShare(recordZoneID: zoneID)
-share[CKShare.SystemFieldKey.title] = "Ollie Events"
-share.publicPermission = .none  // invite-only
+- **`Ollie-app.entitlements`** (NEW)
+  - CloudKit container entitlement
+  - Push notification entitlement
 
-// Use UICloudSharingController to send invite
-// Marjolein accepts via iCloud → both see same data
-```
+- **`Info.plist`** (MODIFIED)
+  - Background modes for remote-notification and fetch
 
-Add a "Delen" button in settings that presents the `UICloudSharingController`. Marjolein gets a link, taps it, done.
-
-## Step 4: Change Tracking
-
-Use `CKFetchRecordZoneChangesOperation` to efficiently sync:
-- Store a `serverChangeToken` locally
-- On each sync, only fetch changes since last token
-- This is cheap and fast — no full re-download
-
-Subscribe to push notifications for changes:
-```swift
-let subscription = CKRecordZoneSubscription(zoneID: zoneID)
-subscription.notificationInfo = CKSubscription.NotificationInfo()
-subscription.notificationInfo?.shouldSendContentAvailable = true  // silent push
-```
-
-This triggers a background sync when Marjolein logs an event → it appears on Jaap's phone within seconds.
-
-## Step 5: Migration
-
-For existing local data (from MVP development):
-- On first launch after CloudKit is enabled, upload all local JSONL events to CloudKit
-- Use `localId` (UUID) for deduplication — don't create duplicates
-- After migration, local files become a cache
-
-## Step 6: JSONL Export (keep compatibility)
-
-Keep the ability to export/import JSONL for web app compatibility:
-- "Exporteer data" in settings → generates JSONL files
-- "Importeer data" → reads JSONL and pushes to CloudKit
-- This maintains the bridge to the web app / GitHub repo
-
-## Architecture Summary
+## Architecture
 
 ```
-┌─────────────┐     ┌─────────────┐
-│  Jaap's      │     │  Marjolein's │
-│  iPhone      │     │  iPhone      │
-│             │     │             │
-│  EventStore  │◄───►│  EventStore  │
-│  (local cache)│     │  (local cache)│
-└──────┬───────┘     └──────┬───────┘
-       │                     │
-       └──────┬──────────────┘
-              │
-       ┌──────▼───────┐
-       │   CloudKit     │
-       │  (shared zone) │
-       │  CKShare       │
-       └───────────────┘
-              │
-       ┌──────▼───────┐
-       │  Web app       │
-       │  (JSONL export) │
-       └───────────────┘
+┌─────────────────┐     ┌─────────────────┐
+│   Jaap's        │     │   Marjolein's   │
+│   iPhone        │     │   iPhone        │
+│                 │     │                 │
+│   EventStore    │◄───►│   EventStore    │
+│   (local cache) │     │   (local cache) │
+└────────┬────────┘     └────────┬────────┘
+         │                       │
+         └───────┬───────────────┘
+                 │
+          ┌──────▼───────┐
+          │   CloudKit   │
+          │ Private DB   │
+          │   CKShare    │
+          └──────────────┘
 ```
 
-## Done Criteria
+**Key features:**
+- **Local-first**: Events save instantly to JSONL, then sync to cloud
+- **Offline support**: App works without network, syncs when online
+- **Multi-device**: Changes sync across all your devices
+- **Partner sharing**: CKShare allows inviting partner via iCloud
+- **Real-time updates**: Silent push notifications trigger background sync
+
+## How Sharing Works
+
+1. **Owner** (Jaap) taps "Deel met partner" in Settings
+2. System shows share sheet with invite options (Messages, Mail, etc.)
+3. **Participant** (Marjolein) receives invite link, taps it
+4. Her phone opens Ollie app, CloudKit links her to the shared zone
+5. Both can now log events, both see all events
+
+The participant's data is stored in the owner's private database via CKShare. The participant accesses it via their shared database.
+
+## Testing Checklist
+
 - [ ] CloudKit capability enabled in Xcode
-- [ ] Events sync between two devices
-- [ ] Sharing works (Jaap invites Marjolein)
-- [ ] Offline logging works (syncs when back online)
+- [ ] App builds without errors
+- [ ] Events save to CloudKit (check CloudKit Dashboard)
+- [ ] Events sync between two devices (same iCloud account)
+- [ ] Sharing works (invite partner, they accept)
+- [ ] Offline logging works (airplane mode, then back online)
 - [ ] Existing local data migrated to CloudKit
 - [ ] App still works without network
 
-Delete this file when done.
+## CloudKit Dashboard
+
+To inspect your CloudKit data:
+1. Go to https://icloud.developer.apple.com/
+2. Sign in with your Apple Developer account
+3. Select "CloudKit Database"
+4. Choose container: `iCloud.nl.jaapstronks.Ollie`
+5. Browse "Private Database" > "OllieEvents" zone
+
+Delete this file when setup is complete and tested.

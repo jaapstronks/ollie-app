@@ -1,0 +1,41 @@
+# Test day navigation (swipe and buttons)
+appId: jaapstronks.Ollie-app
+---
+- launchApp
+- waitForAnimationToEnd
+
+# Wait for app to load
+- extendedWaitUntil:
+    visible: "Today|Vandaag"
+    timeout: 5000
+
+# Screenshot of today
+- takeScreenshot: "screenshots/nav-01-today"
+
+# Navigate to previous day via swipe right
+- swipe:
+    start: "20%,50%"
+    end: "80%,50%"
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/nav-02-yesterday"
+
+# Navigate to day before
+- swipe:
+    start: "20%,50%"
+    end: "80%,50%"
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/nav-03-two-days-ago"
+
+# Navigate forward via swipe left
+- swipe:
+    start: "80%,50%"
+    end: "20%,50%"
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/nav-04-back-one-day"
+
+# Return to today
+- swipe:
+    start: "80%,50%"
+    end: "20%,50%"
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/nav-05-back-to-today"

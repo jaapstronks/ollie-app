@@ -30,7 +30,7 @@ struct PatternAnalysisCard: View {
     }
 
     private var noDataView: some View {
-        Text("Nog niet genoeg data voor patronen")
+        Text(Strings.Patterns.insufficientData)
             .font(.subheadline)
             .foregroundColor(.secondary)
             .padding()
@@ -48,6 +48,7 @@ struct TriggerRow: View {
                 Image(systemName: trigger.iconName)
                     .font(.title3)
                     .foregroundStyle(trigger.iconColor)
+                    .accessibilityHidden(true)
 
                 Text(trigger.name)
                     .font(.subheadline)
@@ -64,22 +65,25 @@ struct TriggerRow: View {
                     .foregroundColor(.secondary)
             }
 
-            // Success rate bar
+            // Success rate bar - minimum 16pt height for accessibility
             GeometryReader { geometry in
                 ZStack(alignment: .leading) {
                     // Background bar
-                    RoundedRectangle(cornerRadius: 4)
+                    RoundedRectangle(cornerRadius: 8)
                         .fill(Color.gray.opacity(0.2))
-                        .frame(height: 8)
+                        .frame(height: 16)
 
                     // Success portion (outdoor)
-                    RoundedRectangle(cornerRadius: 4)
+                    RoundedRectangle(cornerRadius: 8)
                         .fill(successColor)
-                        .frame(width: geometry.size.width * CGFloat(trigger.successRate) / 100, height: 8)
+                        .frame(width: geometry.size.width * CGFloat(trigger.successRate) / 100, height: 16)
                 }
             }
-            .frame(height: 8)
+            .frame(height: 16)
         }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(trigger.name): \(Strings.Patterns.successRate(trigger.successRate)) \(Strings.Patterns.percentSuccess)")
+        .accessibilityValue("\(Strings.Patterns.count(trigger.totalCount)) \(Strings.Patterns.timesMeasured)")
     }
 
     private var successColor: Color {
@@ -128,6 +132,7 @@ struct CompactTriggerBadge: View {
             Image(systemName: trigger.iconName)
                 .font(.caption)
                 .foregroundStyle(trigger.iconColor)
+                .accessibilityHidden(true)
 
             Text("\(trigger.successRate)%")
                 .font(.caption)
@@ -138,6 +143,8 @@ struct CompactTriggerBadge: View {
         .padding(.vertical, 4)
         .background(Color(.tertiarySystemBackground))
         .cornerRadius(8)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(trigger.name): \(Strings.Patterns.successRate(trigger.successRate))")
     }
 
     private var successColor: Color {
@@ -161,10 +168,10 @@ struct CompactTriggerBadge: View {
         PatternAnalysisCard(
             analysis: PatternAnalysis(
                 triggers: [
-                    PatternTrigger(id: "sleep", name: "Na slaap", emoji: "😴", outdoorCount: 8, indoorCount: 2),
-                    PatternTrigger(id: "meal", name: "Na eten", emoji: "🍽️", outdoorCount: 5, indoorCount: 1),
-                    PatternTrigger(id: "walk", name: "Bij wandeling", emoji: "🚶", outdoorCount: 12, indoorCount: 0),
-                    PatternTrigger(id: "water", name: "Na drinken", emoji: "💧", outdoorCount: 3, indoorCount: 2)
+                    PatternTrigger(id: "sleep", name: "Na slaap", iconName: "moon.zzz.fill", iconColor: .ollieSleep, outdoorCount: 8, indoorCount: 2),
+                    PatternTrigger(id: "meal", name: "Na eten", iconName: "fork.knife", iconColor: .ollieAccent, outdoorCount: 5, indoorCount: 1),
+                    PatternTrigger(id: "walk", name: "Bij wandeling", iconName: "figure.walk", iconColor: .ollieAccent, outdoorCount: 12, indoorCount: 0),
+                    PatternTrigger(id: "water", name: "Na drinken", iconName: "drop.fill", iconColor: .ollieInfo, outdoorCount: 3, indoorCount: 2)
                 ],
                 periodDays: 7
             )
@@ -189,9 +196,9 @@ struct CompactTriggerBadge: View {
         PatternAnalysisCompact(
             analysis: PatternAnalysis(
                 triggers: [
-                    PatternTrigger(id: "sleep", name: "Na slaap", emoji: "😴", outdoorCount: 8, indoorCount: 2),
-                    PatternTrigger(id: "meal", name: "Na eten", emoji: "🍽️", outdoorCount: 5, indoorCount: 1),
-                    PatternTrigger(id: "walk", name: "Bij wandeling", emoji: "🚶", outdoorCount: 12, indoorCount: 0)
+                    PatternTrigger(id: "sleep", name: "Na slaap", iconName: "moon.zzz.fill", iconColor: .ollieSleep, outdoorCount: 8, indoorCount: 2),
+                    PatternTrigger(id: "meal", name: "Na eten", iconName: "fork.knife", iconColor: .ollieAccent, outdoorCount: 5, indoorCount: 1),
+                    PatternTrigger(id: "walk", name: "Bij wandeling", iconName: "figure.walk", iconColor: .ollieAccent, outdoorCount: 12, indoorCount: 0)
                 ],
                 periodDays: 7
             )

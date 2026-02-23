@@ -136,26 +136,6 @@ struct PredictionCalculations {
         )
     }
 
-    /// Get emoji for urgency level (legacy)
-    static func emoji(for urgency: PottyUrgency) -> String {
-        switch urgency {
-        case .justWent:
-            return "✅"
-        case .normal:
-            return "🚽"
-        case .attention:
-            return "🚽"
-        case .soon:
-            return "⚠️"
-        case .overdue:
-            return "🚨"
-        case .postAccident:
-            return "⚠️"
-        case .unknown:
-            return "❓"
-        }
-    }
-
     /// Get SF Symbol icon name for urgency level
     static func iconName(for urgency: PottyUrgency) -> String {
         switch urgency {
@@ -200,29 +180,29 @@ struct PredictionCalculations {
     static func displayText(for prediction: PottyPrediction, puppyName: String = "Puppy") -> String {
         switch prediction.urgency {
         case .justWent:
-            return "Net geplast"
+            return Strings.Prediction.justPeed
         case .normal(let remaining):
-            return "Volgende over ~\(remaining) min"
+            return Strings.Prediction.nextIn(remaining)
         case .attention(let remaining):
-            return "Volgende over ~\(remaining) min"
+            return Strings.Prediction.nextIn(remaining)
         case .soon(let remaining):
             if remaining <= 0 {
-                return "Binnenkort!"
+                return Strings.Prediction.soon
             }
-            return "Nog ~\(remaining) min"
+            return Strings.TimeFormat.stillMinutes(remaining)
         case .overdue(let overdue):
             if overdue < 5 {
-                return "\(puppyName) moet nu plassen!"
+                return Strings.Prediction.needsToPeeNow(name: puppyName)
             }
-            return "\(puppyName) moet nu plassen! (\(overdue) min over tijd)"
+            return Strings.Prediction.needsToPeeNowOverdue(name: puppyName, minutes: overdue)
         case .postAccident:
-            return "Na ongelukje — nu naar buiten!"
+            return Strings.Prediction.afterAccidentGoOutside
         case .unknown:
-            return "Nog geen data"
+            return Strings.TimeFormat.noData
         }
     }
 
-    /// Get subtitle text with trigger info (Dutch)
+    /// Get subtitle text with trigger info
     static func subtitleText(for prediction: PottyPrediction) -> String? {
         guard let minutes = prediction.minutesSinceLast else { return nil }
 
@@ -230,30 +210,30 @@ struct PredictionCalculations {
 
         // Time since last
         if minutes < 60 {
-            parts.append("\(minutes) min geleden")
+            parts.append(Strings.TimeFormat.minutesAgo(minutes))
         } else {
             let hours = minutes / 60
             let mins = minutes % 60
             if mins == 0 {
-                parts.append("\(hours) uur geleden")
+                parts.append(Strings.TimeFormat.hoursAgo(hours))
             } else {
-                parts.append("\(hours)u \(mins)m geleden")
+                parts.append(Strings.TimeFormat.hoursMinutesAgo(hours: hours, minutes: mins))
             }
         }
 
         // Add trigger info
         switch prediction.trigger {
         case .postMeal(let ago):
-            parts.append("(na eten \(ago)m geleden)")
+            parts.append(Strings.TimeFormat.afterEatingAgo(ago))
         case .postSleep(let ago):
-            parts.append("(na dutje \(ago)m geleden)")
+            parts.append(Strings.TimeFormat.afterNapAgo(ago))
         case .none:
             break
         }
 
         // Add indoor warning
         if prediction.lastWasIndoor {
-            parts.append("- binnen")
+            parts.append(Strings.TimeFormat.inside)
         }
 
         return parts.joined(separator: " ")

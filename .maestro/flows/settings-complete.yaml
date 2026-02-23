@@ -1,0 +1,67 @@
+# Complete Settings Tests
+# Tests: Opening settings, profile view, navigation
+appId: nl.jaapstronks.Ollie
+---
+- launchApp
+- waitForAnimationToEnd
+
+# Wait for app to load
+- extendedWaitUntil:
+    visible: "Today|Vandaag"
+    timeout: 5000
+
+# =====================
+# 1. Open Settings via Gear Icon
+# =====================
+- tapOn:
+    id: "settings_button"
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/settings-01-opened"
+
+# Should see Settings title
+- extendedWaitUntil:
+    visible: "Settings|Instellingen"
+    timeout: 3000
+
+# =====================
+# 2. Verify Profile Section
+# =====================
+- assertVisible: "Profile|Profiel"
+- takeScreenshot: "screenshots/settings-02-profile-section"
+
+# =====================
+# 3. Scroll Through Settings
+# =====================
+- scroll
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/settings-03-scrolled"
+
+# Continue scrolling
+- scroll
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/settings-04-more-settings"
+
+# =====================
+# 4. Scroll back up
+# =====================
+- swipe:
+    start: "50%,30%"
+    end: "50%,80%"
+- waitForAnimationToEnd
+- swipe:
+    start: "50%,30%"
+    end: "50%,80%"
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/settings-05-back-to-top"
+
+# =====================
+# 5. Close Settings via Done button
+# =====================
+- tapOn: "Done|Klaar"
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/settings-06-closed"
+
+# Verify we're back on Today view
+- extendedWaitUntil:
+    visible: "Today|Vandaag"
+    timeout: 5000

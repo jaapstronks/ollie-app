@@ -1,0 +1,191 @@
+import SwiftUI
+
+/// Compact horizontal weather strip showing upcoming hours
+struct WeatherBar: View {
+    let forecasts: [HourForecast]
+
+    var body: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 16) {
+                ForEach(forecasts) { hour in
+                    WeatherHourCell(forecast: hour)
+                }
+            }
+            .padding(.horizontal)
+        }
+    }
+}
+
+/// Single hour cell in the weather bar
+struct WeatherHourCell: View {
+    let forecast: HourForecast
+
+    var body: some View {
+        VStack(spacing: 4) {
+            // Hour
+            Text(forecast.time, format: .dateTime.hour())
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+
+            // Weather icon
+            Image(systemName: forecast.icon)
+                .font(.title3)
+                .symbolRenderingMode(.multicolor)
+
+            // Temperature
+            Text("\(Int(forecast.temperature))°")
+                .font(.caption)
+                .fontWeight(.medium)
+
+            // Rain probability (only show if > 10%)
+            if forecast.precipProbability > 10 {
+                HStack(spacing: 2) {
+                    Text("\(forecast.precipProbability)%")
+                    Image(systemName: "drop.fill")
+                        .font(.caption2)
+                }
+                .font(.caption2)
+                .foregroundStyle(forecast.rainWarning ? .red : .secondary)
+            }
+
+            // Wind warning indicator
+            if forecast.windWarning {
+                HStack(spacing: 2) {
+                    Image(systemName: "wind")
+                        .font(.caption2)
+                    Text("\(Int(forecast.windSpeed))")
+                        .font(.caption2)
+                }
+                .foregroundStyle(.orange)
+            }
+        }
+        .frame(minWidth: 44)
+    }
+}
+
+/// Weather alert banner
+struct WeatherAlertBanner: View {
+    let alert: WeatherAlert
+
+    var body: some View {
+        HStack(spacing: 8) {
+            Image(systemName: alert.icon)
+                .font(.title3)
+                .symbolRenderingMode(.multicolor)
+
+            Text(alert.message)
+                .font(.subheadline)
+                .foregroundStyle(textColor)
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 10)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(backgroundColor)
+        .clipShape(RoundedRectangle(cornerRadius: 10))
+    }
+
+    private var backgroundColor: Color {
+        switch alert.type {
+        case .warning: return Color.orange.opacity(0.15)
+        case .info: return Color.blue.opacity(0.15)
+        case .positive: return Color.green.opacity(0.15)
+        }
+    }
+
+    private var textColor: Color {
+        switch alert.type {
+        case .warning: return .orange
+        case .info: return .primary
+        case .positive: return .green
+        }
+    }
+}
+
+/// Weather section combining bar and optional alert
+struct WeatherSection: View {
+    let forecasts: [HourForecast]
+    let alert: WeatherAlert?
+    let isLoading: Bool
+
+    var body: some View {
+        VStack(spacing: 8) {
+            if isLoading && forecasts.isEmpty {
+                // Loading state
+                HStack(spacing: 8) {
+                    ProgressView()
+                        .scaleEffect(0.8)
+                    Text(Strings.Weather.loading)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                .padding(.vertical, 8)
+            } else if !forecasts.isEmpty {
+                // Alert banner (if any)
+                if let alert = alert {
+                    WeatherAlertBanner(alert: alert)
+                        .padding(.horizontal)
+                }
+
+                // Weather bar
+                WeatherBar(forecasts: forecasts)
+            }
+            // When offline with no cached data, show nothing (graceful degradation)
+        }
+    }
+}
+
+// MARK: - Previews
+
+#Preview("Weather Bar") {
+    let sampleForecasts = [
+        HourForecast(time: Date(), temperature: 12, precipProbability: 10, weatherCode: 2, windSpeed: 15),
+        HourForecast(time: Date().addingTimeInterval(3600), temperature: 13, precipProbability: 30, weatherCode: 3, windSpeed: 20),
+        HourForecast(time: Date().addingTimeInterval(7200), temperature: 11, precipProbability: 80, weatherCode: 61, windSpeed: 25),
+        HourForecast(time: Date().addingTimeInterval(10800), temperature: 10, precipProbability: 20, weatherCode: 2, windSpeed: 12),
+        HourForecast(time: Date().addingTimeInterval(14400), temperature: 9, precipProbability: 5, weatherCode: 0, windSpeed: 8),
+        HourForecast(time: Date().addingTimeInterval(18000), temperature: 8, precipProbability: 0, weatherCode: 0, windSpeed: 5)
+    ]
+
+    VStack {
+        WeatherBar(forecasts: sampleForecasts)
+    }
+    .padding()
+}
+
+#Preview("Weather Alert - Rain") {
+    WeatherAlertBanner(alert: WeatherAlert(
+        icon: "cloud.rain.fill",
+        message: "Regen verwacht om 15:00 — misschien nu alvast even naar buiten?",
+        type: .warning
+    ))
+    .padding()
+}
+
+#Preview("Weather Alert - Good") {
+    WeatherAlertBanner(alert: WeatherAlert(
+        icon: "sun.max.fill",
+        message: "Droog tot 16:00 — goed moment voor een wandeling",
+        type: .positive
+    ))
+    .padding()
+}
+
+#Preview("Weather Section") {
+    let sampleForecasts = [
+        HourForecast(time: Date(), temperature: 12, precipProbability: 10, weatherCode: 2, windSpeed: 15),
+        HourForecast(time: Date().addingTimeInterval(3600), temperature: 13, precipProbability: 30, weatherCode: 3, windSpeed: 20),
+        HourForecast(time: Date().addingTimeInterval(7200), temperature: 11, precipProbability: 80, weatherCode: 61, windSpeed: 25),
+        HourForecast(time: Date().addingTimeInterval(10800), temperature: 10, precipProbability: 20, weatherCode: 2, windSpeed: 12)
+    ]
+
+    WeatherSection(
+        forecasts: sampleForecasts,
+        alert: WeatherAlert(
+            icon: "cloud.rain.fill",
+            message: "Regen verwacht om 15:00",
+            type: .warning
+        ),
+        isLoading: false
+    )
+    .padding()
+}

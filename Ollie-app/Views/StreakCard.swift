@@ -18,7 +18,6 @@ struct StreakCard: View {
         // Only show if there's relevant streak data
         if streakInfo.currentStreak > 0 || streakInfo.bestStreak > 0 {
             cardContent
-                .padding(.horizontal, 16)
                 .padding(.vertical, 4)
         }
     }
@@ -27,33 +26,43 @@ struct StreakCard: View {
     private var cardContent: some View {
         HStack(spacing: 12) {
             // Icon with glass circle background
-            Image(systemName: StreakCalculations.iconName(for: streakInfo.currentStreak))
-                .font(.system(size: 20, weight: .semibold))
-                .foregroundStyle(StreakCalculations.iconColor(for: streakInfo.currentStreak))
-                .frame(width: 40, height: 40)
-                .background(iconBackground)
-                .clipShape(Circle())
-                .overlay(iconOverlay)
+            GlassIconCircle(tintColor: progressColor) {
+                Image(systemName: StreakCalculations.iconName(for: streakInfo.currentStreak))
+                    .font(.system(size: 20, weight: .semibold))
+                    .foregroundStyle(StreakCalculations.iconColor(for: streakInfo.currentStreak))
+            }
+            .accessibilityHidden(true)
 
             VStack(alignment: .leading, spacing: 3) {
                 // Main streak text
                 HStack(spacing: 4) {
-                    Text("\(streakInfo.currentStreak)x buiten")
-                        .font(.subheadline)
-                        .fontWeight(.semibold)
-                        .foregroundStyle(textColor)
-
-                    if streakInfo.isOnFire {
-                        Text("op rij!")
+                    if streakInfo.currentStreak > 0 {
+                        Text(Strings.Streak.outdoorStreak(count: streakInfo.currentStreak))
                             .font(.subheadline)
                             .fontWeight(.semibold)
-                            .foregroundStyle(Color.ollieAccent)
+                            .foregroundStyle(textColor)
+
+                        if streakInfo.isOnFire {
+                            Text(Strings.Streak.inARow)
+                                .font(.subheadline)
+                                .fontWeight(.semibold)
+                                .foregroundStyle(Color.ollieAccent)
+                        }
+                    } else {
+                        Text(Strings.Streak.streakBroken)
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
+                            .foregroundStyle(.secondary)
                     }
                 }
 
-                // Subtitle with best streak
-                if streakInfo.bestStreak > streakInfo.currentStreak {
-                    Text("Record: \(streakInfo.bestStreak)x")
+                // Subtitle with best streak or motivational message
+                if streakInfo.currentStreak == 0 && streakInfo.bestStreak > 0 {
+                    Text(Strings.Streak.recordTryAgain(count: streakInfo.bestStreak))
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                } else if streakInfo.bestStreak > streakInfo.currentStreak {
+                    Text(Strings.Streak.record(count: streakInfo.bestStreak))
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 } else if streakInfo.currentStreak > 0 {
@@ -72,78 +81,10 @@ struct StreakCard: View {
         }
         .padding(.horizontal, 14)
         .padding(.vertical, 12)
-        .background(glassBackground)
-        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-        .overlay(glassOverlay)
-    }
-
-    // MARK: - Glass Components
-
-    @ViewBuilder
-    private var iconBackground: some View {
-        ZStack {
-            progressColor.opacity(colorScheme == .dark ? 0.2 : 0.15)
-
-            LinearGradient(
-                colors: [
-                    Color.white.opacity(colorScheme == .dark ? 0.1 : 0.3),
-                    Color.clear
-                ],
-                startPoint: .top,
-                endPoint: .bottom
-            )
-        }
-    }
-
-    @ViewBuilder
-    private var iconOverlay: some View {
-        Circle()
-            .strokeBorder(
-                progressColor.opacity(0.3),
-                lineWidth: 0.5
-            )
-    }
-
-    @ViewBuilder
-    private var glassBackground: some View {
-        ZStack {
-            if colorScheme == .dark {
-                Color.white.opacity(0.05)
-            } else {
-                Color.white.opacity(0.7)
-            }
-
-            // Tint based on streak level
-            progressColor.opacity(colorScheme == .dark ? 0.06 : 0.04)
-
-            // Top highlight
-            LinearGradient(
-                colors: [
-                    Color.white.opacity(colorScheme == .dark ? 0.08 : 0.25),
-                    Color.clear
-                ],
-                startPoint: .top,
-                endPoint: .center
-            )
-        }
-        .background(.thinMaterial)
-    }
-
-    @ViewBuilder
-    private var glassOverlay: some View {
-        RoundedRectangle(cornerRadius: 16, style: .continuous)
-            .strokeBorder(
-                LinearGradient(
-                    colors: [
-                        Color.white.opacity(colorScheme == .dark ? 0.12 : 0.35),
-                        progressColor.opacity(colorScheme == .dark ? 0.08 : 0.05),
-                        Color.clear
-                    ],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                ),
-                lineWidth: 0.5
-            )
+        .glassStatusCard(tintColor: progressColor)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(Strings.Streak.accessibility)
+        .accessibilityValue(Strings.Streak.accessibilityValue(current: streakInfo.currentStreak, record: streakInfo.bestStreak))
     }
 
     @ViewBuilder
@@ -157,17 +98,17 @@ struct StreakCard: View {
                 .fontWeight(.bold)
                 .foregroundStyle(progressColor)
 
-            // Glass progress bar
+            // Glass progress bar - minimum 16pt height for accessibility
             ZStack(alignment: .leading) {
-                RoundedRectangle(cornerRadius: 3)
+                RoundedRectangle(cornerRadius: 8)
                     .fill(progressColor.opacity(colorScheme == .dark ? 0.15 : 0.1))
-                    .frame(width: 44, height: 6)
+                    .frame(width: 44, height: 16)
                     .overlay(
-                        RoundedRectangle(cornerRadius: 3)
+                        RoundedRectangle(cornerRadius: 8)
                             .strokeBorder(progressColor.opacity(0.2), lineWidth: 0.5)
                     )
 
-                RoundedRectangle(cornerRadius: 3)
+                RoundedRectangle(cornerRadius: 8)
                     .fill(
                         LinearGradient(
                             colors: [
@@ -178,8 +119,11 @@ struct StreakCard: View {
                             endPoint: .trailing
                         )
                     )
-                    .frame(width: 44 * progress, height: 6)
+                    .frame(width: 44 * progress, height: 16)
             }
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel(Strings.Streak.progressHint)
+            .accessibilityValue(Strings.Streak.progressAccessibilityValue(current: streakInfo.currentStreak, milestone: milestone))
         }
     }
 
@@ -224,6 +168,21 @@ struct StreakCard: View {
 #Preview("No Streak") {
     VStack {
         StreakCard(streakInfo: .empty)
+        Spacer()
+    }
+    .padding()
+}
+
+#Preview("Streak Broken") {
+    VStack {
+        StreakCard(
+            streakInfo: StreakInfo(
+                currentStreak: 0,
+                bestStreak: 8,
+                lastOutdoorTime: nil,
+                lastIndoorTime: Date()
+            )
+        )
         Spacer()
     }
     .padding()

@@ -1,0 +1,62 @@
+# Test Today View functionality
+# Tests: status cards, day navigation, timeline
+appId: nl.jaapstronks.Ollie
+---
+- launchApp
+- waitForAnimationToEnd
+
+# 1. Verify app launches on Today tab
+- extendedWaitUntil:
+    visible: "Today|Vandaag"
+    timeout: 5000
+- takeScreenshot: "screenshots/today-01-initial-load"
+
+# 2. Check for status cards (only visible when on today's date)
+- extendedWaitUntil:
+    visible: "Day|Dag"
+    timeout: 3000
+- takeScreenshot: "screenshots/today-02-status-cards"
+
+# 3. Scroll down to see timeline
+- scroll
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/today-03-timeline-scrolled"
+
+# 4. Scroll back up
+- swipe:
+    start: "50%,30%"
+    end: "50%,80%"
+- waitForAnimationToEnd
+
+# 5. Navigate to previous day using chevron button
+- tapOn:
+    point: "10%,10%"
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/today-04-previous-day-via-button"
+
+# 6. Notice the date changed in nav bar
+# When not on today, we should see a next-day chevron
+
+# 7. Go back to today by swiping left
+- swipe:
+    start: "80%,50%"
+    end: "20%,50%"
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/today-05-back-to-today"
+
+# 8. Verify we're on today (settings gear should be visible)
+- assertVisible:
+    id: "settings_button"
+
+# 9. Navigate to previous day via swipe
+- swipe:
+    start: "20%,50%"
+    end: "80%,50%"
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/today-06-previous-via-swipe"
+
+# 10. Tap date title to return to today
+- tapOn:
+    point: "50%,6%"
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/today-07-returned-to-today"

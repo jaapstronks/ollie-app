@@ -126,21 +126,6 @@ struct StreakCalculations {
         )
     }
 
-    /// Get emoji for streak count (legacy)
-    static func emoji(for streak: Int) -> String {
-        if streak == 0 {
-            return "💔"
-        } else if streak < 3 {
-            return "👍"
-        } else if streak < 5 {
-            return "🔥"
-        } else if streak < 10 {
-            return "🔥🔥"
-        } else {
-            return "🔥🔥🔥"
-        }
-    }
-
     /// Get SF Symbol icon name for streak count
     static func iconName(for streak: Int) -> String {
         if streak == 0 {

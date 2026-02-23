@@ -75,9 +75,7 @@ struct GapCalculations {
         filterOvernight: Bool = true
     ) -> [PottyGap] {
         // Filter to potty events and sort chronologically
-        let pottyEvents = events
-            .filter { $0.type == .plassen }
-            .sorted { $0.time < $1.time }
+        let pottyEvents = events.pee().chronological()
 
         guard pottyEvents.count >= 2 else { return [] }
 
@@ -152,8 +150,7 @@ struct GapCalculations {
     /// - Parameter events: Array of puppy events
     /// - Returns: Array of potty gaps from today
     static func todayGaps(events: [PuppyEvent]) -> [PottyGap] {
-        let todayEvents = events.filter { Calendar.current.isDateInToday($0.time) }
-        return calculatePottyGaps(events: todayEvents, filterOvernight: false)
+        return calculatePottyGaps(events: events.today(), filterOvernight: false)
     }
 
     /// Get gaps for the last N days
@@ -162,9 +159,7 @@ struct GapCalculations {
     ///   - days: Number of days to include
     /// - Returns: Array of potty gaps
     static func recentGaps(events: [PuppyEvent], days: Int = 7) -> [PottyGap] {
-        let cutoff = Calendar.current.date(byAdding: .day, value: -days, to: Date())!
-        let recentEvents = events.filter { $0.time >= cutoff }
-        return calculatePottyGaps(events: recentEvents, filterOvernight: true)
+        return calculatePottyGaps(events: events.lastDays(days), filterOvernight: true)
     }
 
     /// Format duration for display

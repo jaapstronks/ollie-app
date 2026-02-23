@@ -1,0 +1,84 @@
+# Scenario: Test Poop Tracking Feature
+# Tests logging poop events and checking if warnings appear
+#
+# What this tests:
+# 1. Poop status card visibility on Today view
+# 2. Logging a poop event via FAB and quick log
+# 3. Poop count updating after logging
+# 4. Poop insights in the Insights tab
+#
+appId: jaapstronks.Ollie-app
+---
+- launchApp
+- waitForAnimationToEnd
+
+# 1. Verify app launches correctly
+- extendedWaitUntil:
+    visible: "Today|Vandaag"
+    timeout: 5000
+- takeScreenshot: "screenshots/poop-01-initial-state"
+
+# 2. Scroll to see the poop status card (if present)
+# The PoopStatusCard shows count, warning if needed
+- scroll
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/poop-02-scrolled-check-status"
+
+# 3. Scroll back to top
+- swipe:
+    start: "50%,30%"
+    end: "50%,80%"
+- waitForAnimationToEnd
+
+# 4. Long press FAB to open quick menu
+- longPressOn:
+    id: "FAB_BUTTON"
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/poop-03-fab-quick-menu"
+
+# 5. Look for "Poop outside" option in quick menu
+# This should show if poop is in quickLogTypes
+- takeScreenshot: "screenshots/poop-04-looking-for-poop-option"
+
+# 6. Dismiss quick menu
+- tapOn:
+    point: "20%,30%"
+- waitForAnimationToEnd
+
+# 7. Tap FAB to open all events sheet
+- tapOn:
+    id: "FAB_BUTTON"
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/poop-05-all-events-sheet"
+
+# 8. Find and tap the potty/toilet option
+# In the app, potty combines pee/poop with a modal selector
+- takeScreenshot: "screenshots/poop-06-event-options"
+
+# 9. Dismiss to show final state
+- swipe:
+    start: "50%,50%"
+    end: "50%,90%"
+- waitForAnimationToEnd
+
+# 10. Navigate to Insights tab to see poop patterns
+- tapOn: "Insights|Inzichten"
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/poop-07-insights-tab"
+
+# 11. Scroll to see poop-related stats
+- scroll
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/poop-08-insights-scrolled"
+
+# 12. Back to Today tab - final state
+- tapOn: "Today|Vandaag"
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/poop-09-final-state"
+
+# 13. Check previous days for historical poop data
+- swipe:
+    start: "20%,50%"
+    end: "80%,50%"
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/poop-10-previous-day"

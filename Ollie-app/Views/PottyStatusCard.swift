@@ -12,8 +12,15 @@ import SwiftUI
 struct PottyStatusCard: View {
     let prediction: PottyPrediction
     let puppyName: String
+    let onLogPotty: (() -> Void)?
 
     @Environment(\.colorScheme) private var colorScheme
+
+    init(prediction: PottyPrediction, puppyName: String, onLogPotty: (() -> Void)? = nil) {
+        self.prediction = prediction
+        self.puppyName = puppyName
+        self.onLogPotty = onLogPotty
+    }
 
     var body: some View {
         // Hide during night hours (23:00 - 06:00) or if no data
@@ -21,137 +28,48 @@ struct PottyStatusCard: View {
             EmptyView()
         } else {
             cardContent
-                .padding(.horizontal, 16)
                 .padding(.vertical, 6)
         }
     }
 
     @ViewBuilder
     private var cardContent: some View {
-        HStack(spacing: 14) {
-            // Icon with glass circle background
-            Image(systemName: PredictionCalculations.iconName(for: prediction.urgency))
-                .font(.system(size: 22, weight: .semibold))
-                .foregroundStyle(PredictionCalculations.iconColor(for: prediction.urgency))
-                .frame(width: 44, height: 44)
-                .background(iconBackground)
-                .clipShape(Circle())
-                .overlay(iconOverlay)
+        VStack(spacing: 12) {
+            StatusCardHeader(
+                iconName: PredictionCalculations.iconName(for: prediction.urgency),
+                iconColor: PredictionCalculations.iconColor(for: prediction.urgency),
+                tintColor: indicatorColor,
+                title: PredictionCalculations.displayText(for: prediction, puppyName: puppyName),
+                titleColor: textColor,
+                subtitle: PredictionCalculations.subtitleText(for: prediction),
+                statusLabel: urgencyLabel
+            )
 
-            VStack(alignment: .leading, spacing: 3) {
-                // Main status text
-                Text(PredictionCalculations.displayText(for: prediction, puppyName: puppyName))
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
-                    .foregroundStyle(textColor)
-
-                // Subtitle with timing details
-                if let subtitle = PredictionCalculations.subtitleText(for: prediction) {
-                    Text(subtitle)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+            // Show action when urgency warrants it
+            if let onLogPotty, shouldShowAction {
+                Button(action: onLogPotty) {
+                    Label(Strings.PottyStatus.logNow, systemImage: "drop.fill")
                 }
+                .buttonStyle(.glassPill(tint: .custom(indicatorColor)))
             }
-
-            Spacer()
-
-            // Urgency indicator pill
-            urgencyPill
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 14)
-        .background(glassBackground)
-        .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
-        .overlay(glassOverlay)
+        .glassStatusCard(tintColor: indicatorColor, cornerRadius: 18)
         .shadow(color: shadowColor, radius: 10, y: 5)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(Strings.PottyStatus.accessibility)
+        .accessibilityValue("\(PredictionCalculations.displayText(for: prediction, puppyName: puppyName)). \(urgencyLabel)")
+        .accessibilityHint(Strings.PottyStatus.predictionHint(name: puppyName))
     }
 
-    // MARK: - Glass Components
-
-    @ViewBuilder
-    private var iconBackground: some View {
-        ZStack {
-            indicatorColor.opacity(colorScheme == .dark ? 0.2 : 0.15)
-
-            LinearGradient(
-                colors: [
-                    Color.white.opacity(colorScheme == .dark ? 0.1 : 0.3),
-                    Color.clear
-                ],
-                startPoint: .top,
-                endPoint: .bottom
-            )
+    private var shouldShowAction: Bool {
+        switch prediction.urgency {
+        case .attention, .soon, .overdue:
+            return true
+        default:
+            return false
         }
-    }
-
-    @ViewBuilder
-    private var iconOverlay: some View {
-        Circle()
-            .strokeBorder(
-                indicatorColor.opacity(0.3),
-                lineWidth: 0.5
-            )
-    }
-
-    @ViewBuilder
-    private var urgencyPill: some View {
-        Text(urgencyLabel)
-            .font(.caption2)
-            .fontWeight(.semibold)
-            .foregroundStyle(indicatorColor)
-            .padding(.horizontal, 10)
-            .padding(.vertical, 5)
-            .background(
-                Capsule()
-                    .fill(indicatorColor.opacity(colorScheme == .dark ? 0.2 : 0.12))
-            )
-            .overlay(
-                Capsule()
-                    .strokeBorder(indicatorColor.opacity(0.2), lineWidth: 0.5)
-            )
-    }
-
-    @ViewBuilder
-    private var glassBackground: some View {
-        ZStack {
-            // Base with urgency tint
-            if colorScheme == .dark {
-                Color.white.opacity(0.06)
-            } else {
-                Color.white.opacity(0.75)
-            }
-
-            // Urgency tint
-            indicatorColor.opacity(colorScheme == .dark ? 0.08 : 0.05)
-
-            // Top highlight
-            LinearGradient(
-                colors: [
-                    Color.white.opacity(colorScheme == .dark ? 0.1 : 0.3),
-                    Color.clear
-                ],
-                startPoint: .top,
-                endPoint: .center
-            )
-        }
-        .background(.thinMaterial)
-    }
-
-    @ViewBuilder
-    private var glassOverlay: some View {
-        RoundedRectangle(cornerRadius: 18, style: .continuous)
-            .strokeBorder(
-                LinearGradient(
-                    colors: [
-                        Color.white.opacity(colorScheme == .dark ? 0.15 : 0.4),
-                        indicatorColor.opacity(colorScheme == .dark ? 0.1 : 0.08),
-                        Color.clear
-                    ],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                ),
-                lineWidth: 0.5
-            )
     }
 
     // MARK: - Computed Properties
@@ -178,19 +96,19 @@ struct PottyStatusCard: View {
     private var urgencyLabel: String {
         switch prediction.urgency {
         case .justWent:
-            return "Net geweest"
+            return Strings.PottyStatus.justWent
         case .normal:
-            return "Normaal"
+            return Strings.PottyStatus.normal
         case .attention:
-            return "Let op"
+            return Strings.PottyStatus.attention
         case .soon:
-            return "Bijna tijd"
+            return Strings.PottyStatus.soonTime
         case .overdue:
-            return "Nu!"
+            return Strings.PottyStatus.now
         case .postAccident:
-            return "Ongelukje"
+            return Strings.PottyStatus.accident
         case .unknown:
-            return "Onbekend"
+            return Strings.PottyStatus.unknown
         }
     }
 
@@ -210,8 +128,7 @@ struct PottyStatusCard: View {
     }
 
     private var isNightTime: Bool {
-        let hour = Calendar.current.component(.hour, from: Date())
-        return hour >= 23 || hour < 6
+        Constants.isNightTimeNow()
     }
 }
 

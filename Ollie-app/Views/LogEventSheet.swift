@@ -23,47 +23,58 @@ struct LogEventSheet: View {
             Form {
                 Section {
                     HStack(spacing: 12) {
-                        EventIcon(type: eventType, size: 36)
+                        EventIconLarge(type: eventType, size: 40)
                         Text(eventType.label)
                             .font(.title2)
                             .fontWeight(.semibold)
                     }
                 }
 
-                Section("Notitie") {
-                    TextField("Optionele notitie...", text: $note, axis: .vertical)
+                Section(Strings.LogEvent.note) {
+                    TextField(Strings.LogEvent.notePlaceholder, text: $note, axis: .vertical)
                         .lineLimit(3...6)
+                        .accessibilityLabel(Strings.LogEvent.note)
+                        .accessibilityHint(Strings.LogEvent.noteAccessibilityHint)
                 }
 
                 if eventType == .sociaal {
-                    Section("Wie?") {
-                        TextField("Naam van persoon of dier", text: $who)
+                    Section(Strings.LogEvent.who) {
+                        TextField(Strings.LogEvent.whoPlaceholder, text: $who)
+                            .accessibilityLabel(Strings.LogEvent.whoAccessibility)
+                            .accessibilityHint(Strings.LogEvent.whoAccessibilityHint)
                     }
                 }
 
                 if eventType == .training {
-                    Section("Training") {
-                        TextField("Oefening", text: $exercise)
-                        TextField("Resultaat", text: $result)
+                    Section(Strings.LogEvent.training) {
+                        TextField(Strings.LogEvent.exercise, text: $exercise)
+                            .accessibilityLabel(Strings.LogEvent.exercise)
+                            .accessibilityHint(Strings.LogEvent.exerciseAccessibilityHint)
+                        TextField(Strings.LogEvent.result, text: $result)
+                            .accessibilityLabel(Strings.LogEvent.result)
+                            .accessibilityHint(Strings.LogEvent.resultAccessibilityHint)
                     }
                 }
 
-                Section("Duur") {
-                    TextField("Minuten", text: $durationMin)
+                Section(Strings.LogEvent.duration) {
+                    TextField(Strings.Common.minutesFull, text: $durationMin)
                         .keyboardType(.numberPad)
+                        .accessibilityLabel(Strings.LogEvent.durationAccessibility)
+                        .accessibilityHint(Strings.LogEvent.durationAccessibilityHint)
                 }
             }
-            .navigationTitle("Details")
+            .navigationTitle(Strings.LogEvent.details)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Annuleren") {
+                    Button(Strings.Common.cancel) {
                         dismiss()
                     }
                 }
 
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Opslaan") {
+                    Button(Strings.Common.save) {
+                        HapticFeedback.success()
                         let duration = Int(durationMin)
                         onSave(
                             note.isEmpty ? nil : note,

@@ -20,7 +20,7 @@ struct MealScheduleEditor: View {
             List {
                 Section {
                     ForEach($mealSchedule.portions) { $portion in
-                        MealPortionRow(portion: $portion)
+                        MealPortionDisplayRow(portion: $portion)
                     }
                     .onDelete(perform: deleteMeal)
                     .onMove(perform: moveMeal)
@@ -74,7 +74,7 @@ struct MealScheduleEditor: View {
 }
 
 /// Row for displaying and editing a single meal portion
-struct MealPortionRow: View {
+struct MealPortionDisplayRow: View {
     @Binding var portion: MealSchedule.MealPortion
     @State private var showingEditor = false
 

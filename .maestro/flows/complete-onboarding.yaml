@@ -1,0 +1,63 @@
+appId: nl.jaapstronks.Ollie
+name: Complete Onboarding
+---
+# Complete onboarding flow for test setup
+
+- launchApp:
+    clearState: true
+
+- waitForAnimationToEnd
+
+# Step 0: Welcome - tap Get Started
+- tapOn:
+    text: "Get Started|Aan de slag"
+
+- waitForAnimationToEnd
+
+# Step 1: Enter puppy name - tap on text field first
+- tapOn:
+    text: "Name|Naam"
+    optional: true
+- inputText: "TestPuppy"
+# Dismiss keyboard by tapping on the title
+- tapOn:
+    text: "What's your puppy's name?"
+    optional: true
+- tapOn:
+    text: "Next"
+
+- waitForAnimationToEnd
+
+# Step 2: Select breed (pick first common breed)
+- tapOn:
+    text: "Labrador Retriever"
+    optional: true
+
+- waitForAnimationToEnd
+
+- tapOn:
+    text: "Next|Volgende|Continue|Doorgaan"
+
+- waitForAnimationToEnd
+
+# Step 3: Birth date - just accept default and continue
+- tapOn:
+    text: "Next|Volgende|Continue|Doorgaan"
+
+- waitForAnimationToEnd
+
+# Step 4: Home date - just accept default and continue
+- tapOn:
+    text: "Next|Volgende|Continue|Doorgaan"
+
+- waitForAnimationToEnd
+
+# Step 5: Confirm - save profile (button text is "Start!")
+- tapOn:
+    text: "Start!"
+
+- waitForAnimationToEnd
+
+# Verify we're now on the main Today view
+- assertVisible:
+    text: "Today|Vandaag"

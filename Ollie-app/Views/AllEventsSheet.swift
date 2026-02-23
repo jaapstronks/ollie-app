@@ -32,7 +32,7 @@ struct AllEventsSheet: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
                     // Additional event types section
-                    sectionHeader(title: "Meer events", icon: "square.grid.2x2")
+                    sectionHeader(title: Strings.AllEvents.moreEvents, icon: "square.grid.2x2")
 
                     LazyVGrid(columns: columns, spacing: 12) {
                         ForEach(additionalEventTypes) { type in
@@ -51,7 +51,7 @@ struct AllEventsSheet: View {
                         .padding(.horizontal)
 
                     // Quick log types also available here
-                    sectionHeader(title: "Snelle events", icon: "bolt.fill")
+                    sectionHeader(title: Strings.AllEvents.quickEvents, icon: "bolt.fill")
 
                     LazyVGrid(columns: columns, spacing: 12) {
                         ForEach(Constants.quickLogTypes) { type in
@@ -64,11 +64,11 @@ struct AllEventsSheet: View {
                 }
                 .padding(.vertical)
             }
-            .navigationTitle("Log event")
+            .navigationTitle(Strings.AllEvents.title)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Annuleren") {
+                    Button(Strings.Common.cancel) {
                         onCancel()
                     }
                     .foregroundStyle(Color.ollieAccent)

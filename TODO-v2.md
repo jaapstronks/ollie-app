@@ -1,5 +1,7 @@
 # TODO: V2 — Make it actually useful
 
+(COMPLETED)
+
 Three improvements that make the app a daily driver instead of a demo.
 
 ## Step 1: Time Adjustment on Log
@@ -14,6 +16,7 @@ When logging an event, default to "now" but make it trivially easy to adjust:
 Implementation: modify `QuickLogBar` and `LocationPickerSheet` to include a time row. For non-potty events, show a small confirmation toast/sheet with the time adjustment option before saving (instead of logging instantly).
 
 Suggested UX flow:
+
 1. Tap quick-log button (e.g. 🍽️ Eten)
 2. Small sheet slides up: **"Eten — 09:23"** with [-5] [-10] [-15] buttons and a time picker
 3. Tap "Log" (or the time is already fine, tap the big ✅ button)
@@ -60,11 +63,12 @@ Add optional note input to the logging sheet (from Step 1):
 - Keep it optional — don't add friction to quick logging
 
 ## Done Criteria
-- [ ] Can adjust timestamp when logging (quick buttons + time picker)
-- [ ] "Tijd sinds laatste plas" card visible at top of timeline
-- [ ] Card color changes based on time elapsed
-- [ ] Can access all event types via "+" button
-- [ ] Can add optional note to any event
-- [ ] TODO-mvp.md is deleted (MVP is done)
 
-Delete this file when done.
+- [x] Can adjust timestamp when logging (quick buttons + time picker) → `QuickLogSheet.swift`
+- [x] "Tijd sinds laatste plas" card visible at top of timeline → `PottyStatusCard.swift`
+- [x] Card color changes based on time elapsed → urgency-based coloring in PottyStatusCard
+- [x] Can access all event types via "+" button → `MoreEventsButton` + `AllEventsSheet.swift`
+- [x] Can add optional note to any event → note field in `QuickLogSheet.swift`
+- [x] TODO-mvp.md is deleted (MVP is done)
+
+✅ **All V2 features implemented.** This file can be deleted.

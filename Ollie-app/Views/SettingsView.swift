@@ -2,186 +2,209 @@
 //  SettingsView.swift
 //  Ollie-app
 //
+//  Refactored to use extracted section components from Views/Settings/
 
+import StoreKit
 import SwiftUI
+import TipKit
 
 /// Settings screen with profile editing and data import
 struct SettingsView: View {
     @ObservedObject var profileStore: ProfileStore
     @ObservedObject var dataImporter: DataImporter
     @ObservedObject var eventStore: EventStore
+    @ObservedObject var notificationService: NotificationService
+    @ObservedObject var spotStore: SpotStore
+    @ObservedObject var viewModel: TimelineViewModel
+    @ObservedObject var cloudKit = CloudKitService.shared
 
-    @State private var showingImportSheet = false
+    @State private var showingImportConfirm = false
     @State private var importError: String?
     @State private var showingError = false
-    @State private var showingMealEditor = false
-    @State private var editableMealSchedule: MealSchedule?
+    @State private var overwriteExisting = false
+    @State private var showingNotificationSettings = false
+    @State private var showingUpgradePrompt = false
+    @State private var showingPurchaseSuccess = false
+    @ObservedObject var storeKit = StoreKitManager.shared
     @AppStorage(UserPreferences.Key.appearanceMode.rawValue) private var appearanceMode = AppearanceMode.system.rawValue
 
     var body: some View {
         NavigationStack {
             Form {
                 if let profile = profileStore.profile {
-                    profileSection(profile)
-                    statsSection(profile)
-                    mealSection(profile)
-                    exerciseSection(profile)
+                    // Profile & Stats (extracted to ProfileSection.swift)
+                    ProfileSection(profile: profile)
+                    StatsSection(profile: profile)
+
+                    // Exercise (extracted to ExerciseSection.swift)
+                    ExerciseSection(profile: profile, profileStore: profileStore)
+
+                    // Meals (extracted to MealSection.swift)
+                    MealSection(profile: profile, profileStore: profileStore)
+
+                    // Medications
+                    medicationsSection
+
+                    // Walk spots & Health (kept inline - simple)
+                    walkSpotsSection
+                    healthSection
+
+                    // Notifications (kept inline - has local state)
+                    notificationSection(profile)
+
+                    // Premium (extracted to PremiumSection.swift)
+                    PremiumSection(
+                        profile: profile,
+                        storeKit: storeKit,
+                        showingUpgradePrompt: $showingUpgradePrompt,
+                        showingPurchaseSuccess: $showingPurchaseSuccess,
+                        onPurchase: { await handlePurchase(for: profile) }
+                    )
                 }
+
+                // CloudKit sharing section
+                ShareSettingsSection(cloudKit: cloudKit)
 
                 appearanceSection
-                dataSection
-                dangerSection
-                debugSection
+
+                // Sync (extracted to SyncSection.swift)
+                SyncSection(eventStore: eventStore, cloudKit: cloudKit)
+
+                // Data import (extracted to DataSection.swift)
+                DataSection(
+                    dataImporter: dataImporter,
+                    eventStore: eventStore,
+                    showingImportConfirm: $showingImportConfirm,
+                    overwriteExisting: $overwriteExisting
+                )
+
+                // Danger zone (extracted to DataSection.swift)
+                DangerSection(profileStore: profileStore)
             }
-            .navigationTitle("Instellingen")
+            .navigationTitle(Strings.Settings.title)
         }
-        .sheet(isPresented: $showingImportSheet) {
-            ImportSheet(
-                dataImporter: dataImporter,
-                onDismiss: {
-                    showingImportSheet = false
-                },
-                onComplete: {
-                    showingImportSheet = false
-                    eventStore.loadEvents(for: Date())
-                }
-            )
-            .presentationDetents([.medium, .large])
-        }
-        .alert("Fout", isPresented: $showingError) {
-            Button("OK") {}
+        .alert(Strings.Settings.importAction, isPresented: $showingImportConfirm) {
+            Button(Strings.Settings.importAction) {
+                startImport()
+            }
+            Button(Strings.Common.cancel, role: .cancel) {}
         } message: {
-            Text(importError ?? "Onbekende fout")
+            Text(Strings.Settings.importConfirmMessage)
+        }
+        .alert(Strings.Common.error, isPresented: $showingError) {
+            Button(Strings.Common.ok) {}
+        } message: {
+            Text(importError ?? Strings.PottyStatus.unknown)
         }
     }
 
-    // MARK: - Sections
+    // MARK: - Inline Sections (kept for simplicity or local state needs)
 
     @ViewBuilder
-    private func profileSection(_ profile: PuppyProfile) -> some View {
-        Section("Profiel") {
-            HStack {
-                Text("Naam")
-                Spacer()
-                Text(profile.name)
-                    .foregroundColor(.secondary)
-            }
-
-            if let breed = profile.breed {
+    private var medicationsSection: some View {
+        Section(Strings.Medications.title) {
+            NavigationLink {
+                MedicationSettingsView(profileStore: profileStore)
+            } label: {
                 HStack {
-                    Text("Ras")
+                    Label {
+                        Text(Strings.Medications.title)
+                    } icon: {
+                        Image(systemName: "pills.fill")
+                            .foregroundColor(.ollieAccent)
+                    }
                     Spacer()
-                    Text(breed)
-                        .foregroundColor(.secondary)
-                }
-            }
-
-            HStack {
-                Text("Grootte")
-                Spacer()
-                Text(profile.sizeCategory.label)
-                    .foregroundColor(.secondary)
-            }
-        }
-    }
-
-    @ViewBuilder
-    private func statsSection(_ profile: PuppyProfile) -> some View {
-        Section("Stats") {
-            HStack {
-                Text("Leeftijd")
-                Spacer()
-                Text("\(profile.ageInWeeks) weken")
-                    .foregroundColor(.secondary)
-            }
-
-            HStack {
-                Text("Dagen thuis")
-                Spacer()
-                Text("\(profile.daysHome) dagen")
-                    .foregroundColor(.secondary)
-            }
-
-            HStack {
-                Text("Max beweging")
-                Spacer()
-                Text("\(profile.maxExerciseMinutes) min/wandeling")
-                    .foregroundColor(.secondary)
-            }
-        }
-    }
-
-    @ViewBuilder
-    private func mealSection(_ profile: PuppyProfile) -> some View {
-        Section {
-            ForEach(profile.mealSchedule.portions) { portion in
-                HStack {
-                    Text(portion.label)
-                    Spacer()
-                    VStack(alignment: .trailing) {
-                        Text(portion.amount)
+                    let count = profileStore.profile?.medicationSchedule.medications.count ?? 0
+                    if count > 0 {
+                        Text("\(count)")
                             .foregroundColor(.secondary)
-                        if let time = portion.targetTime {
-                            Text(time)
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                        }
                     }
                 }
             }
+        }
+    }
+
+    @ViewBuilder
+    private var walkSpotsSection: some View {
+        Section(Strings.WalkLocations.walkLocation) {
+            NavigationLink {
+                FavoriteSpotsView(spotStore: spotStore)
+            } label: {
+                HStack {
+                    Label {
+                        Text(Strings.WalkLocations.favoriteSpots)
+                    } icon: {
+                        Image(systemName: "mappin.circle.fill")
+                            .foregroundColor(.ollieAccent)
+                    }
+                    Spacer()
+                    Text("\(spotStore.spots.count)")
+                        .foregroundColor(.secondary)
+                }
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var healthSection: some View {
+        Section(Strings.Health.title) {
+            NavigationLink {
+                HealthView(viewModel: viewModel)
+            } label: {
+                HStack {
+                    Label {
+                        Text(Strings.Health.milestones)
+                    } icon: {
+                        Image(systemName: "heart.fill")
+                            .foregroundColor(.ollieDanger)
+                    }
+                    Spacer()
+                    Text(Strings.Insights.healthDescription)
+                        .foregroundColor(.secondary)
+                        .font(.caption)
+                }
+            }
+        }
+    }
+
+    private let mealRemindersTip = MealRemindersTip()
+
+    @ViewBuilder
+    private func notificationSection(_ profile: PuppyProfile) -> some View {
+        Section(Strings.Settings.reminders) {
+            TipView(mealRemindersTip)
 
             Button {
-                editableMealSchedule = profile.mealSchedule
-                showingMealEditor = true
+                showingNotificationSettings = true
             } label: {
-                Label("Bewerk maaltijden", systemImage: "pencil")
-            }
-        } header: {
-            Text("Maaltijden (\(profile.mealSchedule.mealsPerDay)x per dag)")
-        }
-        .sheet(isPresented: $showingMealEditor) {
-            if let schedule = editableMealSchedule {
-                MealScheduleEditorWrapper(
-                    initialSchedule: schedule,
-                    onSave: { updatedSchedule in
-                        profileStore.updateMealSchedule(updatedSchedule)
-                    }
-                )
-            }
-        }
-    }
-
-    @ViewBuilder
-    private func exerciseSection(_ profile: PuppyProfile) -> some View {
-        Section("Beweging") {
-            HStack {
-                Text("Max beweging")
-                Spacer()
-                Text("\(profile.maxExerciseMinutes) min/wandeling")
-                    .foregroundColor(.secondary)
-            }
-
-            Stepper(value: Binding(
-                get: { profile.exerciseConfig.minutesPerMonthOfAge },
-                set: { newValue in
-                    var config = profile.exerciseConfig
-                    config.minutesPerMonthOfAge = newValue
-                    profileStore.updateExerciseConfig(config)
-                }
-            ), in: 3...10) {
                 HStack {
-                    Text("Minuten per maand leeftijd")
+                    Label {
+                        Text(Strings.Settings.notifications)
+                    } icon: {
+                        Image(systemName: "bell.fill")
+                            .foregroundColor(.ollieAccent)
+                    }
                     Spacer()
-                    Text("\(profile.exerciseConfig.minutesPerMonthOfAge)")
+                    Text(profile.notificationSettings.isEnabled ? Strings.Common.on : Strings.Common.off)
+                        .foregroundColor(.secondary)
+                    Image(systemName: "chevron.right")
+                        .font(.caption)
                         .foregroundColor(.secondary)
                 }
             }
+            .foregroundColor(.primary)
+        }
+        .sheet(isPresented: $showingNotificationSettings) {
+            NotificationSettingsView(
+                profileStore: profileStore,
+                notificationService: notificationService
+            )
         }
     }
 
     private var appearanceSection: some View {
-        Section("Weergave") {
-            Picker("Thema", selection: $appearanceMode) {
+        Section(Strings.Settings.appearance) {
+            Picker(Strings.Settings.theme, selection: $appearanceMode) {
                 ForEach(AppearanceMode.allCases) { mode in
                     Label(mode.label, systemImage: mode.icon)
                         .tag(mode.rawValue)
@@ -192,85 +215,46 @@ struct SettingsView: View {
         }
     }
 
-    private var dataSection: some View {
-        Section("Data") {
-            Button {
-                dataImporter.reset()
-                showingImportSheet = true
-            } label: {
-                Label("Importeer van GitHub", systemImage: "arrow.down.circle")
-            }
+    // MARK: - Actions
 
-            if let result = dataImporter.lastResult {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Laatste import:")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                    Text("\(result.filesImported) dagen, \(result.eventsImported) events")
-                        .font(.caption)
-                    if result.skipped > 0 {
-                        Text("\(result.skipped) overgeslagen (bestonden al)")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
-                }
-            }
+    private func handlePurchase(for profile: PuppyProfile) async {
+        do {
+            try await storeKit.purchase(for: profile.id)
+            profileStore.unlockPremium()
+            showingUpgradePrompt = false
+            showingPurchaseSuccess = true
+            HapticFeedback.success()
+        } catch StoreKitError.userCancelled {
+            // User cancelled, do nothing
+        } catch {
+            HapticFeedback.error()
         }
     }
 
-    private var dangerSection: some View {
-        Section {
-            Button(role: .destructive) {
-                profileStore.resetProfile()
-            } label: {
-                Label("Reset profiel", systemImage: "trash")
-            }
-        }
-    }
-
-    // Debug section for seed data
-    private var debugSection: some View {
-        Section("Debug") {
-            Button {
-                SeedData.forceReinstallBundledData()
+    private func startImport() {
+        Task {
+            do {
+                _ = try await dataImporter.importFromGitHub(overwriteExisting: overwriteExisting)
                 eventStore.loadEvents(for: Date())
-            } label: {
-                Label("Herinstalleer seed data", systemImage: "arrow.clockwise")
+            } catch {
+                importError = error.localizedDescription
+                showingError = true
             }
-
-            // Show data directory status
-            let dataStatus = getDataDirectoryStatus()
-            Text(dataStatus)
-                .font(.caption)
-                .foregroundColor(.secondary)
         }
     }
-
-    private func getDataDirectoryStatus() -> String {
-        let fileManager = FileManager.default
-        let docs = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
-        let dataDir = docs.appendingPathComponent("data")
-
-        guard fileManager.fileExists(atPath: dataDir.path) else {
-            return "Data folder bestaat niet"
-        }
-
-        let files = (try? fileManager.contentsOfDirectory(atPath: dataDir.path)) ?? []
-        let jsonlFiles = files.filter { $0.hasSuffix(".jsonl") }
-
-        if jsonlFiles.isEmpty {
-            return "Data folder is leeg"
-        }
-
-        return "Gevonden: \(jsonlFiles.count) bestanden\n\(jsonlFiles.joined(separator: ", "))"
-    }
-
 }
 
 #Preview {
-    SettingsView(
-        profileStore: ProfileStore(),
+    let eventStore = EventStore()
+    let profileStore = ProfileStore()
+    let viewModel = TimelineViewModel(eventStore: eventStore, profileStore: profileStore)
+
+    return SettingsView(
+        profileStore: profileStore,
         dataImporter: DataImporter(),
-        eventStore: EventStore()
+        eventStore: eventStore,
+        notificationService: NotificationService(),
+        spotStore: SpotStore(),
+        viewModel: viewModel
     )
 }

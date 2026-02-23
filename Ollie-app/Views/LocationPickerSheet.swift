@@ -14,28 +14,28 @@ struct LocationPickerSheet: View {
     var body: some View {
         VStack(spacing: 20) {
             HStack(spacing: 8) {
-                EventIcon(type: eventType, size: 24)
+                EventIcon(type: eventType, size: 28)
                 Text(eventType.label)
                     .font(.headline)
             }
 
-            Text("Waar?")
+            Text(Strings.LocationPicker.title)
                 .font(.subheadline)
                 .foregroundColor(.secondary)
 
             HStack(spacing: 20) {
-                LocationButton(
+                LocationButtonIcon(
                     location: .buiten,
                     action: { onSelect(.buiten) }
                 )
 
-                LocationButton(
+                LocationButtonIcon(
                     location: .binnen,
                     action: { onSelect(.binnen) }
                 )
             }
 
-            Button("Annuleren", role: .cancel) {
+            Button(Strings.Common.cancel, role: .cancel) {
                 onCancel()
             }
             .foregroundColor(.secondary)
@@ -44,7 +44,7 @@ struct LocationPickerSheet: View {
     }
 }
 
-struct LocationButton: View {
+struct LocationButtonIcon: View {
     let location: EventLocation
     let action: () -> Void
 
@@ -58,7 +58,6 @@ struct LocationButton: View {
 
                 Text(location.label)
                     .font(.headline)
-                    .foregroundStyle(location.iconColor)
             }
             .frame(width: 100, height: 100)
             .background(Color(.secondarySystemBackground))

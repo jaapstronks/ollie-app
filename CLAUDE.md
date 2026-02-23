@@ -62,8 +62,35 @@ App-wide constants (non-profile-specific) are in `Utils/Constants.swift`:
 
 User-specific values (birth date, bedtime hour, etc.) come from `PuppyProfile`.
 
-## UI Language
-Dutch. All labels, buttons, and text in Dutch.
+## Localization (i18n)
+English is the development language. Dutch translations included, more languages can be added.
+
+### Infrastructure
+- **`Utils/Strings.swift`** — All user-facing strings as namespaced constants
+- **`Localizable.xcstrings`** — String Catalog with translations (JSON format)
+- **`InfoPlist.xcstrings`** — System permission strings (camera, photos, etc.)
+
+### Usage Pattern
+```swift
+// In views, use Strings constants:
+Text(Strings.Common.cancel)
+Text(Strings.Timeline.noEvents)
+
+// For interpolation:
+Text(Strings.Onboarding.breedQuestion(name: profile.name))
+
+// Model enums use Strings in their label property:
+eventType.label  // Returns localized string
+```
+
+### Adding New Strings
+1. Add to `Strings.swift` with English text
+2. Run build — Xcode extracts to String Catalog automatically
+3. Add translations in `Localizable.xcstrings` when ready
+
+### Supported Languages
+- `en` — English (development language)
+- `nl` — Dutch (translations included)
 
 ## Design Principles
 - **Mobile-first UX** — Big tap targets, quick event logging (2 taps max for common events)
@@ -105,7 +132,7 @@ The web app (JS) has battle-tested calculation modules to port:
 - Swift naming conventions (camelCase properties, PascalCase types)
 - SwiftUI previews for every view
 - No external dependencies (SPM packages) unless absolutely necessary
-- Comments in English, UI in Dutch
+- Comments in English, UI strings in `Strings.swift`
 - Git: commit messages in English, conventional commits style
 
 ## Task Files

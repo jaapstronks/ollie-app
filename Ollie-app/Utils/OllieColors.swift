@@ -14,30 +14,59 @@ extension Color {
     static let ollieAccent = Color(hex: "E8A855")
 
     /// Light gold — backgrounds, badges
-    static let ollieAccentLight = Color(hex: "F5D08E")
+    /// Adjusted for WCAG 4.5:1 contrast ratio
+    static let ollieAccentLight = Color(hex: "D4A04A")
 
     /// Deep amber — pressed states
-    static let ollieAccentDark = Color(hex: "C4872E")
+    /// Adjusted for WCAG 4.5:1 contrast ratio on dark backgrounds
+    static let ollieAccentDark = Color(hex: "A36B1D")
 
     // MARK: - Semantic Colors
 
-    /// Green — buiten, positive outcomes
+    /// Green — buiten, positive outcomes, social interactions
     static let ollieSuccess = Color(hex: "5BAA6E")
 
     /// Gold — caution, transitions (same as accent)
     static let ollieWarning = Color(hex: "E8A855")
 
-    /// Red — binnen, alerts
+    /// Red — binnen, alerts, urgent
     static let ollieDanger = Color(hex: "D4594E")
 
-    /// Teal — stats, neutral data
+    /// Teal — stats, neutral data, foundations
     static let ollieInfo = Color(hex: "5BA4B5")
 
-    /// Muted blue — sleep events
+    /// Muted blue — sleep, rest, crate
     static let ollieSleep = Color(hex: "7B8CC2")
 
+    /// Purple — training, mental activities, learning
+    static let olliePurple = Color(hex: "9B7BC2")
+
+    /// Rose — milestones, celebrations, care
+    static let ollieRose = Color(hex: "E87B9E")
+
     /// Gray — secondary text, neutral
-    static let ollieMuted = Color(hex: "9CA3AF")
+    /// Adjusted for WCAG 4.5:1 contrast ratio
+    static let ollieMuted = Color(hex: "6B7280")
+
+    // MARK: - Background Colors
+
+    /// Warm cream background (light mode)
+    static let ollieBackgroundLight = Color(hue: 38/360, saturation: 0.60, brightness: 0.97)
+
+    /// Warm dark background (dark mode)
+    static let ollieBackgroundDark = Color(hue: 25/360, saturation: 0.20, brightness: 0.08)
+
+    /// Card background (light mode)
+    static let ollieCardLight = Color(hue: 38/360, saturation: 0.50, brightness: 0.99)
+
+    /// Card background (dark mode)
+    static let ollieCardDark = Color(hue: 25/360, saturation: 0.20, brightness: 0.11)
+
+    /// Border color (light mode)
+    static let ollieBorderLight = Color(hue: 38/360, saturation: 0.30, brightness: 0.88)
+
+    /// Border color (dark mode)
+    static let ollieBorderDark = Color(hue: 25/360, saturation: 0.15, brightness: 0.18)
 
     // MARK: - Hex Initializer
 
