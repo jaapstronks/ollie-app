@@ -121,10 +121,9 @@ class SocializationStore: ObservableObject {
             note: note
         )
 
-        if exposuresByItem[itemId] == nil {
-            exposuresByItem[itemId] = []
-        }
-        exposuresByItem[itemId]?.append(exposure)
+        var exposures = exposuresByItem[itemId] ?? []
+        exposures.append(exposure)
+        exposuresByItem[itemId] = exposures
 
         saveExposures()
 
@@ -341,21 +340,20 @@ class SocializationStore: ObservableObject {
     /// Merge cloud exposures with local
     private func mergeExposures(cloud: [Exposure]) {
         for exposure in cloud {
-            if exposuresByItem[exposure.itemId] == nil {
-                exposuresByItem[exposure.itemId] = []
-            }
+            var exposures = exposuresByItem[exposure.itemId] ?? []
 
             // Check if we already have this exposure
-            if let index = exposuresByItem[exposure.itemId]?.firstIndex(where: { $0.id == exposure.id }) {
+            if let index = exposures.firstIndex(where: { $0.id == exposure.id }) {
                 // Cloud wins for conflicts (compare modifiedAt)
-                if let localExposure = exposuresByItem[exposure.itemId]?[index],
-                   exposure.modifiedAt > localExposure.modifiedAt {
-                    exposuresByItem[exposure.itemId]?[index] = exposure
+                if exposure.modifiedAt > exposures[index].modifiedAt {
+                    exposures[index] = exposure
                 }
             } else {
                 // New exposure from cloud
-                exposuresByItem[exposure.itemId]?.append(exposure)
+                exposures.append(exposure)
             }
+
+            exposuresByItem[exposure.itemId] = exposures
         }
     }
 
