@@ -11,13 +11,30 @@ import SwiftUI
 
 /// Widget data shared between app and widgets via App Groups
 struct WidgetData: Codable {
+    // MARK: - Potty Data
     let lastPlasTime: Date?
-    let lastPlasLocation: String?
+    let lastPlasLocation: String?  // "buiten" or "binnen"
     let currentStreak: Int
     let bestStreak: Int
-    let puppyName: String
     let todayPottyCount: Int
     let todayOutdoorCount: Int
+
+    // MARK: - Sleep Data
+    let isCurrentlySleeping: Bool
+    let sleepStartTime: Date?  // When current sleep started (if sleeping)
+
+    // MARK: - Meal Data
+    let lastMealTime: Date?
+    let nextScheduledMealTime: Date?  // Next meal target time today
+    let mealsLoggedToday: Int
+    let mealsExpectedToday: Int
+
+    // MARK: - Walk Data
+    let lastWalkTime: Date?
+    let nextScheduledWalkTime: Date?  // Next walk target time today
+
+    // MARK: - Meta
+    let puppyName: String
     let lastUpdated: Date
 
     static var placeholder: WidgetData {
@@ -26,9 +43,17 @@ struct WidgetData: Codable {
             lastPlasLocation: "buiten",
             currentStreak: 3,
             bestStreak: 12,
-            puppyName: "Puppy",
             todayPottyCount: 4,
             todayOutdoorCount: 3,
+            isCurrentlySleeping: false,
+            sleepStartTime: nil,
+            lastMealTime: Date().addingTimeInterval(-3 * 60 * 60),
+            nextScheduledMealTime: Date().addingTimeInterval(1 * 60 * 60),
+            mealsLoggedToday: 2,
+            mealsExpectedToday: 3,
+            lastWalkTime: Date().addingTimeInterval(-2 * 60 * 60),
+            nextScheduledWalkTime: Date().addingTimeInterval(30 * 60),
+            puppyName: "Puppy",
             lastUpdated: Date()
         )
     }
@@ -103,6 +128,7 @@ struct PottyEntry: TimelineEntry {
 struct PottyWidgetEntryView: View {
     var entry: PottyProvider.Entry
     @Environment(\.widgetFamily) var family
+    @Environment(\.colorScheme) var colorScheme
 
     var body: some View {
         switch family {
@@ -298,60 +324,110 @@ struct PottyWidgetEntryView: View {
 
     private var backgroundGradient: LinearGradient {
         let minutes = entry.minutesSinceLastPlas
+        let isDark = colorScheme == .dark
+
         if minutes > 120 {
-            // Urgent - soft red/coral
-            return LinearGradient(
-                colors: [Color(red: 0.98, green: 0.92, blue: 0.90), Color(red: 0.95, green: 0.85, blue: 0.82)],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
+            // Urgent - red/coral
+            if isDark {
+                return LinearGradient(
+                    colors: [Color(red: 0.35, green: 0.15, blue: 0.15), Color(red: 0.40, green: 0.18, blue: 0.16)],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            } else {
+                return LinearGradient(
+                    colors: [Color(red: 0.98, green: 0.92, blue: 0.90), Color(red: 0.95, green: 0.85, blue: 0.82)],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            }
         } else if minutes > 90 {
-            // Warning - soft amber
-            return LinearGradient(
-                colors: [Color(red: 1.0, green: 0.96, blue: 0.88), Color(red: 1.0, green: 0.92, blue: 0.80)],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
+            // Warning - amber
+            if isDark {
+                return LinearGradient(
+                    colors: [Color(red: 0.35, green: 0.28, blue: 0.12), Color(red: 0.38, green: 0.30, blue: 0.10)],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            } else {
+                return LinearGradient(
+                    colors: [Color(red: 1.0, green: 0.96, blue: 0.88), Color(red: 1.0, green: 0.92, blue: 0.80)],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            }
         } else {
-            // Good - soft mint/sage
-            return LinearGradient(
-                colors: [Color(red: 0.92, green: 0.97, blue: 0.94), Color(red: 0.85, green: 0.94, blue: 0.88)],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
+            // Good - mint/sage
+            if isDark {
+                return LinearGradient(
+                    colors: [Color(red: 0.12, green: 0.22, blue: 0.18), Color(red: 0.14, green: 0.25, blue: 0.20)],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            } else {
+                return LinearGradient(
+                    colors: [Color(red: 0.92, green: 0.97, blue: 0.94), Color(red: 0.85, green: 0.94, blue: 0.88)],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            }
         }
     }
 
     private var urgencyIconBackground: Color {
         let minutes = entry.minutesSinceLastPlas
+        let isDark = colorScheme == .dark
+
         if minutes > 120 {
-            return Color(red: 0.95, green: 0.75, blue: 0.70).opacity(0.6)
+            return isDark
+                ? Color(red: 0.55, green: 0.25, blue: 0.22).opacity(0.7)
+                : Color(red: 0.95, green: 0.75, blue: 0.70).opacity(0.6)
         } else if minutes > 90 {
-            return Color(red: 1.0, green: 0.88, blue: 0.65).opacity(0.6)
+            return isDark
+                ? Color(red: 0.55, green: 0.45, blue: 0.20).opacity(0.7)
+                : Color(red: 1.0, green: 0.88, blue: 0.65).opacity(0.6)
         } else {
-            return Color(red: 0.70, green: 0.88, blue: 0.78).opacity(0.6)
+            return isDark
+                ? Color(red: 0.20, green: 0.45, blue: 0.35).opacity(0.7)
+                : Color(red: 0.70, green: 0.88, blue: 0.78).opacity(0.6)
         }
     }
 
     private var urgencyIconColor: Color {
         let minutes = entry.minutesSinceLastPlas
+        let isDark = colorScheme == .dark
+
         if minutes > 120 {
-            return Color(red: 0.85, green: 0.30, blue: 0.25)
+            return isDark
+                ? Color(red: 1.0, green: 0.55, blue: 0.50)
+                : Color(red: 0.85, green: 0.30, blue: 0.25)
         } else if minutes > 90 {
-            return Color(red: 0.90, green: 0.60, blue: 0.10)
+            return isDark
+                ? Color(red: 1.0, green: 0.75, blue: 0.30)
+                : Color(red: 0.90, green: 0.60, blue: 0.10)
         } else {
-            return Color(red: 0.25, green: 0.65, blue: 0.45)
+            return isDark
+                ? Color(red: 0.45, green: 0.85, blue: 0.65)
+                : Color(red: 0.25, green: 0.65, blue: 0.45)
         }
     }
 
     private var urgencyGradient: [Color] {
         let minutes = entry.minutesSinceLastPlas
+        let isDark = colorScheme == .dark
+
         if minutes > 120 {
-            return [Color(red: 0.98, green: 0.92, blue: 0.90), Color(red: 0.95, green: 0.85, blue: 0.82)]
+            return isDark
+                ? [Color(red: 0.35, green: 0.15, blue: 0.15), Color(red: 0.40, green: 0.18, blue: 0.16)]
+                : [Color(red: 0.98, green: 0.92, blue: 0.90), Color(red: 0.95, green: 0.85, blue: 0.82)]
         } else if minutes > 90 {
-            return [Color(red: 1.0, green: 0.96, blue: 0.88), Color(red: 1.0, green: 0.92, blue: 0.80)]
+            return isDark
+                ? [Color(red: 0.35, green: 0.28, blue: 0.12), Color(red: 0.38, green: 0.30, blue: 0.10)]
+                : [Color(red: 1.0, green: 0.96, blue: 0.88), Color(red: 1.0, green: 0.92, blue: 0.80)]
         } else {
-            return [Color(red: 0.92, green: 0.97, blue: 0.94), Color(red: 0.85, green: 0.94, blue: 0.88)]
+            return isDark
+                ? [Color(red: 0.12, green: 0.22, blue: 0.18), Color(red: 0.14, green: 0.25, blue: 0.20)]
+                : [Color(red: 0.92, green: 0.97, blue: 0.94), Color(red: 0.85, green: 0.94, blue: 0.88)]
         }
     }
 }
@@ -388,9 +464,17 @@ struct OllieWidget: Widget {
         lastPlasLocation: "buiten",
         currentStreak: 5,
         bestStreak: 12,
-        puppyName: "Ollie",
         todayPottyCount: 6,
         todayOutdoorCount: 5,
+        isCurrentlySleeping: false,
+        sleepStartTime: nil,
+        lastMealTime: Date().addingTimeInterval(-2 * 60 * 60),
+        nextScheduledMealTime: Date().addingTimeInterval(1 * 60 * 60),
+        mealsLoggedToday: 2,
+        mealsExpectedToday: 3,
+        lastWalkTime: Date().addingTimeInterval(-1 * 60 * 60),
+        nextScheduledWalkTime: Date().addingTimeInterval(30 * 60),
+        puppyName: "Ollie",
         lastUpdated: Date()
     ))
 }
