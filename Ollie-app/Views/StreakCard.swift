@@ -41,13 +41,6 @@ struct StreakCard: View {
                             .font(.subheadline)
                             .fontWeight(.semibold)
                             .foregroundStyle(textColor)
-
-                        if streakInfo.isOnFire {
-                            Text(Strings.Streak.inARow)
-                                .font(.subheadline)
-                                .fontWeight(.semibold)
-                                .foregroundStyle(Color.ollieAccent)
-                        }
                     } else {
                         Text(Strings.Streak.streakBroken)
                             .font(.subheadline)
