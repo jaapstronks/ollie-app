@@ -76,3 +76,14 @@ crashlytics-build.properties
 # Maestro test reports (generated)
 .maestro/reports/
 .maestro/screenshots/
+
+# Test screenshots (local debugging)
+screenshots/
+
+# Sample/test data
+import-data/
+
+# Certificates (sensitive)
+*.cer
+*.p12
+*.mobileprovision

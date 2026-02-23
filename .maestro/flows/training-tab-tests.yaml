@@ -1,0 +1,58 @@
+# Test Training Tab functionality
+# Tests: Navigation, skill cards, logging sessions, category sections
+appId: nl.jaapstronks.Ollie
+---
+- launchApp
+- waitForAnimationToEnd
+
+# Wait for app to load
+- extendedWaitUntil:
+    visible: "Today|Vandaag"
+    timeout: 5000
+
+# =====================
+# 1. Navigate to Training Tab
+# =====================
+# Use the tab bar Train button
+- tapOn:
+    text: "Train"
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/training-01-tab-opened"
+
+# Verify we're on the training view by waiting for content to load
+- extendedWaitUntil:
+    visible: "Training|Week|Skills"
+    timeout: 5000
+- takeScreenshot: "screenshots/training-02-content-visible"
+
+# =====================
+# 2. Scroll Through Content
+# =====================
+- scroll
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/training-03-scrolled"
+
+# Continue scrolling to see more skills
+- scroll
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/training-04-more-categories"
+
+# =====================
+# 3. Scroll back up
+# =====================
+- swipe:
+    start: "50%,30%"
+    end: "50%,90%"
+- waitForAnimationToEnd
+- swipe:
+    start: "50%,30%"
+    end: "50%,90%"
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/training-05-back-to-top"
+
+# =====================
+# 4. Navigate back to Today tab
+# =====================
+- tapOn: "Today|Vandaag"
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/training-06-back-to-today"

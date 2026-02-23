@@ -163,7 +163,14 @@ struct TodayView: View {
             // Sleep status card
             SleepStatusCard(
                 sleepState: viewModel.currentSleepState,
-                onWakeUp: { viewModel.quickLog(type: .ontwaken) },
+                onWakeUp: {
+                    // Use EndSleepSheet for time-adjustable wake up
+                    if case .sleeping(let since, _) = viewModel.currentSleepState {
+                        viewModel.sheetCoordinator.presentSheet(.endSleep(since))
+                    } else {
+                        viewModel.quickLog(type: .ontwaken)
+                    }
+                },
                 onStartNap: { viewModel.quickLog(type: .slapen) }
             )
 

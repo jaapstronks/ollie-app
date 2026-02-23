@@ -18,7 +18,6 @@ struct StreakCard: View {
         // Only show if there's relevant streak data
         if streakInfo.currentStreak > 0 || streakInfo.bestStreak > 0 {
             cardContent
-                .padding(.horizontal, 16)
                 .padding(.vertical, 4)
         }
     }

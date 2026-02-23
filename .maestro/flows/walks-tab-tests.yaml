@@ -1,0 +1,60 @@
+# Test Walks Tab functionality
+# Tests: Navigation, favorite spots, walk locations
+appId: nl.jaapstronks.Ollie
+---
+- launchApp
+- waitForAnimationToEnd
+
+# Wait for app to load
+- extendedWaitUntil:
+    visible: "Today|Vandaag"
+    timeout: 5000
+
+# =====================
+# 1. Navigate to Walks Tab
+# =====================
+- tapOn: "Walks"
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/walks-01-tab-opened"
+
+# Should see Walks content
+- extendedWaitUntil:
+    visible: "Walks|Wandelingen"
+    timeout: 3000
+
+# =====================
+# 2. View Walks Content
+# =====================
+- takeScreenshot: "screenshots/walks-02-content"
+
+# Scroll to see more
+- scroll
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/walks-03-scrolled"
+
+# =====================
+# 3. Check for Favorite Spots section
+# =====================
+- runFlow:
+    when:
+      visible: "Favorite spots|Favoriete plekken"
+    commands:
+      - tapOn: "Favorite spots|Favoriete plekken"
+      - waitForAnimationToEnd
+      - takeScreenshot: "screenshots/walks-04-favorite-spots"
+      # Go back
+      - tapOn:
+          point: "10%,6%"
+      - waitForAnimationToEnd
+
+# =====================
+# 4. Check Weather Info (if visible)
+# =====================
+- takeScreenshot: "screenshots/walks-05-weather-section"
+
+# =====================
+# 5. Navigate back to Today
+# =====================
+- tapOn: "Today|Vandaag"
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/walks-06-back-to-today"

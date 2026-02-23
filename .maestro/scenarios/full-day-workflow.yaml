@@ -1,0 +1,64 @@
+# Scenario: Day Workflow Sample
+# Simulates logging a few activities using quick-log menu
+appId: nl.jaapstronks.Ollie
+---
+- launchApp
+- waitForAnimationToEnd
+
+# Wait for app to load
+- extendedWaitUntil:
+    visible: "Today|Vandaag"
+    timeout: 5000
+- takeScreenshot: "screenshots/workflow-01-start"
+
+# =====================
+# LOG EVENTS
+# =====================
+
+# 1. Morning pee outside
+- longPressOn:
+    id: "FAB_BUTTON"
+- waitForAnimationToEnd
+- tapOn: "Pee outside|Plas buiten"
+- waitForAnimationToEnd
+
+# Wait for return to main view
+- extendedWaitUntil:
+    visible: "Today|Vandaag"
+    timeout: 5000
+- takeScreenshot: "screenshots/workflow-02-pee-logged"
+
+# 2. Breakfast
+- longPressOn:
+    id: "FAB_BUTTON"
+- waitForAnimationToEnd
+- tapOn: "Eat|Eten"
+- waitForAnimationToEnd
+
+- extendedWaitUntil:
+    visible: "Today|Vandaag"
+    timeout: 5000
+- takeScreenshot: "screenshots/workflow-03-eat-logged"
+
+# 3. Poop
+- longPressOn:
+    id: "FAB_BUTTON"
+- waitForAnimationToEnd
+- tapOn: "Poop outside|Poep buiten"
+- waitForAnimationToEnd
+
+- extendedWaitUntil:
+    visible: "Today|Vandaag"
+    timeout: 5000
+- takeScreenshot: "screenshots/workflow-04-poop-logged"
+
+# =====================
+# VERIFY TIMELINE
+# =====================
+- scroll
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/workflow-05-timeline"
+
+# Check that events are in timeline
+- assertVisible: "Timeline"
+- takeScreenshot: "screenshots/workflow-06-final"

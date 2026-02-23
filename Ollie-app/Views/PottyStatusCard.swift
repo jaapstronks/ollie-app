@@ -12,8 +12,15 @@ import SwiftUI
 struct PottyStatusCard: View {
     let prediction: PottyPrediction
     let puppyName: String
+    let onLogPotty: (() -> Void)?
 
     @Environment(\.colorScheme) private var colorScheme
+
+    init(prediction: PottyPrediction, puppyName: String, onLogPotty: (() -> Void)? = nil) {
+        self.prediction = prediction
+        self.puppyName = puppyName
+        self.onLogPotty = onLogPotty
+    }
 
     var body: some View {
         // Hide during night hours (23:00 - 06:00) or if no data
@@ -21,22 +28,31 @@ struct PottyStatusCard: View {
             EmptyView()
         } else {
             cardContent
-                .padding(.horizontal, 16)
                 .padding(.vertical, 6)
         }
     }
 
     @ViewBuilder
     private var cardContent: some View {
-        StatusCardHeader(
-            iconName: PredictionCalculations.iconName(for: prediction.urgency),
-            iconColor: PredictionCalculations.iconColor(for: prediction.urgency),
-            tintColor: indicatorColor,
-            title: PredictionCalculations.displayText(for: prediction, puppyName: puppyName),
-            titleColor: textColor,
-            subtitle: PredictionCalculations.subtitleText(for: prediction),
-            statusLabel: urgencyLabel
-        )
+        VStack(spacing: 12) {
+            StatusCardHeader(
+                iconName: PredictionCalculations.iconName(for: prediction.urgency),
+                iconColor: PredictionCalculations.iconColor(for: prediction.urgency),
+                tintColor: indicatorColor,
+                title: PredictionCalculations.displayText(for: prediction, puppyName: puppyName),
+                titleColor: textColor,
+                subtitle: PredictionCalculations.subtitleText(for: prediction),
+                statusLabel: urgencyLabel
+            )
+
+            // Show action when urgency warrants it
+            if let onLogPotty, shouldShowAction {
+                Button(action: onLogPotty) {
+                    Label(Strings.PottyStatus.logNow, systemImage: "drop.fill")
+                }
+                .buttonStyle(.glassPill(tint: .custom(indicatorColor)))
+            }
+        }
         .padding(.horizontal, 16)
         .padding(.vertical, 14)
         .glassStatusCard(tintColor: indicatorColor, cornerRadius: 18)
@@ -45,6 +61,15 @@ struct PottyStatusCard: View {
         .accessibilityLabel(Strings.PottyStatus.accessibility)
         .accessibilityValue("\(PredictionCalculations.displayText(for: prediction, puppyName: puppyName)). \(urgencyLabel)")
         .accessibilityHint(Strings.PottyStatus.predictionHint(name: puppyName))
+    }
+
+    private var shouldShowAction: Bool {
+        switch prediction.urgency {
+        case .attention, .soon, .overdue:
+            return true
+        default:
+            return false
+        }
     }
 
     // MARK: - Computed Properties

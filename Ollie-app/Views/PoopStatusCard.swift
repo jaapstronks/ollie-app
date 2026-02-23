@@ -11,8 +11,14 @@ import SwiftUI
 /// Uses liquid glass design with semantic tinting based on urgency
 struct PoopStatusCard: View {
     let status: PoopStatus
+    let onLogPoop: (() -> Void)?
 
     @Environment(\.colorScheme) private var colorScheme
+
+    init(status: PoopStatus, onLogPoop: (() -> Void)? = nil) {
+        self.status = status
+        self.onLogPoop = onLogPoop
+    }
 
     var body: some View {
         // Hide during night hours
@@ -20,29 +26,51 @@ struct PoopStatusCard: View {
             EmptyView()
         } else {
             cardContent
-                .padding(.horizontal, 16)
                 .padding(.vertical, 4)
         }
     }
 
     @ViewBuilder
     private var cardContent: some View {
-        StatusCardHeader(
-            iconName: PoopCalculations.iconName(for: status.urgency),
-            iconColor: PoopCalculations.iconColor(for: status.urgency),
-            tintColor: indicatorColor,
-            title: mainText,
-            titleColor: textColor,
-            subtitle: subtitleText,
-            statusLabel: statusLabel,
-            iconSize: 40
-        )
+        VStack(spacing: 12) {
+            StatusCardHeader(
+                iconName: PoopCalculations.iconName(for: status.urgency),
+                iconColor: PoopCalculations.iconColor(for: status.urgency),
+                tintColor: indicatorColor,
+                title: mainText,
+                titleColor: textColor,
+                subtitle: subtitleText,
+                statusLabel: statusLabel,
+                iconSize: 40
+            )
+
+            // Show action when urgency warrants it
+            if let onLogPoop, shouldShowAction {
+                Button(action: onLogPoop) {
+                    Label(Strings.PoopStatus.logNow, systemImage: "leaf.fill")
+                }
+                .buttonStyle(.glassPill(tint: .custom(indicatorColor)))
+            }
+        }
         .padding(.horizontal, 14)
         .padding(.vertical, 12)
         .glassStatusCard(tintColor: indicatorColor)
         .accessibilityElement(children: .combine)
         .accessibilityLabel(Strings.PoopStatus.accessibility)
         .accessibilityValue("\(mainText). \(statusLabel)")
+    }
+
+    private var shouldShowAction: Bool {
+        // Show button when no poops yet or when urgency warrants it
+        if status.todayCount == 0 {
+            return true
+        }
+        switch status.urgency {
+        case .gentle, .attention:
+            return true
+        default:
+            return false
+        }
     }
 
     // MARK: - Computed Properties
@@ -132,7 +160,8 @@ struct PoopStatusCard: View {
                 message: Strings.PoopStatus.noPoopYet,
                 hasPatternData: true,
                 patternDailyMedian: 3.0
-            )
+            ),
+            onLogPoop: {}
         )
         Spacer()
     }

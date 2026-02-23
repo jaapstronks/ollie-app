@@ -11,8 +11,16 @@ import SwiftUI
 /// Uses liquid glass design with semantic tinting
 struct SleepStatusCard: View {
     let sleepState: SleepState
+    let onWakeUp: (() -> Void)?
+    let onStartNap: (() -> Void)?
 
     @Environment(\.colorScheme) private var colorScheme
+
+    init(sleepState: SleepState, onWakeUp: (() -> Void)? = nil, onStartNap: (() -> Void)? = nil) {
+        self.sleepState = sleepState
+        self.onWakeUp = onWakeUp
+        self.onStartNap = onStartNap
+    }
 
     var body: some View {
         // Hide during night hours (23:00 - 06:00) or if no data
@@ -20,29 +28,56 @@ struct SleepStatusCard: View {
             EmptyView()
         } else {
             cardContent
-                .padding(.horizontal, 16)
                 .padding(.vertical, 4)
         }
     }
 
     @ViewBuilder
     private var cardContent: some View {
-        StatusCardHeader(
-            iconName: iconName,
-            iconColor: indicatorColor,
-            tintColor: indicatorColor,
-            title: mainText,
-            titleColor: textColor,
-            subtitle: subtitleText.isEmpty ? nil : subtitleText,
-            statusLabel: statusLabel,
-            iconSize: 40
-        )
+        VStack(spacing: 12) {
+            StatusCardHeader(
+                iconName: iconName,
+                iconColor: indicatorColor,
+                tintColor: indicatorColor,
+                title: mainText,
+                titleColor: textColor,
+                subtitle: subtitleText.isEmpty ? nil : subtitleText,
+                statusLabel: statusLabel,
+                iconSize: 40
+            )
+
+            // Show contextual action based on sleep state
+            actionButton
+        }
         .padding(.horizontal, 14)
         .padding(.vertical, 12)
         .glassStatusCard(tintColor: indicatorColor)
         .accessibilityElement(children: .combine)
         .accessibilityLabel(Strings.SleepStatus.title)
         .accessibilityValue("\(mainText). \(statusLabel)")
+    }
+
+    @ViewBuilder
+    private var actionButton: some View {
+        switch sleepState {
+        case .sleeping:
+            if let onWakeUp {
+                Button(action: onWakeUp) {
+                    Label(Strings.SleepStatus.wakeUp, systemImage: "sun.max.fill")
+                }
+                .buttonStyle(.glassPill(tint: .custom(indicatorColor)))
+            }
+        case .awake(_, let durationMin):
+            // Show nap button when awake >= 45 minutes
+            if durationMin >= SleepCalculations.awakeWarningMinutes, let onStartNap {
+                Button(action: onStartNap) {
+                    Label(Strings.SleepStatus.startNap, systemImage: "moon.zzz.fill")
+                }
+                .buttonStyle(.glassPill(tint: .custom(indicatorColor)))
+            }
+        case .unknown:
+            EmptyView()
+        }
     }
 
     // MARK: - Computed Properties

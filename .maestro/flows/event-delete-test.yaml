@@ -1,0 +1,55 @@
+# Test Event Deletion
+# Tests: Log an event via quick menu, then swipe to delete from timeline
+appId: nl.jaapstronks.Ollie
+---
+- launchApp
+- waitForAnimationToEnd
+
+# Wait for app to load
+- extendedWaitUntil:
+    visible: "Today|Vandaag"
+    timeout: 5000
+
+# 1. Log an event via quick menu to delete
+- longPressOn:
+    id: "FAB_BUTTON"
+- waitForAnimationToEnd
+
+# Tap Walk to log a walk event
+- runFlow:
+    when:
+      visible: "Walk"
+    commands:
+      - tapOn: "Walk"
+      - waitForAnimationToEnd
+      - takeScreenshot: "screenshots/delete-01-walk-logged"
+
+# Ensure back on main view
+- extendedWaitUntil:
+    visible: "Today|Vandaag"
+    timeout: 5000
+
+# 2. Scroll to see the timeline with the logged event
+- scroll
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/delete-02-timeline-with-event"
+
+# 3. Swipe left on an event row to reveal delete
+# Events are in the middle-lower part of the screen
+- swipe:
+    start: "80%,55%"
+    end: "20%,55%"
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/delete-03-swipe-revealed"
+
+# 4. If delete button is visible, tap it
+- runFlow:
+    when:
+      visible: "Delete|Verwijderen"
+    commands:
+      - tapOn: "Delete|Verwijderen"
+      - waitForAnimationToEnd
+      - takeScreenshot: "screenshots/delete-04-event-deleted"
+
+# 5. Verify deletion (event should be gone or undo toast visible)
+- takeScreenshot: "screenshots/delete-05-final-state"

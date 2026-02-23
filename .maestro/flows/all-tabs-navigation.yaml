@@ -1,0 +1,40 @@
+# Test navigation between all 4 tabs
+# Tabs: Today, Train, Walks, Plan
+appId: nl.jaapstronks.Ollie
+---
+- launchApp
+- waitForAnimationToEnd
+
+# Wait for app to load
+- extendedWaitUntil:
+    visible: "Today|Vandaag"
+    timeout: 5000
+- takeScreenshot: "screenshots/tabs-01-today"
+
+# =====================
+# Navigate to each tab
+# =====================
+
+# Tab 2: Train
+- tapOn: "Train"
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/tabs-02-train"
+
+# Tab 3: Walks
+- tapOn: "Walks"
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/tabs-03-walks"
+
+# Tab 4: Plan
+- tapOn: "Plan"
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/tabs-04-plan"
+
+# Back to Today
+- tapOn: "Today|Vandaag"
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/tabs-05-back-to-today"
+
+# Verify we're back on Today
+- assertVisible:
+    id: "settings_button"

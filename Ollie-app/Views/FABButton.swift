@@ -33,8 +33,24 @@ struct FABQuickAction: Identifiable {
 /// Floating Action Button with long-press quick menu
 struct FABButton: View {
     let sleepState: SleepState
+    let currentActivity: InProgressActivity?
     let onTap: () -> Void
     let onQuickAction: (EventType, EventLocation?) -> Void
+    let onEndActivity: (() -> Void)?
+
+    init(
+        sleepState: SleepState,
+        currentActivity: InProgressActivity? = nil,
+        onTap: @escaping () -> Void,
+        onQuickAction: @escaping (EventType, EventLocation?) -> Void,
+        onEndActivity: (() -> Void)? = nil
+    ) {
+        self.sleepState = sleepState
+        self.currentActivity = currentActivity
+        self.onTap = onTap
+        self.onQuickAction = onQuickAction
+        self.onEndActivity = onEndActivity
+    }
 
     @State private var isShowingMenu = false
     @State private var isPressed = false

@@ -158,6 +158,7 @@ struct MainTabView: View {
                 // Tab 2: Walks
                 WalksTabView(
                     spotStore: spotStore,
+                    weatherService: weatherService,
                     locationManager: locationManager,
                     viewModel: viewModel
                 )

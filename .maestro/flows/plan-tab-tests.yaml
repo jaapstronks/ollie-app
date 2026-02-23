@@ -1,0 +1,63 @@
+# Test Plan Tab functionality
+# Tests: Navigation, moments gallery, week overview
+appId: nl.jaapstronks.Ollie
+---
+- launchApp
+- waitForAnimationToEnd
+
+# Wait for app to load
+- extendedWaitUntil:
+    visible: "Today|Vandaag"
+    timeout: 5000
+
+# =====================
+# 1. Navigate to Plan Tab
+# =====================
+- tapOn: "Plan"
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/plan-01-tab-opened"
+
+# =====================
+# 2. View Plan Content
+# =====================
+# Plan tab should show week overview and moments
+- takeScreenshot: "screenshots/plan-02-content"
+
+# =====================
+# 3. Scroll Through Content
+# =====================
+- scroll
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/plan-03-scrolled"
+
+# Continue scrolling
+- scroll
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/plan-04-more-content"
+
+# =====================
+# 4. Check for Moments Gallery
+# =====================
+- runFlow:
+    when:
+      visible: "Moments|Momenten"
+    commands:
+      - tapOn: "Moments|Momenten"
+      - waitForAnimationToEnd
+      - takeScreenshot: "screenshots/plan-05-moments-gallery"
+      # Navigate back if needed
+      - runFlow:
+          when:
+            visible:
+              id: "back_button"
+          commands:
+            - tapOn:
+                id: "back_button"
+            - waitForAnimationToEnd
+
+# =====================
+# 5. Navigate back to Today
+# =====================
+- tapOn: "Today|Vandaag"
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/plan-06-back-to-today"

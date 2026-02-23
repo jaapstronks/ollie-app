@@ -1,0 +1,109 @@
+# Event Logging Tests
+# Tests: FAB tap and long-press quick menu functionality
+appId: nl.jaapstronks.Ollie
+---
+- launchApp
+- waitForAnimationToEnd
+
+# Wait for app to load
+- extendedWaitUntil:
+    visible: "Today|Vandaag"
+    timeout: 5000
+- takeScreenshot: "screenshots/logging-01-app-launched"
+
+# =====================
+# TEST 1: FAB Long Press - Quick Menu
+# =====================
+# Long press opens the quick action menu
+- longPressOn:
+    id: "FAB_BUTTON"
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/logging-02-quick-menu-open"
+
+# Quick menu should show options like "Pee outside", "Eat", etc.
+# Tap one of the quick actions
+- runFlow:
+    when:
+      visible: "Pee outside|Plas buiten"
+    commands:
+      - tapOn: "Pee outside|Plas buiten"
+      - waitForAnimationToEnd
+      - takeScreenshot: "screenshots/logging-03-pee-quick-logged"
+
+# If quick menu is still visible, dismiss it
+- runFlow:
+    when:
+      notVisible: "Today|Vandaag"
+    commands:
+      - tapOn:
+          point: "20%,30%"
+      - waitForAnimationToEnd
+
+# Verify back on main view
+- extendedWaitUntil:
+    visible: "Today|Vandaag"
+    timeout: 5000
+- takeScreenshot: "screenshots/logging-04-after-quick-log"
+
+# =====================
+# TEST 2: Quick Log - Eat
+# =====================
+- longPressOn:
+    id: "FAB_BUTTON"
+- waitForAnimationToEnd
+
+- runFlow:
+    when:
+      visible: "Eat|Eten"
+    commands:
+      - tapOn: "Eat|Eten"
+      - waitForAnimationToEnd
+      - takeScreenshot: "screenshots/logging-05-eat-quick-logged"
+
+# Ensure back on main view
+- extendedWaitUntil:
+    visible: "Today|Vandaag"
+    timeout: 5000
+
+# =====================
+# TEST 3: Quick Log - Sleep/Wake
+# =====================
+- longPressOn:
+    id: "FAB_BUTTON"
+- waitForAnimationToEnd
+
+# Tap Sleep or Wake up (depending on current state)
+- runFlow:
+    when:
+      visible: "Sleep|Slapen"
+    commands:
+      - tapOn: "Sleep|Slapen"
+      - waitForAnimationToEnd
+
+- runFlow:
+    when:
+      visible: "Wake up|Ontwaken"
+    commands:
+      - tapOn: "Wake up|Ontwaken"
+      - waitForAnimationToEnd
+
+# Ensure back on main view
+- extendedWaitUntil:
+    visible: "Today|Vandaag"
+    timeout: 5000
+- takeScreenshot: "screenshots/logging-06-sleep-logged"
+
+# =====================
+# TEST 4: Verify Events in Timeline
+# =====================
+# Scroll to see timeline with logged events
+- scroll
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/logging-07-timeline-events"
+
+# Final state
+- swipe:
+    start: "50%,30%"
+    end: "50%,70%"
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/logging-08-final-state"

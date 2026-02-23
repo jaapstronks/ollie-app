@@ -30,6 +30,7 @@ enum GlassTint {
     case danger
     case info
     case sleep
+    case custom(Color)
 
     var color: Color? {
         switch self {
@@ -40,6 +41,7 @@ enum GlassTint {
         case .danger: return Color.ollieDanger
         case .info: return Color.ollieInfo
         case .sleep: return Color.ollieSleep
+        case .custom(let color): return color
         }
     }
 }

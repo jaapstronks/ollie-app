@@ -7,15 +7,17 @@
 import SwiftUI
 
 /// Row displaying a sleep session in the timeline
+/// Shows start → end time as a single unified event
 struct SleepSessionRow: View {
     let session: SleepSession
+    var note: String?
     let onEditStart: () -> Void
     let onEditEnd: () -> Void
     let onDelete: () -> Void
 
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
-            // Time display
+            // Time display - shows start and end stacked
             VStack(alignment: .trailing, spacing: 2) {
                 Text(session.startTime.timeString)
                     .font(.caption)
@@ -25,6 +27,11 @@ struct SleepSessionRow: View {
                     Text(endTime.timeString)
                         .font(.caption)
                         .foregroundColor(.secondary)
+                } else {
+                    // Ongoing indicator
+                    Text("...")
+                        .font(.caption)
+                        .foregroundColor(.ollieSleep)
                 }
             }
             .frame(width: 44, alignment: .trailing)
@@ -39,6 +46,14 @@ struct SleepSessionRow: View {
                 } else {
                     completedContent
                 }
+
+                // Note (if any)
+                if let note = note, !note.isEmpty {
+                    Text(note)
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                        .lineLimit(2)
+                }
             }
 
             Spacer()
@@ -51,6 +66,7 @@ struct SleepSessionRow: View {
         .contentShape(Rectangle())
         .accessibilityElement(children: .combine)
         .accessibilityLabel(accessibilityLabel)
+        .accessibilityIdentifier("SLEEP_SESSION_ROW")
     }
 
     // MARK: - Ongoing Sleep Content
@@ -61,13 +77,12 @@ struct SleepSessionRow: View {
             Text(Strings.SleepSession.sleeping)
                 .font(.body)
                 .fontWeight(.medium)
-        }
 
-        // Live timer using TimelineView for updates
-        SwiftUI.TimelineView(.periodic(from: Date(), by: 60)) { _ in
-            Text(Strings.SleepStatus.started(time: session.startTime.timeString))
-                .font(.subheadline)
-                .foregroundColor(.secondary)
+            // Pulsing dot indicator
+            Circle()
+                .fill(Color.ollieSleep)
+                .frame(width: 8, height: 8)
+                .modifier(PulsingAnimation())
         }
     }
 
@@ -86,10 +101,6 @@ struct SleepSessionRow: View {
                     .foregroundColor(.orange)
             }
         }
-
-        Text("\(session.startTime.timeString) \u{2192} \(session.endTime?.timeString ?? "")")
-            .font(.subheadline)
-            .foregroundColor(.secondary)
     }
 
     // MARK: - Duration Pill
@@ -102,10 +113,10 @@ struct SleepSessionRow: View {
                 Text(formatLiveDuration())
                     .font(.caption)
                     .fontWeight(.medium)
-                    .foregroundColor(.purple)
+                    .foregroundColor(.ollieSleep)
                     .padding(.horizontal, 8)
                     .padding(.vertical, 4)
-                    .background(Color.purple.opacity(0.15))
+                    .background(Color.ollieSleep.opacity(0.15))
                     .clipShape(Capsule())
             }
         } else {
@@ -137,11 +148,41 @@ struct SleepSessionRow: View {
     }
 
     private var accessibilityLabel: String {
+        var parts: [String] = []
+
         if session.isOngoing {
-            return "\(Strings.SleepSession.sleeping), \(Strings.SleepStatus.started(time: session.startTime.timeString)), \(formatLiveDuration())"
+            parts.append(Strings.SleepSession.sleeping)
+            parts.append(Strings.SleepStatus.started(time: session.startTime.timeString))
+            parts.append(formatLiveDuration())
         } else {
-            return "\(Strings.SleepSession.nap), \(session.startTime.timeString) to \(session.endTime?.timeString ?? ""), \(session.durationString)"
+            parts.append(Strings.SleepSession.nap)
+            parts.append("\(session.startTime.timeString) to \(session.endTime?.timeString ?? "")")
+            parts.append(session.durationString)
         }
+
+        if let note = note, !note.isEmpty {
+            parts.append(note)
+        }
+
+        return parts.joined(separator: ", ")
+    }
+}
+
+// MARK: - Pulsing Animation
+
+private struct PulsingAnimation: ViewModifier {
+    @State private var isPulsing = false
+
+    func body(content: Content) -> some View {
+        content
+            .opacity(isPulsing ? 0.4 : 1.0)
+            .animation(
+                .easeInOut(duration: 1.0).repeatForever(autoreverses: true),
+                value: isPulsing
+            )
+            .onAppear {
+                isPulsing = true
+            }
     }
 }
 
@@ -157,6 +198,7 @@ struct SleepSessionRow: View {
                 startEventId: UUID(),
                 endEventId: nil
             ),
+            note: nil,
             onEditStart: {},
             onEditEnd: {},
             onDelete: {}
@@ -176,6 +218,7 @@ struct SleepSessionRow: View {
                 startEventId: UUID(),
                 endEventId: UUID()
             ),
+            note: "After lunch nap",
             onEditStart: {},
             onEditEnd: {},
             onDelete: {}
@@ -195,6 +238,7 @@ struct SleepSessionRow: View {
                 startEventId: UUID(),
                 endEventId: UUID()
             ),
+            note: nil,
             onEditStart: {},
             onEditEnd: {},
             onDelete: {}
