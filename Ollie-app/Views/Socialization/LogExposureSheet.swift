@@ -70,8 +70,9 @@ struct LogExposureSheet: View {
     private var itemHeader: some View {
         VStack(spacing: 8) {
             if let category = socializationStore.category(forItemId: item.id) {
-                Text(category.emoji)
-                    .font(.system(size: 48))
+                Image(systemName: category.icon)
+                    .font(.system(size: 36))
+                    .foregroundStyle(.primary)
             }
 
             Text(item.name)
@@ -111,7 +112,7 @@ struct LogExposureSheet: View {
             HapticFeedback.light()
         } label: {
             VStack(spacing: 6) {
-                Text(distance.emoji)
+                Image(systemName: distance.icon)
                     .font(.title2)
 
                 Text(distance.label)
@@ -157,8 +158,9 @@ struct LogExposureSheet: View {
             HapticFeedback.light()
         } label: {
             VStack(spacing: 6) {
-                Text(reaction.emoji)
+                Image(systemName: reaction.icon)
                     .font(.title2)
+                    .foregroundStyle(reactionIconColor(for: reaction))
 
                 Text(reaction.label)
                     .font(.caption)
@@ -199,6 +201,15 @@ struct LogExposureSheet: View {
             return reaction.isPositive ? .ollieSuccess : .ollieWarning
         }
         return .clear
+    }
+
+    private func reactionIconColor(for reaction: SocializationReaction) -> Color {
+        switch reaction {
+        case .positief: return .ollieSuccess
+        case .neutraal: return .ollieAccent
+        case .onzeker: return .orange
+        case .angstig: return .ollieWarning
+        }
     }
 
     // MARK: - Tip Callout

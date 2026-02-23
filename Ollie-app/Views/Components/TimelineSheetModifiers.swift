@@ -117,9 +117,9 @@ struct TimelineSheetModifiers: ViewModifier {
         case .allEvents:
             AllEventsSheet(
                 onSelect: { type in
-                    // Moment events need special handling - go to LogMomentSheet
+                    // Moment events need special handling - show camera/library choice first
                     if type == .moment {
-                        viewModel.sheetCoordinator.transitionToSheet(.logMoment)
+                        viewModel.sheetCoordinator.transitionToSheet(.momentSourcePicker)
                     } else if type == .uitlaten {
                         // Walk: check if activity in progress, otherwise show start/log choice
                         if viewModel.isWalkInProgress {
@@ -183,6 +183,20 @@ struct TimelineSheetModifiers: ViewModifier {
         case .mediaPicker:
             // Handled by fullScreenCover above, this case shouldn't be reached
             EmptyView()
+
+        case .momentSourcePicker:
+            MomentSourcePickerSheet(
+                onCamera: {
+                    viewModel.openCamera()
+                },
+                onLibrary: {
+                    viewModel.openPhotoLibrary()
+                },
+                onCancel: {
+                    viewModel.sheetCoordinator.dismissSheet()
+                }
+            )
+            .presentationDetents([.height(200)])
 
         case .logMoment:
             LogMomentSheet(

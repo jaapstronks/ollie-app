@@ -19,9 +19,7 @@ struct WalkSuggestion {
 
     /// Format suggested time as HH:mm string
     var timeString: String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "HH:mm"
-        return formatter.string(from: suggestedTime)
+        suggestedTime.timeString
     }
 
     /// Is the walk day complete (all scheduled walks done or past end time)?
@@ -53,9 +51,9 @@ struct WalkSuggestionCalculations {
         let now = date
 
         // Filter to today's walk events
-        let todayWalks = events.filter { event in
-            event.type == .uitlaten && calendar.isDate(event.time, inSameDayAs: date)
-        }.sorted { $0.time < $1.time }
+        let todayWalks = events.walks().filter { event in
+            calendar.isDate(event.time, inSameDayAs: date)
+        }.chronological()
 
         let walksCompletedToday = todayWalks.count
         let targetWalksPerDay = walkSchedule.walks.count

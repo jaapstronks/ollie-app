@@ -89,7 +89,7 @@ struct PatternCalculations {
         var indoorCount = 0
 
         // Find all wake events
-        let wakeEvents = events.filter { $0.type == .ontwaken }
+        let wakeEvents = events.wakes()
 
         for wakeEvent in wakeEvents {
             // Look for the first potty event within the trigger window
@@ -117,7 +117,7 @@ struct PatternCalculations {
         var outdoorCount = 0
         var indoorCount = 0
 
-        let mealEvents = events.filter { $0.type == .eten }
+        let mealEvents = events.meals()
 
         for mealEvent in mealEvents {
             if let pottyResult = findFirstPottyAfter(time: mealEvent.time, events: events) {
@@ -144,7 +144,7 @@ struct PatternCalculations {
         var outdoorCount = 0
         var indoorCount = 0
 
-        let walkEvents = events.filter { $0.type == .uitlaten }
+        let walkEvents = events.walks()
 
         for walkEvent in walkEvents {
             // For walks, we look for potty events during or shortly after the walk
@@ -173,7 +173,7 @@ struct PatternCalculations {
         var outdoorCount = 0
         var indoorCount = 0
 
-        let waterEvents = events.filter { $0.type == .drinken }
+        let waterEvents = events.drinks()
 
         for waterEvent in waterEvents {
             // Water typically leads to potty within 15-30 minutes
@@ -202,7 +202,7 @@ struct PatternCalculations {
         var indoorCount = 0
 
         // Training and social events are often high-energy activities
-        let playEvents = events.filter { $0.type == .training || $0.type == .sociaal }
+        let playEvents = events.ofTypes([.training, .sociaal])
 
         for playEvent in playEvents {
             if let pottyResult = findFirstPottyAfter(time: playEvent.time, events: events) {

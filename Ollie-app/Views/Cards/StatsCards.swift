@@ -136,23 +136,23 @@ struct TodayStatsCard: View {
     let events: [PuppyEvent]
 
     private var pottyCount: Int {
-        events.filter { $0.type == .plassen }.count
+        events.pee().count
     }
 
     private var outdoorCount: Int {
-        events.filter { $0.type == .plassen && $0.location == .buiten }.count
+        events.outdoorPee().count
     }
 
     private var indoorCount: Int {
-        events.filter { $0.type == .plassen && $0.location == .binnen }.count
+        events.pee().indoor().count
     }
 
     private var mealCount: Int {
-        events.filter { $0.type == .eten }.count
+        events.meals().count
     }
 
     private var poopCount: Int {
-        events.filter { $0.type == .poepen }.count
+        events.poop().count
     }
 
     var body: some View {
@@ -219,7 +219,7 @@ struct SleepStatsCard: View {
     }
 
     private var sleepSessions: Int {
-        events.filter { $0.type == .slapen }.count
+        events.sleeps().count
     }
 
     private var goalMinutes: Int { 18 * 60 }

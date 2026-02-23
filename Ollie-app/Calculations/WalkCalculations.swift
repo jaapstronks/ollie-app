@@ -13,7 +13,7 @@ struct WalkCalculations {
     /// - Returns: Array of WalkSession objects for display
     static func walkSessions(from events: [PuppyEvent]) -> [WalkSession] {
         // Get all walk events
-        let walkEvents = events.filter { $0.type == .uitlaten }
+        let walkEvents = events.walks()
 
         return walkEvents.compactMap { walkEvent -> WalkSession? in
             // Find potty events that belong to this walk
@@ -57,6 +57,6 @@ struct WalkCalculations {
     /// - Parameter events: All events for the day
     /// - Returns: Set of walk event IDs
     static func walkEventIds(from events: [PuppyEvent]) -> Set<UUID> {
-        Set(events.filter { $0.type == .uitlaten }.map(\.id))
+        Set(events.walks().map(\.id))
     }
 }

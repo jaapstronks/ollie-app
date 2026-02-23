@@ -145,7 +145,7 @@ final class IntentDataStore {
 
         // Check today first
         let todayEvents = readEvents(for: today)
-        if let event = todayEvents.filter({ $0.type == type }).first {
+        if let event = todayEvents.ofType(type).first {
             return event
         }
 
@@ -153,7 +153,7 @@ final class IntentDataStore {
         var date = Calendar.current.date(byAdding: .day, value: -1, to: today)!
         for _ in 0..<7 {
             let dayEvents = readEvents(for: date)
-            if let event = dayEvents.filter({ $0.type == type }).first {
+            if let event = dayEvents.ofType(type).first {
                 return event
             }
             date = Calendar.current.date(byAdding: .day, value: -1, to: date)!
@@ -173,7 +173,7 @@ final class IntentDataStore {
         let todayEvents = readEvents(for: today)
 
         // Get all sleep/wake events sorted by time (most recent first)
-        let sleepWakeEvents = todayEvents.filter { $0.type == .slapen || $0.type == .ontwaken }
+        let sleepWakeEvents = todayEvents.ofTypes([.slapen, .ontwaken])
 
         // If the most recent sleep/wake event is a sleep, return it
         if let mostRecent = sleepWakeEvents.first, mostRecent.type == .slapen {
@@ -183,7 +183,7 @@ final class IntentDataStore {
         // Check yesterday too (in case puppy went to sleep last night)
         if let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: today) {
             let yesterdayEvents = readEvents(for: yesterday)
-            let yesterdaySleepWake = yesterdayEvents.filter { $0.type == .slapen || $0.type == .ontwaken }
+            let yesterdaySleepWake = yesterdayEvents.ofTypes([.slapen, .ontwaken])
             if let mostRecent = yesterdaySleepWake.first, mostRecent.type == .slapen {
                 return mostRecent
             }

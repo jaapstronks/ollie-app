@@ -53,9 +53,7 @@ struct UpcomingItem: Identifiable {
     }
 
     var timeString: String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "HH:mm"
-        return formatter.string(from: targetTime)
+        targetTime.timeString
     }
 
     /// Minutes until target time (negative if past)
@@ -371,7 +369,7 @@ struct UpcomingCalculations {
 
         // Calculate upcoming meals
         if let schedule = mealSchedule {
-            let mealsToday = events.filter { $0.type == .eten }
+            let mealsToday = events.meals()
             let mealCount = mealsToday.count
 
             for (index, portion) in schedule.portions.enumerated() {

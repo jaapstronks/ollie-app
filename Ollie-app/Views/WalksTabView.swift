@@ -23,7 +23,7 @@ struct WalksTabView: View {
     // MARK: - Computed Properties
 
     private var todaysWalks: [PuppyEvent] {
-        viewModel.events.filter { $0.type == .uitlaten }
+        viewModel.events.walks()
     }
 
     private var totalWalkMinutes: Int {

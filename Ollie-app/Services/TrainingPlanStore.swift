@@ -72,8 +72,8 @@ class TrainingPlanStore: ObservableObject {
             to: Date()
         )
 
-        return allEvents.filter { event in
-            event.type == .training && event.exercise == skillId
+        return allEvents.training().filter { event in
+            event.exercise == skillId
         }.count
     }
 
@@ -158,8 +158,8 @@ class TrainingPlanStore: ObservableObject {
         let thirtyDaysAgo = Calendar.current.date(byAdding: .day, value: -30, to: Date()) ?? Date()
         let allEvents = eventStore.getEvents(from: thirtyDaysAgo, to: Date())
 
-        return allEvents
-            .filter { $0.type == .training && $0.exercise == skillId }
+        return allEvents.training()
+            .filter { $0.exercise == skillId }
             .prefix(limit)
             .map { $0 }
     }
@@ -236,9 +236,6 @@ class TrainingPlanStore: ObservableObject {
 extension Date {
     /// Parse a date string in YYYY-MM-DD format
     static func fromDateString(_ string: String) -> Date? {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd"
-        formatter.timeZone = TimeZone.current
-        return formatter.date(from: string)
+        DateFormatters.dateOnly.date(from: string)
     }
 }

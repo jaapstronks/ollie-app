@@ -52,8 +52,8 @@ struct SleepSession: Identifiable {
     /// Build sleep sessions from a list of events
     /// Groups slapen + ontwaken events by sleepSessionId, falling back to time-based matching
     static func buildSessions(from events: [PuppyEvent]) -> [SleepSession] {
-        let sleepEvents = events.filter { $0.type == .slapen }
-        let wakeEvents = events.filter { $0.type == .ontwaken }
+        let sleepEvents = events.sleeps()
+        let wakeEvents = events.wakes()
 
         var sessions: [SleepSession] = []
         var matchedWakeIds: Set<UUID> = []
@@ -100,8 +100,8 @@ struct SleepSession: Identifiable {
 
     /// Get the sleepSessionId for an ongoing sleep (to attach to wake event)
     static func ongoingSleepSessionId(from events: [PuppyEvent]) -> UUID? {
-        let sleepEvents = events.filter { $0.type == .slapen }.sorted { $0.time > $1.time }
-        let wakeEvents = events.filter { $0.type == .ontwaken }
+        let sleepEvents = events.sleeps().reverseChronological()
+        let wakeEvents = events.wakes()
 
         // Find the most recent sleep event that doesn't have a matching wake
         for sleepEvent in sleepEvents {

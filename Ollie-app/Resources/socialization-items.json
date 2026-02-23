@@ -3,7 +3,7 @@
     {
       "id": "mensen",
       "name": "People",
-      "emoji": "👥",
+      "icon": "person.2.fill",
       "items": [
         { "id": "kind-0-5", "name": "Toddler (0-5 years)", "targetExposures": 3, "isWalkable": true },
         { "id": "kind-6-12", "name": "Child (6-12 years)", "targetExposures": 3, "isWalkable": true },
@@ -26,7 +26,7 @@
     {
       "id": "dieren",
       "name": "Animals",
-      "emoji": "🐕",
+      "icon": "pawprint.fill",
       "items": [
         { "id": "hond-klein", "name": "Small dog", "targetExposures": 5, "isWalkable": true },
         { "id": "hond-groot", "name": "Large dog", "targetExposures": 5, "isWalkable": true },
@@ -41,7 +41,7 @@
     {
       "id": "voertuigen",
       "name": "Vehicles",
-      "emoji": "🚗",
+      "icon": "car.fill",
       "items": [
         { "id": "auto", "name": "Car", "targetExposures": 5, "isWalkable": true },
         { "id": "bus", "name": "Bus", "targetExposures": 3, "isWalkable": true },
@@ -58,7 +58,7 @@
     {
       "id": "geluiden",
       "name": "Sounds",
-      "emoji": "🔊",
+      "icon": "speaker.wave.3.fill",
       "items": [
         { "id": "stofzuiger", "name": "Vacuum cleaner", "targetExposures": 5, "isWalkable": false },
         { "id": "fohn", "name": "Hair dryer", "targetExposures": 3, "isWalkable": false },
@@ -79,7 +79,7 @@
     {
       "id": "omgevingen",
       "name": "Environments",
-      "emoji": "🏙️",
+      "icon": "building.2.fill",
       "items": [
         { "id": "drukke-straat", "name": "Busy street", "targetExposures": 5, "isWalkable": true },
         { "id": "winkelstraat", "name": "Shopping street", "targetExposures": 3, "isWalkable": true },
@@ -98,7 +98,7 @@
     {
       "id": "ondergronden",
       "name": "Surfaces",
-      "emoji": "🪨",
+      "icon": "square.stack.3d.up.fill",
       "items": [
         { "id": "gras", "name": "Grass", "targetExposures": 5, "isWalkable": true },
         { "id": "grind", "name": "Gravel", "targetExposures": 3, "isWalkable": true },
@@ -115,7 +115,7 @@
     {
       "id": "handling",
       "name": "Handling",
-      "emoji": "✋",
+      "icon": "hand.raised.fill",
       "items": [
         { "id": "oren-aanraken", "name": "Touching ears", "targetExposures": 5, "isWalkable": false },
         { "id": "poten-aanraken", "name": "Touching paws", "targetExposures": 5, "isWalkable": false },
@@ -132,7 +132,7 @@
     {
       "id": "objecten",
       "name": "Objects",
-      "emoji": "📦",
+      "icon": "shippingbox.fill",
       "items": [
         { "id": "paraplu-open", "name": "Opening umbrella", "targetExposures": 3, "isWalkable": false },
         { "id": "ballonnen", "name": "Balloons", "targetExposures": 2, "isWalkable": true },
@@ -149,7 +149,7 @@
     {
       "id": "weer",
       "name": "Weather",
-      "emoji": "🌧️",
+      "icon": "cloud.rain.fill",
       "items": [
         { "id": "regen", "name": "Rain", "targetExposures": 3, "isWalkable": true },
         { "id": "wind", "name": "Strong wind", "targetExposures": 3, "isWalkable": true },

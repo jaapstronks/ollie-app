@@ -206,7 +206,7 @@ class NotificationService: ObservableObject {
         await cancelNotifications(withPrefix: NotificationPrefix.meal)
 
         let minutesBefore = profile.notificationSettings.mealReminders.minutesBefore
-        let todayMealEvents = events.filter { $0.type == .eten }
+        let todayMealEvents = events.meals()
 
         for portion in profile.mealSchedule.portions {
             guard let targetTimeStr = portion.targetTime,

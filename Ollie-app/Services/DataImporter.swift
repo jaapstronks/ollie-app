@@ -220,13 +220,9 @@ class DataImporter: ObservableObject {
 
     /// Parse date range from JSONL file names (format: YYYY-MM-DD.jsonl)
     private func parseDateRange(from fileNames: [String]) -> (start: Date, end: Date)? {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd"
-        formatter.timeZone = TimeZone.current
-
         let dates = fileNames.compactMap { fileName -> Date? in
             let datePart = fileName.replacingOccurrences(of: ".jsonl", with: "")
-            return formatter.date(from: datePart)
+            return DateFormatters.dateOnly.date(from: datePart)
         }.sorted()
 
         guard let first = dates.first, let last = dates.last else {

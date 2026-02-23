@@ -78,10 +78,7 @@ class WeatherService: ObservableObject {
 
         // Check for incoming rain
         if let rainHour = upcoming.first(where: { $0.precipProbability > 60 }) {
-            let formatter = DateFormatter()
-            formatter.dateFormat = "HH:mm"
-            formatter.locale = Locale(identifier: "nl_NL")
-            let timeString = formatter.string(from: rainHour.time)
+            let timeString = rainHour.time.timeString
 
             // If rain is coming before predicted potty time
             if let pottyTime = predictedPottyTime, rainHour.time <= pottyTime {
@@ -111,11 +108,8 @@ class WeatherService: ObservableObject {
         // Check for good weather window
         let dryHours = upcoming.filter { $0.precipProbability < 20 }
         if dryHours.count >= 3, let first = upcoming.first, first.precipProbability < 20 {
-            let formatter = DateFormatter()
-            formatter.dateFormat = "HH:00"
-            formatter.locale = Locale(identifier: "nl_NL")
             if let lastDry = dryHours.last {
-                let untilTime = formatter.string(from: lastDry.time.addingTimeInterval(3600))
+                let untilTime = lastDry.time.addingTimeInterval(3600).hourString
                 return WeatherAlert(
                     icon: "sun.max.fill",
                     message: "Droog tot \(untilTime) — goed moment voor een wandeling",

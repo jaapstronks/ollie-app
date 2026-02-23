@@ -188,15 +188,11 @@ struct EditMealSheet: View {
     }
 
     private func parseTime(_ string: String) -> Date? {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "HH:mm"
-        return formatter.date(from: string)
+        DateFormatters.timeOnly.date(from: string)
     }
 
     private func formatTime(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "HH:mm"
-        return formatter.string(from: date)
+        date.timeString
     }
 }
 
@@ -244,13 +240,10 @@ struct AddMealSheet: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Voeg toe") {
-                        let formatter = DateFormatter()
-                        formatter.dateFormat = "HH:mm"
-
                         let newPortion = MealSchedule.MealPortion(
                             label: label,
                             amount: amount,
-                            targetTime: hasTargetTime ? formatter.string(from: targetTime) : nil
+                            targetTime: hasTargetTime ? targetTime.timeString : nil
                         )
                         onAdd(newPortion)
                         dismiss()

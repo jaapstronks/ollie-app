@@ -116,9 +116,10 @@ struct SocializationItemRow: View {
     @ViewBuilder
     private func lastExposureRow(_ exposure: Exposure) -> some View {
         HStack(spacing: 8) {
-            // Reaction emoji
-            Text(exposure.reaction.emoji)
+            // Reaction icon
+            Image(systemName: exposure.reaction.icon)
                 .font(.caption)
+                .foregroundStyle(exposure.reaction.isPositive ? Color.ollieSuccess : Color.ollieWarning)
 
             // Distance
             Text(exposure.distance.label)

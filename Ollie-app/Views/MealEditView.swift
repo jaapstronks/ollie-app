@@ -138,9 +138,7 @@ struct MealPortionRow: View {
     }
 
     private func dateFromTimeString(_ timeString: String) -> Date? {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "HH:mm"
-        guard let time = formatter.date(from: timeString) else { return nil }
+        guard let time = DateFormatters.timeOnly.date(from: timeString) else { return nil }
 
         // Combine with today's date
         let calendar = Calendar.current
@@ -153,9 +151,7 @@ struct MealPortionRow: View {
     }
 
     private func timeStringFromDate(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "HH:mm"
-        return formatter.string(from: date)
+        date.timeString
     }
 }
 

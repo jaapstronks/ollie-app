@@ -24,9 +24,10 @@ struct SocializationCategoryRow: View {
 
     var body: some View {
         HStack(spacing: 12) {
-            // Emoji
-            Text(category.emoji)
-                .font(.title2)
+            // Icon
+            Image(systemName: category.icon)
+                .font(.title3)
+                .foregroundStyle(.primary)
                 .frame(width: 40, height: 40)
                 .background(
                     Circle()
@@ -93,7 +94,7 @@ struct SocializationCategoryRow: View {
     let category = SocializationCategory(
         id: "mensen",
         name: "People",
-        emoji: "👥",
+        icon: "person.2.fill",
         items: [
             SocializationItem(id: "test", name: "Test", description: nil, targetExposures: 3, isWalkable: true)
         ]

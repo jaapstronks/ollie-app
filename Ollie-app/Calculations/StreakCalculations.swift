@@ -41,9 +41,7 @@ struct StreakCalculations {
     /// - Parameter events: Array of puppy events
     /// - Returns: Number of consecutive outdoor potty events
     static func calculateCurrentStreak(events: [PuppyEvent]) -> Int {
-        let pottyEvents = events
-            .filter { $0.type == .plassen }
-            .sorted { $0.time > $1.time }  // Most recent first
+        let pottyEvents = events.pee().reverseChronological()  // Most recent first
 
         var streak = 0
         for event in pottyEvents {
@@ -60,9 +58,7 @@ struct StreakCalculations {
     /// - Parameter events: Array of puppy events
     /// - Returns: Longest consecutive outdoor streak
     static func calculateBestStreak(events: [PuppyEvent]) -> Int {
-        let pottyEvents = events
-            .filter { $0.type == .plassen }
-            .sorted { $0.time < $1.time }  // Chronological
+        let pottyEvents = events.pee().chronological()  // Chronological
 
         var bestStreak = 0
         var currentStreak = 0
@@ -83,9 +79,7 @@ struct StreakCalculations {
     /// - Parameter events: Array of puppy events
     /// - Returns: StreakInfo with current and best streaks
     static func getStreakInfo(events: [PuppyEvent]) -> StreakInfo {
-        let pottyEvents = events
-            .filter { $0.type == .plassen }
-            .sorted { $0.time < $1.time }
+        let pottyEvents = events.pee().chronological()
 
         guard !pottyEvents.isEmpty else { return .empty }
 

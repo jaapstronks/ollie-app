@@ -28,6 +28,14 @@ enum DateFormatters {
         return formatter
     }()
 
+    /// Format: HH:00 (hour only, for weather forecasts)
+    static let hourOnly: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:00"
+        formatter.timeZone = TimeZone.current
+        return formatter
+    }()
+
     /// Format: EEEE d MMMM (Dutch locale, full day name)
     static let dutchFullDate: DateFormatter = {
         let formatter = DateFormatter()
@@ -95,6 +103,11 @@ extension Date {
     /// Format as HH:mm for display
     var timeString: String {
         DateFormatters.timeOnly.string(from: self)
+    }
+
+    /// Format as HH:00 for display (hour only)
+    var hourString: String {
+        DateFormatters.hourOnly.string(from: self)
     }
 
     /// Format as full ISO 8601 with timezone

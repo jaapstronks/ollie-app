@@ -74,10 +74,11 @@ struct WalkSuggestionsCard: View {
             HapticFeedback.light()
         } label: {
             HStack(spacing: 12) {
-                // Category emoji
+                // Category icon
                 if let category = socializationStore.category(forItemId: item.id) {
-                    Text(category.emoji)
+                    Image(systemName: category.icon)
                         .font(.title3)
+                        .foregroundStyle(.secondary)
                 }
 
                 // Item info

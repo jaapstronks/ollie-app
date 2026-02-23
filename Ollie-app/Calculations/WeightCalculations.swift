@@ -43,8 +43,8 @@ enum WeightCalculations {
     ) -> [WeightMeasurement] {
         let calendar = Calendar.current
 
-        return events
-            .filter { $0.type == .gewicht && $0.weightKg != nil }
+        return events.weights()
+            .filter { $0.weightKg != nil }
             .compactMap { event -> WeightMeasurement? in
                 guard let weight = event.weightKg else { return nil }
 
@@ -66,8 +66,8 @@ enum WeightCalculations {
 
     /// Get the most recent weight measurement
     static func latestWeight(events: [PuppyEvent]) -> (weight: Double, date: Date)? {
-        let weightEvents = events
-            .filter { $0.type == .gewicht && $0.weightKg != nil }
+        let weightEvents = events.weights()
+            .filter { $0.weightKg != nil }
             .sorted { $0.time > $1.time }
 
         guard let latest = weightEvents.first, let weight = latest.weightKg else {
@@ -79,8 +79,8 @@ enum WeightCalculations {
 
     /// Calculate weight change since previous measurement
     static func weightDelta(events: [PuppyEvent]) -> (delta: Double, previousDate: Date)? {
-        let weightEvents = events
-            .filter { $0.type == .gewicht && $0.weightKg != nil }
+        let weightEvents = events.weights()
+            .filter { $0.weightKg != nil }
             .sorted { $0.time > $1.time }
 
         guard weightEvents.count >= 2,

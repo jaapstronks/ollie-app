@@ -63,6 +63,11 @@ extension Array where Element == PuppyEvent {
         filter { $0.type == .gewicht }
     }
 
+    /// Filter to drink/water events
+    func drinks() -> [PuppyEvent] {
+        filter { $0.type == .drinken }
+    }
+
     /// Filter to moment (photo) events
     func moments() -> [PuppyEvent] {
         filter { $0.type == .moment }

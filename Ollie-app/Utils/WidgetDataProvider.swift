@@ -55,17 +55,14 @@ class WidgetDataProvider {
     /// Call this after any event changes (add/delete/update)
     func update(events: [PuppyEvent], allEvents: [PuppyEvent], profile: PuppyProfile?) {
         let today = Date().startOfDay
-        let todayEvents = events.filter { Calendar.current.isDate($0.time, inSameDayAs: today) }
+        let todayEvents = events.onDate(today)
 
         // Get potty events
-        let pottyEvents = todayEvents.filter { $0.type == .plassen }
-        let outdoorPotty = pottyEvents.filter { $0.location == .buiten }
+        let pottyEvents = todayEvents.pee()
+        let outdoorPotty = pottyEvents.outdoor()
 
         // Find last plas event (across all loaded events, not just today)
-        let lastPlas = allEvents
-            .filter { $0.type == .plassen }
-            .sorted { $0.time > $1.time }
-            .first
+        let lastPlas = allEvents.pee().reverseChronological().first
 
         // Calculate streaks from all events
         let streakInfo = StreakCalculations.getStreakInfo(events: allEvents)

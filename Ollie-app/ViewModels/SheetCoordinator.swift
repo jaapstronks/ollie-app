@@ -22,6 +22,7 @@ final class SheetCoordinator: ObservableObject {
         case logEvent(EventType)
         case locationPicker(EventType)
         case mediaPicker(MediaPickerSource)
+        case momentSourcePicker
         case logMoment
         case editEvent(PuppyEvent)
         case upgradePrompt
@@ -38,6 +39,7 @@ final class SheetCoordinator: ObservableObject {
             case .logEvent(let type): return "logEvent-\(type.rawValue)"
             case .locationPicker(let type): return "locationPicker-\(type.rawValue)"
             case .mediaPicker(let source): return "mediaPicker-\(source)"
+            case .momentSourcePicker: return "momentSourcePicker"
             case .logMoment: return "logMoment"
             case .editEvent(let event): return "editEvent-\(event.id.uuidString)"
             case .upgradePrompt: return "upgradePrompt"

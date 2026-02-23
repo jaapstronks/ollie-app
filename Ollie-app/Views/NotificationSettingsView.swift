@@ -321,19 +321,11 @@ struct TimePickerField: View {
         )
         .labelsHidden()
         .onChange(of: selectedTime) { _, newValue in
-            let formatter = DateFormatter()
-            formatter.dateFormat = "HH:mm"
-            timeString = formatter.string(from: newValue)
+            timeString = newValue.timeString
         }
         .onAppear {
-            selectedTime = parseTime(timeString) ?? Date()
+            selectedTime = DateFormatters.timeOnly.date(from: timeString) ?? Date()
         }
-    }
-
-    private func parseTime(_ str: String) -> Date? {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "HH:mm"
-        return formatter.date(from: str)
     }
 }
 

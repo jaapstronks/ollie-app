@@ -22,7 +22,7 @@ struct PoopStatusCard: View {
 
     var body: some View {
         // Hide during night hours
-        if status.urgency == .hidden {
+        if status.urgency.isHidden {
             EmptyView()
         } else {
             cardContent
@@ -34,11 +34,11 @@ struct PoopStatusCard: View {
     private var cardContent: some View {
         VStack(spacing: 12) {
             StatusCardHeader(
-                iconName: PoopCalculations.iconName(for: status.urgency),
-                iconColor: PoopCalculations.iconColor(for: status.urgency),
+                iconName: status.urgency.iconName,
+                iconColor: status.urgency.iconColor,
                 tintColor: indicatorColor,
                 title: mainText,
-                titleColor: textColor,
+                titleColor: status.urgency.textColor,
                 subtitle: subtitleText,
                 statusLabel: statusLabel,
                 iconSize: 40
@@ -110,18 +110,7 @@ struct PoopStatusCard: View {
     }
 
     private var indicatorColor: Color {
-        PoopCalculations.iconColor(for: status.urgency)
-    }
-
-    private var textColor: Color {
-        switch status.urgency {
-        case .hidden, .good, .info:
-            return .primary
-        case .gentle:
-            return .primary
-        case .attention:
-            return .ollieWarning
-        }
+        status.urgency.iconColor
     }
 }
 

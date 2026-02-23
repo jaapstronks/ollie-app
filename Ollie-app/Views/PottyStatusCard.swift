@@ -36,11 +36,11 @@ struct PottyStatusCard: View {
     private var cardContent: some View {
         VStack(spacing: 12) {
             StatusCardHeader(
-                iconName: PredictionCalculations.iconName(for: prediction.urgency),
-                iconColor: PredictionCalculations.iconColor(for: prediction.urgency),
+                iconName: prediction.urgency.iconName,
+                iconColor: prediction.urgency.iconColor,
                 tintColor: indicatorColor,
                 title: PredictionCalculations.displayText(for: prediction, puppyName: puppyName),
-                titleColor: textColor,
+                titleColor: prediction.urgency.textColor,
                 subtitle: PredictionCalculations.subtitleText(for: prediction),
                 statusLabel: urgencyLabel
             )
@@ -64,33 +64,13 @@ struct PottyStatusCard: View {
     }
 
     private var shouldShowAction: Bool {
-        switch prediction.urgency {
-        case .attention, .soon, .overdue:
-            return true
-        default:
-            return false
-        }
+        prediction.urgency.isUrgent
     }
 
     // MARK: - Computed Properties
 
     private var indicatorColor: Color {
-        PredictionCalculations.iconColor(for: prediction.urgency)
-    }
-
-    private var textColor: Color {
-        switch prediction.urgency {
-        case .justWent, .normal:
-            return .primary
-        case .attention:
-            return Color.ollieAccent
-        case .soon:
-            return Color.ollieWarning
-        case .overdue, .postAccident:
-            return Color.ollieDanger
-        case .unknown:
-            return .secondary
-        }
+        prediction.urgency.iconColor
     }
 
     private var urgencyLabel: String {
@@ -113,18 +93,9 @@ struct PottyStatusCard: View {
     }
 
     private var shadowColor: Color {
-        switch prediction.urgency {
-        case .justWent, .normal:
-            return Color.ollieSuccess.opacity(colorScheme == .dark ? 0.2 : 0.1)
-        case .attention:
-            return Color.ollieAccent.opacity(colorScheme == .dark ? 0.2 : 0.1)
-        case .soon:
-            return Color.ollieWarning.opacity(colorScheme == .dark ? 0.25 : 0.12)
-        case .overdue, .postAccident:
-            return Color.ollieDanger.opacity(colorScheme == .dark ? 0.25 : 0.12)
-        case .unknown:
-            return Color.black.opacity(colorScheme == .dark ? 0.2 : 0.06)
-        }
+        let baseColor = prediction.urgency.iconColor
+        let opacity = colorScheme == .dark ? 0.2 : 0.1
+        return baseColor.opacity(prediction.urgency.isUrgent ? opacity * 1.25 : opacity)
     }
 
     private var isNightTime: Bool {

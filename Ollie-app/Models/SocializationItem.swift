@@ -12,7 +12,7 @@ import Foundation
 struct SocializationCategory: Identifiable, Codable {
     let id: String              // "mensen", "dieren", etc.
     let name: String            // Display name (localized key)
-    let emoji: String           // "👥"
+    let icon: String            // SF Symbol name, e.g. "person.2.fill"
     let items: [SocializationItem]
 
     /// Localized display name
@@ -95,11 +95,11 @@ enum ExposureDistance: String, Codable, CaseIterable, Identifiable {
 
     var id: String { rawValue }
 
-    var emoji: String {
+    var icon: String {
         switch self {
-        case .far: return "📏"
-        case .near: return "🤏"
-        case .direct: return "🤝"
+        case .far: return "eye"
+        case .near: return "figure.stand"
+        case .direct: return "hand.raised.fill"
         }
     }
 
@@ -131,12 +131,12 @@ enum SocializationReaction: String, Codable, CaseIterable, Identifiable {
 
     var id: String { rawValue }
 
-    var emoji: String {
+    var icon: String {
         switch self {
-        case .positief: return "😊"
-        case .neutraal: return "😌"
-        case .onzeker: return "😟"
-        case .angstig: return "😰"
+        case .positief: return "heart.fill"
+        case .neutraal: return "checkmark.circle.fill"
+        case .onzeker: return "questionmark.circle.fill"
+        case .angstig: return "exclamationmark.triangle.fill"
         }
     }
 

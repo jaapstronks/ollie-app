@@ -104,10 +104,10 @@ struct DigestCalculations {
 
     /// Generate potty summary with outdoor percentage
     private static func generatePottySummary(events: [PuppyEvent]) -> String? {
-        let pottyEvents = events.filter { $0.type == .plassen }
+        let pottyEvents = events.pee()
         guard !pottyEvents.isEmpty else { return nil }
 
-        let outdoorCount = pottyEvents.filter { $0.location == .buiten }.count
+        let outdoorCount = pottyEvents.outdoor().count
         let totalCount = pottyEvents.count
 
         if totalCount == 0 {
@@ -125,10 +125,10 @@ struct DigestCalculations {
 
     /// Generate poop summary
     private static func generatePoopSummary(events: [PuppyEvent]) -> String? {
-        let poopEvents = events.filter { $0.type == .poepen }
+        let poopEvents = events.poop()
         guard !poopEvents.isEmpty else { return nil }
 
-        let outdoorCount = poopEvents.filter { $0.location == .buiten }.count
+        let outdoorCount = poopEvents.outdoor().count
         let totalCount = poopEvents.count
 
         if outdoorCount == totalCount && totalCount > 0 {
@@ -143,7 +143,7 @@ struct DigestCalculations {
 
     /// Generate meal summary
     private static func generateMealSummary(events: [PuppyEvent]) -> String? {
-        let mealCount = events.filter { $0.type == .eten }.count
+        let mealCount = events.meals().count
         guard mealCount > 0 else { return nil }
 
         if mealCount == 1 {
@@ -172,7 +172,7 @@ struct DigestCalculations {
 
     /// Generate walk summary
     private static func generateWalkSummary(events: [PuppyEvent]) -> String? {
-        let walkCount = events.filter { $0.type == .uitlaten }.count
+        let walkCount = events.walks().count
         guard walkCount > 0 else { return nil }
 
         if walkCount == 1 {
