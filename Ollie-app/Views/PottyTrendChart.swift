@@ -24,12 +24,12 @@ struct PottyTrendPoint: Identifiable {
         }
     }
 
-    /// Short day label (e.g., "ma")
+    /// Short day label (e.g., "Mon")
     var dayLabel: String {
         let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "nl_NL")
+        formatter.locale = Locale.current
         formatter.dateFormat = "E"
-        return formatter.string(from: date).lowercased()
+        return formatter.string(from: date)
     }
 }
 

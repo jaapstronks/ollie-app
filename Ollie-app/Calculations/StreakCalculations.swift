@@ -148,20 +148,20 @@ struct StreakCalculations {
         }
     }
 
-    /// Get motivational message for streak (Dutch)
+    /// Get motivational message for streak
     static func message(for streak: Int) -> String {
         if streak == 0 {
-            return "Begin opnieuw!"
+            return Strings.Stats.streakStartAgain
         } else if streak == 1 {
-            return "Goed begin!"
+            return Strings.Stats.streakGoodStart
         } else if streak < 3 {
-            return "Lekker bezig!"
+            return Strings.Stats.streakNiceWork
         } else if streak < 5 {
-            return "Super! Houd vol!"
+            return Strings.Stats.streakSuperKeepGoing
         } else if streak < 10 {
-            return "Fantastisch! 🎉"
+            return Strings.Stats.streakFantastic
         } else {
-            return "Ongelofelijk! 🏆"
+            return Strings.Stats.streakIncredible
         }
     }
 }

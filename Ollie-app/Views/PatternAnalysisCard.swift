@@ -168,10 +168,10 @@ struct CompactTriggerBadge: View {
         PatternAnalysisCard(
             analysis: PatternAnalysis(
                 triggers: [
-                    PatternTrigger(id: "sleep", name: "Na slaap", iconName: "moon.zzz.fill", iconColor: .ollieSleep, outdoorCount: 8, indoorCount: 2),
-                    PatternTrigger(id: "meal", name: "Na eten", iconName: "fork.knife", iconColor: .ollieAccent, outdoorCount: 5, indoorCount: 1),
-                    PatternTrigger(id: "walk", name: "Bij wandeling", iconName: "figure.walk", iconColor: .ollieAccent, outdoorCount: 12, indoorCount: 0),
-                    PatternTrigger(id: "water", name: "Na drinken", iconName: "drop.fill", iconColor: .ollieInfo, outdoorCount: 3, indoorCount: 2)
+                    PatternTrigger(id: "sleep", name: Strings.Patterns.afterSleep, iconName: "moon.zzz.fill", iconColor: .ollieSleep, outdoorCount: 8, indoorCount: 2),
+                    PatternTrigger(id: "meal", name: Strings.Patterns.afterEating, iconName: "fork.knife", iconColor: .ollieAccent, outdoorCount: 5, indoorCount: 1),
+                    PatternTrigger(id: "walk", name: Strings.Patterns.duringWalk, iconName: "figure.walk", iconColor: .ollieAccent, outdoorCount: 12, indoorCount: 0),
+                    PatternTrigger(id: "water", name: Strings.Patterns.afterDrinking, iconName: "drop.fill", iconColor: .ollieInfo, outdoorCount: 3, indoorCount: 2)
                 ],
                 periodDays: 7
             )
@@ -196,9 +196,9 @@ struct CompactTriggerBadge: View {
         PatternAnalysisCompact(
             analysis: PatternAnalysis(
                 triggers: [
-                    PatternTrigger(id: "sleep", name: "Na slaap", iconName: "moon.zzz.fill", iconColor: .ollieSleep, outdoorCount: 8, indoorCount: 2),
-                    PatternTrigger(id: "meal", name: "Na eten", iconName: "fork.knife", iconColor: .ollieAccent, outdoorCount: 5, indoorCount: 1),
-                    PatternTrigger(id: "walk", name: "Bij wandeling", iconName: "figure.walk", iconColor: .ollieAccent, outdoorCount: 12, indoorCount: 0)
+                    PatternTrigger(id: "sleep", name: Strings.Patterns.afterSleep, iconName: "moon.zzz.fill", iconColor: .ollieSleep, outdoorCount: 8, indoorCount: 2),
+                    PatternTrigger(id: "meal", name: Strings.Patterns.afterEating, iconName: "fork.knife", iconColor: .ollieAccent, outdoorCount: 5, indoorCount: 1),
+                    PatternTrigger(id: "walk", name: Strings.Patterns.duringWalk, iconName: "figure.walk", iconColor: .ollieAccent, outdoorCount: 12, indoorCount: 0)
                 ],
                 periodDays: 7
             )

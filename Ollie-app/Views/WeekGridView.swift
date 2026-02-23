@@ -21,26 +21,28 @@ struct WeekGridView: View {
 
     @Environment(\.colorScheme) private var colorScheme
 
-    private let rows: [WeekGridRow] = [
-        WeekGridRow(iconName: "tree.fill", label: "Buiten", color: .ollieSuccess) { stats in
-            stats.outdoorPotty > 0 ? "\(stats.outdoorPotty)" : "–"
-        },
-        WeekGridRow(iconName: "house.fill", label: "Binnen", color: .ollieDanger) { stats in
-            stats.indoorPotty > 0 ? "\(stats.indoorPotty)" : "–"
-        },
-        WeekGridRow(iconName: "fork.knife", label: "Eten", color: .ollieAccent) { stats in
-            stats.meals > 0 ? "\(stats.meals)" : "–"
-        },
-        WeekGridRow(iconName: "figure.walk", label: "Uitlaten", color: .ollieInfo) { stats in
-            stats.walks > 0 ? "\(stats.walks)" : "–"
-        },
-        WeekGridRow(iconName: "moon.fill", label: "Slapen", color: .ollieSleep) { stats in
-            stats.sleepHours > 0 ? String(format: "%.0f", stats.sleepHours) : "–"
-        },
-        WeekGridRow(iconName: "scope", label: "Training", color: .olliePurple) { stats in
-            stats.trainingSessions > 0 ? "\(stats.trainingSessions)" : "–"
-        }
-    ]
+    private var rows: [WeekGridRow] {
+        [
+            WeekGridRow(iconName: "tree.fill", label: Strings.Stats.outdoor, color: .ollieSuccess) { stats in
+                stats.outdoorPotty > 0 ? "\(stats.outdoorPotty)" : "–"
+            },
+            WeekGridRow(iconName: "house.fill", label: Strings.Stats.indoor, color: .ollieDanger) { stats in
+                stats.indoorPotty > 0 ? "\(stats.indoorPotty)" : "–"
+            },
+            WeekGridRow(iconName: "fork.knife", label: Strings.Stats.mealsLabel, color: .ollieAccent) { stats in
+                stats.meals > 0 ? "\(stats.meals)" : "–"
+            },
+            WeekGridRow(iconName: "figure.walk", label: Strings.Stats.walksLabel, color: .ollieInfo) { stats in
+                stats.walks > 0 ? "\(stats.walks)" : "–"
+            },
+            WeekGridRow(iconName: "moon.fill", label: Strings.Stats.sleepLabel, color: .ollieSleep) { stats in
+                stats.sleepHours > 0 ? String(format: "%.0f", stats.sleepHours) : "–"
+            },
+            WeekGridRow(iconName: "scope", label: Strings.Stats.trainingLabel, color: .olliePurple) { stats in
+                stats.trainingSessions > 0 ? "\(stats.trainingSessions)" : "–"
+            }
+        ]
+    }
 
     var body: some View {
         VStack(spacing: 0) {
@@ -120,7 +122,7 @@ struct WeekGridView: View {
             }
         }
 
-        if row.label != "Training" {
+        if row.label != Strings.Stats.trainingLabel {
             Divider()
                 .opacity(0.5)
         }

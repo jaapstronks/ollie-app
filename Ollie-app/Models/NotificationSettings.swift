@@ -46,17 +46,17 @@ enum PottyNotificationLevel: String, Codable, CaseIterable, Identifiable {
 
     var label: String {
         switch self {
-        case .attention: return "Vroeg (~20 min)"
-        case .soon: return "Binnenkort (~10 min)"
-        case .overdue: return "Op tijd (0 min)"
+        case .attention: return Strings.NotificationSettings.pottyLevelEarly
+        case .soon: return Strings.NotificationSettings.pottyLevelSoon
+        case .overdue: return Strings.NotificationSettings.pottyLevelOnTime
         }
     }
 
     var description: String {
         switch self {
-        case .attention: return "Herinnering als er ~20 minuten over zijn"
-        case .soon: return "Herinnering als er ~10 minuten over zijn"
-        case .overdue: return "Herinnering wanneer het tijd is"
+        case .attention: return Strings.NotificationSettings.pottyLevelEarlyDesc
+        case .soon: return Strings.NotificationSettings.pottyLevelSoonDesc
+        case .overdue: return Strings.NotificationSettings.pottyLevelOnTimeDesc
         }
     }
 

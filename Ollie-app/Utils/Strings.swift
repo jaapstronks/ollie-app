@@ -39,6 +39,9 @@ enum Strings {
         static let today = String(localized: "Today")
         static let yesterday = String(localized: "Yesterday")
         static let tomorrow = String(localized: "Tomorrow")
+
+        // Navigation
+        static let seeAll = String(localized: "See all")
     }
 
     // MARK: - App
@@ -454,6 +457,13 @@ enum Strings {
         }
         static let percentSuccess = String(localized: "percent success")
         static let timesMeasured = String(localized: "times measured")
+
+        // Pattern trigger names
+        static let afterSleep = String(localized: "After sleep")
+        static let afterEating = String(localized: "After eating")
+        static let duringWalk = String(localized: "During walk")
+        static let afterDrinking = String(localized: "After drinking")
+        static let afterPlaying = String(localized: "After playing")
     }
 
     // MARK: - Location Picker
@@ -533,6 +543,12 @@ enum Strings {
         static let sleepToday = String(localized: "Sleep Today")
         static let patterns = String(localized: "Patterns (7 days)")
 
+        // Expanded Stats tab sections
+        static let health = String(localized: "Health")
+        static let walkHistory = String(localized: "Walk History")
+        static let spots = String(localized: "Spots")
+        static let thisWeek = String(localized: "This week")
+
         static let currentStreak = String(localized: "Current streak")
         static let bestEver = String(localized: "Best ever")
         static let median = String(localized: "Median")
@@ -548,6 +564,22 @@ enum Strings {
         }
         static let outsidePercent = String(localized: "% outside")
         static let insufficientData = String(localized: "Not enough data yet")
+
+        // Week grid row labels
+        static let outdoor = String(localized: "Outdoor")
+        static let indoor = String(localized: "Indoor")
+        static let mealsLabel = String(localized: "Meals")
+        static let walksLabel = String(localized: "Walks")
+        static let sleepLabel = String(localized: "Sleep")
+        static let trainingLabel = String(localized: "Training")
+
+        // Streak motivational messages
+        static let streakStartAgain = String(localized: "Start again!")
+        static let streakGoodStart = String(localized: "Good start!")
+        static let streakNiceWork = String(localized: "Nice work!")
+        static let streakSuperKeepGoing = String(localized: "Super! Keep going!")
+        static let streakFantastic = String(localized: "Fantastic! 🎉")
+        static let streakIncredible = String(localized: "Incredible! 🏆")
 
         static let timesPeed = String(localized: "Times peed")
         static let meals = String(localized: "Meals")
@@ -676,6 +708,14 @@ enum Strings {
         static let removeLast = String(localized: "Remove last")
         static let walks = String(localized: "Walks")
         static let walkReminderDescription = String(localized: "Reminder before it's time for a walk.")
+
+        // Potty notification levels
+        static let pottyLevelEarly = String(localized: "Early (~20 min)")
+        static let pottyLevelSoon = String(localized: "Soon (~10 min)")
+        static let pottyLevelOnTime = String(localized: "On time (0 min)")
+        static let pottyLevelEarlyDesc = String(localized: "Reminder when ~20 minutes remaining")
+        static let pottyLevelSoonDesc = String(localized: "Reminder when ~10 minutes remaining")
+        static let pottyLevelOnTimeDesc = String(localized: "Reminder when it's time")
     }
 
     // MARK: - Cloud Sharing View
@@ -725,6 +765,7 @@ enum Strings {
             String(localized: "Migration failed: \(message)")
         }
         static let cannotShareAsParticipant = String(localized: "You cannot share as a participant")
+        static let couldNotLoadShare = String(localized: "Could not load share")
     }
 
     // MARK: - Data Import
@@ -1018,6 +1059,17 @@ enum Strings {
         static let weightKg = String(localized: "Weight (kg)")
         static let enterWeight = String(localized: "Enter weight")
         static let weightPlaceholder = String(localized: "e.g. 8.5")
+    }
+
+    // MARK: - Train Tab
+    enum Train {
+        static let pottyProgress = String(localized: "Potty Progress")
+        static let socialization = String(localized: "Socialization")
+        static let skills = String(localized: "Skills")
+        static let outdoorThisWeek = String(localized: "outdoor this week")
+        static let dayStreak = String(localized: "day streak")
+        static let topTriggers = String(localized: "Top triggers")
+        static let allCategories = String(localized: "All categories")
     }
 
     // MARK: - Training
@@ -1378,6 +1430,7 @@ enum Strings {
     // MARK: - Walks Tab
     enum WalksTab {
         static let title = String(localized: "Walks")
+        static let walks = String(localized: "walks")
         static let todaysWalks = String(localized: "Today's walks")
         static let noWalksToday = String(localized: "No walks logged today")
         static let startWalk = String(localized: "Start a walk")

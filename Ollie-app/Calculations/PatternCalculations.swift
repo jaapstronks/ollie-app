@@ -104,7 +104,7 @@ struct PatternCalculations {
 
         return PatternTrigger(
             id: "sleep",
-            name: "Na slaap",
+            name: Strings.Patterns.afterSleep,
             iconName: "moon.zzz.fill",
             iconColor: .ollieSleep,
             outdoorCount: outdoorCount,
@@ -131,7 +131,7 @@ struct PatternCalculations {
 
         return PatternTrigger(
             id: "meal",
-            name: "Na eten",
+            name: Strings.Patterns.afterEating,
             iconName: "fork.knife",
             iconColor: .ollieAccent,
             outdoorCount: outdoorCount,
@@ -160,7 +160,7 @@ struct PatternCalculations {
 
         return PatternTrigger(
             id: "walk",
-            name: "Bij wandeling",
+            name: Strings.Patterns.duringWalk,
             iconName: "figure.walk",
             iconColor: .ollieAccent,
             outdoorCount: outdoorCount,
@@ -188,7 +188,7 @@ struct PatternCalculations {
 
         return PatternTrigger(
             id: "water",
-            name: "Na drinken",
+            name: Strings.Patterns.afterDrinking,
             iconName: "drop.fill",
             iconColor: .ollieInfo,
             outdoorCount: outdoorCount,
@@ -216,7 +216,7 @@ struct PatternCalculations {
 
         return PatternTrigger(
             id: "play",
-            name: "Na spelen",
+            name: Strings.Patterns.afterPlaying,
             iconName: "tennisball.fill",
             iconColor: .ollieAccent,
             outdoorCount: outdoorCount,
