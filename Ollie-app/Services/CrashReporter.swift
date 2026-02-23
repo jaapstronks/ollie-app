@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import OllieShared
 import Sentry
 
 /// Centralized crash reporting and error tracking using Sentry

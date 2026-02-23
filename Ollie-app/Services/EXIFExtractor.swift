@@ -4,6 +4,7 @@
 //
 
 import Foundation
+import OllieShared
 import ImageIO
 import UIKit
 import CoreLocation

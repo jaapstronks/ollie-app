@@ -6,6 +6,7 @@
 //  Expanded to include content from Health, Walk history, and Spots
 
 import SwiftUI
+import OllieShared
 import MapKit
 
 /// Stats tab showing patterns, stats, health, walks, and spots

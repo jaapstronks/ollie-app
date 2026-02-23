@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import OllieShared
 
 /// Welcome step - first step of onboarding with brand messaging
 struct OnboardingWelcomeStep: View {

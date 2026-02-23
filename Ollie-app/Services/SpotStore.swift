@@ -5,6 +5,7 @@
 //  CRUD operations and persistence for WalkSpot
 
 import Foundation
+import OllieShared
 import Combine
 
 /// Manages saved walk spots with local persistence

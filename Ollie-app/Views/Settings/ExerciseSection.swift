@@ -5,6 +5,7 @@
 //  Exercise settings section for SettingsView
 
 import SwiftUI
+import OllieShared
 
 /// Exercise limits and settings section
 struct ExerciseSection: View {

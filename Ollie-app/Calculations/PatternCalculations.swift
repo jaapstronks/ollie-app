@@ -5,6 +5,7 @@
 //  Pattern analysis calculations for trigger success rates
 
 import Foundation
+import OllieShared
 import SwiftUI
 
 /// A trigger pattern that may lead to potty events

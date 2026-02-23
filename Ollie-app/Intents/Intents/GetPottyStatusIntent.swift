@@ -5,6 +5,7 @@
 //  App Intent for querying potty status via Siri/Shortcuts
 
 import AppIntents
+import OllieShared
 
 /// Query when the puppy last peed
 struct GetPottyStatusIntent: AppIntent {

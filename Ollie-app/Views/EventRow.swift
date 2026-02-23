@@ -4,6 +4,7 @@
 //
 
 import SwiftUI
+import OllieShared
 import UIKit
 
 /// Single event row in the timeline

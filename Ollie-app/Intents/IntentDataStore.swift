@@ -5,6 +5,7 @@
 //  Lightweight shared data access for App Intents via App Group
 
 import Foundation
+import OllieShared
 import WidgetKit
 import os
 

@@ -5,6 +5,7 @@
 //  Smart dashboard widget showing sleep state, potty timer, meals, and walks
 
 import WidgetKit
+import OllieShared
 import SwiftUI
 
 // MARK: - Timeline Provider

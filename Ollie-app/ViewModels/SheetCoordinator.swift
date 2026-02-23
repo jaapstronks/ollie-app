@@ -6,6 +6,7 @@
 //
 
 import Combine
+import OllieShared
 import SwiftUI
 
 /// Manages sheet presentation state for the timeline view

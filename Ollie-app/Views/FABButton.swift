@@ -7,6 +7,7 @@
 //  Long press: Shows radial quick menu for one-tap logging
 
 import SwiftUI
+import OllieShared
 
 /// Quick action item for the FAB menu
 struct FABQuickAction: Identifiable {

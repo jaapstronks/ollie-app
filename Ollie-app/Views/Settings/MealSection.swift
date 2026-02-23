@@ -5,6 +5,7 @@
 //  Meal schedule section for SettingsView
 
 import SwiftUI
+import OllieShared
 
 /// Meal schedule settings section
 struct MealSection: View {

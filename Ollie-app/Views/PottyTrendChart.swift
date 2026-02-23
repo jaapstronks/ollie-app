@@ -5,6 +5,7 @@
 //  Line chart showing outdoor potty percentage over the last 7 days
 
 import SwiftUI
+import OllieShared
 import Charts
 
 /// Data point for the potty trend chart

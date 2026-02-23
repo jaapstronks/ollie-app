@@ -5,6 +5,7 @@
 //  Reusable row component for displaying a walk spot
 
 import SwiftUI
+import OllieShared
 
 /// Row view for displaying a saved walk spot in lists
 struct SpotRowView: View {

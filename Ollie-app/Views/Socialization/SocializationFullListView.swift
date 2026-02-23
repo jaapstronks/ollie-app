@@ -5,6 +5,7 @@
 //  Full list of all socialization categories
 
 import SwiftUI
+import OllieShared
 
 /// Full list view showing all socialization categories
 struct SocializationFullListView: View {

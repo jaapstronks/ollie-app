@@ -4,6 +4,7 @@
 //
 
 import SwiftUI
+import OllieShared
 import UIKit
 
 /// Grid gallery view of all photo moments

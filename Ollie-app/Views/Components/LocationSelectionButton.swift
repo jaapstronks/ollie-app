@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import OllieShared
 
 /// Button for selecting indoor/outdoor location with accessibility support
 struct LocationSelectionButton: View {

@@ -5,6 +5,7 @@
 //  App Intent for logging potty events via Siri/Shortcuts
 
 import AppIntents
+import OllieShared
 
 /// Log a potty event (pee or poop) with location
 struct LogPottyIntent: AppIntent {

@@ -4,6 +4,7 @@
 //
 
 import Foundation
+import OllieShared
 import Combine
 
 /// Manages reading and writing the puppy profile

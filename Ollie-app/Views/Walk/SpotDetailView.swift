@@ -5,6 +5,7 @@
 //  Full-screen detail view for a walk spot with inline editing
 
 import SwiftUI
+import OllieShared
 import MapKit
 
 /// Full detail view for viewing and editing a walk spot

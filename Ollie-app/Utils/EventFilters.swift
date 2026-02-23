@@ -6,6 +6,7 @@
 //  Eliminates repeated .filter { $0.type == ... } patterns across the codebase.
 
 import Foundation
+import OllieShared
 
 // MARK: - Event Filtering Extensions
 

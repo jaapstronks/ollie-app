@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import OllieShared
 
 /// ViewModifier that applies all timeline sheet handling
 struct TimelineSheetModifiers: ViewModifier {

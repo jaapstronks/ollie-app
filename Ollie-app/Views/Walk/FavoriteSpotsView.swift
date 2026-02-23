@@ -5,6 +5,7 @@
 //  Settings screen for managing favorite walk spots
 
 import SwiftUI
+import OllieShared
 import MapKit
 
 /// Full-screen view for managing favorite walk spots

@@ -5,8 +5,9 @@
 //  Manages reading and writing puppy events with CloudKit sync and local cache
 //
 
-import Foundation
 import Combine
+import Foundation
+import OllieShared
 import os
 
 /// Manages reading and writing puppy events

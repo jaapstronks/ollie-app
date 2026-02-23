@@ -6,6 +6,7 @@
 
 import StoreKit
 import SwiftUI
+import OllieShared
 
 /// Premium status and purchase section
 struct PremiumSection: View {

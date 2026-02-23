@@ -5,6 +5,7 @@
 //  Sheet for ending an ongoing sleep session with wake-up time adjustment
 
 import SwiftUI
+import OllieShared
 
 /// Sheet for logging a wake-up event to end an ongoing sleep session
 struct EndSleepSheet: View {

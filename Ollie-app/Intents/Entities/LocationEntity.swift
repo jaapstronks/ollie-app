@@ -5,6 +5,7 @@
 //  AppEntity for event locations (inside/outside)
 
 import AppIntents
+import OllieShared
 
 /// App Entity representing event location (inside/outside)
 struct LocationEntity: AppEntity {

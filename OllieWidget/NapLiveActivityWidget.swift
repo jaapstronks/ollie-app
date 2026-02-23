@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import OllieShared
 import WidgetKit
 import ActivityKit
 import AppIntents

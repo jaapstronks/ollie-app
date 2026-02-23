@@ -5,6 +5,7 @@
 //  Card showing suggested socialization items to watch for during walks
 
 import SwiftUI
+import OllieShared
 
 /// Card displaying walkable socialization items to watch for
 struct WalkSuggestionsCard: View {

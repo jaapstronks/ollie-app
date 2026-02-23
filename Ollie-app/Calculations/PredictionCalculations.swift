@@ -5,6 +5,7 @@
 //  Potty prediction calculations ported from web app's predictions.js
 
 import Foundation
+import OllieShared
 import SwiftUI
 
 /// Urgency level for potty predictions

@@ -5,6 +5,7 @@
 //  Row displaying a socialization category with progress
 
 import SwiftUI
+import OllieShared
 
 /// Row showing a category with emoji, name, and progress indicator
 struct SocializationCategoryRow: View {

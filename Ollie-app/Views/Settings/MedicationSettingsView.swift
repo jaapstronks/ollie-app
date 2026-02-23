@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import OllieShared
 
 /// Settings view for managing medications
 struct MedicationSettingsView: View {

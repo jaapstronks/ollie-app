@@ -5,6 +5,7 @@
 //  Compact daily digest card for timeline header
 
 import SwiftUI
+import OllieShared
 
 /// Compact card showing daily summary at top of timeline
 /// Uses liquid glass design for iOS 26 aesthetic

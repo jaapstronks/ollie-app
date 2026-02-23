@@ -4,6 +4,7 @@
 //
 
 import SwiftUI
+import OllieShared
 import Combine
 
 /// App error types with user-friendly messages

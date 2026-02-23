@@ -5,6 +5,7 @@
 //  Combined sheet for logging plassen, poepen, or both
 
 import SwiftUI
+import OllieShared
 
 /// Selection options for potty events
 enum PottySelection: String, CaseIterable {

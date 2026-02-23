@@ -4,6 +4,7 @@
 //
 
 import SwiftUI
+import OllieShared
 
 /// Sheet for editing an existing event
 struct EditEventSheet: View {

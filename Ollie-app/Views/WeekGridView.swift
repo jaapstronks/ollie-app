@@ -5,6 +5,7 @@
 //  Week overview grid showing 7 days of metrics
 
 import SwiftUI
+import OllieShared
 
 /// Row configuration for the week grid
 private struct WeekGridRow: Identifiable {

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import OllieShared
 
 /// Card displaying a pending medication with swipe-to-complete slider
 struct MedicationReminderCard: View {

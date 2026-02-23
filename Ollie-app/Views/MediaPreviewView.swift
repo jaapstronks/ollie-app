@@ -4,6 +4,7 @@
 //
 
 import SwiftUI
+import OllieShared
 import UIKit
 
 /// Full-screen photo viewer with pinch-to-zoom

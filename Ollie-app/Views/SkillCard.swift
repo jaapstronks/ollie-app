@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import OllieShared
 
 /// Expandable card showing a training skill with details
 struct SkillCard: View {

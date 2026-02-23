@@ -5,6 +5,7 @@
 //  Quick weight entry sheet
 
 import SwiftUI
+import OllieShared
 
 /// Sheet for logging a weight measurement
 struct WeightLogSheet: View {

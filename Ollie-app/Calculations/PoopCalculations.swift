@@ -6,6 +6,7 @@
 //  Provides subtle awareness without nagging
 
 import Foundation
+import OllieShared
 import SwiftUI
 
 // MARK: - Poop Status Model

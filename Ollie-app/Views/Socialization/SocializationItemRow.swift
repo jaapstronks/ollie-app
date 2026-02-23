@@ -5,6 +5,7 @@
 //  Row showing a single socialization item with progress
 
 import SwiftUI
+import OllieShared
 
 /// Row displaying a socialization item with progress bar and last exposure info
 struct SocializationItemRow: View {

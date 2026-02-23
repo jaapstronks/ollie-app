@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import OllieShared
 
 /// Styled section header with icon and title
 struct SectionHeader: View {

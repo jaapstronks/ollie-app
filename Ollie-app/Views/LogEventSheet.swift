@@ -4,6 +4,7 @@
 //
 
 import SwiftUI
+import OllieShared
 
 /// Sheet for adding details to an event (note, who, exercise, etc.)
 struct LogEventSheet: View {

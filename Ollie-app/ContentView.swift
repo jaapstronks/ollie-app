@@ -4,6 +4,7 @@
 //
 
 import SwiftUI
+import OllieShared
 
 /// Root view with tab navigation or onboarding
 struct ContentView: View {

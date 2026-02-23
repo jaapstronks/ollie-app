@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import OllieShared
 
 /// Icon displayed in a circular background with optional border
 struct CircleIconView: View {

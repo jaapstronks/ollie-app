@@ -5,6 +5,7 @@
 //  Streak counter widget showing consecutive outdoor potty events
 
 import WidgetKit
+import OllieShared
 import SwiftUI
 
 // MARK: - Timeline Provider

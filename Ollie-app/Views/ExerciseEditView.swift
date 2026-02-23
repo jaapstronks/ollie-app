@@ -4,6 +4,7 @@
 //
 
 import SwiftUI
+import OllieShared
 
 /// View for editing exercise configuration
 struct ExerciseEditView: View {

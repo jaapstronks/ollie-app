@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import OllieShared
 
 /// A swipe-to-complete slider that requires deliberate gesture to trigger
 struct SwipeToCompleteSlider: View {

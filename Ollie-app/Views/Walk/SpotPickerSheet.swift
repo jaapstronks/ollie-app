@@ -5,6 +5,7 @@
 //  Sheet for selecting or creating a walk spot
 
 import SwiftUI
+import OllieShared
 import CoreLocation
 
 /// Sheet for picking a saved spot or capturing current location

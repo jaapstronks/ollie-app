@@ -5,6 +5,7 @@
 //  iCloud sync section for SettingsView
 
 import SwiftUI
+import OllieShared
 
 /// iCloud sync status and controls section
 struct SyncSection: View {

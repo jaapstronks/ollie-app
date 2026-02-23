@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import OllieShared
 
 // MARK: - Glass Background Configurations
 

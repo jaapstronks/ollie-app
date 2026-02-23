@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import OllieShared
 
 /// Main training view with skill tracker
 struct TrainingView: View {

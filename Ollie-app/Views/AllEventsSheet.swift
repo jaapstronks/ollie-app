@@ -6,6 +6,7 @@
 //  Uses liquid glass design for iOS 26 aesthetic
 
 import SwiftUI
+import OllieShared
 
 /// Sheet showing all event types in a grid layout
 /// Uses liquid glass button styling

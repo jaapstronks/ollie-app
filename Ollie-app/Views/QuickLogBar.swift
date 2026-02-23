@@ -4,6 +4,7 @@
 //
 
 import SwiftUI
+import OllieShared
 
 /// Context for smart quick log bar icon display
 struct QuickLogContext {

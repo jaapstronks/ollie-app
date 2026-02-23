@@ -5,6 +5,7 @@
 //  Multi-stage import sheet with preview, progress, and completion states
 
 import SwiftUI
+import OllieShared
 
 /// Import stages
 enum ImportStage {

@@ -6,6 +6,7 @@
 //  Uses liquid glass design for iOS 26 aesthetic
 
 import SwiftUI
+import OllieShared
 
 /// Compact card showing current outdoor potty streak
 /// Uses liquid glass design with celebratory styling for high streaks

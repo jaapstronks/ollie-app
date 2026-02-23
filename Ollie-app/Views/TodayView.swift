@@ -6,6 +6,7 @@
 //  Combines the web app's "home" and "dag" views into a single scrollable view
 
 import SwiftUI
+import OllieShared
 import TipKit
 
 /// Main "Today" tab showing the daily hub

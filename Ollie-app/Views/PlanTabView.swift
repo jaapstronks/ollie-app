@@ -5,6 +5,7 @@
 //  Plan tab showing puppy age, milestones, and moments preview
 
 import SwiftUI
+import OllieShared
 
 /// Plan tab - milestones, appointments, moments
 struct PlanTabView: View {

@@ -4,6 +4,7 @@
 //
 
 import SwiftUI
+import OllieShared
 import UIKit
 
 /// Reusable button for attaching photos to events

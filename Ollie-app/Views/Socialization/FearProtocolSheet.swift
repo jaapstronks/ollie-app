@@ -5,6 +5,7 @@
 //  Tips sheet shown when puppy has a fearful reaction
 
 import SwiftUI
+import OllieShared
 
 /// Sheet showing tips for handling fearful reactions
 struct FearProtocolSheet: View {

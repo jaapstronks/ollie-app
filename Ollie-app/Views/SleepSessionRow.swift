@@ -5,6 +5,7 @@
 //  Timeline row for displaying sleep sessions with live timer for ongoing sleep
 
 import SwiftUI
+import OllieShared
 
 /// Row displaying a sleep session in the timeline
 /// Shows start → end time as a single unified event

@@ -5,6 +5,7 @@
 //  AppShortcutsProvider with Siri phrases for Ollie
 
 import AppIntents
+import OllieShared
 
 /// Provides App Shortcuts for Siri and the Shortcuts app
 struct OllieShortcuts: AppShortcutsProvider {

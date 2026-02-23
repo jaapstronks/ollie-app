@@ -4,6 +4,7 @@
 //
 
 import SwiftUI
+import OllieShared
 
 /// Launch screen shown while app loads
 struct LaunchScreen: View {

@@ -4,6 +4,7 @@
 //
 
 import SwiftUI
+import OllieShared
 import TipKit
 
 /// Main timeline view showing today's events

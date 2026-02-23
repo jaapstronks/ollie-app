@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import OllieShared
 import CloudKit
 
 /// SwiftUI wrapper for UICloudSharingController

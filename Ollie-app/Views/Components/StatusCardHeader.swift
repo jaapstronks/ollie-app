@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import OllieShared
 
 /// Reusable header component for status cards (PottyStatusCard, SleepStatusCard, etc.)
 struct StatusCardHeader: View {

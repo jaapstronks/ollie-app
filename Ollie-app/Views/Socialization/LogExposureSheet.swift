@@ -5,6 +5,7 @@
 //  Sheet for logging a socialization exposure
 
 import SwiftUI
+import OllieShared
 
 /// Sheet for logging an exposure to a socialization item
 struct LogExposureSheet: View {

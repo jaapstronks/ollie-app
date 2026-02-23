@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import OllieShared
 import Combine
 
 /// Manages the training plan and skill progress

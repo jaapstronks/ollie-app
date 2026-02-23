@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import OllieShared
 import UserNotifications
 import Combine
 

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import OllieShared
 
 /// Summary and confirmation step - final step of onboarding
 struct OnboardingConfirmStep: View {

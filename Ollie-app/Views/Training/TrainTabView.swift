@@ -4,6 +4,7 @@
 //
 //  Combined training tab with Potty Progress, Socialization, and Skills sections
 
+import OllieShared
 import SwiftUI
 
 /// Train tab - unified view with potty progress, socialization checklist, and skills tracker

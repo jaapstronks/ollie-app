@@ -5,6 +5,7 @@
 //  Timeline row for displaying walk sessions as a card container with nested potty events
 
 import SwiftUI
+import OllieShared
 
 /// Card-style row displaying a walk session with nested child events
 struct WalkSessionRow: View {

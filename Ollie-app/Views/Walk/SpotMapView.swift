@@ -5,6 +5,7 @@
 //  MapKit mini-map component for displaying a single location
 
 import SwiftUI
+import OllieShared
 import MapKit
 
 /// Non-interactive mini-map showing a single pinned location

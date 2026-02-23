@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import OllieShared
 
 /// Hero card displaying the current training week and focus skills
 struct WeekHeroCard: View {

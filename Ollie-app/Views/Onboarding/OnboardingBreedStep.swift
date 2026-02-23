@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import OllieShared
 
 /// Breed selection step
 struct OnboardingBreedStep: View {

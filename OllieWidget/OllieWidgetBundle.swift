@@ -5,6 +5,7 @@
 //  Widget bundle registering all Ollie widgets
 
 import WidgetKit
+import OllieShared
 import SwiftUI
 
 @main

@@ -5,6 +5,7 @@
 //  Overall progress card for socialization checklist
 
 import SwiftUI
+import OllieShared
 
 /// Card showing overall socialization progress and window status
 struct SocializationProgressCard: View {

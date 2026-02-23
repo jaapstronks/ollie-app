@@ -1,4 +1,5 @@
 import SwiftUI
+import OllieShared
 
 /// Compact horizontal weather strip showing upcoming hours
 struct WeatherBar: View {

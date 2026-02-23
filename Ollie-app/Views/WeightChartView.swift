@@ -5,6 +5,7 @@
 //  Growth curve chart using Swift Charts
 
 import SwiftUI
+import OllieShared
 import Charts
 
 /// Growth curve chart showing puppy weight vs reference

@@ -6,6 +6,7 @@
 //  V3: Added walk location support
 
 import SwiftUI
+import OllieShared
 import CoreLocation
 
 /// Sheet for quick logging with time adjustment

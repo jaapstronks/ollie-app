@@ -5,6 +5,7 @@
 //  Sheet for editing an existing walk event
 
 import SwiftUI
+import OllieShared
 
 /// Sheet for editing a walk event's details
 struct EditWalkSheet: View {

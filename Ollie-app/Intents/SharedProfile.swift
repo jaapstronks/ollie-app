@@ -5,6 +5,7 @@
 //  Minimal profile for App Intents - shared via App Group
 
 import Foundation
+import OllieShared
 
 /// Minimal profile struct shared with App Intents via App Group
 /// Contains only what intents need to function

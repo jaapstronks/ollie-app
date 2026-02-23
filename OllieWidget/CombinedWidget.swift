@@ -5,6 +5,7 @@
 //  Combined widget showing potty timer and streak together
 
 import WidgetKit
+import OllieShared
 import SwiftUI
 
 // MARK: - Timeline Provider

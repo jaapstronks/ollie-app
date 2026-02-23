@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import OllieShared
 
 /// Full statistics view with all metrics
 /// Uses liquid glass card styling throughout

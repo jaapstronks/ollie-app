@@ -5,6 +5,7 @@
 //  Manages socialization checklist items and exposures with CloudKit sync
 
 import Foundation
+import OllieShared
 import Combine
 import os
 

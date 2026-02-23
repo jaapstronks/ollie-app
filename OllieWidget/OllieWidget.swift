@@ -5,6 +5,7 @@
 //  Potty timer widget showing time since last plas event
 
 import WidgetKit
+import OllieShared
 import SwiftUI
 
 // MARK: - Shared Widget Data

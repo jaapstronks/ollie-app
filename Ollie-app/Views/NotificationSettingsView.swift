@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import OllieShared
 
 /// View for configuring notification settings
 struct NotificationSettingsView: View {

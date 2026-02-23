@@ -6,6 +6,7 @@
 //  Uses liquid glass design for iOS 26 aesthetic
 
 import SwiftUI
+import OllieShared
 
 /// Card showing poop status for the day
 /// Uses liquid glass design with semantic tinting based on urgency

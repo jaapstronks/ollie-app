@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import OllieShared
 
 /// Sheet for logging a training session for a specific skill
 struct TrainingLogSheet: View {

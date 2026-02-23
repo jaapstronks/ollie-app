@@ -5,6 +5,7 @@
 //  Sheet for logging a walk with optional potty events
 
 import SwiftUI
+import OllieShared
 
 /// Sheet for logging a completed walk with optional pee/poop
 struct WalkLogSheet: View {

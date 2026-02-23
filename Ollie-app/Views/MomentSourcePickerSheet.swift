@@ -5,6 +5,7 @@
 //  Sheet for choosing camera or photo library when logging a moment
 
 import SwiftUI
+import OllieShared
 
 /// Simple sheet to choose between camera and photo library for moments
 struct MomentSourcePickerSheet: View {

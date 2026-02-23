@@ -5,6 +5,7 @@
 //  Walks tab showing walk weather, today's walks, map, and favorite spots
 
 import SwiftUI
+import OllieShared
 import MapKit
 
 /// Walks tab - map, weather, spots, and today's walks

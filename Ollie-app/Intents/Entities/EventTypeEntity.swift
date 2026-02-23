@@ -5,6 +5,7 @@
 //  AppEntity for event types used in App Intents
 
 import AppIntents
+import OllieShared
 
 /// App Entity representing potty event types (pee/poop)
 struct PottyTypeEntity: AppEntity {

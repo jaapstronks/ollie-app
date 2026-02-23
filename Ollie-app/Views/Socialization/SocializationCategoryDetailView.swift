@@ -5,6 +5,7 @@
 //  Detail view showing all items in a socialization category
 
 import SwiftUI
+import OllieShared
 
 /// Detail view for a socialization category, showing all items
 struct SocializationCategoryDetailView: View {

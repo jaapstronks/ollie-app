@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import OllieShared
 
 /// Name input step - first step of onboarding
 struct OnboardingNameStep: View {

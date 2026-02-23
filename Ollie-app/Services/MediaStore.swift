@@ -4,6 +4,7 @@
 //
 
 import Foundation
+import OllieShared
 import UIKit
 import Combine
 

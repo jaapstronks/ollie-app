@@ -7,6 +7,7 @@
 import CloudKit
 import StoreKit
 import SwiftUI
+import OllieShared
 import TipKit
 
 /// Settings screen with profile editing and data import

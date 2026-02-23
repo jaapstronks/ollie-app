@@ -5,6 +5,7 @@
 
 import StoreKit
 import SwiftUI
+import OllieShared
 
 /// Full-screen overlay prompting users to upgrade when free period expires
 struct UpgradePromptView: View {

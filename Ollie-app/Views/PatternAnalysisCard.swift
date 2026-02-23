@@ -5,6 +5,7 @@
 //  Card showing trigger pattern success rates
 
 import SwiftUI
+import OllieShared
 
 /// Card displaying pattern analysis with trigger success rates
 struct PatternAnalysisCard: View {

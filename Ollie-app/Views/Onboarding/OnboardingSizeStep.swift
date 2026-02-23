@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import OllieShared
 
 /// Size category selection step (shown only for custom breeds)
 struct OnboardingSizeStep: View {

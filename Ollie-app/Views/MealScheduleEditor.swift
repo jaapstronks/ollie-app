@@ -5,6 +5,7 @@
 //  Editor for configuring meal schedule
 
 import SwiftUI
+import OllieShared
 
 /// Editor view for meal schedule configuration
 struct MealScheduleEditor: View {

@@ -4,6 +4,7 @@
 //
 //  Compact card showing potty training progress: streak, outdoor %, and top triggers
 
+import OllieShared
 import SwiftUI
 
 /// Compact potty progress card for the Train tab

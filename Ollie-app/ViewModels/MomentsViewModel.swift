@@ -4,6 +4,7 @@
 //
 
 import Foundation
+import OllieShared
 import Combine
 
 /// ViewModel for the moments gallery view

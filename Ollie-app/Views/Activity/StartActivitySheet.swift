@@ -6,6 +6,7 @@
 //  "Start now" (live tracking) or "Log completed" (retrospective)
 
 import SwiftUI
+import OllieShared
 
 /// Sheet offering choice between starting live activity or logging completed one
 struct StartActivitySheet: View {

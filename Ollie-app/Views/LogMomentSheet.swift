@@ -4,6 +4,7 @@
 //
 
 import SwiftUI
+import OllieShared
 
 /// Photo-first logging sheet: shows preview + extracted date/location + optional note
 struct LogMomentSheet: View {
