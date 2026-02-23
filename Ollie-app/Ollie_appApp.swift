@@ -20,6 +20,7 @@ struct OllieApp: App {
     @StateObject private var spotStore = SpotStore()
     @StateObject private var locationManager = LocationManager()
     @StateObject private var medicationStore = MedicationStore()
+    @StateObject private var socializationStore = SocializationStore()
     @ObservedObject private var cloudKit = CloudKitService.shared
 
     init() {
@@ -48,6 +49,7 @@ struct OllieApp: App {
                 .environmentObject(spotStore)
                 .environmentObject(locationManager)
                 .environmentObject(medicationStore)
+                .environmentObject(socializationStore)
                 .environmentObject(cloudKit)
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
                     // Sync when app comes to foreground

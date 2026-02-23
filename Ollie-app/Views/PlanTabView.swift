@@ -11,6 +11,7 @@ struct PlanTabView: View {
     @ObservedObject var viewModel: TimelineViewModel
     @ObservedObject var momentsViewModel: MomentsViewModel
     @EnvironmentObject var profileStore: ProfileStore
+    @EnvironmentObject var socializationStore: SocializationStore
 
     @State private var milestones: [HealthMilestone] = []
     @State private var showMomentsGallery = false
@@ -39,6 +40,9 @@ struct PlanTabView: View {
                 VStack(spacing: 20) {
                     // Puppy age header
                     ageHeaderSection
+
+                    // Socialization checklist
+                    socializationSection
 
                     // Upcoming milestones (next up + overdue)
                     if !upcomingMilestones.isEmpty {
@@ -123,6 +127,36 @@ struct PlanTabView: View {
             return Strings.PlanTab.monthsOld(months)
         } else {
             return Strings.PlanTab.weeksOld(profile.ageInWeeks)
+        }
+    }
+
+    // MARK: - Socialization Section
+
+    @ViewBuilder
+    private var socializationSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            // Progress card
+            SocializationProgressCard()
+
+            // Category list
+            VStack(spacing: 0) {
+                ForEach(socializationStore.categories) { category in
+                    NavigationLink {
+                        SocializationCategoryDetailView(category: category)
+                    } label: {
+                        SocializationCategoryRow(category: category)
+                    }
+                    .buttonStyle(.plain)
+
+                    if category.id != socializationStore.categories.last?.id {
+                        Divider()
+                            .padding(.leading, 52)
+                    }
+                }
+            }
+            .padding(.horizontal)
+            .padding(.vertical, 8)
+            .glassCard(tint: .accent)
         }
     }
 
@@ -311,6 +345,7 @@ struct PlanTabView: View {
 #Preview {
     let eventStore = EventStore()
     let profileStore = ProfileStore()
+    let socializationStore = SocializationStore()
     let viewModel = TimelineViewModel(eventStore: eventStore, profileStore: profileStore)
     let momentsViewModel = MomentsViewModel(eventStore: eventStore)
 
@@ -319,4 +354,5 @@ struct PlanTabView: View {
         momentsViewModel: momentsViewModel
     )
     .environmentObject(profileStore)
+    .environmentObject(socializationStore)
 }

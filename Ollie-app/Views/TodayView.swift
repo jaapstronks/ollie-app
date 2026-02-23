@@ -48,6 +48,11 @@ struct TodayView: View {
                         statusCardsSection
                     }
 
+                    // Walk suggestions (socialization items to watch for)
+                    if viewModel.isShowingToday {
+                        WalkSuggestionsCard()
+                    }
+
                     // Streak card (motivational - only if there's a streak)
                     StreakCard(streakInfo: viewModel.streakInfo)
 
