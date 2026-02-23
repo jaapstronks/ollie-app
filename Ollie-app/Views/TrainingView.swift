@@ -11,9 +11,13 @@ import OllieShared
 /// Main training view with skill tracker
 struct TrainingView: View {
     @ObservedObject var eventStore: EventStore
+
     @StateObject private var trainingStore = TrainingPlanStore()
 
     @State private var selectedSkill: Skill?
+    @State private var activeTrainingSkill: Skill?
+    @State private var skillForInfoSheet: Skill?
+    @State private var completedSessionData: TrainingSessionData?
     @State private var scrollToSkillId: String?
 
     @Environment(\.colorScheme) private var colorScheme
@@ -56,15 +60,57 @@ struct TrainingView: View {
         .onAppear {
             trainingStore.setEventStore(eventStore)
         }
+        // Full-screen training session
+        .fullScreenCover(item: $activeTrainingSkill) { skill in
+            TrainingSessionView(
+                skill: skill,
+                onComplete: { data in
+                    activeTrainingSkill = nil
+                    completedSessionData = data
+                    // Small delay to allow cover to dismiss, then show log sheet
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        selectedSkill = skill
+                    }
+                },
+                onCancel: {
+                    activeTrainingSkill = nil
+                }
+            )
+        }
+        // Skill info sheet
+        .sheet(item: $skillForInfoSheet) { skill in
+            let status = trainingStore.status(for: skill.id)
+            let sessionCount = trainingStore.sessionCount(for: skill.id)
+            let recentSessions = trainingStore.recentSessions(for: skill.id)
+
+            SkillInfoSheet(
+                skill: skill,
+                status: status,
+                sessionCount: sessionCount,
+                recentSessions: recentSessions,
+                onStartTraining: {
+                    // Start training after info sheet dismisses
+                    activeTrainingSkill = skill
+                },
+                onDismiss: {
+                    skillForInfoSheet = nil
+                }
+            )
+            .presentationDetents([.large])
+        }
+        // Training log sheet (for completing sessions)
         .sheet(item: $selectedSkill) { skill in
             TrainingLogSheet(
                 skill: skill,
+                prefillData: completedSessionData,
                 onSave: { event in
                     eventStore.addEvent(event)
                     selectedSkill = nil
+                    completedSessionData = nil
                 },
                 onCancel: {
                     selectedSkill = nil
+                    completedSessionData = nil
                 }
             )
             .presentationDetents([.height(500)])
@@ -122,8 +168,11 @@ struct TrainingView: View {
                         isLocked: isLocked,
                         missingRequirements: missingReqs,
                         recentSessions: recentSessions,
-                        onLogSession: {
-                            selectedSkill = skill
+                        onStartTraining: {
+                            activeTrainingSkill = skill
+                        },
+                        onViewInfo: {
+                            skillForInfoSheet = skill
                         },
                         onToggleMastered: {
                             trainingStore.toggleMastered(skill.id)

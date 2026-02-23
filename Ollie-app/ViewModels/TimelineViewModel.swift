@@ -19,17 +19,23 @@ class TimelineViewModel: ObservableObject {
 
     // MARK: - Activity State
 
-    /// Currently in-progress activity (walk or nap)
-    @Published var currentActivity: InProgressActivity?
+    /// Activity tracking manager (handles walk/nap lifecycle)
+    let activityManager = ActivityTrackingManager()
+
+    /// Currently in-progress activity (walk or nap) - delegates to activityManager
+    var currentActivity: InProgressActivity? {
+        get { activityManager.currentActivity }
+        set { activityManager.currentActivity = newValue }
+    }
 
     /// Whether a walk is currently in progress
     var isWalkInProgress: Bool {
-        currentActivity?.type == .walk
+        activityManager.isWalkInProgress
     }
 
     /// Whether a nap is currently in progress
     var isNapInProgress: Bool {
-        currentActivity?.type == .nap
+        activityManager.isNapInProgress
     }
 
     // MARK: - Cached Stats (to avoid recomputation every frame)
@@ -51,6 +57,9 @@ class TimelineViewModel: ObservableObject {
 
     /// Subscription to forward SheetCoordinator changes
     private var sheetCoordinatorCancellable: AnyCancellable?
+
+    /// Subscription to forward ActivityTrackingManager changes
+    private var activityManagerCancellable: AnyCancellable?
 
     /// Subscription to observe EventStore events
     private var eventStoreCancellable: AnyCancellable?
@@ -83,6 +92,15 @@ class TimelineViewModel: ObservableObject {
             .sink { [weak self] _ in
                 self?.objectWillChange.send()
             }
+
+        // Forward ActivityTrackingManager's objectWillChange to this ViewModel
+        activityManagerCancellable = activityManager.objectWillChange
+            .sink { [weak self] _ in
+                self?.objectWillChange.send()
+            }
+
+        // Set up activity manager callbacks
+        setupActivityManagerCallbacks()
 
         // Observe EventStore's events and sync to this ViewModel
         // This ensures events are updated when EventStore loads them asynchronously
@@ -252,74 +270,64 @@ class TimelineViewModel: ObservableObject {
         sheetCoordinator.dismissSheet()
     }
 
+    // MARK: - Activity Tracking Setup
+
+    /// Configure activity manager callbacks
+    private func setupActivityManagerCallbacks() {
+        // Log event callback
+        activityManager.onLogEvent = { [weak self] type, time, location, note, duration, sleepSessionId in
+            self?.logEvent(type: type, time: time ?? Date(), location: location, note: note, durationMin: duration, sleepSessionId: sleepSessionId)
+        }
+
+        // Dismiss sheet callback
+        activityManager.onDismiss = { [weak self] in
+            self?.sheetCoordinator.dismissSheet()
+        }
+
+        // Delete sleep event callback (returns the event if found)
+        activityManager.onDeleteSleepEvent = { [weak self] sessionId -> PuppyEvent? in
+            guard let self = self else { return nil }
+            return self.events.first(where: { $0.sleepSessionId == sessionId && $0.type == .slapen })
+        }
+    }
+
     // MARK: - Activity Tracking (Walks & Naps)
 
     /// Start a new activity (walk or nap)
     func startActivity(type: ActivityType) {
-        var sleepSessionId: UUID? = nil
-
-        // For naps, log the sleep event immediately so it appears in timeline
-        if type == .nap {
-            sleepSessionId = UUID()
-            logEvent(type: .slapen, sleepSessionId: sleepSessionId)
-        }
-
-        currentActivity = InProgressActivity(
-            type: type,
-            startTime: Date(),
-            sleepSessionId: sleepSessionId
-        )
-        sheetCoordinator.dismissSheet()
-        HapticFeedback.success()
+        activityManager.startActivity(type: type)
     }
 
     /// End the current activity
     func endActivity(minutesAgo: Int, note: String?) {
-        guard let activity = currentActivity else { return }
+        // Get info before ending (for note update on naps)
+        let sleepSessionId = activityManager.currentActivity?.sleepSessionId
+        let activityType = activityManager.currentActivity?.type
 
-        let endTime = Date().addingTimeInterval(-Double(minutesAgo) * 60)
-        let duration = Int(endTime.timeIntervalSince(activity.startTime) / 60)
+        // End the activity (this logs events via callbacks)
+        _ = activityManager.endActivity(minutesAgo: minutesAgo, note: note)
 
-        if activity.type == .nap {
-            // For naps, sleep was already logged at start - just log wake event
-            logEvent(type: .ontwaken, time: endTime, sleepSessionId: activity.sleepSessionId)
-
-            // Update the existing sleep event with note if provided
-            if let note = note, !note.isEmpty,
-               let sleepEvent = events.first(where: { $0.sleepSessionId == activity.sleepSessionId && $0.type == .slapen }) {
-                var updated = sleepEvent
-                updated.note = note
-                updateEvent(updated)
-            }
-        } else {
-            // For walks, log the walk event at start time
-            logEvent(
-                type: .uitlaten,
-                time: activity.startTime,
-                location: .buiten,
-                note: note,
-                durationMin: max(1, duration)
-            )
+        // Update sleep event note if needed (for naps)
+        if activityType == .nap,
+           let note = note, !note.isEmpty,
+           let sessionId = sleepSessionId,
+           let sleepEvent = events.first(where: { $0.sleepSessionId == sessionId && $0.type == .slapen }) {
+            var updated = sleepEvent
+            updated.note = note
+            updateEvent(updated)
         }
-
-        currentActivity = nil
-        sheetCoordinator.dismissSheet()
-        HapticFeedback.success()
     }
 
     /// Cancel/discard the current activity without logging
     func cancelActivity() {
-        // If cancelling a nap, delete the sleep event that was logged at start
-        if let activity = currentActivity,
-           activity.type == .nap,
-           let sessionId = activity.sleepSessionId,
+        // Cancel and check if we need to delete a sleep event
+        if let result = activityManager.cancelActivity(),
+           result.shouldDeleteSleep,
+           let sessionId = result.sessionId,
            let sleepEvent = events.first(where: { $0.sleepSessionId == sessionId && $0.type == .slapen }) {
             eventStore.deleteEvent(sleepEvent)
             loadEvents()
         }
-
-        currentActivity = nil
-        sheetCoordinator.dismissSheet()
     }
 
     /// Log a wake-up event at the specified time (for EndSleepSheet)
@@ -327,9 +335,8 @@ class TimelineViewModel: ObservableObject {
         // Use the currentActivity's sleepSessionId if available (for naps started via activity tracking)
         // Otherwise find it from recent events (for naps logged directly without activity tracking)
         let sleepSessionId: UUID?
-        if let activity = currentActivity, activity.type == .nap {
-            sleepSessionId = activity.sleepSessionId
-            currentActivity = nil  // Clear the in-progress activity
+        if let sessionId = activityManager.prepareWakeUp() {
+            sleepSessionId = sessionId
         } else {
             let recentEvents = getRecentEvents()
             sleepSessionId = SleepSession.ongoingSleepSessionId(from: recentEvents)
