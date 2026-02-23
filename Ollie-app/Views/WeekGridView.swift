@@ -9,7 +9,7 @@ import SwiftUI
 /// Row configuration for the week grid
 private struct WeekGridRow: Identifiable {
     let id = UUID()
-    let emoji: String
+    let iconName: String
     let label: String
     let color: Color
     let getValue: (DayStats) -> String
@@ -22,22 +22,22 @@ struct WeekGridView: View {
     @Environment(\.colorScheme) private var colorScheme
 
     private let rows: [WeekGridRow] = [
-        WeekGridRow(emoji: "🚽", label: "Buiten", color: .ollieSuccess) { stats in
+        WeekGridRow(iconName: "tree.fill", label: "Buiten", color: .ollieSuccess) { stats in
             stats.outdoorPotty > 0 ? "\(stats.outdoorPotty)" : "–"
         },
-        WeekGridRow(emoji: "⚠️", label: "Binnen", color: .ollieDanger) { stats in
+        WeekGridRow(iconName: "house.fill", label: "Binnen", color: .ollieDanger) { stats in
             stats.indoorPotty > 0 ? "\(stats.indoorPotty)" : "–"
         },
-        WeekGridRow(emoji: "🍽️", label: "Eten", color: .ollieAccent) { stats in
+        WeekGridRow(iconName: "fork.knife", label: "Eten", color: .ollieAccent) { stats in
             stats.meals > 0 ? "\(stats.meals)" : "–"
         },
-        WeekGridRow(emoji: "🚶", label: "Uitlaten", color: .ollieInfo) { stats in
+        WeekGridRow(iconName: "figure.walk", label: "Uitlaten", color: .ollieInfo) { stats in
             stats.walks > 0 ? "\(stats.walks)" : "–"
         },
-        WeekGridRow(emoji: "😴", label: "Slapen", color: .ollieSleep) { stats in
+        WeekGridRow(iconName: "moon.fill", label: "Slapen", color: .ollieSleep) { stats in
             stats.sleepHours > 0 ? String(format: "%.0f", stats.sleepHours) : "–"
         },
-        WeekGridRow(emoji: "🎓", label: "Training", color: Color(hex: "9B59B6")) { stats in
+        WeekGridRow(iconName: "scope", label: "Training", color: .olliePurple) { stats in
             stats.trainingSessions > 0 ? "\(stats.trainingSessions)" : "–"
         }
     ]
@@ -91,8 +91,9 @@ struct WeekGridView: View {
         HStack(spacing: 0) {
             // Row label
             HStack(spacing: 4) {
-                Text(row.emoji)
+                Image(systemName: row.iconName)
                     .font(.caption)
+                    .foregroundStyle(row.color)
                 Text(row.label)
                     .font(.caption2)
                     .foregroundStyle(.secondary)
