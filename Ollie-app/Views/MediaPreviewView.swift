@@ -19,9 +19,21 @@ struct MediaPreviewView: View {
     @State private var lastOffset: CGSize = .zero
     @State private var showControls: Bool = true
     @State private var showDeleteConfirmation: Bool = false
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     private var documentsURL: URL {
         FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+    }
+
+    private var mediaInfoAccessibilityLabel: String {
+        var parts = [event.type.label, event.time.formatted(date: .abbreviated, time: .shortened)]
+        if let note = event.note, !note.isEmpty {
+            parts.append(note)
+        }
+        if event.latitude != nil && event.longitude != nil {
+            parts.append(Strings.MediaPreview.hasLocation)
+        }
+        return parts.joined(separator: ", ")
     }
 
     var body: some View {
@@ -29,8 +41,8 @@ struct MediaPreviewView: View {
             ZStack {
                 Color.black.ignoresSafeArea()
 
-                // Photo with gestures
-                if let photoPath = event.photo,
+                // Photo with gestures (fallback to thumbnail if photo is nil)
+                if let photoPath = event.photo ?? event.thumbnailPath,
                    let data = try? Data(contentsOf: documentsURL.appendingPathComponent(photoPath)),
                    let uiImage = UIImage(data: data) {
                     Image(uiImage: uiImage)
@@ -47,9 +59,14 @@ struct MediaPreviewView: View {
                                 .onEnded { _ in
                                     lastScale = scale
                                     if scale == 1.0 {
-                                        withAnimation {
+                                        if reduceMotion {
                                             offset = .zero
                                             lastOffset = .zero
+                                        } else {
+                                            withAnimation {
+                                                offset = .zero
+                                                lastOffset = .zero
+                                            }
                                         }
                                     }
                                 }
@@ -69,12 +86,16 @@ struct MediaPreviewView: View {
                                 }
                         )
                         .onTapGesture {
-                            withAnimation(.easeInOut(duration: 0.2)) {
+                            if reduceMotion {
                                 showControls.toggle()
+                            } else {
+                                withAnimation(.easeInOut(duration: 0.2)) {
+                                    showControls.toggle()
+                                }
                             }
                         }
                         .onTapGesture(count: 2) {
-                            withAnimation {
+                            if reduceMotion {
                                 if scale > 1.0 {
                                     scale = 1.0
                                     lastScale = 1.0
@@ -84,8 +105,22 @@ struct MediaPreviewView: View {
                                     scale = 2.0
                                     lastScale = 2.0
                                 }
+                            } else {
+                                withAnimation {
+                                    if scale > 1.0 {
+                                        scale = 1.0
+                                        lastScale = 1.0
+                                        offset = .zero
+                                        lastOffset = .zero
+                                    } else {
+                                        scale = 2.0
+                                        lastScale = 2.0
+                                    }
+                                }
                             }
                         }
+                        .accessibilityLabel(Strings.MediaPreview.photoOf(event.type.label))
+                        .accessibilityHint(Strings.MediaPreview.zoomHint)
                 } else {
                     Text(Strings.MediaPreview.photoNotFound)
                         .foregroundColor(.white)
@@ -105,6 +140,8 @@ struct MediaPreviewView: View {
                                     .padding()
                                     .background(Circle().fill(Color.black.opacity(0.5)))
                             }
+                            .accessibilityLabel(Strings.Common.close)
+                            .accessibilityIdentifier("MEDIA_CLOSE_BUTTON")
 
                             Spacer()
 
@@ -117,6 +154,8 @@ struct MediaPreviewView: View {
                                     .padding()
                                     .background(Circle().fill(Color.black.opacity(0.5)))
                             }
+                            .accessibilityLabel(Strings.Common.delete)
+                            .accessibilityIdentifier("MEDIA_DELETE_BUTTON")
                         }
                         .padding()
 
@@ -126,6 +165,7 @@ struct MediaPreviewView: View {
                         VStack(alignment: .leading, spacing: 8) {
                             HStack {
                                 EventIcon(type: event.type, location: event.location, size: 28)
+                                    .accessibilityHidden(true)
                                 Text(event.type.label)
                                     .font(.headline)
                                     .foregroundColor(.white)
@@ -157,6 +197,8 @@ struct MediaPreviewView: View {
                                 endPoint: .bottom
                             )
                         )
+                        .accessibilityElement(children: .combine)
+                        .accessibilityLabel(mediaInfoAccessibilityLabel)
                     }
                 }
             }

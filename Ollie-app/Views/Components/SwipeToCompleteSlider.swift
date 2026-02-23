@@ -192,8 +192,12 @@ struct SwipeToCompleteSlider: View {
                         complete()
                     } else {
                         // Quick snap back
-                        withAnimation(.spring(response: 0.25, dampingFraction: 0.7)) {
+                        if reduceMotion {
                             dragOffset = 0
+                        } else {
+                            withAnimation(.spring(response: 0.25, dampingFraction: 0.7)) {
+                                dragOffset = 0
+                            }
                         }
                     }
                 }
@@ -208,19 +212,26 @@ struct SwipeToCompleteSlider: View {
         // Immediate haptic
         HapticFeedback.success()
 
-        // Quick completion animation
-        withAnimation(.spring(response: 0.2, dampingFraction: 0.6)) {
+        if reduceMotion {
+            // Instant state change without animation
             isComplete = true
             dragOffset = 0
-        }
-
-        // Checkmark pop animation
-        withAnimation(.spring(response: 0.3, dampingFraction: 0.5).delay(0.1)) {
-            checkmarkScale = 1.2
-        }
-
-        withAnimation(.spring(response: 0.2, dampingFraction: 0.7).delay(0.25)) {
             checkmarkScale = 1.0
+        } else {
+            // Quick completion animation
+            withAnimation(.spring(response: 0.2, dampingFraction: 0.6)) {
+                isComplete = true
+                dragOffset = 0
+            }
+
+            // Checkmark pop animation
+            withAnimation(.spring(response: 0.3, dampingFraction: 0.5).delay(0.1)) {
+                checkmarkScale = 1.2
+            }
+
+            withAnimation(.spring(response: 0.2, dampingFraction: 0.7).delay(0.25)) {
+                checkmarkScale = 1.0
+            }
         }
 
         // Call completion quickly

@@ -91,6 +91,8 @@ struct MealPortionRow: View {
         VStack(alignment: .leading, spacing: 8) {
             TextField(Strings.Meals.name, text: $portion.label)
                 .font(.headline)
+                .accessibilityLabel(Strings.Meals.mealNameAccessibility)
+                .accessibilityHint(Strings.Meals.mealNameHint)
 
             HStack {
                 Text(Strings.Meals.amount)
@@ -99,6 +101,8 @@ struct MealPortionRow: View {
                 TextField(Strings.Meals.amountExample, text: $portion.amount)
                     .multilineTextAlignment(.trailing)
                     .frame(width: 80)
+                    .accessibilityLabel(Strings.Meals.mealAmountAccessibility(portion.label))
+                    .accessibilityHint(Strings.Meals.mealAmountHint)
             }
 
             HStack {
@@ -111,9 +115,12 @@ struct MealPortionRow: View {
                     displayedComponents: .hourAndMinute
                 )
                 .labelsHidden()
+                .accessibilityLabel(Strings.Meals.mealTimeAccessibility(portion.label))
             }
         }
         .padding(.vertical, 4)
+        .accessibilityElement(children: .contain)
+        .accessibilityIdentifier("MEAL_PORTION_\(portion.id)")
     }
 
     /// Binding that converts between String ("HH:mm") and Date
@@ -132,23 +139,11 @@ struct MealPortionRow: View {
     }
 
     private var defaultTime: Date {
-        var components = DateComponents()
-        components.hour = 12
-        components.minute = 0
-        return Calendar.current.date(from: components) ?? Date()
+        Date.fromTimeComponents(hour: 12, minute: 0)
     }
 
     private func dateFromTimeString(_ timeString: String) -> Date? {
-        guard let time = DateFormatters.timeOnly.date(from: timeString) else { return nil }
-
-        // Combine with today's date
-        let calendar = Calendar.current
-        let now = Date()
-        var components = calendar.dateComponents([.year, .month, .day], from: now)
-        let timeComponents = calendar.dateComponents([.hour, .minute], from: time)
-        components.hour = timeComponents.hour
-        components.minute = timeComponents.minute
-        return calendar.date(from: components)
+        Date.fromTimeString(timeString)
     }
 
     private func timeStringFromDate(_ date: Date) -> String {

@@ -15,6 +15,7 @@ struct ClickerButton: View {
 
     @State private var isPressed = false
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     private let buttonSize: CGFloat = 160
 
@@ -84,7 +85,7 @@ struct ClickerButton: View {
                 }
             }
             .scaleEffect(isPressed ? 0.92 : 1.0)
-            .animation(.easeOut(duration: 0.1), value: isPressed)
+            .animation(reduceMotion ? nil : .easeOut(duration: 0.1), value: isPressed)
         }
         .buttonStyle(ClickerButtonStyle(isPressed: $isPressed))
         .accessibilityLabel(Strings.TrainingSession.clickerAccessibilityLabel)
@@ -129,8 +130,9 @@ private struct ClickerButtonStyle: ButtonStyle {
         var body: some View {
             VStack(spacing: 32) {
                 Text("\(clicks)")
-                    .font(.system(size: 64, weight: .bold, design: .rounded))
+                    .font(.system(.largeTitle, design: .rounded, weight: .bold))
                     .foregroundStyle(.primary)
+                    .accessibilityLabel(Strings.TrainingSession.clickCount(clicks))
 
                 Text(Strings.TrainingSession.clicks)
                     .font(.title3)

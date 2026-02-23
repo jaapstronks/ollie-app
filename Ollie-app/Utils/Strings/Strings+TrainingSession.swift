@@ -35,6 +35,9 @@ extension Strings {
         // Accessibility
         static let clickerAccessibilityLabel = String(localized: "Clicker button")
         static let clickerAccessibilityHint = String(localized: "Double tap to mark behavior")
+        static func clickCount(_ count: Int) -> String {
+            String(localized: "\(count) clicks")
+        }
 
         // Info sheet
         static let viewInfo = String(localized: "Info")
