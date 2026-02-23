@@ -34,11 +34,7 @@ struct LogWakeUpIntent: AppIntent {
         // Link wake event to the sleep session
         let sleepSessionId = ongoingSleep?.sleepSessionId ?? ongoingSleep?.id
 
-        let event = PuppyEvent(
-            time: Date(),
-            type: .ontwaken,
-            sleepSessionId: sleepSessionId
-        )
+        let event = PuppyEvent.wake(sleepSessionId: sleepSessionId)
 
         do {
             try store.addEvent(event)

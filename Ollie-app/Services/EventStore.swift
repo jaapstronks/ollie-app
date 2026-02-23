@@ -238,7 +238,9 @@ class EventStore: ObservableObject {
     /// Update an existing event
     func updateEvent(_ event: PuppyEvent, profile: PuppyProfile? = nil) {
         if let index = events.firstIndex(where: { $0.id == event.id }) {
-            events[index] = event
+            // Update modifiedAt timestamp
+            let updatedEvent = event.withUpdatedTimestamp()
+            events[index] = updatedEvent
             events.sort { $0.time > $1.time }
 
             saveEvents(for: currentDate)
@@ -247,7 +249,7 @@ class EventStore: ObservableObject {
             updateWidgetData(profile: profile)
 
             Task {
-                await saveToCloud(event)
+                await saveToCloud(updatedEvent)
             }
         }
     }

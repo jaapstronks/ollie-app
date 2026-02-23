@@ -24,10 +24,7 @@ struct LogMealIntent: AppIntent {
             return .result(dialog: "Your free trial has ended. Please upgrade in the Ollie app to continue logging.")
         }
 
-        let event = PuppyEvent(
-            time: Date(),
-            type: .eten
-        )
+        let event = PuppyEvent.meal()
 
         do {
             try store.addEvent(event)

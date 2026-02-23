@@ -255,7 +255,19 @@ class TimelineViewModel: ObservableObject {
 
     /// Start a new activity (walk or nap)
     func startActivity(type: ActivityType) {
-        currentActivity = InProgressActivity(type: type, startTime: Date())
+        var sleepSessionId: UUID? = nil
+
+        // For naps, log the sleep event immediately so it appears in timeline
+        if type == .nap {
+            sleepSessionId = UUID()
+            logEvent(type: .slapen, sleepSessionId: sleepSessionId)
+        }
+
+        currentActivity = InProgressActivity(
+            type: type,
+            startTime: Date(),
+            sleepSessionId: sleepSessionId
+        )
         sheetCoordinator.dismissSheet()
         HapticFeedback.success()
     }
@@ -267,24 +279,26 @@ class TimelineViewModel: ObservableObject {
         let endTime = Date().addingTimeInterval(-Double(minutesAgo) * 60)
         let duration = Int(endTime.timeIntervalSince(activity.startTime) / 60)
 
-        // Log the appropriate event type
-        let eventType: EventType = activity.type == .walk ? .uitlaten : .slapen
-
-        // Generate sleepSessionId for nap activities to link sleep + wake events
-        let sleepSessionId: UUID? = activity.type == .nap ? UUID() : nil
-
-        logEvent(
-            type: eventType,
-            time: activity.startTime,
-            location: eventType == .uitlaten ? .buiten : nil,
-            note: note,
-            durationMin: max(1, duration),
-            sleepSessionId: sleepSessionId
-        )
-
-        // If it was a nap, also log wake-up with same session ID
         if activity.type == .nap {
-            logEvent(type: .ontwaken, time: endTime, sleepSessionId: sleepSessionId)
+            // For naps, sleep was already logged at start - just log wake event
+            logEvent(type: .ontwaken, time: endTime, sleepSessionId: activity.sleepSessionId)
+
+            // Update the existing sleep event with note if provided
+            if let note = note, !note.isEmpty,
+               let sleepEvent = events.first(where: { $0.sleepSessionId == activity.sleepSessionId && $0.type == .slapen }) {
+                var updated = sleepEvent
+                updated.note = note
+                updateEvent(updated)
+            }
+        } else {
+            // For walks, log the walk event at start time
+            logEvent(
+                type: .uitlaten,
+                time: activity.startTime,
+                location: .buiten,
+                note: note,
+                durationMin: max(1, duration)
+            )
         }
 
         currentActivity = nil
@@ -294,15 +308,32 @@ class TimelineViewModel: ObservableObject {
 
     /// Cancel/discard the current activity without logging
     func cancelActivity() {
+        // If cancelling a nap, delete the sleep event that was logged at start
+        if let activity = currentActivity,
+           activity.type == .nap,
+           let sessionId = activity.sleepSessionId,
+           let sleepEvent = events.first(where: { $0.sleepSessionId == sessionId && $0.type == .slapen }) {
+            eventStore.deleteEvent(sleepEvent)
+            loadEvents()
+        }
+
         currentActivity = nil
         sheetCoordinator.dismissSheet()
     }
 
     /// Log a wake-up event at the specified time (for EndSleepSheet)
     func logWakeUp(time: Date) {
-        // Find the ongoing sleep session ID to link this wake event
-        let recentEvents = getRecentEvents()
-        let sleepSessionId = SleepSession.ongoingSleepSessionId(from: recentEvents)
+        // Use the currentActivity's sleepSessionId if available (for naps started via activity tracking)
+        // Otherwise find it from recent events (for naps logged directly without activity tracking)
+        let sleepSessionId: UUID?
+        if let activity = currentActivity, activity.type == .nap {
+            sleepSessionId = activity.sleepSessionId
+            currentActivity = nil  // Clear the in-progress activity
+        } else {
+            let recentEvents = getRecentEvents()
+            sleepSessionId = SleepSession.ongoingSleepSessionId(from: recentEvents)
+        }
+
         logEvent(type: .ontwaken, time: time, sleepSessionId: sleepSessionId)
         sheetCoordinator.dismissSheet()
         HapticFeedback.success()
@@ -412,14 +443,7 @@ class TimelineViewModel: ObservableObject {
         durationMin: Int? = nil,
         sleepSessionId: UUID? = nil
     ) {
-        // Auto-generate sleepSessionId for sleep events
-        let sessionId: UUID?
-        if type == .slapen {
-            sessionId = sleepSessionId ?? UUID()
-        } else {
-            sessionId = sleepSessionId
-        }
-
+        // Note: sleepSessionId is auto-generated for sleep events in PuppyEvent init
         let event = PuppyEvent(
             time: time,
             type: type,
@@ -429,7 +453,7 @@ class TimelineViewModel: ObservableObject {
             exercise: exercise,
             result: result,
             durationMin: durationMin,
-            sleepSessionId: sessionId
+            sleepSessionId: sleepSessionId
         )
 
         eventStore.addEvent(event)
@@ -445,14 +469,12 @@ class TimelineViewModel: ObservableObject {
         longitude: Double? = nil,
         note: String? = nil
     ) {
-        let event = PuppyEvent(
+        let event = PuppyEvent.walk(
             time: time,
-            type: .uitlaten,
             note: note,
-            latitude: latitude ?? spot?.latitude,
-            longitude: longitude ?? spot?.longitude,
-            spotId: spot?.id,
-            spotName: spot?.name
+            spot: spot,
+            latitude: latitude,
+            longitude: longitude
         )
 
         eventStore.addEvent(event)
@@ -662,11 +684,7 @@ class TimelineViewModel: ObservableObject {
         )
 
         // Log medication event to timeline
-        let event = PuppyEvent(
-            time: Date(),
-            type: .medicatie,
-            note: medicationName
-        )
+        let event = PuppyEvent.medication(medicationName: medicationName)
         eventStore.addEvent(event)
 
         objectWillChange.send()

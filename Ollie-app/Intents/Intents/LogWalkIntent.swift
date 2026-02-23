@@ -33,11 +33,7 @@ struct LogWalkIntent: AppIntent {
             return .result(dialog: "Your free trial has ended. Please upgrade in the Ollie app to continue logging.")
         }
 
-        let event = PuppyEvent(
-            time: Date(),
-            type: .uitlaten,
-            durationMin: durationMinutes
-        )
+        let event = PuppyEvent.walk(durationMin: durationMinutes)
 
         do {
             try store.addEvent(event)

@@ -34,8 +34,7 @@ struct LogPottyIntent: AppIntent {
             return .result(dialog: "Your free trial has ended. Please upgrade in the Ollie app to continue logging.")
         }
 
-        let event = PuppyEvent(
-            time: Date(),
+        let event = PuppyEvent.potty(
             type: pottyType.eventType,
             location: location.eventLocation
         )
@@ -71,11 +70,7 @@ struct LogPeeOutsideIntent: AppIntent {
             return .result(dialog: "Your free trial has ended. Please upgrade in the Ollie app to continue logging.")
         }
 
-        let event = PuppyEvent(
-            time: Date(),
-            type: .plassen,
-            location: .buiten
-        )
+        let event = PuppyEvent.potty(type: .plassen, location: .buiten)
 
         do {
             try store.addEvent(event)
@@ -104,11 +99,7 @@ struct LogPoopOutsideIntent: AppIntent {
             return .result(dialog: "Your free trial has ended. Please upgrade in the Ollie app to continue logging.")
         }
 
-        let event = PuppyEvent(
-            time: Date(),
-            type: .poepen,
-            location: .buiten
-        )
+        let event = PuppyEvent.potty(type: .poepen, location: .buiten)
 
         do {
             try store.addEvent(event)
