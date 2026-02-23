@@ -71,7 +71,8 @@ struct UpcomingItem: Identifiable {
 struct UpcomingEventsCard: View {
     let items: [UpcomingItem]
     let isToday: Bool
-    let onLogEvent: (EventType) -> Void
+    /// Callback with event type and optional suggested time (for overdue items, use scheduled time)
+    let onLogEvent: (EventType, Date?) -> Void
 
     var body: some View {
         if !isToday || items.isEmpty {
@@ -100,7 +101,6 @@ struct UpcomingEventsCard: View {
             .background(Color(.systemBackground))
             .cornerRadius(12)
             .shadow(color: .black.opacity(0.05), radius: 4, y: 2)
-            .padding(.horizontal)
         }
     }
 
@@ -157,13 +157,25 @@ struct UpcomingEventsCard: View {
                 .foregroundColor(item.rainWarning ? .red : .secondary)
             }
 
-            // Action button - circular icon
+            // Action button - for overdue items show "Log now" text
             Button {
-                onLogEvent(item.itemType.eventType)
+                // For overdue items, suggest using the scheduled time as default
+                onLogEvent(item.itemType.eventType, item.isOverdue ? item.targetTime : nil)
             } label: {
-                Image(systemName: "plus.circle.fill")
-                    .font(.title2)
-                    .foregroundColor(item.isOverdue ? .orange : .accentColor)
+                if item.isOverdue {
+                    Text(Strings.Upcoming.logNow)
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                        .foregroundColor(.white)
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 6)
+                        .background(Color.orange)
+                        .cornerRadius(16)
+                } else {
+                    Image(systemName: "plus.circle.fill")
+                        .font(.title2)
+                        .foregroundColor(.accentColor)
+                }
             }
         }
         .padding(12)
@@ -216,11 +228,22 @@ struct UpcomingEventsCard: View {
 
                         // Compact action button
                         Button {
-                            onLogEvent(item.itemType.eventType)
+                            onLogEvent(item.itemType.eventType, item.isOverdue ? item.targetTime : nil)
                         } label: {
-                            Image(systemName: "plus.circle.fill")
-                                .font(.body)
-                                .foregroundColor(item.isOverdue ? .orange : .accentColor)
+                            if item.isOverdue {
+                                Text(Strings.Upcoming.logNow)
+                                    .font(.caption)
+                                    .fontWeight(.semibold)
+                                    .foregroundColor(.white)
+                                    .padding(.horizontal, 8)
+                                    .padding(.vertical, 4)
+                                    .background(Color.orange)
+                                    .cornerRadius(12)
+                            } else {
+                                Image(systemName: "plus.circle.fill")
+                                    .font(.body)
+                                    .foregroundColor(.accentColor)
+                            }
                         }
                     }
                 }
@@ -365,8 +388,8 @@ struct UpcomingCalculations {
                 )
             ],
             isToday: true,
-            onLogEvent: { eventType in
-                print("Log event: \(eventType)")
+            onLogEvent: { eventType, suggestedTime in
+                print("Log event: \(eventType), suggested time: \(suggestedTime?.description ?? "now")")
             }
         )
     }

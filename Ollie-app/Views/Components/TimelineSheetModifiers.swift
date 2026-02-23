@@ -144,11 +144,12 @@ struct TimelineSheetModifiers: ViewModifier {
             )
             .presentationDetents([.medium, .large])
 
-        case .quickLog(let type):
+        case .quickLog(let type, let suggestedTime):
             QuickLogSheet(
                 eventType: type,
                 onSave: viewModel.logFromQuickSheet,
                 onCancel: viewModel.cancelQuickLogSheet,
+                suggestedTime: suggestedTime,
                 spotStore: type == .uitlaten ? spotStore : nil,
                 locationManager: type == .uitlaten ? locationManager : nil,
                 onSaveWalk: type == .uitlaten ? { time, spot, lat, lon, note in

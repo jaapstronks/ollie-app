@@ -14,12 +14,16 @@ struct QuickLogSheet: View {
     let onSave: (Date, EventLocation?, String?) -> Void
     let onCancel: () -> Void
 
+    // Optional suggested time (e.g., for overdue meals - use scheduled time as default)
+    var suggestedTime: Date?
+
     // Optional walk location support
     var spotStore: SpotStore?
     var locationManager: LocationManager?
     var onSaveWalk: ((Date, WalkSpot?, Double?, Double?, String?) -> Void)?
 
     @State private var selectedTime: Date = Date()
+    @State private var hasInitializedTime: Bool = false
     @State private var selectedLocation: EventLocation?
     @State private var note: String = ""
     @State private var showingTimePicker: Bool = false
@@ -162,6 +166,13 @@ struct QuickLogSheet: View {
         .padding()
         .animation(.easeInOut(duration: 0.2), value: showingTimePicker)
         .animation(.easeInOut(duration: 0.2), value: showingSpotNameInput)
+        .onAppear {
+            // Initialize time from suggested time (e.g., for overdue meals)
+            if !hasInitializedTime {
+                selectedTime = suggestedTime ?? Date()
+                hasInitializedTime = true
+            }
+        }
         .sheet(isPresented: $showingSpotPicker) {
             if let store = spotStore, let locMgr = locationManager {
                 SpotPickerSheet(

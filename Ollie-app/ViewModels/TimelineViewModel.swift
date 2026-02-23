@@ -206,13 +206,14 @@ class TimelineViewModel: ObservableObject {
 
     // MARK: - Quick Log
 
-    func quickLog(type: EventType) {
+    func quickLog(type: EventType, suggestedTime: Date? = nil) {
         guard canLogEvents else {
             sheetCoordinator.presentSheet(.upgradePrompt)
             return
         }
         // V2: All events now go through QuickLogSheet for time adjustment
-        sheetCoordinator.presentSheet(.quickLog(type))
+        // Pass suggested time for overdue items (e.g., scheduled meal time)
+        sheetCoordinator.presentSheet(.quickLog(type, suggestedTime: suggestedTime))
     }
 
     /// Quick log with immediate location (used by FAB quick actions)

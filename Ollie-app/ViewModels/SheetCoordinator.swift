@@ -16,7 +16,7 @@ final class SheetCoordinator: ObservableObject {
 
     /// All possible sheet types that can be presented
     enum ActiveSheet: Equatable, Identifiable {
-        case quickLog(EventType)
+        case quickLog(EventType, suggestedTime: Date? = nil)
         case potty
         case allEvents
         case logEvent(EventType)
@@ -26,10 +26,13 @@ final class SheetCoordinator: ObservableObject {
         case editEvent(PuppyEvent)
         case upgradePrompt
         case purchaseSuccess
+        case startActivity(ActivityType)
+        case endActivity
+        case endSleep(Date)
 
         var id: String {
             switch self {
-            case .quickLog(let type): return "quickLog-\(type.rawValue)"
+            case .quickLog(let type, _): return "quickLog-\(type.rawValue)"
             case .potty: return "potty"
             case .allEvents: return "allEvents"
             case .logEvent(let type): return "logEvent-\(type.rawValue)"
@@ -39,6 +42,9 @@ final class SheetCoordinator: ObservableObject {
             case .editEvent(let event): return "editEvent-\(event.id.uuidString)"
             case .upgradePrompt: return "upgradePrompt"
             case .purchaseSuccess: return "purchaseSuccess"
+            case .startActivity(let type): return "startActivity-\(type.rawValue)"
+            case .endActivity: return "endActivity"
+            case .endSleep: return "endSleep"
             }
         }
     }
@@ -65,7 +71,7 @@ final class SheetCoordinator: ObservableObject {
     var pendingEventType: EventType? {
         guard let sheet = activeSheet else { return nil }
         switch sheet {
-        case .quickLog(let type), .logEvent(let type), .locationPicker(let type):
+        case .quickLog(let type, _), .logEvent(let type), .locationPicker(let type):
             return type
         default:
             return nil

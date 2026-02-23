@@ -280,6 +280,7 @@ enum Strings {
         static let now = String(localized: "Now!")
         static let accident = String(localized: "Accident")
         static let unknown = String(localized: "No data")
+        static let logNow = String(localized: "Log potty")
 
         static func predictionHint(name: String) -> String {
             String(localized: "Shows prediction for when \(name) needs to pee")
@@ -293,6 +294,8 @@ enum Strings {
         static let awake = String(localized: "Awake")
         static let napTime = String(localized: "Nap time!")
         static let attention = String(localized: "Tired?")
+        static let wakeUp = String(localized: "Wake up")
+        static let startNap = String(localized: "Start nap")
 
         static func sleepingFor(duration: String) -> String {
             String(localized: "Sleeping for \(duration)")
@@ -329,10 +332,34 @@ enum Strings {
         static let editEndTime = String(localized: "Edit wake-up time")
     }
 
+    // MARK: - Walk Log Sheet
+    enum WalkLog {
+        static let title = String(localized: "Log Walk")
+        static let startTime = String(localized: "Start time")
+        static let duration = String(localized: "Duration")
+        static func durationMinutes(_ minutes: Int) -> String {
+            String(localized: "\(minutes) min")
+        }
+        static let pottyDuringWalk = String(localized: "Potty during walk")
+        static let pee = String(localized: "Pee")
+        static let poop = String(localized: "Poop")
+        static let pickSpot = String(localized: "Pick spot")
+        static let notePlaceholder = String(localized: "Notes (optional)")
+        static let logWalk = String(localized: "Log Walk")
+    }
+
+    // MARK: - Walk Session Row
+    enum WalkSession {
+        static let walk = String(localized: "Walk")
+        static let peed = String(localized: "peed")
+        static let pooped = String(localized: "pooped")
+    }
+
     // MARK: - Poop Status Card
     enum PoopStatus {
         static let accessibility = String(localized: "Poop status")
         static let title = String(localized: "Poop")
+        static let logNow = String(localized: "Log poop")
 
         // Count display
         static func todayCount(_ count: Int, expectedLower: Int, expectedUpper: Int) -> String {
@@ -386,6 +413,7 @@ enum Strings {
             }
         }
         static let onFire = String(localized: "On fire!")
+        static let inARow = String(localized: "in a row!")
         static let streakBroken = String(localized: "Streak broken")
         static func recordTryAgain(count: Int) -> String {
             String(localized: "Record: \(count)x — try again!")
@@ -444,6 +472,7 @@ enum Strings {
     enum Upcoming {
         static let title = String(localized: "Coming up")
         static let overdue = String(localized: "overdue")
+        static let logNow = String(localized: "Log now")
         static func laterToday(_ count: Int) -> String {
             String(localized: "\(count) later today")
         }

@@ -62,8 +62,8 @@ struct TimelineView: View {
             UpcomingEventsCard(
                 items: viewModel.upcomingItems(forecasts: weatherService.forecasts),
                 isToday: viewModel.isShowingToday,
-                onLogEvent: { eventType in
-                    viewModel.quickLog(type: eventType)
+                onLogEvent: { eventType, suggestedTime in
+                    viewModel.quickLog(type: eventType, suggestedTime: suggestedTime)
                 }
             )
 
@@ -105,7 +105,7 @@ struct TimelineView: View {
                 context: viewModel.quickLogContext,
                 canLogEvents: viewModel.canLogEvents,
                 onPottyTap: viewModel.showPottySheet,
-                onQuickLog: viewModel.quickLog,
+                onQuickLog: { type in viewModel.quickLog(type: type) },
                 onShowAllEvents: viewModel.showAllEvents,
                 onCameraTap: viewModel.openCamera
             )
@@ -245,13 +245,86 @@ struct DateHeader: View {
     }
 }
 
+/// Unified timeline item - either a regular event or a sleep session
+enum TimelineItem: Identifiable {
+    case event(PuppyEvent)
+    case sleepSession(SleepSession, note: String?)
+
+    var id: UUID {
+        switch self {
+        case .event(let event): return event.id
+        case .sleepSession(let session, _): return session.id
+        }
+    }
+
+    var sortTime: Date {
+        switch self {
+        case .event(let event): return event.time
+        case .sleepSession(let session, _): return session.startTime
+        }
+    }
+}
+
 struct EventList: View {
     let events: [PuppyEvent]
     let onDelete: (PuppyEvent) -> Void
+    let onDeleteSession: ((SleepSession) -> Void)?
     let onRefresh: () -> Void
     let onTapPhoto: (PuppyEvent) -> Void
 
     private let swipeToDeleteTip = SwipeToDeleteTip()
+
+    init(
+        events: [PuppyEvent],
+        onDelete: @escaping (PuppyEvent) -> Void,
+        onRefresh: @escaping () -> Void,
+        onTapPhoto: @escaping (PuppyEvent) -> Void,
+        onDeleteSession: ((SleepSession) -> Void)? = nil
+    ) {
+        self.events = events
+        self.onDelete = onDelete
+        self.onDeleteSession = onDeleteSession
+        self.onRefresh = onRefresh
+        self.onTapPhoto = onTapPhoto
+    }
+
+    /// Build unified timeline by grouping sleep/wake events into sessions
+    private var timelineItems: [TimelineItem] {
+        // Build sleep sessions
+        let sessions = SleepSession.buildSessions(from: events)
+
+        // Get IDs of events that are part of sessions
+        var sessionEventIds: Set<UUID> = []
+        var sessionNotes: [UUID: String] = [:]
+
+        for session in sessions {
+            sessionEventIds.insert(session.startEventId)
+            if let endId = session.endEventId {
+                sessionEventIds.insert(endId)
+            }
+            // Get note from the sleep event
+            if let sleepEvent = events.first(where: { $0.id == session.startEventId }),
+               let note = sleepEvent.note {
+                sessionNotes[session.id] = note
+            }
+        }
+
+        // Build timeline items
+        var items: [TimelineItem] = []
+
+        // Add non-sleep events
+        for event in events where !sessionEventIds.contains(event.id) {
+            items.append(.event(event))
+        }
+
+        // Add sleep sessions
+        for session in sessions {
+            items.append(.sleepSession(session, note: sessionNotes[session.id]))
+        }
+
+        // Sort by time (most recent first, or oldest first depending on preference)
+        return items.sorted { $0.sortTime < $1.sortTime }
+    }
 
     var body: some View {
         ScrollViewReader { proxy in
@@ -261,21 +334,62 @@ struct EventList: View {
                     .listRowSeparator(.hidden)
                     .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
 
-                ForEach(events) { event in
-                    EventRow(event: event)
-                        .id(event.id)
+                ForEach(timelineItems) { item in
+                    switch item {
+                    case .event(let event):
+                        EventRow(event: event)
+                            .id(event.id)
+                            .listRowInsets(EdgeInsets())
+                            .listRowSeparator(.hidden)
+                            .onTapGesture {
+                                if event.photo != nil {
+                                    onTapPhoto(event)
+                                }
+                            }
+
+                    case .sleepSession(let session, let note):
+                        SleepSessionRow(
+                            session: session,
+                            note: note,
+                            onEditStart: {},
+                            onEditEnd: {},
+                            onDelete: {
+                                if let deleteSession = onDeleteSession {
+                                    deleteSession(session)
+                                } else {
+                                    // Fallback: delete individual events
+                                    if let sleepEvent = events.first(where: { $0.id == session.startEventId }) {
+                                        onDelete(sleepEvent)
+                                    }
+                                    if let endId = session.endEventId,
+                                       let wakeEvent = events.first(where: { $0.id == endId }) {
+                                        onDelete(wakeEvent)
+                                    }
+                                }
+                            }
+                        )
+                        .id(session.id)
                         .listRowInsets(EdgeInsets())
                         .listRowSeparator(.hidden)
-                        .onTapGesture {
-                            if event.photo != nil {
-                                onTapPhoto(event)
-                            }
-                        }
+                    }
                 }
                 .onDelete { indexSet in
                     for index in indexSet {
+                        let item = timelineItems[index]
                         HapticFeedback.warning()
-                        onDelete(events[index])
+                        switch item {
+                        case .event(let event):
+                            onDelete(event)
+                        case .sleepSession(let session, _):
+                            // Delete both sleep and wake events
+                            if let sleepEvent = events.first(where: { $0.id == session.startEventId }) {
+                                onDelete(sleepEvent)
+                            }
+                            if let endId = session.endEventId,
+                               let wakeEvent = events.first(where: { $0.id == endId }) {
+                                onDelete(wakeEvent)
+                            }
+                        }
                     }
                 }
             }
@@ -284,10 +398,10 @@ struct EventList: View {
                 onRefresh()
             }
             .onChange(of: events.count) { _, _ in
-                // Scroll to latest event
-                if let lastEvent = events.last {
+                // Scroll to latest item
+                if let lastItem = timelineItems.last {
                     withAnimation {
-                        proxy.scrollTo(lastEvent.id, anchor: .bottom)
+                        proxy.scrollTo(lastItem.id, anchor: .bottom)
                     }
                 }
             }

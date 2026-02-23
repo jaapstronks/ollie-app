@@ -150,14 +150,22 @@ struct TodayView: View {
             // Potty status hero card
             PottyStatusCard(
                 prediction: viewModel.pottyPrediction,
-                puppyName: viewModel.puppyName
+                puppyName: viewModel.puppyName,
+                onLogPotty: { viewModel.sheetCoordinator.presentSheet(.potty) }
             )
 
             // Poop status tracker
-            PoopStatusCard(status: viewModel.poopStatus)
+            PoopStatusCard(
+                status: viewModel.poopStatus,
+                onLogPoop: { viewModel.quickLog(type: .poepen) }
+            )
 
             // Sleep status card
-            SleepStatusCard(sleepState: viewModel.currentSleepState)
+            SleepStatusCard(
+                sleepState: viewModel.currentSleepState,
+                onWakeUp: { viewModel.quickLog(type: .ontwaken) },
+                onStartNap: { viewModel.quickLog(type: .slapen) }
+            )
 
             // Medication reminders
             ForEach(viewModel.pendingMedications) { pending in
@@ -176,8 +184,8 @@ struct TodayView: View {
             UpcomingEventsCard(
                 items: viewModel.upcomingItems(forecasts: weatherService.forecasts),
                 isToday: viewModel.isShowingToday,
-                onLogEvent: { eventType in
-                    viewModel.quickLog(type: eventType)
+                onLogEvent: { eventType, suggestedTime in
+                    viewModel.quickLog(type: eventType, suggestedTime: suggestedTime)
                 }
             )
         }
