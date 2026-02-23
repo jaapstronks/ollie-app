@@ -86,7 +86,7 @@ struct CombinedWidgetEntryView: View {
                     .font(.system(size: 22, weight: .bold, design: .rounded))
                     .foregroundStyle(.primary)
 
-                Text("sinds plas")
+                Text(String(localized: "since potty"))
                     .font(.system(size: 10, weight: .medium))
                     .foregroundStyle(.secondary)
             }
@@ -115,7 +115,7 @@ struct CombinedWidgetEntryView: View {
                     .font(.system(size: 22, weight: .bold, design: .rounded))
                     .foregroundStyle(.primary)
 
-                Text("buiten op rij")
+                Text(String(localized: "outdoor streak"))
                     .font(.system(size: 10, weight: .medium))
                     .foregroundStyle(.secondary)
             }
@@ -145,7 +145,7 @@ struct CombinedWidgetEntryView: View {
 
                 Spacer()
 
-                Text("vandaag")
+                Text(String(localized: "today"))
                     .font(.system(size: 11, weight: .medium))
                     .foregroundStyle(.secondary)
                     .padding(.horizontal, 8)
@@ -173,7 +173,7 @@ struct CombinedWidgetEntryView: View {
                         .font(.system(size: 28, weight: .bold, design: .rounded))
                         .foregroundStyle(.primary)
 
-                    Text("sinds plas")
+                    Text(String(localized: "since potty"))
                         .font(.system(size: 11, weight: .medium))
                         .foregroundStyle(.secondary)
                 }
@@ -195,7 +195,7 @@ struct CombinedWidgetEntryView: View {
                         .font(.system(size: 28, weight: .bold, design: .rounded))
                         .foregroundStyle(.primary)
 
-                    Text("buiten op rij")
+                    Text(String(localized: "outdoor streak"))
                         .font(.system(size: 11, weight: .medium))
                         .foregroundStyle(.secondary)
                 }
@@ -204,9 +204,9 @@ struct CombinedWidgetEntryView: View {
 
             // Today's summary cards
             HStack(spacing: 12) {
-                StatCard(value: entry.data.todayPottyCount, label: "plasjes", icon: "drop.fill")
-                StatCard(value: entry.data.todayOutdoorCount, label: "buiten", icon: "leaf.fill")
-                StatCard(value: entry.data.bestStreak, label: "record", icon: "trophy.fill")
+                StatCard(value: entry.data.todayPottyCount, label: String(localized: "potty"), icon: "drop.fill")
+                StatCard(value: entry.data.todayOutdoorCount, label: String(localized: "outdoor"), icon: "leaf.fill")
+                StatCard(value: entry.data.bestStreak, label: String(localized: "record"), icon: "trophy.fill")
             }
             .padding(.horizontal, 16)
 
@@ -217,7 +217,7 @@ struct CombinedWidgetEntryView: View {
                 HStack(spacing: 6) {
                     Image(systemName: "bell.fill")
                         .font(.system(size: 12))
-                    Text("Tijd voor een plasje!")
+                    Text(String(localized: "Time for a potty break!"))
                         .font(.system(size: 12, weight: .semibold))
                 }
                 .foregroundStyle(.orange)
@@ -245,9 +245,9 @@ struct CombinedWidgetEntryView: View {
             let hours = minutes / 60
             let mins = minutes % 60
             if mins == 0 {
-                return "\(hours) uur"
+                return "\(hours)h"
             }
-            return "\(hours)u \(mins)m"
+            return "\(hours)h \(mins)m"
         }
     }
 
@@ -375,8 +375,8 @@ struct CombinedWidget: Widget {
         StaticConfiguration(kind: kind, provider: CombinedProvider()) { entry in
             CombinedWidgetEntryView(entry: entry)
         }
-        .configurationDisplayName("Ollie Overzicht")
-        .description("Plas timer en streak in één widget.")
+        .configurationDisplayName(String(localized: "Ollie Overview"))
+        .description(String(localized: "Potty timer and streak in one widget."))
         .supportedFamilies([.systemMedium, .systemLarge])
     }
 }

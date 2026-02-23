@@ -140,7 +140,7 @@ struct PottyWidgetEntryView: View {
                 .foregroundStyle(.primary)
                 .minimumScaleFactor(0.8)
 
-            Text("sinds plas")
+            Text(String(localized: "since potty"))
                 .font(.system(size: 11, weight: .medium))
                 .foregroundStyle(.secondary)
         }
@@ -175,7 +175,7 @@ struct PottyWidgetEntryView: View {
                     .font(.system(size: 32, weight: .bold, design: .rounded))
                     .foregroundStyle(.primary)
 
-                Text("sinds laatste plas")
+                Text(String(localized: "since last potty"))
                     .font(.system(size: 13, weight: .medium))
                     .foregroundStyle(.secondary)
             }
@@ -188,7 +188,7 @@ struct PottyWidgetEntryView: View {
                     Image(systemName: "exclamationmark.circle.fill")
                         .font(.system(size: 24))
                         .foregroundStyle(.orange)
-                    Text("Nu")
+                    Text(String(localized: "Now"))
                         .font(.system(size: 10, weight: .bold))
                         .foregroundStyle(.orange)
                 }
@@ -228,7 +228,7 @@ struct PottyWidgetEntryView: View {
     private var inlineWidget: some View {
         HStack(spacing: 4) {
             Image(systemName: "drop.fill")
-            Text("\(timeText) sinds plas")
+            Text("\(timeText) \(String(localized: "since potty"))")
         }
     }
 
@@ -240,7 +240,7 @@ struct PottyWidgetEntryView: View {
                     Text(timeText)
                         .fontWeight(.bold)
                 }
-                Text("sinds plas")
+                Text(String(localized: "since potty"))
                     .font(.caption2)
                     .foregroundStyle(.secondary)
             }
@@ -274,9 +274,9 @@ struct PottyWidgetEntryView: View {
             let hours = minutes / 60
             let mins = minutes % 60
             if mins == 0 {
-                return "\(hours) uur"
+                return "\(hours)h"
             }
-            return "\(hours)u \(mins)m"
+            return "\(hours)h \(mins)m"
         }
     }
 
@@ -290,7 +290,7 @@ struct PottyWidgetEntryView: View {
             let hours = minutes / 60
             let mins = minutes % 60
             if mins == 0 {
-                return "\(hours)u"
+                return "\(hours)h"
             }
             return "\(hours):\(String(format: "%02d", mins))"
         }
@@ -365,8 +365,8 @@ struct OllieWidget: Widget {
         StaticConfiguration(kind: kind, provider: PottyProvider()) { entry in
             PottyWidgetEntryView(entry: entry)
         }
-        .configurationDisplayName("Plas Timer")
-        .description("Zie hoelang geleden de laatste plas was.")
+        .configurationDisplayName(String(localized: "Potty Timer"))
+        .description(String(localized: "See how long since the last potty break."))
         .supportedFamilies([
             .systemSmall,
             .systemMedium,

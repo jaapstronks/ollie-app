@@ -105,7 +105,7 @@ struct StreakWidgetEntryView: View {
     private var inlineWidget: some View {
         HStack(spacing: 4) {
             Image(systemName: streakIcon)
-            Text("\(entry.data.currentStreak) buiten op rij")
+            Text("\(entry.data.currentStreak) \(String(localized: "outdoor streak"))")
         }
     }
 
@@ -186,9 +186,9 @@ struct StreakWidgetEntryView: View {
     private var streakLabel: String {
         let streak = entry.data.currentStreak
         if streak == 0 {
-            return "Begin opnieuw!"
+            return String(localized: "Start fresh!")
         } else {
-            return "buiten op rij"
+            return String(localized: "outdoor streak")
         }
     }
 }
@@ -202,8 +202,8 @@ struct StreakWidget: Widget {
         StaticConfiguration(kind: kind, provider: StreakProvider()) { entry in
             StreakWidgetEntryView(entry: entry)
         }
-        .configurationDisplayName("Streak Teller")
-        .description("Houd je outdoor potty streak bij.")
+        .configurationDisplayName(String(localized: "Streak Counter"))
+        .description(String(localized: "Track your outdoor potty streak."))
         .supportedFamilies([
             .systemSmall,
             .accessoryCircular,

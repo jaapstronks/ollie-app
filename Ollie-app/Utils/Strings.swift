@@ -1833,4 +1833,30 @@ enum Strings {
         static let noExposuresYet = String(localized: "No exposures logged yet")
         static let tapToLogFirst = String(localized: "Tap to log your first exposure")
     }
+
+    // MARK: - Widgets
+    // Note: Widget extension uses its own String(localized:) calls since it's a separate target.
+    // These are documented here for reference and String Catalog sync.
+    enum Widgets {
+        // Potty Timer Widget
+        static let pottyTimerName = String(localized: "Potty Timer")
+        static let pottyTimerDescription = String(localized: "See how long since the last potty break.")
+        static let sincePotty = String(localized: "since potty")
+        static let sinceLastPotty = String(localized: "since last potty")
+        static let now = String(localized: "Now")
+
+        // Combined Widget
+        static let overviewName = String(localized: "Ollie Overview")
+        static let overviewDescription = String(localized: "Potty timer and streak in one widget.")
+        static let outdoorStreak = String(localized: "outdoor streak")
+        static let pottyBreakReminder = String(localized: "Time for a potty break!")
+        static let pottyLabel = String(localized: "potty")
+        static let outdoorLabel = String(localized: "outdoor")
+        static let recordLabel = String(localized: "record")
+
+        // Streak Widget
+        static let streakCounterName = String(localized: "Streak Counter")
+        static let streakCounterDescription = String(localized: "Track your outdoor potty streak.")
+        static let startFresh = String(localized: "Start fresh!")
+    }
 }
