@@ -20,6 +20,7 @@
 - Photo/video attachments
 
 ## Next Up
+- Apple Watch App (Phase 4.1)
 - Interactive Widgets with quick-log buttons (Phase 2.2)
 
 ---
@@ -330,49 +331,107 @@ Donate intents to make suggestions contextual.
 
 ## Phase 4: Apple Watch
 
-### 4.1 Watch App — Basic
-**Effort:** High | **Impact:** High
-**Requires:** watchOS 9+
+### Prerequisites ✅ DONE
+The foundation for watchOS support has been built:
 
-Companion watch app for quick logging.
-
-**Features:**
-- Quick-log grid (same as phone quick-log bar)
-- Current potty timer
-- Today's event count
-- Streak display
-
-**Files:** New target `OllieWatch/`
-- `ContentView.swift`
-- `QuickLogView.swift`
-- `WatchConnectivityManager.swift`
-
-**Considerations:**
-- WatchConnectivity for syncing with phone
-- Can share CloudKit container for independent operation
+| Component | Status | Description |
+|-----------|--------|-------------|
+| **OllieShared Package** | ✅ | Swift Package targeting watchOS 10 with all models & calculations |
+| **App Intents** | ✅ | 9 intents ready for watch (log potty, meal, walk, sleep, status queries) |
+| **App Groups** | ✅ | `group.jaapstronks.Ollie` configured for shared data access |
+| **IntentDataStore** | ✅ | Shared data layer for reading/writing events from any extension |
+| **Calculation Modules** | ✅ | GapCalculations, StreakCalculations, SleepCalculations in shared package |
 
 ---
 
-### 4.2 Watch Complications
+### 4.1 Watch App — MVP (Option A)
 **Effort:** Medium | **Impact:** High
+**Requires:** watchOS 10+
 
-Glanceable info on watch face.
+Minimal viable watch app focused on the #1 use case: hands-free logging during walks.
+
+**Features:**
+- **Quick-Log Grid** — 6-button grid for common events:
+  - Pee outside / Pee inside
+  - Poop outside / Poop inside
+  - Meal / Wake up
+- **Potty Timer** — Time since last pee with urgency color indicator
+- **Current Streak** — Outdoor streak counter with motivational icon
+- **Sleep Status** — "Currently sleeping" indicator when active
+
+**Files:** New target `OllieWatch/`
+- `OllieWatchApp.swift` — App entry point
+- `ContentView.swift` — Main view with timer + streak
+- `QuickLogView.swift` — 6-button grid
+- `WatchDataProvider.swift` — Reads from App Group container
+
+**Implementation approach:**
+- Reuse existing App Intents for logging (no new business logic)
+- Read-only access via App Group (IntentDataStore pattern)
+- No WatchConnectivity needed initially — App Group sync is sufficient
+- No complications in MVP (reduces scope significantly)
+
+**Why this scope:**
+- Delivers 80% of watch value with minimal code
+- Can ship independently of CloudKit progress
+- Easy to test without complication edge cases
+
+---
+
+### 4.2 Watch App — Full (Option B)
+**Effort:** High | **Impact:** High
+**Requires:** watchOS 10+
+
+Feature-complete companion app. Build after MVP is validated.
+
+**Additional features (on top of MVP):**
+- **Watch Complications** — Circular (timer), Rectangular (timer + streak), Corner (streak)
+- **Today Summary** — Event counts by type (pee: 5, poop: 2, meals: 3)
+- **Recent Events List** — Scrollable list of today's events
+- **Walk Mode** — Start/end walk with duration timer on watch
+- **Haptic Reminders** — Gentle tap when predicted potty time approaches
+- **Sleep Quick Actions** — "Bedtime" button that logs sleep
+
+**Additional files:**
+- `OllieWatch/Complications/` — WidgetKit complications
+- `OllieWatch/Views/TodaySummaryView.swift`
+- `OllieWatch/Views/EventListView.swift`
+- `OllieWatch/Services/WatchNotificationManager.swift`
+
+**Considerations:**
+- Complications require WidgetKit for watchOS (similar to iOS widgets)
+- Walk mode may need background execution entitlement
+- Haptic reminders need local notification scheduling on watch
+- Consider WatchConnectivity for real-time sync if App Group latency is noticeable
+
+---
+
+### 4.3 Watch Complications
+**Effort:** Medium | **Impact:** High
+**Requires:** watchOS 10+
+
+Part of Option B. Glanceable info on watch face.
 
 **Complication types:**
-- Circular: potty timer
-- Rectangular: timer + streak
-- Corner: streak number
+- Circular: potty timer with urgency ring
+- Rectangular: timer + streak side by side
+- Corner: streak number with flame icon
 
 **Files:** `OllieWatch/Complications/`
 
 ---
 
-### 4.3 Watch Haptic Reminders
+### 4.4 Watch Haptic Reminders
 **Effort:** Low | **Impact:** Medium
 
-Gentle tap when predicted potty time approaches.
+Part of Option B. Gentle tap when predicted potty time approaches.
 
-**Files:** Extend `NotificationService.swift` for watch
+**Implementation:**
+- Schedule local notifications on watch based on prediction
+- Use `.notification` haptic type for gentle alert
+- Respect Do Not Disturb / Sleep Focus
+
+**Files:** `OllieWatch/Services/WatchNotificationManager.swift`
 
 ---
 
@@ -478,14 +537,16 @@ Search events from iOS Spotlight.
 | 4 | Basic Widgets | ✅ Done | Most requested, high daily utility |
 | 5 | App Intents | ✅ Done | Enables voice, widgets, shortcuts |
 | 6 | Lock Screen Widgets | ✅ Done | Quick glance on lock screen |
-| 7 | Interactive Widgets | | Killer feature: log without unlocking |
-| 8 | CI/CD Pipeline | | Automated testing on every PR |
-| 9 | Watch App | | Perfect for walks, hands-free logging |
-| 10 | Live Activities | | Nice-to-have, great for walk tracking |
-| 11 | TipKit | ✅ Done | Helps new users discover features |
-| 12 | Analytics | | Understand user behavior (optional) |
-| 13 | Maps | | Niche, high effort |
-| 14 | Spotlight | | Low priority, users won't search often |
+| 7 | Watch App Prerequisites | ✅ Done | OllieShared package, App Groups, IntentDataStore |
+| 8 | **Watch App MVP** | **Next** | Perfect for walks, hands-free logging |
+| 9 | Interactive Widgets | | Killer feature: log without unlocking |
+| 10 | CI/CD Pipeline | | Automated testing on every PR |
+| 11 | Watch Complications | | Glanceable info on watch face |
+| 12 | Live Activities | | Nice-to-have, great for walk tracking |
+| 13 | TipKit | ✅ Done | Helps new users discover features |
+| 14 | Analytics | | Understand user behavior (optional) |
+| 15 | Maps | | Niche, high effort |
+| 16 | Spotlight | | Low priority, users won't search often |
 
 ---
 
@@ -519,7 +580,9 @@ Options:
 | 1.1 | Haptics, TipKit | iOS 17 | ✅ Done |
 | 1.2 | Widgets (basic + lock screen + smart dashboard) | iOS 16 | ✅ Done |
 | 1.3 | App Intents | iOS 16 | ✅ Done |
-| 1.4 | Interactive widgets | iOS 17 | |
-| 2.0 | Apple Watch app | iOS 17 + watchOS 10 | |
-| 2.1 | Live Activities | iOS 16.1 | |
-| 2.2 | Maps, routes | iOS 17 | |
+| 1.4 | OllieShared package (watch prep) | iOS 17 | ✅ Done |
+| **2.0** | **Apple Watch MVP** | iOS 17 + watchOS 10 | **Next** |
+| 2.1 | Interactive widgets | iOS 17 | |
+| 2.2 | Watch complications + full features | iOS 17 + watchOS 10 | |
+| 2.3 | Live Activities | iOS 16.1 | |
+| 3.0 | Maps, routes | iOS 17 | |
