@@ -13,7 +13,6 @@ struct SocializationCategoryDetailView: View {
     @EnvironmentObject var profileStore: ProfileStore
 
     @State private var selectedItem: SocializationItem?
-    @State private var showLogSheet = false
     @State private var showFearProtocol = false
     @State private var lastLoggedReaction: SocializationReaction?
 
@@ -31,7 +30,6 @@ struct SocializationCategoryDetailView: View {
                         .contentShape(Rectangle())
                         .onTapGesture {
                             selectedItem = item
-                            showLogSheet = true
                         }
                 }
             } header: {
@@ -41,15 +39,13 @@ struct SocializationCategoryDetailView: View {
         .listStyle(.insetGrouped)
         .navigationTitle(category.name)
         .navigationBarTitleDisplayMode(.large)
-        .sheet(isPresented: $showLogSheet) {
-            if let item = selectedItem {
-                LogExposureSheet(item: item) { reaction in
-                    lastLoggedReaction = reaction
-                    if reaction.needsFearProtocol {
-                        // Show fear protocol after a short delay
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                            showFearProtocol = true
-                        }
+        .sheet(item: $selectedItem) { item in
+            LogExposureSheet(item: item) { reaction in
+                lastLoggedReaction = reaction
+                if reaction.needsFearProtocol {
+                    // Show fear protocol after a short delay
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        showFearProtocol = true
                     }
                 }
             }
@@ -66,9 +62,10 @@ struct SocializationCategoryDetailView: View {
         let progress = socializationStore.categoryProgress(for: category.id)
 
         HStack(spacing: 16) {
-            // Category emoji
-            Text(category.emoji)
-                .font(.system(size: 40))
+            // Category icon
+            Image(systemName: category.icon)
+                .font(.system(size: 32))
+                .foregroundStyle(.primary)
 
             VStack(alignment: .leading, spacing: 4) {
                 Text(Strings.Socialization.categoryProgress(
@@ -163,7 +160,7 @@ struct SocializationCategoryDetailView: View {
             category: SocializationCategory(
                 id: "mensen",
                 name: "People",
-                emoji: "👥",
+                icon: "person.2.fill",
                 items: [
                     SocializationItem(id: "kind", name: "Child", description: nil, targetExposures: 3, isWalkable: true),
                     SocializationItem(id: "adult", name: "Adult", description: nil, targetExposures: 3, isWalkable: true)
