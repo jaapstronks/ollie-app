@@ -53,7 +53,7 @@ struct ExerciseEditView: View {
                 }
 
                 Section(Strings.Exercise.walksPerDay) {
-                    Stepper(value: $maxWalksPerDay, in: 1...5) {
+                    Stepper(value: $maxWalksPerDay, in: 1...10) {
                         HStack {
                             Text("\(maxWalksPerDay)")
                                 .font(.title2)
