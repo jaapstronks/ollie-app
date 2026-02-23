@@ -1,6 +1,6 @@
 # Ollie iOS — Feature Roadmap
 
-*Last updated: 2026-02-21*
+*Last updated: 2026-02-23*
 
 ## Current State
 - Core logging functionality complete
@@ -9,6 +9,7 @@
 - Local JSONL storage
 - ✅ Haptic feedback throughout app (v1.1)
 - ✅ TipKit contextual tips (v1.1)
+- ✅ App Intents / Siri Shortcuts (v1.3)
 
 ## In Progress
 - CloudKit sync & family sharing
@@ -248,7 +249,7 @@ Add buttons to widgets for quick logging without opening app.
 - "Plas binnen" button
 - "Poep buiten" button
 
-**Dependencies:** Requires App Intents (2.3)
+**Dependencies:** ✅ App Intents (3.1) — already implemented
 
 ---
 
@@ -267,28 +268,35 @@ Circular/rectangular lock screen widgets.
 
 ## Phase 3: Siri & Shortcuts
 
-### 3.1 App Intents
+### 3.1 App Intents ✅ DONE
 **Effort:** Medium | **Impact:** High
 **Requires:** iOS 16+
 
 Enable Siri and Shortcuts integration.
 
-**Intents to implement:**
-- `LogPottyIntent` — "Log dat Ollie buiten plaste"
-- `LogMealIntent` — "Ollie heeft gegeten"
-- `GetLastPottyIntent` — "Wanneer plaste Ollie laatst?"
-- `GetStreakIntent` — "Wat is Ollie's streak?"
+**Implemented intents:**
+- ✅ `LogPeeOutsideIntent` — "Ollie peed outside"
+- ✅ `LogPoopOutsideIntent` — "Ollie pooped outside"
+- ✅ `LogPottyIntent` — "Log potty with Ollie" (with type/location params)
+- ✅ `LogMealIntent` — "Ollie ate"
+- ✅ `LogWalkIntent` — "Ollie went for a walk"
+- ✅ `LogSleepIntent` — "Ollie is sleeping"
+- ✅ `LogWakeUpIntent` — "Ollie woke up"
+- ✅ `GetPottyStatusIntent` — "When did puppy last pee"
+- ✅ `GetPoopStatusIntent` — "When did puppy last poop"
 
 **Files:**
-- `Intents/LogPottyIntent.swift`
-- `Intents/LogMealIntent.swift`
 - `Intents/OllieShortcuts.swift` (App Shortcuts provider)
+- `Intents/IntentDataStore.swift` (shared data access)
+- `Intents/Entities/` (EventTypeEntity, LocationEntity)
+- `Intents/Intents/` (all intent implementations)
 
 **Enables:**
-- Voice logging during walks
-- Interactive widget buttons
+- ✅ Voice logging during walks
+- Interactive widget buttons (ready for Phase 2.2)
 - Spotlight suggestions
 - Action buttons in notifications
+- Apple Watch support (intents work on watch)
 
 ---
 
@@ -452,7 +460,7 @@ Search events from iOS Spotlight.
 | 2 | Haptic feedback | ✅ Done | Quick win, immediate UX improvement |
 | 3 | Unit Tests | | Confidence in calculation logic |
 | 4 | Basic Widgets | | Most requested, high daily utility |
-| 5 | App Intents | | Enables voice, widgets, shortcuts |
+| 5 | App Intents | ✅ Done | Enables voice, widgets, shortcuts |
 | 6 | Interactive Widgets | | Killer feature: log without unlocking |
 | 7 | CI/CD Pipeline | | Automated testing on every PR |
 | 8 | Watch App | | Perfect for walks, hands-free logging |
@@ -493,7 +501,8 @@ Options:
 |---------|----------|---------|--------|
 | 1.1 | Haptics, TipKit | iOS 17 | ✅ Done |
 | 1.2 | Widgets (basic + lock screen) | iOS 16 | |
-| 1.3 | App Intents, interactive widgets | iOS 17 | |
+| 1.3 | App Intents | iOS 16 | ✅ Done |
+| 1.4 | Interactive widgets | iOS 17 | |
 | 2.0 | Apple Watch app | iOS 17 + watchOS 10 | |
 | 2.1 | Live Activities | iOS 16.1 | |
 | 2.2 | Maps, routes | iOS 17 | |
