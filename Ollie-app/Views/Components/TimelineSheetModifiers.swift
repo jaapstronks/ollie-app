@@ -36,11 +36,24 @@ struct TimelineSheetModifiers: ViewModifier {
         self.sheetCoordinator = viewModel.sheetCoordinator
     }
 
+    /// Binding that excludes mediaPicker from sheet presentation (handled by fullScreenCover)
+    private var sheetBinding: Binding<SheetCoordinator.ActiveSheet?> {
+        Binding(
+            get: {
+                if case .mediaPicker = sheetCoordinator.activeSheet {
+                    return nil  // Don't present as sheet - fullScreenCover handles this
+                }
+                return sheetCoordinator.activeSheet
+            },
+            set: { sheetCoordinator.activeSheet = $0 }
+        )
+    }
+
     func body(content: Content) -> some View {
         content
             // Single sheet presentation using item-based approach
-            // Directly bind to sheetCoordinator.activeSheet since we're observing it
-            .sheet(item: $sheetCoordinator.activeSheet) { sheet in
+            // Uses sheetBinding to exclude mediaPicker (handled by fullScreenCover instead)
+            .sheet(item: sheetBinding) { sheet in
                 sheetContent(for: sheet)
             }
             // Media picker uses fullScreenCover (separate from sheets)
@@ -142,7 +155,7 @@ struct TimelineSheetModifiers: ViewModifier {
                     viewModel.sheetCoordinator.dismissSheet()
                 }
             )
-            .presentationDetents([.medium, .large])
+            .presentationDetents([.fraction(0.75), .large])
 
         case .quickLog(let type, let suggestedTime):
             QuickLogSheet(
