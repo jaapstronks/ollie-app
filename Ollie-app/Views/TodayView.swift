@@ -117,19 +117,8 @@ struct TodayView: View {
 
             Spacer()
 
-            // Settings gear (when showing today) or next day button
-            if viewModel.isShowingToday {
-                Button {
-                    onSettingsTap()
-                } label: {
-                    Image(systemName: "gear")
-                        .font(.title2)
-                        .frame(width: 44, height: 44)
-                        .contentShape(Rectangle())
-                }
-                .accessibilityLabel(Strings.Tabs.settings)
-                .accessibilityIdentifier("settings_button")
-            } else {
+            // Next day button (when not showing today)
+            if !viewModel.isShowingToday {
                 Button {
                     HapticFeedback.selection()
                     viewModel.goToNextDay()
@@ -143,6 +132,18 @@ struct TodayView: View {
                 .disabled(!viewModel.canGoForward)
                 .accessibilityLabel(Strings.Timeline.nextDay)
             }
+
+            // Settings gear (always visible)
+            Button {
+                onSettingsTap()
+            } label: {
+                Image(systemName: "gear")
+                    .font(.title2)
+                    .frame(width: 44, height: 44)
+                    .contentShape(Rectangle())
+            }
+            .accessibilityLabel(Strings.Tabs.settings)
+            .accessibilityIdentifier("settings_button")
         }
         .padding()
         .background(Color(.systemBackground))

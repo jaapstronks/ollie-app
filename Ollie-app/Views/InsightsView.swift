@@ -14,6 +14,7 @@ struct InsightsView: View {
     @ObservedObject var viewModel: TimelineViewModel
     @ObservedObject var momentsViewModel: MomentsViewModel
     @ObservedObject var spotStore: SpotStore
+    let onSettingsTap: () -> Void
 
     @EnvironmentObject var locationManager: LocationManager
 
@@ -68,6 +69,16 @@ struct InsightsView: View {
             }
             .navigationTitle(Strings.Insights.title)
             .navigationBarTitleDisplayMode(.large)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        onSettingsTap()
+                    } label: {
+                        Image(systemName: "gear")
+                    }
+                    .accessibilityLabel(Strings.Tabs.settings)
+                }
+            }
             .sheet(isPresented: $showWeightSheet) {
                 WeightLogSheet(isPresented: $showWeightSheet) { weight in
                     logWeight(weight)
@@ -508,10 +519,11 @@ struct InsightsView: View {
     let momentsViewModel = MomentsViewModel(eventStore: eventStore)
     let spotStore = SpotStore()
 
-    return InsightsView(
+    InsightsView(
         viewModel: viewModel,
         momentsViewModel: momentsViewModel,
-        spotStore: spotStore
+        spotStore: spotStore,
+        onSettingsTap: { print("Settings tapped") }
     )
     .environmentObject(LocationManager())
 }

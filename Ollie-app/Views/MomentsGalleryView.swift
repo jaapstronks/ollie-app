@@ -10,8 +10,8 @@ import UIKit
 /// Grid gallery view of all photo moments
 struct MomentsGalleryView: View {
     @ObservedObject var viewModel: MomentsViewModel
+    var onSettingsTap: (() -> Void)? = nil
     @State private var selectedEvent: PuppyEvent?
-    @State private var showPreview: Bool = false
 
     private let columns = [
         GridItem(.flexible(), spacing: 2),
@@ -42,7 +42,6 @@ struct MomentsGalleryView: View {
                                                 .aspectRatio(1, contentMode: .fill)
                                                 .onTapGesture {
                                                     selectedEvent = event
-                                                    showPreview = true
                                                 }
                                         }
                                     }
@@ -54,16 +53,26 @@ struct MomentsGalleryView: View {
                 }
             }
             .navigationTitle(Strings.MomentsGallery.title)
-            .fullScreenCover(isPresented: $showPreview) {
-                if let event = selectedEvent {
-                    MediaPreviewView(
-                        event: event,
-                        onDelete: {
-                            viewModel.deleteEvent(event)
-                            selectedEvent = nil
+            .toolbar {
+                if let onSettingsTap = onSettingsTap {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button {
+                            onSettingsTap()
+                        } label: {
+                            Image(systemName: "gear")
                         }
-                    )
+                        .accessibilityLabel(Strings.Tabs.settings)
+                    }
                 }
+            }
+            .fullScreenCover(item: $selectedEvent) { event in
+                MediaPreviewView(
+                    event: event,
+                    onDelete: {
+                        viewModel.deleteEvent(event)
+                        selectedEvent = nil
+                    }
+                )
             }
             .onAppear {
                 viewModel.loadEventsWithMedia()

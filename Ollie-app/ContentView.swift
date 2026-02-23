@@ -150,7 +150,8 @@ struct MainTabView: View {
                 // Tab 1: Train (expanded with Potty + Socialization + Skills)
                 TrainTabView(
                     viewModel: viewModel,
-                    eventStore: eventStore
+                    eventStore: eventStore,
+                    onSettingsTap: { showingSettings = true }
                 )
                 .tabItem {
                     Label(Strings.Tabs.train, systemImage: "graduationcap.fill")
@@ -158,9 +159,10 @@ struct MainTabView: View {
                 .tag(1)
 
                 // Tab 2: Moments (promoted from nested view)
-                NavigationStack {
-                    MomentsGalleryView(viewModel: momentsViewModel)
-                }
+                MomentsGalleryView(
+                    viewModel: momentsViewModel,
+                    onSettingsTap: { showingSettings = true }
+                )
                 .tabItem {
                     Label(Strings.Tabs.moments, systemImage: "photo.on.rectangle.angled")
                 }
@@ -170,7 +172,8 @@ struct MainTabView: View {
                 InsightsView(
                     viewModel: viewModel,
                     momentsViewModel: momentsViewModel,
-                    spotStore: spotStore
+                    spotStore: spotStore,
+                    onSettingsTap: { showingSettings = true }
                 )
                 .tabItem {
                     Label(Strings.Tabs.stats, systemImage: "chart.bar.fill")

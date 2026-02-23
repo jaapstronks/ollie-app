@@ -11,6 +11,7 @@ import SwiftUI
 struct TrainTabView: View {
     @ObservedObject var viewModel: TimelineViewModel
     @ObservedObject var eventStore: EventStore
+    let onSettingsTap: () -> Void
     @EnvironmentObject var socializationStore: SocializationStore
     @EnvironmentObject var profileStore: ProfileStore
 
@@ -51,6 +52,16 @@ struct TrainTabView: View {
             }
             .navigationTitle(Strings.Tabs.train)
             .navigationBarTitleDisplayMode(.large)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        onSettingsTap()
+                    } label: {
+                        Image(systemName: "gear")
+                    }
+                    .accessibilityLabel(Strings.Tabs.settings)
+                }
+            }
         }
     }
 
@@ -309,7 +320,8 @@ private struct SkillsPreviewCard: View {
 
     return TrainTabView(
         viewModel: viewModel,
-        eventStore: eventStore
+        eventStore: eventStore,
+        onSettingsTap: { print("Settings tapped") }
     )
     .environmentObject(SocializationStore())
     .environmentObject(profileStore)
