@@ -10,6 +10,8 @@
 - ✅ Haptic feedback throughout app (v1.1)
 - ✅ TipKit contextual tips (v1.1)
 - ✅ App Intents / Siri Shortcuts (v1.3)
+- ✅ Widgets: potty timer, streak, combined, smart dashboard (v1.2)
+- ✅ Lock screen widgets (v1.2)
 
 ## In Progress
 - CloudKit sync & family sharing
@@ -18,7 +20,7 @@
 - Photo/video attachments
 
 ## Next Up
-- Basic Widgets (Phase 2.1)
+- Interactive Widgets with quick-log buttons (Phase 2.2)
 
 ---
 
@@ -214,28 +216,36 @@ Contextual feature tips for new users.
 
 ## Phase 2: Widgets
 
-### 2.1 Basic Widgets (WidgetKit)
+### 2.1 Basic Widgets (WidgetKit) ✅ DONE
 **Effort:** Medium | **Impact:** High
 **Requires:** iOS 14+
 
 Home screen widgets for at-a-glance info.
 
-**Small widget options:**
-- Potty timer — "2u 15m sinds laatste plas"
-- Streak counter — "🔥 5 dagen buiten"
-- Next meal countdown
+**Implemented widgets:**
+- ✅ **Potty Timer** (small/medium) — time since last potty with urgency colors
+- ✅ **Streak Counter** (small) — outdoor potty streak with milestone icons
+- ✅ **Combined Overview** (medium/large) — potty timer + streak together
+- ✅ **Smart Dashboard** (medium/large) — sleep-aware widget showing:
+  - Current sleep state with duration
+  - Potty timer with sleep-aware urgency warnings
+  - Meal status (logged vs expected, upcoming/overdue)
+  - Walk status (time since last, upcoming/overdue)
+- ✅ **Dark mode support** — all widgets adapt to light/dark mode
 
-**Medium widget:**
-- Combined: timer + streak + last 3 events
+**Files:** Target `OllieWidget/`
+- `OllieWidget.swift` — Potty timer widget
+- `StreakWidget.swift` — Streak counter widget
+- `CombinedWidget.swift` — Combined overview widget
+- `StatusDashboardWidget.swift` — Smart dashboard widget
+- `OllieWidgetBundle.swift` — Widget bundle registration
+- `Ollie-app/Utils/WidgetDataProvider.swift` — Shared data access via App Groups
 
-**Files:** New target `OllieWidgets/`
-- `PottyTimerWidget.swift`
-- `StreakWidget.swift`
-- `WidgetDataProvider.swift` (shared data access)
-
-**Considerations:**
-- App Groups for shared UserDefaults/data access between app and widget
-- Timeline refresh strategy (every 15 min for timer accuracy)
+**Data shared to widgets:**
+- Potty: last time, location, streak, today's counts
+- Sleep: current state, sleep start time
+- Meals: last meal, next scheduled, logged vs expected
+- Walks: last walk, next scheduled
 
 ---
 
@@ -251,18 +261,24 @@ Add buttons to widgets for quick logging without opening app.
 
 **Dependencies:** ✅ App Intents (3.1) — already implemented
 
+**Implementation notes:**
+- Use `Button` with `AppIntent` in widget views
+- Leverage existing `LogPeeOutsideIntent`, `LogPoopOutsideIntent`
+- Add to medium/large widget layouts
+
 ---
 
-### 2.3 Lock Screen Widgets
+### 2.3 Lock Screen Widgets ✅ DONE
 **Effort:** Low | **Impact:** Medium
 **Requires:** iOS 16+
 
 Circular/rectangular lock screen widgets.
 
-- Potty timer (circular, inline)
-- Streak count (circular)
+**Implemented:**
+- ✅ Potty timer (accessoryCircular, accessoryInline, accessoryRectangular)
+- ✅ Streak count (accessoryCircular, accessoryInline)
 
-**Files:** Extend `OllieWidgets/` with lock screen families
+**Files:** Included in `OllieWidget/OllieWidget.swift` and `StreakWidget.swift`
 
 ---
 
@@ -459,16 +475,17 @@ Search events from iOS Spotlight.
 | 1 | Crash Reporting | | Know when things break in production |
 | 2 | Haptic feedback | ✅ Done | Quick win, immediate UX improvement |
 | 3 | Unit Tests | | Confidence in calculation logic |
-| 4 | Basic Widgets | | Most requested, high daily utility |
+| 4 | Basic Widgets | ✅ Done | Most requested, high daily utility |
 | 5 | App Intents | ✅ Done | Enables voice, widgets, shortcuts |
-| 6 | Interactive Widgets | | Killer feature: log without unlocking |
-| 7 | CI/CD Pipeline | | Automated testing on every PR |
-| 8 | Watch App | | Perfect for walks, hands-free logging |
-| 9 | Live Activities | | Nice-to-have, great for walk tracking |
-| 10 | TipKit | ✅ Done | Helps new users discover features |
-| 11 | Analytics | | Understand user behavior (optional) |
-| 12 | Maps | | Niche, high effort |
-| 13 | Spotlight | | Low priority, users won't search often |
+| 6 | Lock Screen Widgets | ✅ Done | Quick glance on lock screen |
+| 7 | Interactive Widgets | | Killer feature: log without unlocking |
+| 8 | CI/CD Pipeline | | Automated testing on every PR |
+| 9 | Watch App | | Perfect for walks, hands-free logging |
+| 10 | Live Activities | | Nice-to-have, great for walk tracking |
+| 11 | TipKit | ✅ Done | Helps new users discover features |
+| 12 | Analytics | | Understand user behavior (optional) |
+| 13 | Maps | | Niche, high effort |
+| 14 | Spotlight | | Low priority, users won't search often |
 
 ---
 
@@ -500,7 +517,7 @@ Options:
 | Version | Features | iOS Min | Status |
 |---------|----------|---------|--------|
 | 1.1 | Haptics, TipKit | iOS 17 | ✅ Done |
-| 1.2 | Widgets (basic + lock screen) | iOS 16 | |
+| 1.2 | Widgets (basic + lock screen + smart dashboard) | iOS 16 | ✅ Done |
 | 1.3 | App Intents | iOS 16 | ✅ Done |
 | 1.4 | Interactive widgets | iOS 17 | |
 | 2.0 | Apple Watch app | iOS 17 + watchOS 10 | |
