@@ -51,6 +51,9 @@ class TimelineViewModel: ObservableObject {
     /// Subscription to forward SheetCoordinator changes
     private var sheetCoordinatorCancellable: AnyCancellable?
 
+    /// Subscription to observe EventStore events
+    private var eventStoreCancellable: AnyCancellable?
+
     let eventStore: EventStore
     let profileStore: ProfileStore
     var notificationService: NotificationService?
@@ -78,6 +81,16 @@ class TimelineViewModel: ObservableObject {
         sheetCoordinatorCancellable = sheetCoordinator.objectWillChange
             .sink { [weak self] _ in
                 self?.objectWillChange.send()
+            }
+
+        // Observe EventStore's events and sync to this ViewModel
+        // This ensures events are updated when EventStore loads them asynchronously
+        eventStoreCancellable = eventStore.$events
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] loadedEvents in
+                guard let self = self else { return }
+                self.events = loadedEvents
+                self.refreshCachedStats()
             }
 
         loadEvents()
