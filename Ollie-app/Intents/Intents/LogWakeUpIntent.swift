@@ -5,6 +5,7 @@
 //  App Intent for logging wake up events via Siri/Shortcuts
 
 import AppIntents
+import OllieShared
 
 /// Log that your puppy woke up
 struct LogWakeUpIntent: AppIntent {

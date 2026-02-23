@@ -5,6 +5,7 @@
 //  App Intent for logging sleep events via Siri/Shortcuts
 
 import AppIntents
+import OllieShared
 
 /// Log that your puppy is sleeping
 struct LogSleepIntent: AppIntent {

@@ -5,6 +5,7 @@
 //  App Intent for logging meal events via Siri/Shortcuts
 
 import AppIntents
+import OllieShared
 
 /// Log that your puppy ate
 struct LogMealIntent: AppIntent {
