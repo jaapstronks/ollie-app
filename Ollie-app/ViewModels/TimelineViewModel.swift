@@ -727,8 +727,23 @@ class TimelineViewModel: ObservableObject {
     // MARK: - Upcoming Events
 
     /// Upcoming meals and walks for today, with optional weather forecasts
+    /// Returns legacy format with all items combined
     func upcomingItems(forecasts: [HourForecast] = []) -> [UpcomingItem] {
         guard let profile = profileStore.profile else { return [] }
+        return UpcomingCalculations.calculateUpcoming(
+            events: events,
+            mealSchedule: profile.mealSchedule,
+            walkSchedule: profile.walkSchedule,
+            forecasts: forecasts,
+            date: currentDate
+        )
+    }
+
+    /// Separated actionable and upcoming items
+    /// - Actionable: items within 10 min or overdue (shown prominently)
+    /// - Upcoming: items more than 10 min away (shown in compact list)
+    func separatedUpcomingItems(forecasts: [HourForecast] = []) -> (actionable: [ActionableItem], upcoming: [UpcomingItem]) {
+        guard let profile = profileStore.profile else { return ([], []) }
         return UpcomingCalculations.calculateUpcoming(
             events: events,
             mealSchedule: profile.mealSchedule,

@@ -192,13 +192,10 @@ struct TodayView: View {
                 )
             }
 
-            // Upcoming events (meals & walks)
-            UpcomingEventsCard(
-                items: viewModel.upcomingItems(forecasts: weatherService.forecasts),
-                isToday: viewModel.isShowingToday,
-                onLogEvent: { eventType, suggestedTime in
-                    viewModel.quickLog(type: eventType, suggestedTime: suggestedTime)
-                }
+            // Actionable & Upcoming events
+            ScheduledEventsSection(
+                viewModel: viewModel,
+                weatherService: weatherService
             )
         }
     }

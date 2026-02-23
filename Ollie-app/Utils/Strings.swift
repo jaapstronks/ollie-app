@@ -476,6 +476,40 @@ enum Strings {
         static func laterToday(_ count: Int) -> String {
             String(localized: "\(count) later today")
         }
+        static func showAll(_ count: Int) -> String {
+            String(localized: "Show all (\(count))")
+        }
+        static let showLess = String(localized: "Show less")
+    }
+
+    // MARK: - Actionable Event Card
+    enum Actionable {
+        // Approaching state (can start early)
+        static func walkInMinutes(_ minutes: Int) -> String {
+            String(localized: "Walk in \(minutes) min")
+        }
+        static func mealInMinutes(_ minutes: Int) -> String {
+            String(localized: "Meal in \(minutes) min")
+        }
+        static let startEarly = String(localized: "Start early")
+
+        // Due state (time to start)
+        static let timeForWalk = String(localized: "Time for a walk")
+        static let timeForMeal = String(localized: "Time for a meal")
+        static let start = String(localized: "Start")
+
+        // Overdue state
+        static func walkOverdue(_ minutes: Int) -> String {
+            String(localized: "Walk overdue by \(minutes) min")
+        }
+        static func mealOverdue(_ minutes: Int) -> String {
+            String(localized: "Meal overdue by \(minutes) min")
+        }
+
+        // Status labels
+        static let approaching = String(localized: "Soon")
+        static let due = String(localized: "Now")
+        static let overdueLabel = String(localized: "Overdue")
     }
 
     // MARK: - Event Row

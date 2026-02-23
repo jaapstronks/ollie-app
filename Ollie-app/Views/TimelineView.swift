@@ -58,13 +58,10 @@ struct TimelineView: View {
                 puppyName: viewModel.puppyName
             )
 
-            // Upcoming events (meals & walks) - only for today
-            UpcomingEventsCard(
-                items: viewModel.upcomingItems(forecasts: weatherService.forecasts),
-                isToday: viewModel.isShowingToday,
-                onLogEvent: { eventType, suggestedTime in
-                    viewModel.quickLog(type: eventType, suggestedTime: suggestedTime)
-                }
+            // Actionable & Upcoming events (meals & walks) - only for today
+            ScheduledEventsSection(
+                viewModel: viewModel,
+                weatherService: weatherService
             )
 
             // V3: Potty status hero card with smart predictions
