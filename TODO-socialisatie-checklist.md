@@ -2,10 +2,30 @@
 
 Socialisatie-checklist als onderdeel van de **Plan** tab (overzicht/roadmap) met bidirectionele koppeling naar **Today** (logging). Geen eigen tab, geen plek bij Train.
 
+## Socialisatie-filosofie (BELANGRIJK)
+
+> **"Het doel van socialisatie is NIET interactie; het is NEUTRALITEIT."**
+
+De pup moet leren dat stimuli (honden, mensen, geluiden) gewoon onderdeel zijn van de wereld. Geen angst, maar ook geen overenthousiasme. Een goed gesocialiseerde pup ziet iets nieuws, denkt "oh dat hoort erbij", en kijkt terug naar de eigenaar.
+
+### De Gouden Verhouding: 10:1
+- Voor elke 1 **interactie** (aaien, spelen), 10 **exposures** (observeren, negeren)
+- Dit voorkomt de "hyper-sociale hond" die naar elke hond en persoon wil
+
+### Drie Niveaus van Socialisatie
+1. **Ver observeren** — Pup ziet stimulus op afstand, blijft kalm → belonen
+2. **Dichtbij passeren** — Stimulus passeert, pup negeert → belonen  
+3. **Korte interactie** — Alleen bij stabiele, rustige stimulus
+
+### Anti-patroon: De Hyper-Sociale Hond
+Als pup leert dat "hond zien = hond spelen", bouwt hij enorme verwachtingen op. Wanneer hij aan de lijn staat en NIET kan spelen → frustratie → blaffen, trekken, bijten in de riem.
+
+**Zigzag mist dit volledig** — zij loggen alleen "heeft X gezien ✓". Wij tracken HOE de ervaring was én op welke afstand.
+
 ## Waarom
 
 - Socialisatievenster sluit rond 16 weken — tijdgevoelig
-- Zigzag's sterkste feature, maar achter paywall. Wij bieden het gratis.
+- Zigzag's sterkste feature, maar achter paywall én filosofisch zwak. Wij doen het beter.
 - Past perfect bij Plan tab: het IS een roadmap van ervaringen
 - Dubbele flow: spontaan loggen (Today) + bewust plannen (Plan)
 
@@ -16,17 +36,17 @@ Socialisatie-checklist als onderdeel van de **Plan** tab (overzicht/roadmap) met
 **Route 1 — Spontaan (Today → Plan):**
 1. Gebruiker logt een `sociaal` event via de normale Today flow
 2. In het log-sheet verschijnt een extra veld: "Socialisatie-item?" met picker van open items
-3. Bij selectie: socialisatie-item wordt afgevinkt + event verschijnt in timeline
-4. Optioneel: als je geen item kiest, is het gewoon een los sociaal event (zoals nu)
+3. Bij selectie: exposure wordt gelogd + event verschijnt in timeline
+4. Optioneel: als je geen item kiest, is het gewoon een los sociaal event
 
 **Route 2 — Bewust (Plan → Today):**
 1. Gebruiker opent Plan tab, ziet socialisatie-sectie
-2. Tikt op een open item (bijv. "Stofzuiger")
-3. Sheet: reactie-picker + optionele notitie + "Afvinken"
-4. Item wordt afgevinkt EN er wordt automatisch een `sociaal` event aangemaakt in de timeline
+2. Tikt op een item (bijv. "Stofzuiger")
+3. Sheet: afstand + reactie + optionele notitie
+4. Exposure wordt gelogd EN er wordt automatisch een `sociaal` event aangemaakt
 
 **Beide routes produceren:**
-- Een afgevinkt socialisatie-item (met datum, reactie, notitie)
+- Een exposure-log voor het socialisatie-item (met datum, afstand, reactie)
 - Een `sociaal` event in de timeline (met `socialization_item` referentie)
 
 ## Data Model
@@ -46,140 +66,241 @@ struct SocializationCategory: Identifiable, Codable {
 struct SocializationItem: Identifiable, Codable {
     let id: String                  // "kind-0-5", "stofzuiger", etc.
     let name: String                // "Kind (0-5 jaar)"
-    let description: String?        // Optionele tip/context
-    var completed: Bool
-    var completedDate: Date?
-    var reaction: SocializationReaction?
-    var note: String?
+    let description: String?        // Korte tip (bijv. "Niet forceren, laat pup observeren")
+    let targetExposures: Int        // Doel-aantal exposures voor "comfortabel"
+    let isWalkable: Bool            // Kan tijdens wandeling
+    var exposures: [Exposure]       // Alle gelogde exposures
+    
+    // Computed
+    var isComfortable: Bool {
+        // Comfortabel = voldoende exposures met positieve/neutrale reactie
+        let goodExposures = exposures.filter { 
+            $0.reaction == .positief || $0.reaction == .neutraal 
+        }
+        return goodExposures.count >= targetExposures
+    }
+    
+    var progressFraction: Double {
+        let goodCount = exposures.filter { 
+            $0.reaction == .positief || $0.reaction == .neutraal 
+        }.count
+        return min(1.0, Double(goodCount) / Double(targetExposures))
+    }
+}
+
+struct Exposure: Identifiable, Codable {
+    let id: UUID
+    let date: Date
+    let distance: ExposureDistance
+    let reaction: SocializationReaction
+    let note: String?
+}
+
+enum ExposureDistance: String, Codable, CaseIterable {
+    case far = "ver"                // 🔭 Observeren op afstand
+    case near = "dichtbij"          // 👀 Dichtbij passeren
+    case direct = "direct"          // 🤝 Directe interactie
+    
+    var emoji: String {
+        switch self {
+        case .far: return "🔭"
+        case .near: return "👀"
+        case .direct: return "🤝"
+        }
+    }
+    
+    var label: String {
+        switch self {
+        case .far: return "Op afstand"
+        case .near: return "Dichtbij"
+        case .direct: return "Direct contact"
+        }
+    }
 }
 
 enum SocializationReaction: String, Codable, CaseIterable {
-    case positief = "positief"      // 😊 Ontspannen, nieuwsgierig
-    case neutraal = "neutraal"      // 😐 Geen reactie
+    case positief = "positief"      // 🌟 Ontspannen, nieuwsgierig
+    case neutraal = "neutraal"      // ✅ Negeert, kijkt terug naar baas (DIT IS HET DOEL!)
     case onzeker = "onzeker"        // 😟 Terughoudend, vermijdend
     case angstig = "angstig"        // 😰 Bang, trillen, vluchten
     
     var emoji: String {
         switch self {
-        case .positief: return "😊"
-        case .neutraal: return "😐"
+        case .positief: return "🌟"
+        case .neutraal: return "✅"
         case .onzeker: return "😟"
         case .angstig: return "😰"
+        }
+    }
+    
+    var description: String {
+        switch self {
+        case .positief: return "Ontspannen, nieuwsgierig"
+        case .neutraal: return "Negeert het, kijkt naar jou" // GOAL!
+        case .onzeker: return "Terughoudend, vermijdend"
+        case .angstig: return "Bang, trilt, wil vluchten"
         }
     }
 }
 ```
 
+**Let op:** `neutraal` is het DOEL, niet een middelmatige score. De UI moet dit duidelijk maken.
+
 ### Koppeling met PuppyEvent
 
-Voeg een optioneel veld toe aan het bestaande `PuppyEvent` model:
+Voeg toe aan het bestaande `PuppyEvent` model:
 
 ```swift
-// In PuppyEvent, voeg toe:
-var socializationItemId: String?    // Referentie naar socialisatie-item
+var socializationItemId: String?
+var exposureDistance: ExposureDistance?
 ```
 
 In JSONL:
 ```json
-{"time":"2026-02-23T14:30+01:00","type":"sociaal","who":"Kind op straat","note":"Heel nieuwsgierig","socialization_item":"kind-0-5"}
+{"time":"2026-02-23T14:30+01:00","type":"sociaal","who":"Kind op straat","note":"Keek even en ging verder","socialization_item":"kind-0-5","distance":"near"}
 ```
 
-## Checklist Categorieën & Items (~77 items)
+## Checklist Categorieën & Items
 
-### 👥 Mensen (~15 items)
-- Kind (0-5 jaar)
-- Kind (6-12 jaar)
-- Tiener
-- Man met baard
-- Persoon met hoed/pet
-- Persoon met zonnebril
-- Persoon in uniform (bezorger, politie)
-- Persoon met wandelstok/rollator
-- Persoon in rolstoel
-- Rennend persoon / jogger
-- Persoon op fiets
-- Groep mensen
-- Baby/peuter (geluiden)
-- Postbode / pakketbezorger
-- Dierenarts / trimmer
+### Exposure-doelen
+Items hebben verschillende target exposures gebaseerd op frequentie en belang:
+- **Hoge frequentie** (auto's, fietsers): 10-15x neutraal/positief
+- **Gemiddelde frequentie** (honden, kinderen): 5-8x
+- **Lage frequentie** (vuurwerk, lift): 2-3x
 
-### 🐾 Dieren (~8 items)
-- Grote hond
-- Kleine hond
-- Puppy (leeftijdsgenoot)
-- Kat
-- Vogels (eenden, duiven)
-- Paard / pony
-- Koe / schaap
-- Konijn / knaagdier
+### 👥 Mensen (16 items)
+| Item | Target | Walkable | Tip |
+|------|--------|----------|-----|
+| Kind (0-5 jaar) | 5x | ✓ | Altijd onder toezicht, niet forceren |
+| Kind (6-12 jaar) | 5x | ✓ | Kunnen onvoorspelbaar bewegen |
+| Tiener | 3x | ✓ | |
+| Man met baard | 5x | ✓ | Sommige pups vinden dit eng |
+| Persoon met hoed/pet | 5x | ✓ | Verandert silhouet |
+| Persoon met zonnebril | 3x | ✓ | Verbergt ogen |
+| Persoon in uniform | 5x | ✓ | Bezorger, politie, bouwvakker |
+| Persoon met wandelstok/rollator | 3x | ✓ | Ander bewegingspatroon |
+| Persoon in rolstoel | 3x | ✓ | |
+| Jogger/hardloper | 8x | ✓ | Snelle beweging, vaak passeren |
+| Fietser | 10x | ✓ | Zeer frequent, moet neutraal worden |
+| Groep mensen | 5x | ✓ | Drukte, stemmen |
+| Baby/peuter (geluiden) | 3x | ✓ | Hoge, onvoorspelbare geluiden |
+| Postbode/bezorger | 5x | ✓ | Komt regelmatig, voorkom territorium-gedrag |
+| Persoon met paraplu | 5x | ✓ | Openen is eng voor veel pups |
+| Mensen van diverse achtergrond | 5x | ✓ | Verschillende verschijningen |
 
-### 🔊 Geluiden (~12 items)
-- Stofzuiger
-- Wasmachine / droger
-- Deurbel
-- Telefoon / alarm
-- Onweer / harde wind
-- Vuurwerk
-- Claxon / sirene
-- Bouwgeluiden (boren, hameren)
-- Muziek (luid)
-- Blaffende honden
-- Kerkklokken
-- Vliegtuig / helikopter
+### 🐾 Andere dieren (8 items)
+| Item | Target | Walkable | Tip |
+|------|--------|----------|-----|
+| Grote hond (rustig, bekend) | 3x | Geregeld | Kwaliteit > kwantiteit. Alleen stabiele honden! |
+| Kleine hond (op afstand) | 5x | ✓ | Passeren zonder contact |
+| Hond aan de lijn (passeren) | 10x | ✓ | NIET laten groeten aan de lijn |
+| Kat | 3x | Sometimes | Op afstand observeren |
+| Vogels (eenden, duiven) | 5x | ✓ | Niet najagen, negeren |
+| Paard/pony | 2x | Rural | Groot, anders ruikend |
+| Koe/schaap | 2x | Rural | Als relevant voor omgeving |
+| Klein dier (konijn, eekhoorn) | 3x | ✓ | Leren niet te achtervolgen |
 
-### 🚗 Voertuigen & Transport (~8 items)
-- Auto (meerijden)
-- Fiets (erlangs)
-- Bus / tram
-- Trein (station)
-- Scooter / brommer
-- Skateboard / step
-- Vrachtwagen / vuilniswagen
-- Kinderwagen
+### 🚗 Voertuigen & Transport (10 items)
+| Item | Target | Walkable | Tip |
+|------|--------|----------|-----|
+| Passerende auto's | 15x | ✓ | Moet volledig neutraal worden |
+| Vrachtwagen/bus | 8x | ✓ | Groter, luider |
+| Motor/scooter | 8x | ✓ | Ander geluid |
+| Fiets (erlangs) | 10x | ✓ | Snelle beweging |
+| Skateboard/step | 5x | ✓ | Vreemd geluid + beweging |
+| Kinderwagen | 5x | ✓ | |
+| Vuilniswagen | 3x | ✓ | Luid, grote bewegingen |
+| Autorijden (kort) | 8x | — | Begin met 5 min, bouw op |
+| Autorijden (langer) | 5x | — | 15+ minuten |
+| Openbaar vervoer | 2x | — | Als relevant |
 
-### 🏠 Omgevingen (~10 items)
-- Drukke winkelstraat
-- Park / speeltuin
-- Strand
-- Bos / natuur
-- Parkeergarage
-- Lift
-- Trap (boven/beneden)
-- Dierenartspraktijk (kennismaking)
-- Terras / restaurant
-- Markt / evenement
+### 🔊 Geluiden (14 items)
+| Item | Target | Walkable | Tip |
+|------|--------|----------|-----|
+| Stofzuiger | 5x | — | Start op afstand, beloon kalmte |
+| Wasmachine/droger | 3x | — | |
+| Deurbel | 8x | — | Voorkom blaffen, kalmte belonen |
+| Telefoon/alarm | 5x | — | Onverwacht geluid |
+| Onweer (opname) | 5x | — | Begin zacht, bouw volume op |
+| Vuurwerk (opname) | 5x | — | Maanden voor seizoen beginnen |
+| Claxon/sirene | 5x | ✓ | |
+| Bouwgeluiden | 5x | ✓ | Boren, hameren |
+| Luide muziek | 3x | — | |
+| Blaffende honden | 8x | ✓ | Moet neutraal blijven |
+| Föhn | 3x | — | Voorbereiden op trimmer |
+| Kerkklokken | 3x | ✓ | |
+| Vliegtuig/helikopter | 3x | ✓ | |
+| Stemverheffing/ruzie | 2x | — | TV-geluiden zijn veilig |
 
-### 🦶 Ondergronden (~8 items)
-- Gras
-- Tegels / stoep
-- Zand
-- Modder
-- Water (ondiep)
-- Rooster / tralie
-- Houten vloer (glad)
-- Kiezels / grind
+### 🏠 Omgevingen (12 items)
+| Item | Target | Walkable | Tip |
+|------|--------|----------|-----|
+| Drukke straat | 8x | ✓ | Observeer eerst vanaf bankje |
+| Rustig park | 5x | ✓ | Basis buitenervaring |
+| Druk park | 5x | ✓ | Meer prikkels |
+| Terras/restaurant | 5x | ✓ | Settelen en observeren |
+| Winkelcentrum (buiten) | 3x | ✓ | Drukte, geluiden |
+| Parkeergarage | 3x | ✓ | Echo's, auto's |
+| Lift | 3x | — | Beweging, klein |
+| Trap (open) | 5x | ✓ | Kan eng zijn |
+| Trap (dicht) | 3x | ✓ | |
+| Dierenarts (happy visit) | 3x | — | Zonder behandeling, alleen kennismaken |
+| Strand/water | 3x | ✓ | Golven, zand, meeuwen |
+| Bos/natuur | 5x | ✓ | Wildlife, texturen |
 
-### ✋ Aanraking & Handling (~8 items)
-- Poten aanraken
-- Oren controleren
-- Tanden/bek bekijken
-- Nagels knippen (of aanraken)
-- Borstelen / kammen
-- Baden / afspoelen
-- Handdoek afdrogen
-- Optillen
+### 🦶 Ondergronden (10 items)
+| Item | Target | Walkable | Tip |
+|------|--------|----------|-----|
+| Gras (droog) | 5x | ✓ | |
+| Gras (nat) | 3x | ✓ | |
+| Tegels/stoep | 5x | ✓ | |
+| Kiezels/grind | 5x | ✓ | |
+| Zand | 3x | ✓ | |
+| Modder | 3x | ✓ | |
+| Water (ondiep) | 3x | ✓ | Pootje baden |
+| Metalen rooster | 5x | ✓ | Vaak eng, beloon bravery |
+| Gladde vloer (binnen) | 5x | — | Tegels, parket |
+| Houten vlonder/brug | 3x | ✓ | Kan wiebelen |
 
-### 🎪 Objecten (~8 items)
-- Paraplu (openen)
-- Ballon
-- Vuilniszak (wapperend)
-- Bezem / dweil
-- Plastic tas (geluid)
-- Fietsbel
-- Kinderspeelgoed (bewegend/geluid)
-- Kerstversiering / Halloween
+### ✋ Handling (10 items)
+| Item | Target | Walkable | Tip |
+|------|--------|----------|-----|
+| Poten aanraken | 10x | — | Elke poot, regelmatig |
+| Nagels knippen (aanraken) | 8x | — | Eerst alleen aanraken/geluid |
+| Oren bekijken | 8x | — | Binnenkant |
+| Tanden/bek bekijken | 8x | — | Voorbereiding dierenarts |
+| Borstelen/kammen | 8x | — | |
+| Optillen | 5x | — | |
+| Handdoek afdrogen | 5x | — | Na wandeling |
+| Poten schoonmaken | 8x | — | Routine na wandeling |
+| Halsband pakken | 5x | — | Noodgeval-handling |
+| Tuig/harnas aan/uit | 8x | — | |
 
-**Totaal: ~77 items in 8 categorieën**
+### 🎪 Objecten (10 items)
+| Item | Target | Walkable | Tip |
+|------|--------|----------|-----|
+| Paraplu (openen) | 5x | ✓ | Plotse beweging |
+| Ballon | 3x | — | Beweging, kan knappen |
+| Plastic tas (wapperend) | 5x | ✓ | Onvoorspelbare beweging |
+| Vuilnisbak/kliko | 5x | ✓ | Rijden, geluid |
+| Bezem/stofzuiger (object) | 3x | — | Bewegend object |
+| Rolgordijn/gordijn | 3x | — | Beweging |
+| Spiegel | 2x | — | Eigen reflectie |
+| Kerstversiering | 2x | — | Lichtjes, beweging |
+| Robot (stofzuiger etc) | 3x | — | Zelfstandig bewegend |
+| Kinderspeelgoed | 3x | ✓ | Geluid, beweging |
+
+### 🌦 Weersomstandigheden (6 items)
+| Item | Target | Walkable | Tip |
+|------|--------|----------|-----|
+| Lichte regen | 5x | ✓ | Korte blootstelling |
+| Wind | 5x | ✓ | Geluiden, bewegende objecten |
+| Donker/avondwandeling | 5x | ✓ | Andere schaduwen, geluiden |
+| Koude | 3x | ✓ | Gepaste duur |
+| Sneeuw/vorst | 2x | ✓ | Als seizoensgebonden |
+| Plassen/modderpoelen | 3x | ✓ | |
+
+**Totaal: ~96 items in 10 categorieën**
 
 ## Opslag
 
@@ -190,10 +311,22 @@ Checklist-state als JSON in app documents: `socialization.json`
     "startedDate": "2026-02-14",
     "items": {
         "kind-0-5": {
-            "completed": true,
-            "completedDate": "2026-02-20T14:30:00+01:00",
-            "reaction": "positief",
-            "note": "Buurmeisje, heel lief"
+            "exposures": [
+                {
+                    "id": "uuid-1",
+                    "date": "2026-02-20T14:30:00+01:00",
+                    "distance": "near",
+                    "reaction": "neutraal",
+                    "note": "Buurmeisje, pup keek even en ging verder"
+                },
+                {
+                    "id": "uuid-2",
+                    "date": "2026-02-22T10:15:00+01:00",
+                    "distance": "far",
+                    "reaction": "positief",
+                    "note": "Kinderen op speelplein, observeerde rustig"
+                }
+            ]
         }
     }
 }
@@ -201,69 +334,81 @@ Checklist-state als JSON in app documents: `socialization.json`
 
 Seed data (de categorieën + items template) als bundled JSON: `Ollie-app/SeedData/socialization-items.json`
 
-Later syncen via CloudKit wanneer dat gebouwd is.
-
 ## UI Design
 
 ### Plan tab — Socialisatie sectie
 
-Voeg toe als prominente sectie in de bestaande Plan view, boven of onder "Upcoming milestones":
-
 ```
 ┌──────────────────────────────┐
 │ Plan                         │
-│ 2 months old                 │
+│ 10 weeks old                 │
 │                              │
 │ 🐾 Socialisatie              │
 │ ┌──────────────────────────┐ │
-│ │ 34 / 77            ████░ │ │
-│ │ ⏰ Nog 3 weken tot venster│ │
-│ │    sluit (~16 weken)      │ │
+│ │ 34 / 96 comfortabel ████░│ │
+│ │ ⏰ Nog 6 weken in het      │ │
+│ │    socialisatievenster    │ │
 │ └──────────────────────────┘ │
 │                              │
-│ 👥 Mensen            8/15  ▸│
-│ 🐾 Dieren            3/8   ▸│
-│ 🔊 Geluiden          6/12  ▸│
-│ 🚗 Voertuigen        4/8   ▸│
-│ 🏠 Omgevingen        5/10  ▸│
-│ 🦶 Ondergronden      4/8   ▸│
-│ ✋ Handling           2/8   ▸│
-│ 🎪 Objecten          2/8   ▸│
+│ 👥 Mensen           8/16   ▸│
+│ 🐾 Dieren           2/8    ▸│
+│ 🚗 Voertuigen       4/10   ▸│
+│ 🔊 Geluiden         6/14   ▸│
+│ 🏠 Omgevingen       5/12   ▸│
+│ 🦶 Ondergronden     4/10   ▸│
+│ ✋ Handling          2/10   ▸│
+│ 🎪 Objecten         2/10   ▸│
+│ 🌦 Weer             1/6    ▸│
 │                              │
-│ ⚠️ Upcoming milestones       │
-│ ...bestaande content...      │
 └──────────────────────────────┘
 ```
 
-De urgentie-banner ("Nog X weken") verdwijnt na ~20 weken. Checklist blijft beschikbaar maar zonder countdown.
-
-### Categorie detail (vanuit Plan)
+### Categorie detail view
 
 ```
 ┌──────────────────────────────┐
-│ ← 👥 Mensen           8/15  │
+│ ← 👥 Mensen           8/16  │
 │                              │
-│ ✅ Kind (0-5 jaar)     😊    │
-│    20 feb — "Buurmeisje"     │
+│ ✅ Kind (0-5 jaar)    2/5   │
+│    ████░░░░░░░░░░░░         │
+│    Laatste: 20 feb — ✅      │
 │                              │
-│ ✅ Kind (6-12 jaar)    😐    │
-│    19 feb                    │
+│ ✅ Fietser            8/10  │
+│    ████████████████░░       │
+│    Laatste: vandaag — ✅     │
 │                              │
-│ ☐  Man met baard             │
-│ ☐  Persoon met hoed          │
-│ ☐  Persoon in uniform        │
+│ 🔄 Man met baard      1/5   │
+│    ███░░░░░░░░░░░░░░        │
+│    Laatste: 19 feb — 😟     │
+│    ⚠️ Laatste was onzeker    │
+│                              │
+│ ○  Persoon met hoed   0/5   │
+│ ○  Persoon in rolstoel 0/3  │
 │ ...                          │
 └──────────────────────────────┘
 ```
 
-Tap op een open item → afvink-sheet (Route 2):
+Tap op item → exposure-log sheet:
 
 ```
 ┌──────────────────────────────┐
-│ Stofzuiger ✓                 │
+│ Kind (0-5 jaar)              │
 │                              │
-│ Hoe reageerde [puppy naam]?  │
-│ 😊  😐  😟  😰               │
+│ Hoe dichtbij?                │
+│ ┌────┐ ┌────┐ ┌────┐        │
+│ │ 🔭 │ │ 👀 │ │ 🤝 │        │
+│ │Ver │ │Nabij│ │Direct│       │
+│ └────┘ └────┘ └────┘        │
+│                              │
+│ Reactie van [puppy naam]?    │
+│ ┌────┐ ┌────┐ ┌────┐ ┌────┐ │
+│ │ 🌟 │ │ ✅ │ │ 😟 │ │ 😰 │ │
+│ │Blij│ │Kalm│ │Onzeker│ │Bang││
+│ └────┘ └────┘ └────┘ └────┘ │
+│                              │
+│ 💡 Tip: "Kalm" (✅) is het   │
+│ doel — pup ziet het en       │
+│ negeert het.                 │
 │                              │
 │ Notitie (optioneel)          │
 │ ┌──────────────────────────┐ │
@@ -274,78 +419,125 @@ Tap op een open item → afvink-sheet (Route 2):
 └──────────────────────────────┘
 ```
 
-Reactie en notitie zijn optioneel — snelle één-tap afvinken is ook prima.
+### Angst-protocol popup
 
-### Today view — Social event koppeling (Route 1)
+Als gebruiker `angstig` of `onzeker` selecteert:
 
-Wanneer de gebruiker een `sociaal` event logt via de bestaande "Log event" → "Social" flow, voeg een optioneel veld toe aan het log-sheet:
+```
+┌──────────────────────────────┐
+│ 💡 Tips bij angst            │
+│                              │
+│ • Niet forceren — trek pup   │
+│   niet dichterbij            │
+│ • Maak afstand — ga verder   │
+│   weg tot pup ontspant       │
+│ • Laat observeren — pup mag  │
+│   kijken vanaf veilige plek  │
+│ • Beloon moed — treats voor  │
+│   kalmte en nieuwsgierigheid │
+│                              │
+│ Volgende keer: begin verder  │
+│ weg (🔭) en bouw langzaam op.│
+│                              │
+│           [Begrepen]         │
+└──────────────────────────────┘
+```
+
+### Today view — Social event koppeling
+
+Bij loggen van `sociaal` event:
 
 ```
 ┌──────────────────────────────┐
 │ Cancel          Log event    │
 │                              │
 │ 🐾 Social — 13:22           │
-│ [-5] [-10] [-15] [⏰]       │
 │                              │
 │ Wie/wat?                     │
 │ ┌──────────────────────────┐ │
-│ │ Kind op straat           │ │
+│ │ Kind op speelplein       │ │
 │ └──────────────────────────┘ │
 │                              │
 │ 📋 Socialisatie-item?        │
 │ ┌──────────────────────────┐ │
 │ │ Kind (0-5 jaar)        ▾ │ │
 │ └──────────────────────────┘ │
-│ (optioneel — alleen open     │
-│  items getoond)              │
 │                              │
-│ Notitie (optioneel)          │
-│ ┌──────────────────────────┐ │
-│ │                          │ │
-│ └──────────────────────────┘ │
+│ Afstand: 🔭 Ver  👀 Nabij  🤝│
+│ Reactie: 🌟  ✅  😟  😰      │
 │                              │
 │       [Log]                  │
 └──────────────────────────────┘
 ```
 
-De socialisatie-picker is optioneel en toont alleen nog-niet-afgevinkte items. Als je er één selecteert, wordt dat item automatisch afgevinkt.
+### Walk Suggestions (Today view)
 
-### Today view — Compacte suggestie (optioneel, nice-to-have)
-
-Op de Today view, in de "Coming up" sectie of als subtiele kaart:
+Subtiele kaart op Today wanneer wandeling gepland staat:
 
 ```
 ┌──────────────────────────────┐
-│ 💡 Socialisatie-tip           │
-│ Jullie hebben nog geen       │
-│ ervaring met een lift.       │
+│ 🚶 Wandeling om 15:00        │
+│                              │
+│ 💡 Let tijdens de wandeling  │
+│    op deze items:            │
+│                              │
+│ • Fietser (8/10) — bijna!    │
+│ • Man met baard (1/5)        │
+│ • Metalen rooster (2/5)      │
+│                              │
+│ Tip: Observeer op afstand,   │
+│ beloon kalmte.               │
 │                      [Later] │
 └──────────────────────────────┘
 ```
 
-Eén suggestie per dag, random uit onafgevinkte items. Niet opdringerig — kan weggetikt worden. Dit is nice-to-have voor v1.1.
+Suggesties gebaseerd op:
+- Items met `isWalkable: true`
+- Nog niet comfortabel
+- Recent negatieve ervaring → prioriteit voor retry op grotere afstand
+- Items waar progressie bijna compleet is
 
 ## Leeftijdslogica
 
 - `PuppyProfile.ageInWeeks` bepaalt urgentie
-- < 12 weken: groene banner "Volop in het socialisatievenster"
-- 12-16 weken: oranje banner "Nog X weken — maak er gebruik van!"
-- 16-20 weken: rode banner "Venster sluit — focus op de belangrijkste items"
-- > 20 weken: geen banner meer, checklist blijft gewoon beschikbaar
+- < 10 weken: groene banner "Midden in het socialisatievenster — ideale tijd!"
+- 10-14 weken: blauwe banner "Socialisatievenster — nog X weken optimaal"
+- 14-16 weken: oranje banner "Venster sluit bijna — focus op de belangrijkste items"
+- 16-20 weken: gele banner "Na het venster — socialisatie blijft waardevol maar lastiger"
+- > 20 weken: geen banner, checklist blijft beschikbaar
 
 ## Definition of Done
 
-- [ ] `SocializationCategory`, `SocializationItem`, `SocializationReaction` models
-- [ ] JSON seed data met alle ~77 items in 8 categorieën
-- [ ] `SocializationStore` service (laden, opslaan, afvinken)
-- [ ] Socialisatie-sectie in Plan view met voortgangsbalk en categorieën
-- [ ] Categorie detail view met items en afvink-sheet
-- [ ] Reactie-picker (emoji) bij afvinken
-- [ ] Optionele notitie bij items
-- [ ] Socialisatievenster countdown op basis van puppy leeftijd
-- [ ] `socialization_item` veld toegevoegd aan PuppyEvent model
-- [ ] Social event log-sheet uitgebreid met socialisatie-item picker
-- [ ] Afvinken vanuit Plan creëert automatisch `sociaal` event in timeline
-- [ ] Koppelen vanuit Today Social event vinkt automatisch socialisatie-item af
+### Models
+- [ ] `SocializationCategory`, `SocializationItem` models
+- [ ] `Exposure`, `ExposureDistance`, `SocializationReaction` models
+- [ ] `targetExposures` en `isWalkable` per item
+- [ ] Computed properties: `isComfortable`, `progressFraction`
+
+### Data
+- [ ] JSON seed data met alle ~96 items in 10 categorieën
+- [ ] `SocializationStore` service (laden, opslaan, exposure toevoegen)
+- [ ] Migratie van oud formaat (single completed) naar exposures array
+
+### UI — Plan
+- [ ] Socialisatie-sectie in Plan view met voortgangsbalk
+- [ ] Categorieën met progress indicators
+- [ ] Categorie detail view met items en voortgang per item
+- [ ] Exposure-log sheet met afstand + reactie picker
+- [ ] Progress bars per item (niet binary checkmarks)
+
+### UI — Feedback
+- [ ] "Kalm is het doel" uitleg in UI
+- [ ] Angst-protocol popup bij negatieve reactie
+- [ ] Tips per item (description veld)
+
+### UI — Today integratie
+- [ ] `socialization_item` + `distance` velden in PuppyEvent
+- [ ] Social event log-sheet uitgebreid met socialisatie-koppeling
+- [ ] Log vanuit Plan creëert automatisch `sociaal` event
+
+### UI — Suggesties
+- [ ] Walk suggestions kaart op Today view
+- [ ] Prioritering: bijna-compleet, recent negatief, walkable
 
 Delete this file when done.
