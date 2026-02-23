@@ -31,9 +31,43 @@ struct SocializationItem: Identifiable, Codable {
     let description: String?    // Tip text
     let targetExposures: Int    // Goal count (default: 3)
     let isWalkable: Bool        // Can encounter during walks
+    let priority: Int           // Suggestion priority (0=rare, 1=normal, 2=common, 3=starter)
 
     /// Default target if not specified in seed data
     static let defaultTargetExposures = 3
+    /// Default priority for items without explicit priority
+    static let defaultPriority = 1
+
+    /// Memberwise initializer for creating items directly
+    init(
+        id: String,
+        name: String,
+        description: String? = nil,
+        targetExposures: Int = defaultTargetExposures,
+        isWalkable: Bool = false,
+        priority: Int = defaultPriority
+    ) {
+        self.id = id
+        self.name = name
+        self.description = description
+        self.targetExposures = targetExposures
+        self.isWalkable = isWalkable
+        self.priority = priority
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(String.self, forKey: .id)
+        name = try container.decode(String.self, forKey: .name)
+        description = try container.decodeIfPresent(String.self, forKey: .description)
+        targetExposures = try container.decodeIfPresent(Int.self, forKey: .targetExposures) ?? Self.defaultTargetExposures
+        isWalkable = try container.decodeIfPresent(Bool.self, forKey: .isWalkable) ?? false
+        priority = try container.decodeIfPresent(Int.self, forKey: .priority) ?? Self.defaultPriority
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case id, name, description, targetExposures, isWalkable, priority
+    }
 }
 
 // MARK: - Exposure

@@ -202,7 +202,7 @@ class SocializationStore: ObservableObject {
     // MARK: - Walk Suggestions
 
     /// Get suggested items to watch for during walks
-    /// Priority: recent negative reaction > almost complete > not started
+    /// Priority: recent negative reaction > almost complete > not started (weighted by item priority)
     func suggestedWalkItems(limit: Int = 3) -> [SocializationItem] {
         let walkableItems = categories.flatMap { $0.items }.filter { $0.isWalkable }
 
@@ -228,9 +228,10 @@ class SocializationStore: ObservableObject {
                 score += 50
             }
 
-            // Not started yet
+            // Not started yet - use item priority to weight suggestions
+            // Higher priority items (3=starter, 2=common) should be suggested first
             if exposures.isEmpty {
-                score += 25
+                score += 20 + (item.priority * 10)  // Range: 20-50 based on priority
             }
 
             // Items that are already comfortable get low priority
