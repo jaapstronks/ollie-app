@@ -370,7 +370,8 @@ struct PuppyEvent: Codable, Identifiable, Equatable {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 
-        id = try container.decode(UUID.self, forKey: .id)
+        // Generate UUID if not present in JSON (web app data doesn't include it)
+        id = try container.decodeIfPresent(UUID.self, forKey: .id) ?? UUID()
         time = try container.decode(Date.self, forKey: .time)
         type = try container.decode(EventType.self, forKey: .type)
 
