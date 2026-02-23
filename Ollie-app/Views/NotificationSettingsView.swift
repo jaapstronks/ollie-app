@@ -9,7 +9,7 @@ import SwiftUI
 
 /// View for configuring notification settings
 struct NotificationSettingsView: View {
-    @ObservedObject var profileStore: ProfileStore
+    let profileStore: ProfileStore
     @ObservedObject var notificationService: NotificationService
     @Environment(\.dismiss) private var dismiss
 

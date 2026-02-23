@@ -7,7 +7,7 @@ import SwiftUI
 
 /// View for editing the meal schedule
 struct MealEditView: View {
-    @ObservedObject var profileStore: ProfileStore
+    let profileStore: ProfileStore
     @Environment(\.dismiss) private var dismiss
 
     @State private var mealsPerDay: Int

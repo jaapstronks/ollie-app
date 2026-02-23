@@ -9,8 +9,8 @@ import SwiftUI
 /// Meal schedule settings section
 struct MealSection: View {
     let profile: PuppyProfile
-    @ObservedObject var profileStore: ProfileStore
-    @State private var showingMealEdit = false
+    let profileStore: ProfileStore
+    @Binding var showingMealEdit: Bool
 
     var body: some View {
         Section(Strings.Settings.mealsPerDay(profile.mealSchedule.mealsPerDay)) {
@@ -35,9 +35,6 @@ struct MealSection: View {
             } label: {
                 Label(Strings.Settings.editMeals, systemImage: "pencil")
             }
-        }
-        .sheet(isPresented: $showingMealEdit) {
-            MealEditView(profileStore: profileStore)
         }
     }
 }

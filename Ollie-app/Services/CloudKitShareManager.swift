@@ -124,7 +124,13 @@ final class CloudKitShareManager: ObservableObject {
 
     /// Stop sharing (remove all participants)
     func stopSharing() async throws {
-        guard let share = try await fetchExistingShare() else { return }
+        guard let share = try await fetchExistingShare() else {
+            // No share exists, reset state anyway
+            isShared = false
+            shareParticipants = []
+            logger.info("No share to stop, reset state")
+            return
+        }
 
         try await privateDatabase.deleteRecord(withID: share.recordID)
         isShared = false

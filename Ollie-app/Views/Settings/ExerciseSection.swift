@@ -9,8 +9,8 @@ import SwiftUI
 /// Exercise limits and settings section
 struct ExerciseSection: View {
     let profile: PuppyProfile
-    @ObservedObject var profileStore: ProfileStore
-    @State private var showingExerciseEdit = false
+    let profileStore: ProfileStore
+    @Binding var showingExerciseEdit: Bool
 
     var body: some View {
         Section(Strings.Settings.exercise) {
@@ -26,9 +26,6 @@ struct ExerciseSection: View {
             } label: {
                 Label(Strings.Settings.editExerciseLimit, systemImage: "pencil")
             }
-        }
-        .sheet(isPresented: $showingExerciseEdit) {
-            ExerciseEditView(profileStore: profileStore)
         }
     }
 }

@@ -7,7 +7,7 @@ import SwiftUI
 
 /// View for editing exercise configuration
 struct ExerciseEditView: View {
-    @ObservedObject var profileStore: ProfileStore
+    let profileStore: ProfileStore
     @Environment(\.dismiss) private var dismiss
 
     @State private var minutesPerMonth: Int

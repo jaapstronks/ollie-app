@@ -9,7 +9,7 @@ import SwiftUI
 
 /// Sheet for adding or editing a medication
 struct AddEditMedicationSheet: View {
-    @ObservedObject var profileStore: ProfileStore
+    let profileStore: ProfileStore
     let medication: Medication?
 
     @Environment(\.dismiss) private var dismiss

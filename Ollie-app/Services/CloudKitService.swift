@@ -78,6 +78,7 @@ final class CloudKitService: ObservableObject {
     private var participantZoneID: CKRecordZone.ID? // Zone ID when viewing shared data
     private let logger = Logger(subsystem: "nl.jaapstronks.Ollie", category: "CloudKit")
     private let deviceID: String
+    private var shareManagerCancellable: AnyCancellable?
 
     // MARK: - UserDefaults Keys
 
@@ -99,6 +100,11 @@ final class CloudKitService: ObservableObject {
     private init() {
         deviceID = UIDevice.current.identifierForVendor?.uuidString ?? UUID().uuidString
         loadPersistedState()
+
+        // Forward shareManager changes to this object so SwiftUI views update
+        shareManagerCancellable = shareManager.objectWillChange.sink { [weak self] _ in
+            self?.objectWillChange.send()
+        }
 
         #if targetEnvironment(simulator)
         // CloudKit works on simulator but may have limitations without proper entitlements

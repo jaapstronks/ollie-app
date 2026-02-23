@@ -4,6 +4,7 @@
 //
 //  Refactored to use extracted section components from Views/Settings/
 
+import CloudKit
 import StoreKit
 import SwiftUI
 import TipKit
@@ -25,6 +26,11 @@ struct SettingsView: View {
     @State private var showingNotificationSettings = false
     @State private var showingUpgradePrompt = false
     @State private var showingPurchaseSuccess = false
+    @State private var showingMealEdit = false
+    @State private var showingExerciseEdit = false
+    @State private var shareToPresent: IdentifiableShare?
+    @State private var shareError: String?
+    @State private var showStopSharingConfirm = false
     @ObservedObject var storeKit = StoreKitManager.shared
     @AppStorage(UserPreferences.Key.appearanceMode.rawValue) private var appearanceMode = AppearanceMode.system.rawValue
 
@@ -37,10 +43,10 @@ struct SettingsView: View {
                     StatsSection(profile: profile)
 
                     // Exercise (extracted to ExerciseSection.swift)
-                    ExerciseSection(profile: profile, profileStore: profileStore)
+                    ExerciseSection(profile: profile, profileStore: profileStore, showingExerciseEdit: $showingExerciseEdit)
 
                     // Meals (extracted to MealSection.swift)
-                    MealSection(profile: profile, profileStore: profileStore)
+                    MealSection(profile: profile, profileStore: profileStore, showingMealEdit: $showingMealEdit)
 
                     // Medications
                     medicationsSection
@@ -63,7 +69,7 @@ struct SettingsView: View {
                 }
 
                 // CloudKit sharing section
-                ShareSettingsSection(cloudKit: cloudKit)
+                sharingSectionContent
 
                 appearanceSection
 
@@ -95,6 +101,26 @@ struct SettingsView: View {
             Button(Strings.Common.ok) {}
         } message: {
             Text(importError ?? Strings.PottyStatus.unknown)
+        }
+        .sheet(isPresented: $showingMealEdit) {
+            MealEditView(profileStore: profileStore)
+        }
+        .sheet(isPresented: $showingExerciseEdit) {
+            ExerciseEditView(profileStore: profileStore)
+        }
+        .sheet(item: $shareToPresent) { identifiableShare in
+            CloudSharingView(
+                share: identifiableShare.share,
+                container: CKContainer(identifier: "iCloud.nl.jaapstronks.Ollie")
+            )
+        }
+        .alert(Strings.CloudSharing.stopSharing, isPresented: $showStopSharingConfirm) {
+            Button(Strings.Common.cancel, role: .cancel) {}
+            Button(Strings.CloudSharing.stopSharing, role: .destructive) {
+                Task { await stopSharing() }
+            }
+        } message: {
+            Text(Strings.CloudSharing.stopSharingConfirm)
         }
     }
 
@@ -215,6 +241,139 @@ struct SettingsView: View {
         }
     }
 
+    // MARK: - Sharing Section
+
+    @ViewBuilder
+    private var sharingSectionContent: some View {
+        Section {
+            if !cloudKit.isCloudAvailable {
+                // iCloud not available
+                HStack {
+                    Image(systemName: "exclamationmark.icloud")
+                        .foregroundStyle(.orange)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(Strings.CloudSharing.iCloudUnavailable)
+                            .font(.subheadline)
+                        if let error = cloudKit.syncError {
+                            Text(error)
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                }
+            } else if cloudKit.isParticipant {
+                // User is viewing shared data (not the owner)
+                HStack {
+                    Image(systemName: "person.2.fill")
+                        .foregroundStyle(.blue)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(Strings.CloudSharing.sharedData)
+                            .font(.subheadline)
+                        Text(Strings.CloudSharing.viewingOthersData)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+            } else if cloudKit.isShared {
+                // Already shared - show participants
+                VStack(alignment: .leading, spacing: 12) {
+                    HStack {
+                        Image(systemName: "checkmark.circle.fill")
+                            .foregroundStyle(.green)
+                        Text(Strings.CloudSharing.shared)
+                            .font(.subheadline.weight(.medium))
+                    }
+
+                    if cloudKit.shareParticipants.isEmpty {
+                        Text(Strings.CloudSharing.noParticipants)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    } else {
+                        ForEach(cloudKit.shareParticipants) { participant in
+                            HStack {
+                                Image(systemName: "person.fill")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                                Text(participant.name)
+                                    .font(.subheadline)
+                                Spacer()
+                                Text(participant.status.label)
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
+                    }
+                }
+
+                Button {
+                    Task { await showExistingShare() }
+                } label: {
+                    Label(Strings.CloudSharing.manageSharing, systemImage: "person.badge.plus")
+                }
+
+                Button(role: .destructive) {
+                    HapticFeedback.warning()
+                    showStopSharingConfirm = true
+                } label: {
+                    Label(Strings.CloudSharing.stopSharing, systemImage: "xmark.circle")
+                }
+            } else {
+                // Not shared yet - show invite button
+                Button {
+                    Task { await createAndShowShare() }
+                } label: {
+                    Label(Strings.CloudSharing.shareWithPartner, systemImage: "person.badge.plus")
+                }
+            }
+
+            if let error = shareError {
+                Text(error)
+                    .font(.caption)
+                    .foregroundStyle(.red)
+            }
+        } header: {
+            Text(Strings.CloudSharing.sharing)
+        } footer: {
+            if cloudKit.isCloudAvailable && !cloudKit.isParticipant {
+                Text(Strings.CloudSharing.sharingDescription)
+            }
+        }
+    }
+
+    // MARK: - Sharing Actions
+
+    private func createAndShowShare() async {
+        shareError = nil
+        do {
+            let share = try await cloudKit.createShare()
+            shareToPresent = IdentifiableShare(share: share)
+        } catch {
+            shareError = "Could not create share: \(error.localizedDescription)"
+        }
+    }
+
+    private func showExistingShare() async {
+        shareError = nil
+        do {
+            if let share = try await cloudKit.fetchExistingShare() {
+                shareToPresent = IdentifiableShare(share: share)
+            } else {
+                shareError = Strings.CloudSharing.couldNotLoadShare
+            }
+        } catch {
+            shareError = Strings.CloudSharing.couldNotLoadShare
+        }
+    }
+
+    private func stopSharing() async {
+        shareError = nil
+        do {
+            try await cloudKit.stopSharing()
+        } catch {
+            shareError = "Could not stop sharing: \(error.localizedDescription)"
+        }
+    }
+
     // MARK: - Actions
 
     private func handlePurchase(for profile: PuppyProfile) async {
@@ -242,6 +401,14 @@ struct SettingsView: View {
             }
         }
     }
+}
+
+// MARK: - Helper Types
+
+/// Wrapper to make CKShare work with .sheet(item:)
+struct IdentifiableShare: Identifiable {
+    let id = UUID()
+    let share: CKShare
 }
 
 #Preview {

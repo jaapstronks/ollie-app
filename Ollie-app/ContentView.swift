@@ -70,7 +70,7 @@ struct ContentView: View {
 }
 
 /// Wrapper view that owns the TimelineViewModel as a @StateObject
-/// New structure: 5 tabs (Today, Train, Walks, Plan, Stats) + FAB for logging
+/// New structure: 4 tabs (Today, Train, Moments, Stats) + FAB for logging
 struct MainTabView: View {
     @Binding var selectedTab: Int
     let eventStore: EventStore
@@ -146,49 +146,38 @@ struct MainTabView: View {
                 }
                 .tag(0)
 
-                // Tab 1: Training
-                NavigationStack {
-                    TrainingView(eventStore: eventStore)
-                }
+                // Tab 1: Train (expanded with Potty + Socialization + Skills)
+                TrainTabView(
+                    viewModel: viewModel,
+                    eventStore: eventStore
+                )
                 .tabItem {
                     Label(Strings.Tabs.train, systemImage: "graduationcap.fill")
                 }
                 .tag(1)
 
-                // Tab 2: Walks
-                WalksTabView(
-                    spotStore: spotStore,
-                    weatherService: weatherService,
-                    locationManager: locationManager,
-                    viewModel: viewModel
-                )
+                // Tab 2: Moments (promoted from nested view)
+                NavigationStack {
+                    MomentsGalleryView(viewModel: momentsViewModel)
+                }
                 .tabItem {
-                    Label(Strings.Tabs.walks, systemImage: "figure.walk")
+                    Label(Strings.Tabs.moments, systemImage: "photo.on.rectangle.angled")
                 }
                 .tag(2)
 
-                // Tab 3: Plan
-                PlanTabView(
-                    viewModel: viewModel,
-                    momentsViewModel: momentsViewModel
-                )
-                .tabItem {
-                    Label(Strings.Tabs.plan, systemImage: "calendar.badge.clock")
-                }
-                .tag(3)
-
-                // Tab 4: Stats/Insights
+                // Tab 3: Stats (expanded with Health, Walks, Spots)
                 InsightsView(
                     viewModel: viewModel,
-                    momentsViewModel: momentsViewModel
+                    momentsViewModel: momentsViewModel,
+                    spotStore: spotStore
                 )
                 .tabItem {
                     Label(Strings.Tabs.stats, systemImage: "chart.bar.fill")
                 }
-                .tag(4)
+                .tag(3)
             }
 
-            // Floating Action Button (hidden on Walks tab)
+            // Floating Action Button (hidden on Moments tab)
             if selectedTab != 2 {
                 HStack {
                     Spacer()
