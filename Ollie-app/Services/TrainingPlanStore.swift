@@ -8,6 +8,7 @@
 import Foundation
 import OllieShared
 import Combine
+import os
 
 /// Manages the training plan and skill progress
 @MainActor
@@ -22,6 +23,7 @@ class TrainingPlanStore: ObservableObject {
     private let fileManager = FileManager.default
     private let encoder: JSONEncoder
     private let decoder: JSONDecoder
+    private let logger = Logger.ollie(category: "TrainingPlanStore")
 
     private var eventStore: EventStore?
 
@@ -198,7 +200,7 @@ class TrainingPlanStore: ObservableObject {
         guard let url = Bundle.main.url(forResource: "training-plan", withExtension: "json"),
               let data = try? Data(contentsOf: url),
               let plan = try? decoder.decode(TrainingPlan.self, from: data) else {
-            print("Failed to load training plan from bundle")
+            logger.error("Failed to load training plan from bundle")
             return
         }
 

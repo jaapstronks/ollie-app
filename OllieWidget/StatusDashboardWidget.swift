@@ -502,18 +502,7 @@ struct StatusDashboardWidgetEntryView: View {
     // MARK: - Helpers
 
     private func formatDuration(_ minutes: Int) -> String {
-        if minutes == 0 {
-            return "--"
-        } else if minutes < 60 {
-            return "\(minutes)m"
-        } else {
-            let hours = minutes / 60
-            let mins = minutes % 60
-            if mins == 0 {
-                return "\(hours)h"
-            }
-            return "\(hours)h \(mins)m"
-        }
+        DurationFormatter.format(minutes, style: .compact, showZeroAsEmpty: true)
     }
 
     // MARK: - Colors

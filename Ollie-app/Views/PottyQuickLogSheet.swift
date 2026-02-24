@@ -52,27 +52,15 @@ struct PottyQuickLogSheet: View {
     var body: some View {
         VStack(spacing: 20) {
             // Header
-            HStack(spacing: 12) {
-                // Combined potty icon
-                HStack(spacing: 4) {
-                    Image(systemName: "drop.fill")
-                        .font(.system(size: 20, weight: .semibold))
-                        .foregroundStyle(Color.ollieInfo)
-                    Image(systemName: "circle.inset.filled")
-                        .font(.system(size: 16, weight: .semibold))
-                        .foregroundStyle(Color.ollieWarning)
-                }
-                .frame(width: 44, height: 44)
-                .background(Color.ollieInfo.opacity(0.1))
-                .clipShape(Circle())
-                .accessibilityHidden(true)
-
-                Text(Strings.PottyQuickLog.toilet)
-                    .font(.title2)
-                    .fontWeight(.semibold)
-            }
-            .padding(.top, 8)
-            .accessibilityAddTraits(.isHeader)
+            SheetHeader(
+                title: Strings.PottyQuickLog.toilet,
+                icon: .combined(
+                    primary: "drop.fill",
+                    secondary: "circle.inset.filled",
+                    primaryColor: .ollieInfo,
+                    secondaryColor: .ollieWarning
+                )
+            )
 
             // Potty type selection
             VStack(spacing: 8) {
@@ -92,54 +80,13 @@ struct PottyQuickLogSheet: View {
             }
 
             // Time display and adjustment
-            VStack(spacing: 12) {
-                // Tappable time display
-                Button {
-                    showingTimePicker.toggle()
-                } label: {
-                    HStack {
-                        Image(systemName: "clock")
-                            .foregroundColor(.secondary)
-                            .accessibilityHidden(true)
-                        Text(selectedTime.timeString)
-                            .font(.title3)
-                            .fontWeight(.medium)
-                        Image(systemName: "chevron.down")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                            .accessibilityHidden(true)
-                    }
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 10)
-                    .background(Color(uiColor: .secondarySystemBackground))
-                    .cornerRadius(10)
-                }
-                .buttonStyle(.plain)
-                .accessibilityLabel(Strings.PottyQuickLog.timeAccessibility(selectedTime.timeString))
-                .accessibilityHint(Strings.PottyQuickLog.timeAccessibilityHint)
-                .accessibilityIdentifier("POTTY_TIME_PICKER")
-
-                // Quick adjustment buttons
-                HStack(spacing: 10) {
-                    TimeAdjustButton(minutes: -5, selectedTime: $selectedTime)
-                    TimeAdjustButton(minutes: -10, selectedTime: $selectedTime)
-                    TimeAdjustButton(minutes: -15, selectedTime: $selectedTime)
-                    TimeAdjustButton(minutes: -30, selectedTime: $selectedTime)
-                }
-
-                // Time picker (expandable)
-                if showingTimePicker {
-                    DatePicker(
-                        Strings.PottyQuickLog.time,
-                        selection: $selectedTime,
-                        displayedComponents: .hourAndMinute
-                    )
-                    .datePickerStyle(.wheel)
-                    .labelsHidden()
-                    .frame(height: 120)
-                    .transition(.opacity.combined(with: .scale(scale: 0.95)))
-                }
-            }
+            TimePickerSection(
+                selectedTime: $selectedTime,
+                showingTimePicker: $showingTimePicker,
+                accessibilityLabel: Strings.PottyQuickLog.timeAccessibility(selectedTime.timeString),
+                accessibilityHint: Strings.PottyQuickLog.timeAccessibilityHint,
+                accessibilityIdentifier: "POTTY_TIME_PICKER"
+            )
 
             // Location picker
             VStack(spacing: 8) {
@@ -199,7 +146,7 @@ struct PottyQuickLogSheet: View {
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 14)
                     .background(canSave ? Color.accentColor : Color.gray)
-                    .cornerRadius(12)
+                    .cornerRadius(LayoutConstants.cornerRadiusM)
                 }
                 .disabled(!canSave)
                 .accessibilityLabel(Strings.PottyQuickLog.logAccessibility)
@@ -253,7 +200,7 @@ struct PottyToggleButton: View {
             .frame(maxWidth: .infinity)
             .frame(height: 80)
             .background(isSelected ? potty.iconColor.opacity(0.15) : Color(uiColor: .secondarySystemBackground))
-            .cornerRadius(12)
+            .cornerRadius(LayoutConstants.cornerRadiusM)
             .overlay(
                 RoundedRectangle(cornerRadius: 12)
                     .stroke(isSelected ? potty.iconColor : Color.clear, lineWidth: 2)

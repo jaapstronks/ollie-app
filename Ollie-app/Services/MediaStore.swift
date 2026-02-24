@@ -7,11 +7,13 @@ import Foundation
 import OllieShared
 import UIKit
 import Combine
+import os
 
 /// Manages saving, loading, and deleting photo media files
 @MainActor
 class MediaStore: ObservableObject {
     private let fileManager = FileManager.default
+    private let logger = Logger.ollie(category: "MediaStore")
 
     // MARK: - Directory URLs
 
@@ -25,6 +27,24 @@ class MediaStore: ObservableObject {
 
     private var thumbnailDirectoryURL: URL {
         documentsURL.appendingPathComponent(Constants.thumbnailDirectoryName, isDirectory: true)
+    }
+
+    // MARK: - Security
+
+    /// Validates that a relative path resolves to a location within the allowed directory
+    /// Prevents path traversal attacks (e.g., "../../sensitive_file")
+    private func isPathSafe(_ relativePath: String, within allowedDirectory: URL) -> Bool {
+        let resolvedURL = documentsURL.appendingPathComponent(relativePath).standardized
+        let allowedPath = allowedDirectory.standardized.path
+
+        // Ensure the resolved path starts with the allowed directory path
+        return resolvedURL.path.hasPrefix(allowedPath)
+    }
+
+    /// Validates that a path is within either the media or thumbnail directories
+    private func isMediaPathSafe(_ relativePath: String) -> Bool {
+        return isPathSafe(relativePath, within: mediaDirectoryURL) ||
+               isPathSafe(relativePath, within: thumbnailDirectoryURL)
     }
 
     // MARK: - Public Methods
@@ -63,41 +83,67 @@ class MediaStore: ObservableObject {
 
             return (photoRelativePath, thumbnailRelativePath)
         } catch {
-            print("Error saving photo: \(error)")
+            logger.error("Error saving photo: \(error.localizedDescription)")
             return nil
         }
     }
 
     /// Load a photo from relative path
+    /// Returns nil if path is invalid or attempts path traversal
     func loadPhoto(relativePath: String) -> UIImage? {
+        guard isMediaPathSafe(relativePath) else {
+            logger.warning("Blocked potentially unsafe photo path: \(relativePath)")
+            return nil
+        }
+
         let url = documentsURL.appendingPathComponent(relativePath)
         guard let data = try? Data(contentsOf: url) else { return nil }
         return UIImage(data: data)
     }
 
     /// Load a thumbnail from relative path
+    /// Returns nil if path is invalid or attempts path traversal
     func loadThumbnail(relativePath: String) -> UIImage? {
+        guard isMediaPathSafe(relativePath) else {
+            logger.warning("Blocked potentially unsafe thumbnail path: \(relativePath)")
+            return nil
+        }
+
         let url = documentsURL.appendingPathComponent(relativePath)
         guard let data = try? Data(contentsOf: url) else { return nil }
         return UIImage(data: data)
     }
 
     /// Delete photo and thumbnail files for an event
+    /// Silently ignores paths that fail security validation
     func deleteMedia(photoPath: String?, thumbnailPath: String?) {
         if let photoPath = photoPath {
+            guard isMediaPathSafe(photoPath) else {
+                logger.warning("Blocked deletion of unsafe photo path: \(photoPath)")
+                return
+            }
             let photoURL = documentsURL.appendingPathComponent(photoPath)
             try? fileManager.removeItem(at: photoURL)
         }
 
         if let thumbnailPath = thumbnailPath {
+            guard isMediaPathSafe(thumbnailPath) else {
+                logger.warning("Blocked deletion of unsafe thumbnail path: \(thumbnailPath)")
+                return
+            }
             let thumbnailURL = documentsURL.appendingPathComponent(thumbnailPath)
             try? fileManager.removeItem(at: thumbnailURL)
         }
     }
 
     /// Get full URL for a relative path
-    func fullURL(for relativePath: String) -> URL {
-        documentsURL.appendingPathComponent(relativePath)
+    /// Returns nil if path fails security validation
+    func fullURL(for relativePath: String) -> URL? {
+        guard isMediaPathSafe(relativePath) else {
+            logger.warning("Blocked unsafe path in fullURL: \(relativePath)")
+            return nil
+        }
+        return documentsURL.appendingPathComponent(relativePath)
     }
 
     // MARK: - Private Methods

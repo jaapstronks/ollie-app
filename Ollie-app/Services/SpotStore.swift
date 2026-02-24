@@ -7,6 +7,7 @@
 import Foundation
 import OllieShared
 import Combine
+import os
 
 /// Manages saved walk spots with local persistence
 @MainActor
@@ -15,6 +16,8 @@ class SpotStore: ObservableObject {
     // MARK: - Published State
 
     @Published var spots: [WalkSpot] = []
+
+    private let logger = Logger.ollie(category: "SpotStore")
 
     // MARK: - Computed Properties
 
@@ -135,7 +138,7 @@ class SpotStore: ObservableObject {
             decoder.dateDecodingStrategy = .iso8601
             spots = try decoder.decode([WalkSpot].self, from: data)
         } catch {
-            print("Failed to load spots: \(error)")
+            logger.error("Failed to load spots: \(error.localizedDescription)")
             spots = []
         }
     }
@@ -148,7 +151,7 @@ class SpotStore: ObservableObject {
             let data = try encoder.encode(spots)
             try data.write(to: fileURL, options: .atomic)
         } catch {
-            print("Failed to save spots: \(error)")
+            logger.error("Failed to save spots: \(error.localizedDescription)")
         }
     }
 

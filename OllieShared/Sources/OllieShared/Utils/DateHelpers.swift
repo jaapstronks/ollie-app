@@ -254,3 +254,101 @@ extension DateFormatter {
         return formatter
     }
 }
+
+// MARK: - Duration Formatting
+
+/// Style options for duration formatting
+public enum DurationFormatStyle {
+    /// Compact format for widgets: "5m", "1h 30m", "--" for zero
+    case compact
+    /// Full format for app UI: "5 min", "1u 30m"
+    case full
+}
+
+/// Centralized duration formatting to avoid duplication
+public enum DurationFormatter {
+    /// Format a duration in minutes for display
+    /// - Parameters:
+    ///   - minutes: Duration in minutes
+    ///   - style: Format style (.compact for widgets, .full for app)
+    ///   - showZeroAsEmpty: If true, returns "--" for zero (useful for widgets)
+    /// - Returns: Formatted duration string
+    public static func format(_ minutes: Int, style: DurationFormatStyle = .full, showZeroAsEmpty: Bool = false) -> String {
+        if minutes == 0 && showZeroAsEmpty {
+            return "--"
+        }
+
+        let hours = minutes / 60
+        let mins = minutes % 60
+
+        switch style {
+        case .compact:
+            if minutes < 60 {
+                return "\(minutes)m"
+            } else if mins == 0 {
+                return "\(hours)h"
+            } else {
+                return "\(hours)h \(mins)m"
+            }
+
+        case .full:
+            if minutes < 60 {
+                return "\(minutes) \(Strings.Common.minutes)"
+            } else if mins == 0 {
+                return "\(hours) \(Strings.Common.hours)"
+            } else {
+                return "\(hours)u \(mins)m"
+            }
+        }
+    }
+}
+
+// Convenience extension for Int
+extension Int {
+    /// Format this integer as a duration in minutes
+    public func formatAsDuration(style: DurationFormatStyle = .full, showZeroAsEmpty: Bool = false) -> String {
+        DurationFormatter.format(self, style: style, showZeroAsEmpty: showZeroAsEmpty)
+    }
+}
+
+// MARK: - Time Parsing Helpers
+
+extension String {
+    /// Parse a time string like "08:00" or "14:30" into hour and minute components
+    /// - Returns: Tuple of (hour, minute) or nil if parsing fails
+    public func parseTimeComponents() -> (hour: Int, minute: Int)? {
+        let parts = self.split(separator: ":")
+        guard parts.count >= 2,
+              let hour = Int(parts[0]),
+              let minute = Int(parts[1]) else { return nil }
+        return (hour, minute)
+    }
+}
+
+extension Date {
+    /// Create a Date from a time string (e.g., "08:00") on a given date
+    /// - Parameters:
+    ///   - timeString: Time string in "HH:mm" format
+    ///   - date: The date to apply the time to (defaults to today)
+    /// - Returns: A Date with the specified time on the given date, or nil if parsing fails
+    public static func fromTimeString(_ timeString: String, on date: Date = Date()) -> Date? {
+        guard let (hour, minute) = timeString.parseTimeComponents() else { return nil }
+        var components = AppCalendar.current.dateComponents([.year, .month, .day], from: date)
+        components.hour = hour
+        components.minute = minute
+        return AppCalendar.current.date(from: components)
+    }
+
+    /// Create a Date from hour and minute components (without a reference date)
+    /// Useful for time pickers where only the time matters
+    /// - Parameters:
+    ///   - hour: Hour (0-23)
+    ///   - minute: Minute (0-59)
+    /// - Returns: A Date with the specified time components
+    public static func fromTimeComponents(hour: Int, minute: Int) -> Date {
+        var components = DateComponents()
+        components.hour = hour
+        components.minute = minute
+        return AppCalendar.current.date(from: components) ?? Date()
+    }
+}

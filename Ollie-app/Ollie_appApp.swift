@@ -8,6 +8,7 @@ import OllieShared
 import CloudKit
 import UserNotifications
 import TipKit
+import os
 
 @main
 struct OllieApp: App {
@@ -22,6 +23,7 @@ struct OllieApp: App {
     @StateObject private var locationManager = LocationManager()
     @StateObject private var medicationStore = MedicationStore()
     @StateObject private var socializationStore = SocializationStore()
+    @StateObject private var subscriptionManager = SubscriptionManager.shared
     @ObservedObject private var cloudKit = CloudKitService.shared
 
     init() {
@@ -51,7 +53,13 @@ struct OllieApp: App {
                 .environmentObject(locationManager)
                 .environmentObject(medicationStore)
                 .environmentObject(socializationStore)
+                .environmentObject(subscriptionManager)
                 .environmentObject(cloudKit)
+                .task {
+                    // Check subscription status on app launch
+                    await subscriptionManager.checkSubscriptionStatus()
+                    await subscriptionManager.loadProducts()
+                }
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
                     // Sync when app comes to foreground
                     Task {
@@ -73,6 +81,8 @@ struct OllieApp: App {
 // MARK: - App Delegate for CloudKit Remote Notifications
 
 class AppDelegate: NSObject, UIApplicationDelegate {
+    private let logger = Logger.ollie(category: "AppDelegate")
+
     func application(
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
@@ -87,14 +97,14 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data
     ) {
         // CloudKit uses this automatically
-        print("Registered for remote notifications")
+        logger.info("Registered for remote notifications")
     }
 
     func application(
         _ application: UIApplication,
         didFailToRegisterForRemoteNotificationsWithError error: Error
     ) {
-        print("Failed to register for remote notifications: \(error.localizedDescription)")
+        logger.error("Failed to register for remote notifications: \(error.localizedDescription)")
     }
 
     func application(
@@ -115,7 +125,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
                     try await CloudKitService.shared.sync()
                     completionHandler(.newData)
                 } catch {
-                    print("Background sync failed: \(error.localizedDescription)")
+                    logger.error("Background sync failed: \(error.localizedDescription)")
                     completionHandler(.failed)
                 }
             }

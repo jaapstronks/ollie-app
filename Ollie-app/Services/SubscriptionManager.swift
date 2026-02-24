@@ -37,7 +37,7 @@ class SubscriptionManager: ObservableObject {
     @Published var purchaseError: Error?
     @Published var isTrialEligible = false
 
-    private let logger = Logger(subsystem: "nl.jaapstronks.Ollie", category: "SubscriptionManager")
+    private let logger = Logger.ollie(category: "SubscriptionManager")
 
     // MARK: - Private
 
@@ -260,45 +260,69 @@ class SubscriptionManager: ObservableObject {
         }
     }
 
-    // MARK: - Offline Caching
+    // MARK: - Secure Caching (Keychain)
 
-    /// Cache subscription status to UserDefaults for offline access
+    /// Cache subscription status to Keychain for secure offline access
+    /// Using Keychain prevents tampering to bypass the paywall
     private func cacheSubscriptionStatus() {
         do {
-            let data = try JSONEncoder().encode(subscriptionStatus)
-            UserDefaults.standard.set(data, forKey: Self.cachedStatusKey)
+            try KeychainHelper.save(subscriptionStatus, for: KeychainHelper.Key.subscriptionStatus)
         } catch {
             logger.error("Failed to cache subscription status: \(error.localizedDescription)")
         }
     }
 
-    /// Load cached subscription status from UserDefaults
+    /// Load cached subscription status from Keychain
     private func loadCachedSubscriptionStatus() {
+        // Migrate from old UserDefaults storage if present
+        migrateFromUserDefaultsIfNeeded()
+
+        guard let cachedStatus = KeychainHelper.load(
+            key: KeychainHelper.Key.subscriptionStatus,
+            as: OlliePlusStatus.self
+        ) else {
+            return
+        }
+
+        // Check if cached status is still valid (not expired)
+        switch cachedStatus {
+        case .trial(let until), .active(let until):
+            if until > Date() {
+                // Still valid, use cached status
+                // Set directly to avoid triggering didSet (which would re-cache)
+                _subscriptionStatus = Published(initialValue: cachedStatus)
+            } else {
+                // Expired, set to expired state
+                _subscriptionStatus = Published(initialValue: .expired)
+            }
+        case .free, .expired, .legacy:
+            // These states don't expire
+            _subscriptionStatus = Published(initialValue: cachedStatus)
+        }
+    }
+
+    /// Migrate subscription cache from UserDefaults to Keychain (one-time)
+    private func migrateFromUserDefaultsIfNeeded() {
+        // Check if old data exists in UserDefaults
         guard let data = UserDefaults.standard.data(forKey: Self.cachedStatusKey) else {
             return
         }
 
-        do {
-            let cachedStatus = try JSONDecoder().decode(OlliePlusStatus.self, from: data)
-
-            // Check if cached status is still valid (not expired)
-            switch cachedStatus {
-            case .trial(let until), .active(let until):
-                if until > Date() {
-                    // Still valid, use cached status
-                    // Set directly to avoid triggering didSet (which would re-cache)
-                    _subscriptionStatus = Published(initialValue: cachedStatus)
-                } else {
-                    // Expired, set to expired state
-                    _subscriptionStatus = Published(initialValue: .expired)
-                }
-            case .free, .expired, .legacy:
-                // These states don't expire
-                _subscriptionStatus = Published(initialValue: cachedStatus)
-            }
-        } catch {
-            logger.error("Failed to load cached subscription status: \(error.localizedDescription)")
+        // Only migrate if Keychain doesn't have data yet
+        guard !KeychainHelper.exists(key: KeychainHelper.Key.subscriptionStatus) else {
+            // Clean up old UserDefaults data
+            UserDefaults.standard.removeObject(forKey: Self.cachedStatusKey)
+            return
         }
+
+        // Migrate to Keychain
+        if let status = try? JSONDecoder().decode(OlliePlusStatus.self, from: data) {
+            try? KeychainHelper.save(status, for: KeychainHelper.Key.subscriptionStatus)
+            logger.info("Migrated subscription status from UserDefaults to Keychain")
+        }
+
+        // Remove from UserDefaults
+        UserDefaults.standard.removeObject(forKey: Self.cachedStatusKey)
     }
 }
 

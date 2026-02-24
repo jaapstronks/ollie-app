@@ -160,17 +160,9 @@ public struct GapCalculations {
     }
 
     /// Format duration for display
+    /// - Note: Delegates to shared DurationFormatter for consistency
     public static func formatDuration(_ minutes: Int) -> String {
-        if minutes < 60 {
-            return "\(minutes) min"
-        } else {
-            let hours = minutes / 60
-            let mins = minutes % 60
-            if mins == 0 {
-                return "\(hours) uur"
-            }
-            return "\(hours)u \(mins)m"
-        }
+        DurationFormatter.format(minutes, style: .full)
     }
 
     // MARK: - Private Helpers

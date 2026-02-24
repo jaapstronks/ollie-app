@@ -41,24 +41,11 @@ public struct InProgressActivity: Codable, Equatable, Sendable {
 
     /// Formatted duration string (e.g., "25 min" or "1u 15m")
     public var durationFormatted: String {
-        formatDuration(durationMinutes)
+        DurationFormatter.format(durationMinutes, style: .full)
     }
 
     /// Alias for durationFormatted used by ActivityEndSheet
     public var elapsedTimeFormatted: String {
         durationFormatted
-    }
-
-    private func formatDuration(_ minutes: Int) -> String {
-        if minutes < 60 {
-            return "\(minutes) min"
-        } else {
-            let hours = minutes / 60
-            let mins = minutes % 60
-            if mins == 0 {
-                return "\(hours) uur"
-            }
-            return "\(hours)u \(mins)m"
-        }
     }
 }

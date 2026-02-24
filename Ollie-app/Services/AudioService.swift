@@ -6,6 +6,8 @@
 //
 
 import AVFoundation
+import OllieShared
+import os
 
 /// Service for playing audio feedback during training sessions
 @MainActor
@@ -14,6 +16,7 @@ final class AudioService {
 
     private var clickPlayer: AVAudioPlayer?
     private var isEnabled = true
+    private let logger = Logger.ollie(category: "AudioService")
 
     private init() {
         setupAudioSession()
@@ -30,7 +33,7 @@ final class AudioService {
                 options: [.mixWithOthers, .duckOthers]
             )
         } catch {
-            print("AudioService: Failed to configure audio session: \(error)")
+            logger.error("Failed to configure audio session: \(error.localizedDescription)")
         }
     }
 
@@ -44,7 +47,7 @@ final class AudioService {
                 clickPlayer?.volume = 0.8
                 return
             } catch {
-                print("AudioService: Failed to load click sound from bundle: \(error)")
+                logger.error("Failed to load click sound from bundle: \(error.localizedDescription)")
             }
         }
 
