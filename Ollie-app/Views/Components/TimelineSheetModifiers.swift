@@ -227,24 +227,19 @@ struct TimelineSheetModifiers: ViewModifier {
                 }
             )
 
-        case .upgradePrompt:
-            UpgradePromptView(
-                puppyName: viewModel.puppyName,
-                onPurchase: {
-                    Task { await handlePurchase(viewModel: viewModel) }
-                },
-                onRestore: {
-                    Task { await StoreKitManager.shared.restorePurchases() }
-                },
+        case .olliePlus:
+            OlliePlusSheet(
                 onDismiss: {
                     viewModel.sheetCoordinator.dismissSheet()
+                },
+                onSubscribed: {
+                    viewModel.sheetCoordinator.transitionToSheet(.subscriptionSuccess)
                 }
             )
             .presentationDetents([.large])
 
-        case .purchaseSuccess:
-            PurchaseSuccessView(
-                puppyName: viewModel.puppyName,
+        case .subscriptionSuccess:
+            SubscriptionSuccessView(
                 onDismiss: {
                     viewModel.sheetCoordinator.dismissSheet()
                 }
@@ -306,23 +301,6 @@ struct TimelineSheetModifiers: ViewModifier {
                 EmptyView()
             }
         }
-    }
-}
-
-// MARK: - Purchase Handling
-
-private func handlePurchase(viewModel: TimelineViewModel) async {
-    guard let profileID = viewModel.profileStore.profile?.id else { return }
-
-    do {
-        try await StoreKitManager.shared.purchase(for: profileID)
-        viewModel.profileStore.unlockPremium()
-        viewModel.sheetCoordinator.presentSheet(.purchaseSuccess)
-        HapticFeedback.success()
-    } catch StoreKitError.userCancelled {
-        // User cancelled, do nothing
-    } catch {
-        HapticFeedback.error()
     }
 }
 
