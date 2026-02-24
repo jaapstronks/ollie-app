@@ -54,9 +54,8 @@ struct PottyStatusCard: View {
                 .buttonStyle(.glassPill(tint: .custom(indicatorColor)))
             }
         }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 14)
-        .glassStatusCard(tintColor: indicatorColor, cornerRadius: 18)
+        .statusCardPadding()
+        .glassStatusCard(tintColor: indicatorColor, cornerRadius: LayoutConstants.cornerRadiusL)
         .shadow(color: shadowColor, radius: 10, y: 5)
         .accessibilityElement(children: .combine)
         .accessibilityLabel(Strings.PottyStatus.accessibility)

@@ -80,8 +80,7 @@ struct NotificationSettingsView: View {
                     Button(Strings.Common.allow) {
                         requestPermission()
                     }
-                    .buttonStyle(.borderedProminent)
-                    .tint(.ollieAccent)
+                    .buttonStyle(.glassPill(tint: .accent))
                 }
             }
         }

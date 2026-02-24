@@ -476,4 +476,25 @@ extension View {
     func glassStatusCard(tintColor: Color? = nil, cornerRadius: CGFloat = 16) -> some View {
         modifier(GlassStatusCardModifier(tintColor: tintColor, cornerRadius: cornerRadius))
     }
+
+    // MARK: - Consistent Padding Modifiers
+
+    /// Apply consistent card padding using LayoutConstants
+    /// Use this for stats cards, info cards, and general card containers
+    func cardPadding() -> some View {
+        self.padding(.horizontal, LayoutConstants.cardHorizontalPadding)
+            .padding(.vertical, LayoutConstants.cardVerticalPadding)
+    }
+
+    /// Apply consistent status card padding using LayoutConstants
+    /// Use this for status cards (PottyStatusCard, SleepStatusCard, PoopStatusCard)
+    func statusCardPadding() -> some View {
+        self.padding(.horizontal, LayoutConstants.statusCardHorizontalPadding)
+            .padding(.vertical, LayoutConstants.statusCardVerticalPadding)
+    }
+
+    /// Apply consistent section padding
+    func sectionPadding() -> some View {
+        self.padding(.vertical, LayoutConstants.sectionPadding)
+    }
 }

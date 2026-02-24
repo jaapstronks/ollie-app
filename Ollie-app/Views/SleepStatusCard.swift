@@ -50,9 +50,8 @@ struct SleepStatusCard: View {
             // Show contextual action based on sleep state
             actionButton
         }
-        .padding(.horizontal, 14)
-        .padding(.vertical, 12)
-        .glassStatusCard(tintColor: indicatorColor)
+        .statusCardPadding()
+        .glassStatusCard(tintColor: indicatorColor, cornerRadius: LayoutConstants.cornerRadius)
         .accessibilityElement(children: .combine)
         .accessibilityLabel(Strings.SleepStatus.title)
         .accessibilityValue("\(mainText). \(statusLabel)")
@@ -118,15 +117,15 @@ struct SleepStatusCard: View {
     private var mainText: String {
         switch sleepState {
         case .sleeping(_, let durationMin):
-            return Strings.SleepStatus.sleepingFor(duration: formatDuration(durationMin))
+            return Strings.SleepStatus.sleepingFor(duration: durationMin.formatAsDuration())
         case .awake(_, let durationMin):
             if durationMin >= SleepCalculations.maxAwakeMinutes {
-                return Strings.SleepStatus.awakeTooLong(duration: formatDuration(durationMin))
+                return Strings.SleepStatus.awakeTooLong(duration: durationMin.formatAsDuration())
             } else if durationMin >= SleepCalculations.awakeWarningMinutes {
                 let remaining = SleepCalculations.maxAwakeMinutes - durationMin
-                return Strings.SleepStatus.awakeWithNapSuggestion(duration: formatDuration(durationMin), remaining: remaining)
+                return Strings.SleepStatus.awakeWithNapSuggestion(duration: durationMin.formatAsDuration(), remaining: remaining)
             }
-            return Strings.SleepStatus.awakeSince(duration: formatDuration(durationMin))
+            return Strings.SleepStatus.awakeSince(duration: durationMin.formatAsDuration())
         case .unknown:
             return Strings.SleepStatus.noSleepData
         }
@@ -193,19 +192,6 @@ struct SleepStatusCard: View {
 
     private var isNightTime: Bool {
         Constants.isNightTimeNow()
-    }
-
-    private func formatDuration(_ minutes: Int) -> String {
-        if minutes < 60 {
-            return "\(minutes) min"
-        } else {
-            let hours = minutes / 60
-            let mins = minutes % 60
-            if mins == 0 {
-                return "\(hours) uur"
-            }
-            return "\(hours)u\(mins)m"
-        }
     }
 }
 

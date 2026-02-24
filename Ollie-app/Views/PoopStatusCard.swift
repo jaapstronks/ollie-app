@@ -53,9 +53,8 @@ struct PoopStatusCard: View {
                 .buttonStyle(.glassPill(tint: .custom(indicatorColor)))
             }
         }
-        .padding(.horizontal, 14)
-        .padding(.vertical, 12)
-        .glassStatusCard(tintColor: indicatorColor)
+        .statusCardPadding()
+        .glassStatusCard(tintColor: indicatorColor, cornerRadius: LayoutConstants.cornerRadius)
         .accessibilityElement(children: .combine)
         .accessibilityLabel(Strings.PoopStatus.accessibility)
         .accessibilityValue("\(mainText). \(statusLabel)")

@@ -40,7 +40,7 @@ struct StreakStatsCard: View {
                     .foregroundStyle(Color.ollieAccent)
             }
         }
-        .padding()
+        .cardPadding()
         .glassCard(tint: .accent)
     }
 }
@@ -126,7 +126,7 @@ struct GapStatsCard: View {
                 }
             }
         }
-        .padding()
+        .cardPadding()
         .glassCard(tint: .info)
     }
 }
@@ -203,7 +203,7 @@ struct TodayStatsCard: View {
                 }
             }
         }
-        .padding()
+        .cardPadding()
         .glassCard(tint: .success)
     }
 }
@@ -298,7 +298,7 @@ struct SleepStatsCard: View {
                 .accessibilityValue("\(Int(progress * 100)) \(Strings.Stats.percentOfGoal)")
             }
         }
-        .padding()
+        .cardPadding()
         .glassCard(tint: .sleep)
     }
 
