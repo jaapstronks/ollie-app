@@ -54,6 +54,14 @@ struct TodayView: View {
                     // Streak card (motivational - only if there's a streak)
                     StreakCard(streakInfo: viewModel.streakInfo)
 
+                    // Poop count for today (lower priority info)
+                    if viewModel.isShowingToday {
+                        PoopStatusCard(
+                            status: viewModel.poopStatus,
+                            onLogPoop: { viewModel.quickLog(type: .poepen) }
+                        )
+                    }
+
                     // Timeline section
                     timelineSection
                 }
@@ -155,32 +163,56 @@ struct TodayView: View {
     @ViewBuilder
     private var statusCardsSection: some View {
         VStack(spacing: 12) {
-            // Potty status hero card
-            PottyStatusCard(
-                prediction: viewModel.pottyPrediction,
-                puppyName: viewModel.puppyName,
-                onLogPotty: { viewModel.sheetCoordinator.presentSheet(.potty) }
-            )
+            // Use combined state to determine which cards to show
+            let combinedState = viewModel.combinedSleepPottyState
 
-            // Poop status tracker
-            PoopStatusCard(
-                status: viewModel.poopStatus,
-                onLogPoop: { viewModel.quickLog(type: .poepen) }
-            )
+            // Post-wake potty prompt (highest priority - shows at top)
+            if case .justWokeNeedsPotty(let wokeAt, let minutesSinceWake, let overdueBy) = combinedState {
+                PostWakePottyCard(
+                    wokeAt: wokeAt,
+                    minutesSinceWake: minutesSinceWake,
+                    pottyWasOverdueBy: overdueBy,
+                    onLogPotty: { viewModel.sheetCoordinator.presentSheet(.potty) }
+                )
+            }
 
-            // Sleep status card
-            SleepStatusCard(
-                sleepState: viewModel.currentSleepState,
-                onWakeUp: {
-                    // Use EndSleepSheet for time-adjustable wake up
-                    if case .sleeping(let since, _) = viewModel.currentSleepState {
+            // Combined sleep + potty card (when sleeping and potty is urgent)
+            if case .sleepingPottyUrgent(let since, let duration, let urgency, let overdue) = combinedState {
+                CombinedSleepPottyCard(
+                    sleepingSince: since,
+                    sleepDurationMin: duration,
+                    pottyUrgency: urgency,
+                    minutesOverdue: overdue,
+                    onWakeUp: {
                         viewModel.sheetCoordinator.presentSheet(.endSleep(since))
-                    } else {
-                        viewModel.quickLog(type: .ontwaken)
                     }
-                },
-                onStartNap: { viewModel.quickLog(type: .slapen) }
-            )
+                )
+            }
+
+            // Normal potty card (hide when combined card is showing or just woke)
+            if !combinedState.shouldHidePottyCard {
+                PottyStatusCard(
+                    prediction: viewModel.pottyPrediction,
+                    puppyName: viewModel.puppyName,
+                    onLogPotty: { viewModel.sheetCoordinator.presentSheet(.potty) }
+                )
+            }
+
+            // Sleep status card (hide when combined card is showing)
+            if !combinedState.shouldHideSleepCard {
+                SleepStatusCard(
+                    sleepState: viewModel.currentSleepState,
+                    onWakeUp: {
+                        // Use EndSleepSheet for time-adjustable wake up
+                        if case .sleeping(let since, _) = viewModel.currentSleepState {
+                            viewModel.sheetCoordinator.presentSheet(.endSleep(since))
+                        } else {
+                            viewModel.quickLog(type: .ontwaken)
+                        }
+                    },
+                    onStartNap: { viewModel.quickLog(type: .slapen) }
+                )
+            }
 
             // Medication reminders
             ForEach(viewModel.pendingMedications) { pending in
