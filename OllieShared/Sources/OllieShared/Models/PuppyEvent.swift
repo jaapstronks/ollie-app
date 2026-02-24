@@ -193,6 +193,7 @@ public struct PuppyEvent: Codable, Identifiable, Equatable, Sendable {
     public var photo: String?
     public var video: String?
     public var thumbnailPath: String?
+    public var cloudPhotoSynced: Bool?
 
     // MARK: - Location Fields
 
@@ -212,6 +213,16 @@ public struct PuppyEvent: Codable, Identifiable, Equatable, Sendable {
             video = newValue.videoPath
             thumbnailPath = newValue.thumbnailPath
         }
+    }
+
+    /// Whether this event has a local photo that needs to be uploaded to CloudKit
+    public var needsPhotoUpload: Bool {
+        photo != nil && !(cloudPhotoSynced ?? false)
+    }
+
+    /// Whether this event has a cloud photo that needs to be downloaded locally
+    public var needsPhotoDownload: Bool {
+        (cloudPhotoSynced ?? false) && photo != nil
     }
 
     public var locationInfo: LocationInfo {
@@ -245,6 +256,7 @@ public struct PuppyEvent: Codable, Identifiable, Equatable, Sendable {
         latitude: Double? = nil,
         longitude: Double? = nil,
         thumbnailPath: String? = nil,
+        cloudPhotoSynced: Bool? = nil,
         weightKg: Double? = nil,
         spotId: UUID? = nil,
         spotName: String? = nil,
@@ -270,6 +282,7 @@ public struct PuppyEvent: Codable, Identifiable, Equatable, Sendable {
         self.latitude = latitude
         self.longitude = longitude
         self.thumbnailPath = thumbnailPath
+        self.cloudPhotoSynced = cloudPhotoSynced
         self.weightKg = weightKg
         self.spotId = spotId
         self.spotName = spotName
@@ -307,6 +320,7 @@ public struct PuppyEvent: Codable, Identifiable, Equatable, Sendable {
         case latitude
         case longitude
         case thumbnailPath = "thumbnail_path"
+        case cloudPhotoSynced = "cloud_photo_synced"
         case weightKg = "weight_kg"
         case spotId = "spot_id"
         case spotName = "spot_name"
@@ -337,6 +351,7 @@ public struct PuppyEvent: Codable, Identifiable, Equatable, Sendable {
         latitude = try container.decodeIfPresent(Double.self, forKey: .latitude)
         longitude = try container.decodeIfPresent(Double.self, forKey: .longitude)
         thumbnailPath = try container.decodeIfPresent(String.self, forKey: .thumbnailPath)
+        cloudPhotoSynced = try container.decodeIfPresent(Bool.self, forKey: .cloudPhotoSynced)
         weightKg = try container.decodeIfPresent(Double.self, forKey: .weightKg)
         spotId = try container.decodeIfPresent(UUID.self, forKey: .spotId)
         spotName = try container.decodeIfPresent(String.self, forKey: .spotName)
@@ -348,211 +363,6 @@ public struct PuppyEvent: Codable, Identifiable, Equatable, Sendable {
         } else {
             sleepSessionId = decodedSleepSessionId
         }
-    }
-}
-
-// MARK: - Factory Methods
-
-extension PuppyEvent {
-
-    public static func potty(
-        type: EventType,
-        time: Date = Date(),
-        location: EventLocation,
-        note: String? = nil,
-        photo: String? = nil,
-        thumbnailPath: String? = nil,
-        parentWalkId: UUID? = nil,
-        latitude: Double? = nil,
-        longitude: Double? = nil
-    ) -> PuppyEvent {
-        precondition(type.isPottyEvent, "potty() factory only accepts plassen or poepen")
-
-        return PuppyEvent(
-            time: time,
-            type: type,
-            location: location,
-            note: note,
-            photo: photo,
-            latitude: latitude,
-            longitude: longitude,
-            thumbnailPath: thumbnailPath,
-            parentWalkId: parentWalkId
-        )
-    }
-
-    public static func walk(
-        time: Date = Date(),
-        durationMin: Int? = nil,
-        note: String? = nil,
-        spot: WalkSpot? = nil,
-        latitude: Double? = nil,
-        longitude: Double? = nil,
-        photo: String? = nil,
-        thumbnailPath: String? = nil
-    ) -> PuppyEvent {
-        return PuppyEvent(
-            time: time,
-            type: .uitlaten,
-            note: note,
-            durationMin: durationMin,
-            photo: photo,
-            latitude: latitude ?? spot?.latitude,
-            longitude: longitude ?? spot?.longitude,
-            thumbnailPath: thumbnailPath,
-            spotId: spot?.id,
-            spotName: spot?.name
-        )
-    }
-
-    public static func training(
-        time: Date = Date(),
-        exercise: String,
-        result: String? = nil,
-        durationMin: Int? = nil,
-        note: String? = nil
-    ) -> PuppyEvent {
-        return PuppyEvent(
-            time: time,
-            type: .training,
-            note: note,
-            exercise: exercise,
-            result: result,
-            durationMin: durationMin
-        )
-    }
-
-    public static func social(
-        time: Date = Date(),
-        who: String,
-        note: String? = nil,
-        durationMin: Int? = nil,
-        photo: String? = nil,
-        thumbnailPath: String? = nil
-    ) -> PuppyEvent {
-        return PuppyEvent(
-            time: time,
-            type: .sociaal,
-            note: note,
-            who: who,
-            durationMin: durationMin,
-            photo: photo,
-            thumbnailPath: thumbnailPath
-        )
-    }
-
-    public static func sleep(
-        time: Date = Date(),
-        note: String? = nil,
-        sleepSessionId: UUID? = nil
-    ) -> PuppyEvent {
-        return PuppyEvent(
-            time: time,
-            type: .slapen,
-            note: note,
-            sleepSessionId: sleepSessionId
-        )
-    }
-
-    public static func wake(
-        time: Date = Date(),
-        sleepSessionId: UUID?,
-        note: String? = nil
-    ) -> PuppyEvent {
-        return PuppyEvent(
-            time: time,
-            type: .ontwaken,
-            note: note,
-            sleepSessionId: sleepSessionId
-        )
-    }
-
-    public static func weight(
-        time: Date = Date(),
-        weightKg: Double,
-        note: String? = nil
-    ) -> PuppyEvent {
-        return PuppyEvent(
-            time: time,
-            type: .gewicht,
-            note: note,
-            weightKg: weightKg
-        )
-    }
-
-    public static func meal(
-        time: Date = Date(),
-        note: String? = nil,
-        durationMin: Int? = nil
-    ) -> PuppyEvent {
-        return PuppyEvent(
-            time: time,
-            type: .eten,
-            note: note,
-            durationMin: durationMin
-        )
-    }
-
-    public static func drink(
-        time: Date = Date(),
-        note: String? = nil
-    ) -> PuppyEvent {
-        return PuppyEvent(
-            time: time,
-            type: .drinken,
-            note: note
-        )
-    }
-
-    public static func medication(
-        time: Date = Date(),
-        medicationName: String
-    ) -> PuppyEvent {
-        return PuppyEvent(
-            time: time,
-            type: .medicatie,
-            note: medicationName
-        )
-    }
-
-    public static func moment(
-        time: Date = Date(),
-        photo: String,
-        thumbnailPath: String? = nil,
-        note: String? = nil
-    ) -> PuppyEvent {
-        return PuppyEvent(
-            time: time,
-            type: .moment,
-            note: note,
-            photo: photo,
-            thumbnailPath: thumbnailPath
-        )
-    }
-
-    public static func milestone(
-        time: Date = Date(),
-        note: String
-    ) -> PuppyEvent {
-        return PuppyEvent(
-            time: time,
-            type: .milestone,
-            note: note
-        )
-    }
-
-    public static func simple(
-        type: EventType,
-        time: Date = Date(),
-        note: String? = nil,
-        durationMin: Int? = nil
-    ) -> PuppyEvent {
-        return PuppyEvent(
-            time: time,
-            type: type,
-            note: note,
-            durationMin: durationMin
-        )
     }
 }
 

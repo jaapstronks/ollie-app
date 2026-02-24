@@ -67,12 +67,25 @@ struct OllieApp: App {
                     // Check subscription status on app launch
                     await subscriptionManager.checkSubscriptionStatus()
                     await subscriptionManager.loadProducts()
+
+                    // Initial CloudKit sync for profile, spots, and medications
+                    await profileStore.initialSync()
+                    await spotStore.initialSync()
+                    await medicationStore.initialSync()
+
+                    // Initial sync to Apple Watch
+                    WatchSyncService.shared.syncToWatch()
                 }
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
                     // Sync when app comes to foreground
                     Task {
                         await eventStore.forceSync()
+                        await profileStore.forceSync()
+                        await spotStore.forceSync()
+                        await medicationStore.forceSync()
                     }
+                    // Sync data to Apple Watch
+                    WatchSyncService.shared.syncToWatch()
                 }
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
                     // Track app usage for review prompt timing

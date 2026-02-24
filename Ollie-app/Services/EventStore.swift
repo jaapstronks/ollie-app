@@ -31,6 +31,9 @@ class EventStore: ObservableObject {
     /// CloudKit sync coordinator
     private let syncCoordinator = EventSyncCoordinator()
 
+    /// Media store for photo operations (used by sync coordinator)
+    private let mediaStore = MediaStore()
+
     /// File monitoring for App Intent changes
     private let fileMonitor = FileMonitoringService()
 
@@ -45,15 +48,26 @@ class EventStore: ObservableObject {
         setupWatchEventObserver()
         loadEvents(for: currentDate)
 
+        // Wire up sync coordinator with mediaStore for photo operations
+        syncCoordinator.mediaStore = mediaStore
+
         // Set up sync coordinator callback
         syncCoordinator.onSyncCompleted = { [weak self] in
             await self?.refreshFromCloud()
+        }
+
+        // Callback when photo is synced to CloudKit
+        syncCoordinator.onPhotoSynced = { [weak self] eventId in
+            await self?.markPhotoAsSynced(eventId: eventId)
         }
 
         // Initial sync on launch
         Task {
             let allLocalEvents = fileStore.readAllEvents()
             await syncCoordinator.initialSync(localEvents: allLocalEvents)
+
+            // Migrate existing photos to CloudKit
+            await syncCoordinator.migrateExistingPhotos(allLocalEvents)
         }
     }
 
@@ -141,6 +155,9 @@ class EventStore: ObservableObject {
 
             // Persist merged result locally
             fileStore.saveEvents(mergedEvents, for: currentDate)
+
+            // Download any missing photos from CloudKit
+            await syncCoordinator.downloadMissingPhotos(for: mergedEvents)
         } catch {
             logger.warning("Failed to refresh from cloud: \(error.localizedDescription)")
         }
@@ -231,6 +248,37 @@ class EventStore: ObservableObject {
             // Sync to Apple Watch
             WatchSyncService.shared.syncToWatch()
         }
+    }
+
+    /// Mark an event's photo as synced to CloudKit
+    /// Called by EventSyncCoordinator after successful photo upload
+    private func markPhotoAsSynced(eventId: UUID) async {
+        // Find and update the event in all date files
+        let allEvents = fileStore.readAllEvents()
+        guard let event = allEvents.first(where: { $0.id == eventId }) else {
+            logger.warning("Could not find event \(eventId) to mark photo as synced")
+            return
+        }
+
+        var updatedEvent = event
+        updatedEvent.cloudPhotoSynced = true
+
+        // Save to the correct date file
+        let eventDate = Calendar.current.startOfDay(for: event.time)
+        var eventsForDate = fileStore.readEvents(for: eventDate)
+        if let index = eventsForDate.firstIndex(where: { $0.id == eventId }) {
+            eventsForDate[index] = updatedEvent
+            fileStore.saveEvents(eventsForDate, for: eventDate)
+        }
+
+        // Update in-memory events if this is the current date
+        if Calendar.current.isDate(eventDate, inSameDayAs: currentDate) {
+            if let index = events.firstIndex(where: { $0.id == eventId }) {
+                events[index] = updatedEvent
+            }
+        }
+
+        logger.info("Marked photo as synced for event \(eventId)")
     }
 
     /// Get all events for a date range

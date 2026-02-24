@@ -146,6 +146,46 @@ class MediaStore: ObservableObject {
         return documentsURL.appendingPathComponent(relativePath)
     }
 
+    /// Check if a photo file exists locally
+    func photoExists(for relativePath: String) -> Bool {
+        guard let url = fullURL(for: relativePath) else { return false }
+        return fileManager.fileExists(atPath: url.path)
+    }
+
+    // MARK: - Cloud Download Support
+
+    /// Get the destination URL for downloading a photo from CloudKit
+    /// Uses the same path as the original so the event's photo path remains valid
+    func cloudDownloadURL(for eventId: UUID, originalPath: String) -> URL {
+        ensureDirectoriesExist()
+        return documentsURL.appendingPathComponent(originalPath)
+    }
+
+    /// Regenerate thumbnail for a downloaded photo
+    func regenerateThumbnail(for eventId: UUID, photoURL: URL) async {
+        guard let image = UIImage(contentsOfFile: photoURL.path) else {
+            logger.warning("Could not load downloaded photo for thumbnail generation")
+            return
+        }
+
+        guard let thumbnailImage = resizeImage(image, maxSize: Constants.thumbnailSize),
+              let thumbnailData = thumbnailImage.jpegData(compressionQuality: 0.7) else {
+            logger.warning("Could not generate thumbnail for downloaded photo")
+            return
+        }
+
+        // Extract filename from photo path and use for thumbnail
+        let filename = photoURL.deletingPathExtension().lastPathComponent + ".jpg"
+        let thumbnailURL = thumbnailDirectoryURL.appendingPathComponent(filename)
+
+        do {
+            try thumbnailData.write(to: thumbnailURL)
+            logger.info("Regenerated thumbnail for event \(eventId)")
+        } catch {
+            logger.error("Failed to save regenerated thumbnail: \(error.localizedDescription)")
+        }
+    }
+
     // MARK: - Private Methods
 
     private func ensureDirectoriesExist() {

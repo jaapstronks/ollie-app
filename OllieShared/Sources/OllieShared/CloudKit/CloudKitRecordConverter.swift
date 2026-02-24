@@ -12,6 +12,10 @@ public struct CloudKitRecordConverter: Sendable {
     public let recordType: String
     public let deviceID: String
 
+    /// Optional callback to resolve local photo paths to file URLs for CKAsset
+    /// This is set by the app layer since OllieShared doesn't have access to the documents directory
+    public var resolvePhotoURL: (@Sendable (String) -> URL?)?
+
     public init(recordType: String, deviceID: String) {
         self.recordType = recordType
         self.deviceID = deviceID
@@ -62,6 +66,9 @@ public struct CloudKitRecordConverter: Sendable {
         if let thumbnailPath = event.thumbnailPath {
             record["thumbnailPath"] = thumbnailPath as CKRecordValue
         }
+        if let cloudPhotoSynced = event.cloudPhotoSynced {
+            record["cloudPhotoSynced"] = (cloudPhotoSynced ? 1 : 0) as CKRecordValue
+        }
         if let weightKg = event.weightKg {
             record["weightKg"] = weightKg as CKRecordValue
         }
@@ -101,6 +108,13 @@ public struct CloudKitRecordConverter: Sendable {
             parentWalkId = UUID(uuidString: parentWalkIdString)
         }
 
+        let cloudPhotoSynced: Bool?
+        if let syncedValue = record["cloudPhotoSynced"] as? Int {
+            cloudPhotoSynced = syncedValue != 0
+        } else {
+            cloudPhotoSynced = nil
+        }
+
         return PuppyEvent(
             id: id,
             time: eventTime,
@@ -116,6 +130,7 @@ public struct CloudKitRecordConverter: Sendable {
             latitude: record["latitude"] as? Double,
             longitude: record["longitude"] as? Double,
             thumbnailPath: record["thumbnailPath"] as? String,
+            cloudPhotoSynced: cloudPhotoSynced,
             weightKg: record["weightKg"] as? Double,
             parentWalkId: parentWalkId
         )

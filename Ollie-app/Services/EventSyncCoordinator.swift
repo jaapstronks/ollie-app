@@ -12,7 +12,7 @@ import OllieShared
 import os
 
 /// Coordinates CloudKit sync operations for puppy events
-/// Handles save, delete, refresh, migration, and merge operations
+/// Handles save, delete, refresh, migration, merge operations, and photo sync
 @MainActor
 final class EventSyncCoordinator: ObservableObject {
     @Published private(set) var isSyncing = false
@@ -24,9 +24,22 @@ final class EventSyncCoordinator: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
     private var pendingCloudSaves: [PuppyEvent] = []
     private var pendingCloudDeletes: [PuppyEvent] = []
+    private var pendingPhotoUploads: [PuppyEvent] = []
+
+    /// Reference to MediaStore for photo operations
+    var mediaStore: MediaStore?
 
     /// Callback invoked when cloud sync completes and local data should refresh
     var onSyncCompleted: (() async -> Void)?
+
+    /// Callback to update an event's cloudPhotoSynced flag after upload
+    var onPhotoSynced: ((UUID) async -> Void)?
+
+    // MARK: - UserDefaults Keys
+
+    private enum UserDefaultsKey {
+        static let photoMigrationCompleted = "eventSyncCoordinator.photoMigrationCompleted"
+    }
 
     init() {
         setupCloudKitObservers()
@@ -87,20 +100,52 @@ final class EventSyncCoordinator: ObservableObject {
 
     // MARK: - Cloud Operations
 
-    /// Save event to CloudKit
+    /// Save event to CloudKit (and upload photo if needed)
     func saveToCloud(_ event: PuppyEvent) async {
         guard cloudKit.isCloudAvailable else {
             pendingCloudSaves.append(event)
+            if event.needsPhotoUpload {
+                pendingPhotoUploads.append(event)
+            }
             return
         }
 
         do {
             try await cloudKit.saveEvent(event)
             pendingCloudSaves.removeAll { $0.id == event.id }
+
+            // Upload photo if event has one that hasn't been synced
+            if event.needsPhotoUpload {
+                await uploadPhotoForEvent(event)
+            }
         } catch {
             logger.warning("Failed to save to cloud, will retry: \(error.localizedDescription)")
             if !pendingCloudSaves.contains(where: { $0.id == event.id }) {
                 pendingCloudSaves.append(event)
+            }
+        }
+    }
+
+    /// Upload photo for an event to CloudKit
+    private func uploadPhotoForEvent(_ event: PuppyEvent) async {
+        guard let photoPath = event.photo,
+              let mediaStore = mediaStore,
+              let localURL = mediaStore.fullURL(for: photoPath) else {
+            return
+        }
+
+        do {
+            _ = try await cloudKit.uploadPhoto(localURL: localURL, eventId: event.id)
+            pendingPhotoUploads.removeAll { $0.id == event.id }
+
+            // Notify that photo was synced so local event can be updated
+            await onPhotoSynced?(event.id)
+
+            logger.info("Uploaded photo for event \(event.id)")
+        } catch {
+            logger.warning("Failed to upload photo: \(error.localizedDescription)")
+            if !pendingPhotoUploads.contains(where: { $0.id == event.id }) {
+                pendingPhotoUploads.append(event)
             }
         }
     }
@@ -156,6 +201,67 @@ final class EventSyncCoordinator: ObservableObject {
         for event in pendingCloudDeletes {
             await deleteFromCloud(event)
         }
+        for event in pendingPhotoUploads {
+            await uploadPhotoForEvent(event)
+        }
+    }
+
+    // MARK: - Photo Sync
+
+    /// Download missing photos from CloudKit after sync
+    /// Call this with events that have cloudPhotoSynced=true but no local photo file
+    func downloadMissingPhotos(for events: [PuppyEvent]) async {
+        guard cloudKit.isCloudAvailable, let mediaStore = mediaStore else { return }
+
+        let eventsNeedingDownload = events.filter { event in
+            guard let photoPath = event.photo else { return false }
+            // Has cloud photo but local file doesn't exist
+            return event.cloudPhotoSynced == true && mediaStore.fullURL(for: photoPath) == nil
+        }
+
+        guard !eventsNeedingDownload.isEmpty else { return }
+
+        logger.info("Downloading \(eventsNeedingDownload.count) missing photos from cloud")
+
+        for event in eventsNeedingDownload {
+            guard let photoPath = event.photo else { continue }
+            let destinationURL = mediaStore.cloudDownloadURL(for: event.id, originalPath: photoPath)
+
+            do {
+                let downloaded = try await cloudKit.downloadPhoto(eventId: event.id, to: destinationURL)
+                if downloaded {
+                    // Regenerate thumbnail locally
+                    await mediaStore.regenerateThumbnail(for: event.id, photoURL: destinationURL)
+                    logger.info("Downloaded photo for event \(event.id)")
+                }
+            } catch {
+                logger.warning("Failed to download photo for event \(event.id): \(error.localizedDescription)")
+            }
+        }
+    }
+
+    /// Migrate existing local photos to CloudKit (one-time operation)
+    func migrateExistingPhotos(_ events: [PuppyEvent]) async {
+        guard cloudKit.isCloudAvailable else { return }
+        guard !UserDefaults.standard.bool(forKey: UserDefaultsKey.photoMigrationCompleted) else {
+            return
+        }
+
+        let eventsWithUnuploadedPhotos = events.filter { $0.needsPhotoUpload }
+
+        guard !eventsWithUnuploadedPhotos.isEmpty else {
+            UserDefaults.standard.set(true, forKey: UserDefaultsKey.photoMigrationCompleted)
+            return
+        }
+
+        logger.info("Migrating \(eventsWithUnuploadedPhotos.count) existing photos to CloudKit")
+
+        for event in eventsWithUnuploadedPhotos {
+            await uploadPhotoForEvent(event)
+        }
+
+        UserDefaults.standard.set(true, forKey: UserDefaultsKey.photoMigrationCompleted)
+        logger.info("Photo migration completed")
     }
 
     // MARK: - Migration

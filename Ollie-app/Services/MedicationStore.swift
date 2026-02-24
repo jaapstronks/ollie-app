@@ -2,7 +2,7 @@
 //  MedicationStore.swift
 //  Ollie-app
 //
-//  Manages medication completion tracking with JSONL persistence
+//  Manages medication completion tracking with JSONL persistence and CloudKit sync
 //
 
 import Foundation
@@ -14,14 +14,131 @@ import os
 @MainActor
 class MedicationStore: ObservableObject {
     @Published private(set) var completions: [MedicationCompletion] = []
+    @Published private(set) var isSyncing = false
 
     private let logger = Logger.ollie(category: "MedicationStore")
+    private let cloudKit = CloudKitService.shared
 
     /// File name for medication completions
     private let completionsFileName = "medication-completions.jsonl"
 
+    // MARK: - UserDefaults Keys
+
+    private enum UserDefaultsKey {
+        static let cloudMigrationCompleted = "medicationStore.cloudMigrationCompleted"
+    }
+
     init() {
         loadAllCompletions()
+    }
+
+    // MARK: - CloudKit Sync
+
+    /// Perform initial sync on app launch
+    func initialSync() async {
+        guard cloudKit.isCloudAvailable else {
+            logger.info("CloudKit not available, skipping medication completions sync")
+            return
+        }
+
+        // Migrate existing local completions to CloudKit if needed
+        if !UserDefaults.standard.bool(forKey: UserDefaultsKey.cloudMigrationCompleted) {
+            await migrateLocalCompletions()
+        }
+
+        // Fetch from cloud and merge
+        await fetchFromCloud()
+    }
+
+    /// Force sync with CloudKit
+    func forceSync() async {
+        await fetchFromCloud()
+    }
+
+    /// Migrate existing local completions to CloudKit (one-time)
+    private func migrateLocalCompletions() async {
+        guard !completions.isEmpty else {
+            UserDefaults.standard.set(true, forKey: UserDefaultsKey.cloudMigrationCompleted)
+            return
+        }
+
+        logger.info("Migrating \(self.completions.count) local completions to CloudKit")
+
+        do {
+            try await cloudKit.saveCompletions(completions)
+            UserDefaults.standard.set(true, forKey: UserDefaultsKey.cloudMigrationCompleted)
+            logger.info("Medication completions migration completed")
+        } catch {
+            logger.error("Medication completions migration failed: \(error.localizedDescription)")
+        }
+    }
+
+    /// Fetch completions from CloudKit and merge with local
+    private func fetchFromCloud() async {
+        guard cloudKit.isCloudAvailable else { return }
+
+        isSyncing = true
+        defer { isSyncing = false }
+
+        do {
+            let cloudCompletions = try await cloudKit.fetchAllCompletions()
+            let merged = mergeCompletions(local: completions, cloud: cloudCompletions)
+
+            if merged.map({ $0.id }) != completions.map({ $0.id }) {
+                completions = merged
+                saveCompletions()
+                logger.info("Medication completions updated from CloudKit")
+            }
+        } catch {
+            logger.warning("Failed to fetch completions from cloud: \(error.localizedDescription)")
+        }
+    }
+
+    /// Save a completion to CloudKit
+    private func saveToCloud(_ completion: MedicationCompletion) async {
+        guard cloudKit.isCloudAvailable else { return }
+
+        do {
+            try await cloudKit.saveCompletion(completion)
+            logger.debug("Completion synced to CloudKit")
+        } catch {
+            logger.warning("Failed to save completion to cloud: \(error.localizedDescription)")
+        }
+    }
+
+    /// Delete a completion from CloudKit
+    private func deleteFromCloud(_ completion: MedicationCompletion) async {
+        guard cloudKit.isCloudAvailable else { return }
+
+        do {
+            try await cloudKit.deleteCompletion(completion)
+            logger.debug("Completion deleted from CloudKit")
+        } catch {
+            logger.warning("Failed to delete completion from cloud: \(error.localizedDescription)")
+        }
+    }
+
+    /// Merge local and cloud completions, preferring newer modifiedAt
+    private func mergeCompletions(local: [MedicationCompletion], cloud: [MedicationCompletion]) -> [MedicationCompletion] {
+        var merged: [UUID: MedicationCompletion] = [:]
+
+        // Add all local completions
+        for completion in local {
+            merged[completion.id] = completion
+        }
+
+        // Merge cloud completions (prefer newer modifiedAt)
+        for cloudCompletion in cloud {
+            if let existing = merged[cloudCompletion.id] {
+                if cloudCompletion.modifiedAt > existing.modifiedAt {
+                    merged[cloudCompletion.id] = cloudCompletion
+                }
+            } else {
+                merged[cloudCompletion.id] = cloudCompletion
+            }
+        }
+
+        return Array(merged.values).sorted { $0.completedAt > $1.completedAt }
     }
 
     // MARK: - Public Methods
@@ -56,6 +173,11 @@ class MedicationStore: ObservableObject {
         completions.append(completion)
         saveCompletions()
 
+        // Sync to CloudKit in background
+        Task {
+            await saveToCloud(completion)
+        }
+
         logger.info("Marked medication \(medicationId) time \(timeId) as complete")
         return completion
     }
@@ -64,6 +186,12 @@ class MedicationStore: ObservableObject {
     func deleteCompletion(_ completion: MedicationCompletion) {
         completions.removeAll { $0.id == completion.id }
         saveCompletions()
+
+        // Delete from CloudKit in background
+        Task {
+            await deleteFromCloud(completion)
+        }
+
         logger.info("Deleted medication completion \(completion.id)")
     }
 

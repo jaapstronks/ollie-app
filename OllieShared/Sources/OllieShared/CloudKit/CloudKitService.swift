@@ -80,6 +80,91 @@ public final class CloudKitService: ObservableObject {
         )
     }()
 
+    private lazy var walkSpotService: WalkSpotCloudService = {
+        WalkSpotCloudService(
+            deviceID: deviceID,
+            getDatabase: { [weak self] in
+                guard let self = self else { return CKContainer.default().privateCloudDatabase }
+                return self.isParticipant ? self.sharedDatabase : self.privateDatabase
+            },
+            getZoneID: { [weak self] in
+                guard let self = self else { return CKRecordZone.ID(zoneName: "OllieEvents", ownerName: CKCurrentUserDefaultName) }
+                return self.isParticipant ? (self.participantZoneID ?? self.zoneID) : self.zoneID
+            },
+            isCloudAvailable: { [weak self] in
+                self?.isCloudAvailable ?? false
+            }
+        )
+    }()
+
+    private lazy var mediaService: MediaCloudService = {
+        MediaCloudService(
+            deviceID: deviceID,
+            getDatabase: { [weak self] in
+                guard let self = self else { return CKContainer.default().privateCloudDatabase }
+                return self.isParticipant ? self.sharedDatabase : self.privateDatabase
+            },
+            getZoneID: { [weak self] in
+                guard let self = self else { return CKRecordZone.ID(zoneName: "OllieEvents", ownerName: CKCurrentUserDefaultName) }
+                return self.isParticipant ? (self.participantZoneID ?? self.zoneID) : self.zoneID
+            },
+            isCloudAvailable: { [weak self] in
+                self?.isCloudAvailable ?? false
+            }
+        )
+    }()
+
+    private lazy var profileService: ProfileCloudService = {
+        ProfileCloudService(
+            deviceID: deviceID,
+            getDatabase: { [weak self] in
+                guard let self = self else { return CKContainer.default().privateCloudDatabase }
+                return self.isParticipant ? self.sharedDatabase : self.privateDatabase
+            },
+            getZoneID: { [weak self] in
+                guard let self = self else { return CKRecordZone.ID(zoneName: "OllieEvents", ownerName: CKCurrentUserDefaultName) }
+                return self.isParticipant ? (self.participantZoneID ?? self.zoneID) : self.zoneID
+            },
+            isCloudAvailable: { [weak self] in
+                self?.isCloudAvailable ?? false
+            }
+        )
+    }()
+
+    private lazy var medicationCompletionService: MedicationCompletionCloudService = {
+        MedicationCompletionCloudService(
+            deviceID: deviceID,
+            getDatabase: { [weak self] in
+                guard let self = self else { return CKContainer.default().privateCloudDatabase }
+                return self.isParticipant ? self.sharedDatabase : self.privateDatabase
+            },
+            getZoneID: { [weak self] in
+                guard let self = self else { return CKRecordZone.ID(zoneName: "OllieEvents", ownerName: CKCurrentUserDefaultName) }
+                return self.isParticipant ? (self.participantZoneID ?? self.zoneID) : self.zoneID
+            },
+            isCloudAvailable: { [weak self] in
+                self?.isCloudAvailable ?? false
+            }
+        )
+    }()
+
+    private lazy var masteredSkillsService: MasteredSkillsCloudService = {
+        MasteredSkillsCloudService(
+            deviceID: deviceID,
+            getDatabase: { [weak self] in
+                guard let self = self else { return CKContainer.default().privateCloudDatabase }
+                return self.isParticipant ? self.sharedDatabase : self.privateDatabase
+            },
+            getZoneID: { [weak self] in
+                guard let self = self else { return CKRecordZone.ID(zoneName: "OllieEvents", ownerName: CKCurrentUserDefaultName) }
+                return self.isParticipant ? (self.participantZoneID ?? self.zoneID) : self.zoneID
+            },
+            isCloudAvailable: { [weak self] in
+                self?.isCloudAvailable ?? false
+            }
+        )
+    }()
+
     // MARK: - Published State
 
     @Published public private(set) var isSyncing = false
@@ -542,6 +627,30 @@ public final class CloudKitService: ObservableObject {
         try await shareManager.stopSharing()
     }
 
+    /// Accept an incoming share invitation
+    public func acceptShare(_ metadata: CKShare.Metadata) async throws {
+        guard isCloudAvailable else {
+            throw CloudKitError.notAvailable
+        }
+
+        // Accept the share
+        try await container.accept(metadata)
+
+        // Store participant zone info
+        let sharedZoneID = metadata.share.recordID.zoneID
+        UserDefaults.standard.set(sharedZoneID.ownerName, forKey: UserDefaultsKey.participantZoneOwner)
+        UserDefaults.standard.set(sharedZoneID.zoneName, forKey: UserDefaultsKey.participantZoneName)
+
+        // Update state
+        participantZoneID = sharedZoneID
+        isParticipant = true
+
+        // Sync shared data
+        try await sync()
+
+        logger.info("Accepted share and synced data from zone: \(sharedZoneID.zoneName)")
+    }
+
     // MARK: - Migration
 
     /// Migrate local events to CloudKit (one-time on first CloudKit setup)
@@ -659,6 +768,116 @@ public final class CloudKitService: ObservableObject {
     public func fetchAllExposures() async throws -> [Exposure] {
         try await exposureService.fetchAllExposures()
     }
+
+    // MARK: - Walk Spots (delegated to WalkSpotCloudService)
+
+    /// Save a spot to CloudKit
+    public func saveSpot(_ spot: WalkSpot) async throws {
+        try await walkSpotService.saveSpot(spot)
+    }
+
+    /// Save multiple spots to CloudKit
+    public func saveSpots(_ spots: [WalkSpot]) async throws {
+        try await walkSpotService.saveSpots(spots)
+    }
+
+    /// Delete a spot from CloudKit
+    public func deleteSpot(_ spot: WalkSpot) async throws {
+        try await walkSpotService.deleteSpot(spot)
+    }
+
+    /// Fetch all spots from CloudKit
+    public func fetchAllSpots() async throws -> [WalkSpot] {
+        try await walkSpotService.fetchAllSpots()
+    }
+
+    // MARK: - Media (delegated to MediaCloudService)
+
+    /// Upload a photo to CloudKit
+    public func uploadPhoto(localURL: URL, eventId: UUID) async throws -> CKRecord.ID {
+        try await mediaService.uploadPhoto(localURL: localURL, eventId: eventId)
+    }
+
+    /// Download a photo from CloudKit
+    public func downloadPhoto(eventId: UUID, to destinationURL: URL) async throws -> Bool {
+        try await mediaService.downloadPhoto(eventId: eventId, to: destinationURL)
+    }
+
+    /// Check if a photo exists in CloudKit
+    public func photoExists(eventId: UUID) async throws -> Bool {
+        try await mediaService.photoExists(eventId: eventId)
+    }
+
+    /// Delete a photo from CloudKit
+    public func deletePhoto(eventId: UUID) async throws {
+        try await mediaService.deletePhoto(eventId: eventId)
+    }
+
+    /// Fetch all event IDs that have photos in CloudKit
+    public func fetchAllPhotoEventIds() async throws -> [UUID] {
+        try await mediaService.fetchAllPhotoEventIds()
+    }
+
+    // MARK: - Profile (delegated to ProfileCloudService)
+
+    /// Save a profile to CloudKit
+    public func saveProfile(_ profile: PuppyProfile) async throws {
+        try await profileService.saveProfile(profile)
+    }
+
+    /// Fetch the profile from CloudKit
+    public func fetchProfile() async throws -> PuppyProfile? {
+        try await profileService.fetchProfile()
+    }
+
+    /// Delete a profile from CloudKit
+    public func deleteProfile(_ profile: PuppyProfile) async throws {
+        try await profileService.deleteProfile(profile)
+    }
+
+    // MARK: - Medication Completions (delegated to MedicationCompletionCloudService)
+
+    /// Save a medication completion to CloudKit
+    public func saveCompletion(_ completion: MedicationCompletion) async throws {
+        try await medicationCompletionService.saveCompletion(completion)
+    }
+
+    /// Save multiple completions to CloudKit
+    public func saveCompletions(_ completions: [MedicationCompletion]) async throws {
+        try await medicationCompletionService.saveCompletions(completions)
+    }
+
+    /// Delete a medication completion from CloudKit
+    public func deleteCompletion(_ completion: MedicationCompletion) async throws {
+        try await medicationCompletionService.deleteCompletion(completion)
+    }
+
+    /// Fetch all medication completions from CloudKit
+    public func fetchAllCompletions() async throws -> [MedicationCompletion] {
+        try await medicationCompletionService.fetchAllCompletions()
+    }
+
+    // MARK: - Mastered Skills (delegated to MasteredSkillsCloudService)
+
+    /// Save a mastered skill to CloudKit
+    public func saveMasteredSkill(_ skill: MasteredSkill) async throws {
+        try await masteredSkillsService.saveMasteredSkill(skill)
+    }
+
+    /// Save multiple mastered skills to CloudKit
+    public func saveMasteredSkills(_ skills: [MasteredSkill]) async throws {
+        try await masteredSkillsService.saveMasteredSkills(skills)
+    }
+
+    /// Delete a mastered skill from CloudKit
+    public func deleteMasteredSkill(_ skill: MasteredSkill) async throws {
+        try await masteredSkillsService.deleteMasteredSkill(skill)
+    }
+
+    /// Fetch all mastered skills from CloudKit
+    public func fetchAllMasteredSkills() async throws -> [MasteredSkill] {
+        try await masteredSkillsService.fetchAllMasteredSkills()
+    }
 }
 
 // MARK: - Error Types
@@ -666,6 +885,7 @@ public final class CloudKitService: ObservableObject {
 public enum CloudKitError: LocalizedError {
     case notAvailable
     case saveFailed(String)
+    case fetchFailed(String)
     case deleteFailed(String)
     case syncFailed(String)
     case migrationFailed(String)
@@ -677,6 +897,8 @@ public enum CloudKitError: LocalizedError {
             return Strings.CloudSharing.cloudKitNotAvailable
         case .saveFailed(let message):
             return Strings.CloudSharing.saveFailedMessage(message)
+        case .fetchFailed(let message):
+            return "Failed to fetch from CloudKit: \(message)"
         case .deleteFailed(let message):
             return Strings.CloudSharing.deleteFailedMessage(message)
         case .syncFailed(let message):

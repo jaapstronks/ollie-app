@@ -19,10 +19,12 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
     public var walkSchedule: WalkSchedule
     public var notificationSettings: NotificationSettings
     public var medicationSchedule: MedicationSchedule
+    public var modifiedAt: Date
 
-    // MARK: - Monetization
-    public var freeStartDate: Date
-    public var isPremiumUnlocked: Bool
+    // MARK: - Legacy Migration
+    /// Legacy one-time purchasers are grandfathered into Ollie+
+    /// This field is only used for migration from the old purchase model
+    public var legacyPremiumUnlocked: Bool
 
     public enum SizeCategory: String, Codable, CaseIterable, Identifiable, Sendable {
         case small
@@ -77,21 +79,6 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
         ageInMonths * exerciseConfig.minutesPerMonthOfAge
     }
 
-    // MARK: - Monetization Computed Properties
-
-    public var freeDaysRemaining: Int {
-        guard !isPremiumUnlocked else { return -1 }
-        let daysSinceStart = Calendar.current.dateComponents([.day], from: freeStartDate, to: Date()).day ?? 0
-        return max(0, 21 - daysSinceStart)
-    }
-
-    public var isFreePeriodExpired: Bool {
-        !isPremiumUnlocked && freeDaysRemaining <= 0
-    }
-
-    public var canLogEvents: Bool {
-        isPremiumUnlocked || !isFreePeriodExpired
-    }
 
     /// Creates a default profile for onboarding
     public static func defaultProfile(name: String, birthDate: Date, homeDate: Date, size: SizeCategory) -> PuppyProfile {
@@ -110,8 +97,8 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
             walkSchedule: WalkSchedule.defaultSchedule(),
             notificationSettings: NotificationSettings.defaultSettings(),
             medicationSchedule: MedicationSchedule.empty(),
-            freeStartDate: Date(),
-            isPremiumUnlocked: false
+            modifiedAt: Date(),
+            legacyPremiumUnlocked: false
         )
     }
 
@@ -130,8 +117,8 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
         walkSchedule: WalkSchedule,
         notificationSettings: NotificationSettings,
         medicationSchedule: MedicationSchedule = MedicationSchedule.empty(),
-        freeStartDate: Date = Date(),
-        isPremiumUnlocked: Bool = false
+        modifiedAt: Date? = nil,
+        legacyPremiumUnlocked: Bool = false
     ) {
         self.id = id
         self.name = name
@@ -145,8 +132,8 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
         self.walkSchedule = walkSchedule
         self.notificationSettings = notificationSettings
         self.medicationSchedule = medicationSchedule
-        self.freeStartDate = freeStartDate
-        self.isPremiumUnlocked = isPremiumUnlocked
+        self.modifiedAt = modifiedAt ?? Date()
+        self.legacyPremiumUnlocked = legacyPremiumUnlocked
     }
 
     // MARK: - Codable
@@ -156,7 +143,11 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
         case name, breed, birthDate, homeDate, sizeCategory
         case mealSchedule, exerciseConfig, predictionConfig
         case walkSchedule, notificationSettings, medicationSchedule
+        case modifiedAt
+        // Legacy fields for migration (read old values)
         case freeStartDate, isPremiumUnlocked
+        // New field
+        case legacyPremiumUnlocked
     }
 
     public init(from decoder: Decoder) throws {
@@ -173,8 +164,17 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
         walkSchedule = try container.decodeIfPresent(WalkSchedule.self, forKey: .walkSchedule) ?? WalkSchedule.defaultSchedule()
         notificationSettings = try container.decodeIfPresent(NotificationSettings.self, forKey: .notificationSettings) ?? NotificationSettings.defaultSettings()
         medicationSchedule = try container.decodeIfPresent(MedicationSchedule.self, forKey: .medicationSchedule) ?? MedicationSchedule.empty()
-        freeStartDate = try container.decodeIfPresent(Date.self, forKey: .freeStartDate) ?? Date()
-        isPremiumUnlocked = try container.decodeIfPresent(Bool.self, forKey: .isPremiumUnlocked) ?? false
+        modifiedAt = try container.decodeIfPresent(Date.self, forKey: .modifiedAt) ?? Date()
+
+        // Migration: check new field first, then fall back to old isPremiumUnlocked
+        if let legacy = try container.decodeIfPresent(Bool.self, forKey: .legacyPremiumUnlocked) {
+            legacyPremiumUnlocked = legacy
+        } else if let oldPremium = try container.decodeIfPresent(Bool.self, forKey: .isPremiumUnlocked) {
+            // Migrate from old isPremiumUnlocked to new legacyPremiumUnlocked
+            legacyPremiumUnlocked = oldPremium
+        } else {
+            legacyPremiumUnlocked = false
+        }
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -191,7 +191,17 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
         try container.encode(walkSchedule, forKey: .walkSchedule)
         try container.encode(notificationSettings, forKey: .notificationSettings)
         try container.encode(medicationSchedule, forKey: .medicationSchedule)
-        try container.encode(freeStartDate, forKey: .freeStartDate)
-        try container.encode(isPremiumUnlocked, forKey: .isPremiumUnlocked)
+        try container.encode(modifiedAt, forKey: .modifiedAt)
+        try container.encode(legacyPremiumUnlocked, forKey: .legacyPremiumUnlocked)
+        // Note: No longer writing freeStartDate or isPremiumUnlocked (subscription replaces these)
+    }
+
+    // MARK: - Mutation Helpers
+
+    /// Returns a copy with updated modifiedAt timestamp
+    public func withUpdatedTimestamp() -> PuppyProfile {
+        var copy = self
+        copy.modifiedAt = Date()
+        return copy
     }
 }

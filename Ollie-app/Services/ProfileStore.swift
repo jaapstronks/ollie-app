@@ -6,19 +6,29 @@
 import Foundation
 import OllieShared
 import Combine
+import os
 
-/// Manages reading and writing the puppy profile
+/// Manages reading and writing the puppy profile with CloudKit sync
 @MainActor
 class ProfileStore: ObservableObject {
     @Published private(set) var profile: PuppyProfile?
     @Published private(set) var isLoading: Bool = true
+    @Published private(set) var isSyncing: Bool = false
 
     private let fileManager = FileManager.default
     private let encoder: JSONEncoder
     private let decoder: JSONDecoder
+    private let cloudKit = CloudKitService.shared
+    private let logger = Logger.ollie(category: "ProfileStore")
 
     /// App Group suite name for sharing with Intents/Widgets
     private static let appGroupSuiteName = Constants.appGroupIdentifier
+
+    // MARK: - UserDefaults Keys
+
+    private enum UserDefaultsKey {
+        static let profileCloudMigrationCompleted = "profileStore.cloudMigrationCompleted"
+    }
 
     init() {
         encoder = JSONEncoder()
@@ -40,8 +50,37 @@ class ProfileStore: ObservableObject {
 
     /// Save a new or updated profile
     func saveProfile(_ newProfile: PuppyProfile) {
-        profile = newProfile
+        let updatedProfile = newProfile.withUpdatedTimestamp()
+        profile = updatedProfile
         writeProfile()
+
+        // Sync to CloudKit
+        Task {
+            await saveToCloud(updatedProfile)
+        }
+    }
+
+    // MARK: - Initial Sync
+
+    /// Perform initial sync on app launch
+    func initialSync() async {
+        guard cloudKit.isCloudAvailable else {
+            logger.info("CloudKit not available, skipping profile sync")
+            return
+        }
+
+        // Migrate existing local profile to CloudKit if needed
+        if !UserDefaults.standard.bool(forKey: UserDefaultsKey.profileCloudMigrationCompleted) {
+            await migrateLocalProfile()
+        }
+
+        // Fetch from cloud and merge
+        await fetchFromCloud()
+    }
+
+    /// Force sync with CloudKit
+    func forceSync() async {
+        await fetchFromCloud()
     }
 
     /// Update the meal schedule
@@ -195,5 +234,79 @@ class ProfileStore: ObservableObject {
     /// Call this if profile was loaded from elsewhere and needs to be shared
     func forceAppGroupSync() {
         syncToAppGroup()
+    }
+
+    // MARK: - CloudKit Operations
+
+    /// Save profile to CloudKit
+    private func saveToCloud(_ profile: PuppyProfile) async {
+        guard cloudKit.isCloudAvailable else {
+            logger.info("CloudKit not available, profile saved locally only")
+            return
+        }
+
+        do {
+            try await cloudKit.saveProfile(profile)
+            logger.info("Profile synced to CloudKit")
+        } catch {
+            logger.warning("Failed to save profile to cloud: \(error.localizedDescription)")
+        }
+    }
+
+    /// Fetch profile from CloudKit and merge with local
+    private func fetchFromCloud() async {
+        guard cloudKit.isCloudAvailable else { return }
+
+        isSyncing = true
+        defer { isSyncing = false }
+
+        do {
+            if let cloudProfile = try await cloudKit.fetchProfile() {
+                let merged = mergeProfiles(local: profile, cloud: cloudProfile)
+                if merged.id != profile?.id || merged.modifiedAt != profile?.modifiedAt {
+                    profile = merged
+                    writeProfile()
+                    logger.info("Profile updated from CloudKit")
+                }
+            }
+        } catch {
+            logger.warning("Failed to fetch profile from cloud: \(error.localizedDescription)")
+        }
+    }
+
+    /// Migrate existing local profile to CloudKit (one-time)
+    private func migrateLocalProfile() async {
+        guard let localProfile = profile else {
+            UserDefaults.standard.set(true, forKey: UserDefaultsKey.profileCloudMigrationCompleted)
+            return
+        }
+
+        logger.info("Migrating local profile to CloudKit")
+
+        do {
+            try await cloudKit.saveProfile(localProfile)
+            UserDefaults.standard.set(true, forKey: UserDefaultsKey.profileCloudMigrationCompleted)
+            logger.info("Profile migration completed")
+        } catch {
+            logger.error("Profile migration failed: \(error.localizedDescription)")
+        }
+    }
+
+    /// Merge local and cloud profiles, preferring newer modifiedAt
+    private func mergeProfiles(local: PuppyProfile?, cloud: PuppyProfile) -> PuppyProfile {
+        guard let local = local else {
+            // No local profile, use cloud
+            return cloud
+        }
+
+        // Same profile ID - use newer modifiedAt
+        if local.id == cloud.id {
+            return local.modifiedAt > cloud.modifiedAt ? local : cloud
+        }
+
+        // Different profile IDs - this shouldn't happen normally
+        // Prefer cloud if it's newer, otherwise keep local
+        logger.warning("Profile ID mismatch: local=\(local.id), cloud=\(cloud.id)")
+        return cloud.modifiedAt > local.modifiedAt ? cloud : local
     }
 }
