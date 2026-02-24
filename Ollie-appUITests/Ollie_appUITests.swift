@@ -72,10 +72,11 @@ final class Ollie_appUITests: XCTestCase {
 
         // Strategy 3: Find button in top navigation area with gear-like characteristics
         let navButtons = app.buttons.allElementsBoundByIndex
+        let screenWidth = app.windows.firstMatch.frame.width
         for button in navButtons {
             let frame = button.frame
             // Check if button is in top-right area (roughly)
-            if frame.minY < 150 && frame.minX > UIScreen.main.bounds.width / 2 {
+            if frame.minY < 150 && frame.minX > screenWidth / 2 {
                 // Check if it has gear-related label or identifier
                 if button.identifier == "settings_button" ||
                    button.label.lowercased().contains("setting") ||
@@ -120,8 +121,8 @@ final class Ollie_appUITests: XCTestCase {
     @MainActor
     func testNavigateToInsightsTab() throws {
         let tabBar = app.tabBars.firstMatch
-        // Insights/Stats tab is now at index 4 (Today=0, Train=1, Walks=2, Plan=3, Stats=4)
-        let insightsTab = tabBar.buttons.element(boundBy: 4)
+        // Stats tab is at index 3 (Today=0, Train=1, Places=2, Stats=3)
+        let insightsTab = tabBar.buttons.element(boundBy: 3)
 
         insightsTab.tap()
         Thread.sleep(forTimeInterval: 0.5)
@@ -133,12 +134,11 @@ final class Ollie_appUITests: XCTestCase {
     @MainActor
     func testNavigateBetweenAllTabs() throws {
         let tabBar = app.tabBars.firstMatch
-        // Tab indices: Today=0, Train=1, Walks=2, Plan=3, Stats=4
+        // Tab indices: Today=0, Train=1, Places=2, Stats=3
         let todayTab = tabBar.buttons.element(boundBy: 0)
         let trainTab = tabBar.buttons.element(boundBy: 1)
-        let walksTab = tabBar.buttons.element(boundBy: 2)
-        let planTab = tabBar.buttons.element(boundBy: 3)
-        let statsTab = tabBar.buttons.element(boundBy: 4)
+        let placesTab = tabBar.buttons.element(boundBy: 2)
+        let statsTab = tabBar.buttons.element(boundBy: 3)
 
         // Ensure we start on Today tab (may be on different tab from previous test)
         ensureOnTodayTab()
@@ -151,29 +151,23 @@ final class Ollie_appUITests: XCTestCase {
         XCTAssertTrue(trainTab.isSelected, "Train tab should be selected")
         takeScreenshot(named: "05-Train-Tab")
 
-        // Go to Walks
-        walksTab.tap()
+        // Go to Places
+        placesTab.tap()
         Thread.sleep(forTimeInterval: 0.3)
-        XCTAssertTrue(walksTab.isSelected, "Walks tab should be selected")
-        takeScreenshot(named: "06-Walks-Tab")
-
-        // Go to Plan
-        planTab.tap()
-        Thread.sleep(forTimeInterval: 0.3)
-        XCTAssertTrue(planTab.isSelected, "Plan tab should be selected")
-        takeScreenshot(named: "07-Plan-Tab")
+        XCTAssertTrue(placesTab.isSelected, "Places tab should be selected")
+        takeScreenshot(named: "06-Places-Tab")
 
         // Go to Stats/Insights
         statsTab.tap()
         Thread.sleep(forTimeInterval: 0.3)
         XCTAssertTrue(statsTab.isSelected, "Stats tab should be selected")
-        takeScreenshot(named: "08-Stats-Tab")
+        takeScreenshot(named: "07-Stats-Tab")
 
         // Return to Today
         todayTab.tap()
         Thread.sleep(forTimeInterval: 0.3)
         XCTAssertTrue(todayTab.isSelected, "Should return to Today tab")
-        takeScreenshot(named: "09-Today-Tab-Return")
+        takeScreenshot(named: "08-Today-Tab-Return")
     }
 
     // MARK: - FAB Button Tests
@@ -262,9 +256,6 @@ final class Ollie_appUITests: XCTestCase {
     @MainActor
     func testSwipeRightGoesToPreviousDay() throws {
         ensureOnTodayTab()
-
-        // Get initial date title
-        let initialTitle = app.staticTexts.element(boundBy: 0).label
 
         // Swipe right to go to previous day
         app.swipeRight()
@@ -388,8 +379,8 @@ final class Ollie_appUITests: XCTestCase {
     @MainActor
     func testInsightsTabContent() throws {
         let tabBar = app.tabBars.firstMatch
-        // Insights/Stats tab is now at index 4
-        let insightsTab = tabBar.buttons.element(boundBy: 4)
+        // Stats tab is at index 3 (Today=0, Train=1, Places=2, Stats=3)
+        let insightsTab = tabBar.buttons.element(boundBy: 3)
 
         insightsTab.tap()
         Thread.sleep(forTimeInterval: 0.5)
@@ -436,8 +427,8 @@ final class Ollie_appUITests: XCTestCase {
         app.swipeDown()
         Thread.sleep(forTimeInterval: 0.5)
 
-        // 5. Insights Tab (now at index 4)
-        app.tabBars.firstMatch.buttons.element(boundBy: 4).tap()
+        // 5. Insights Tab (at index 3)
+        app.tabBars.firstMatch.buttons.element(boundBy: 3).tap()
         Thread.sleep(forTimeInterval: 0.5)
         takeScreenshot(named: "VR-05-Insights")
 
@@ -471,8 +462,8 @@ final class Ollie_appUITests: XCTestCase {
     func testTabSwitchingPerformance() throws {
         let tabBar = app.tabBars.firstMatch
         let todayTab = tabBar.buttons.element(boundBy: 0)
-        // Insights/Stats tab is now at index 4
-        let insightsTab = tabBar.buttons.element(boundBy: 4)
+        // Stats tab is at index 3
+        let insightsTab = tabBar.buttons.element(boundBy: 3)
 
         measure {
             insightsTab.tap()
