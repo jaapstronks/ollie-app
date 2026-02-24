@@ -117,39 +117,17 @@ class CloudSharingHostController: UIViewController, UIAdaptivePresentationContro
         presentSharingController()
     }
 
+    @available(iOS, introduced: 13.0, deprecated: 17.0, message: "Uses deprecated CloudKit sharing API")
     private func presentSharingController() {
         switch mode {
         case .invite:
-            // Use preparationHandler for inviting - creates share when user chooses how to send
-            // Note: UICloudSharingController(preparationHandler:) shows a deprecation warning in iOS 17+
-            // but UICloudSharingController is still the correct API for CloudKit sharing.
-            // The deprecation refers to the generic UIActivityViewController pattern, not CloudKit sharing.
             let capturedContainer = container!
             let capturedZoneID = zoneID!
 
-            sharingController = UICloudSharingController { (_, preparationCompletionHandler) in
-                Task {
-                    do {
-                        let newShare = CKShare(recordZoneID: capturedZoneID)
-                        newShare[CKShare.SystemFieldKey.title] = "Ollie - Puppy Events"
-                        newShare.publicPermission = .none
-
-                        // Save the share to CloudKit
-                        _ = try await capturedContainer.privateCloudDatabase.save(newShare)
-
-                        logger.info("Share created and saved successfully")
-
-                        await MainActor.run {
-                            preparationCompletionHandler(newShare, capturedContainer, nil)
-                        }
-                    } catch {
-                        logger.error("Failed to create share: \(error.localizedDescription)")
-                        await MainActor.run {
-                            preparationCompletionHandler(nil, nil, error)
-                        }
-                    }
-                }
-            }
+            sharingController = Self.makeSharingController(
+                container: capturedContainer,
+                zoneID: capturedZoneID
+            )
 
         case .manage:
             guard let existingShare = share else {
@@ -194,6 +172,45 @@ class CloudSharingHostController: UIViewController, UIAdaptivePresentationContro
         // Notify when this host controller is being dismissed
         if isBeingDismissed || isMovingFromParent {
             coordinator?.onDismiss()
+        }
+    }
+
+    // MARK: - Factory Method
+
+    /// Creates a UICloudSharingController with a preparation handler for creating new shares.
+    /// This uses the deprecated `init(preparationHandler:)` which is still the correct API
+    /// for CloudKit zone sharing. The deprecation refers to generic UIActivityViewController usage,
+    /// not CloudKit sharing specifically. There is no modern replacement for this use case.
+    /// - Note: Suppress deprecation warning - this is intentional, Apple has not provided
+    ///   a replacement API for CloudKit zone sharing with preparation handlers.
+    @available(iOS, introduced: 13.0, deprecated: 17.0, message: "Intentional use of deprecated CloudKit sharing API")
+    private static func makeSharingController(
+        container: CKContainer,
+        zoneID: CKRecordZone.ID
+    ) -> UICloudSharingController {
+        // swiftlint:disable:next deprecated_initializer
+        UICloudSharingController { (_, preparationCompletionHandler) in
+            Task {
+                do {
+                    let newShare = CKShare(recordZoneID: zoneID)
+                    newShare[CKShare.SystemFieldKey.title] = "Ollie - Puppy Events"
+                    newShare.publicPermission = .none
+
+                    // Save the share to CloudKit
+                    _ = try await container.privateCloudDatabase.save(newShare)
+
+                    logger.info("Share created and saved successfully")
+
+                    await MainActor.run {
+                        preparationCompletionHandler(newShare, container, nil)
+                    }
+                } catch {
+                    logger.error("Failed to create share: \(error.localizedDescription)")
+                    await MainActor.run {
+                        preparationCompletionHandler(nil, nil, error)
+                    }
+                }
+            }
         }
     }
 }
