@@ -12,6 +12,7 @@ extension Strings {
     enum Common {
         static let cancel = String(localized: "Cancel")
         static let save = String(localized: "Save")
+        static let add = String(localized: "Add")
         static let delete = String(localized: "Delete")
         static let done = String(localized: "Done")
         static let ok = String(localized: "OK")
@@ -63,6 +64,7 @@ extension Strings {
         static let train = String(localized: "Train")
         static let walks = String(localized: "Walks")
         static let plan = String(localized: "Plan")
+        static let places = String(localized: "Places")
     }
 
     // MARK: - FAB (Floating Action Button)
@@ -87,7 +89,8 @@ extension Strings {
     enum Insights {
         static let title = String(localized: "Insights")
         static let weekOverview = String(localized: "Week Overview")
-        static let trends = String(localized: "Trends")
+        static let outdoorPottyTrend = String(localized: "Outdoor Potty Success")
+        static let outdoorPottyTrendSubtitle = String(localized: "% of potty outside vs accidents")
         static let explore = String(localized: "Explore")
         static let training = String(localized: "Training")
         static let trainingDescription = String(localized: "Track skills & progress")

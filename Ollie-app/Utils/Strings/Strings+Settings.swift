@@ -133,6 +133,12 @@ extension Strings {
             String(localized: "Meal \(n)")
         }
 
+        // Meal Schedule Editor
+        static let addMeal = String(localized: "Add meal")
+        static let editMeal = String(localized: "Edit meal")
+        static let namePlaceholder = String(localized: "e.g. Breakfast")
+        static let footerHint = String(localized: "Tap a meal to edit. Swipe to delete.")
+
         // Accessibility
         static let mealNameAccessibility = String(localized: "Meal name")
         static let mealNameHint = String(localized: "Enter the name for this meal, like Breakfast or Dinner")

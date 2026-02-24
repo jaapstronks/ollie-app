@@ -105,7 +105,14 @@ struct SettingsView: View {
             Text(importError ?? Strings.PottyStatus.unknown)
         }
         .sheet(isPresented: $showingMealEdit) {
-            MealEditView(profileStore: profileStore)
+            if let profile = profileStore.profile {
+                MealScheduleEditorWrapper(
+                    initialSchedule: profile.mealSchedule,
+                    onSave: { updatedSchedule in
+                        profileStore.updateMealSchedule(updatedSchedule)
+                    }
+                )
+            }
         }
         .sheet(isPresented: $showingExerciseEdit) {
             ExerciseEditView(profileStore: profileStore)
