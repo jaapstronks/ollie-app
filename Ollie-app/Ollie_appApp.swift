@@ -59,6 +59,11 @@ struct OllieApp: App {
                     // Wire up location manager to weather service
                     weatherService.setLocationManager(locationManager)
 
+                    // Request location authorization for weather forecasts
+                    if !locationManager.authorizationDetermined {
+                        locationManager.requestAuthorization()
+                    }
+
                     // Check subscription status on app launch
                     await subscriptionManager.checkSubscriptionStatus()
                     await subscriptionManager.loadProducts()
@@ -134,6 +139,23 @@ class AppDelegate: NSObject, UIApplicationDelegate {
             }
         } else {
             completionHandler(.noData)
+        }
+    }
+
+    // MARK: - CloudKit Share Acceptance
+
+    /// Handle CloudKit share acceptance when user taps share link
+    func application(
+        _ application: UIApplication,
+        userDidAcceptCloudKitShareWith cloudKitShareMetadata: CKShare.Metadata
+    ) {
+        Task { @MainActor in
+            do {
+                try await CloudKitService.shared.acceptShare(cloudKitShareMetadata)
+                logger.info("Successfully accepted CloudKit share")
+            } catch {
+                logger.error("Failed to accept share: \(error.localizedDescription)")
+            }
         }
     }
 }

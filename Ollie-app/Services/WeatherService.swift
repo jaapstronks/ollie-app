@@ -40,9 +40,20 @@ class WeatherService: ObservableObject {
 
     /// Fetch hourly forecasts using user's current location (or default if unavailable)
     func fetchForecasts() async {
-        // Use user's location if available, otherwise fall back to default
-        let coordinates = locationManager?.currentCoordinates ?? (Self.defaultLocation.lat, Self.defaultLocation.lon)
-        await fetchForecasts(lat: coordinates.0, lon: coordinates.1)
+        var coordinates: (Double, Double)?
+
+        // Try to get user's location if authorized
+        if let manager = locationManager, manager.isAuthorized {
+            // Request fresh location if we don't have one cached
+            if manager.currentCoordinates == nil {
+                _ = try? await manager.requestLocation()
+            }
+            coordinates = manager.currentCoordinates
+        }
+
+        // Fall back to default location (Rotterdam) if location unavailable
+        let finalCoords = coordinates ?? (Self.defaultLocation.lat, Self.defaultLocation.lon)
+        await fetchForecasts(lat: finalCoords.0, lon: finalCoords.1)
     }
 
     /// Fetch hourly forecasts for a specific location
