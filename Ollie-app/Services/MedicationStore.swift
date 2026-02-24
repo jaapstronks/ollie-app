@@ -15,21 +15,12 @@ import os
 class MedicationStore: ObservableObject {
     @Published private(set) var completions: [MedicationCompletion] = []
 
-    private let fileManager = FileManager.default
-    private let encoder: JSONEncoder
-    private let decoder: JSONDecoder
-    private let logger = Logger(subsystem: "nl.jaapstronks.Ollie", category: "MedicationStore")
+    private let logger = Logger.ollie(category: "MedicationStore")
 
     /// File name for medication completions
     private let completionsFileName = "medication-completions.jsonl"
 
     init() {
-        encoder = JSONEncoder()
-        encoder.dateEncodingStrategy = .iso8601
-
-        decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .iso8601
-
         loadAllCompletions()
     }
 
@@ -121,59 +112,13 @@ class MedicationStore: ObservableObject {
 
     // MARK: - Private Methods
 
-    private var documentsURL: URL {
-        fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
-    }
-
-    private var dataDirectoryURL: URL {
-        documentsURL.appendingPathComponent(Constants.dataDirectoryName, isDirectory: true)
-    }
-
-    private var completionsFileURL: URL {
-        dataDirectoryURL.appendingPathComponent(completionsFileName)
-    }
-
-    private func ensureDataDirectoryExists() {
-        if !fileManager.fileExists(atPath: dataDirectoryURL.path) {
-            try? fileManager.createDirectory(at: dataDirectoryURL, withIntermediateDirectories: true)
-        }
-    }
-
     private func loadAllCompletions() {
-        let url = completionsFileURL
-
-        guard fileManager.fileExists(atPath: url.path),
-              let content = try? String(contentsOf: url, encoding: .utf8) else {
-            completions = []
-            return
-        }
-
-        let lines = content.components(separatedBy: .newlines).filter { !$0.isEmpty }
-
-        completions = lines.compactMap { line in
-            guard let data = line.data(using: .utf8) else { return nil }
-            return try? decoder.decode(MedicationCompletion.self, from: data)
-        }
-
+        completions = JSONFileStorage.loadJSONL(from: completionsFileName, inDataDirectory: true, logger: logger)
         logger.info("Loaded \(self.completions.count) medication completions")
     }
 
     private func saveCompletions() {
-        ensureDataDirectoryExists()
-
-        let lines = completions.compactMap { completion -> String? in
-            guard let data = try? encoder.encode(completion) else { return nil }
-            return String(data: data, encoding: .utf8)
-        }
-
-        let content = lines.joined(separator: "\n")
-        let url = completionsFileURL
-
-        do {
-            try content.write(to: url, atomically: true, encoding: .utf8)
-        } catch {
-            logger.error("Failed to save medication completions: \(error.localizedDescription)")
-        }
+        JSONFileStorage.saveJSONL(completions, to: completionsFileName, inDataDirectory: true, logger: logger)
     }
 
     /// Clean up old completions (older than 90 days)

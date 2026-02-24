@@ -42,17 +42,12 @@ class SocializationStore: ObservableObject {
     // MARK: - Storage
 
     private let fileName = "socialization.json"
-    private let logger = Logger(subsystem: "nl.jaapstronks.Ollie", category: "SocializationStore")
+    private let logger = Logger.ollie(category: "SocializationStore")
     private let cloudKit = CloudKitService.shared
 
     private var cancellables = Set<AnyCancellable>()
     private var pendingCloudSaves: [Exposure] = []
     private var pendingCloudDeletes: [Exposure] = []
-
-    private var fileURL: URL {
-        FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-            .appendingPathComponent(fileName)
-    }
 
     // MARK: - Init
 
@@ -253,40 +248,21 @@ class SocializationStore: ObservableObject {
     // MARK: - Local Persistence
 
     private func loadExposures() {
-        guard FileManager.default.fileExists(atPath: fileURL.path) else {
-            exposuresByItem = [:]
-            return
-        }
-
-        do {
-            let data = try Data(contentsOf: fileURL)
-            let decoder = JSONDecoder()
-            decoder.dateDecodingStrategy = .iso8601
-            let container = try decoder.decode(ExposureDataContainer.self, from: data)
+        if let container: ExposureDataContainer = JSONFileStorage.loadObject(from: fileName, logger: logger) {
             exposuresByItem = container.exposuresByItem
             startedDate = container.startedDate
             logger.info("Loaded \(self.allExposures.count) exposures")
-        } catch {
-            logger.error("Failed to load exposures: \(error.localizedDescription)")
+        } else {
             exposuresByItem = [:]
         }
     }
 
     private func saveExposures() {
-        do {
-            let encoder = JSONEncoder()
-            encoder.dateEncodingStrategy = .iso8601
-            encoder.outputFormatting = .prettyPrinted
-
-            let container = ExposureDataContainer(
-                exposuresByItem: exposuresByItem,
-                startedDate: startedDate ?? Date()
-            )
-            let data = try encoder.encode(container)
-            try data.write(to: fileURL, options: .atomic)
-        } catch {
-            logger.error("Failed to save exposures: \(error.localizedDescription)")
-        }
+        let container = ExposureDataContainer(
+            exposuresByItem: exposuresByItem,
+            startedDate: startedDate ?? Date()
+        )
+        JSONFileStorage.saveObject(container, to: fileName, logger: logger)
     }
 
     // MARK: - CloudKit Operations

@@ -63,6 +63,23 @@ public final class CloudKitService: ObservableObject {
         )
     }()
 
+    private lazy var exposureService: ExposureCloudService = {
+        ExposureCloudService(
+            deviceID: deviceID,
+            getDatabase: { [weak self] in
+                guard let self = self else { return CKContainer.default().privateCloudDatabase }
+                return self.isParticipant ? self.sharedDatabase : self.privateDatabase
+            },
+            getZoneID: { [weak self] in
+                guard let self = self else { return CKRecordZone.ID(zoneName: "OllieEvents", ownerName: CKCurrentUserDefaultName) }
+                return self.isParticipant ? (self.participantZoneID ?? self.zoneID) : self.zoneID
+            },
+            isCloudAvailable: { [weak self] in
+                self?.isCloudAvailable ?? false
+            }
+        )
+    }()
+
     // MARK: - Published State
 
     @Published public private(set) var isSyncing = false
@@ -75,7 +92,7 @@ public final class CloudKitService: ObservableObject {
 
     private var serverChangeToken: CKServerChangeToken?
     private var participantZoneID: CKRecordZone.ID? // Zone ID when viewing shared data
-    private let logger = Logger(subsystem: "nl.jaapstronks.Ollie", category: "CloudKit")
+    private let logger = Logger.ollie(category: "CloudKit")
     private let deviceID: String
     private var shareManagerCancellable: AnyCancellable?
 
@@ -184,10 +201,20 @@ public final class CloudKitService: ObservableObject {
         // Check if we have stored participant zone info
         if let ownerName = UserDefaults.standard.string(forKey: UserDefaultsKey.participantZoneOwner),
            let zoneName = UserDefaults.standard.string(forKey: UserDefaultsKey.participantZoneName) {
-            participantZoneID = CKRecordZone.ID(zoneName: zoneName, ownerName: ownerName)
-            isParticipant = true
-            logger.info("Loaded participant zone: \(zoneName) owned by \(ownerName)")
-            return
+
+            // Security: Verify the cached zone still exists in shared database
+            // This prevents using stale/tampered zone IDs
+            let cachedZoneID = CKRecordZone.ID(zoneName: zoneName, ownerName: ownerName)
+            if await verifyParticipantZone(cachedZoneID) {
+                participantZoneID = cachedZoneID
+                isParticipant = true
+                logger.info("Verified participant zone: \(zoneName) owned by \(ownerName)")
+                return
+            } else {
+                // Cached zone is invalid - clear it
+                logger.warning("Cached participant zone no longer valid, clearing")
+                clearParticipantZoneCache()
+            }
         }
 
         // Check shared database for any shared zones
@@ -201,6 +228,23 @@ public final class CloudKitService: ObservableObject {
 
             logger.info("Found shared zone, switching to participant mode")
         }
+    }
+
+    /// Verify that a participant zone ID is valid (exists in shared database)
+    private func verifyParticipantZone(_ zoneID: CKRecordZone.ID) async -> Bool {
+        do {
+            let zones = try await zoneManager.allSharedZones()
+            return zones.contains { $0.zoneID == zoneID }
+        } catch {
+            logger.error("Failed to verify participant zone: \(error.localizedDescription)")
+            return false
+        }
+    }
+
+    /// Clear cached participant zone info
+    private func clearParticipantZoneCache() {
+        UserDefaults.standard.removeObject(forKey: UserDefaultsKey.participantZoneOwner)
+        UserDefaults.standard.removeObject(forKey: UserDefaultsKey.participantZoneName)
     }
 
     // MARK: - Save Events
@@ -480,10 +524,16 @@ public final class CloudKitService: ObservableObject {
         return try await shareManager.fetchExistingShare()
     }
 
-    /// Refresh the list of share participants
+    /// Refresh the list of share participants and share state
     public func refreshShareParticipants() async {
         guard isCloudAvailable else { return }
         await shareManager.refreshShareParticipants()
+    }
+
+    /// Update share state (call after share sheet is dismissed)
+    public func updateShareState() async {
+        guard isCloudAvailable else { return }
+        await shareManager.updateShareState()
     }
 
     /// Stop sharing (remove all participants)
@@ -588,152 +638,26 @@ public final class CloudKitService: ObservableObject {
         UserDefaults.standard.removeObject(forKey: UserDefaultsKey.serverChangeToken)
         UserDefaults.standard.removeObject(forKey: UserDefaultsKey.lastSyncDate)
         UserDefaults.standard.removeObject(forKey: UserDefaultsKey.migrationCompleted)
-        UserDefaults.standard.removeObject(forKey: UserDefaultsKey.participantZoneOwner)
-        UserDefaults.standard.removeObject(forKey: UserDefaultsKey.participantZoneName)
+        clearParticipantZoneCache()
 
         logger.info("CloudKit state reset")
     }
 
-    // MARK: - Socialization Exposures
-
-    private let exposureRecordType = "SocializationExposure"
+    // MARK: - Socialization Exposures (delegated to ExposureCloudService)
 
     /// Save an exposure to CloudKit
     public func saveExposure(_ exposure: Exposure) async throws {
-        guard isCloudAvailable else {
-            throw CloudKitError.notAvailable
-        }
-
-        let targetZoneID = isParticipant ? (participantZoneID ?? zoneID) : zoneID
-        let record = createExposureRecord(from: exposure, in: targetZoneID)
-        let database = isParticipant ? sharedDatabase : privateDatabase
-
-        do {
-            _ = try await database.save(record)
-            logger.info("Saved exposure to CloudKit: \(exposure.itemId)")
-        } catch let error as CKError {
-            logger.error("Failed to save exposure: \(error.localizedDescription)")
-            throw CloudKitError.saveFailed(error.localizedDescription)
-        }
+        try await exposureService.saveExposure(exposure)
     }
 
     /// Delete an exposure from CloudKit
     public func deleteExposure(_ exposure: Exposure) async throws {
-        guard isCloudAvailable else {
-            throw CloudKitError.notAvailable
-        }
-
-        let targetZoneID = isParticipant ? (participantZoneID ?? zoneID) : zoneID
-        let recordID = CKRecord.ID(recordName: exposure.id.uuidString, zoneID: targetZoneID)
-        let database = isParticipant ? sharedDatabase : privateDatabase
-
-        do {
-            try await database.deleteRecord(withID: recordID)
-            logger.info("Deleted exposure from CloudKit: \(exposure.id)")
-        } catch let error as CKError {
-            if error.code != .unknownItem {
-                throw CloudKitError.deleteFailed(error.localizedDescription)
-            }
-        }
+        try await exposureService.deleteExposure(exposure)
     }
 
     /// Fetch all exposures from CloudKit
     public func fetchAllExposures() async throws -> [Exposure] {
-        guard isCloudAvailable else {
-            throw CloudKitError.notAvailable
-        }
-
-        let predicate = NSPredicate(value: true)
-        let query = CKQuery(recordType: exposureRecordType, predicate: predicate)
-        query.sortDescriptors = [NSSortDescriptor(key: "exposureDate", ascending: false)]
-
-        var allExposures: [Exposure] = []
-
-        if isParticipant {
-            let exposures = try await fetchExposuresFromDatabase(sharedDatabase, query: query, zoneID: participantZoneID ?? zoneID)
-            allExposures.append(contentsOf: exposures)
-        } else {
-            let privateExposures = try await fetchExposuresFromDatabase(privateDatabase, query: query, zoneID: zoneID)
-            allExposures.append(contentsOf: privateExposures)
-        }
-
-        return allExposures.uniqued(on: \.id)
-    }
-
-    private func fetchExposuresFromDatabase(_ database: CKDatabase, query: CKQuery, zoneID: CKRecordZone.ID) async throws -> [Exposure] {
-        do {
-            let (results, _) = try await database.records(matching: query, inZoneWith: zoneID)
-
-            var exposures: [Exposure] = []
-            for (_, result) in results {
-                if case .success(let record) = result,
-                   let exposure = createExposure(from: record) {
-                    exposures.append(exposure)
-                }
-            }
-
-            return exposures
-        } catch let error as CKError {
-            if error.code == .zoneNotFound {
-                return []
-            }
-            throw error
-        }
-    }
-
-    // MARK: - Exposure Record Conversion
-
-    private func createExposureRecord(from exposure: Exposure, in zoneID: CKRecordZone.ID) -> CKRecord {
-        let recordID = CKRecord.ID(recordName: exposure.id.uuidString, zoneID: zoneID)
-        let record = CKRecord(recordType: exposureRecordType, recordID: recordID)
-
-        record["localId"] = exposure.id.uuidString as CKRecordValue
-        record["itemId"] = exposure.itemId as CKRecordValue
-        record["exposureDate"] = exposure.date as CKRecordValue
-        record["distance"] = exposure.distance.rawValue as CKRecordValue
-        record["reaction"] = exposure.reaction.rawValue as CKRecordValue
-        record["deviceId"] = deviceID as CKRecordValue
-        record["createdAt"] = exposure.createdAt as CKRecordValue
-        record["modifiedAt"] = exposure.modifiedAt as CKRecordValue
-
-        if let note = exposure.note {
-            record["note"] = note as CKRecordValue
-        }
-
-        return record
-    }
-
-    private func createExposure(from record: CKRecord) -> Exposure? {
-        guard let itemId = record["itemId"] as? String,
-              let exposureDate = record["exposureDate"] as? Date,
-              let distanceRaw = record["distance"] as? String,
-              let distance = ExposureDistance(rawValue: distanceRaw),
-              let reactionRaw = record["reaction"] as? String,
-              let reaction = SocializationReaction(rawValue: reactionRaw) else {
-            return nil
-        }
-
-        let id: UUID
-        if let localIdString = record["localId"] as? String,
-           let localId = UUID(uuidString: localIdString) {
-            id = localId
-        } else {
-            id = UUID(uuidString: record.recordID.recordName) ?? UUID()
-        }
-
-        let createdAt = record["createdAt"] as? Date ?? exposureDate
-        let modifiedAt = record["modifiedAt"] as? Date ?? exposureDate
-
-        return Exposure(
-            id: id,
-            itemId: itemId,
-            date: exposureDate,
-            distance: distance,
-            reaction: reaction,
-            note: record["note"] as? String,
-            createdAt: createdAt,
-            modifiedAt: modifiedAt
-        )
+        try await exposureService.fetchAllExposures()
     }
 }
 

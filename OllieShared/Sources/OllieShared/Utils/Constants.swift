@@ -6,9 +6,23 @@
 
 import Foundation
 import CoreGraphics
+import OSLog
 
 /// App-wide constants (non-profile-specific)
 public enum Constants {
+    // MARK: - App Identifiers
+
+    /// Logger subsystem identifier
+    public static let loggerSubsystem = "nl.jaapstronks.Ollie"
+
+    /// Watch logger subsystem identifier
+    public static let watchLoggerSubsystem = "nl.jaapstronks.Ollie.watchkitapp"
+
+    /// App group identifier for shared data
+    public static let appGroupIdentifier = "group.jaapstronks.Ollie"
+
+    // MARK: - Storage
+
     /// Data directory name within app documents
     public static let dataDirectoryName = "data"
 
@@ -76,5 +90,23 @@ public enum Constants {
     public static func isNightTimeNow() -> Bool {
         let hour = Calendar.current.component(.hour, from: Date())
         return isNightTime(hour: hour)
+    }
+}
+
+// MARK: - Logger Extension
+
+public extension Logger {
+    /// Create a logger with the Ollie app subsystem
+    /// - Parameter category: The logging category (e.g., "EventStore", "ProfileStore")
+    /// - Returns: A configured Logger instance
+    static func ollie(category: String) -> Logger {
+        Logger(subsystem: Constants.loggerSubsystem, category: category)
+    }
+
+    /// Create a logger with the Ollie Watch subsystem
+    /// - Parameter category: The logging category
+    /// - Returns: A configured Logger instance for the watch app
+    static func ollieWatch(category: String) -> Logger {
+        Logger(subsystem: Constants.watchLoggerSubsystem, category: category)
     }
 }

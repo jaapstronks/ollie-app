@@ -299,7 +299,7 @@ struct GlassDestructiveButtonStyle: ButtonStyle {
         configuration.label
             .font(.body)
             .fontWeight(.medium)
-            .foregroundStyle(.ollieDanger)
+            .foregroundStyle(Color.ollieDanger)
             .padding(.horizontal, 24)
             .padding(.vertical, 14)
             .frame(maxWidth: .infinity)
@@ -412,7 +412,7 @@ extension ButtonStyle where Self == GlassDestructiveButtonStyle {
                         }
                         .padding()
                         .background(Color.white.opacity(0.1))
-                        .cornerRadius(12)
+                        .cornerRadius(LayoutConstants.cornerRadiusM)
                     }
                     .buttonStyle(.glassScale)
                 }

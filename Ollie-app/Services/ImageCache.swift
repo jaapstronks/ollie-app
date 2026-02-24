@@ -4,6 +4,7 @@
 //
 //  High-performance image caching with async loading for thumbnails and photos
 
+import OllieShared
 import UIKit
 import os
 
@@ -12,7 +13,7 @@ actor ImageCache {
     static let shared = ImageCache()
 
     private let cache = NSCache<NSString, UIImage>()
-    private let logger = Logger(subsystem: "nl.jaapstronks.Ollie", category: "ImageCache")
+    private let logger = Logger.ollie(category: "ImageCache")
 
     /// In-flight loading tasks to prevent duplicate loads
     private var loadingTasks: [String: Task<UIImage?, Never>] = [:]

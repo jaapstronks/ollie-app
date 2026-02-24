@@ -44,11 +44,6 @@ class SpotStore: ObservableObject {
 
     private let fileName = "spots.json"
 
-    private var fileURL: URL {
-        FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-            .appendingPathComponent(fileName)
-    }
-
     // MARK: - Init
 
     init() {
@@ -127,32 +122,11 @@ class SpotStore: ObservableObject {
     // MARK: - Persistence
 
     private func loadSpots() {
-        guard FileManager.default.fileExists(atPath: fileURL.path) else {
-            spots = []
-            return
-        }
-
-        do {
-            let data = try Data(contentsOf: fileURL)
-            let decoder = JSONDecoder()
-            decoder.dateDecodingStrategy = .iso8601
-            spots = try decoder.decode([WalkSpot].self, from: data)
-        } catch {
-            logger.error("Failed to load spots: \(error.localizedDescription)")
-            spots = []
-        }
+        spots = JSONFileStorage.loadArray(from: fileName, logger: logger)
     }
 
     private func saveSpots() {
-        do {
-            let encoder = JSONEncoder()
-            encoder.dateEncodingStrategy = .iso8601
-            encoder.outputFormatting = .prettyPrinted
-            let data = try encoder.encode(spots)
-            try data.write(to: fileURL, options: .atomic)
-        } catch {
-            logger.error("Failed to save spots: \(error.localizedDescription)")
-        }
+        JSONFileStorage.saveArray(spots, to: fileName, logger: logger)
     }
 
     // MARK: - CloudKit Sync Stubs

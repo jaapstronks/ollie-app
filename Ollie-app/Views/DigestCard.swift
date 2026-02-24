@@ -101,7 +101,7 @@ struct DigestChips: View {
                         .padding(.horizontal, 10)
                         .padding(.vertical, 4)
                         .background(Color(.tertiarySystemBackground))
-                        .cornerRadius(12)
+                        .cornerRadius(LayoutConstants.cornerRadiusM)
                 }
             }
         }

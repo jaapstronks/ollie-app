@@ -41,7 +41,7 @@ struct OnboardingConfirmStep: View {
             }
             .padding()
             .background(Color(.secondarySystemBackground))
-            .cornerRadius(12)
+            .cornerRadius(LayoutConstants.cornerRadiusM)
             .padding(.horizontal)
 
             Spacer()
@@ -56,7 +56,7 @@ struct OnboardingConfirmStep: View {
                         .padding()
                         .background(Color.accentColor)
                         .foregroundColor(.white)
-                        .cornerRadius(12)
+                        .cornerRadius(LayoutConstants.cornerRadiusM)
                 }
             }
         }

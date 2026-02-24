@@ -167,7 +167,7 @@ struct GlassStatusPill: View {
             }
             .padding()
             .background(Color.white.opacity(0.1))
-            .cornerRadius(12)
+            .cornerRadius(LayoutConstants.cornerRadiusM)
 
             // Status pills
             HStack(spacing: 12) {

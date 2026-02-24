@@ -1,27 +1,26 @@
 //
-//  IntentDataStore.swift
-//  Ollie-app
+//  WatchIntentDataStore.swift
+//  OllieWatch
 //
-//  Lightweight shared data access for App Intents via App Group
+//  Watch-specific data store for writing events to App Group
+//  Similar to IntentDataStore but without WidgetKit dependency
 
 import Foundation
 import OllieShared
-import WidgetKit
 import os
 
-/// Lightweight data store for App Intents
-/// Uses App Group container for shared access with main app
-final class IntentDataStore {
-    static let shared = IntentDataStore()
+/// Watch-specific data store for event logging
+/// Writes to App Group container for main app to pick up
+final class WatchIntentDataStore {
+    static let shared = WatchIntentDataStore()
 
     static let suiteName = Constants.appGroupIdentifier
-    static let profileKey = "sharedProfile"
     static let dataDirectoryName = "data"
 
     private let fileManager = FileManager.default
     private let encoder: JSONEncoder
     private let decoder: JSONDecoder
-    private let logger = Logger.ollie(category: "IntentDataStore")
+    private let logger = Logger.ollieWatch(category: "WatchIntentDataStore")
 
     private init() {
         encoder = JSONEncoder()
@@ -55,34 +54,12 @@ final class IntentDataStore {
         dataDirectoryURL?.appendingPathComponent("\(date.dateString).jsonl")
     }
 
-    // MARK: - Profile
-
-    /// Load the shared profile from App Group UserDefaults
-    func loadProfile() -> SharedProfile? {
-        guard let sharedDefaults = UserDefaults(suiteName: Self.suiteName),
-              let data = sharedDefaults.data(forKey: Self.profileKey),
-              let profile = try? JSONDecoder().decode(SharedProfile.self, from: data) else {
-            return nil
-        }
-        return profile
-    }
-
-    /// Save a shared profile to App Group UserDefaults
-    func saveProfile(_ profile: SharedProfile) {
-        guard let sharedDefaults = UserDefaults(suiteName: Self.suiteName),
-              let data = try? JSONEncoder().encode(profile) else {
-            return
-        }
-        sharedDefaults.set(data, forKey: Self.profileKey)
-    }
-
     // MARK: - Events
 
-    /// Add an event via Siri/Shortcuts
-    /// Events are saved to the App Group container for the main app to pick up
+    /// Add an event to the App Group container
     func addEvent(_ event: PuppyEvent) throws {
         guard let dataDir = dataDirectoryURL else {
-            throw IntentDataStoreError.containerNotAvailable
+            throw WatchDataStoreError.containerNotAvailable
         }
 
         // Ensure data directory exists
@@ -93,7 +70,7 @@ final class IntentDataStore {
         // Get file URL for event's date
         let eventDate = event.time.startOfDay
         guard let fileURL = self.fileURL(for: eventDate) else {
-            throw IntentDataStoreError.containerNotAvailable
+            throw WatchDataStoreError.containerNotAvailable
         }
 
         // Read existing events
@@ -118,10 +95,9 @@ final class IntentDataStore {
         let content = lines.joined(separator: "\n")
         try content.write(to: fileURL, atomically: true, encoding: .utf8)
 
-        logger.info("Intent logged event: \(event.type.rawValue)")
+        logger.info("Watch logged event: \(event.type.rawValue)")
 
-        // Notify widgets to refresh
-        WidgetCenter.shared.reloadAllTimelines()
+        // Note: No WidgetCenter refresh here - widgets are iOS only
     }
 
     /// Read events for a specific date from App Group container
@@ -138,34 +114,6 @@ final class IntentDataStore {
             guard let data = line.data(using: .utf8) else { return nil }
             return try? decoder.decode(PuppyEvent.self, from: data)
         }.sorted { $0.time > $1.time }
-    }
-
-    /// Get the most recent event of a specific type
-    func lastEvent(ofType type: EventType) -> PuppyEvent? {
-        let today = Date()
-
-        // Check today first
-        let todayEvents = readEvents(for: today)
-        if let event = todayEvents.ofType(type).first {
-            return event
-        }
-
-        // Check previous days (up to 7 days back)
-        var date = Calendar.current.date(byAdding: .day, value: -1, to: today)!
-        for _ in 0..<7 {
-            let dayEvents = readEvents(for: date)
-            if let event = dayEvents.ofType(type).first {
-                return event
-            }
-            date = Calendar.current.date(byAdding: .day, value: -1, to: date)!
-        }
-
-        return nil
-    }
-
-    /// Check if puppy is currently sleeping (has a sleep event without matching wake up)
-    func isCurrentlySleeping() -> Bool {
-        return ongoingSleepEvent() != nil
     }
 
     /// Get the ongoing sleep event (if puppy is currently sleeping)
@@ -196,19 +144,13 @@ final class IntentDataStore {
 
 // MARK: - Errors
 
-enum IntentDataStoreError: Error, LocalizedError {
+enum WatchDataStoreError: Error, LocalizedError {
     case containerNotAvailable
-    case profileNotFound
-    case loggingDisabled
 
     var errorDescription: String? {
         switch self {
         case .containerNotAvailable:
             return "App Group container not available"
-        case .profileNotFound:
-            return "Please set up your puppy profile first"
-        case .loggingDisabled:
-            return "Your free trial has ended. Please upgrade to continue logging."
         }
     }
 }

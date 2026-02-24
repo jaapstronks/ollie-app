@@ -15,9 +15,7 @@ struct TodayView: View {
     @ObservedObject var weatherService: WeatherService
     let onSettingsTap: () -> Void
 
-    @State private var dragOffset: CGFloat = 0
     @State private var selectedPhotoEvent: PuppyEvent?
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         VStack(spacing: 0) {
@@ -28,7 +26,7 @@ struct TodayView: View {
             if viewModel.shouldShowTrialBanner {
                 TrialBanner(
                     daysRemaining: viewModel.freeDaysRemaining,
-                    onTap: { viewModel.sheetCoordinator.presentSheet(.upgradePrompt) }
+                    onTap: { viewModel.sheetCoordinator.presentSheet(.olliePlus) }
                 )
             }
 
@@ -68,7 +66,11 @@ struct TodayView: View {
             }
         }
         // Swipe gestures for day navigation
-        .gesture(dayNavigationGesture)
+        .dayNavigation(
+            canGoForward: viewModel.canGoForward,
+            onPreviousDay: viewModel.goToPreviousDay,
+            onNextDay: viewModel.goToNextDay
+        )
         .task {
             await weatherService.fetchForecasts()
         }
@@ -251,38 +253,6 @@ struct TodayView: View {
                 .frame(minHeight: CGFloat(viewModel.events.count * 80))
             }
         }
-    }
-
-    // MARK: - Gestures
-
-    private var dayNavigationGesture: some Gesture {
-        DragGesture()
-            .onChanged { value in
-                dragOffset = value.translation.width
-            }
-            .onEnded { value in
-                let threshold: CGFloat = 50
-                if value.translation.width > threshold {
-                    HapticFeedback.selection()
-                    if reduceMotion {
-                        viewModel.goToPreviousDay()
-                    } else {
-                        withAnimation {
-                            viewModel.goToPreviousDay()
-                        }
-                    }
-                } else if value.translation.width < -threshold && viewModel.canGoForward {
-                    HapticFeedback.selection()
-                    if reduceMotion {
-                        viewModel.goToNextDay()
-                    } else {
-                        withAnimation {
-                            viewModel.goToNextDay()
-                        }
-                    }
-                }
-                dragOffset = 0
-            }
     }
 
 }

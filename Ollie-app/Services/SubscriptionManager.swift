@@ -6,6 +6,7 @@
 
 import Combine
 import Foundation
+import OllieShared
 import StoreKit
 import UIKit
 import os

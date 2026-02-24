@@ -11,7 +11,6 @@ import TipKit
 struct TimelineView: View {
     @ObservedObject var viewModel: TimelineViewModel
     @ObservedObject var weatherService: WeatherService
-    @State private var dragOffset: CGFloat = 0
     @StateObject private var mediaCaptureViewModel = MediaCaptureViewModel(mediaStore: MediaStore())
     @State private var selectedPhotoEvent: PuppyEvent?
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -39,7 +38,7 @@ struct TimelineView: View {
             if viewModel.shouldShowTrialBanner {
                 TrialBanner(
                     daysRemaining: viewModel.freeDaysRemaining,
-                    onTap: { viewModel.sheetCoordinator.presentSheet(.upgradePrompt) }
+                    onTap: { viewModel.sheetCoordinator.presentSheet(.olliePlus) }
                 )
             }
 
@@ -109,36 +108,10 @@ struct TimelineView: View {
             )
         }
         // Swipe gestures for day navigation
-        .gesture(
-            DragGesture()
-                .onChanged { value in
-                    dragOffset = value.translation.width
-                }
-                .onEnded { value in
-                    let threshold: CGFloat = 50
-                    if value.translation.width > threshold {
-                        // Swipe right -> previous day
-                        HapticFeedback.selection()
-                        if reduceMotion {
-                            viewModel.goToPreviousDay()
-                        } else {
-                            withAnimation {
-                                viewModel.goToPreviousDay()
-                            }
-                        }
-                    } else if value.translation.width < -threshold && viewModel.canGoForward {
-                        // Swipe left -> next day
-                        HapticFeedback.selection()
-                        if reduceMotion {
-                            viewModel.goToNextDay()
-                        } else {
-                            withAnimation {
-                                viewModel.goToNextDay()
-                            }
-                        }
-                    }
-                    dragOffset = 0
-                }
+        .dayNavigation(
+            canGoForward: viewModel.canGoForward,
+            onPreviousDay: viewModel.goToPreviousDay,
+            onNextDay: viewModel.goToNextDay
         )
         // All sheets from shared modifier
         .timelineSheetHandling(
@@ -187,7 +160,7 @@ struct UndoBanner: View {
         }
         .padding()
         .background(Color.black.opacity(0.85))
-        .cornerRadius(12)
+        .cornerRadius(LayoutConstants.cornerRadiusM)
         .padding(.horizontal)
         .accessibilityElement(children: .combine)
         .accessibilityLabel(Strings.Timeline.eventDeleted)

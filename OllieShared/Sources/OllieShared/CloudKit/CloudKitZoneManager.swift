@@ -15,7 +15,7 @@ public struct CloudKitZoneManager: Sendable {
     public let zoneID: CKRecordZone.ID
     public let zoneName: String
 
-    private let logger = Logger(subsystem: "nl.jaapstronks.Ollie", category: "CloudKitZone")
+    private let logger = Logger.ollie(category: "CloudKitZone")
 
     public init(
         privateDatabase: CKDatabase,

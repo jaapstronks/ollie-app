@@ -18,7 +18,7 @@ class ProfileStore: ObservableObject {
     private let decoder: JSONDecoder
 
     /// App Group suite name for sharing with Intents/Widgets
-    private static let appGroupSuiteName = "group.jaapstronks.Ollie"
+    private static let appGroupSuiteName = Constants.appGroupIdentifier
 
     init() {
         encoder = JSONEncoder()
@@ -76,13 +76,6 @@ class ProfileStore: ObservableObject {
     func updateWalkSchedule(_ schedule: WalkSchedule) {
         guard var currentProfile = profile else { return }
         currentProfile.walkSchedule = schedule
-        saveProfile(currentProfile)
-    }
-
-    /// Unlock premium for the current profile
-    func unlockPremium() {
-        guard var currentProfile = profile else { return }
-        currentProfile.isPremiumUnlocked = true
         saveProfile(currentProfile)
     }
 

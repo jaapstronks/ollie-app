@@ -16,7 +16,7 @@ public final class CloudKitShareManager: ObservableObject {
     private let zoneID: CKRecordZone.ID
     private let zoneManager: CloudKitZoneManager
 
-    private let logger = Logger(subsystem: "nl.jaapstronks.Ollie", category: "CloudKitShare")
+    private let logger = Logger.ollie(category: "CloudKitShare")
 
     // MARK: - Published State
 
@@ -37,13 +37,13 @@ public final class CloudKitShareManager: ObservableObject {
 
     // MARK: - Share Creation
 
-    /// Create a share for the events zone
+    /// Create a share for the events zone (does NOT update UI state - caller should call updateShareState after sheet is dismissed)
     public func createShare() async throws -> CKShare {
         // Ensure zone exists
         try await zoneManager.createZoneIfNeeded()
 
-        // Check if share already exists
-        if let existingShare = try await fetchExistingShare() {
+        // Check if share already exists (pure fetch, no side effects)
+        if let existingShare = try await fetchShareRecord() {
             return existingShare
         }
 
@@ -54,29 +54,19 @@ public final class CloudKitShareManager: ObservableObject {
 
         _ = try await privateDatabase.save(share)
 
-        isShared = true
-        await refreshShareParticipants()
-
         logger.info("Created new share for zone")
         return share
     }
 
     // MARK: - Share Fetching
 
-    /// Fetch existing share for the zone
-    public func fetchExistingShare() async throws -> CKShare? {
+    /// Pure fetch - gets share record without updating any UI state
+    private func fetchShareRecord() async throws -> CKShare? {
         do {
             let zone = try await privateDatabase.recordZone(for: zoneID)
 
             if let shareRef = zone.share {
-                let share = try await privateDatabase.record(for: shareRef.recordID) as? CKShare
-
-                if share != nil {
-                    isShared = true
-                    await refreshShareParticipants()
-                }
-
-                return share
+                return try await privateDatabase.record(for: shareRef.recordID) as? CKShare
             }
         } catch let error as CKError {
             if error.code == .zoneNotFound {
@@ -88,15 +78,32 @@ public final class CloudKitShareManager: ObservableObject {
         return nil
     }
 
+    /// Fetch existing share for the zone (updates UI state)
+    public func fetchExistingShare() async throws -> CKShare? {
+        let share = try await fetchShareRecord()
+        // Don't update state here - let caller decide when to update
+        return share
+    }
+
+    /// Update the shared state based on current CloudKit status
+    public func updateShareState() async {
+        do {
+            if let share = try await fetchShareRecord() {
+                isShared = true
+                updateParticipants(from: share)
+            } else {
+                isShared = false
+                shareParticipants = []
+            }
+        } catch {
+            logger.error("Failed to update share state: \(error.localizedDescription)")
+        }
+    }
+
     // MARK: - Participants
 
-    /// Refresh the list of share participants
-    public func refreshShareParticipants() async {
-        guard let share = try? await fetchExistingShare() else {
-            shareParticipants = []
-            return
-        }
-
+    /// Update participants from a share object (no async fetch)
+    private func updateParticipants(from share: CKShare) {
         shareParticipants = share.participants.compactMap { participant in
             guard participant.role != .owner else { return nil }
 
@@ -120,12 +127,18 @@ public final class CloudKitShareManager: ObservableObject {
         }
     }
 
+    /// Refresh the list of share participants
+    public func refreshShareParticipants() async {
+        await updateShareState()
+    }
+
     // MARK: - Stop Sharing
 
     /// Stop sharing (remove all participants)
     public func stopSharing() async throws {
-        guard let share = try await fetchExistingShare() else {
-            // No share exists, reset state anyway
+        // Fetch without side effects
+        guard let share = try await fetchShareRecord() else {
+            // No share exists, reset state
             isShared = false
             shareParticipants = []
             logger.info("No share to stop, reset state")

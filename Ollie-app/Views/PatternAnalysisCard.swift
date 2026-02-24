@@ -23,7 +23,7 @@ struct PatternAnalysisCard: View {
         }
         .padding()
         .background(Color(.secondarySystemBackground))
-        .cornerRadius(12)
+        .cornerRadius(LayoutConstants.cornerRadiusM)
     }
 
     private var triggersWithData: [PatternTrigger] {

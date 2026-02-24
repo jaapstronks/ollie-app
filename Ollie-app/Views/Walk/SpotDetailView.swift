@@ -105,7 +105,7 @@ struct SpotDetailView: View {
                 }
                 .padding()
                 .background(Color(.secondarySystemGroupedBackground))
-                .cornerRadius(12)
+                .cornerRadius(LayoutConstants.cornerRadiusM)
                 .padding(.horizontal)
 
                 // Actions

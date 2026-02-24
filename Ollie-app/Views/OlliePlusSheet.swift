@@ -421,7 +421,7 @@ struct SubscriptionSuccessView: View {
                     .frame(height: 50)
                     .background(Color.ollieAccent)
                     .foregroundStyle(.white)
-                    .cornerRadius(12)
+                    .cornerRadius(LayoutConstants.cornerRadiusM)
             }
             .padding(.horizontal, 24)
             .padding(.bottom, 24)

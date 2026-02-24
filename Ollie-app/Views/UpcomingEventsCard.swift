@@ -26,6 +26,11 @@ struct ActionableEventCard: View {
                 iconSize: 40
             )
 
+            // Weather info for walks
+            if actionableItem.item.itemType == .walk, let weatherIcon = actionableItem.item.weatherIcon {
+                weatherBadge(icon: weatherIcon)
+            }
+
             // Action button
             Button {
                 onLogEvent(actionableItem.item.itemType.eventType, actionableItem.item.targetTime)
@@ -37,6 +42,39 @@ struct ActionableEventCard: View {
         .padding(.horizontal, 14)
         .padding(.vertical, 12)
         .glassStatusCard(tintColor: indicatorColor)
+    }
+
+    // MARK: - Weather Badge
+
+    @ViewBuilder
+    private func weatherBadge(icon: String) -> some View {
+        let item = actionableItem.item
+
+        HStack(spacing: 6) {
+            Image(systemName: icon)
+                .font(.subheadline)
+                .symbolRenderingMode(.multicolor)
+
+            if let temp = item.temperature {
+                Text("\(temp)°")
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+            }
+
+            if item.rainWarning {
+                HStack(spacing: 2) {
+                    Image(systemName: "drop.fill")
+                        .font(.caption2)
+                    Text(Strings.Weather.rainExpected)
+                        .font(.caption)
+                }
+                .foregroundStyle(.red)
+            }
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 6)
+        .background(Color(.tertiarySystemBackground))
+        .clipShape(Capsule())
     }
 
     // MARK: - Computed Properties
@@ -280,7 +318,7 @@ struct UpcomingEventsCard: View {
 
 // MARK: - Previews
 
-#Preview("Actionable - Approaching") {
+#Preview("Actionable - Approaching (sunny)") {
     VStack {
         ActionableEventCard(
             actionableItem: ActionableItem(
@@ -289,7 +327,9 @@ struct UpcomingEventsCard: View {
                     label: "Afternoon walk",
                     detail: "2/9 walks",
                     targetTime: Date().addingTimeInterval(8 * 60),
-                    itemType: .walk
+                    itemType: .walk,
+                    weatherIcon: "sun.max.fill",
+                    temperature: 18
                 ),
                 state: .approaching(minutesUntil: 8)
             ),
@@ -300,7 +340,7 @@ struct UpcomingEventsCard: View {
     .padding()
 }
 
-#Preview("Actionable - Due") {
+#Preview("Actionable - Due (meal)") {
     VStack {
         ActionableEventCard(
             actionableItem: ActionableItem(
@@ -320,7 +360,29 @@ struct UpcomingEventsCard: View {
     .padding()
 }
 
-#Preview("Actionable - Overdue") {
+#Preview("Actionable - Due (walk, cloudy)") {
+    VStack {
+        ActionableEventCard(
+            actionableItem: ActionableItem(
+                item: UpcomingItem(
+                    icon: "figure.walk",
+                    label: "Afternoon walk",
+                    detail: "2/9 walks",
+                    targetTime: Date(),
+                    itemType: .walk,
+                    weatherIcon: "cloud.fill",
+                    temperature: 14
+                ),
+                state: .due
+            ),
+            onLogEvent: { _, _ in }
+        )
+        Spacer()
+    }
+    .padding()
+}
+
+#Preview("Actionable - Overdue (rainy)") {
     VStack {
         ActionableEventCard(
             actionableItem: ActionableItem(
@@ -329,7 +391,10 @@ struct UpcomingEventsCard: View {
                     label: "Morning walk",
                     detail: "1/9 walks",
                     targetTime: Date().addingTimeInterval(-25 * 60),
-                    itemType: .walk
+                    itemType: .walk,
+                    weatherIcon: "cloud.rain.fill",
+                    temperature: 8,
+                    rainWarning: true
                 ),
                 state: .overdue(minutesOverdue: 25)
             ),

@@ -62,7 +62,7 @@ struct WidgetData: Codable {
 
 /// Reads widget data from shared App Group UserDefaults
 struct WidgetDataReader {
-    static let suiteName = "group.jaapstronks.Ollie"
+    static let suiteName = Constants.appGroupIdentifier
     static let dataKey = "widgetData"
 
     static func read() -> WidgetData? {

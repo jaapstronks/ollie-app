@@ -50,7 +50,7 @@ struct SpotMapView: View {
                 }
             }
         }
-        .cornerRadius(12)
+        .cornerRadius(LayoutConstants.cornerRadiusM)
     }
 }
 
