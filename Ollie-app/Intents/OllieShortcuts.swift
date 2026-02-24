@@ -8,17 +8,18 @@ import AppIntents
 import OllieShared
 
 /// Provides App Shortcuts for Siri and the Shortcuts app
+/// Note: "Ollie" in phrases refers to the app name, not the dog's name.
+/// The dog's actual name (from profile) is used in responses.
 struct OllieShortcuts: AppShortcutsProvider {
     static var appShortcuts: [AppShortcut] {
         // Log pee outside - most common action
         AppShortcut(
             intent: LogPeeOutsideIntent(),
             phrases: [
-                "Log pee outside with \(.applicationName)",
-                "\(.applicationName) pee outside",
-                "\(.applicationName) peed outside",
-                "Puppy peed outside in \(.applicationName)",
-                "Log outdoor pee with \(.applicationName)"
+                "Log pee outside in \(.applicationName)",
+                "My puppy peed outside in \(.applicationName)",
+                "My dog peed outside in \(.applicationName)",
+                "Log outdoor pee in \(.applicationName)"
             ],
             shortTitle: "Pee Outside",
             systemImageName: "drop.fill"
@@ -28,37 +29,49 @@ struct OllieShortcuts: AppShortcutsProvider {
         AppShortcut(
             intent: LogPoopOutsideIntent(),
             phrases: [
-                "Log poop outside with \(.applicationName)",
-                "\(.applicationName) poop outside",
-                "\(.applicationName) pooped outside",
-                "Puppy pooped outside in \(.applicationName)",
-                "Log outdoor poop with \(.applicationName)"
+                "Log poop outside in \(.applicationName)",
+                "My puppy pooped outside in \(.applicationName)",
+                "My dog pooped outside in \(.applicationName)",
+                "Log outdoor poop in \(.applicationName)"
             ],
             shortTitle: "Poop Outside",
             systemImageName: "circle.inset.filled"
         )
 
-        // Log potty (with parameters)
+        // Log pee inside (accident)
         AppShortcut(
-            intent: LogPottyIntent(),
+            intent: LogPeeInsideIntent(),
             phrases: [
-                "Log potty with \(.applicationName)",
-                "\(.applicationName) went potty",
-                "Log toilet with \(.applicationName)"
+                "Log pee inside in \(.applicationName)",
+                "My puppy peed inside in \(.applicationName)",
+                "My dog had an accident in \(.applicationName)",
+                "Log indoor pee in \(.applicationName)"
             ],
-            shortTitle: "Log Potty",
+            shortTitle: "Pee Inside",
             systemImageName: "drop.fill"
+        )
+
+        // Log poop inside (accident)
+        AppShortcut(
+            intent: LogPoopInsideIntent(),
+            phrases: [
+                "Log poop inside in \(.applicationName)",
+                "My puppy pooped inside in \(.applicationName)",
+                "My dog pooped inside in \(.applicationName)",
+                "Log indoor poop in \(.applicationName)"
+            ],
+            shortTitle: "Poop Inside",
+            systemImageName: "circle.inset.filled"
         )
 
         // Log meal
         AppShortcut(
             intent: LogMealIntent(),
             phrases: [
-                "Log meal with \(.applicationName)",
-                "\(.applicationName) ate",
-                "\(.applicationName) had food",
-                "Puppy ate in \(.applicationName)",
-                "Log eating with \(.applicationName)"
+                "Log meal in \(.applicationName)",
+                "My puppy ate in \(.applicationName)",
+                "My dog had food in \(.applicationName)",
+                "Log feeding in \(.applicationName)"
             ],
             shortTitle: "Log Meal",
             systemImageName: "fork.knife"
@@ -68,10 +81,10 @@ struct OllieShortcuts: AppShortcutsProvider {
         AppShortcut(
             intent: LogWalkIntent(),
             phrases: [
-                "Log walk with \(.applicationName)",
-                "\(.applicationName) went for a walk",
-                "Puppy walked in \(.applicationName)",
-                "Log dog walk with \(.applicationName)"
+                "Log walk in \(.applicationName)",
+                "My puppy went for a walk in \(.applicationName)",
+                "Log dog walk in \(.applicationName)",
+                "We went for a walk in \(.applicationName)"
             ],
             shortTitle: "Log Walk",
             systemImageName: "figure.walk"
@@ -81,11 +94,10 @@ struct OllieShortcuts: AppShortcutsProvider {
         AppShortcut(
             intent: LogSleepIntent(),
             phrases: [
-                "Log sleep with \(.applicationName)",
-                "\(.applicationName) is sleeping",
-                "\(.applicationName) went to sleep",
-                "Puppy is sleeping in \(.applicationName)",
-                "Log nap with \(.applicationName)"
+                "Log sleep in \(.applicationName)",
+                "My puppy is sleeping in \(.applicationName)",
+                "My dog fell asleep in \(.applicationName)",
+                "Log nap in \(.applicationName)"
             ],
             shortTitle: "Log Sleep",
             systemImageName: "moon.zzz.fill"
@@ -95,40 +107,40 @@ struct OllieShortcuts: AppShortcutsProvider {
         AppShortcut(
             intent: LogWakeUpIntent(),
             phrases: [
-                "Log wake up with \(.applicationName)",
-                "\(.applicationName) woke up",
-                "\(.applicationName) is awake",
-                "Puppy woke up in \(.applicationName)"
+                "Log wake up in \(.applicationName)",
+                "My puppy woke up in \(.applicationName)",
+                "My dog is awake in \(.applicationName)",
+                "Log awake in \(.applicationName)"
             ],
             shortTitle: "Log Wake Up",
             systemImageName: "sun.max.fill"
         )
 
-        // Get potty status
+        // Get potty status (combined pee and poop)
         AppShortcut(
             intent: GetPottyStatusIntent(),
             phrases: [
-                "When did puppy last pee in \(.applicationName)",
-                "\(.applicationName) potty status",
-                "When did \(.applicationName) last pee",
-                "Last pee time in \(.applicationName)",
-                "Check potty status with \(.applicationName)"
+                "Potty status in \(.applicationName)",
+                "When did my puppy last go potty in \(.applicationName)",
+                "Check potty status in \(.applicationName)",
+                "When did my dog last pee in \(.applicationName)"
             ],
             shortTitle: "Potty Status",
             systemImageName: "clock.fill"
         )
 
-        // Get poop status
+        // Get comprehensive puppy status
         AppShortcut(
-            intent: GetPoopStatusIntent(),
+            intent: GetPuppyStatusIntent(),
             phrases: [
-                "When did puppy last poop in \(.applicationName)",
-                "\(.applicationName) poop status",
-                "When did \(.applicationName) last poop",
-                "Last poop time in \(.applicationName)"
+                "How is my puppy in \(.applicationName)",
+                "Puppy status in \(.applicationName)",
+                "How is my dog doing in \(.applicationName)",
+                "Is my puppy sleeping in \(.applicationName)",
+                "How long has my puppy been asleep in \(.applicationName)"
             ],
-            shortTitle: "Poop Status",
-            systemImageName: "clock.fill"
+            shortTitle: "Puppy Status",
+            systemImageName: "pawprint.fill"
         )
     }
 }

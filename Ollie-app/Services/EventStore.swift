@@ -42,6 +42,7 @@ class EventStore: ObservableObject {
     init() {
         setupSyncCoordinatorBindings()
         setupFileMonitoring()
+        setupWatchEventObserver()
         loadEvents(for: currentDate)
 
         // Set up sync coordinator callback
@@ -76,6 +77,24 @@ class EventStore: ObservableObject {
             self?.handleFileSystemChange()
         }
         fileMonitor.startMonitoring(directoryURL: dataDir)
+    }
+
+    private func setupWatchEventObserver() {
+        NotificationCenter.default.addObserver(
+            forName: .watchEventReceived,
+            object: nil,
+            queue: .main
+        ) { [weak self] notification in
+            guard let self = self else { return }
+
+            Task { @MainActor in
+                self.logger.info("Received event from Apple Watch, reloading...")
+
+                // Invalidate cache and reload events for current date
+                self.fileStore.invalidateCache(for: self.currentDate)
+                self.loadEvents(for: self.currentDate)
+            }
+        }
     }
 
     // MARK: - Public Methods
@@ -162,6 +181,9 @@ class EventStore: ObservableObject {
             let currentStreak = StreakCalculations.calculateCurrentStreak(events: allEvents)
             ReviewService.shared.checkForStreakMilestoneReview(currentStreak: currentStreak)
         }
+
+        // Sync to Apple Watch
+        WatchSyncService.shared.syncToWatch()
     }
 
     /// Delete an event
@@ -183,6 +205,9 @@ class EventStore: ObservableObject {
         Task {
             await syncCoordinator.deleteFromCloud(event)
         }
+
+        // Sync to Apple Watch
+        WatchSyncService.shared.syncToWatch()
     }
 
     /// Update an existing event
@@ -202,6 +227,9 @@ class EventStore: ObservableObject {
             Task {
                 await syncCoordinator.saveToCloud(updatedEvent)
             }
+
+            // Sync to Apple Watch
+            WatchSyncService.shared.syncToWatch()
         }
     }
 

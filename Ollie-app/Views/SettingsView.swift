@@ -25,14 +25,14 @@ struct SettingsView: View {
     @State private var showingError = false
     @State private var overwriteExisting = false
     @State private var showingNotificationSettings = false
-    @State private var showingUpgradePrompt = false
-    @State private var showingPurchaseSuccess = false
+    @State private var showingOlliePlusSheet = false
+    @State private var showingSubscriptionSuccess = false
     @State private var showingMealEdit = false
     @State private var showingExerciseEdit = false
-    @State private var shareToPresent: IdentifiableShare?
+    @State private var activeShare: CKShare?
+    @State private var isPreparingShare = false
     @State private var shareError: String?
     @State private var showStopSharingConfirm = false
-    @ObservedObject var storeKit = StoreKitManager.shared
     @AppStorage(UserPreferences.Key.appearanceMode.rawValue) private var appearanceMode = AppearanceMode.system.rawValue
 
     var body: some View {
@@ -59,13 +59,14 @@ struct SettingsView: View {
                     // Notifications (kept inline - has local state)
                     notificationSection(profile)
 
-                    // Premium (extracted to PremiumSection.swift)
+                    // Siri & Shortcuts help
+                    SiriSection()
+
+                    // Ollie+ subscription (extracted to PremiumSection.swift)
                     PremiumSection(
                         profile: profile,
-                        storeKit: storeKit,
-                        showingUpgradePrompt: $showingUpgradePrompt,
-                        showingPurchaseSuccess: $showingPurchaseSuccess,
-                        onPurchase: { await handlePurchase(for: profile) }
+                        showingOlliePlusSheet: $showingOlliePlusSheet,
+                        showingSubscriptionSuccess: $showingSubscriptionSuccess
                     )
                 }
 
@@ -109,11 +110,20 @@ struct SettingsView: View {
         .sheet(isPresented: $showingExerciseEdit) {
             ExerciseEditView(profileStore: profileStore)
         }
-        .sheet(item: $shareToPresent) { identifiableShare in
-            CloudSharingView(
-                share: identifiableShare.share,
-                container: CKContainer(identifier: "iCloud.nl.jaapstronks.Ollie")
-            )
+        .sheet(isPresented: Binding(
+            get: { activeShare != nil },
+            set: { if !$0 { activeShare = nil } }
+        )) {
+            if let share = activeShare {
+                CloudSharingView(
+                    share: share,
+                    container: CKContainer(identifier: "iCloud.nl.jaapstronks.Ollie"),
+                    onDismiss: {
+                        activeShare = nil
+                        Task { await cloudKit.updateShareState() }
+                    }
+                )
+            }
         }
         .alert(Strings.CloudSharing.stopSharing, isPresented: $showStopSharingConfirm) {
             Button(Strings.Common.cancel, role: .cancel) {}
@@ -307,10 +317,31 @@ struct SettingsView: View {
                 }
 
                 Button {
-                    Task { await showExistingShare() }
+                    Task { await manageExistingShare() }
                 } label: {
-                    Label(Strings.CloudSharing.manageSharing, systemImage: "person.badge.plus")
+                    HStack {
+                        Label(Strings.CloudSharing.manageSharing, systemImage: "person.2.fill")
+                        if isPreparingShare {
+                            Spacer()
+                            ProgressView()
+                        }
+                    }
                 }
+                .disabled(isPreparingShare)
+
+                // Add another person button
+                Button {
+                    Task { await prepareAndShowShare() }
+                } label: {
+                    HStack {
+                        Label(Strings.CloudSharing.inviteAnother, systemImage: "person.badge.plus")
+                        if isPreparingShare {
+                            Spacer()
+                            ProgressView()
+                        }
+                    }
+                }
+                .disabled(isPreparingShare)
 
                 Button(role: .destructive) {
                     HapticFeedback.warning()
@@ -321,10 +352,17 @@ struct SettingsView: View {
             } else {
                 // Not shared yet - show invite button
                 Button {
-                    Task { await createAndShowShare() }
+                    Task { await prepareAndShowShare() }
                 } label: {
-                    Label(Strings.CloudSharing.shareWithPartner, systemImage: "person.badge.plus")
+                    HStack {
+                        Label(Strings.CloudSharing.shareWithPartner, systemImage: "person.badge.plus")
+                        if isPreparingShare {
+                            Spacer()
+                            ProgressView()
+                        }
+                    }
                 }
+                .disabled(isPreparingShare)
             }
 
             if let error = shareError {
@@ -339,31 +377,47 @@ struct SettingsView: View {
                 Text(Strings.CloudSharing.sharingDescription)
             }
         }
+        .task {
+            // Refresh share state when entering settings
+            await cloudKit.updateShareState()
+        }
     }
 
     // MARK: - Sharing Actions
 
-    private func createAndShowShare() async {
+    /// Create or fetch share FIRST, then show sheet
+    private func prepareAndShowShare() async {
+        guard !isPreparingShare else { return }
+        isPreparingShare = true
         shareError = nil
+
         do {
+            // Create or fetch existing share BEFORE showing sheet
             let share = try await cloudKit.createShare()
-            shareToPresent = IdentifiableShare(share: share)
+            activeShare = share
         } catch {
-            shareError = "Could not create share: \(error.localizedDescription)"
+            shareError = error.localizedDescription
         }
+
+        isPreparingShare = false
     }
 
-    private func showExistingShare() async {
+    private func manageExistingShare() async {
+        guard !isPreparingShare else { return }
+        isPreparingShare = true
         shareError = nil
+
         do {
             if let share = try await cloudKit.fetchExistingShare() {
-                shareToPresent = IdentifiableShare(share: share)
+                activeShare = share
             } else {
                 shareError = Strings.CloudSharing.couldNotLoadShare
             }
         } catch {
             shareError = Strings.CloudSharing.couldNotLoadShare
         }
+
+        isPreparingShare = false
     }
 
     private func stopSharing() async {
@@ -377,20 +431,6 @@ struct SettingsView: View {
 
     // MARK: - Actions
 
-    private func handlePurchase(for profile: PuppyProfile) async {
-        do {
-            try await storeKit.purchase(for: profile.id)
-            profileStore.unlockPremium()
-            showingUpgradePrompt = false
-            showingPurchaseSuccess = true
-            HapticFeedback.success()
-        } catch StoreKitError.userCancelled {
-            // User cancelled, do nothing
-        } catch {
-            HapticFeedback.error()
-        }
-    }
-
     private func startImport() {
         Task {
             do {
@@ -402,14 +442,6 @@ struct SettingsView: View {
             }
         }
     }
-}
-
-// MARK: - Helper Types
-
-/// Wrapper to make CKShare work with .sheet(item:)
-struct IdentifiableShare: Identifiable {
-    let id = UUID()
-    let share: CKShare
 }
 
 #Preview {
