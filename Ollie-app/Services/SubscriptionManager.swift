@@ -96,7 +96,7 @@ class SubscriptionManager: ObservableObject {
                 if let expirationDate = transaction.expirationDate {
                     if expirationDate > Date() {
                         // Detect trial vs active subscription
-                        if transaction.offerType == .introductory {
+                        if transaction.offer?.type == .introductory {
                             subscriptionStatus = .trial(until: expirationDate)
                         } else {
                             subscriptionStatus = .active(until: expirationDate)
@@ -148,7 +148,7 @@ class SubscriptionManager: ObservableObject {
 
                 // Update subscription status - detect trial vs active
                 if let expirationDate = transaction.expirationDate {
-                    if transaction.offerType == .introductory {
+                    if transaction.offer?.type == .introductory {
                         subscriptionStatus = .trial(until: expirationDate)
                     } else {
                         subscriptionStatus = .active(until: expirationDate)
@@ -225,7 +225,7 @@ class SubscriptionManager: ObservableObject {
             if let expirationDate = transaction.expirationDate {
                 if expirationDate > Date() {
                     // Detect trial vs active subscription
-                    if transaction.offerType == .introductory {
+                    if transaction.offer?.type == .introductory {
                         subscriptionStatus = .trial(until: expirationDate)
                     } else {
                         subscriptionStatus = .active(until: expirationDate)
@@ -252,7 +252,7 @@ class SubscriptionManager: ObservableObject {
     /// Open App Store subscription management
     @available(iOS 15.0, *)
     func manageSubscription() async {
-        if let windowScene = await UIApplication.shared.connectedScenes.first as? UIWindowScene {
+        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
             do {
                 try await AppStore.showManageSubscriptions(in: windowScene)
             } catch {

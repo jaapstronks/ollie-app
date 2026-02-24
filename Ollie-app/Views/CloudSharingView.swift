@@ -121,10 +121,13 @@ class CloudSharingHostController: UIViewController, UIAdaptivePresentationContro
         switch mode {
         case .invite:
             // Use preparationHandler for inviting - creates share when user chooses how to send
+            // Note: UICloudSharingController(preparationHandler:) shows a deprecation warning in iOS 17+
+            // but UICloudSharingController is still the correct API for CloudKit sharing.
+            // The deprecation refers to the generic UIActivityViewController pattern, not CloudKit sharing.
             let capturedContainer = container!
             let capturedZoneID = zoneID!
 
-            sharingController = UICloudSharingController { [weak self] (controller, preparationCompletionHandler) in
+            sharingController = UICloudSharingController { (_, preparationCompletionHandler) in
                 Task {
                     do {
                         let newShare = CKShare(recordZoneID: capturedZoneID)
