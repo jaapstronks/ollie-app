@@ -101,6 +101,7 @@ class CloudSharingHostController: UIViewController, UIAdaptivePresentationContro
 
     private var hasPresented = false
     private var sharingController: UICloudSharingController?
+    private var isPreparingShare = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -117,17 +118,11 @@ class CloudSharingHostController: UIViewController, UIAdaptivePresentationContro
         presentSharingController()
     }
 
-    @available(iOS, introduced: 13.0, deprecated: 17.0, message: "Uses deprecated CloudKit sharing API")
     private func presentSharingController() {
         switch mode {
         case .invite:
-            let capturedContainer = container!
-            let capturedZoneID = zoneID!
-
-            sharingController = Self.makeSharingController(
-                container: capturedContainer,
-                zoneID: capturedZoneID
-            )
+            // Create the share first, then present the controller
+            prepareAndPresentInviteController()
 
         case .manage:
             guard let existingShare = share else {
@@ -135,8 +130,48 @@ class CloudSharingHostController: UIViewController, UIAdaptivePresentationContro
                 dismissAndNotify()
                 return
             }
-            sharingController = UICloudSharingController(share: existingShare, container: container)
+            presentController(with: existingShare)
         }
+    }
+
+    /// Creates a new share and presents the sharing controller (iOS 17+ approach)
+    private func prepareAndPresentInviteController() {
+        guard !isPreparingShare else { return }
+        isPreparingShare = true
+
+        // Show loading indicator
+        let spinner = UIActivityIndicatorView(style: .large)
+        spinner.center = view.center
+        spinner.startAnimating()
+        view.addSubview(spinner)
+
+        Task {
+            do {
+                // Create and save the share first
+                let newShare = CKShare(recordZoneID: zoneID)
+                newShare[CKShare.SystemFieldKey.title] = "Ollie - Puppy Events"
+                newShare.publicPermission = .none
+
+                _ = try await container.privateCloudDatabase.save(newShare)
+                logger.info("Share created and saved successfully")
+
+                await MainActor.run {
+                    spinner.removeFromSuperview()
+                    self.presentController(with: newShare)
+                }
+            } catch {
+                logger.error("Failed to create share: \(error.localizedDescription)")
+                await MainActor.run {
+                    spinner.removeFromSuperview()
+                    self.showError(error)
+                }
+            }
+        }
+    }
+
+    /// Presents the UICloudSharingController with an existing share
+    private func presentController(with share: CKShare) {
+        sharingController = UICloudSharingController(share: share, container: container)
 
         guard let sharingController = sharingController else { return }
 
@@ -144,10 +179,22 @@ class CloudSharingHostController: UIViewController, UIAdaptivePresentationContro
         sharingController.delegate = coordinator
         sharingController.presentationController?.delegate = self
 
-        // Present the sharing controller
         present(sharingController, animated: true) {
             logger.info("Sharing controller presented")
         }
+    }
+
+    /// Shows an error alert and dismisses
+    private func showError(_ error: Error) {
+        let alert = UIAlertController(
+            title: Strings.Common.error,
+            message: error.localizedDescription,
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: Strings.Common.ok, style: .default) { [weak self] _ in
+            self?.dismissAndNotify()
+        })
+        present(alert, animated: true)
     }
 
     // Called when user dismisses the sharing controller by swiping down or tapping outside
@@ -172,45 +219,6 @@ class CloudSharingHostController: UIViewController, UIAdaptivePresentationContro
         // Notify when this host controller is being dismissed
         if isBeingDismissed || isMovingFromParent {
             coordinator?.onDismiss()
-        }
-    }
-
-    // MARK: - Factory Method
-
-    /// Creates a UICloudSharingController with a preparation handler for creating new shares.
-    /// This uses the deprecated `init(preparationHandler:)` which is still the correct API
-    /// for CloudKit zone sharing. The deprecation refers to generic UIActivityViewController usage,
-    /// not CloudKit sharing specifically. There is no modern replacement for this use case.
-    /// - Note: Suppress deprecation warning - this is intentional, Apple has not provided
-    ///   a replacement API for CloudKit zone sharing with preparation handlers.
-    @available(iOS, introduced: 13.0, deprecated: 17.0, message: "Intentional use of deprecated CloudKit sharing API")
-    private static func makeSharingController(
-        container: CKContainer,
-        zoneID: CKRecordZone.ID
-    ) -> UICloudSharingController {
-        // swiftlint:disable:next deprecated_initializer
-        UICloudSharingController { (_, preparationCompletionHandler) in
-            Task {
-                do {
-                    let newShare = CKShare(recordZoneID: zoneID)
-                    newShare[CKShare.SystemFieldKey.title] = "Ollie - Puppy Events"
-                    newShare.publicPermission = .none
-
-                    // Save the share to CloudKit
-                    _ = try await container.privateCloudDatabase.save(newShare)
-
-                    logger.info("Share created and saved successfully")
-
-                    await MainActor.run {
-                        preparationCompletionHandler(newShare, container, nil)
-                    }
-                } catch {
-                    logger.error("Failed to create share: \(error.localizedDescription)")
-                    await MainActor.run {
-                        preparationCompletionHandler(nil, nil, error)
-                    }
-                }
-            }
         }
     }
 }

@@ -210,6 +210,61 @@ struct SpotAnnotation: Identifiable {
     let isFavorite: Bool
 }
 
+/// Compact map preview showing all spots (non-interactive)
+struct AllSpotsPreviewMap: View {
+    let spots: [WalkSpot]
+
+    private var cameraPosition: MapCameraPosition {
+        if let first = spots.first {
+            var minLat = first.latitude
+            var maxLat = first.latitude
+            var minLon = first.longitude
+            var maxLon = first.longitude
+
+            for spot in spots {
+                minLat = min(minLat, spot.latitude)
+                maxLat = max(maxLat, spot.latitude)
+                minLon = min(minLon, spot.longitude)
+                maxLon = max(maxLon, spot.longitude)
+            }
+
+            let centerLat = (minLat + maxLat) / 2
+            let centerLon = (minLon + maxLon) / 2
+            let spanLat = max(0.01, (maxLat - minLat) * 1.5)
+            let spanLon = max(0.01, (maxLon - minLon) * 1.5)
+
+            return .region(MKCoordinateRegion(
+                center: CLLocationCoordinate2D(latitude: centerLat, longitude: centerLon),
+                span: MKCoordinateSpan(latitudeDelta: spanLat, longitudeDelta: spanLon)
+            ))
+        } else {
+            return .region(MKCoordinateRegion(
+                center: CLLocationCoordinate2D(latitude: 51.9225, longitude: 4.4792),
+                span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
+            ))
+        }
+    }
+
+    var body: some View {
+        Map(initialPosition: cameraPosition) {
+            ForEach(spots) { spot in
+                Annotation("", coordinate: CLLocationCoordinate2D(latitude: spot.latitude, longitude: spot.longitude)) {
+                    Image(systemName: spot.isFavorite ? "star.circle.fill" : "mappin.circle.fill")
+                        .font(.title3)
+                        .foregroundStyle(spot.isFavorite ? .yellow : .ollieAccent)
+                        .background(
+                            Circle()
+                                .fill(.white)
+                                .frame(width: 16, height: 16)
+                        )
+                }
+            }
+        }
+        .mapControlVisibility(.hidden)
+        .allowsHitTesting(false)
+    }
+}
+
 #Preview {
     NavigationStack {
         FavoriteSpotsView(spotStore: SpotStore())
