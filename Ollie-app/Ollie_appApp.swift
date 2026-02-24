@@ -56,6 +56,9 @@ struct OllieApp: App {
                 .environmentObject(subscriptionManager)
                 .environmentObject(cloudKit)
                 .task {
+                    // Wire up location manager to weather service
+                    weatherService.setLocationManager(locationManager)
+
                     // Check subscription status on app launch
                     await subscriptionManager.checkSubscriptionStatus()
                     await subscriptionManager.loadProducts()

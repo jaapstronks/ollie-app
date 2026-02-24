@@ -12,20 +12,42 @@ class WeatherService: ObservableObject {
     @Published var isLoading = false
     @Published var lastError: Error?
 
+    // MARK: - Dependencies
+
+    private weak var locationManager: LocationManager?
+
     // MARK: - Cache
 
     private var cache: (forecasts: [HourForecast], fetchedAt: Date, location: (lat: Double, lon: Double))?
     private let cacheValidityMinutes: Double = 30
 
-    // MARK: - Default Location (Rotterdam)
+    // MARK: - Default Location (Rotterdam - fallback when location unavailable)
 
     nonisolated static let defaultLocation = (lat: 51.9225, lon: 4.4792)
 
+    // MARK: - Init
+
+    init(locationManager: LocationManager? = nil) {
+        self.locationManager = locationManager
+    }
+
+    /// Set the location manager (useful when injected via environment)
+    func setLocationManager(_ manager: LocationManager) {
+        self.locationManager = manager
+    }
+
     // MARK: - Public Methods
 
-    /// Fetch hourly forecasts for the given location
+    /// Fetch hourly forecasts using user's current location (or default if unavailable)
+    func fetchForecasts() async {
+        // Use user's location if available, otherwise fall back to default
+        let coordinates = locationManager?.currentCoordinates ?? (Self.defaultLocation.lat, Self.defaultLocation.lon)
+        await fetchForecasts(lat: coordinates.0, lon: coordinates.1)
+    }
+
+    /// Fetch hourly forecasts for a specific location
     /// Uses cached data if available and fresh (< 30 minutes old)
-    func fetchForecasts(lat: Double = defaultLocation.lat, lon: Double = defaultLocation.lon) async {
+    func fetchForecasts(lat: Double, lon: Double) async {
         // Check cache validity
         if let cached = cache,
            cached.location.lat == lat,
@@ -122,8 +144,14 @@ class WeatherService: ObservableObject {
         return nil
     }
 
-    /// Force refresh, bypassing cache
-    func refresh(lat: Double = defaultLocation.lat, lon: Double = defaultLocation.lon) async {
+    /// Force refresh using user's location, bypassing cache
+    func refresh() async {
+        cache = nil
+        await fetchForecasts()
+    }
+
+    /// Force refresh for a specific location, bypassing cache
+    func refresh(lat: Double, lon: Double) async {
         cache = nil
         await fetchForecasts(lat: lat, lon: lon)
     }
