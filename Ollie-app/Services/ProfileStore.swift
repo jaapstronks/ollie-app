@@ -152,6 +152,9 @@ class ProfileStore: ObservableObject {
 
         // Sync to App Group on load for Intents/Widgets
         syncToAppGroup()
+
+        // Also update widget data with profile name on load
+        WidgetDataProvider.shared.updateProfileName(loadedProfile.name)
     }
 
     private func writeProfile() {
@@ -164,6 +167,12 @@ class ProfileStore: ObservableObject {
 
         // Sync minimal profile to App Group for Intents/Widgets
         syncToAppGroup()
+
+        // Update widget data with new profile name
+        WidgetDataProvider.shared.updateProfileName(profile.name)
+
+        // Sync to Apple Watch
+        WatchSyncService.shared.syncToWatch()
     }
 
     // MARK: - App Group Sync
