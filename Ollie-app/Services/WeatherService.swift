@@ -106,50 +106,37 @@ class WeatherService: ObservableObject {
     }
 
     /// Generate smart weather alert if conditions warrant it
+    /// Returns a simple, minimal alert for weather conditions
     func smartAlert(predictedPottyTime: Date?) -> WeatherAlert? {
         let upcoming = upcomingForecasts(hours: 4)
         guard !upcoming.isEmpty else { return nil }
 
         // Check for incoming rain
         if let rainHour = upcoming.first(where: { $0.precipProbability > 60 }) {
-            let timeString = rainHour.time.timeString
-
-            // If rain is coming before predicted potty time
-            if let pottyTime = predictedPottyTime, rainHour.time <= pottyTime {
-                return WeatherAlert(
-                    icon: "cloud.rain.fill",
-                    message: "Regen verwacht om \(timeString) — misschien nu alvast even naar buiten?",
-                    type: .warning
-                )
-            } else {
-                return WeatherAlert(
-                    icon: "cloud.rain.fill",
-                    message: "Regen verwacht om \(timeString)",
-                    type: .info
-                )
-            }
+            return WeatherAlert(
+                icon: "cloud.rain.fill",
+                message: Strings.Weather.rainSoon,
+                type: .warning
+            )
         }
 
         // Check for freezing temperatures
         if let current = upcoming.first, current.freezingWarning {
             return WeatherAlert(
                 icon: "thermometer.snowflake",
-                message: "\(Int(current.temperature))° buiten — kort tuinbezoek is genoeg",
+                message: Strings.Weather.freezing,
                 type: .info
             )
         }
 
-        // Check for good weather window
+        // Check for good weather window (dry ahead)
         let dryHours = upcoming.filter { $0.precipProbability < 20 }
         if dryHours.count >= 3, let first = upcoming.first, first.precipProbability < 20 {
-            if let lastDry = dryHours.last {
-                let untilTime = lastDry.time.addingTimeInterval(3600).hourString
-                return WeatherAlert(
-                    icon: "sun.max.fill",
-                    message: "Droog tot \(untilTime) — goed moment voor een wandeling",
-                    type: .positive
-                )
-            }
+            return WeatherAlert(
+                icon: "sun.max.fill",
+                message: Strings.Weather.dryAhead,
+                type: .positive
+            )
         }
 
         return nil
@@ -193,8 +180,11 @@ class WeatherService: ObservableObject {
         let hourly = response.hourly
         var forecasts: [HourForecast] = []
 
-        let dateFormatter = ISO8601DateFormatter()
-        dateFormatter.formatOptions = [.withFullDate, .withTime, .withDashSeparatorInDate, .withColonSeparatorInTime]
+        // Open-Meteo returns times without seconds: "2026-02-24T14:00"
+        // ISO8601DateFormatter with .withTime expects seconds, so we use a custom DateFormatter
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm"
+        dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
 
         for i in 0..<hourly.time.count {
             guard let time = dateFormatter.date(from: hourly.time[i]) else { continue }

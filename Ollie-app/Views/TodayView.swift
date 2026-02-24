@@ -32,14 +32,13 @@ struct TodayView: View {
 
             ScrollView {
                 VStack(spacing: 16) {
-                    // Weather section (only show for today)
+                    // Weather section (only show for today - compact single line)
                     if Calendar.current.isDateInToday(viewModel.currentDate) {
                         WeatherSection(
                             forecasts: weatherService.upcomingForecasts(hours: 6),
                             alert: weatherService.smartAlert(predictedPottyTime: viewModel.predictedNextPlasTime),
                             isLoading: weatherService.isLoading
                         )
-                        .padding(.vertical, 8)
                     }
 
                     // Status cards section (only for today)

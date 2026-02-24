@@ -26,18 +26,28 @@ struct ActionableEventCard: View {
                 iconSize: 40
             )
 
-            // Weather info for walks
+            // Weather + Action row
             if actionableItem.item.itemType == .walk, let weatherIcon = actionableItem.item.weatherIcon {
-                weatherBadge(icon: weatherIcon)
+                // Side by side layout for walks with weather
+                HStack(spacing: 12) {
+                    weatherBadge(icon: weatherIcon)
+                    Spacer()
+                    Button {
+                        onLogEvent(actionableItem.item.itemType.eventType, actionableItem.item.targetTime)
+                    } label: {
+                        Label(buttonText, systemImage: buttonIcon)
+                    }
+                    .buttonStyle(.glassPill(tint: buttonTint))
+                }
+            } else {
+                // Centered button for meals or walks without weather
+                Button {
+                    onLogEvent(actionableItem.item.itemType.eventType, actionableItem.item.targetTime)
+                } label: {
+                    Label(buttonText, systemImage: buttonIcon)
+                }
+                .buttonStyle(.glassPill(tint: buttonTint))
             }
-
-            // Action button
-            Button {
-                onLogEvent(actionableItem.item.itemType.eventType, actionableItem.item.targetTime)
-            } label: {
-                Label(buttonText, systemImage: buttonIcon)
-            }
-            .buttonStyle(.glassPill(tint: buttonTint))
         }
         .padding(.horizontal, 14)
         .padding(.vertical, 12)

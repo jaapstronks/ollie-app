@@ -36,16 +36,6 @@ extension Strings {
         }
     }
 
-    // MARK: - Weather Alerts
-    enum WeatherAlerts {
-        static func rainExpected(time: String) -> String {
-            String(localized: "Rain expected at \(time) — maybe go outside now?")
-        }
-        static func dryUntil(time: String) -> String {
-            String(localized: "Dry until \(time) — good time for a walk")
-        }
-    }
-
     // MARK: - Widgets
     // Note: Widget extension uses its own String(localized:) calls since it's a separate target.
     // These are documented here for reference and String Catalog sync.

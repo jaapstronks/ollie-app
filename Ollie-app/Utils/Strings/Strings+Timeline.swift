@@ -275,10 +275,14 @@ extension Strings {
         static let afterAccidentGoOutside = String(localized: "After accident — go outside now!")
     }
 
-    // MARK: - Weather Bar
+    // MARK: - Weather
     enum Weather {
         static let loading = String(localized: "Loading weather...")
         static let rainExpected = String(localized: "Rain expected")
+        static let dryAhead = String(localized: "Dry ahead")
+        static let rainSoon = String(localized: "Rain soon")
+        static let freezing = String(localized: "Freezing")
+        static let windy = String(localized: "Windy")
         static func temperature(_ temp: Int) -> String {
             String(localized: "\(temp)°")
         }
