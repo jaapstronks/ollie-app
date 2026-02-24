@@ -21,6 +21,7 @@ struct WidgetData: Codable {
     // MARK: - Sleep Data
     let isCurrentlySleeping: Bool
     let sleepStartTime: Date?  // When current sleep started (if sleeping)
+    let lastWakeTime: Date?    // When puppy last woke up (for awake timer)
 
     // MARK: - Meal Data
     let lastMealTime: Date?
@@ -36,6 +37,68 @@ struct WidgetData: Codable {
     let puppyName: String
     let lastUpdated: Date
 
+    // MARK: - Backwards-compatible decoding
+    // Handles cached data that may be missing newer fields like lastWakeTime
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        lastPlasTime = try container.decodeIfPresent(Date.self, forKey: .lastPlasTime)
+        lastPlasLocation = try container.decodeIfPresent(String.self, forKey: .lastPlasLocation)
+        currentStreak = try container.decode(Int.self, forKey: .currentStreak)
+        bestStreak = try container.decode(Int.self, forKey: .bestStreak)
+        todayPottyCount = try container.decode(Int.self, forKey: .todayPottyCount)
+        todayOutdoorCount = try container.decode(Int.self, forKey: .todayOutdoorCount)
+        isCurrentlySleeping = try container.decode(Bool.self, forKey: .isCurrentlySleeping)
+        sleepStartTime = try container.decodeIfPresent(Date.self, forKey: .sleepStartTime)
+        lastWakeTime = try container.decodeIfPresent(Date.self, forKey: .lastWakeTime)
+        lastMealTime = try container.decodeIfPresent(Date.self, forKey: .lastMealTime)
+        nextScheduledMealTime = try container.decodeIfPresent(Date.self, forKey: .nextScheduledMealTime)
+        mealsLoggedToday = try container.decode(Int.self, forKey: .mealsLoggedToday)
+        mealsExpectedToday = try container.decode(Int.self, forKey: .mealsExpectedToday)
+        lastWalkTime = try container.decodeIfPresent(Date.self, forKey: .lastWalkTime)
+        nextScheduledWalkTime = try container.decodeIfPresent(Date.self, forKey: .nextScheduledWalkTime)
+        puppyName = try container.decode(String.self, forKey: .puppyName)
+        lastUpdated = try container.decode(Date.self, forKey: .lastUpdated)
+    }
+
+    // Memberwise initializer for creating new instances
+    init(
+        lastPlasTime: Date?,
+        lastPlasLocation: String?,
+        currentStreak: Int,
+        bestStreak: Int,
+        todayPottyCount: Int,
+        todayOutdoorCount: Int,
+        isCurrentlySleeping: Bool,
+        sleepStartTime: Date?,
+        lastWakeTime: Date?,
+        lastMealTime: Date?,
+        nextScheduledMealTime: Date?,
+        mealsLoggedToday: Int,
+        mealsExpectedToday: Int,
+        lastWalkTime: Date?,
+        nextScheduledWalkTime: Date?,
+        puppyName: String,
+        lastUpdated: Date
+    ) {
+        self.lastPlasTime = lastPlasTime
+        self.lastPlasLocation = lastPlasLocation
+        self.currentStreak = currentStreak
+        self.bestStreak = bestStreak
+        self.todayPottyCount = todayPottyCount
+        self.todayOutdoorCount = todayOutdoorCount
+        self.isCurrentlySleeping = isCurrentlySleeping
+        self.sleepStartTime = sleepStartTime
+        self.lastWakeTime = lastWakeTime
+        self.lastMealTime = lastMealTime
+        self.nextScheduledMealTime = nextScheduledMealTime
+        self.mealsLoggedToday = mealsLoggedToday
+        self.mealsExpectedToday = mealsExpectedToday
+        self.lastWalkTime = lastWalkTime
+        self.nextScheduledWalkTime = nextScheduledWalkTime
+        self.puppyName = puppyName
+        self.lastUpdated = lastUpdated
+    }
+
     static var placeholder: WidgetData {
         WidgetData(
             lastPlasTime: Date().addingTimeInterval(-45 * 60),
@@ -46,6 +109,7 @@ struct WidgetData: Codable {
             todayOutdoorCount: 3,
             isCurrentlySleeping: false,
             sleepStartTime: nil,
+            lastWakeTime: Date().addingTimeInterval(-90 * 60),
             lastMealTime: Date().addingTimeInterval(-3 * 60 * 60),
             nextScheduledMealTime: Date().addingTimeInterval(1 * 60 * 60),
             mealsLoggedToday: 2,
@@ -94,8 +158,11 @@ class WidgetDataProvider {
         let sleepState = SleepCalculations.currentSleepState(events: allEvents)
         let isCurrentlySleeping = sleepState.isSleeping
         var sleepStartTime: Date? = nil
+        var lastWakeTime: Date? = nil
         if case .sleeping(let since, _) = sleepState {
             sleepStartTime = since
+        } else if case .awake(let since, _) = sleepState {
+            lastWakeTime = since
         }
 
         // MARK: Meal Data
@@ -123,6 +190,7 @@ class WidgetDataProvider {
             todayOutdoorCount: outdoorPotty.count,
             isCurrentlySleeping: isCurrentlySleeping,
             sleepStartTime: sleepStartTime,
+            lastWakeTime: lastWakeTime,
             lastMealTime: lastMeal?.time,
             nextScheduledMealTime: nextMealTime,
             mealsLoggedToday: mealEvents.count,
@@ -173,6 +241,61 @@ class WidgetDataProvider {
             return nil
         }
         return widgetData
+    }
+
+    // MARK: - Profile-Only Update
+
+    /// Update just the puppy name in widget data
+    /// Call this when profile is saved but no events have changed
+    func updateProfileName(_ name: String) {
+        // Read existing widget data and update name
+        if let existing = read() {
+            // Create new data with updated name
+            let updated = WidgetData(
+                lastPlasTime: existing.lastPlasTime,
+                lastPlasLocation: existing.lastPlasLocation,
+                currentStreak: existing.currentStreak,
+                bestStreak: existing.bestStreak,
+                todayPottyCount: existing.todayPottyCount,
+                todayOutdoorCount: existing.todayOutdoorCount,
+                isCurrentlySleeping: existing.isCurrentlySleeping,
+                sleepStartTime: existing.sleepStartTime,
+                lastWakeTime: existing.lastWakeTime,
+                lastMealTime: existing.lastMealTime,
+                nextScheduledMealTime: existing.nextScheduledMealTime,
+                mealsLoggedToday: existing.mealsLoggedToday,
+                mealsExpectedToday: existing.mealsExpectedToday,
+                lastWalkTime: existing.lastWalkTime,
+                nextScheduledWalkTime: existing.nextScheduledWalkTime,
+                puppyName: name,
+                lastUpdated: Date()
+            )
+            write(updated)
+            WidgetCenter.shared.reloadAllTimelines()
+        } else {
+            // No existing data - create minimal data with name
+            let minimal = WidgetData(
+                lastPlasTime: nil,
+                lastPlasLocation: nil,
+                currentStreak: 0,
+                bestStreak: 0,
+                todayPottyCount: 0,
+                todayOutdoorCount: 0,
+                isCurrentlySleeping: false,
+                sleepStartTime: nil,
+                lastWakeTime: nil,
+                lastMealTime: nil,
+                nextScheduledMealTime: nil,
+                mealsLoggedToday: 0,
+                mealsExpectedToday: 3,
+                lastWalkTime: nil,
+                nextScheduledWalkTime: nil,
+                puppyName: name,
+                lastUpdated: Date()
+            )
+            write(minimal)
+            WidgetCenter.shared.reloadAllTimelines()
+        }
     }
 
     // MARK: - Private Methods
