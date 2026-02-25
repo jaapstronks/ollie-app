@@ -58,14 +58,25 @@ Andere apps vertellen je wat je moet doen. Ollie laat je zien wat er werkelijk g
 
 ## Pricing Strategie
 
-**Launch: 100% gratis.**
+**Freemium model: core gratis, Ollie+ voor power users.**
 
-De markt is ziek van paywalls. Ollie's gratis launch genereert:
+De markt is ziek van paywalls. Ollie's gratis core genereert:
 - Maximale downloads en reviews
 - Mond-tot-mond via puppy-eigenaar communities
 - Goodwill en vertrouwen
+- Data-dependency voordat premium zichtbaar wordt
 
-**Toekomstig (v1.2+, alleen met traction):**
-- Ollie Pro: €2.99/maand of €19.99/jaar
-- Geavanceerde analytics, onbeperkt sharing, export, prioriteit features
-- Core logging, potty tracking, training tips blijven ALTIJD gratis
+**Ollie+ (vanaf launch):**
+- €2.99/maand of €24.99/jaar
+- 7 dagen gratis proberen
+- Slimme voorspellingen, geavanceerde analytics, volledige trainingsbibliotheek, foto's, export
+
+**Altijd gratis:**
+- Alle event logging (onbeperkt)
+- Timeline en dag-navigatie
+- Quick-log bar
+- Basis dagstatistieken
+- Clicker tool
+- 10 trainingscommando's
+- Socialisatie-checklist (bekijken)
+- 1 partner sharing
