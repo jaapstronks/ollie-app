@@ -268,8 +268,8 @@ struct TimelineSheetModifiers: ViewModifier {
         case .startActivity(let activityType):
             StartActivitySheet(
                 activityType: activityType,
-                onStartNow: {
-                    viewModel.startActivity(type: activityType)
+                onStartNow: { startTime in
+                    viewModel.startActivity(type: activityType, startTime: startTime)
                 },
                 onLogCompleted: {
                     // Transition to regular quickLog sheet for retrospective logging
@@ -280,7 +280,7 @@ struct TimelineSheetModifiers: ViewModifier {
                     viewModel.sheetCoordinator.dismissSheet()
                 }
             )
-            .presentationDetents([.height(350)])
+            .presentationDetents([.height(350), .medium])
 
         case .endActivity:
             if let activity = viewModel.currentActivity {
@@ -300,6 +300,10 @@ struct TimelineSheetModifiers: ViewModifier {
             } else {
                 EmptyView()
             }
+
+        // Placeholder cases for future sheets (handled elsewhere or not yet implemented)
+        case .weightLog, .trainingLog, .socializationLog, .settings, .profileEdit, .notificationSettings, .walkLog:
+            EmptyView()
         }
     }
 }

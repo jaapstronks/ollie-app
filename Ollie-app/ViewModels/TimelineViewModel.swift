@@ -8,11 +8,40 @@ import OllieShared
 import SwiftUI
 import Combine
 
+/// Unified timeline item - either a regular event or a sleep session
+/// Moved to ViewModel to avoid recomputation on every view render
+enum TimelineItem: Identifiable {
+    case event(PuppyEvent)
+    case sleepSession(SleepSession, note: String?)
+
+    var id: UUID {
+        switch self {
+        case .event(let event): return event.id
+        case .sleepSession(let session, _): return session.id
+        }
+    }
+
+    var sortTime: Date {
+        switch self {
+        case .event(let event): return event.time
+        case .sleepSession(let session, _): return session.startTime
+        }
+    }
+}
+
 /// ViewModel for the timeline view, manages event display and logging
 @MainActor
 class TimelineViewModel: ObservableObject {
     @Published var currentDate: Date = Date()
     @Published var events: [PuppyEvent] = []
+
+    /// Pre-computed timeline items (events + sleep sessions)
+    /// Updated only when events change to avoid O(n²) recomputation on every view render
+    @Published private(set) var timelineItems: [TimelineItem] = []
+
+    /// Celebration trigger for milestone moments
+    @Published var showCelebration = false
+    @Published var celebrationStyle: CelebrationStyle = .milestone
 
     /// Sheet coordinator for all sheet presentations
     @Published var sheetCoordinator = SheetCoordinator()
@@ -51,6 +80,14 @@ class TimelineViewModel: ObservableObject {
 
     /// Last time stats were computed
     private var lastStatsUpdate: Date?
+
+    // MARK: - Combined Sleep + Potty State
+
+    /// Captured potty state at wake time (for post-wake tracking)
+    @Published private(set) var wakeTimePottyState: WakeTimePottyState?
+
+    /// Time of last potty event (for clearing post-wake state)
+    private var lastPottyLogTime: Date?
 
     /// Background notification task (stored for cancellation)
     private var notificationTask: Task<Void, Never>?
@@ -109,7 +146,9 @@ class TimelineViewModel: ObservableObject {
             .sink { [weak self] loadedEvents in
                 guard let self = self else { return }
                 self.events = loadedEvents
-                self.refreshCachedStats()
+                // Rebuild timeline items and refresh stats since events changed
+                self.rebuildTimelineItems()
+                self.refreshCachedStats(force: true)
             }
 
         loadEvents()
@@ -187,15 +226,65 @@ class TimelineViewModel: ObservableObject {
 
     func loadEvents() {
         eventStore.loadEvents(for: currentDate)
-        events = eventStore.events
-        refreshCachedStats()
+        // Don't immediately copy eventStore.events here - it's stale because
+        // EventStore.loadEvents() defers the actual load to the next run loop.
+        // The subscription at init (eventStoreCancellable) will receive the
+        // updated events and call rebuildTimelineItems() + refreshCachedStats().
+    }
+
+    /// Rebuild the pre-computed timeline items from current events
+    /// This avoids O(n²) session building on every view render
+    private func rebuildTimelineItems() {
+        // Build sleep sessions (O(n) with optimized lookup)
+        let sessions = SleepSession.buildSessions(from: events)
+
+        // Create a lookup dictionary for event IDs -> notes (O(1) lookup instead of O(n))
+        let eventNotes: [UUID: String] = Dictionary(
+            uniqueKeysWithValues: events.compactMap { event in
+                guard let note = event.note else { return nil }
+                return (event.id, note)
+            }
+        )
+
+        // Get IDs of events that are part of sessions
+        var sessionEventIds: Set<UUID> = []
+        var sessionNotes: [UUID: String] = [:]
+
+        for session in sessions {
+            sessionEventIds.insert(session.startEventId)
+            if let endId = session.endEventId {
+                sessionEventIds.insert(endId)
+            }
+            // Get note from the sleep event using O(1) dictionary lookup
+            if let note = eventNotes[session.startEventId] {
+                sessionNotes[session.id] = note
+            }
+        }
+
+        // Build timeline items
+        var items: [TimelineItem] = []
+
+        // Add non-sleep events
+        for event in events where !sessionEventIds.contains(event.id) {
+            items.append(.event(event))
+        }
+
+        // Add sleep sessions
+        for session in sessions {
+            items.append(.sleepSession(session, note: sessionNotes[session.id]))
+        }
+
+        // Sort by time (oldest first for timeline display)
+        timelineItems = items.sorted { $0.sortTime < $1.sortTime }
     }
 
     /// Refresh cached stats (debounced, only if data changed)
-    private func refreshCachedStats() {
+    /// - Parameter force: When true, bypasses debounce (use after event changes)
+    private func refreshCachedStats(force: Bool = false) {
         // Debounce: only update if more than 1 second since last update
+        // Skip debounce when force is true (e.g., after event edits)
         let now = Date()
-        if let lastUpdate = lastStatsUpdate, now.timeIntervalSince(lastUpdate) < 1.0 {
+        if !force, let lastUpdate = lastStatsUpdate, now.timeIntervalSince(lastUpdate) < 1.0 {
             return
         }
         lastStatsUpdate = now
@@ -218,31 +307,40 @@ class TimelineViewModel: ObservableObject {
         }
     }
 
-    // MARK: - Premium/Monetization
+    // MARK: - Subscription
 
-    /// Whether the user can log events (premium or still in free period)
-    var canLogEvents: Bool {
-        profileStore.profile?.canLogEvents ?? true
+    /// Subscription manager for Ollie+ status
+    var subscriptionManager: SubscriptionManager {
+        SubscriptionManager.shared
     }
 
-    /// Days remaining in free trial (-1 if premium)
-    var freeDaysRemaining: Int {
-        profileStore.profile?.freeDaysRemaining ?? 21
+    /// Whether user has Ollie+ access
+    var hasOlliePlus: Bool {
+        subscriptionManager.effectiveStatus.hasOlliePlus
     }
 
-    /// Whether to show the trial banner (last 7 days of trial)
-    var shouldShowTrialBanner: Bool {
+    /// Whether to show the Ollie+ upsell banner
+    /// Shows after first week of use if user is on free tier
+    var shouldShowOlliePlusBanner: Bool {
         guard let profile = profileStore.profile else { return false }
-        return !profile.isPremiumUnlocked && profile.freeDaysRemaining > 0 && profile.freeDaysRemaining <= 7
+        // Show if free tier and has been using app for at least 7 days
+        return !hasOlliePlus && profile.daysHome >= 7
+    }
+
+    /// Whether to show the trial banner (during trial period)
+    var shouldShowTrialBanner: Bool {
+        subscriptionManager.effectiveStatus.isInTrial
+    }
+
+    /// Days remaining in trial period (0 if not in trial)
+    var freeDaysRemaining: Int {
+        subscriptionManager.effectiveStatus.trialDaysRemaining ?? 0
     }
 
     // MARK: - Quick Log
 
     func quickLog(type: EventType, suggestedTime: Date? = nil) {
-        guard canLogEvents else {
-            sheetCoordinator.presentSheet(.upgradePrompt)
-            return
-        }
+        // Core logging is always free - no paywall check needed
         // V2: All events now go through QuickLogSheet for time adjustment
         // Pass suggested time for overdue items (e.g., scheduled meal time)
         sheetCoordinator.presentSheet(.quickLog(type, suggestedTime: suggestedTime))
@@ -250,10 +348,7 @@ class TimelineViewModel: ObservableObject {
 
     /// Quick log with immediate location (used by FAB quick actions)
     func quickLogWithLocation(type: EventType, location: EventLocation) {
-        guard canLogEvents else {
-            sheetCoordinator.presentSheet(.upgradePrompt)
-            return
-        }
+        // Core logging is always free - no paywall check needed
         // Log immediately with the provided location
         logEvent(type: type, location: location)
         HapticFeedback.success()
@@ -294,8 +389,11 @@ class TimelineViewModel: ObservableObject {
     // MARK: - Activity Tracking (Walks & Naps)
 
     /// Start a new activity (walk or nap)
-    func startActivity(type: ActivityType) {
-        activityManager.startActivity(type: type)
+    /// - Parameters:
+    ///   - type: The type of activity to start
+    ///   - startTime: Optional custom start time (defaults to now)
+    func startActivity(type: ActivityType, startTime: Date = Date()) {
+        activityManager.startActivity(type: type, startTime: startTime)
     }
 
     /// End the current activity
@@ -332,6 +430,14 @@ class TimelineViewModel: ObservableObject {
 
     /// Log a wake-up event at the specified time (for EndSleepSheet)
     func logWakeUp(time: Date) {
+        // Capture potty state BEFORE logging wake (for post-wake tracking)
+        // Only capture if potty is urgent/overdue
+        if pottyPrediction.urgency.isUrgent {
+            wakeTimePottyState = CombinedStatusCalculations.captureWakeTimePottyState(
+                pottyPrediction: pottyPrediction
+            )
+        }
+
         // Use the currentActivity's sleepSessionId if available (for naps started via activity tracking)
         // Otherwise find it from recent events (for naps logged directly without activity tracking)
         let sleepSessionId: UUID?
@@ -363,20 +469,14 @@ class TimelineViewModel: ObservableObject {
     }
 
     func showAllEvents() {
-        guard canLogEvents else {
-            sheetCoordinator.presentSheet(.upgradePrompt)
-            return
-        }
+        // Core logging is always free - no paywall check needed
         sheetCoordinator.presentSheet(.allEvents)
     }
 
     // MARK: - Potty Quick Log (V3: combined plassen/poepen)
 
     func showPottySheet() {
-        guard canLogEvents else {
-            sheetCoordinator.presentSheet(.upgradePrompt)
-            return
-        }
+        // Core logging is always free - no paywall check needed
         sheetCoordinator.presentSheet(.potty)
     }
 
@@ -411,16 +511,18 @@ class TimelineViewModel: ObservableObject {
     // MARK: - Photo Moment Capture
 
     func openCamera() {
-        guard canLogEvents else {
-            sheetCoordinator.presentSheet(.upgradePrompt)
+        // Photo/video attachments require Ollie+
+        guard subscriptionManager.hasAccess(to: .photoVideoAttachments) else {
+            sheetCoordinator.presentSheet(.olliePlus)
             return
         }
         sheetCoordinator.presentSheet(.mediaPicker(.camera))
     }
 
     func openPhotoLibrary() {
-        guard canLogEvents else {
-            sheetCoordinator.presentSheet(.upgradePrompt)
+        // Photo/video attachments require Ollie+
+        guard subscriptionManager.hasAccess(to: .photoVideoAttachments) else {
+            sheetCoordinator.presentSheet(.olliePlus)
             return
         }
         sheetCoordinator.presentSheet(.mediaPicker(.library))
@@ -464,9 +566,36 @@ class TimelineViewModel: ObservableObject {
             sleepSessionId: sleepSessionId
         )
 
+        // Track potty event time for post-wake state clearing
+        if type == .plassen || type == .poepen {
+            lastPottyLogTime = Date()
+            // Clear post-wake state when potty is logged
+            wakeTimePottyState = nil
+        }
+
+        // Check if this is the user's very first event (before adding)
+        let isFirstEvent = events.isEmpty && eventStore.getEvents(
+            from: Date.distantPast,
+            to: Date()
+        ).isEmpty
+
         eventStore.addEvent(event)
         loadEvents()
         refreshNotifications()
+
+        // Provide audio + haptic feedback for successful log
+        FeedbackManager.logEvent()
+
+        // Trigger celebration for first-ever event
+        if isFirstEvent {
+            triggerCelebration(.milestone)
+        }
+    }
+
+    /// Trigger a celebration animation
+    func triggerCelebration(_ style: CelebrationStyle) {
+        celebrationStyle = style
+        showCelebration = true
     }
 
     /// Log a walk event with optional spot information
@@ -488,6 +617,9 @@ class TimelineViewModel: ObservableObject {
         eventStore.addEvent(event)
         loadEvents()
         refreshNotifications()
+
+        // Provide audio + haptic feedback for successful log
+        FeedbackManager.logEvent()
     }
 
     /// Add a pre-built event (used for photo moments)
@@ -501,7 +633,17 @@ class TimelineViewModel: ObservableObject {
     func updateEvent(_ event: PuppyEvent) {
         eventStore.updateEvent(event)
         loadEvents()
+        // Force refresh stats to ensure week view updates immediately
+        refreshCachedStats(force: true)
         refreshNotifications()
+
+        // Sync activity manager if this is the current nap's sleep event
+        // This ensures the banner shows the correct start time after editing
+        if event.type == .slapen,
+           let sessionId = event.sleepSessionId,
+           activityManager.currentActivity?.sleepSessionId == sessionId {
+            activityManager.updateActivityStartTime(to: event.time)
+        }
     }
 
     /// Show edit sheet for an event
@@ -541,6 +683,8 @@ class TimelineViewModel: ObservableObject {
         // Actually delete
         eventStore.deleteEvent(event)
         loadEvents()
+        // Force refresh stats to ensure week view updates immediately
+        refreshCachedStats(force: true)
         refreshNotifications()
 
         HapticFeedback.warning()
@@ -559,6 +703,8 @@ class TimelineViewModel: ObservableObject {
         guard let event = sheetCoordinator.popLastDeletedEvent() else { return }
         eventStore.addEvent(event)
         loadEvents()
+        // Force refresh stats to ensure week view updates immediately
+        refreshCachedStats(force: true)
         refreshNotifications()
         HapticFeedback.success()
     }
@@ -568,33 +714,7 @@ class TimelineViewModel: ObservableObject {
         sheetCoordinator.dismissUndoBanner()
     }
 
-    // MARK: - Stats
-
-    var lastPlasEvent: PuppyEvent? {
-        eventStore.lastEvent(ofType: .plassen)
-    }
-
-    var minutesSinceLastPlas: Int? {
-        guard let last = lastPlasEvent else { return nil }
-        return Date().minutesSince(last.time)
-    }
-
-    var timeSinceLastPlasText: String {
-        guard let minutes = minutesSinceLastPlas else {
-            return Strings.TimeFormat.noData
-        }
-
-        if minutes < 60 {
-            return Strings.TimeFormat.minutesAgo(minutes)
-        } else {
-            let hours = minutes / 60
-            let mins = minutes % 60
-            if mins == 0 {
-                return Strings.TimeFormat.hoursAgo(hours)
-            }
-            return Strings.TimeFormat.hoursMinutesAgo(hours: hours, minutes: mins)
-        }
-    }
+    // MARK: - Predictions
 
     /// Predicted minutes until next potty break
     var predictedNextPlasMinutes: Int? {
@@ -622,6 +742,34 @@ class TimelineViewModel: ObservableObject {
     var currentSleepState: SleepState {
         let recentEvents = getRecentEvents()
         return SleepCalculations.currentSleepState(events: recentEvents)
+    }
+
+    // MARK: - Combined Sleep + Potty Status
+
+    /// Combined state for sleep + potty status display
+    /// Determines which card(s) to show based on current conditions
+    var combinedSleepPottyState: CombinedSleepPottyState {
+        // Check if wake state should be cleared
+        if CombinedStatusCalculations.shouldClearWakeState(
+            wakeState: wakeTimePottyState,
+            pottyWasLoggedSince: lastPottyLogTime
+        ) {
+            // Clear it asynchronously
+            Task { @MainActor in
+                self.wakeTimePottyState = nil
+            }
+        }
+
+        return CombinedStatusCalculations.calculateCombinedState(
+            sleepState: currentSleepState,
+            pottyPrediction: pottyPrediction,
+            wakeTimePottyState: wakeTimePottyState
+        )
+    }
+
+    /// Clear the post-wake potty state manually
+    func clearPostWakeState() {
+        wakeTimePottyState = nil
     }
 
     // MARK: - Poop Status
@@ -763,6 +911,11 @@ class TimelineViewModel: ObservableObject {
 
     /// Whether current view is showing today
     var isShowingToday: Bool {
+        currentDate.isToday
+    }
+
+    /// Whether user can log events (only for today)
+    var canLogEvents: Bool {
         currentDate.isToday
     }
 

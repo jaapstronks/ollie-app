@@ -14,7 +14,7 @@ import SwiftUI
 
 /// Protocol for activity tracking actions
 protocol ActivityTrackingActions {
-    func startActivity(type: ActivityType)
+    func startActivity(type: ActivityType, startTime: Date)
     func endActivity(minutesAgo: Int, note: String?)
     func cancelActivity()
     func logWakeUp(time: Date)
@@ -51,23 +51,33 @@ class ActivityTrackingManager: ObservableObject {
     // MARK: - Activity Actions
 
     /// Start a new activity (walk or nap)
-    func startActivity(type: ActivityType) {
+    /// - Parameters:
+    ///   - type: The type of activity to start
+    ///   - startTime: Optional custom start time (defaults to now)
+    func startActivity(type: ActivityType, startTime: Date = Date()) {
         var sleepSessionId: UUID? = nil
 
         // For naps, log the sleep event immediately so it appears in timeline
         if type == .nap {
             sleepSessionId = UUID()
-            onLogEvent?(.slapen, nil, nil, nil, nil, sleepSessionId)
+            onLogEvent?(.slapen, startTime, nil, nil, nil, sleepSessionId)
         }
 
         currentActivity = InProgressActivity(
             type: type,
-            startTime: Date(),
+            startTime: startTime,
             sleepSessionId: sleepSessionId
         )
 
         onDismiss?()
         HapticFeedback.success()
+    }
+
+    /// Update the start time of the current activity
+    /// Used when user edits the sleep event in the timeline
+    func updateActivityStartTime(to newTime: Date) {
+        guard currentActivity != nil else { return }
+        currentActivity?.startTime = newTime
     }
 
     /// End the current activity

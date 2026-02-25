@@ -11,11 +11,14 @@ import OllieShared
 /// Sheet offering choice between starting live activity or logging completed one
 struct StartActivitySheet: View {
     let activityType: ActivityType
-    let onStartNow: () -> Void
+    let onStartNow: (Date) -> Void
     let onLogCompleted: () -> Void
     let onCancel: () -> Void
 
     @Environment(\.colorScheme) private var colorScheme
+
+    @State private var isStartNowExpanded = false
+    @State private var selectedStartTime = Date()
 
     var body: some View {
         NavigationStack {
@@ -34,32 +37,69 @@ struct StartActivitySheet: View {
 
                 // Options
                 VStack(spacing: 16) {
-                    // Start now option
-                    Button {
-                        HapticFeedback.medium()
-                        onStartNow()
-                    } label: {
-                        HStack {
-                            Image(systemName: "play.circle.fill")
-                                .font(.title2)
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text(startNowTitle)
-                                    .font(.headline)
-                                Text(startNowDescription)
-                                    .font(.caption)
+                    // Start now option (expandable with time picker)
+                    VStack(spacing: 0) {
+                        Button {
+                            withAnimation(.easeInOut(duration: 0.2)) {
+                                isStartNowExpanded.toggle()
+                            }
+                            HapticFeedback.selection()
+                        } label: {
+                            HStack {
+                                Image(systemName: "play.circle.fill")
+                                    .font(.title2)
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text(startNowTitle)
+                                        .font(.headline)
+                                    Text(startNowDescription)
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                }
+                                Spacer()
+                                Image(systemName: isStartNowExpanded ? "chevron.up" : "chevron.down")
                                     .foregroundStyle(.secondary)
                             }
-                            Spacer()
-                            Image(systemName: "chevron.right")
-                                .foregroundStyle(.secondary)
+                            .padding()
                         }
-                        .padding()
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(glassBackground)
-                        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-                        .overlay(glassOverlay)
+                        .buttonStyle(.plain)
+
+                        if isStartNowExpanded {
+                            Divider()
+                                .padding(.horizontal)
+
+                            VStack(spacing: 16) {
+                                // Time picker
+                                DatePicker(
+                                    Strings.QuickLogSheet.time,
+                                    selection: $selectedStartTime,
+                                    in: ...Date(),
+                                    displayedComponents: [.hourAndMinute]
+                                )
+                                .datePickerStyle(.wheel)
+                                .labelsHidden()
+                                .frame(height: 120)
+
+                                // Start button
+                                Button {
+                                    HapticFeedback.medium()
+                                    onStartNow(selectedStartTime)
+                                } label: {
+                                    Text(Strings.Activity.startActivity)
+                                        .font(.headline)
+                                        .foregroundStyle(.white)
+                                        .frame(maxWidth: .infinity)
+                                        .padding(.vertical, 14)
+                                        .background(iconColor)
+                                        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                                }
+                            }
+                            .padding()
+                        }
                     }
-                    .buttonStyle(.plain)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(glassBackground)
+                    .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+                    .overlay(glassOverlay)
 
                     // Log completed option
                     Button {
@@ -173,7 +213,7 @@ struct StartActivitySheet: View {
 #Preview {
     StartActivitySheet(
         activityType: .walk,
-        onStartNow: { print("Start now") },
+        onStartNow: { time in print("Start now at \(time)") },
         onLogCompleted: { print("Log completed") },
         onCancel: { print("Cancel") }
     )

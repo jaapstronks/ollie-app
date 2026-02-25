@@ -23,7 +23,7 @@ public enum ActivityType: String, Codable, Sendable {
 /// Represents an activity currently in progress
 public struct InProgressActivity: Codable, Equatable, Sendable {
     public let type: ActivityType
-    public let startTime: Date
+    public var startTime: Date
     public let spotName: String?
     public let sleepSessionId: UUID?
 
