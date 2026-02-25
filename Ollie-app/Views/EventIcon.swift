@@ -5,6 +5,7 @@
 //  Reusable icon component for event types
 
 import SwiftUI
+import OllieShared
 
 /// Displays an SF Symbol icon for an event type with appropriate color
 struct EventIcon: View {

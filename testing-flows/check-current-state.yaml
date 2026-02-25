@@ -1,0 +1,4 @@
+appId: com.jaapstronks.Ollie-app
+---
+# Check current state
+- takeScreenshot: testing-screenshots/current-state

@@ -6,6 +6,7 @@
 //  V3: Added walk location support
 
 import SwiftUI
+import OllieShared
 import CoreLocation
 
 /// Sheet for quick logging with time adjustment
@@ -44,58 +45,16 @@ struct QuickLogSheet: View {
     var body: some View {
         VStack(spacing: 20) {
             // Header
-            HStack(spacing: 12) {
-                EventIcon(type: eventType, size: 36)
-                Text(eventType.label)
-                    .font(.title2)
-                    .fontWeight(.semibold)
-            }
-            .padding(.top, 8)
+            SheetHeader(
+                title: eventType.label,
+                icon: .eventType(eventType)
+            )
 
             // Time display and adjustment
-            VStack(spacing: 12) {
-                // Tappable time display
-                Button {
-                    showingTimePicker.toggle()
-                } label: {
-                    HStack {
-                        Image(systemName: "clock")
-                            .foregroundColor(.secondary)
-                        Text(selectedTime.timeString)
-                            .font(.title3)
-                            .fontWeight(.medium)
-                        Image(systemName: "chevron.down")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 10)
-                    .background(Color(.secondarySystemBackground))
-                    .cornerRadius(10)
-                }
-                .buttonStyle(.plain)
-
-                // Quick adjustment buttons
-                HStack(spacing: 10) {
-                    TimeAdjustButton(minutes: -5, selectedTime: $selectedTime)
-                    TimeAdjustButton(minutes: -10, selectedTime: $selectedTime)
-                    TimeAdjustButton(minutes: -15, selectedTime: $selectedTime)
-                    TimeAdjustButton(minutes: -30, selectedTime: $selectedTime)
-                }
-
-                // Time picker (expandable)
-                if showingTimePicker {
-                    DatePicker(
-                        Strings.QuickLogSheet.time,
-                        selection: $selectedTime,
-                        displayedComponents: .hourAndMinute
-                    )
-                    .datePickerStyle(.wheel)
-                    .labelsHidden()
-                    .frame(height: 120)
-                    .transition(.opacity.combined(with: .scale(scale: 0.95)))
-                }
-            }
+            TimePickerSection(
+                selectedTime: $selectedTime,
+                showingTimePicker: $showingTimePicker
+            )
 
             // Walk location section (for walk events)
             if isWalkEvent {
@@ -135,6 +94,7 @@ struct QuickLogSheet: View {
                     .textFieldStyle(.roundedBorder)
                     .accessibilityLabel(Strings.LogEvent.note)
                     .accessibilityHint(Strings.QuickLogSheet.noteAccessibilityHint)
+                    .accessibilityIdentifier("QUICK_LOG_NOTE_FIELD")
             }
             .padding(.horizontal, 4)
 
@@ -144,6 +104,7 @@ struct QuickLogSheet: View {
                     onCancel()
                 }
                 .foregroundColor(.secondary)
+                .accessibilityIdentifier("QUICK_LOG_CANCEL_BUTTON")
 
                 Button {
                     HapticFeedback.success()
@@ -158,9 +119,10 @@ struct QuickLogSheet: View {
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 14)
                     .background(canSave ? Color.accentColor : Color.gray)
-                    .cornerRadius(12)
+                    .cornerRadius(LayoutConstants.cornerRadiusM)
                 }
                 .disabled(!canSave)
+                .accessibilityIdentifier("QUICK_LOG_SAVE_BUTTON")
             }
         }
         .padding()
@@ -239,7 +201,7 @@ struct QuickLogSheet: View {
                 }
                 .padding()
                 .background(Color(.secondarySystemBackground))
-                .cornerRadius(12)
+                .cornerRadius(LayoutConstants.cornerRadiusM)
             } else if let spot = selectedSpot {
                 // Selected spot display
                 HStack {

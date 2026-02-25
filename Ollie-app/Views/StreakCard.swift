@@ -6,19 +6,34 @@
 //  Uses liquid glass design for iOS 26 aesthetic
 
 import SwiftUI
+import OllieShared
 
 /// Compact card showing current outdoor potty streak
 /// Uses liquid glass design with celebratory styling for high streaks
 struct StreakCard: View {
     let streakInfo: StreakInfo
+    /// Previous streak count for detecting milestone achievements
+    var previousStreak: Int = 0
 
     @Environment(\.colorScheme) private var colorScheme
+    @State private var showCelebration = false
+
+    /// Milestones that trigger celebrations
+    private let milestones = [3, 5, 7, 10, 15, 20, 25, 30, 50, 100]
 
     var body: some View {
         // Only show if there's relevant streak data
         if streakInfo.currentStreak > 0 || streakInfo.bestStreak > 0 {
             cardContent
                 .padding(.vertical, 4)
+                .celebration(style: .streak, trigger: $showCelebration)
+                .onChange(of: streakInfo.currentStreak) { oldValue, newValue in
+                    // Check if we just hit a milestone
+                    if newValue > oldValue && milestones.contains(newValue) {
+                        showCelebration = true
+                        FeedbackManager.milestone()
+                    }
+                }
         }
     }
 
@@ -41,13 +56,6 @@ struct StreakCard: View {
                             .font(.subheadline)
                             .fontWeight(.semibold)
                             .foregroundStyle(textColor)
-
-                        if streakInfo.isOnFire {
-                            Text(Strings.Streak.inARow)
-                                .font(.subheadline)
-                                .fontWeight(.semibold)
-                                .foregroundStyle(Color.ollieAccent)
-                        }
                     } else {
                         Text(Strings.Streak.streakBroken)
                             .font(.subheadline)

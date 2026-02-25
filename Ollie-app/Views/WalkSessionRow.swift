@@ -5,6 +5,7 @@
 //  Timeline row for displaying walk sessions as a card container with nested potty events
 
 import SwiftUI
+import OllieShared
 
 /// Card-style row displaying a walk session with nested child events
 struct WalkSessionRow: View {
@@ -71,14 +72,11 @@ struct WalkSessionRow: View {
 
                     // Duration pill
                     if let durationString = session.durationString {
-                        Text(durationString)
-                            .font(.caption)
-                            .fontWeight(.medium)
-                            .foregroundColor(.ollieSuccess)
-                            .padding(.horizontal, 8)
-                            .padding(.vertical, 3)
-                            .background(Color.ollieSuccess.opacity(0.15))
-                            .clipShape(Capsule())
+                        DurationPill(
+                            text: durationString,
+                            color: .ollieSuccess,
+                            isHighlighted: true
+                        )
                     }
                 }
 

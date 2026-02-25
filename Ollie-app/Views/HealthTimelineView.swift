@@ -5,6 +5,7 @@
 //  Vertical timeline of health milestones (vaccinations, deworming, vet visits)
 
 import SwiftUI
+import OllieShared
 
 /// Vertical timeline showing health milestones with status indicators
 struct HealthTimelineView: View {

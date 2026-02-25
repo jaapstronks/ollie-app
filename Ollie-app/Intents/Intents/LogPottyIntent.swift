@@ -5,6 +5,7 @@
 //  App Intent for logging potty events via Siri/Shortcuts
 
 import AppIntents
+import OllieShared
 
 /// Log a potty event (pee or poop) with location
 struct LogPottyIntent: AppIntent {
@@ -104,6 +105,64 @@ struct LogPoopOutsideIntent: AppIntent {
         do {
             try store.addEvent(event)
             return .result(dialog: "Logged poop outside for \(profile.name)")
+        } catch {
+            return .result(dialog: "Failed to log event: \(error.localizedDescription)")
+        }
+    }
+}
+
+/// Quick shortcut for logging pee inside (accident)
+struct LogPeeInsideIntent: AppIntent {
+    static var title: LocalizedStringResource = "Log Pee Inside"
+    static var description = IntentDescription("Quickly log that your puppy peed inside")
+    static var openAppWhenRun: Bool = false
+
+    @MainActor
+    func perform() async throws -> some IntentResult & ProvidesDialog {
+        let store = IntentDataStore.shared
+
+        guard let profile = store.loadProfile() else {
+            return .result(dialog: "Please set up your puppy profile in the Ollie app first.")
+        }
+
+        guard profile.canLogEvents else {
+            return .result(dialog: "Your free trial has ended. Please upgrade in the Ollie app to continue logging.")
+        }
+
+        let event = PuppyEvent.potty(type: .plassen, location: .binnen)
+
+        do {
+            try store.addEvent(event)
+            return .result(dialog: "Logged pee inside for \(profile.name)")
+        } catch {
+            return .result(dialog: "Failed to log event: \(error.localizedDescription)")
+        }
+    }
+}
+
+/// Quick shortcut for logging poop inside (accident)
+struct LogPoopInsideIntent: AppIntent {
+    static var title: LocalizedStringResource = "Log Poop Inside"
+    static var description = IntentDescription("Quickly log that your puppy pooped inside")
+    static var openAppWhenRun: Bool = false
+
+    @MainActor
+    func perform() async throws -> some IntentResult & ProvidesDialog {
+        let store = IntentDataStore.shared
+
+        guard let profile = store.loadProfile() else {
+            return .result(dialog: "Please set up your puppy profile in the Ollie app first.")
+        }
+
+        guard profile.canLogEvents else {
+            return .result(dialog: "Your free trial has ended. Please upgrade in the Ollie app to continue logging.")
+        }
+
+        let event = PuppyEvent.potty(type: .poepen, location: .binnen)
+
+        do {
+            try store.addEvent(event)
+            return .result(dialog: "Logged poop inside for \(profile.name)")
         } catch {
             return .result(dialog: "Failed to log event: \(error.localizedDescription)")
         }

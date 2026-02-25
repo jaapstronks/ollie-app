@@ -4,267 +4,404 @@
 
 | Aspect | Decision |
 |--------|----------|
-| **Model** | Free intro period + one-time purchase |
-| **Free period** | 21 days per dog profile |
-| **Price** | €19 one-time (non-consumable IAP) |
-| **Scope** | Per dog profile (multi-dog = multi-purchase) |
-| **After free period** | View-only mode (all data preserved, no new logging) |
+| **Model** | Freemium + subscription (Ollie+) |
+| **Free tier** | Core logging forever, basic features |
+| **Price** | €2.99/month or €24.99/year |
+| **Scope** | Per Apple ID (all dogs included) |
+| **Trial** | 7 days of Ollie+ free for new users |
 
 ## Positioning
 
-**Not a "trial" — a gift during the hardest weeks.**
+**"Ollie is gratis. Ollie+ geeft je superkrachten."**
 
-New puppy owners are overwhelmed in the first 3 weeks. Ollie is free exactly when they need it most. If they're still using it after that, €19 is a no-brainer.
+Core puppy tracking is free forever — no time limits, no event limits. Ollie+ unlocks smart insights, predictions, and advanced features for users who want more.
 
 **Key message:**
-> "De eerste weken met een nieuwe puppy zijn overweldigend. Daarom is Ollie gratis als je het het hardst nodig hebt."
+> "Log alles over je puppy, helemaal gratis. Wil je slimme inzichten en voorspellingen? Probeer Ollie+ 7 dagen gratis."
 
 This framing:
-- Feels generous, not extractive
-- Acknowledges the user's struggle
-- Positions payment as fair exchange for ongoing value
-- Avoids "trial" language that implies limited/crippled experience
+- Core value is genuinely free (not a crippled trial)
+- Premium feels like an upgrade, not a paywall
+- Users build data dependency before seeing premium value
+- Competitive advantage: "the only free puppy tracker"
 
-## What's Free vs Premium
+## What's Free vs Ollie+
 
-### Free (first 21 days)
-- Full event logging (all types)
-- Timeline view with day navigation
-- All historical data access
-- Basic stats visible
-- Quick-log bar
+### Free Forever
+- **All event logging** (unlimited, all types)
+- **Timeline view** with day navigation
+- **Quick-log bar** (full functionality)
+- **Basic daily stats** (today's summary, event counts)
+- **Training library** (first 10 commands, browse only)
+- **Socialization checklist** (view items, no progress tracking)
+- **Clicker tool** (full functionality)
+- **1 partner sharing** (via CloudKit)
 
-### Free (after 21 days)
-- View-only access to all existing data
-- Timeline browsing (no new events)
-- Day navigation
-- Cannot log new events
-
-### Premium (€19 unlocks)
-- Unlimited logging (no time limit)
-- Full stats dashboard (patterns, streaks, gaps)
-- Potty predictions with trigger adjustments
-- Photo/video attachments
-- Data export functionality
-- Future premium features
+### Ollie+ (€2.99/mo or €24.99/yr)
+- Everything in Free, plus:
+- **Smart potty predictions** with trigger adjustments
+- **Advanced analytics** (patterns, trends, gaps analysis)
+- **Sleep insights** (night quality, nap tracking)
+- **Week-in-review summaries**
+- **Full training library** (30+ commands with progress tracking)
+- **Socialization tracking** (mark complete, see progress %)
+- **Photo/video attachments** on events
+- **Unlimited partner sharing**
+- **Export/PDF** for vet visits
+- **Future premium features**
 
 ## Technical Implementation
 
 ### 1. Model Changes
 
-**PuppyProfile.swift** — add fields:
+**New file: Models/SubscriptionStatus.swift**
 ```swift
-struct PuppyProfile: Codable {
-    // ... existing fields ...
+import Foundation
 
-    var freeStartDate: Date      // Set on profile creation
-    var isPremiumUnlocked: Bool   // Set to true after purchase
+struct SubscriptionStatus: Codable {
+    var isOlliePlus: Bool
+    var expirationDate: Date?
+    var isInTrialPeriod: Bool
 
-    var freeDaysRemaining: Int {
-        guard !isPremiumUnlocked else { return -1 } // -1 = unlimited
-        let daysSinceStart = Calendar.current.dateComponents([.day], from: freeStartDate, to: Date()).day ?? 0
-        return max(0, 21 - daysSinceStart)
+    var isActive: Bool {
+        isOlliePlus && (expirationDate == nil || expirationDate! > Date())
     }
 
-    var isFreePeriodExpired: Bool {
-        !isPremiumUnlocked && freeDaysRemaining <= 0
-    }
-
-    var canLogEvents: Bool {
-        isPremiumUnlocked || !isFreePeriodExpired
-    }
+    static let free = SubscriptionStatus(isOlliePlus: false, expirationDate: nil, isInTrialPeriod: false)
 }
 ```
 
+**No changes to PuppyProfile** — subscription is per Apple ID, not per dog.
+
 ### 2. StoreKit 2 Integration
 
-**New file: Services/StoreKitManager.swift**
+**New file: Services/SubscriptionManager.swift**
 ```swift
 import StoreKit
 
 @MainActor
-class StoreKitManager: ObservableObject {
-    static let shared = StoreKitManager()
+class SubscriptionManager: ObservableObject {
+    static let shared = SubscriptionManager()
 
-    static let premiumProductID = "com.ollie.premium.perdog"
+    static let monthlyProductID = "com.ollie.plus.monthly"    // €2.99/mo
+    static let yearlyProductID = "com.ollie.plus.yearly"      // €24.99/yr
 
-    @Published var premiumProduct: Product?
+    @Published var products: [Product] = []
+    @Published var subscriptionStatus: SubscriptionStatus = .free
     @Published var purchaseState: PurchaseState = .idle
 
     enum PurchaseState {
         case idle, purchasing, purchased, failed(Error)
     }
 
+    // Check entitlement status on app launch
+    func checkSubscriptionStatus() async { ... }
+
+    // Load available products from App Store
     func loadProducts() async { ... }
-    func purchase() async throws { ... }
+
+    // Purchase a subscription
+    func purchase(_ product: Product) async throws { ... }
+
+    // Restore purchases (for new device / reinstall)
     func restorePurchases() async { ... }
+
+    // Listen for transaction updates
+    func listenForTransactions() async { ... }
 }
 ```
 
-**Note:** Non-consumable IAP. Each profile needs its own purchase record (store profile ID with transaction).
+**Note:** Auto-renewable subscriptions. StoreKit 2 handles trial eligibility automatically.
 
-### 3. Purchase Tracking
+### 3. Subscription Tracking
 
-Need to track which profiles have been unlocked. Options:
+StoreKit 2 manages subscription state via `Transaction.currentEntitlements`. No need to store locally — always check with StoreKit on app launch.
 
-**Option A: Local UserDefaults**
 ```swift
-// Store array of unlocked profile IDs
-UserDefaults.standard.set(unlockedProfileIDs, forKey: "unlockedProfiles")
+// On app launch:
+for await result in Transaction.currentEntitlements {
+    if case .verified(let transaction) = result {
+        // User has active subscription
+        subscriptionStatus = SubscriptionStatus(
+            isOlliePlus: true,
+            expirationDate: transaction.expirationDate,
+            isInTrialPeriod: transaction.offerType == .introductory
+        )
+    }
+}
 ```
-
-**Option B: Store in profile.json** (simpler)
-```swift
-// isPremiumUnlocked flag in PuppyProfile
-// Risk: user could edit JSON, but low stakes
-```
-
-**Recommendation:** Option B (keep it simple). For a €19 app, elaborate anti-piracy isn't worth it.
 
 ### 4. UI Changes
 
-#### Status Banner (during free period)
-Subtle banner in TimelineView — don't nag during the hard weeks:
+#### Ollie+ Upsell Points
+Show upgrade prompts when users try to access premium features:
+
+**Predictions card (InsightsView):**
 ```
 ┌─────────────────────────────────────────┐
-│ Nog 14 dagen gratis                     │
+│ 🔮 Slimme voorspellingen                │
+│                                         │
+│ Ollie+ voorspelt wanneer je puppy       │
+│ weer moet plassen op basis van          │
+│ zijn patronen.                          │
+│                                         │
+│   [Probeer Ollie+ gratis]               │
 └─────────────────────────────────────────┘
 ```
-Tappable → opens upgrade sheet (but keep it subtle).
 
-#### Expired State
-When free period ends, overlay on quick-log bar:
+**Training progress (locked commands):**
 ```
 ┌─────────────────────────────────────────┐
-│ Je gratis periode is voorbij            │
+│ 🔒 20+ extra commando's                 │
 │                                         │
-│ De eerste 3 weken met een puppy zijn    │
-│ het zwaarst — daarom was Ollie gratis.  │
-│ Wil je blijven loggen?                  │
+│ Ontgrendel de volledige trainings-      │
+│ bibliotheek met Ollie+.                 │
 │                                         │
-│   [Doorgaan met Ollie — €19]            │
-│   [Herstel aankoop]                     │
+│   [Bekijk Ollie+]                       │
 └─────────────────────────────────────────┘
 ```
 
 #### Settings Screen
 Add section:
 ```
-Ollie Premium
-├─ Status: Gratis (nog 7 dagen) / Premium / Gratis periode voorbij
-├─ [Doorgaan met Ollie — €19]  (if not premium)
-└─ [Herstel aankoop]           (if not premium)
+Ollie+
+├─ Status: Gratis / Ollie+ (maandelijks) / Ollie+ (jaarlijks)
+├─ [Upgrade naar Ollie+]     (if free)
+├─ [Beheer abonnement]       (if subscribed, opens App Store)
+└─ [Herstel aankoop]         (always visible)
 ```
 
-### 5. Gating Logic
+#### Subscription Sheet (OlliePlusSheet.swift)
+Full-screen sheet showing:
+- Feature comparison (free vs Ollie+)
+- Pricing options (monthly / yearly with savings badge)
+- 7-day free trial callout
+- Terms & restore link
 
-**QuickLogBar.swift / LogEventSheet.swift:**
+### 5. Feature Gating Logic
+
+**Create: Utils/FeatureGating.swift**
 ```swift
-if !profile.canLogEvents {
-    // Show upgrade prompt instead of log UI
-    UpgradePromptView()
-} else {
-    // Normal logging UI
+enum PremiumFeature {
+    case predictions
+    case advancedAnalytics
+    case sleepInsights
+    case weekReview
+    case fullTrainingLibrary
+    case socializationTracking
+    case photoAttachments
+    case unlimitedSharing
+    case exportPDF
+}
+
+extension SubscriptionManager {
+    func hasAccess(to feature: PremiumFeature) -> Bool {
+        subscriptionStatus.isActive
+    }
 }
 ```
 
-**TimelineView.swift:**
+**Usage in views:**
 ```swift
-// Always allow viewing, just disable add button
-Button("Log event") { ... }
-    .disabled(!profile.canLogEvents)
+// Show locked state for premium features
+if subscriptionManager.hasAccess(to: .predictions) {
+    PredictionsCard()
+} else {
+    PredictionsLockedCard(onUpgrade: { showOlliePlusSheet = true })
+}
+
+// Photo attachment button
+Button("Add photo") { ... }
+    .disabled(!subscriptionManager.hasAccess(to: .photoAttachments))
+```
+
+**Training library gating:**
+```swift
+// First 10 commands always visible
+let freeCommands = trainingLibrary.prefix(10)
+let premiumCommands = trainingLibrary.dropFirst(10)
+
+ForEach(freeCommands) { command in
+    CommandRow(command)
+}
+
+if subscriptionManager.hasAccess(to: .fullTrainingLibrary) {
+    ForEach(premiumCommands) { command in
+        CommandRow(command)
+    }
+} else {
+    LockedCommandsRow(count: premiumCommands.count, onUpgrade: { ... })
+}
 ```
 
 ## Dutch Copy
 
-### During Free Period
-- Banner: "Nog X dagen gratis"
-- Subtle, non-intrusive — user is in the overwhelming phase
+### Ollie+ Sheet (main upsell)
+- Title: "Ollie+"
+- Subtitle: "Haal meer uit je puppy-data"
+- Trial callout: "Probeer 7 dagen gratis"
+- Monthly: "€2,99/maand"
+- Yearly: "€24,99/jaar" + badge "Bespaar 30%"
+- CTA button: "Start gratis proefperiode"
+- Footer: "Abonnement verlengt automatisch. Annuleer wanneer je wilt."
 
-### Free Period Ended
-- Title: "Je gratis periode is voorbij"
-- Body: "De eerste 3 weken met een puppy zijn het zwaarst — daarom was Ollie gratis. Wil je blijven loggen? Dat kan voor eenmalig €19."
-- Button: "Doorgaan met Ollie — €19"
-- Secondary: "Herstel aankoop"
+### Feature Locked States
+- Predictions: "Ontgrendel slimme voorspellingen met Ollie+"
+- Analytics: "Bekijk patronen en trends met Ollie+"
+- Training: "Ontgrendel 20+ extra commando's met Ollie+"
+- Photos: "Voeg foto's toe met Ollie+"
+- Export: "Exporteer naar PDF met Ollie+"
 
 ### Settings
-- Section title: "Ollie Premium"
-- Status label: "Status"
-- Values: "Gratis (nog X dagen)" / "Premium" / "Gratis periode voorbij"
+- Section title: "Ollie+"
+- Status values: "Gratis" / "Ollie+ (proefperiode)" / "Ollie+ (maandelijks)" / "Ollie+ (jaarlijks)"
+- Upgrade button: "Upgrade naar Ollie+"
+- Manage button: "Beheer abonnement"
+- Restore button: "Herstel aankoop"
 
 ### Purchase Success
-- "Gelukt! Je kunt nu onbeperkt blijven loggen voor [puppyname]."
+- "Welkom bij Ollie+! Je hebt nu toegang tot alle functies."
 
 ### Restore Success
-- "Aankoop hersteld voor [puppyname]."
+- "Abonnement hersteld. Welkom terug!"
+
+### Trial Ending (push notification, day 6)
+- "Je Ollie+ proefperiode eindigt morgen. Blijf genieten van slimme inzichten?"
 
 ### App Store Description (snippet)
-- "Ollie is gratis voor de eerste 3 weken — precies wanneer je het het hardst nodig hebt. Daarna eenmalig €19 om te blijven loggen."
+- "Ollie is gratis — log alles over je puppy zonder limiet. Upgrade naar Ollie+ voor slimme voorspellingen, geavanceerde statistieken en meer."
 
 ## App Store Setup
 
-1. **Create non-consumable IAP** in App Store Connect
-   - Product ID: `com.ollie.premium.perdog`
-   - Reference Name: "Ollie Premium (per dog)"
-   - Price: Tier 15 (€19.99) or custom €19.00
+### 1. Create Subscription Group
+In App Store Connect → Subscriptions:
+- Group name: "Ollie+"
+- Group ID: `ollie_plus`
 
-2. **Localized metadata (Dutch)**
-   - Display Name: "Ollie Premium"
-   - Description: "Ontgrendel onbeperkt loggen voor je puppy, plus statistieken, voorspellingen en meer."
+### 2. Create Subscription Products
 
-3. **Review notes**
-   - Explain per-dog model
-   - Free period details (21 days full access, then view-only)
+**Monthly:**
+- Product ID: `com.ollie.plus.monthly`
+- Reference Name: "Ollie+ Monthly"
+- Price: €2.99 (Tier 3)
+- Duration: 1 month
+
+**Yearly:**
+- Product ID: `com.ollie.plus.yearly`
+- Reference Name: "Ollie+ Yearly"
+- Price: €24.99 (Tier 25)
+- Duration: 1 year
+
+### 3. Configure Free Trial
+- Introductory Offer: 7-day free trial
+- Applies to: Both monthly and yearly
+- Eligibility: New subscribers only (StoreKit handles this)
+
+### 4. Localized Metadata (Dutch)
+
+**Display Name:** "Ollie+"
+
+**Description:**
+"Haal meer uit Ollie met slimme voorspellingen, geavanceerde statistieken, de volledige trainingsbibliotheek, en meer."
+
+**Subscription Group Display Name:** "Ollie+ Abonnement"
+
+### 5. Review Notes
+```
+Ollie is a puppy tracking app. Core features (event logging, timeline,
+basic stats) are free forever with no limits.
+
+Ollie+ subscription unlocks:
+- Smart potty predictions
+- Advanced analytics and patterns
+- Full training library (30+ commands)
+- Socialization progress tracking
+- Photo/video attachments
+- Export to PDF
+- Unlimited partner sharing
+
+Pricing:
+- €2.99/month or €24.99/year
+- 7-day free trial for new subscribers
+
+The app is fully functional without a subscription. Ollie+ adds
+convenience features and insights for power users.
+```
 
 ## Implementation Order
 
 ### Phase 1: Core Infrastructure
-- [ ] Add `freeStartDate` and `isPremiumUnlocked` to PuppyProfile
-- [ ] Add computed properties (`freeDaysRemaining`, `isFreePeriodExpired`, `canLogEvents`)
-- [ ] Migration: set `freeStartDate = Date()` for existing profiles
-- [ ] Create StoreKitManager service
+- [ ] Create `SubscriptionStatus` model
+- [ ] Create `SubscriptionManager` service with StoreKit 2
+- [ ] Implement `checkSubscriptionStatus()` on app launch
+- [ ] Implement `listenForTransactions()` for real-time updates
+- [ ] Add `@EnvironmentObject` for SubscriptionManager in app
 
-### Phase 2: Gating
-- [ ] Disable logging UI when `!canLogEvents`
-- [ ] Show upgrade prompt when trying to log after free period
-- [ ] Keep all read/view functionality working
+### Phase 2: App Store Connect Setup
+- [ ] Create subscription group "Ollie+"
+- [ ] Create monthly product (com.ollie.plus.monthly)
+- [ ] Create yearly product (com.ollie.plus.yearly)
+- [ ] Configure 7-day free trial as introductory offer
+- [ ] Add localized metadata (Dutch)
+- [ ] Create StoreKit configuration file for testing
 
-### Phase 3: Purchase Flow
-- [ ] Implement purchase flow in StoreKitManager
-- [ ] Create UpgradePromptView
-- [ ] Add upgrade button to Settings
-- [ ] Handle restore purchases
-- [ ] Update `isPremiumUnlocked` on successful purchase
+### Phase 3: Feature Gating
+- [ ] Create `PremiumFeature` enum and gating helper
+- [ ] Gate predictions/analytics in InsightsView
+- [ ] Gate training library (first 10 free, rest locked)
+- [ ] Gate socialization progress tracking
+- [ ] Gate photo/video attachments
+- [ ] Gate export/PDF functionality
+- [ ] Gate unlimited partner sharing (allow 1 free)
 
-### Phase 4: Status UI
-- [ ] Add "Nog X dagen gratis" banner to TimelineView
-- [ ] Show days remaining
-- [ ] Add Premium section to Settings
+### Phase 4: Subscription UI
+- [ ] Create `OlliePlusSheet` (main upsell screen)
+- [ ] Create locked feature cards (predictions, training, etc.)
+- [ ] Add Ollie+ section to Settings
+- [ ] Implement purchase flow with loading states
+- [ ] Implement restore purchases
+- [ ] Add "Manage subscription" link (opens App Store)
 
-### Phase 5: Polish
-- [ ] Test purchase flow in sandbox
-- [ ] Test free period expiration edge cases
-- [ ] Test restore purchases
-- [ ] Test new profile creation (fresh free period)
-- [ ] Submit IAP for review
+### Phase 5: Polish & Testing
+- [ ] Test purchase flow in sandbox (monthly)
+- [ ] Test purchase flow in sandbox (yearly)
+- [ ] Test free trial flow
+- [ ] Test restore purchases on new device
+- [ ] Test subscription expiration handling
+- [ ] Test offline behavior
+- [ ] Add trial ending notification (day 6)
+- [ ] Submit for App Review
 
 ## Edge Cases
 
 | Scenario | Behavior |
 |----------|----------|
-| New profile created | Free period starts at creation date |
-| Profile deleted & recreated | New free period (it's a new profile) |
-| App reinstalled | Profile restored from file, free period continues from original date |
-| Multiple dogs | Each profile has own free/premium status |
-| Clock manipulation | Accept it — not worth fighting for €19 |
-| Offline purchase | StoreKit handles this |
+| App reinstalled | StoreKit restores subscription automatically |
+| New device | Subscription transfers via Apple ID |
+| Multiple dogs | One subscription covers all dogs |
+| Subscription expires | Graceful downgrade to free (keep all data) |
+| Subscription renews | Automatic, no user action needed |
+| Trial ends, no purchase | Downgrade to free tier |
+| Offline | Cache last known status, re-check when online |
+| Family Sharing | Works automatically if enabled in ASC |
+| Refund requested | Apple handles, app loses access on next check |
 
 ## Future Considerations
 
-- **Family Sharing:** Could enable for IAP (one purchase = whole family)
-- **Promo codes:** Generate for reviewers, influencers
-- **Sale pricing:** Occasional €14.99 promotions
-- **Bundle:** If we add more apps, bundle discount
+- **Promo codes:** Generate for reviewers, influencers, beta testers
+- **Offer codes:** Time-limited discounts (e.g., 50% off first year)
+- **Win-back offers:** Re-engage churned subscribers
+- **Family Sharing:** Enable in App Store Connect (one sub = whole family)
+- **Subscription upgrades:** Allow monthly → yearly upgrade with prorated credit
+
+## Metrics to Track
+
+- Trial start rate (% of users who start trial)
+- Trial → paid conversion rate
+- Monthly vs yearly split
+- Churn rate (monthly, yearly)
+- Revenue per user (ARPU)
+- Feature-specific upgrade triggers (which locked feature drives most conversions?)
 
 ---
 

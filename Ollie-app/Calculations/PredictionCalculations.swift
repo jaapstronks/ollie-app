@@ -5,6 +5,7 @@
 //  Potty prediction calculations ported from web app's predictions.js
 
 import Foundation
+import OllieShared
 import SwiftUI
 
 /// Urgency level for potty predictions
@@ -80,10 +81,7 @@ struct PredictionCalculations {
         config: PredictionConfig
     ) -> PottyPrediction {
         // Find last potty event
-        let lastPlas = events
-            .filter { $0.type == .plassen }
-            .sorted { $0.time < $1.time }
-            .last
+        let lastPlas = events.pee().chronological().last
 
         // Check for recent indoor accident
         if let last = lastPlas, last.location == .binnen {

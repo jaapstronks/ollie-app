@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import OllieShared
 
 /// Async thumbnail loader with loading, error, and success states
 struct AsyncThumbnailView: View {

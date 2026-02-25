@@ -6,6 +6,7 @@
 //  Avoids magic numbers like .padding(.horizontal, 16) scattered throughout.
 
 import SwiftUI
+import OllieShared
 
 // MARK: - Layout Constants
 
@@ -42,7 +43,19 @@ enum LayoutConstants {
     /// Standard vertical padding
     static let verticalPadding: CGFloat = 14
 
-    /// Card internal padding
+    /// Card internal horizontal padding
+    static let cardHorizontalPadding: CGFloat = 16
+
+    /// Card internal vertical padding
+    static let cardVerticalPadding: CGFloat = 14
+
+    /// Status card horizontal padding (slightly tighter for status cards)
+    static let statusCardHorizontalPadding: CGFloat = 16
+
+    /// Status card vertical padding
+    static let statusCardVerticalPadding: CGFloat = 14
+
+    /// Card internal padding (legacy - use cardHorizontalPadding/cardVerticalPadding)
     static let cardPadding: CGFloat = 14
 
     /// Section padding (used between major UI sections)

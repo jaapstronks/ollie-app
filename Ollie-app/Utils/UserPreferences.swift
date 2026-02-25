@@ -4,6 +4,7 @@
 //
 
 import SwiftUI
+import OllieShared
 
 /// Appearance mode options
 enum AppearanceMode: String, CaseIterable, Identifiable {

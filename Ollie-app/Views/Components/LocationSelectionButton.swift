@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import OllieShared
 
 /// Button for selecting indoor/outdoor location with accessibility support
 struct LocationSelectionButton: View {
@@ -29,7 +30,7 @@ struct LocationSelectionButton: View {
             }
             .frame(width: 80, height: 80)
             .background(isSelected ? location.iconColor.opacity(0.15) : Color(.secondarySystemBackground))
-            .cornerRadius(12)
+            .cornerRadius(LayoutConstants.cornerRadiusM)
             .overlay(
                 RoundedRectangle(cornerRadius: 12)
                     .stroke(isSelected ? location.iconColor : Color.clear, lineWidth: 2)

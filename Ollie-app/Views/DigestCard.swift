@@ -5,6 +5,7 @@
 //  Compact daily digest card for timeline header
 
 import SwiftUI
+import OllieShared
 
 /// Compact card showing daily summary at top of timeline
 /// Uses liquid glass design for iOS 26 aesthetic
@@ -100,7 +101,7 @@ struct DigestChips: View {
                         .padding(.horizontal, 10)
                         .padding(.vertical, 4)
                         .background(Color(.tertiarySystemBackground))
-                        .cornerRadius(12)
+                        .cornerRadius(LayoutConstants.cornerRadiusM)
                 }
             }
         }

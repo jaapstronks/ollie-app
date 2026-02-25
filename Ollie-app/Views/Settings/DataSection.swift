@@ -5,6 +5,7 @@
 //  Data import/export section for SettingsView
 
 import SwiftUI
+import OllieShared
 
 /// Data import and management section
 struct DataSection: View {

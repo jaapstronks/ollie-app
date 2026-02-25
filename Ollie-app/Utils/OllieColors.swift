@@ -5,6 +5,7 @@
 //  Brand colors and semantic color palette
 
 import SwiftUI
+import OllieShared
 
 /// Ollie brand color palette
 extension Color {

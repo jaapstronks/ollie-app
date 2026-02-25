@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import OllieShared
 
 /// Birth date selection step
 struct OnboardingBirthStep: View {

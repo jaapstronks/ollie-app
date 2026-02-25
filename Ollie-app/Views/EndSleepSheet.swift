@@ -5,6 +5,7 @@
 //  Sheet for ending an ongoing sleep session with wake-up time adjustment
 
 import SwiftUI
+import OllieShared
 
 /// Sheet for logging a wake-up event to end an ongoing sleep session
 struct EndSleepSheet: View {
@@ -55,7 +56,7 @@ struct EndSleepSheet: View {
             .padding()
             .frame(maxWidth: .infinity)
             .background(Color.purple.opacity(0.1))
-            .cornerRadius(12)
+            .cornerRadius(LayoutConstants.cornerRadiusM)
 
             // Wake-up time section
             VStack(spacing: 12) {
@@ -115,6 +116,7 @@ struct EndSleepSheet: View {
                 }
                 .foregroundColor(.secondary)
                 .frame(minWidth: 44, minHeight: 44)
+                .accessibilityIdentifier("END_SLEEP_CANCEL_BUTTON")
 
                 Button {
                     HapticFeedback.success()
@@ -129,8 +131,9 @@ struct EndSleepSheet: View {
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 14)
                     .background(Color.accentColor)
-                    .cornerRadius(12)
+                    .cornerRadius(LayoutConstants.cornerRadiusM)
                 }
+                .accessibilityIdentifier("END_SLEEP_SAVE_BUTTON")
             }
         }
         .padding()

@@ -6,6 +6,7 @@
 //  Uses liquid glass design for iOS 26 aesthetic
 
 import SwiftUI
+import OllieShared
 
 /// Prominent card showing potty status with smart predictions
 /// Uses liquid glass design with semantic tinting based on urgency
@@ -34,97 +35,45 @@ struct PottyStatusCard: View {
 
     @ViewBuilder
     private var cardContent: some View {
-        VStack(spacing: 12) {
-            StatusCardHeader(
-                iconName: PredictionCalculations.iconName(for: prediction.urgency),
-                iconColor: PredictionCalculations.iconColor(for: prediction.urgency),
-                tintColor: indicatorColor,
-                title: PredictionCalculations.displayText(for: prediction, puppyName: puppyName),
-                titleColor: textColor,
-                subtitle: PredictionCalculations.subtitleText(for: prediction),
-                statusLabel: urgencyLabel
-            )
-
+        StatusCardHeader(
+            iconName: prediction.urgency.iconName,
+            iconColor: prediction.urgency.iconColor,
+            tintColor: indicatorColor,
+            title: PredictionCalculations.displayText(for: prediction, puppyName: puppyName),
+            titleColor: prediction.urgency.textColor,
+            subtitle: PredictionCalculations.subtitleText(for: prediction)
+        ) {
             // Show action when urgency warrants it
             if let onLogPotty, shouldShowAction {
                 Button(action: onLogPotty) {
                     Label(Strings.PottyStatus.logNow, systemImage: "drop.fill")
                 }
-                .buttonStyle(.glassPill(tint: .custom(indicatorColor)))
+                .buttonStyle(.glassPillCompact(tint: .custom(indicatorColor)))
             }
         }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 14)
-        .glassStatusCard(tintColor: indicatorColor, cornerRadius: 18)
+        .statusCardPadding()
+        .glassStatusCard(tintColor: indicatorColor, cornerRadius: LayoutConstants.cornerRadiusL)
         .shadow(color: shadowColor, radius: 10, y: 5)
         .accessibilityElement(children: .combine)
         .accessibilityLabel(Strings.PottyStatus.accessibility)
-        .accessibilityValue("\(PredictionCalculations.displayText(for: prediction, puppyName: puppyName)). \(urgencyLabel)")
+        .accessibilityValue(PredictionCalculations.displayText(for: prediction, puppyName: puppyName))
         .accessibilityHint(Strings.PottyStatus.predictionHint(name: puppyName))
     }
 
     private var shouldShowAction: Bool {
-        switch prediction.urgency {
-        case .attention, .soon, .overdue:
-            return true
-        default:
-            return false
-        }
+        prediction.urgency.isUrgent
     }
 
     // MARK: - Computed Properties
 
     private var indicatorColor: Color {
-        PredictionCalculations.iconColor(for: prediction.urgency)
-    }
-
-    private var textColor: Color {
-        switch prediction.urgency {
-        case .justWent, .normal:
-            return .primary
-        case .attention:
-            return Color.ollieAccent
-        case .soon:
-            return Color.ollieWarning
-        case .overdue, .postAccident:
-            return Color.ollieDanger
-        case .unknown:
-            return .secondary
-        }
-    }
-
-    private var urgencyLabel: String {
-        switch prediction.urgency {
-        case .justWent:
-            return Strings.PottyStatus.justWent
-        case .normal:
-            return Strings.PottyStatus.normal
-        case .attention:
-            return Strings.PottyStatus.attention
-        case .soon:
-            return Strings.PottyStatus.soonTime
-        case .overdue:
-            return Strings.PottyStatus.now
-        case .postAccident:
-            return Strings.PottyStatus.accident
-        case .unknown:
-            return Strings.PottyStatus.unknown
-        }
+        prediction.urgency.iconColor
     }
 
     private var shadowColor: Color {
-        switch prediction.urgency {
-        case .justWent, .normal:
-            return Color.ollieSuccess.opacity(colorScheme == .dark ? 0.2 : 0.1)
-        case .attention:
-            return Color.ollieAccent.opacity(colorScheme == .dark ? 0.2 : 0.1)
-        case .soon:
-            return Color.ollieWarning.opacity(colorScheme == .dark ? 0.25 : 0.12)
-        case .overdue, .postAccident:
-            return Color.ollieDanger.opacity(colorScheme == .dark ? 0.25 : 0.12)
-        case .unknown:
-            return Color.black.opacity(colorScheme == .dark ? 0.2 : 0.06)
-        }
+        let baseColor = prediction.urgency.iconColor
+        let opacity = colorScheme == .dark ? 0.2 : 0.1
+        return baseColor.opacity(prediction.urgency.isUrgent ? opacity * 1.25 : opacity)
     }
 
     private var isNightTime: Bool {

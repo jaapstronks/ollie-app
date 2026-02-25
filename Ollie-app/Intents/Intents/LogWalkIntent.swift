@@ -5,6 +5,7 @@
 //  App Intent for logging walk events via Siri/Shortcuts
 
 import AppIntents
+import OllieShared
 
 /// Log a walk with optional duration
 struct LogWalkIntent: AppIntent {

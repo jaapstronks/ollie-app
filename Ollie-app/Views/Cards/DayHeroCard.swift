@@ -6,6 +6,7 @@
 //  Focused single purpose - no redundant stats
 
 import SwiftUI
+import OllieShared
 
 /// Hero card displaying "Day X with [Puppy]"
 /// Clean, prominent display for the day counter

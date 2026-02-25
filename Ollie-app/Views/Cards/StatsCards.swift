@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import OllieShared
 
 // MARK: - Streak Stats Card
 
@@ -39,7 +40,7 @@ struct StreakStatsCard: View {
                     .foregroundStyle(Color.ollieAccent)
             }
         }
-        .padding()
+        .cardPadding()
         .glassCard(tint: .accent)
     }
 }
@@ -125,7 +126,7 @@ struct GapStatsCard: View {
                 }
             }
         }
-        .padding()
+        .cardPadding()
         .glassCard(tint: .info)
     }
 }
@@ -136,23 +137,23 @@ struct TodayStatsCard: View {
     let events: [PuppyEvent]
 
     private var pottyCount: Int {
-        events.filter { $0.type == .plassen }.count
+        events.pee().count
     }
 
     private var outdoorCount: Int {
-        events.filter { $0.type == .plassen && $0.location == .buiten }.count
+        events.outdoorPee().count
     }
 
     private var indoorCount: Int {
-        events.filter { $0.type == .plassen && $0.location == .binnen }.count
+        events.pee().indoor().count
     }
 
     private var mealCount: Int {
-        events.filter { $0.type == .eten }.count
+        events.meals().count
     }
 
     private var poopCount: Int {
-        events.filter { $0.type == .poepen }.count
+        events.poop().count
     }
 
     var body: some View {
@@ -202,7 +203,7 @@ struct TodayStatsCard: View {
                 }
             }
         }
-        .padding()
+        .cardPadding()
         .glassCard(tint: .success)
     }
 }
@@ -219,7 +220,7 @@ struct SleepStatsCard: View {
     }
 
     private var sleepSessions: Int {
-        events.filter { $0.type == .slapen }.count
+        events.sleeps().count
     }
 
     private var goalMinutes: Int { 18 * 60 }
@@ -297,7 +298,7 @@ struct SleepStatsCard: View {
                 .accessibilityValue("\(Int(progress * 100)) \(Strings.Stats.percentOfGoal)")
             }
         }
-        .padding()
+        .cardPadding()
         .glassCard(tint: .sleep)
     }
 

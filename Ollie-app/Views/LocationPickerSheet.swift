@@ -4,6 +4,7 @@
 //
 
 import SwiftUI
+import OllieShared
 
 /// Quick picker for potty location (binnen/buiten)
 struct LocationPickerSheet: View {

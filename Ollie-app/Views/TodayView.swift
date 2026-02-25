@@ -6,17 +6,18 @@
 //  Combines the web app's "home" and "dag" views into a single scrollable view
 
 import SwiftUI
+import OllieShared
 import TipKit
 
 /// Main "Today" tab showing the daily hub
 struct TodayView: View {
     @ObservedObject var viewModel: TimelineViewModel
-    @ObservedObject var weatherService: WeatherService
+    /// Weather service passed down but not observed here to avoid full view redraws
+    /// Weather-dependent sections use their own observation via WeatherSectionContainer
+    let weatherService: WeatherService
     let onSettingsTap: () -> Void
 
-    @State private var dragOffset: CGFloat = 0
     @State private var selectedPhotoEvent: PuppyEvent?
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         VStack(spacing: 0) {
@@ -27,32 +28,44 @@ struct TodayView: View {
             if viewModel.shouldShowTrialBanner {
                 TrialBanner(
                     daysRemaining: viewModel.freeDaysRemaining,
-                    onTap: { viewModel.sheetCoordinator.presentSheet(.upgradePrompt) }
+                    onTap: { viewModel.sheetCoordinator.presentSheet(.olliePlus) }
                 )
             }
 
             ScrollView {
                 VStack(spacing: 16) {
-                    // Weather section (only show for today)
-                    if Calendar.current.isDateInToday(viewModel.currentDate) {
-                        WeatherSection(
-                            forecasts: weatherService.upcomingForecasts(hours: 6),
-                            alert: weatherService.smartAlert(predictedPottyTime: viewModel.predictedNextPlasTime),
-                            isLoading: weatherService.isLoading
-                        )
-                        .padding(.vertical, 8)
-                    }
+                    // Weather section container (isolates weather observation)
+                    WeatherSectionContainer(
+                        weatherService: weatherService,
+                        isToday: Calendar.current.isDateInToday(viewModel.currentDate),
+                        predictedPottyTime: viewModel.predictedNextPlasTime
+                    )
+                    .animatedAppear(delay: 0)
 
                     // Status cards section (only for today)
                     if viewModel.isShowingToday {
                         statusCardsSection
+                            .animatedAppear(delay: 0.05)
                     }
 
-                    // Streak card (motivational - only if there's a streak)
-                    StreakCard(streakInfo: viewModel.streakInfo)
+                    // Walk suggestions (socialization items to watch for)
+                    if viewModel.isShowingToday {
+                        WalkSuggestionsCard()
+                            .animatedAppear(delay: 0.10)
+                    }
+
+                    // Combined potty progress card (streak + poop count)
+                    if viewModel.isShowingToday {
+                        PottyProgressSummaryCard(
+                            streakInfo: viewModel.streakInfo,
+                            poopStatus: viewModel.poopStatus
+                        )
+                        .animatedAppear(delay: 0.15)
+                    }
 
                     // Timeline section
                     timelineSection
+                        .animatedAppear(delay: 0.20)
                 }
                 .padding()
                 .padding(.bottom, 84) // Space for FAB
@@ -62,10 +75,16 @@ struct TodayView: View {
             }
         }
         // Swipe gestures for day navigation
-        .gesture(dayNavigationGesture)
+        .dayNavigation(
+            canGoForward: viewModel.canGoForward,
+            onPreviousDay: viewModel.goToPreviousDay,
+            onNextDay: viewModel.goToNextDay
+        )
         .task {
             await weatherService.fetchForecasts()
         }
+        // Celebration overlay for milestone moments
+        .celebration(style: viewModel.celebrationStyle, trigger: $viewModel.showCelebration)
     }
 
     // MARK: - Nav Bar
@@ -111,19 +130,8 @@ struct TodayView: View {
 
             Spacer()
 
-            // Settings gear (when showing today) or next day button
-            if viewModel.isShowingToday {
-                Button {
-                    onSettingsTap()
-                } label: {
-                    Image(systemName: "gear")
-                        .font(.title2)
-                        .frame(width: 44, height: 44)
-                        .contentShape(Rectangle())
-                }
-                .accessibilityLabel(Strings.Tabs.settings)
-                .accessibilityIdentifier("settings_button")
-            } else {
+            // Next day button (when not showing today)
+            if !viewModel.isShowingToday {
                 Button {
                     HapticFeedback.selection()
                     viewModel.goToNextDay()
@@ -137,6 +145,18 @@ struct TodayView: View {
                 .disabled(!viewModel.canGoForward)
                 .accessibilityLabel(Strings.Timeline.nextDay)
             }
+
+            // Settings gear (always visible)
+            Button {
+                onSettingsTap()
+            } label: {
+                Image(systemName: "gear")
+                    .font(.title2)
+                    .frame(width: 44, height: 44)
+                    .contentShape(Rectangle())
+            }
+            .accessibilityLabel(Strings.Tabs.settings)
+            .accessibilityIdentifier("settings_button")
         }
         .padding()
         .background(Color(.systemBackground))
@@ -147,32 +167,56 @@ struct TodayView: View {
     @ViewBuilder
     private var statusCardsSection: some View {
         VStack(spacing: 12) {
-            // Potty status hero card
-            PottyStatusCard(
-                prediction: viewModel.pottyPrediction,
-                puppyName: viewModel.puppyName,
-                onLogPotty: { viewModel.sheetCoordinator.presentSheet(.potty) }
-            )
+            // Use combined state to determine which cards to show
+            let combinedState = viewModel.combinedSleepPottyState
 
-            // Poop status tracker
-            PoopStatusCard(
-                status: viewModel.poopStatus,
-                onLogPoop: { viewModel.quickLog(type: .poepen) }
-            )
+            // Post-wake potty prompt (highest priority - shows at top)
+            if case .justWokeNeedsPotty(let wokeAt, let minutesSinceWake, let overdueBy) = combinedState {
+                PostWakePottyCard(
+                    wokeAt: wokeAt,
+                    minutesSinceWake: minutesSinceWake,
+                    pottyWasOverdueBy: overdueBy,
+                    onLogPotty: { viewModel.sheetCoordinator.presentSheet(.potty) }
+                )
+            }
 
-            // Sleep status card
-            SleepStatusCard(
-                sleepState: viewModel.currentSleepState,
-                onWakeUp: {
-                    // Use EndSleepSheet for time-adjustable wake up
-                    if case .sleeping(let since, _) = viewModel.currentSleepState {
+            // Combined sleep + potty card (when sleeping and potty is urgent)
+            if case .sleepingPottyUrgent(let since, let duration, let urgency, let overdue) = combinedState {
+                CombinedSleepPottyCard(
+                    sleepingSince: since,
+                    sleepDurationMin: duration,
+                    pottyUrgency: urgency,
+                    minutesOverdue: overdue,
+                    onWakeUp: {
                         viewModel.sheetCoordinator.presentSheet(.endSleep(since))
-                    } else {
-                        viewModel.quickLog(type: .ontwaken)
                     }
-                },
-                onStartNap: { viewModel.quickLog(type: .slapen) }
-            )
+                )
+            }
+
+            // Normal potty card (hide when combined card is showing or just woke)
+            if !combinedState.shouldHidePottyCard {
+                PottyStatusCard(
+                    prediction: viewModel.pottyPrediction,
+                    puppyName: viewModel.puppyName,
+                    onLogPotty: { viewModel.sheetCoordinator.presentSheet(.potty) }
+                )
+            }
+
+            // Sleep status card (hide when combined card is showing)
+            if !combinedState.shouldHideSleepCard {
+                SleepStatusCard(
+                    sleepState: viewModel.currentSleepState,
+                    onWakeUp: {
+                        // Use EndSleepSheet for time-adjustable wake up
+                        if case .sleeping(let since, _) = viewModel.currentSleepState {
+                            viewModel.sheetCoordinator.presentSheet(.endSleep(since))
+                        } else {
+                            viewModel.quickLog(type: .ontwaken)
+                        }
+                    },
+                    onStartNap: { viewModel.quickLog(type: .slapen) }
+                )
+            }
 
             // Medication reminders
             ForEach(viewModel.pendingMedications) { pending in
@@ -187,13 +231,10 @@ struct TodayView: View {
                 )
             }
 
-            // Upcoming events (meals & walks)
-            UpcomingEventsCard(
-                items: viewModel.upcomingItems(forecasts: weatherService.forecasts),
-                isToday: viewModel.isShowingToday,
-                onLogEvent: { eventType, suggestedTime in
-                    viewModel.quickLog(type: eventType, suggestedTime: suggestedTime)
-                }
+            // Actionable & Upcoming events
+            ScheduledEventsSection(
+                viewModel: viewModel,
+                weatherService: weatherService
             )
         }
     }
@@ -247,38 +288,6 @@ struct TodayView: View {
                 .frame(minHeight: CGFloat(viewModel.events.count * 80))
             }
         }
-    }
-
-    // MARK: - Gestures
-
-    private var dayNavigationGesture: some Gesture {
-        DragGesture()
-            .onChanged { value in
-                dragOffset = value.translation.width
-            }
-            .onEnded { value in
-                let threshold: CGFloat = 50
-                if value.translation.width > threshold {
-                    HapticFeedback.selection()
-                    if reduceMotion {
-                        viewModel.goToPreviousDay()
-                    } else {
-                        withAnimation {
-                            viewModel.goToPreviousDay()
-                        }
-                    }
-                } else if value.translation.width < -threshold && viewModel.canGoForward {
-                    HapticFeedback.selection()
-                    if reduceMotion {
-                        viewModel.goToNextDay()
-                    } else {
-                        withAnimation {
-                            viewModel.goToNextDay()
-                        }
-                    }
-                }
-                dragOffset = 0
-            }
     }
 
 }

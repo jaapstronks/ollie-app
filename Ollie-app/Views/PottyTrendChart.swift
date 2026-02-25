@@ -5,6 +5,7 @@
 //  Line chart showing outdoor potty percentage over the last 7 days
 
 import SwiftUI
+import OllieShared
 import Charts
 
 /// Data point for the potty trend chart
@@ -24,12 +25,12 @@ struct PottyTrendPoint: Identifiable {
         }
     }
 
-    /// Short day label (e.g., "ma")
+    /// Short day label (e.g., "Mon")
     var dayLabel: String {
         let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "nl_NL")
+        formatter.locale = Locale.current
         formatter.dateFormat = "E"
-        return formatter.string(from: date).lowercased()
+        return formatter.string(from: date)
     }
 }
 
@@ -52,15 +53,21 @@ struct PottyTrendChart: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             // Header
-            HStack(spacing: 8) {
-                Image(systemName: "chart.line.uptrend.xyaxis")
-                    .font(.system(size: 14, weight: .semibold))
-                    .foregroundStyle(Color.ollieSuccess)
+            VStack(alignment: .leading, spacing: 4) {
+                HStack(spacing: 8) {
+                    Image(systemName: "chart.line.uptrend.xyaxis")
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundStyle(Color.ollieSuccess)
 
-                Text(Strings.Insights.trends)
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
-                    .foregroundStyle(.secondary)
+                    Text(Strings.Insights.outdoorPottyTrend)
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(.secondary)
+                }
+
+                Text(Strings.Insights.outdoorPottyTrendSubtitle)
+                    .font(.caption)
+                    .foregroundStyle(.tertiary)
             }
 
             if hasData {

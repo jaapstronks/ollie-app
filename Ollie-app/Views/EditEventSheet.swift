@@ -4,6 +4,7 @@
 //
 
 import SwiftUI
+import OllieShared
 
 /// Sheet for editing an existing event
 struct EditEventSheet: View {
@@ -57,6 +58,7 @@ struct EditEventSheet: View {
                         displayedComponents: [.date, .hourAndMinute]
                     )
                     .labelsHidden()
+                    .accessibilityIdentifier("EDIT_EVENT_TIME_PICKER")
                 }
 
                 // Location picker (for potty events)
@@ -74,6 +76,7 @@ struct EditEventSheet: View {
                 Section(Strings.LogEvent.note) {
                     TextField(Strings.LogEvent.notePlaceholder, text: $note, axis: .vertical)
                         .lineLimit(3...6)
+                        .accessibilityIdentifier("EDIT_EVENT_NOTE_FIELD")
                 }
 
                 // Social event: who
@@ -112,12 +115,14 @@ struct EditEventSheet: View {
                     Button(Strings.Common.cancel) {
                         dismiss()
                     }
+                    .accessibilityIdentifier("EDIT_EVENT_CANCEL_BUTTON")
                 }
 
                 ToolbarItem(placement: .confirmationAction) {
                     Button(Strings.Common.save) {
                         saveEvent()
                     }
+                    .accessibilityIdentifier("EDIT_EVENT_SAVE_BUTTON")
                 }
             }
         }

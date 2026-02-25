@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import OllieShared
 
 /// Settings view for managing medications
 struct MedicationSettingsView: View {
@@ -86,7 +87,7 @@ struct MedicationSettingsView: View {
                 } label: {
                     Label(Strings.Medications.addMedication, systemImage: "plus.circle.fill")
                 }
-                .buttonStyle(.borderedProminent)
+                .buttonStyle(.glassPill(tint: .accent))
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, 32)

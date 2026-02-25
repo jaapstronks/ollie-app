@@ -4,6 +4,7 @@
 //
 
 import SwiftUI
+import OllieShared
 
 /// Context for smart quick log bar icon display
 struct QuickLogContext {
@@ -19,7 +20,7 @@ struct QuickLogContext {
         let calendar = Calendar.current
 
         // Check if any meal is already logged today
-        let mealEventsToday = todayEvents.filter { $0.type == .eten }
+        let mealEventsToday = todayEvents.meals()
 
         for portion in schedule.portions {
             guard let targetTimeStr = portion.targetTime else { continue }

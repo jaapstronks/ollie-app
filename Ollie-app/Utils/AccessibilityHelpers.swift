@@ -5,6 +5,7 @@
 //  Reusable accessibility utilities and extensions
 
 import SwiftUI
+import OllieShared
 
 // MARK: - Conditional Animation Extension
 

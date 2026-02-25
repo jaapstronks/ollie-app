@@ -6,6 +6,7 @@
 //
 
 import Combine
+import OllieShared
 import SwiftUI
 
 /// Manages sheet presentation state for the timeline view
@@ -22,13 +23,23 @@ final class SheetCoordinator: ObservableObject {
         case logEvent(EventType)
         case locationPicker(EventType)
         case mediaPicker(MediaPickerSource)
+        case momentSourcePicker
         case logMoment
         case editEvent(PuppyEvent)
-        case upgradePrompt
-        case purchaseSuccess
+        case olliePlus  // Ollie+ subscription upsell sheet
+        case subscriptionSuccess  // Shown after successful subscription
         case startActivity(ActivityType)
         case endActivity
         case endSleep(Date)
+        // Additional sheets for settings and specialized logging
+        case weightLog
+        case trainingLog
+        case socializationLog
+        case settings
+        case profileEdit
+        case notificationSettings
+        case walkLog
+        case napLog(defaultDuration: Int)
 
         var id: String {
             switch self {
@@ -38,13 +49,22 @@ final class SheetCoordinator: ObservableObject {
             case .logEvent(let type): return "logEvent-\(type.rawValue)"
             case .locationPicker(let type): return "locationPicker-\(type.rawValue)"
             case .mediaPicker(let source): return "mediaPicker-\(source)"
+            case .momentSourcePicker: return "momentSourcePicker"
             case .logMoment: return "logMoment"
             case .editEvent(let event): return "editEvent-\(event.id.uuidString)"
-            case .upgradePrompt: return "upgradePrompt"
-            case .purchaseSuccess: return "purchaseSuccess"
+            case .olliePlus: return "olliePlus"
+            case .subscriptionSuccess: return "subscriptionSuccess"
             case .startActivity(let type): return "startActivity-\(type.rawValue)"
             case .endActivity: return "endActivity"
             case .endSleep: return "endSleep"
+            case .weightLog: return "weightLog"
+            case .trainingLog: return "trainingLog"
+            case .socializationLog: return "socializationLog"
+            case .settings: return "settings"
+            case .profileEdit: return "profileEdit"
+            case .notificationSettings: return "notificationSettings"
+            case .walkLog: return "walkLog"
+            case .napLog: return "napLog"
             }
         }
     }

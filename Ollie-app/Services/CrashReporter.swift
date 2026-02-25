@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import OllieShared
 import Sentry
 
 /// Centralized crash reporting and error tracking using Sentry
@@ -13,12 +14,23 @@ enum CrashReporter {
 
     // MARK: - Configuration
 
-    private static let dsn = "https://d1bf2a8b99068707032e4021d6b9c967@o4510923207999488.ingest.de.sentry.io/4510923210752080"
+    /// Sentry DSN loaded from Info.plist (set via build configuration)
+    /// Configure in Xcode: Add SENTRY_DSN to your xcconfig or build settings
+    private static var dsn: String? {
+        Bundle.main.object(forInfoDictionaryKey: "SENTRY_DSN") as? String
+    }
 
     // MARK: - Initialization
 
     /// Call this in app init, before any other code runs
     static func start() {
+        guard let dsn = dsn, !dsn.isEmpty, dsn != "$(SENTRY_DSN)" else {
+            #if DEBUG
+            print("[CrashReporter] Sentry DSN not configured - crash reporting disabled")
+            #endif
+            return
+        }
+
         SentrySDK.start { options in
             options.dsn = dsn
 
@@ -67,6 +79,26 @@ enum CrashReporter {
 
             // Send default PII (device info, OS version - but not user data)
             options.sendDefaultPii = false
+
+            // Scrub sensitive data before sending to Sentry
+            options.beforeSend = { event in
+                // Remove potentially sensitive HTTP headers from breadcrumbs
+                if let breadcrumbs = event.breadcrumbs {
+                    for breadcrumb in breadcrumbs {
+                        if var data = breadcrumb.data {
+                            // Remove sensitive headers that might be captured
+                            let sensitiveKeys = ["Authorization", "Cookie", "Set-Cookie", "X-Auth-Token", "Api-Key",
+                                                 "authorization", "cookie", "set-cookie", "x-auth-token", "api-key"]
+                            for key in sensitiveKeys {
+                                data.removeValue(forKey: key)
+                            }
+                            breadcrumb.data = data
+                        }
+                    }
+                }
+
+                return event
+            }
         }
     }
 

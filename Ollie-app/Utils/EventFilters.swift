@@ -6,6 +6,7 @@
 //  Eliminates repeated .filter { $0.type == ... } patterns across the codebase.
 
 import Foundation
+import OllieShared
 
 // MARK: - Event Filtering Extensions
 
@@ -61,6 +62,11 @@ extension Array where Element == PuppyEvent {
     /// Filter to weight events
     func weights() -> [PuppyEvent] {
         filter { $0.type == .gewicht }
+    }
+
+    /// Filter to drink/water events
+    func drinks() -> [PuppyEvent] {
+        filter { $0.type == .drinken }
     }
 
     /// Filter to moment (photo) events

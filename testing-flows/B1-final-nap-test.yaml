@@ -1,0 +1,36 @@
+appId: com.jaapstronks.Ollie-app
+---
+# Final attempt to start nap
+
+# Open FAB menu
+- tapOn:
+    id: "FAB_BUTTON"
+- waitForAnimationToEnd
+
+# Tap Sleep
+- tapOn:
+    text: "Sleep"
+- waitForAnimationToEnd
+
+# Tap Start nap now
+- tapOn:
+    text: "Start nap now"
+- waitForAnimationToEnd
+
+# Take screenshot to see the button
+- takeScreenshot: testing-screenshots/B1-15-before-button
+
+# Tap at the bottom center where the orange button should be
+# Using point coordinates (relative to screen)
+- tapOn:
+    point: "50%,85%"
+- waitForAnimationToEnd
+
+# Screenshot result
+- takeScreenshot: testing-screenshots/B1-16-after-button
+
+# Check if sleep started - scroll up to see status cards
+- swipe:
+    direction: DOWN
+    duration: 500
+- takeScreenshot: testing-screenshots/B1-17-final-status

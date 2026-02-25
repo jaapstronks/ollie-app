@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import OllieShared
 
 /// Name input step - first step of onboarding
 struct OnboardingNameStep: View {
@@ -75,7 +76,7 @@ struct OnboardingNextButton: View {
                 .padding()
                 .background(enabled ? Color.accentColor : Color.gray)
                 .foregroundColor(.white)
-                .cornerRadius(12)
+                .cornerRadius(LayoutConstants.cornerRadiusM)
         }
         .disabled(!enabled)
     }
@@ -93,7 +94,7 @@ struct OnboardingBackButton: View {
                 .padding()
                 .background(Color(.secondarySystemBackground))
                 .foregroundColor(.primary)
-                .cornerRadius(12)
+                .cornerRadius(LayoutConstants.cornerRadiusM)
         }
     }
 }

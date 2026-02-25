@@ -1,0 +1,28 @@
+appId: com.jaapstronks.Ollie-app
+---
+# Test B1: Start a nap - full flow
+
+# Tap FAB to open log menu
+- tapOn:
+    id: "FAB_BUTTON"
+- waitForAnimationToEnd
+
+# Tap on Sleep
+- tapOn:
+    text: "Sleep"
+- waitForAnimationToEnd
+- takeScreenshot: testing-screenshots/B1-10-sleep-options
+
+# Tap on "Start nap now" to expand it
+- tapOn:
+    text: "Start nap now"
+- waitForAnimationToEnd
+- takeScreenshot: testing-screenshots/B1-11-time-picker
+
+# Look for and tap the confirm/start button
+# The button might say "Start" or have a different label
+- tapOn:
+    text: "Start"
+    optional: true
+- waitForAnimationToEnd
+- takeScreenshot: testing-screenshots/B1-12-after-tap

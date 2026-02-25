@@ -5,6 +5,7 @@
 //  Multi-stage import sheet with preview, progress, and completion states
 
 import SwiftUI
+import OllieShared
 
 /// Import stages
 enum ImportStage {
@@ -142,7 +143,7 @@ struct ImportSheet: View {
                 .frame(maxWidth: .infinity)
                 .padding()
                 .background(Color.blue)
-                .cornerRadius(12)
+                .cornerRadius(LayoutConstants.cornerRadiusM)
             }
             .disabled(preview.newDays == 0 && !overwriteExisting)
         }
@@ -244,7 +245,7 @@ struct ImportSheet: View {
                     .frame(maxWidth: .infinity)
                     .padding()
                     .background(Color.green)
-                    .cornerRadius(12)
+                    .cornerRadius(LayoutConstants.cornerRadiusM)
             }
             .padding(.bottom, 20)
         }
@@ -287,7 +288,7 @@ struct ImportSheet: View {
                         .frame(maxWidth: .infinity)
                         .padding()
                         .background(Color.blue)
-                        .cornerRadius(12)
+                        .cornerRadius(LayoutConstants.cornerRadiusM)
                 }
 
                 Button {

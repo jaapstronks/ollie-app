@@ -2,9 +2,10 @@
 //  MealScheduleEditor.swift
 //  Ollie-app
 //
-//  Editor for configuring meal schedule
+//  Editor for configuring meal schedule with add/delete/reorder support
 
 import SwiftUI
+import OllieShared
 
 /// Editor view for meal schedule configuration
 struct MealScheduleEditor: View {
@@ -12,7 +13,6 @@ struct MealScheduleEditor: View {
     let onSave: () -> Void
 
     @Environment(\.dismiss) private var dismiss
-    @State private var editingPortion: MealSchedule.MealPortion?
     @State private var showingAddMeal = false
 
     var body: some View {
@@ -28,25 +28,25 @@ struct MealScheduleEditor: View {
                     Button {
                         showingAddMeal = true
                     } label: {
-                        Label("Maaltijd toevoegen", systemImage: "plus.circle")
+                        Label(Strings.Meals.addMeal, systemImage: "plus.circle")
                     }
                 } header: {
-                    Text("Maaltijden")
+                    Text(Strings.Meals.mealsSection)
                 } footer: {
-                    Text("Tik op een maaltijd om te bewerken. Veeg om te verwijderen.")
+                    Text(Strings.Meals.footerHint)
                 }
             }
-            .navigationTitle("Maaltijden")
+            .navigationTitle(Strings.Meals.title)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Annuleren") {
+                    Button(Strings.Common.cancel) {
                         dismiss()
                     }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Bewaar") {
-                        // Update mealsPerDay count
+                    Button(Strings.Common.save) {
+                        // Update mealsPerDay count to match portions
                         mealSchedule.mealsPerDay = mealSchedule.portions.count
                         onSave()
                         dismiss()
@@ -122,41 +122,36 @@ struct EditMealSheet: View {
     @State private var label: String = ""
     @State private var amount: String = ""
     @State private var targetTime: Date = Date()
-    @State private var hasTargetTime: Bool = false
 
     var body: some View {
         NavigationStack {
             Form {
-                Section("Naam") {
-                    TextField("Bijv. Ontbijt", text: $label)
+                Section(Strings.Meals.name) {
+                    TextField(Strings.Meals.namePlaceholder, text: $label)
                 }
 
-                Section("Hoeveelheid") {
-                    TextField("Bijv. 80g", text: $amount)
+                Section(Strings.Meals.amount) {
+                    TextField(Strings.Meals.amountExample, text: $amount)
                 }
 
-                Section("Tijd") {
-                    Toggle("Streeftijd instellen", isOn: $hasTargetTime)
-
-                    if hasTargetTime {
-                        DatePicker(
-                            "Tijd",
-                            selection: $targetTime,
-                            displayedComponents: .hourAndMinute
-                        )
-                    }
+                Section(Strings.Meals.time) {
+                    DatePicker(
+                        Strings.Meals.time,
+                        selection: $targetTime,
+                        displayedComponents: .hourAndMinute
+                    )
                 }
             }
-            .navigationTitle("Maaltijd bewerken")
+            .navigationTitle(Strings.Meals.editMeal)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Annuleren") {
+                    Button(Strings.Common.cancel) {
                         dismiss()
                     }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Bewaar") {
+                    Button(Strings.Common.save) {
                         savePortion()
                         dismiss()
                     }
@@ -173,30 +168,19 @@ struct EditMealSheet: View {
         label = portion.label
         amount = portion.amount
 
-        if let timeString = portion.targetTime {
-            hasTargetTime = true
-            targetTime = parseTime(timeString) ?? Date()
+        if let timeString = portion.targetTime,
+           let parsed = DateFormatters.timeOnly.date(from: timeString) {
+            targetTime = parsed
         } else {
-            hasTargetTime = false
+            // Default to noon if no time set
+            targetTime = Date.fromTimeComponents(hour: 12, minute: 0)
         }
     }
 
     private func savePortion() {
         portion.label = label
         portion.amount = amount
-        portion.targetTime = hasTargetTime ? formatTime(targetTime) : nil
-    }
-
-    private func parseTime(_ string: String) -> Date? {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "HH:mm"
-        return formatter.date(from: string)
-    }
-
-    private func formatTime(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "HH:mm"
-        return formatter.string(from: date)
+        portion.targetTime = targetTime.timeString
     }
 }
 
@@ -208,49 +192,41 @@ struct AddMealSheet: View {
 
     @State private var label: String = ""
     @State private var amount: String = ""
-    @State private var targetTime: Date = Date()
-    @State private var hasTargetTime: Bool = true
+    @State private var targetTime: Date = Date.fromTimeComponents(hour: 12, minute: 0)
 
     var body: some View {
         NavigationStack {
             Form {
-                Section("Naam") {
-                    TextField("Bijv. Ontbijt", text: $label)
+                Section(Strings.Meals.name) {
+                    TextField(Strings.Meals.namePlaceholder, text: $label)
                 }
 
-                Section("Hoeveelheid") {
-                    TextField("Bijv. 80g", text: $amount)
+                Section(Strings.Meals.amount) {
+                    TextField(Strings.Meals.amountExample, text: $amount)
                 }
 
-                Section("Tijd") {
-                    Toggle("Streeftijd instellen", isOn: $hasTargetTime)
-
-                    if hasTargetTime {
-                        DatePicker(
-                            "Tijd",
-                            selection: $targetTime,
-                            displayedComponents: .hourAndMinute
-                        )
-                    }
+                Section(Strings.Meals.time) {
+                    DatePicker(
+                        Strings.Meals.time,
+                        selection: $targetTime,
+                        displayedComponents: .hourAndMinute
+                    )
                 }
             }
-            .navigationTitle("Maaltijd toevoegen")
+            .navigationTitle(Strings.Meals.addMeal)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Annuleren") {
+                    Button(Strings.Common.cancel) {
                         dismiss()
                     }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Voeg toe") {
-                        let formatter = DateFormatter()
-                        formatter.dateFormat = "HH:mm"
-
+                    Button(Strings.Common.add) {
                         let newPortion = MealSchedule.MealPortion(
                             label: label,
                             amount: amount,
-                            targetTime: hasTargetTime ? formatter.string(from: targetTime) : nil
+                            targetTime: targetTime.timeString
                         )
                         onAdd(newPortion)
                         dismiss()
@@ -287,9 +263,9 @@ struct MealScheduleEditorWrapper: View {
         initialSchedule: MealSchedule(
             mealsPerDay: 3,
             portions: [
-                .init(label: "Ontbijt", amount: "80g", targetTime: "07:00"),
-                .init(label: "Middag", amount: "80g", targetTime: "13:00"),
-                .init(label: "Avond", amount: "80g", targetTime: "19:00")
+                .init(label: "Breakfast", amount: "80g", targetTime: "07:00"),
+                .init(label: "Lunch", amount: "80g", targetTime: "13:00"),
+                .init(label: "Dinner", amount: "80g", targetTime: "19:00")
             ]
         ),
         onSave: { _ in }

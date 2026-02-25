@@ -5,6 +5,7 @@
 //  Slim banner shown above TabView when activity is in progress
 
 import SwiftUI
+import OllieShared
 
 /// Compact banner for cross-tab activity visibility
 struct CompactActivityBanner: View {

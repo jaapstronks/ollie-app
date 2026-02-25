@@ -7,13 +7,29 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		672ED4502F4CF0400024A12B /* OllieWatch Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 672ED4462F4CF03F0024A12B /* OllieWatch Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		672ED45C2F4CF0A30024A12B /* OllieShared in Frameworks */ = {isa = PBXBuildFile; productRef = 672ED45B2F4CF0A30024A12B /* OllieShared */; };
+		672ED5002F4D9DA10024A12B /* Secrets.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 672ED4FF2F4D9DA10024A12B /* Secrets.xcconfig */; };
 		673C41F42F49B3DA004333E6 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = 673C41F32F49B3DA004333E6 /* Sentry */; };
 		6768FD482F476789000E6A79 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6768FD472F476789000E6A79 /* WidgetKit.framework */; };
 		6768FD4A2F476789000E6A79 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6768FD492F476789000E6A79 /* SwiftUI.framework */; };
 		6768FD5B2F476789000E6A79 /* OlliewidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 6768FD452F476789000E6A79 /* OlliewidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		67B4054C2F4DD23900DA9DBF /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6768FD472F476789000E6A79 /* WidgetKit.framework */; };
+		67B4054D2F4DD23900DA9DBF /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6768FD492F476789000E6A79 /* SwiftUI.framework */; };
+		67B4055C2F4DD23A00DA9DBF /* OllieWatchWidgetsExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 67B4054B2F4DD23900DA9DBF /* OllieWatchWidgetsExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		67DE47522F4CE78700F643A4 /* OllieShared in Frameworks */ = {isa = PBXBuildFile; productRef = 67SHARED022F500000000002 /* OllieShared */; };
+		67DE47532F4CE78700F643A4 /* OllieShared in Frameworks */ = {isa = PBXBuildFile; productRef = 67SHARED032F500000000003 /* OllieShared */; };
+		67DE47542F4CE78700F643A4 /* OllieShared in Frameworks */ = {isa = PBXBuildFile; productRef = 67SHARED042F500000000004 /* OllieShared */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		672ED44E2F4CF0400024A12B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6786FEB82F470F4300CBFE93 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 672ED4452F4CF03F0024A12B;
+			remoteInfo = "OllieWatch Watch App";
+		};
 		673C41E92F49ABCD004333E6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 6786FEB82F470F4300CBFE93 /* Project object */;
@@ -28,9 +44,27 @@
 			remoteGlobalIDString = 6768FD442F476789000E6A79;
 			remoteInfo = OlliewidgetExtension;
 		};
+		67B4055A2F4DD23A00DA9DBF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6786FEB82F470F4300CBFE93 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 67B4054A2F4DD23900DA9DBF;
+			remoteInfo = OllieWatchWidgetsExtension;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		672ED4542F4CF0400024A12B /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				672ED4502F4CF0400024A12B /* OllieWatch Watch App.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		6768FD602F476789000E6A79 /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -42,18 +76,32 @@
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		67B405612F4DD23A00DA9DBF /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				67B4055C2F4DD23A00DA9DBF /* OllieWatchWidgetsExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		672ED4462F4CF03F0024A12B /* OllieWatch Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "OllieWatch Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		672ED4FF2F4D9DA10024A12B /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
 		673C41E32F49ABCD004333E6 /* Ollie-appUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Ollie-appUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6768FD452F476789000E6A79 /* OlliewidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = OlliewidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		6768FD472F476789000E6A79 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		6768FD492F476789000E6A79 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		6786FEC02F470F4300CBFE93 /* Ollie-app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Ollie-app.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		67B4054B2F4DD23900DA9DBF /* OllieWatchWidgetsExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = OllieWatchWidgetsExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		6768FD5C2F476789000E6A79 /* Exceptions for "Olliewidget" folder in "OlliewidgetExtension" target */ = {
+		6768FD5C2F476789000E6A79 /* Exceptions for "OllieWidget" folder in "OlliewidgetExtension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -67,20 +115,32 @@
 			);
 			target = 6786FEBF2F470F4300CBFE93 /* Ollie-app */;
 		};
+		67B405602F4DD23A00DA9DBF /* Exceptions for "OllieWatchWidgets" folder in "OllieWatchWidgetsExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 67B4054A2F4DD23900DA9DBF /* OllieWatchWidgetsExtension */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		672ED4472F4CF03F0024A12B /* OllieWatch Watch App */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "OllieWatch Watch App";
+			sourceTree = "<group>";
+		};
 		673C41E42F49ABCD004333E6 /* Ollie-appUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = "Ollie-appUITests";
 			sourceTree = "<group>";
 		};
-		6768FD4B2F476789000E6A79 /* Olliewidget */ = {
+		6768FD4B2F476789000E6A79 /* OllieWidget */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				6768FD5C2F476789000E6A79 /* Exceptions for "Olliewidget" folder in "OlliewidgetExtension" target */,
+				6768FD5C2F476789000E6A79 /* Exceptions for "OllieWidget" folder in "OlliewidgetExtension" target */,
 			);
-			path = Olliewidget;
+			path = OllieWidget;
 			sourceTree = "<group>";
 		};
 		6786FEC22F470F4300CBFE93 /* Ollie-app */ = {
@@ -91,13 +151,30 @@
 			path = "Ollie-app";
 			sourceTree = "<group>";
 		};
+		67B4054E2F4DD23900DA9DBF /* OllieWatchWidgets */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				67B405602F4DD23A00DA9DBF /* Exceptions for "OllieWatchWidgets" folder in "OllieWatchWidgetsExtension" target */,
+			);
+			path = OllieWatchWidgets;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		672ED4432F4CF03F0024A12B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				672ED45C2F4CF0A30024A12B /* OllieShared in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		673C41E02F49ABCD004333E6 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				67DE47542F4CE78700F643A4 /* OllieShared in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -105,6 +182,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				67DE47532F4CE78700F643A4 /* OllieShared in Frameworks */,
 				6768FD4A2F476789000E6A79 /* SwiftUI.framework in Frameworks */,
 				6768FD482F476789000E6A79 /* WidgetKit.framework in Frameworks */,
 			);
@@ -114,7 +192,17 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				67DE47522F4CE78700F643A4 /* OllieShared in Frameworks */,
 				673C41F42F49B3DA004333E6 /* Sentry in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		67B405482F4DD23900DA9DBF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				67B4054D2F4DD23900DA9DBF /* SwiftUI.framework in Frameworks */,
+				67B4054C2F4DD23900DA9DBF /* WidgetKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -134,10 +222,13 @@
 			isa = PBXGroup;
 			children = (
 				6786FEC22F470F4300CBFE93 /* Ollie-app */,
-				6768FD4B2F476789000E6A79 /* Olliewidget */,
+				6768FD4B2F476789000E6A79 /* OllieWidget */,
 				673C41E42F49ABCD004333E6 /* Ollie-appUITests */,
+				672ED4472F4CF03F0024A12B /* OllieWatch Watch App */,
+				67B4054E2F4DD23900DA9DBF /* OllieWatchWidgets */,
 				6768FD462F476789000E6A79 /* Frameworks */,
 				6786FEC12F470F4300CBFE93 /* Products */,
+				672ED4FF2F4D9DA10024A12B /* Secrets.xcconfig */,
 			);
 			sourceTree = "<group>";
 		};
@@ -147,6 +238,8 @@
 				6786FEC02F470F4300CBFE93 /* Ollie-app.app */,
 				6768FD452F476789000E6A79 /* OlliewidgetExtension.appex */,
 				673C41E32F49ABCD004333E6 /* Ollie-appUITests.xctest */,
+				672ED4462F4CF03F0024A12B /* OllieWatch Watch App.app */,
+				67B4054B2F4DD23900DA9DBF /* OllieWatchWidgetsExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -154,6 +247,31 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		672ED4452F4CF03F0024A12B /* OllieWatch Watch App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 672ED4512F4CF0400024A12B /* Build configuration list for PBXNativeTarget "OllieWatch Watch App" */;
+			buildPhases = (
+				672ED4422F4CF03F0024A12B /* Sources */,
+				672ED4432F4CF03F0024A12B /* Frameworks */,
+				672ED4442F4CF03F0024A12B /* Resources */,
+				67B405612F4DD23A00DA9DBF /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				67B4055B2F4DD23A00DA9DBF /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				672ED4472F4CF03F0024A12B /* OllieWatch Watch App */,
+			);
+			name = "OllieWatch Watch App";
+			packageProductDependencies = (
+				672ED45B2F4CF0A30024A12B /* OllieShared */,
+			);
+			productName = "OllieWatch Watch App";
+			productReference = 672ED4462F4CF03F0024A12B /* OllieWatch Watch App.app */;
+			productType = "com.apple.product-type.application";
+		};
 		673C41E22F49ABCD004333E6 /* Ollie-appUITests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 673C41EB2F49ABCD004333E6 /* Build configuration list for PBXNativeTarget "Ollie-appUITests" */;
@@ -172,6 +290,7 @@
 			);
 			name = "Ollie-appUITests";
 			packageProductDependencies = (
+				67SHARED042F500000000004 /* OllieShared */,
 			);
 			productName = "Ollie-appUITests";
 			productReference = 673C41E32F49ABCD004333E6 /* Ollie-appUITests.xctest */;
@@ -190,10 +309,11 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				6768FD4B2F476789000E6A79 /* Olliewidget */,
+				6768FD4B2F476789000E6A79 /* OllieWidget */,
 			);
 			name = OlliewidgetExtension;
 			packageProductDependencies = (
+				67SHARED032F500000000003 /* OllieShared */,
 			);
 			productName = OlliewidgetExtension;
 			productReference = 6768FD452F476789000E6A79 /* OlliewidgetExtension.appex */;
@@ -207,11 +327,13 @@
 				6786FEBD2F470F4300CBFE93 /* Frameworks */,
 				6786FEBE2F470F4300CBFE93 /* Resources */,
 				6768FD602F476789000E6A79 /* Embed Foundation Extensions */,
+				672ED4542F4CF0400024A12B /* Embed Watch Content */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				6768FD5A2F476789000E6A79 /* PBXTargetDependency */,
+				672ED44F2F4CF0400024A12B /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				6786FEC22F470F4300CBFE93 /* Ollie-app */,
@@ -219,10 +341,33 @@
 			name = "Ollie-app";
 			packageProductDependencies = (
 				673C41F32F49B3DA004333E6 /* Sentry */,
+				67SHARED022F500000000002 /* OllieShared */,
 			);
 			productName = "Ollie-app";
 			productReference = 6786FEC02F470F4300CBFE93 /* Ollie-app.app */;
 			productType = "com.apple.product-type.application";
+		};
+		67B4054A2F4DD23900DA9DBF /* OllieWatchWidgetsExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 67B4055D2F4DD23A00DA9DBF /* Build configuration list for PBXNativeTarget "OllieWatchWidgetsExtension" */;
+			buildPhases = (
+				67B405472F4DD23900DA9DBF /* Sources */,
+				67B405482F4DD23900DA9DBF /* Frameworks */,
+				67B405492F4DD23900DA9DBF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				67B4054E2F4DD23900DA9DBF /* OllieWatchWidgets */,
+			);
+			name = OllieWatchWidgetsExtension;
+			packageProductDependencies = (
+			);
+			productName = OllieWatchWidgetsExtension;
+			productReference = 67B4054B2F4DD23900DA9DBF /* OllieWatchWidgetsExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -234,6 +379,9 @@
 				LastSwiftUpdateCheck = 2620;
 				LastUpgradeCheck = 2620;
 				TargetAttributes = {
+					672ED4452F4CF03F0024A12B = {
+						CreatedOnToolsVersion = 26.2;
+					};
 					673C41E22F49ABCD004333E6 = {
 						CreatedOnToolsVersion = 26.2;
 						TestTargetID = 6786FEBF2F470F4300CBFE93;
@@ -242,6 +390,9 @@
 						CreatedOnToolsVersion = 26.2;
 					};
 					6786FEBF2F470F4300CBFE93 = {
+						CreatedOnToolsVersion = 26.2;
+					};
+					67B4054A2F4DD23900DA9DBF = {
 						CreatedOnToolsVersion = 26.2;
 					};
 				};
@@ -257,6 +408,7 @@
 			mainGroup = 6786FEB72F470F4300CBFE93;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
+				67SHARED012F500000000001 /* XCLocalSwiftPackageReference "OllieShared" */,
 				673C41F22F49B3DA004333E6 /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
 			);
 			preferredProjectObjectVersion = 77;
@@ -267,11 +419,20 @@
 				6786FEBF2F470F4300CBFE93 /* Ollie-app */,
 				6768FD442F476789000E6A79 /* OlliewidgetExtension */,
 				673C41E22F49ABCD004333E6 /* Ollie-appUITests */,
+				672ED4452F4CF03F0024A12B /* OllieWatch Watch App */,
+				67B4054A2F4DD23900DA9DBF /* OllieWatchWidgetsExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		672ED4442F4CF03F0024A12B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		673C41E12F49ABCD004333E6 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -290,12 +451,27 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				672ED5002F4D9DA10024A12B /* Secrets.xcconfig in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		67B405492F4DD23900DA9DBF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		672ED4422F4CF03F0024A12B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		673C41DF2F49ABCD004333E6 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -317,9 +493,21 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		67B405472F4DD23900DA9DBF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		672ED44F2F4CF0400024A12B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 672ED4452F4CF03F0024A12B /* OllieWatch Watch App */;
+			targetProxy = 672ED44E2F4CF0400024A12B /* PBXContainerItemProxy */;
+		};
 		673C41EA2F49ABCD004333E6 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 6786FEBF2F470F4300CBFE93 /* Ollie-app */;
@@ -330,9 +518,82 @@
 			target = 6768FD442F476789000E6A79 /* OlliewidgetExtension */;
 			targetProxy = 6768FD592F476789000E6A79 /* PBXContainerItemProxy */;
 		};
+		67B4055B2F4DD23A00DA9DBF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 67B4054A2F4DD23900DA9DBF /* OllieWatchWidgetsExtension */;
+			targetProxy = 67B4055A2F4DD23A00DA9DBF /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		672ED4522F4CF0400024A12B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "OllieWatch Watch App/OllieWatch Watch App.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 56TESV358R;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = OllieWatch;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = nl.jaapstronks.Ollie;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = nl.jaapstronks.Ollie.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 26.2;
+			};
+			name = Debug;
+		};
+		672ED4532F4CF0400024A12B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "OllieWatch Watch App/OllieWatch Watch App.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 56TESV358R;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = OllieWatch;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = nl.jaapstronks.Ollie;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = nl.jaapstronks.Ollie.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 26.2;
+			};
+			name = Release;
+		};
 		673C41EC2F49ABCD004333E6 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -558,6 +819,7 @@
 		};
 		6786FECC2F470F4400CBFE93 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 672ED4FF2F4D9DA10024A12B /* Secrets.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -592,6 +854,7 @@
 		};
 		6786FECD2F470F4400CBFE93 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 672ED4FF2F4D9DA10024A12B /* Secrets.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -624,9 +887,86 @@
 			};
 			name = Release;
 		};
+		67B4055E2F4DD23A00DA9DBF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = OllieWatchWidgetsExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 56TESV358R;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = OllieWatchWidgets/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = OllieWatchWidgets;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = nl.jaapstronks.Ollie.watchkitapp.OllieWatchWidgets;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 26.2;
+			};
+			name = Debug;
+		};
+		67B4055F2F4DD23A00DA9DBF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = OllieWatchWidgetsExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 56TESV358R;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = OllieWatchWidgets/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = OllieWatchWidgets;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = nl.jaapstronks.Ollie.watchkitapp.OllieWatchWidgets;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 26.2;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		672ED4512F4CF0400024A12B /* Build configuration list for PBXNativeTarget "OllieWatch Watch App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				672ED4522F4CF0400024A12B /* Debug */,
+				672ED4532F4CF0400024A12B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		673C41EB2F49ABCD004333E6 /* Build configuration list for PBXNativeTarget "Ollie-appUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -663,7 +1003,23 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		67B4055D2F4DD23A00DA9DBF /* Build configuration list for PBXNativeTarget "OllieWatchWidgetsExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				67B4055E2F4DD23A00DA9DBF /* Debug */,
+				67B4055F2F4DD23A00DA9DBF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		67SHARED012F500000000001 /* XCLocalSwiftPackageReference "OllieShared" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = OllieShared;
+		};
+/* End XCLocalSwiftPackageReference section */
 
 /* Begin XCRemoteSwiftPackageReference section */
 		673C41F22F49B3DA004333E6 /* XCRemoteSwiftPackageReference "sentry-cocoa" */ = {
@@ -677,10 +1033,27 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		672ED45B2F4CF0A30024A12B /* OllieShared */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 67SHARED012F500000000001 /* XCLocalSwiftPackageReference "OllieShared" */;
+			productName = OllieShared;
+		};
 		673C41F32F49B3DA004333E6 /* Sentry */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 673C41F22F49B3DA004333E6 /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
 			productName = Sentry;
+		};
+		67SHARED022F500000000002 /* OllieShared */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = OllieShared;
+		};
+		67SHARED032F500000000003 /* OllieShared */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = OllieShared;
+		};
+		67SHARED042F500000000004 /* OllieShared */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = OllieShared;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

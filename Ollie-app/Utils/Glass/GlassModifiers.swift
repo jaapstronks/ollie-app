@@ -7,6 +7,70 @@
 
 import SwiftUI
 
+// MARK: - Glass Effect Helpers
+
+/// Shared helpers for creating glass backgrounds and overlays
+/// Reduces duplication across glass modifiers
+enum GlassEffects {
+    /// Create a glass background layer
+    @ViewBuilder
+    static func background(
+        baseOpacity: (dark: Double, light: Double),
+        tintColor: Color?,
+        tintOpacity: (dark: Double, light: Double) = (0.15, 0.1),
+        gradientOpacity: (dark: Double, light: Double) = (0.1, 0.3),
+        material: Material = .ultraThinMaterial,
+        colorScheme: ColorScheme
+    ) -> some View {
+        ZStack {
+            // Base color
+            if colorScheme == .dark {
+                Color.white.opacity(baseOpacity.dark)
+            } else {
+                Color.white.opacity(baseOpacity.light)
+            }
+
+            // Tint overlay
+            if let tintColor = tintColor {
+                tintColor.opacity(colorScheme == .dark ? tintOpacity.dark : tintOpacity.light)
+            }
+
+            // Inner glow gradient for depth
+            LinearGradient(
+                colors: [
+                    Color.white.opacity(colorScheme == .dark ? gradientOpacity.dark : gradientOpacity.light),
+                    Color.clear
+                ],
+                startPoint: .top,
+                endPoint: .center
+            )
+        }
+        .background(material)
+    }
+
+    /// Create a glass border overlay
+    @ViewBuilder
+    static func overlay(
+        cornerRadius: CGFloat,
+        borderOpacity: (topDark: Double, topLight: Double, bottomDark: Double, bottomLight: Double) = (0.2, 0.5, 0.05, 0.1),
+        colorScheme: ColorScheme
+    ) -> some View {
+        RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+            .strokeBorder(
+                LinearGradient(
+                    colors: [
+                        Color.white.opacity(colorScheme == .dark ? borderOpacity.topDark : borderOpacity.topLight),
+                        Color.white.opacity(colorScheme == .dark ? borderOpacity.bottomDark : borderOpacity.bottomLight),
+                        Color.clear
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                ),
+                lineWidth: 0.5
+            )
+    }
+}
+
 // MARK: - Liquid Glass View Modifier
 
 struct LiquidGlassModifier: ViewModifier {
@@ -411,5 +475,26 @@ extension View {
     /// Apply glass status card styling with custom tint color
     func glassStatusCard(tintColor: Color? = nil, cornerRadius: CGFloat = 16) -> some View {
         modifier(GlassStatusCardModifier(tintColor: tintColor, cornerRadius: cornerRadius))
+    }
+
+    // MARK: - Consistent Padding Modifiers
+
+    /// Apply consistent card padding using LayoutConstants
+    /// Use this for stats cards, info cards, and general card containers
+    func cardPadding() -> some View {
+        self.padding(.horizontal, LayoutConstants.cardHorizontalPadding)
+            .padding(.vertical, LayoutConstants.cardVerticalPadding)
+    }
+
+    /// Apply consistent status card padding using LayoutConstants
+    /// Use this for status cards (PottyStatusCard, SleepStatusCard, PoopStatusCard)
+    func statusCardPadding() -> some View {
+        self.padding(.horizontal, LayoutConstants.statusCardHorizontalPadding)
+            .padding(.vertical, LayoutConstants.statusCardVerticalPadding)
+    }
+
+    /// Apply consistent section padding
+    func sectionPadding() -> some View {
+        self.padding(.vertical, LayoutConstants.sectionPadding)
     }
 }

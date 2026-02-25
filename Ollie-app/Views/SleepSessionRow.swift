@@ -5,6 +5,7 @@
 //  Timeline row for displaying sleep sessions with live timer for ongoing sleep
 
 import SwiftUI
+import OllieShared
 
 /// Row displaying a sleep session in the timeline
 /// Shows start → end time as a single unified event
@@ -108,43 +109,17 @@ struct SleepSessionRow: View {
     @ViewBuilder
     private var durationPill: some View {
         if session.isOngoing {
-            // Live updating duration for ongoing sleep
-            SwiftUI.TimelineView(.periodic(from: Date(), by: 60)) { _ in
-                Text(formatLiveDuration())
-                    .font(.caption)
-                    .fontWeight(.medium)
-                    .foregroundColor(.ollieSleep)
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 4)
-                    .background(Color.ollieSleep.opacity(0.15))
-                    .clipShape(Capsule())
-            }
+            LiveDurationPill(startTime: session.startTime, color: .ollieSleep)
         } else {
-            Text(session.durationString)
-                .font(.caption)
-                .fontWeight(.medium)
-                .foregroundColor(.secondary)
-                .padding(.horizontal, 8)
-                .padding(.vertical, 4)
-                .background(Color(.tertiarySystemBackground))
-                .clipShape(Capsule())
+            DurationPill(text: session.durationString)
         }
     }
 
     // MARK: - Helpers
 
-    private func formatLiveDuration() -> String {
+    private var liveDurationText: String {
         let minutes = Date().minutesSince(session.startTime)
-        if minutes < 60 {
-            return "\(minutes) min"
-        } else {
-            let hours = minutes / 60
-            let mins = minutes % 60
-            if mins == 0 {
-                return "\(hours)h"
-            }
-            return "\(hours)h\(mins)m"
-        }
+        return DurationFormatter.format(minutes, style: .compact)
     }
 
     private var accessibilityLabel: String {
@@ -153,7 +128,7 @@ struct SleepSessionRow: View {
         if session.isOngoing {
             parts.append(Strings.SleepSession.sleeping)
             parts.append(Strings.SleepStatus.started(time: session.startTime.timeString))
-            parts.append(formatLiveDuration())
+            parts.append(liveDurationText)
         } else {
             parts.append(Strings.SleepSession.nap)
             parts.append("\(session.startTime.timeString) to \(session.endTime?.timeString ?? "")")

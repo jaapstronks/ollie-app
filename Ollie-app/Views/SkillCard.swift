@@ -2,12 +2,13 @@
 //  SkillCard.swift
 //  Ollie-app
 //
-//  Expandable card displaying a training skill and its progress
+//  Card displaying a training skill with Start Training and Info buttons
 //
 
 import SwiftUI
+import OllieShared
 
-/// Expandable card showing a training skill with details
+/// Card showing a training skill with quick actions
 struct SkillCard: View {
     let skill: Skill
     let status: SkillStatus
@@ -15,99 +16,108 @@ struct SkillCard: View {
     let isLocked: Bool
     let missingRequirements: [Skill]
     let recentSessions: [PuppyEvent]
-    let onLogSession: () -> Void
+    let onStartTraining: () -> Void
+    let onViewInfo: () -> Void
     let onToggleMastered: () -> Void
 
-    @State private var isExpanded = false
     @Environment(\.colorScheme) private var colorScheme
 
     var body: some View {
         VStack(spacing: 0) {
-            // Collapsed header - always visible
-            collapsedHeader
+            // Main card content
+            HStack(spacing: 12) {
+                // Icon
+                Image(systemName: skill.icon)
+                    .font(.system(size: 24))
+                    .foregroundStyle(isLocked ? .secondary : Color.ollieAccent)
+                    .frame(width: 36)
 
-            // Expanded content
-            if isExpanded && !isLocked {
-                expandedContent
-                    .transition(.opacity.combined(with: .move(edge: .top)))
-            }
-        }
-        .padding()
-        .glassStatusCard(tintColor: cardTintColor)
-        .opacity(isLocked ? 0.6 : 1.0)
-        .contentShape(Rectangle())
-        .onTapGesture {
-            guard !isLocked else { return }
-            HapticFeedback.light()
-            withAnimation(.easeInOut(duration: 0.2)) {
-                isExpanded.toggle()
-            }
-        }
-    }
+                // Name, status, and last session
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(skill.name)
+                        .font(.body)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(isLocked ? .secondary : .primary)
 
-    // MARK: - Collapsed Header
-
-    @ViewBuilder
-    private var collapsedHeader: some View {
-        HStack(spacing: 12) {
-            // Icon
-            Image(systemName: skill.icon)
-                .font(.system(size: 24))
-                .foregroundStyle(Color.ollieAccent)
-                .frame(width: 36)
-
-            // Name and status
-            VStack(alignment: .leading, spacing: 2) {
-                Text(skill.name)
-                    .font(.body)
-                    .fontWeight(.semibold)
-                    .foregroundStyle(isLocked ? .secondary : .primary)
-
-                // Status or locked indicator
-                if isLocked {
-                    HStack(spacing: 4) {
-                        Image(systemName: "lock.fill")
-                            .font(.caption2)
-                        Text(Strings.Training.locked)
-                            .font(.caption)
-                    }
-                    .foregroundStyle(.secondary)
-                } else {
-                    HStack(spacing: 6) {
-                        // Status badge
-                        statusBadge
-
-                        // Session count
-                        if sessionCount > 0 {
-                            Text("•")
-                                .foregroundStyle(.tertiary)
-                            Text(Strings.Training.sessionCount(sessionCount))
+                    // Status or locked indicator
+                    if isLocked {
+                        HStack(spacing: 4) {
+                            Image(systemName: "lock.fill")
+                                .font(.caption2)
+                            Text(Strings.Training.locked)
                                 .font(.caption)
-                                .foregroundStyle(.secondary)
+                        }
+                        .foregroundStyle(.secondary)
+                    } else {
+                        HStack(spacing: 6) {
+                            // Status badge
+                            statusBadge
+
+                            // Session count
+                            if sessionCount > 0 {
+                                Text("•")
+                                    .foregroundStyle(.tertiary)
+                                Text(Strings.Training.sessionCount(sessionCount))
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
                         }
                     }
                 }
+
+                Spacer()
+
+                // Action buttons (only if not locked)
+                if !isLocked {
+                    HStack(spacing: 8) {
+                        // Info button
+                        Button {
+                            HapticFeedback.light()
+                            onViewInfo()
+                        } label: {
+                            Image(systemName: "info.circle")
+                                .font(.body)
+                                .foregroundStyle(.secondary)
+                                .frame(width: 36, height: 36)
+                                .background(
+                                    Circle()
+                                        .fill(colorScheme == .dark ? Color.white.opacity(0.08) : Color.black.opacity(0.04))
+                                )
+                        }
+                        .buttonStyle(ScaleButtonStyle())
+
+                        // Start training button
+                        Button {
+                            HapticFeedback.medium()
+                            onStartTraining()
+                        } label: {
+                            HStack(spacing: 4) {
+                                Image(systemName: "play.fill")
+                                    .font(.caption)
+                            }
+                            .foregroundStyle(.white)
+                            .frame(width: 36, height: 36)
+                            .background(Color.ollieAccent)
+                            .clipShape(Circle())
+                        }
+                        .buttonStyle(ScaleButtonStyle())
+                    }
+                } else {
+                    // Lock icon for locked skills
+                    Image(systemName: "lock.fill")
+                        .font(.body)
+                        .foregroundStyle(.tertiary)
+                }
             }
+            .padding()
 
-            Spacer()
-
-            // Expand/collapse indicator or lock
-            if isLocked {
-                Image(systemName: "lock.fill")
-                    .font(.body)
-                    .foregroundStyle(.tertiary)
-            } else {
-                Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
-                    .foregroundStyle(.secondary)
-                    .padding(8)
-                    .background(
-                        Circle()
-                            .fill(colorScheme == .dark ? Color.white.opacity(0.08) : Color.black.opacity(0.04))
-                    )
+            // Last session info (if has sessions and not locked)
+            if !isLocked && !recentSessions.isEmpty {
+                lastSessionRow
             }
         }
+        .glassStatusCard(tintColor: cardTintColor)
+        .opacity(isLocked ? 0.6 : 1.0)
     }
 
     // MARK: - Status Badge
@@ -124,140 +134,45 @@ struct SkillCard: View {
         .foregroundStyle(status.color)
     }
 
-    // MARK: - Expanded Content
+    // MARK: - Last Session Row
 
     @ViewBuilder
-    private var expandedContent: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Divider()
-                .padding(.vertical, 8)
+    private var lastSessionRow: some View {
+        if let lastSession = recentSessions.first {
+            VStack(spacing: 0) {
+                Divider()
+                    .padding(.horizontal)
 
-            // Description
-            Text(skill.description)
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
+                HStack(spacing: 8) {
+                    Image(systemName: "clock")
+                        .font(.caption2)
+                        .foregroundStyle(.tertiary)
 
-            // How to train
-            VStack(alignment: .leading, spacing: 8) {
-                Text(Strings.Training.howTo)
-                    .font(.caption)
-                    .fontWeight(.medium)
-                    .foregroundStyle(.tertiary)
-                    .textCase(.uppercase)
-
-                VStack(alignment: .leading, spacing: 6) {
-                    ForEach(Array(skill.howTo.enumerated()), id: \.offset) { index, step in
-                        HStack(alignment: .top, spacing: 8) {
-                            Text("\(index + 1).")
-                                .font(.caption)
-                                .fontWeight(.medium)
-                                .foregroundStyle(.secondary)
-                                .frame(width: 20, alignment: .leading)
-                            Text(step)
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                        }
-                    }
-                }
-            }
-
-            // Done when
-            VStack(alignment: .leading, spacing: 6) {
-                Text(Strings.Training.doneWhen)
-                    .font(.caption)
-                    .fontWeight(.medium)
-                    .foregroundStyle(.tertiary)
-                    .textCase(.uppercase)
-
-                HStack(alignment: .top, spacing: 8) {
-                    Image(systemName: "checkmark.circle.fill")
-                        .font(.caption)
-                        .foregroundStyle(Color.ollieSuccess)
-                    Text(skill.doneWhen)
+                    Text(Strings.TrainingSession.lastSession(date: lastSession.time.formatted(date: .abbreviated, time: .omitted)))
                         .font(.caption)
                         .foregroundStyle(.secondary)
-                }
-            }
 
-            // Tips
-            if !skill.tips.isEmpty {
-                VStack(alignment: .leading, spacing: 6) {
-                    Text(Strings.Training.tips)
-                        .font(.caption)
-                        .fontWeight(.medium)
-                        .foregroundStyle(.tertiary)
-                        .textCase(.uppercase)
+                    Spacer()
 
-                    ForEach(skill.tips, id: \.self) { tip in
-                        HStack(alignment: .top, spacing: 8) {
-                            Image(systemName: "lightbulb.fill")
-                                .font(.caption2)
-                                .foregroundStyle(Color.ollieWarning)
-                            Text(tip)
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
+                    // Mark mastered button (contextual)
+                    if status == .practicing || status == .mastered {
+                        Button {
+                            HapticFeedback.medium()
+                            onToggleMastered()
+                        } label: {
+                            HStack(spacing: 4) {
+                                Image(systemName: status == .mastered ? "checkmark.circle.fill" : "checkmark.circle")
+                                    .font(.caption2)
+                                Text(status == .mastered ? Strings.Training.unmarkMastered : Strings.Training.markMastered)
+                                    .font(.caption2)
+                            }
+                            .foregroundStyle(status == .mastered ? Color.ollieSuccess : .secondary)
                         }
+                        .buttonStyle(ScaleButtonStyle())
                     }
                 }
-            }
-
-            // Recent sessions
-            if !recentSessions.isEmpty {
-                VStack(alignment: .leading, spacing: 6) {
-                    Text(Strings.Training.recentSessions)
-                        .font(.caption)
-                        .fontWeight(.medium)
-                        .foregroundStyle(.tertiary)
-                        .textCase(.uppercase)
-
-                    ForEach(recentSessions.prefix(3)) { session in
-                        HStack(spacing: 8) {
-                            Text(session.time.formatted(date: .abbreviated, time: .shortened))
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-
-                            if let duration = session.durationMin {
-                                Text("•")
-                                    .foregroundStyle(.tertiary)
-                                Text("\(duration) min")
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                            }
-
-                            if let result = session.result, !result.isEmpty {
-                                Text("•")
-                                    .foregroundStyle(.tertiary)
-                                Text(result)
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                                    .lineLimit(1)
-                            }
-                        }
-                    }
-                }
-            }
-
-            // Action buttons
-            HStack(spacing: 12) {
-                // Log session button
-                TrainingActionButton(
-                    icon: "plus.circle.fill",
-                    title: Strings.Training.logSession,
-                    style: .primary
-                ) {
-                    HapticFeedback.selection()
-                    onLogSession()
-                }
-
-                // Mark mastered button
-                TrainingActionButton(
-                    icon: status == .mastered ? "checkmark.circle.fill" : "checkmark.circle",
-                    title: status == .mastered ? Strings.Training.unmarkMastered : Strings.Training.markMastered,
-                    style: status == .mastered ? .success : .successOutline
-                ) {
-                    HapticFeedback.medium()
-                    onToggleMastered()
-                }
+                .padding(.horizontal)
+                .padding(.vertical, 10)
             }
         }
     }
@@ -273,72 +188,6 @@ struct SkillCard: View {
         case .started: return Color.ollieInfo
         case .practicing: return Color.ollieWarning
         case .mastered: return Color.ollieSuccess
-        }
-    }
-}
-
-// MARK: - Training Action Button
-
-/// A responsive button with immediate press feedback for training actions
-private struct TrainingActionButton: View {
-    let icon: String
-    let title: String
-    let style: Style
-    let action: () -> Void
-
-    @Environment(\.colorScheme) private var colorScheme
-
-    enum Style {
-        case primary
-        case success
-        case successOutline
-    }
-
-    var body: some View {
-        Button {
-            action()
-        } label: {
-            HStack(spacing: 6) {
-                Image(systemName: icon)
-                Text(title)
-            }
-            .font(.subheadline)
-            .fontWeight(.medium)
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 12)
-            .background(backgroundColor)
-            .foregroundStyle(foregroundColor)
-            .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-            .overlay(borderOverlay)
-        }
-        .buttonStyle(ScaleButtonStyle())
-    }
-
-    private var backgroundColor: Color {
-        switch style {
-        case .primary:
-            return Color.ollieAccent
-        case .success:
-            return Color.ollieSuccess
-        case .successOutline:
-            return Color.ollieSuccess.opacity(colorScheme == .dark ? 0.15 : 0.1)
-        }
-    }
-
-    private var foregroundColor: Color {
-        switch style {
-        case .primary, .success:
-            return .white
-        case .successOutline:
-            return .ollieSuccess
-        }
-    }
-
-    @ViewBuilder
-    private var borderOverlay: some View {
-        if style == .successOutline {
-            RoundedRectangle(cornerRadius: 10, style: .continuous)
-                .strokeBorder(Color.ollieSuccess, lineWidth: 1)
         }
     }
 }
@@ -422,7 +271,7 @@ struct LockedSkillCard: View {
 private struct ScaleButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .scaleEffect(configuration.isPressed ? 0.96 : 1.0)
+            .scaleEffect(configuration.isPressed ? 0.92 : 1.0)
             .opacity(configuration.isPressed ? 0.85 : 1.0)
             .animation(.easeOut(duration: 0.1), value: configuration.isPressed)
     }
@@ -448,8 +297,23 @@ private let previewSkill = Skill(
                 sessionCount: 6,
                 isLocked: false,
                 missingRequirements: [],
+                recentSessions: [
+                    PuppyEvent(time: Date().addingTimeInterval(-86400), type: .training, exercise: "sit", durationMin: 5)
+                ],
+                onStartTraining: {},
+                onViewInfo: {},
+                onToggleMastered: {}
+            )
+
+            SkillCard(
+                skill: previewSkill,
+                status: .notStarted,
+                sessionCount: 0,
+                isLocked: false,
+                missingRequirements: [],
                 recentSessions: [],
-                onLogSession: {},
+                onStartTraining: {},
+                onViewInfo: {},
                 onToggleMastered: {}
             )
 
@@ -460,7 +324,8 @@ private let previewSkill = Skill(
                 isLocked: true,
                 missingRequirements: [],
                 recentSessions: [],
-                onLogSession: {},
+                onStartTraining: {},
+                onViewInfo: {},
                 onToggleMastered: {}
             )
         }

@@ -7,6 +7,7 @@
 import CoreLocation
 import MapKit
 import SwiftUI
+import OllieShared
 
 /// Sheet for adding a new walk spot
 struct AddSpotSheet: View {

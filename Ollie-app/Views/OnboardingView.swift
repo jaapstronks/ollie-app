@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import OllieShared
 
 /// Onboarding flow for new users
 struct OnboardingView: View {

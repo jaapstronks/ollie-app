@@ -5,6 +5,7 @@
 //  Sheet for selecting or creating a walk spot
 
 import SwiftUI
+import OllieShared
 import CoreLocation
 
 /// Sheet for picking a saved spot or capturing current location
@@ -86,7 +87,7 @@ struct SpotPickerSheet: View {
                 }
                 .padding()
                 .background(Color(.secondarySystemBackground))
-                .cornerRadius(12)
+                .cornerRadius(LayoutConstants.cornerRadiusM)
             } else {
                 // Use current location button
                 Button {
@@ -105,7 +106,7 @@ struct SpotPickerSheet: View {
                     .padding(.vertical, 14)
                     .background(Color.ollieAccent)
                     .foregroundStyle(.white)
-                    .cornerRadius(12)
+                    .cornerRadius(LayoutConstants.cornerRadiusM)
                 }
                 .disabled(isCapturingLocation)
 

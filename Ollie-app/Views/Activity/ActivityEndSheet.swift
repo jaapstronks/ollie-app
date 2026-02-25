@@ -5,6 +5,7 @@
 //  Sheet for ending an in-progress activity with time adjustment options
 
 import SwiftUI
+import OllieShared
 
 /// Sheet shown when ending an in-progress walk or nap
 struct ActivityEndSheet: View {

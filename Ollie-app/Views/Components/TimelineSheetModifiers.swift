@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import OllieShared
 
 /// ViewModifier that applies all timeline sheet handling
 struct TimelineSheetModifiers: ViewModifier {
@@ -36,11 +37,24 @@ struct TimelineSheetModifiers: ViewModifier {
         self.sheetCoordinator = viewModel.sheetCoordinator
     }
 
+    /// Binding that excludes mediaPicker from sheet presentation (handled by fullScreenCover)
+    private var sheetBinding: Binding<SheetCoordinator.ActiveSheet?> {
+        Binding(
+            get: {
+                if case .mediaPicker = sheetCoordinator.activeSheet {
+                    return nil  // Don't present as sheet - fullScreenCover handles this
+                }
+                return sheetCoordinator.activeSheet
+            },
+            set: { sheetCoordinator.activeSheet = $0 }
+        )
+    }
+
     func body(content: Content) -> some View {
         content
             // Single sheet presentation using item-based approach
-            // Directly bind to sheetCoordinator.activeSheet since we're observing it
-            .sheet(item: $sheetCoordinator.activeSheet) { sheet in
+            // Uses sheetBinding to exclude mediaPicker (handled by fullScreenCover instead)
+            .sheet(item: sheetBinding) { sheet in
                 sheetContent(for: sheet)
             }
             // Media picker uses fullScreenCover (separate from sheets)
@@ -117,9 +131,9 @@ struct TimelineSheetModifiers: ViewModifier {
         case .allEvents:
             AllEventsSheet(
                 onSelect: { type in
-                    // Moment events need special handling - go to LogMomentSheet
+                    // Moment events need special handling - show camera/library choice first
                     if type == .moment {
-                        viewModel.sheetCoordinator.transitionToSheet(.logMoment)
+                        viewModel.sheetCoordinator.transitionToSheet(.momentSourcePicker)
                     } else if type == .uitlaten {
                         // Walk: check if activity in progress, otherwise show start/log choice
                         if viewModel.isWalkInProgress {
@@ -142,7 +156,7 @@ struct TimelineSheetModifiers: ViewModifier {
                     viewModel.sheetCoordinator.dismissSheet()
                 }
             )
-            .presentationDetents([.medium, .large])
+            .presentationDetents([.fraction(0.75), .large])
 
         case .quickLog(let type, let suggestedTime):
             QuickLogSheet(
@@ -184,6 +198,20 @@ struct TimelineSheetModifiers: ViewModifier {
             // Handled by fullScreenCover above, this case shouldn't be reached
             EmptyView()
 
+        case .momentSourcePicker:
+            MomentSourcePickerSheet(
+                onCamera: {
+                    viewModel.openCamera()
+                },
+                onLibrary: {
+                    viewModel.openPhotoLibrary()
+                },
+                onCancel: {
+                    viewModel.sheetCoordinator.dismissSheet()
+                }
+            )
+            .presentationDetents([.height(200)])
+
         case .logMoment:
             LogMomentSheet(
                 viewModel: mediaCaptureViewModel,
@@ -199,24 +227,19 @@ struct TimelineSheetModifiers: ViewModifier {
                 }
             )
 
-        case .upgradePrompt:
-            UpgradePromptView(
-                puppyName: viewModel.puppyName,
-                onPurchase: {
-                    Task { await handlePurchase(viewModel: viewModel) }
-                },
-                onRestore: {
-                    Task { await StoreKitManager.shared.restorePurchases() }
-                },
+        case .olliePlus:
+            OlliePlusSheet(
                 onDismiss: {
                     viewModel.sheetCoordinator.dismissSheet()
+                },
+                onSubscribed: {
+                    viewModel.sheetCoordinator.transitionToSheet(.subscriptionSuccess)
                 }
             )
             .presentationDetents([.large])
 
-        case .purchaseSuccess:
-            PurchaseSuccessView(
-                puppyName: viewModel.puppyName,
+        case .subscriptionSuccess:
+            SubscriptionSuccessView(
                 onDismiss: {
                     viewModel.sheetCoordinator.dismissSheet()
                 }
@@ -245,19 +268,25 @@ struct TimelineSheetModifiers: ViewModifier {
         case .startActivity(let activityType):
             StartActivitySheet(
                 activityType: activityType,
-                onStartNow: {
-                    viewModel.startActivity(type: activityType)
+                onStartNow: { startTime in
+                    viewModel.startActivity(type: activityType, startTime: startTime)
                 },
                 onLogCompleted: {
-                    // Transition to regular quickLog sheet for retrospective logging
-                    let eventType: EventType = activityType == .walk ? .uitlaten : .slapen
-                    viewModel.sheetCoordinator.transitionToSheet(.quickLog(eventType))
+                    // Transition to specialized sheet for retrospective logging
+                    if activityType == .walk {
+                        viewModel.sheetCoordinator.transitionToSheet(.walkLog)
+                    } else {
+                        // Calculate default nap duration from recent events
+                        let recentEvents = viewModel.getRecentEvents()
+                        let defaultDuration = SleepCalculations.defaultNapDuration(events: recentEvents)
+                        viewModel.sheetCoordinator.transitionToSheet(.napLog(defaultDuration: defaultDuration))
+                    }
                 },
                 onCancel: {
                     viewModel.sheetCoordinator.dismissSheet()
                 }
             )
-            .presentationDetents([.height(350)])
+            .presentationDetents([.height(350), .medium])
 
         case .endActivity:
             if let activity = viewModel.currentActivity {
@@ -277,24 +306,45 @@ struct TimelineSheetModifiers: ViewModifier {
             } else {
                 EmptyView()
             }
+
+        case .walkLog:
+            WalkLogSheet(
+                onSave: { startTime, duration, didPee, didPoop, spot, note in
+                    viewModel.logWalkEvent(
+                        time: startTime,
+                        durationMin: duration,
+                        didPee: didPee,
+                        didPoop: didPoop,
+                        spot: spot,
+                        note: note
+                    )
+                    viewModel.sheetCoordinator.dismissSheet()
+                },
+                onCancel: {
+                    viewModel.sheetCoordinator.dismissSheet()
+                },
+                spotStore: spotStore,
+                locationManager: locationManager
+            )
+            .presentationDetents([.height(520), .large])
+
+        case .napLog(let defaultDuration):
+            NapLogSheet(
+                onSave: { startTime, endTime, note in
+                    viewModel.logCompletedNap(startTime: startTime, endTime: endTime, note: note)
+                    viewModel.sheetCoordinator.dismissSheet()
+                },
+                onCancel: {
+                    viewModel.sheetCoordinator.dismissSheet()
+                },
+                defaultDurationMinutes: defaultDuration
+            )
+            .presentationDetents([.height(420), .medium])
+
+        // Placeholder cases for future sheets (handled elsewhere or not yet implemented)
+        case .weightLog, .trainingLog, .socializationLog, .settings, .profileEdit, .notificationSettings:
+            EmptyView()
         }
-    }
-}
-
-// MARK: - Purchase Handling
-
-private func handlePurchase(viewModel: TimelineViewModel) async {
-    guard let profileID = viewModel.profileStore.profile?.id else { return }
-
-    do {
-        try await StoreKitManager.shared.purchase(for: profileID)
-        viewModel.profileStore.unlockPremium()
-        viewModel.sheetCoordinator.presentSheet(.purchaseSuccess)
-        HapticFeedback.success()
-    } catch StoreKitError.userCancelled {
-        // User cancelled, do nothing
-    } catch {
-        HapticFeedback.error()
     }
 }
 

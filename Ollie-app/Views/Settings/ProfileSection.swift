@@ -5,6 +5,7 @@
 //  Profile information section for SettingsView
 
 import SwiftUI
+import OllieShared
 
 /// Profile information section showing puppy details
 struct ProfileSection: View {

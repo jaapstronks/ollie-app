@@ -2,36 +2,89 @@
 //  TrainingPlanStore.swift
 //  Ollie-app
 //
-//  Manages training plan data and skill progress tracking
+//  Manages training plan data and skill progress tracking with Core Data and automatic CloudKit sync
 //
 
 import Foundation
+import CoreData
+import OllieShared
 import Combine
+import os
 
-/// Manages the training plan and skill progress
+/// Manages the training plan and skill progress with Core Data storage
 @MainActor
 class TrainingPlanStore: ObservableObject {
     @Published private(set) var trainingPlan: TrainingPlan?
-    @Published private(set) var masteredSkillIds: Set<String> = []
+    @Published private(set) var masteredSkills: [MasteredSkill] = []
     @Published private(set) var isLoading: Bool = true
+    @Published private(set) var isSyncing: Bool = false
 
     /// The start date for the 6-week training program
     static let startDate = Date.fromDateString("2026-02-14") ?? Date()
 
-    private let fileManager = FileManager.default
-    private let encoder: JSONEncoder
-    private let decoder: JSONDecoder
+    private let persistenceController: PersistenceController
+    private let logger = Logger.ollie(category: "TrainingPlanStore")
+    private var cancellables = Set<AnyCancellable>()
 
     private var eventStore: EventStore?
 
-    init() {
-        encoder = JSONEncoder()
-        encoder.outputFormatting = .prettyPrinted
+    private let decoder: JSONDecoder = {
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        return decoder
+    }()
 
-        decoder = JSONDecoder()
+    private var viewContext: NSManagedObjectContext {
+        persistenceController.viewContext
+    }
+
+    // MARK: - Computed Properties
+
+    /// Set of mastered skill IDs for backwards compatibility
+    var masteredSkillIds: Set<String> {
+        Set(masteredSkills.map { $0.skillId })
+    }
+
+    /// Get the MasteredSkill record for a skill ID
+    func masteredSkill(for skillId: String) -> MasteredSkill? {
+        masteredSkills.first { $0.skillId == skillId }
+    }
+
+    init(persistenceController: PersistenceController = .shared) {
+        self.persistenceController = persistenceController
 
         loadTrainingPlan()
         loadMasteredSkills()
+        setupRemoteChangeObserver()
+    }
+
+    // MARK: - Setup
+
+    private func setupRemoteChangeObserver() {
+        NotificationCenter.default.publisher(for: .NSPersistentStoreRemoteChange)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.handleRemoteChange()
+            }
+            .store(in: &cancellables)
+    }
+
+    private func handleRemoteChange() {
+        logger.debug("Detected CloudKit remote change for mastered skills")
+        loadMasteredSkills()
+    }
+
+    // MARK: - CloudKit Sync
+
+    /// Perform initial sync on app launch
+    func initialSync() async {
+        viewContext.refreshAllObjects()
+        loadMasteredSkills()
+    }
+
+    /// Force sync with CloudKit
+    func forceSync() async {
+        await initialSync()
     }
 
     // MARK: - Setup
@@ -48,7 +101,7 @@ class TrainingPlanStore: ObservableObject {
         let calendar = Calendar.current
         let days = calendar.dateComponents([.day], from: Self.startDate, to: Date()).day ?? 0
         let week = (days / 7) + 1
-        return max(1, week)  // At minimum week 1
+        return max(1, week)
     }
 
     /// Get the week plan for the current week
@@ -72,8 +125,8 @@ class TrainingPlanStore: ObservableObject {
             to: Date()
         )
 
-        return allEvents.filter { event in
-            event.type == .training && event.exercise == skillId
+        return allEvents.training().filter { event in
+            event.exercise == skillId
         }.count
     }
 
@@ -158,8 +211,8 @@ class TrainingPlanStore: ObservableObject {
         let thirtyDaysAgo = Calendar.current.date(byAdding: .day, value: -30, to: Date()) ?? Date()
         let allEvents = eventStore.getEvents(from: thirtyDaysAgo, to: Date())
 
-        return allEvents
-            .filter { $0.type == .training && $0.exercise == skillId }
+        return allEvents.training()
+            .filter { $0.exercise == skillId }
             .prefix(limit)
             .map { $0 }
     }
@@ -168,14 +221,37 @@ class TrainingPlanStore: ObservableObject {
 
     /// Mark a skill as mastered
     func markAsMastered(_ skillId: String) {
-        masteredSkillIds.insert(skillId)
-        saveMasteredSkills()
+        guard !masteredSkillIds.contains(skillId) else { return }
+
+        let skill = MasteredSkill(skillId: skillId)
+
+        // Save to Core Data
+        _ = CDMasteredSkill.create(from: skill, in: viewContext)
+
+        do {
+            try persistenceController.save()
+            masteredSkills.append(skill)
+            logger.info("Marked skill as mastered: \(skillId)")
+        } catch {
+            logger.error("Failed to save mastered skill: \(error.localizedDescription)")
+        }
     }
 
     /// Unmark a skill as mastered
     func unmarkMastered(_ skillId: String) {
-        masteredSkillIds.remove(skillId)
-        saveMasteredSkills()
+        guard masteredSkill(for: skillId) != nil else { return }
+
+        if let cdSkill = CDMasteredSkill.fetch(bySkillId: skillId, in: viewContext) {
+            viewContext.delete(cdSkill)
+
+            do {
+                try persistenceController.save()
+                masteredSkills.removeAll { $0.skillId == skillId }
+                logger.info("Unmarked skill as mastered: \(skillId)")
+            } catch {
+                logger.error("Failed to delete mastered skill: \(error.localizedDescription)")
+            }
+        }
     }
 
     /// Toggle mastered state for a skill
@@ -193,11 +269,10 @@ class TrainingPlanStore: ObservableObject {
         isLoading = true
         defer { isLoading = false }
 
-        // Load from bundled JSON
         guard let url = Bundle.main.url(forResource: "training-plan", withExtension: "json"),
               let data = try? Data(contentsOf: url),
               let plan = try? decoder.decode(TrainingPlan.self, from: data) else {
-            print("Failed to load training plan from bundle")
+            logger.error("Failed to load training plan from bundle")
             return
         }
 
@@ -206,28 +281,10 @@ class TrainingPlanStore: ObservableObject {
 
     // MARK: - Private: Mastered Skills Persistence
 
-    private var documentsURL: URL {
-        fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
-    }
-
-    private var masteredSkillsURL: URL {
-        documentsURL.appendingPathComponent("mastered-skills.json")
-    }
-
     private func loadMasteredSkills() {
-        guard fileManager.fileExists(atPath: masteredSkillsURL.path),
-              let data = try? Data(contentsOf: masteredSkillsURL),
-              let skillIds = try? decoder.decode(Set<String>.self, from: data) else {
-            masteredSkillIds = []
-            return
-        }
-
-        masteredSkillIds = skillIds
-    }
-
-    private func saveMasteredSkills() {
-        guard let data = try? encoder.encode(masteredSkillIds) else { return }
-        try? data.write(to: masteredSkillsURL, options: .atomic)
+        let cdSkills = CDMasteredSkill.fetchAllSkills(in: viewContext)
+        masteredSkills = cdSkills.compactMap { $0.toMasteredSkill() }
+        logger.debug("Loaded \(self.masteredSkills.count) mastered skills from Core Data")
     }
 }
 
@@ -236,9 +293,6 @@ class TrainingPlanStore: ObservableObject {
 extension Date {
     /// Parse a date string in YYYY-MM-DD format
     static func fromDateString(_ string: String) -> Date? {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd"
-        formatter.timeZone = TimeZone.current
-        return formatter.date(from: string)
+        DateFormatters.dateOnly.date(from: string)
     }
 }

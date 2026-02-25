@@ -1,4 +1,5 @@
 import Foundation
+import OllieShared
 import Combine
 
 /// Service for fetching weather forecasts from Open-Meteo API
@@ -11,20 +12,53 @@ class WeatherService: ObservableObject {
     @Published var isLoading = false
     @Published var lastError: Error?
 
+    // MARK: - Dependencies
+
+    private weak var locationManager: LocationManager?
+
     // MARK: - Cache
 
     private var cache: (forecasts: [HourForecast], fetchedAt: Date, location: (lat: Double, lon: Double))?
     private let cacheValidityMinutes: Double = 30
 
-    // MARK: - Default Location (Rotterdam)
+    // MARK: - Default Location (Rotterdam - fallback when location unavailable)
 
     nonisolated static let defaultLocation = (lat: 51.9225, lon: 4.4792)
 
+    // MARK: - Init
+
+    init(locationManager: LocationManager? = nil) {
+        self.locationManager = locationManager
+    }
+
+    /// Set the location manager (useful when injected via environment)
+    func setLocationManager(_ manager: LocationManager) {
+        self.locationManager = manager
+    }
+
     // MARK: - Public Methods
 
-    /// Fetch hourly forecasts for the given location
+    /// Fetch hourly forecasts using user's current location (or default if unavailable)
+    func fetchForecasts() async {
+        var coordinates: (Double, Double)?
+
+        // Try to get user's location if authorized
+        if let manager = locationManager, manager.isAuthorized {
+            // Request fresh location if we don't have one cached
+            if manager.currentCoordinates == nil {
+                _ = try? await manager.requestLocation()
+            }
+            coordinates = manager.currentCoordinates
+        }
+
+        // Fall back to default location (Rotterdam) if location unavailable
+        let finalCoords = coordinates ?? (Self.defaultLocation.lat, Self.defaultLocation.lon)
+        await fetchForecasts(lat: finalCoords.0, lon: finalCoords.1)
+    }
+
+    /// Fetch hourly forecasts for a specific location
     /// Uses cached data if available and fresh (< 30 minutes old)
-    func fetchForecasts(lat: Double = defaultLocation.lat, lon: Double = defaultLocation.lon) async {
+    func fetchForecasts(lat: Double, lon: Double) async {
         // Check cache validity
         if let cached = cache,
            cached.location.lat == lat,
@@ -72,63 +106,50 @@ class WeatherService: ObservableObject {
     }
 
     /// Generate smart weather alert if conditions warrant it
+    /// Returns a simple, minimal alert for weather conditions
     func smartAlert(predictedPottyTime: Date?) -> WeatherAlert? {
         let upcoming = upcomingForecasts(hours: 4)
         guard !upcoming.isEmpty else { return nil }
 
         // Check for incoming rain
-        if let rainHour = upcoming.first(where: { $0.precipProbability > 60 }) {
-            let formatter = DateFormatter()
-            formatter.dateFormat = "HH:mm"
-            formatter.locale = Locale(identifier: "nl_NL")
-            let timeString = formatter.string(from: rainHour.time)
-
-            // If rain is coming before predicted potty time
-            if let pottyTime = predictedPottyTime, rainHour.time <= pottyTime {
-                return WeatherAlert(
-                    icon: "cloud.rain.fill",
-                    message: "Regen verwacht om \(timeString) — misschien nu alvast even naar buiten?",
-                    type: .warning
-                )
-            } else {
-                return WeatherAlert(
-                    icon: "cloud.rain.fill",
-                    message: "Regen verwacht om \(timeString)",
-                    type: .info
-                )
-            }
+        if upcoming.contains(where: { $0.precipProbability > 60 }) {
+            return WeatherAlert(
+                icon: "cloud.rain.fill",
+                message: Strings.Weather.rainSoon,
+                type: .warning
+            )
         }
 
         // Check for freezing temperatures
         if let current = upcoming.first, current.freezingWarning {
             return WeatherAlert(
                 icon: "thermometer.snowflake",
-                message: "\(Int(current.temperature))° buiten — kort tuinbezoek is genoeg",
+                message: Strings.Weather.freezing,
                 type: .info
             )
         }
 
-        // Check for good weather window
+        // Check for good weather window (dry ahead)
         let dryHours = upcoming.filter { $0.precipProbability < 20 }
         if dryHours.count >= 3, let first = upcoming.first, first.precipProbability < 20 {
-            let formatter = DateFormatter()
-            formatter.dateFormat = "HH:00"
-            formatter.locale = Locale(identifier: "nl_NL")
-            if let lastDry = dryHours.last {
-                let untilTime = formatter.string(from: lastDry.time.addingTimeInterval(3600))
-                return WeatherAlert(
-                    icon: "sun.max.fill",
-                    message: "Droog tot \(untilTime) — goed moment voor een wandeling",
-                    type: .positive
-                )
-            }
+            return WeatherAlert(
+                icon: "sun.max.fill",
+                message: Strings.Weather.dryAhead,
+                type: .positive
+            )
         }
 
         return nil
     }
 
-    /// Force refresh, bypassing cache
-    func refresh(lat: Double = defaultLocation.lat, lon: Double = defaultLocation.lon) async {
+    /// Force refresh using user's location, bypassing cache
+    func refresh() async {
+        cache = nil
+        await fetchForecasts()
+    }
+
+    /// Force refresh for a specific location, bypassing cache
+    func refresh(lat: Double, lon: Double) async {
         cache = nil
         await fetchForecasts(lat: lat, lon: lon)
     }
@@ -159,8 +180,11 @@ class WeatherService: ObservableObject {
         let hourly = response.hourly
         var forecasts: [HourForecast] = []
 
-        let dateFormatter = ISO8601DateFormatter()
-        dateFormatter.formatOptions = [.withFullDate, .withTime, .withDashSeparatorInDate, .withColonSeparatorInTime]
+        // Open-Meteo returns times without seconds: "2026-02-24T14:00"
+        // ISO8601DateFormatter with .withTime expects seconds, so we use a custom DateFormatter
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm"
+        dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
 
         for i in 0..<hourly.time.count {
             guard let time = dateFormatter.date(from: hourly.time[i]) else { continue }

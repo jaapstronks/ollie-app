@@ -4,13 +4,15 @@
 //
 
 import SwiftUI
+import OllieShared
 import UIKit
 
 /// Grid gallery view of all photo moments
 struct MomentsGalleryView: View {
     @ObservedObject var viewModel: MomentsViewModel
+    var onSettingsTap: (() -> Void)? = nil
     @State private var selectedEvent: PuppyEvent?
-    @State private var showPreview: Bool = false
+    @Namespace private var heroNamespace
 
     private let columns = [
         GridItem(.flexible(), spacing: 2),
@@ -22,27 +24,39 @@ struct MomentsGalleryView: View {
         NavigationStack {
             Group {
                 if viewModel.isLoading {
-                    ProgressView()
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    // Skeleton loading grid
+                    ScrollView {
+                        LazyVGrid(columns: columns, spacing: 2) {
+                            ForEach(0..<12, id: \.self) { index in
+                                SkeletonRect(height: 120, cornerRadius: 0)
+                                    .aspectRatio(1, contentMode: .fill)
+                                    .animatedAppear(delay: StaggeredAnimation.delay(for: index))
+                            }
+                        }
+                        .padding(.top)
+                    }
+                    .skeleton(isLoading: true)
                 } else if viewModel.events.isEmpty {
                     EmptyMomentsView()
                 } else {
                     ScrollView {
                         LazyVStack(alignment: .leading, spacing: 16) {
-                            ForEach(viewModel.eventsByMonth, id: \.month) { section in
+                            ForEach(Array(viewModel.eventsByMonth.enumerated()), id: \.element.month) { sectionIndex, section in
                                 VStack(alignment: .leading, spacing: 8) {
                                     Text(section.month)
                                         .font(.headline)
                                         .padding(.horizontal)
+                                        .animatedAppear(delay: StaggeredAnimation.delay(for: sectionIndex))
 
                                     LazyVGrid(columns: columns, spacing: 2) {
-                                        ForEach(section.events) { event in
+                                        ForEach(Array(section.events.enumerated()), id: \.element.id) { eventIndex, event in
                                             GalleryThumbnail(event: event)
                                                 .aspectRatio(1, contentMode: .fill)
+                                                .zoomTransitionSource(id: event.id, in: heroNamespace)
                                                 .onTapGesture {
                                                     selectedEvent = event
-                                                    showPreview = true
                                                 }
+                                                .animatedAppear(delay: StaggeredAnimation.delay(for: eventIndex, baseDelay: 0.03, maxDelay: 0.2))
                                         }
                                     }
                                 }
@@ -53,16 +67,26 @@ struct MomentsGalleryView: View {
                 }
             }
             .navigationTitle(Strings.MomentsGallery.title)
-            .fullScreenCover(isPresented: $showPreview) {
-                if let event = selectedEvent {
-                    MediaPreviewView(
-                        event: event,
-                        onDelete: {
-                            viewModel.deleteEvent(event)
-                            selectedEvent = nil
+            .toolbar {
+                if let onSettingsTap = onSettingsTap {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button {
+                            onSettingsTap()
+                        } label: {
+                            Image(systemName: "gear")
                         }
-                    )
+                        .accessibilityLabel(Strings.Tabs.settings)
+                    }
                 }
+            }
+            .fullScreenCover(item: $selectedEvent) { event in
+                MediaPreviewView(
+                    event: event,
+                    onDelete: {
+                        viewModel.deleteEvent(event)
+                        selectedEvent = nil
+                    }
+                )
             }
             .onAppear {
                 viewModel.loadEventsWithMedia()
@@ -119,28 +143,74 @@ struct GalleryThumbnail: View {
     }
 }
 
-/// Empty state for moments gallery
+/// Enhanced empty state for moments gallery with animation
 struct EmptyMomentsView: View {
+    @State private var isAnimating = false
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
     var body: some View {
-        VStack(spacing: 16) {
+        VStack(spacing: 20) {
             Spacer()
 
-            Image(systemName: "photo.on.rectangle.angled")
-                .font(.system(size: 60))
-                .foregroundColor(.secondary)
+            // Animated photo stack
+            ZStack {
+                // Background photo (rotated)
+                Image(systemName: "photo.fill")
+                    .font(.system(size: 45))
+                    .foregroundStyle(Color.ollieAccent.opacity(0.2))
+                    .offset(x: -20, y: 10)
+                    .rotationEffect(.degrees(-12))
 
-            Text(Strings.MomentsGallery.noPhotos)
-                .font(.headline)
-                .foregroundColor(.secondary)
+                // Middle photo
+                Image(systemName: "photo.fill")
+                    .font(.system(size: 50))
+                    .foregroundStyle(Color.ollieAccent.opacity(0.4))
+                    .offset(x: 15, y: -5)
+                    .rotationEffect(.degrees(8))
 
-            Text(Strings.MomentsGallery.makePhotosHint)
-                .font(.subheadline)
-                .foregroundColor(.secondary)
-                .multilineTextAlignment(.center)
+                // Front photo with animation
+                Image(systemName: "photo.on.rectangle.angled")
+                    .font(.system(size: 65))
+                    .foregroundStyle(
+                        LinearGradient(
+                            colors: [Color.ollieAccent, Color.ollieAccent.opacity(0.6)],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .scaleEffect(isAnimating ? 1.0 : 0.92)
+                    .opacity(isAnimating ? 1.0 : 0.8)
+            }
+            .onAppear {
+                guard !reduceMotion else {
+                    isAnimating = true
+                    return
+                }
+                withAnimation(
+                    .easeInOut(duration: 1.8)
+                    .repeatForever(autoreverses: true)
+                ) {
+                    isAnimating = true
+                }
+            }
+
+            VStack(spacing: 8) {
+                Text(Strings.MomentsGallery.noPhotos)
+                    .font(.title3)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(.primary)
+
+                Text(Strings.MomentsGallery.makePhotosHint)
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
+            }
 
             Spacer()
         }
         .padding()
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(Strings.MomentsGallery.noPhotos)
     }
 }
 

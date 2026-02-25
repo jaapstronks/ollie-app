@@ -1,0 +1,23 @@
+appId: com.jaapstronks.Ollie-app
+---
+# Complete starting the nap
+
+# Tap the Start or Log button
+- tapOn:
+    text: "Start or Log?"
+- waitForAnimationToEnd
+
+# Screenshot after starting nap
+- takeScreenshot: testing-screenshots/B1-07-nap-started
+
+# Scroll to see status cards at top
+- swipe:
+    direction: DOWN
+    duration: 500
+- takeScreenshot: testing-screenshots/B1-08-status-sleeping
+
+# Scroll to see timeline
+- swipe:
+    direction: UP
+    duration: 800
+- takeScreenshot: testing-screenshots/B1-09-timeline-with-sleep

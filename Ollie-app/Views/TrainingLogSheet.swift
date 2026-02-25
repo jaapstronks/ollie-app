@@ -6,26 +6,59 @@
 //
 
 import SwiftUI
+import OllieShared
 
 /// Sheet for logging a training session for a specific skill
 struct TrainingLogSheet: View {
     let skill: Skill
+    let prefillData: TrainingSessionData?
     let onSave: (PuppyEvent) -> Void
     let onCancel: () -> Void
 
-    @State private var selectedTime: Date = Date()
-    @State private var duration: Int = 5
+    @State private var selectedTime: Date
+    @State private var duration: Int
     @State private var result: String = ""
     @State private var note: String = ""
 
     @Environment(\.colorScheme) private var colorScheme
+
+    init(
+        skill: Skill,
+        prefillData: TrainingSessionData? = nil,
+        onSave: @escaping (PuppyEvent) -> Void,
+        onCancel: @escaping () -> Void
+    ) {
+        self.skill = skill
+        self.prefillData = prefillData
+        self.onSave = onSave
+        self.onCancel = onCancel
+
+        // Pre-fill from session data if available
+        if let data = prefillData {
+            _selectedTime = State(initialValue: data.startTime)
+            _duration = State(initialValue: max(1, data.durationMinutes))
+        } else {
+            _selectedTime = State(initialValue: Date())
+            _duration = State(initialValue: 5)
+        }
+    }
 
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 24) {
                     // Skill header
-                    skillHeader
+                    SheetHeaderCard(
+                        title: skill.name,
+                        icon: .skill(skill),
+                        subtitle: skill.category.label,
+                        tintColor: .ollieAccent
+                    )
+
+                    // Session summary (if from training mode)
+                    if let data = prefillData {
+                        sessionSummaryCard(data)
+                    }
 
                     // Time picker
                     VStack(alignment: .leading, spacing: 8) {
@@ -95,7 +128,7 @@ struct TrainingLogSheet: View {
                             .fontWeight(.medium)
                             .foregroundStyle(.secondary)
 
-                        TextField(Strings.Training.notePlaceholder, text: $note, axis: .vertical)
+                        TextField(notePlaceholder, text: $note, axis: .vertical)
                             .textFieldStyle(.plain)
                             .lineLimit(3...5)
                             .padding()
@@ -126,35 +159,50 @@ struct TrainingLogSheet: View {
         }
     }
 
-    // MARK: - Skill Header
+    // MARK: - Session Summary Card
 
     @ViewBuilder
-    private var skillHeader: some View {
-        HStack(spacing: 12) {
-            // Icon in circle
-            ZStack {
-                Circle()
-                    .fill(Color.ollieAccent.opacity(colorScheme == .dark ? 0.2 : 0.15))
-                    .frame(width: 56, height: 56)
-
-                Image(systemName: skill.icon)
-                    .font(.system(size: 24))
-                    .foregroundStyle(Color.ollieAccent)
-            }
-
-            VStack(alignment: .leading, spacing: 2) {
-                Text(skill.name)
-                    .font(.title3)
-                    .fontWeight(.semibold)
-
-                Text(skill.category.label)
-                    .font(.subheadline)
+    private func sessionSummaryCard(_ data: TrainingSessionData) -> some View {
+        HStack(spacing: 16) {
+            // Duration
+            VStack(spacing: 4) {
+                Text("\(data.durationMinutes)")
+                    .font(.title2)
+                    .fontWeight(.bold)
+                Text(Strings.Common.minutes)
+                    .font(.caption)
                     .foregroundStyle(.secondary)
             }
+            .frame(maxWidth: .infinity)
+
+            Divider()
+                .frame(height: 40)
+
+            // Clicks
+            VStack(spacing: 4) {
+                Text("\(data.clickCount)")
+                    .font(.title2)
+                    .fontWeight(.bold)
+                Text(Strings.TrainingSession.clicks)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            .frame(maxWidth: .infinity)
         }
         .padding()
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .glassStatusCard(tintColor: Color.ollieAccent)
+        .background(
+            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                .fill(Color.ollieAccent.opacity(colorScheme == .dark ? 0.15 : 0.1))
+        )
+    }
+
+    // MARK: - Helpers
+
+    private var notePlaceholder: String {
+        if let data = prefillData, data.clickCount > 0 {
+            return "\(data.clickCount) clicks..."
+        }
+        return Strings.Training.notePlaceholder
     }
 
     // MARK: - Save
@@ -185,9 +233,23 @@ private let previewSkillForTrainingLog = Skill(
     requires: ["luring"]
 )
 
-#Preview {
+#Preview("Without Prefill") {
     TrainingLogSheet(
         skill: previewSkillForTrainingLog,
+        onSave: { _ in },
+        onCancel: {}
+    )
+}
+
+#Preview("With Prefill") {
+    TrainingLogSheet(
+        skill: previewSkillForTrainingLog,
+        prefillData: TrainingSessionData(
+            skill: previewSkillForTrainingLog,
+            startTime: Date().addingTimeInterval(-180),
+            endTime: Date(),
+            clickCount: 12
+        ),
         onSave: { _ in },
         onCancel: {}
     )

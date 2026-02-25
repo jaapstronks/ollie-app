@@ -6,6 +6,7 @@
 //  Uses liquid glass design for iOS 26 aesthetic
 
 import SwiftUI
+import OllieShared
 
 /// Card showing poop status for the day
 /// Uses liquid glass design with semantic tinting based on urgency
@@ -22,7 +23,7 @@ struct PoopStatusCard: View {
 
     var body: some View {
         // Hide during night hours
-        if status.urgency == .hidden {
+        if status.urgency.isHidden {
             EmptyView()
         } else {
             cardContent
@@ -32,32 +33,28 @@ struct PoopStatusCard: View {
 
     @ViewBuilder
     private var cardContent: some View {
-        VStack(spacing: 12) {
-            StatusCardHeader(
-                iconName: PoopCalculations.iconName(for: status.urgency),
-                iconColor: PoopCalculations.iconColor(for: status.urgency),
-                tintColor: indicatorColor,
-                title: mainText,
-                titleColor: textColor,
-                subtitle: subtitleText,
-                statusLabel: statusLabel,
-                iconSize: 40
-            )
-
+        StatusCardHeader(
+            iconName: status.urgency.iconName,
+            iconColor: status.urgency.iconColor,
+            tintColor: indicatorColor,
+            title: mainText,
+            titleColor: status.urgency.textColor,
+            subtitle: subtitleText,
+            iconSize: 40
+        ) {
             // Show action when urgency warrants it
             if let onLogPoop, shouldShowAction {
                 Button(action: onLogPoop) {
                     Label(Strings.PoopStatus.logNow, systemImage: "leaf.fill")
                 }
-                .buttonStyle(.glassPill(tint: .custom(indicatorColor)))
+                .buttonStyle(.glassPillCompact(tint: .custom(indicatorColor)))
             }
         }
-        .padding(.horizontal, 14)
-        .padding(.vertical, 12)
-        .glassStatusCard(tintColor: indicatorColor)
+        .statusCardPadding()
+        .glassStatusCard(tintColor: indicatorColor, cornerRadius: LayoutConstants.cornerRadius)
         .accessibilityElement(children: .combine)
         .accessibilityLabel(Strings.PoopStatus.accessibility)
-        .accessibilityValue("\(mainText). \(statusLabel)")
+        .accessibilityValue(mainText)
     }
 
     private var shouldShowAction: Bool {
@@ -96,32 +93,8 @@ struct PoopStatusCard: View {
         return PoopCalculations.formatTimeSince(status.lastPoopTime)
     }
 
-    private var statusLabel: String {
-        switch status.urgency {
-        case .hidden:
-            return ""
-        case .good:
-            return Strings.PoopStatus.good
-        case .info:
-            return Strings.PoopStatus.info
-        case .gentle, .attention:
-            return Strings.PoopStatus.note
-        }
-    }
-
     private var indicatorColor: Color {
-        PoopCalculations.iconColor(for: status.urgency)
-    }
-
-    private var textColor: Color {
-        switch status.urgency {
-        case .hidden, .good, .info:
-            return .primary
-        case .gentle:
-            return .primary
-        case .attention:
-            return .ollieWarning
-        }
+        status.urgency.iconColor
     }
 }
 

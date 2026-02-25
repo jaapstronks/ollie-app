@@ -1,0 +1,15 @@
+appId: com.jaapstronks.Ollie-app
+---
+# Check the timeline section after accident
+
+# Scroll down to see timeline
+- swipe:
+    direction: UP
+    duration: 500
+- takeScreenshot: testing-screenshots/A3-07-timeline-after-accident
+
+# Scroll more
+- swipe:
+    direction: UP
+    duration: 500
+- takeScreenshot: testing-screenshots/A3-08-timeline-bottom

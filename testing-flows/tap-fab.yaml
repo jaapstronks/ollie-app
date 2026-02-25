@@ -1,0 +1,14 @@
+appId: com.jaapstronks.Ollie-app
+---
+# Take initial screenshot
+- takeScreenshot: testing-screenshots/maestro-init
+
+# Tap the FAB button to open log menu
+- tapOn:
+    id: "FAB_BUTTON"
+
+# Wait for sheet to appear
+- waitForAnimationToEnd
+
+# Take screenshot of log menu
+- takeScreenshot: testing-screenshots/maestro-log-menu

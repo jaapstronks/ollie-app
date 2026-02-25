@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import OllieShared
 import ActivityKit
 
 /// Attributes for the nap Live Activity

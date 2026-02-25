@@ -1,0 +1,163 @@
+{
+  "categories": [
+    {
+      "id": "mensen",
+      "name": "People",
+      "icon": "person.2.fill",
+      "items": [
+        { "id": "kind-0-5", "name": "Toddler (0-5 years)", "targetExposures": 3, "isWalkable": true, "priority": 2 },
+        { "id": "kind-6-12", "name": "Child (6-12 years)", "targetExposures": 3, "isWalkable": true, "priority": 2 },
+        { "id": "tiener", "name": "Teenager", "targetExposures": 3, "isWalkable": true, "priority": 2 },
+        { "id": "volwassene-man", "name": "Adult man", "targetExposures": 3, "isWalkable": true, "priority": 3 },
+        { "id": "volwassene-vrouw", "name": "Adult woman", "targetExposures": 3, "isWalkable": true, "priority": 3 },
+        { "id": "oudere", "name": "Elderly person", "targetExposures": 3, "isWalkable": true, "priority": 2 },
+        { "id": "baard", "name": "Person with beard", "targetExposures": 3, "isWalkable": true },
+        { "id": "hoed", "name": "Person with hat", "targetExposures": 3, "isWalkable": true },
+        { "id": "zonnebril", "name": "Person with sunglasses", "targetExposures": 3, "isWalkable": true },
+        { "id": "uniform", "name": "Person in uniform", "description": "Police, delivery person, postal worker", "targetExposures": 3, "isWalkable": true },
+        { "id": "rolstoel", "name": "Person in wheelchair", "targetExposures": 2, "isWalkable": true, "priority": 0 },
+        { "id": "krukken", "name": "Person with crutches/walker", "targetExposures": 2, "isWalkable": true, "priority": 0 },
+        { "id": "paraplu", "name": "Person with umbrella", "targetExposures": 3, "isWalkable": true },
+        { "id": "rugzak", "name": "Person with large backpack", "targetExposures": 3, "isWalkable": true },
+        { "id": "rennend", "name": "Running person", "targetExposures": 3, "isWalkable": true, "priority": 2 },
+        { "id": "groep", "name": "Group of people", "targetExposures": 3, "isWalkable": true }
+      ]
+    },
+    {
+      "id": "dieren",
+      "name": "Animals",
+      "icon": "pawprint.fill",
+      "items": [
+        { "id": "hond-klein", "name": "Small dog", "targetExposures": 5, "isWalkable": true, "priority": 3 },
+        { "id": "hond-groot", "name": "Large dog", "targetExposures": 5, "isWalkable": true, "priority": 3 },
+        { "id": "puppy", "name": "Other puppy", "targetExposures": 5, "isWalkable": true, "priority": 3 },
+        { "id": "kat", "name": "Cat", "targetExposures": 3, "isWalkable": true, "priority": 2 },
+        { "id": "vogel", "name": "Bird", "targetExposures": 3, "isWalkable": true },
+        { "id": "eend-gans", "name": "Duck/goose", "targetExposures": 3, "isWalkable": true },
+        { "id": "paard", "name": "Horse", "targetExposures": 2, "isWalkable": true, "priority": 0 },
+        { "id": "koe-schaap", "name": "Cow/sheep", "targetExposures": 2, "isWalkable": true, "priority": 0 }
+      ]
+    },
+    {
+      "id": "voertuigen",
+      "name": "Vehicles",
+      "icon": "car.fill",
+      "items": [
+        { "id": "auto", "name": "Car", "targetExposures": 5, "isWalkable": true, "priority": 3 },
+        { "id": "bus", "name": "Bus", "targetExposures": 3, "isWalkable": true, "priority": 2 },
+        { "id": "vrachtwagen", "name": "Truck", "targetExposures": 3, "isWalkable": true },
+        { "id": "motor", "name": "Motorcycle", "targetExposures": 3, "isWalkable": true },
+        { "id": "fiets", "name": "Bicycle", "targetExposures": 5, "isWalkable": true, "priority": 3 },
+        { "id": "scooter", "name": "Scooter/moped", "targetExposures": 3, "isWalkable": true },
+        { "id": "skateboard", "name": "Skateboard/rollerblades", "targetExposures": 3, "isWalkable": true },
+        { "id": "kinderwagen", "name": "Stroller/pram", "targetExposures": 3, "isWalkable": true, "priority": 2 },
+        { "id": "ambulance", "name": "Emergency vehicle", "description": "Ambulance, fire truck, police car", "targetExposures": 2, "isWalkable": true, "priority": 0 },
+        { "id": "tram-trein", "name": "Tram/train", "targetExposures": 2, "isWalkable": true, "priority": 0 }
+      ]
+    },
+    {
+      "id": "geluiden",
+      "name": "Sounds",
+      "icon": "speaker.wave.3.fill",
+      "items": [
+        { "id": "stofzuiger", "name": "Vacuum cleaner", "targetExposures": 5, "isWalkable": false },
+        { "id": "fohn", "name": "Hair dryer", "targetExposures": 3, "isWalkable": false },
+        { "id": "wasmachine", "name": "Washing machine", "targetExposures": 3, "isWalkable": false },
+        { "id": "vaatwasser", "name": "Dishwasher", "targetExposures": 3, "isWalkable": false },
+        { "id": "deurbel", "name": "Doorbell", "targetExposures": 5, "isWalkable": false },
+        { "id": "telefoon", "name": "Phone ringing", "targetExposures": 3, "isWalkable": false },
+        { "id": "alarm", "name": "Alarm/siren", "targetExposures": 2, "isWalkable": true, "priority": 0 },
+        { "id": "bouw", "name": "Construction noise", "targetExposures": 3, "isWalkable": true, "priority": 0 },
+        { "id": "onweer", "name": "Thunder", "targetExposures": 3, "isWalkable": false },
+        { "id": "vuurwerk", "name": "Fireworks", "description": "Start with recordings at low volume", "targetExposures": 3, "isWalkable": false },
+        { "id": "muziek", "name": "Loud music", "targetExposures": 3, "isWalkable": true, "priority": 0 },
+        { "id": "geschreeuw", "name": "Shouting/cheering", "targetExposures": 3, "isWalkable": true, "priority": 0 },
+        { "id": "kerkklok", "name": "Church bells", "targetExposures": 2, "isWalkable": true, "priority": 0 },
+        { "id": "huilende-baby", "name": "Crying baby", "targetExposures": 2, "isWalkable": true, "priority": 0 }
+      ]
+    },
+    {
+      "id": "omgevingen",
+      "name": "Environments",
+      "icon": "building.2.fill",
+      "items": [
+        { "id": "drukke-straat", "name": "Busy street", "targetExposures": 5, "isWalkable": true, "priority": 2 },
+        { "id": "winkelstraat", "name": "Shopping street", "targetExposures": 3, "isWalkable": true },
+        { "id": "park", "name": "Park", "targetExposures": 5, "isWalkable": true, "priority": 3 },
+        { "id": "bos", "name": "Forest", "targetExposures": 3, "isWalkable": true },
+        { "id": "strand", "name": "Beach", "targetExposures": 2, "isWalkable": true, "priority": 0 },
+        { "id": "terras", "name": "Outdoor cafe/terrace", "targetExposures": 3, "isWalkable": true },
+        { "id": "station", "name": "Train/bus station", "targetExposures": 2, "isWalkable": true, "priority": 0 },
+        { "id": "parkeergarage", "name": "Parking garage", "targetExposures": 2, "isWalkable": true, "priority": 0 },
+        { "id": "lift", "name": "Elevator", "targetExposures": 3, "isWalkable": false },
+        { "id": "trap", "name": "Stairs", "targetExposures": 5, "isWalkable": true, "priority": 2 },
+        { "id": "speeltuin", "name": "Playground", "targetExposures": 3, "isWalkable": true, "priority": 2 },
+        { "id": "dierenwinkel", "name": "Pet store", "targetExposures": 2, "isWalkable": true }
+      ]
+    },
+    {
+      "id": "ondergronden",
+      "name": "Surfaces",
+      "icon": "square.stack.3d.up.fill",
+      "items": [
+        { "id": "gras", "name": "Grass", "targetExposures": 5, "isWalkable": true, "priority": 3 },
+        { "id": "grind", "name": "Gravel", "targetExposures": 3, "isWalkable": true },
+        { "id": "zand", "name": "Sand", "targetExposures": 3, "isWalkable": true },
+        { "id": "tegels", "name": "Tiles/pavement", "targetExposures": 5, "isWalkable": true, "priority": 3 },
+        { "id": "hout", "name": "Wood/decking", "targetExposures": 3, "isWalkable": true },
+        { "id": "metaal", "name": "Metal grating", "description": "Bridges, grates, manhole covers", "targetExposures": 3, "isWalkable": true },
+        { "id": "water", "name": "Shallow water", "targetExposures": 3, "isWalkable": true },
+        { "id": "modder", "name": "Mud", "targetExposures": 2, "isWalkable": true },
+        { "id": "bladeren", "name": "Leaves/mulch", "targetExposures": 3, "isWalkable": true },
+        { "id": "sneeuw", "name": "Snow", "targetExposures": 2, "isWalkable": true, "priority": 0 }
+      ]
+    },
+    {
+      "id": "handling",
+      "name": "Handling",
+      "icon": "hand.raised.fill",
+      "items": [
+        { "id": "oren-aanraken", "name": "Touching ears", "targetExposures": 5, "isWalkable": false },
+        { "id": "poten-aanraken", "name": "Touching paws", "targetExposures": 5, "isWalkable": false },
+        { "id": "staart-aanraken", "name": "Touching tail", "targetExposures": 3, "isWalkable": false },
+        { "id": "bek-openen", "name": "Opening mouth", "targetExposures": 5, "isWalkable": false },
+        { "id": "nagels-knippen", "name": "Nail trimming", "description": "Start with just touching clippers", "targetExposures": 5, "isWalkable": false },
+        { "id": "borstelen", "name": "Brushing", "targetExposures": 5, "isWalkable": false },
+        { "id": "baden", "name": "Bathing", "targetExposures": 3, "isWalkable": false },
+        { "id": "afdrogen", "name": "Towel drying", "targetExposures": 3, "isWalkable": false },
+        { "id": "optillen", "name": "Being picked up", "targetExposures": 5, "isWalkable": false },
+        { "id": "vastpakken-halsband", "name": "Collar grab", "description": "Important for safety", "targetExposures": 5, "isWalkable": false }
+      ]
+    },
+    {
+      "id": "objecten",
+      "name": "Objects",
+      "icon": "shippingbox.fill",
+      "items": [
+        { "id": "paraplu-open", "name": "Opening umbrella", "targetExposures": 3, "isWalkable": false },
+        { "id": "ballonnen", "name": "Balloons", "targetExposures": 2, "isWalkable": true, "priority": 0 },
+        { "id": "vuilniszak", "name": "Garbage bags", "targetExposures": 3, "isWalkable": true },
+        { "id": "kliko", "name": "Trash bins/dumpsters", "targetExposures": 3, "isWalkable": true },
+        { "id": "bezem", "name": "Broom/mop", "targetExposures": 3, "isWalkable": false },
+        { "id": "stoel-tafel", "name": "Moving furniture", "targetExposures": 3, "isWalkable": false },
+        { "id": "plastic-zak", "name": "Plastic bags (sound)", "targetExposures": 3, "isWalkable": true },
+        { "id": "vlaggend-object", "name": "Flags/banners", "targetExposures": 3, "isWalkable": true },
+        { "id": "spiegel", "name": "Mirror", "targetExposures": 2, "isWalkable": false },
+        { "id": "standbeeld", "name": "Statues/mannequins", "targetExposures": 2, "isWalkable": true, "priority": 0 }
+      ]
+    },
+    {
+      "id": "weer",
+      "name": "Weather",
+      "icon": "cloud.rain.fill",
+      "items": [
+        { "id": "regen", "name": "Rain", "targetExposures": 3, "isWalkable": true, "priority": 0 },
+        { "id": "wind", "name": "Strong wind", "targetExposures": 3, "isWalkable": true, "priority": 0 },
+        { "id": "sneeuw-hagel", "name": "Snow/hail", "targetExposures": 2, "isWalkable": true, "priority": 0 },
+        { "id": "warmte", "name": "Hot weather", "targetExposures": 3, "isWalkable": true, "priority": 0 },
+        { "id": "kou", "name": "Cold weather", "targetExposures": 3, "isWalkable": true, "priority": 0 },
+        { "id": "donker", "name": "Darkness/night walk", "targetExposures": 5, "isWalkable": true, "priority": 0 }
+      ]
+    }
+  ]
+}

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import OllieShared
 
 // MARK: - Dog Breed
 

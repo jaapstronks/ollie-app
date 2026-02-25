@@ -1,0 +1,9 @@
+appId: com.jaapstronks.Ollie-app
+---
+# Dismiss sheet and continue testing
+
+# Tap Cancel to dismiss
+- tapOn:
+    text: "Cancel"
+- waitForAnimationToEnd
+- takeScreenshot: testing-screenshots/dismissed-state

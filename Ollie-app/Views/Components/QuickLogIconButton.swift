@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import OllieShared
 
 /// Generic button for quick logging actions
 struct QuickLogIconButton: View {

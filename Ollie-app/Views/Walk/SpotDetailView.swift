@@ -5,11 +5,13 @@
 //  Full-screen detail view for a walk spot with inline editing
 
 import SwiftUI
+import OllieShared
 import MapKit
 
 /// Full detail view for viewing and editing a walk spot
 struct SpotDetailView: View {
     @ObservedObject var spotStore: SpotStore
+    var momentsViewModel: MomentsViewModel?
     let spot: WalkSpot
 
     @Environment(\.dismiss) private var dismiss
@@ -18,10 +20,22 @@ struct SpotDetailView: View {
     @State private var editedNotes: String
     @State private var isEditing = false
     @State private var showingDeleteConfirmation = false
+    @State private var selectedPhotoEvent: PuppyEvent?
 
+    /// Full initializer with photo support
+    init(spotStore: SpotStore, spot: WalkSpot, momentsViewModel: MomentsViewModel) {
+        self.spotStore = spotStore
+        self.spot = spot
+        self.momentsViewModel = momentsViewModel
+        _editedName = State(initialValue: spot.name)
+        _editedNotes = State(initialValue: spot.notes ?? "")
+    }
+
+    /// Convenience initializer without photo support (for legacy usage)
     init(spotStore: SpotStore, spot: WalkSpot) {
         self.spotStore = spotStore
         self.spot = spot
+        self.momentsViewModel = nil
         _editedName = State(initialValue: spot.name)
         _editedNotes = State(initialValue: spot.notes ?? "")
     }
@@ -30,6 +44,18 @@ struct SpotDetailView: View {
     private var currentSpot: WalkSpot {
         spotStore.spot(withId: spot.id) ?? spot
     }
+
+    // Photos taken near this spot
+    private var photosHere: [PuppyEvent] {
+        momentsViewModel?.photosAtSpot(currentSpot) ?? []
+    }
+
+    private let photoGridColumns = [
+        GridItem(.flexible(), spacing: 4),
+        GridItem(.flexible(), spacing: 4),
+        GridItem(.flexible(), spacing: 4),
+        GridItem(.flexible(), spacing: 4)
+    ]
 
     var body: some View {
         ScrollView {
@@ -77,8 +103,8 @@ struct SpotDetailView: View {
 
                     Divider()
 
-                    // Stats
-                    HStack(spacing: 24) {
+                    // Stats row with photo count
+                    HStack(spacing: 16) {
                         // Visit count
                         VStack(alignment: .leading, spacing: 2) {
                             Text(Strings.WalkLocations.visitCount(currentSpot.visitCount))
@@ -87,6 +113,18 @@ struct SpotDetailView: View {
                             Text(Strings.SpotDetail.visits)
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
+                        }
+
+                        // Photo count
+                        if !photosHere.isEmpty {
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("\(photosHere.count)")
+                                    .font(.subheadline)
+                                    .fontWeight(.medium)
+                                Text(Strings.SpotDetail.photos)
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
                         }
 
                         Spacer()
@@ -104,8 +142,13 @@ struct SpotDetailView: View {
                 }
                 .padding()
                 .background(Color(.secondarySystemGroupedBackground))
-                .cornerRadius(12)
+                .cornerRadius(LayoutConstants.cornerRadiusM)
                 .padding(.horizontal)
+
+                // Photos section
+                if !photosHere.isEmpty {
+                    photosSection
+                }
 
                 // Actions
                 VStack(spacing: 12) {
@@ -176,6 +219,58 @@ struct SpotDetailView: View {
         } message: {
             Text(Strings.SpotDetail.deleteConfirmMessage)
         }
+        .fullScreenCover(item: $selectedPhotoEvent) { event in
+            MediaPreviewView(
+                event: event,
+                onDelete: {
+                    momentsViewModel?.deleteEvent(event)
+                    selectedPhotoEvent = nil
+                }
+            )
+        }
+    }
+
+    // MARK: - Photos Section
+
+    private var photosSection: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack {
+                Image(systemName: "photo.fill")
+                    .foregroundStyle(.pink)
+                Text(Strings.SpotDetail.photosHere)
+                    .font(.headline)
+
+                Spacer()
+
+                if photosHere.count > 8 {
+                    Text(Strings.Places.photoCount(photosHere.count))
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            }
+            .padding(.horizontal)
+
+            // Photo grid (show up to 8 photos)
+            LazyVGrid(columns: photoGridColumns, spacing: 4) {
+                ForEach(photosHere.prefix(8)) { event in
+                    GalleryThumbnail(event: event)
+                        .aspectRatio(1, contentMode: .fill)
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                        .onTapGesture {
+                            selectedPhotoEvent = event
+                        }
+                }
+            }
+            .padding(.horizontal)
+
+            // Empty state hint
+            if photosHere.isEmpty {
+                Text(Strings.SpotDetail.noPhotosHint)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .padding(.horizontal)
+            }
+        }
     }
 
     private func save() {
@@ -205,7 +300,27 @@ struct SpotDetailView: View {
     }
 }
 
-#Preview {
+#Preview("With Photos") {
+    let eventStore = EventStore()
+    let momentsViewModel = MomentsViewModel(eventStore: eventStore)
+
+    return NavigationStack {
+        SpotDetailView(
+            spotStore: SpotStore(),
+            spot: WalkSpot(
+                name: "Kralingse Bos",
+                latitude: 51.9225,
+                longitude: 4.4792,
+                isFavorite: true,
+                notes: "Great park with lots of trails",
+                visitCount: 15
+            ),
+            momentsViewModel: momentsViewModel
+        )
+    }
+}
+
+#Preview("Without Photos") {
     NavigationStack {
         SpotDetailView(
             spotStore: SpotStore(),

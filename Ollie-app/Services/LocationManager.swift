@@ -5,6 +5,7 @@
 //  Wrapper for CLLocationManager with async/await support
 
 import Foundation
+import OllieShared
 import CoreLocation
 import Combine
 

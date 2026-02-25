@@ -4,6 +4,7 @@
 //
 
 import Foundation
+import OllieShared
 import Combine
 
 /// Preview of what will be imported
@@ -44,6 +45,66 @@ class DataImporter: ObservableObject {
     @Published private(set) var lastError: String?
 
     private let fileManager = FileManager.default
+
+    // MARK: - Security
+
+    /// Allowed domains for downloading files
+    private static let allowedDownloadHosts = ["raw.githubusercontent.com", "github.com", "objects.githubusercontent.com"]
+
+    /// Maximum allowed file size for imports (5MB)
+    private static let maxFileSize = 5 * 1024 * 1024
+
+    /// Maximum allowed line length in JSONL files (prevents memory attacks)
+    private static let maxLineLength = 50_000
+
+    /// Validates that a URL is from an allowed GitHub domain
+    private func isURLAllowed(_ url: URL) -> Bool {
+        guard let host = url.host?.lowercased() else { return false }
+        return Self.allowedDownloadHosts.contains(host)
+    }
+
+    /// Validates and sanitizes JSONL content
+    /// Returns nil if content appears malicious
+    private func sanitizeJSONLContent(_ content: String) throws -> String {
+        var sanitizedLines: [String] = []
+
+        for line in content.components(separatedBy: .newlines) {
+            // Skip empty lines
+            guard !line.trimmingCharacters(in: .whitespaces).isEmpty else {
+                continue
+            }
+
+            // Check line length
+            guard line.count <= Self.maxLineLength else {
+                throw ImportError.contentTooLarge
+            }
+
+            // Validate that each line is valid JSON
+            guard let data = line.data(using: .utf8),
+                  let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
+                // Skip invalid JSON lines rather than failing entirely
+                continue
+            }
+
+            // Validate required fields and sanitize paths
+            if let photoPath = json["photo"] as? String {
+                // Block path traversal attempts in photo paths
+                if photoPath.contains("..") || photoPath.hasPrefix("/") {
+                    throw ImportError.maliciousContent
+                }
+            }
+
+            if let videoPath = json["video"] as? String {
+                if videoPath.contains("..") || videoPath.hasPrefix("/") {
+                    throw ImportError.maliciousContent
+                }
+            }
+
+            sanitizedLines.append(line)
+        }
+
+        return sanitizedLines.joined(separator: "\n")
+    }
 
     // MARK: - Public Methods
 
@@ -185,11 +246,28 @@ class DataImporter: ObservableObject {
                   let downloadURL = URL(string: downloadURLString) else {
                 return nil
             }
+
+            // Security: Validate the download URL is from an allowed domain
+            guard isURLAllowed(downloadURL) else {
+                return nil
+            }
+
+            // Security: Validate filename format (YYYY-MM-DD.jsonl)
+            let filenamePattern = #"^\d{4}-\d{2}-\d{2}\.jsonl$"#
+            guard name.range(of: filenamePattern, options: .regularExpression) != nil else {
+                return nil
+            }
+
             return GitHubFile(name: name, downloadURL: downloadURL)
         }
     }
 
     private func downloadFile(url: URL) async throws -> String {
+        // Security: Validate URL before downloading
+        guard isURLAllowed(url) else {
+            throw ImportError.untrustedURL
+        }
+
         let (data, response) = try await URLSession.shared.data(from: url)
 
         guard let httpResponse = response as? HTTPURLResponse,
@@ -197,11 +275,17 @@ class DataImporter: ObservableObject {
             throw ImportError.downloadFailed
         }
 
+        // Security: Check file size
+        guard data.count <= Self.maxFileSize else {
+            throw ImportError.contentTooLarge
+        }
+
         guard let content = String(data: data, encoding: .utf8) else {
             throw ImportError.invalidContent
         }
 
-        return content
+        // Security: Sanitize and validate JSONL content
+        return try sanitizeJSONLContent(content)
     }
 
     /// Get list of local JSONL file names
@@ -220,13 +304,9 @@ class DataImporter: ObservableObject {
 
     /// Parse date range from JSONL file names (format: YYYY-MM-DD.jsonl)
     private func parseDateRange(from fileNames: [String]) -> (start: Date, end: Date)? {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd"
-        formatter.timeZone = TimeZone.current
-
         let dates = fileNames.compactMap { fileName -> Date? in
             let datePart = fileName.replacingOccurrences(of: ".jsonl", with: "")
-            return formatter.date(from: datePart)
+            return DateFormatters.dateOnly.date(from: datePart)
         }.sorted()
 
         guard let first = dates.first, let last = dates.last else {
@@ -250,6 +330,9 @@ enum ImportError: LocalizedError {
     case invalidResponse
     case downloadFailed
     case invalidContent
+    case untrustedURL
+    case contentTooLarge
+    case maliciousContent
 
     var errorDescription: String? {
         switch self {
@@ -257,6 +340,9 @@ enum ImportError: LocalizedError {
         case .invalidResponse: return "Ongeldig antwoord van GitHub"
         case .downloadFailed: return "Download mislukt"
         case .invalidContent: return "Bestandsinhoud ongeldig"
+        case .untrustedURL: return "Onvertrouwde download URL"
+        case .contentTooLarge: return "Bestand te groot"
+        case .maliciousContent: return "Verdachte inhoud gedetecteerd"
         }
     }
 }

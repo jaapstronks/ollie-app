@@ -2,43 +2,46 @@
 //  CloudSharingView.swift
 //  Ollie-app
 //
-//  UIKit wrapper for CloudKit sharing controller
+//  Simple UIKit wrapper for CloudKit sharing controller (Apple's recommended pattern)
 //
 
 import SwiftUI
+import OllieShared
 import CloudKit
+import os
 
-/// SwiftUI wrapper for UICloudSharingController
+private let logger = Logger.ollie(category: "CloudSharingView")
+
+/// Simple SwiftUI wrapper for UICloudSharingController (Apple's pattern)
+/// Pass an already-created CKShare - no async share creation inside the view
 struct CloudSharingView: UIViewControllerRepresentable {
     let share: CKShare
     let container: CKContainer
-
-    @Environment(\.dismiss) private var dismiss
+    let onDismiss: () -> Void
 
     func makeUIViewController(context: Context) -> UICloudSharingController {
         let controller = UICloudSharingController(share: share, container: container)
-        controller.availablePermissions = [.allowReadWrite]
+        controller.availablePermissions = [.allowReadWrite, .allowPrivate]
         controller.delegate = context.coordinator
+        controller.modalPresentationStyle = .formSheet
         return controller
     }
 
-    func updateUIViewController(_ uiViewController: UICloudSharingController, context: Context) {
-        // No updates needed
-    }
+    func updateUIViewController(_ uiViewController: UICloudSharingController, context: Context) {}
 
     func makeCoordinator() -> Coordinator {
-        Coordinator(dismiss: dismiss)
+        Coordinator(onDismiss: onDismiss)
     }
 
     class Coordinator: NSObject, UICloudSharingControllerDelegate {
-        let dismiss: DismissAction
+        let onDismiss: () -> Void
 
-        init(dismiss: DismissAction) {
-            self.dismiss = dismiss
+        init(onDismiss: @escaping () -> Void) {
+            self.onDismiss = onDismiss
         }
 
         func cloudSharingController(_ csc: UICloudSharingController, failedToSaveShareWithError error: Error) {
-            print("Failed to save share: \(error.localizedDescription)")
+            logger.error("Share failed: \(error.localizedDescription)")
         }
 
         func itemTitle(for csc: UICloudSharingController) -> String? {
@@ -46,188 +49,33 @@ struct CloudSharingView: UIViewControllerRepresentable {
         }
 
         func itemThumbnailData(for csc: UICloudSharingController) -> Data? {
-            // Could return app icon data here
-            nil
+            // Return app icon as thumbnail for share previews
+            if let icon = UIImage(named: "AppIcon"),
+               let data = icon.pngData() {
+                return data
+            }
+            // Fallback: try to get icon from bundle
+            if let icons = Bundle.main.infoDictionary?["CFBundleIcons"] as? [String: Any],
+               let primaryIcon = icons["CFBundlePrimaryIcon"] as? [String: Any],
+               let iconFiles = primaryIcon["CFBundleIconFiles"] as? [String],
+               let lastIcon = iconFiles.last,
+               let icon = UIImage(named: lastIcon),
+               let data = icon.pngData() {
+                return data
+            }
+            return nil
         }
 
         func cloudSharingControllerDidSaveShare(_ csc: UICloudSharingController) {
-            // Share was saved successfully
-            Task { @MainActor in
-                await CloudKitService.shared.refreshShareParticipants()
-            }
+            logger.info("Share saved successfully")
+            // Share state is managed automatically by NSPersistentCloudKitContainer
+            NotificationCenter.default.post(name: .cloudKitShareAccepted, object: nil)
         }
 
         func cloudSharingControllerDidStopSharing(_ csc: UICloudSharingController) {
-            // User stopped sharing
-            Task { @MainActor in
-                await CloudKitService.shared.refreshShareParticipants()
-            }
-        }
-    }
-}
-
-/// Settings section for CloudKit sharing
-struct ShareSettingsSection: View {
-    @ObservedObject var cloudKit: CloudKitService
-
-    @State private var share: CKShare?
-    @State private var showShareSheet = false
-    @State private var isLoading = true
-    @State private var errorMessage: String?
-    @State private var showStopSharingConfirm = false
-
-    var body: some View {
-        Section {
-            if !cloudKit.isCloudAvailable {
-                // iCloud not available
-                HStack {
-                    Image(systemName: "exclamationmark.icloud")
-                        .foregroundStyle(.orange)
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(Strings.CloudSharing.iCloudUnavailable)
-                            .font(.subheadline)
-                        if let error = cloudKit.syncError {
-                            Text(error)
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                        }
-                    }
-                }
-            } else if cloudKit.isParticipant {
-                // User is viewing shared data (not the owner)
-                HStack {
-                    Image(systemName: "person.2.fill")
-                        .foregroundStyle(.blue)
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(Strings.CloudSharing.sharedData)
-                            .font(.subheadline)
-                        Text(Strings.CloudSharing.viewingOthersData)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                }
-            } else if isLoading {
-                HStack {
-                    ProgressView()
-                        .scaleEffect(0.8)
-                    Text(Strings.Common.loading)
-                        .foregroundStyle(.secondary)
-                }
-            } else if cloudKit.isShared {
-                // Already shared - show participants
-                VStack(alignment: .leading, spacing: 12) {
-                    HStack {
-                        Image(systemName: "checkmark.circle.fill")
-                            .foregroundStyle(.green)
-                        Text(Strings.CloudSharing.shared)
-                            .font(.subheadline.weight(.medium))
-                    }
-
-                    if cloudKit.shareParticipants.isEmpty {
-                        Text(Strings.CloudSharing.noParticipants)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    } else {
-                        ForEach(cloudKit.shareParticipants) { participant in
-                            HStack {
-                                Image(systemName: "person.fill")
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                                Text(participant.name)
-                                    .font(.subheadline)
-                                Spacer()
-                                Text(participant.status.label)
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                            }
-                        }
-                    }
-                }
-
-                Button {
-                    showShareSheet = true
-                } label: {
-                    Label(Strings.CloudSharing.manageSharing, systemImage: "person.badge.plus")
-                }
-
-                Button(role: .destructive) {
-                    HapticFeedback.warning()
-                    showStopSharingConfirm = true
-                } label: {
-                    Label(Strings.CloudSharing.stopSharing, systemImage: "xmark.circle")
-                }
-            } else {
-                // Not shared yet - show invite button
-                Button {
-                    Task { await createAndShowShare() }
-                } label: {
-                    Label(Strings.CloudSharing.shareWithPartner, systemImage: "person.badge.plus")
-                }
-            }
-
-            if let error = errorMessage {
-                Text(error)
-                    .font(.caption)
-                    .foregroundStyle(.red)
-            }
-        } header: {
-            Text(Strings.CloudSharing.sharing)
-        } footer: {
-            if cloudKit.isCloudAvailable && !cloudKit.isParticipant {
-                Text(Strings.CloudSharing.sharingDescription)
-            }
-        }
-        .task {
-            await loadExistingShare()
-        }
-        .sheet(isPresented: $showShareSheet) {
-            if let share = share {
-                CloudSharingView(
-                    share: share,
-                    container: CKContainer(identifier: "iCloud.nl.jaapstronks.Ollie")
-                )
-            }
-        }
-        .alert(Strings.CloudSharing.stopSharing, isPresented: $showStopSharingConfirm) {
-            Button(Strings.Common.cancel, role: .cancel) {}
-            Button(Strings.CloudSharing.stopSharing, role: .destructive) {
-                Task { await stopSharing() }
-            }
-        } message: {
-            Text(Strings.CloudSharing.stopSharingConfirm)
-        }
-    }
-
-    private func loadExistingShare() async {
-        isLoading = true
-        errorMessage = nil
-
-        do {
-            share = try await cloudKit.fetchExistingShare()
-        } catch {
-            // Not a critical error if there's no share yet
-        }
-
-        isLoading = false
-    }
-
-    private func createAndShowShare() async {
-        errorMessage = nil
-
-        do {
-            share = try await cloudKit.createShare()
-            showShareSheet = true
-        } catch {
-            errorMessage = "Kon niet delen: \(error.localizedDescription)"
-        }
-    }
-
-    private func stopSharing() async {
-        do {
-            try await cloudKit.stopSharing()
-            share = nil
-        } catch {
-            errorMessage = "Kon delen niet stoppen: \(error.localizedDescription)"
+            logger.info("Sharing stopped")
+            // Share state is managed automatically by NSPersistentCloudKitContainer
+            NotificationCenter.default.post(name: .cloudKitShareAccepted, object: nil)
         }
     }
 }
@@ -254,27 +102,14 @@ struct SyncStatusView: View {
                     .foregroundStyle(.secondary)
                     .lineLimit(1)
             } else if cloudKit.isCloudAvailable {
-                if let lastSync = cloudKit.lastSyncDate {
-                    Image(systemName: "checkmark.icloud")
-                        .font(.caption)
-                        .foregroundStyle(.green)
-                    Text(Strings.CloudSharing.lastSynced(time: lastSync.formatted(.relative(presentation: .named))))
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                } else {
-                    Image(systemName: "icloud")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
+                Image(systemName: "checkmark.icloud")
+                    .font(.caption)
+                    .foregroundStyle(.green)
             }
         }
     }
 }
 
 #Preview {
-    NavigationStack {
-        Form {
-            ShareSettingsSection(cloudKit: CloudKitService.shared)
-        }
-    }
+    SyncStatusView(eventStore: EventStore())
 }

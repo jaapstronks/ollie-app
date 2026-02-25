@@ -4,6 +4,7 @@
 //
 
 import Foundation
+import OllieShared
 
 enum SeedData {
     // Sample events for development/testing

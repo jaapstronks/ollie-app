@@ -5,6 +5,7 @@
 //  Health tracking view: weight chart and health milestones timeline
 
 import SwiftUI
+import OllieShared
 
 /// Main health view showing weight tracking and health milestones
 struct HealthView: View {

@@ -5,6 +5,7 @@
 //  Sheet for logging a walk with optional potty events
 
 import SwiftUI
+import OllieShared
 
 /// Sheet for logging a completed walk with optional pee/poop
 struct WalkLogSheet: View {
@@ -13,66 +14,58 @@ struct WalkLogSheet: View {
     var spotStore: SpotStore?
     var locationManager: LocationManager?
 
-    @State private var startTime = Date()
-    @State private var durationMinutes = 15
+    /// Default duration in minutes (15 for walks)
+    var defaultDurationMinutes: Int = 15
+
+    private let now = Date()
+
+    @State private var startTime: Date
+    @State private var endTime: Date
     @State private var didPee = false
     @State private var didPoop = false
     @State private var selectedSpot: WalkSpot?
     @State private var note = ""
     @State private var showSpotPicker = false
 
-    private let durationOptions = [5, 10, 15, 20, 30, 45, 60, 90]
+    /// Computed duration in minutes
+    private var durationMinutes: Int {
+        max(1, Int(endTime.timeIntervalSince(startTime) / 60))
+    }
 
-    // Time presets: how many minutes ago
-    private let timePresets = [
-        (label: "Now", minutes: 0),
-        (label: "5 min", minutes: 5),
-        (label: "10 min", minutes: 10),
-        (label: "15 min", minutes: 15),
-        (label: "30 min", minutes: 30)
-    ]
+    init(
+        onSave: @escaping (Date, Int, Bool, Bool, WalkSpot?, String?) -> Void,
+        onCancel: @escaping () -> Void,
+        spotStore: SpotStore? = nil,
+        locationManager: LocationManager? = nil,
+        defaultDurationMinutes: Int = 15
+    ) {
+        self.onSave = onSave
+        self.onCancel = onCancel
+        self.spotStore = spotStore
+        self.locationManager = locationManager
+        self.defaultDurationMinutes = defaultDurationMinutes
+
+        // Calculate defaults: end time = now, start = end - duration
+        let defaultEndTime = Date()
+        let defaultStartTime = defaultEndTime.addingTimeInterval(-Double(defaultDurationMinutes) * 60)
+
+        _startTime = State(initialValue: defaultStartTime)
+        _endTime = State(initialValue: defaultEndTime)
+    }
 
     var body: some View {
         NavigationView {
             Form {
-                // Time section
+                // Time section with linked start/end/duration
                 Section {
-                    DatePicker(
-                        Strings.WalkLog.startTime,
-                        selection: $startTime,
-                        displayedComponents: [.date, .hourAndMinute]
+                    DurationTimePicker(
+                        startTime: $startTime,
+                        endTime: $endTime,
+                        accentColor: .green,
+                        maxEndTime: now
                     )
-
-                    // Quick time presets
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: 8) {
-                            ForEach(timePresets, id: \.minutes) { preset in
-                                Button {
-                                    startTime = Date().addingTimeInterval(-Double(preset.minutes) * 60)
-                                } label: {
-                                    Text(preset.label)
-                                        .font(.subheadline)
-                                        .padding(.horizontal, 12)
-                                        .padding(.vertical, 6)
-                                        .background(isTimePresetSelected(preset.minutes) ? Color.ollieAccent : Color(.tertiarySystemBackground))
-                                        .foregroundColor(isTimePresetSelected(preset.minutes) ? .white : .primary)
-                                        .clipShape(Capsule())
-                                }
-                                .buttonStyle(.plain)
-                            }
-                        }
-                        .padding(.vertical, 4)
-                    }
-                }
-
-                // Duration section
-                Section {
-                    Picker(Strings.WalkLog.duration, selection: $durationMinutes) {
-                        ForEach(durationOptions, id: \.self) { minutes in
-                            Text(Strings.WalkLog.durationMinutes(minutes)).tag(minutes)
-                        }
-                    }
-                    .pickerStyle(.menu)
+                    .listRowInsets(EdgeInsets())
+                    .listRowBackground(Color.clear)
                 }
 
                 // Potty section
@@ -140,7 +133,7 @@ struct WalkLogSheet: View {
                 }
 
                 ToolbarItem(placement: .confirmationAction) {
-                    Button(Strings.WalkLog.logWalk) {
+                    Button {
                         onSave(
                             startTime,
                             durationMinutes,
@@ -149,8 +142,15 @@ struct WalkLogSheet: View {
                             selectedSpot,
                             note.isEmpty ? nil : note
                         )
+                    } label: {
+                        Text(Strings.WalkLog.logWalk)
+                            .fontWeight(.semibold)
+                            .foregroundColor(.white)
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 8)
+                            .background(Color.ollieAccent)
+                            .clipShape(Capsule())
                     }
-                    .fontWeight(.semibold)
                 }
             }
             .sheet(isPresented: $showSpotPicker) {
@@ -202,13 +202,6 @@ struct WalkLogSheet: View {
         .accessibilityAddTraits(isOn.wrappedValue ? [.isSelected] : [])
     }
 
-    // MARK: - Helpers
-
-    private func isTimePresetSelected(_ minutesAgo: Int) -> Bool {
-        let presetTime = Date().addingTimeInterval(-Double(minutesAgo) * 60)
-        // Consider it "selected" if within 30 seconds of the preset
-        return abs(startTime.timeIntervalSince(presetTime)) < 30
-    }
 }
 
 // MARK: - Preview
