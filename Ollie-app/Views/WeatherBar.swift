@@ -167,6 +167,27 @@ struct WeatherSection: View {
     }
 }
 
+// MARK: - Weather Section Container
+
+/// Isolated container that owns weather observation
+/// Prevents parent view from re-rendering when weather updates
+struct WeatherSectionContainer: View {
+    @ObservedObject var weatherService: WeatherService
+    let isToday: Bool
+    let predictedPottyTime: Date?
+
+    var body: some View {
+        if isToday {
+            WeatherSection(
+                forecasts: weatherService.upcomingForecasts(hours: 6),
+                alert: weatherService.smartAlert(predictedPottyTime: predictedPottyTime),
+                isLoading: weatherService.isLoading
+            )
+            .padding(.vertical, 8)
+        }
+    }
+}
+
 // MARK: - Previews
 
 #Preview("Weather Bar") {

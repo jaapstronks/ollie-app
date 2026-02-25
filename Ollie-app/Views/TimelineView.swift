@@ -10,7 +10,9 @@ import TipKit
 /// Main timeline view showing today's events
 struct TimelineView: View {
     @ObservedObject var viewModel: TimelineViewModel
-    @ObservedObject var weatherService: WeatherService
+    /// Weather service passed down but not observed here to avoid full view redraws
+    /// Weather-dependent sections use their own observation via WeatherSectionContainer
+    let weatherService: WeatherService
     @StateObject private var mediaCaptureViewModel = MediaCaptureViewModel(mediaStore: MediaStore())
     @State private var selectedPhotoEvent: PuppyEvent?
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -42,15 +44,12 @@ struct TimelineView: View {
                 )
             }
 
-            // Weather section (only show for today)
-            if Calendar.current.isDateInToday(viewModel.currentDate) {
-                WeatherSection(
-                    forecasts: weatherService.upcomingForecasts(hours: 6),
-                    alert: weatherService.smartAlert(predictedPottyTime: viewModel.predictedNextPlasTime),
-                    isLoading: weatherService.isLoading
-                )
-                .padding(.vertical, 8)
-            }
+            // Weather section container (isolates weather observation to avoid full view redraws)
+            WeatherSectionContainer(
+                weatherService: weatherService,
+                isToday: Calendar.current.isDateInToday(viewModel.currentDate),
+                predictedPottyTime: viewModel.predictedNextPlasTime
+            )
 
             // Daily digest summary
             DigestCard(
@@ -58,7 +57,7 @@ struct TimelineView: View {
                 puppyName: viewModel.puppyName
             )
 
-            // Actionable & Upcoming events (meals & walks) - only for today
+            // Scheduled events section (owns weather observation via @ObservedObject)
             ScheduledEventsSection(
                 viewModel: viewModel,
                 weatherService: weatherService
@@ -86,6 +85,7 @@ struct TimelineView: View {
                 }
             } else {
                 EventList(
+                    timelineItems: viewModel.timelineItems,
                     events: viewModel.events,
                     onDelete: viewModel.deleteEvent,
                     onRefresh: viewModel.loadEvents,
@@ -216,27 +216,12 @@ struct DateHeader: View {
     }
 }
 
-/// Unified timeline item - either a regular event or a sleep session
-enum TimelineItem: Identifiable {
-    case event(PuppyEvent)
-    case sleepSession(SleepSession, note: String?)
-
-    var id: UUID {
-        switch self {
-        case .event(let event): return event.id
-        case .sleepSession(let session, _): return session.id
-        }
-    }
-
-    var sortTime: Date {
-        switch self {
-        case .event(let event): return event.time
-        case .sleepSession(let session, _): return session.startTime
-        }
-    }
-}
+// TimelineItem enum moved to TimelineViewModel for pre-computation
 
 struct EventList: View {
+    /// Pre-computed timeline items from ViewModel (avoids O(n²) computation on every render)
+    let timelineItems: [TimelineItem]
+    /// Raw events for deletion operations
     let events: [PuppyEvent]
     let onDelete: (PuppyEvent) -> Void
     let onDeleteSession: ((SleepSession) -> Void)?
@@ -246,55 +231,19 @@ struct EventList: View {
     private let swipeToDeleteTip = SwipeToDeleteTip()
 
     init(
+        timelineItems: [TimelineItem],
         events: [PuppyEvent],
         onDelete: @escaping (PuppyEvent) -> Void,
         onRefresh: @escaping () -> Void,
         onTapPhoto: @escaping (PuppyEvent) -> Void,
         onDeleteSession: ((SleepSession) -> Void)? = nil
     ) {
+        self.timelineItems = timelineItems
         self.events = events
         self.onDelete = onDelete
         self.onDeleteSession = onDeleteSession
         self.onRefresh = onRefresh
         self.onTapPhoto = onTapPhoto
-    }
-
-    /// Build unified timeline by grouping sleep/wake events into sessions
-    private var timelineItems: [TimelineItem] {
-        // Build sleep sessions
-        let sessions = SleepSession.buildSessions(from: events)
-
-        // Get IDs of events that are part of sessions
-        var sessionEventIds: Set<UUID> = []
-        var sessionNotes: [UUID: String] = [:]
-
-        for session in sessions {
-            sessionEventIds.insert(session.startEventId)
-            if let endId = session.endEventId {
-                sessionEventIds.insert(endId)
-            }
-            // Get note from the sleep event
-            if let sleepEvent = events.first(where: { $0.id == session.startEventId }),
-               let note = sleepEvent.note {
-                sessionNotes[session.id] = note
-            }
-        }
-
-        // Build timeline items
-        var items: [TimelineItem] = []
-
-        // Add non-sleep events
-        for event in events where !sessionEventIds.contains(event.id) {
-            items.append(.event(event))
-        }
-
-        // Add sleep sessions
-        for session in sessions {
-            items.append(.sleepSession(session, note: sessionNotes[session.id]))
-        }
-
-        // Sort by time (most recent first, or oldest first depending on preference)
-        return items.sorted { $0.sortTime < $1.sortTime }
     }
 
     var body: some View {
@@ -383,21 +332,67 @@ struct EventList: View {
 struct EmptyTimelineView: View {
     private let quickLogBarTip = QuickLogBarTip()
 
+    @State private var isAnimating = false
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
     var body: some View {
-        VStack(spacing: 16) {
+        VStack(spacing: 20) {
             Spacer()
 
-            Image(systemName: "pawprint")
-                .font(.system(size: 60))
-                .foregroundColor(.secondary)
+            // Animated paw prints
+            ZStack {
+                // Background paw (slightly offset)
+                Image(systemName: "pawprint.fill")
+                    .font(.system(size: 50))
+                    .foregroundStyle(Color.ollieAccent.opacity(0.2))
+                    .offset(x: 15, y: -10)
+                    .rotationEffect(.degrees(-15))
 
-            Text(Strings.Timeline.noEvents)
-                .font(.headline)
-                .foregroundColor(.secondary)
+                // Main paw with animation
+                Image(systemName: "pawprint.fill")
+                    .font(.system(size: 70))
+                    .foregroundStyle(
+                        LinearGradient(
+                            colors: [Color.ollieAccent, Color.ollieAccent.opacity(0.7)],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .scaleEffect(isAnimating ? 1.0 : 0.9)
+                    .opacity(isAnimating ? 1.0 : 0.7)
 
-            Text(Strings.Timeline.tapToLog)
-                .font(.subheadline)
-                .foregroundColor(.secondary)
+                // Small accent paw
+                Image(systemName: "pawprint.fill")
+                    .font(.system(size: 24))
+                    .foregroundStyle(Color.ollieSuccess.opacity(0.5))
+                    .offset(x: -25, y: 20)
+                    .rotationEffect(.degrees(20))
+            }
+            .padding(.bottom, 8)
+            .onAppear {
+                guard !reduceMotion else {
+                    isAnimating = true
+                    return
+                }
+                withAnimation(
+                    .easeInOut(duration: 1.5)
+                    .repeatForever(autoreverses: true)
+                ) {
+                    isAnimating = true
+                }
+            }
+
+            VStack(spacing: 8) {
+                Text(Strings.Timeline.noEvents)
+                    .font(.title3)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(.primary)
+
+                Text(Strings.Timeline.tapToLog)
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
+            }
 
             // Tip for using the quick log bar
             TipView(quickLogBarTip)
@@ -406,6 +401,9 @@ struct EmptyTimelineView: View {
             Spacer()
         }
         .padding()
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(Strings.Timeline.noEvents)
+        .accessibilityHint(Strings.Timeline.tapToLog)
     }
 }
 

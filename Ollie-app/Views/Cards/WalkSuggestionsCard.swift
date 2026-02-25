@@ -8,23 +8,40 @@ import SwiftUI
 import OllieShared
 
 /// Card displaying walkable socialization items to watch for
+/// Shows 1 item by default, expandable to show all 3
 struct WalkSuggestionsCard: View {
     @EnvironmentObject var socializationStore: SocializationStore
 
     @State private var selectedItem: SocializationItem?
     @State private var showLogSheet = false
     @State private var showFearProtocol = false
+    @State private var isExpanded = false
 
     @Environment(\.colorScheme) private var colorScheme
+
+    /// Number of items to show by default (collapsed state)
+    private let defaultVisibleCount = 1
 
     private var suggestedItems: [SocializationItem] {
         socializationStore.suggestedWalkItems(limit: 3)
     }
 
+    private var visibleItems: [SocializationItem] {
+        if isExpanded {
+            return suggestedItems
+        } else {
+            return Array(suggestedItems.prefix(defaultVisibleCount))
+        }
+    }
+
+    private var hiddenCount: Int {
+        max(0, suggestedItems.count - defaultVisibleCount)
+    }
+
     var body: some View {
         if !suggestedItems.isEmpty {
             VStack(alignment: .leading, spacing: 12) {
-                // Header
+                // Header with "See all" link
                 HStack {
                     Image(systemName: "eye.fill")
                         .foregroundStyle(Color.ollieAccent)
@@ -32,19 +49,51 @@ struct WalkSuggestionsCard: View {
                         .font(.subheadline)
                         .fontWeight(.semibold)
                     Spacer()
+
+                    // "See all" navigation link
+                    NavigationLink {
+                        SocializationFullListView()
+                    } label: {
+                        HStack(spacing: 4) {
+                            Text(Strings.Socialization.seeAll)
+                                .font(.caption)
+                            Image(systemName: "chevron.right")
+                                .font(.caption2)
+                        }
+                        .foregroundStyle(.secondary)
+                    }
+                    .buttonStyle(.plain)
                 }
 
-                // Items
+                // Items list (collapsed or expanded)
                 VStack(spacing: 8) {
-                    ForEach(suggestedItems) { item in
+                    ForEach(visibleItems) { item in
                         walkSuggestionRow(item)
                     }
                 }
 
-                // Tip
-                Text(Strings.Socialization.walkSuggestionsTip)
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
+                // Expand/collapse button if more than 1 item
+                if hiddenCount > 0 {
+                    Button {
+                        withAnimation(.easeInOut(duration: 0.2)) {
+                            isExpanded.toggle()
+                        }
+                    } label: {
+                        HStack {
+                            Text(isExpanded
+                                ? Strings.Socialization.showLess
+                                : Strings.Socialization.showMore(hiddenCount))
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                            Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
+                                .font(.caption2)
+                                .foregroundStyle(.secondary)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(.top, 4)
+                    }
+                    .buttonStyle(.plain)
+                }
             }
             .padding()
             .glassCard(tint: .accent)

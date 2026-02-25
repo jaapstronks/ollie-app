@@ -50,80 +50,86 @@ struct PottyQuickLogSheet: View {
     @State private var showingTimePicker: Bool = false
 
     var body: some View {
-        VStack(spacing: 20) {
-            // Header
-            SheetHeader(
-                title: Strings.PottyQuickLog.toilet,
-                icon: .combined(
-                    primary: "drop.fill",
-                    secondary: "circle.inset.filled",
-                    primaryColor: .ollieInfo,
-                    secondaryColor: .ollieWarning
-                )
-            )
-
-            // Potty type selection
-            VStack(spacing: 8) {
-                Text(Strings.PottyQuickLog.what)
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-
-                HStack(spacing: 12) {
-                    ForEach(PottySelection.allCases, id: \.self) { potty in
-                        PottyToggleButton(
-                            potty: potty,
-                            isSelected: selectedPotty == potty,
-                            action: { selectedPotty = potty }
+        VStack(spacing: 0) {
+            ScrollView {
+                VStack(spacing: 20) {
+                    // Header
+                    SheetHeader(
+                        title: Strings.PottyQuickLog.toilet,
+                        icon: .combined(
+                            primary: "drop.fill",
+                            secondary: "circle.inset.filled",
+                            primaryColor: .ollieInfo,
+                            secondaryColor: .ollieWarning
                         )
+                    )
+
+                    // Potty type selection
+                    VStack(spacing: 8) {
+                        Text(Strings.PottyQuickLog.what)
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+
+                        HStack(spacing: 12) {
+                            ForEach(PottySelection.allCases, id: \.self) { potty in
+                                PottyToggleButton(
+                                    potty: potty,
+                                    isSelected: selectedPotty == potty,
+                                    action: { selectedPotty = potty }
+                                )
+                            }
+                        }
                     }
-                }
-            }
 
-            // Time display and adjustment
-            TimePickerSection(
-                selectedTime: $selectedTime,
-                showingTimePicker: $showingTimePicker,
-                accessibilityLabel: Strings.PottyQuickLog.timeAccessibility(selectedTime.timeString),
-                accessibilityHint: Strings.PottyQuickLog.timeAccessibilityHint,
-                accessibilityIdentifier: "POTTY_TIME_PICKER"
-            )
-
-            // Location picker
-            VStack(spacing: 8) {
-                Text(Strings.PottyQuickLog.where_)
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-
-                HStack(spacing: 16) {
-                    LocationSelectionButton(
-                        location: .buiten,
-                        isSelected: selectedLocation == .buiten,
-                        action: { selectedLocation = .buiten }
+                    // Time display and adjustment
+                    TimePickerSection(
+                        selectedTime: $selectedTime,
+                        showingTimePicker: $showingTimePicker,
+                        accessibilityLabel: Strings.PottyQuickLog.timeAccessibility(selectedTime.timeString),
+                        accessibilityHint: Strings.PottyQuickLog.timeAccessibilityHint,
+                        accessibilityIdentifier: "POTTY_TIME_PICKER"
                     )
 
-                    LocationSelectionButton(
-                        location: .binnen,
-                        isSelected: selectedLocation == .binnen,
-                        action: { selectedLocation = .binnen }
-                    )
+                    // Location picker
+                    VStack(spacing: 8) {
+                        Text(Strings.PottyQuickLog.where_)
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+
+                        HStack(spacing: 16) {
+                            LocationSelectionButton(
+                                location: .buiten,
+                                isSelected: selectedLocation == .buiten,
+                                action: { selectedLocation = .buiten }
+                            )
+
+                            LocationSelectionButton(
+                                location: .binnen,
+                                isSelected: selectedLocation == .binnen,
+                                action: { selectedLocation = .binnen }
+                            )
+                        }
+                    }
+
+                    // Note field
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(Strings.PottyQuickLog.noteOptional)
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+
+                        TextField(Strings.PottyQuickLog.notePlaceholder, text: $note)
+                            .textFieldStyle(.roundedBorder)
+                            .accessibilityLabel(Strings.PottyQuickLog.noteOptional)
+                            .accessibilityHint(Strings.QuickLogSheet.noteAccessibilityHint)
+                            .accessibilityIdentifier("POTTY_NOTE_FIELD")
+                    }
+                    .padding(.horizontal, 4)
                 }
+                .padding([.horizontal, .top])
+                .padding(.bottom, 8)
             }
 
-            // Note field
-            VStack(alignment: .leading, spacing: 4) {
-                Text(Strings.PottyQuickLog.noteOptional)
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-
-                TextField(Strings.PottyQuickLog.notePlaceholder, text: $note)
-                    .textFieldStyle(.roundedBorder)
-                    .accessibilityLabel(Strings.PottyQuickLog.noteOptional)
-                    .accessibilityHint(Strings.QuickLogSheet.noteAccessibilityHint)
-                    .accessibilityIdentifier("POTTY_NOTE_FIELD")
-            }
-            .padding(.horizontal, 4)
-
-            // Action buttons
+            // Action buttons - pinned at bottom
             HStack(spacing: 16) {
                 Button(Strings.Common.cancel) {
                     onCancel()
@@ -153,8 +159,8 @@ struct PottyQuickLogSheet: View {
                 .accessibilityHint(canSave ? Strings.PottyQuickLog.logAccessibilityHint : Strings.PottyQuickLog.selectRequiredFields)
                 .accessibilityIdentifier("POTTY_LOG_BUTTON")
             }
+            .padding()
         }
-        .padding()
         .modifier(ReduceMotionAnimation(value: showingTimePicker))
     }
 

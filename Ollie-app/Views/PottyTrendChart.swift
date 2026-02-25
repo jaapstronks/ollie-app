@@ -53,15 +53,21 @@ struct PottyTrendChart: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             // Header
-            HStack(spacing: 8) {
-                Image(systemName: "chart.line.uptrend.xyaxis")
-                    .font(.system(size: 14, weight: .semibold))
-                    .foregroundStyle(Color.ollieSuccess)
+            VStack(alignment: .leading, spacing: 4) {
+                HStack(spacing: 8) {
+                    Image(systemName: "chart.line.uptrend.xyaxis")
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundStyle(Color.ollieSuccess)
 
-                Text(Strings.Insights.trends)
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
-                    .foregroundStyle(.secondary)
+                    Text(Strings.Insights.outdoorPottyTrend)
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(.secondary)
+                }
+
+                Text(Strings.Insights.outdoorPottyTrendSubtitle)
+                    .font(.caption)
+                    .foregroundStyle(.tertiary)
             }
 
             if hasData {

@@ -22,9 +22,8 @@ struct ActionableEventCard: View {
                 title: mainText,
                 titleColor: textColor,
                 subtitle: subtitleText,
-                statusLabel: statusLabel,
                 iconSize: 40
-            )
+            ) { EmptyView() }
 
             // Weather + Action row
             if actionableItem.item.itemType == .walk, let weatherIcon = actionableItem.item.weatherIcon {
@@ -274,17 +273,17 @@ struct UpcomingEventsCard: View {
                 .foregroundStyle(.secondary)
                 .frame(minWidth: 40, alignment: .leading)
 
-            // Icon with approaching indicator
+            // Icon with approaching indicator - color based on item type
             ZStack(alignment: .topTrailing) {
                 Image(systemName: item.icon)
                     .font(.subheadline)
-                    .foregroundStyle(.accent)
+                    .foregroundStyle(iconColor(for: item.itemType))
                     .frame(width: 20)
 
-                // Orange dot for items approaching (within 30 min)
+                // Dot for items approaching (within 30 min)
                 if item.minutesUntil <= 30 && item.minutesUntil > 10 {
                     Circle()
-                        .fill(Color.orange)
+                        .fill(iconColor(for: item.itemType))
                         .frame(width: 6, height: 6)
                         .offset(x: 2, y: -2)
                 }
@@ -320,6 +319,16 @@ struct UpcomingEventsCard: View {
             }
         }
         .padding(.vertical, 4)
+    }
+
+    /// Returns the appropriate color for an item type
+    private func iconColor(for itemType: UpcomingItemType) -> Color {
+        switch itemType {
+        case .walk:
+            return .orange   // Consistent with walk status cards
+        case .meal:
+            return .blue     // Distinct from potty (green), sleep (purple), walks (orange)
+        }
     }
 }
 

@@ -12,7 +12,9 @@ import TipKit
 /// Main "Today" tab showing the daily hub
 struct TodayView: View {
     @ObservedObject var viewModel: TimelineViewModel
-    @ObservedObject var weatherService: WeatherService
+    /// Weather service passed down but not observed here to avoid full view redraws
+    /// Weather-dependent sections use their own observation via WeatherSectionContainer
+    let weatherService: WeatherService
     let onSettingsTap: () -> Void
 
     @State private var selectedPhotoEvent: PuppyEvent?
@@ -32,38 +34,38 @@ struct TodayView: View {
 
             ScrollView {
                 VStack(spacing: 16) {
-                    // Weather section (only show for today - compact single line)
-                    if Calendar.current.isDateInToday(viewModel.currentDate) {
-                        WeatherSection(
-                            forecasts: weatherService.upcomingForecasts(hours: 6),
-                            alert: weatherService.smartAlert(predictedPottyTime: viewModel.predictedNextPlasTime),
-                            isLoading: weatherService.isLoading
-                        )
-                    }
+                    // Weather section container (isolates weather observation)
+                    WeatherSectionContainer(
+                        weatherService: weatherService,
+                        isToday: Calendar.current.isDateInToday(viewModel.currentDate),
+                        predictedPottyTime: viewModel.predictedNextPlasTime
+                    )
+                    .animatedAppear(delay: 0)
 
                     // Status cards section (only for today)
                     if viewModel.isShowingToday {
                         statusCardsSection
+                            .animatedAppear(delay: 0.05)
                     }
 
                     // Walk suggestions (socialization items to watch for)
                     if viewModel.isShowingToday {
                         WalkSuggestionsCard()
+                            .animatedAppear(delay: 0.10)
                     }
 
-                    // Streak card (motivational - only if there's a streak)
-                    StreakCard(streakInfo: viewModel.streakInfo)
-
-                    // Poop count for today (lower priority info)
+                    // Combined potty progress card (streak + poop count)
                     if viewModel.isShowingToday {
-                        PoopStatusCard(
-                            status: viewModel.poopStatus,
-                            onLogPoop: { viewModel.quickLog(type: .poepen) }
+                        PottyProgressSummaryCard(
+                            streakInfo: viewModel.streakInfo,
+                            poopStatus: viewModel.poopStatus
                         )
+                        .animatedAppear(delay: 0.15)
                     }
 
                     // Timeline section
                     timelineSection
+                        .animatedAppear(delay: 0.20)
                 }
                 .padding()
                 .padding(.bottom, 84) // Space for FAB
@@ -81,6 +83,8 @@ struct TodayView: View {
         .task {
             await weatherService.fetchForecasts()
         }
+        // Celebration overlay for milestone moments
+        .celebration(style: viewModel.celebrationStyle, trigger: $viewModel.showCelebration)
     }
 
     // MARK: - Nav Bar

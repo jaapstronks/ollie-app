@@ -35,18 +35,15 @@ struct SleepStatusCard: View {
 
     @ViewBuilder
     private var cardContent: some View {
-        VStack(spacing: 12) {
-            StatusCardHeader(
-                iconName: iconName,
-                iconColor: indicatorColor,
-                tintColor: indicatorColor,
-                title: mainText,
-                titleColor: textColor,
-                subtitle: subtitleText.isEmpty ? nil : subtitleText,
-                statusLabel: statusLabel,
-                iconSize: 40
-            )
-
+        StatusCardHeader(
+            iconName: iconName,
+            iconColor: indicatorColor,
+            tintColor: indicatorColor,
+            title: mainText,
+            titleColor: textColor,
+            subtitle: subtitleText.isEmpty ? nil : subtitleText,
+            iconSize: 40
+        ) {
             // Show contextual action based on sleep state
             actionButton
         }
@@ -54,7 +51,7 @@ struct SleepStatusCard: View {
         .glassStatusCard(tintColor: indicatorColor, cornerRadius: LayoutConstants.cornerRadius)
         .accessibilityElement(children: .combine)
         .accessibilityLabel(Strings.SleepStatus.title)
-        .accessibilityValue("\(mainText). \(statusLabel)")
+        .accessibilityValue(mainText)
     }
 
     @ViewBuilder
@@ -65,7 +62,7 @@ struct SleepStatusCard: View {
                 Button(action: onWakeUp) {
                     Label(Strings.SleepStatus.wakeUp, systemImage: "sun.max.fill")
                 }
-                .buttonStyle(.glassPill(tint: .custom(indicatorColor)))
+                .buttonStyle(.glassPillCompact(tint: .custom(indicatorColor)))
             }
         case .awake(_, let durationMin):
             // Show nap button when awake >= 45 minutes
@@ -73,7 +70,7 @@ struct SleepStatusCard: View {
                 Button(action: onStartNap) {
                     Label(Strings.SleepStatus.startNap, systemImage: "moon.zzz.fill")
                 }
-                .buttonStyle(.glassPill(tint: .custom(indicatorColor)))
+                .buttonStyle(.glassPillCompact(tint: .custom(indicatorColor)))
             }
         case .unknown:
             EmptyView()
@@ -95,22 +92,6 @@ struct SleepStatusCard: View {
             return "sun.max.fill"
         case .unknown:
             return "questionmark.circle"
-        }
-    }
-
-    private var statusLabel: String {
-        switch sleepState {
-        case .sleeping:
-            return Strings.SleepStatus.sleeping
-        case .awake(_, let durationMin):
-            if durationMin >= SleepCalculations.maxAwakeMinutes {
-                return Strings.SleepStatus.napTime
-            } else if durationMin >= SleepCalculations.awakeWarningMinutes {
-                return Strings.SleepStatus.attention
-            }
-            return Strings.SleepStatus.awake
-        case .unknown:
-            return Strings.PottyStatus.unknown
         }
     }
 
