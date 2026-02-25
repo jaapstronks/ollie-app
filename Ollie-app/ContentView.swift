@@ -158,13 +158,16 @@ struct MainTabView: View {
                 }
                 .tag(1)
 
-                // Tab 2: Moments (promoted from nested view)
-                MomentsGalleryView(
-                    viewModel: momentsViewModel,
+                // Tab 2: Places (spots + moments combined)
+                PlacesTabView(
+                    spotStore: spotStore,
+                    momentsViewModel: momentsViewModel,
+                    viewModel: viewModel,
+                    locationManager: locationManager,
                     onSettingsTap: { showingSettings = true }
                 )
                 .tabItem {
-                    Label(Strings.Tabs.moments, systemImage: "photo.on.rectangle.angled")
+                    Label(Strings.Tabs.places, systemImage: "map.fill")
                 }
                 .tag(2)
 

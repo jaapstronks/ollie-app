@@ -68,6 +68,7 @@ crashlytics-build.properties
 .env
 .env.*
 *.xcconfig.local
+Secrets.xcconfig
 
 # Editor directories
 .idea/

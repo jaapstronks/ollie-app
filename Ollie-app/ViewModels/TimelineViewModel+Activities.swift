@@ -16,7 +16,7 @@ extension TimelineViewModel {
 
     /// Duration of current activity in minutes
     var currentActivityDuration: Int? {
-        activityManager.currentActivity?.elapsedMinutes
+        activityManager.currentActivity?.durationMinutes
     }
 
     /// Type of current activity
@@ -95,9 +95,7 @@ extension TimelineViewModel {
 
     /// Get today's naps for display
     var todayNaps: [SleepSession] {
-        let sleepEvents = events.sleeps()
-        let wakeEvents = events.wakeUps()
-        return SleepSession.fromEvents(sleeps: sleepEvents, wakeUps: wakeEvents)
+        SleepSession.buildSessions(from: events)
     }
 }
 
@@ -111,13 +109,13 @@ extension TimelineViewModel {
     }
 
     /// Show the end sleep sheet (for ending naps)
-    func showEndSleepSheet() {
-        sheetCoordinator.presentSheet(.endSleep)
+    func showEndSleepSheet(startTime: Date = Date()) {
+        sheetCoordinator.presentSheet(.endSleep(startTime))
     }
 
     /// Show the start activity sheet
-    func showStartActivitySheet() {
-        sheetCoordinator.presentSheet(.startActivity)
+    func showStartActivitySheet(type: ActivityType = .walk) {
+        sheetCoordinator.presentSheet(.startActivity(type))
     }
 
     /// Show the end activity sheet

@@ -17,19 +17,19 @@ extension TimelineViewModel {
     // MARK: - Potty Stats
 
     /// Last plas (pee) event
-    var lastPlasEventComputed: PuppyEvent? {
+    var lastPlasEvent: PuppyEvent? {
         eventStore.lastEvent(ofType: .plassen)
     }
 
     /// Minutes since the last plas event
-    var minutesSinceLastPlasComputed: Int? {
-        guard let last = lastPlasEventComputed else { return nil }
+    var minutesSinceLastPlas: Int? {
+        guard let last = lastPlasEvent else { return nil }
         return Date().minutesSince(last.time)
     }
 
     /// Formatted text for time since last plas
-    var timeSinceLastPlasTextComputed: String {
-        guard let minutes = minutesSinceLastPlasComputed else {
+    var timeSinceLastPlasText: String {
+        guard let minutes = minutesSinceLastPlas else {
             return Strings.TimeFormat.noData
         }
 
