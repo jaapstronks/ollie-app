@@ -21,12 +21,12 @@ struct PremiumSection: View {
             HStack {
                 Text(Strings.OlliePlus.settingsStatus)
                 Spacer()
-                Text(subscriptionManager.subscriptionStatus.displayLabel)
+                Text(subscriptionManager.effectiveStatus.displayLabel)
                     .foregroundColor(statusColor)
             }
 
             // Action buttons based on status
-            switch subscriptionManager.subscriptionStatus {
+            switch subscriptionManager.effectiveStatus {
             case .free, .expired:
                 // Upgrade button
                 Button {
@@ -99,6 +99,7 @@ struct PremiumSection: View {
         .task {
             // Only refresh if status is expired or unknown
             // (App launch already checks status, and transaction listener updates in real-time)
+            // Note: Check actual subscriptionStatus, not effectiveStatus (debug override)
             if case .expired = subscriptionManager.subscriptionStatus {
                 await subscriptionManager.checkSubscriptionStatus()
             }
@@ -110,7 +111,7 @@ struct PremiumSection: View {
     }
 
     private var statusColor: Color {
-        switch subscriptionManager.subscriptionStatus {
+        switch subscriptionManager.effectiveStatus {
         case .free:
             return Color.secondary
         case .trial:

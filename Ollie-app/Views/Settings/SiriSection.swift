@@ -9,43 +9,50 @@ import SwiftUI
 /// Siri & Shortcuts help section explaining voice commands
 struct SiriSection: View {
     @Environment(\.openURL) private var openURL
+    @State private var isExpanded = false
 
     var body: some View {
         Section {
-            // Explanation
-            VStack(alignment: .leading, spacing: 8) {
+            // Collapsible instructions
+            DisclosureGroup(isExpanded: $isExpanded) {
+                VStack(alignment: .leading, spacing: 12) {
+                    // Description
+                    Text(Strings.Siri.helpDescription)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+
+                    // Example commands
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text(Strings.Siri.exampleCommands)
+                            .font(.caption.weight(.medium))
+                            .foregroundStyle(.secondary)
+
+                        ForEach(examplePhrases, id: \.self) { phrase in
+                            HStack(spacing: 8) {
+                                Image(systemName: "quote.opening")
+                                    .font(.caption2)
+                                    .foregroundStyle(.tertiary)
+                                Text(phrase)
+                                    .font(.callout)
+                                Spacer()
+                            }
+                        }
+                    }
+
+                    // Footer info
+                    Text(Strings.Siri.helpFooter)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                .padding(.top, 8)
+            } label: {
                 Label {
                     Text(Strings.Siri.helpTitle)
-                        .font(.subheadline.weight(.medium))
                 } icon: {
                     Image(systemName: "mic.fill")
                         .foregroundStyle(Color.ollieAccent)
                 }
-
-                Text(Strings.Siri.helpDescription)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
             }
-            .padding(.vertical, 4)
-
-            // Example commands
-            VStack(alignment: .leading, spacing: 6) {
-                Text(Strings.Siri.exampleCommands)
-                    .font(.caption.weight(.medium))
-                    .foregroundStyle(.secondary)
-
-                ForEach(examplePhrases, id: \.self) { phrase in
-                    HStack(spacing: 8) {
-                        Image(systemName: "quote.opening")
-                            .font(.caption2)
-                            .foregroundStyle(.tertiary)
-                        Text(phrase)
-                            .font(.callout)
-                        Spacer()
-                    }
-                }
-            }
-            .padding(.vertical, 4)
 
             // Open Shortcuts app button
             Button {
@@ -74,8 +81,6 @@ struct SiriSection: View {
             .foregroundStyle(.primary)
         } header: {
             Text(Strings.Siri.sectionTitle)
-        } footer: {
-            Text(Strings.Siri.helpFooter)
         }
     }
 
