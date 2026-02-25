@@ -26,6 +26,33 @@ class SubscriptionManager: ObservableObject {
 
     private static let cachedStatusKey = "ollie.subscription.cachedStatus"
 
+    // MARK: - Debug Override (DEBUG builds only)
+
+    #if DEBUG
+    /// When set, overrides the actual subscription status for testing
+    /// Set to nil to use actual StoreKit status
+    @Published var debugOverrideStatus: OlliePlusStatus? = nil {
+        didSet {
+            // Persist debug override across app launches
+            if let status = debugOverrideStatus {
+                UserDefaults.standard.set(try? JSONEncoder().encode(status), forKey: "debug.subscriptionOverride")
+            } else {
+                UserDefaults.standard.removeObject(forKey: "debug.subscriptionOverride")
+            }
+        }
+    }
+
+    /// The effective subscription status (respects debug override)
+    var effectiveStatus: OlliePlusStatus {
+        debugOverrideStatus ?? subscriptionStatus
+    }
+    #else
+    /// In release builds, just return the real status
+    var effectiveStatus: OlliePlusStatus {
+        subscriptionStatus
+    }
+    #endif
+
     // MARK: - Published State
 
     @Published var products: [Product] = []
@@ -50,6 +77,14 @@ class SubscriptionManager: ObservableObject {
         // Load cached status immediately for offline support
         loadCachedSubscriptionStatus()
         updateListenerTask = listenForTransactions()
+
+        #if DEBUG
+        // Load persisted debug override
+        if let data = UserDefaults.standard.data(forKey: "debug.subscriptionOverride"),
+           let status = try? JSONDecoder().decode(OlliePlusStatus.self, from: data) {
+            debugOverrideStatus = status
+        }
+        #endif
     }
 
     deinit {
@@ -187,13 +222,13 @@ class SubscriptionManager: ObservableObject {
 
     /// Check if user has access to a specific feature
     func hasAccess(to feature: PremiumFeature) -> Bool {
-        subscriptionStatus.hasOlliePlus
+        effectiveStatus.hasOlliePlus
     }
 
     /// Check if user can access a training skill at the given index
     /// First N skills are free, rest require Ollie+
     func canAccessSkill(at index: Int) -> Bool {
-        index < freeTrainingSkillCount || subscriptionStatus.hasOlliePlus
+        index < freeTrainingSkillCount || effectiveStatus.hasOlliePlus
     }
 
     // MARK: - Transaction Handling
