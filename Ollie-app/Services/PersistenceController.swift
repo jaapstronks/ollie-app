@@ -14,7 +14,8 @@ final class PersistenceController: @unchecked Sendable {
 
     // MARK: - Singleton
 
-    static let shared = PersistenceController()
+    // nonisolated to allow use in default parameter values
+    nonisolated(unsafe) static let shared = PersistenceController()
 
     // MARK: - Container
 
