@@ -1,0 +1,39 @@
+appId: com.jaapstronks.Ollie-app
+---
+# Test A3: Log indoor pee (accident)
+# Initial state: Has 1 outdoor pee streak
+# Expected: Streak breaks, shows post-accident state
+
+# Screenshot initial state showing current streak
+- takeScreenshot: testing-screenshots/A3-01-initial-streak
+
+# Tap FAB to open log menu
+- tapOn:
+    id: "FAB_BUTTON"
+- waitForAnimationToEnd
+- takeScreenshot: testing-screenshots/A3-02-log-menu
+
+# Tap on Pee button
+- tapOn:
+    text: "Pee"
+- waitForAnimationToEnd
+- takeScreenshot: testing-screenshots/A3-03-pee-sheet
+
+# Select "Inside" location (accident)
+- tapOn:
+    text: "Inside"
+- takeScreenshot: testing-screenshots/A3-04-inside-selected
+
+# Tap Log button to save
+- tapOn:
+    text: "Log"
+- waitForAnimationToEnd
+
+# Screenshot the result - should show broken streak
+- takeScreenshot: testing-screenshots/A3-05-after-accident
+
+# Swipe to see status cards
+- swipe:
+    direction: DOWN
+    duration: 500
+- takeScreenshot: testing-screenshots/A3-06-status-cards

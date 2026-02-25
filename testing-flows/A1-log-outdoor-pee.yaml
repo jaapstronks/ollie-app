@@ -1,0 +1,33 @@
+appId: com.jaapstronks.Ollie-app
+---
+# Test A1: Log outdoor pee event
+# Initial state: Log event sheet is currently open from previous test
+# Expected: Timeline updates, status cards appear
+
+# Screenshot initial state (log sheet should still be open)
+- takeScreenshot: testing-screenshots/A1-01-initial
+
+# Tap on Pee button
+- tapOn:
+    text: "Pee"
+- waitForAnimationToEnd
+- takeScreenshot: testing-screenshots/A1-02-pee-sheet
+
+# Select "Outside" location
+- tapOn:
+    text: "Outside"
+- takeScreenshot: testing-screenshots/A1-03-outside-selected
+
+# Tap Log button to save
+- tapOn:
+    text: "Log"
+- waitForAnimationToEnd
+
+# Screenshot the result - should show event in timeline
+- takeScreenshot: testing-screenshots/A1-04-after-log
+
+# Swipe down to see more content
+- swipe:
+    direction: DOWN
+    duration: 500
+- takeScreenshot: testing-screenshots/A1-05-scrolled

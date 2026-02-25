@@ -1,0 +1,24 @@
+appId: com.jaapstronks.Ollie-app
+---
+# Test B1: Start a nap
+# Expected: Sleep event logged, status changes to "sleeping"
+
+# Tap on "Start nap now" option
+- tapOn:
+    text: "Start nap now"
+- waitForAnimationToEnd
+
+# Screenshot after starting nap
+- takeScreenshot: testing-screenshots/B1-04-after-nap-start
+
+# Scroll to see status cards
+- swipe:
+    direction: DOWN
+    duration: 500
+- takeScreenshot: testing-screenshots/B1-05-status-sleeping
+
+# Scroll to see timeline
+- swipe:
+    direction: UP
+    duration: 500
+- takeScreenshot: testing-screenshots/B1-06-timeline-with-sleep

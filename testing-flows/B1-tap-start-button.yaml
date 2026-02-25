@@ -1,0 +1,15 @@
+appId: com.jaapstronks.Ollie-app
+---
+# Tap the orange Start or Log button
+
+# Try tapping by partial text match
+- tapOn:
+    text: ".*Start.*Log.*"
+- waitForAnimationToEnd
+- takeScreenshot: testing-screenshots/B1-13-after-start
+
+# Check the status
+- swipe:
+    direction: DOWN
+    duration: 500
+- takeScreenshot: testing-screenshots/B1-14-sleeping-status
