@@ -93,8 +93,12 @@ class EventStore: ObservableObject {
 
     /// Load events for a specific date
     func loadEvents(for date: Date) {
-        currentDate = date
-        events = coreDataStore.readEvents(for: date)
+        // Defer to next run loop to avoid "Publishing changes from within view updates"
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            self.currentDate = date
+            self.events = self.coreDataStore.readEvents(for: date)
+        }
     }
 
     /// Refresh events (re-read from Core Data)
