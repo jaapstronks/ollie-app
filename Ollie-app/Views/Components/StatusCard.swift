@@ -103,9 +103,8 @@ struct StatusCard<Content: View>: View {
                 title: header.title,
                 titleColor: header.titleColor,
                 subtitle: header.subtitle,
-                statusLabel: header.statusLabel,
                 iconSize: header.iconSize
-            )
+            ) { EmptyView() }
 
             content()
 

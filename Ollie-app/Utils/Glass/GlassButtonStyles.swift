@@ -67,6 +67,66 @@ extension ButtonStyle where Self == GlassPillButtonStyle {
     }
 }
 
+// MARK: - Compact Pill Button Style
+
+/// Compact capsule-shaped glass button for inline actions (e.g., in status card headers)
+struct GlassPillCompactButtonStyle: ButtonStyle {
+    let tint: GlassTint
+    @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .font(.caption)
+            .fontWeight(.semibold)
+            .foregroundStyle(tint.color ?? .primary)
+            .padding(.horizontal, 12)
+            .padding(.vertical, 8)
+            .background(
+                ZStack {
+                    if colorScheme == .dark {
+                        Color.white.opacity(configuration.isPressed ? 0.15 : 0.1)
+                    } else {
+                        Color.white.opacity(configuration.isPressed ? 0.95 : 0.8)
+                    }
+
+                    if let tintColor = tint.color {
+                        tintColor.opacity(colorScheme == .dark ? 0.2 : 0.12)
+                    }
+                }
+                .background(.ultraThinMaterial)
+            )
+            .clipShape(Capsule())
+            .overlay(
+                Capsule()
+                    .strokeBorder(
+                        LinearGradient(
+                            colors: [
+                                Color.white.opacity(colorScheme == .dark ? 0.2 : 0.5),
+                                Color.clear
+                            ],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        ),
+                        lineWidth: 0.5
+                    )
+            )
+            .shadow(
+                color: tint.color?.opacity(0.15) ?? Color.black.opacity(0.06),
+                radius: configuration.isPressed ? 1 : 4,
+                y: configuration.isPressed ? 0 : 2
+            )
+            .scaleEffect(configuration.isPressed ? 0.96 : 1.0)
+            .animation(reduceMotion ? nil : .spring(response: 0.2, dampingFraction: 0.7), value: configuration.isPressed)
+    }
+}
+
+extension ButtonStyle where Self == GlassPillCompactButtonStyle {
+    static func glassPillCompact(tint: GlassTint = .accent) -> GlassPillCompactButtonStyle {
+        GlassPillCompactButtonStyle(tint: tint)
+    }
+}
+
 // MARK: - Icon Button Style
 
 /// Circular glass button for icon actions
