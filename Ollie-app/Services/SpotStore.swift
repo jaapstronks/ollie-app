@@ -2,14 +2,16 @@
 //  SpotStore.swift
 //  Ollie-app
 //
-//  CRUD operations and persistence for WalkSpot with CloudKit sync
+//  CRUD operations and persistence for WalkSpot with Core Data and automatic CloudKit sync
+//
 
 import Foundation
+import CoreData
 import OllieShared
 import Combine
 import os
 
-/// Manages saved walk spots with local persistence and CloudKit sync
+/// Manages saved walk spots with Core Data and automatic CloudKit sync
 @MainActor
 class SpotStore: ObservableObject {
 
@@ -18,18 +20,12 @@ class SpotStore: ObservableObject {
     @Published var spots: [WalkSpot] = []
     @Published private(set) var isSyncing = false
 
+    private let persistenceController: PersistenceController
     private let logger = Logger.ollie(category: "SpotStore")
-    private let cloudKit = CloudKitService.shared
+    private var cancellables = Set<AnyCancellable>()
 
-    // MARK: - Pending Operations (for offline support)
-
-    private var pendingCloudSaves: [WalkSpot] = []
-    private var pendingCloudDeletes: [WalkSpot] = []
-
-    // MARK: - UserDefaults Keys
-
-    private enum UserDefaultsKey {
-        static let spotsMigrationCompleted = "spotStore.cloudMigrationCompleted"
+    private var viewContext: NSManagedObjectContext {
+        persistenceController.viewContext
     }
 
     // MARK: - Computed Properties
@@ -53,13 +49,27 @@ class SpotStore: ObservableObject {
         spots.sorted { $0.visitCount > $1.visitCount }
     }
 
-    // MARK: - Storage
-
-    private let fileName = "spots.json"
-
     // MARK: - Init
 
-    init() {
+    init(persistenceController: PersistenceController = .shared) {
+        self.persistenceController = persistenceController
+        loadSpots()
+        setupRemoteChangeObserver()
+    }
+
+    // MARK: - Setup
+
+    private func setupRemoteChangeObserver() {
+        NotificationCenter.default.publisher(for: .NSPersistentStoreRemoteChange)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.handleRemoteChange()
+            }
+            .store(in: &cancellables)
+    }
+
+    private func handleRemoteChange() {
+        logger.debug("Detected CloudKit remote change for spots")
         loadSpots()
     }
 
@@ -67,32 +77,22 @@ class SpotStore: ObservableObject {
 
     /// Perform initial sync on app launch
     func initialSync() async {
-        guard cloudKit.isCloudAvailable else {
-            logger.info("CloudKit not available, skipping spot sync")
-            return
-        }
-
-        // Migrate existing local spots to CloudKit if needed
-        if !UserDefaults.standard.bool(forKey: UserDefaultsKey.spotsMigrationCompleted) {
-            await migrateLocalSpots()
-        }
-
-        // Fetch from cloud and merge
-        await fetchFromCloud()
-
-        // Retry any pending operations
-        await retryPendingOperations()
+        // With NSPersistentCloudKitContainer, sync is automatic
+        viewContext.refreshAllObjects()
+        loadSpots()
     }
 
     // MARK: - CRUD Operations
 
     /// Add a new spot
     func addSpot(_ spot: WalkSpot) {
-        spots.append(spot)
-        saveSpots()
+        _ = CDWalkSpot.create(from: spot, in: viewContext)
 
-        Task {
-            await saveToCloud(spot)
+        do {
+            try persistenceController.save()
+            spots.append(spot)
+        } catch {
+            logger.error("Failed to add spot: \(error.localizedDescription)")
         }
     }
 
@@ -110,23 +110,33 @@ class SpotStore: ObservableObject {
 
     /// Update an existing spot
     func updateSpot(_ spot: WalkSpot) {
-        guard let index = spots.firstIndex(where: { $0.id == spot.id }) else { return }
         let updatedSpot = spot.withUpdatedTimestamp()
-        spots[index] = updatedSpot
-        saveSpots()
 
-        Task {
-            await saveToCloud(updatedSpot)
+        if let existing = CDWalkSpot.fetch(byId: spot.id, in: viewContext) {
+            existing.update(from: updatedSpot)
+
+            do {
+                try persistenceController.save()
+                if let index = spots.firstIndex(where: { $0.id == spot.id }) {
+                    spots[index] = updatedSpot
+                }
+            } catch {
+                logger.error("Failed to update spot: \(error.localizedDescription)")
+            }
         }
     }
 
     /// Delete a spot
     func deleteSpot(_ spot: WalkSpot) {
-        spots.removeAll { $0.id == spot.id }
-        saveSpots()
+        if let existing = CDWalkSpot.fetch(byId: spot.id, in: viewContext) {
+            viewContext.delete(existing)
 
-        Task {
-            await deleteFromCloud(spot)
+            do {
+                try persistenceController.save()
+                spots.removeAll { $0.id == spot.id }
+            } catch {
+                logger.error("Failed to delete spot: \(error.localizedDescription)")
+            }
         }
     }
 
@@ -138,30 +148,16 @@ class SpotStore: ObservableObject {
 
     /// Toggle favorite status
     func toggleFavorite(_ spot: WalkSpot) {
-        guard let index = spots.firstIndex(where: { $0.id == spot.id }) else { return }
-        var updatedSpot = spots[index]
+        guard var updatedSpot = spots.first(where: { $0.id == spot.id }) else { return }
         updatedSpot.isFavorite.toggle()
-        updatedSpot = updatedSpot.withUpdatedTimestamp()
-        spots[index] = updatedSpot
-        saveSpots()
-
-        Task {
-            await saveToCloud(updatedSpot)
-        }
+        updateSpot(updatedSpot)
     }
 
     /// Increment visit count for a spot
     func incrementVisitCount(_ spot: WalkSpot) {
-        guard let index = spots.firstIndex(where: { $0.id == spot.id }) else { return }
-        var updatedSpot = spots[index]
+        guard var updatedSpot = spots.first(where: { $0.id == spot.id }) else { return }
         updatedSpot.visitCount += 1
-        updatedSpot = updatedSpot.withUpdatedTimestamp()
-        spots[index] = updatedSpot
-        saveSpots()
-
-        Task {
-            await saveToCloud(updatedSpot)
-        }
+        updateSpot(updatedSpot)
     }
 
     /// Find spot by ID
@@ -183,131 +179,21 @@ class SpotStore: ObservableObject {
     // MARK: - Persistence
 
     private func loadSpots() {
-        spots = JSONFileStorage.loadArray(from: fileName, logger: logger)
+        let cdSpots = CDWalkSpot.fetchAllSpots(in: viewContext)
+        spots = cdSpots.compactMap { $0.toWalkSpot() }
     }
 
-    private func saveSpots() {
-        JSONFileStorage.saveArray(spots, to: fileName, logger: logger)
-    }
+    // MARK: - Sync
 
-    // MARK: - CloudKit Operations
-
-    /// Save a spot to CloudKit
-    private func saveToCloud(_ spot: WalkSpot) async {
-        guard cloudKit.isCloudAvailable else {
-            pendingCloudSaves.append(spot)
-            return
-        }
-
-        do {
-            try await cloudKit.saveSpot(spot)
-            pendingCloudSaves.removeAll { $0.id == spot.id }
-        } catch {
-            logger.warning("Failed to save spot to cloud, will retry: \(error.localizedDescription)")
-            if !pendingCloudSaves.contains(where: { $0.id == spot.id }) {
-                pendingCloudSaves.append(spot)
-            }
-        }
-    }
-
-    /// Delete a spot from CloudKit
-    private func deleteFromCloud(_ spot: WalkSpot) async {
-        guard cloudKit.isCloudAvailable else {
-            pendingCloudDeletes.append(spot)
-            return
-        }
-
-        do {
-            try await cloudKit.deleteSpot(spot)
-            pendingCloudDeletes.removeAll { $0.id == spot.id }
-        } catch {
-            logger.warning("Failed to delete spot from cloud: \(error.localizedDescription)")
-            if !pendingCloudDeletes.contains(where: { $0.id == spot.id }) {
-                pendingCloudDeletes.append(spot)
-            }
-        }
-    }
-
-    /// Fetch spots from CloudKit and merge with local
+    /// Fetch from CloudKit (no-op with automatic sync)
     func fetchFromCloud() async {
-        guard cloudKit.isCloudAvailable else { return }
-
-        isSyncing = true
-        defer { isSyncing = false }
-
-        do {
-            let cloudSpots = try await cloudKit.fetchAllSpots()
-            let merged = mergeSpots(local: spots, cloud: cloudSpots)
-            spots = merged
-            saveSpots()
-            logger.info("Synced \(cloudSpots.count) spots from cloud, total: \(merged.count)")
-        } catch {
-            logger.warning("Failed to fetch spots from cloud: \(error.localizedDescription)")
-        }
+        viewContext.refreshAllObjects()
+        loadSpots()
     }
 
     /// Force a full sync with CloudKit
     func forceSync() async {
         await fetchFromCloud()
-        await retryPendingOperations()
-    }
-
-    /// Retry pending cloud operations
-    private func retryPendingOperations() async {
-        for spot in pendingCloudSaves {
-            await saveToCloud(spot)
-        }
-        for spot in pendingCloudDeletes {
-            await deleteFromCloud(spot)
-        }
-    }
-
-    // MARK: - Migration
-
-    /// Migrate existing local spots to CloudKit (one-time)
-    private func migrateLocalSpots() async {
-        let localSpots = spots
-        guard !localSpots.isEmpty else {
-            UserDefaults.standard.set(true, forKey: UserDefaultsKey.spotsMigrationCompleted)
-            return
-        }
-
-        logger.info("Starting migration of \(localSpots.count) local spots to CloudKit")
-
-        do {
-            try await cloudKit.saveSpots(localSpots)
-            UserDefaults.standard.set(true, forKey: UserDefaultsKey.spotsMigrationCompleted)
-            logger.info("Migration completed: \(localSpots.count) spots uploaded")
-        } catch {
-            logger.error("Spot migration failed: \(error.localizedDescription)")
-        }
-    }
-
-    // MARK: - Merging
-
-    /// Merge local and cloud spots, preferring newer modifiedAt for conflicts
-    private func mergeSpots(local: [WalkSpot], cloud: [WalkSpot]) -> [WalkSpot] {
-        var merged: [UUID: WalkSpot] = [:]
-
-        // Add all local spots first
-        for spot in local {
-            merged[spot.id] = spot
-        }
-
-        // Merge cloud spots, preferring newer modifiedAt
-        for cloudSpot in cloud {
-            if let existingSpot = merged[cloudSpot.id] {
-                // Keep the one with the newer modifiedAt
-                if cloudSpot.modifiedAt > existingSpot.modifiedAt {
-                    merged[cloudSpot.id] = cloudSpot
-                }
-            } else {
-                // New spot from cloud
-                merged[cloudSpot.id] = cloudSpot
-            }
-        }
-
-        return Array(merged.values).sorted { $0.createdAt > $1.createdAt }
     }
 
     // MARK: - Helpers

@@ -2,33 +2,48 @@
 //  MedicationStore.swift
 //  Ollie-app
 //
-//  Manages medication completion tracking with JSONL persistence and CloudKit sync
+//  Manages medication completion tracking with Core Data and automatic CloudKit sync
 //
 
 import Foundation
+import CoreData
 import OllieShared
 import Combine
 import os
 
-/// Manages medication completion tracking
+/// Manages medication completion tracking with Core Data storage
 @MainActor
 class MedicationStore: ObservableObject {
     @Published private(set) var completions: [MedicationCompletion] = []
     @Published private(set) var isSyncing = false
 
+    private let persistenceController: PersistenceController
     private let logger = Logger.ollie(category: "MedicationStore")
-    private let cloudKit = CloudKitService.shared
+    private var cancellables = Set<AnyCancellable>()
 
-    /// File name for medication completions
-    private let completionsFileName = "medication-completions.jsonl"
-
-    // MARK: - UserDefaults Keys
-
-    private enum UserDefaultsKey {
-        static let cloudMigrationCompleted = "medicationStore.cloudMigrationCompleted"
+    private var viewContext: NSManagedObjectContext {
+        persistenceController.viewContext
     }
 
-    init() {
+    init(persistenceController: PersistenceController = .shared) {
+        self.persistenceController = persistenceController
+        loadAllCompletions()
+        setupRemoteChangeObserver()
+    }
+
+    // MARK: - Setup
+
+    private func setupRemoteChangeObserver() {
+        NotificationCenter.default.publisher(for: .NSPersistentStoreRemoteChange)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.handleRemoteChange()
+            }
+            .store(in: &cancellables)
+    }
+
+    private func handleRemoteChange() {
+        logger.debug("Detected CloudKit remote change for medication completions")
         loadAllCompletions()
     }
 
@@ -36,128 +51,30 @@ class MedicationStore: ObservableObject {
 
     /// Perform initial sync on app launch
     func initialSync() async {
-        guard cloudKit.isCloudAvailable else {
-            logger.info("CloudKit not available, skipping medication completions sync")
-            return
-        }
-
-        // Migrate existing local completions to CloudKit if needed
-        if !UserDefaults.standard.bool(forKey: UserDefaultsKey.cloudMigrationCompleted) {
-            await migrateLocalCompletions()
-        }
-
-        // Fetch from cloud and merge
-        await fetchFromCloud()
+        viewContext.refreshAllObjects()
+        loadAllCompletions()
     }
 
     /// Force sync with CloudKit
     func forceSync() async {
-        await fetchFromCloud()
-    }
-
-    /// Migrate existing local completions to CloudKit (one-time)
-    private func migrateLocalCompletions() async {
-        guard !completions.isEmpty else {
-            UserDefaults.standard.set(true, forKey: UserDefaultsKey.cloudMigrationCompleted)
-            return
-        }
-
-        logger.info("Migrating \(self.completions.count) local completions to CloudKit")
-
-        do {
-            try await cloudKit.saveCompletions(completions)
-            UserDefaults.standard.set(true, forKey: UserDefaultsKey.cloudMigrationCompleted)
-            logger.info("Medication completions migration completed")
-        } catch {
-            logger.error("Medication completions migration failed: \(error.localizedDescription)")
-        }
-    }
-
-    /// Fetch completions from CloudKit and merge with local
-    private func fetchFromCloud() async {
-        guard cloudKit.isCloudAvailable else { return }
-
-        isSyncing = true
-        defer { isSyncing = false }
-
-        do {
-            let cloudCompletions = try await cloudKit.fetchAllCompletions()
-            let merged = mergeCompletions(local: completions, cloud: cloudCompletions)
-
-            if merged.map({ $0.id }) != completions.map({ $0.id }) {
-                completions = merged
-                saveCompletions()
-                logger.info("Medication completions updated from CloudKit")
-            }
-        } catch {
-            logger.warning("Failed to fetch completions from cloud: \(error.localizedDescription)")
-        }
-    }
-
-    /// Save a completion to CloudKit
-    private func saveToCloud(_ completion: MedicationCompletion) async {
-        guard cloudKit.isCloudAvailable else { return }
-
-        do {
-            try await cloudKit.saveCompletion(completion)
-            logger.debug("Completion synced to CloudKit")
-        } catch {
-            logger.warning("Failed to save completion to cloud: \(error.localizedDescription)")
-        }
-    }
-
-    /// Delete a completion from CloudKit
-    private func deleteFromCloud(_ completion: MedicationCompletion) async {
-        guard cloudKit.isCloudAvailable else { return }
-
-        do {
-            try await cloudKit.deleteCompletion(completion)
-            logger.debug("Completion deleted from CloudKit")
-        } catch {
-            logger.warning("Failed to delete completion from cloud: \(error.localizedDescription)")
-        }
-    }
-
-    /// Merge local and cloud completions, preferring newer modifiedAt
-    private func mergeCompletions(local: [MedicationCompletion], cloud: [MedicationCompletion]) -> [MedicationCompletion] {
-        var merged: [UUID: MedicationCompletion] = [:]
-
-        // Add all local completions
-        for completion in local {
-            merged[completion.id] = completion
-        }
-
-        // Merge cloud completions (prefer newer modifiedAt)
-        for cloudCompletion in cloud {
-            if let existing = merged[cloudCompletion.id] {
-                if cloudCompletion.modifiedAt > existing.modifiedAt {
-                    merged[cloudCompletion.id] = cloudCompletion
-                }
-            } else {
-                merged[cloudCompletion.id] = cloudCompletion
-            }
-        }
-
-        return Array(merged.values).sorted { $0.completedAt > $1.completedAt }
+        await initialSync()
     }
 
     // MARK: - Public Methods
 
-    /// Load completions for a specific date (no-op, all completions already loaded)
+    /// Load completions for a specific date (refreshes from Core Data)
     func loadCompletions(for date: Date) {
-        // Completions are already loaded in memory from init
-        // This method exists for API consistency if we add date-based filtering later
+        loadAllCompletions()
     }
 
     /// Check if a medication time is complete for a given date
     func isComplete(medicationId: UUID, timeId: UUID, for date: Date) -> Bool {
-        let calendar = Calendar.current
-        let startOfDay = calendar.startOfDay(for: date)
-        return completions.contains { completion in
-            completion.medicationId == medicationId &&
-            completion.timeId == timeId &&
-            calendar.isDate(completion.date, inSameDayAs: startOfDay)
-        }
+        CDMedicationCompletion.isCompleted(
+            medicationId: medicationId,
+            timeId: timeId,
+            date: date,
+            in: viewContext
+        )
     }
 
     /// Mark a medication as complete
@@ -170,29 +87,33 @@ class MedicationStore: ObservableObject {
             completedAt: Date()
         )
 
-        completions.append(completion)
-        saveCompletions()
+        // Save to Core Data
+        _ = CDMedicationCompletion.create(from: completion, in: viewContext)
 
-        // Sync to CloudKit in background
-        Task {
-            await saveToCloud(completion)
+        do {
+            try persistenceController.save()
+            completions.append(completion)
+            logger.info("Marked medication \(medicationId) time \(timeId) as complete")
+        } catch {
+            logger.error("Failed to save medication completion: \(error.localizedDescription)")
         }
 
-        logger.info("Marked medication \(medicationId) time \(timeId) as complete")
         return completion
     }
 
     /// Delete a completion
     func deleteCompletion(_ completion: MedicationCompletion) {
-        completions.removeAll { $0.id == completion.id }
-        saveCompletions()
+        if let cdCompletion = CDMedicationCompletion.fetch(byId: completion.id, in: viewContext) {
+            viewContext.delete(cdCompletion)
 
-        // Delete from CloudKit in background
-        Task {
-            await deleteFromCloud(completion)
+            do {
+                try persistenceController.save()
+                completions.removeAll { $0.id == completion.id }
+                logger.info("Deleted medication completion \(completion.id)")
+            } catch {
+                logger.error("Failed to delete medication completion: \(error.localizedDescription)")
+            }
         }
-
-        logger.info("Deleted medication completion \(completion.id)")
     }
 
     /// Get pending medications for a date
@@ -212,13 +133,8 @@ class MedicationStore: ObservableObject {
 
                 guard let scheduledDate = time.scheduledDate(for: date) else { continue }
 
-                // Only show if scheduled time has passed or is within 30 minutes
                 let minutesUntilDue = calendar.dateComponents([.minute], from: now, to: scheduledDate).minute ?? 0
 
-                // Show medication if:
-                // - It's past the scheduled time (overdue)
-                // - It's within 30 minutes of the scheduled time
-                // - We're viewing a past date
                 let isToday = calendar.isDateInToday(date)
                 let shouldShow = !isToday || minutesUntilDue <= 30
 
@@ -234,30 +150,34 @@ class MedicationStore: ObservableObject {
             }
         }
 
-        // Sort by scheduled time
         return pending.sorted { $0.scheduledDate < $1.scheduledDate }
     }
 
     // MARK: - Private Methods
 
     private func loadAllCompletions() {
-        completions = JSONFileStorage.loadJSONL(from: completionsFileName, inDataDirectory: true, logger: logger)
-        logger.info("Loaded \(self.completions.count) medication completions")
-    }
-
-    private func saveCompletions() {
-        JSONFileStorage.saveJSONL(completions, to: completionsFileName, inDataDirectory: true, logger: logger)
+        let cdCompletions = CDMedicationCompletion.fetchAllCompletions(in: viewContext)
+        completions = cdCompletions.compactMap { $0.toMedicationCompletion() }
+        logger.info("Loaded \(self.completions.count) medication completions from Core Data")
     }
 
     /// Clean up old completions (older than 90 days)
     func cleanupOldCompletions() {
         let cutoffDate = Calendar.current.date(byAdding: .day, value: -90, to: Date()) ?? Date()
-        let oldCount = completions.count
-        completions.removeAll { $0.date < cutoffDate }
 
-        if completions.count != oldCount {
-            saveCompletions()
-            logger.info("Cleaned up \(oldCount - self.completions.count) old medication completions")
+        let request = NSFetchRequest<CDMedicationCompletion>(entityName: "CDMedicationCompletion")
+        request.predicate = NSPredicate(format: "date < %@", cutoffDate as CVarArg)
+
+        do {
+            let oldCompletions = try viewContext.fetch(request)
+            for completion in oldCompletions {
+                viewContext.delete(completion)
+            }
+            try persistenceController.save()
+            loadAllCompletions()
+            logger.info("Cleaned up \(oldCompletions.count) old medication completions")
+        } catch {
+            logger.error("Failed to cleanup old completions: \(error.localizedDescription)")
         }
     }
 }

@@ -5,6 +5,7 @@
 //  Refactored to use extracted section components from Views/Settings/
 
 import CloudKit
+import CoreData
 import StoreKit
 import SwiftUI
 import OllieShared
@@ -28,7 +29,7 @@ struct SettingsView: View {
     @State private var showingOlliePlusSheet = false
     @State private var showingSubscriptionSuccess = false
     @State private var showingMealEdit = false
-    @State private var showingExerciseEdit = false
+    @State private var showingWalkScheduleEdit = false
     @State private var activeShare: CKShare?
     @State private var isPreparingShare = false
     @State private var shareError: String?
@@ -43,8 +44,8 @@ struct SettingsView: View {
                     ProfileSection(profile: profile)
                     StatsSection(profile: profile)
 
-                    // Exercise (extracted to ExerciseSection.swift)
-                    ExerciseSection(profile: profile, profileStore: profileStore, showingExerciseEdit: $showingExerciseEdit)
+                    // Walk Schedule (consolidated from ExerciseSection)
+                    WalkSection(profile: profile, profileStore: profileStore, showingWalkScheduleEdit: $showingWalkScheduleEdit)
 
                     // Meals (extracted to MealSection.swift)
                     MealSection(profile: profile, profileStore: profileStore, showingMealEdit: $showingMealEdit)
@@ -88,6 +89,11 @@ struct SettingsView: View {
 
                 // Danger zone (extracted to DataSection.swift)
                 DangerSection(profileStore: profileStore)
+
+                #if DEBUG
+                // Debug section - only visible in debug builds
+                DebugSection()
+                #endif
             }
             .navigationTitle(Strings.Settings.title)
         }
@@ -114,8 +120,16 @@ struct SettingsView: View {
                 )
             }
         }
-        .sheet(isPresented: $showingExerciseEdit) {
-            ExerciseEditView(profileStore: profileStore)
+        .sheet(isPresented: $showingWalkScheduleEdit) {
+            if let profile = profileStore.profile {
+                WalkScheduleEditorWrapper(
+                    initialSchedule: profile.walkSchedule,
+                    ageInMonths: profile.ageInMonths,
+                    onSave: { updatedSchedule in
+                        profileStore.updateWalkSchedule(updatedSchedule)
+                    }
+                )
+            }
         }
         .sheet(isPresented: Binding(
             get: { activeShare != nil },
@@ -256,6 +270,14 @@ struct SettingsView: View {
             }
             .pickerStyle(.inline)
             .labelsHidden()
+
+            // Sound feedback toggle
+            Toggle(isOn: Binding(
+                get: { SoundFeedback.isEnabled },
+                set: { SoundFeedback.isEnabled = $0 }
+            )) {
+                Label(Strings.Settings.soundFeedback, systemImage: "speaker.wave.2")
+            }
         }
     }
 
@@ -269,15 +291,8 @@ struct SettingsView: View {
                 HStack {
                     Image(systemName: "exclamationmark.icloud")
                         .foregroundStyle(.orange)
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(Strings.CloudSharing.iCloudUnavailable)
-                            .font(.subheadline)
-                        if let error = cloudKit.syncError {
-                            Text(error)
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                        }
-                    }
+                    Text(Strings.CloudSharing.iCloudUnavailable)
+                        .font(.subheadline)
                 }
             } else if cloudKit.isParticipant {
                 // User is viewing shared data (not the owner)
@@ -385,22 +400,40 @@ struct SettingsView: View {
             }
         }
         .task {
-            // Refresh share state when entering settings
-            await cloudKit.updateShareState()
+            // Refresh share state from Core Data when entering settings
+            let context = PersistenceController.shared.viewContext
+            if let cdProfile = CDPuppyProfile.fetchProfile(in: context) {
+                await cloudKit.refreshShareState(
+                    for: cdProfile,
+                    using: PersistenceController.shared.container
+                )
+            }
         }
     }
 
     // MARK: - Sharing Actions
 
-    /// Create or fetch share FIRST, then show sheet
+    /// Create or fetch share, then show the sharing controller
     private func prepareAndShowShare() async {
         guard !isPreparingShare else { return }
         isPreparingShare = true
         shareError = nil
 
         do {
-            // Create or fetch existing share BEFORE showing sheet
-            let share = try await cloudKit.createShare()
+            // Fetch the CDPuppyProfile from Core Data
+            let context = PersistenceController.shared.viewContext
+            guard let cdProfile = CDPuppyProfile.fetchProfile(in: context) else {
+                shareError = "No profile found. Please set up your puppy first."
+                isPreparingShare = false
+                return
+            }
+
+            // Get or create share using Core Data's sharing APIs
+            let share = try await cloudKit.getOrCreateShare(
+                for: cdProfile,
+                using: PersistenceController.shared.container
+            )
+
             activeShare = share
         } catch {
             shareError = error.localizedDescription
@@ -414,13 +447,19 @@ struct SettingsView: View {
         isPreparingShare = true
         shareError = nil
 
-        do {
-            if let share = try await cloudKit.fetchExistingShare() {
-                activeShare = share
-            } else {
-                shareError = Strings.CloudSharing.couldNotLoadShare
-            }
-        } catch {
+        // Refresh share state first
+        let context = PersistenceController.shared.viewContext
+        if let cdProfile = CDPuppyProfile.fetchProfile(in: context) {
+            await cloudKit.refreshShareState(
+                for: cdProfile,
+                using: PersistenceController.shared.container
+            )
+        }
+
+        // Use the current share from shareManager
+        if let share = cloudKit.currentShare {
+            activeShare = share
+        } else {
             shareError = Strings.CloudSharing.couldNotLoadShare
         }
 
@@ -429,10 +468,13 @@ struct SettingsView: View {
 
     private func stopSharing() async {
         shareError = nil
+
         do {
             try await cloudKit.stopSharing()
+            // Refresh the share state after stopping
+            await cloudKit.updateShareState()
         } catch {
-            shareError = "Could not stop sharing: \(error.localizedDescription)"
+            shareError = error.localizedDescription
         }
     }
 

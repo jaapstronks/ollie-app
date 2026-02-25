@@ -2,107 +2,118 @@
 //  CloudKitShareManager.swift
 //  OllieShared
 //
-//  Manages CloudKit sharing functionality
+//  Manages CloudKit sharing functionality using NSPersistentCloudKitContainer
+//
 
 import Foundation
 import CloudKit
+import CoreData
 import Combine
 import os
 
-/// Handles CloudKit share creation, management, and participant tracking
+/// Handles CloudKit share management for Core Data
+/// Uses NSPersistentCloudKitContainer's sharing APIs
 @MainActor
 public final class CloudKitShareManager: ObservableObject {
-    private let privateDatabase: CKDatabase
-    private let zoneID: CKRecordZone.ID
-    private let zoneManager: CloudKitZoneManager
-
+    private let container: CKContainer
     private let logger = Logger.ollie(category: "CloudKitShare")
 
     // MARK: - Published State
 
     @Published public private(set) var isShared = false
     @Published public private(set) var shareParticipants: [ShareParticipant] = []
+    @Published public private(set) var currentShare: CKShare?
+    @Published public private(set) var isLoading = false
+    @Published public private(set) var error: String?
 
     // MARK: - Init
 
-    public init(
-        privateDatabase: CKDatabase,
-        zoneID: CKRecordZone.ID,
-        zoneManager: CloudKitZoneManager
-    ) {
-        self.privateDatabase = privateDatabase
-        self.zoneID = zoneID
-        self.zoneManager = zoneManager
+    public init(containerIdentifier: String = "iCloud.nl.jaapstronks.Ollie") {
+        self.container = CKContainer(identifier: containerIdentifier)
     }
 
-    // MARK: - Share Creation
+    // MARK: - Share Creation with Core Data
 
-    /// Create a share for the events zone (does NOT update UI state - caller should call updateShareState after sheet is dismissed)
-    public func createShare() async throws -> CKShare {
-        // Ensure zone exists
-        try await zoneManager.createZoneIfNeeded()
+    /// Create or get existing share for a profile using NSPersistentCloudKitContainer
+    /// Returns existing share if one exists, otherwise creates a new one
+    public func getOrCreateShare(
+        for profile: NSManagedObject,
+        using persistentContainer: NSPersistentCloudKitContainer
+    ) async throws -> CKShare {
+        isLoading = true
+        error = nil
+        defer { isLoading = false }
 
-        // Check if share already exists (pure fetch, no side effects)
-        if let existingShare = try await fetchShareRecord() {
+        // First check if a share already exists
+        if let existingShare = try await fetchExistingShare(for: profile, using: persistentContainer) {
+            logger.info("Found existing share")
             return existingShare
         }
 
-        // Create new share for the zone
-        let share = CKShare(recordZoneID: zoneID)
-        share[CKShare.SystemFieldKey.title] = "Ollie - Puppy Events"
+        // Create new share using Core Data's sharing API
+        let (_, share, _) = try await persistentContainer.share([profile], to: nil)
+
+        // Configure the share
+        share[CKShare.SystemFieldKey.title] = "Ollie - Puppy Data"
         share.publicPermission = .none // Invite-only
 
-        _ = try await privateDatabase.save(share)
+        currentShare = share
+        await updateShareState()
 
-        logger.info("Created new share for zone")
+        logger.info("Created new share using Core Data")
         return share
     }
 
-    // MARK: - Share Fetching
+    /// Get existing share for a profile
+    public func fetchExistingShare(
+        for profile: NSManagedObject,
+        using persistentContainer: NSPersistentCloudKitContainer
+    ) async throws -> CKShare? {
+        let shares = try persistentContainer.fetchShares(matching: [profile.objectID])
+        let share = shares[profile.objectID]
+        if share != nil {
+            currentShare = share
+            await updateShareState()
+        }
+        return share
+    }
 
-    /// Pure fetch - gets share record without updating any UI state
-    private func fetchShareRecord() async throws -> CKShare? {
-        do {
-            let zone = try await privateDatabase.recordZone(for: zoneID)
+    // MARK: - State Updates
 
-            if let shareRef = zone.share {
-                return try await privateDatabase.record(for: shareRef.recordID) as? CKShare
-            }
-        } catch let error as CKError {
-            if error.code == .zoneNotFound {
-                return nil
-            }
-            throw error
+    /// Update the shared state based on current share
+    public func updateShareState() async {
+        guard let share = currentShare else {
+            isShared = false
+            shareParticipants = []
+            return
         }
 
-        return nil
+        isShared = true
+        updateParticipants(from: share)
     }
 
-    /// Fetch existing share for the zone (updates UI state)
-    public func fetchExistingShare() async throws -> CKShare? {
-        let share = try await fetchShareRecord()
-        // Don't update state here - let caller decide when to update
-        return share
-    }
-
-    /// Update the shared state based on current CloudKit status
-    public func updateShareState() async {
+    /// Refresh share state from CloudKit by re-fetching
+    public func refreshShareState(
+        for profile: NSManagedObject,
+        using persistentContainer: NSPersistentCloudKitContainer
+    ) async {
         do {
-            if let share = try await fetchShareRecord() {
-                isShared = true
-                updateParticipants(from: share)
+            if let share = try await fetchExistingShare(for: profile, using: persistentContainer) {
+                currentShare = share
+                await updateShareState()
             } else {
+                currentShare = nil
                 isShared = false
                 shareParticipants = []
             }
         } catch {
-            logger.error("Failed to update share state: \(error.localizedDescription)")
+            logger.error("Failed to refresh share state: \(error.localizedDescription)")
+            self.error = error.localizedDescription
         }
     }
 
     // MARK: - Participants
 
-    /// Update participants from a share object (no async fetch)
     private func updateParticipants(from share: CKShare) {
         shareParticipants = share.participants.compactMap { participant in
             guard participant.role != .owner else { return nil }
@@ -134,22 +145,50 @@ public final class CloudKitShareManager: ObservableObject {
 
     // MARK: - Stop Sharing
 
-    /// Stop sharing (remove all participants)
+    /// Stop sharing by deleting the CKShare record
+    /// This removes participant access but owner keeps all data
     public func stopSharing() async throws {
-        // Fetch without side effects
-        guard let share = try await fetchShareRecord() else {
-            // No share exists, reset state
+        guard let share = currentShare else {
             isShared = false
             shareParticipants = []
-            logger.info("No share to stop, reset state")
+            logger.info("No share to stop")
             return
         }
 
-        try await privateDatabase.deleteRecord(withID: share.recordID)
+        isLoading = true
+        error = nil
+        defer { isLoading = false }
+
+        // Delete the share record from CloudKit
+        // This stops sharing but preserves owner's data
+        let database = container.privateCloudDatabase
+        try await database.deleteRecord(withID: share.recordID)
+
+        currentShare = nil
         isShared = false
         shareParticipants = []
 
-        logger.info("Stopped sharing")
+        logger.info("Stopped sharing - participants removed, owner data preserved")
+    }
+
+    /// Clear local share state (used when share was removed externally)
+    public func clearShareState() {
+        currentShare = nil
+        isShared = false
+        shareParticipants = []
+        error = nil
+    }
+
+    // MARK: - Share Acceptance
+
+    /// Accept a share invitation using NSPersistentCloudKitContainer
+    public func acceptShare(
+        _ metadata: CKShare.Metadata,
+        into store: NSPersistentStore,
+        using persistentContainer: NSPersistentCloudKitContainer
+    ) async throws {
+        try await persistentContainer.acceptShareInvitations(from: [metadata], into: store)
+        logger.info("Share invitation accepted via Core Data")
     }
 }
 

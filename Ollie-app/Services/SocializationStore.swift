@@ -2,14 +2,16 @@
 //  SocializationStore.swift
 //  Ollie-app
 //
-//  Manages socialization checklist items and exposures with CloudKit sync
+//  Manages socialization checklist items and exposures with Core Data and automatic CloudKit sync
+//
 
 import Foundation
+import CoreData
 import OllieShared
 import Combine
 import os
 
-/// Manages socialization items and user exposures with local persistence and CloudKit sync
+/// Manages socialization items and user exposures with Core Data and automatic CloudKit sync
 @MainActor
 class SocializationStore: ObservableObject {
 
@@ -19,6 +21,14 @@ class SocializationStore: ObservableObject {
     @Published private(set) var exposuresByItem: [String: [Exposure]] = [:]
     @Published var startedDate: Date?
     @Published private(set) var isSyncing = false
+
+    private let persistenceController: PersistenceController
+    private let logger = Logger.ollie(category: "SocializationStore")
+    private var cancellables = Set<AnyCancellable>()
+
+    private var viewContext: NSManagedObjectContext {
+        persistenceController.viewContext
+    }
 
     // MARK: - Computed Properties
 
@@ -39,45 +49,29 @@ class SocializationStore: ObservableObject {
         exposuresByItem.values.flatMap { $0 }
     }
 
-    // MARK: - Storage
-
-    private let fileName = "socialization.json"
-    private let logger = Logger.ollie(category: "SocializationStore")
-    private let cloudKit = CloudKitService.shared
-
-    private var cancellables = Set<AnyCancellable>()
-    private var pendingCloudSaves: [Exposure] = []
-    private var pendingCloudDeletes: [Exposure] = []
-
     // MARK: - Init
 
-    init() {
+    init(persistenceController: PersistenceController = .shared) {
+        self.persistenceController = persistenceController
         loadCategories()
         loadExposures()
-        setupCloudKitObservers()
-
-        // Initial sync
-        Task {
-            await syncFromCloud()
-        }
+        setupRemoteChangeObserver()
     }
 
     // MARK: - Setup
 
-    private func setupCloudKitObservers() {
-        // Listen for sync completion to refresh
-        NotificationCenter.default.publisher(for: .cloudKitSocializationSyncCompleted)
+    private func setupRemoteChangeObserver() {
+        NotificationCenter.default.publisher(for: .NSPersistentStoreRemoteChange)
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] notification in
-                self?.handleSyncCompleted(notification)
+            .sink { [weak self] _ in
+                self?.handleRemoteChange()
             }
             .store(in: &cancellables)
     }
 
-    private func handleSyncCompleted(_ notification: Notification) {
-        Task {
-            await syncFromCloud()
-        }
+    private func handleRemoteChange() {
+        logger.debug("Detected CloudKit remote change for exposures")
+        loadExposures()
     }
 
     // MARK: - Category Loading
@@ -117,15 +111,18 @@ class SocializationStore: ObservableObject {
             note: note
         )
 
-        var exposures = exposuresByItem[itemId] ?? []
-        exposures.append(exposure)
-        exposuresByItem[itemId] = exposures
+        // Save to Core Data
+        _ = CDExposure.create(from: exposure, in: viewContext)
 
-        saveExposures()
+        do {
+            try persistenceController.save()
 
-        // Sync to CloudKit
-        Task {
-            await saveToCloud(exposure)
+            // Update in-memory
+            var exposures = exposuresByItem[itemId] ?? []
+            exposures.append(exposure)
+            exposuresByItem[itemId] = exposures
+        } catch {
+            logger.error("Failed to save exposure: \(error.localizedDescription)")
         }
 
         return exposure
@@ -138,11 +135,15 @@ class SocializationStore: ObservableObject {
 
     /// Delete an exposure
     func deleteExposure(_ exposure: Exposure) {
-        exposuresByItem[exposure.itemId]?.removeAll { $0.id == exposure.id }
-        saveExposures()
+        if let cdExposure = CDExposure.fetch(byId: exposure.id, in: viewContext) {
+            viewContext.delete(cdExposure)
 
-        Task {
-            await deleteFromCloud(exposure)
+            do {
+                try persistenceController.save()
+                exposuresByItem[exposure.itemId]?.removeAll { $0.id == exposure.id }
+            } catch {
+                logger.error("Failed to delete exposure: \(error.localizedDescription)")
+            }
         }
     }
 
@@ -198,11 +199,9 @@ class SocializationStore: ObservableObject {
     // MARK: - Walk Suggestions
 
     /// Get suggested items to watch for during walks
-    /// Priority: recent negative reaction > almost complete > not started (weighted by item priority)
     func suggestedWalkItems(limit: Int = 3) -> [SocializationItem] {
         let walkableItems = categories.flatMap { $0.items }.filter { $0.isWalkable }
 
-        // Score each item
         let scoredItems = walkableItems.map { item -> (SocializationItem, Int) in
             let exposures = getExposures(for: item.id)
             let positiveCount = exposures.filter { $0.reaction.isPositive }.count
@@ -210,7 +209,6 @@ class SocializationStore: ObservableObject {
 
             var score = 0
 
-            // Recent negative reaction gets highest priority
             if let last = lastExposure, !last.reaction.isPositive {
                 let daysSince = Calendar.current.dateComponents([.day], from: last.date, to: Date()).day ?? 0
                 if daysSince < 7 {
@@ -218,19 +216,15 @@ class SocializationStore: ObservableObject {
                 }
             }
 
-            // Almost complete (1-2 away from target)
             let remaining = item.targetExposures - positiveCount
             if remaining > 0 && remaining <= 2 {
                 score += 50
             }
 
-            // Not started yet - use item priority to weight suggestions
-            // Higher priority items (3=starter, 2=common) should be suggested first
             if exposures.isEmpty {
-                score += 20 + (item.priority * 10)  // Range: 20-50 based on priority
+                score += 20 + (item.priority * 10)
             }
 
-            // Items that are already comfortable get low priority
             if positiveCount >= item.targetExposures {
                 score = 0
             }
@@ -245,104 +239,28 @@ class SocializationStore: ObservableObject {
             .map { $0.0 }
     }
 
-    // MARK: - Local Persistence
+    // MARK: - Persistence
 
     private func loadExposures() {
-        if let container: ExposureDataContainer = JSONFileStorage.loadObject(from: fileName, logger: logger) {
-            exposuresByItem = container.exposuresByItem
-            startedDate = container.startedDate
-            logger.info("Loaded \(self.allExposures.count) exposures")
-        } else {
-            exposuresByItem = [:]
-        }
+        let cdExposures = CDExposure.fetchAllExposures(in: viewContext)
+        let exposures = cdExposures.compactMap { $0.toExposure() }
+
+        // Group by itemId
+        exposuresByItem = Dictionary(grouping: exposures, by: { $0.itemId })
+        logger.info("Loaded \(exposures.count) exposures from Core Data")
     }
 
-    private func saveExposures() {
-        let container = ExposureDataContainer(
-            exposuresByItem: exposuresByItem,
-            startedDate: startedDate ?? Date()
-        )
-        JSONFileStorage.saveObject(container, to: fileName, logger: logger)
-    }
+    // MARK: - CloudKit Sync
 
-    // MARK: - CloudKit Operations
-
-    private func saveToCloud(_ exposure: Exposure) async {
-        guard cloudKit.isCloudAvailable else {
-            pendingCloudSaves.append(exposure)
-            return
-        }
-
-        do {
-            try await cloudKit.saveExposure(exposure)
-            pendingCloudSaves.removeAll { $0.id == exposure.id }
-        } catch {
-            logger.warning("Failed to save exposure to cloud: \(error.localizedDescription)")
-            if !pendingCloudSaves.contains(where: { $0.id == exposure.id }) {
-                pendingCloudSaves.append(exposure)
-            }
-        }
-    }
-
-    private func deleteFromCloud(_ exposure: Exposure) async {
-        guard cloudKit.isCloudAvailable else {
-            pendingCloudDeletes.append(exposure)
-            return
-        }
-
-        do {
-            try await cloudKit.deleteExposure(exposure)
-            pendingCloudDeletes.removeAll { $0.id == exposure.id }
-        } catch {
-            logger.warning("Failed to delete exposure from cloud: \(error.localizedDescription)")
-        }
-    }
-
-    /// Sync exposures from CloudKit
+    /// Sync exposures from CloudKit (no-op with automatic sync)
     func syncFromCloud() async {
-        guard cloudKit.isCloudAvailable else { return }
-
-        isSyncing = true
-        defer { isSyncing = false }
-
-        do {
-            let cloudExposures = try await cloudKit.fetchAllExposures()
-            mergeExposures(cloud: cloudExposures)
-            saveExposures()
-            logger.info("Synced \(cloudExposures.count) exposures from cloud")
-        } catch {
-            logger.warning("Failed to sync from cloud: \(error.localizedDescription)")
-        }
+        viewContext.refreshAllObjects()
+        loadExposures()
     }
 
-    /// Merge cloud exposures with local
-    private func mergeExposures(cloud: [Exposure]) {
-        for exposure in cloud {
-            var exposures = exposuresByItem[exposure.itemId] ?? []
-
-            // Check if we already have this exposure
-            if let index = exposures.firstIndex(where: { $0.id == exposure.id }) {
-                // Cloud wins for conflicts (compare modifiedAt)
-                if exposure.modifiedAt > exposures[index].modifiedAt {
-                    exposures[index] = exposure
-                }
-            } else {
-                // New exposure from cloud
-                exposures.append(exposure)
-            }
-
-            exposuresByItem[exposure.itemId] = exposures
-        }
-    }
-
-    /// Retry pending cloud operations
+    /// Retry pending operations (no-op with automatic sync)
     func retryPendingOperations() async {
-        for exposure in pendingCloudSaves {
-            await saveToCloud(exposure)
-        }
-        for exposure in pendingCloudDeletes {
-            await deleteFromCloud(exposure)
-        }
+        // With NSPersistentCloudKitContainer, retries are automatic
     }
 }
 
@@ -350,13 +268,6 @@ class SocializationStore: ObservableObject {
 
 private struct SeedDataContainer: Codable {
     let categories: [SocializationCategory]
-}
-
-// MARK: - Exposure Data Container
-
-private struct ExposureDataContainer: Codable {
-    let exposuresByItem: [String: [Exposure]]
-    let startedDate: Date
 }
 
 // MARK: - Notification Names

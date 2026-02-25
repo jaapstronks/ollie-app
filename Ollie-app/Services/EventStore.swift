@@ -2,20 +2,17 @@
 //  EventStore.swift
 //  Ollie-app
 //
-//  Manages reading and writing puppy events with CloudKit sync and local cache
-//  Orchestrates LocalEventFileStore and EventSyncCoordinator
+//  Manages reading and writing puppy events with Core Data and automatic CloudKit sync
 //
 
 import Combine
 import Foundation
+import CoreData
 import OllieShared
 import os
 
 /// Manages reading and writing puppy events
-/// Architecture: Local-first with CloudKit sync
-/// - Saves locally first (instant, works offline)
-/// - Syncs to CloudKit in background
-/// - Subscribes to CloudKit changes for multi-device/multi-user sync
+/// Architecture: Core Data with NSPersistentCloudKitContainer for automatic CloudKit sync
 @MainActor
 class EventStore: ObservableObject {
     @Published private(set) var events: [PuppyEvent] = []
@@ -25,72 +22,43 @@ class EventStore: ObservableObject {
 
     private let logger = Logger.ollie(category: "EventStore")
 
-    /// Local file storage for events
-    private let fileStore = LocalEventFileStore()
+    /// Core Data event store
+    private let coreDataStore: CoreDataEventStore
 
-    /// CloudKit sync coordinator
-    private let syncCoordinator = EventSyncCoordinator()
-
-    /// Media store for photo operations (used by sync coordinator)
+    /// Media store for photo operations
     private let mediaStore = MediaStore()
-
-    /// File monitoring for App Intent changes
-    private let fileMonitor = FileMonitoringService()
 
     private var cancellables = Set<AnyCancellable>()
 
-    /// Background refresh task (stored for cancellation)
-    private var cloudRefreshTask: Task<Void, Never>?
+    /// NSFetchedResultsController for reactive updates
+    private var fetchedResultsController: NSFetchedResultsController<CDPuppyEvent>?
 
-    init() {
-        setupSyncCoordinatorBindings()
-        setupFileMonitoring()
+    init(persistenceController: PersistenceController = .shared) {
+        self.coreDataStore = CoreDataEventStore(persistenceController: persistenceController)
+
+        setupRemoteChangeObserver()
         setupWatchEventObserver()
         loadEvents(for: currentDate)
-
-        // Wire up sync coordinator with mediaStore for photo operations
-        syncCoordinator.mediaStore = mediaStore
-
-        // Set up sync coordinator callback
-        syncCoordinator.onSyncCompleted = { [weak self] in
-            await self?.refreshFromCloud()
-        }
-
-        // Callback when photo is synced to CloudKit
-        syncCoordinator.onPhotoSynced = { [weak self] eventId in
-            await self?.markPhotoAsSynced(eventId: eventId)
-        }
-
-        // Initial sync on launch
-        Task {
-            let allLocalEvents = fileStore.readAllEvents()
-            await syncCoordinator.initialSync(localEvents: allLocalEvents)
-
-            // Migrate existing photos to CloudKit
-            await syncCoordinator.migrateExistingPhotos(allLocalEvents)
-        }
     }
 
     // MARK: - Setup
 
-    private func setupSyncCoordinatorBindings() {
-        // Forward sync state from coordinator
-        syncCoordinator.$isSyncing
+    private func setupRemoteChangeObserver() {
+        // Listen for Core Data remote changes (CloudKit sync)
+        NotificationCenter.default.publisher(for: .NSPersistentStoreRemoteChange)
             .receive(on: DispatchQueue.main)
-            .assign(to: &$isSyncing)
+            .sink { [weak self] _ in
+                self?.handleRemoteChange()
+            }
+            .store(in: &cancellables)
 
-        syncCoordinator.$syncError
+        // Listen for share acceptance to reload data
+        NotificationCenter.default.publisher(for: .cloudKitShareAccepted)
             .receive(on: DispatchQueue.main)
-            .assign(to: &$syncError)
-    }
-
-    private func setupFileMonitoring() {
-        guard let dataDir = fileStore.dataDirectoryURL else { return }
-
-        fileMonitor.onFileChange = { [weak self] in
-            self?.handleFileSystemChange()
-        }
-        fileMonitor.startMonitoring(directoryURL: dataDir)
+            .sink { [weak self] _ in
+                self?.handleShareAccepted()
+            }
+            .store(in: &cancellables)
     }
 
     private func setupWatchEventObserver() {
@@ -103,64 +71,38 @@ class EventStore: ObservableObject {
 
             Task { @MainActor in
                 self.logger.info("Received event from Apple Watch, reloading...")
-
-                // Invalidate cache and reload events for current date
-                self.fileStore.invalidateCache(for: self.currentDate)
+                self.coreDataStore.invalidateCache(for: self.currentDate)
                 self.loadEvents(for: self.currentDate)
             }
         }
+    }
+
+    private func handleRemoteChange() {
+        logger.debug("Detected CloudKit remote change")
+        coreDataStore.invalidateCache(for: currentDate)
+        loadEvents(for: currentDate)
+    }
+
+    private func handleShareAccepted() {
+        logger.info("Share accepted - reloading data from shared store")
+        coreDataStore.invalidateAllCaches()
+        loadEvents(for: currentDate)
     }
 
     // MARK: - Public Methods
 
     /// Load events for a specific date
     func loadEvents(for date: Date) {
-        // Read events synchronously first
-        let loadedEvents = fileStore.readEvents(for: date)
-
-        // Cancel any existing cloud refresh task
-        cloudRefreshTask?.cancel()
-
-        // Defer published property updates to avoid "Publishing changes from within view updates"
-        Task { @MainActor [weak self] in
-            guard let self = self else { return }
-            self.currentDate = date
-            self.events = loadedEvents
-
-            // Then fetch from CloudKit in background
-            self.cloudRefreshTask = Task {
-                await self.refreshFromCloud()
-            }
-        }
+        currentDate = date
+        events = coreDataStore.readEvents(for: date)
     }
 
-    /// Refresh current date's events from CloudKit
+    /// Refresh events (re-read from Core Data)
     func refreshFromCloud() async {
-        guard syncCoordinator.isCloudAvailable else { return }
-        guard !Task.isCancelled else { return }
-
-        do {
-            let cloudEvents = try await syncCoordinator.fetchEvents(for: currentDate)
-            guard !Task.isCancelled else { return }
-
-            // Clear cache for this date before merging
-            fileStore.invalidateCache(for: currentDate)
-
-            // Merge with local events
-            let localEvents = fileStore.readEvents(for: currentDate)
-            let mergedEvents = syncCoordinator.mergeEvents(local: localEvents, cloud: cloudEvents)
-
-            // Update UI
-            events = mergedEvents.sorted { $0.time > $1.time }
-
-            // Persist merged result locally
-            fileStore.saveEvents(mergedEvents, for: currentDate)
-
-            // Download any missing photos from CloudKit
-            await syncCoordinator.downloadMissingPhotos(for: mergedEvents)
-        } catch {
-            logger.warning("Failed to refresh from cloud: \(error.localizedDescription)")
-        }
+        // With NSPersistentCloudKitContainer, CloudKit sync is automatic
+        // Just invalidate cache and reload
+        coreDataStore.invalidateCache(for: currentDate)
+        loadEvents(for: currentDate)
     }
 
     /// Add a new event
@@ -172,118 +114,83 @@ class EventStore: ObservableObject {
             newEvent.id = UUID()
         }
 
-        // Add to in-memory list
-        events.append(newEvent)
-        events.sort { $0.time > $1.time }
+        do {
+            try coreDataStore.saveEvent(newEvent)
 
-        // Persist to local file for the event's actual date (not currentDate)
-        let eventDate = newEvent.time.startOfDay
-        fileStore.saveEvent(newEvent, for: eventDate)
+            // Add to in-memory list
+            events.append(newEvent)
+            events.sort { $0.time > $1.time }
 
-        // Update widgets
-        updateWidgetData(profile: profile)
+            // Update widgets
+            updateWidgetData(profile: profile)
 
-        // Sync to CloudKit in background
-        Task {
-            await syncCoordinator.saveToCloud(newEvent)
+            // Sync to Apple Watch
+            WatchSyncService.shared.syncToWatch()
+
+            // Check if it's time to request a review
+            ReviewService.shared.checkForUsageBasedReview()
+
+            // Check for streak milestone review (for outdoor potty events)
+            if newEvent.type == .plassen && newEvent.location == .buiten {
+                let thirtyDaysAgo = Calendar.current.date(byAdding: .day, value: -30, to: Date()) ?? Date()
+                let allEvents = getEvents(from: thirtyDaysAgo, to: Date())
+                let currentStreak = StreakCalculations.calculateCurrentStreak(events: allEvents)
+                ReviewService.shared.checkForStreakMilestoneReview(currentStreak: currentStreak)
+            }
+        } catch {
+            logger.error("Failed to save event: \(error.localizedDescription)")
+            syncError = error.localizedDescription
         }
-
-        // Check if it's time to request a review (after successful event logging)
-        ReviewService.shared.checkForUsageBasedReview()
-
-        // Check for streak milestone review (for outdoor potty events)
-        if newEvent.type == .plassen && newEvent.location == .buiten {
-            let thirtyDaysAgo = Calendar.current.date(byAdding: .day, value: -30, to: Date()) ?? Date()
-            let allEvents = getEvents(from: thirtyDaysAgo, to: Date())
-            let currentStreak = StreakCalculations.calculateCurrentStreak(events: allEvents)
-            ReviewService.shared.checkForStreakMilestoneReview(currentStreak: currentStreak)
-        }
-
-        // Sync to Apple Watch
-        WatchSyncService.shared.syncToWatch()
     }
 
     /// Delete an event
     func deleteEvent(_ event: PuppyEvent, profile: PuppyProfile? = nil) {
         // Delete associated media files
-        fileStore.deleteMediaFiles(for: event)
+        coreDataStore.deleteMediaFiles(for: event)
 
-        // Remove from in-memory list
-        events.removeAll { $0.id == event.id }
+        do {
+            try coreDataStore.deleteEvent(event)
 
-        // Persist locally
-        let eventsForDate = events.filter { Calendar.current.isDate($0.time, inSameDayAs: currentDate) }
-        fileStore.saveEvents(eventsForDate, for: currentDate)
-
-        // Update widgets
-        updateWidgetData(profile: profile)
-
-        // Delete from CloudKit
-        Task {
-            await syncCoordinator.deleteFromCloud(event)
-        }
-
-        // Sync to Apple Watch
-        WatchSyncService.shared.syncToWatch()
-    }
-
-    /// Update an existing event
-    func updateEvent(_ event: PuppyEvent, profile: PuppyProfile? = nil) {
-        if let index = events.firstIndex(where: { $0.id == event.id }) {
-            // Update modifiedAt timestamp
-            let updatedEvent = event.withUpdatedTimestamp()
-            events[index] = updatedEvent
-            events.sort { $0.time > $1.time }
-
-            let eventsForDate = events.filter { Calendar.current.isDate($0.time, inSameDayAs: currentDate) }
-            fileStore.saveEvents(eventsForDate, for: currentDate)
+            // Remove from in-memory list
+            events.removeAll { $0.id == event.id }
 
             // Update widgets
             updateWidgetData(profile: profile)
 
-            Task {
-                await syncCoordinator.saveToCloud(updatedEvent)
-            }
-
             // Sync to Apple Watch
             WatchSyncService.shared.syncToWatch()
+        } catch {
+            logger.error("Failed to delete event: \(error.localizedDescription)")
+            syncError = error.localizedDescription
         }
     }
 
-    /// Mark an event's photo as synced to CloudKit
-    /// Called by EventSyncCoordinator after successful photo upload
-    private func markPhotoAsSynced(eventId: UUID) async {
-        // Find and update the event in all date files
-        let allEvents = fileStore.readAllEvents()
-        guard let event = allEvents.first(where: { $0.id == eventId }) else {
-            logger.warning("Could not find event \(eventId) to mark photo as synced")
-            return
-        }
+    /// Update an existing event
+    func updateEvent(_ event: PuppyEvent, profile: PuppyProfile? = nil) {
+        let updatedEvent = event.withUpdatedTimestamp()
 
-        var updatedEvent = event
-        updatedEvent.cloudPhotoSynced = true
+        do {
+            try coreDataStore.saveEvent(updatedEvent)
 
-        // Save to the correct date file
-        let eventDate = Calendar.current.startOfDay(for: event.time)
-        var eventsForDate = fileStore.readEvents(for: eventDate)
-        if let index = eventsForDate.firstIndex(where: { $0.id == eventId }) {
-            eventsForDate[index] = updatedEvent
-            fileStore.saveEvents(eventsForDate, for: eventDate)
-        }
-
-        // Update in-memory events if this is the current date
-        if Calendar.current.isDate(eventDate, inSameDayAs: currentDate) {
-            if let index = events.firstIndex(where: { $0.id == eventId }) {
+            if let index = events.firstIndex(where: { $0.id == event.id }) {
                 events[index] = updatedEvent
+                events.sort { $0.time > $1.time }
             }
-        }
 
-        logger.info("Marked photo as synced for event \(eventId)")
+            // Update widgets
+            updateWidgetData(profile: profile)
+
+            // Sync to Apple Watch
+            WatchSyncService.shared.syncToWatch()
+        } catch {
+            logger.error("Failed to update event: \(error.localizedDescription)")
+            syncError = error.localizedDescription
+        }
     }
 
     /// Get all events for a date range
     func getEvents(from startDate: Date, to endDate: Date) -> [PuppyEvent] {
-        fileStore.readEvents(from: startDate, to: endDate)
+        coreDataStore.readEvents(from: startDate, to: endDate)
     }
 
     /// Get all events that have media (photos)
@@ -291,20 +198,10 @@ class EventStore: ObservableObject {
         getEvents(from: startDate, to: endDate).filter { $0.photo != nil }
     }
 
-    /// Get all events for a date range from CloudKit
+    /// Get all events for a date range (async version)
     func getEventsFromCloud(from startDate: Date, to endDate: Date) async -> [PuppyEvent] {
-        guard syncCoordinator.isCloudAvailable else {
-            return getEvents(from: startDate, to: endDate)
-        }
-
-        do {
-            let cloudEvents = try await syncCoordinator.fetchEvents(from: startDate, to: endDate)
-            let localEvents = getEvents(from: startDate, to: endDate)
-            return syncCoordinator.mergeEvents(local: localEvents, cloud: cloudEvents)
-        } catch {
-            logger.warning("Failed to fetch from cloud: \(error.localizedDescription)")
-            return getEvents(from: startDate, to: endDate)
-        }
+        // With Core Data + CloudKit, local and cloud are automatically synced
+        await coreDataStore.readEventsAsync(from: startDate, to: endDate)
     }
 
     /// Get the most recent event of a specific type
@@ -317,7 +214,7 @@ class EventStore: ObservableObject {
         // Check previous days (up to 7 days back)
         var date = Calendar.current.date(byAdding: .day, value: -1, to: currentDate)!
         for _ in 0..<7 {
-            let dayEvents = fileStore.readEvents(for: date)
+            let dayEvents = coreDataStore.readEvents(for: date)
             if let event = dayEvents.filter({ $0.type == type }).first {
                 return event
             }
@@ -327,19 +224,33 @@ class EventStore: ObservableObject {
         return nil
     }
 
-    /// Check if data directory exists
+    /// Check if Core Data has any events
     func dataDirectoryExists() -> Bool {
-        fileStore.dataDirectoryExists()
+        // With Core Data, this always returns true
+        return true
     }
 
-    /// Force a full sync with CloudKit
+    /// Force a refresh (no-op with automatic CloudKit sync)
     func forceSync() async {
-        await syncCoordinator.forceSync()
+        // With NSPersistentCloudKitContainer, sync is automatic
+        // Just reload current data
+        await refreshFromCloud()
     }
 
-    /// Retry pending cloud operations
+    /// Delete all local events (use when switching to shared data)
+    func deleteAllLocalEvents() {
+        logger.info("Deleting all local events for share acceptance")
+        events = []
+        do {
+            try coreDataStore.deleteAllEvents()
+        } catch {
+            logger.error("Failed to delete all events: \(error.localizedDescription)")
+        }
+    }
+
+    /// Retry pending operations (no-op with automatic CloudKit sync)
     func retryPendingOperations() async {
-        await syncCoordinator.retryPendingOperations()
+        // With NSPersistentCloudKitContainer, retries are automatic
     }
 
     // MARK: - Widget Data
@@ -353,23 +264,5 @@ class EventStore: ObservableObject {
             allEvents: allRecentEvents,
             profile: profile
         )
-    }
-
-    // MARK: - File Monitoring
-
-    private func handleFileSystemChange() {
-        logger.debug("Detected file system change, reloading events")
-
-        // Invalidate cache for current date
-        fileStore.invalidateCache(for: currentDate)
-
-        // Reload events
-        let reloadedEvents = fileStore.readEvents(for: currentDate)
-
-        // Only update if different
-        if reloadedEvents.map({ $0.id }) != events.map({ $0.id }) {
-            events = reloadedEvents
-            logger.info("Events updated from file system change")
-        }
     }
 }

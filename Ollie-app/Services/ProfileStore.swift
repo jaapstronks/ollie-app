@@ -2,42 +2,68 @@
 //  ProfileStore.swift
 //  Ollie-app
 //
+//  Manages reading and writing the puppy profile with Core Data and automatic CloudKit sync
+//
 
 import Foundation
+import CoreData
 import OllieShared
 import Combine
 import os
 
-/// Manages reading and writing the puppy profile with CloudKit sync
+/// Manages reading and writing the puppy profile
+/// Architecture: Core Data with NSPersistentCloudKitContainer for automatic CloudKit sync
 @MainActor
 class ProfileStore: ObservableObject {
     @Published private(set) var profile: PuppyProfile?
     @Published private(set) var isLoading: Bool = true
     @Published private(set) var isSyncing: Bool = false
 
-    private let fileManager = FileManager.default
-    private let encoder: JSONEncoder
-    private let decoder: JSONDecoder
-    private let cloudKit = CloudKitService.shared
+    private let persistenceController: PersistenceController
     private let logger = Logger.ollie(category: "ProfileStore")
+    private var cancellables = Set<AnyCancellable>()
 
     /// App Group suite name for sharing with Intents/Widgets
     private static let appGroupSuiteName = Constants.appGroupIdentifier
 
-    // MARK: - UserDefaults Keys
-
-    private enum UserDefaultsKey {
-        static let profileCloudMigrationCompleted = "profileStore.cloudMigrationCompleted"
+    private var viewContext: NSManagedObjectContext {
+        persistenceController.viewContext
     }
 
-    init() {
-        encoder = JSONEncoder()
-        encoder.outputFormatting = .prettyPrinted
-        encoder.dateEncodingStrategy = .iso8601
+    init(persistenceController: PersistenceController = .shared) {
+        self.persistenceController = persistenceController
 
-        decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .iso8601
+        loadProfile()
+        setupRemoteChangeObserver()
+    }
 
+    // MARK: - Setup
+
+    private func setupRemoteChangeObserver() {
+        // Listen for Core Data remote changes (CloudKit sync)
+        NotificationCenter.default.publisher(for: .NSPersistentStoreRemoteChange)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.handleRemoteChange()
+            }
+            .store(in: &cancellables)
+
+        // Listen for share acceptance to reload profile
+        NotificationCenter.default.publisher(for: .cloudKitShareAccepted)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.handleShareAccepted()
+            }
+            .store(in: &cancellables)
+    }
+
+    private func handleRemoteChange() {
+        logger.debug("Detected CloudKit remote change for profile")
+        loadProfile()
+    }
+
+    private func handleShareAccepted() {
+        logger.info("Share accepted - reloading profile from shared store")
         loadProfile()
     }
 
@@ -51,12 +77,22 @@ class ProfileStore: ObservableObject {
     /// Save a new or updated profile
     func saveProfile(_ newProfile: PuppyProfile) {
         let updatedProfile = newProfile.withUpdatedTimestamp()
-        profile = updatedProfile
-        writeProfile()
 
-        // Sync to CloudKit
-        Task {
-            await saveToCloud(updatedProfile)
+        // Save to Core Data
+        if let existing = CDPuppyProfile.fetch(byId: updatedProfile.id, in: viewContext) {
+            existing.update(from: updatedProfile)
+        } else {
+            _ = CDPuppyProfile.create(from: updatedProfile, in: viewContext)
+        }
+
+        do {
+            try persistenceController.save()
+            profile = updatedProfile
+            syncToAppGroup()
+            WidgetDataProvider.shared.updateProfileName(updatedProfile.name)
+            WatchSyncService.shared.syncToWatch()
+        } catch {
+            logger.error("Failed to save profile: \(error.localizedDescription)")
         }
     }
 
@@ -64,23 +100,15 @@ class ProfileStore: ObservableObject {
 
     /// Perform initial sync on app launch
     func initialSync() async {
-        guard cloudKit.isCloudAvailable else {
-            logger.info("CloudKit not available, skipping profile sync")
-            return
-        }
-
-        // Migrate existing local profile to CloudKit if needed
-        if !UserDefaults.standard.bool(forKey: UserDefaultsKey.profileCloudMigrationCompleted) {
-            await migrateLocalProfile()
-        }
-
-        // Fetch from cloud and merge
-        await fetchFromCloud()
+        // With NSPersistentCloudKitContainer, sync is automatic
+        // Just refresh the view context
+        viewContext.refreshAllObjects()
+        loadProfile()
     }
 
     /// Force sync with CloudKit
     func forceSync() async {
-        await fetchFromCloud()
+        await initialSync()
     }
 
     /// Update the meal schedule
@@ -120,9 +148,12 @@ class ProfileStore: ObservableObject {
 
     /// Reset profile (for testing or re-onboarding)
     func resetProfile() {
+        // Delete from Core Data
+        if let existing = CDPuppyProfile.fetchProfile(in: viewContext) {
+            viewContext.delete(existing)
+            try? persistenceController.save()
+        }
         profile = nil
-        let url = profileURL
-        try? fileManager.removeItem(at: url)
     }
 
     // MARK: - Medication Schedule
@@ -168,50 +199,20 @@ class ProfileStore: ObservableObject {
 
     // MARK: - Private Methods
 
-    private var documentsURL: URL {
-        fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
-    }
-
-    private var profileURL: URL {
-        documentsURL.appendingPathComponent(Constants.profileFileName)
-    }
-
     private func loadProfile() {
         isLoading = true
         defer { isLoading = false }
 
-        guard fileManager.fileExists(atPath: profileURL.path),
-              let data = try? Data(contentsOf: profileURL),
-              let loadedProfile = try? decoder.decode(PuppyProfile.self, from: data) else {
+        // Try to load from Core Data
+        guard let cdProfile = CDPuppyProfile.fetchProfile(in: viewContext),
+              let loadedProfile = cdProfile.toPuppyProfile() else {
             profile = nil
             return
         }
 
         profile = loadedProfile
-
-        // Sync to App Group on load for Intents/Widgets
         syncToAppGroup()
-
-        // Also update widget data with profile name on load
         WidgetDataProvider.shared.updateProfileName(loadedProfile.name)
-    }
-
-    private func writeProfile() {
-        guard let profile = profile,
-              let data = try? encoder.encode(profile) else {
-            return
-        }
-
-        try? data.write(to: profileURL, options: .atomic)
-
-        // Sync minimal profile to App Group for Intents/Widgets
-        syncToAppGroup()
-
-        // Update widget data with new profile name
-        WidgetDataProvider.shared.updateProfileName(profile.name)
-
-        // Sync to Apple Watch
-        WatchSyncService.shared.syncToWatch()
     }
 
     // MARK: - App Group Sync
@@ -234,79 +235,5 @@ class ProfileStore: ObservableObject {
     /// Call this if profile was loaded from elsewhere and needs to be shared
     func forceAppGroupSync() {
         syncToAppGroup()
-    }
-
-    // MARK: - CloudKit Operations
-
-    /// Save profile to CloudKit
-    private func saveToCloud(_ profile: PuppyProfile) async {
-        guard cloudKit.isCloudAvailable else {
-            logger.info("CloudKit not available, profile saved locally only")
-            return
-        }
-
-        do {
-            try await cloudKit.saveProfile(profile)
-            logger.info("Profile synced to CloudKit")
-        } catch {
-            logger.warning("Failed to save profile to cloud: \(error.localizedDescription)")
-        }
-    }
-
-    /// Fetch profile from CloudKit and merge with local
-    private func fetchFromCloud() async {
-        guard cloudKit.isCloudAvailable else { return }
-
-        isSyncing = true
-        defer { isSyncing = false }
-
-        do {
-            if let cloudProfile = try await cloudKit.fetchProfile() {
-                let merged = mergeProfiles(local: profile, cloud: cloudProfile)
-                if merged.id != profile?.id || merged.modifiedAt != profile?.modifiedAt {
-                    profile = merged
-                    writeProfile()
-                    logger.info("Profile updated from CloudKit")
-                }
-            }
-        } catch {
-            logger.warning("Failed to fetch profile from cloud: \(error.localizedDescription)")
-        }
-    }
-
-    /// Migrate existing local profile to CloudKit (one-time)
-    private func migrateLocalProfile() async {
-        guard let localProfile = profile else {
-            UserDefaults.standard.set(true, forKey: UserDefaultsKey.profileCloudMigrationCompleted)
-            return
-        }
-
-        logger.info("Migrating local profile to CloudKit")
-
-        do {
-            try await cloudKit.saveProfile(localProfile)
-            UserDefaults.standard.set(true, forKey: UserDefaultsKey.profileCloudMigrationCompleted)
-            logger.info("Profile migration completed")
-        } catch {
-            logger.error("Profile migration failed: \(error.localizedDescription)")
-        }
-    }
-
-    /// Merge local and cloud profiles, preferring newer modifiedAt
-    private func mergeProfiles(local: PuppyProfile?, cloud: PuppyProfile) -> PuppyProfile {
-        guard let local = local else {
-            // No local profile, use cloud
-            return cloud
-        }
-
-        // Same profile ID - use newer modifiedAt
-        if local.id == cloud.id {
-            return local.modifiedAt > cloud.modifiedAt ? local : cloud
-        }
-
-        // Different profile IDs - this shouldn't happen normally
-        // Prefer cloud if it's newer, otherwise keep local
-        logger.warning("Profile ID mismatch: local=\(local.id), cloud=\(cloud.id)")
-        return cloud.modifiedAt > local.modifiedAt ? cloud : local
     }
 }

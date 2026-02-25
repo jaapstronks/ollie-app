@@ -2,15 +2,16 @@
 //  TrainingPlanStore.swift
 //  Ollie-app
 //
-//  Manages training plan data and skill progress tracking with CloudKit sync
+//  Manages training plan data and skill progress tracking with Core Data and automatic CloudKit sync
 //
 
 import Foundation
+import CoreData
 import OllieShared
 import Combine
 import os
 
-/// Manages the training plan and skill progress
+/// Manages the training plan and skill progress with Core Data storage
 @MainActor
 class TrainingPlanStore: ObservableObject {
     @Published private(set) var trainingPlan: TrainingPlan?
@@ -21,19 +22,20 @@ class TrainingPlanStore: ObservableObject {
     /// The start date for the 6-week training program
     static let startDate = Date.fromDateString("2026-02-14") ?? Date()
 
-    private let fileManager = FileManager.default
-    private let encoder: JSONEncoder
-    private let decoder: JSONDecoder
+    private let persistenceController: PersistenceController
     private let logger = Logger.ollie(category: "TrainingPlanStore")
-    private let cloudKit = CloudKitService.shared
+    private var cancellables = Set<AnyCancellable>()
 
     private var eventStore: EventStore?
 
-    // MARK: - UserDefaults Keys
+    private let decoder: JSONDecoder = {
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        return decoder
+    }()
 
-    private enum UserDefaultsKey {
-        static let cloudMigrationCompleted = "trainingPlanStore.cloudMigrationCompleted.v2"
-        static let legacyFormatMigrated = "trainingPlanStore.legacyFormatMigrated"
+    private var viewContext: NSManagedObjectContext {
+        persistenceController.viewContext
     }
 
     // MARK: - Computed Properties
@@ -48,16 +50,27 @@ class TrainingPlanStore: ObservableObject {
         masteredSkills.first { $0.skillId == skillId }
     }
 
-    init() {
-        encoder = JSONEncoder()
-        encoder.outputFormatting = .prettyPrinted
-        encoder.dateEncodingStrategy = .iso8601
-
-        decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .iso8601
+    init(persistenceController: PersistenceController = .shared) {
+        self.persistenceController = persistenceController
 
         loadTrainingPlan()
-        migrateFromLegacyFormat()
+        loadMasteredSkills()
+        setupRemoteChangeObserver()
+    }
+
+    // MARK: - Setup
+
+    private func setupRemoteChangeObserver() {
+        NotificationCenter.default.publisher(for: .NSPersistentStoreRemoteChange)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.handleRemoteChange()
+            }
+            .store(in: &cancellables)
+    }
+
+    private func handleRemoteChange() {
+        logger.debug("Detected CloudKit remote change for mastered skills")
         loadMasteredSkills()
     }
 
@@ -65,114 +78,13 @@ class TrainingPlanStore: ObservableObject {
 
     /// Perform initial sync on app launch
     func initialSync() async {
-        guard cloudKit.isCloudAvailable else {
-            logger.info("CloudKit not available, skipping mastered skills sync")
-            return
-        }
-
-        // Migrate existing local mastered skills to CloudKit if needed
-        if !UserDefaults.standard.bool(forKey: UserDefaultsKey.cloudMigrationCompleted) {
-            await migrateLocalMasteredSkills()
-        }
-
-        // Fetch from cloud and merge
-        await fetchFromCloud()
+        viewContext.refreshAllObjects()
+        loadMasteredSkills()
     }
 
     /// Force sync with CloudKit
     func forceSync() async {
-        await fetchFromCloud()
-    }
-
-    /// Migrate existing local mastered skills to CloudKit (one-time)
-    private func migrateLocalMasteredSkills() async {
-        guard !masteredSkills.isEmpty else {
-            UserDefaults.standard.set(true, forKey: UserDefaultsKey.cloudMigrationCompleted)
-            return
-        }
-
-        logger.info("Migrating \(self.masteredSkills.count) local mastered skills to CloudKit")
-
-        do {
-            try await cloudKit.saveMasteredSkills(masteredSkills)
-            UserDefaults.standard.set(true, forKey: UserDefaultsKey.cloudMigrationCompleted)
-            logger.info("Mastered skills migration completed")
-        } catch {
-            logger.error("Mastered skills migration failed: \(error.localizedDescription)")
-        }
-    }
-
-    /// Fetch mastered skills from CloudKit and merge with local
-    private func fetchFromCloud() async {
-        guard cloudKit.isCloudAvailable else { return }
-
-        isSyncing = true
-        defer { isSyncing = false }
-
-        do {
-            let cloudSkills = try await cloudKit.fetchAllMasteredSkills()
-            let merged = mergeMasteredSkills(local: masteredSkills, cloud: cloudSkills)
-
-            if merged.map({ $0.skillId }).sorted() != masteredSkills.map({ $0.skillId }).sorted() {
-                masteredSkills = merged
-                saveMasteredSkills()
-                logger.info("Mastered skills updated from CloudKit (\(merged.count) skills)")
-            }
-        } catch {
-            logger.warning("Failed to fetch mastered skills from cloud: \(error.localizedDescription)")
-        }
-    }
-
-    /// Save a mastered skill to CloudKit
-    private func saveToCloud(_ skill: MasteredSkill) async {
-        guard cloudKit.isCloudAvailable else { return }
-
-        do {
-            try await cloudKit.saveMasteredSkill(skill)
-            logger.debug("Mastered skill synced to CloudKit: \(skill.skillId)")
-        } catch {
-            logger.warning("Failed to save mastered skill to cloud: \(error.localizedDescription)")
-        }
-    }
-
-    /// Delete a mastered skill from CloudKit
-    private func deleteFromCloud(_ skill: MasteredSkill) async {
-        guard cloudKit.isCloudAvailable else { return }
-
-        do {
-            try await cloudKit.deleteMasteredSkill(skill)
-            logger.debug("Mastered skill deleted from CloudKit: \(skill.skillId)")
-        } catch {
-            logger.warning("Failed to delete mastered skill from cloud: \(error.localizedDescription)")
-        }
-    }
-
-    /// Merge local and cloud mastered skills, preferring newer modifiedAt for conflicts
-    private func mergeMasteredSkills(local: [MasteredSkill], cloud: [MasteredSkill]) -> [MasteredSkill] {
-        var merged: [String: MasteredSkill] = [:]
-
-        // Add all local skills
-        for skill in local {
-            merged[skill.skillId] = skill
-        }
-
-        // Merge cloud skills (prefer newer modifiedAt, or earlier masteredAt for same modifiedAt)
-        for cloudSkill in cloud {
-            if let existing = merged[cloudSkill.skillId] {
-                // Keep the one with newer modifiedAt
-                // If same modifiedAt, keep the one with earlier masteredAt (first to master wins)
-                if cloudSkill.modifiedAt > existing.modifiedAt {
-                    merged[cloudSkill.skillId] = cloudSkill
-                } else if cloudSkill.modifiedAt == existing.modifiedAt &&
-                          cloudSkill.masteredAt < existing.masteredAt {
-                    merged[cloudSkill.skillId] = cloudSkill
-                }
-            } else {
-                merged[cloudSkill.skillId] = cloudSkill
-            }
-        }
-
-        return Array(merged.values).sorted { $0.masteredAt > $1.masteredAt }
+        await initialSync()
     }
 
     // MARK: - Setup
@@ -189,7 +101,7 @@ class TrainingPlanStore: ObservableObject {
         let calendar = Calendar.current
         let days = calendar.dateComponents([.day], from: Self.startDate, to: Date()).day ?? 0
         let week = (days / 7) + 1
-        return max(1, week)  // At minimum week 1
+        return max(1, week)
     }
 
     /// Get the week plan for the current week
@@ -309,34 +221,37 @@ class TrainingPlanStore: ObservableObject {
 
     /// Mark a skill as mastered
     func markAsMastered(_ skillId: String) {
-        // Check if already mastered
         guard !masteredSkillIds.contains(skillId) else { return }
 
         let skill = MasteredSkill(skillId: skillId)
-        masteredSkills.append(skill)
-        saveMasteredSkills()
 
-        // Sync to CloudKit in background
-        Task {
-            await saveToCloud(skill)
+        // Save to Core Data
+        _ = CDMasteredSkill.create(from: skill, in: viewContext)
+
+        do {
+            try persistenceController.save()
+            masteredSkills.append(skill)
+            logger.info("Marked skill as mastered: \(skillId)")
+        } catch {
+            logger.error("Failed to save mastered skill: \(error.localizedDescription)")
         }
-
-        logger.info("Marked skill as mastered: \(skillId)")
     }
 
     /// Unmark a skill as mastered
     func unmarkMastered(_ skillId: String) {
-        guard let skill = masteredSkill(for: skillId) else { return }
+        guard masteredSkill(for: skillId) != nil else { return }
 
-        masteredSkills.removeAll { $0.skillId == skillId }
-        saveMasteredSkills()
+        if let cdSkill = CDMasteredSkill.fetch(bySkillId: skillId, in: viewContext) {
+            viewContext.delete(cdSkill)
 
-        // Delete from CloudKit in background
-        Task {
-            await deleteFromCloud(skill)
+            do {
+                try persistenceController.save()
+                masteredSkills.removeAll { $0.skillId == skillId }
+                logger.info("Unmarked skill as mastered: \(skillId)")
+            } catch {
+                logger.error("Failed to delete mastered skill: \(error.localizedDescription)")
+            }
         }
-
-        logger.info("Unmarked skill as mastered: \(skillId)")
     }
 
     /// Toggle mastered state for a skill
@@ -354,7 +269,6 @@ class TrainingPlanStore: ObservableObject {
         isLoading = true
         defer { isLoading = false }
 
-        // Load from bundled JSON
         guard let url = Bundle.main.url(forResource: "training-plan", withExtension: "json"),
               let data = try? Data(contentsOf: url),
               let plan = try? decoder.decode(TrainingPlan.self, from: data) else {
@@ -367,63 +281,10 @@ class TrainingPlanStore: ObservableObject {
 
     // MARK: - Private: Mastered Skills Persistence
 
-    private var documentsURL: URL {
-        fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
-    }
-
-    private var masteredSkillsURL: URL {
-        documentsURL.appendingPathComponent("mastered-skills-v2.json")
-    }
-
-    private var legacyMasteredSkillsURL: URL {
-        documentsURL.appendingPathComponent("mastered-skills.json")
-    }
-
-    /// Migrate from legacy Set<String> format to new [MasteredSkill] format
-    private func migrateFromLegacyFormat() {
-        guard !UserDefaults.standard.bool(forKey: UserDefaultsKey.legacyFormatMigrated) else { return }
-
-        // Check if legacy file exists
-        guard fileManager.fileExists(atPath: legacyMasteredSkillsURL.path),
-              let data = try? Data(contentsOf: legacyMasteredSkillsURL),
-              let skillIds = try? JSONDecoder().decode(Set<String>.self, from: data) else {
-            UserDefaults.standard.set(true, forKey: UserDefaultsKey.legacyFormatMigrated)
-            return
-        }
-
-        logger.info("Migrating \(skillIds.count) skills from legacy format")
-
-        // Convert to new format with current date as masteredAt
-        // (We don't have the actual mastered date, so we use now as a best guess)
-        let migrationDate = Date()
-        let migratedSkills = skillIds.map { skillId in
-            MasteredSkill(skillId: skillId, masteredAt: migrationDate)
-        }
-
-        // Save in new format
-        masteredSkills = migratedSkills
-        saveMasteredSkills()
-
-        // Mark migration as complete
-        UserDefaults.standard.set(true, forKey: UserDefaultsKey.legacyFormatMigrated)
-        logger.info("Legacy format migration completed")
-    }
-
     private func loadMasteredSkills() {
-        guard fileManager.fileExists(atPath: masteredSkillsURL.path),
-              let data = try? Data(contentsOf: masteredSkillsURL),
-              let skills = try? decoder.decode([MasteredSkill].self, from: data) else {
-            masteredSkills = []
-            return
-        }
-
-        masteredSkills = skills
-        logger.debug("Loaded \(skills.count) mastered skills")
-    }
-
-    private func saveMasteredSkills() {
-        guard let data = try? encoder.encode(masteredSkills) else { return }
-        try? data.write(to: masteredSkillsURL, options: .atomic)
+        let cdSkills = CDMasteredSkill.fetchAllSkills(in: viewContext)
+        masteredSkills = cdSkills.compactMap { $0.toMasteredSkill() }
+        logger.debug("Loaded \(self.masteredSkills.count) mastered skills from Core Data")
     }
 }
 

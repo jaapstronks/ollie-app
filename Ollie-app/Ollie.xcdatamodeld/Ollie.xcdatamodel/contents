@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23231" systemVersion="24D5034f" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
+    <entity name="CDPuppyProfile" representedClassName="CDPuppyProfile" syncable="YES" codeGenerationType="class">
+        <attribute name="birthDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="breed" optional="YES" attributeType="String"/>
+        <attribute name="exerciseConfigData" optional="YES" attributeType="Binary"/>
+        <attribute name="homeDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="legacyPremiumUnlocked" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="mealScheduleData" optional="YES" attributeType="Binary"/>
+        <attribute name="medicationScheduleData" optional="YES" attributeType="Binary"/>
+        <attribute name="modifiedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="name" attributeType="String" defaultValueString=""/>
+        <attribute name="notificationSettingsData" optional="YES" attributeType="Binary"/>
+        <attribute name="predictionConfigData" optional="YES" attributeType="Binary"/>
+        <attribute name="sizeCategory" attributeType="String" defaultValueString="medium"/>
+        <attribute name="walkScheduleData" optional="YES" attributeType="Binary"/>
+    </entity>
+    <entity name="CDPuppyEvent" representedClassName="CDPuppyEvent" syncable="YES" codeGenerationType="class">
+        <attribute name="cloudPhotoSynced" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="durationMin" optional="YES" attributeType="Integer 32" usesScalarValueType="YES"/>
+        <attribute name="exercise" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="latitude" optional="YES" attributeType="Double" usesScalarValueType="YES"/>
+        <attribute name="location" optional="YES" attributeType="String"/>
+        <attribute name="longitude" optional="YES" attributeType="Double" usesScalarValueType="YES"/>
+        <attribute name="modifiedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="note" optional="YES" attributeType="String"/>
+        <attribute name="parentWalkId" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="photo" optional="YES" attributeType="String"/>
+        <attribute name="result" optional="YES" attributeType="String"/>
+        <attribute name="sleepSessionId" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="spotId" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="spotName" optional="YES" attributeType="String"/>
+        <attribute name="thumbnailPath" optional="YES" attributeType="String"/>
+        <attribute name="time" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="type" attributeType="String" defaultValueString=""/>
+        <attribute name="video" optional="YES" attributeType="String"/>
+        <attribute name="weightKg" optional="YES" attributeType="Double" usesScalarValueType="YES"/>
+        <attribute name="who" optional="YES" attributeType="String"/>
+        <fetchIndex name="byTimeIndex">
+            <fetchIndexElement property="time" type="Binary" order="descending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="CDWalkSpot" representedClassName="CDWalkSpot" syncable="YES" codeGenerationType="class">
+        <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="isFavorite" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="latitude" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="longitude" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="modifiedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="name" attributeType="String" defaultValueString=""/>
+        <attribute name="notes" optional="YES" attributeType="String"/>
+        <attribute name="visitCount" attributeType="Integer 32" defaultValueString="1" usesScalarValueType="YES"/>
+    </entity>
+    <entity name="CDMasteredSkill" representedClassName="CDMasteredSkill" syncable="YES" codeGenerationType="class">
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="masteredAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="modifiedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="skillId" attributeType="String" defaultValueString=""/>
+    </entity>
+    <entity name="CDMedicationCompletion" representedClassName="CDMedicationCompletion" syncable="YES" codeGenerationType="class">
+        <attribute name="completedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="medicationId" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="modifiedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="timeId" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <fetchIndex name="byDateIndex">
+            <fetchIndexElement property="date" type="Binary" order="descending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="CDExposure" representedClassName="CDExposure" syncable="YES" codeGenerationType="class">
+        <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="distance" attributeType="String" defaultValueString=""/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="itemId" attributeType="String" defaultValueString=""/>
+        <attribute name="modifiedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="note" optional="YES" attributeType="String"/>
+        <attribute name="reaction" attributeType="String" defaultValueString=""/>
+        <fetchIndex name="byDateIndex">
+            <fetchIndexElement property="date" type="Binary" order="descending"/>
+        </fetchIndex>
+    </entity>
+</model>
