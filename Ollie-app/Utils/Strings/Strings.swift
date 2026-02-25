@@ -19,6 +19,7 @@ enum Strings {
     // - Strings+Settings.swift: Settings, Meals, Notifications
     // - Strings+Health.swift: Health, Medications
     // - Strings+Walks.swift: Walks, WalkLocations, Spots
+    // - Strings+Places.swift: Places tab (combined spots + moments)
     // - Strings+Onboarding.swift: Onboarding, SizeCategory
     // - Strings+Premium.swift: Premium, Siri
     // - Strings+Widgets.swift: Widgets, PushNotifications

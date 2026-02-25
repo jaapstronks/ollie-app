@@ -59,6 +59,7 @@ extension Strings {
     // MARK: - Quick Log Sheet
     enum QuickLogSheet {
         static let time = String(localized: "Time")
+        static let timeHint = String(localized: "Double-tap to change time")
         static let where_ = String(localized: "Where?")
         static let what = String(localized: "What?")
         static let noteOptional = String(localized: "Note (optional)")

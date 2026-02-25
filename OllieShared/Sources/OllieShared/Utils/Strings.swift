@@ -162,6 +162,7 @@ public enum Strings {
         public static var manageSharing: String { String(localized: "Manage sharing", bundle: Strings.bundle) }
         public static var stopSharing: String { String(localized: "Stop sharing", bundle: Strings.bundle) }
         public static var shareWithPartner: String { String(localized: "Share with partner", bundle: Strings.bundle) }
+        public static var inviteAnother: String { String(localized: "Invite another person", bundle: Strings.bundle) }
         public static var sharing: String { String(localized: "Sharing", bundle: Strings.bundle) }
         public static var sharingDescription: String { String(localized: "Share your puppy's data with your partner so you can both track and log events.", bundle: Strings.bundle) }
         public static var stopSharingConfirm: String { String(localized: "Are you sure you want to stop sharing? The other person will lose access.", bundle: Strings.bundle) }
@@ -288,6 +289,7 @@ public enum Strings {
         public static var lunchWalk: String { String(localized: "Lunch walk", bundle: Strings.bundle) }
         public static var earlyAfternoon: String { String(localized: "Early afternoon", bundle: Strings.bundle) }
         public static var afternoonWalk: String { String(localized: "Afternoon walk", bundle: Strings.bundle) }
+        public static var lateAfternoon: String { String(localized: "Late afternoon", bundle: Strings.bundle) }
         public static var eveningWalk: String { String(localized: "Evening walk", bundle: Strings.bundle) }
         public static var lateEvening: String { String(localized: "Late evening", bundle: Strings.bundle) }
         public static var nightWalk: String { String(localized: "Night walk", bundle: Strings.bundle) }
@@ -595,6 +597,59 @@ public enum Strings {
         }
         public static func hoursMinutesAgo(hours: Int, minutes: Int) -> String {
             String(localized: "\(hours)h\(minutes)m ago", bundle: Strings.bundle)
+        }
+    }
+
+    // MARK: - Walk Schedule
+    public enum WalkSchedule {
+        // Mode labels
+        public static var modeFlexible: String { String(localized: "Flexible", bundle: Strings.bundle) }
+        public static var modeStrict: String { String(localized: "Strict", bundle: Strings.bundle) }
+        public static var modeFlexibleDescription: String { String(localized: "Walk times adjust based on when the last walk happened. Good for adapting to real-world timing.", bundle: Strings.bundle) }
+        public static var modeStrictDescription: String { String(localized: "Walk times are fixed to the scheduled times. Useful for strict routines or multiple caretakers.", bundle: Strings.bundle) }
+
+        // Duration rule labels
+        public static func minutesPerMonthRule(_ minutes: Int) -> String {
+            String(localized: "\(minutes) min per month of age", bundle: Strings.bundle)
+        }
+        public static func fixedMinutesRule(_ minutes: Int) -> String {
+            String(localized: "Fixed: \(minutes) min max", bundle: Strings.bundle)
+        }
+
+        // Walk numbering
+        public static func walkNumber(_ n: Int) -> String {
+            String(localized: "Walk \(n)", bundle: Strings.bundle)
+        }
+
+        // Section headers
+        public static var schedulingMode: String { String(localized: "Scheduling Mode", bundle: Strings.bundle) }
+        public static var walksSection: String { String(localized: "Walks", bundle: Strings.bundle) }
+        public static var timingSection: String { String(localized: "Timing", bundle: Strings.bundle) }
+        public static var dayBoundaries: String { String(localized: "Day Boundaries", bundle: Strings.bundle) }
+        public static var exerciseLimits: String { String(localized: "Exercise Limits", bundle: Strings.bundle) }
+
+        // Editor labels
+        public static var title: String { String(localized: "Walk Schedule", bundle: Strings.bundle) }
+        public static var addWalk: String { String(localized: "Add walk", bundle: Strings.bundle) }
+        public static var editWalk: String { String(localized: "Edit walk", bundle: Strings.bundle) }
+        public static var intervalBetweenWalks: String { String(localized: "Interval between walks", bundle: Strings.bundle) }
+        public static var firstWalkAfter: String { String(localized: "First walk after", bundle: Strings.bundle) }
+        public static var lastWalkBefore: String { String(localized: "Last walk before", bundle: Strings.bundle) }
+        public static var maxDurationPerWalk: String { String(localized: "Max duration per walk", bundle: Strings.bundle) }
+        public static var minutesPerMonth: String { String(localized: "Minutes per month of age", bundle: Strings.bundle) }
+
+        // Footer explanations
+        public static var intervalFooter: String { String(localized: "In flexible mode, this is the minimum time between walks.", bundle: Strings.bundle) }
+        public static func maxDurationFooter(age: Int, minutes: Int) -> String {
+            String(localized: "At \(age) months: max \(minutes) min", bundle: Strings.bundle)
+        }
+
+        // Summary
+        public static func walksPerDay(_ count: Int) -> String {
+            String(localized: "\(count) walks/day", bundle: Strings.bundle)
+        }
+        public static func intervalSummary(_ minutes: Int) -> String {
+            String(localized: "~\(minutes) min interval", bundle: Strings.bundle)
         }
     }
 }

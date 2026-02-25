@@ -12,6 +12,12 @@ extension Strings {
     enum Settings {
         static let title = String(localized: "Settings")
 
+        // Hub navigation
+        static let dogProfile = String(localized: "Dog Profile")
+        static let dogProfileSubtitle = String(localized: "Walks, meals, meds, spots")
+        static let appSettings = String(localized: "App Settings")
+        static let appSettingsSubtitle = String(localized: "Subscription, notifications, sync")
+
         // Profile section
         static let profile = String(localized: "Profile")
         static let name = String(localized: "Name")
@@ -42,6 +48,7 @@ extension Strings {
         // Appearance section
         static let appearance = String(localized: "Appearance")
         static let theme = String(localized: "Theme")
+        static let soundFeedback = String(localized: "Sound feedback")
 
         // Sync section
         static let sync = String(localized: "Sync")
@@ -71,6 +78,7 @@ extension Strings {
         static let importConfirmMessage = String(localized: "Do you want to import data from GitHub? This will fetch all available days.")
 
         static let resetProfile = String(localized: "Reset profile")
+        static let advanced = String(localized: "Advanced")
     }
 
     // MARK: - Exercise Edit View

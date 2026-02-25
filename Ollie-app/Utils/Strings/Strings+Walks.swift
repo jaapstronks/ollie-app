@@ -17,6 +17,7 @@ extension Strings {
         static let lunchWalk = String(localized: "Lunch walk")
         static let earlyAfternoon = String(localized: "Early afternoon")
         static let afternoonWalk = String(localized: "Afternoon walk")
+        static let lateAfternoon = String(localized: "Late afternoon")
         static let eveningWalk = String(localized: "Evening walk")
         static let lateEvening = String(localized: "Late evening")
         static let nightWalk = String(localized: "Night walk")
