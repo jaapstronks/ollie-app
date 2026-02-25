@@ -40,12 +40,15 @@ struct TrainTabView: View {
                 VStack(spacing: 20) {
                     // Section 1: Potty Progress
                     pottyProgressSection
+                        .animatedAppear(delay: 0)
 
-                    // Section 2: Socialization
-                    socializationSection
-
-                    // Section 3: Skills
+                    // Section 2: Skills
                     skillsSection
+                        .animatedAppear(delay: 0.08)
+
+                    // Section 3: Socialization
+                    socializationSection
+                        .animatedAppear(delay: 0.16)
                 }
                 .padding()
                 .padding(.bottom, 84) // Space for FAB
@@ -169,40 +172,7 @@ struct TrainTabView: View {
 
     @ViewBuilder
     private var skillsSection: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            // Section header
-            HStack(spacing: 8) {
-                Image(systemName: "graduationcap.fill")
-                    .font(.system(size: 14, weight: .semibold))
-                    .foregroundStyle(Color.ollieAccent)
-                    .accessibilityHidden(true)
-
-                Text(Strings.Train.skills)
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
-                    .foregroundStyle(.secondary)
-
-                Spacer()
-
-                // See all link
-                NavigationLink {
-                    TrainingView(eventStore: eventStore)
-                } label: {
-                    HStack(spacing: 4) {
-                        Text(Strings.Common.seeAll)
-                        Image(systemName: "chevron.right")
-                    }
-                    .font(.caption)
-                    .fontWeight(.medium)
-                    .foregroundStyle(Color.ollieAccent)
-                }
-            }
-            .padding(.horizontal, 4)
-            .accessibilityAddTraits(.isHeader)
-
-            // Embedded skills preview
-            SkillsPreviewCard(eventStore: eventStore)
-        }
+        SkillsPreviewCard(eventStore: eventStore)
     }
 }
 
@@ -217,6 +187,16 @@ private struct SkillsPreviewCard: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
+            // Header (matching Potty Progress and Socialization style)
+            HStack {
+                Image(systemName: "graduationcap.fill")
+                    .foregroundStyle(Color.ollieAccent)
+                Text(Strings.Train.skills)
+                    .font(.headline)
+                    .fontWeight(.semibold)
+                Spacer()
+            }
+
             if let weekPlan = trainingStore.currentWeekPlan {
                 // Week info
                 HStack {
@@ -263,6 +243,37 @@ private struct SkillsPreviewCard: View {
                         }
                     }
                 }
+
+                // "See all" link at the bottom (matching "All Categories" style)
+                Divider()
+
+                NavigationLink {
+                    TrainingView(eventStore: eventStore)
+                } label: {
+                    HStack(spacing: 12) {
+                        Image(systemName: "list.bullet")
+                            .font(.title3)
+                            .foregroundStyle(.secondary)
+                            .frame(width: 40, height: 40)
+                            .background(
+                                Circle()
+                                    .fill(Color.secondary.opacity(colorScheme == .dark ? 0.2 : 0.1))
+                            )
+
+                        Text(Strings.Common.seeAll)
+                            .font(.subheadline)
+                            .fontWeight(.medium)
+                            .foregroundStyle(Color.ollieAccent)
+
+                        Spacer()
+
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 12, weight: .semibold))
+                            .foregroundStyle(.secondary)
+                    }
+                    .padding(.vertical, 4)
+                }
+                .buttonStyle(.plain)
             } else {
                 // Loading or no plan
                 Text(Strings.Common.loading)

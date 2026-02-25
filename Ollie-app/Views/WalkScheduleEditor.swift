@@ -162,12 +162,12 @@ struct WalkScheduleEditor: View {
 
             Stepper(
                 value: $schedule.dayEndHour,
-                in: 18...24
+                in: 20...24
             ) {
                 HStack {
                     Text(Strings.WalkScheduleEditor.lastWalkBefore)
                     Spacer()
-                    Text(String(format: "%02d:00", schedule.dayEndHour))
+                    Text(schedule.dayEndHour == 24 ? "00:00" : String(format: "%02d:00", schedule.dayEndHour))
                         .foregroundColor(.secondary)
                 }
             }

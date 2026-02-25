@@ -320,22 +320,14 @@ struct AddEditMedicationSheet: View {
     // MARK: - Helpers
 
     private func timeFromString(_ string: String) -> Date {
-        let parts = string.split(separator: ":")
-        guard parts.count == 2,
-              let hour = Int(parts[0]),
-              let minute = Int(parts[1]) else {
+        guard let (hour, minute) = string.parseTimeComponents() else {
             return Date()
         }
-        var components = DateComponents()
-        components.hour = hour
-        components.minute = minute
-        return Calendar.current.date(from: components) ?? Date()
+        return Date.fromTimeComponents(hour: hour, minute: minute)
     }
 
     private func timeToString(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "HH:mm"
-        return formatter.string(from: date)
+        date.timeString
     }
 }
 

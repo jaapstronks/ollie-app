@@ -16,7 +16,6 @@ struct NotificationSettingsView: View {
 
     // Local state for editing
     @State private var settings: NotificationSettings = NotificationSettings.defaultSettings()
-    @State private var walkSchedule: WalkSchedule = WalkSchedule.defaultSchedule()
     @State private var showingPermissionAlert = false
 
     var body: some View {
@@ -219,31 +218,6 @@ struct NotificationSettingsView: View {
                     in: 5...30,
                     step: 5
                 )
-
-                // Walk schedule
-                ForEach($walkSchedule.walks) { $walk in
-                    HStack {
-                        TextField(Strings.Notifications.label, text: $walk.label)
-                            .textFieldStyle(.plain)
-                        Spacer()
-                        TimePickerField(timeString: $walk.targetTime)
-                    }
-                }
-
-                Button {
-                    addWalk()
-                } label: {
-                    Label(Strings.Notifications.addWalk, systemImage: "plus")
-                }
-
-                if walkSchedule.walks.count > 1 {
-                    Button(role: .destructive) {
-                        HapticFeedback.warning()
-                        removeLastWalk()
-                    } label: {
-                        Label(Strings.Notifications.removeLast, systemImage: "minus")
-                    }
-                }
             }
         } header: {
             Text(Strings.Notifications.walksSection)
@@ -263,15 +237,11 @@ struct NotificationSettingsView: View {
     private func loadCurrentSettings() {
         if let profile = profileStore.profile {
             settings = profile.notificationSettings
-            walkSchedule = profile.walkSchedule
         }
     }
 
     private func saveSettings() {
-        guard var profile = profileStore.profile else { return }
-        profile.notificationSettings = settings
-        profile.walkSchedule = walkSchedule
-        profileStore.saveProfile(profile)
+        profileStore.updateNotificationSettings(settings)
         dismiss()
     }
 
@@ -290,19 +260,6 @@ struct NotificationSettingsView: View {
         if let url = URL(string: UIApplication.openSettingsURLString) {
             UIApplication.shared.open(url)
         }
-    }
-
-    private func addWalk() {
-        let newWalk = WalkSchedule.ScheduledWalk(
-            label: Strings.Notifications.walkNumber(walkSchedule.walks.count + 1),
-            targetTime: "12:00"
-        )
-        walkSchedule.walks.append(newWalk)
-    }
-
-    private func removeLastWalk() {
-        guard walkSchedule.walks.count > 1 else { return }
-        walkSchedule.walks.removeLast()
     }
 }
 
