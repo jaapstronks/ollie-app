@@ -13,6 +13,7 @@ struct InsightsHealthSection: View {
     let latestWeight: (weight: Double, date: Date)?
     let weightDelta: (delta: Double, previousDate: Date)?
     @ObservedObject var viewModel: TimelineViewModel
+    @ObservedObject var milestoneStore: MilestoneStore
     @Binding var showWeightSheet: Bool
 
     @Environment(\.colorScheme) private var colorScheme
@@ -30,7 +31,7 @@ struct InsightsHealthSection: View {
 
                 // See all link
                 NavigationLink {
-                    HealthView(viewModel: viewModel)
+                    HealthView(viewModel: viewModel, milestoneStore: milestoneStore)
                 } label: {
                     HStack(spacing: 4) {
                         Text(Strings.Common.seeAll)

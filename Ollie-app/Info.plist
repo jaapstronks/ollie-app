@@ -10,6 +10,8 @@
 	<string>Ollie uses your location to save walk spots so you can easily log walks at your favorite places.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Ollie wants access to your photos to add moments.</string>
+	<key>NSCalendarsFullAccessUsageDescription</key>
+	<string>Ollie uses your calendar to add reminders for upcoming milestones like vaccinations and vet visits.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>

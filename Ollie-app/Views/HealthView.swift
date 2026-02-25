@@ -10,9 +10,9 @@ import OllieShared
 /// Main health view showing weight tracking and health milestones
 struct HealthView: View {
     @ObservedObject var viewModel: TimelineViewModel
+    @ObservedObject var milestoneStore: MilestoneStore
 
     @State private var showWeightSheet = false
-    @State private var milestones: [HealthMilestone] = []
 
     @Environment(\.colorScheme) private var colorScheme
 
@@ -67,9 +67,6 @@ struct HealthView: View {
             WeightLogSheet(isPresented: $showWeightSheet) { weight in
                 logWeight(weight)
             }
-        }
-        .onAppear {
-            loadMilestones()
         }
     }
 
@@ -179,9 +176,13 @@ struct HealthView: View {
             .padding(.horizontal, 4)
 
             // Timeline
-            HealthTimelineView(milestones: milestones) { milestone in
-                toggleMilestone(milestone)
-            }
+            HealthTimelineView(
+                milestones: milestoneStore.milestones,
+                birthDate: profile?.birthDate ?? Date(),
+                onToggle: { milestone in
+                    milestoneStore.toggleMilestoneCompletion(milestone)
+                }
+            )
             .padding()
             .glassCard(tint: .danger)
         }
@@ -196,21 +197,6 @@ struct HealthView: View {
             weightKg: weight
         )
         viewModel.addEvent(event)
-    }
-
-    private func loadMilestones() {
-        guard let birthDate = profile?.birthDate else { return }
-
-        // TODO: Later, load saved milestones from storage
-        // For now, create defaults based on birth date
-        milestones = DefaultMilestones.create(birthDate: birthDate)
-    }
-
-    private func toggleMilestone(_ milestone: HealthMilestone) {
-        if let index = milestones.firstIndex(where: { $0.id == milestone.id }) {
-            milestones[index].isDone.toggle()
-            // TODO: Save to storage
-        }
     }
 
     // MARK: - Helpers
@@ -228,9 +214,10 @@ struct HealthView: View {
 #Preview {
     let eventStore = EventStore()
     let profileStore = ProfileStore()
+    let milestoneStore = MilestoneStore()
     let viewModel = TimelineViewModel(eventStore: eventStore, profileStore: profileStore)
 
-    return NavigationStack {
-        HealthView(viewModel: viewModel)
+    NavigationStack {
+        HealthView(viewModel: viewModel, milestoneStore: milestoneStore)
     }
 }

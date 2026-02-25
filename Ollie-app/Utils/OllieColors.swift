@@ -49,6 +49,32 @@ extension Color {
     /// Adjusted for WCAG 4.5:1 contrast ratio
     static let ollieMuted = Color(hex: "6B7280")
 
+    // MARK: - Milestone Category Colors
+
+    /// Health milestones — medical red
+    static let ollieHealthRed = Color(hex: "E85555")
+
+    /// Health tint — light background
+    static let ollieHealthRedTint = Color(hex: "FDECEC")
+
+    /// Developmental milestones — purple
+    static let ollieDevelopmental = Color(hex: "9B7BC2")
+
+    /// Developmental tint — light background
+    static let ollieDevelopmentalTint = Color(hex: "F3EDF9")
+
+    /// Administrative milestones — blue
+    static let ollieAdministrative = Color(hex: "5BA4B5")
+
+    /// Administrative tint — light background
+    static let ollieAdministrativeTint = Color(hex: "EBF5F7")
+
+    /// Custom milestones — orange
+    static let ollieCustomOrange = Color(hex: "E8A855")
+
+    /// Custom tint — light background
+    static let ollieCustomOrangeTint = Color(hex: "FDF5E8")
+
     // MARK: - Background Colors
 
     /// Warm cream background (light mode)

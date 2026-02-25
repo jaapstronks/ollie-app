@@ -28,6 +28,18 @@ extension Strings {
         static let allow = String(localized: "Allow")
         static let on = String(localized: "On")
         static let off = String(localized: "Off")
+        static let remove = String(localized: "Remove")
+
+        // Error messages
+        static let saveFailed = String(localized: "Failed to save. Please try again.")
+        static let deleteFailed = String(localized: "Failed to delete. Please try again.")
+        static let notFound = String(localized: "Item not found.")
+        static let calendarSyncFailed = String(localized: "Failed to sync with calendar")
+        static let calendarAccessDenied = String(localized: "Calendar access denied. Enable in Settings.")
+
+        // Photo picker
+        static let takePhoto = String(localized: "Take Photo")
+        static let chooseFromLibrary = String(localized: "Choose from Library")
 
         // Time units
         static let minutes = String(localized: "min")

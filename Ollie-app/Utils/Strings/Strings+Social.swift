@@ -105,5 +105,17 @@ extension Strings {
         // Empty state
         static let noExposuresYet = String(localized: "No exposures logged yet")
         static let tapToLogFirst = String(localized: "Tap to log your first exposure")
+
+        // Week timeline
+        static let socializationWindowTitle = String(localized: "Socialization Window")
+        static let complete = String(localized: "Complete")
+        static let current = String(localized: "Current")
+        static let upcoming = String(localized: "Upcoming")
+        static func weeksLeft(_ weeks: Int) -> String {
+            String(localized: "\(weeks) weeks left")
+        }
+        static func thisWeekProgress(_ count: Int) -> String {
+            String(localized: "\(count) exposures this week")
+        }
     }
 }

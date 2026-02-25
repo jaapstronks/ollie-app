@@ -32,6 +32,9 @@ extension Strings {
         static let featurePhotoVideo = String(localized: "Photo & Video Attachments")
         static let featureUnlimitedSharing = String(localized: "Unlimited Partner Sharing")
         static let featureExportPDF = String(localized: "Export to PDF")
+        static let featureCalendarIntegration = String(localized: "Calendar Integration")
+        static let featureCustomMilestones = String(localized: "Custom Milestones")
+        static let featureMilestoneNotes = String(localized: "Milestone Notes & Photos")
 
         // Feature descriptions
         static let featurePottyPredictionsDesc = String(localized: "AI predicts when your puppy needs to go based on patterns")
@@ -43,6 +46,9 @@ extension Strings {
         static let featurePhotoVideoDesc = String(localized: "Attach photos and videos to any event")
         static let featureUnlimitedSharingDesc = String(localized: "Share with your whole family, not just one partner")
         static let featureExportPDFDesc = String(localized: "Export logs and reports for your vet")
+        static let featureCalendarIntegrationDesc = String(localized: "Add milestones to your calendar with reminders")
+        static let featureCustomMilestonesDesc = String(localized: "Create your own custom milestones and events")
+        static let featureMilestoneNotesDesc = String(localized: "Add notes and photos when completing milestones")
 
         // Pricing
         static let yearly = String(localized: "Yearly")

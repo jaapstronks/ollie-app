@@ -84,4 +84,33 @@
             <fetchIndexElement property="date" type="Binary" order="descending"/>
         </fetchIndex>
     </entity>
+    <entity name="CDMilestone" representedClassName="CDMilestone" syncable="YES" codeGenerationType="class">
+        <attribute name="calendarEventID" optional="YES" attributeType="String"/>
+        <attribute name="category" attributeType="String" defaultValueString="health"/>
+        <attribute name="completedDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="completionNotes" optional="YES" attributeType="String"/>
+        <attribute name="completionPhotoID" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="detailKey" optional="YES" attributeType="String"/>
+        <attribute name="fixedDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="icon" attributeType="String" defaultValueString="heart.fill"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="isActionable" attributeType="Boolean" defaultValueString="YES" usesScalarValueType="YES"/>
+        <attribute name="isCompleted" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="isCustom" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="isRecurring" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="isUserDismissable" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="labelKey" attributeType="String" defaultValueString=""/>
+        <attribute name="modifiedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="recurrenceMonths" optional="YES" attributeType="Integer 32" usesScalarValueType="YES"/>
+        <attribute name="reminderDaysBefore" attributeType="Integer 32" defaultValueString="3" usesScalarValueType="YES"/>
+        <attribute name="sortOrder" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="targetAgeDays" optional="YES" attributeType="Integer 32" usesScalarValueType="YES"/>
+        <attribute name="targetAgeMonths" optional="YES" attributeType="Integer 32" usesScalarValueType="YES"/>
+        <attribute name="targetAgeWeeks" optional="YES" attributeType="Integer 32" usesScalarValueType="YES"/>
+        <attribute name="vetClinicName" optional="YES" attributeType="String"/>
+        <fetchIndex name="bySortOrderIndex">
+            <fetchIndexElement property="sortOrder" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
 </model>

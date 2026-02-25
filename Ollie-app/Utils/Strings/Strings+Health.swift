@@ -67,6 +67,94 @@ extension Strings {
         static let weightKg = String(localized: "Weight (kg)")
         static let enterWeight = String(localized: "Enter weight")
         static let weightPlaceholder = String(localized: "e.g. 8.5")
+
+        // Milestone sections
+        static let upcomingMilestones = String(localized: "Coming Up")
+        static let completedMilestones = String(localized: "Completed")
+        static let addMilestone = String(localized: "Add Milestone")
+        static let completeMilestone = String(localized: "Mark Complete")
+        static let uncompleteMilestone = String(localized: "Mark Incomplete")
+
+        // Milestone completion sheet
+        static let completeTitle = String(localized: "Complete Milestone")
+        static let completionDate = String(localized: "Completion date")
+        static let addNotes = String(localized: "Add notes")
+        static let notesPlaceholder = String(localized: "Optional notes about this milestone...")
+        static let vetClinic = String(localized: "Vet clinic")
+        static let vetClinicPlaceholder = String(localized: "Clinic name (optional)")
+        static let addToCalendar = String(localized: "Add to Calendar")
+        static let removeFromCalendar = String(localized: "Remove from Calendar")
+        static let addPhoto = String(localized: "Add Photo")
+
+        // Milestone labels (localized versions of labelKeys)
+        static let milestoneFirstDewormingBreeder = String(localized: "First deworming (breeder)")
+        static let milestoneFirstVaccination = String(localized: "First vaccination (DHP + Lepto)")
+        static let milestoneFirstVaccinationDetail = String(localized: "Core vaccination at 8 weeks")
+        static let milestoneFirstVetVisit = String(localized: "First vet visit")
+        static let milestoneFirstDewormingHome = String(localized: "First deworming (home)")
+        static let milestoneSecondVaccination = String(localized: "Second vaccination (DHP + Lepto + Rabies)")
+        static let milestoneSecondVaccinationDetail = String(localized: "Booster vaccination at 12 weeks")
+        static let milestoneThirdVaccination = String(localized: "Third vaccination (cocktail)")
+        static let milestoneThirdVaccinationDetail = String(localized: "Final puppy vaccination at 16 weeks")
+        static let milestoneNeuteredDiscussion = String(localized: "Spay/neuter discussion with vet")
+        static let milestoneYearlyVaccination = String(localized: "Yearly vaccination")
+
+        // Developmental milestones
+        static let milestoneSocializationStart = String(localized: "Socialization window begins")
+        static let milestoneSocializationStartDetail = String(localized: "Critical period for positive experiences starts now")
+        static let milestoneSocializationPeak = String(localized: "Peak socialization period")
+        static let milestoneSocializationPeakDetail = String(localized: "Most receptive time for new experiences")
+        static let milestoneSocializationEnd = String(localized: "Socialization window closing")
+        static let milestoneSocializationEndDetail = String(localized: "Window is narrowing - focus on remaining exposures")
+        static let milestoneFearPeriod1 = String(localized: "First fear period")
+        static let milestoneFearPeriod1Detail = String(localized: "Be extra gentle with new experiences")
+        static let milestoneFearPeriod2 = String(localized: "Second fear period")
+        static let milestoneFearPeriod2Detail = String(localized: "Temporary increase in fearfulness - stay patient")
+
+        // Administrative milestones
+        static let milestoneMicrochipRegistration = String(localized: "Microchip registration")
+        static let milestoneInsuranceSetup = String(localized: "Pet insurance setup")
+        static let milestoneInsuranceSetupDetail = String(localized: "Consider health insurance coverage")
+        static let milestoneDogLicense = String(localized: "Dog license")
+        static let milestoneDogLicenseDetail = String(localized: "Register with your municipality if required")
+
+        // Custom milestone (Ollie+)
+        static let customMilestoneTitle = String(localized: "Title")
+        static let customMilestoneDate = String(localized: "Date")
+        static let customMilestoneCategory = String(localized: "Category")
+        static let customMilestoneReminder = String(localized: "Reminder")
+        static let customMilestoneReminderDays = String(localized: "days before")
+
+        // Milestone timing
+        static let today = String(localized: "Today")
+        static let photoAdded = String(localized: "Photo added")
+        static let addPhotoButton = String(localized: "Add photo")
+        static let reminderNextOccurrence = String(localized: "Add reminder for next occurrence")
+        static let optionalNotes = String(localized: "Optional notes about this milestone")
+        static let calendarHelpText = String(localized: "Add this milestone to your default calendar with a reminder")
+
+        static func inDays(_ days: Int) -> String {
+            String(localized: "in \(days)d")
+        }
+
+        static func daysOverdue(_ days: Int) -> String {
+            String(localized: "\(days)d overdue")
+        }
+
+        static func daysAgo(_ days: Int) -> String {
+            String(localized: "\(days)d ago")
+        }
+    }
+
+    // MARK: - This Week Card
+    enum ThisWeek {
+        static let title = String(localized: "This Week")
+        static let socializationActive = String(localized: "Socialization active")
+        static let windowEnded = String(localized: "Window ended")
+        static let exposures = String(localized: "exposures")
+        static let categories = String(localized: "categories")
+        static let focusOn = String(localized: "Focus on:")
+        static let upcoming = String(localized: "Coming up")
     }
 
     // MARK: - Medications
