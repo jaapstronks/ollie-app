@@ -11,25 +11,51 @@ import OllieShared
 /// Contains only what intents need to function
 struct SharedProfile: Codable {
     let name: String
-    let isPremiumUnlocked: Bool
-    let freeDaysRemaining: Int
+    let legacyPremiumUnlocked: Bool
 
-    /// Whether the user can log events (premium or still in free period)
+    /// Core logging is always free now - no time-gate
     var canLogEvents: Bool {
-        isPremiumUnlocked || freeDaysRemaining > 0
+        true  // Always true in the new subscription model
     }
 
     /// Create from full PuppyProfile
     init(from profile: PuppyProfile) {
         self.name = profile.name
-        self.isPremiumUnlocked = profile.isPremiumUnlocked
-        self.freeDaysRemaining = profile.freeDaysRemaining
+        self.legacyPremiumUnlocked = profile.legacyPremiumUnlocked
     }
 
     /// Direct initializer for decoding
-    init(name: String, isPremiumUnlocked: Bool, freeDaysRemaining: Int) {
+    init(name: String, legacyPremiumUnlocked: Bool) {
         self.name = name
-        self.isPremiumUnlocked = isPremiumUnlocked
-        self.freeDaysRemaining = freeDaysRemaining
+        self.legacyPremiumUnlocked = legacyPremiumUnlocked
+    }
+
+    // MARK: - Codable Migration
+
+    private enum CodingKeys: String, CodingKey {
+        case name
+        case isPremiumUnlocked  // Legacy key for backwards compatibility
+        case legacyPremiumUnlocked
+        case freeDaysRemaining  // Legacy key (ignored)
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        name = try container.decode(String.self, forKey: .name)
+
+        // Try new field first, fall back to old
+        if let legacy = try container.decodeIfPresent(Bool.self, forKey: .legacyPremiumUnlocked) {
+            legacyPremiumUnlocked = legacy
+        } else if let old = try container.decodeIfPresent(Bool.self, forKey: .isPremiumUnlocked) {
+            legacyPremiumUnlocked = old
+        } else {
+            legacyPremiumUnlocked = false
+        }
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(name, forKey: .name)
+        try container.encode(legacyPremiumUnlocked, forKey: .legacyPremiumUnlocked)
     }
 }

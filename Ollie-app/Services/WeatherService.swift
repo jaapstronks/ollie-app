@@ -112,7 +112,7 @@ class WeatherService: ObservableObject {
         guard !upcoming.isEmpty else { return nil }
 
         // Check for incoming rain
-        if let rainHour = upcoming.first(where: { $0.precipProbability > 60 }) {
+        if upcoming.contains(where: { $0.precipProbability > 60 }) {
             return WeatherAlert(
                 icon: "cloud.rain.fill",
                 message: Strings.Weather.rainSoon,
