@@ -90,10 +90,18 @@ extension Strings {
         static let editEndTime = String(localized: "Edit wake-up time")
     }
 
+    // MARK: - Duration Picker
+    enum DurationPicker {
+        static let startTime = String(localized: "Start")
+        static let endTime = String(localized: "End")
+        static let duration = String(localized: "Duration")
+    }
+
     // MARK: - Walk Log Sheet
     enum WalkLog {
         static let title = String(localized: "Log Walk")
         static let startTime = String(localized: "Start time")
+        static let endTime = String(localized: "End time")
         static let duration = String(localized: "Duration")
         static func durationMinutes(_ minutes: Int) -> String {
             String(localized: "\(minutes) min")
@@ -104,6 +112,19 @@ extension Strings {
         static let pickSpot = String(localized: "Pick spot")
         static let notePlaceholder = String(localized: "Notes (optional)")
         static let logWalk = String(localized: "Log Walk")
+    }
+
+    // MARK: - Nap Log Sheet
+    enum NapLog {
+        static let title = String(localized: "Log Nap")
+        static let startTime = String(localized: "Fell asleep")
+        static let endTime = String(localized: "Woke up")
+        static let duration = String(localized: "Duration")
+        static func durationMinutes(_ minutes: Int) -> String {
+            String(localized: "\(minutes) min")
+        }
+        static let notePlaceholder = String(localized: "Notes (optional)")
+        static let logNap = String(localized: "Log Nap")
     }
 
     // MARK: - Walk Session Row
@@ -346,5 +367,33 @@ extension Strings {
         static let wakeUp = String(localized: "Wake Up")
         static let started = String(localized: "Started")
         static let openAppToEndNap = String(localized: "Open app to end nap")
+    }
+
+    // MARK: - Combined Sleep + Potty Status
+    enum CombinedStatus {
+        // Combined card (sleeping + potty urgent)
+        static func sleepingFor(duration: String) -> String {
+            String(localized: "Sleeping for \(duration)")
+        }
+        static func pottyOverdueWhileSleeping(minutes: Int) -> String {
+            String(localized: "Potty is \(minutes) min overdue")
+        }
+        static let pottyUrgentWhileSleeping = String(localized: "Potty needed soon")
+        static let whenWakesTakeOutside = String(localized: "When she wakes, take her outside")
+        static let wakeUp = String(localized: "Wake Up")
+        static let sleepingPottyLabel = String(localized: "Sleeping")
+
+        // Post-wake card
+        static let awakeTimePotty = String(localized: "She's awake — time for potty!")
+        static func pottyWasOverdue(minutes: Int) -> String {
+            String(localized: "Potty was \(minutes) min overdue")
+        }
+        static let postNapPottyRecommended = String(localized: "Post-nap potty break recommended")
+        static let logPotty = String(localized: "Log Potty")
+        static let postWakeLabel = String(localized: "Just woke")
+
+        // Accessibility
+        static let combinedCardAccessibility = String(localized: "Sleep and potty status")
+        static let postWakeCardAccessibility = String(localized: "Post-wake potty reminder")
     }
 }

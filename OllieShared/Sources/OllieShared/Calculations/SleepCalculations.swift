@@ -125,6 +125,35 @@ public struct SleepCalculations {
         return minutesSinceWake <= windowMinutes
     }
 
+    /// Calculate average nap duration from recent events, rounded to nearest 5 minutes
+    /// Returns nil if not enough data
+    public static func averageNapDuration(events: [PuppyEvent], minSessions: Int = 3) -> Int? {
+        let sessions = SleepSession.buildSessions(from: events)
+        let completedSessions = sessions.filter { !$0.isOngoing }
+
+        guard completedSessions.count >= minSessions else {
+            return nil
+        }
+
+        let totalMinutes = completedSessions.reduce(0) { $0 + $1.durationMinutes }
+        let average = totalMinutes / completedSessions.count
+
+        // Round to nearest 5 minutes
+        return ((average + 2) / 5) * 5
+    }
+
+    /// Get default nap duration for logging UI
+    /// Returns average if available, otherwise a sensible default (30 min)
+    /// Caps at a duration that would end at current time
+    public static func defaultNapDuration(events: [PuppyEvent], currentTime: Date = Date()) -> Int {
+        let baseDuration = averageNapDuration(events: events) ?? 30
+
+        // Round to nearest 5 minutes and ensure reasonable bounds
+        let rounded = max(15, min(120, ((baseDuration + 2) / 5) * 5))
+
+        return rounded
+    }
+
     // MARK: - Private Helpers
 
     private static func isSleepEvent(_ type: EventType) -> Bool {

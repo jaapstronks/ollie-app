@@ -272,9 +272,15 @@ struct TimelineSheetModifiers: ViewModifier {
                     viewModel.startActivity(type: activityType, startTime: startTime)
                 },
                 onLogCompleted: {
-                    // Transition to regular quickLog sheet for retrospective logging
-                    let eventType: EventType = activityType == .walk ? .uitlaten : .slapen
-                    viewModel.sheetCoordinator.transitionToSheet(.quickLog(eventType))
+                    // Transition to specialized sheet for retrospective logging
+                    if activityType == .walk {
+                        viewModel.sheetCoordinator.transitionToSheet(.walkLog)
+                    } else {
+                        // Calculate default nap duration from recent events
+                        let recentEvents = viewModel.getRecentEvents()
+                        let defaultDuration = SleepCalculations.defaultNapDuration(events: recentEvents)
+                        viewModel.sheetCoordinator.transitionToSheet(.napLog(defaultDuration: defaultDuration))
+                    }
                 },
                 onCancel: {
                     viewModel.sheetCoordinator.dismissSheet()
@@ -301,8 +307,42 @@ struct TimelineSheetModifiers: ViewModifier {
                 EmptyView()
             }
 
+        case .walkLog:
+            WalkLogSheet(
+                onSave: { startTime, duration, didPee, didPoop, spot, note in
+                    viewModel.logWalkEvent(
+                        time: startTime,
+                        durationMin: duration,
+                        didPee: didPee,
+                        didPoop: didPoop,
+                        spot: spot,
+                        note: note
+                    )
+                    viewModel.sheetCoordinator.dismissSheet()
+                },
+                onCancel: {
+                    viewModel.sheetCoordinator.dismissSheet()
+                },
+                spotStore: spotStore,
+                locationManager: locationManager
+            )
+            .presentationDetents([.height(520), .large])
+
+        case .napLog(let defaultDuration):
+            NapLogSheet(
+                onSave: { startTime, endTime, note in
+                    viewModel.logCompletedNap(startTime: startTime, endTime: endTime, note: note)
+                    viewModel.sheetCoordinator.dismissSheet()
+                },
+                onCancel: {
+                    viewModel.sheetCoordinator.dismissSheet()
+                },
+                defaultDurationMinutes: defaultDuration
+            )
+            .presentationDetents([.height(420), .medium])
+
         // Placeholder cases for future sheets (handled elsewhere or not yet implemented)
-        case .weightLog, .trainingLog, .socializationLog, .settings, .profileEdit, .notificationSettings, .walkLog:
+        case .weightLog, .trainingLog, .socializationLog, .settings, .profileEdit, .notificationSettings:
             EmptyView()
         }
     }
