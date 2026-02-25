@@ -60,9 +60,11 @@ class NotificationService: ObservableObject {
 
     /// Refresh all notifications based on current state
     /// Called after event logging or settings changes
+    /// - Parameter isWalkInProgress: When true, suppresses walk notifications since user is already walking
     func refreshNotifications(
         events: [PuppyEvent],
-        profile: PuppyProfile
+        profile: PuppyProfile,
+        isWalkInProgress: Bool = false
     ) async {
         guard profile.notificationSettings.isEnabled && isAuthorized else {
             await cancelAllNotifications()
@@ -90,7 +92,8 @@ class NotificationService: ObservableObject {
             await napScheduler.cancel()
         }
 
-        if settings.walkReminders.isEnabled {
+        // Don't schedule walk notifications if a walk is already in progress
+        if settings.walkReminders.isEnabled && !isWalkInProgress {
             await walkScheduler.schedule(events: events, profile: profile)
         } else {
             await walkScheduler.cancel()

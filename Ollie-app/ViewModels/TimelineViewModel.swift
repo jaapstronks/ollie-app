@@ -424,7 +424,10 @@ class TimelineViewModel: ObservableObject {
            let sessionId = result.sessionId,
            let sleepEvent = events.first(where: { $0.sleepSessionId == sessionId && $0.type == .slapen }) {
             eventStore.deleteEvent(sleepEvent)
-            loadEvents()
+
+            // Immediately sync for instant UI updates
+            self.events = eventStore.events
+            rebuildTimelineItems()
         }
     }
 
@@ -580,7 +583,12 @@ class TimelineViewModel: ObservableObject {
         ).isEmpty
 
         eventStore.addEvent(event)
-        loadEvents()
+
+        // Immediately sync events from EventStore to ensure status cards update
+        // Don't wait for the deferred subscription - sync now for instant UI updates
+        self.events = eventStore.events
+        rebuildTimelineItems()
+
         refreshNotifications()
 
         // Provide audio + haptic feedback for successful log
@@ -598,24 +606,84 @@ class TimelineViewModel: ObservableObject {
         showCelebration = true
     }
 
-    /// Log a walk event with optional spot information
+    /// Log a walk event with optional spot information and potty events
     func logWalkEvent(
         time: Date = Date(),
+        durationMin: Int? = nil,
+        didPee: Bool = false,
+        didPoop: Bool = false,
         spot: WalkSpot? = nil,
         latitude: Double? = nil,
         longitude: Double? = nil,
         note: String? = nil
     ) {
-        let event = PuppyEvent.walk(
+        let walkEvent = PuppyEvent.walk(
             time: time,
+            durationMin: durationMin,
             note: note,
             spot: spot,
             latitude: latitude,
             longitude: longitude
         )
 
-        eventStore.addEvent(event)
-        loadEvents()
+        eventStore.addEvent(walkEvent)
+
+        // Log potty events linked to this walk
+        if didPee {
+            let peeEvent = PuppyEvent.potty(
+                type: .plassen,
+                time: time,
+                location: .buiten,
+                parentWalkId: walkEvent.id
+            )
+            eventStore.addEvent(peeEvent)
+        }
+
+        if didPoop {
+            let poopEvent = PuppyEvent.potty(
+                type: .poepen,
+                time: time,
+                location: .buiten,
+                parentWalkId: walkEvent.id
+            )
+            eventStore.addEvent(poopEvent)
+        }
+
+        // Immediately sync for instant UI updates
+        self.events = eventStore.events
+        rebuildTimelineItems()
+
+        refreshNotifications()
+
+        // Provide audio + haptic feedback for successful log
+        FeedbackManager.logEvent()
+    }
+
+    /// Log a completed nap with start and end time (creates both sleep and wake events)
+    func logCompletedNap(startTime: Date, endTime: Date, note: String?) {
+        let sessionId = UUID()
+
+        // Log sleep event at start time
+        let sleepEvent = PuppyEvent(
+            time: startTime,
+            type: .slapen,
+            note: note,
+            sleepSessionId: sessionId
+        )
+        eventStore.addEvent(sleepEvent)
+
+        // Log wake event at end time
+        let wakeEvent = PuppyEvent(
+            time: endTime,
+            type: .ontwaken,
+            sleepSessionId: sessionId
+        )
+        eventStore.addEvent(wakeEvent)
+
+        // Immediately sync for instant UI updates
+        self.events = eventStore.events
+        rebuildTimelineItems()
+
         refreshNotifications()
 
         // Provide audio + haptic feedback for successful log
@@ -625,14 +693,22 @@ class TimelineViewModel: ObservableObject {
     /// Add a pre-built event (used for photo moments)
     func addEvent(_ event: PuppyEvent) {
         eventStore.addEvent(event)
-        loadEvents()
+
+        // Immediately sync for instant UI updates
+        self.events = eventStore.events
+        rebuildTimelineItems()
+
         refreshNotifications()
     }
 
     /// Update an existing event
     func updateEvent(_ event: PuppyEvent) {
         eventStore.updateEvent(event)
-        loadEvents()
+
+        // Immediately sync for instant UI updates
+        self.events = eventStore.events
+        rebuildTimelineItems()
+
         // Force refresh stats to ensure week view updates immediately
         refreshCachedStats(force: true)
         refreshNotifications()
@@ -682,7 +758,11 @@ class TimelineViewModel: ObservableObject {
     func deleteEventWithUndo(_ event: PuppyEvent) {
         // Actually delete
         eventStore.deleteEvent(event)
-        loadEvents()
+
+        // Immediately sync for instant UI updates
+        self.events = eventStore.events
+        rebuildTimelineItems()
+
         // Force refresh stats to ensure week view updates immediately
         refreshCachedStats(force: true)
         refreshNotifications()
@@ -702,7 +782,10 @@ class TimelineViewModel: ObservableObject {
     func undoDelete() {
         guard let event = sheetCoordinator.popLastDeletedEvent() else { return }
         eventStore.addEvent(event)
-        loadEvents()
+
+        // Immediately sync for instant UI updates
+        self.events = eventStore.events
+        rebuildTimelineItems()
         // Force refresh stats to ensure week view updates immediately
         refreshCachedStats(force: true)
         refreshNotifications()
@@ -787,9 +870,20 @@ class TimelineViewModel: ObservableObject {
     }
 
     /// Get events from the past N days (for pattern analysis)
+    /// Uses in-memory events for today + Core Data for historical data
     private func getHistoricalEvents(days: Int) -> [PuppyEvent] {
-        let startDate = Date().addingDays(-days)
-        return eventStore.getEvents(from: startDate, to: Date())
+        let calendar = Calendar.current
+        let today = Date()
+        let startDate = today.addingDays(-days)
+        let startOfToday = calendar.startOfDay(for: today)
+
+        // Get historical events (before today) from Core Data
+        let historicalEvents = eventStore.getEvents(from: startDate, to: startOfToday)
+
+        // Use in-memory events for today (always fresh)
+        let todayEvents = events.filter { calendar.isDateInToday($0.time) }
+
+        return (historicalEvents + todayEvents).sorted { $0.time > $1.time }
     }
 
     // MARK: - Potty Predictions
@@ -891,7 +985,8 @@ class TimelineViewModel: ObservableObject {
             mealSchedule: profile.mealSchedule,
             walkSchedule: profile.walkSchedule,
             forecasts: forecasts,
-            date: currentDate
+            date: currentDate,
+            isWalkInProgress: isWalkInProgress
         )
     }
 
@@ -905,7 +1000,8 @@ class TimelineViewModel: ObservableObject {
             mealSchedule: profile.mealSchedule,
             walkSchedule: profile.walkSchedule,
             forecasts: forecasts,
-            date: currentDate
+            date: currentDate,
+            isWalkInProgress: isWalkInProgress
         )
     }
 
@@ -928,9 +1024,25 @@ class TimelineViewModel: ObservableObject {
     // MARK: - Private Helpers
 
     /// Get events from today and yesterday (for cross-midnight tracking)
-    private func getRecentEvents() -> [PuppyEvent] {
-        let yesterday = currentDate.addingDays(-1)
-        return eventStore.getEvents(from: yesterday, to: currentDate)
+    /// Uses in-memory events for today (fresh) + Core Data for yesterday (stable)
+    /// This ensures status cards update immediately when events are logged
+    func getRecentEvents() -> [PuppyEvent] {
+        let calendar = Calendar.current
+        let today = Date()
+
+        // For today's events, use in-memory array (always fresh)
+        // For yesterday, fetch from Core Data (stable)
+        let yesterday = today.addingDays(-1)
+        let startOfToday = calendar.startOfDay(for: today)
+
+        // Get yesterday's events from Core Data
+        let yesterdayEvents = eventStore.getEvents(from: yesterday, to: startOfToday)
+
+        // Use in-memory events for today (these are always up-to-date)
+        let todayEvents = events.filter { calendar.isDateInToday($0.time) }
+
+        // Combine and return
+        return (yesterdayEvents + todayEvents).sorted { $0.time > $1.time }
     }
 
     // MARK: - Notifications
@@ -943,10 +1055,17 @@ class TimelineViewModel: ObservableObject {
         // Cancel any existing notification task to prevent pile-up
         notificationTask?.cancel()
 
+        // Capture walk state before async task
+        let walkInProgress = isWalkInProgress
+
         notificationTask = Task {
             guard !Task.isCancelled else { return }
             let recentEvents = getRecentEvents()
-            await service.refreshNotifications(events: recentEvents, profile: profile)
+            await service.refreshNotifications(
+                events: recentEvents,
+                profile: profile,
+                isWalkInProgress: walkInProgress
+            )
         }
     }
 }
