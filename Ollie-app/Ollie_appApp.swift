@@ -173,6 +173,9 @@ struct OllieApp: App {
                     await subscriptionManager.checkSubscriptionStatus()
                     await subscriptionManager.loadProducts()
 
+                    // Setup CloudKit service and check availability
+                    await CloudKitService.shared.setup()
+
                     // Initial CloudKit sync for profile, spots, and medications
                     await profileStore.initialSync()
                     await spotStore.initialSync()
