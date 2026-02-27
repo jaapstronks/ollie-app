@@ -14,25 +14,12 @@ struct PoopStatusCard: View {
     let status: PoopStatus
     let onLogPoop: (() -> Void)?
 
-    @Environment(\.colorScheme) private var colorScheme
-
     init(status: PoopStatus, onLogPoop: (() -> Void)? = nil) {
         self.status = status
         self.onLogPoop = onLogPoop
     }
 
     var body: some View {
-        // Hide during night hours
-        if status.urgency.isHidden {
-            EmptyView()
-        } else {
-            cardContent
-                .padding(.vertical, 4)
-        }
-    }
-
-    @ViewBuilder
-    private var cardContent: some View {
         StatusCardHeader(
             iconName: status.urgency.iconName,
             iconColor: status.urgency.iconColor,
@@ -42,7 +29,6 @@ struct PoopStatusCard: View {
             subtitle: subtitleText,
             iconSize: 40
         ) {
-            // Show action when urgency warrants it
             if let onLogPoop, shouldShowAction {
                 Button(action: onLogPoop) {
                     Label(Strings.PoopStatus.logNow, systemImage: "leaf.fill")
@@ -50,11 +36,13 @@ struct PoopStatusCard: View {
                 .buttonStyle(.glassPillCompact(tint: .custom(indicatorColor)))
             }
         }
-        .statusCardPadding()
-        .glassStatusCard(tintColor: indicatorColor, cornerRadius: LayoutConstants.cornerRadius)
-        .accessibilityElement(children: .combine)
-        .accessibilityLabel(Strings.PoopStatus.accessibility)
-        .accessibilityValue(mainText)
+        .statusCardContainer(
+            tint: indicatorColor,
+            isVisible: !status.urgency.isHidden,
+            accessibilityLabel: Strings.PoopStatus.accessibility,
+            accessibilityValue: mainText
+        )
+        .padding(.vertical, 4)
     }
 
     private var shouldShowAction: Bool {

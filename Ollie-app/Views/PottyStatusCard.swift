@@ -15,8 +15,6 @@ struct PottyStatusCard: View {
     let puppyName: String
     let onLogPotty: (() -> Void)?
 
-    @Environment(\.colorScheme) private var colorScheme
-
     init(prediction: PottyPrediction, puppyName: String, onLogPotty: (() -> Void)? = nil) {
         self.prediction = prediction
         self.puppyName = puppyName
@@ -24,26 +22,14 @@ struct PottyStatusCard: View {
     }
 
     var body: some View {
-        // Hide during night hours (23:00 - 06:00) or if no data
-        if isNightTime {
-            EmptyView()
-        } else {
-            cardContent
-                .padding(.vertical, 6)
-        }
-    }
-
-    @ViewBuilder
-    private var cardContent: some View {
         StatusCardHeader(
             iconName: prediction.urgency.iconName,
             iconColor: prediction.urgency.iconColor,
             tintColor: indicatorColor,
-            title: PredictionCalculations.displayText(for: prediction, puppyName: puppyName),
+            title: displayText,
             titleColor: prediction.urgency.textColor,
             subtitle: PredictionCalculations.subtitleText(for: prediction)
         ) {
-            // Show action when urgency warrants it
             if let onLogPotty, shouldShowAction {
                 Button(action: onLogPotty) {
                     Label(Strings.PottyStatus.logNow, systemImage: "drop.fill")
@@ -51,33 +37,31 @@ struct PottyStatusCard: View {
                 .buttonStyle(.glassPillCompact(tint: .custom(indicatorColor)))
             }
         }
-        .statusCardPadding()
-        .glassStatusCard(tintColor: indicatorColor, cornerRadius: LayoutConstants.cornerRadiusL)
-        .shadow(color: shadowColor, radius: 10, y: 5)
-        .accessibilityElement(children: .combine)
-        .accessibilityLabel(Strings.PottyStatus.accessibility)
-        .accessibilityValue(PredictionCalculations.displayText(for: prediction, puppyName: puppyName))
-        .accessibilityHint(Strings.PottyStatus.predictionHint(name: puppyName))
+        .statusCardContainer(
+            tint: indicatorColor,
+            cornerRadius: LayoutConstants.cornerRadiusL,
+            isVisible: !Constants.isNightTimeNow(),
+            showShadow: true,
+            isUrgent: prediction.urgency.isUrgent,
+            accessibilityLabel: Strings.PottyStatus.accessibility,
+            accessibilityValue: displayText,
+            accessibilityHint: Strings.PottyStatus.predictionHint(name: puppyName)
+        )
+        .padding(.vertical, 6)
+    }
+
+    // MARK: - Computed Properties
+
+    private var displayText: String {
+        PredictionCalculations.displayText(for: prediction, puppyName: puppyName)
     }
 
     private var shouldShowAction: Bool {
         prediction.urgency.isUrgent
     }
 
-    // MARK: - Computed Properties
-
     private var indicatorColor: Color {
         prediction.urgency.iconColor
-    }
-
-    private var shadowColor: Color {
-        let baseColor = prediction.urgency.iconColor
-        let opacity = colorScheme == .dark ? 0.2 : 0.1
-        return baseColor.opacity(prediction.urgency.isUrgent ? opacity * 1.25 : opacity)
-    }
-
-    private var isNightTime: Bool {
-        Constants.isNightTimeNow()
     }
 }
 

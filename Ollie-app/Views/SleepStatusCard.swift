@@ -16,8 +16,6 @@ struct SleepStatusCard: View {
     let onWakeUp: (() -> Void)?
     let onStartNap: (() -> Void)?
 
-    @Environment(\.colorScheme) private var colorScheme
-
     init(
         sleepState: SleepState,
         pendingActionable: ActionableItem? = nil,
@@ -31,17 +29,6 @@ struct SleepStatusCard: View {
     }
 
     var body: some View {
-        // Hide during night hours (23:00 - 06:00) or if no data
-        if isNightTime || sleepState == .unknown {
-            EmptyView()
-        } else {
-            cardContent
-                .padding(.vertical, 4)
-        }
-    }
-
-    @ViewBuilder
-    private var cardContent: some View {
         StatusCardHeader(
             iconName: iconName,
             iconColor: indicatorColor,
@@ -51,14 +38,15 @@ struct SleepStatusCard: View {
             subtitle: subtitleText.isEmpty ? nil : subtitleText,
             iconSize: 40
         ) {
-            // Show contextual action based on sleep state
             actionButton
         }
-        .statusCardPadding()
-        .glassStatusCard(tintColor: indicatorColor, cornerRadius: LayoutConstants.cornerRadius)
-        .accessibilityElement(children: .combine)
-        .accessibilityLabel(Strings.SleepStatus.title)
-        .accessibilityValue(mainText)
+        .statusCardContainer(
+            tint: indicatorColor,
+            isVisible: !Constants.isNightTimeNow() && sleepState != .unknown,
+            accessibilityLabel: Strings.SleepStatus.title,
+            accessibilityValue: mainText
+        )
+        .padding(.vertical, 4)
     }
 
     @ViewBuilder
@@ -182,25 +170,6 @@ struct SleepStatusCard: View {
         }
     }
 
-    private var backgroundColor: Color {
-        switch sleepState {
-        case .sleeping:
-            return Color.purple.opacity(0.1)
-        case .awake(_, let durationMin):
-            if durationMin >= SleepCalculations.maxAwakeMinutes {
-                return Color.red.opacity(0.1)
-            } else if durationMin >= SleepCalculations.awakeWarningMinutes {
-                return Color.orange.opacity(0.1)
-            }
-            return Color.green.opacity(0.1)
-        case .unknown:
-            return Color(.secondarySystemBackground)
-        }
-    }
-
-    private var isNightTime: Bool {
-        Constants.isNightTimeNow()
-    }
 }
 
 // MARK: - Previews
