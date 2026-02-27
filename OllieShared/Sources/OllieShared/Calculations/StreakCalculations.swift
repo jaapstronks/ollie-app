@@ -79,8 +79,19 @@ public struct StreakCalculations {
     }
 
     /// Get full streak information
-    public static func getStreakInfo(events: [PuppyEvent]) -> StreakInfo {
-        let pottyEvents = events.pee().chronological()
+    /// Coverage gaps do NOT break streaks - the streak continues across gaps
+    public static func getStreakInfo(events: [PuppyEvent], coverageGaps: [PuppyEvent] = []) -> StreakInfo {
+        // Filter out potty events that occurred during coverage gaps
+        let allPotty = events.pee().chronological()
+        let pottyEvents: [PuppyEvent]
+
+        if coverageGaps.isEmpty {
+            pottyEvents = allPotty
+        } else {
+            pottyEvents = allPotty.filter { event in
+                !CoverageGapFilter.isTimeCoveredByGap(event.time, gaps: coverageGaps)
+            }
+        }
 
         guard !pottyEvents.isEmpty else { return .empty }
 

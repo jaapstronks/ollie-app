@@ -36,6 +36,9 @@ extension CDPuppyEvent {
         self.spotName = event.spotName
         self.parentWalkId = event.parentWalkId
         self.sleepSessionId = event.sleepSessionId
+        self.gapType = event.gapType?.rawValue
+        self.endTime = event.endTime
+        self.gapLocation = event.gapLocation
     }
 
     /// Create a new CDPuppyEvent from a PuppyEvent struct
@@ -65,6 +68,13 @@ extension CDPuppyEvent {
             location = nil
         }
 
+        let gapType: CoverageGapType?
+        if let gapTypeString = self.gapType {
+            gapType = CoverageGapType(rawValue: gapTypeString)
+        } else {
+            gapType = nil
+        }
+
         return PuppyEvent(
             id: id,
             time: time,
@@ -87,7 +97,10 @@ extension CDPuppyEvent {
             spotId: self.spotId,
             spotName: self.spotName,
             parentWalkId: self.parentWalkId,
-            sleepSessionId: self.sleepSessionId
+            sleepSessionId: self.sleepSessionId,
+            gapType: gapType,
+            endTime: self.endTime,
+            gapLocation: self.gapLocation
         )
     }
 }

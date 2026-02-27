@@ -6,6 +6,7 @@
 //  Consolidates icon, color, and text presentation for potty/poop urgency
 
 import SwiftUI
+import OllieShared
 
 /// Protocol for types that represent urgency levels
 /// Provides consistent UI presentation across different urgency types
@@ -56,6 +57,8 @@ extension PottyUrgency: UrgencyPresentable {
             return "bell.badge.fill"
         case .postAccident:
             return "exclamationmark.triangle.fill"
+        case .coverageGap(let type, _):
+            return type.icon
         case .unknown:
             return "questionmark.circle.fill"
         }
@@ -75,6 +78,8 @@ extension PottyUrgency: UrgencyPresentable {
             return .ollieDanger
         case .postAccident:
             return .ollieDanger
+        case .coverageGap:
+            return .orange
         case .unknown:
             return .ollieMuted
         }
@@ -90,6 +95,8 @@ extension PottyUrgency: UrgencyPresentable {
             return .ollieWarning
         case .overdue, .postAccident:
             return .ollieDanger
+        case .coverageGap:
+            return .orange
         case .unknown:
             return .secondary
         }

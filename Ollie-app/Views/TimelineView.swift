@@ -44,6 +44,14 @@ struct TimelineView: View {
                 )
             }
 
+            // Coverage gap banner (show when tracking is paused)
+            if let activeGap = viewModel.activeCoverageGap {
+                CoverageGapBanner(
+                    gap: activeGap,
+                    onEnd: { viewModel.showEndCoverageGapSheet(for: activeGap) }
+                )
+            }
+
             // Weather section container (isolates weather observation to avoid full view redraws)
             WeatherSectionContainer(
                 weatherService: weatherService,
@@ -91,6 +99,14 @@ struct TimelineView: View {
                     onRefresh: viewModel.loadEvents,
                     onTapPhoto: { event in
                         selectedPhotoEvent = event
+                    },
+                    onTapCoverageGap: { gap in
+                        // Show end sheet for ongoing gaps, edit for completed
+                        if gap.isOngoingGap {
+                            viewModel.showEndCoverageGapSheet(for: gap)
+                        } else {
+                            viewModel.editEvent(gap)
+                        }
                     }
                 )
             }
@@ -125,6 +141,13 @@ struct TimelineView: View {
         .task {
             // Fetch weather on appear
             await weatherService.fetchForecasts()
+        }
+        .onAppear {
+            // Check for catch-up prompt on view appear (3-16 hour gaps)
+            // This takes priority over gap detection since it's less intrusive
+            if viewModel.events.isEmpty == false {
+                viewModel.checkForCatchUp()
+            }
         }
     }
 }
@@ -227,6 +250,7 @@ struct EventList: View {
     let onDeleteSession: ((SleepSession) -> Void)?
     let onRefresh: () -> Void
     let onTapPhoto: (PuppyEvent) -> Void
+    let onTapCoverageGap: ((PuppyEvent) -> Void)?
 
     private let swipeToDeleteTip = SwipeToDeleteTip()
 
@@ -236,7 +260,8 @@ struct EventList: View {
         onDelete: @escaping (PuppyEvent) -> Void,
         onRefresh: @escaping () -> Void,
         onTapPhoto: @escaping (PuppyEvent) -> Void,
-        onDeleteSession: ((SleepSession) -> Void)? = nil
+        onDeleteSession: ((SleepSession) -> Void)? = nil,
+        onTapCoverageGap: ((PuppyEvent) -> Void)? = nil
     ) {
         self.timelineItems = timelineItems
         self.events = events
@@ -244,6 +269,7 @@ struct EventList: View {
         self.onDeleteSession = onDeleteSession
         self.onRefresh = onRefresh
         self.onTapPhoto = onTapPhoto
+        self.onTapCoverageGap = onTapCoverageGap
     }
 
     var body: some View {
@@ -257,15 +283,25 @@ struct EventList: View {
                 ForEach(timelineItems) { item in
                     switch item {
                     case .event(let event):
-                        EventRow(event: event)
-                            .id(event.id)
-                            .listRowInsets(EdgeInsets())
-                            .listRowSeparator(.hidden)
-                            .onTapGesture {
-                                if event.photo != nil {
-                                    onTapPhoto(event)
-                                }
+                        // Use CoverageGapRow for coverage gap events
+                        if event.type == .coverageGap {
+                            CoverageGapRow(event: event) {
+                                onTapCoverageGap?(event)
                             }
+                            .id(event.id)
+                            .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
+                            .listRowSeparator(.hidden)
+                        } else {
+                            EventRow(event: event)
+                                .id(event.id)
+                                .listRowInsets(EdgeInsets())
+                                .listRowSeparator(.hidden)
+                                .onTapGesture {
+                                    if event.photo != nil {
+                                        onTapPhoto(event)
+                                    }
+                                }
+                        }
 
                     case .sleepSession(let session, let note):
                         SleepSessionRow(

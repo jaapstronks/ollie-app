@@ -76,6 +76,7 @@ extension EventType {
         case .gewicht: return "scalemass.fill"
         case .moment: return "camera.fill"
         case .medicatie: return "pills.fill"
+        case .coverageGap: return "person.badge.clock.fill"
         }
     }
 
@@ -119,6 +120,8 @@ extension EventType {
             return .ollieAccent // Gold - brand accent for photos
         case .medicatie:
             return .ollieAccent // Gold - health/care
+        case .coverageGap:
+            return .orange // Orange - coverage gap status
         }
     }
 }

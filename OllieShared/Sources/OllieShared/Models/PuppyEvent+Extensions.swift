@@ -192,4 +192,35 @@ extension Array where Element == PuppyEvent {
     public func withPhotos() -> [PuppyEvent] {
         filter { $0.photo != nil }
     }
+
+    // MARK: - Coverage Gap Filtering
+
+    /// Filter to only coverage gap events
+    public func coverageGaps() -> [PuppyEvent] {
+        filter { $0.type == .coverageGap }
+    }
+
+    /// Filter to only active (ongoing) coverage gaps - where endTime is nil
+    public func activeGaps() -> [PuppyEvent] {
+        filter { $0.type == .coverageGap && $0.endTime == nil }
+    }
+
+    /// Check if a specific time falls within any coverage gap
+    public func isTimeCoveredByGap(_ time: Date) -> Bool {
+        coverageGaps().contains { gap in
+            let startTime = gap.time
+            let endTime = gap.endTime ?? Date.distantFuture
+            return time >= startTime && time <= endTime
+        }
+    }
+
+    /// Get coverage gaps that overlap with a date range
+    public func gapsOverlapping(start: Date, end: Date) -> [PuppyEvent] {
+        coverageGaps().filter { gap in
+            let gapStart = gap.time
+            let gapEnd = gap.endTime ?? Date.distantFuture
+            // Overlap exists if gap starts before range ends AND gap ends after range starts
+            return gapStart <= end && gapEnd >= start
+        }
+    }
 }

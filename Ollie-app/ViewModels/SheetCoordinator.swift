@@ -40,6 +40,12 @@ final class SheetCoordinator: ObservableObject {
         case notificationSettings
         case walkLog
         case napLog(defaultDuration: Int)
+        // Coverage gap sheets
+        case startCoverageGap
+        case endCoverageGap(PuppyEvent)
+        case gapDetection(hours: Int, puppyName: String, suggestedStartTime: Date)
+        // Catch-up sheet (for 3-16 hour gaps)
+        case catchUp(hours: Int, puppyName: String, context: CatchUpContext)
 
         var id: String {
             switch self {
@@ -65,6 +71,10 @@ final class SheetCoordinator: ObservableObject {
             case .notificationSettings: return "notificationSettings"
             case .walkLog: return "walkLog"
             case .napLog: return "napLog"
+            case .startCoverageGap: return "startCoverageGap"
+            case .endCoverageGap(let gap): return "endCoverageGap-\(gap.id.uuidString)"
+            case .gapDetection: return "gapDetection"
+            case .catchUp: return "catchUp"
             }
         }
     }

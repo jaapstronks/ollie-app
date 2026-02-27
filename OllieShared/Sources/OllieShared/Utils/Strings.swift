@@ -600,6 +600,59 @@ public enum Strings {
         }
     }
 
+    // MARK: - Coverage Gap
+    public enum CoverageGap {
+        // Event label
+        public static var eventLabel: String { String(localized: "Coverage Gap", bundle: Strings.bundle) }
+
+        // Gap types
+        public static var typeDaycare: String { String(localized: "Daycare", bundle: Strings.bundle) }
+        public static var typeFamily: String { String(localized: "Family", bundle: Strings.bundle) }
+        public static var typeSitter: String { String(localized: "Pet Sitter", bundle: Strings.bundle) }
+        public static var typeVacation: String { String(localized: "Vacation", bundle: Strings.bundle) }
+        public static var typeOther: String { String(localized: "Other", bundle: Strings.bundle) }
+
+        // Banner
+        public static func since(time: String) -> String {
+            String(localized: "Since \(time)", bundle: Strings.bundle)
+        }
+        public static var endGap: String { String(localized: "End", bundle: Strings.bundle) }
+        public static var trackingPaused: String { String(localized: "Tracking paused", bundle: Strings.bundle) }
+
+        // Sheets
+        public static var startTitle: String { String(localized: "Who's caring for your dog?", bundle: Strings.bundle) }
+        public static var endTitle: String { String(localized: "End Coverage Gap", bundle: Strings.bundle) }
+        public static var locationPlaceholder: String { String(localized: "Location (optional)", bundle: Strings.bundle) }
+        public static var startButton: String { String(localized: "Start", bundle: Strings.bundle) }
+        public static var endButton: String { String(localized: "End Gap", bundle: Strings.bundle) }
+        public static var notePlaceholder: String { String(localized: "Notes (optional)", bundle: Strings.bundle) }
+        public static var startTime: String { String(localized: "Start time", bundle: Strings.bundle) }
+        public static var endTime: String { String(localized: "End time", bundle: Strings.bundle) }
+
+        // Detection prompt
+        public static func detectionPrompt(hours: Int, name: String) -> String {
+            String(localized: "No events logged in \(hours) hours. Was \(name) with someone else?", bundle: Strings.bundle)
+        }
+        public static var yesLogCoverage: String { String(localized: "Yes, log coverage", bundle: Strings.bundle) }
+        public static var noIForgot: String { String(localized: "No, I forgot to log", bundle: Strings.bundle) }
+
+        // Timeline
+        public static var ongoing: String { String(localized: "Ongoing", bundle: Strings.bundle) }
+        public static func duration(hours: Int, minutes: Int) -> String {
+            if hours > 0 {
+                return String(localized: "\(hours)h \(minutes)m", bundle: Strings.bundle)
+            } else {
+                return String(localized: "\(minutes)m", bundle: Strings.bundle)
+            }
+        }
+
+        // Accessibility
+        public static func gapTypeAccessibility(_ type: String) -> String {
+            String(localized: "Care type: \(type)", bundle: Strings.bundle)
+        }
+        public static var endGapAccessibilityHint: String { String(localized: "Double-tap to end the coverage gap", bundle: Strings.bundle) }
+    }
+
     // MARK: - Walk Schedule
     public enum WalkSchedule {
         // Mode labels
