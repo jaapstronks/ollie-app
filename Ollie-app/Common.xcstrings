@@ -45,6 +45,16 @@
         }
       }
     },
+    "Calendar" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Agenda"
+          }
+        }
+      }
+    },
     "Calendar access denied. Enable in Settings." : {
       "extractionState" : "stale",
       "localizations" : {
@@ -679,6 +689,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Wandelingen"
+          }
+        }
+      }
+    },
+    "week" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "week"
           }
         }
       }

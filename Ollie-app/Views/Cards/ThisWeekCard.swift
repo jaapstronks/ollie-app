@@ -153,7 +153,7 @@ struct ThisWeekCard: View {
                         .foregroundStyle(.secondary)
 
                     ForEach(viewModel.focusCategories, id: \.id) { category in
-                        Text(category.name)
+                        Text(category.localizedDisplayName)
                             .font(.caption)
                             .fontWeight(.medium)
                             .padding(.horizontal, 6)

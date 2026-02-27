@@ -166,7 +166,7 @@ struct WeekDetailSheet: View {
                 .padding(.horizontal)
 
             VStack(spacing: 8) {
-                ForEach(categoryProgress.sorted(by: { $0.category.name < $1.category.name })) { progress in
+                ForEach(categoryProgress.sorted(by: { $0.category.localizedDisplayName < $1.category.localizedDisplayName })) { progress in
                     categoryRow(category: progress.category, count: progress.count, total: progress.total)
                 }
             }
@@ -186,7 +186,7 @@ struct WeekDetailSheet: View {
                 .frame(width: 24)
 
             // Category name
-            Text(category.name)
+            Text(category.localizedDisplayName)
                 .font(.subheadline)
 
             Spacer()
