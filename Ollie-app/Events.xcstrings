@@ -848,13 +848,12 @@
         }
       }
     },
-    "Wake up" : {
-      "extractionState" : "stale",
+    "Woke up" : {
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Wakker"
+            "value" : "Is wakker"
           }
         }
       }
