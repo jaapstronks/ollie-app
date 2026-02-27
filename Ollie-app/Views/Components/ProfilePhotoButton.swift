@@ -13,27 +13,55 @@ struct ProfilePhotoButton: View {
     let action: () -> Void
 
     @State private var loadedImage: UIImage?
+    @Environment(\.colorScheme) private var colorScheme
+
+    private let size: CGFloat = 34
 
     var body: some View {
         Button(action: action) {
-            Group {
+            ZStack {
                 if let image = loadedImage {
                     Image(uiImage: image)
                         .resizable()
                         .scaledToFill()
+                        .frame(width: size, height: size)
+                        .clipShape(Circle())
                 } else {
-                    // Placeholder: paw icon
+                    // Placeholder: gradient background with paw icon
+                    Circle()
+                        .fill(
+                            LinearGradient(
+                                colors: [Color.ollieAccent, Color.ollieAccent.opacity(0.8)],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                        .frame(width: size, height: size)
+
                     Image(systemName: "pawprint.fill")
-                        .font(.system(size: 14, weight: .medium))
+                        .font(.system(size: 15, weight: .semibold))
                         .foregroundStyle(.white)
-                        .frame(width: 32, height: 32)
-                        .background(Color.ollieAccent)
                 }
             }
-            .frame(width: 32, height: 32)
-            .clipShape(Circle())
-            .overlay(Circle().stroke(Color.secondary.opacity(0.3), lineWidth: 0.5))
+            .overlay {
+                Circle()
+                    .stroke(
+                        colorScheme == .dark
+                            ? Color.white.opacity(0.2)
+                            : Color.black.opacity(0.08),
+                        lineWidth: 1
+                    )
+            }
+            .shadow(
+                color: colorScheme == .dark
+                    ? Color.black.opacity(0.3)
+                    : Color.black.opacity(0.12),
+                radius: 2,
+                x: 0,
+                y: 1
+            )
         }
+        .buttonStyle(.plain)
         .accessibilityLabel(Strings.Tabs.settings)
         .accessibilityIdentifier("settings_button")
         .onAppear { loadImage() }
@@ -49,9 +77,20 @@ struct ProfilePhotoButton: View {
     }
 }
 
-#Preview {
-    HStack {
+#Preview("No Photo") {
+    HStack(spacing: 20) {
         ProfilePhotoButton(profile: nil, action: {})
         Text("Settings")
     }
+    .padding()
+}
+
+#Preview("No Photo - Dark") {
+    HStack(spacing: 20) {
+        ProfilePhotoButton(profile: nil, action: {})
+        Text("Settings")
+    }
+    .padding()
+    .background(Color.black)
+    .preferredColorScheme(.dark)
 }

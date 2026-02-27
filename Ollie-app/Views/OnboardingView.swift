@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UIKit
 import OllieShared
 
 /// Onboarding flow for new users
@@ -24,6 +25,7 @@ struct OnboardingView: View {
     @State private var birthDate: Date = Calendar.current.date(byAdding: .month, value: -2, to: Date()) ?? Date()
     @State private var homeDate: Date = Date()
     @State private var sizeCategory: PuppyProfile.SizeCategory = .large
+    @State private var profilePhoto: UIImage? = nil
 
     // Focus state for keyboard management
     @FocusState private var isNameFieldFocused: Bool
@@ -51,8 +53,9 @@ struct OnboardingView: View {
 
     /// Total steps shown in progress bar (excludes welcome and size step when not needed)
     /// Welcome step (0) doesn't show progress, so we count from step 1 onwards
+    /// Steps: Name(1), Breed(2), Birth(3), Home(4), [Size(5)], Photo(6), Confirm(7)
     private var totalSteps: Int {
-        shouldShowSizeStep ? 6 : 5
+        shouldShowSizeStep ? 7 : 6
     }
 
     /// Maps the visual step (for progress indicator) to actual step
@@ -61,9 +64,10 @@ struct OnboardingView: View {
         if currentStep == 0 {
             return -1 // Not shown in progress bar
         }
-        let adjustedStep = currentStep - 1
-        if !shouldShowSizeStep && currentStep == 6 {
-            return 4
+        var adjustedStep = currentStep - 1
+        // Adjust for skipped size step
+        if !shouldShowSizeStep && currentStep >= 6 {
+            adjustedStep = currentStep - 2
         }
         return adjustedStep
     }
@@ -127,15 +131,23 @@ struct OnboardingView: View {
                     onBack: { navigateToStep(4) }
                 ).tag(5)
 
+                OnboardingPhotoStep(
+                    puppyName: name,
+                    selectedImage: $profilePhoto,
+                    onNext: { navigateToStep(7) },
+                    onBack: { navigateToStep(shouldShowSizeStep ? 5 : 4) }
+                ).tag(6)
+
                 OnboardingConfirmStep(
                     name: name,
                     breedToSave: breedToSave,
                     birthDate: birthDate,
                     homeDate: homeDate,
                     sizeCategory: sizeCategory,
+                    profilePhoto: profilePhoto,
                     onSave: saveProfile,
-                    onBack: { navigateToStep(shouldShowSizeStep ? 5 : 4) }
-                ).tag(6)
+                    onBack: { navigateToStep(6) }
+                ).tag(7)
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
             .animation(reduceMotion ? nil : .easeInOut, value: currentStep)
@@ -190,6 +202,14 @@ struct OnboardingView: View {
         if !breedToSave.isEmpty {
             profile.breed = breedToSave
         }
+
+        // Save profile photo if selected
+        if let photo = profilePhoto {
+            if let filename = try? ProfilePhotoStore.shared.save(image: photo) {
+                profile.profilePhotoFilename = filename
+            }
+        }
+
         profileStore.saveProfile(profile)
 
         // Small delay to ensure profile is saved before completing

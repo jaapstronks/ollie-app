@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UIKit
 import OllieShared
 
 /// Summary and confirmation step - final step of onboarding
@@ -15,6 +16,7 @@ struct OnboardingConfirmStep: View {
     let birthDate: Date
     let homeDate: Date
     let sizeCategory: PuppyProfile.SizeCategory
+    let profilePhoto: UIImage?
     let onSave: () -> Void
     let onBack: () -> Void
 
@@ -22,9 +24,19 @@ struct OnboardingConfirmStep: View {
         VStack(spacing: 24) {
             Spacer()
 
-            Image(systemName: "star.circle.fill")
-                .font(.system(size: 60))
-                .foregroundStyle(Color.ollieAccent)
+            // Profile photo or icon
+            if let photo = profilePhoto {
+                Image(uiImage: photo)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 100, height: 100)
+                    .clipShape(Circle())
+                    .overlay(Circle().stroke(Color.ollieAccent, lineWidth: 3))
+            } else {
+                Image(systemName: "star.circle.fill")
+                    .font(.system(size: 60))
+                    .foregroundStyle(Color.ollieAccent)
+            }
 
             Text(Strings.Onboarding.readyToStart)
                 .font(.title)

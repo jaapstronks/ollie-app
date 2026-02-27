@@ -65,6 +65,13 @@ extension Strings {
 
         static let readyToStart = String(localized: "Ready to begin!", table: table)
 
+        // Photo step
+        static func photoQuestion(name: String) -> String {
+            String(localized: "Add a photo of \(name)?", table: table)
+        }
+        static let photoSubtitle = String(localized: "This is optional — you can always add one later.", table: table)
+        static let skip = String(localized: "Skip", table: table)
+
         // Confirmation step
         static let born = String(localized: "Born", table: table)
         static let cameHome = String(localized: "Came home", table: table)
