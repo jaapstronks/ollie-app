@@ -133,7 +133,7 @@ struct WalkSuggestionsCard: View {
 
                 // Item info
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(item.name)
+                    Text(item.localizedDisplayName)
                         .font(.subheadline)
                         .fontWeight(.medium)
 
@@ -146,7 +146,7 @@ struct WalkSuggestionsCard: View {
                         HStack(spacing: 4) {
                             Image(systemName: "exclamationmark.triangle.fill")
                                 .font(.system(size: 10))
-                            Text("Needs practice")
+                            Text(Strings.Socialization.needsPractice)
                         }
                         .font(.caption2)
                         .foregroundStyle(Color.ollieWarning)

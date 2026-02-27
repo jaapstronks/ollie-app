@@ -275,6 +275,7 @@ struct TodayView: View {
                 .fontWeight(.semibold)
                 .foregroundStyle(.secondary)
                 .padding(.horizontal, 4)
+                .accessibilityAddTraits(.isHeader)
 
             if viewModel.events.isEmpty {
                 EmptyTimelineCard()
@@ -327,6 +328,7 @@ struct EmptyTimelineCard: View {
             Image(systemName: "pawprint")
                 .font(.system(size: 40))
                 .foregroundColor(.secondary)
+                .accessibilityHidden(true)
 
             Text(Strings.Timeline.noEvents)
                 .font(.headline)
@@ -343,6 +345,9 @@ struct EmptyTimelineCard: View {
         .padding(.horizontal)
         .background(Color(.secondarySystemBackground))
         .cornerRadius(16)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(Strings.Timeline.noEvents)
+        .accessibilityHint(Strings.Timeline.tapToLog)
     }
 }
 

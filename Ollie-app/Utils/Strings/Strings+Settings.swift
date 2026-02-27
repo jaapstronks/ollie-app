@@ -23,6 +23,7 @@ extension Strings {
         // Profile section
         static let profile = String(localized: "Profile", table: table)
         static let name = String(localized: "Name", table: table)
+        static let changeName = String(localized: "Change name", table: table)
         static let breed = String(localized: "Breed", table: table)
         static let size = String(localized: "Size", table: table)
 
@@ -51,6 +52,14 @@ extension Strings {
         static let appearance = String(localized: "Appearance", table: table)
         static let theme = String(localized: "Theme", table: table)
         static let soundFeedback = String(localized: "Sound feedback", table: table)
+        static let systemTheme = String(localized: "System", table: table)
+        static let lightTheme = String(localized: "Light", table: table)
+        static let darkTheme = String(localized: "Dark", table: table)
+
+        // Units section
+        static let units = String(localized: "Units", table: table)
+        static let temperature = String(localized: "Temperature", table: table)
+        static let weight = String(localized: "Weight", table: table)
 
         // Sync section
         static let sync = String(localized: "Sync", table: table)
@@ -317,5 +326,13 @@ extension Strings {
         static func setupFailed(_ error: String) -> String {
             String(localized: "Setup failed: \(error)", table: table)
         }
+    }
+
+    // MARK: - Units
+    enum Units {
+        static let celsius = String(localized: "Celsius (°C)", table: table)
+        static let fahrenheit = String(localized: "Fahrenheit (°F)", table: table)
+        static let kilograms = String(localized: "Kilograms (kg)", table: table)
+        static let pounds = String(localized: "Pounds (lbs)", table: table)
     }
 }

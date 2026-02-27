@@ -309,6 +309,28 @@
         }
       }
     },
+    "After waking: time for a meal" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Na wakker worden: tijd voor eten"
+          }
+        }
+      }
+    },
+    "After waking: time for a walk" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Na wakker worden: tijd voor wandeling"
+          }
+        }
+      }
+    },
     "All good" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -397,6 +419,17 @@
         }
       }
     },
+    "Been sleeping for %@" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Slaapt al %@"
+          }
+        }
+      }
+    },
     "Below usual for this time" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -459,6 +492,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Dag %lld"
+          }
+        }
+      }
+    },
+    "Day %lld with %@" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dag %lld met %@"
           }
         }
       }
@@ -701,6 +744,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Info"
+          }
+        }
+      }
+    },
+    "Just fell asleep" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Net in slaap gevallen"
           }
         }
       }
@@ -1377,31 +1431,12 @@
       }
     },
     "Sleeping for %@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Slaapt net %@"
-          }
-        }
-      }
-    },
-    "Been sleeping for %@" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Slaapt al %@"
-          }
-        }
-      }
-    },
-    "Just fell asleep" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Net in slaap gevallen"
           }
         }
       }
@@ -1527,6 +1562,17 @@
         }
       }
     },
+    "Started previous night" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Begonnen vorige nacht"
+          }
+        }
+      }
+    },
     "Started: %@" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -1545,6 +1591,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tik hieronder om de eerste te loggen"
+          }
+        }
+      }
+    },
+    "The nap started before midnight and ended on the selected date" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Het dutje begon voor middernacht en eindigde op de geselecteerde datum"
           }
         }
       }
@@ -1600,6 +1657,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "keer gemeten"
+          }
+        }
+      }
+    },
+    "Timeline" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tijdlijn"
           }
         }
       }
@@ -1736,6 +1803,17 @@
         }
       }
     },
+    "Was scheduled at %@" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Was gepland om %@"
+          }
+        }
+      }
+    },
     "When she wakes, take her outside" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -1776,56 +1854,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Wakker geworden"
-          }
-        }
-      }
-    },
-    "After waking: time for a walk" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Na wakker worden: tijd voor wandeling"
-          }
-        }
-      }
-    },
-    "After waking: time for a meal" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Na wakker worden: tijd voor eten"
-          }
-        }
-      }
-    },
-    "Was scheduled at %@" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Was gepland om %@"
-          }
-        }
-      }
-    },
-    "Started previous night" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Begonnen vorige nacht"
-          }
-        }
-      }
-    },
-    "The nap started before midnight and ended on the selected date" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Het dutje begon voor middernacht en eindigde op de geselecteerde datum"
           }
         }
       }

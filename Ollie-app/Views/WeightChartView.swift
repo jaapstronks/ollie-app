@@ -15,8 +15,13 @@ struct WeightChartView: View {
     let puppyName: String
 
     @Environment(\.colorScheme) private var colorScheme
+    @AppStorage(UserPreferences.Key.weightUnit.rawValue) private var weightUnitRaw = WeightUnit.kg.rawValue
 
-    // Chart bounds
+    private var weightUnit: WeightUnit {
+        WeightUnit(rawValue: weightUnitRaw) ?? .kg
+    }
+
+    // Chart bounds (in display units)
     private var maxWeeks: Int {
         let measurementMax = measurements.map(\.ageWeeks).max() ?? 0
         let referenceMax = referenceCurve.last?.weeks ?? 78
@@ -24,10 +29,16 @@ struct WeightChartView: View {
     }
 
     private var maxWeight: Double {
-        let measurementMax = measurements.map(\.weightKg).max() ?? 0
-        let referenceMax = referenceCurve.filter { $0.weeks <= maxWeeks }.map(\.kg).max() ?? 30
-        let upperBand = referenceMax * (1 + GrowthCurves.tolerancePercent)
-        return max(measurementMax * 1.1, upperBand * 1.1)
+        let measurementMaxKg = measurements.map(\.weightKg).max() ?? 0
+        let referenceMaxKg = referenceCurve.filter { $0.weeks <= maxWeeks }.map(\.kg).max() ?? 30
+        let upperBandKg = referenceMaxKg * (1 + GrowthCurves.tolerancePercent)
+        let maxKg = max(measurementMaxKg * 1.1, upperBandKg * 1.1)
+        return weightUnit.convert(fromKg: maxKg)
+    }
+
+    /// Convert kg to display unit
+    private func displayWeight(_ kg: Double) -> Double {
+        weightUnit.convert(fromKg: kg)
     }
 
     var body: some View {
@@ -47,8 +58,8 @@ struct WeightChartView: View {
                     let band = WeightCalculations.referenceBand(at: point.weeks, curve: referenceCurve)
                     AreaMark(
                         x: .value(Strings.Health.weeks, point.weeks),
-                        yStart: .value("Min", band.min),
-                        yEnd: .value("Max", band.max)
+                        yStart: .value("Min", displayWeight(band.min)),
+                        yEnd: .value("Max", displayWeight(band.max))
                     )
                     .foregroundStyle(Color.ollieMuted.opacity(colorScheme == .dark ? 0.15 : 0.1))
                     .interpolationMethod(.catmullRom)
@@ -58,7 +69,7 @@ struct WeightChartView: View {
                 ForEach(referenceCurve.filter { $0.weeks <= maxWeeks }) { point in
                     LineMark(
                         x: .value(Strings.Health.weeks, point.weeks),
-                        y: .value(Strings.Health.kg, point.kg)
+                        y: .value(weightUnit.symbol, displayWeight(point.kg))
                     )
                     .foregroundStyle(Color.ollieMuted.opacity(0.5))
                     .lineStyle(StrokeStyle(lineWidth: 1.5, dash: [5, 3]))
@@ -69,7 +80,7 @@ struct WeightChartView: View {
                 ForEach(measurements) { measurement in
                     LineMark(
                         x: .value(Strings.Health.weeks, measurement.ageWeeks),
-                        y: .value(Strings.Health.kg, measurement.weightKg)
+                        y: .value(weightUnit.symbol, displayWeight(measurement.weightKg))
                     )
                     .foregroundStyle(Color.ollieAccent)
                     .lineStyle(StrokeStyle(lineWidth: 2.5))
@@ -80,7 +91,7 @@ struct WeightChartView: View {
                 ForEach(measurements) { measurement in
                     PointMark(
                         x: .value(Strings.Health.weeks, measurement.ageWeeks),
-                        y: .value(Strings.Health.kg, measurement.weightKg)
+                        y: .value(weightUnit.symbol, displayWeight(measurement.weightKg))
                     )
                     .foregroundStyle(Color.ollieAccent)
                     .symbolSize(60)

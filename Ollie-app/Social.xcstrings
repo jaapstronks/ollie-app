@@ -408,6 +408,16 @@
         }
       }
     },
+    "Needs practice" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oefening nodig"
+          }
+        }
+      }
+    },
     "Not started" : {
       "extractionState" : "stale",
       "localizations" : {

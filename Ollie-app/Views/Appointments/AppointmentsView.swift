@@ -169,11 +169,11 @@ struct AppointmentsView: View {
         let calendar = Calendar.current
 
         if calendar.isDateInToday(date) {
-            return String(localized: "Today")
+            return Strings.Common.today
         } else if calendar.isDateInTomorrow(date) {
-            return String(localized: "Tomorrow")
+            return Strings.Common.tomorrow
         } else if calendar.isDateInYesterday(date) {
-            return String(localized: "Yesterday")
+            return Strings.Common.yesterday
         } else {
             let formatter = DateFormatter()
             formatter.dateStyle = .medium

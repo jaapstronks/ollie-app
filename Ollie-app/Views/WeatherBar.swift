@@ -20,6 +20,11 @@ struct WeatherBar: View {
 /// Single hour cell in the weather bar
 struct WeatherHourCell: View {
     let forecast: HourForecast
+    @AppStorage(UserPreferences.Key.temperatureUnit.rawValue) private var temperatureUnitRaw = TemperatureUnit.celsius.rawValue
+
+    private var temperatureUnit: TemperatureUnit {
+        TemperatureUnit(rawValue: temperatureUnitRaw) ?? .celsius
+    }
 
     var body: some View {
         VStack(spacing: 4) {
@@ -34,7 +39,7 @@ struct WeatherHourCell: View {
                 .symbolRenderingMode(.multicolor)
 
             // Temperature
-            Text("\(Int(forecast.temperature))°")
+            Text(temperatureUnit.format(forecast.temperature))
                 .font(.caption)
                 .fontWeight(.medium)
 
@@ -107,6 +112,11 @@ struct WeatherSection: View {
     let forecasts: [HourForecast]
     let alert: WeatherAlert?
     let isLoading: Bool
+    @AppStorage(UserPreferences.Key.temperatureUnit.rawValue) private var temperatureUnitRaw = TemperatureUnit.celsius.rawValue
+
+    private var temperatureUnit: TemperatureUnit {
+        TemperatureUnit(rawValue: temperatureUnitRaw) ?? .celsius
+    }
 
     var body: some View {
         if isLoading && forecasts.isEmpty {
@@ -127,7 +137,7 @@ struct WeatherSection: View {
                     Image(systemName: current.icon)
                         .font(.subheadline)
                         .symbolRenderingMode(.multicolor)
-                    Text("\(Int(current.temperature))°")
+                    Text(temperatureUnit.format(current.temperature))
                         .font(.subheadline)
                         .fontWeight(.medium)
                 }

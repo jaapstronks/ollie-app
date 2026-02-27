@@ -12,6 +12,11 @@ import OllieShared
 struct ActionableEventCard: View {
     let actionableItem: ActionableItem
     let onLogEvent: (EventType, Date?) -> Void
+    @AppStorage(UserPreferences.Key.temperatureUnit.rawValue) private var temperatureUnitRaw = TemperatureUnit.celsius.rawValue
+
+    private var temperatureUnit: TemperatureUnit {
+        TemperatureUnit(rawValue: temperatureUnitRaw) ?? .celsius
+    }
 
     var body: some View {
         VStack(spacing: 12) {
@@ -65,7 +70,7 @@ struct ActionableEventCard: View {
                 .symbolRenderingMode(.multicolor)
 
             if let temp = item.temperature {
-                Text("\(temp)°")
+                Text(temperatureUnit.format(Double(temp)))
                     .font(.subheadline)
                     .fontWeight(.medium)
             }
@@ -222,6 +227,11 @@ struct UpcomingEventsCard: View {
     let isToday: Bool
 
     @State private var isExpanded = false
+    @AppStorage(UserPreferences.Key.temperatureUnit.rawValue) private var temperatureUnitRaw = TemperatureUnit.celsius.rawValue
+
+    private var temperatureUnit: TemperatureUnit {
+        TemperatureUnit(rawValue: temperatureUnitRaw) ?? .celsius
+    }
 
     /// Number of items to show by default
     private let defaultVisibleCount = 3
@@ -328,7 +338,7 @@ struct UpcomingEventsCard: View {
                     Image(systemName: weatherIcon)
                         .font(.caption2)
                     if let temp = item.temperature {
-                        Text("\(temp)°")
+                        Text(temperatureUnit.format(Double(temp)))
                             .font(.caption2)
                     }
                 }

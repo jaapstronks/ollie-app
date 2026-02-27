@@ -35,9 +35,21 @@ extension Strings {
             String(localized: "\(delta) since \(date)", table: table)
         }
 
+        // Accessibility
+        static func currentWeight(_ weight: String) -> String {
+            String(localized: "Current weight: \(weight)", table: table)
+        }
+        static func weightIncreased(_ delta: String) -> String {
+            String(localized: "Gained \(delta)", table: table)
+        }
+        static func weightDecreased(_ delta: String) -> String {
+            String(localized: "Lost \(delta)", table: table)
+        }
+
         // Chart
         static let weeks = String(localized: "Weeks", table: table)
         static let kg = String(localized: "kg", table: table)
+        static let lbs = String(localized: "lbs", table: table)
         static let yourPuppy = String(localized: "Your puppy", table: table)
         static let reference = String(localized: "Reference", table: table)
 
@@ -67,8 +79,10 @@ extension Strings {
 
         // Weight log sheet
         static let weightKg = String(localized: "Weight (kg)", table: table)
+        static let weightLbs = String(localized: "Weight (lbs)", table: table)
         static let enterWeight = String(localized: "Enter weight", table: table)
         static let weightPlaceholder = String(localized: "e.g. 8.5", table: table)
+        static let weightPlaceholderLbs = String(localized: "e.g. 18.7", table: table)
 
         // Milestone sections
         static let upcomingMilestones = String(localized: "Coming Up", table: table)

@@ -1,2037 +1,2115 @@
 {
-  "sourceLanguage": "en",
-  "strings": {
-    "%lld days, %lld events": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld dagen, %lld events"
+  "sourceLanguage" : "en",
+  "strings" : {
+    "%lld days, %lld events" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld dagen, %lld events"
           }
         }
       }
     },
-    "%lld min before": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld min van tevoren"
+    "%lld min before" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld min van tevoren"
           }
         }
       }
     },
-    "%lld skipped (already existed)": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld overgeslagen (bestond al)"
+    "%lld skipped (already existed)" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld overgeslagen (bestond al)"
           }
         }
       }
     },
-    "%lldx per day": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lldx per dag"
+    "%lldx per day" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lldx per dag"
           }
         }
       }
     },
-    "Active": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Actief"
+    "Active" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actief"
           }
         }
       }
     },
-    "Add meal": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Maaltijd toevoegen"
+    "Add Appointment" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afspraak toevoegen"
           }
         }
       }
     },
-    "Add Photo": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Foto toevoegen"
+    "Add meal" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maaltijd toevoegen"
           }
         }
       }
     },
-    "Add walk": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wandeling toevoegen"
+    "Add Photo" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Foto toevoegen"
           }
         }
       }
     },
-    "Advanced": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Geavanceerd"
+    "Add to Calendar" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toevoegen aan agenda"
           }
         }
       }
     },
-    "After %lld min awake": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Na %lld min wakker"
+    "Add walk" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wandeling toevoegen"
           }
         }
       }
     },
-    "Afternoon": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Middag"
+    "Address or location name" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adres of locatienaam"
           }
         }
       }
     },
-    "Age": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Leeftijd"
+    "Advanced" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geavanceerd"
           }
         }
       }
     },
-    "Amount": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hoeveelheid"
+    "Adjust Photo" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Foto aanpassen"
           }
         }
       }
     },
-    "Amount for %@": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hoeveelheid voor %@"
+    "After" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Na"
           }
         }
       }
     },
-    "App Settings": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "App-instellingen"
+    "After %lld min awake" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Na %lld min wakker"
           }
         }
       }
     },
-    "Appearance": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Weergave"
+    "Afternoon" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Middag"
           }
         }
       }
     },
-    "Are you sure you want to stop sharing? The other person will lose access.": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Weet je zeker dat je wilt stoppen met delen? De andere persoon verliest dan toegang."
+    "Age" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leeftijd"
           }
         }
       }
     },
-    "At %lld months old: max %lld minutes per walk": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Op %lld maanden oud: max %lld minuten per wandeling"
+    "All Day" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hele dag"
           }
         }
       }
     },
-    "Breakfast": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ontbijt"
+    "Amount" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoeveelheid"
           }
         }
       }
     },
-    "Breed": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ras"
+    "Amount for %@" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoeveelheid voor %@"
           }
         }
       }
     },
-    "Change Photo": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Foto wijzigen"
+    "App Settings" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App-instellingen"
           }
         }
       }
     },
-    "CloudKit is not available": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "CloudKit is niet beschikbaar"
+    "Appearance" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weergave"
           }
         }
       }
     },
-    "Could not check iCloud status": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kon iCloud-status niet controleren"
+    "Appointment title" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afspraaktitel"
           }
         }
       }
     },
-    "Could not load share": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kon gedeelde data niet laden"
+    "Appointments" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afspraken"
           }
         }
       }
     },
-    "Could not reach GitHub API": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kon GitHub API niet bereiken"
+    "Are you sure you want to stop sharing? The other person will lose access." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weet je zeker dat je wilt stoppen met delen? De andere persoon verliest dan toegang."
           }
         }
       }
     },
-    "Data": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gegevens"
+    "At %lld months old: max %lld minutes per walk" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Op %lld maanden oud: max %lld minuten per wandeling"
           }
         }
       }
     },
-    "Data is automatically synced between all your devices via iCloud.": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gegevens worden automatisch gesynchroniseerd tussen al je apparaten via iCloud."
+    "Breakfast" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ontbijt"
           }
         }
       }
     },
-    "Days home": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dagen thuis"
+    "Breed" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ras"
           }
         }
       }
     },
-    "Delete failed": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Verwijderen mislukt"
+    "Calendar access is required to sync appointments." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Agendatoegang is vereist om afspraken te synchroniseren."
           }
         }
       }
     },
-    "Delete failed: %@": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Verwijderen mislukt: %@"
+    "Change Photo" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Foto wijzigen"
           }
         }
       }
     },
-    "Dinner": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Avondeten"
+    "Change name" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Naam wijzigen"
           }
         }
       }
     },
-    "Do you want to import data from GitHub? This will fetch all available days.": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wil je gegevens importeren van GitHub? Dit haalt alle beschikbare dagen op."
+    "CloudKit is not available" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CloudKit is niet beschikbaar"
           }
         }
       }
     },
-    "Dog Profile": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hondenprofiel"
+    "Completed" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voltooid"
           }
         }
       }
     },
-    "Done!": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Klaar!"
+    "Contact" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Contact"
           }
         }
       }
     },
-    "Download failed": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Download mislukt"
+    "Could not check iCloud status" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kon iCloud-status niet controleren"
           }
         }
       }
     },
-    "Downloading: %lld/%lld": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Downloaden: %lld/%lld"
+    "Could not load share" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kon gedeelde data niet laden"
           }
         }
       }
     },
-    "e.g. 80g": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "bijv. 80g"
+    "Could not reach GitHub API" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kon GitHub API niet bereiken"
           }
         }
       }
     },
-    "e.g. Breakfast": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "bijv. Ontbijt"
+    "Data" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gegevens"
           }
         }
       }
     },
-    "Early (~20 min)": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vroeg (~20 min)"
+    "Data is automatically synced between all your devices via iCloud." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gegevens worden automatisch gesynchroniseerd tussen al je apparaten via iCloud."
           }
         }
       }
     },
-    "Edit exercise limit": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bewegingslimiet aanpassen"
+    "Date" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Datum"
           }
         }
       }
     },
-    "Edit meal": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Maaltijd bewerken"
+    "Days home" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dagen thuis"
           }
         }
       }
     },
-    "Edit meals": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Maaltijden aanpassen"
+    "Delete Appointment?" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afspraak verwijderen?"
           }
         }
       }
     },
-    "Enable notifications in Settings to receive reminders.": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Schakel meldingen in via Instellingen om herinneringen te ontvangen."
+    "Delete failed" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verwijderen mislukt"
           }
         }
       }
     },
-    "Enable notifications to receive reminders": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Schakel meldingen in om herinneringen te ontvangen"
+    "Delete failed: %@" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verwijderen mislukt: %@"
           }
         }
       }
     },
-    "Enter the name for this meal, like Breakfast or Dinner": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Voer de naam voor deze maaltijd in, zoals Ontbijt of Avondeten"
+    "Dinner" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avondeten"
           }
         }
       }
     },
-    "Enter the portion size, like 80g": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Voer de portiegrootte in, zoals 80g"
+    "Do you want to import data from GitHub? This will fetch all available days." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wil je gegevens importeren van GitHub? Dit haalt alle beschikbare dagen op."
           }
         }
       }
     },
-    "Evening": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Avond"
+    "Does not repeat" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Herhaalt niet"
           }
         }
       }
     },
-    "Exercise": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Beweging"
+    "Dog Profile" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hondenprofiel"
           }
         }
       }
     },
-    "Exercise limit": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bewegingslimiet"
+    "Done!" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Klaar!"
           }
         }
       }
     },
-    "Fetching files...": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bestanden ophalen..."
+    "Download failed" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Download mislukt"
           }
         }
       }
     },
-    "File content invalid": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bestandsinhoud ongeldig"
+    "Downloading: %lld/%lld" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Downloaden: %lld/%lld"
           }
         }
       }
     },
-    "Found: %lld days": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gevonden: %lld dagen"
+    "e.g. 80g" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "bijv. 80g"
           }
         }
       }
     },
-    "iCloud is restricted": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "iCloud is beperkt"
+    "e.g. Breakfast" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "bijv. Ontbijt"
           }
         }
       }
     },
-    "iCloud not available": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "iCloud niet beschikbaar"
+    "Early (~20 min)" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vroeg (~20 min)"
           }
         }
       }
     },
-    "iCloud status unknown": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "iCloud-status onbekend"
+    "Edit Appointment" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afspraak bewerken"
           }
         }
       }
     },
-    "iCloud Sync active": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "iCloud-synchronisatie actief"
+    "Edit exercise limit" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bewegingslimiet aanpassen"
           }
         }
       }
     },
-    "iCloud temporarily unavailable": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "iCloud tijdelijk niet beschikbaar"
+    "Edit meal" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maaltijd bewerken"
           }
         }
       }
     },
-    "iCloud unavailable": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "iCloud niet beschikbaar"
+    "Edit meals" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maaltijden aanpassen"
           }
         }
       }
     },
-    "Import": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Importeren"
+    "Enable notifications in Settings to receive reminders." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schakel meldingen in via Instellingen om herinneringen te ontvangen."
           }
         }
       }
     },
-    "Import from GitHub": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Importeren van GitHub"
+    "Enable notifications to receive reminders" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schakel meldingen in om herinneringen te ontvangen"
           }
         }
       }
     },
-    "Invalid response from GitHub": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ongeldige respons van GitHub"
+    "End Time" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eindtijd"
           }
         }
       }
     },
-    "Invite another person": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nog iemand uitnodigen"
+    "Ends" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eindigt"
           }
         }
       }
     },
-    "Invited": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Uitgenodigd"
+    "Enter the name for this meal, like Breakfast or Dinner" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voer de naam voor deze maaltijd in, zoals Ontbijt of Avondeten"
           }
         }
       }
     },
-    "Label": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Label"
+    "Enter the portion size, like 80g" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voer de portiegrootte in, zoals 80g"
           }
         }
       }
     },
-    "Last import: %@": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Laatste import: %@"
+    "Evening" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avond"
           }
         }
       }
     },
-    "Last: %@": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Laatst: %@"
+    "Every" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elke"
           }
         }
       }
     },
-    "Lunch": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Lunch"
+    "Exercise" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beweging"
           }
         }
       }
     },
-    "Manage sharing": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Delen beheren"
+    "Exercise limit" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bewegingslimiet"
           }
         }
       }
     },
-    "Max exercise": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Max beweging"
+    "Fetching files..." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bestanden ophalen..."
           }
         }
       }
     },
-    "Meal %lld": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Maaltijd %lld"
+    "File content invalid" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bestandsinhoud ongeldig"
           }
         }
       }
     },
-    "Meal name": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Naam van maaltijd"
+    "Found: %lld days" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gevonden: %lld dagen"
           }
         }
       }
     },
-    "Meal reminder": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Maaltijdherinnering"
+    "Frequency" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Frequentie"
           }
         }
       }
     },
-    "Meals": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Maaltijden"
+    "iCloud is restricted" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud is beperkt"
           }
         }
       }
     },
-    "Meals (%lld)x per day)": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Maaltijden (%lldx per dag)"
+    "iCloud not available" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud niet beschikbaar"
           }
         }
       }
     },
-    "Meals per day": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Maaltijden per dag"
+    "iCloud status unknown" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud-status onbekend"
           }
         }
       }
     },
-    "Migration failed: %@": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Migratie mislukt: %@"
+    "iCloud Sync active" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud-synchronisatie actief"
           }
         }
       }
     },
-    "min/month": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "min/maand"
+    "iCloud temporarily unavailable" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud tijdelijk niet beschikbaar"
           }
         }
       }
     },
-    "min/walk": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "min/wandeling"
+    "iCloud unavailable" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud niet beschikbaar"
           }
         }
       }
     },
-    "Minutes per month of age": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Minuten per maand leeftijd"
+    "Import" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Importeren"
           }
         }
       }
     },
-    "Morning": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ochtend"
+    "Import from GitHub" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Importeren van GitHub"
           }
         }
       }
     },
-    "Name": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Naam"
+    "In Calendar" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In agenda"
           }
         }
       }
     },
-    "Nap needed": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dutje nodig"
+    "Invalid response from GitHub" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ongeldige respons van GitHub"
           }
         }
       }
     },
-    "Naps": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dutjes"
+    "Invite another person" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nog iemand uitnodigen"
           }
         }
       }
     },
-    "No iCloud account configured": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Geen iCloud-account geconfigureerd"
+    "Invited" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uitgenodigd"
           }
         }
       }
     },
-    "No participants yet": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nog geen deelnemers"
+    "Label" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Label"
           }
         }
       }
     },
-    "Notifications": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Meldingen"
+    "Last import: %@" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laatste import: %@"
           }
         }
       }
     },
-    "Notifications disabled": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Meldingen uitgeschakeld"
+    "Last: %@" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laatst: %@"
           }
         }
       }
     },
-    "Number of meals": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aantal maaltijden"
+    "Link Contact" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Contact koppelen"
           }
         }
       }
     },
-    "On time (0 min)": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Op tijd (0 min)"
+    "Link Milestone" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mijlpaal koppelen"
           }
         }
       }
     },
-    "Overwrite existing data": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bestaande gegevens overschrijven"
+    "Location" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Locatie"
           }
         }
       }
     },
-    "Potty alarm": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Plasalarm"
+    "Lunch" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lunch"
           }
         }
       }
     },
-    "Potty reminders": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Plasherinneringen"
+    "Manage sharing" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delen beheren"
           }
         }
       }
     },
-    "Profile": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Profiel"
+    "Mark as Completed" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Markeer als voltooid"
           }
         }
       }
     },
-    "Profile Photo": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Profielfoto"
+    "Max exercise" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Max beweging"
           }
         }
       }
     },
-    "Receive smart reminders for potty, meals, naps, and walks.": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ontvang slimme herinneringen voor plasjes, maaltijden, dutjes en wandelingen."
+    "Meal %lld" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maaltijd %lld"
           }
         }
       }
     },
-    "Reminder before it's time for a walk.": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Herinnering voordat het tijd is voor een wandeling."
+    "Meal name" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Naam van maaltijd"
           }
         }
       }
     },
-    "Reminder before it's time for the next meal.": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Herinnering voordat het tijd is voor de volgende maaltijd."
+    "Meal reminder" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maaltijdherinnering"
           }
         }
       }
     },
-    "Reminder when %@ has been awake too long.": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Herinnering als %@ te lang wakker is geweest."
+    "Meals" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maaltijden"
           }
         }
       }
     },
-    "Reminder when ~10 minutes remaining": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Herinnering wanneer ~10 minuten resterend"
+    "Meals (%lld)x per day)" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maaltijden (%lldx per dag)"
           }
         }
       }
     },
-    "Reminder when ~20 minutes remaining": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Herinnering wanneer ~20 minuten resterend"
+    "Meals per day" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maaltijden per dag"
           }
         }
       }
     },
-    "Reminder when it's time": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Herinnering wanneer het tijd is"
+    "Migration failed: %@" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Migratie mislukt: %@"
           }
         }
       }
     },
-    "Reminders": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Herinneringen"
+    "Milestone" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mijlpaal"
           }
         }
       }
     },
-    "Remove last": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Laatste verwijderen"
+    "min/month" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "min/maand"
           }
         }
       }
     },
-    "Remove Photo": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Foto verwijderen"
+    "min/walk" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "min/wandeling"
           }
         }
       }
     },
-    "Removed": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Verwijderd"
+    "Minutes per month of age" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Minuten per maand leeftijd"
           }
         }
       }
     },
-    "Reset profile": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Profiel resetten"
+    "Morning" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ochtend"
           }
         }
       }
     },
-    "Save failed": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Opslaan mislukt"
+    "Name" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Naam"
           }
         }
       }
     },
-    "Save failed: %@": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Opslaan mislukt: %@"
+    "Nap needed" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dutje nodig"
           }
         }
       }
     },
-    "Settings": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Instellingen"
+    "Naps" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dutjes"
           }
         }
       }
     },
-    "Setup failed: %@": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Configuratie mislukt: %@"
+    "Never" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nooit"
           }
         }
       }
     },
-    "Share with partner": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Delen met partner"
+    "No Appointments" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geen afspraken"
           }
         }
       }
     },
-    "Share your puppy's data with your partner so you can both track and log events.": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Deel de gegevens van je pup met je partner zodat jullie allebei kunnen bijhouden en loggen."
+    "No appointments today" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geen afspraken vandaag"
           }
         }
       }
     },
-    "Shared": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gedeeld"
+    "No iCloud account configured" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geen iCloud-account geconfigureerd"
           }
         }
       }
     },
-    "Shared data": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gedeelde gegevens"
+    "No participants yet" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nog geen deelnemers"
           }
         }
       }
     },
-    "Sharing": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Delen"
+    "No past appointments" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geen afgelopen afspraken"
           }
         }
       }
     },
-    "Size": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Grootte"
+    "No upcoming appointments" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geen aankomende afspraken"
           }
         }
       }
     },
-    "Soon (~10 min)": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bijna (~10 min)"
+    "None" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geen"
           }
         }
       }
     },
-    "Sound feedback": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Geluidsfeedback"
+    "Notes" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notities"
           }
         }
       }
     },
-    "Stats": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Statistieken"
+    "Notes from Appointment" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notities van afspraak"
           }
         }
       }
     },
-    "Stop sharing": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Stoppen met delen"
+    "Notifications" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meldingen"
           }
         }
       }
     },
-    "Subscription, notifications, sync": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Abonnement, meldingen, synchronisatie"
+    "Notifications disabled" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meldingen uitgeschakeld"
           }
         }
       }
     },
-    "Sync": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Synchronisatie"
+    "Number of meals" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aantal maaltijden"
           }
         }
       }
     },
-    "Sync failed: %@": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Synchronisatie mislukt: %@"
+    "occurrences" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "keer"
           }
         }
       }
     },
-    "Sync now": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nu synchroniseren"
+    "On Date" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Op datum"
           }
         }
       }
     },
-    "Synced %@": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gesynchroniseerd %@"
+    "On time (0 min)" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Op tijd (0 min)"
           }
         }
       }
     },
-    "Syncing...": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Synchroniseren..."
+    "Optional notes about this appointment..." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Optionele notities over deze afspraak..."
           }
         }
       }
     },
-    "Tap a meal to edit. Swipe to delete.": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tik op een maaltijd om te bewerken. Veeg om te verwijderen."
+    "Overwrite existing data" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bestaande gegevens overschrijven"
           }
         }
       }
     },
-    "The well-known '5-minute rule' — adjust based on your puppy's energy level.": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "De bekende '5-minutenregel' — pas aan op basis van het energieniveau van je pup."
+    "Past" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afgelopen"
           }
         }
       }
     },
-    "The well-known '5-minute rule' — puppies can walk for a maximum of 5 minutes per month of age per session. Adjust based on your puppy's energy level.": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "De bekende '5-minutenregel' — puppy's kunnen maximaal 5 minuten per maand leeftijd per sessie wandelen. Pas aan op basis van het energieniveau van je pup."
+    "Pinch to zoom, drag to position" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Knijp om te zoomen, sleep om te positioneren"
           }
         }
       }
     },
-    "Theme": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Thema"
+    "Potty alarm" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plasalarm"
           }
         }
       }
     },
-    "Time": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tijd"
+    "Potty reminders" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plasherinneringen"
           }
         }
       }
     },
-    "Time for %@": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tijd voor %@"
+    "Profile" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Profiel"
           }
         }
       }
     },
-    "Walk %lld": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wandeling %lld"
+    "Profile Photo" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Profielfoto"
           }
         }
       }
     },
-    "Walk reminders": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wandelherinneringen"
+    "Receive smart reminders for potty, meals, naps, and walks." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ontvang slimme herinneringen voor plasjes, maaltijden, dutjes en wandelingen."
           }
         }
       }
     },
-    "Walks": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wandelingen"
+    "Reminder" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Herinnering"
           }
         }
       }
     },
-    "Walks per day": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wandelingen per dag"
+    "Reminder before it's time for a walk." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Herinnering voordat het tijd is voor een wandeling."
           }
         }
       }
     },
-    "Walks, meals, meds, spots": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wandelingen, maaltijden, medicijnen, plekjes"
+    "Reminder before it's time for the next meal." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Herinnering voordat het tijd is voor de volgende maaltijd."
           }
         }
       }
     },
-    "walks/day": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "wandelingen/dag"
+    "Reminder when %@ has been awake too long." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Herinnering als %@ te lang wakker is geweest."
           }
         }
       }
     },
-    "When to notify": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wanneer melden"
+    "Reminder when ~10 minutes remaining" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Herinnering wanneer ~10 minuten resterend"
           }
         }
       }
     },
-    "You cannot share as a participant": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Je kunt niet delen als deelnemer"
+    "Reminder when ~20 minutes remaining" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Herinnering wanneer ~20 minuten resterend"
           }
         }
       }
     },
-    "You're viewing someone else's data": {
-      "extractionState": "stale",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Je bekijkt de gegevens van iemand anders"
+    "Reminder when it's time" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Herinnering wanneer het tijd is"
           }
         }
       }
     },
-    "Appointments": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Afspraken"
+    "Reminders" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Herinneringen"
           }
         }
       }
     },
-    "Add Appointment": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Afspraak toevoegen"
+    "Remove from Calendar" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uit agenda verwijderen"
           }
         }
       }
     },
-    "Edit Appointment": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Afspraak bewerken"
+    "Remove last" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laatste verwijderen"
           }
         }
       }
     },
-    "Upcoming": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aankomend"
+    "Remove Photo" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Foto verwijderen"
           }
         }
       }
     },
-    "Past": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Afgelopen"
+    "Removed" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verwijderd"
           }
         }
       }
     },
-    "No Appointments": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Geen afspraken"
+    "Repeat Schedule" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Herhalingsschema"
           }
         }
       }
     },
-    "Schedule vet visits, training classes, grooming, and more.": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Plan dierenartsconsulten, trainingen, trimsessies en meer."
+    "Repeats" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Herhaalt"
           }
         }
       }
     },
-    "No upcoming appointments": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Geen aankomende afspraken"
+    "Reset profile" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Profiel resetten"
           }
         }
       }
     },
-    "No past appointments": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Geen afgelopen afspraken"
+    "Save failed" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opslaan mislukt"
           }
         }
       }
     },
-    "Type": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Type"
+    "Save failed: %@" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opslaan mislukt: %@"
           }
         }
       }
     },
-    "Title": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Titel"
+    "Schedule vet visits, training classes, grooming, and more." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plan dierenartsconsulten, trainingen, trimsessies en meer."
           }
         }
       }
     },
-    "Appointment title": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Afspraaktitel"
+    "Settings" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Instellingen"
           }
         }
       }
     },
-    "Date": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Datum"
+    "Setup failed: %@" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Configuratie mislukt: %@"
           }
         }
       }
     },
-    "Start Time": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Starttijd"
+    "Share with partner" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delen met partner"
           }
         }
       }
     },
-    "End Time": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Eindtijd"
+    "Share your puppy's data with your partner so you can both track and log events." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deel de gegevens van je pup met je partner zodat jullie allebei kunnen bijhouden en loggen."
           }
         }
       }
     },
-    "All Day": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hele dag"
+    "Shared" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gedeeld"
           }
         }
       }
     },
-    "Location": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Locatie"
+    "Shared data" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gedeelde gegevens"
           }
         }
       }
     },
-    "Address or location name": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Adres of locatienaam"
+    "Sharing" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delen"
           }
         }
       }
     },
-    "Notes": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Notities"
+    "Size" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grootte"
           }
         }
       }
     },
-    "Optional notes about this appointment...": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Optionele notities over deze afspraak..."
+    "Soon (~10 min)" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bijna (~10 min)"
           }
         }
       }
     },
-    "Reminder": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Herinnering"
+    "Sound feedback" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geluidsfeedback"
           }
         }
       }
     },
-    "Repeats": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Herhaalt"
+    "Start Time" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Starttijd"
           }
         }
       }
     },
-    "Does not repeat": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Herhaalt niet"
+    "Stats" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Statistieken"
           }
         }
       }
     },
-    "Repeat Schedule": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Herhalingsschema"
+    "Stop sharing" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stoppen met delen"
           }
         }
       }
     },
-    "Frequency": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Frequentie"
+    "Subscription, notifications, sync" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abonnement, meldingen, synchronisatie"
           }
         }
       }
     },
-    "Every": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Elke"
+    "Sync" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Synchronisatie"
           }
         }
       }
     },
-    "Ends": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Eindigt"
+    "Sync failed: %@" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Synchronisatie mislukt: %@"
           }
         }
       }
     },
-    "Never": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nooit"
+    "Sync now" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nu synchroniseren"
           }
         }
       }
     },
-    "On Date": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Op datum"
+    "Synced %@" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gesynchroniseerd %@"
           }
         }
       }
     },
-    "After": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Na"
+    "Syncing..." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Synchroniseren..."
           }
         }
       }
     },
-    "occurrences": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "keer"
+    "Tap a meal to edit. Swipe to delete." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tik op een maaltijd om te bewerken. Veeg om te verwijderen."
           }
         }
       }
     },
-    "Link Contact": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Contact koppelen"
+    "The well-known '5-minute rule' — adjust based on your puppy's energy level." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De bekende '5-minutenregel' — pas aan op basis van het energieniveau van je pup."
           }
         }
       }
     },
-    "Contact": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Contact"
+    "The well-known '5-minute rule' — puppies can walk for a maximum of 5 minutes per month of age per session. Adjust based on your puppy's energy level." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De bekende '5-minutenregel' — puppy's kunnen maximaal 5 minuten per maand leeftijd per sessie wandelen. Pas aan op basis van het energieniveau van je pup."
           }
         }
       }
     },
-    "Link Milestone": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mijlpaal koppelen"
+    "Theme" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thema"
           }
         }
       }
     },
-    "Milestone": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mijlpaal"
+    "This appointment will be permanently deleted." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deze afspraak wordt permanent verwijderd."
           }
         }
       }
     },
-    "None": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Geen"
+    "Time" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tijd"
           }
         }
       }
     },
-    "Add to Calendar": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Toevoegen aan agenda"
+    "Time for %@" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tijd voor %@"
           }
         }
       }
     },
-    "In Calendar": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "In agenda"
+    "Title" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Titel"
           }
         }
       }
     },
-    "Remove from Calendar": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Uit agenda verwijderen"
+    "Today's Schedule" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schema van vandaag"
           }
         }
       }
     },
-    "Calendar access is required to sync appointments.": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Agendatoegang is vereist om afspraken te synchroniseren."
+    "Type" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Type"
           }
         }
       }
     },
-    "Mark as Completed": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Markeer als voltooid"
+    "Upcoming" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aankomend"
           }
         }
       }
     },
-    "Completed": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Voltooid"
+    "Walk %lld" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wandeling %lld"
           }
         }
       }
     },
-    "Notes from Appointment": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Notities van afspraak"
+    "Walk reminders" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wandelherinneringen"
           }
         }
       }
     },
-    "What happened at this appointment?": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wat is er gebeurd bij deze afspraak?"
+    "Walks" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wandelingen"
           }
         }
       }
     },
-    "Delete Appointment?": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Afspraak verwijderen?"
+    "Walks per day" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wandelingen per dag"
           }
         }
       }
     },
-    "This appointment will be permanently deleted.": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Deze afspraak wordt permanent verwijderd."
+    "Walks, meals, meds, spots" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wandelingen, maaltijden, medicijnen, plekjes"
           }
         }
       }
     },
-    "Today's Schedule": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Schema van vandaag"
+    "walks/day" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "wandelingen/dag"
           }
         }
       }
     },
-    "No appointments today": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Geen afspraken vandaag"
+    "What happened at this appointment?" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wat is er gebeurd bij deze afspraak?"
+          }
+        }
+      }
+    },
+    "When to notify" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wanneer melden"
+          }
+        }
+      }
+    },
+    "You cannot share as a participant" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je kunt niet delen als deelnemer"
+          }
+        }
+      }
+    },
+    "You're viewing someone else's data" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je bekijkt de gegevens van iemand anders"
           }
         }
       }
     }
   },
-  "version": "1.0"
+  "version" : "1.0"
 }

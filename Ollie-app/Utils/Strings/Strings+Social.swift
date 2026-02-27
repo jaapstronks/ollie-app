@@ -75,6 +75,7 @@ extension Strings {
         static let inProgress = String(localized: "In progress", table: table)
         static let almostThere = String(localized: "Almost there", table: table)
         static let comfortableState = String(localized: "Comfortable", table: table)
+        static let needsPractice = String(localized: "Needs practice", table: table)
 
         // Walk suggestions
         static let walkSuggestionsTitle = String(localized: "Watch for during walk", table: table)

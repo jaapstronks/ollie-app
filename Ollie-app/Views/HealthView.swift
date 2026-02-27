@@ -16,8 +16,13 @@ struct HealthView: View {
 
     @State private var showWeightSheet = false
     @State private var showAddMilestoneSheet = false
+    @AppStorage(UserPreferences.Key.weightUnit.rawValue) private var weightUnitRaw = WeightUnit.kg.rawValue
 
     @Environment(\.colorScheme) private var colorScheme
+
+    private var weightUnit: WeightUnit {
+        WeightUnit(rawValue: weightUnitRaw) ?? .kg
+    }
 
     // MARK: - Computed Properties
 
@@ -129,7 +134,7 @@ struct HealthView: View {
     private func weightHeroCard(weight: Double, date: Date) -> some View {
         VStack(spacing: 8) {
             // Big weight number
-            Text(WeightCalculations.formatWeight(weight))
+            Text(weightUnit.format(weight))
                 .font(.system(size: 42, weight: .bold, design: .rounded))
                 .foregroundStyle(.primary)
 
@@ -143,7 +148,7 @@ struct HealthView: View {
                 HStack(spacing: 4) {
                     Image(systemName: delta.delta >= 0 ? "arrow.up.right" : "arrow.down.right")
                         .font(.caption)
-                    Text(Strings.Health.sinceLast(WeightCalculations.formatDelta(delta.delta)))
+                    Text(Strings.Health.sinceLast(weightUnit.formatDelta(delta.delta)))
                         .font(.caption)
                 }
                 .foregroundStyle(delta.delta >= 0 ? Color.ollieSuccess : Color.ollieWarning)

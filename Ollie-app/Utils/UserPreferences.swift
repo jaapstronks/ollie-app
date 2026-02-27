@@ -16,9 +16,9 @@ enum AppearanceMode: String, CaseIterable, Identifiable {
 
     var label: String {
         switch self {
-        case .system: return "Systeem"
-        case .light: return "Licht"
-        case .dark: return "Donker"
+        case .system: return Strings.Settings.systemTheme
+        case .light: return Strings.Settings.lightTheme
+        case .dark: return Strings.Settings.darkTheme
         }
     }
 
@@ -39,6 +39,105 @@ enum AppearanceMode: String, CaseIterable, Identifiable {
     }
 }
 
+/// Temperature unit options
+enum TemperatureUnit: String, CaseIterable, Identifiable {
+    case celsius = "celsius"
+    case fahrenheit = "fahrenheit"
+
+    var id: String { rawValue }
+
+    var label: String {
+        switch self {
+        case .celsius: return Strings.Units.celsius
+        case .fahrenheit: return Strings.Units.fahrenheit
+        }
+    }
+
+    var symbol: String {
+        switch self {
+        case .celsius: return "°C"
+        case .fahrenheit: return "°F"
+        }
+    }
+
+    /// Convert Celsius to this unit
+    func convert(fromCelsius celsius: Double) -> Double {
+        switch self {
+        case .celsius: return celsius
+        case .fahrenheit: return celsius * 9 / 5 + 32
+        }
+    }
+
+    /// Format temperature with unit symbol
+    func format(_ celsius: Double) -> String {
+        let converted = convert(fromCelsius: celsius)
+        return "\(Int(converted))°"
+    }
+}
+
+/// Weight unit options
+enum WeightUnit: String, CaseIterable, Identifiable {
+    case kg = "kg"
+    case lbs = "lbs"
+
+    var id: String { rawValue }
+
+    var label: String {
+        switch self {
+        case .kg: return Strings.Units.kilograms
+        case .lbs: return Strings.Units.pounds
+        }
+    }
+
+    var symbol: String {
+        switch self {
+        case .kg: return "kg"
+        case .lbs: return "lbs"
+        }
+    }
+
+    /// Convert kg to this unit
+    func convert(fromKg kg: Double) -> Double {
+        switch self {
+        case .kg: return kg
+        case .lbs: return kg * 2.20462
+        }
+    }
+
+    /// Convert from this unit to kg
+    func toKg(_ value: Double) -> Double {
+        switch self {
+        case .kg: return value
+        case .lbs: return value / 2.20462
+        }
+    }
+
+    /// Format weight with unit symbol
+    func format(_ kg: Double) -> String {
+        let converted = convert(fromKg: kg)
+        if self == .kg {
+            if converted >= 10 {
+                return String(format: "%.1f kg", converted)
+            } else {
+                return String(format: "%.2f kg", converted)
+            }
+        } else {
+            if converted >= 22 {
+                return String(format: "%.1f lbs", converted)
+            } else {
+                return String(format: "%.2f lbs", converted)
+            }
+        }
+    }
+
+    /// Format weight delta with unit symbol
+    func formatDelta(_ deltaKg: Double) -> String {
+        let converted = convert(fromKg: deltaKg)
+        let sign = converted >= 0 ? "+" : ""
+        return String(format: "%@%.2f %@", sign, converted, symbol)
+    }
+}
+
 /// User preferences stored in UserDefaults via @AppStorage
 enum UserPreferences {
     // MARK: - Keys
@@ -50,6 +149,8 @@ enum UserPreferences {
         case enableHaptics = "enableHaptics"
         case lastViewedDate = "lastViewedDate"
         case appearanceMode = "appearanceMode"
+        case temperatureUnit = "temperatureUnit"
+        case weightUnit = "weightUnit"
     }
 
     // MARK: - Defaults
@@ -59,7 +160,9 @@ enum UserPreferences {
         Key.hasCompletedOnboarding.rawValue: false,
         Key.showTimeSinceLastPlas.rawValue: true,
         Key.enableHaptics.rawValue: true,
-        Key.appearanceMode.rawValue: AppearanceMode.system.rawValue
+        Key.appearanceMode.rawValue: AppearanceMode.system.rawValue,
+        Key.temperatureUnit.rawValue: TemperatureUnit.celsius.rawValue,
+        Key.weightUnit.rawValue: WeightUnit.kg.rawValue
     ]
 
     /// Register default values on app launch

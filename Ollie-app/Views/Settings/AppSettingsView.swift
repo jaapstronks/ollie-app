@@ -31,6 +31,8 @@ struct AppSettingsView: View {
     @State private var shareError: String?
     @State private var showStopSharingConfirm = false
     @AppStorage(UserPreferences.Key.appearanceMode.rawValue) private var appearanceMode = AppearanceMode.system.rawValue
+    @AppStorage(UserPreferences.Key.temperatureUnit.rawValue) private var temperatureUnit = TemperatureUnit.celsius.rawValue
+    @AppStorage(UserPreferences.Key.weightUnit.rawValue) private var weightUnit = WeightUnit.kg.rawValue
 
     var body: some View {
         Form {
@@ -57,6 +59,9 @@ struct AppSettingsView: View {
 
             // Appearance
             appearanceSection
+
+            // Units
+            unitsSection
 
             // Advanced section
             Section(Strings.Settings.advanced) {
@@ -199,6 +204,26 @@ struct AppSettingsView: View {
                 set: { SoundFeedback.isEnabled = $0 }
             )) {
                 Label(Strings.Settings.soundFeedback, systemImage: "speaker.wave.2")
+            }
+        }
+    }
+
+    // MARK: - Units Section
+
+    private var unitsSection: some View {
+        Section(Strings.Settings.units) {
+            Picker(Strings.Settings.temperature, selection: $temperatureUnit) {
+                ForEach(TemperatureUnit.allCases) { unit in
+                    Text(unit.label)
+                        .tag(unit.rawValue)
+                }
+            }
+
+            Picker(Strings.Settings.weight, selection: $weightUnit) {
+                ForEach(WeightUnit.allCases) { unit in
+                    Text(unit.label)
+                        .tag(unit.rawValue)
+                }
             }
         }
     }

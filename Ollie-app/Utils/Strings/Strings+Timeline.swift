@@ -12,10 +12,14 @@ extension Strings {
 
     // MARK: - Timeline
     enum Timeline {
+        static let sectionTitle = String(localized: "Timeline", table: table)
         static let previousDay = String(localized: "Previous day", table: table)
         static let nextDay = String(localized: "Next day", table: table)
         static func dateLabel(date: String) -> String {
             String(localized: "Date: \(date)", table: table)
+        }
+        static func dayWithPuppyName(day: Int, name: String) -> String {
+            String(localized: "Day \(day) with \(name)", table: table)
         }
 
         static let noEvents = String(localized: "No events yet", table: table)
