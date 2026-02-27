@@ -123,6 +123,7 @@ struct OllieApp: App {
     @StateObject private var milestoneStore = MilestoneStore()
     @StateObject private var documentStore = DocumentStore()
     @StateObject private var contactStore = ContactStore()
+    @StateObject private var appointmentStore = AppointmentStore()
     @StateObject private var subscriptionManager = SubscriptionManager.shared
     @ObservedObject private var cloudKit = CloudKitService.shared
 
@@ -157,6 +158,7 @@ struct OllieApp: App {
                 .environmentObject(milestoneStore)
                 .environmentObject(documentStore)
                 .environmentObject(contactStore)
+                .environmentObject(appointmentStore)
                 .environmentObject(subscriptionManager)
                 .environmentObject(cloudKit)
                 .task {
@@ -193,6 +195,10 @@ struct OllieApp: App {
                     // Wire up DocumentStore with ProfileStore and migrate any orphaned documents
                     documentStore.setProfileStore(profileStore)
                     documentStore.migrateOrphanedDocuments()
+
+                    // Wire up AppointmentStore with ProfileStore and migrate any orphaned appointments
+                    appointmentStore.setProfileStore(profileStore)
+                    appointmentStore.migrateOrphanedAppointments()
 
                     // Initial sync to Apple Watch
                     WatchSyncService.shared.syncToWatch()

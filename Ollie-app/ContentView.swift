@@ -19,6 +19,7 @@ struct ContentView: View {
     @EnvironmentObject var milestoneStore: MilestoneStore
     @EnvironmentObject var documentStore: DocumentStore
     @EnvironmentObject var contactStore: ContactStore
+    @EnvironmentObject var appointmentStore: AppointmentStore
 
     @State private var showOnboarding = false
     @AppStorage(UserPreferences.Key.lastSelectedTab.rawValue) private var selectedTab = 0
@@ -54,7 +55,8 @@ struct ContentView: View {
                         socializationStore: socializationStore,
                         milestoneStore: milestoneStore,
                         documentStore: documentStore,
-                        contactStore: contactStore
+                        contactStore: contactStore,
+                        appointmentStore: appointmentStore
                     )
                 }
             }
@@ -79,7 +81,7 @@ struct ContentView: View {
 }
 
 /// Wrapper view that owns the TimelineViewModel as a @StateObject
-/// New structure: 4 tabs (Today, Train, Moments, Stats) + FAB for logging
+/// New structure: 5 tabs (Today, Train, Places, Calendar, Insights) + FAB for logging
 struct MainTabView: View {
     @Binding var selectedTab: Int
     let eventStore: EventStore
@@ -93,6 +95,7 @@ struct MainTabView: View {
     @ObservedObject var milestoneStore: MilestoneStore
     @ObservedObject var documentStore: DocumentStore
     @ObservedObject var contactStore: ContactStore
+    @ObservedObject var appointmentStore: AppointmentStore
     @EnvironmentObject var locationManager: LocationManager
 
     @StateObject private var viewModel: TimelineViewModel
@@ -115,7 +118,8 @@ struct MainTabView: View {
         socializationStore: SocializationStore,
         milestoneStore: MilestoneStore,
         documentStore: DocumentStore,
-        contactStore: ContactStore
+        contactStore: ContactStore,
+        appointmentStore: AppointmentStore
     ) {
         self._selectedTab = selectedTab
         self.eventStore = eventStore
@@ -129,6 +133,7 @@ struct MainTabView: View {
         self.milestoneStore = milestoneStore
         self.documentStore = documentStore
         self.contactStore = contactStore
+        self.appointmentStore = appointmentStore
         // StateObject init with autoclosure ensures single creation
         self._viewModel = StateObject(wrappedValue: TimelineViewModel(
             eventStore: eventStore,
@@ -166,9 +171,11 @@ struct MainTabView: View {
                 TodayView(
                     viewModel: viewModel,
                     thisWeekViewModel: thisWeekViewModel,
+                    appointmentStore: appointmentStore,
                     weatherService: weatherService,
                     onSettingsTap: { showingSettings = true },
-                    onNavigateToInsights: { selectedTab = 3 }
+                    onNavigateToInsights: { selectedTab = 4 },
+                    onNavigateToAppointments: { selectedTab = 3 }
                 )
                 .tabItem {
                     Label(Strings.Tabs.today, systemImage: "calendar")
@@ -199,22 +206,31 @@ struct MainTabView: View {
                 }
                 .tag(2)
 
-                // Tab 3: Insights (expanded with Health, Walks, Spots)
+                // Tab 3: Calendar (age, appointments, milestones)
+                CalendarTabView(
+                    milestoneStore: milestoneStore,
+                    appointmentStore: appointmentStore,
+                    socializationStore: socializationStore,
+                    onSettingsTap: { showingSettings = true }
+                )
+                .tabItem {
+                    Label(Strings.Tabs.calendar, systemImage: "calendar.badge.clock")
+                }
+                .tag(3)
+
+                // Tab 4: Insights (stats only)
                 InsightsView(
                     viewModel: viewModel,
                     momentsViewModel: momentsViewModel,
-                    spotStore: spotStore,
-                    socializationStore: socializationStore,
-                    milestoneStore: milestoneStore,
                     onSettingsTap: { showingSettings = true }
                 )
                 .tabItem {
                     Label(Strings.Tabs.insights, systemImage: "chart.bar.fill")
                 }
-                .tag(3)
+                .tag(4)
             }
 
-            // Floating Action Button (hidden on Moments tab)
+            // Floating Action Button (hidden on Places tab)
             if selectedTab != 2 {
                 HStack {
                     Spacer()
@@ -252,9 +268,6 @@ struct MainTabView: View {
                     dataImporter: dataImporter,
                     eventStore: eventStore,
                     notificationService: notificationService,
-                    spotStore: spotStore,
-                    viewModel: viewModel,
-                    milestoneStore: milestoneStore,
                     documentStore: documentStore,
                     contactStore: contactStore
                 )
@@ -294,4 +307,5 @@ struct MainTabView: View {
         .environmentObject(MilestoneStore())
         .environmentObject(DocumentStore())
         .environmentObject(ContactStore())
+        .environmentObject(AppointmentStore())
 }

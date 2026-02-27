@@ -16,6 +16,7 @@
         <attribute name="profilePhotoFilename" optional="YES" attributeType="String"/>
         <attribute name="sizeCategory" attributeType="String" defaultValueString="medium"/>
         <attribute name="walkScheduleData" optional="YES" attributeType="Binary"/>
+        <relationship name="appointments" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDDogAppointment" inverseName="profile" inverseEntity="CDDogAppointment"/>
         <relationship name="documents" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDDocument" inverseName="profile" inverseEntity="CDDocument"/>
         <relationship name="events" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDPuppyEvent" inverseName="profile" inverseEntity="CDPuppyEvent"/>
         <relationship name="exposures" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDExposure" inverseName="profile" inverseEntity="CDExposure"/>
@@ -129,6 +130,7 @@
         </fetchIndex>
     </entity>
     <entity name="CDDocument" representedClassName="CDDocument" syncable="YES" codeGenerationType="class">
+        <attribute name="attachmentType" attributeType="String" defaultValueString="none"/>
         <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="documentDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="expiryDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
@@ -136,6 +138,7 @@
         <attribute name="imageData" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
         <attribute name="modifiedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="note" optional="YES" attributeType="String"/>
+        <attribute name="pdfData" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
         <attribute name="thumbnailData" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
         <attribute name="title" optional="YES" attributeType="String"/>
         <attribute name="type" attributeType="String" defaultValueString="other"/>
@@ -156,6 +159,33 @@
         <attribute name="phone" optional="YES" attributeType="String"/>
         <fetchIndex name="byCreatedAtIndex">
             <fetchIndexElement property="createdAt" type="Binary" order="descending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="CDDogAppointment" representedClassName="CDDogAppointment" syncable="YES" codeGenerationType="class">
+        <attribute name="appointmentType" attributeType="String" defaultValueString="other"/>
+        <attribute name="calendarEventID" optional="YES" attributeType="String"/>
+        <attribute name="completionNotes" optional="YES" attributeType="String"/>
+        <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="endDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="isAllDay" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="isCompleted" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="linkedContactID" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="linkedMilestoneID" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="location" optional="YES" attributeType="String"/>
+        <attribute name="modifiedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="notes" optional="YES" attributeType="String"/>
+        <attribute name="recurrenceCount" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="recurrenceDaysOfWeek" optional="YES" attributeType="String"/>
+        <attribute name="recurrenceEndDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="recurrenceFrequency" optional="YES" attributeType="String"/>
+        <attribute name="recurrenceInterval" attributeType="Integer 16" defaultValueString="1" usesScalarValueType="YES"/>
+        <attribute name="reminderMinutesBefore" attributeType="Integer 16" defaultValueString="60" usesScalarValueType="YES"/>
+        <attribute name="startDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="title" attributeType="String" defaultValueString=""/>
+        <relationship name="profile" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDPuppyProfile" inverseName="appointments" inverseEntity="CDPuppyProfile"/>
+        <fetchIndex name="byStartDateIndex">
+            <fetchIndexElement property="startDate" type="Binary" order="ascending"/>
         </fetchIndex>
     </entity>
 </model>
