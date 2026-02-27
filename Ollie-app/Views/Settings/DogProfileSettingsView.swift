@@ -21,7 +21,7 @@ struct DogProfileSettingsView: View {
         Form {
             if let profile = profileStore.profile {
                 // Profile basics
-                ProfileSection(profile: profile)
+                ProfileSection(profile: profile, profileStore: profileStore)
                 StatsSection(profile: profile)
 
                 // Schedules

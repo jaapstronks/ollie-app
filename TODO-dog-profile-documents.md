@@ -12,9 +12,9 @@ The dog profile (`PuppyProfile` / `CDPuppyProfile`) already exists. This feature
 
 #### New Core Data Entity: `CDDocument`
 
-Add to `Ollie.xcdatamodeld`:
+Add to `Ollie-app/Ollie.xcdatamodeld`:
 
-```
+```xml
 Entity: CDDocument
 Attributes:
   - id: UUID
@@ -44,7 +44,7 @@ Add to `OllieShared/Sources/OllieShared/Models/`:
 // DocumentType.swift
 import Foundation
 
-public enum DocumentType: String, CaseIterable, Codable, Identifiable {
+public enum DocumentType: String, CaseIterable, Codable, Identifiable, Sendable {
     case passport = "passport"
     case chipRegistration = "chip_registration"
     case insurance = "insurance"
@@ -93,7 +93,7 @@ public enum DocumentType: String, CaseIterable, Codable, Identifiable {
 // DogDocument.swift
 import Foundation
 
-public struct DogDocument: Identifiable, Codable, Hashable {
+public struct DogDocument: Identifiable, Codable, Hashable, Sendable {
     public let id: UUID
     public var title: String
     public var documentType: DocumentType
@@ -141,7 +141,7 @@ public struct DogDocument: Identifiable, Codable, Hashable {
 
 ### Image Storage
 
-**Do NOT use CDN or cloud storage.** Store images locally in the app's documents directory:
+**Store images locally in the app's documents directory.** The existing `MediaPicker` and event photo handling patterns should be reused.
 
 ```swift
 // DocumentImageStore.swift
@@ -194,19 +194,19 @@ final class DocumentImageStore {
         try fileManager.removeItem(at: url)
     }
 
+    func fullPath(for filename: String) -> URL {
+        documentsDirectory.appendingPathComponent(filename)
+    }
+
     enum DocumentError: Error {
         case imageConversionFailed
     }
 }
 ```
 
-### CloudKit Sync Considerations
+### CloudKit Sync
 
-- The `DogDocuments/` directory should be included in the app's iCloud container if CloudKit is enabled
-- For image sync: consider using `NSPersistentCloudKitContainer` which auto-syncs Core Data
-- Images stored as external binary data in Core Data (`Allows External Storage` checkbox) will sync via CloudKit automatically
-- **Alternative approach:** Store the image data as a `Binary Data` attribute on `CDDocument` with "Allows External Storage" enabled — Core Data manages file storage and CloudKit handles sync
-- Max CloudKit asset size: 50MB per record (more than enough for document scans)
+The Core Data model uses `usedWithCloudKit="YES"`, so `CDDocument` will sync automatically via `NSPersistentCloudKitContainer`. Images stored as filenames will need the `DogDocuments/` directory included in iCloud container, or use Core Data's "Allows External Storage" for the image data.
 
 ### ViewModel
 
@@ -220,7 +220,7 @@ import SwiftUI
 final class DocumentStore: ObservableObject {
     @Published var documents: [DogDocument] = []
 
-    private let context: NSManagedObjectContext
+    let context: NSManagedObjectContext
     private let imageStore = DocumentImageStore.shared
 
     init(context: NSManagedObjectContext) {
@@ -234,7 +234,7 @@ final class DocumentStore: ObservableObject {
 
         do {
             let results = try context.fetch(request)
-            documents = results.map { $0.toDogDocument() }
+            documents = results.compactMap { $0.toDogDocument() }
         } catch {
             print("Failed to fetch documents: \(error)")
         }
@@ -300,32 +300,45 @@ DogProfileSettingsView (existing)
 DocumentsView
   ├── List grouped by DocumentType
   │     └── DocumentRow (thumbnail, title, type, expiration badge)
-  ├── Empty state illustration
+  ├── Empty state (ContentUnavailableView)
   ├── Toolbar: + button → AddDocumentSheet
   └── Swipe to delete
 
 AddDocumentSheet
-  ├── PhotosPicker / Camera button
-  ├── Image preview + crop
+  ├── Image selection (reuse MediaAttachmentButton pattern)
+  │     ├── PhotosPicker / Camera via existing MediaPicker
+  │     └── Image preview
   ├── TextField: title
   ├── Picker: DocumentType
-  ├── DatePicker: expiration (optional)
+  ├── Toggle + DatePicker: expiration (optional)
   ├── TextEditor: notes (optional)
   └── Save button
 
 DocumentDetailView
-  ├── Full-size zoomable image (pinch to zoom)
+  ├── Full-size zoomable image (reuse MediaPreviewView pattern)
   ├── Document metadata
   ├── Edit button → edit mode
   ├── Share button (ShareLink)
   └── Delete button
 ```
 
+### Reuse Existing Components
+
+The app already has these components that should be reused:
+
+| Component | Location | Use For |
+|-----------|----------|---------|
+| `MediaAttachmentButton` | `Ollie-app/Views/MediaAttachmentButton.swift` | Photo selection UI pattern |
+| `MediaPicker` | `Ollie-app/Views/MediaPicker.swift` | Camera/library picker |
+| `MediaPickerSource` | `Ollie-app/Views/MediaPicker.swift` | `.camera` / `.library` enum |
+| `MediaPreviewView` | `Ollie-app/Views/MediaPreviewView.swift` | Full-screen image viewer with zoom |
+
 ### Key View: DocumentsView
 
 ```swift
 // DocumentsView.swift
 import SwiftUI
+import OllieShared
 
 struct DocumentsView: View {
     @StateObject private var store: DocumentStore
@@ -339,9 +352,9 @@ struct DocumentsView: View {
         Group {
             if store.documents.isEmpty {
                 ContentUnavailableView(
-                    String(localized: "documents.empty.title"),
+                    Strings.Documents.emptyTitle,
                     systemImage: "doc.text.magnifyingglass",
-                    description: Text(String(localized: "documents.empty.description"))
+                    description: Text(Strings.Documents.emptyDescription)
                 )
             } else {
                 List {
@@ -360,7 +373,7 @@ struct DocumentsView: View {
                 }
             }
         }
-        .navigationTitle(String(localized: "documents.title"))
+        .navigationTitle(Strings.Documents.title)
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Button {
@@ -393,209 +406,51 @@ struct DocumentsView: View {
 }
 ```
 
-### Key View: AddDocumentSheet
-
-```swift
-// AddDocumentSheet.swift
-import SwiftUI
-import PhotosUI
-
-struct AddDocumentSheet: View {
-    @ObservedObject var store: DocumentStore
-    @Environment(\.dismiss) private var dismiss
-
-    @State private var title = ""
-    @State private var documentType: DocumentType = .passport
-    @State private var notes = ""
-    @State private var expirationDate: Date?
-    @State private var hasExpiration = false
-    @State private var selectedImage: UIImage?
-    @State private var selectedItem: PhotosPickerItem?
-    @State private var showingCamera = false
-    @State private var isSaving = false
-
-    var body: some View {
-        NavigationStack {
-            Form {
-                // Image selection
-                Section {
-                    if let image = selectedImage {
-                        Image(uiImage: image)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(maxHeight: 200)
-                            .clipShape(RoundedRectangle(cornerRadius: 8))
-                    }
-
-                    HStack {
-                        PhotosPicker(
-                            selection: $selectedItem,
-                            matching: .images
-                        ) {
-                            Label(String(localized: "documents.add.photoLibrary"), systemImage: "photo.on.rectangle")
-                        }
-
-                        Button {
-                            showingCamera = true
-                        } label: {
-                            Label(String(localized: "documents.add.camera"), systemImage: "camera")
-                        }
-                    }
-                }
-
-                // Metadata
-                Section {
-                    TextField(String(localized: "documents.add.title"), text: $title)
-
-                    Picker(String(localized: "documents.add.type"), selection: $documentType) {
-                        ForEach(DocumentType.allCases) { type in
-                            Label(type.displayName, systemImage: type.systemImage)
-                                .tag(type)
-                        }
-                    }
-                }
-
-                // Expiration
-                Section {
-                    Toggle(String(localized: "documents.add.hasExpiration"), isOn: $hasExpiration)
-                    if hasExpiration {
-                        DatePicker(
-                            String(localized: "documents.add.expirationDate"),
-                            selection: Binding(
-                                get: { expirationDate ?? Date() },
-                                set: { expirationDate = $0 }
-                            ),
-                            displayedComponents: .date
-                        )
-                    }
-                }
-
-                // Notes
-                Section(String(localized: "documents.add.notes")) {
-                    TextEditor(text: $notes)
-                        .frame(minHeight: 80)
-                }
-            }
-            .navigationTitle(String(localized: "documents.add.title.nav"))
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button(String(localized: "general.cancel")) { dismiss() }
-                }
-                ToolbarItem(placement: .confirmationAction) {
-                    Button(String(localized: "general.save")) { save() }
-                        .disabled(title.isEmpty || selectedImage == nil || isSaving)
-                }
-            }
-            .onChange(of: selectedItem) { _, newItem in
-                Task {
-                    if let data = try? await newItem?.loadTransferable(type: Data.self),
-                       let image = UIImage(data: data) {
-                        selectedImage = image
-                    }
-                }
-            }
-            .fullScreenCover(isPresented: $showingCamera) {
-                CameraView(image: $selectedImage)
-            }
-        }
-    }
-
-    private func save() {
-        guard let image = selectedImage else { return }
-        isSaving = true
-
-        Task {
-            do {
-                // Get current profile from Core Data
-                let context = store.context
-                let request = CDPuppyProfile.fetchRequest()
-                guard let profile = try context.fetch(request).first else { return }
-
-                try store.addDocument(
-                    title: title,
-                    type: documentType,
-                    image: image,
-                    notes: notes.isEmpty ? nil : notes,
-                    expirationDate: hasExpiration ? expirationDate : nil,
-                    profile: profile
-                )
-                dismiss()
-            } catch {
-                isSaving = false
-            }
-        }
-    }
-}
-```
-
-### Camera Integration
-
-```swift
-// CameraView.swift
-import SwiftUI
-
-struct CameraView: UIViewControllerRepresentable {
-    @Binding var image: UIImage?
-    @Environment(\.dismiss) private var dismiss
-
-    func makeUIViewController(context: Context) -> UIImagePickerController {
-        let picker = UIImagePickerController()
-        picker.sourceType = .camera
-        picker.delegate = context.coordinator
-        return picker
-    }
-
-    func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {}
-
-    func makeCoordinator() -> Coordinator {
-        Coordinator(self)
-    }
-
-    class Coordinator: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-        let parent: CameraView
-
-        init(_ parent: CameraView) {
-            self.parent = parent
-        }
-
-        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
-            if let image = info[.originalImage] as? UIImage {
-                parent.image = image
-            }
-            parent.dismiss()
-        }
-
-        func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-            parent.dismiss()
-        }
-    }
-}
-```
-
 ## File List
 
 ### New Files
+
 | File | Location |
 |------|----------|
 | `DocumentType.swift` | `OllieShared/Sources/OllieShared/Models/` |
 | `DogDocument.swift` | `OllieShared/Sources/OllieShared/Models/` |
-| `DocumentStore.swift` | `Ollie/ViewModels/` |
-| `DocumentImageStore.swift` | `Ollie/Services/` |
-| `DocumentsView.swift` | `Ollie/Views/Documents/` |
-| `AddDocumentSheet.swift` | `Ollie/Views/Documents/` |
-| `DocumentDetailView.swift` | `Ollie/Views/Documents/` |
-| `DocumentRow.swift` | `Ollie/Views/Documents/` |
-| `CameraView.swift` | `Ollie/Views/Documents/` |
+| `DocumentStore.swift` | `Ollie-app/ViewModels/` |
+| `DocumentImageStore.swift` | `Ollie-app/Services/` |
+| `DocumentsView.swift` | `Ollie-app/Views/Documents/` |
+| `AddDocumentSheet.swift` | `Ollie-app/Views/Documents/` |
+| `DocumentDetailView.swift` | `Ollie-app/Views/Documents/` |
+| `DocumentRow.swift` | `Ollie-app/Views/Documents/` |
 
 ### Modified Files
+
 | File | Change |
 |------|--------|
-| `Ollie.xcdatamodeld` | Add `CDDocument` entity + relationship on `CDPuppyProfile` |
-| `DogProfileSettingsView.swift` | Add "Documents" section with NavigationLink |
-| `Localizable.xcstrings` | Add all `documents.*` keys (en + nl) |
-| `Strings.swift` | Add document-related string constants if used |
+| `Ollie-app/Ollie.xcdatamodeld` | Add `CDDocument` entity + relationship on `CDPuppyProfile` |
+| `Ollie-app/Views/Settings/DogProfileSettingsView.swift` | Add "Documents" section with NavigationLink |
+| `OllieShared/Sources/OllieShared/Utils/Strings.swift` | Add `Strings.Documents.*` constants |
+| `Ollie-app/Localizable.xcstrings` | Add all document-related keys (en + nl) |
 
 ## Localization Keys
+
+Add to `Strings.swift`:
+
+```swift
+public enum Documents {
+    public static let title = String(localized: "documents.title")
+    public static let emptyTitle = String(localized: "documents.empty.title")
+    public static let emptyDescription = String(localized: "documents.empty.description")
+    public static let addTitle = String(localized: "documents.add.title")
+    public static let addTitleNav = String(localized: "documents.add.title.nav")
+    public static let type = String(localized: "documents.add.type")
+    public static let hasExpiration = String(localized: "documents.add.hasExpiration")
+    public static let expirationDate = String(localized: "documents.add.expirationDate")
+    public static let notes = String(localized: "documents.add.notes")
+    public static let expiring = String(localized: "document.expiring")
+    public static let expired = String(localized: "document.expired")
+}
+```
+
+Translations (en / nl):
 
 ```
 documents.title = "Documents" / "Documenten"
@@ -604,8 +459,6 @@ documents.empty.description = "Add your dog's important documents like passport,
 documents.add.title.nav = "Add Document" / "Document toevoegen"
 documents.add.title = "Title" / "Titel"
 documents.add.type = "Type" / "Type"
-documents.add.photoLibrary = "Photo Library" / "Fotobibliotheek"
-documents.add.camera = "Camera" / "Camera"
 documents.add.hasExpiration = "Has expiration date" / "Heeft vervaldatum"
 documents.add.expirationDate = "Expiration Date" / "Vervaldatum"
 documents.add.notes = "Notes" / "Notities"
@@ -624,23 +477,21 @@ document.expired = "Expired" / "Verlopen"
 
 ## Implementation Order
 
-1. **Core Data model** — Add `CDDocument` entity and relationship
-2. **OllieShared models** — `DocumentType` enum + `DogDocument` struct
-3. **DocumentImageStore** — File storage service
-4. **DocumentStore** — ViewModel with CRUD operations
-5. **DocumentRow** — List row component
-6. **DocumentsView** — Main list view
-7. **CameraView** — Camera UIKit bridge
-8. **AddDocumentSheet** — Creation form
-9. **DocumentDetailView** — Full view with zoom + share
-10. **Integration** — Add section to `DogProfileSettingsView`
-11. **Localization** — Add all string keys
-12. **Expiration notifications** — Optional: local notifications for expiring documents
+1. **Core Data model** - Add `CDDocument` entity and relationship to `CDPuppyProfile`
+2. **OllieShared models** - `DocumentType` enum + `DogDocument` struct
+3. **DocumentImageStore** - File storage service
+4. **DocumentStore** - ViewModel with CRUD operations
+5. **DocumentRow** - List row component
+6. **DocumentsView** - Main list view with empty state
+7. **AddDocumentSheet** - Creation form (reuse MediaPicker patterns)
+8. **DocumentDetailView** - Full view with zoom (reuse MediaPreviewView) + share
+9. **Integration** - Add section to `DogProfileSettingsView`
+10. **Localization** - Add all string keys to Strings.swift and xcstrings
 
 ## Future Considerations
 
-- **VisionKit integration** — Use `VNDocumentCameraViewController` for proper document scanning (auto-crop, perspective correction) instead of plain camera
-- **OCR** — Extract text from scanned documents using Vision framework
-- **Quick Look** — Support PDF documents via `QLPreviewController`
-- **Widgets** — Show expiring documents in widget
-- **Siri** — "Show my dog's passport" via App Intents
+- **VisionKit integration** - Use `VNDocumentCameraViewController` for proper document scanning (auto-crop, perspective correction)
+- **OCR** - Extract text from scanned documents using Vision framework
+- **Quick Look** - Support PDF documents via `QLPreviewController`
+- **Expiration notifications** - Local notifications for expiring documents
+- **Widgets** - Show expiring documents in widget

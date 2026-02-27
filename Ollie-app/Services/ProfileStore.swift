@@ -146,6 +146,13 @@ class ProfileStore: ObservableObject {
         saveProfile(currentProfile)
     }
 
+    /// Update the profile photo filename
+    func updateProfilePhoto(_ filename: String?) {
+        guard var currentProfile = profile else { return }
+        currentProfile.profilePhotoFilename = filename
+        saveProfile(currentProfile)
+    }
+
     /// Reset profile (for testing or re-onboarding)
     func resetProfile() {
         // Delete from Core Data

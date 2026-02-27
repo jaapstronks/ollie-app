@@ -107,7 +107,7 @@ struct PlanSection: View {
             if let milestone = selectedMilestone {
                 MilestoneCompletionSheet(
                     milestone: milestone,
-                    isPresented: $showMilestoneDetail,
+                    onDismiss: { showMilestoneDetail = false },
                     onComplete: { notes, photoID, vetClinic, completionDate in
                         milestoneStore.completeMilestone(
                             milestone,
@@ -116,6 +116,7 @@ struct PlanSection: View {
                             vetClinicName: vetClinic,
                             completionDate: completionDate
                         )
+                        showMilestoneDetail = false
                     }
                 )
             }

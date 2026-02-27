@@ -67,6 +67,16 @@
         }
       }
     },
+    "Add Photo" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Foto toevoegen"
+          }
+        }
+      }
+    },
     "Add walk" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -206,6 +216,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ras"
+          }
+        }
+      }
+    },
+    "Change Photo" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Foto wijzigen"
           }
         }
       }
@@ -1002,6 +1022,16 @@
         }
       }
     },
+    "Profile Photo" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Profielfoto"
+          }
+        }
+      }
+    },
     "Receive smart reminders for potty, meals, naps, and walks." : {
       "extractionState" : "stale",
       "localizations" : {
@@ -1097,6 +1127,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Laatste verwijderen"
+          }
+        }
+      }
+    },
+    "Remove Photo" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Foto verwijderen"
           }
         }
       }

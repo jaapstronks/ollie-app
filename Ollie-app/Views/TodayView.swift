@@ -157,17 +157,11 @@ struct TodayView: View {
                 .accessibilityLabel(Strings.Timeline.nextDay)
             }
 
-            // Settings gear (always visible)
-            Button {
-                onSettingsTap()
-            } label: {
-                Image(systemName: "gear")
-                    .font(.title2)
-                    .frame(width: 44, height: 44)
-                    .contentShape(Rectangle())
-            }
-            .accessibilityLabel(Strings.Tabs.settings)
-            .accessibilityIdentifier("settings_button")
+            // Profile photo button (opens settings)
+            ProfilePhotoButton(
+                profile: viewModel.profileStore.profile,
+                action: onSettingsTap
+            )
         }
         .padding()
         .background(Color(.systemBackground))

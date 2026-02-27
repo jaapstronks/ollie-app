@@ -21,6 +21,9 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
     public var medicationSchedule: MedicationSchedule
     public var modifiedAt: Date
 
+    /// Profile photo filename (stored in ProfilePhotos directory)
+    public var profilePhotoFilename: String?
+
     // MARK: - Legacy Migration
     /// Legacy one-time purchasers are grandfathered into Ollie+
     /// This field is only used for migration from the old purchase model
@@ -118,6 +121,7 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
         notificationSettings: NotificationSettings,
         medicationSchedule: MedicationSchedule = MedicationSchedule.empty(),
         modifiedAt: Date? = nil,
+        profilePhotoFilename: String? = nil,
         legacyPremiumUnlocked: Bool = false
     ) {
         self.id = id
@@ -133,6 +137,7 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
         self.notificationSettings = notificationSettings
         self.medicationSchedule = medicationSchedule
         self.modifiedAt = modifiedAt ?? Date()
+        self.profilePhotoFilename = profilePhotoFilename
         self.legacyPremiumUnlocked = legacyPremiumUnlocked
     }
 
@@ -144,6 +149,7 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
         case mealSchedule, exerciseConfig, predictionConfig
         case walkSchedule, notificationSettings, medicationSchedule
         case modifiedAt
+        case profilePhotoFilename
         // Legacy fields for migration (read old values)
         case freeStartDate, isPremiumUnlocked
         // New field
@@ -165,6 +171,7 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
         notificationSettings = try container.decodeIfPresent(NotificationSettings.self, forKey: .notificationSettings) ?? NotificationSettings.defaultSettings()
         medicationSchedule = try container.decodeIfPresent(MedicationSchedule.self, forKey: .medicationSchedule) ?? MedicationSchedule.empty()
         modifiedAt = try container.decodeIfPresent(Date.self, forKey: .modifiedAt) ?? Date()
+        profilePhotoFilename = try container.decodeIfPresent(String.self, forKey: .profilePhotoFilename)
 
         // Migration: check new field first, then fall back to old isPremiumUnlocked
         if let legacy = try container.decodeIfPresent(Bool.self, forKey: .legacyPremiumUnlocked) {
@@ -192,6 +199,7 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
         try container.encode(notificationSettings, forKey: .notificationSettings)
         try container.encode(medicationSchedule, forKey: .medicationSchedule)
         try container.encode(modifiedAt, forKey: .modifiedAt)
+        try container.encodeIfPresent(profilePhotoFilename, forKey: .profilePhotoFilename)
         try container.encode(legacyPremiumUnlocked, forKey: .legacyPremiumUnlocked)
         // Note: No longer writing freeStartDate or isPremiumUnlocked (subscription replaces these)
     }
