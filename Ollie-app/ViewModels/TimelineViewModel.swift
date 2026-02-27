@@ -2,6 +2,14 @@
 //  TimelineViewModel.swift
 //  Ollie-app
 //
+//  Core timeline view model - manages event display and state
+//  Functionality is split across extensions:
+//  - TimelineViewModel+Navigation.swift - Date navigation
+//  - TimelineViewModel+Events.swift - Event CRUD operations
+//  - TimelineViewModel+Predictions.swift - Potty/sleep predictions and stats
+//  - TimelineViewModel+CoverageGaps.swift - Coverage gap tracking
+//  - TimelineViewModel+Activities.swift - Walk/nap activity tracking
+//
 
 import Foundation
 import OllieShared
@@ -84,10 +92,10 @@ class TimelineViewModel: ObservableObject {
     // MARK: - Combined Sleep + Potty State
 
     /// Captured potty state at wake time (for post-wake tracking)
-    @Published private(set) var wakeTimePottyState: WakeTimePottyState?
+    @Published internal(set) var wakeTimePottyState: WakeTimePottyState?
 
     /// Time of last potty event (for clearing post-wake state)
-    private var lastPottyLogTime: Date?
+    internal var lastPottyLogTime: Date?
 
     /// Background notification task (stored for cancellation)
     private var notificationTask: Task<Void, Never>?
@@ -191,37 +199,6 @@ class TimelineViewModel: ObservableObject {
         sheetCoordinator.lastDeletedEvent
     }
 
-    // MARK: - Navigation
-
-    var dateTitle: String {
-        currentDate.relativeDayString
-    }
-
-    var canGoForward: Bool {
-        !currentDate.isToday
-    }
-
-    func goToPreviousDay() {
-        currentDate = currentDate.addingDays(-1)
-        loadEvents()
-    }
-
-    func goToNextDay() {
-        guard canGoForward else { return }
-        currentDate = currentDate.addingDays(1)
-        loadEvents()
-    }
-
-    func goToToday() {
-        currentDate = Date()
-        loadEvents()
-    }
-
-    func goToDate(_ date: Date) {
-        currentDate = date
-        loadEvents()
-    }
-
     // MARK: - Event Loading
 
     func loadEvents() {
@@ -234,7 +211,7 @@ class TimelineViewModel: ObservableObject {
 
     /// Rebuild the pre-computed timeline items from current events
     /// This avoids O(n²) session building on every view render
-    private func rebuildTimelineItems() {
+    internal func rebuildTimelineItems() {
         // Build sleep sessions (O(n) with optimized lookup)
         let sessions = SleepSession.buildSessions(from: events)
 
@@ -280,7 +257,7 @@ class TimelineViewModel: ObservableObject {
 
     /// Refresh cached stats (debounced, only if data changed)
     /// - Parameter force: When true, bypasses debounce (use after event changes)
-    private func refreshCachedStats(force: Bool = false) {
+    internal func refreshCachedStats(force: Bool = false) {
         // Debounce: only update if more than 1 second since last update
         // Skip debounce when force is true (e.g., after event edits)
         let now = Date()
@@ -337,32 +314,24 @@ class TimelineViewModel: ObservableObject {
         subscriptionManager.effectiveStatus.trialDaysRemaining ?? 0
     }
 
-    // MARK: - Quick Log
+    // MARK: - Medication Helpers
 
-    func quickLog(type: EventType, suggestedTime: Date? = nil) {
-        // Core logging is always free - no paywall check needed
-        // V2: All events now go through QuickLogSheet for time adjustment
-        // Pass suggested time for overdue items (e.g., scheduled meal time)
-        sheetCoordinator.presentSheet(.quickLog(type, suggestedTime: suggestedTime))
+    /// Get pending medications for today
+    var pendingMedications: [PendingMedication] {
+        guard let store = medicationStore,
+              let profile = profileStore.profile else { return [] }
+        return store.pendingMedications(schedule: profile.medicationSchedule, for: Date())
     }
 
-    /// Quick log with immediate location (used by FAB quick actions)
-    func quickLogWithLocation(type: EventType, location: EventLocation) {
-        // Core logging is always free - no paywall check needed
-        // Log immediately with the provided location
-        logEvent(type: type, location: location)
+    /// Mark a pending medication as complete
+    func completeMedication(_ pending: PendingMedication, medicationName: String) {
+        guard let store = medicationStore else { return }
+        store.markComplete(
+            medicationId: pending.medication.id,
+            timeId: pending.time.id,
+            for: pending.scheduledDate
+        )
         HapticFeedback.success()
-    }
-
-    /// Log event with time, location, and note from QuickLogSheet
-    func logFromQuickSheet(time: Date, location: EventLocation?, note: String?) {
-        guard let type = pendingEventType else { return }
-        logEvent(type: type, time: time, location: location, note: note)
-        sheetCoordinator.dismissSheet()
-    }
-
-    func cancelQuickLogSheet() {
-        sheetCoordinator.dismissSheet()
     }
 
     // MARK: - Activity Tracking Setup
@@ -386,467 +355,42 @@ class TimelineViewModel: ObservableObject {
         }
     }
 
-    // MARK: - Activity Tracking (Walks & Naps)
+    // MARK: - Internal Helper Properties (for extensions)
 
-    /// Start a new activity (walk or nap)
-    /// - Parameters:
-    ///   - type: The type of activity to start
-    ///   - startTime: Optional custom start time (defaults to now)
-    func startActivity(type: ActivityType, startTime: Date = Date()) {
-        activityManager.startActivity(type: type, startTime: startTime)
+    /// Puppy name for display
+    var puppyName: String {
+        profileStore.profile?.name ?? "Puppy"
     }
 
-    /// End the current activity
-    func endActivity(minutesAgo: Int, note: String?) {
-        // Get info before ending (for note update on naps)
-        let sleepSessionId = activityManager.currentActivity?.sleepSessionId
-        let activityType = activityManager.currentActivity?.type
+    // MARK: - Internal Helper Methods (for extensions)
 
-        // End the activity (this logs events via callbacks)
-        _ = activityManager.endActivity(minutesAgo: minutesAgo, note: note)
-
-        // Update sleep event note if needed (for naps)
-        if activityType == .nap,
-           let note = note, !note.isEmpty,
-           let sessionId = sleepSessionId,
-           let sleepEvent = events.first(where: { $0.sleepSessionId == sessionId && $0.type == .slapen }) {
-            var updated = sleepEvent
-            updated.note = note
-            updateEvent(updated)
-        }
-    }
-
-    /// Cancel/discard the current activity without logging
-    func cancelActivity() {
-        // Cancel and check if we need to delete a sleep event
-        if let result = activityManager.cancelActivity(),
-           result.shouldDeleteSleep,
-           let sessionId = result.sessionId,
-           let sleepEvent = events.first(where: { $0.sleepSessionId == sessionId && $0.type == .slapen }) {
-            eventStore.deleteEvent(sleepEvent)
-
-            // Immediately sync for instant UI updates
-            self.events = eventStore.events
-            rebuildTimelineItems()
-        }
-    }
-
-    /// Log a wake-up event at the specified time (for EndSleepSheet)
-    func logWakeUp(time: Date) {
-        // Capture potty state BEFORE logging wake (for post-wake tracking)
-        // Only capture if potty is urgent/overdue
-        if pottyPrediction.urgency.isUrgent {
-            wakeTimePottyState = CombinedStatusCalculations.captureWakeTimePottyState(
-                pottyPrediction: pottyPrediction
-            )
-        }
-
-        // Use the currentActivity's sleepSessionId if available (for naps started via activity tracking)
-        // Otherwise find it from recent events (for naps logged directly without activity tracking)
-        let sleepSessionId: UUID?
-        if let sessionId = activityManager.prepareWakeUp() {
-            sleepSessionId = sessionId
-        } else {
-            let recentEvents = getRecentEvents()
-            sleepSessionId = SleepSession.ongoingSleepSessionId(from: recentEvents)
-        }
-
-        logEvent(type: .ontwaken, time: time, sleepSessionId: sleepSessionId)
-        sheetCoordinator.dismissSheet()
-        HapticFeedback.success()
-    }
-
-    // Legacy: kept for backwards compatibility
-    func logWithLocation(location: EventLocation) {
-        guard let type = pendingEventType else { return }
-        logEvent(type: type, location: location)
-        sheetCoordinator.dismissSheet()
-    }
-
-    func cancelLocationPicker() {
-        sheetCoordinator.dismissSheet()
-    }
-
-    func openLogSheet(for type: EventType) {
-        sheetCoordinator.presentSheet(.logEvent(type))
-    }
-
-    func showAllEvents() {
-        // Core logging is always free - no paywall check needed
-        sheetCoordinator.presentSheet(.allEvents)
-    }
-
-    // MARK: - Potty Quick Log (V3: combined plassen/poepen)
-
-    func showPottySheet() {
-        // Core logging is always free - no paywall check needed
-        sheetCoordinator.presentSheet(.potty)
-    }
-
-    func cancelPottySheet() {
-        sheetCoordinator.dismissSheet()
-    }
-
-    func logPottyEvent(selection: PottySelection, time: Date, location: EventLocation, note: String?) {
-        switch selection {
-        case .plassen:
-            logEvent(type: .plassen, time: time, location: location, note: note)
-        case .poepen:
-            logEvent(type: .poepen, time: time, location: location, note: note)
-        case .beide:
-            // Log both events at the same time
-            logEvent(type: .plassen, time: time, location: location, note: note)
-            logEvent(type: .poepen, time: time, location: location, note: note)
-        }
-        sheetCoordinator.dismissSheet()
-    }
-
-    // MARK: - Quick Log Context
-
-    var quickLogContext: QuickLogContext {
-        QuickLogContext(
-            sleepState: currentSleepState,
-            mealSchedule: profileStore.profile?.mealSchedule,
-            todayEvents: events
-        )
-    }
-
-    // MARK: - Photo Moment Capture
-
-    func openCamera() {
-        // Photo/video attachments require Ollie+
-        guard subscriptionManager.hasAccess(to: .photoVideoAttachments) else {
-            sheetCoordinator.presentSheet(.olliePlus)
-            return
-        }
-        sheetCoordinator.presentSheet(.mediaPicker(.camera))
-    }
-
-    func openPhotoLibrary() {
-        // Photo/video attachments require Ollie+
-        guard subscriptionManager.hasAccess(to: .photoVideoAttachments) else {
-            sheetCoordinator.presentSheet(.olliePlus)
-            return
-        }
-        sheetCoordinator.presentSheet(.mediaPicker(.library))
-    }
-
-    func dismissMediaPicker() {
-        sheetCoordinator.dismissSheet()
-    }
-
-    func showLogMomentSheet() {
-        sheetCoordinator.presentSheet(.logMoment)
-    }
-
-    func dismissLogMomentSheet() {
-        sheetCoordinator.dismissSheet()
-    }
-
-    // MARK: - Event CRUD
-
-    func logEvent(
-        type: EventType,
-        time: Date = Date(),
-        location: EventLocation? = nil,
-        note: String? = nil,
-        who: String? = nil,
-        exercise: String? = nil,
-        result: String? = nil,
-        durationMin: Int? = nil,
-        sleepSessionId: UUID? = nil
-    ) {
-        // Note: sleepSessionId is auto-generated for sleep events in PuppyEvent init
-        let event = PuppyEvent(
-            time: time,
-            type: type,
-            location: location,
-            note: note,
-            who: who,
-            exercise: exercise,
-            result: result,
-            durationMin: durationMin,
-            sleepSessionId: sleepSessionId
-        )
-
-        // Track potty event time for post-wake state clearing
-        if type == .plassen || type == .poepen {
-            lastPottyLogTime = Date()
-            // Clear post-wake state when potty is logged
-            wakeTimePottyState = nil
-        }
-
-        // Check if this is the user's very first event (before adding)
-        let isFirstEvent = events.isEmpty && eventStore.getEvents(
-            from: Date.distantPast,
-            to: Date()
-        ).isEmpty
-
-        eventStore.addEvent(event)
-
-        // Immediately sync events from EventStore to ensure status cards update
-        // Don't wait for the deferred subscription - sync now for instant UI updates
+    /// Sync events from EventStore to local array
+    func syncEventsFromStore() {
         self.events = eventStore.events
         rebuildTimelineItems()
-
-        refreshNotifications()
-
-        // Provide audio + haptic feedback for successful log
-        FeedbackManager.logEvent()
-
-        // Trigger celebration for first-ever event
-        if isFirstEvent {
-            triggerCelebration(.milestone)
-        }
     }
 
-    /// Trigger a celebration animation
-    func triggerCelebration(_ style: CelebrationStyle) {
-        celebrationStyle = style
-        showCelebration = true
-    }
-
-    /// Log a walk event with optional spot information and potty events
-    func logWalkEvent(
-        time: Date = Date(),
-        durationMin: Int? = nil,
-        didPee: Bool = false,
-        didPoop: Bool = false,
-        spot: WalkSpot? = nil,
-        latitude: Double? = nil,
-        longitude: Double? = nil,
-        note: String? = nil
-    ) {
-        let walkEvent = PuppyEvent.walk(
-            time: time,
-            durationMin: durationMin,
-            note: note,
-            spot: spot,
-            latitude: latitude,
-            longitude: longitude
-        )
-
-        eventStore.addEvent(walkEvent)
-
-        // Log potty events linked to this walk
-        if didPee {
-            let peeEvent = PuppyEvent.potty(
-                type: .plassen,
-                time: time,
-                location: .buiten,
-                parentWalkId: walkEvent.id
-            )
-            eventStore.addEvent(peeEvent)
-        }
-
-        if didPoop {
-            let poopEvent = PuppyEvent.potty(
-                type: .poepen,
-                time: time,
-                location: .buiten,
-                parentWalkId: walkEvent.id
-            )
-            eventStore.addEvent(poopEvent)
-        }
-
-        // Immediately sync for instant UI updates
-        self.events = eventStore.events
-        rebuildTimelineItems()
-
-        refreshNotifications()
-
-        // Provide audio + haptic feedback for successful log
-        FeedbackManager.logEvent()
-    }
-
-    /// Log a completed nap with start and end time (creates both sleep and wake events)
-    func logCompletedNap(startTime: Date, endTime: Date, note: String?) {
-        let sessionId = UUID()
-
-        // Log sleep event at start time
-        let sleepEvent = PuppyEvent(
-            time: startTime,
-            type: .slapen,
-            note: note,
-            sleepSessionId: sessionId
-        )
-        eventStore.addEvent(sleepEvent)
-
-        // Log wake event at end time
-        let wakeEvent = PuppyEvent(
-            time: endTime,
-            type: .ontwaken,
-            sleepSessionId: sessionId
-        )
-        eventStore.addEvent(wakeEvent)
-
-        // Immediately sync for instant UI updates
-        self.events = eventStore.events
-        rebuildTimelineItems()
-
-        refreshNotifications()
-
-        // Provide audio + haptic feedback for successful log
-        FeedbackManager.logEvent()
-    }
-
-    /// Add a pre-built event (used for photo moments)
-    func addEvent(_ event: PuppyEvent) {
-        eventStore.addEvent(event)
-
-        // Immediately sync for instant UI updates
-        self.events = eventStore.events
-        rebuildTimelineItems()
-
+    /// Notify to refresh notifications
+    func notifyRefreshNotifications() {
         refreshNotifications()
     }
 
-    /// Update an existing event
-    func updateEvent(_ event: PuppyEvent) {
-        eventStore.updateEvent(event)
-
-        // Immediately sync for instant UI updates
-        self.events = eventStore.events
-        rebuildTimelineItems()
-
-        // Force refresh stats to ensure week view updates immediately
+    /// Notify to force refresh stats
+    func notifyForceRefreshStats() {
         refreshCachedStats(force: true)
-        refreshNotifications()
-
-        // Sync activity manager if this is the current nap's sleep event
-        // This ensures the banner shows the correct start time after editing
-        if event.type == .slapen,
-           let sessionId = event.sleepSessionId,
-           activityManager.currentActivity?.sleepSessionId == sessionId {
-            activityManager.updateActivityStartTime(to: event.time)
-        }
     }
 
-    /// Show edit sheet for an event
-    func editEvent(_ event: PuppyEvent) {
-        sheetCoordinator.presentSheet(.editEvent(event))
+    /// Record potty log time for post-wake state tracking
+    func recordPottyLogTime() {
+        lastPottyLogTime = Date()
+        // Clear post-wake state when potty is logged
+        wakeTimePottyState = nil
     }
 
-    // MARK: - Delete with Confirmation
-
-    /// Request to delete an event (shows confirmation)
-    func requestDeleteEvent(_ event: PuppyEvent) {
-        sheetCoordinator.requestDeleteEvent(event)
-    }
-
-    /// Confirm deletion after user approval
-    func confirmDeleteEvent() {
-        guard let event = sheetCoordinator.eventToDelete else { return }
-        deleteEventWithUndo(event)
-        sheetCoordinator.clearDeleteConfirmation()
-    }
-
-    /// Cancel deletion
-    func cancelDeleteEvent() {
-        sheetCoordinator.clearDeleteConfirmation()
-    }
-
-    /// Binding for delete confirmation dialog
-    var showingDeleteConfirmation: Binding<Bool> {
-        Binding(
-            get: { self.sheetCoordinator.showingDeleteConfirmation },
-            set: { self.sheetCoordinator.showingDeleteConfirmation = $0 }
-        )
-    }
-
-    /// Delete event with undo capability
-    func deleteEventWithUndo(_ event: PuppyEvent) {
-        // Actually delete
-        eventStore.deleteEvent(event)
-
-        // Immediately sync for instant UI updates
-        self.events = eventStore.events
-        rebuildTimelineItems()
-
-        // Force refresh stats to ensure week view updates immediately
-        refreshCachedStats(force: true)
-        refreshNotifications()
-
-        HapticFeedback.warning()
-
-        // Show undo banner
-        sheetCoordinator.showUndo(for: event)
-    }
-
-    /// Direct delete (from swipe, no confirmation needed but with undo)
-    func deleteEvent(_ event: PuppyEvent) {
-        deleteEventWithUndo(event)
-    }
-
-    /// Undo the last deletion
-    func undoDelete() {
-        guard let event = sheetCoordinator.popLastDeletedEvent() else { return }
-        eventStore.addEvent(event)
-
-        // Immediately sync for instant UI updates
-        self.events = eventStore.events
-        rebuildTimelineItems()
-        // Force refresh stats to ensure week view updates immediately
-        refreshCachedStats(force: true)
-        refreshNotifications()
-        HapticFeedback.success()
-    }
-
-    /// Dismiss the undo banner
-    func dismissUndoBanner() {
-        sheetCoordinator.dismissUndoBanner()
-    }
-
-    // MARK: - Predictions
-
-    /// Predicted minutes until next potty break
-    var predictedNextPlasMinutes: Int? {
-        guard let profile = profileStore.profile else { return nil }
-        let config = profile.predictionConfig
-
-        // Simple prediction: default gap minus time since last
-        guard let minutesSince = minutesSinceLastPlas else {
-            return config.defaultGapMinutes
-        }
-
-        let remaining = config.defaultGapMinutes - minutesSince
-        return max(0, remaining)
-    }
-
-    /// Predicted time for next potty break (for weather alerts)
-    var predictedNextPlasTime: Date? {
-        guard let minutes = predictedNextPlasMinutes else { return nil }
-        return Date().addingTimeInterval(Double(minutes) * 60)
-    }
-
-    // MARK: - Sleep Status
-
-    /// Current sleep state (sleeping, awake, or unknown)
-    var currentSleepState: SleepState {
-        let recentEvents = getRecentEvents()
-        return SleepCalculations.currentSleepState(events: recentEvents)
-    }
-
-    // MARK: - Combined Sleep + Potty Status
-
-    /// Combined state for sleep + potty status display
-    /// Determines which card(s) to show based on current conditions
-    var combinedSleepPottyState: CombinedSleepPottyState {
-        // Check if wake state should be cleared
-        if CombinedStatusCalculations.shouldClearWakeState(
-            wakeState: wakeTimePottyState,
-            pottyWasLoggedSince: lastPottyLogTime
-        ) {
-            // Clear it asynchronously
-            Task { @MainActor in
-                self.wakeTimePottyState = nil
-            }
-        }
-
-        return CombinedStatusCalculations.calculateCombinedState(
-            sleepState: currentSleepState,
-            pottyPrediction: pottyPrediction,
-            wakeTimePottyState: wakeTimePottyState
+    /// Capture wake time potty state for post-wake tracking
+    func captureWakeTimePottyState() {
+        wakeTimePottyState = CombinedStatusCalculations.captureWakeTimePottyState(
+            pottyPrediction: pottyPrediction
         )
     }
 
@@ -855,23 +399,9 @@ class TimelineViewModel: ObservableObject {
         wakeTimePottyState = nil
     }
 
-    // MARK: - Poop Status
-
-    /// Current poop status with pattern-based insights
-    var poopStatus: PoopStatus {
-        let ageInWeeks = profileStore.profile?.ageInWeeks ?? 26
-        let historicalEvents = getHistoricalEvents(days: PoopCalculations.patternAnalysisDays)
-
-        return PoopCalculations.calculateStatus(
-            todayEvents: events,
-            historicalEvents: historicalEvents,
-            ageInWeeks: ageInWeeks
-        )
-    }
-
     /// Get events from the past N days (for pattern analysis)
     /// Uses in-memory events for today + Core Data for historical data
-    private func getHistoricalEvents(days: Int) -> [PuppyEvent] {
+    func getHistoricalEvents(days: Int) -> [PuppyEvent] {
         let calendar = Calendar.current
         let today = Date()
         let startDate = today.addingDays(-days)
@@ -886,288 +416,11 @@ class TimelineViewModel: ObservableObject {
         return (historicalEvents + todayEvents).sorted { $0.time > $1.time }
     }
 
-    // MARK: - Potty Predictions
-
-    /// Current potty prediction with urgency level and triggers
-    var pottyPrediction: PottyPrediction {
-        guard let profile = profileStore.profile else {
-            return PottyPrediction(
-                urgency: .unknown,
-                trigger: .none,
-                expectedGapMinutes: 90,
-                minutesSinceLast: nil,
-                lastWasIndoor: false
-            )
-        }
-
-        let recentEvents = getRecentEvents()
-        return PredictionCalculations.calculatePrediction(
-            events: recentEvents,
-            config: profile.predictionConfig
-        )
-    }
-
-    /// Puppy name for display
-    var puppyName: String {
-        profileStore.profile?.name ?? "Puppy"
-    }
-
-    // MARK: - Medications
-
-    /// Pending medications for the current date
-    var pendingMedications: [PendingMedication] {
-        guard let profile = profileStore.profile,
-              let store = medicationStore else { return [] }
-        return store.pendingMedications(
-            schedule: profile.medicationSchedule,
-            for: currentDate
-        )
-    }
-
-    /// Complete a pending medication and log to timeline
-    func completeMedication(_ pending: PendingMedication, medicationName: String) {
-        // Mark as complete in medication store
-        medicationStore?.markComplete(
-            medicationId: pending.medication.id,
-            timeId: pending.time.id,
-            for: currentDate
-        )
-
-        // Log medication event to timeline
-        let event = PuppyEvent.medication(medicationName: medicationName)
-        eventStore.addEvent(event)
-
-        objectWillChange.send()
-    }
-
-    // MARK: - Coverage Gaps
-
-    /// Active coverage gap (ongoing, not ended)
-    var activeCoverageGap: PuppyEvent? {
-        events.activeGaps().first
-    }
-
-    /// All coverage gaps in the current view
-    var coverageGaps: [PuppyEvent] {
-        events.coverageGaps()
-    }
-
-    /// Start a new coverage gap
-    func startCoverageGap(type: CoverageGapType, startTime: Date, location: String?, note: String?) {
-        let gap = PuppyEvent.coverageGap(
-            startTime: startTime,
-            endTime: nil,
-            gapType: type,
-            location: location,
-            note: note
-        )
-        eventStore.addEvent(gap)
-
-        // Immediately sync for instant UI updates
-        self.events = eventStore.events
-        rebuildTimelineItems()
-
-        HapticFeedback.success()
-    }
-
-    /// End an active coverage gap
-    func endCoverageGap(_ gap: PuppyEvent, endTime: Date, note: String?) {
-        let updatedGap = gap.withEndTime(endTime, note: note)
-        eventStore.updateEvent(updatedGap)
-
-        // Immediately sync for instant UI updates
-        self.events = eventStore.events
-        rebuildTimelineItems()
-
-        HapticFeedback.success()
-    }
-
-    /// Show start coverage gap sheet
-    func showStartCoverageGapSheet() {
-        sheetCoordinator.presentSheet(.startCoverageGap)
-    }
-
-    /// Show end coverage gap sheet
-    func showEndCoverageGapSheet(for gap: PuppyEvent) {
-        sheetCoordinator.presentSheet(.endCoverageGap(gap))
-    }
-
-    /// Check for and show gap detection prompt if needed
-    /// Call this on app launch/foreground
-    func checkForGapDetection() {
-        // Don't show if there's already an active gap
-        guard activeCoverageGap == nil else { return }
-
-        // Don't show if a sheet is already active
-        guard sheetCoordinator.activeSheet == nil else { return }
-
-        // Get the most recent event time (excluding coverage gaps)
-        let lastEventTime = events
-            .filter { $0.type != .coverageGap }
-            .sorted { $0.time > $1.time }
-            .first?.time
-
-        // Check if we should prompt
-        if GapDetectionService.shouldPromptForGap(lastEventTime: lastEventTime),
-           let hours = GapDetectionService.hoursSinceLastEvent(lastEventTime: lastEventTime),
-           let (suggestedStart, _) = GapDetectionService.suggestedGapRange(lastEventTime: lastEventTime) {
-            sheetCoordinator.presentSheet(.gapDetection(
-                hours: hours,
-                puppyName: puppyName,
-                suggestedStartTime: suggestedStart
-            ))
-        }
-    }
-
-    // MARK: - Quick Catch-Up (3-16 hour gaps)
-
-    /// Check for and show catch-up prompt if needed
-    /// Call this on app launch/foreground for shorter gaps (3-16 hours)
-    func checkForCatchUp() {
-        // Don't show if there's already an active gap
-        guard activeCoverageGap == nil else { return }
-
-        // Don't show if a sheet is already active
-        guard sheetCoordinator.activeSheet == nil else { return }
-
-        // Get the most recent event time (excluding coverage gaps)
-        let lastEventTime = events
-            .filter { $0.type != .coverageGap }
-            .sorted { $0.time > $1.time }
-            .first?.time
-
-        // Check if we should show catch-up (3-16 hour gap range)
-        if CatchUpService.shouldShowCatchUp(lastEventTime: lastEventTime, hasActiveCoverageGap: false),
-           let hours = CatchUpService.hoursSinceLastEvent(lastEventTime) {
-            let context = CatchUpService.getCatchUpContext(
-                events: getRecentEvents(),
-                profile: profileStore.profile
-            )
-            sheetCoordinator.presentSheet(.catchUp(
-                hours: hours,
-                puppyName: puppyName,
-                context: context
-            ))
-        }
-    }
-
-    /// Process catch-up result and log approximate events
-    func processCatchUpResult(_ result: CatchUpResult) {
-        // Log sleep/wake event based on current state
-        if let isSleeping = result.isSleeping,
-           let sinceTime = result.sleepAwakeSinceTime {
-            if isSleeping {
-                // Log that they fell asleep at the given time
-                logEvent(type: .slapen, time: sinceTime, note: Strings.CatchUp.approximateNote)
-            } else {
-                // Log that they woke up at the given time
-                // Try to find an ongoing sleep session to link it to
-                let recentEvents = getRecentEvents()
-                let sleepSessionId = SleepSession.ongoingSleepSessionId(from: recentEvents)
-                logEvent(type: .ontwaken, time: sinceTime, note: Strings.CatchUp.approximateNote, sleepSessionId: sleepSessionId)
-            }
-        }
-
-        // Log potty event based on selection
-        if let minutesAgo = result.lastPottyOption.minutesAgo {
-            let pottyTime = Date().addingTimeInterval(-Double(minutesAgo) * 60)
-            logEvent(type: .plassen, time: pottyTime, location: .buiten, note: Strings.CatchUp.approximateNote)
-        }
-
-        // Log poop if user indicated yes
-        if result.hasPoopedToday == true {
-            // Log a poop event (approximate time, use current time)
-            logEvent(type: .poepen, time: Date(), location: .buiten, note: Strings.CatchUp.approximateNote)
-        }
-
-        // Note: We don't log meals here since we're just asking if they ate,
-        // not when - the meal schedule will handle the next meal reminder
-
-        HapticFeedback.success()
-    }
-
-    // MARK: - Streaks
-
-    /// Current streak information
-    var streakInfo: StreakInfo {
-        // Get all events for accurate streak calculation
-        let allEvents = getAllEvents()
-        return StreakCalculations.getStreakInfo(events: allEvents)
-    }
-
-    // MARK: - Daily Digest
-
-    /// Daily digest summary for current date
-    var dailyDigest: DailyDigest {
-        DigestCalculations.generateDigest(
-            events: events,
-            profile: profileStore.profile,
-            date: currentDate
-        )
-    }
-
-    // MARK: - Pattern Analysis
-
-    /// Pattern analysis for last 7 days (uses cached value for performance)
-    var patternAnalysis: PatternAnalysis {
-        // Return cached value if available
-        if let cached = cachedPatternAnalysis {
-            return cached
-        }
-        // Fallback to computing (shouldn't happen often)
-        let sevenDaysAgo = Date().addingDays(-7)
-        let recentEvents = eventStore.getEvents(from: sevenDaysAgo, to: Date())
-        return PatternCalculations.analyzePatterns(events: recentEvents, periodDays: 7)
-    }
-
-    // MARK: - Upcoming Events
-
-    /// Upcoming meals and walks for today, with optional weather forecasts
-    /// Returns legacy format with all items combined
-    func upcomingItems(forecasts: [HourForecast] = []) -> [UpcomingItem] {
-        guard let profile = profileStore.profile else { return [] }
-        return UpcomingCalculations.calculateUpcoming(
-            events: events,
-            mealSchedule: profile.mealSchedule,
-            walkSchedule: profile.walkSchedule,
-            forecasts: forecasts,
-            date: currentDate,
-            isWalkInProgress: isWalkInProgress
-        )
-    }
-
-    /// Separated actionable and upcoming items
-    /// - Actionable: items within 10 min or overdue (shown prominently)
-    /// - Upcoming: items more than 10 min away (shown in compact list)
-    func separatedUpcomingItems(forecasts: [HourForecast] = []) -> (actionable: [ActionableItem], upcoming: [UpcomingItem]) {
-        guard let profile = profileStore.profile else { return ([], []) }
-        return UpcomingCalculations.calculateUpcoming(
-            events: events,
-            mealSchedule: profile.mealSchedule,
-            walkSchedule: profile.walkSchedule,
-            forecasts: forecasts,
-            date: currentDate,
-            isWalkInProgress: isWalkInProgress
-        )
-    }
-
-    /// Whether current view is showing today
-    var isShowingToday: Bool {
-        currentDate.isToday
-    }
-
-    /// Whether user can log events (only for today)
-    var canLogEvents: Bool {
-        currentDate.isToday
-    }
-
     /// Get all events (up to 30 days back for streak history)
-    private func getAllEvents() -> [PuppyEvent] {
+    func getAllEvents() -> [PuppyEvent] {
         let thirtyDaysAgo = Date().addingDays(-30)
         return eventStore.getEvents(from: thirtyDaysAgo, to: Date())
     }
-
-    // MARK: - Private Helpers
 
     /// Get events from today and yesterday (for cross-midnight tracking)
     /// Uses in-memory events for today (fresh) + Core Data for yesterday (stable)
@@ -1191,7 +444,7 @@ class TimelineViewModel: ObservableObject {
         return (yesterdayEvents + todayEvents).sorted { $0.time > $1.time }
     }
 
-    // MARK: - Notifications
+    // MARK: - Private Helpers
 
     /// Refresh scheduled notifications after events change
     private func refreshNotifications() {

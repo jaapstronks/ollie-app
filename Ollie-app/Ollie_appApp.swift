@@ -252,6 +252,10 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
+        // Initialize WatchConnectivity session as early as possible (Apple best practice)
+        // This ensures WCSession is ready before any sync attempts
+        _ = WatchSyncService.shared
+
         // Register for remote notifications (required for CloudKit silent push)
         application.registerForRemoteNotifications()
         return true

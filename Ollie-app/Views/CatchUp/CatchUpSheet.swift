@@ -358,7 +358,7 @@ private struct StateButton: View {
             .padding(.vertical, 16)
             .background(
                 RoundedRectangle(cornerRadius: 12, style: .continuous)
-                    .fill(isSelected ? color : glassColor)
+                    .fill(isSelected ? color : GlassButtonHelpers.glassColor(for: colorScheme))
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 12, style: .continuous)
@@ -369,10 +369,6 @@ private struct StateButton: View {
             )
         }
         .buttonStyle(.plain)
-    }
-
-    private var glassColor: Color {
-        colorScheme == .dark ? Color.white.opacity(0.05) : Color.white.opacity(0.6)
     }
 }
 
@@ -393,7 +389,7 @@ private struct PottyOptionButton: View {
                 .padding(.vertical, 12)
                 .background(
                     RoundedRectangle(cornerRadius: 10, style: .continuous)
-                        .fill(isSelected ? Color.blue : glassColor)
+                        .fill(isSelected ? Color.blue : GlassButtonHelpers.glassColor(for: colorScheme))
                 )
                 .overlay(
                     RoundedRectangle(cornerRadius: 10, style: .continuous)
@@ -404,10 +400,6 @@ private struct PottyOptionButton: View {
                 )
         }
         .buttonStyle(.plain)
-    }
-
-    private var glassColor: Color {
-        colorScheme == .dark ? Color.white.opacity(0.05) : Color.white.opacity(0.6)
     }
 }
 
@@ -428,7 +420,7 @@ private struct YesNoButton: View {
                 .padding(.vertical, 12)
                 .background(
                     RoundedRectangle(cornerRadius: 10, style: .continuous)
-                        .fill(isSelected ? Color.blue : glassColor)
+                        .fill(isSelected ? Color.blue : GlassButtonHelpers.glassColor(for: colorScheme))
                 )
                 .overlay(
                     RoundedRectangle(cornerRadius: 10, style: .continuous)
@@ -439,10 +431,6 @@ private struct YesNoButton: View {
                 )
         }
         .buttonStyle(.plain)
-    }
-
-    private var glassColor: Color {
-        colorScheme == .dark ? Color.white.opacity(0.05) : Color.white.opacity(0.6)
     }
 }
 

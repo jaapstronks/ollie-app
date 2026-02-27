@@ -108,4 +108,27 @@ enum GlassButtonHelpers {
             endPoint: .center
         )
     }
+
+    /// Glass color for toggle button backgrounds
+    /// Used by StateButton, PottyOptionButton, YesNoButton, GapTypeButton, etc.
+    static func glassColor(for colorScheme: ColorScheme) -> Color {
+        colorScheme == .dark ? Color.white.opacity(0.05) : Color.white.opacity(0.6)
+    }
+
+    /// Glass pill background view for button styles
+    /// Used by GlassPillButtonStyle and GlassPillCompactButtonStyle
+    @ViewBuilder
+    static func glassPillBackground(
+        isPressed: Bool,
+        tint: GlassTint,
+        colorScheme: ColorScheme
+    ) -> some View {
+        ZStack {
+            Color.white.opacity(baseOpacity(isPressed: isPressed, colorScheme: colorScheme))
+            if let tintColor = tint.color {
+                tintColor.opacity(tintOpacity(colorScheme: colorScheme))
+            }
+        }
+        .background(.ultraThinMaterial)
+    }
 }

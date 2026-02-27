@@ -191,15 +191,15 @@ struct PlanSection: View {
     private func ageStageLabel(for profile: PuppyProfile) -> String {
         let weeks = profile.ageInWeeks
         if weeks < 8 {
-            return String(localized: "Newborn")
+            return Strings.PlanTab.ageStageNewborn
         } else if weeks <= 16 {
-            return String(localized: "Socialization")
+            return Strings.PlanTab.ageStageSocialization
         } else if weeks <= 26 {
-            return String(localized: "Juvenile")
+            return Strings.PlanTab.ageStageJuvenile
         } else if weeks <= 52 {
-            return String(localized: "Adolescent")
+            return Strings.PlanTab.ageStageAdolescent
         } else {
-            return String(localized: "Adult")
+            return Strings.PlanTab.ageStageAdult
         }
     }
 

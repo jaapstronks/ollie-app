@@ -34,6 +34,12 @@ struct DurationTimePicker: View {
     @State private var showStartPicker = false
     @State private var showEndPicker = false
 
+    /// Track if user has manually edited end time (if not, end follows start changes)
+    @State private var userEditedEndTime = false
+
+    /// Last known duration before a start time change (to maintain when adjusting start)
+    @State private var lastKnownDuration: TimeInterval = 0
+
     /// Computed duration in minutes
     private var durationMinutes: Int {
         max(1, Int(endTime.timeIntervalSince(startTime) / 60))
@@ -96,15 +102,26 @@ struct DurationTimePicker: View {
                 .datePickerStyle(.wheel)
                 .labelsHidden()
                 .frame(height: 120)
+                .onAppear {
+                    // Capture current duration when picker opens
+                    lastKnownDuration = endTime.timeIntervalSince(startTime)
+                }
                 .onChange(of: startTime) { _, newStart in
-                    // Ensure end time is after start time
-                    if newStart >= endTime {
-                        endTime = newStart.addingTimeInterval(5 * 60) // Add 5 min minimum
-                    }
+                    // Maintain the duration by adjusting end time
+                    let targetDuration = lastKnownDuration > 0 ? lastKnownDuration : 10 * 60 // Default 10 min
+                    var newEnd = newStart.addingTimeInterval(targetDuration)
+
                     // Clamp end time to max
-                    if endTime > maxEndTime {
-                        endTime = maxEndTime
+                    if newEnd > maxEndTime {
+                        newEnd = maxEndTime
                     }
+
+                    // Ensure minimum 1 minute duration
+                    if newEnd.timeIntervalSince(newStart) < 60 {
+                        newEnd = newStart.addingTimeInterval(60)
+                    }
+
+                    endTime = newEnd
                 }
             }
 
@@ -150,6 +167,10 @@ struct DurationTimePicker: View {
                 .datePickerStyle(.wheel)
                 .labelsHidden()
                 .frame(height: 120)
+                .onChange(of: endTime) { _, _ in
+                    // User explicitly edited end time, update lastKnownDuration
+                    lastKnownDuration = endTime.timeIntervalSince(startTime)
+                }
             }
 
             Divider()
@@ -203,15 +224,19 @@ struct DurationTimePicker: View {
 
     private func setDuration(_ minutes: Int) {
         // Calculate new end time from start time + duration
-        let newEnd = startTime.addingTimeInterval(Double(minutes) * 60)
+        let duration = Double(minutes) * 60
+        let newEnd = startTime.addingTimeInterval(duration)
 
         // If end would be in the future, adjust start time instead
         if newEnd > maxEndTime {
             endTime = maxEndTime
-            startTime = maxEndTime.addingTimeInterval(-Double(minutes) * 60)
+            startTime = maxEndTime.addingTimeInterval(-duration)
         } else {
             endTime = newEnd
         }
+
+        // Update lastKnownDuration so future start time changes maintain this duration
+        lastKnownDuration = duration
     }
 }
 
