@@ -16,8 +16,12 @@ struct EndSleepSheet: View {
     @State private var wakeUpTime: Date = Date()
     @State private var showingTimePicker: Bool = false
 
+    private var currentDurationMinutes: Int {
+        wakeUpTime.minutesSince(sleepStartTime)
+    }
+
     private var currentDuration: String {
-        let minutes = wakeUpTime.minutesSince(sleepStartTime)
+        let minutes = currentDurationMinutes
         if minutes < 60 {
             return "\(minutes) min"
         } else {
@@ -28,6 +32,16 @@ struct EndSleepSheet: View {
             }
             return "\(hours)h\(mins)m"
         }
+    }
+
+    private var sleepDurationText: String {
+        let minutes = currentDurationMinutes
+        if minutes <= 1 {
+            return Strings.SleepStatus.justFellAsleep
+        } else if minutes <= 15 {
+            return Strings.SleepStatus.sleepingBriefly(duration: currentDuration)
+        }
+        return Strings.SleepStatus.sleepingFor(duration: currentDuration)
     }
 
     var body: some View {
@@ -46,7 +60,7 @@ struct EndSleepSheet: View {
 
             // Sleep duration summary
             VStack(spacing: 8) {
-                Text(Strings.SleepStatus.sleepingFor(duration: currentDuration))
+                Text(sleepDurationText)
                     .font(.headline)
 
                 Text(Strings.SleepStatus.started(time: sleepStartTime.timeString))
