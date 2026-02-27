@@ -16,6 +16,8 @@ struct SettingsView: View {
     @ObservedObject var spotStore: SpotStore
     @ObservedObject var viewModel: TimelineViewModel
     @ObservedObject var milestoneStore: MilestoneStore
+    @ObservedObject var documentStore: DocumentStore
+    @ObservedObject var contactStore: ContactStore
 
     var body: some View {
         List {
@@ -26,7 +28,9 @@ struct SettingsView: View {
                         profileStore: profileStore,
                         spotStore: spotStore,
                         viewModel: viewModel,
-                        milestoneStore: milestoneStore
+                        milestoneStore: milestoneStore,
+                        documentStore: documentStore,
+                        contactStore: contactStore
                     )
                 } label: {
                     SettingsHubRow(
@@ -91,6 +95,8 @@ private struct SettingsHubRow: View {
     let eventStore = EventStore()
     let profileStore = ProfileStore()
     let milestoneStore = MilestoneStore()
+    let documentStore = DocumentStore()
+    let contactStore = ContactStore()
     let viewModel = TimelineViewModel(eventStore: eventStore, profileStore: profileStore)
 
     NavigationStack {
@@ -101,7 +107,9 @@ private struct SettingsHubRow: View {
             notificationService: NotificationService(),
             spotStore: SpotStore(),
             viewModel: viewModel,
-            milestoneStore: milestoneStore
+            milestoneStore: milestoneStore,
+            documentStore: documentStore,
+            contactStore: contactStore
         )
     }
 }

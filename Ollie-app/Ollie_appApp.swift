@@ -121,6 +121,8 @@ struct OllieApp: App {
     @StateObject private var medicationStore = MedicationStore()
     @StateObject private var socializationStore = SocializationStore()
     @StateObject private var milestoneStore = MilestoneStore()
+    @StateObject private var documentStore = DocumentStore()
+    @StateObject private var contactStore = ContactStore()
     @StateObject private var subscriptionManager = SubscriptionManager.shared
     @ObservedObject private var cloudKit = CloudKitService.shared
 
@@ -153,6 +155,8 @@ struct OllieApp: App {
                 .environmentObject(medicationStore)
                 .environmentObject(socializationStore)
                 .environmentObject(milestoneStore)
+                .environmentObject(documentStore)
+                .environmentObject(contactStore)
                 .environmentObject(subscriptionManager)
                 .environmentObject(cloudKit)
                 .task {
@@ -185,6 +189,10 @@ struct OllieApp: App {
 
                     // Seed default milestones if this is a fresh install
                     milestoneStore.seedDefaultMilestonesIfNeeded()
+
+                    // Wire up DocumentStore with ProfileStore and migrate any orphaned documents
+                    documentStore.setProfileStore(profileStore)
+                    documentStore.migrateOrphanedDocuments()
 
                     // Initial sync to Apple Watch
                     WatchSyncService.shared.syncToWatch()

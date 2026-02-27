@@ -17,6 +17,8 @@ struct ContentView: View {
     @EnvironmentObject var medicationStore: MedicationStore
     @EnvironmentObject var socializationStore: SocializationStore
     @EnvironmentObject var milestoneStore: MilestoneStore
+    @EnvironmentObject var documentStore: DocumentStore
+    @EnvironmentObject var contactStore: ContactStore
 
     @State private var showOnboarding = false
     @AppStorage(UserPreferences.Key.lastSelectedTab.rawValue) private var selectedTab = 0
@@ -50,7 +52,9 @@ struct ContentView: View {
                         spotStore: spotStore,
                         medicationStore: medicationStore,
                         socializationStore: socializationStore,
-                        milestoneStore: milestoneStore
+                        milestoneStore: milestoneStore,
+                        documentStore: documentStore,
+                        contactStore: contactStore
                     )
                 }
             }
@@ -87,6 +91,8 @@ struct MainTabView: View {
     @ObservedObject var medicationStore: MedicationStore
     @ObservedObject var socializationStore: SocializationStore
     @ObservedObject var milestoneStore: MilestoneStore
+    @ObservedObject var documentStore: DocumentStore
+    @ObservedObject var contactStore: ContactStore
     @EnvironmentObject var locationManager: LocationManager
 
     @StateObject private var viewModel: TimelineViewModel
@@ -107,7 +113,9 @@ struct MainTabView: View {
         spotStore: SpotStore,
         medicationStore: MedicationStore,
         socializationStore: SocializationStore,
-        milestoneStore: MilestoneStore
+        milestoneStore: MilestoneStore,
+        documentStore: DocumentStore,
+        contactStore: ContactStore
     ) {
         self._selectedTab = selectedTab
         self.eventStore = eventStore
@@ -119,6 +127,8 @@ struct MainTabView: View {
         self.medicationStore = medicationStore
         self.socializationStore = socializationStore
         self.milestoneStore = milestoneStore
+        self.documentStore = documentStore
+        self.contactStore = contactStore
         // StateObject init with autoclosure ensures single creation
         self._viewModel = StateObject(wrappedValue: TimelineViewModel(
             eventStore: eventStore,
@@ -244,7 +254,9 @@ struct MainTabView: View {
                     notificationService: notificationService,
                     spotStore: spotStore,
                     viewModel: viewModel,
-                    milestoneStore: milestoneStore
+                    milestoneStore: milestoneStore,
+                    documentStore: documentStore,
+                    contactStore: contactStore
                 )
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
@@ -278,4 +290,8 @@ struct MainTabView: View {
         .environmentObject(SpotStore())
         .environmentObject(LocationManager())
         .environmentObject(MedicationStore())
+        .environmentObject(SocializationStore())
+        .environmentObject(MilestoneStore())
+        .environmentObject(DocumentStore())
+        .environmentObject(ContactStore())
 }

@@ -13,6 +13,8 @@ struct DogProfileSettingsView: View {
     @ObservedObject var spotStore: SpotStore
     @ObservedObject var viewModel: TimelineViewModel
     @ObservedObject var milestoneStore: MilestoneStore
+    @ObservedObject var documentStore: DocumentStore
+    @ObservedObject var contactStore: ContactStore
 
     @State private var showingMealEdit = false
     @State private var showingWalkScheduleEdit = false
@@ -45,6 +47,12 @@ struct DogProfileSettingsView: View {
 
                 // Health milestones
                 healthSection
+
+                // Documents
+                documentsSection
+
+                // Contacts
+                contactsSection
             }
         }
         .navigationTitle(profileStore.profile?.name ?? Strings.Settings.profile)
@@ -139,12 +147,62 @@ struct DogProfileSettingsView: View {
             }
         }
     }
+
+    @ViewBuilder
+    private var documentsSection: some View {
+        Section(Strings.Documents.title) {
+            NavigationLink {
+                DocumentsView(documentStore: documentStore)
+            } label: {
+                HStack {
+                    Label {
+                        Text(Strings.Documents.title)
+                    } icon: {
+                        Image(systemName: "doc.text.fill")
+                            .foregroundColor(.ollieAccent)
+                    }
+                    Spacer()
+                    let count = documentStore.documentCount
+                    if count > 0 {
+                        Text("\(count)")
+                            .foregroundColor(.secondary)
+                    }
+                }
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var contactsSection: some View {
+        Section(Strings.Contacts.title) {
+            NavigationLink {
+                ContactsView(contactStore: contactStore)
+            } label: {
+                HStack {
+                    Label {
+                        Text(Strings.Contacts.title)
+                    } icon: {
+                        Image(systemName: "person.crop.circle.fill")
+                            .foregroundColor(.ollieAccent)
+                    }
+                    Spacer()
+                    let count = contactStore.contactCount
+                    if count > 0 {
+                        Text("\(count)")
+                            .foregroundColor(.secondary)
+                    }
+                }
+            }
+        }
+    }
 }
 
 #Preview {
     let profileStore = ProfileStore()
     let eventStore = EventStore()
     let milestoneStore = MilestoneStore()
+    let documentStore = DocumentStore()
+    let contactStore = ContactStore()
     let viewModel = TimelineViewModel(eventStore: eventStore, profileStore: profileStore)
 
     NavigationStack {
@@ -152,7 +210,9 @@ struct DogProfileSettingsView: View {
             profileStore: profileStore,
             spotStore: SpotStore(),
             viewModel: viewModel,
-            milestoneStore: milestoneStore
+            milestoneStore: milestoneStore,
+            documentStore: documentStore,
+            contactStore: contactStore
         )
     }
 }
