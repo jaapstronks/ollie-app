@@ -11,8 +11,7 @@ import OllieShared
 struct ProfileSection: View {
     let profile: PuppyProfile
     @ObservedObject var profileStore: ProfileStore
-
-    @State private var showingPhotoPicker = false
+    @Binding var showingPhotoPicker: Bool
 
     var body: some View {
         Section(Strings.Settings.profile) {
@@ -51,43 +50,6 @@ struct ProfileSection: View {
                     .foregroundColor(.secondary)
             }
         }
-        .sheet(isPresented: $showingPhotoPicker) {
-            ProfilePhotoPicker(
-                currentImage: loadCurrentImage(),
-                onSave: { image in
-                    saveProfilePhoto(image)
-                },
-                onRemove: profile.profilePhotoFilename != nil ? {
-                    removeProfilePhoto()
-                } : nil
-            )
-        }
-    }
-
-    private func loadCurrentImage() -> UIImage? {
-        guard let filename = profile.profilePhotoFilename else { return nil }
-        return ProfilePhotoStore.shared.load(filename: filename)
-    }
-
-    private func saveProfilePhoto(_ image: UIImage) {
-        do {
-            // Delete old photo if exists
-            if let oldFilename = profile.profilePhotoFilename {
-                ProfilePhotoStore.shared.delete(filename: oldFilename)
-            }
-
-            let filename = try ProfilePhotoStore.shared.save(image: image)
-            profileStore.updateProfilePhoto(filename)
-        } catch {
-            print("Failed to save profile photo: \(error)")
-        }
-    }
-
-    private func removeProfilePhoto() {
-        if let filename = profile.profilePhotoFilename {
-            ProfilePhotoStore.shared.delete(filename: filename)
-        }
-        profileStore.updateProfilePhoto(nil)
     }
 }
 
