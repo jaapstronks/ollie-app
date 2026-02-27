@@ -54,7 +54,7 @@ struct AddSpotSheet: View {
                     if let location = selectedLocation {
                         HStack {
                             Image(systemName: "checkmark.circle.fill")
-                                .foregroundStyle(.green)
+                                .foregroundStyle(Color.ollieSuccess)
                             Text(Strings.WalkLocations.locationCaptured)
                             Spacer()
                             Button(Strings.Common.edit) {
@@ -76,7 +76,7 @@ struct AddSpotSheet: View {
                     if let error = errorMessage {
                         HStack {
                             Image(systemName: "exclamationmark.triangle.fill")
-                                .foregroundStyle(.orange)
+                                .foregroundStyle(Color.ollieWarning)
                             Text(error)
                                 .font(.caption)
                                 .foregroundStyle(.secondary)

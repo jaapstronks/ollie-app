@@ -2,13 +2,12 @@
 //  AppSettingsView.swift
 //  Ollie-app
 //
-//  App settings: subscription, notifications, sharing, sync, appearance
+//  App settings: subscription, sharing, sync, appearance
 
 import CloudKit
 import CoreData
 import StoreKit
 import SwiftUI
-import TipKit
 import OllieShared
 
 /// Settings screen for all app-related configuration
@@ -16,10 +15,8 @@ struct AppSettingsView: View {
     @ObservedObject var profileStore: ProfileStore
     @ObservedObject var dataImporter: DataImporter
     @ObservedObject var eventStore: EventStore
-    @ObservedObject var notificationService: NotificationService
     @ObservedObject var cloudKit = CloudKitService.shared
 
-    @State private var showingNotificationSettings = false
     @State private var showingOlliePlusSheet = false
     @State private var showingSubscriptionSuccess = false
     @State private var showingImportConfirm = false
@@ -34,6 +31,12 @@ struct AppSettingsView: View {
     @AppStorage(UserPreferences.Key.temperatureUnit.rawValue) private var temperatureUnit = TemperatureUnit.celsius.rawValue
     @AppStorage(UserPreferences.Key.weightUnit.rawValue) private var weightUnit = WeightUnit.kg.rawValue
 
+    // Atmosphere settings
+    @AppStorage(UserPreferences.Key.atmosphereTimeOfDay.rawValue) private var atmosphereTimeOfDay = true
+    @AppStorage(UserPreferences.Key.atmosphereWeather.rawValue) private var atmosphereWeather = true
+    @AppStorage(UserPreferences.Key.atmosphereState.rawValue) private var atmosphereState = true
+    @AppStorage(UserPreferences.Key.atmosphereSeasonal.rawValue) private var atmosphereSeasonal = false
+
     var body: some View {
         Form {
             if let profile = profileStore.profile {
@@ -43,9 +46,6 @@ struct AppSettingsView: View {
                     showingOlliePlusSheet: $showingOlliePlusSheet,
                     showingSubscriptionSuccess: $showingSubscriptionSuccess
                 )
-
-                // Notifications
-                notificationSection(profile)
             }
 
             // iCloud Sync
@@ -62,6 +62,12 @@ struct AppSettingsView: View {
 
             // Units
             unitsSection
+
+            // Atmosphere
+            atmosphereSection
+
+            // Celebrations
+            celebrationsSection
 
             // Advanced section
             Section(Strings.Settings.advanced) {
@@ -149,43 +155,6 @@ struct AppSettingsView: View {
         }
     }
 
-    // MARK: - Notification Section
-
-    private let mealRemindersTip = MealRemindersTip()
-
-    @ViewBuilder
-    private func notificationSection(_ profile: PuppyProfile) -> some View {
-        Section(Strings.Settings.reminders) {
-            TipView(mealRemindersTip)
-
-            Button {
-                showingNotificationSettings = true
-            } label: {
-                HStack {
-                    Label {
-                        Text(Strings.Settings.notifications)
-                    } icon: {
-                        Image(systemName: "bell.fill")
-                            .foregroundColor(.ollieAccent)
-                    }
-                    Spacer()
-                    Text(profile.notificationSettings.isEnabled ? Strings.Common.on : Strings.Common.off)
-                        .foregroundColor(.secondary)
-                    Image(systemName: "chevron.right")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                }
-            }
-            .foregroundColor(.primary)
-        }
-        .sheet(isPresented: $showingNotificationSettings) {
-            NotificationSettingsView(
-                profileStore: profileStore,
-                notificationService: notificationService
-            )
-        }
-    }
-
     // MARK: - Appearance Section
 
     private var appearanceSection: some View {
@@ -228,6 +197,76 @@ struct AppSettingsView: View {
         }
     }
 
+    // MARK: - Atmosphere Section
+
+    private var atmosphereSection: some View {
+        Section {
+            Toggle(isOn: $atmosphereTimeOfDay) {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(Strings.Atmosphere.timeOfDay)
+                    Text(Strings.Atmosphere.timeOfDayDescription)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            }
+
+            Toggle(isOn: $atmosphereWeather) {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(Strings.Atmosphere.weather)
+                    Text(Strings.Atmosphere.weatherDescription)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            }
+
+            Toggle(isOn: $atmosphereState) {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(Strings.Atmosphere.puppyState)
+                    Text(Strings.Atmosphere.puppyStateDescription)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            }
+
+            Toggle(isOn: $atmosphereSeasonal) {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(Strings.Atmosphere.seasonal)
+                    Text(Strings.Atmosphere.seasonalDescription)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            }
+        } header: {
+            Text(Strings.Atmosphere.title)
+        } footer: {
+            Text(Strings.Atmosphere.description)
+        }
+    }
+
+    // MARK: - Celebrations Section
+
+    private var celebrationsSection: some View {
+        Section {
+            NavigationLink {
+                CelebrationSettingsView()
+            } label: {
+                HStack {
+                    Label(Strings.Celebrations.celebrationStyle, systemImage: "sparkles")
+                    Spacer()
+                    Text(currentCelebrationStyle.displayName)
+                        .foregroundStyle(.secondary)
+                }
+            }
+        } header: {
+            Text(Strings.Celebrations.celebrationStyle)
+        }
+    }
+
+    private var currentCelebrationStyle: CelebrationStyle {
+        let rawValue = UserDefaults.standard.string(forKey: UserPreferences.Key.celebrationStyle.rawValue)
+        return CelebrationStyle(rawValue: rawValue ?? "") ?? .full
+    }
+
     // MARK: - Sharing Section
 
     @ViewBuilder
@@ -236,14 +275,14 @@ struct AppSettingsView: View {
             if !cloudKit.isCloudAvailable {
                 HStack {
                     Image(systemName: "exclamationmark.icloud")
-                        .foregroundStyle(.orange)
+                        .foregroundStyle(Color.ollieWarning)
                     Text(Strings.CloudSharing.iCloudUnavailable)
                         .font(.subheadline)
                 }
             } else if cloudKit.isParticipant {
                 HStack {
                     Image(systemName: "person.2.fill")
-                        .foregroundStyle(.blue)
+                        .foregroundStyle(Color.ollieInfo)
                     VStack(alignment: .leading, spacing: 2) {
                         Text(Strings.CloudSharing.sharedData)
                             .font(.subheadline)
@@ -256,7 +295,7 @@ struct AppSettingsView: View {
                 VStack(alignment: .leading, spacing: 12) {
                     HStack {
                         Image(systemName: "checkmark.circle.fill")
-                            .foregroundStyle(.green)
+                            .foregroundStyle(Color.ollieSuccess)
                         Text(Strings.CloudSharing.shared)
                             .font(.subheadline.weight(.medium))
                     }
@@ -429,15 +468,11 @@ struct AppSettingsView: View {
 }
 
 #Preview {
-    let profileStore = ProfileStore()
-    let eventStore = EventStore()
-
-    return NavigationStack {
+    NavigationStack {
         AppSettingsView(
-            profileStore: profileStore,
+            profileStore: ProfileStore(),
             dataImporter: DataImporter(),
-            eventStore: eventStore,
-            notificationService: NotificationService()
+            eventStore: EventStore()
         )
     }
 }

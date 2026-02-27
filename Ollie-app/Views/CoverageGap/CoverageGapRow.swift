@@ -22,9 +22,9 @@ struct CoverageGapRow: View {
                 // Icon with background
                 Image(systemName: event.gapType?.icon ?? "person.badge.clock.fill")
                     .font(.title3)
-                    .foregroundStyle(.orange)
+                    .foregroundStyle(Color.ollieWarning)
                     .frame(width: 40, height: 40)
-                    .background(Color.orange.opacity(0.15))
+                    .background(Color.ollieWarning.opacity(0.15))
                     .clipShape(Circle())
 
                 // Info
@@ -42,7 +42,7 @@ struct CoverageGapRow: View {
                                 .foregroundStyle(.white)
                                 .padding(.horizontal, 6)
                                 .padding(.vertical, 2)
-                                .background(Color.orange)
+                                .background(Color.ollieWarning)
                                 .clipShape(Capsule())
                         }
                     }
@@ -95,7 +95,7 @@ struct CoverageGapRow: View {
             .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
             .overlay(
                 RoundedRectangle(cornerRadius: 12, style: .continuous)
-                    .strokeBorder(Color.orange.opacity(0.2), lineWidth: 0.5)
+                    .strokeBorder(Color.ollieWarning.opacity(0.2), lineWidth: 0.5)
             )
         }
         .buttonStyle(.plain)
@@ -112,9 +112,9 @@ struct CoverageGapRow: View {
 
     private var cardBackground: some ShapeStyle {
         if colorScheme == .dark {
-            return AnyShapeStyle(Color.orange.opacity(0.08))
+            return AnyShapeStyle(Color.ollieWarning.opacity(0.08))
         }
-        return AnyShapeStyle(Color.orange.opacity(0.05))
+        return AnyShapeStyle(Color.ollieWarning.opacity(0.05))
     }
 }
 

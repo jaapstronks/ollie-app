@@ -20,7 +20,7 @@ struct CoverageGapBanner: View {
             // Icon
             Image(systemName: gap.gapType?.icon ?? "person.badge.clock.fill")
                 .font(.title3)
-                .foregroundStyle(.orange)
+                .foregroundStyle(Color.ollieWarning)
 
             // Info
             VStack(alignment: .leading, spacing: 2) {
@@ -54,7 +54,7 @@ struct CoverageGapBanner: View {
                     .foregroundStyle(.white)
                     .padding(.horizontal, 16)
                     .padding(.vertical, 8)
-                    .background(Color.orange)
+                    .background(Color.ollieWarning)
                     .clipShape(Capsule())
             }
             .accessibilityHint(Strings.CoverageGap.endGapAccessibilityHint)
@@ -65,7 +65,7 @@ struct CoverageGapBanner: View {
         .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
         .overlay(
             RoundedRectangle(cornerRadius: 12, style: .continuous)
-                .strokeBorder(Color.orange.opacity(0.3), lineWidth: 1)
+                .strokeBorder(Color.ollieWarning.opacity(0.3), lineWidth: 1)
         )
         .padding(.horizontal, 16)
         .padding(.vertical, 4)
@@ -73,9 +73,9 @@ struct CoverageGapBanner: View {
 
     private var bannerBackground: some ShapeStyle {
         if colorScheme == .dark {
-            return AnyShapeStyle(Color.orange.opacity(0.15))
+            return AnyShapeStyle(Color.ollieWarning.opacity(0.15))
         }
-        return AnyShapeStyle(Color.orange.opacity(0.08))
+        return AnyShapeStyle(Color.ollieWarning.opacity(0.08))
     }
 }
 

@@ -24,7 +24,7 @@ struct GapDetectionSheet: View {
                 // Icon
                 Image(systemName: "clock.badge.questionmark.fill")
                     .font(.system(size: 64))
-                    .foregroundStyle(.orange)
+                    .foregroundStyle(Color.ollieWarning)
                     .padding(.top, 40)
 
                 // Message
@@ -53,7 +53,7 @@ struct GapDetectionSheet: View {
                         .foregroundStyle(.white)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 14)
-                        .background(Color.orange)
+                        .background(Color.ollieWarning)
                         .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
                     }
 

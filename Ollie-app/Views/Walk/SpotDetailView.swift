@@ -21,6 +21,7 @@ struct SpotDetailView: View {
     @State private var isEditing = false
     @State private var showingDeleteConfirmation = false
     @State private var selectedPhotoEvent: PuppyEvent?
+    @State private var placeStats: PlaceStats?
 
     /// Full initializer with photo support
     init(spotStore: SpotStore, spot: WalkSpot, momentsViewModel: MomentsViewModel) {
@@ -145,6 +146,11 @@ struct SpotDetailView: View {
                 .cornerRadius(LayoutConstants.cornerRadiusM)
                 .padding(.horizontal)
 
+                // Place stats section
+                if let stats = placeStats, stats.hasStats {
+                    placeStatsSection(stats: stats)
+                }
+
                 // Photos section
                 if !photosHere.isEmpty {
                     photosSection
@@ -228,6 +234,82 @@ struct SpotDetailView: View {
                 }
             )
         }
+        .task {
+            // Load place stats asynchronously
+            if let viewModel = momentsViewModel {
+                placeStats = await viewModel.loadStatsForSpot(currentSpot)
+            }
+        }
+    }
+
+    // MARK: - Place Stats Section
+
+    private func placeStatsSection(stats: PlaceStats) -> some View {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack {
+                Image(systemName: "chart.bar.fill")
+                    .foregroundStyle(Color.ollieAccent)
+                Text(Strings.SpotDetail.placeStats)
+                    .font(.headline)
+            }
+            .padding(.horizontal)
+
+            // Stats grid
+            HStack(spacing: 16) {
+                // First visited
+                if let firstVisited = stats.firstVisited {
+                    statItem(
+                        value: firstVisited.formatted(.dateTime.month(.abbreviated).day()),
+                        label: Strings.SpotDetail.firstVisited,
+                        icon: "calendar",
+                        color: .blue
+                    )
+                }
+
+                // Dogs met
+                if stats.dogsMetCount > 0 {
+                    statItem(
+                        value: "\(stats.dogsMetCount)",
+                        label: Strings.SpotDetail.dogsMet,
+                        icon: "dog.fill",
+                        color: .orange
+                    )
+                }
+
+                // Potty successes
+                if stats.pottySuccessCount > 0 {
+                    statItem(
+                        value: "\(stats.pottySuccessCount)",
+                        label: Strings.SpotDetail.pottySuccesses,
+                        icon: "checkmark.circle.fill",
+                        color: .green
+                    )
+                }
+            }
+            .padding(.horizontal)
+        }
+        .padding()
+        .background(Color(.secondarySystemGroupedBackground))
+        .cornerRadius(LayoutConstants.cornerRadiusM)
+        .padding(.horizontal)
+    }
+
+    private func statItem(value: String, label: String, icon: String, color: Color) -> some View {
+        VStack(spacing: 4) {
+            HStack(spacing: 4) {
+                Image(systemName: icon)
+                    .font(.caption)
+                    .foregroundStyle(color)
+                Text(value)
+                    .font(.subheadline)
+                    .fontWeight(.semibold)
+            }
+            Text(label)
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+                .lineLimit(1)
+        }
+        .frame(maxWidth: .infinity)
     }
 
     // MARK: - Photos Section

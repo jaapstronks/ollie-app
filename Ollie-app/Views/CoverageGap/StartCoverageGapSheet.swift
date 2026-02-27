@@ -28,7 +28,7 @@ struct StartCoverageGapSheet: View {
                     VStack(spacing: 12) {
                         Image(systemName: "person.badge.clock.fill")
                             .font(.system(size: 48))
-                            .foregroundStyle(.orange)
+                            .foregroundStyle(Color.ollieWarning)
 
                         Text(Strings.CoverageGap.startTitle)
                             .font(.title3)
@@ -102,7 +102,7 @@ struct StartCoverageGapSheet: View {
                             .foregroundStyle(.white)
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 14)
-                            .background(selectedType != nil ? Color.orange : Color.gray.opacity(0.5))
+                            .background(selectedType != nil ? Color.ollieWarning : Color.gray.opacity(0.5))
                             .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
                     }
                     .disabled(selectedType == nil)
@@ -151,12 +151,12 @@ private struct GapTypeButton: View {
             .padding(.vertical, 16)
             .background(
                 RoundedRectangle(cornerRadius: 12, style: .continuous)
-                    .fill(isSelected ? Color.orange : GlassButtonHelpers.glassColor(for: colorScheme))
+                    .fill(isSelected ? Color.ollieWarning : GlassButtonHelpers.glassColor(for: colorScheme))
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 12, style: .continuous)
                     .strokeBorder(
-                        isSelected ? Color.orange : Color.primary.opacity(0.1),
+                        isSelected ? Color.ollieWarning : Color.primary.opacity(0.1),
                         lineWidth: isSelected ? 2 : 0.5
                     )
             )

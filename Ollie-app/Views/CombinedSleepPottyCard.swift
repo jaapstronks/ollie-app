@@ -34,10 +34,10 @@ struct CombinedSleepPottyCard: View {
             HStack(spacing: 14) {
                 // Combined icon: moon with warning
                 ZStack {
-                    GlassIconCircle(tintColor: .purple, size: 44) {
+                    GlassIconCircle(tintColor: .ollieSleep, size: 44) {
                         Image(systemName: "moon.zzz.fill")
                             .font(.system(size: 22, weight: .semibold))
-                            .foregroundStyle(.purple)
+                            .foregroundStyle(Color.ollieSleep)
                     }
 
                     // Warning badge overlay
@@ -66,7 +66,7 @@ struct CombinedSleepPottyCard: View {
 
                 Spacer()
 
-                GlassStatusPill(text: Strings.CombinedStatus.sleepingPottyLabel, tintColor: .purple)
+                GlassStatusPill(text: Strings.CombinedStatus.sleepingPottyLabel, tintColor: .ollieSleep)
             }
 
             // Divider
@@ -100,7 +100,7 @@ struct CombinedSleepPottyCard: View {
             Button(action: onWakeUp) {
                 Label(Strings.CombinedStatus.wakeUp, systemImage: "sun.max.fill")
             }
-            .buttonStyle(.glassPill(tint: .custom(.purple)))
+            .buttonStyle(.glassPill(tint: .custom(.ollieSleep)))
         }
         .statusCardPadding()
         .glassStatusCard(tintColor: gradientColor, cornerRadius: LayoutConstants.cornerRadiusL)
@@ -122,12 +122,12 @@ struct CombinedSleepPottyCard: View {
     /// Gradient color combining sleep (purple) and warning (orange)
     private var gradientColor: Color {
         // Use purple as base with subtle orange influence
-        .purple
+        .ollieSleep
     }
 
     private var shadowColor: Color {
         let opacity = colorScheme == .dark ? 0.2 : 0.1
-        return Color.purple.opacity(opacity)
+        return Color.ollieSleep.opacity(opacity)
     }
 }
 

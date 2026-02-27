@@ -96,7 +96,7 @@ struct SyncStatusView: View {
             } else if let error = eventStore.syncError {
                 Image(systemName: "exclamationmark.icloud")
                     .font(.caption)
-                    .foregroundStyle(.orange)
+                    .foregroundStyle(Color.ollieWarning)
                 Text(error)
                     .font(.caption)
                     .foregroundStyle(.secondary)
@@ -104,7 +104,7 @@ struct SyncStatusView: View {
             } else if cloudKit.isCloudAvailable {
                 Image(systemName: "checkmark.icloud")
                     .font(.caption)
-                    .foregroundStyle(.green)
+                    .foregroundStyle(Color.ollieSuccess)
             }
         }
     }

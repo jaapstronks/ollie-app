@@ -51,7 +51,7 @@ struct WeatherHourCell: View {
                         .font(.caption2)
                 }
                 .font(.caption2)
-                .foregroundStyle(forecast.rainWarning ? .red : .secondary)
+                .foregroundStyle(forecast.rainWarning ? Color.ollieDanger : Color.secondary)
             }
 
             // Wind warning indicator
@@ -62,7 +62,7 @@ struct WeatherHourCell: View {
                     Text("\(Int(forecast.windSpeed))")
                         .font(.caption2)
                 }
-                .foregroundStyle(.orange)
+                .foregroundStyle(Color.ollieWarning)
             }
         }
         .frame(minWidth: 44)
@@ -92,17 +92,17 @@ struct WeatherAlertBanner: View {
 
     private var backgroundColor: Color {
         switch alert.type {
-        case .warning: return Color.orange.opacity(0.15)
-        case .info: return Color.blue.opacity(0.15)
-        case .positive: return Color.green.opacity(0.15)
+        case .warning: return Color.ollieWarning.opacity(0.15)
+        case .info: return Color.ollieInfo.opacity(0.15)
+        case .positive: return Color.ollieSuccess.opacity(0.15)
         }
     }
 
     private var textColor: Color {
         switch alert.type {
-        case .warning: return .orange
+        case .warning: return .ollieWarning
         case .info: return .primary
-        case .positive: return .green
+        case .positive: return .ollieSuccess
         }
     }
 }
@@ -170,9 +170,9 @@ struct WeatherSection: View {
 
     private func alertColor(for type: WeatherAlert.AlertType) -> Color {
         switch type {
-        case .warning: return .orange
+        case .warning: return .ollieWarning
         case .info: return .secondary
-        case .positive: return .green
+        case .positive: return .ollieSuccess
         }
     }
 }

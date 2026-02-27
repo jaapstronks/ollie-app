@@ -82,7 +82,7 @@ struct ActionableEventCard: View {
                     Text(Strings.Weather.rainExpected)
                         .font(.caption)
                 }
-                .foregroundStyle(.red)
+                .foregroundStyle(Color.ollieDanger)
             }
         }
         .padding(.horizontal, 12)
@@ -142,9 +142,9 @@ struct ActionableEventCard: View {
 
     private var indicatorColor: Color {
         switch actionableItem.state {
-        case .approaching: return .blue
-        case .due: return .green
-        case .overdue: return .orange
+        case .approaching: return .ollieInfo
+        case .due: return .ollieSuccess
+        case .overdue: return .ollieWarning
         }
     }
 
@@ -152,7 +152,7 @@ struct ActionableEventCard: View {
         switch actionableItem.state {
         case .approaching: return .primary
         case .due: return .primary
-        case .overdue: return .orange
+        case .overdue: return .ollieWarning
         }
     }
 
@@ -342,7 +342,7 @@ struct UpcomingEventsCard: View {
                             .font(.caption2)
                     }
                 }
-                .foregroundStyle(item.rainWarning ? .red : .secondary)
+                .foregroundStyle(item.rainWarning ? Color.ollieDanger : Color.secondary)
             }
         }
         .padding(.vertical, 4)
@@ -352,9 +352,9 @@ struct UpcomingEventsCard: View {
     private func iconColor(for itemType: UpcomingItemType) -> Color {
         switch itemType {
         case .walk:
-            return .orange   // Consistent with walk status cards
+            return .ollieSuccess // Green for outdoor activities
         case .meal:
-            return .blue     // Distinct from potty (green), sleep (purple), walks (orange)
+            return .ollieAccent  // Gold for meals
         }
     }
 }
