@@ -35,6 +35,15 @@ enum PremiumFeature: String, CaseIterable {
     /// Export data to PDF
     case exportPDF
 
+    /// Calendar integration for milestones
+    case calendarIntegration
+
+    /// Create custom milestones
+    case customMilestones
+
+    /// Notes and photos on milestone completions
+    case milestoneNotes
+
     /// Display name for the feature
     var displayName: String {
         switch self {
@@ -56,6 +65,12 @@ enum PremiumFeature: String, CaseIterable {
             return Strings.OlliePlus.featureUnlimitedSharing
         case .exportPDF:
             return Strings.OlliePlus.featureExportPDF
+        case .calendarIntegration:
+            return Strings.OlliePlus.featureCalendarIntegration
+        case .customMilestones:
+            return Strings.OlliePlus.featureCustomMilestones
+        case .milestoneNotes:
+            return Strings.OlliePlus.featureMilestoneNotes
         }
     }
 
@@ -80,6 +95,12 @@ enum PremiumFeature: String, CaseIterable {
             return Strings.OlliePlus.featureUnlimitedSharingDesc
         case .exportPDF:
             return Strings.OlliePlus.featureExportPDFDesc
+        case .calendarIntegration:
+            return Strings.OlliePlus.featureCalendarIntegrationDesc
+        case .customMilestones:
+            return Strings.OlliePlus.featureCustomMilestonesDesc
+        case .milestoneNotes:
+            return Strings.OlliePlus.featureMilestoneNotesDesc
         }
     }
 
@@ -104,6 +125,12 @@ enum PremiumFeature: String, CaseIterable {
             return "person.badge.plus"
         case .exportPDF:
             return "doc.richtext"
+        case .calendarIntegration:
+            return "calendar.badge.plus"
+        case .customMilestones:
+            return "plus.circle.fill"
+        case .milestoneNotes:
+            return "note.text"
         }
     }
 }

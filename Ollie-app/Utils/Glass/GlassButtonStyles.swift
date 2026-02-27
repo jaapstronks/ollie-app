@@ -22,35 +22,9 @@ struct GlassPillButtonStyle: ButtonStyle {
             .foregroundStyle(tint.color ?? .primary)
             .padding(.horizontal, 16)
             .padding(.vertical, 10)
-            .background(
-                ZStack {
-                    if colorScheme == .dark {
-                        Color.white.opacity(configuration.isPressed ? 0.15 : 0.1)
-                    } else {
-                        Color.white.opacity(configuration.isPressed ? 0.95 : 0.8)
-                    }
-
-                    if let tintColor = tint.color {
-                        tintColor.opacity(colorScheme == .dark ? 0.2 : 0.12)
-                    }
-                }
-                .background(.ultraThinMaterial)
-            )
+            .background(glassPillBackground(isPressed: configuration.isPressed))
             .clipShape(Capsule())
-            .overlay(
-                Capsule()
-                    .strokeBorder(
-                        LinearGradient(
-                            colors: [
-                                Color.white.opacity(colorScheme == .dark ? 0.2 : 0.5),
-                                Color.clear
-                            ],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        ),
-                        lineWidth: 0.5
-                    )
-            )
+            .overlay(Capsule().strokeBorder(GlassButtonHelpers.capsuleBorderGradient(colorScheme: colorScheme), lineWidth: 0.5))
             .shadow(
                 color: tint.color?.opacity(0.2) ?? Color.black.opacity(0.08),
                 radius: configuration.isPressed ? 2 : 6,
@@ -58,6 +32,17 @@ struct GlassPillButtonStyle: ButtonStyle {
             )
             .scaleEffect(configuration.isPressed ? 0.97 : 1.0)
             .animation(reduceMotion ? nil : .spring(response: 0.25, dampingFraction: 0.6), value: configuration.isPressed)
+    }
+
+    @ViewBuilder
+    private func glassPillBackground(isPressed: Bool) -> some View {
+        ZStack {
+            Color.white.opacity(GlassButtonHelpers.baseOpacity(isPressed: isPressed, colorScheme: colorScheme))
+            if let tintColor = tint.color {
+                tintColor.opacity(GlassButtonHelpers.tintOpacity(colorScheme: colorScheme))
+            }
+        }
+        .background(.ultraThinMaterial)
     }
 }
 
@@ -82,35 +67,9 @@ struct GlassPillCompactButtonStyle: ButtonStyle {
             .foregroundStyle(tint.color ?? .primary)
             .padding(.horizontal, 12)
             .padding(.vertical, 8)
-            .background(
-                ZStack {
-                    if colorScheme == .dark {
-                        Color.white.opacity(configuration.isPressed ? 0.15 : 0.1)
-                    } else {
-                        Color.white.opacity(configuration.isPressed ? 0.95 : 0.8)
-                    }
-
-                    if let tintColor = tint.color {
-                        tintColor.opacity(colorScheme == .dark ? 0.2 : 0.12)
-                    }
-                }
-                .background(.ultraThinMaterial)
-            )
+            .background(glassPillBackground(isPressed: configuration.isPressed))
             .clipShape(Capsule())
-            .overlay(
-                Capsule()
-                    .strokeBorder(
-                        LinearGradient(
-                            colors: [
-                                Color.white.opacity(colorScheme == .dark ? 0.2 : 0.5),
-                                Color.clear
-                            ],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        ),
-                        lineWidth: 0.5
-                    )
-            )
+            .overlay(Capsule().strokeBorder(GlassButtonHelpers.capsuleBorderGradient(colorScheme: colorScheme), lineWidth: 0.5))
             .shadow(
                 color: tint.color?.opacity(0.15) ?? Color.black.opacity(0.06),
                 radius: configuration.isPressed ? 1 : 4,
@@ -118,6 +77,17 @@ struct GlassPillCompactButtonStyle: ButtonStyle {
             )
             .scaleEffect(configuration.isPressed ? 0.96 : 1.0)
             .animation(reduceMotion ? nil : .spring(response: 0.2, dampingFraction: 0.7), value: configuration.isPressed)
+    }
+
+    @ViewBuilder
+    private func glassPillBackground(isPressed: Bool) -> some View {
+        ZStack {
+            Color.white.opacity(GlassButtonHelpers.baseOpacity(isPressed: isPressed, colorScheme: colorScheme))
+            if let tintColor = tint.color {
+                tintColor.opacity(GlassButtonHelpers.tintOpacity(colorScheme: colorScheme))
+            }
+        }
+        .background(.ultraThinMaterial)
     }
 }
 
@@ -141,45 +111,9 @@ struct GlassIconButtonStyle: ButtonStyle {
             .font(.system(size: size * 0.45, weight: .medium))
             .foregroundStyle(tint.color ?? .primary)
             .frame(width: size, height: size)
-            .background(
-                ZStack {
-                    if colorScheme == .dark {
-                        Color.white.opacity(configuration.isPressed ? 0.18 : 0.1)
-                    } else {
-                        Color.white.opacity(configuration.isPressed ? 0.95 : 0.75)
-                    }
-
-                    if let tintColor = tint.color {
-                        tintColor.opacity(colorScheme == .dark ? 0.2 : 0.1)
-                    }
-
-                    // Highlight
-                    LinearGradient(
-                        colors: [
-                            Color.white.opacity(colorScheme == .dark ? 0.12 : 0.35),
-                            Color.clear
-                        ],
-                        startPoint: .top,
-                        endPoint: .center
-                    )
-                }
-                .background(.ultraThinMaterial)
-            )
+            .background(glassIconBackground(isPressed: configuration.isPressed))
             .clipShape(Circle())
-            .overlay(
-                Circle()
-                    .strokeBorder(
-                        LinearGradient(
-                            colors: [
-                                Color.white.opacity(colorScheme == .dark ? 0.25 : 0.6),
-                                Color.white.opacity(colorScheme == .dark ? 0.05 : 0.1)
-                            ],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        ),
-                        lineWidth: 0.5
-                    )
-            )
+            .overlay(Circle().strokeBorder(GlassButtonHelpers.circleBorderGradient(colorScheme: colorScheme), lineWidth: 0.5))
             .shadow(
                 color: tint.color?.opacity(0.25) ?? Color.black.opacity(0.1),
                 radius: configuration.isPressed ? 2 : 6,
@@ -187,6 +121,25 @@ struct GlassIconButtonStyle: ButtonStyle {
             )
             .scaleEffect(configuration.isPressed ? 0.94 : 1.0)
             .animation(reduceMotion ? nil : .spring(response: 0.2, dampingFraction: 0.6), value: configuration.isPressed)
+    }
+
+    @ViewBuilder
+    private func glassIconBackground(isPressed: Bool) -> some View {
+        ZStack {
+            Color.white.opacity(GlassButtonHelpers.baseOpacity(
+                isPressed: isPressed,
+                colorScheme: colorScheme,
+                pressedLight: 0.95,
+                normalLight: 0.75,
+                pressedDark: 0.18,
+                normalDark: 0.1
+            ))
+            if let tintColor = tint.color {
+                tintColor.opacity(GlassButtonHelpers.tintOpacity(colorScheme: colorScheme, dark: 0.2, light: 0.1))
+            }
+            GlassButtonHelpers.highlightGradient(colorScheme: colorScheme)
+        }
+        .background(.ultraThinMaterial)
     }
 }
 

@@ -148,6 +148,13 @@ struct TimelineSheetModifiers: ViewModifier {
                         } else {
                             viewModel.sheetCoordinator.transitionToSheet(.startActivity(.nap))
                         }
+                    } else if type == .coverageGap {
+                        // Coverage gap: show start or end sheet depending on state
+                        if let activeGap = viewModel.activeCoverageGap {
+                            viewModel.sheetCoordinator.transitionToSheet(.endCoverageGap(activeGap))
+                        } else {
+                            viewModel.sheetCoordinator.transitionToSheet(.startCoverageGap)
+                        }
                     } else {
                         viewModel.sheetCoordinator.transitionToSheet(.quickLog(type))
                     }
@@ -340,6 +347,61 @@ struct TimelineSheetModifiers: ViewModifier {
                 defaultDurationMinutes: defaultDuration
             )
             .presentationDetents([.height(420), .medium])
+
+        case .startCoverageGap:
+            StartCoverageGapSheet(
+                onSave: { gapType, startTime, location, note in
+                    viewModel.startCoverageGap(type: gapType, startTime: startTime, location: location, note: note)
+                    viewModel.sheetCoordinator.dismissSheet()
+                },
+                onCancel: {
+                    viewModel.sheetCoordinator.dismissSheet()
+                }
+            )
+            .presentationDetents([.height(580), .large])
+
+        case .endCoverageGap(let gap):
+            EndCoverageGapSheet(
+                gap: gap,
+                onEnd: { endTime, note in
+                    viewModel.endCoverageGap(gap, endTime: endTime, note: note)
+                    viewModel.sheetCoordinator.dismissSheet()
+                },
+                onCancel: {
+                    viewModel.sheetCoordinator.dismissSheet()
+                }
+            )
+            .presentationDetents([.height(450)])
+
+        case .gapDetection(let hours, let puppyName, let suggestedStartTime):
+            GapDetectionSheet(
+                hours: hours,
+                puppyName: puppyName,
+                suggestedStartTime: suggestedStartTime,
+                onLogCoverage: {
+                    // Transition to start coverage gap sheet
+                    viewModel.sheetCoordinator.transitionToSheet(.startCoverageGap)
+                },
+                onDismiss: {
+                    viewModel.sheetCoordinator.dismissSheet()
+                }
+            )
+            .presentationDetents([.medium])
+
+        case .catchUp(let hours, let puppyName, let context):
+            CatchUpSheet(
+                puppyName: puppyName,
+                hoursSinceLastEvent: hours,
+                context: context,
+                onComplete: { result in
+                    viewModel.processCatchUpResult(result)
+                    viewModel.sheetCoordinator.dismissSheet()
+                },
+                onSkip: {
+                    viewModel.sheetCoordinator.dismissSheet()
+                }
+            )
+            .presentationDetents([.large])
 
         // Placeholder cases for future sheets (handled elsewhere or not yet implemented)
         case .weightLog, .trainingLog, .socializationLog, .settings, .profileEdit, .notificationSettings:

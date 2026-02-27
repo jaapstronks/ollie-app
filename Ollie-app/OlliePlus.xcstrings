@@ -1,0 +1,710 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "/month" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "/maand"
+          }
+        }
+      }
+    },
+    "/year" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "/jaar"
+          }
+        }
+      }
+    },
+    "7 days free" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "7 dagen gratis"
+          }
+        }
+      }
+    },
+    "Access all training skills and exercises" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toegang tot alle trainingsvaardigheden en oefeningen"
+          }
+        }
+      }
+    },
+    "Active (renews %@)" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actief (verlengt op %@)"
+          }
+        }
+      }
+    },
+    "Add milestones to your calendar with reminders" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voeg mijlpalen toe aan je agenda met herinneringen"
+          }
+        }
+      }
+    },
+    "Add notes and photos when completing milestones" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voeg notities en foto's toe bij het voltooien van mijlpalen"
+          }
+        }
+      }
+    },
+    "Advanced Analytics" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geavanceerde analyses"
+          }
+        }
+      }
+    },
+    "AI predicts when your puppy needs to go based on patterns" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI voorspelt wanneer je puppy moet plassen op basis van patronen"
+          }
+        }
+      }
+    },
+    "An error occurred" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Er is een fout opgetreden"
+          }
+        }
+      }
+    },
+    "Attach photos and videos to any event" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voeg foto's en video's toe aan elk event"
+          }
+        }
+      }
+    },
+    "Calendar Integration" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Agenda-integratie"
+          }
+        }
+      }
+    },
+    "Could not verify purchase" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kon aankoop niet verifiëren"
+          }
+        }
+      }
+    },
+    "Create your own custom milestones and events" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maak je eigen mijlpalen en events aan"
+          }
+        }
+      }
+    },
+    "Custom Milestones" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eigen mijlpalen"
+          }
+        }
+      }
+    },
+    "Deep insights into behavior, health, and routines" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diepgaande inzichten in gedrag, gezondheid en routines"
+          }
+        }
+      }
+    },
+    "Discover behavioral patterns with Ollie+" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ontdek gedragspatronen met Ollie+"
+          }
+        }
+      }
+    },
+    "Discover premium features" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ontdek premium functies"
+          }
+        }
+      }
+    },
+    "Expired" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verlopen"
+          }
+        }
+      }
+    },
+    "Export logs and reports for your vet" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exporteer logboeken en rapporten voor je dierenarts"
+          }
+        }
+      }
+    },
+    "Export to PDF" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exporteren naar PDF"
+          }
+        }
+      }
+    },
+    "Free" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gratis"
+          }
+        }
+      }
+    },
+    "Full Training Library" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Volledige trainingsbibliotheek"
+          }
+        }
+      }
+    },
+    "Get AI-powered insights, unlimited training, and premium features to help your puppy thrive." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Krijg AI-gestuurde inzichten, onbeperkte training en premium functies om je puppy te helpen bloeien."
+          }
+        }
+      }
+    },
+    "Get detailed sleep analysis with Ollie+" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Krijg gedetailleerde slaapanalyse met Ollie+"
+          }
+        }
+      }
+    },
+    "Get Started" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aan de slag"
+          }
+        }
+      }
+    },
+    "Manage Subscription" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abonnement beheren"
+          }
+        }
+      }
+    },
+    "Milestone Notes & Photos" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notities en foto's bij mijlpalen"
+          }
+        }
+      }
+    },
+    "Monthly" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maandelijks"
+          }
+        }
+      }
+    },
+    "More Training Skills" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meer trainingsvaardigheden"
+          }
+        }
+      }
+    },
+    "Ollie+" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ollie+"
+          }
+        }
+      }
+    },
+    "Pattern Analysis" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Patroonanalyse"
+          }
+        }
+      }
+    },
+    "Photo & Video Attachments" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Foto- en videobijlagen"
+          }
+        }
+      }
+    },
+    "Potty Predictions" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plasvoorspellingen"
+          }
+        }
+      }
+    },
+    "Premium (Lifetime)" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Premium (Levenslang)"
+          }
+        }
+      }
+    },
+    "Privacy Policy" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Privacybeleid"
+          }
+        }
+      }
+    },
+    "Products not available" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Producten niet beschikbaar"
+          }
+        }
+      }
+    },
+    "Purchase Failed" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aankoop mislukt"
+          }
+        }
+      }
+    },
+    "Purchase is pending approval" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aankoop wacht op goedkeuring"
+          }
+        }
+      }
+    },
+    "Purchase was cancelled" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aankoop is geannuleerd"
+          }
+        }
+      }
+    },
+    "Restore Purchases" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aankopen herstellen"
+          }
+        }
+      }
+    },
+    "Save %lld%%" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bespaar %lld%%"
+          }
+        }
+      }
+    },
+    "Share with your whole family, not just one partner" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deel met je hele gezin, niet alleen met een partner"
+          }
+        }
+      }
+    },
+    "Sleep Insights" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Slaapinzichten"
+          }
+        }
+      }
+    },
+    "Socialization Progress" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Socialisatievoortgang"
+          }
+        }
+      }
+    },
+    "Status" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Status"
+          }
+        }
+      }
+    },
+    "Subscribe" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abonneren"
+          }
+        }
+      }
+    },
+    "Subscriptions automatically renew unless cancelled at least 24 hours before the end of the current period. Payment will be charged to your Apple ID account. Manage your subscriptions in Settings." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abonnementen worden automatisch verlengd tenzij je minimaal 24 uur voor het einde van de huidige periode opzegt. De betaling wordt in rekening gebracht op je Apple ID-account. Beheer je abonnementen in Instellingen."
+          }
+        }
+      }
+    },
+    "Terms of Service" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gebruiksvoorwaarden"
+          }
+        }
+      }
+    },
+    "Track sleep quality and optimize rest schedules" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Volg slaapkwaliteit en optimaliseer rustschema's"
+          }
+        }
+      }
+    },
+    "Track socialization experiences and progress" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Volg socialisatie-ervaringen en voortgang"
+          }
+        }
+      }
+    },
+    "Trial (%lld days left)" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Proefperiode (%lld dagen over)"
+          }
+        }
+      }
+    },
+    "Try all Ollie+ features risk-free. Cancel anytime." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Probeer alle Ollie+ functies risicovrij. Annuleer wanneer je wilt."
+          }
+        }
+      }
+    },
+    "Try Ollie+" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Probeer Ollie+"
+          }
+        }
+      }
+    },
+    "Unlimited Partner Sharing" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Onbeperkt delen met partners"
+          }
+        }
+      }
+    },
+    "Unlock all training skills with Ollie+" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ontgrendel alle trainingsvaardigheden met Ollie+"
+          }
+        }
+      }
+    },
+    "Unlock the full Ollie experience" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ontgrendel de volledige Ollie-ervaring"
+          }
+        }
+      }
+    },
+    "Unlock with Ollie+" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ontgrendel met Ollie+"
+          }
+        }
+      }
+    },
+    "Week in Review" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weekoverzicht"
+          }
+        }
+      }
+    },
+    "Weekly summaries with progress highlights" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wekelijkse samenvattingen met voortgangshoogtepunten"
+          }
+        }
+      }
+    },
+    "Welcome to Ollie+!" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Welkom bij Ollie+!"
+          }
+        }
+      }
+    },
+    "What's included" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wat zit erin"
+          }
+        }
+      }
+    },
+    "Yearly" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jaarlijks"
+          }
+        }
+      }
+    },
+    "You now have access to all premium features. Let's make the most of your puppy's journey together." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je hebt nu toegang tot alle premium functies. Laten we samen het meeste uit de reis van je puppy halen."
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

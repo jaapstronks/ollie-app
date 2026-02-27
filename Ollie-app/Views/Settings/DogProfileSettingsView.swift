@@ -12,6 +12,7 @@ struct DogProfileSettingsView: View {
     @ObservedObject var profileStore: ProfileStore
     @ObservedObject var spotStore: SpotStore
     @ObservedObject var viewModel: TimelineViewModel
+    @ObservedObject var milestoneStore: MilestoneStore
 
     @State private var showingMealEdit = false
     @State private var showingWalkScheduleEdit = false
@@ -121,7 +122,7 @@ struct DogProfileSettingsView: View {
     private var healthSection: some View {
         Section(Strings.Health.title) {
             NavigationLink {
-                HealthView(viewModel: viewModel)
+                HealthView(viewModel: viewModel, milestoneStore: milestoneStore)
             } label: {
                 HStack {
                     Label {
@@ -143,13 +144,15 @@ struct DogProfileSettingsView: View {
 #Preview {
     let profileStore = ProfileStore()
     let eventStore = EventStore()
+    let milestoneStore = MilestoneStore()
     let viewModel = TimelineViewModel(eventStore: eventStore, profileStore: profileStore)
 
-    return NavigationStack {
+    NavigationStack {
         DogProfileSettingsView(
             profileStore: profileStore,
             spotStore: SpotStore(),
-            viewModel: viewModel
+            viewModel: viewModel,
+            milestoneStore: milestoneStore
         )
     }
 }

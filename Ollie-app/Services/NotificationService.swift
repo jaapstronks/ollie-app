@@ -71,6 +71,13 @@ class NotificationService: ObservableObject {
             return
         }
 
+        // Check for active coverage gap - suppress all notifications while tracking is paused
+        if CoverageGapFilter.hasActiveGap(gaps: events) {
+            logger.info("Active coverage gap detected - suppressing all notifications")
+            await cancelAllNotifications()
+            return
+        }
+
         let settings = profile.notificationSettings
 
         // Delegate to individual schedulers

@@ -22,6 +22,8 @@ enum PottyUrgency: Equatable {
     case overdue(minutesOverdue: Int)
     /// After an indoor accident - go outside now
     case postAccident
+    /// Tracking paused - puppy is with someone else
+    case coverageGap(type: CoverageGapType, since: Date)
     /// No data available
     case unknown
 
@@ -32,6 +34,13 @@ enum PottyUrgency: Equatable {
         default:
             return false
         }
+    }
+
+    var isPaused: Bool {
+        if case .coverageGap = self {
+            return true
+        }
+        return false
     }
 }
 
@@ -80,6 +89,18 @@ struct PredictionCalculations {
         events: [PuppyEvent],
         config: PredictionConfig
     ) -> PottyPrediction {
+        // Check for active coverage gap first - tracking is paused
+        if let activeGap = events.activeGaps().first,
+           let gapType = activeGap.gapType {
+            return PottyPrediction(
+                urgency: .coverageGap(type: gapType, since: activeGap.time),
+                trigger: .none,
+                expectedGapMinutes: config.defaultGapMinutes,
+                minutesSinceLast: nil,
+                lastWasIndoor: false
+            )
+        }
+
         // Find last potty event
         let lastPlas = events.pee().chronological().last
 
@@ -149,6 +170,8 @@ struct PredictionCalculations {
             return "bell.badge.fill"
         case .postAccident:
             return "exclamationmark.triangle.fill"
+        case .coverageGap(let type, _):
+            return type.icon
         case .unknown:
             return "questionmark.circle.fill"
         }
@@ -169,6 +192,8 @@ struct PredictionCalculations {
             return .ollieDanger
         case .postAccident:
             return .ollieDanger
+        case .coverageGap:
+            return .orange
         case .unknown:
             return .ollieMuted
         }
@@ -195,6 +220,8 @@ struct PredictionCalculations {
             return Strings.Prediction.needsToPeeNowOverdue(name: puppyName, minutes: overdue)
         case .postAccident:
             return Strings.Prediction.afterAccidentGoOutside
+        case .coverageGap:
+            return Strings.CoverageGap.trackingPaused
         case .unknown:
             return Strings.TimeFormat.noData
         }

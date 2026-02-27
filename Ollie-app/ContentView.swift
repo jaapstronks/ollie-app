@@ -15,6 +15,8 @@ struct ContentView: View {
     @EnvironmentObject var notificationService: NotificationService
     @EnvironmentObject var spotStore: SpotStore
     @EnvironmentObject var medicationStore: MedicationStore
+    @EnvironmentObject var socializationStore: SocializationStore
+    @EnvironmentObject var milestoneStore: MilestoneStore
 
     @State private var showOnboarding = false
     @AppStorage(UserPreferences.Key.lastSelectedTab.rawValue) private var selectedTab = 0
@@ -46,7 +48,9 @@ struct ContentView: View {
                         weatherService: weatherService,
                         notificationService: notificationService,
                         spotStore: spotStore,
-                        medicationStore: medicationStore
+                        medicationStore: medicationStore,
+                        socializationStore: socializationStore,
+                        milestoneStore: milestoneStore
                     )
                 }
             }
@@ -81,11 +85,14 @@ struct MainTabView: View {
     @ObservedObject var notificationService: NotificationService
     @ObservedObject var spotStore: SpotStore
     @ObservedObject var medicationStore: MedicationStore
+    @ObservedObject var socializationStore: SocializationStore
+    @ObservedObject var milestoneStore: MilestoneStore
     @EnvironmentObject var locationManager: LocationManager
 
     @StateObject private var viewModel: TimelineViewModel
     @StateObject private var momentsViewModel: MomentsViewModel
     @StateObject private var mediaCaptureViewModel = MediaCaptureViewModel(mediaStore: MediaStore())
+    @StateObject private var thisWeekViewModel: ThisWeekViewModel
     @State private var showingSettings = false
     @State private var selectedPhotoEvent: PuppyEvent?
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -98,7 +105,9 @@ struct MainTabView: View {
         weatherService: WeatherService,
         notificationService: NotificationService,
         spotStore: SpotStore,
-        medicationStore: MedicationStore
+        medicationStore: MedicationStore,
+        socializationStore: SocializationStore,
+        milestoneStore: MilestoneStore
     ) {
         self._selectedTab = selectedTab
         self.eventStore = eventStore
@@ -108,6 +117,8 @@ struct MainTabView: View {
         self.notificationService = notificationService
         self.spotStore = spotStore
         self.medicationStore = medicationStore
+        self.socializationStore = socializationStore
+        self.milestoneStore = milestoneStore
         // StateObject init with autoclosure ensures single creation
         self._viewModel = StateObject(wrappedValue: TimelineViewModel(
             eventStore: eventStore,
@@ -117,6 +128,11 @@ struct MainTabView: View {
         ))
         self._momentsViewModel = StateObject(wrappedValue: MomentsViewModel(
             eventStore: eventStore
+        ))
+        self._thisWeekViewModel = StateObject(wrappedValue: ThisWeekViewModel(
+            profileStore: profileStore,
+            milestoneStore: milestoneStore,
+            socializationStore: socializationStore
         ))
     }
 
@@ -139,8 +155,10 @@ struct MainTabView: View {
                 // Tab 0: Today
                 TodayView(
                     viewModel: viewModel,
+                    thisWeekViewModel: thisWeekViewModel,
                     weatherService: weatherService,
-                    onSettingsTap: { showingSettings = true }
+                    onSettingsTap: { showingSettings = true },
+                    onNavigateToInsights: { selectedTab = 3 }
                 )
                 .tabItem {
                     Label(Strings.Tabs.today, systemImage: "calendar")
@@ -171,15 +189,17 @@ struct MainTabView: View {
                 }
                 .tag(2)
 
-                // Tab 3: Stats (expanded with Health, Walks, Spots)
+                // Tab 3: Insights (expanded with Health, Walks, Spots)
                 InsightsView(
                     viewModel: viewModel,
                     momentsViewModel: momentsViewModel,
                     spotStore: spotStore,
+                    socializationStore: socializationStore,
+                    milestoneStore: milestoneStore,
                     onSettingsTap: { showingSettings = true }
                 )
                 .tabItem {
-                    Label(Strings.Tabs.stats, systemImage: "chart.bar.fill")
+                    Label(Strings.Tabs.insights, systemImage: "chart.bar.fill")
                 }
                 .tag(3)
             }
@@ -223,7 +243,8 @@ struct MainTabView: View {
                     eventStore: eventStore,
                     notificationService: notificationService,
                     spotStore: spotStore,
-                    viewModel: viewModel
+                    viewModel: viewModel,
+                    milestoneStore: milestoneStore
                 )
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {

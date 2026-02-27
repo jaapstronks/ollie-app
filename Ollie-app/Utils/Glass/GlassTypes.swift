@@ -45,3 +45,67 @@ enum GlassTint {
         }
     }
 }
+
+// MARK: - Glass Button Helpers
+
+/// Shared helpers for glass button backgrounds and effects
+/// Reduces code duplication across GlassPillButtonStyle, GlassIconButtonStyle, etc.
+enum GlassButtonHelpers {
+
+    /// Calculate base opacity for glass button background
+    static func baseOpacity(
+        isPressed: Bool,
+        colorScheme: ColorScheme,
+        pressedLight: Double = 0.95,
+        normalLight: Double = 0.8,
+        pressedDark: Double = 0.15,
+        normalDark: Double = 0.1
+    ) -> Double {
+        if colorScheme == .dark {
+            return isPressed ? pressedDark : normalDark
+        } else {
+            return isPressed ? pressedLight : normalLight
+        }
+    }
+
+    /// Calculate tint overlay opacity
+    static func tintOpacity(colorScheme: ColorScheme, dark: Double = 0.2, light: Double = 0.12) -> Double {
+        colorScheme == .dark ? dark : light
+    }
+
+    /// Standard capsule border gradient for glass buttons
+    static func capsuleBorderGradient(colorScheme: ColorScheme) -> LinearGradient {
+        LinearGradient(
+            colors: [
+                Color.white.opacity(colorScheme == .dark ? 0.2 : 0.5),
+                Color.clear
+            ],
+            startPoint: .topLeading,
+            endPoint: .bottomTrailing
+        )
+    }
+
+    /// Standard circle border gradient for glass icon buttons
+    static func circleBorderGradient(colorScheme: ColorScheme) -> LinearGradient {
+        LinearGradient(
+            colors: [
+                Color.white.opacity(colorScheme == .dark ? 0.25 : 0.6),
+                Color.white.opacity(colorScheme == .dark ? 0.05 : 0.1)
+            ],
+            startPoint: .topLeading,
+            endPoint: .bottomTrailing
+        )
+    }
+
+    /// Highlight gradient for buttons with top-to-center fade
+    static func highlightGradient(colorScheme: ColorScheme, darkOpacity: Double = 0.12, lightOpacity: Double = 0.35) -> LinearGradient {
+        LinearGradient(
+            colors: [
+                Color.white.opacity(colorScheme == .dark ? darkOpacity : lightOpacity),
+                Color.clear
+            ],
+            startPoint: .top,
+            endPoint: .center
+        )
+    }
+}

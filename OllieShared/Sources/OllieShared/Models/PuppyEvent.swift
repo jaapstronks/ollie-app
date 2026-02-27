@@ -5,6 +5,37 @@
 
 import Foundation
 
+// MARK: - Coverage Gap Type
+
+/// Types of coverage gaps when the puppy is cared for by someone else
+public enum CoverageGapType: String, Codable, CaseIterable, Sendable {
+    case daycare
+    case family
+    case sitter
+    case vacation
+    case other
+
+    public var label: String {
+        switch self {
+        case .daycare: return Strings.CoverageGap.typeDaycare
+        case .family: return Strings.CoverageGap.typeFamily
+        case .sitter: return Strings.CoverageGap.typeSitter
+        case .vacation: return Strings.CoverageGap.typeVacation
+        case .other: return Strings.CoverageGap.typeOther
+        }
+    }
+
+    public var icon: String {
+        switch self {
+        case .daycare: return "building.2.fill"
+        case .family: return "person.2.fill"
+        case .sitter: return "person.fill.checkmark"
+        case .vacation: return "airplane"
+        case .other: return "ellipsis.circle.fill"
+        }
+    }
+}
+
 // MARK: - Event Type
 
 /// Event types for tracking puppy activities
@@ -25,6 +56,7 @@ public enum EventType: String, Codable, CaseIterable, Identifiable, Sendable {
     case gewicht
     case moment
     case medicatie
+    case coverageGap
 
     public var id: String { rawValue }
 
@@ -47,6 +79,7 @@ public enum EventType: String, Codable, CaseIterable, Identifiable, Sendable {
         case .gewicht: return "scalemass.fill"
         case .moment: return "camera.fill"
         case .medicatie: return "pills.fill"
+        case .coverageGap: return "person.badge.clock.fill"
         }
     }
 
@@ -68,6 +101,7 @@ public enum EventType: String, Codable, CaseIterable, Identifiable, Sendable {
         case .gewicht: return Strings.EventType.weight
         case .moment: return Strings.EventType.moment
         case .medicatie: return Strings.EventType.medication
+        case .coverageGap: return Strings.CoverageGap.eventLabel
         }
     }
 
@@ -84,6 +118,11 @@ public enum EventType: String, Codable, CaseIterable, Identifiable, Sendable {
     /// Whether this event type is a sleep-related event
     public var isSleepEvent: Bool {
         self == .slapen || self == .ontwaken
+    }
+
+    /// Whether this event type is a coverage gap
+    public var isCoverageGap: Bool {
+        self == .coverageGap
     }
 }
 
@@ -188,6 +227,12 @@ public struct PuppyEvent: Codable, Identifiable, Equatable, Sendable {
     public var parentWalkId: UUID?
     public var sleepSessionId: UUID?
 
+    // MARK: - Coverage Gap Fields
+
+    public var gapType: CoverageGapType?
+    public var endTime: Date?          // nil = ongoing gap
+    public var gapLocation: String?    // optional location (e.g., "Grandma's house")
+
     // MARK: - Media Fields
 
     public var photo: String?
@@ -261,7 +306,10 @@ public struct PuppyEvent: Codable, Identifiable, Equatable, Sendable {
         spotId: UUID? = nil,
         spotName: String? = nil,
         parentWalkId: UUID? = nil,
-        sleepSessionId: UUID? = nil
+        sleepSessionId: UUID? = nil,
+        gapType: CoverageGapType? = nil,
+        endTime: Date? = nil,
+        gapLocation: String? = nil
     ) {
         self.id = id
         self.time = time
@@ -287,6 +335,9 @@ public struct PuppyEvent: Codable, Identifiable, Equatable, Sendable {
         self.spotId = spotId
         self.spotName = spotName
         self.parentWalkId = parentWalkId
+        self.gapType = gapType
+        self.endTime = endTime
+        self.gapLocation = gapLocation
 
         if type == .slapen {
             self.sleepSessionId = sleepSessionId ?? UUID()
@@ -326,6 +377,9 @@ public struct PuppyEvent: Codable, Identifiable, Equatable, Sendable {
         case spotName = "spot_name"
         case parentWalkId = "parent_walk_id"
         case sleepSessionId = "sleep_session_id"
+        case gapType = "gap_type"
+        case endTime = "end_time"
+        case gapLocation = "gap_location"
     }
 
     // MARK: - Custom Decoding
@@ -363,6 +417,11 @@ public struct PuppyEvent: Codable, Identifiable, Equatable, Sendable {
         } else {
             sleepSessionId = decodedSleepSessionId
         }
+
+        // Coverage gap fields
+        gapType = try container.decodeIfPresent(CoverageGapType.self, forKey: .gapType)
+        endTime = try container.decodeIfPresent(Date.self, forKey: .endTime)
+        gapLocation = try container.decodeIfPresent(String.self, forKey: .gapLocation)
     }
 }
 
@@ -388,5 +447,27 @@ extension PuppyEvent {
         copy.locationInfo = locationInfo
         copy.modifiedAt = Date()
         return copy
+    }
+
+    /// End a coverage gap by setting the end time
+    public func withEndTime(_ endTime: Date, note: String? = nil) -> PuppyEvent {
+        var copy = self
+        copy.endTime = endTime
+        if let note = note {
+            copy.note = note
+        }
+        copy.modifiedAt = Date()
+        return copy
+    }
+
+    /// Check if this coverage gap is ongoing (no end time)
+    public var isOngoingGap: Bool {
+        type == .coverageGap && endTime == nil
+    }
+
+    /// Duration of coverage gap in minutes (nil if ongoing)
+    public var gapDurationMinutes: Int? {
+        guard type == .coverageGap, let endTime = endTime else { return nil }
+        return Int(endTime.timeIntervalSince(time) / 60)
     }
 }

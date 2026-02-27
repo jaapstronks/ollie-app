@@ -1,0 +1,490 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "%@'s birth date" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geboortedatum van %@"
+          }
+        }
+      }
+    },
+    "%lld days home" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld dagen thuis"
+          }
+        }
+      }
+    },
+    "%lld months old" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld maanden oud"
+          }
+        }
+      }
+    },
+    "%lld weeks old" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld weken oud"
+          }
+        }
+      }
+    },
+    "1 month old" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 maand oud"
+          }
+        }
+      }
+    },
+    "All milestones completed!" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle mijlpalen behaald!"
+          }
+        }
+      }
+    },
+    "Already in the deep end?" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Al midden in het avontuur?"
+          }
+        }
+      }
+    },
+    "Beagle, Cocker Spaniel, Border Collie" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beagle, Cocker Spaniel, Border Collie"
+          }
+        }
+      }
+    },
+    "Bernese Mountain Dog, Great Dane, Saint Bernard" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Berner Sennenhond, Duitse Dog, Sint-Bernard"
+          }
+        }
+      }
+    },
+    "Birth date" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geboortedatum"
+          }
+        }
+      }
+    },
+    "Born" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geboren"
+          }
+        }
+      }
+    },
+    "Breed (optional)" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ras (optioneel)"
+          }
+        }
+      }
+    },
+    "Came home" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thuisgekomen"
+          }
+        }
+      }
+    },
+    "Chihuahua, Maltese, Yorkshire Terrier" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chihuahua, Maltezer, Yorkshire Terrier"
+          }
+        }
+      }
+    },
+    "Date %@ came home" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Datum dat %@ thuiskwam"
+          }
+        }
+      }
+    },
+    "Enter custom" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zelf invoeren"
+          }
+        }
+      }
+    },
+    "Enter your puppy's name" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voer de naam van je pup in"
+          }
+        }
+      }
+    },
+    "Extra large (>45kg)" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Extra groot (>45kg)"
+          }
+        }
+      }
+    },
+    "Get Started" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aan de slag"
+          }
+        }
+      }
+    },
+    "Home date" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thuiskomst"
+          }
+        }
+      }
+    },
+    "How big will %@ get?" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoe groot wordt %@?"
+          }
+        }
+      }
+    },
+    "Just start tracking. Patterns emerge fast." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ga gewoon beginnen. Patronen worden snel zichtbaar."
+          }
+        }
+      }
+    },
+    "Labrador, Golden Retriever, German Shepherd" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Labrador, Golden Retriever, Duitse Herder"
+          }
+        }
+      }
+    },
+    "Large (25-45kg)" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Groot (25-45kg)"
+          }
+        }
+      }
+    },
+    "Medium (10-25kg)" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Middelgroot (10-25kg)"
+          }
+        }
+      }
+    },
+    "Moments" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Momenten"
+          }
+        }
+      }
+    },
+    "Name" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Naam"
+          }
+        }
+      }
+    },
+    "Next up" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Binnenkort"
+          }
+        }
+      }
+    },
+    "No upcoming milestones" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geen komende mijlpalen"
+          }
+        }
+      }
+    },
+    "Other / Unknown" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anders / Onbekend"
+          }
+        }
+      }
+    },
+    "Overdue" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Te laat"
+          }
+        }
+      }
+    },
+    "Plan" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plan"
+          }
+        }
+      }
+    },
+    "Preparing for your puppy?" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voorbereiden op je pup?"
+          }
+        }
+      }
+    },
+    "Puppy age" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leeftijd pup"
+          }
+        }
+      }
+    },
+    "Ready to begin!" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Klaar om te beginnen!"
+          }
+        }
+      }
+    },
+    "See all moments" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bekijk alle momenten"
+          }
+        }
+      }
+    },
+    "Small (<10kg)" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Klein (<10kg)"
+          }
+        }
+      }
+    },
+    "Start logging from day one. You'll thank yourself in week two." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Begin met loggen vanaf dag een. Je bedankt jezelf in week twee."
+          }
+        }
+      }
+    },
+    "Track meals, potty, sleep & walks — and actually understand what your puppy needs." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Houd maaltijden, plasjes, slaap en wandelingen bij — en begrijp eindelijk wat je pup nodig heeft."
+          }
+        }
+      }
+    },
+    "Upcoming milestones" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Komende mijlpalen"
+          }
+        }
+      }
+    },
+    "What breed is %@?" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wat voor ras is %@?"
+          }
+        }
+      }
+    },
+    "What's your puppy's name?" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoe heet je pup?"
+          }
+        }
+      }
+    },
+    "When did %@ come home?" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wanneer is %@ thuisgekomen?"
+          }
+        }
+      }
+    },
+    "When was %@ born?" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wanneer is %@ geboren?"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

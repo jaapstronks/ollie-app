@@ -12,10 +12,12 @@ import TipKit
 /// Main "Today" tab showing the daily hub
 struct TodayView: View {
     @ObservedObject var viewModel: TimelineViewModel
+    @ObservedObject var thisWeekViewModel: ThisWeekViewModel
     /// Weather service passed down but not observed here to avoid full view redraws
     /// Weather-dependent sections use their own observation via WeatherSectionContainer
     let weatherService: WeatherService
     let onSettingsTap: () -> Void
+    var onNavigateToInsights: (() -> Void)?
 
     @State private var selectedPhotoEvent: PuppyEvent?
 
@@ -48,10 +50,19 @@ struct TodayView: View {
                             .animatedAppear(delay: 0.05)
                     }
 
+                    // This Week card (socialization + milestones)
+                    if viewModel.isShowingToday {
+                        ThisWeekCard(
+                            viewModel: thisWeekViewModel,
+                            onNavigateToInsights: onNavigateToInsights
+                        )
+                        .animatedAppear(delay: 0.10)
+                    }
+
                     // Walk suggestions (socialization items to watch for)
                     if viewModel.isShowingToday {
                         WalkSuggestionsCard()
-                            .animatedAppear(delay: 0.10)
+                            .animatedAppear(delay: 0.15)
                     }
 
                     // Combined potty progress card (streak + poop count)
@@ -60,12 +71,12 @@ struct TodayView: View {
                             streakInfo: viewModel.streakInfo,
                             poopStatus: viewModel.poopStatus
                         )
-                        .animatedAppear(delay: 0.15)
+                        .animatedAppear(delay: 0.20)
                     }
 
                     // Timeline section
                     timelineSection
-                        .animatedAppear(delay: 0.20)
+                        .animatedAppear(delay: 0.25)
                 }
                 .padding()
                 .padding(.bottom, 84) // Space for FAB
@@ -326,12 +337,21 @@ struct EmptyTimelineCard: View {
 #Preview {
     let eventStore = EventStore()
     let profileStore = ProfileStore()
+    let milestoneStore = MilestoneStore()
+    let socializationStore = SocializationStore()
     let viewModel = TimelineViewModel(eventStore: eventStore, profileStore: profileStore)
+    let thisWeekViewModel = ThisWeekViewModel(
+        profileStore: profileStore,
+        milestoneStore: milestoneStore,
+        socializationStore: socializationStore
+    )
     let weatherService = WeatherService()
 
     return TodayView(
         viewModel: viewModel,
+        thisWeekViewModel: thisWeekViewModel,
         weatherService: weatherService,
-        onSettingsTap: { print("Settings tapped") }
+        onSettingsTap: { print("Settings tapped") },
+        onNavigateToInsights: { print("Navigate to Insights") }
     )
 }

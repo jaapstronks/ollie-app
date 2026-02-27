@@ -1,0 +1,176 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "All caught up!" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Helemaal bijgepraat!"
+          }
+        }
+      }
+    },
+    "Awake" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wakker"
+          }
+        }
+      }
+    },
+    "Eaten since %@?" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gegeten sinds %@?"
+          }
+        }
+      }
+    },
+    "Hey! Let's get you caught up." : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hey! Laten we je bijpraten."
+          }
+        }
+      }
+    },
+    "Just now" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Net"
+          }
+        }
+      }
+    },
+    "Last logged: %lld hours ago" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laatst gelogd: %lld uur geleden"
+          }
+        }
+      }
+    },
+    "Last pee outside?" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laatste plas buiten?"
+          }
+        }
+      }
+    },
+    "Logged via catch-up" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gelogd via bijpraten"
+          }
+        }
+      }
+    },
+    "Now" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nu"
+          }
+        }
+      }
+    },
+    "Pooped today?" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vandaag gepoept?"
+          }
+        }
+      }
+    },
+    "Quick Catch-Up" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Snel bijpraten"
+          }
+        }
+      }
+    },
+    "Right now, is %@..." : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Is %@ nu..."
+          }
+        }
+      }
+    },
+    "Since:" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sinds:"
+          }
+        }
+      }
+    },
+    "Skip for now" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nu overslaan"
+          }
+        }
+      }
+    },
+    "Sleeping" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Slaapt"
+          }
+        }
+      }
+    },
+    "~1h" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "~1u"
+          }
+        }
+      }
+    },
+    "~2h" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "~2u"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

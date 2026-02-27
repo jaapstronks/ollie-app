@@ -211,4 +211,21 @@ extension PuppyEvent {
             durationMin: durationMin
         )
     }
+
+    public static func coverageGap(
+        startTime: Date = Date(),
+        endTime: Date? = nil,
+        gapType: CoverageGapType,
+        location: String? = nil,
+        note: String? = nil
+    ) -> PuppyEvent {
+        return PuppyEvent(
+            time: startTime,
+            type: .coverageGap,
+            note: note,
+            gapType: gapType,
+            endTime: endTime,
+            gapLocation: location
+        )
+    }
 }

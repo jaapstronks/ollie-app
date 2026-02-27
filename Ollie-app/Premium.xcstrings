@@ -1,0 +1,754 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "%@ ate - logged!" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ heeft gegeten - gelogd!"
+          }
+        }
+      }
+    },
+    "%@ is already sleeping. Say '%@ woke up' when they wake." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ slaapt al. Zeg '%2$@ is wakker' wanneer die wakker wordt."
+          }
+        }
+      }
+    },
+    "%@ is sleeping - logged. Say '%@ woke up' when they wake." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ slaapt - gelogd. Zeg '%2$@ is wakker' wanneer die wakker wordt."
+          }
+        }
+      }
+    },
+    "%@ just peed %@." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ heeft net %2$@ geplast."
+          }
+        }
+      }
+    },
+    "%@ peed %@ %lld hours ago." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ heeft %2$@ %3$lld uur geleden geplast."
+          }
+        }
+      }
+    },
+    "%@ peed %@ %lld hours and %lld minutes ago." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ heeft %2$@ %3$lld uur en %4$lld minuten geleden geplast."
+          }
+        }
+      }
+    },
+    "%@ peed %@ %lld minutes ago." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ heeft %2$@ %3$lld minuten geleden geplast."
+          }
+        }
+      }
+    },
+    "%@ wasn't logged as sleeping. Logging wake up anyway." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ was niet als slapend gelogd. Wakker worden wordt toch gelogd."
+          }
+        }
+      }
+    },
+    "%@ woke up - logged!" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ is wakker - gelogd!"
+          }
+        }
+      }
+    },
+    "%@ woke up after %lld minutes - logged!" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ is wakker na %lld minuten - gelogd!"
+          }
+        }
+      }
+    },
+    "%lld days left free" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nog %lld dagen gratis"
+          }
+        }
+      }
+    },
+    "%lld days left in trial" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nog %lld dagen proefperiode"
+          }
+        }
+      }
+    },
+    "%lld days remaining" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nog %lld dagen"
+          }
+        }
+      }
+    },
+    "€19" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "€19"
+          }
+        }
+      }
+    },
+    "Continue with Ollie" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Doorgaan met Ollie"
+          }
+        }
+      }
+    },
+    "Continue with Ollie — %@" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Doorgaan met Ollie — %@"
+          }
+        }
+      }
+    },
+    "Example commands:" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voorbeeldopdrachten:"
+          }
+        }
+      }
+    },
+    "Expired" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verlopen"
+          }
+        }
+      }
+    },
+    "Failed to log event" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gebeurtenis loggen mislukt"
+          }
+        }
+      }
+    },
+    "Find out when your puppy last peed" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ontdek wanneer je puppy voor het laatst heeft geplast"
+          }
+        }
+      }
+    },
+    "Find out when your puppy last pooped" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ontdek wanneer je puppy voor het laatst heeft gepoept"
+          }
+        }
+      }
+    },
+    "Free" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gratis"
+          }
+        }
+      }
+    },
+    "How is my puppy in Ollie" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoe gaat het met mijn puppy in Ollie"
+          }
+        }
+      }
+    },
+    "Log a walk with your puppy" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Log een wandeling met je puppy"
+          }
+        }
+      }
+    },
+    "Log Meal" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Log Maaltijd"
+          }
+        }
+      }
+    },
+    "Log Potty" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Log Plasje"
+          }
+        }
+      }
+    },
+    "Log Sleep" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Log Slaap"
+          }
+        }
+      }
+    },
+    "Log that your puppy ate" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Log dat je puppy heeft gegeten"
+          }
+        }
+      }
+    },
+    "Log that your puppy is sleeping" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Log dat je puppy slaapt"
+          }
+        }
+      }
+    },
+    "Log that your puppy woke up" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Log dat je puppy wakker is geworden"
+          }
+        }
+      }
+    },
+    "Log Wake Up" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Log Wakker"
+          }
+        }
+      }
+    },
+    "Log Walk" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Log Wandeling"
+          }
+        }
+      }
+    },
+    "Log when your puppy peed or pooped" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Log wanneer je puppy heeft geplast of gepoept"
+          }
+        }
+      }
+    },
+    "Logged %@ %@ for %@" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ %2$@ gelogd voor %3$@"
+          }
+        }
+      }
+    },
+    "Logged %lld minute walk with %@" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wandeling van %lld minuten met %@ gelogd"
+          }
+        }
+      }
+    },
+    "Logged walk with %@" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wandeling met %@ gelogd"
+          }
+        }
+      }
+    },
+    "Logging disabled" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loggen uitgeschakeld"
+          }
+        }
+      }
+    },
+    "My puppy is sleeping in Ollie" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mijn puppy slaapt in Ollie"
+          }
+        }
+      }
+    },
+    "My puppy peed outside in Ollie" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mijn puppy heeft buiten geplast in Ollie"
+          }
+        }
+      }
+    },
+    "No pee events logged for %@ in the last week." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geen plasjes gelogd voor %@ in de afgelopen week."
+          }
+        }
+      }
+    },
+    "No poop events logged for %@ in the last week." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geen poepjes gelogd voor %@ in de afgelopen week."
+          }
+        }
+      }
+    },
+    "No restorable purchases found" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geen herstelbare aankopen gevonden"
+          }
+        }
+      }
+    },
+    "Ollie Premium" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ollie Premium"
+          }
+        }
+      }
+    },
+    "One-time purchase, per puppy profile" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eenmalige aankoop, per puppyprofiel"
+          }
+        }
+      }
+    },
+    "Open Shortcuts App" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open Opdrachten-app"
+          }
+        }
+      }
+    },
+    "Please set up your puppy profile in the Ollie app first." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stel eerst je puppyprofiel in via de Ollie-app."
+          }
+        }
+      }
+    },
+    "Please try again" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Probeer het opnieuw"
+          }
+        }
+      }
+    },
+    "Poop Status" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Poep Status"
+          }
+        }
+      }
+    },
+    "Potty Status" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plas Status"
+          }
+        }
+      }
+    },
+    "Premium" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Premium"
+          }
+        }
+      }
+    },
+    "Purchase failed" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aankoop mislukt"
+          }
+        }
+      }
+    },
+    "Restore purchases" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aankopen herstellen"
+          }
+        }
+      }
+    },
+    "Restoring purchases..." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aankopen herstellen..."
+          }
+        }
+      }
+    },
+    "See all Ollie shortcuts" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bekijk alle Ollie-snelkoppelingen"
+          }
+        }
+      }
+    },
+    "Siri & Shortcuts" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Siri & Snelkoppelingen"
+          }
+        }
+      }
+    },
+    "Siri will respond using your puppy's name from your profile." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Siri antwoordt met de naam van je puppy uit je profiel."
+          }
+        }
+      }
+    },
+    "Status" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Status"
+          }
+        }
+      }
+    },
+    "Success!" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gelukt!"
+          }
+        }
+      }
+    },
+    "Tap to upgrade" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tik om te upgraden"
+          }
+        }
+      }
+    },
+    "The first weeks with a puppy are the most important. Ollie helps you track patterns and build good habits." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De eerste weken met een puppy zijn het belangrijkst. Ollie helpt je patronen te volgen en goede gewoontes op te bouwen."
+          }
+        }
+      }
+    },
+    "Unlock unlimited logging, predictions, and insights for your puppy's journey." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ontgrendel onbeperkt loggen, voorspellingen en inzichten voor de reis van je puppy."
+          }
+        }
+      }
+    },
+    "Upgrade to continue logging events" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Upgrade om door te gaan met het loggen van gebeurtenissen"
+          }
+        }
+      }
+    },
+    "Use Siri to log events and check on your puppy hands-free. Say \"Hey Siri\" followed by a command." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gebruik Siri om gebeurtenissen te loggen en je puppy te checken zonder je handen te gebruiken. Zeg \"Hé Siri\" gevolgd door een opdracht."
+          }
+        }
+      }
+    },
+    "Voice Commands" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spraakopdrachten"
+          }
+        }
+      }
+    },
+    "You can now log unlimited events for %@." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je kunt nu onbeperkt gebeurtenissen loggen voor %@."
+          }
+        }
+      }
+    },
+    "Your free trial for %@ has ended" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je gratis proefperiode voor %@ is afgelopen"
+          }
+        }
+      }
+    },
+    "Your free trial has ended" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je gratis proefperiode is afgelopen"
+          }
+        }
+      }
+    },
+    "Your free trial has ended. Please upgrade in the Ollie app to continue logging." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je gratis proefperiode is afgelopen. Upgrade in de Ollie-app om door te gaan met loggen."
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

@@ -33,7 +33,13 @@ public struct SleepCalculations {
     // MARK: - Public Methods
 
     /// Determine the current sleep state from events
+    /// Returns .unknown if there's an active coverage gap (tracking paused)
     public static func currentSleepState(events: [PuppyEvent]) -> SleepState {
+        // Check for active coverage gap - tracking is paused
+        if CoverageGapFilter.hasActiveGap(gaps: events) {
+            return .unknown
+        }
+
         let sleepEvents = events
             .filter { isSleepEvent($0.type) || isWakeEvent($0.type) }
             .sorted { $0.time < $1.time }

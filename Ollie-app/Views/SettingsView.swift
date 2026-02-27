@@ -15,6 +15,7 @@ struct SettingsView: View {
     @ObservedObject var notificationService: NotificationService
     @ObservedObject var spotStore: SpotStore
     @ObservedObject var viewModel: TimelineViewModel
+    @ObservedObject var milestoneStore: MilestoneStore
 
     var body: some View {
         List {
@@ -24,7 +25,8 @@ struct SettingsView: View {
                     DogProfileSettingsView(
                         profileStore: profileStore,
                         spotStore: spotStore,
-                        viewModel: viewModel
+                        viewModel: viewModel,
+                        milestoneStore: milestoneStore
                     )
                 } label: {
                     SettingsHubRow(
@@ -88,16 +90,18 @@ private struct SettingsHubRow: View {
 #Preview {
     let eventStore = EventStore()
     let profileStore = ProfileStore()
+    let milestoneStore = MilestoneStore()
     let viewModel = TimelineViewModel(eventStore: eventStore, profileStore: profileStore)
 
-    return NavigationStack {
+    NavigationStack {
         SettingsView(
             profileStore: profileStore,
             dataImporter: DataImporter(),
             eventStore: eventStore,
             notificationService: NotificationService(),
             spotStore: SpotStore(),
-            viewModel: viewModel
+            viewModel: viewModel,
+            milestoneStore: milestoneStore
         )
     }
 }

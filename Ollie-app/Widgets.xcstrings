@@ -1,0 +1,292 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "%@ has been awake for %lld minutes" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ is al %lld minuten wakker"
+          }
+        }
+      }
+    },
+    "%@ needs to pee in ~%lld min" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ moet over ~%lld min plassen"
+          }
+        }
+      }
+    },
+    "%@ needs to pee now!" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ moet nu plassen!"
+          }
+        }
+      }
+    },
+    "%@ needs to pee soon!" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ moet binnenkort plassen!"
+          }
+        }
+      }
+    },
+    "Go outside now!" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nu naar buiten!"
+          }
+        }
+      }
+    },
+    "Nap needed?" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dutje nodig?"
+          }
+        }
+      }
+    },
+    "Now" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nu"
+          }
+        }
+      }
+    },
+    "Ollie Overview" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ollie Overzicht"
+          }
+        }
+      }
+    },
+    "outdoor" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "buiten"
+          }
+        }
+      }
+    },
+    "outdoor streak" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "buitenreeks"
+          }
+        }
+      }
+    },
+    "potty" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "plas"
+          }
+        }
+      }
+    },
+    "Potty alarm!" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plasalarm!"
+          }
+        }
+      }
+    },
+    "Potty Timer" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plastimer"
+          }
+        }
+      }
+    },
+    "Potty timer and streak in one widget." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plastimer en reeks in een widget."
+          }
+        }
+      }
+    },
+    "record" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "record"
+          }
+        }
+      }
+    },
+    "See how long since the last potty break." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zie hoe lang geleden de laatste plasbreak was."
+          }
+        }
+      }
+    },
+    "since last potty" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "sinds laatste plas"
+          }
+        }
+      }
+    },
+    "since potty" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "sinds plas"
+          }
+        }
+      }
+    },
+    "Start fresh!" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Begin opnieuw!"
+          }
+        }
+      }
+    },
+    "Streak Counter" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reeksteller"
+          }
+        }
+      }
+    },
+    "Time for %@'s %@" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tijd voor %1$@'s %2$@"
+          }
+        }
+      }
+    },
+    "Time for %@'s walk" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tijd voor %@'s wandeling"
+          }
+        }
+      }
+    },
+    "Time for a potty break!" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tijd voor een plasbreak!"
+          }
+        }
+      }
+    },
+    "Time for a walk!" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tijd voor een wandeling!"
+          }
+        }
+      }
+    },
+    "Time to eat!" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tijd om te eten!"
+          }
+        }
+      }
+    },
+    "Track your outdoor potty streak." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Volg je buitenplas-reeks."
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}
