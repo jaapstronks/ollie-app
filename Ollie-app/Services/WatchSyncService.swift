@@ -3,8 +3,12 @@
 //  Ollie-app
 //
 //  Syncs data from iPhone to Apple Watch via WatchConnectivity
+//
+//  IMPORTANT: Apple recommends activating WCSession as early as possible in app lifecycle.
+//  This service is initialized in AppDelegate.didFinishLaunchingWithOptions.
 
 import Foundation
+import Combine
 import WatchConnectivity
 import OllieShared
 import CoreData
@@ -18,8 +22,41 @@ final class WatchSyncService: NSObject {
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "Ollie", category: "WatchSync")
     private let eventStore = CoreDataEventStore()
 
+    // MARK: - Sync Status
+
+    /// Whether the watch is currently connected and reachable
+    @Published private(set) var isWatchReachable: Bool = false
+
+    /// Whether the watch app is installed
+    @Published private(set) var isWatchAppInstalled: Bool = false
+
+    /// Last successful sync time
+    @Published private(set) var lastSyncTime: Date?
+
+    /// Current sync state
+    @Published private(set) var syncState: SyncState = .idle
+
+    enum SyncState {
+        case idle
+        case syncing
+        case success
+        case failed(Error)
+    }
+
+    // MARK: - Retry Configuration
+
+    private var retryCount = 0
+    private let maxRetries = 3
+    private var retryWorkItem: DispatchWorkItem?
+
+    // MARK: - Persistence Keys
+
+    private static let lastSyncTimeKey = "WatchSync_lastSuccessfulSyncTime"
+    private static let pendingSyncKey = "WatchSync_pendingSync"
+
     override init() {
         super.init()
+        loadPersistedState()
         setupSession()
     }
 
@@ -34,6 +71,33 @@ final class WatchSyncService: NSObject {
         session = WCSession.default
         session?.delegate = self
         session?.activate()
+        logger.info("WCSession activation requested")
+    }
+
+    // MARK: - State Persistence
+
+    private func loadPersistedState() {
+        let timestamp = UserDefaults.standard.double(forKey: Self.lastSyncTimeKey)
+        if timestamp > 0 {
+            lastSyncTime = Date(timeIntervalSince1970: timestamp)
+        }
+    }
+
+    private func persistSyncTime(_ date: Date) {
+        UserDefaults.standard.set(date.timeIntervalSince1970, forKey: Self.lastSyncTimeKey)
+        lastSyncTime = date
+    }
+
+    private func markPendingSync() {
+        UserDefaults.standard.set(true, forKey: Self.pendingSyncKey)
+    }
+
+    private func clearPendingSync() {
+        UserDefaults.standard.set(false, forKey: Self.pendingSyncKey)
+    }
+
+    private var hasPendingSync: Bool {
+        UserDefaults.standard.bool(forKey: Self.pendingSyncKey)
     }
 
     // MARK: - Public Methods
@@ -45,8 +109,16 @@ final class WatchSyncService: NSObject {
               session.activationState == .activated,
               session.isPaired,
               session.isWatchAppInstalled else {
+            logger.debug("Cannot sync - session not ready or watch not available")
             return
         }
+
+        // Cancel any pending retry
+        retryWorkItem?.cancel()
+        retryWorkItem = nil
+
+        syncState = .syncing
+        markPendingSync()
 
         Task {
             let data = await buildSyncData()
@@ -55,8 +127,23 @@ final class WatchSyncService: NSObject {
             do {
                 try session.updateApplicationContext(data)
                 logger.debug("Updated application context for Watch")
+
+                // Mark sync as successful
+                let now = Date()
+                persistSyncTime(now)
+                clearPendingSync()
+                retryCount = 0
+                syncState = .success
+
+                // Reset to idle after a moment
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                    if case .success = self.syncState {
+                        self.syncState = .idle
+                    }
+                }
             } catch {
                 logger.error("Failed to update context: \(error.localizedDescription)")
+                handleSyncError(error)
             }
 
             // Also send real-time message if watch is reachable for immediate update
@@ -67,8 +154,50 @@ final class WatchSyncService: NSObject {
                     self.logger.debug("Real-time sync delivered to Watch")
                 }, errorHandler: { error in
                     self.logger.warning("Real-time sync failed: \(error.localizedDescription)")
+                    // Don't trigger retry for real-time failures - applicationContext is the reliable path
                 })
             }
+        }
+    }
+
+    // MARK: - Retry Logic
+
+    private func handleSyncError(_ error: Error) {
+        self.syncState = .failed(error)
+
+        guard self.retryCount < self.maxRetries else {
+            self.logger.error("Sync failed after \(self.maxRetries) retries")
+            self.retryCount = 0
+            return
+        }
+
+        self.retryCount += 1
+
+        // Exponential backoff: 2s, 4s, 8s
+        let delay = pow(2.0, Double(self.retryCount))
+        self.logger.info("Scheduling sync retry \(self.retryCount)/\(self.maxRetries) in \(delay)s")
+
+        let workItem = DispatchWorkItem { [weak self] in
+            self?.syncToWatch()
+        }
+        self.retryWorkItem = workItem
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: workItem)
+    }
+
+    /// Force a sync attempt, clearing retry state
+    func forceSyncToWatch() {
+        retryCount = 0
+        retryWorkItem?.cancel()
+        retryWorkItem = nil
+        syncToWatch()
+    }
+
+    /// Retry sync if there's a pending sync that failed
+    func retryPendingSyncIfNeeded() {
+        if hasPendingSync {
+            logger.info("Retrying pending sync")
+            syncToWatch()
         }
     }
 
@@ -135,8 +264,15 @@ final class WatchSyncService: NSObject {
 extension WatchSyncService: WCSessionDelegate {
     func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
         if activationState == .activated {
-            logger.info("WatchConnectivity activated")
+            logger.info("WatchConnectivity activated, paired: \(session.isPaired), installed: \(session.isWatchAppInstalled), reachable: \(session.isReachable)")
+
+            // Update published state
+            isWatchReachable = session.isReachable
+            isWatchAppInstalled = session.isWatchAppInstalled
+
+            // Sync immediately and retry any pending sync
             syncToWatch()
+            retryPendingSyncIfNeeded()
         } else if let error = error {
             logger.error("WatchConnectivity activation failed: \(error.localizedDescription)")
         }
@@ -144,16 +280,33 @@ extension WatchSyncService: WCSessionDelegate {
 
     func sessionDidBecomeInactive(_ session: WCSession) {
         // Required for iOS
+        logger.debug("WCSession became inactive")
     }
 
     func sessionDidDeactivate(_ session: WCSession) {
         // Required for iOS - reactivate for watch switching
+        logger.debug("WCSession deactivated, reactivating...")
         session.activate()
     }
 
     func sessionWatchStateDidChange(_ session: WCSession) {
+        logger.info("Watch state changed - paired: \(session.isPaired), installed: \(session.isWatchAppInstalled)")
+
+        isWatchAppInstalled = session.isWatchAppInstalled
+
         if session.isPaired && session.isWatchAppInstalled {
             syncToWatch()
+        }
+    }
+
+    func sessionReachabilityDidChange(_ session: WCSession) {
+        logger.info("Watch reachability changed: \(session.isReachable)")
+
+        isWatchReachable = session.isReachable
+
+        if session.isReachable {
+            // Watch became reachable - retry any pending sync
+            retryPendingSyncIfNeeded()
         }
     }
 

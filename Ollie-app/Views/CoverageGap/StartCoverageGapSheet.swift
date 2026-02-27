@@ -151,7 +151,7 @@ private struct GapTypeButton: View {
             .padding(.vertical, 16)
             .background(
                 RoundedRectangle(cornerRadius: 12, style: .continuous)
-                    .fill(isSelected ? Color.orange : glassColor)
+                    .fill(isSelected ? Color.orange : GlassButtonHelpers.glassColor(for: colorScheme))
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 12, style: .continuous)
@@ -163,10 +163,6 @@ private struct GapTypeButton: View {
         }
         .buttonStyle(.plain)
         .accessibilityLabel(Strings.CoverageGap.gapTypeAccessibility(type.label))
-    }
-
-    private var glassColor: Color {
-        colorScheme == .dark ? Color.white.opacity(0.05) : Color.white.opacity(0.6)
     }
 }
 

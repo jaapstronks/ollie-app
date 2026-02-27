@@ -107,17 +107,24 @@ struct ActionableEventCard: View {
             case .walk: return Strings.Actionable.timeForWalk
             case .meal: return Strings.Actionable.timeForMeal
             }
-        case .overdue(let minutes):
+        case .overdue:
+            // Show "Time for a walk" instead of "Walk overdue by X min"
             switch actionableItem.item.itemType {
-            case .walk: return Strings.Actionable.walkOverdue(minutes)
-            case .meal: return Strings.Actionable.mealOverdue(minutes)
+            case .walk: return Strings.Actionable.timeForWalk
+            case .meal: return Strings.Actionable.timeForMeal
             }
         }
     }
 
     private var subtitleText: String? {
-        // Show detail like "2/9 walks today" or "110g"
-        actionableItem.item.detail
+        switch actionableItem.state {
+        case .overdue:
+            // Show "Was scheduled at <time>" for overdue items
+            return Strings.Actionable.wasScheduledAt(time: actionableItem.item.timeString)
+        default:
+            // Show detail like "2/9 walks today" or "110g"
+            return actionableItem.item.detail
+        }
     }
 
     private var statusLabel: String {
@@ -176,17 +183,27 @@ struct ScheduledEventsSection: View {
     @ObservedObject var viewModel: TimelineViewModel
     @ObservedObject var weatherService: WeatherService
 
+    /// Pre-computed separated items (optional, to avoid redundant calculation when passed from parent)
+    var precomputedSeparated: (actionable: [ActionableItem], upcoming: [UpcomingItem])?
+
+    /// Whether puppy is sleeping (passed in to avoid redundant state access)
+    var isSleeping: Bool = false
+
     var body: some View {
-        let separated = viewModel.separatedUpcomingItems(forecasts: weatherService.forecasts)
+        // Use precomputed values if available, otherwise compute here
+        let separated = precomputedSeparated ?? viewModel.separatedUpcomingItems(forecasts: weatherService.forecasts)
 
         // Actionable events (within 10 min or overdue - shown prominently)
-        ForEach(separated.actionable) { actionableItem in
-            ActionableEventCard(
-                actionableItem: actionableItem,
-                onLogEvent: { eventType, suggestedTime in
-                    viewModel.quickLog(type: eventType, suggestedTime: suggestedTime)
-                }
-            )
+        // HIDE when puppy is sleeping - the sleep card will mention pending activities
+        if !isSleeping {
+            ForEach(separated.actionable) { actionableItem in
+                ActionableEventCard(
+                    actionableItem: actionableItem,
+                    onLogEvent: { eventType, suggestedTime in
+                        viewModel.quickLog(type: eventType, suggestedTime: suggestedTime)
+                    }
+                )
+            }
         }
 
         // Upcoming events (more than 10 min away - compact list)

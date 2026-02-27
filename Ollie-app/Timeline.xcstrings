@@ -524,7 +524,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Droog weer op komst"
+            "value" : "Komende uren droog"
           }
         }
       }
@@ -1377,12 +1377,31 @@
       }
     },
     "Sleeping for %@" : {
-      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Slaapt net %@"
+          }
+        }
+      }
+    },
+    "Been sleeping for %@" : {
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Slaapt al %@"
+          }
+        }
+      }
+    },
+    "Just fell asleep" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Net in slaap gevallen"
           }
         }
       }
@@ -1757,6 +1776,56 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Wakker geworden"
+          }
+        }
+      }
+    },
+    "After waking: time for a walk" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Na wakker worden: tijd voor wandeling"
+          }
+        }
+      }
+    },
+    "After waking: time for a meal" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Na wakker worden: tijd voor eten"
+          }
+        }
+      }
+    },
+    "Was scheduled at %@" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Was gepland om %@"
+          }
+        }
+      }
+    },
+    "Started previous night" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Begonnen vorige nacht"
+          }
+        }
+      }
+    },
+    "The nap started before midnight and ended on the selected date" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Het dutje begon voor middernacht en eindigde op de geselecteerde datum"
           }
         }
       }

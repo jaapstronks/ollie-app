@@ -41,7 +41,7 @@ extension TimelineViewModel {
 
     /// Start a walk activity
     func startWalk() {
-        startActivity(type: .walk)
+        activityManager.startActivity(type: .walk)
         HapticFeedback.medium()
     }
 
@@ -55,7 +55,7 @@ extension TimelineViewModel {
         poopLocation: EventLocation = .buiten
     ) {
         // End the walk activity
-        endActivity(minutesAgo: minutesAgo, note: note)
+        _ = activityManager.endActivity(minutesAgo: minutesAgo, note: note)
 
         // Log potty events if needed
         let eventTime = Date().addingTimeInterval(-Double(minutesAgo) * 60)
@@ -83,19 +83,58 @@ extension TimelineViewModel {
 
     /// Start a nap activity
     func startNap() {
-        startActivity(type: .nap)
+        activityManager.startActivity(type: .nap)
         HapticFeedback.medium()
     }
 
     /// End current nap
     func endNap(minutesAgo: Int = 0, note: String? = nil) {
-        endActivity(minutesAgo: minutesAgo, note: note)
+        _ = activityManager.endActivity(minutesAgo: minutesAgo, note: note)
         HapticFeedback.success()
     }
 
     /// Get today's naps for display
     var todayNaps: [SleepSession] {
         SleepSession.buildSessions(from: events)
+    }
+}
+
+// MARK: - Activity Management
+
+extension TimelineViewModel {
+
+    /// Start an activity with a specific type and start time
+    func startActivity(type: ActivityType, startTime: Date) {
+        activityManager.startActivity(type: type, startTime: startTime)
+        HapticFeedback.medium()
+    }
+
+    /// End the current activity
+    func endActivity(minutesAgo: Int = 0, note: String? = nil) {
+        _ = activityManager.endActivity(minutesAgo: minutesAgo, note: note)
+        HapticFeedback.success()
+        sheetCoordinator.dismissSheet()
+    }
+
+    /// Cancel/discard the current activity without logging
+    func cancelActivity() {
+        _ = activityManager.cancelActivity()
+        HapticFeedback.medium()
+        sheetCoordinator.dismissSheet()
+    }
+
+    /// Log wake up event at a specific time
+    func logWakeUp(time: Date) {
+        // Find the ongoing sleep session to link the wake event
+        let recentEvents = getRecentEvents()
+        let sleepSessionId = SleepSession.ongoingSleepSessionId(from: recentEvents)
+
+        // End any in-progress nap activity
+        _ = activityManager.prepareWakeUp()
+
+        // Log the wake-up event
+        logEvent(type: .ontwaken, time: time, sleepSessionId: sleepSessionId)
+        HapticFeedback.success()
     }
 }
 

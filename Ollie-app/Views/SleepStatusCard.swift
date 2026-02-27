@@ -12,13 +12,20 @@ import OllieShared
 /// Uses liquid glass design with semantic tinting
 struct SleepStatusCard: View {
     let sleepState: SleepState
+    let pendingActionable: ActionableItem?
     let onWakeUp: (() -> Void)?
     let onStartNap: (() -> Void)?
 
     @Environment(\.colorScheme) private var colorScheme
 
-    init(sleepState: SleepState, onWakeUp: (() -> Void)? = nil, onStartNap: (() -> Void)? = nil) {
+    init(
+        sleepState: SleepState,
+        pendingActionable: ActionableItem? = nil,
+        onWakeUp: (() -> Void)? = nil,
+        onStartNap: (() -> Void)? = nil
+    ) {
         self.sleepState = sleepState
+        self.pendingActionable = pendingActionable
         self.onWakeUp = onWakeUp
         self.onStartNap = onStartNap
     }
@@ -98,6 +105,12 @@ struct SleepStatusCard: View {
     private var mainText: String {
         switch sleepState {
         case .sleeping(_, let durationMin):
+            // Different text based on sleep duration
+            if durationMin <= 1 {
+                return Strings.SleepStatus.justFellAsleep
+            } else if durationMin <= 15 {
+                return Strings.SleepStatus.sleepingBriefly(duration: durationMin.formatAsDuration())
+            }
             return Strings.SleepStatus.sleepingFor(duration: durationMin.formatAsDuration())
         case .awake(_, let durationMin):
             if durationMin >= SleepCalculations.maxAwakeMinutes {
@@ -115,11 +128,25 @@ struct SleepStatusCard: View {
     private var subtitleText: String {
         switch sleepState {
         case .sleeping(let since, _):
+            // When sleeping with pending actionable, show what's due after waking
+            if let actionable = pendingActionable {
+                return pendingActionableSubtitle(actionable)
+            }
             return Strings.SleepStatus.started(time: since.timeString)
         case .awake(let since, _):
             return Strings.SleepStatus.awakeSinceTime(time: since.timeString)
         case .unknown:
             return ""
+        }
+    }
+
+    /// Subtitle text for pending walk/meal when sleeping
+    private func pendingActionableSubtitle(_ actionable: ActionableItem) -> String {
+        switch actionable.item.itemType {
+        case .walk:
+            return Strings.SleepStatus.afterWakeTimeForWalk
+        case .meal:
+            return Strings.SleepStatus.afterWakeTimeForMeal
         }
     }
 

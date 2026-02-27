@@ -19,6 +19,15 @@ struct CombinedSleepPottyCard: View {
 
     @Environment(\.colorScheme) private var colorScheme
 
+    private var sleepDurationText: String {
+        if sleepDurationMin <= 1 {
+            return Strings.CombinedStatus.justFellAsleep
+        } else if sleepDurationMin <= 15 {
+            return Strings.CombinedStatus.sleepingBriefly(duration: sleepDurationMin.formatAsDuration())
+        }
+        return Strings.CombinedStatus.sleepingFor(duration: sleepDurationMin.formatAsDuration())
+    }
+
     var body: some View {
         VStack(spacing: 12) {
             // Sleep status header
@@ -45,7 +54,7 @@ struct CombinedSleepPottyCard: View {
                 .accessibilityHidden(true)
 
                 VStack(alignment: .leading, spacing: 3) {
-                    Text(Strings.CombinedStatus.sleepingFor(duration: sleepDurationMin.formatAsDuration()))
+                    Text(sleepDurationText)
                         .font(.subheadline)
                         .fontWeight(.semibold)
                         .foregroundStyle(.primary)
@@ -98,7 +107,7 @@ struct CombinedSleepPottyCard: View {
         .shadow(color: shadowColor, radius: 10, y: 5)
         .accessibilityElement(children: .combine)
         .accessibilityLabel(Strings.CombinedStatus.combinedCardAccessibility)
-        .accessibilityValue("\(Strings.CombinedStatus.sleepingFor(duration: sleepDurationMin.formatAsDuration())). \(pottySubtitle)")
+        .accessibilityValue("\(sleepDurationText). \(pottySubtitle)")
     }
 
     // MARK: - Computed Properties

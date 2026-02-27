@@ -98,5 +98,12 @@ extension Strings {
         static func daysHome(_ days: Int) -> String {
             String(localized: "\(days) days home", table: table)
         }
+
+        // Age stages
+        static let ageStageNewborn = String(localized: "Newborn", table: table)
+        static let ageStageSocialization = String(localized: "Socialization", table: table)
+        static let ageStageJuvenile = String(localized: "Juvenile", table: table)
+        static let ageStageAdolescent = String(localized: "Adolescent", table: table)
+        static let ageStageAdult = String(localized: "Adult", table: table)
     }
 }

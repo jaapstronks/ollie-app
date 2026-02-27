@@ -180,6 +180,12 @@ struct TodayView: View {
         VStack(spacing: 12) {
             // Use combined state to determine which cards to show
             let combinedState = viewModel.combinedSleepPottyState
+            let isSleeping = combinedState.isSleeping
+
+            // Compute upcoming items ONCE for both sleep card and scheduled events section
+            // This avoids redundant calculation when puppy is sleeping
+            let separated = viewModel.separatedUpcomingItems(forecasts: weatherService.forecasts)
+            let pendingActionable = isSleeping ? separated.actionable.first : nil
 
             // Post-wake potty prompt (highest priority - shows at top)
             if case .justWokeNeedsPotty(let wokeAt, let minutesSinceWake, let overdueBy) = combinedState {
@@ -217,6 +223,7 @@ struct TodayView: View {
             if !combinedState.shouldHideSleepCard {
                 SleepStatusCard(
                     sleepState: viewModel.currentSleepState,
+                    pendingActionable: pendingActionable,
                     onWakeUp: {
                         // Use EndSleepSheet for time-adjustable wake up
                         if case .sleeping(let since, _) = viewModel.currentSleepState {
@@ -242,10 +249,12 @@ struct TodayView: View {
                 )
             }
 
-            // Actionable & Upcoming events
+            // Actionable & Upcoming events (pass precomputed values)
             ScheduledEventsSection(
                 viewModel: viewModel,
-                weatherService: weatherService
+                weatherService: weatherService,
+                precomputedSeparated: separated,
+                isSleeping: isSleeping
             )
         }
     }
