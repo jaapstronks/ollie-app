@@ -10,8 +10,9 @@ import SwiftUI
 /// Train tab - unified view with potty progress, socialization checklist, and skills tracker
 struct TrainTabView: View {
     @ObservedObject var viewModel: TimelineViewModel
-    @ObservedObject var eventStore: EventStore
     let onSettingsTap: () -> Void
+
+    @EnvironmentObject var eventStore: EventStore
     @EnvironmentObject var socializationStore: SocializationStore
     @EnvironmentObject var profileStore: ProfileStore
 
@@ -55,16 +56,7 @@ struct TrainTabView: View {
             }
             .navigationTitle(Strings.Tabs.train)
             .navigationBarTitleDisplayMode(.large)
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        onSettingsTap()
-                    } label: {
-                        Image(systemName: "gear")
-                    }
-                    .accessibilityLabel(Strings.Tabs.settings)
-                }
-            }
+            .profileToolbar(profile: profileStore.profile, action: onSettingsTap)
         }
     }
 
@@ -331,9 +323,9 @@ private struct SkillsPreviewCard: View {
 
     return TrainTabView(
         viewModel: viewModel,
-        eventStore: eventStore,
         onSettingsTap: { print("Settings tapped") }
     )
+    .environmentObject(eventStore)
     .environmentObject(SocializationStore())
     .environmentObject(profileStore)
 }

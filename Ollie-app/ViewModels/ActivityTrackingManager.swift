@@ -10,14 +10,32 @@ import Foundation
 import OllieShared
 import SwiftUI
 
-// MARK: - Activity Tracking Protocol
+// MARK: - Event Log Request
 
-/// Protocol for activity tracking actions
-protocol ActivityTrackingActions {
-    func startActivity(type: ActivityType, startTime: Date)
-    func endActivity(minutesAgo: Int, note: String?)
-    func cancelActivity()
-    func logWakeUp(time: Date)
+/// Parameters for logging an event from activity tracking
+struct EventLogRequest {
+    let type: EventType
+    let time: Date?
+    let location: EventLocation?
+    let note: String?
+    let durationMin: Int?
+    let sleepSessionId: UUID?
+
+    init(
+        type: EventType,
+        time: Date? = nil,
+        location: EventLocation? = nil,
+        note: String? = nil,
+        durationMin: Int? = nil,
+        sleepSessionId: UUID? = nil
+    ) {
+        self.type = type
+        self.time = time
+        self.location = location
+        self.note = note
+        self.durationMin = durationMin
+        self.sleepSessionId = sleepSessionId
+    }
 }
 
 // MARK: - Activity Tracking Manager
@@ -30,7 +48,7 @@ class ActivityTrackingManager: ObservableObject {
     @Published var currentActivity: InProgressActivity?
 
     /// Callback to log an event (delegated to TimelineViewModel)
-    var onLogEvent: ((EventType, Date?, EventLocation?, String?, Int?, UUID?) -> Void)?
+    var onLogEvent: ((EventLogRequest) -> Void)?
 
     /// Callback when activity is dismissed
     var onDismiss: (() -> Void)?
@@ -60,7 +78,7 @@ class ActivityTrackingManager: ObservableObject {
         // For naps, log the sleep event immediately so it appears in timeline
         if type == .nap {
             sleepSessionId = UUID()
-            onLogEvent?(.slapen, startTime, nil, nil, nil, sleepSessionId)
+            onLogEvent?(EventLogRequest(type: .slapen, time: startTime, sleepSessionId: sleepSessionId))
         }
 
         currentActivity = InProgressActivity(
@@ -89,7 +107,7 @@ class ActivityTrackingManager: ObservableObject {
 
         if activity.type == .nap {
             // For naps, sleep was already logged at start - just log wake event
-            onLogEvent?(.ontwaken, endTime, nil, nil, nil, activity.sleepSessionId)
+            onLogEvent?(EventLogRequest(type: .ontwaken, time: endTime, sleepSessionId: activity.sleepSessionId))
 
             // Return info for updating note if needed
             currentActivity = nil
@@ -98,14 +116,13 @@ class ActivityTrackingManager: ObservableObject {
             return (activity.sleepSessionId, nil)
         } else {
             // For walks, log the walk event at start time
-            onLogEvent?(
-                .uitlaten,
-                activity.startTime,
-                .buiten,
-                note,
-                max(1, duration),
-                nil
-            )
+            onLogEvent?(EventLogRequest(
+                type: .uitlaten,
+                time: activity.startTime,
+                location: .buiten,
+                note: note,
+                durationMin: max(1, duration)
+            ))
         }
 
         currentActivity = nil

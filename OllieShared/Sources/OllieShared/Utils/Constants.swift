@@ -79,6 +79,11 @@ public enum Constants {
     /// Seconds for sheet transition delay (0.3 seconds)
     public static let sheetTransitionDelay: TimeInterval = 0.3
 
+    // MARK: - UI Dimensions
+
+    /// Estimated height for event rows in timeline list
+    public static let eventRowEstimatedHeight: CGFloat = 80
+
     // MARK: - Helper Functions
 
     /// Check if given hour is during night time (23:00 - 06:00)

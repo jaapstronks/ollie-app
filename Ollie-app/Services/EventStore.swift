@@ -216,13 +216,13 @@ class EventStore: ObservableObject {
         }
 
         // Check previous days (up to 7 days back)
-        var date = Calendar.current.date(byAdding: .day, value: -1, to: currentDate)!
+        var date = Calendar.current.date(byAdding: .day, value: -1, to: currentDate) ?? currentDate
         for _ in 0..<7 {
             let dayEvents = coreDataStore.readEvents(for: date)
             if let event = dayEvents.filter({ $0.type == type }).first {
                 return event
             }
-            date = Calendar.current.date(byAdding: .day, value: -1, to: date)!
+            date = Calendar.current.date(byAdding: .day, value: -1, to: date) ?? date
         }
 
         return nil
@@ -260,7 +260,7 @@ class EventStore: ObservableObject {
     // MARK: - Widget Data
 
     private func updateWidgetData(profile: PuppyProfile?) {
-        let thirtyDaysAgo = Calendar.current.date(byAdding: .day, value: -30, to: Date())!
+        let thirtyDaysAgo = Calendar.current.date(byAdding: .day, value: -30, to: Date()) ?? Date()
         let allRecentEvents = getEvents(from: thirtyDaysAgo, to: Date())
 
         WidgetDataProvider.shared.update(

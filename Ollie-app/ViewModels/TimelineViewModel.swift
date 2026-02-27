@@ -339,8 +339,15 @@ class TimelineViewModel: ObservableObject {
     /// Configure activity manager callbacks
     private func setupActivityManagerCallbacks() {
         // Log event callback
-        activityManager.onLogEvent = { [weak self] type, time, location, note, duration, sleepSessionId in
-            self?.logEvent(type: type, time: time ?? Date(), location: location, note: note, durationMin: duration, sleepSessionId: sleepSessionId)
+        activityManager.onLogEvent = { [weak self] request in
+            self?.logEvent(
+                type: request.type,
+                time: request.time ?? Date(),
+                location: request.location,
+                note: request.note,
+                durationMin: request.durationMin,
+                sleepSessionId: request.sleepSessionId
+            )
         }
 
         // Dismiss sheet callback

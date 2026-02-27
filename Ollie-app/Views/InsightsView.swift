@@ -2,68 +2,55 @@
 //  InsightsView.swift
 //  Ollie-app
 //
-//  The "Inzichten" (Stats) tab - patterns, stats, health, walks, and spots
+//  The "Inzichten" (Insights) tab - patterns, stats, health, and walks
 //
 
 import SwiftUI
 import OllieShared
-import MapKit
 
-/// Stats tab showing patterns, stats, health, walks, and spots
+/// Stats tab showing patterns, stats, health, and walks
 struct InsightsView: View {
     @ObservedObject var viewModel: TimelineViewModel
     @ObservedObject var momentsViewModel: MomentsViewModel
-    @ObservedObject var spotStore: SpotStore
-    @ObservedObject var socializationStore: SocializationStore
-    @ObservedObject var milestoneStore: MilestoneStore
     let onSettingsTap: () -> Void
 
-    @EnvironmentObject var locationManager: LocationManager
     @EnvironmentObject var subscriptionManager: SubscriptionManager
     @EnvironmentObject var profileStore: ProfileStore
 
     @State private var showWeightSheet = false
-    @State private var showAllSpots = false
     @State private var showOlliePlusSheet = false
 
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 20) {
-                    // Plan Section (age, socialization, milestones)
-                    PlanSection(
-                        socializationStore: socializationStore,
-                        milestoneStore: milestoneStore
-                    )
-                    .animatedAppear(delay: 0)
-
                     // Week Overview section (grid + trend chart)
                     InsightsWeekOverviewSection(weekStats: weekStats)
-                        .animatedAppear(delay: 0.05)
+                        .animatedAppear(delay: 0)
 
                     // Streak section
                     statsSection(title: Strings.Stats.outdoorStreak, icon: "flame.fill", tint: .ollieAccent) {
                         StreakStatsCard(streakInfo: viewModel.streakInfo)
                     }
-                    .animatedAppear(delay: 0.10)
+                    .animatedAppear(delay: 0.05)
 
                     // Potty gaps section
                     statsSection(title: Strings.Stats.pottyGaps, icon: "chart.bar.fill", tint: .ollieInfo) {
                         GapStatsCard(events: recentEvents)
                     }
-                    .animatedAppear(delay: 0.15)
+                    .animatedAppear(delay: 0.10)
 
                     // Today's summary
                     statsSection(title: Strings.Stats.today, icon: "calendar", tint: .ollieSuccess) {
                         TodayStatsCard(events: todayEvents)
                     }
-                    .animatedAppear(delay: 0.20)
+                    .animatedAppear(delay: 0.15)
 
                     // Sleep summary
                     statsSection(title: Strings.Stats.sleepToday, icon: "moon.fill", tint: .ollieSleep) {
                         SleepStatsCard(events: todayEvents)
                     }
-                    .animatedAppear(delay: 0.25)
+                    .animatedAppear(delay: 0.20)
 
                     // Pattern analysis (Ollie+ feature)
                     Group {
@@ -80,54 +67,34 @@ struct InsightsView: View {
                             )
                         }
                     }
-                    .animatedAppear(delay: 0.30)
+                    .animatedAppear(delay: 0.25)
 
-                    // Health section
+                    // Health section (weight tracking only)
                     InsightsHealthSection(
                         latestWeight: latestWeight,
                         weightDelta: weightDelta,
                         viewModel: viewModel,
-                        milestoneStore: milestoneStore,
                         showWeightSheet: $showWeightSheet
                     )
-                    .animatedAppear(delay: 0.35)
+                    .animatedAppear(delay: 0.30)
 
                     // Walk history section
                     InsightsWalkHistorySection(
                         recentWalks: recentWalks,
                         weekWalkStats: weekWalkStats
                     )
-                    .animatedAppear(delay: 0.40)
-
-                    // Spots section
-                    InsightsSpotsSection(
-                        spotStore: spotStore,
-                        showAllSpots: $showAllSpots
-                    )
-                    .animatedAppear(delay: 0.45)
+                    .animatedAppear(delay: 0.35)
                 }
                 .padding()
                 .padding(.bottom, 84) // Space for FAB
             }
             .navigationTitle(Strings.Insights.title)
             .navigationBarTitleDisplayMode(.large)
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        onSettingsTap()
-                    } label: {
-                        Image(systemName: "gear")
-                    }
-                    .accessibilityLabel(Strings.Tabs.settings)
-                }
-            }
+            .profileToolbar(profile: profileStore.profile, action: onSettingsTap)
             .sheet(isPresented: $showWeightSheet) {
                 WeightLogSheet(isPresented: $showWeightSheet) { weight in
                     logWeight(weight)
                 }
-            }
-            .sheet(isPresented: $showAllSpots) {
-                AllSpotsMapView(spots: spotStore.spots)
             }
             .sheet(isPresented: $showOlliePlusSheet) {
                 OlliePlusSheet(
@@ -173,14 +140,14 @@ struct InsightsView: View {
     }
 
     private var recentEvents: [PuppyEvent] {
-        let sevenDaysAgo = Calendar.current.date(byAdding: .day, value: -7, to: Date())!
+        let sevenDaysAgo = Calendar.current.date(byAdding: .day, value: -7, to: Date()) ?? Date()
         return viewModel.eventStore.getEvents(from: sevenDaysAgo, to: Date())
     }
 
     private var weekStats: [DayStats] {
         WeekCalculations.calculateWeekStats { date in
             let startOfDay = Calendar.current.startOfDay(for: date)
-            let endOfDay = Calendar.current.date(byAdding: .day, value: 1, to: startOfDay)!
+            let endOfDay = Calendar.current.date(byAdding: .day, value: 1, to: startOfDay) ?? startOfDay
             return viewModel.eventStore.getEvents(from: startOfDay, to: endOfDay)
         }
     }
@@ -219,19 +186,12 @@ struct InsightsView: View {
     let profileStore = ProfileStore()
     let viewModel = TimelineViewModel(eventStore: eventStore, profileStore: profileStore)
     let momentsViewModel = MomentsViewModel(eventStore: eventStore)
-    let spotStore = SpotStore()
-    let socializationStore = SocializationStore()
-    let milestoneStore = MilestoneStore()
 
     InsightsView(
         viewModel: viewModel,
         momentsViewModel: momentsViewModel,
-        spotStore: spotStore,
-        socializationStore: socializationStore,
-        milestoneStore: milestoneStore,
         onSettingsTap: { print("Settings tapped") }
     )
-    .environmentObject(LocationManager())
     .environmentObject(SubscriptionManager.shared)
     .environmentObject(profileStore)
 }

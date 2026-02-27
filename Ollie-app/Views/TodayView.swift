@@ -13,11 +13,13 @@ import TipKit
 struct TodayView: View {
     @ObservedObject var viewModel: TimelineViewModel
     @ObservedObject var thisWeekViewModel: ThisWeekViewModel
+    @ObservedObject var appointmentStore: AppointmentStore
     /// Weather service passed down but not observed here to avoid full view redraws
     /// Weather-dependent sections use their own observation via WeatherSectionContainer
     let weatherService: WeatherService
     let onSettingsTap: () -> Void
     var onNavigateToInsights: (() -> Void)?
+    var onNavigateToAppointments: (() -> Void)?
 
     @State private var selectedPhotoEvent: PuppyEvent?
 
@@ -57,6 +59,15 @@ struct TodayView: View {
                             onNavigateToInsights: onNavigateToInsights
                         )
                         .animatedAppear(delay: 0.10)
+                    }
+
+                    // Today's scheduled appointments
+                    if viewModel.isShowingToday {
+                        TodaysScheduleCard(
+                            appointmentStore: appointmentStore,
+                            onViewAll: onNavigateToAppointments
+                        )
+                        .animatedAppear(delay: 0.12)
                     }
 
                     // Walk suggestions (socialization items to watch for)
@@ -127,7 +138,7 @@ struct TodayView: View {
 
                     // Subtle day counter - only show when viewing today
                     if viewModel.isShowingToday, let dayNumber = viewModel.dailyDigest.dayNumber {
-                        Text("Day \(dayNumber) with \(viewModel.puppyName)")
+                        Text(Strings.Timeline.dayWithPuppyName(day: dayNumber, name: viewModel.puppyName))
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
@@ -226,7 +237,7 @@ struct TodayView: View {
                             viewModel.quickLog(type: .ontwaken)
                         }
                     },
-                    onStartNap: { viewModel.quickLog(type: .slapen) }
+                    onStartNap: { viewModel.sheetCoordinator.presentSheet(.startActivity(.nap)) }
                 )
             }
 
@@ -259,7 +270,7 @@ struct TodayView: View {
     private var timelineSection: some View {
         VStack(alignment: .leading, spacing: 8) {
             // Section header
-            Text("Timeline")
+            Text(Strings.Timeline.sectionTitle)
                 .font(.subheadline)
                 .fontWeight(.semibold)
                 .foregroundStyle(.secondary)
@@ -299,7 +310,7 @@ struct TodayView: View {
                 }
                 .listStyle(.plain)
                 .scrollDisabled(true)
-                .frame(minHeight: CGFloat(viewModel.events.count * 80))
+                .frame(minHeight: CGFloat(viewModel.events.count) * Constants.eventRowEstimatedHeight)
             }
         }
     }
@@ -342,6 +353,7 @@ struct EmptyTimelineCard: View {
     let profileStore = ProfileStore()
     let milestoneStore = MilestoneStore()
     let socializationStore = SocializationStore()
+    let appointmentStore = AppointmentStore()
     let viewModel = TimelineViewModel(eventStore: eventStore, profileStore: profileStore)
     let thisWeekViewModel = ThisWeekViewModel(
         profileStore: profileStore,
@@ -353,8 +365,10 @@ struct EmptyTimelineCard: View {
     return TodayView(
         viewModel: viewModel,
         thisWeekViewModel: thisWeekViewModel,
+        appointmentStore: appointmentStore,
         weatherService: weatherService,
         onSettingsTap: { print("Settings tapped") },
-        onNavigateToInsights: { print("Navigate to Insights") }
+        onNavigateToInsights: { print("Navigate to Insights") },
+        onNavigateToAppointments: { print("Navigate to Appointments") }
     )
 }

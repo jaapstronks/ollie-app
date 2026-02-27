@@ -137,6 +137,18 @@ extension Strings {
         static let couldNotShare = String(localized: "Could not share", table: table)
         static let couldNotStopSharing = String(localized: "Could not stop sharing", table: table)
         static let couldNotProcessWeather = String(localized: "Could not process weather data", table: table)
+
+        // Weather errors
+        static let invalidURL = String(localized: "Invalid URL", table: table)
+
+        // Import errors
+        static let apiError = String(localized: "Could not reach GitHub API", table: table)
+        static let invalidResponse = String(localized: "Invalid response from GitHub", table: table)
+        static let downloadFailed = String(localized: "Download failed", table: table)
+        static let invalidContent = String(localized: "Invalid file content", table: table)
+        static let untrustedURL = String(localized: "Untrusted download URL", table: table)
+        static let contentTooLarge = String(localized: "File too large", table: table)
+        static let maliciousContent = String(localized: "Suspicious content detected", table: table)
     }
 
     // MARK: - Streaks

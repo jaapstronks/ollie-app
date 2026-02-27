@@ -185,7 +185,6 @@ struct MainTabView: View {
                 // Tab 1: Train (expanded with Potty + Socialization + Skills)
                 TrainTabView(
                     viewModel: viewModel,
-                    eventStore: eventStore,
                     onSettingsTap: { showingSettings = true }
                 )
                 .tabItem {

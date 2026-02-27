@@ -160,6 +160,7 @@ struct ContactDetailView: View {
             }
         }
         .buttonStyle(.plain)
+        .accessibilityLabel(label)
     }
 
     // MARK: - Details Card
@@ -176,7 +177,7 @@ struct ContactDetailView: View {
             }
 
             if let email = contact.email, !email.isEmpty {
-                if contact.phone != nil && !contact.phone!.isEmpty {
+                if let phone = contact.phone, !phone.isEmpty {
                     Divider()
                 }
                 detailRow(
@@ -187,8 +188,9 @@ struct ContactDetailView: View {
             }
 
             if let address = contact.address, !address.isEmpty {
-                if (contact.phone != nil && !contact.phone!.isEmpty) ||
-                   (contact.email != nil && !contact.email!.isEmpty) {
+                let hasPhone = contact.phone.map { !$0.isEmpty } ?? false
+                let hasEmail = contact.email.map { !$0.isEmpty } ?? false
+                if hasPhone || hasEmail {
                     Divider()
                 }
                 detailRow(

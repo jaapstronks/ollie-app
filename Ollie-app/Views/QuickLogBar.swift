@@ -43,8 +43,10 @@ struct QuickLogContext {
             if mealLogged { continue }
 
             // Show icon from configured window before until configured window after
-            let windowStart = calendar.date(byAdding: .minute, value: -Constants.mealWindowBeforeMinutes, to: mealTime)!
-            let windowEnd = calendar.date(byAdding: .minute, value: Constants.mealWindowAfterMinutes, to: mealTime)!
+            guard let windowStart = calendar.date(byAdding: .minute, value: -Constants.mealWindowBeforeMinutes, to: mealTime),
+                  let windowEnd = calendar.date(byAdding: .minute, value: Constants.mealWindowAfterMinutes, to: mealTime) else {
+                continue
+            }
 
             if now >= windowStart && now <= windowEnd {
                 return true

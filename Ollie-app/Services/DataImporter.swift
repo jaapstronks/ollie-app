@@ -224,7 +224,9 @@ class DataImporter: ObservableObject {
     }
 
     private func fetchFileList() async throws -> [GitHubFile] {
-        let apiURL = URL(string: "https://api.github.com/repos/\(Constants.gitHubOwner)/\(Constants.gitHubRepo)/contents/\(Constants.gitHubDataPath)")!
+        guard let apiURL = URL(string: "https://api.github.com/repos/\(Constants.gitHubOwner)/\(Constants.gitHubRepo)/contents/\(Constants.gitHubDataPath)") else {
+            throw ImportError.invalidResponse
+        }
 
         var request = URLRequest(url: apiURL)
         request.setValue("application/vnd.github.v3+json", forHTTPHeaderField: "Accept")
@@ -336,13 +338,13 @@ enum ImportError: LocalizedError {
 
     var errorDescription: String? {
         switch self {
-        case .apiError: return "Kon GitHub API niet bereiken"
-        case .invalidResponse: return "Ongeldig antwoord van GitHub"
-        case .downloadFailed: return "Download mislukt"
-        case .invalidContent: return "Bestandsinhoud ongeldig"
-        case .untrustedURL: return "Onvertrouwde download URL"
-        case .contentTooLarge: return "Bestand te groot"
-        case .maliciousContent: return "Verdachte inhoud gedetecteerd"
+        case .apiError: return Strings.Errors.apiError
+        case .invalidResponse: return Strings.Errors.invalidResponse
+        case .downloadFailed: return Strings.Errors.downloadFailed
+        case .invalidContent: return Strings.Errors.invalidContent
+        case .untrustedURL: return Strings.Errors.untrustedURL
+        case .contentTooLarge: return Strings.Errors.contentTooLarge
+        case .maliciousContent: return Strings.Errors.maliciousContent
         }
     }
 }

@@ -17,26 +17,26 @@ enum AppError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .networkError:
-            return "Netwerkfout"
+            return Strings.Errors.networkError
         case .fileError:
-            return "Bestandsfout"
+            return Strings.Errors.fileError
         case .dataCorrupted:
-            return "Data beschadigd"
+            return Strings.Errors.dataCorrupted
         case .unknown:
-            return "Onbekende fout"
+            return Strings.Errors.unknownError
         }
     }
 
     var recoverySuggestion: String? {
         switch self {
         case .networkError:
-            return "Controleer je internetverbinding en probeer het opnieuw."
+            return Strings.Errors.networkRecovery
         case .fileError:
-            return "Er is iets misgegaan bij het opslaan. Probeer het opnieuw."
+            return Strings.Errors.fileRecovery
         case .dataCorrupted:
-            return "De data kon niet worden gelezen. Probeer de app opnieuw te starten."
+            return Strings.Errors.dataRecovery
         case .unknown:
-            return "Probeer het later opnieuw."
+            return Strings.Errors.unknownRecovery
         }
     }
 }
@@ -48,7 +48,7 @@ struct ErrorAlert: ViewModifier {
 
     func body(content: Content) -> some View {
         content
-            .alert("Fout", isPresented: $isPresented) {
+            .alert(Strings.Errors.title, isPresented: $isPresented) {
                 Button("OK") {
                     error = nil
                 }

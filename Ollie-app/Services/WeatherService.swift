@@ -212,9 +212,9 @@ enum WeatherError: LocalizedError {
 
     var errorDescription: String? {
         switch self {
-        case .invalidURL: return "Ongeldige URL"
-        case .networkError: return "Netwerkfout"
-        case .parseError: return "Kon weerdata niet verwerken"
+        case .invalidURL: return Strings.Errors.invalidURL
+        case .networkError: return Strings.Errors.networkError
+        case .parseError: return Strings.Errors.couldNotProcessWeather
         }
     }
 }
