@@ -57,8 +57,13 @@ extension Strings {
         static let wakeUp = String(localized: "Wake up", table: table)
         static let startNap = String(localized: "Start nap", table: table)
 
-        static func sleepingFor(duration: String) -> String {
+        // Sleep duration variants based on how long sleeping
+        static let justFellAsleep = String(localized: "Just fell asleep", table: table)
+        static func sleepingBriefly(duration: String) -> String {
             String(localized: "Sleeping for \(duration)", table: table)
+        }
+        static func sleepingFor(duration: String) -> String {
+            String(localized: "Been sleeping for \(duration)", table: table)
         }
         static func awakeTooLong(duration: String) -> String {
             String(localized: "Awake for \(duration) — time for a nap!", table: table)
@@ -76,6 +81,10 @@ extension Strings {
         static func awakeSinceTime(time: String) -> String {
             String(localized: "Awake since: \(time)", table: table)
         }
+
+        // Pending activities while sleeping (shown in subtitle)
+        static let afterWakeTimeForWalk = String(localized: "After waking: time for a walk", table: table)
+        static let afterWakeTimeForMeal = String(localized: "After waking: time for a meal", table: table)
     }
 
     // MARK: - Sleep Session (Timeline display)
@@ -127,6 +136,9 @@ extension Strings {
         }
         static let notePlaceholder = String(localized: "Notes (optional)", table: table)
         static let logNap = String(localized: "Log Nap", table: table)
+        static let napDate = String(localized: "Date", table: table)
+        static let startedPreviousNight = String(localized: "Started previous night", table: table)
+        static let overnightHint = String(localized: "The nap started before midnight and ended on the selected date", table: table)
     }
 
     // MARK: - Walk Session Row
@@ -219,6 +231,9 @@ extension Strings {
         }
         static func mealOverdue(_ minutes: Int) -> String {
             String(localized: "Meal overdue by \(minutes) min", table: table)
+        }
+        static func wasScheduledAt(time: String) -> String {
+            String(localized: "Was scheduled at \(time)", table: table)
         }
 
         // Status labels
@@ -374,8 +389,13 @@ extension Strings {
     // MARK: - Combined Sleep + Potty Status
     enum CombinedStatus {
         // Combined card (sleeping + potty urgent)
-        static func sleepingFor(duration: String) -> String {
+        // Sleep duration variants based on how long sleeping
+        static let justFellAsleep = String(localized: "Just fell asleep", table: table)
+        static func sleepingBriefly(duration: String) -> String {
             String(localized: "Sleeping for \(duration)", table: table)
+        }
+        static func sleepingFor(duration: String) -> String {
+            String(localized: "Been sleeping for \(duration)", table: table)
         }
         static func pottyOverdueWhileSleeping(minutes: Int) -> String {
             String(localized: "Potty is \(minutes) min overdue", table: table)

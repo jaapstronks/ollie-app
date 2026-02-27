@@ -7,7 +7,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject private var dataProvider = WatchDataProvider.shared
+    @EnvironmentObject private var dataProvider: WatchDataProvider
 
     var body: some View {
         TabView {
@@ -28,4 +28,5 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
+        .environmentObject(WatchDataProvider.shared)
 }

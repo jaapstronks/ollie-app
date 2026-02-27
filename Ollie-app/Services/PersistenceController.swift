@@ -5,6 +5,9 @@
 //  Core Data persistence with NSPersistentCloudKitContainer for automatic CloudKit sync.
 //  Uses two-store architecture: private store for owner data, shared store for participant data.
 //
+//  IMPORTANT: Includes iCloud availability checking and fallback to local-only storage
+//  to protect against data loss when iCloud becomes unavailable (iOS 18+ issue).
+//
 
 import CoreData
 import CloudKit
@@ -31,6 +34,14 @@ final class PersistenceController: @unchecked Sendable {
     private static let cloudKitContainerIdentifier = "iCloud.nl.jaapstronks.Ollie"
     private static let appGroupIdentifier = "group.jaapstronks.Ollie"
 
+    // MARK: - iCloud Availability
+
+    /// Whether iCloud is currently available for sync
+    private(set) var isCloudKitAvailable: Bool = false
+
+    /// Whether we're running in local-only mode (fallback when iCloud unavailable)
+    private(set) var isLocalOnlyMode: Bool = false
+
     // MARK: - Contexts
 
     /// Main view context for UI operations
@@ -51,11 +62,20 @@ final class PersistenceController: @unchecked Sendable {
     init(inMemory: Bool = false) {
         container = NSPersistentCloudKitContainer(name: "Ollie")
 
+        // Check iCloud availability before configuring stores
+        let iCloudAvailable = Self.checkiCloudAccountStatus()
+        isCloudKitAvailable = iCloudAvailable
+
         // Configure stores
         if inMemory {
             configureInMemoryStore()
-        } else {
+        } else if iCloudAvailable {
             configurePersistentStores()
+        } else {
+            // Fallback to local-only mode when iCloud is unavailable
+            print("iCloud not available - using local-only storage")
+            isLocalOnlyMode = true
+            configureLocalOnlyStore()
         }
 
         // Load stores
@@ -65,8 +85,106 @@ final class PersistenceController: @unchecked Sendable {
         container.viewContext.automaticallyMergesChangesFromParent = true
         container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
 
-        // Track remote changes
-        setupRemoteChangeTracking()
+        // Track remote changes (only useful when CloudKit is enabled)
+        if iCloudAvailable {
+            setupRemoteChangeTracking()
+        }
+
+        // Listen for iCloud account changes
+        setupAccountChangeNotifications()
+    }
+
+    // MARK: - iCloud Account Status Check
+
+    /// Check if iCloud account is available and signed in
+    private static func checkiCloudAccountStatus() -> Bool {
+        // Check if iCloud is available via FileManager
+        guard FileManager.default.ubiquityIdentityToken != nil else {
+            print("iCloud ubiquity token not available - user may not be signed in")
+            return false
+        }
+
+        // Additional check: verify we can access the CloudKit container
+        // This is a synchronous check that catches most availability issues
+        let container = CKContainer(identifier: cloudKitContainerIdentifier)
+        var isAvailable = false
+        let semaphore = DispatchSemaphore(value: 0)
+
+        container.accountStatus { status, error in
+            defer { semaphore.signal() }
+
+            if let error = error {
+                print("CloudKit account status check failed: \(error.localizedDescription)")
+                isAvailable = false
+                return
+            }
+
+            switch status {
+            case .available:
+                print("iCloud account available")
+                isAvailable = true
+            case .noAccount:
+                print("No iCloud account signed in")
+                isAvailable = false
+            case .restricted:
+                print("iCloud account restricted (parental controls, MDM, etc.)")
+                isAvailable = false
+            case .couldNotDetermine:
+                print("Could not determine iCloud account status")
+                isAvailable = false
+            case .temporarilyUnavailable:
+                print("iCloud temporarily unavailable")
+                // Still try to use CloudKit - it may become available
+                isAvailable = true
+            @unknown default:
+                print("Unknown iCloud account status")
+                isAvailable = false
+            }
+        }
+
+        // Wait with timeout to avoid blocking forever
+        let result = semaphore.wait(timeout: .now() + 5)
+        if result == .timedOut {
+            print("iCloud account status check timed out - assuming unavailable")
+            return false
+        }
+
+        return isAvailable
+    }
+
+    // MARK: - Account Change Notifications
+
+    private func setupAccountChangeNotifications() {
+        // Listen for iCloud account changes to handle sign-out gracefully
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleAccountChange),
+            name: .CKAccountChanged,
+            object: nil
+        )
+    }
+
+    @objc private func handleAccountChange(_ notification: Notification) {
+        print("iCloud account changed - checking new status")
+
+        Task {
+            let newStatus = Self.checkiCloudAccountStatus()
+
+            if !newStatus && isCloudKitAvailable {
+                // User signed out of iCloud while app was running
+                // NSPersistentCloudKitContainer may clear data - this is the iOS 18+ issue
+                print("WARNING: iCloud account signed out - data may be affected")
+
+                // Post notification so UI can inform user
+                await MainActor.run {
+                    NotificationCenter.default.post(name: .iCloudAccountBecameUnavailable, object: nil)
+                }
+            }
+
+            await MainActor.run {
+                self.isCloudKitAvailable = newStatus
+            }
+        }
     }
 
     // MARK: - Store Configuration
@@ -75,6 +193,27 @@ final class PersistenceController: @unchecked Sendable {
         let description = NSPersistentStoreDescription()
         description.type = NSInMemoryStoreType
         container.persistentStoreDescriptions = [description]
+    }
+
+    /// Configure local-only SQLite store without CloudKit sync
+    /// Used as fallback when iCloud is unavailable to prevent data loss
+    private func configureLocalOnlyStore() {
+        guard let storeURL = Self.storeURL(for: "Ollie-local.sqlite") else {
+            fatalError("Unable to resolve app group container URL for local store")
+        }
+
+        let description = NSPersistentStoreDescription(url: storeURL)
+        description.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
+
+        // IMPORTANT: No CloudKit options - this is a local-only store
+        // Data will be preserved even if user signs out/in of iCloud
+        description.cloudKitContainerOptions = nil
+
+        container.persistentStoreDescriptions = [description]
+
+        print("Local-only store configured:")
+        print("  URL: \(storeURL)")
+        print("  Note: CloudKit sync disabled - data stored locally only")
     }
 
     private func configurePersistentStores() {
@@ -351,6 +490,7 @@ enum PersistenceError: LocalizedError {
     case sharedStoreUnavailable
     case privateStoreUnavailable
     case saveFailure(Error)
+    case iCloudUnavailable
 
     var errorDescription: String? {
         switch self {
@@ -360,6 +500,16 @@ enum PersistenceError: LocalizedError {
             return "Private store is not available"
         case .saveFailure(let error):
             return "Failed to save: \(error.localizedDescription)"
+        case .iCloudUnavailable:
+            return "iCloud is not available. Data is being stored locally only."
         }
     }
+}
+
+// MARK: - Notification Names
+
+extension Notification.Name {
+    /// Posted when iCloud account becomes unavailable while app is running
+    /// UI should inform user that sync is paused
+    static let iCloudAccountBecameUnavailable = Notification.Name("iCloudAccountBecameUnavailable")
 }

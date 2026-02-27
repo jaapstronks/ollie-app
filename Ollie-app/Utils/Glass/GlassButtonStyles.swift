@@ -22,7 +22,7 @@ struct GlassPillButtonStyle: ButtonStyle {
             .foregroundStyle(tint.color ?? .primary)
             .padding(.horizontal, 16)
             .padding(.vertical, 10)
-            .background(glassPillBackground(isPressed: configuration.isPressed))
+            .background(GlassButtonHelpers.glassPillBackground(isPressed: configuration.isPressed, tint: tint, colorScheme: colorScheme))
             .clipShape(Capsule())
             .overlay(Capsule().strokeBorder(GlassButtonHelpers.capsuleBorderGradient(colorScheme: colorScheme), lineWidth: 0.5))
             .shadow(
@@ -32,17 +32,6 @@ struct GlassPillButtonStyle: ButtonStyle {
             )
             .scaleEffect(configuration.isPressed ? 0.97 : 1.0)
             .animation(reduceMotion ? nil : .spring(response: 0.25, dampingFraction: 0.6), value: configuration.isPressed)
-    }
-
-    @ViewBuilder
-    private func glassPillBackground(isPressed: Bool) -> some View {
-        ZStack {
-            Color.white.opacity(GlassButtonHelpers.baseOpacity(isPressed: isPressed, colorScheme: colorScheme))
-            if let tintColor = tint.color {
-                tintColor.opacity(GlassButtonHelpers.tintOpacity(colorScheme: colorScheme))
-            }
-        }
-        .background(.ultraThinMaterial)
     }
 }
 
@@ -67,7 +56,7 @@ struct GlassPillCompactButtonStyle: ButtonStyle {
             .foregroundStyle(tint.color ?? .primary)
             .padding(.horizontal, 12)
             .padding(.vertical, 8)
-            .background(glassPillBackground(isPressed: configuration.isPressed))
+            .background(GlassButtonHelpers.glassPillBackground(isPressed: configuration.isPressed, tint: tint, colorScheme: colorScheme))
             .clipShape(Capsule())
             .overlay(Capsule().strokeBorder(GlassButtonHelpers.capsuleBorderGradient(colorScheme: colorScheme), lineWidth: 0.5))
             .shadow(
@@ -77,17 +66,6 @@ struct GlassPillCompactButtonStyle: ButtonStyle {
             )
             .scaleEffect(configuration.isPressed ? 0.96 : 1.0)
             .animation(reduceMotion ? nil : .spring(response: 0.2, dampingFraction: 0.7), value: configuration.isPressed)
-    }
-
-    @ViewBuilder
-    private func glassPillBackground(isPressed: Bool) -> some View {
-        ZStack {
-            Color.white.opacity(GlassButtonHelpers.baseOpacity(isPressed: isPressed, colorScheme: colorScheme))
-            if let tintColor = tint.color {
-                tintColor.opacity(GlassButtonHelpers.tintOpacity(colorScheme: colorScheme))
-            }
-        }
-        .background(.ultraThinMaterial)
     }
 }
 

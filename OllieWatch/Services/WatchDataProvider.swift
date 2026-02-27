@@ -2,15 +2,21 @@
 //  WatchDataProvider.swift
 //  OllieWatch
 //
-//  Provides read access to shared data from App Group container
+//  Receives data from iPhone via WatchConnectivity
+//  CRITICAL: App Groups do NOT sync between iPhone and Watch - they're different devices.
+//  Watch MUST use WatchConnectivity for all data sync with iPhone.
 
 import Foundation
+import Combine
+import WatchConnectivity
+import WidgetKit
 import OllieShared
 import os
 
-/// Provides read access to shared data from App Group container
+/// Provides data received from iPhone via WatchConnectivity
+/// Also reads local events logged directly on Watch
 @MainActor
-final class WatchDataProvider: ObservableObject {
+final class WatchDataProvider: NSObject, ObservableObject {
     static let shared = WatchDataProvider()
 
     @Published var lastPeeTime: Date?
@@ -20,46 +26,143 @@ final class WatchDataProvider: ObservableObject {
     @Published var sleepStartTime: Date?
     @Published var puppyName: String = "Puppy"
     @Published var canLogEvents: Bool = true
+    @Published var isConnected: Bool = false
+    @Published var lastSyncTime: Date?
+    @Published var connectionState: ConnectionState = .unknown
 
-    private let suiteName = Constants.appGroupIdentifier
-    private let dataDirectoryName = "data"
-    private let profileKey = "sharedProfile"
-    private let fileManager = FileManager.default
+    private var session: WCSession?
     private let logger = Logger.ollieWatch(category: "WatchDataProvider")
-    private let decoder: JSONDecoder
+    private let localDataStore = WatchIntentDataStore.shared
 
-    private init() {
-        decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .custom { decoder in
-            let container = try decoder.singleValueContainer()
-            let string = try container.decode(String.self)
-            if let date = Date.fromISO8601(string) {
-                return date
+    // Sync state persistence keys
+    private static let lastSyncTimeKey = "lastSuccessfulSyncTime"
+    private static let appGroupIdentifier = Constants.appGroupIdentifier
+    private static let widgetDataKey = "widgetData"
+
+    // MARK: - Connection State
+
+    enum ConnectionState {
+        case unknown
+        case notSupported
+        case activating
+        case activated
+        case notReachable
+        case reachable
+
+        var displayText: String {
+            switch self {
+            case .unknown: return "Connecting..."
+            case .notSupported: return "Not supported"
+            case .activating: return "Activating..."
+            case .activated: return "Connected"
+            case .notReachable: return "iPhone not reachable"
+            case .reachable: return "Connected"
             }
-            throw DecodingError.dataCorruptedError(in: container, debugDescription: "Invalid date format")
+        }
+
+        var isHealthy: Bool {
+            switch self {
+            case .activated, .reachable: return true
+            default: return false
+            }
         }
     }
 
-    // MARK: - Container Access
-
-    private var containerURL: URL? {
-        fileManager.containerURL(forSecurityApplicationGroupIdentifier: suiteName)
+    override init() {
+        super.init()
+        loadPersistedSyncTime()
     }
 
-    private var dataDirectoryURL: URL? {
-        containerURL?.appendingPathComponent(dataDirectoryName, isDirectory: true)
-    }
+    // MARK: - Session Management
 
-    private func fileURL(for date: Date) -> URL? {
-        dataDirectoryURL?.appendingPathComponent("\(date.dateString).jsonl")
+    /// Call this as early as possible in app lifecycle (in OllieWatchApp.init or onAppear)
+    func activateSession() {
+        guard WCSession.isSupported() else {
+            connectionState = .notSupported
+            logger.warning("WatchConnectivity not supported")
+            return
+        }
+
+        connectionState = .activating
+        session = WCSession.default
+        session?.delegate = self
+        session?.activate()
+        logger.info("WCSession activation requested")
     }
 
     // MARK: - Public Methods
 
-    /// Refresh all data from App Group
+    /// Refresh data - merges iPhone data with locally logged events
     func refresh() {
-        loadProfile()
-        loadRecentEvents()
+        // Re-process any cached context
+        if let context = session?.receivedApplicationContext, !context.isEmpty {
+            processReceivedData(context)
+        }
+
+        // Also check local events logged on Watch
+        mergeLocalEvents()
+    }
+
+    /// Request fresh data from iPhone
+    func requestSync() {
+        guard let session = session,
+              session.activationState == .activated,
+              session.isReachable else {
+            logger.debug("Cannot request sync - session not ready or phone not reachable")
+            return
+        }
+
+        session.sendMessage(["request": "sync"], replyHandler: nil) { error in
+            Task { @MainActor in
+                self.logger.error("Failed to request sync: \(error.localizedDescription)")
+            }
+        }
+    }
+
+    /// Send a logged event to the iPhone for storage
+    func sendEventToPhone(_ event: PuppyEvent) {
+        guard let session = session,
+              session.activationState == .activated else {
+            logger.debug("Cannot send event to phone - session not activated")
+            return
+        }
+
+        // Encode the event to JSON
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .custom { date, encoder in
+            var container = encoder.singleValueContainer()
+            try container.encode(date.iso8601String)
+        }
+
+        guard let eventData = try? encoder.encode(event),
+              let eventJSON = String(data: eventData, encoding: .utf8) else {
+            logger.error("Failed to encode event for phone sync")
+            return
+        }
+
+        let message: [String: Any] = [
+            "action": "logEvent",
+            "event": eventJSON
+        ]
+
+        // Try real-time delivery first if phone is reachable
+        if session.isReachable {
+            session.sendMessage(message, replyHandler: { _ in
+                Task { @MainActor in
+                    self.logger.debug("Event sent to phone in real-time: \(event.type.rawValue)")
+                }
+            }, errorHandler: { error in
+                Task { @MainActor in
+                    self.logger.warning("Real-time send failed, using queued transfer: \(error.localizedDescription)")
+                    // Fall back to guaranteed delivery
+                    session.transferUserInfo(message)
+                }
+            })
+        } else {
+            // Use transferUserInfo for guaranteed delivery when phone is not reachable
+            session.transferUserInfo(message)
+            logger.debug("Queued event for transfer to phone: \(event.type.rawValue)")
+        }
     }
 
     /// Format time since last pee for display
@@ -91,89 +194,102 @@ final class WatchDataProvider: ObservableObject {
 
     // MARK: - Private Methods
 
-    private func loadProfile() {
-        guard let sharedDefaults = UserDefaults(suiteName: suiteName),
-              let data = sharedDefaults.data(forKey: profileKey) else {
-            logger.info("No shared profile found")
-            return
+    private func processReceivedData(_ data: [String: Any]) {
+        if let name = data["puppyName"] as? String {
+            puppyName = name
         }
 
-        do {
-            let profile = try JSONDecoder().decode(SharedProfile.self, from: data)
-            puppyName = profile.name
-            canLogEvents = profile.canLogEvents
-        } catch {
-            logger.error("Failed to decode profile: \(error.localizedDescription)")
+        if let lastPeeTimestamp = data["lastPeeTime"] as? TimeInterval {
+            lastPeeTime = Date(timeIntervalSince1970: lastPeeTimestamp)
         }
-    }
 
-    private func loadRecentEvents() {
-        let today = Date()
-        var allEvents: [PuppyEvent] = []
+        if let lastPoopTimestamp = data["lastPoopTime"] as? TimeInterval {
+            lastPoopTime = Date(timeIntervalSince1970: lastPoopTimestamp)
+        }
 
-        // Load today's events
-        allEvents.append(contentsOf: readEvents(for: today))
+        if let streak = data["streak"] as? Int {
+            currentStreak = streak
+        }
 
-        // Load up to 7 days back for streak calculation
-        for dayOffset in 1...7 {
-            if let date = Calendar.current.date(byAdding: .day, value: -dayOffset, to: today) {
-                allEvents.append(contentsOf: readEvents(for: date))
+        if let sleeping = data["isSleeping"] as? Bool {
+            isSleeping = sleeping
+            if sleeping, let sleepTimestamp = data["sleepStartTime"] as? TimeInterval {
+                sleepStartTime = Date(timeIntervalSince1970: sleepTimestamp)
+            } else {
+                sleepStartTime = nil
             }
         }
 
-        // Update published properties
-        updateLastPeeTime(from: allEvents)
-        updateLastPoopTime(from: allEvents)
-        updateStreak(from: allEvents)
-        updateSleepState(from: allEvents)
-    }
-
-    private func readEvents(for date: Date) -> [PuppyEvent] {
-        guard let fileURL = self.fileURL(for: date),
-              fileManager.fileExists(atPath: fileURL.path),
-              let content = try? String(contentsOf: fileURL, encoding: .utf8) else {
-            return []
+        if let timestamp = data["timestamp"] as? TimeInterval {
+            lastSyncTime = Date(timeIntervalSince1970: timestamp)
+            persistSyncTime(lastSyncTime!)
         }
 
-        let lines = content.components(separatedBy: .newlines).filter { !$0.isEmpty }
+        logger.debug("Processed sync data from iPhone")
+    }
 
-        return lines.compactMap { line in
-            guard let data = line.data(using: .utf8) else { return nil }
-            return try? decoder.decode(PuppyEvent.self, from: data)
+    /// Merge locally logged Watch events with iPhone data
+    private func mergeLocalEvents() {
+        let today = Date()
+        var localEvents = localDataStore.readEvents(for: today)
+
+        // Also check yesterday for events logged near midnight
+        if let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: today) {
+            localEvents += localDataStore.readEvents(for: yesterday)
         }
-    }
 
-    private func updateLastPeeTime(from events: [PuppyEvent]) {
-        lastPeeTime = events
-            .pee()
-            .reverseChronological()
-            .first?
-            .time
-    }
+        guard !localEvents.isEmpty else {
+            // Still update widget data even with no local events
+            // (to reflect data received from iPhone)
+            updateWidgetData()
+            return
+        }
 
-    private func updateLastPoopTime(from events: [PuppyEvent]) {
-        lastPoopTime = events
-            .poop()
-            .reverseChronological()
-            .first?
-            .time
-    }
+        // Find the most recent pee event
+        if let mostRecentPee = localEvents.first(where: { $0.type == .plassen }) {
+            if lastPeeTime == nil || mostRecentPee.time > lastPeeTime! {
+                lastPeeTime = mostRecentPee.time
+            }
+        }
 
-    private func updateStreak(from events: [PuppyEvent]) {
-        currentStreak = StreakCalculations.calculateCurrentStreak(events: events)
-    }
+        // Find the most recent poop event
+        if let mostRecentPoop = localEvents.first(where: { $0.type == .poepen }) {
+            if lastPoopTime == nil || mostRecentPoop.time > lastPoopTime! {
+                lastPoopTime = mostRecentPoop.time
+            }
+        }
 
-    private func updateSleepState(from events: [PuppyEvent]) {
-        let sleepState = SleepCalculations.currentSleepState(events: events)
-
+        // Update sleep state from local events
+        let sleepState = SleepCalculations.currentSleepState(events: localEvents)
         switch sleepState {
         case .sleeping(let since, _):
-            isSleeping = true
-            sleepStartTime = since
-        case .awake, .unknown:
-            isSleeping = false
-            sleepStartTime = nil
+            // Only use local sleep state if it's more recent than iPhone sync
+            if lastSyncTime == nil || since > lastSyncTime! {
+                isSleeping = true
+                sleepStartTime = since
+            }
+        case .awake:
+            // Local wake-up - check if it's more recent
+            if let wakeEvent = localEvents.first(where: { $0.type == .ontwaken }),
+               lastSyncTime == nil || wakeEvent.time > lastSyncTime! {
+                isSleeping = false
+                sleepStartTime = nil
+            }
+        case .unknown:
+            break
         }
+
+        // Recalculate streak from local events
+        let localStreak = StreakCalculations.calculateCurrentStreak(events: localEvents)
+        if localStreak != currentStreak {
+            // If there are local pee events, use the recalculated streak
+            if localEvents.contains(where: { $0.type == .plassen }) {
+                currentStreak = localStreak
+            }
+        }
+
+        // Update widget data after merging local events
+        updateWidgetData()
     }
 
     private func formatTimeSince(_ date: Date) -> String {
@@ -185,9 +301,176 @@ final class WatchDataProvider: ObservableObject {
             let hours = minutes / 60
             let mins = minutes % 60
             if mins == 0 {
-                return "\(hours)u"
+                return "\(hours)h"
             }
-            return "\(hours)u \(mins)m"
+            return "\(hours)h \(mins)m"
+        }
+    }
+
+    // MARK: - Sync State Persistence
+
+    private func persistSyncTime(_ date: Date) {
+        UserDefaults.standard.set(date.timeIntervalSince1970, forKey: Self.lastSyncTimeKey)
+    }
+
+    private func loadPersistedSyncTime() {
+        let timestamp = UserDefaults.standard.double(forKey: Self.lastSyncTimeKey)
+        if timestamp > 0 {
+            lastSyncTime = Date(timeIntervalSince1970: timestamp)
+        }
+    }
+
+    // MARK: - Widget Data Sync
+
+    /// Write current data to App Group UserDefaults for watch widgets
+    private func updateWidgetData() {
+        guard let sharedDefaults = UserDefaults(suiteName: Self.appGroupIdentifier) else {
+            logger.warning("Failed to access App Group UserDefaults for widgets")
+            return
+        }
+
+        // Calculate last wake time if awake
+        var lastWakeTime: Date? = nil
+        if !isSleeping {
+            // Try to find wake time from local events
+            let today = Date()
+            var localEvents = localDataStore.readEvents(for: today)
+            if let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: today) {
+                localEvents += localDataStore.readEvents(for: yesterday)
+            }
+            if let wakeEvent = localEvents.first(where: { $0.type == .ontwaken }) {
+                lastWakeTime = wakeEvent.time
+            }
+        }
+
+        // Encode as JSON (matching the format WidgetDataProvider uses)
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+
+        // Create a Codable struct matching WatchWidgetData
+        struct WidgetDataForEncoding: Codable {
+            let lastPlasTime: Date?
+            let lastPlasLocation: String?
+            let currentStreak: Int
+            let bestStreak: Int
+            let todayPottyCount: Int
+            let todayOutdoorCount: Int
+            let isCurrentlySleeping: Bool
+            let sleepStartTime: Date?
+            let lastWakeTime: Date?
+            let lastMealTime: Date?
+            let nextScheduledMealTime: Date?
+            let mealsLoggedToday: Int
+            let mealsExpectedToday: Int
+            let lastWalkTime: Date?
+            let nextScheduledWalkTime: Date?
+            let puppyName: String
+            let lastUpdated: Date
+        }
+
+        let dataToEncode = WidgetDataForEncoding(
+            lastPlasTime: lastPeeTime,
+            lastPlasLocation: nil,
+            currentStreak: currentStreak,
+            bestStreak: 0,
+            todayPottyCount: 0,
+            todayOutdoorCount: 0,
+            isCurrentlySleeping: isSleeping,
+            sleepStartTime: sleepStartTime,
+            lastWakeTime: lastWakeTime,
+            lastMealTime: nil,
+            nextScheduledMealTime: nil,
+            mealsLoggedToday: 0,
+            mealsExpectedToday: 3,
+            lastWalkTime: nil,
+            nextScheduledWalkTime: nil,
+            puppyName: puppyName,
+            lastUpdated: Date()
+        )
+
+        guard let encodedData = try? encoder.encode(dataToEncode) else {
+            logger.error("Failed to encode widget data")
+            return
+        }
+
+        sharedDefaults.set(encodedData, forKey: Self.widgetDataKey)
+        logger.debug("Updated widget data in App Group")
+
+        // Reload widget timelines
+        WidgetCenter.shared.reloadAllTimelines()
+    }
+}
+
+// MARK: - WCSessionDelegate
+
+extension WatchDataProvider: WCSessionDelegate {
+    nonisolated func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
+        Task { @MainActor in
+            if activationState == .activated {
+                connectionState = session.isReachable ? .reachable : .activated
+                isConnected = true
+                logger.info("WatchConnectivity activated, reachable: \(session.isReachable)")
+                refresh()
+
+                // Request fresh sync from iPhone
+                if session.isReachable {
+                    requestSync()
+                }
+            } else {
+                connectionState = .notReachable
+                isConnected = false
+                if let error = error {
+                    logger.error("WatchConnectivity failed: \(error.localizedDescription)")
+                }
+            }
+        }
+    }
+
+    nonisolated func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String: Any]) {
+        Task { @MainActor in
+            processReceivedData(applicationContext)
+            // Always merge local events after receiving iPhone data
+            // to ensure locally logged watch events take precedence
+            mergeLocalEvents()
+        }
+    }
+
+    nonisolated func sessionReachabilityDidChange(_ session: WCSession) {
+        Task { @MainActor in
+            connectionState = session.isReachable ? .reachable : .notReachable
+            isConnected = session.isReachable
+
+            if session.isReachable {
+                logger.info("iPhone became reachable, requesting sync")
+                requestSync()
+            } else {
+                logger.info("iPhone became unreachable")
+            }
+        }
+    }
+
+    // Handle real-time sync updates from iPhone
+    nonisolated func session(_ session: WCSession, didReceiveMessage message: [String: Any]) {
+        Task { @MainActor in
+            if message["action"] as? String == "syncUpdate" {
+                logger.debug("Received real-time sync update from iPhone")
+                processReceivedData(message)
+                mergeLocalEvents()
+            }
+        }
+    }
+
+    // Handle real-time sync with reply handler
+    nonisolated func session(_ session: WCSession, didReceiveMessage message: [String: Any], replyHandler: @escaping ([String: Any]) -> Void) {
+        Task { @MainActor in
+            if message["action"] as? String == "syncUpdate" {
+                logger.debug("Received real-time sync update from iPhone (with reply)")
+                processReceivedData(message)
+                mergeLocalEvents()
+                replyHandler(["status": "received"])
+            } else {
+                replyHandler(["status": "unknown"])
+            }
         }
     }
 }
@@ -200,16 +483,4 @@ enum UrgencyLevel {
     case warning
     case urgent
     case unknown
-}
-
-// MARK: - Shared Profile (matches iOS app)
-
-struct SharedProfile: Codable {
-    let name: String
-    let isPremiumUnlocked: Bool
-    let freeDaysRemaining: Int
-
-    var canLogEvents: Bool {
-        isPremiumUnlocked || freeDaysRemaining > 0
-    }
 }

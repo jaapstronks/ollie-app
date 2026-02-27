@@ -303,15 +303,7 @@ struct SleepStatsCard: View {
     }
 
     private func formatSleepTime(_ minutes: Int) -> String {
-        let hours = minutes / 60
-        let mins = minutes % 60
-        if hours == 0 {
-            return "\(mins) min"
-        } else if mins == 0 {
-            return "\(hours) uur"
-        } else {
-            return "\(hours)u \(mins)m"
-        }
+        DurationFormatter.format(minutes, style: .compact)
     }
 }
 
