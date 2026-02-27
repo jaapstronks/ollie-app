@@ -208,11 +208,12 @@ class MilestoneStore: ObservableObject {
         _ milestone: Milestone,
         notes: String? = nil,
         photoID: UUID? = nil,
-        vetClinicName: String? = nil
+        vetClinicName: String? = nil,
+        completionDate: Date? = nil
     ) {
         var updated = milestone
         updated.isCompleted = true
-        updated.completedDate = Date()
+        updated.completedDate = completionDate ?? Date()
         updated.completionNotes = notes
         updated.completionPhotoID = photoID
         updated.vetClinicName = vetClinicName

@@ -1,0 +1,2360 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "%lld sessions" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld sessies"
+          }
+        }
+      }
+    },
+    "%lld/%lld started" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld/%lld gestart"
+          }
+        }
+      }
+    },
+    "1 session" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 sessie"
+          }
+        }
+      }
+    },
+    "Add distractions last" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voeg als laatste afleiding toe"
+          }
+        }
+      }
+    },
+    "Add duration first (stay close but longer)" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voeg eerst duur toe (blijf dichtbij maar langer)"
+          }
+        }
+      }
+    },
+    "Add the cue 'down' once behavior is reliable" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voeg het commando 'af' toe zodra het gedrag betrouwbaar is"
+          }
+        }
+      }
+    },
+    "Add the cue 'place' or 'bed'" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voeg het commando 'plaats' of 'mand' toe"
+          }
+        }
+      }
+    },
+    "Add the cue 'touch'" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voeg het commando 'touch' toe"
+          }
+        }
+      }
+    },
+    "Add the cue 'watch' or 'look'" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voeg het commando 'kijk' of 'hier' toe"
+          }
+        }
+      }
+    },
+    "Add the word 'sit' once behavior is reliable" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voeg het woord 'zit' toe zodra het gedrag betrouwbaar is"
+          }
+        }
+      }
+    },
+    "All categories" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle categorieën"
+          }
+        }
+      }
+    },
+    "Always make coming to you worthwhile" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zorg dat naar jou toekomen altijd de moeite waard is"
+          }
+        }
+      }
+    },
+    "Always return to puppy - don't call them to break stay" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keer altijd terug naar je pup - roep hem niet om het blijven te verbreken"
+          }
+        }
+      }
+    },
+    "As their head goes up, their bottom goes down" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Als zijn hoofd omhoog gaat, gaat zijn achterwerk omlaag"
+          }
+        }
+      }
+    },
+    "Ask for a down on the mat" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vraag om af op het matje"
+          }
+        }
+      }
+    },
+    "Attach leash and let them drag it supervised" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maak de riem vast en laat hem deze onder toezicht slepen"
+          }
+        }
+      }
+    },
+    "Basic Commands" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Basiscommando's"
+          }
+        }
+      }
+    },
+    "Build duration very slowly" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bouw de duur heel langzaam op"
+          }
+        }
+      }
+    },
+    "Can be used to guide puppy into positions" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kan gebruikt worden om je pup naar posities te leiden"
+          }
+        }
+      }
+    },
+    "Care" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verzorging"
+          }
+        }
+      }
+    },
+    "Change direction frequently to keep attention" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verander vaak van richting om de aandacht vast te houden"
+          }
+        }
+      }
+    },
+    "Check collar fit - two fingers should fit underneath" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Controleer of de halsband goed zit - twee vingers moeten eronder passen"
+          }
+        }
+      }
+    },
+    "Click and treat the moment bottom touches floor" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Klik en geef een snoepje zodra het achterwerk de grond raakt"
+          }
+        }
+      }
+    },
+    "Click and treat when elbows touch ground" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Klik en geef een snoepje wanneer de ellebogen de grond raken"
+          }
+        }
+      }
+    },
+    "Click and treat when nose touches palm" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Klik en geef een snoepje wanneer de neus de handpalm raakt"
+          }
+        }
+      }
+    },
+    "Click the clicker (or use a marker word like 'yes')" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Klik met de clicker (of gebruik een markerwoord zoals 'ja')"
+          }
+        }
+      }
+    },
+    "Clicker" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clicker"
+          }
+        }
+      }
+    },
+    "Collar & Leash" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Halsband & riem"
+          }
+        }
+      }
+    },
+    "Come" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kom"
+          }
+        }
+      }
+    },
+    "Coming to you should be the best thing ever" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Naar jou toekomen moet het beste zijn dat er is"
+          }
+        }
+      }
+    },
+    "Consolidation Week" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Consolidatieweek"
+          }
+        }
+      }
+    },
+    "day streak" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "dagen op rij"
+          }
+        }
+      }
+    },
+    "Don't click to get attention - click to mark behavior" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Klik niet om aandacht te krijgen - klik om gedrag te markeren"
+          }
+        }
+      }
+    },
+    "Don't push puppy down" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Duw je pup niet omlaag"
+          }
+        }
+      }
+    },
+    "Don't push their bottom down" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Duw zijn achterwerk niet omlaag"
+          }
+        }
+      }
+    },
+    "Don't push your hand into their face" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Duw je hand niet in zijn gezicht"
+          }
+        }
+      }
+    },
+    "Done when" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Klaar wanneer"
+          }
+        }
+      }
+    },
+    "Down" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Af"
+          }
+        }
+      }
+    },
+    "Duration" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Duur"
+          }
+        }
+      }
+    },
+    "Duration Training" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Duurtraining"
+          }
+        }
+      }
+    },
+    "e.g. Good focus, needed help" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "bijv. Goede focus, had hulp nodig"
+          }
+        }
+      }
+    },
+    "Eventually fade the lure into a hand signal" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laat het lokken uiteindelijk overgaan in een handgebaar"
+          }
+        }
+      }
+    },
+    "First Commands" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eerste commando's"
+          }
+        }
+      }
+    },
+    "Focus skills" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Focus vaardigheden"
+          }
+        }
+      }
+    },
+    "Foundation Week" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Basisweek"
+          }
+        }
+      }
+    },
+    "Foundations" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Basis"
+          }
+        }
+      }
+    },
+    "Gently touch ears, paws, tail, mouth" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Raak zachtjes oren, poten, staart en bek aan"
+          }
+        }
+      }
+    },
+    "Get your puppy comfortable being touched everywhere. Important for vet visits, grooming, and health checks." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laat je pup wennen aan overal aangeraakt worden. Belangrijk voor dierenartsbezoeken, verzorging en gezondheidscontroles."
+          }
+        }
+      }
+    },
+    "Get your puppy comfortable wearing a collar and being on a leash. Foundation for all outdoor training." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laat je pup wennen aan het dragen van een halsband en aan de riem lopen. Basis voor alle buitentraining."
+          }
+        }
+      }
+    },
+    "Give treats while handling" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geef snoepjes tijdens het aanraken"
+          }
+        }
+      }
+    },
+    "Go slowly - this builds lifelong trust" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ga langzaam - dit bouwt levenslang vertrouwen"
+          }
+        }
+      }
+    },
+    "Gradually add distractions" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voeg geleidelijk afleiding toe"
+          }
+        }
+      }
+    },
+    "Gradually add duration and distance" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voeg geleidelijk duur en afstand toe"
+          }
+        }
+      }
+    },
+    "Gradually increase distance and duration" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vergroot geleidelijk de afstand en duur"
+          }
+        }
+      }
+    },
+    "Gradually increase duration" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verleng geleidelijk de duur"
+          }
+        }
+      }
+    },
+    "Gradually increase duration and pressure" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verleng geleidelijk de duur en druk"
+          }
+        }
+      }
+    },
+    "Gradually phase out hand movement" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laat de handbeweging geleidelijk weg"
+          }
+        }
+      }
+    },
+    "Great alternative to 'come' for recall" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geweldig alternatief voor 'kom' bij terugroepen"
+          }
+        }
+      }
+    },
+    "Great for restaurant and café visits" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geweldig voor restaurant- en cafébezoeken"
+          }
+        }
+      }
+    },
+    "Great for safety at doors and curbs" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geweldig voor veiligheid bij deuren en stoepranden"
+          }
+        }
+      }
+    },
+    "Great for when guests arrive" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geweldig voor als er gasten komen"
+          }
+        }
+      }
+    },
+    "Great to use before crossing streets" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geweldig om te gebruiken voor het oversteken"
+          }
+        }
+      }
+    },
+    "Handling" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aanraken"
+          }
+        }
+      }
+    },
+    "Hold a treat between your thumb and fingers" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Houd een snoepje tussen je duim en vingers"
+          }
+        }
+      }
+    },
+    "Hold a treat near your face" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Houd een snoepje bij je gezicht"
+          }
+        }
+      }
+    },
+    "Hold treat above puppy's nose" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Houd een snoepje boven de neus van je pup"
+          }
+        }
+      }
+    },
+    "Hold treats ready in your hand" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Houd snoepjes klaar in je hand"
+          }
+        }
+      }
+    },
+    "How to train" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoe te trainen"
+          }
+        }
+      }
+    },
+    "If puppy freezes, lure them forward with treats" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Als je pup bevriest, lok hem dan vooruit met snoepjes"
+          }
+        }
+      }
+    },
+    "If puppy pulls, stop walking immediately" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Als je pup trekt, stop direct met lopen"
+          }
+        }
+      }
+    },
+    "If they break, simply reset without punishment" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Als hij breekt, reset simpelweg zonder straf"
+          }
+        }
+      }
+    },
+    "If they don't respond, try again later or reduce distractions" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Als hij niet reageert, probeer het later opnieuw of verminder de afleiding"
+          }
+        }
+      }
+    },
+    "If they jump, hold treat closer to nose" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Als hij springt, houd het snoepje dichter bij zijn neus"
+          }
+        }
+      }
+    },
+    "If they lose interest, use higher value treats" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Als hij de interesse verliest, gebruik lekkerder snoepjes"
+          }
+        }
+      }
+    },
+    "If they stand, you moved the treat too far" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Als hij gaat staan, heb je het snoepje te ver bewogen"
+          }
+        }
+      }
+    },
+    "Immediately give a treat within 1-2 seconds" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geef direct een snoepje binnen 1-2 seconden"
+          }
+        }
+      }
+    },
+    "Impulse Control" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impulscontrole"
+          }
+        }
+      }
+    },
+    "Keep sessions short (2-3 minutes)" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Houd sessies kort (2-3 minuten)"
+          }
+        }
+      }
+    },
+    "Keep sessions very short at first" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Houd sessies in het begin heel kort"
+          }
+        }
+      }
+    },
+    "Keep the treat close to their nose" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Houd het snoepje dicht bij zijn neus"
+          }
+        }
+      }
+    },
+    "Let puppy sniff the collar first" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laat je pup eerst aan de halsband ruiken"
+          }
+        }
+      }
+    },
+    "Let your puppy sniff the treat but not eat it" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laat je pup aan het snoepje ruiken maar niet opeten"
+          }
+        }
+      }
+    },
+    "Locked" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vergrendeld"
+          }
+        }
+      }
+    },
+    "Log session" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sessie loggen"
+          }
+        }
+      }
+    },
+    "Log Training Session" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trainingssessie loggen"
+          }
+        }
+      }
+    },
+    "Long-duration stay - puppy remains in position until released." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Langdurig blijven - je pup blijft in positie tot hij wordt losgelaten."
+          }
+        }
+      }
+    },
+    "Loose Leash Walking" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aan de losse lijn lopen"
+          }
+        }
+      }
+    },
+    "Lure puppy onto their bed or mat" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lok je pup naar zijn mand of matje"
+          }
+        }
+      }
+    },
+    "Lure treat from nose straight down to floor" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lok met een snoepje van de neus recht naar beneden naar de grond"
+          }
+        }
+      }
+    },
+    "Luring" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lokken"
+          }
+        }
+      }
+    },
+    "Make it part of daily routine" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maak het onderdeel van de dagelijkse routine"
+          }
+        }
+      }
+    },
+    "Mark as mastered" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Markeer als beheerst"
+          }
+        }
+      }
+    },
+    "Mastered" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beheerst"
+          }
+        }
+      }
+    },
+    "minutes" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "minuten"
+          }
+        }
+      }
+    },
+    "Most puppies will naturally investigate" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De meeste pups zullen van nature onderzoeken"
+          }
+        }
+      }
+    },
+    "Move slowly and smoothly" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beweeg langzaam en soepel"
+          }
+        }
+      }
+    },
+    "Move the treat slowly - your puppy's nose should follow" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beweeg het snoepje langzaam - de neus van je pup moet volgen"
+          }
+        }
+      }
+    },
+    "Move treat slowly back over their head" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beweeg het snoepje langzaam naar achteren over zijn hoofd"
+          }
+        }
+      }
+    },
+    "Name Recognition" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Naam herkenning"
+          }
+        }
+      }
+    },
+    "Never call for something negative" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Roep nooit voor iets negatiefs"
+          }
+        }
+      }
+    },
+    "Never chase your puppy if they don't come" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Achtervolg je pup nooit als hij niet komt"
+          }
+        }
+      }
+    },
+    "Never leave leash on unsupervised" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laat de riem nooit onbewaakt aan"
+          }
+        }
+      }
+    },
+    "Never use their name negatively" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gebruik zijn naam nooit negatief"
+          }
+        }
+      }
+    },
+    "No skills started yet" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nog geen vaardigheden gestart"
+          }
+        }
+      }
+    },
+    "Not started" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Niet gestart"
+          }
+        }
+      }
+    },
+    "Note" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notitie"
+          }
+        }
+      }
+    },
+    "Only say the name once - don't repeat it" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeg de naam maar één keer - niet herhalen"
+          }
+        }
+      }
+    },
+    "Optional note..." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Optionele notitie..."
+          }
+        }
+      }
+    },
+    "outdoor this week" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "buiten deze week"
+          }
+        }
+      }
+    },
+    "Pair with eye contact for maximum attention" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Combineer met oogcontact voor maximale aandacht"
+          }
+        }
+      }
+    },
+    "Pick up leash and follow puppy around" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pak de riem op en volg je pup"
+          }
+        }
+      }
+    },
+    "Place" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plaats"
+          }
+        }
+      }
+    },
+    "Potty Progress" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zindelijkheid"
+          }
+        }
+      }
+    },
+    "Practice 'let's go' turns to redirect" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oefen 'kom mee' bochten om af te leiden"
+          }
+        }
+      }
+    },
+    "Practice at different heights and distances" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oefen op verschillende hoogtes en afstanden"
+          }
+        }
+      }
+    },
+    "Practice before meals for extra motivation" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oefen voor de maaltijden voor extra motivatie"
+          }
+        }
+      }
+    },
+    "Practice before putting food bowl down" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oefen voordat je de voerbak neerzet"
+          }
+        }
+      }
+    },
+    "Practice during meals and TV time" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oefen tijdens maaltijden en tv-tijd"
+          }
+        }
+      }
+    },
+    "Practice in different locations" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oefen op verschillende locaties"
+          }
+        }
+      }
+    },
+    "Practice inside before going outside" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oefen eerst binnen voordat je naar buiten gaat"
+          }
+        }
+      }
+    },
+    "Practice lifting paws and looking in ears" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oefen met poten optillen en in de oren kijken"
+          }
+        }
+      }
+    },
+    "Practice moving in different directions" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oefen met bewegen in verschillende richtingen"
+          }
+        }
+      }
+    },
+    "Practice on a comfortable surface first" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oefen eerst op een comfortabel oppervlak"
+          }
+        }
+      }
+    },
+    "Practice randomly throughout the day" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oefen willekeurig door de dag heen"
+          }
+        }
+      }
+    },
+    "Practicing" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aan het oefenen"
+          }
+        }
+      }
+    },
+    "Present flat palm near puppy's nose" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Houd je vlakke handpalm bij de neus van je pup"
+          }
+        }
+      }
+    },
+    "Puppy goes to their bed or mat and stays there. Great for settling at home." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je pup gaat naar zijn mand of matje en blijft daar. Geweldig om thuis te kalmeren."
+          }
+        }
+      }
+    },
+    "Puppy learns to touch their nose to your palm. Useful for positioning and recall." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je pup leert zijn neus tegen je handpalm te duwen. Handig voor positionering en terugroepen."
+          }
+        }
+      }
+    },
+    "Puppy lies down on command. A calm position useful for settling." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je pup gaat liggen op commando. Een rustige positie die handig is om te kalmeren."
+          }
+        }
+      }
+    },
+    "Put collar on during positive moments (meals, play)" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Doe de halsband om tijdens positieve momenten (maaltijden, spelen)"
+          }
+        }
+      }
+    },
+    "Put puppy in sit" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zet je pup in zit"
+          }
+        }
+      }
+    },
+    "Recall - the most important safety command. Your puppy comes to you when called." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terugroepen - het belangrijkste veiligheidscommando. Je pup komt naar je toe wanneer je roept."
+          }
+        }
+      }
+    },
+    "Recent sessions" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recente sessies"
+          }
+        }
+      }
+    },
+    "Release with 'okay' or 'free'" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laat los met 'oké' of 'vrij'"
+          }
+        }
+      }
+    },
+    "Repeat 10-15 times per session" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Herhaal 10-15 keer per sessie"
+          }
+        }
+      }
+    },
+    "Requires" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vereist"
+          }
+        }
+      }
+    },
+    "Result" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Resultaat"
+          }
+        }
+      }
+    },
+    "Return and treat before they move" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kom terug en geef een snoepje voordat hij beweegt"
+          }
+        }
+      }
+    },
+    "Return to puppy before releasing" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keer terug naar je pup voordat je loslaat"
+          }
+        }
+      }
+    },
+    "Reward for staying on the mat" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beloon voor het blijven op het matje"
+          }
+        }
+      }
+    },
+    "Reward frequently for staying beside you" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beloon regelmatig voor het naast je blijven"
+          }
+        }
+      }
+    },
+    "Reward generously when they reach you" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beloon royaal wanneer hij bij je komt"
+          }
+        }
+      }
+    },
+    "Reward when they follow the lure smoothly" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beloon wanneer hij het lokker soepel volgt"
+          }
+        }
+      }
+    },
+    "Rub treat on palm if they need encouragement" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wrijf een snoepje over je handpalm als hij aanmoediging nodig heeft"
+          }
+        }
+      }
+    },
+    "Safety" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Veiligheid"
+          }
+        }
+      }
+    },
+    "Safety & Movement" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Veiligheid & beweging"
+          }
+        }
+      }
+    },
+    "Say puppy's name + 'come' in excited voice" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeg de naam van je pup + 'kom' met een enthousiaste stem"
+          }
+        }
+      }
+    },
+    "Say their name once in a happy voice" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeg zijn naam één keer met een blije stem"
+          }
+        }
+      }
+    },
+    "Short-term stay - puppy pauses briefly at doors, before meals, etc." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Korte stop - je pup pauzeert even bij deuren, voor maaltijden, etc."
+          }
+        }
+      }
+    },
+    "Show palm and say 'wait'" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toon je handpalm en zeg 'wacht'"
+          }
+        }
+      }
+    },
+    "Sit" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zit"
+          }
+        }
+      }
+    },
+    "Skill Tracker" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vaardigheden bijhouden"
+          }
+        }
+      }
+    },
+    "Skills" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vaardigheden"
+          }
+        }
+      }
+    },
+    "Socialization" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Socialisatie"
+          }
+        }
+      }
+    },
+    "Some dogs find direct eye contact uncomfortable - be patient" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sommige honden vinden direct oogcontact ongemakkelijk - wees geduldig"
+          }
+        }
+      }
+    },
+    "Start from sit or down" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Begin vanuit zit of af"
+          }
+        }
+      }
+    },
+    "Start in low-distraction environment" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Begin in een omgeving met weinig afleiding"
+          }
+        }
+      }
+    },
+    "Start inside or in a boring area" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Begin binnen of in een saaie omgeving"
+          }
+        }
+      }
+    },
+    "Start very close with high-value treats" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Begin heel dichtbij met extra lekkere snoepjes"
+          }
+        }
+      }
+    },
+    "Start when puppy is calm and relaxed" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Begin wanneer je pup rustig en ontspannen is"
+          }
+        }
+      }
+    },
+    "Start with puppy in sit" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Begin met je pup in zit"
+          }
+        }
+      }
+    },
+    "Start with short periods" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Begin met korte periodes"
+          }
+        }
+      }
+    },
+    "Started" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gestart"
+          }
+        }
+      }
+    },
+    "Stay" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Blijf"
+          }
+        }
+      }
+    },
+    "Stop if puppy shows stress signals" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stop als je pup stresssignalen vertoont"
+          }
+        }
+      }
+    },
+    "Take one small step back" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neem één kleine stap naar achteren"
+          }
+        }
+      }
+    },
+    "Tap a skill to begin training" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tik op een vaardigheid om te beginnen"
+          }
+        }
+      }
+    },
+    "Teach your puppy that the click sound means a treat is coming. This is the foundation for all marker-based training." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leer je pup dat het klikgeluid betekent dat er een snoepje aankomt. Dit is de basis voor alle markertraining."
+          }
+        }
+      }
+    },
+    "The classic sit command. A building block for many other behaviors." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Het klassieke zit-commando. Een bouwsteen voor veel ander gedrag."
+          }
+        }
+      }
+    },
+    "The click must ALWAYS be followed by a treat" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Op de klik moet ALTIJD een snoepje volgen"
+          }
+        }
+      }
+    },
+    "The moment they look at your eyes, click and treat" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Op het moment dat hij naar je ogen kijkt, klik en geef een snoepje"
+          }
+        }
+      }
+    },
+    "The three Ds: Duration, Distance, Distraction - increase one at a time" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De drie D's: Duur, Afstand, Afleiding - verhoog er één tegelijk"
+          }
+        }
+      }
+    },
+    "Then add distance (stay far but shorter)" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voeg dan afstand toe (blijf ver maar korter)"
+          }
+        }
+      }
+    },
+    "Then slowly pull treat away from puppy along floor" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trek het snoepje dan langzaam over de grond van je pup weg"
+          }
+        }
+      }
+    },
+    "This is different from 'stay' - shorter and more casual" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dit is anders dan 'blijf' - korter en meer informeel"
+          }
+        }
+      }
+    },
+    "This takes months to master - be patient" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dit duurt maanden om te beheersen - wees geduldig"
+          }
+        }
+      }
+    },
+    "This takes weeks to master - be patient" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dit duurt weken om te beheersen - wees geduldig"
+          }
+        }
+      }
+    },
+    "Tips" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tips"
+          }
+        }
+      }
+    },
+    "Tired puppies walk better - play first" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vermoeide pups lopen beter - speel eerst"
+          }
+        }
+      }
+    },
+    "Top triggers" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Belangrijkste triggers"
+          }
+        }
+      }
+    },
+    "Touch" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aanraken"
+          }
+        }
+      }
+    },
+    "Training" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Training"
+          }
+        }
+      }
+    },
+    "Unmark mastered" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Markering verwijderen"
+          }
+        }
+      }
+    },
+    "Use a front-clip harness if pulling is severe" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gebruik een anti-trektuig als het trekken ernstig is"
+          }
+        }
+      }
+    },
+    "Use a long line for safety during training" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gebruik een lange lijn voor veiligheid tijdens het trainen"
+          }
+        }
+      }
+    },
+    "Use a portable mat to transfer this skill anywhere" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gebruik een draagbaar matje om deze vaardigheid overal toe te passen"
+          }
+        }
+      }
+    },
+    "Use a treat to guide your puppy into positions. This technique is used to teach many other commands." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gebruik een snoepje om je pup naar posities te leiden. Deze techniek wordt gebruikt om veel andere commando's te leren."
+          }
+        }
+      }
+    },
+    "Use high-value treats" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gebruik extra lekkere snoepjes"
+          }
+        }
+      }
+    },
+    "Use this to redirect attention from distractions" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gebruik dit om de aandacht van afleiding af te leiden"
+          }
+        }
+      }
+    },
+    "Wait" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wacht"
+          }
+        }
+      }
+    },
+    "Wait for eye contact" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wacht op oogcontact"
+          }
+        }
+      }
+    },
+    "Wait for loose leash before continuing" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wacht op een losse riem voordat je verder gaat"
+          }
+        }
+      }
+    },
+    "Wait until your puppy looks away" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wacht tot je pup wegkijkt"
+          }
+        }
+      }
+    },
+    "Walk nicely on a loose leash without pulling. Makes walks enjoyable for both of you." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Netjes lopen aan een losse riem zonder te trekken. Maakt wandelingen leuk voor jullie beiden."
+          }
+        }
+      }
+    },
+    "Watch Me" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kijk naar mij"
+          }
+        }
+      }
+    },
+    "Week %lld" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Week %lld"
+          }
+        }
+      }
+    },
+    "When they look at you, click and treat" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wanneer hij naar je kijkt, klik en geef een snoepje"
+          }
+        }
+      }
+    },
+    "Your puppy can walk 10 meters on a loose leash with moderate distractions." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je pup kan 10 meter lopen aan een losse riem met matige afleiding."
+          }
+        }
+      }
+    },
+    "Your puppy comes immediately when called in the house and garden." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je pup komt direct wanneer je roept in huis en tuin."
+          }
+        }
+      }
+    },
+    "Your puppy follows the treat smoothly in any direction without jumping or grabbing." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je pup volgt het snoepje soepel in elke richting zonder te springen of te grijpen."
+          }
+        }
+      }
+    },
+    "Your puppy goes to their bed and lies down for 2 minutes." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je pup gaat naar zijn mand en gaat 2 minuten liggen."
+          }
+        }
+      }
+    },
+    "Your puppy ignores the collar and doesn't panic when leash is attached or lifted." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je pup negeert de halsband en raakt niet in paniek wanneer de riem wordt vastgemaakt of opgetild."
+          }
+        }
+      }
+    },
+    "Your puppy immediately looks at you or your hand when they hear the click, expecting a treat." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je pup kijkt meteen naar jou of je hand als hij de klik hoort, in afwachting van een snoepje."
+          }
+        }
+      }
+    },
+    "Your puppy immediately looks at you when you say their name, even with mild distractions." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je pup kijkt meteen naar je als je zijn naam zegt, zelfs met lichte afleiding."
+          }
+        }
+      }
+    },
+    "Your puppy learns to look at you when they hear their name. Essential for getting attention before giving commands." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je pup leert naar je te kijken als hij zijn naam hoort. Essentieel om aandacht te krijgen voordat je commando's geeft."
+          }
+        }
+      }
+    },
+    "Your puppy learns to make eye contact on command. Great for getting focus before other commands." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je pup leert oogcontact te maken op commando. Geweldig om focus te krijgen voor andere commando's."
+          }
+        }
+      }
+    },
+    "Your puppy lies down on command from a sit, without lure." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je pup gaat liggen op commando vanuit zit, zonder lokker."
+          }
+        }
+      }
+    },
+    "Your puppy makes eye contact for 3-5 seconds on command." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je pup maakt 3-5 seconden oogcontact op commando."
+          }
+        }
+      }
+    },
+    "Your puppy should start looking for treats when they hear the click" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je pup moet beginnen te zoeken naar snoepjes als hij de klik hoort"
+          }
+        }
+      }
+    },
+    "Your puppy sits on command with just the verbal cue, no lure needed." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je pup gaat zitten op commando met alleen het verbale signaal, geen lokker nodig."
+          }
+        }
+      }
+    },
+    "Your puppy stays for 30 seconds while you walk 5 meters away." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je pup blijft 30 seconden terwijl je 5 meter wegloopt."
+          }
+        }
+      }
+    },
+    "Your puppy stays relaxed when you touch their ears, paws, mouth, and tail." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je pup blijft ontspannen wanneer je zijn oren, poten, bek en staart aanraakt."
+          }
+        }
+      }
+    },
+    "Your puppy touches their nose to your palm on command from 1 meter away." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je pup duwt zijn neus tegen je handpalm op commando vanaf 1 meter afstand."
+          }
+        }
+      }
+    },
+    "Your puppy waits for 10 seconds at doors and before meals." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je pup wacht 10 seconden bij deuren en voor maaltijden."
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

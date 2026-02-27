@@ -155,10 +155,10 @@ struct HealthTimelineView: View {
                 MilestoneCompletionSheet(
                     milestone: milestone,
                     isPresented: $showCompletionSheet,
-                    onComplete: { notes, photoID, vetClinic in
+                    onComplete: { notes, photoID, vetClinic, completionDate in
                         var updated = milestone
                         updated.isCompleted = true
-                        updated.completedDate = Date()
+                        updated.completedDate = completionDate
                         updated.completionNotes = notes
                         updated.completionPhotoID = photoID
                         updated.vetClinicName = vetClinic

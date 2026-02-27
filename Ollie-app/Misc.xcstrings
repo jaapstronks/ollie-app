@@ -1,0 +1,941 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "% outside" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "% buiten"
+          }
+        }
+      }
+    },
+    "%lld in a row" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld op rij"
+          }
+        }
+      }
+    },
+    "%lld inside" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld binnen"
+          }
+        }
+      }
+    },
+    "%lld of %lld" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld van %lld"
+          }
+        }
+      }
+    },
+    "%lld outdoor pees in a row" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld keer buiten geplast op rij"
+          }
+        }
+      }
+    },
+    "%lld outside" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld buiten"
+          }
+        }
+      }
+    },
+    "%lld pees outside in a row" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld keer buiten geplast op rij"
+          }
+        }
+      }
+    },
+    "%lld pees outside in a row. Record: %lld" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld keer buiten geplast op rij. Record: %lld"
+          }
+        }
+      }
+    },
+    "%lld poops" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld poepjes"
+          }
+        }
+      }
+    },
+    "%lld poops (%lld-%lld expected)" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld poepjes (%lld-%lld verwacht)"
+          }
+        }
+      }
+    },
+    "%lld poops today" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld poepjes vandaag"
+          }
+        }
+      }
+    },
+    "%lld poops today, %lld to %lld expected" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld poepjes vandaag, %lld tot %lld verwacht"
+          }
+        }
+      }
+    },
+    "1 in a row" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 op rij"
+          }
+        }
+      }
+    },
+    "1 pee outside" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 keer buiten geplast"
+          }
+        }
+      }
+    },
+    "1 poop" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 poepje"
+          }
+        }
+      }
+    },
+    "Average" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gemiddeld"
+          }
+        }
+      }
+    },
+    "Best ever" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beste ooit"
+          }
+        }
+      }
+    },
+    "Check statistics to discover patterns in your puppy's behavior." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bekijk statistieken om patronen in het gedrag van je pup te ontdekken."
+          }
+        }
+      }
+    },
+    "Check your internet connection and try again." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Controleer je internetverbinding en probeer opnieuw."
+          }
+        }
+      }
+    },
+    "CloudKit not available" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CloudKit niet beschikbaar"
+          }
+        }
+      }
+    },
+    "CloudKit not available on simulator" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CloudKit niet beschikbaar op simulator"
+          }
+        }
+      }
+    },
+    "CloudKit not configured" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CloudKit niet geconfigureerd"
+          }
+        }
+      }
+    },
+    "Could not process weather data" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kon weerdata niet verwerken"
+          }
+        }
+      }
+    },
+    "Could not share" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kon niet delen"
+          }
+        }
+      }
+    },
+    "Could not stop sharing" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kon delen niet stoppen"
+          }
+        }
+      }
+    },
+    "Current streak" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Huidige reeks"
+          }
+        }
+      }
+    },
+    "Data corrupted" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Data beschadigd"
+          }
+        }
+      }
+    },
+    "Discover patterns" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ontdek patronen"
+          }
+        }
+      }
+    },
+    "Error" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fout"
+          }
+        }
+      }
+    },
+    "Fantastic! 🎉" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fantastisch! 🎉"
+          }
+        }
+      }
+    },
+    "File error" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bestandsfout"
+          }
+        }
+      }
+    },
+    "Get notified when it's time for the next meal." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ontvang een melding wanneer het tijd is voor de volgende maaltijd."
+          }
+        }
+      }
+    },
+    "Goal: 18 hours" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Doel: 18 uur"
+          }
+        }
+      }
+    },
+    "Good start!" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Goed begin!"
+          }
+        }
+      }
+    },
+    "Health" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gezondheid"
+          }
+        }
+      }
+    },
+    "Hold an event for extra options like edit." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Houd een event ingedrukt voor extra opties zoals bewerken."
+          }
+        }
+      }
+    },
+    "Hold for options" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Houd ingedrukt voor opties"
+          }
+        }
+      }
+    },
+    "in a row!" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "op rij!"
+          }
+        }
+      }
+    },
+    "Incredible! 🏆" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ongelooflijk! 🏆"
+          }
+        }
+      }
+    },
+    "Indoor" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Binnen"
+          }
+        }
+      }
+    },
+    "Longest" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Langste"
+          }
+        }
+      }
+    },
+    "Meals" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maaltijden"
+          }
+        }
+      }
+    },
+    "Median" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mediaan"
+          }
+        }
+      }
+    },
+    "Naps" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dutjes"
+          }
+        }
+      }
+    },
+    "Network error" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Netwerkfout"
+          }
+        }
+      }
+    },
+    "Nice work!" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Goed bezig!"
+          }
+        }
+      }
+    },
+    "Not enough data yet" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nog niet genoeg gegevens"
+          }
+        }
+      }
+    },
+    "On fire!" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Top!"
+          }
+        }
+      }
+    },
+    "Outdoor" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buiten"
+          }
+        }
+      }
+    },
+    "Outdoor pee streak" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buiten plassen reeks"
+          }
+        }
+      }
+    },
+    "Outdoor Streak" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buiten-reeks"
+          }
+        }
+      }
+    },
+    "Patterns (7 days)" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Patronen (7 dagen)"
+          }
+        }
+      }
+    },
+    "Pee Intervals (7 days)" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plasintervallen (7 dagen)"
+          }
+        }
+      }
+    },
+    "percent of goal" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "procent van doel"
+          }
+        }
+      }
+    },
+    "Please try again later." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Probeer het later opnieuw."
+          }
+        }
+      }
+    },
+    "Prediction" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voorspelling"
+          }
+        }
+      }
+    },
+    "Progress toward next milestone" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voortgang richting volgende mijlpaal"
+          }
+        }
+      }
+    },
+    "Quick log" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Snel loggen"
+          }
+        }
+      }
+    },
+    "Record: %lldx" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Record: %lldx"
+          }
+        }
+      }
+    },
+    "Record: %lldx — try again!" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Record: %lldx — probeer opnieuw!"
+          }
+        }
+      }
+    },
+    "Set up meal reminders" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stel maaltijdherinneringen in"
+          }
+        }
+      }
+    },
+    "Shortest" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kortste"
+          }
+        }
+      }
+    },
+    "Sleep" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Slaap"
+          }
+        }
+      }
+    },
+    "Sleep progress" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Slaapvoortgang"
+          }
+        }
+      }
+    },
+    "Sleep Today" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Slaap vandaag"
+          }
+        }
+      }
+    },
+    "Something went wrong while saving. Please try again." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Er ging iets mis bij het opslaan. Probeer opnieuw."
+          }
+        }
+      }
+    },
+    "Spots" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plekken"
+          }
+        }
+      }
+    },
+    "Start again!" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Begin opnieuw!"
+          }
+        }
+      }
+    },
+    "Statistics" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Statistieken"
+          }
+        }
+      }
+    },
+    "Streak broken" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reeks gebroken"
+          }
+        }
+      }
+    },
+    "Super! Keep going!" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Super! Ga zo door!"
+          }
+        }
+      }
+    },
+    "Swipe an event left to delete it." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Veeg een event naar links om het te verwijderen."
+          }
+        }
+      }
+    },
+    "Swipe to delete" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Veeg om te verwijderen"
+          }
+        }
+      }
+    },
+    "The app learns from patterns and predicts when your puppy needs to pee." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De app leert van patronen en voorspelt wanneer je pup moet plassen."
+          }
+        }
+      }
+    },
+    "The data could not be read. Try restarting the app." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De data kon niet worden gelezen. Probeer de app opnieuw te starten."
+          }
+        }
+      }
+    },
+    "This week" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deze week"
+          }
+        }
+      }
+    },
+    "Times peed" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keer geplast"
+          }
+        }
+      }
+    },
+    "Times pooped" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keer gepoept"
+          }
+        }
+      }
+    },
+    "Today" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vandaag"
+          }
+        }
+      }
+    },
+    "Total slept" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Totaal geslapen"
+          }
+        }
+      }
+    },
+    "Training" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Training"
+          }
+        }
+      }
+    },
+    "Unknown error" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Onbekende fout"
+          }
+        }
+      }
+    },
+    "Use the bar at the bottom to quickly log events with one tap." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gebruik de balk onderaan om snel events te loggen met een tik."
+          }
+        }
+      }
+    },
+    "Walk History" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wandelgeschiedenis"
+          }
+        }
+      }
+    },
+    "Walks" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wandelingen"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

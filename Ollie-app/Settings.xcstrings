@@ -1,0 +1,1513 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "%lld days, %lld events" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld dagen, %lld events"
+          }
+        }
+      }
+    },
+    "%lld min before" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld min van tevoren"
+          }
+        }
+      }
+    },
+    "%lld skipped (already existed)" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld overgeslagen (bestond al)"
+          }
+        }
+      }
+    },
+    "%lldx per day" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lldx per dag"
+          }
+        }
+      }
+    },
+    "Active" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actief"
+          }
+        }
+      }
+    },
+    "Add meal" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maaltijd toevoegen"
+          }
+        }
+      }
+    },
+    "Add walk" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wandeling toevoegen"
+          }
+        }
+      }
+    },
+    "Advanced" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geavanceerd"
+          }
+        }
+      }
+    },
+    "After %lld min awake" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Na %lld min wakker"
+          }
+        }
+      }
+    },
+    "Afternoon" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Middag"
+          }
+        }
+      }
+    },
+    "Age" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leeftijd"
+          }
+        }
+      }
+    },
+    "Amount" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoeveelheid"
+          }
+        }
+      }
+    },
+    "Amount for %@" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoeveelheid voor %@"
+          }
+        }
+      }
+    },
+    "App Settings" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App-instellingen"
+          }
+        }
+      }
+    },
+    "Appearance" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weergave"
+          }
+        }
+      }
+    },
+    "Are you sure you want to stop sharing? The other person will lose access." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weet je zeker dat je wilt stoppen met delen? De andere persoon verliest dan toegang."
+          }
+        }
+      }
+    },
+    "At %lld months old: max %lld minutes per walk" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Op %lld maanden oud: max %lld minuten per wandeling"
+          }
+        }
+      }
+    },
+    "Breakfast" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ontbijt"
+          }
+        }
+      }
+    },
+    "Breed" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ras"
+          }
+        }
+      }
+    },
+    "CloudKit is not available" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CloudKit is niet beschikbaar"
+          }
+        }
+      }
+    },
+    "Could not check iCloud status" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kon iCloud-status niet controleren"
+          }
+        }
+      }
+    },
+    "Could not load share" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kon gedeelde data niet laden"
+          }
+        }
+      }
+    },
+    "Could not reach GitHub API" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kon GitHub API niet bereiken"
+          }
+        }
+      }
+    },
+    "Data" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gegevens"
+          }
+        }
+      }
+    },
+    "Data is automatically synced between all your devices via iCloud." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gegevens worden automatisch gesynchroniseerd tussen al je apparaten via iCloud."
+          }
+        }
+      }
+    },
+    "Days home" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dagen thuis"
+          }
+        }
+      }
+    },
+    "Delete failed" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verwijderen mislukt"
+          }
+        }
+      }
+    },
+    "Delete failed: %@" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verwijderen mislukt: %@"
+          }
+        }
+      }
+    },
+    "Dinner" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avondeten"
+          }
+        }
+      }
+    },
+    "Do you want to import data from GitHub? This will fetch all available days." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wil je gegevens importeren van GitHub? Dit haalt alle beschikbare dagen op."
+          }
+        }
+      }
+    },
+    "Dog Profile" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hondenprofiel"
+          }
+        }
+      }
+    },
+    "Done!" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Klaar!"
+          }
+        }
+      }
+    },
+    "Download failed" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Download mislukt"
+          }
+        }
+      }
+    },
+    "Downloading: %lld/%lld" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Downloaden: %lld/%lld"
+          }
+        }
+      }
+    },
+    "e.g. 80g" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "bijv. 80g"
+          }
+        }
+      }
+    },
+    "e.g. Breakfast" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "bijv. Ontbijt"
+          }
+        }
+      }
+    },
+    "Early (~20 min)" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vroeg (~20 min)"
+          }
+        }
+      }
+    },
+    "Edit exercise limit" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bewegingslimiet aanpassen"
+          }
+        }
+      }
+    },
+    "Edit meal" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maaltijd bewerken"
+          }
+        }
+      }
+    },
+    "Edit meals" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maaltijden aanpassen"
+          }
+        }
+      }
+    },
+    "Enable notifications in Settings to receive reminders." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schakel meldingen in via Instellingen om herinneringen te ontvangen."
+          }
+        }
+      }
+    },
+    "Enable notifications to receive reminders" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schakel meldingen in om herinneringen te ontvangen"
+          }
+        }
+      }
+    },
+    "Enter the name for this meal, like Breakfast or Dinner" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voer de naam voor deze maaltijd in, zoals Ontbijt of Avondeten"
+          }
+        }
+      }
+    },
+    "Enter the portion size, like 80g" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voer de portiegrootte in, zoals 80g"
+          }
+        }
+      }
+    },
+    "Evening" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avond"
+          }
+        }
+      }
+    },
+    "Exercise" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beweging"
+          }
+        }
+      }
+    },
+    "Exercise limit" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bewegingslimiet"
+          }
+        }
+      }
+    },
+    "Fetching files..." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bestanden ophalen..."
+          }
+        }
+      }
+    },
+    "File content invalid" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bestandsinhoud ongeldig"
+          }
+        }
+      }
+    },
+    "Found: %lld days" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gevonden: %lld dagen"
+          }
+        }
+      }
+    },
+    "iCloud is restricted" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud is beperkt"
+          }
+        }
+      }
+    },
+    "iCloud not available" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud niet beschikbaar"
+          }
+        }
+      }
+    },
+    "iCloud status unknown" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud-status onbekend"
+          }
+        }
+      }
+    },
+    "iCloud Sync active" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud-synchronisatie actief"
+          }
+        }
+      }
+    },
+    "iCloud temporarily unavailable" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud tijdelijk niet beschikbaar"
+          }
+        }
+      }
+    },
+    "iCloud unavailable" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud niet beschikbaar"
+          }
+        }
+      }
+    },
+    "Import" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Importeren"
+          }
+        }
+      }
+    },
+    "Import from GitHub" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Importeren van GitHub"
+          }
+        }
+      }
+    },
+    "Invalid response from GitHub" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ongeldige respons van GitHub"
+          }
+        }
+      }
+    },
+    "Invite another person" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nog iemand uitnodigen"
+          }
+        }
+      }
+    },
+    "Invited" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uitgenodigd"
+          }
+        }
+      }
+    },
+    "Label" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Label"
+          }
+        }
+      }
+    },
+    "Last import: %@" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laatste import: %@"
+          }
+        }
+      }
+    },
+    "Last: %@" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laatst: %@"
+          }
+        }
+      }
+    },
+    "Lunch" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lunch"
+          }
+        }
+      }
+    },
+    "Manage sharing" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delen beheren"
+          }
+        }
+      }
+    },
+    "Max exercise" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Max beweging"
+          }
+        }
+      }
+    },
+    "Meal %lld" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maaltijd %lld"
+          }
+        }
+      }
+    },
+    "Meal name" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Naam van maaltijd"
+          }
+        }
+      }
+    },
+    "Meal reminder" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maaltijdherinnering"
+          }
+        }
+      }
+    },
+    "Meals" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maaltijden"
+          }
+        }
+      }
+    },
+    "Meals (%lld)x per day)" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maaltijden (%lldx per dag)"
+          }
+        }
+      }
+    },
+    "Meals per day" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maaltijden per dag"
+          }
+        }
+      }
+    },
+    "Migration failed: %@" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Migratie mislukt: %@"
+          }
+        }
+      }
+    },
+    "min/month" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "min/maand"
+          }
+        }
+      }
+    },
+    "min/walk" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "min/wandeling"
+          }
+        }
+      }
+    },
+    "Minutes per month of age" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Minuten per maand leeftijd"
+          }
+        }
+      }
+    },
+    "Morning" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ochtend"
+          }
+        }
+      }
+    },
+    "Name" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Naam"
+          }
+        }
+      }
+    },
+    "Nap needed" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dutje nodig"
+          }
+        }
+      }
+    },
+    "Naps" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dutjes"
+          }
+        }
+      }
+    },
+    "No iCloud account configured" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geen iCloud-account geconfigureerd"
+          }
+        }
+      }
+    },
+    "No participants yet" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nog geen deelnemers"
+          }
+        }
+      }
+    },
+    "Notifications" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meldingen"
+          }
+        }
+      }
+    },
+    "Notifications disabled" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meldingen uitgeschakeld"
+          }
+        }
+      }
+    },
+    "Number of meals" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aantal maaltijden"
+          }
+        }
+      }
+    },
+    "On time (0 min)" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Op tijd (0 min)"
+          }
+        }
+      }
+    },
+    "Overwrite existing data" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bestaande gegevens overschrijven"
+          }
+        }
+      }
+    },
+    "Potty alarm" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plasalarm"
+          }
+        }
+      }
+    },
+    "Potty reminders" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plasherinneringen"
+          }
+        }
+      }
+    },
+    "Profile" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Profiel"
+          }
+        }
+      }
+    },
+    "Receive smart reminders for potty, meals, naps, and walks." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ontvang slimme herinneringen voor plasjes, maaltijden, dutjes en wandelingen."
+          }
+        }
+      }
+    },
+    "Reminder before it's time for a walk." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Herinnering voordat het tijd is voor een wandeling."
+          }
+        }
+      }
+    },
+    "Reminder before it's time for the next meal." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Herinnering voordat het tijd is voor de volgende maaltijd."
+          }
+        }
+      }
+    },
+    "Reminder when %@ has been awake too long." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Herinnering als %@ te lang wakker is geweest."
+          }
+        }
+      }
+    },
+    "Reminder when ~10 minutes remaining" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Herinnering wanneer ~10 minuten resterend"
+          }
+        }
+      }
+    },
+    "Reminder when ~20 minutes remaining" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Herinnering wanneer ~20 minuten resterend"
+          }
+        }
+      }
+    },
+    "Reminder when it's time" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Herinnering wanneer het tijd is"
+          }
+        }
+      }
+    },
+    "Reminders" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Herinneringen"
+          }
+        }
+      }
+    },
+    "Remove last" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laatste verwijderen"
+          }
+        }
+      }
+    },
+    "Removed" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verwijderd"
+          }
+        }
+      }
+    },
+    "Reset profile" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Profiel resetten"
+          }
+        }
+      }
+    },
+    "Save failed" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opslaan mislukt"
+          }
+        }
+      }
+    },
+    "Save failed: %@" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opslaan mislukt: %@"
+          }
+        }
+      }
+    },
+    "Settings" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Instellingen"
+          }
+        }
+      }
+    },
+    "Setup failed: %@" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Configuratie mislukt: %@"
+          }
+        }
+      }
+    },
+    "Share with partner" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delen met partner"
+          }
+        }
+      }
+    },
+    "Share your puppy's data with your partner so you can both track and log events." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deel de gegevens van je pup met je partner zodat jullie allebei kunnen bijhouden en loggen."
+          }
+        }
+      }
+    },
+    "Shared" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gedeeld"
+          }
+        }
+      }
+    },
+    "Shared data" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gedeelde gegevens"
+          }
+        }
+      }
+    },
+    "Sharing" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delen"
+          }
+        }
+      }
+    },
+    "Size" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grootte"
+          }
+        }
+      }
+    },
+    "Soon (~10 min)" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bijna (~10 min)"
+          }
+        }
+      }
+    },
+    "Sound feedback" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geluidsfeedback"
+          }
+        }
+      }
+    },
+    "Stats" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Statistieken"
+          }
+        }
+      }
+    },
+    "Stop sharing" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stoppen met delen"
+          }
+        }
+      }
+    },
+    "Subscription, notifications, sync" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abonnement, meldingen, synchronisatie"
+          }
+        }
+      }
+    },
+    "Sync" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Synchronisatie"
+          }
+        }
+      }
+    },
+    "Sync failed: %@" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Synchronisatie mislukt: %@"
+          }
+        }
+      }
+    },
+    "Sync now" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nu synchroniseren"
+          }
+        }
+      }
+    },
+    "Synced %@" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gesynchroniseerd %@"
+          }
+        }
+      }
+    },
+    "Syncing..." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Synchroniseren..."
+          }
+        }
+      }
+    },
+    "Tap a meal to edit. Swipe to delete." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tik op een maaltijd om te bewerken. Veeg om te verwijderen."
+          }
+        }
+      }
+    },
+    "The well-known '5-minute rule' — adjust based on your puppy's energy level." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De bekende '5-minutenregel' — pas aan op basis van het energieniveau van je pup."
+          }
+        }
+      }
+    },
+    "The well-known '5-minute rule' — puppies can walk for a maximum of 5 minutes per month of age per session. Adjust based on your puppy's energy level." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De bekende '5-minutenregel' — puppy's kunnen maximaal 5 minuten per maand leeftijd per sessie wandelen. Pas aan op basis van het energieniveau van je pup."
+          }
+        }
+      }
+    },
+    "Theme" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thema"
+          }
+        }
+      }
+    },
+    "Time" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tijd"
+          }
+        }
+      }
+    },
+    "Time for %@" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tijd voor %@"
+          }
+        }
+      }
+    },
+    "Walk %lld" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wandeling %lld"
+          }
+        }
+      }
+    },
+    "Walk reminders" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wandelherinneringen"
+          }
+        }
+      }
+    },
+    "Walks" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wandelingen"
+          }
+        }
+      }
+    },
+    "Walks per day" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wandelingen per dag"
+          }
+        }
+      }
+    },
+    "Walks, meals, meds, spots" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wandelingen, maaltijden, medicijnen, plekjes"
+          }
+        }
+      }
+    },
+    "walks/day" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "wandelingen/dag"
+          }
+        }
+      }
+    },
+    "When to notify" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wanneer melden"
+          }
+        }
+      }
+    },
+    "You cannot share as a participant" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je kunt niet delen als deelnemer"
+          }
+        }
+      }
+    },
+    "You're viewing someone else's data" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je bekijkt de gegevens van iemand anders"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

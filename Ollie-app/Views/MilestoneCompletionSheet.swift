@@ -11,13 +11,15 @@ import OllieShared
 struct MilestoneCompletionSheet: View {
     let milestone: Milestone
     @Binding var isPresented: Bool
-    let onComplete: (String?, UUID?, String?) -> Void
+    /// Callback with (notes, photoID, vetClinic, completionDate)
+    let onComplete: (String?, UUID?, String?, Date) -> Void
 
     @EnvironmentObject var subscriptionManager: SubscriptionManager
     @Environment(\.colorScheme) private var colorScheme
 
     @State private var notes: String = ""
     @State private var vetClinic: String = ""
+    @State private var completionDate: Date = Date()
     @State private var addToCalendar: Bool = false
     @State private var showPhotoPicker: Bool = false
     @State private var showPhotoSourcePicker: Bool = false
@@ -52,6 +54,34 @@ struct MilestoneCompletionSheet: View {
                             .background(Color.ollieSuccess)
                             .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
                         }
+
+                        Divider()
+                            .padding(.vertical, 8)
+
+                        // Completion date picker
+                        VStack(alignment: .leading, spacing: 8) {
+                            HStack(spacing: 8) {
+                                Image(systemName: "calendar")
+                                    .font(.subheadline)
+                                    .foregroundStyle(.secondary)
+
+                                Text(Strings.Health.completionDate)
+                                    .font(.subheadline)
+                                    .fontWeight(.medium)
+                            }
+
+                            DatePicker(
+                                "",
+                                selection: $completionDate,
+                                in: ...Date(),
+                                displayedComponents: .date
+                            )
+                            .datePickerStyle(.compact)
+                            .labelsHidden()
+                        }
+                        .padding()
+                        .background(Color(.secondarySystemBackground))
+                        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
 
                         Divider()
                             .padding(.vertical, 8)
@@ -317,7 +347,7 @@ struct MilestoneCompletionSheet: View {
         )
 
         HapticFeedback.success()
-        onComplete(notesValue, photoValue, vetValue)
+        onComplete(notesValue, photoValue, vetValue, completionDate)
         isPresented = false
     }
 }
@@ -332,8 +362,8 @@ struct MilestoneCompletionSheet: View {
     return MilestoneCompletionSheet(
         milestone: milestone,
         isPresented: $isPresented,
-        onComplete: { notes, photoID, vetClinic in
-            print("Completed with notes: \(notes ?? "none")")
+        onComplete: { notes, photoID, vetClinic, completionDate in
+            print("Completed with notes: \(notes ?? "none"), date: \(completionDate)")
         }
     )
     .environmentObject(SubscriptionManager.shared)

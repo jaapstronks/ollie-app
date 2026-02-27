@@ -1,0 +1,358 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "%lld min" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld min"
+          }
+        }
+      }
+    },
+    "%lld min/month" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld min/maand"
+          }
+        }
+      }
+    },
+    "%lld walks" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld wandelingen"
+          }
+        }
+      }
+    },
+    "%lld walks/day" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld wandelingen/dag"
+          }
+        }
+      }
+    },
+    "~%lld min interval" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "~%lld min interval"
+          }
+        }
+      }
+    },
+    "Add walk" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wandeling toevoegen"
+          }
+        }
+      }
+    },
+    "At %lld months: max %lld min per walk" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bij %lld maanden: max %lld min per wandeling"
+          }
+        }
+      }
+    },
+    "Day Boundaries" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Daggrenzen"
+          }
+        }
+      }
+    },
+    "Delete walk" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wandeling verwijderen"
+          }
+        }
+      }
+    },
+    "e.g. Morning walk" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "bijv. Ochtendwandeling"
+          }
+        }
+      }
+    },
+    "Edit walk" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wandeling bewerken"
+          }
+        }
+      }
+    },
+    "Edit walk schedule" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wandelschema bewerken"
+          }
+        }
+      }
+    },
+    "Exercise Limits" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bewegingslimieten"
+          }
+        }
+      }
+    },
+    "First walk after" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eerste wandeling na"
+          }
+        }
+      }
+    },
+    "Flexible" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Flexibel"
+          }
+        }
+      }
+    },
+    "Flexible (Recommended)" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Flexibel (Aanbevolen)"
+          }
+        }
+      }
+    },
+    "In flexible mode, this is the minimum time between walks." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In flexibele modus is dit de minimale tijd tussen wandelingen."
+          }
+        }
+      }
+    },
+    "Interval between walks" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Interval tussen wandelingen"
+          }
+        }
+      }
+    },
+    "Last walk before" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laatste wandeling voor"
+          }
+        }
+      }
+    },
+    "Max %lld min/walk" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Max %lld min/wandeling"
+          }
+        }
+      }
+    },
+    "Max duration per walk" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Max duur per wandeling"
+          }
+        }
+      }
+    },
+    "Minutes per month of age" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Minuten per maand leeftijd"
+          }
+        }
+      }
+    },
+    "Scheduling Mode" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Planningsmodus"
+          }
+        }
+      }
+    },
+    "Strict" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Strikt"
+          }
+        }
+      }
+    },
+    "The '5-minute rule' — puppies can walk 5 minutes per month of age per session." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De '5-minutenregel' — puppy's mogen 5 minuten per maand leeftijd per keer wandelen."
+          }
+        }
+      }
+    },
+    "Time" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tijd"
+          }
+        }
+      }
+    },
+    "Timing" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Timing"
+          }
+        }
+      }
+    },
+    "Walk name" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Naam wandeling"
+          }
+        }
+      }
+    },
+    "Walk Schedule" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wandelschema"
+          }
+        }
+      }
+    },
+    "Walk times adjust based on when the last walk happened. Good for adapting to real-world timing." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wandeltijden passen zich aan op basis van de laatste wandeling. Ideaal om aan te passen aan de praktijk."
+          }
+        }
+      }
+    },
+    "Walk times are fixed to the scheduled times. Useful for strict routines or multiple caretakers." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wandeltijden zijn vastgelegd op de geplande tijden. Handig voor strikte routines of meerdere verzorgers."
+          }
+        }
+      }
+    },
+    "Walks" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wandelingen"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

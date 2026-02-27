@@ -102,6 +102,24 @@ struct PlanSection: View {
                 )
             }
         }
+        // Milestone completion sheet (for both overdue and upcoming)
+        .sheet(isPresented: $showMilestoneDetail) {
+            if let milestone = selectedMilestone {
+                MilestoneCompletionSheet(
+                    milestone: milestone,
+                    isPresented: $showMilestoneDetail,
+                    onComplete: { notes, photoID, vetClinic, completionDate in
+                        milestoneStore.completeMilestone(
+                            milestone,
+                            notes: notes,
+                            photoID: photoID,
+                            vetClinicName: vetClinic,
+                            completionDate: completionDate
+                        )
+                    }
+                )
+            }
+        }
     }
 
     // MARK: - Age Stage Header
@@ -331,22 +349,6 @@ struct PlanSection: View {
                         showMilestoneDetail = true
                     }
                 }
-            }
-        }
-        .sheet(isPresented: $showMilestoneDetail) {
-            if let milestone = selectedMilestone {
-                MilestoneCompletionSheet(
-                    milestone: milestone,
-                    isPresented: $showMilestoneDetail,
-                    onComplete: { notes, photoID, vetClinic in
-                        milestoneStore.completeMilestone(
-                            milestone,
-                            notes: notes,
-                            photoID: photoID,
-                            vetClinicName: vetClinic
-                        )
-                    }
-                )
             }
         }
     }

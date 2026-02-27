@@ -189,7 +189,7 @@ struct MainTabView: View {
                 }
                 .tag(2)
 
-                // Tab 3: Stats (expanded with Health, Walks, Spots)
+                // Tab 3: Insights (expanded with Health, Walks, Spots)
                 InsightsView(
                     viewModel: viewModel,
                     momentsViewModel: momentsViewModel,
@@ -199,7 +199,7 @@ struct MainTabView: View {
                     onSettingsTap: { showingSettings = true }
                 )
                 .tabItem {
-                    Label(Strings.Tabs.stats, systemImage: "chart.bar.fill")
+                    Label(Strings.Tabs.insights, systemImage: "chart.bar.fill")
                 }
                 .tag(3)
             }
