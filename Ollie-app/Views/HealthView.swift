@@ -12,7 +12,10 @@ struct HealthView: View {
     @ObservedObject var viewModel: TimelineViewModel
     @ObservedObject var milestoneStore: MilestoneStore
 
+    @EnvironmentObject var subscriptionManager: SubscriptionManager
+
     @State private var showWeightSheet = false
+    @State private var showAddMilestoneSheet = false
 
     @Environment(\.colorScheme) private var colorScheme
 
@@ -172,6 +175,19 @@ struct HealthView: View {
                     .font(.subheadline)
                     .fontWeight(.semibold)
                     .foregroundStyle(.secondary)
+
+                Spacer()
+
+                // Add button (premium)
+                if subscriptionManager.hasAccess(to: .customMilestones) {
+                    Button {
+                        showAddMilestoneSheet = true
+                    } label: {
+                        Label(Strings.Health.addMilestone, systemImage: "plus.circle.fill")
+                            .font(.subheadline)
+                            .fontWeight(.medium)
+                    }
+                }
             }
             .padding(.horizontal, 4)
 
@@ -185,6 +201,11 @@ struct HealthView: View {
             )
             .padding()
             .glassCard(tint: .danger)
+        }
+        .sheet(isPresented: $showAddMilestoneSheet) {
+            AddMilestoneSheet(isPresented: $showAddMilestoneSheet) { milestone in
+                milestoneStore.toggleMilestoneCompletion(milestone)
+            }
         }
     }
 
@@ -220,4 +241,5 @@ struct HealthView: View {
     NavigationStack {
         HealthView(viewModel: viewModel, milestoneStore: milestoneStore)
     }
+    .environmentObject(SubscriptionManager.shared)
 }

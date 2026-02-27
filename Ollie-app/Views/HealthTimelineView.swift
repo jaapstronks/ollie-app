@@ -13,12 +13,9 @@ struct HealthTimelineView: View {
     let birthDate: Date
     let onToggle: (Milestone) -> Void
 
-    @EnvironmentObject var subscriptionManager: SubscriptionManager
     @Environment(\.colorScheme) private var colorScheme
 
-    @State private var showCompletionSheet = false
     @State private var selectedMilestone: Milestone?
-    @State private var showAddSheet = false
 
     // MARK: - Grouped Milestones
 
@@ -51,32 +48,6 @@ struct HealthTimelineView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            // Header with Add button (Ollie+ gated)
-            HStack {
-                SectionHeader(
-                    title: Strings.Health.milestones,
-                    icon: "heart.fill",
-                    tint: .ollieDanger
-                )
-
-                Spacer()
-
-                // Add button (premium)
-                if subscriptionManager.hasAccess(to: .customMilestones) {
-                    Button {
-                        showAddSheet = true
-                    } label: {
-                        HStack(spacing: 4) {
-                            Image(systemName: "plus")
-                            Text(Strings.Health.addMilestone)
-                        }
-                        .font(.caption)
-                        .fontWeight(.medium)
-                        .foregroundStyle(Color.ollieAccent)
-                    }
-                }
-            }
-
             // Next Up section
             if !groupedMilestones.nextUp.isEmpty {
                 VStack(alignment: .leading, spacing: 8) {
@@ -93,7 +64,6 @@ struct HealthTimelineView: View {
                             isProminent: true
                         ) {
                             selectedMilestone = milestone
-                            showCompletionSheet = true
                         }
                     }
                 }
@@ -115,7 +85,6 @@ struct HealthTimelineView: View {
                             isProminent: false
                         ) {
                             selectedMilestone = milestone
-                            showCompletionSheet = true
                         }
                     }
                 }
@@ -150,27 +119,24 @@ struct HealthTimelineView: View {
                 .tint(.secondary)
             }
         }
-        .sheet(isPresented: $showCompletionSheet) {
-            if let milestone = selectedMilestone {
-                MilestoneCompletionSheet(
-                    milestone: milestone,
-                    isPresented: $showCompletionSheet,
-                    onComplete: { notes, photoID, vetClinic, completionDate in
-                        var updated = milestone
-                        updated.isCompleted = true
-                        updated.completedDate = completionDate
-                        updated.completionNotes = notes
-                        updated.completionPhotoID = photoID
-                        updated.vetClinicName = vetClinic
-                        onToggle(updated)
-                    }
-                )
-            }
-        }
-        .sheet(isPresented: $showAddSheet) {
-            AddMilestoneSheet(isPresented: $showAddSheet) { milestone in
-                onToggle(milestone)
-            }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .sheet(item: $selectedMilestone) { milestone in
+            MilestoneCompletionSheet(
+                milestone: milestone,
+                onDismiss: {
+                    selectedMilestone = nil
+                },
+                onComplete: { notes, photoID, vetClinic, completionDate in
+                    var updated = milestone
+                    updated.isCompleted = true
+                    updated.completedDate = completionDate
+                    updated.completionNotes = notes
+                    updated.completionPhotoID = photoID
+                    updated.vetClinicName = vetClinic
+                    onToggle(updated)
+                    selectedMilestone = nil
+                }
+            )
         }
     }
 }

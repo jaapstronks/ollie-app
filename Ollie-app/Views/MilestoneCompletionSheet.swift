@@ -10,7 +10,8 @@ import OllieShared
 /// Sheet for marking a milestone as complete with optional details
 struct MilestoneCompletionSheet: View {
     let milestone: Milestone
-    @Binding var isPresented: Bool
+    /// Called when user cancels (taps Cancel or swipes down)
+    let onDismiss: () -> Void
     /// Callback with (notes, photoID, vetClinic, completionDate)
     let onComplete: (String?, UUID?, String?, Date) -> Void
 
@@ -186,7 +187,7 @@ struct MilestoneCompletionSheet: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(Strings.Common.cancel) {
-                        isPresented = false
+                        onDismiss()
                     }
                 }
 
@@ -348,20 +349,19 @@ struct MilestoneCompletionSheet: View {
 
         HapticFeedback.success()
         onComplete(notesValue, photoValue, vetValue, completionDate)
-        isPresented = false
     }
 }
 
 // MARK: - Preview
 
 #Preview {
-    @Previewable @State var isPresented = true
-
     let milestone = DefaultMilestones.create()[1]
 
     return MilestoneCompletionSheet(
         milestone: milestone,
-        isPresented: $isPresented,
+        onDismiss: {
+            print("Dismissed")
+        },
         onComplete: { notes, photoID, vetClinic, completionDate in
             print("Completed with notes: \(notes ?? "none"), date: \(completionDate)")
         }
