@@ -37,7 +37,7 @@ struct SocializationCategoryRow: View {
 
             // Name and progress text
             VStack(alignment: .leading, spacing: 4) {
-                Text(category.name)
+                Text(category.localizedDisplayName)
                     .font(.subheadline)
                     .fontWeight(.medium)
 

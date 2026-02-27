@@ -1,0 +1,1116 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "Adult man" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Volwassen man"
+          }
+        }
+      }
+    },
+    "Adult woman" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Volwassen vrouw"
+          }
+        }
+      }
+    },
+    "Alarm/siren" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alarm/sirene"
+          }
+        }
+      }
+    },
+    "Ambulance, fire truck, police car" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ambulance, brandweer, politieauto"
+          }
+        }
+      }
+    },
+    "Animals" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dieren"
+          }
+        }
+      }
+    },
+    "Balloons" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ballonnen"
+          }
+        }
+      }
+    },
+    "Bathing" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Baden"
+          }
+        }
+      }
+    },
+    "Beach" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Strand"
+          }
+        }
+      }
+    },
+    "Being picked up" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opgetild worden"
+          }
+        }
+      }
+    },
+    "Bicycle" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fiets"
+          }
+        }
+      }
+    },
+    "Bird" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vogel"
+          }
+        }
+      }
+    },
+    "Bridges, grates, manhole covers" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bruggen, roosters, putdeksels"
+          }
+        }
+      }
+    },
+    "Broom/mop" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bezem/dweil"
+          }
+        }
+      }
+    },
+    "Brushing" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Borstelen"
+          }
+        }
+      }
+    },
+    "Bus" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bus"
+          }
+        }
+      }
+    },
+    "Busy street" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Drukke straat"
+          }
+        }
+      }
+    },
+    "Car" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auto"
+          }
+        }
+      }
+    },
+    "Cat" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kat"
+          }
+        }
+      }
+    },
+    "Child (6-12 years)" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kind (6-12 jaar)"
+          }
+        }
+      }
+    },
+    "Church bells" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kerkklokken"
+          }
+        }
+      }
+    },
+    "Cold weather" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Koud weer"
+          }
+        }
+      }
+    },
+    "Collar grab" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Halsband vastpakken"
+          }
+        }
+      }
+    },
+    "Construction noise" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bouwgeluiden"
+          }
+        }
+      }
+    },
+    "Cow/sheep" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Koe/schaap"
+          }
+        }
+      }
+    },
+    "Crying baby" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Huilende baby"
+          }
+        }
+      }
+    },
+    "Darkness/night walk" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Donker/nachtwandeling"
+          }
+        }
+      }
+    },
+    "Dishwasher" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vaatwasser"
+          }
+        }
+      }
+    },
+    "Doorbell" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deurbel"
+          }
+        }
+      }
+    },
+    "Duck/goose" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eend/gans"
+          }
+        }
+      }
+    },
+    "Elderly person" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oudere persoon"
+          }
+        }
+      }
+    },
+    "Elevator" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lift"
+          }
+        }
+      }
+    },
+    "Emergency vehicle" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hulpdienst"
+          }
+        }
+      }
+    },
+    "Environments" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Omgevingen"
+          }
+        }
+      }
+    },
+    "Fireworks" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vuurwerk"
+          }
+        }
+      }
+    },
+    "Flags/banners" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vlaggen/spandoeken"
+          }
+        }
+      }
+    },
+    "Forest" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bos"
+          }
+        }
+      }
+    },
+    "Garbage bags" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vuilniszakken"
+          }
+        }
+      }
+    },
+    "Grass" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gras"
+          }
+        }
+      }
+    },
+    "Gravel" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grind"
+          }
+        }
+      }
+    },
+    "Group of people" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Groep mensen"
+          }
+        }
+      }
+    },
+    "Hair dryer" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Föhn"
+          }
+        }
+      }
+    },
+    "Handling" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aanraken"
+          }
+        }
+      }
+    },
+    "Horse" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paard"
+          }
+        }
+      }
+    },
+    "Hot weather" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Warm weer"
+          }
+        }
+      }
+    },
+    "Important for safety" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Belangrijk voor veiligheid"
+          }
+        }
+      }
+    },
+    "Large dog" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grote hond"
+          }
+        }
+      }
+    },
+    "Leaves/mulch" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bladeren/mulch"
+          }
+        }
+      }
+    },
+    "Loud music" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Harde muziek"
+          }
+        }
+      }
+    },
+    "Metal grating" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Metalen rooster"
+          }
+        }
+      }
+    },
+    "Mirror" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spiegel"
+          }
+        }
+      }
+    },
+    "Motorcycle" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Motor"
+          }
+        }
+      }
+    },
+    "Moving furniture" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verplaatsend meubilair"
+          }
+        }
+      }
+    },
+    "Mud" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modder"
+          }
+        }
+      }
+    },
+    "Nail trimming" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nagels knippen"
+          }
+        }
+      }
+    },
+    "Objects" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voorwerpen"
+          }
+        }
+      }
+    },
+    "Opening mouth" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bek openen"
+          }
+        }
+      }
+    },
+    "Opening umbrella" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paraplu openen"
+          }
+        }
+      }
+    },
+    "Other puppy" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Andere puppy"
+          }
+        }
+      }
+    },
+    "Outdoor cafe/terrace" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terras"
+          }
+        }
+      }
+    },
+    "Park" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Park"
+          }
+        }
+      }
+    },
+    "Parking garage" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Parkeergarage"
+          }
+        }
+      }
+    },
+    "People" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mensen"
+          }
+        }
+      }
+    },
+    "Person in uniform" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Persoon in uniform"
+          }
+        }
+      }
+    },
+    "Person in wheelchair" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Persoon in rolstoel"
+          }
+        }
+      }
+    },
+    "Person with beard" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Persoon met baard"
+          }
+        }
+      }
+    },
+    "Person with crutches/walker" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Persoon met krukken/rollator"
+          }
+        }
+      }
+    },
+    "Person with hat" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Persoon met hoed"
+          }
+        }
+      }
+    },
+    "Person with large backpack" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Persoon met grote rugzak"
+          }
+        }
+      }
+    },
+    "Person with sunglasses" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Persoon met zonnebril"
+          }
+        }
+      }
+    },
+    "Person with umbrella" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Persoon met paraplu"
+          }
+        }
+      }
+    },
+    "Pet store" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dierenwinkel"
+          }
+        }
+      }
+    },
+    "Phone ringing" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Telefoon rinkelen"
+          }
+        }
+      }
+    },
+    "Plastic bags (sound)" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plastic zakken (geluid)"
+          }
+        }
+      }
+    },
+    "Playground" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Speeltuin"
+          }
+        }
+      }
+    },
+    "Police, delivery person, postal worker" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Politie, bezorger, postbode"
+          }
+        }
+      }
+    },
+    "Rain" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Regen"
+          }
+        }
+      }
+    },
+    "Running person" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rennende persoon"
+          }
+        }
+      }
+    },
+    "Sand" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zand"
+          }
+        }
+      }
+    },
+    "Scooter/moped" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scooter/brommer"
+          }
+        }
+      }
+    },
+    "Shallow water" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ondiep water"
+          }
+        }
+      }
+    },
+    "Shopping street" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Winkelstraat"
+          }
+        }
+      }
+    },
+    "Shouting/cheering" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geschreeuw/gejuich"
+          }
+        }
+      }
+    },
+    "Skateboard/rollerblades" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skateboard/skeelers"
+          }
+        }
+      }
+    },
+    "Small dog" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kleine hond"
+          }
+        }
+      }
+    },
+    "Snow" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sneeuw"
+          }
+        }
+      }
+    },
+    "Snow/hail" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sneeuw/hagel"
+          }
+        }
+      }
+    },
+    "Sounds" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geluiden"
+          }
+        }
+      }
+    },
+    "Stairs" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trap"
+          }
+        }
+      }
+    },
+    "Start with just touching clippers" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Begin met alleen de nagelknipper aanraken"
+          }
+        }
+      }
+    },
+    "Start with recordings at low volume" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Begin met opnames op laag volume"
+          }
+        }
+      }
+    },
+    "Statues/mannequins" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Standbeelden/paspoppen"
+          }
+        }
+      }
+    },
+    "Stroller/pram" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kinderwagen/buggy"
+          }
+        }
+      }
+    },
+    "Strong wind" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Harde wind"
+          }
+        }
+      }
+    },
+    "Surfaces" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ondergronden"
+          }
+        }
+      }
+    },
+    "Teenager" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tiener"
+          }
+        }
+      }
+    },
+    "Thunder" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Onweer"
+          }
+        }
+      }
+    },
+    "Tiles/pavement" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tegels/stoep"
+          }
+        }
+      }
+    },
+    "Toddler (0-5 years)" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Peuter (0-5 jaar)"
+          }
+        }
+      }
+    },
+    "Touching ears" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oren aanraken"
+          }
+        }
+      }
+    },
+    "Touching paws" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Poten aanraken"
+          }
+        }
+      }
+    },
+    "Touching tail" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Staart aanraken"
+          }
+        }
+      }
+    },
+    "Towel drying" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afdrogen met handdoek"
+          }
+        }
+      }
+    },
+    "Train/bus station" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trein-/busstation"
+          }
+        }
+      }
+    },
+    "Tram/train" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tram/trein"
+          }
+        }
+      }
+    },
+    "Trash bins/dumpsters" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kliko's/containers"
+          }
+        }
+      }
+    },
+    "Truck" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vrachtwagen"
+          }
+        }
+      }
+    },
+    "Vacuum cleaner" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stofzuiger"
+          }
+        }
+      }
+    },
+    "Vehicles" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voertuigen"
+          }
+        }
+      }
+    },
+    "Washing machine" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wasmachine"
+          }
+        }
+      }
+    },
+    "Weather" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weer"
+          }
+        }
+      }
+    },
+    "Wood/decking" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hout/vlonder"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

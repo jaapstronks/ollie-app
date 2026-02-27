@@ -382,11 +382,11 @@ class SocializationStore: ObservableObject {
             // Get a few item suggestions from the category (items not yet comfortable)
             let itemNames = category.items.filter { !isComfortable(itemId: $0.id) }
                 .prefix(3)
-                .map { $0.name }
+                .map { $0.localizedDisplayName }
                 .joined(separator: ", ")
 
             if !itemNames.isEmpty {
-                suggestions.append("\(category.name): \(itemNames)")
+                suggestions.append("\(category.localizedDisplayName): \(itemNames)")
             }
         }
 
@@ -401,11 +401,11 @@ class SocializationStore: ObservableObject {
             for category in lowProgressCategories {
                 let itemNames = category.items.filter { !isComfortable(itemId: $0.id) }
                     .prefix(3)
-                    .map { $0.name }
+                    .map { $0.localizedDisplayName }
                     .joined(separator: ", ")
 
-                if !itemNames.isEmpty && !suggestions.contains(where: { $0.hasPrefix(category.name) }) {
-                    suggestions.append("\(category.name): \(itemNames)")
+                if !itemNames.isEmpty && !suggestions.contains(where: { $0.hasPrefix(category.localizedDisplayName) }) {
+                    suggestions.append("\(category.localizedDisplayName): \(itemNames)")
                 }
             }
         }

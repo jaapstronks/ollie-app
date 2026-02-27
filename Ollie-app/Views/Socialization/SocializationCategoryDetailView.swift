@@ -38,7 +38,7 @@ struct SocializationCategoryDetailView: View {
             }
         }
         .listStyle(.insetGrouped)
-        .navigationTitle(category.name)
+        .navigationTitle(category.localizedDisplayName)
         .navigationBarTitleDisplayMode(.large)
         .sheet(item: $selectedItem) { item in
             LogExposureSheet(item: item) { reaction in

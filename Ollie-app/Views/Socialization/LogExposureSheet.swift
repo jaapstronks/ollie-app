@@ -76,11 +76,11 @@ struct LogExposureSheet: View {
                     .foregroundStyle(.primary)
             }
 
-            Text(item.name)
+            Text(item.localizedDisplayName)
                 .font(.title3)
                 .fontWeight(.semibold)
 
-            if let description = item.description {
+            if let description = item.localizedDescription {
                 Text(description)
                     .font(.caption)
                     .foregroundStyle(.secondary)

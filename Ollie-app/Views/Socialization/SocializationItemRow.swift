@@ -49,11 +49,11 @@ struct SocializationItemRow: View {
             // Name and status
             HStack {
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(item.name)
+                    Text(item.localizedDisplayName)
                         .font(.subheadline)
                         .fontWeight(.medium)
 
-                    if let description = item.description {
+                    if let description = item.localizedDescription {
                         Text(description)
                             .font(.caption)
                             .foregroundStyle(.secondary)
