@@ -268,6 +268,23 @@ extension Strings {
         static let sharing = String(localized: "Sharing", table: table)
         static let sharingDescription = String(localized: "Share your puppy's data with your partner so you can both track and log events.", table: table)
         static let stopSharingConfirm = String(localized: "Are you sure you want to stop sharing? The other person will lose access.", table: table)
+
+        // Share acceptance
+        static let acceptingShare = String(localized: "Accepting Share...", table: table)
+        static let connectingToSharedData = String(localized: "Connecting to shared data", table: table)
+        static let shareAccepted = String(localized: "Share Accepted!", table: table)
+        static let shareAcceptedMessage = String(localized: "You now have access to shared puppy data.", table: table)
+        static let shareFailed = String(localized: "Share Failed", table: table)
+        static let shareError = String(localized: "Share Error", table: table)
+        static let couldNotFetchShareInfo = String(localized: "Could not fetch share information", table: table)
+
+        // Existing profile conflict warning
+        static let existingProfileTitle = String(localized: "Replace Existing Profile?", table: table)
+        static func existingProfileMessage(existingName: String, sharedOwner: String) -> String {
+            String(localized: "You already have a profile for \(existingName). Accepting this share will replace it with the shared puppy from \(sharedOwner). Your current profile data will be deleted.", table: table)
+        }
+        static let existingProfileMessageGeneric = String(localized: "You already have a puppy profile. Accepting this share will replace it with the shared puppy. Your current profile data will be deleted.", table: table)
+        static let acceptAndReplace = String(localized: "Accept & Replace", table: table)
         static func lastSynced(time: String) -> String {
             String(localized: "Synced \(time)", table: table)
         }

@@ -13,6 +13,9 @@ struct ProfileSection: View {
     @ObservedObject var profileStore: ProfileStore
     @Binding var showingPhotoPicker: Bool
 
+    @State private var showingNameEditor = false
+    @State private var editedName = ""
+
     var body: some View {
         Section(Strings.Settings.profile) {
             // Profile photo row
@@ -27,11 +30,17 @@ struct ProfileSection: View {
             }
             .padding(.vertical, 8)
 
-            HStack {
-                Text(Strings.Settings.name)
-                Spacer()
-                Text(profile.name)
-                    .foregroundColor(.secondary)
+            Button {
+                editedName = profile.name
+                showingNameEditor = true
+            } label: {
+                HStack {
+                    Text(Strings.Settings.name)
+                        .foregroundColor(.primary)
+                    Spacer()
+                    Text(profile.name)
+                        .foregroundColor(.secondary)
+                }
             }
 
             if let breed = profile.breed {
@@ -48,6 +57,16 @@ struct ProfileSection: View {
                 Spacer()
                 Text(profile.sizeCategory.label)
                     .foregroundColor(.secondary)
+            }
+        }
+        .alert(Strings.Settings.changeName, isPresented: $showingNameEditor) {
+            TextField(Strings.Settings.name, text: $editedName)
+            Button(Strings.Common.cancel, role: .cancel) { }
+            Button(Strings.Common.save) {
+                let trimmed = editedName.trimmingCharacters(in: .whitespacesAndNewlines)
+                if !trimmed.isEmpty {
+                    profileStore.updateName(trimmed)
+                }
             }
         }
     }

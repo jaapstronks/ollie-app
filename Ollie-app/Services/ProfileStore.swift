@@ -153,6 +153,13 @@ class ProfileStore: ObservableObject {
         saveProfile(currentProfile)
     }
 
+    /// Update the dog's name
+    func updateName(_ name: String) {
+        guard var currentProfile = profile else { return }
+        currentProfile.name = name
+        saveProfile(currentProfile)
+    }
+
     /// Reset profile (for testing or re-onboarding)
     func resetProfile() {
         // Delete from Core Data
@@ -210,7 +217,29 @@ class ProfileStore: ObservableObject {
         isLoading = true
         defer { isLoading = false }
 
-        // Try to load from Core Data
+        // Check if user is a participant (has shared data) - prioritize shared profile
+        if let sharedStore = persistenceController.getSharedStore(),
+           let cdProfile = CDPuppyProfile.fetchProfile(in: viewContext, from: sharedStore),
+           let loadedProfile = cdProfile.toPuppyProfile() {
+            logger.info("Loaded profile from shared store (participant mode)")
+            profile = loadedProfile
+            syncToAppGroup()
+            WidgetDataProvider.shared.updateProfileName(loadedProfile.name)
+            return
+        }
+
+        // Fall back to private store (owner mode)
+        if let privateStore = persistenceController.getPrivateStore(),
+           let cdProfile = CDPuppyProfile.fetchProfile(in: viewContext, from: privateStore),
+           let loadedProfile = cdProfile.toPuppyProfile() {
+            logger.info("Loaded profile from private store (owner mode)")
+            profile = loadedProfile
+            syncToAppGroup()
+            WidgetDataProvider.shared.updateProfileName(loadedProfile.name)
+            return
+        }
+
+        // No profile found in either store - try generic fetch as fallback
         guard let cdProfile = CDPuppyProfile.fetchProfile(in: viewContext),
               let loadedProfile = cdProfile.toPuppyProfile() else {
             profile = nil
@@ -220,6 +249,30 @@ class ProfileStore: ObservableObject {
         profile = loadedProfile
         syncToAppGroup()
         WidgetDataProvider.shared.updateProfileName(loadedProfile.name)
+    }
+
+    // MARK: - Share Acceptance Support
+
+    /// Check if user has an existing profile in their private store
+    /// Used to warn before accepting a share invitation
+    func hasExistingPrivateProfile() -> Bool {
+        guard let privateStore = persistenceController.getPrivateStore() else { return false }
+        return CDPuppyProfile.hasProfile(in: viewContext, store: privateStore)
+    }
+
+    /// Delete existing profile from private store (called when accepting a share)
+    /// Since multi-dog is not supported yet, we need to clear the private profile
+    func deletePrivateProfile() {
+        guard let privateStore = persistenceController.getPrivateStore() else { return }
+
+        CDPuppyProfile.deleteAllProfiles(in: viewContext, from: privateStore)
+
+        do {
+            try persistenceController.save()
+            logger.info("Deleted existing private profile to make room for shared profile")
+        } catch {
+            logger.error("Failed to delete private profile: \(error.localizedDescription)")
+        }
     }
 
     // MARK: - App Group Sync
