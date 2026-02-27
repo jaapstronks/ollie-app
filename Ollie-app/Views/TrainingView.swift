@@ -18,6 +18,7 @@ struct TrainingView: View {
     @State private var selectedSkill: Skill?
     @State private var activeTrainingSkill: Skill?
     @State private var skillForInfoSheet: Skill?
+    @State private var skillForQuickLog: Skill?
     @State private var completedSessionData: TrainingSessionData?
     @State private var scrollToSkillId: String?
     @State private var showOlliePlusSheet = false
@@ -104,7 +105,7 @@ struct TrainingView: View {
             )
             .presentationDetents([.large])
         }
-        // Training log sheet (for completing sessions)
+        // Training log sheet (for completing in-app sessions)
         .sheet(item: $selectedSkill) { skill in
             TrainingLogSheet(
                 skill: skill,
@@ -117,6 +118,21 @@ struct TrainingView: View {
                 onCancel: {
                     selectedSkill = nil
                     completedSessionData = nil
+                }
+            )
+            .presentationDetents([.height(500)])
+        }
+        // Quick log sheet (for logging without in-app training)
+        .sheet(item: $skillForQuickLog) { skill in
+            TrainingLogSheet(
+                skill: skill,
+                prefillData: nil,
+                onSave: { event in
+                    eventStore.addEvent(event)
+                    skillForQuickLog = nil
+                },
+                onCancel: {
+                    skillForQuickLog = nil
                 }
             )
             .presentationDetents([.height(500)])
@@ -206,6 +222,9 @@ struct TrainingView: View {
                             recentSessions: recentSessions,
                             onStartTraining: {
                                 activeTrainingSkill = skill
+                            },
+                            onQuickLog: {
+                                skillForQuickLog = skill
                             },
                             onViewInfo: {
                                 skillForInfoSheet = skill

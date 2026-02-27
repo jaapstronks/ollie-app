@@ -63,6 +63,7 @@ extension Strings {
         static let tips = String(localized: "Tips", table: table)
         static let recentSessions = String(localized: "Recent sessions", table: table)
         static let logSession = String(localized: "Log session", table: table)
+        static let trainInApp = String(localized: "Train in-app", table: table)
         static let markMastered = String(localized: "Mark as mastered", table: table)
         static let unmarkMastered = String(localized: "Unmark mastered", table: table)
 

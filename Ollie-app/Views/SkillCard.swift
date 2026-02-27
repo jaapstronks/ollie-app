@@ -2,13 +2,13 @@
 //  SkillCard.swift
 //  Ollie-app
 //
-//  Card displaying a training skill with Start Training and Info buttons
+//  Expandable card displaying a training skill with quick actions
 //
 
 import SwiftUI
 import OllieShared
 
-/// Card showing a training skill with quick actions
+/// Card showing a training skill with expandable actions
 struct SkillCard: View {
     let skill: Skill
     let status: SkillStatus
@@ -17,107 +17,115 @@ struct SkillCard: View {
     let missingRequirements: [Skill]
     let recentSessions: [PuppyEvent]
     let onStartTraining: () -> Void
+    let onQuickLog: () -> Void
     let onViewInfo: () -> Void
     let onToggleMastered: () -> Void
 
+    @State private var isExpanded: Bool = false
     @Environment(\.colorScheme) private var colorScheme
 
     var body: some View {
         VStack(spacing: 0) {
-            // Main card content
-            HStack(spacing: 12) {
-                // Icon
-                Image(systemName: skill.icon)
-                    .font(.system(size: 24))
-                    .foregroundStyle(isLocked ? .secondary : Color.ollieAccent)
-                    .frame(width: 36)
-
-                // Name, status, and last session
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(skill.name)
-                        .font(.body)
-                        .fontWeight(.semibold)
-                        .foregroundStyle(isLocked ? .secondary : .primary)
-
-                    // Status or locked indicator
-                    if isLocked {
-                        HStack(spacing: 4) {
-                            Image(systemName: "lock.fill")
-                                .font(.caption2)
-                            Text(Strings.Training.locked)
-                                .font(.caption)
-                        }
-                        .foregroundStyle(.secondary)
-                    } else {
-                        HStack(spacing: 6) {
-                            // Status badge
-                            statusBadge
-
-                            // Session count
-                            if sessionCount > 0 {
-                                Text("•")
-                                    .foregroundStyle(.tertiary)
-                                Text(Strings.Training.sessionCount(sessionCount))
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                            }
-                        }
-                    }
+            // Main card header (tappable to expand)
+            Button {
+                guard !isLocked else { return }
+                withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
+                    isExpanded.toggle()
                 }
+                HapticFeedback.light()
+            } label: {
+                HStack(spacing: 12) {
+                    // Icon with optional recency badge
+                    skillIcon
 
-                Spacer()
+                    // Name and status
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(skill.name)
+                            .font(.body)
+                            .fontWeight(.semibold)
+                            .foregroundStyle(isLocked ? .secondary : .primary)
 
-                // Action buttons (only if not locked)
-                if !isLocked {
-                    HStack(spacing: 8) {
-                        // Info button
-                        Button {
-                            HapticFeedback.light()
-                            onViewInfo()
-                        } label: {
-                            Image(systemName: "info.circle")
-                                .font(.body)
-                                .foregroundStyle(.secondary)
-                                .frame(width: 36, height: 36)
-                                .background(
-                                    Circle()
-                                        .fill(colorScheme == .dark ? Color.white.opacity(0.08) : Color.black.opacity(0.04))
-                                )
-                        }
-                        .buttonStyle(ScaleButtonStyle())
-
-                        // Start training button
-                        Button {
-                            HapticFeedback.medium()
-                            onStartTraining()
-                        } label: {
+                        // Status or locked indicator
+                        if isLocked {
                             HStack(spacing: 4) {
-                                Image(systemName: "play.fill")
+                                Image(systemName: "lock.fill")
+                                    .font(.caption2)
+                                Text(Strings.Training.locked)
                                     .font(.caption)
                             }
-                            .foregroundStyle(.white)
-                            .frame(width: 36, height: 36)
-                            .background(Color.ollieAccent)
-                            .clipShape(Circle())
-                        }
-                        .buttonStyle(ScaleButtonStyle())
-                    }
-                } else {
-                    // Lock icon for locked skills
-                    Image(systemName: "lock.fill")
-                        .font(.body)
-                        .foregroundStyle(.tertiary)
-                }
-            }
-            .padding()
+                            .foregroundStyle(.secondary)
+                        } else {
+                            HStack(spacing: 6) {
+                                // Status badge
+                                statusBadge
 
-            // Last session info (if has sessions and not locked)
-            if !isLocked && !recentSessions.isEmpty {
-                lastSessionRow
+                                // Session count
+                                if sessionCount > 0 {
+                                    Text("•")
+                                        .foregroundStyle(.tertiary)
+                                    Text(Strings.Training.sessionCount(sessionCount))
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                }
+                            }
+                        }
+                    }
+
+                    Spacer()
+
+                    // Chevron (only if not locked)
+                    if !isLocked {
+                        Image(systemName: "chevron.down")
+                            .font(.caption)
+                            .fontWeight(.semibold)
+                            .foregroundStyle(.tertiary)
+                            .rotationEffect(.degrees(isExpanded ? 180 : 0))
+                    } else {
+                        // Lock icon for locked skills
+                        Image(systemName: "lock.fill")
+                            .font(.body)
+                            .foregroundStyle(.tertiary)
+                    }
+                }
+                .padding()
+                .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            .disabled(isLocked)
+
+            // Expanded actions section
+            if isExpanded && !isLocked {
+                expandedActions
             }
         }
         .glassStatusCard(tintColor: cardTintColor)
         .opacity(isLocked ? 0.6 : 1.0)
+    }
+
+    // MARK: - Skill Icon
+
+    @ViewBuilder
+    private var skillIcon: some View {
+        ZStack(alignment: .topTrailing) {
+            Image(systemName: skill.icon)
+                .font(.system(size: 24))
+                .foregroundStyle(isLocked ? .secondary : Color.ollieAccent)
+                .frame(width: 36)
+
+            // Recency indicator badge (if has sessions and been a while)
+            if let lastSession = recentSessions.first, !isLocked {
+                let daysSince = Calendar.current.dateComponents([.day], from: lastSession.time, to: Date()).day ?? 0
+                if daysSince >= 3 {
+                    Image(systemName: "clock.fill")
+                        .font(.system(size: 10))
+                        .foregroundStyle(.white)
+                        .padding(3)
+                        .background(Color.ollieWarning)
+                        .clipShape(Circle())
+                        .offset(x: 6, y: -4)
+                }
+            }
+        }
     }
 
     // MARK: - Status Badge
@@ -134,16 +142,17 @@ struct SkillCard: View {
         .foregroundStyle(status.color)
     }
 
-    // MARK: - Last Session Row
+    // MARK: - Expanded Actions
 
     @ViewBuilder
-    private var lastSessionRow: some View {
-        if let lastSession = recentSessions.first {
-            VStack(spacing: 0) {
-                Divider()
-                    .padding(.horizontal)
+    private var expandedActions: some View {
+        VStack(spacing: 0) {
+            Divider()
+                .padding(.horizontal)
 
-                HStack(spacing: 8) {
+            // Last session info
+            if let lastSession = recentSessions.first {
+                HStack(spacing: 6) {
                     Image(systemName: "clock")
                         .font(.caption2)
                         .foregroundStyle(.tertiary)
@@ -154,7 +163,7 @@ struct SkillCard: View {
 
                     Spacer()
 
-                    // Mark mastered button (contextual)
+                    // Mark mastered button (if practicing or mastered)
                     if status == .practicing || status == .mastered {
                         Button {
                             HapticFeedback.medium()
@@ -172,9 +181,75 @@ struct SkillCard: View {
                     }
                 }
                 .padding(.horizontal)
-                .padding(.vertical, 10)
+                .padding(.vertical, 8)
+
+                Divider()
+                    .padding(.horizontal)
             }
+
+            // Action buttons row
+            HStack(spacing: 12) {
+                // Info button
+                Button {
+                    HapticFeedback.light()
+                    onViewInfo()
+                } label: {
+                    Image(systemName: "info.circle")
+                        .font(.body)
+                        .foregroundStyle(.secondary)
+                        .frame(width: 40, height: 40)
+                        .background(
+                            Circle()
+                                .fill(colorScheme == .dark ? Color.white.opacity(0.08) : Color.black.opacity(0.04))
+                        )
+                }
+                .buttonStyle(ScaleButtonStyle())
+
+                // Log session button
+                Button {
+                    HapticFeedback.medium()
+                    onQuickLog()
+                } label: {
+                    HStack(spacing: 6) {
+                        Image(systemName: "plus.circle.fill")
+                            .font(.subheadline)
+                        Text(Strings.Training.logSession)
+                            .font(.subheadline)
+                            .fontWeight(.medium)
+                    }
+                    .foregroundStyle(.white)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 40)
+                    .background(Color.ollieAccent)
+                    .clipShape(Capsule())
+                }
+                .buttonStyle(ScaleButtonStyle())
+
+                // Train in-app button
+                Button {
+                    HapticFeedback.medium()
+                    onStartTraining()
+                } label: {
+                    HStack(spacing: 6) {
+                        Image(systemName: "play.fill")
+                            .font(.caption)
+                        Text(Strings.Training.trainInApp)
+                            .font(.subheadline)
+                            .fontWeight(.medium)
+                    }
+                    .foregroundStyle(Color.ollieAccent)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 40)
+                    .background(
+                        Capsule()
+                            .strokeBorder(Color.ollieAccent, lineWidth: 1.5)
+                    )
+                }
+                .buttonStyle(ScaleButtonStyle())
+            }
+            .padding()
         }
+        .transition(.opacity.combined(with: .move(edge: .top)))
     }
 
     // MARK: - Computed Properties
@@ -301,6 +376,23 @@ private let previewSkill = Skill(
                     PuppyEvent(time: Date().addingTimeInterval(-86400), type: .training, exercise: "sit", durationMin: 5)
                 ],
                 onStartTraining: {},
+                onQuickLog: {},
+                onViewInfo: {},
+                onToggleMastered: {}
+            )
+
+            // Card with overdue badge (last session > 3 days ago)
+            SkillCard(
+                skill: previewSkill,
+                status: .started,
+                sessionCount: 2,
+                isLocked: false,
+                missingRequirements: [],
+                recentSessions: [
+                    PuppyEvent(time: Date().addingTimeInterval(-86400 * 5), type: .training, exercise: "sit", durationMin: 3)
+                ],
+                onStartTraining: {},
+                onQuickLog: {},
                 onViewInfo: {},
                 onToggleMastered: {}
             )
@@ -313,6 +405,7 @@ private let previewSkill = Skill(
                 missingRequirements: [],
                 recentSessions: [],
                 onStartTraining: {},
+                onQuickLog: {},
                 onViewInfo: {},
                 onToggleMastered: {}
             )
@@ -325,6 +418,7 @@ private let previewSkill = Skill(
                 missingRequirements: [],
                 recentSessions: [],
                 onStartTraining: {},
+                onQuickLog: {},
                 onViewInfo: {},
                 onToggleMastered: {}
             )
