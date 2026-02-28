@@ -1,0 +1,166 @@
+# Test new features: Profile Photo, Documents, Contacts
+# Tests the recently added functionalities
+appId: nl.jaapstronks.Ollie
+---
+- launchApp
+- waitForAnimationToEnd
+
+# Wait for app to load
+- extendedWaitUntil:
+    visible: "Today|Vandaag"
+    timeout: 5000
+- takeScreenshot: "screenshots/new-features-01-home"
+
+# =====================
+# 1. Open Settings via Profile Button
+# =====================
+- tapOn:
+    id: "settings_button"
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/new-features-02-settings-hub"
+
+# Should see Settings title
+- extendedWaitUntil:
+    visible: "Settings|Instellingen"
+    timeout: 3000
+
+# =====================
+# 2. Navigate to Dog Profile Settings
+# =====================
+- tapOn: "Dog Profile|Hondenprofiel"
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/new-features-03-dog-profile"
+
+# =====================
+# 3. TEST: Profile Photo Section
+# =====================
+# Verify profile section is visible
+- assertVisible: "Profile|Profiel"
+
+# Look for Add Photo or Change Photo button
+- runFlow:
+    when:
+      visible: "Add Photo|Foto toevoegen"
+    commands:
+      - tapOn: "Add Photo|Foto toevoegen"
+      - waitForAnimationToEnd
+      - takeScreenshot: "screenshots/new-features-04-photo-picker"
+      # Cancel the picker
+      - tapOn: "Cancel|Annuleer"
+      - waitForAnimationToEnd
+
+- runFlow:
+    when:
+      visible: "Change Photo|Foto wijzigen"
+    commands:
+      - tapOn: "Change Photo|Foto wijzigen"
+      - waitForAnimationToEnd
+      - takeScreenshot: "screenshots/new-features-04-photo-picker"
+      # Cancel the picker
+      - tapOn: "Cancel|Annuleer"
+      - waitForAnimationToEnd
+
+- takeScreenshot: "screenshots/new-features-05-after-photo-test"
+
+# =====================
+# 4. TEST: Documents Section
+# =====================
+# Scroll down to find Documents section
+- scroll
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/new-features-06-scrolled"
+
+# Navigate to Documents
+- tapOn: "Documents|Documenten"
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/new-features-07-documents-view"
+
+# Check for empty state or document list
+- runFlow:
+    when:
+      visible: "No Documents|Geen documenten"
+    commands:
+      - takeScreenshot: "screenshots/new-features-08-documents-empty"
+      - assertVisible: "Add Document|Document toevoegen"
+
+- runFlow:
+    when:
+      notVisible: "No Documents|Geen documenten"
+    commands:
+      - takeScreenshot: "screenshots/new-features-08-documents-list"
+
+# Test adding a document (just open the sheet)
+- tapOn:
+    id: "plus"
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/new-features-09-add-document-sheet"
+
+# Cancel adding document
+- tapOn: "Cancel|Annuleer"
+- waitForAnimationToEnd
+
+# Go back to Dog Profile
+- tapOn:
+    id: "Back"
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/new-features-10-back-to-profile"
+
+# =====================
+# 5. TEST: Contacts Section
+# =====================
+# Scroll down to find Contacts section
+- scroll
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/new-features-11-scrolled-more"
+
+# Navigate to Contacts
+- tapOn: "Contacts|Contacten"
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/new-features-12-contacts-view"
+
+# Check for empty state or contact list
+- runFlow:
+    when:
+      visible: "No Contacts|Geen contacten"
+    commands:
+      - takeScreenshot: "screenshots/new-features-13-contacts-empty"
+      - assertVisible: "Add Contact|Contact toevoegen"
+
+- runFlow:
+    when:
+      notVisible: "No Contacts|Geen contacten"
+    commands:
+      - takeScreenshot: "screenshots/new-features-13-contacts-list"
+
+# Test adding a contact (just open the sheet)
+- tapOn:
+    id: "plus"
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/new-features-14-add-contact-sheet"
+
+# Cancel adding contact
+- tapOn: "Cancel|Annuleer"
+- waitForAnimationToEnd
+
+# =====================
+# 6. Return to Home
+# =====================
+# Go back to Dog Profile
+- tapOn:
+    id: "Back"
+- waitForAnimationToEnd
+
+# Go back to Settings Hub
+- tapOn:
+    id: "Back"
+- waitForAnimationToEnd
+
+# Close Settings
+- tapOn: "Done|Klaar"
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/new-features-15-back-home"
+
+# Verify we're back on Today view
+- extendedWaitUntil:
+    visible: "Today|Vandaag"
+    timeout: 5000
