@@ -78,13 +78,6 @@ struct HealthTabView: View {
                         }
                     }
                     .animatedAppear(delay: 0.30)
-
-                    // Walk history section
-                    InsightsWalkHistorySection(
-                        recentWalks: recentWalks,
-                        weekWalkStats: weekWalkStats
-                    )
-                    .animatedAppear(delay: 0.35)
                 }
                 .padding()
                 .padding(.bottom, 84) // Space for FAB
@@ -136,16 +129,6 @@ struct HealthTabView: View {
     /// Uses cached weight delta from ViewModel
     private var weightDelta: (delta: Double, previousDate: Date)? {
         viewModel.cachedWeightDelta
-    }
-
-    /// Uses cached recent walks from ViewModel (7 days)
-    private var recentWalks: [PuppyEvent] {
-        viewModel.cachedRecentWalks
-    }
-
-    /// Uses cached walk stats from ViewModel
-    private var weekWalkStats: (count: Int, totalMinutes: Int) {
-        viewModel.cachedWeekWalkStats
     }
 
     /// Today's events from in-memory array

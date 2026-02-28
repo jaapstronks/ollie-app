@@ -58,7 +58,7 @@ extension Strings {
         static let awake = String(localized: "Awake", table: table)
         static let napTime = String(localized: "Nap time!", table: table)
         static let attention = String(localized: "Tired?", table: table)
-        static let wakeUp = String(localized: "Wake up", table: table)
+        static let wakeUp = String(localized: "Woke up", table: table)
         static let startNap = String(localized: "Start nap", table: table)
 
         // Sleep duration variants based on how long sleeping
@@ -357,7 +357,7 @@ extension Strings {
         // End activity
         static let endNow = String(localized: "End now", table: table)
         static let endWalk = String(localized: "End walk", table: table)
-        static let wakeUp = String(localized: "Wake up", table: table)
+        static let wakeUp = String(localized: "Woke up", table: table)
         static func endedMinutesAgo(_ minutes: Int) -> String {
             String(localized: "Ended \(minutes) min ago", table: table)
         }
@@ -426,7 +426,7 @@ extension Strings {
         }
         static let pottyUrgentWhileSleeping = String(localized: "Potty needed soon", table: table)
         static let whenWakesTakeOutside = String(localized: "When she wakes, take her outside", table: table)
-        static let wakeUp = String(localized: "Wake Up", table: table)
+        static let wakeUp = String(localized: "Woke up", table: table)
         static let sleepingPottyLabel = String(localized: "Sleeping", table: table)
 
         // Pending meal/walk while sleeping (shown in combined card)

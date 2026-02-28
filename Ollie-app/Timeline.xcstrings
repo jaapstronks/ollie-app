@@ -342,6 +342,26 @@
         }
       }
     },
+    "Also time for a meal" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ook tijd voor eten"
+          }
+        }
+      }
+    },
+    "Also time for a walk" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ook tijd voor een wandeling"
+          }
+        }
+      }
+    },
     "Are you sure you want to delete '%@' from %@?" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -1724,6 +1744,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Wakker maken"
+          }
+        }
+      }
+    },
+    "Woke up" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wakker geworden"
           }
         }
       }

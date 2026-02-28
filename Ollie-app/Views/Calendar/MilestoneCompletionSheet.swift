@@ -183,13 +183,6 @@ struct MilestoneCompletionSheet: View {
                         onDismiss()
                     }
                 }
-
-                ToolbarItem(placement: .confirmationAction) {
-                    Button(Strings.Common.done) {
-                        completeAndDismiss()
-                    }
-                    .fontWeight(.semibold)
-                }
             }
         }
         .presentationDetents([.large])
