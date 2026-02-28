@@ -23,10 +23,6 @@ struct AppSettingsView: View {
     @State private var overwriteExisting = false
     @State private var importError: String?
     @State private var showingError = false
-    @State private var activeShare: CKShare?
-    @State private var isPreparingShare = false
-    @State private var shareError: String?
-    @State private var showStopSharingConfirm = false
     @State private var showingExportSheet = false
     @AppStorage(UserPreferences.Key.appearanceMode.rawValue) private var appearanceMode = AppearanceMode.system.rawValue
     @AppStorage(UserPreferences.Key.temperatureUnit.rawValue) private var temperatureUnit = TemperatureUnit.celsius.rawValue
@@ -53,7 +49,7 @@ struct AppSettingsView: View {
             SyncSection(eventStore: eventStore, cloudKit: cloudKit)
 
             // CloudKit sharing
-            sharingSectionContent
+            SharingSection(cloudKit: cloudKit)
 
             // Siri & Shortcuts
             SiriSection()
@@ -137,29 +133,6 @@ struct AppSettingsView: View {
             Button(Strings.Common.ok) {}
         } message: {
             Text(importError ?? Strings.PottyStatus.unknown)
-        }
-        .sheet(isPresented: Binding(
-            get: { activeShare != nil },
-            set: { if !$0 { activeShare = nil } }
-        )) {
-            if let share = activeShare {
-                CloudSharingView(
-                    share: share,
-                    container: CKContainer(identifier: "iCloud.nl.jaapstronks.Ollie"),
-                    onDismiss: {
-                        activeShare = nil
-                        Task { await cloudKit.updateShareState() }
-                    }
-                )
-            }
-        }
-        .alert(Strings.CloudSharing.stopSharing, isPresented: $showStopSharingConfirm) {
-            Button(Strings.Common.cancel, role: .cancel) {}
-            Button(Strings.CloudSharing.stopSharing, role: .destructive) {
-                Task { await stopSharing() }
-            }
-        } message: {
-            Text(Strings.CloudSharing.stopSharingConfirm)
         }
         .sheet(isPresented: $showingExportSheet) {
             ExportDataView(profileStore: profileStore)
@@ -276,191 +249,6 @@ struct AppSettingsView: View {
     private var currentCelebrationStyle: CelebrationStyle {
         let rawValue = UserDefaults.standard.string(forKey: UserPreferences.Key.celebrationStyle.rawValue)
         return CelebrationStyle(rawValue: rawValue ?? "") ?? .full
-    }
-
-    // MARK: - Sharing Section
-
-    @ViewBuilder
-    private var sharingSectionContent: some View {
-        Section {
-            if !cloudKit.isCloudAvailable {
-                HStack {
-                    Image(systemName: "exclamationmark.icloud")
-                        .foregroundStyle(Color.ollieWarning)
-                    Text(Strings.CloudSharing.iCloudUnavailable)
-                        .font(.subheadline)
-                }
-            } else if cloudKit.isParticipant {
-                HStack {
-                    Image(systemName: "person.2.fill")
-                        .foregroundStyle(Color.ollieInfo)
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(Strings.CloudSharing.sharedData)
-                            .font(.subheadline)
-                        Text(Strings.CloudSharing.viewingOthersData)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                }
-            } else if cloudKit.isShared {
-                VStack(alignment: .leading, spacing: 12) {
-                    HStack {
-                        Image(systemName: "checkmark.circle.fill")
-                            .foregroundStyle(Color.ollieSuccess)
-                        Text(Strings.CloudSharing.shared)
-                            .font(.subheadline.weight(.medium))
-                    }
-
-                    if cloudKit.shareParticipants.isEmpty {
-                        Text(Strings.CloudSharing.noParticipants)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    } else {
-                        ForEach(cloudKit.shareParticipants) { participant in
-                            HStack {
-                                Image(systemName: "person.fill")
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                                Text(participant.name)
-                                    .font(.subheadline)
-                                Spacer()
-                                Text(participant.status.label)
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                            }
-                        }
-                    }
-                }
-
-                Button {
-                    Task { await manageExistingShare() }
-                } label: {
-                    HStack {
-                        Label(Strings.CloudSharing.manageSharing, systemImage: "person.2.fill")
-                        if isPreparingShare {
-                            Spacer()
-                            ProgressView()
-                        }
-                    }
-                }
-                .disabled(isPreparingShare)
-
-                Button {
-                    Task { await prepareAndShowShare() }
-                } label: {
-                    HStack {
-                        Label(Strings.CloudSharing.inviteAnother, systemImage: "person.badge.plus")
-                        if isPreparingShare {
-                            Spacer()
-                            ProgressView()
-                        }
-                    }
-                }
-                .disabled(isPreparingShare)
-
-                Button(role: .destructive) {
-                    HapticFeedback.warning()
-                    showStopSharingConfirm = true
-                } label: {
-                    Label(Strings.CloudSharing.stopSharing, systemImage: "xmark.circle")
-                }
-            } else {
-                Button {
-                    Task { await prepareAndShowShare() }
-                } label: {
-                    HStack {
-                        Label(Strings.CloudSharing.shareWithPartner, systemImage: "person.badge.plus")
-                        if isPreparingShare {
-                            Spacer()
-                            ProgressView()
-                        }
-                    }
-                }
-                .disabled(isPreparingShare)
-            }
-
-            if let error = shareError {
-                Text(error)
-                    .font(.caption)
-                    .foregroundStyle(.red)
-            }
-        } header: {
-            Text(Strings.CloudSharing.sharing)
-        } footer: {
-            if cloudKit.isCloudAvailable && !cloudKit.isParticipant {
-                Text(Strings.CloudSharing.sharingDescription)
-            }
-        }
-        .task {
-            let context = PersistenceController.shared.viewContext
-            if let cdProfile = CDPuppyProfile.fetchProfile(in: context) {
-                await cloudKit.refreshShareState(
-                    for: cdProfile,
-                    using: PersistenceController.shared.container
-                )
-            }
-        }
-    }
-
-    // MARK: - Sharing Actions
-
-    private func prepareAndShowShare() async {
-        guard !isPreparingShare else { return }
-        isPreparingShare = true
-        shareError = nil
-
-        do {
-            let context = PersistenceController.shared.viewContext
-            guard let cdProfile = CDPuppyProfile.fetchProfile(in: context) else {
-                shareError = "No profile found. Please set up your puppy first."
-                isPreparingShare = false
-                return
-            }
-
-            let share = try await cloudKit.getOrCreateShare(
-                for: cdProfile,
-                using: PersistenceController.shared.container
-            )
-
-            activeShare = share
-        } catch {
-            shareError = error.localizedDescription
-        }
-
-        isPreparingShare = false
-    }
-
-    private func manageExistingShare() async {
-        guard !isPreparingShare else { return }
-        isPreparingShare = true
-        shareError = nil
-
-        let context = PersistenceController.shared.viewContext
-        if let cdProfile = CDPuppyProfile.fetchProfile(in: context) {
-            await cloudKit.refreshShareState(
-                for: cdProfile,
-                using: PersistenceController.shared.container
-            )
-        }
-
-        if let share = cloudKit.currentShare {
-            activeShare = share
-        } else {
-            shareError = Strings.CloudSharing.couldNotLoadShare
-        }
-
-        isPreparingShare = false
-    }
-
-    private func stopSharing() async {
-        shareError = nil
-
-        do {
-            try await cloudKit.stopSharing()
-            await cloudKit.updateShareState()
-        } catch {
-            shareError = error.localizedDescription
-        }
     }
 
     // MARK: - Import Actions

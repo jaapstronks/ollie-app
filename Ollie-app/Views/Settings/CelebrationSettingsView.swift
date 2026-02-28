@@ -12,7 +12,6 @@ struct CelebrationSettingsView: View {
     @AppStorage(UserPreferences.Key.celebrationStyle.rawValue)
     private var celebrationStyleRaw: String = CelebrationStyle.full.rawValue
 
-    @State private var showingTier1Preview = false
     @State private var showingTier2Preview = false
     @State private var showingTier3Preview = false
 
@@ -100,37 +99,7 @@ struct CelebrationSettingsView: View {
         Section {
             VStack(spacing: 16) {
                 // Tier 1: Subtle - inline shimmer preview
-                Button {
-                    showingTier1Preview = true
-                    HapticFeedback.light()
-                    // Auto-dismiss after animation
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                        showingTier1Preview = false
-                    }
-                } label: {
-                    HStack {
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text("Tier 1: Subtle")
-                                .font(.subheadline.weight(.medium))
-                            Text("Inline shimmer effect")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                        }
-                        Spacer()
-                        Image(systemName: "play.circle.fill")
-                            .font(.title3)
-                            .foregroundStyle(Color.ollieAccent)
-                    }
-                    .padding()
-                    .background(Color.ollieAccent.opacity(0.08))
-                    .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-                }
-                .buttonStyle(.plain)
-                .overlay {
-                    if showingTier1Preview {
-                        CelebrationView(style: .quickLog, isActive: $showingTier1Preview)
-                    }
-                }
+                CelebrationTier1PreviewButton()
 
                 // Tier 2: Notable - card preview
                 Button {
@@ -184,42 +153,13 @@ struct CelebrationSettingsView: View {
         } footer: {
             Text("Tap to preview each celebration tier")
         }
-        // Tier 2 sheet
-        .sheet(isPresented: $showingTier2Preview) {
-            ZStack {
-                Color.black.opacity(0.001) // Invisible background to capture taps
-                    .ignoresSafeArea()
-
-                Tier2CelebrationCard(
-                    achievement: Achievement(
-                        id: "preview.health",
-                        category: .health,
-                        tier: .notable,
-                        labelKey: "achievement.health.firstVaccination"
-                    ),
-                    puppyName: "Ollie",
-                    onAddPhoto: { showingTier2Preview = false },
-                    onShare: { showingTier2Preview = false },
-                    onDismiss: { showingTier2Preview = false }
-                )
-            }
-            .presentationBackground(.clear)
+        // Tier 2 full screen (using fullScreenCover for better presentation)
+        .fullScreenCover(isPresented: $showingTier2Preview) {
+            CelebrationTier2PreviewWrapper(isPresented: $showingTier2Preview)
         }
         // Tier 3 full screen
         .fullScreenCover(isPresented: $showingTier3Preview) {
-            Tier3CelebrationView(
-                achievement: Achievement(
-                    id: "preview.potty.14",
-                    category: .pottyStreak,
-                    tier: .major,
-                    labelKey: "achievement.pottyStreak.14",
-                    value: 14
-                ),
-                puppyName: "Ollie",
-                onTakePhoto: { showingTier3Preview = false },
-                onAddFromLibrary: { showingTier3Preview = false },
-                onSkip: { showingTier3Preview = false }
-            )
+            CelebrationTier3PreviewWrapper(isPresented: $showingTier3Preview)
         }
     }
 
@@ -294,6 +234,8 @@ struct CelebrationSettingsView: View {
         }
     }
 }
+
+// MARK: - Preview
 
 #Preview {
     NavigationStack {

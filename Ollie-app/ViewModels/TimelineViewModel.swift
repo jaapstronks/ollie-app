@@ -75,40 +75,22 @@ class TimelineViewModel: ObservableObject {
         activityManager.isNapInProgress
     }
 
-    // MARK: - Cached Stats (to avoid recomputation every frame)
+    // MARK: - Stats Cache (extracted to separate service)
 
-    /// Cached pattern analysis (updated when events change)
-    @Published private(set) var cachedPatternAnalysis: PatternAnalysis?
+    /// Stats cache service (manages cached stats to avoid recomputation)
+    let statsCache: TimelineStatsCache
 
-    /// Cached recent events for stats (7 days)
-    @Published private(set) var cachedRecentEvents: [PuppyEvent] = []
-
-    /// Cached week stats for insights view
-    @Published private(set) var cachedWeekStats: [DayStats] = []
-
-    /// Cached events for 1 year (for weight calculations)
-    @Published private(set) var cachedYearEvents: [PuppyEvent] = []
-
-    /// Cached recent walks (7 days)
-    @Published private(set) var cachedRecentWalks: [PuppyEvent] = []
-
-    /// Cached walk stats for the week
-    @Published private(set) var cachedWeekWalkStats: (count: Int, totalMinutes: Int) = (0, 0)
-
-    /// Cached latest weight measurement
-    @Published private(set) var cachedLatestWeight: (weight: Double, date: Date)?
-
-    /// Cached weight delta from previous measurement
-    @Published private(set) var cachedWeightDelta: (delta: Double, previousDate: Date)?
-
-    /// Cached growth story for the health tab
-    @Published private(set) var cachedGrowthStory: GrowthStory?
-
-    /// Cached first weight (for "journey begins" state)
-    @Published private(set) var cachedFirstWeight: (weight: Double, date: Date)?
-
-    /// Last time stats were computed
-    private var lastStatsUpdate: Date?
+    // Convenience accessors for cached stats (forward to statsCache)
+    var cachedPatternAnalysis: PatternAnalysis? { statsCache.patternAnalysis }
+    var cachedRecentEvents: [PuppyEvent] { statsCache.recentEvents }
+    var cachedWeekStats: [DayStats] { statsCache.weekStats }
+    var cachedYearEvents: [PuppyEvent] { statsCache.yearEvents }
+    var cachedRecentWalks: [PuppyEvent] { statsCache.recentWalks }
+    var cachedWeekWalkStats: (count: Int, totalMinutes: Int) { statsCache.weekWalkStats }
+    var cachedLatestWeight: (weight: Double, date: Date)? { statsCache.latestWeight }
+    var cachedWeightDelta: (delta: Double, previousDate: Date)? { statsCache.weightDelta }
+    var cachedGrowthStory: GrowthStory? { statsCache.growthStory }
+    var cachedFirstWeight: (weight: Double, date: Date)? { statsCache.firstWeight }
 
     // MARK: - Combined Sleep + Potty State
 
@@ -132,6 +114,9 @@ class TimelineViewModel: ObservableObject {
 
     /// Subscription to observe EventStore events
     private var eventStoreCancellable: AnyCancellable?
+
+    /// Subscription to forward TimelineStatsCache changes
+    private var statsCacheCancellable: AnyCancellable?
 
     let eventStore: EventStore
     let profileStore: ProfileStore
@@ -158,6 +143,9 @@ class TimelineViewModel: ObservableObject {
         self.medicationStore = medicationStore
         self.appointmentStore = appointmentStore
 
+        // Create stats cache (extracted service)
+        self.statsCache = TimelineStatsCache(eventStore: eventStore, profileStore: profileStore)
+
         // Forward SheetCoordinator's objectWillChange to this ViewModel
         // This ensures views are notified when sheet state changes
         sheetCoordinatorCancellable = sheetCoordinator.objectWillChange
@@ -167,6 +155,12 @@ class TimelineViewModel: ObservableObject {
 
         // Forward ActivityTrackingManager's objectWillChange to this ViewModel
         activityManagerCancellable = activityManager.objectWillChange
+            .sink { [weak self] _ in
+                self?.objectWillChange.send()
+            }
+
+        // Forward TimelineStatsCache's objectWillChange to this ViewModel
+        statsCacheCancellable = statsCache.objectWillChange
             .sink { [weak self] _ in
                 self?.objectWillChange.send()
             }
@@ -183,7 +177,7 @@ class TimelineViewModel: ObservableObject {
                 self.events = loadedEvents
                 // Rebuild timeline items and refresh stats since events changed
                 self.rebuildTimelineItems()
-                self.refreshCachedStats(force: true)
+                self.statsCache.refresh(force: true)
             }
 
         loadEvents()
@@ -297,79 +291,6 @@ class TimelineViewModel: ObservableObject {
         timelineItems = items.sorted { $0.sortTime < $1.sortTime }
     }
 
-    /// Task for async stats refresh (to cancel if a new refresh is requested)
-    private var statsRefreshTask: Task<Void, Never>?
-
-    /// Refresh cached stats (debounced, only if data changed)
-    /// - Parameter force: When true, bypasses debounce (use after event changes)
-    internal func refreshCachedStats(force: Bool = false) {
-        // Debounce: only update if more than 1 second since last update
-        // Skip debounce when force is true (e.g., after event edits)
-        let now = Date()
-        if !force, let lastUpdate = lastStatsUpdate, now.timeIntervalSince(lastUpdate) < 1.0 {
-            return
-        }
-        lastStatsUpdate = now
-
-        // Fetch 8 days of events in a single query (7 days + 1 for sleep overlap)
-        // This is small enough to do synchronously for immediate UI updates
-        let eightDaysAgo = Date().addingDays(-8)
-        let recentEvents = eventStore.getEvents(from: eightDaysAgo, to: Date())
-
-        // Update cached recent events (7 days)
-        let sevenDaysAgo = Date().addingDays(-7)
-        cachedRecentEvents = recentEvents.filter { $0.time >= sevenDaysAgo }
-
-        // Update cached pattern analysis
-        cachedPatternAnalysis = PatternCalculations.analyzePatterns(
-            events: cachedRecentEvents,
-            periodDays: 7
-        )
-
-        // Update cached week stats using optimized batch method (single partition instead of 7 queries)
-        cachedWeekStats = WeekCalculations.calculateWeekStatsBatch(from: recentEvents)
-
-        // Update cached recent walks (7 days)
-        cachedRecentWalks = cachedRecentEvents.walks()
-
-        // Update cached walk stats
-        let totalWalkMinutes = cachedRecentWalks.compactMap { $0.durationMin }.reduce(0, +)
-        cachedWeekWalkStats = (cachedRecentWalks.count, totalWalkMinutes)
-
-        // Update cached year events for weight calculations (async - this is heavy)
-        // Only refresh when force is true or cache is empty
-        if force || cachedYearEvents.isEmpty {
-            // Cancel any existing refresh task
-            statsRefreshTask?.cancel()
-
-            statsRefreshTask = Task { [weak self] in
-                guard let self = self else { return }
-
-                let oneYearAgo = Calendar.current.date(byAdding: .year, value: -1, to: Date()) ?? Date()
-
-                // Fetch year events on background thread
-                let yearEvents = await self.eventStore.getEventsAsync(from: oneYearAgo, to: Date())
-
-                // Check if task was cancelled
-                guard !Task.isCancelled else { return }
-
-                // Update caches on main actor
-                self.cachedYearEvents = yearEvents
-                self.cachedLatestWeight = WeightCalculations.latestWeight(events: yearEvents)
-                self.cachedWeightDelta = WeightCalculations.weightDelta(events: yearEvents)
-                self.cachedFirstWeight = WeightCalculations.firstWeight(events: yearEvents)
-
-                // Compute growth story if we have profile data
-                if let profile = self.profileStore.profile {
-                    self.cachedGrowthStory = WeightCalculations.growthStory(
-                        events: yearEvents,
-                        homeDate: profile.homeDate,
-                        sizeCategory: profile.sizeCategory
-                    )
-                }
-            }
-        }
-    }
 
     // MARK: - Subscription
 
@@ -471,7 +392,7 @@ class TimelineViewModel: ObservableObject {
 
     /// Notify to force refresh stats
     func notifyForceRefreshStats() {
-        refreshCachedStats(force: true)
+        statsCache.refresh(force: true)
     }
 
     /// Record potty log time for post-wake state tracking

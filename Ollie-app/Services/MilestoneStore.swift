@@ -7,54 +7,69 @@
 import Foundation
 import CoreData
 import OllieShared
-import Combine
 import os
 
 /// Manages milestones with Core Data and automatic CloudKit sync
 @MainActor
-class MilestoneStore: ObservableObject {
+final class MilestoneStore: CRUDStore<Milestone, CDMilestone> {
 
-    // MARK: - Published State
+    // MARK: - Cached Computed Properties
 
-    @Published private(set) var milestones: [Milestone] = []
-    @Published private(set) var isSyncing = false
-    /// Last error that occurred during a store operation (for UI display)
-    @Published private(set) var lastError: (message: String, date: Date)? = nil
+    private var _cachedCompletedMilestones: [Milestone]?
+    private var _cachedIncompleteMilestones: [Milestone]?
 
-    /// Clear the last error (call when user dismisses error banner)
-    func clearError() {
-        lastError = nil
+    // MARK: - Sort Order
+
+    override var sortOrder: StoreSortOrder<Milestone> {
+        .ascending(\.sortOrder)
     }
 
-    private let persistenceController: PersistenceController
-    private let logger = Logger.ollie(category: "MilestoneStore")
-    private var cancellables = Set<AnyCancellable>()
+    // MARK: - Init
 
-    private var viewContext: NSManagedObjectContext {
-        persistenceController.viewContext
+    init(persistenceController: PersistenceController = .shared) {
+        super.init(persistenceController: persistenceController, logCategory: "MilestoneStore")
     }
 
-    // MARK: - Computed Properties
+    // MARK: - Data Loading
+
+    override func performInitialLoad() {
+        invalidateCaches()
+        super.performInitialLoad()
+    }
+
+    private func invalidateCaches() {
+        _cachedCompletedMilestones = nil
+        _cachedIncompleteMilestones = nil
+    }
+
+    // MARK: - Backward-Compatible Aliases
+
+    /// Alias for items (backward compatibility)
+    var milestones: [Milestone] { items }
+
+    // MARK: - Cached Computed Properties
 
     /// All completed milestones
     var completedMilestones: [Milestone] {
-        milestones.filter { $0.isCompleted }
+        if let cached = _cachedCompletedMilestones { return cached }
+        let result = items.filter { $0.isCompleted }
+        _cachedCompletedMilestones = result
+        return result
     }
 
     /// All incomplete milestones
     var incompleteMilestones: [Milestone] {
-        milestones.filter { !$0.isCompleted }
+        if let cached = _cachedIncompleteMilestones { return cached }
+        let result = items.filter { !$0.isCompleted }
+        _cachedIncompleteMilestones = result
+        return result
     }
 
     /// Count of completed milestones
-    var completedCount: Int {
-        completedMilestones.count
-    }
+    var completedCount: Int { completedMilestones.count }
 
     /// Count of total milestones
-    var totalCount: Int {
-        milestones.count
-    }
+    var totalCount: Int { itemCount }
 
     /// Progress fraction (0.0 to 1.0)
     var progressFraction: Double {
@@ -62,36 +77,44 @@ class MilestoneStore: ObservableObject {
         return Double(completedCount) / Double(totalCount)
     }
 
-    // MARK: - Init
+    // MARK: - CRUD Operations (with cache invalidation)
 
-    init(persistenceController: PersistenceController = .shared) {
-        self.persistenceController = persistenceController
-        loadMilestones()
-        setupRemoteChangeObserver()
+    @discardableResult
+    override func add(_ item: Milestone) -> Bool {
+        invalidateCaches()
+        return super.add(item)
     }
 
-    // MARK: - Setup
-
-    private func setupRemoteChangeObserver() {
-        NotificationCenter.default.publisher(for: .NSPersistentStoreRemoteChange)
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.handleRemoteChange()
-            }
-            .store(in: &cancellables)
+    @discardableResult
+    override func update(_ item: Milestone) -> Bool {
+        invalidateCaches()
+        return super.update(item)
     }
 
-    private func handleRemoteChange() {
-        logger.debug("Detected CloudKit remote change for milestones")
-        loadMilestones()
+    @discardableResult
+    override func delete(_ item: Milestone) -> Bool {
+        invalidateCaches()
+        return super.delete(item)
     }
 
-    // MARK: - Milestone Loading
+    // MARK: - Backward-Compatible CRUD
 
-    private func loadMilestones() {
-        let cdMilestones = CDMilestone.fetchAllMilestones(in: viewContext)
-        milestones = cdMilestones.compactMap { $0.toMilestone() }
-        logger.info("Loaded \(self.milestones.count) milestones from Core Data")
+    /// Add a new milestone (backward-compatible alias)
+    @discardableResult
+    func addMilestone(_ milestone: Milestone) -> Bool {
+        add(milestone)
+    }
+
+    /// Update an existing milestone (backward-compatible alias)
+    @discardableResult
+    func updateMilestone(_ milestone: Milestone) -> Bool {
+        update(milestone)
+    }
+
+    /// Delete a milestone (backward-compatible alias)
+    @discardableResult
+    func deleteMilestone(_ milestone: Milestone) -> Bool {
+        delete(milestone)
     }
 
     // MARK: - Seeding Default Milestones
@@ -108,96 +131,9 @@ class MilestoneStore: ObservableObject {
                 _ = CDMilestone.create(from: milestone, in: viewContext)
             }
 
-            do {
-                try persistenceController.save()
-                loadMilestones()
-                logger.info("Seeded \(defaults.count) default milestones")
-            } catch {
-                logger.error("Failed to seed default milestones: \(error.localizedDescription)")
+            performSave(operation: "Seeded \(defaults.count) default milestones") {
+                performInitialLoad()
             }
-        }
-    }
-
-    // MARK: - CRUD Operations
-
-    /// Add a new milestone
-    /// - Returns: `true` if the milestone was saved successfully, `false` otherwise
-    @discardableResult
-    func addMilestone(_ milestone: Milestone) -> Bool {
-        _ = CDMilestone.create(from: milestone, in: viewContext)
-
-        do {
-            try persistenceController.save()
-            // Only update in-memory state after confirming persistence succeeded
-            milestones.append(milestone)
-            milestones.sort { $0.sortOrder < $1.sortOrder }
-            lastError = nil
-            logger.info("Added milestone: \(milestone.labelKey)")
-            return true
-        } catch {
-            // Rollback the unsaved Core Data change
-            viewContext.rollback()
-            lastError = (Strings.Common.saveFailed, Date())
-            logger.error("Failed to add milestone: \(error.localizedDescription)")
-            return false
-        }
-    }
-
-    /// Update an existing milestone
-    /// - Returns: `true` if the milestone was updated successfully, `false` otherwise
-    @discardableResult
-    func updateMilestone(_ milestone: Milestone) -> Bool {
-        guard let cdMilestone = CDMilestone.fetch(byId: milestone.id, in: viewContext) else {
-            logger.warning("Milestone not found for update: \(milestone.id)")
-            lastError = (Strings.Common.notFound, Date())
-            return false
-        }
-
-        cdMilestone.update(from: milestone)
-
-        do {
-            try persistenceController.save()
-            // Only update in-memory state after confirming persistence succeeded
-            if let index = milestones.firstIndex(where: { $0.id == milestone.id }) {
-                milestones[index] = milestone
-            }
-            lastError = nil
-            logger.info("Updated milestone: \(milestone.labelKey)")
-            return true
-        } catch {
-            // Rollback the unsaved Core Data change
-            viewContext.rollback()
-            lastError = (Strings.Common.saveFailed, Date())
-            logger.error("Failed to update milestone: \(error.localizedDescription)")
-            return false
-        }
-    }
-
-    /// Delete a milestone
-    /// - Returns: `true` if the milestone was deleted successfully, `false` otherwise
-    @discardableResult
-    func deleteMilestone(_ milestone: Milestone) -> Bool {
-        guard let cdMilestone = CDMilestone.fetch(byId: milestone.id, in: viewContext) else {
-            logger.warning("Milestone not found for deletion: \(milestone.id)")
-            lastError = (Strings.Common.notFound, Date())
-            return false
-        }
-
-        viewContext.delete(cdMilestone)
-
-        do {
-            try persistenceController.save()
-            // Only update in-memory state after confirming persistence succeeded
-            milestones.removeAll { $0.id == milestone.id }
-            lastError = nil
-            logger.info("Deleted milestone: \(milestone.labelKey)")
-            return true
-        } catch {
-            // Rollback the unsaved Core Data change
-            viewContext.rollback()
-            lastError = (Strings.Common.deleteFailed, Date())
-            logger.error("Failed to delete milestone: \(error.localizedDescription)")
-            return false
         }
     }
 
@@ -219,7 +155,7 @@ class MilestoneStore: ObservableObject {
         updated.vetClinicName = vetClinicName
         updated.modifiedAt = Date()
 
-        updateMilestone(updated)
+        update(updated)
     }
 
     /// Uncomplete a milestone (mark as not done)
@@ -229,7 +165,7 @@ class MilestoneStore: ObservableObject {
         updated.completedDate = nil
         updated.modifiedAt = Date()
 
-        updateMilestone(updated)
+        update(updated)
     }
 
     /// Toggle completion status
@@ -249,27 +185,27 @@ class MilestoneStore: ObservableObject {
         updated.calendarEventID = eventID
         updated.modifiedAt = Date()
 
-        updateMilestone(updated)
+        update(updated)
     }
 
     // MARK: - Filtering & Queries
 
     /// Get milestones by category
     func milestones(for category: MilestoneCategory) -> [Milestone] {
-        milestones.filter { $0.category == category }
+        filter { $0.category == category }
     }
 
-    /// Get milestone by ID
+    /// Get milestone by ID (backward-compatible alias)
     func milestone(withId id: UUID) -> Milestone? {
-        milestones.first { $0.id == id }
+        item(withId: id)
     }
 
     /// Get upcoming milestones (within next N days)
     func upcomingMilestones(birthDate: Date, withinDays: Int = 14) -> [Milestone] {
         let now = Date()
-        return milestones.filter { milestone in
+        return filter { milestone in
             guard !milestone.isCompleted,
-                  let _ = milestone.targetDate(birthDate: birthDate),
+                  milestone.targetDate(birthDate: birthDate) != nil,
                   let daysUntil = milestone.daysUntil(birthDate: birthDate, from: now) else {
                 return false
             }
@@ -283,14 +219,12 @@ class MilestoneStore: ObservableObject {
 
     /// Get overdue milestones
     func overdueMilestones(birthDate: Date) -> [Milestone] {
-        milestones.filter { milestone in
-            milestone.status(birthDate: birthDate) == .overdue
-        }
+        filter { $0.status(birthDate: birthDate) == .overdue }
     }
 
     /// Get next milestone that needs attention
     func nextUpMilestone(birthDate: Date) -> Milestone? {
-        milestones
+        items
             .filter { !$0.isCompleted && $0.isActionable }
             .filter { $0.status(birthDate: birthDate) == .nextUp || $0.status(birthDate: birthDate) == .overdue }
             .sorted { milestone1, milestone2 in
@@ -303,20 +237,19 @@ class MilestoneStore: ObservableObject {
 
     /// Get milestones with status
     func milestonesWithStatus(birthDate: Date, status: MilestoneStatus) -> [Milestone] {
-        milestones.filter { $0.status(birthDate: birthDate) == status }
+        filter { $0.status(birthDate: birthDate) == status }
     }
 
     /// Get actionable milestones due within this week (7 days)
     /// Excludes developmental milestones (isActionable: false)
     func milestonesThisWeek(birthDate: Date) -> [Milestone] {
         let now = Date()
-        return milestones.filter { milestone in
+        return filter { milestone in
             guard !milestone.isCompleted,
                   milestone.isActionable,
                   let daysUntil = milestone.daysUntil(birthDate: birthDate, from: now) else {
                 return false
             }
-            // Include overdue (negative) and within 7 days
             return daysUntil <= 7
         }.sorted { milestone1, milestone2 in
             let days1 = milestone1.daysUntil(birthDate: birthDate, from: now) ?? Int.max
@@ -329,13 +262,12 @@ class MilestoneStore: ObservableObject {
     /// Excludes developmental milestones (isActionable: false)
     func milestonesComingUp(birthDate: Date) -> [Milestone] {
         let now = Date()
-        return milestones.filter { milestone in
+        return filter { milestone in
             guard !milestone.isCompleted,
                   milestone.isActionable,
                   let daysUntil = milestone.daysUntil(birthDate: birthDate, from: now) else {
                 return false
             }
-            // Between 8 and 28 days (2-4 weeks)
             return daysUntil > 7 && daysUntil <= 28
         }.sorted { milestone1, milestone2 in
             let days1 = milestone1.daysUntil(birthDate: birthDate, from: now) ?? Int.max
@@ -345,21 +277,17 @@ class MilestoneStore: ObservableObject {
     }
 
     /// Get active developmental periods (non-actionable milestones that apply to current age)
-    /// These include socialization window markers and fear periods
     func activeDevelopmentalPeriods(birthDate: Date) -> [Milestone] {
         let ageInWeeks = Calendar.current.dateComponents([.weekOfYear], from: birthDate, to: Date()).weekOfYear ?? 0
 
-        return milestones.filter { milestone in
+        return filter { milestone in
             guard !milestone.isActionable,
                   milestone.category == .developmental else {
                 return false
             }
 
-            // Check if this developmental period is currently active
             if let targetWeeks = milestone.targetAgeWeeks {
-                // Socialization periods are active from their start week
                 if milestone.labelKey.contains("socialization") {
-                    // Socialization window: 8-16 weeks
                     if milestone.labelKey.contains("Start") {
                         return ageInWeeks >= targetWeeks && ageInWeeks <= 16
                     }
@@ -370,7 +298,6 @@ class MilestoneStore: ObservableObject {
                         return ageInWeeks >= 14 && ageInWeeks <= 18
                     }
                 }
-                // Fear periods are active for about 2-3 weeks around target
                 if milestone.labelKey.contains("fearPeriod") {
                     return abs(ageInWeeks - targetWeeks) <= 2
                 }
@@ -378,7 +305,6 @@ class MilestoneStore: ObservableObject {
 
             if let targetMonths = milestone.targetAgeMonths {
                 let ageInMonths = ageInWeeks / 4
-                // Fear period 2 around 6 months
                 if milestone.labelKey.contains("fearPeriod") {
                     return abs(ageInMonths - targetMonths) <= 1
                 }
@@ -391,17 +317,15 @@ class MilestoneStore: ObservableObject {
     // MARK: - Calendar Grid Support
 
     /// Get milestones that fall within the week containing the given date
-    /// Returns actionable milestones due in that week
     func milestones(inWeekOf date: Date, birthDate: Date) -> [Milestone] {
         let calendar = Calendar.current
 
-        // Get the start of the week containing the date
         guard let weekStart = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: date)),
               let weekEnd = calendar.date(byAdding: .day, value: 7, to: weekStart) else {
             return []
         }
 
-        return milestones.filter { milestone in
+        return filter { milestone in
             guard !milestone.isCompleted,
                   milestone.isActionable,
                   let targetDate = milestone.targetDate(birthDate: birthDate) else {
@@ -417,24 +341,21 @@ class MilestoneStore: ObservableObject {
     }
 
     /// Get milestone spans for a date range (for calendar month view)
-    /// Returns MilestoneSpan objects with their week ranges for background tinting
     func milestoneSpans(from startDate: Date, to endDate: Date, birthDate: Date) -> [MilestoneSpan] {
         let calendar = Calendar.current
 
-        return milestones.compactMap { milestone -> MilestoneSpan? in
+        return items.compactMap { milestone -> MilestoneSpan? in
             guard !milestone.isCompleted,
                   milestone.isActionable,
                   let targetDate = milestone.targetDate(birthDate: birthDate) else {
                 return nil
             }
 
-            // Get the week containing the target date
             guard let weekStart = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: targetDate)),
                   let weekEnd = calendar.date(byAdding: .day, value: 7, to: weekStart) else {
                 return nil
             }
 
-            // Check if this week overlaps with the date range
             guard weekEnd > startDate && weekStart < endDate else {
                 return nil
             }
@@ -446,13 +367,5 @@ class MilestoneStore: ObservableObject {
                 weekEndDate: weekEnd
             )
         }
-    }
-
-    // MARK: - CloudKit Sync
-
-    /// Sync milestones from CloudKit (no-op with automatic sync)
-    func syncFromCloud() async {
-        viewContext.refreshAllObjects()
-        loadMilestones()
     }
 }

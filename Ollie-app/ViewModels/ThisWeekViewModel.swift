@@ -117,7 +117,7 @@ class ThisWeekViewModel: ObservableObject {
             .store(in: &cancellables)
 
         // Watch for milestone changes
-        milestoneStore.$milestones
+        milestoneStore.$items
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 self?.refreshMilestones()

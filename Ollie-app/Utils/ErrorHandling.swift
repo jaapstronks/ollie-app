@@ -8,7 +8,7 @@ import OllieShared
 import Combine
 
 /// App error types with user-friendly messages
-enum AppError: LocalizedError {
+enum GeneralError: LocalizedError {
     case networkError(underlying: Error)
     case fileError(underlying: Error)
     case dataCorrupted
@@ -53,8 +53,8 @@ struct ErrorAlert: ViewModifier {
                     error = nil
                 }
             } message: {
-                if let appError = error as? AppError {
-                    Text("\(appError.localizedDescription)\n\n\(appError.recoverySuggestion ?? "")")
+                if let generalError = error as? GeneralError {
+                    Text("\(generalError.localizedDescription)\n\n\(generalError.recoverySuggestion ?? "")")
                 } else if let localizedError = error as? LocalizedError {
                     Text(localizedError.localizedDescription)
                 } else if let error = error {

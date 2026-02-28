@@ -7,6 +7,36 @@
 import CoreData
 import OllieShared
 
+// MARK: - CDEntityConvertible Conformance
+
+extension CDDogContact: CDEntityConvertible {
+    typealias Model = DogContact
+
+    static func fetchAll(in context: NSManagedObjectContext) -> [NSManagedObject] {
+        fetchAllContacts(in: context)
+    }
+
+    static func fetch(byId id: UUID, in context: NSManagedObjectContext) -> NSManagedObject? {
+        let request = NSFetchRequest<CDDogContact>(entityName: "CDDogContact")
+        request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
+        request.fetchLimit = 1
+        return try? context.fetch(request).first
+    }
+
+    @discardableResult
+    static func create(from contact: DogContact, in context: NSManagedObjectContext) -> NSManagedObject {
+        let cdContact = CDDogContact(context: context)
+        cdContact.update(from: contact)
+        return cdContact
+    }
+
+    func toModel() -> DogContact? {
+        toContact()
+    }
+}
+
+// MARK: - Core Data Operations
+
 extension CDDogContact {
 
     // MARK: - Convert from Swift Struct
@@ -24,13 +54,6 @@ extension CDDogContact {
         self.longitude = contact.longitude as NSNumber?
         self.createdAt = contact.createdAt
         self.modifiedAt = Date()
-    }
-
-    /// Create a new CDDogContact from a DogContact struct
-    static func create(from contact: DogContact, in context: NSManagedObjectContext) -> CDDogContact {
-        let cdContact = CDDogContact(context: context)
-        cdContact.update(from: contact)
-        return cdContact
     }
 
     // MARK: - Convert to Swift Struct
@@ -79,14 +102,6 @@ extension CDDogContact {
         request.predicate = NSPredicate(format: "contactType == %@", type.rawValue)
         request.sortDescriptors = [NSSortDescriptor(keyPath: \CDDogContact.createdAt, ascending: false)]
         return (try? context.fetch(request)) ?? []
-    }
-
-    /// Fetch contact by ID
-    static func fetch(byId id: UUID, in context: NSManagedObjectContext) -> CDDogContact? {
-        let request = NSFetchRequest<CDDogContact>(entityName: "CDDogContact")
-        request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
-        request.fetchLimit = 1
-        return try? context.fetch(request).first
     }
 
     /// Count all contacts

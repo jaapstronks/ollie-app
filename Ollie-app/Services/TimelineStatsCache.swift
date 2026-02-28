@@ -1,0 +1,157 @@
+//
+//  TimelineStatsCache.swift
+//  Ollie-app
+//
+//  Extracted from TimelineViewModel - manages cached stats to avoid recomputation
+//
+
+import Foundation
+import OllieShared
+import Combine
+
+/// Manages cached timeline statistics to avoid expensive recomputation on every frame
+/// Extracted from TimelineViewModel to separate concerns
+@MainActor
+final class TimelineStatsCache: ObservableObject {
+
+    // MARK: - Dependencies
+
+    private let eventStore: EventStore
+    private let profileStore: ProfileStore
+
+    // MARK: - Cached Stats (Published for UI updates)
+
+    /// Cached pattern analysis (updated when events change)
+    @Published private(set) var patternAnalysis: PatternAnalysis?
+
+    /// Cached recent events for stats (7 days)
+    @Published private(set) var recentEvents: [PuppyEvent] = []
+
+    /// Cached week stats for insights view
+    @Published private(set) var weekStats: [DayStats] = []
+
+    /// Cached events for 1 year (for weight calculations)
+    @Published private(set) var yearEvents: [PuppyEvent] = []
+
+    /// Cached recent walks (7 days)
+    @Published private(set) var recentWalks: [PuppyEvent] = []
+
+    /// Cached walk stats for the week
+    @Published private(set) var weekWalkStats: (count: Int, totalMinutes: Int) = (0, 0)
+
+    /// Cached latest weight measurement
+    @Published private(set) var latestWeight: (weight: Double, date: Date)?
+
+    /// Cached weight delta from previous measurement
+    @Published private(set) var weightDelta: (delta: Double, previousDate: Date)?
+
+    /// Cached growth story for the health tab
+    @Published private(set) var growthStory: GrowthStory?
+
+    /// Cached first weight (for "journey begins" state)
+    @Published private(set) var firstWeight: (weight: Double, date: Date)?
+
+    // MARK: - Internal State
+
+    /// Last time stats were computed (for debouncing)
+    private var lastStatsUpdate: Date?
+
+    /// Task for async stats refresh (to cancel if a new refresh is requested)
+    private var statsRefreshTask: Task<Void, Never>?
+
+    // MARK: - Init
+
+    init(eventStore: EventStore, profileStore: ProfileStore) {
+        self.eventStore = eventStore
+        self.profileStore = profileStore
+    }
+
+    // MARK: - Public Methods
+
+    /// Refresh cached stats (debounced, only if data changed)
+    /// - Parameter force: When true, bypasses debounce (use after event changes)
+    func refresh(force: Bool = false) {
+        // Debounce: only update if more than 1 second since last update
+        // Skip debounce when force is true (e.g., after event edits)
+        let now = Date()
+        if !force, let lastUpdate = lastStatsUpdate, now.timeIntervalSince(lastUpdate) < 1.0 {
+            return
+        }
+        lastStatsUpdate = now
+
+        // Fetch 8 days of events in a single query (7 days + 1 for sleep overlap)
+        // This is small enough to do synchronously for immediate UI updates
+        let eightDaysAgo = Date().addingDays(-8)
+        let allRecentEvents = eventStore.getEvents(from: eightDaysAgo, to: Date())
+
+        // Update cached recent events (7 days)
+        let sevenDaysAgo = Date().addingDays(-7)
+        recentEvents = allRecentEvents.filter { $0.time >= sevenDaysAgo }
+
+        // Update cached pattern analysis
+        patternAnalysis = PatternCalculations.analyzePatterns(
+            events: recentEvents,
+            periodDays: 7
+        )
+
+        // Update cached week stats using optimized batch method (single partition instead of 7 queries)
+        weekStats = WeekCalculations.calculateWeekStatsBatch(from: allRecentEvents)
+
+        // Update cached recent walks (7 days)
+        recentWalks = recentEvents.walks()
+
+        // Update cached walk stats
+        let totalWalkMinutes = recentWalks.compactMap { $0.durationMin }.reduce(0, +)
+        weekWalkStats = (recentWalks.count, totalWalkMinutes)
+
+        // Update cached year events for weight calculations (async - this is heavy)
+        // Only refresh when force is true or cache is empty
+        if force || yearEvents.isEmpty {
+            refreshYearEventsAsync()
+        }
+    }
+
+    /// Invalidate year events cache (call when weight is logged)
+    func invalidateYearCache() {
+        yearEvents = []
+        refreshYearEventsAsync()
+    }
+
+    // MARK: - Private Methods
+
+    private func refreshYearEventsAsync() {
+        // Cancel any existing refresh task
+        statsRefreshTask?.cancel()
+
+        statsRefreshTask = Task { [weak self] in
+            guard let self = self else { return }
+
+            let oneYearAgo = Calendar.current.date(byAdding: .year, value: -1, to: Date()) ?? Date()
+
+            // Fetch year events on background thread
+            let fetchedYearEvents = await self.eventStore.getEventsAsync(from: oneYearAgo, to: Date())
+
+            // Check if task was cancelled
+            guard !Task.isCancelled else { return }
+
+            // Update caches on main actor
+            self.yearEvents = fetchedYearEvents
+            self.latestWeight = WeightCalculations.latestWeight(events: fetchedYearEvents)
+            self.weightDelta = WeightCalculations.weightDelta(events: fetchedYearEvents)
+            self.firstWeight = WeightCalculations.firstWeight(events: fetchedYearEvents)
+
+            // Compute growth story if we have profile data
+            if let profile = self.profileStore.profile {
+                self.growthStory = WeightCalculations.growthStory(
+                    events: fetchedYearEvents,
+                    homeDate: profile.homeDate,
+                    sizeCategory: profile.sizeCategory
+                )
+            }
+        }
+    }
+
+    deinit {
+        statsRefreshTask?.cancel()
+    }
+}

@@ -8,6 +8,36 @@
 import CoreData
 import OllieShared
 
+// MARK: - CDEntityConvertible Conformance
+
+extension CDWalkSpot: CDEntityConvertible {
+    typealias Model = WalkSpot
+
+    static func fetchAll(in context: NSManagedObjectContext) -> [NSManagedObject] {
+        fetchAllSpots(in: context)
+    }
+
+    static func fetch(byId id: UUID, in context: NSManagedObjectContext) -> NSManagedObject? {
+        let request = NSFetchRequest<CDWalkSpot>(entityName: "CDWalkSpot")
+        request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
+        request.fetchLimit = 1
+        return try? context.fetch(request).first
+    }
+
+    @discardableResult
+    static func create(from spot: WalkSpot, in context: NSManagedObjectContext) -> NSManagedObject {
+        let cdSpot = CDWalkSpot(context: context)
+        cdSpot.update(from: spot)
+        return cdSpot
+    }
+
+    func toModel() -> WalkSpot? {
+        toWalkSpot()
+    }
+}
+
+// MARK: - Core Data Operations
+
 extension CDWalkSpot {
 
     // MARK: - Convert from Swift Struct
@@ -25,13 +55,6 @@ extension CDWalkSpot {
         self.visitCount = Int32(spot.visitCount)
         self.category = spot.category?.rawValue
         self.photoFilename = spot.photoFilename
-    }
-
-    /// Create a new CDWalkSpot from a WalkSpot struct
-    static func create(from spot: WalkSpot, in context: NSManagedObjectContext) -> CDWalkSpot {
-        let cdSpot = CDWalkSpot(context: context)
-        cdSpot.update(from: spot)
-        return cdSpot
     }
 
     // MARK: - Convert to Swift Struct
@@ -76,14 +99,6 @@ extension CDWalkSpot {
         ]
 
         return (try? context.fetch(request)) ?? []
-    }
-
-    /// Fetch spot by ID
-    static func fetch(byId id: UUID, in context: NSManagedObjectContext) -> CDWalkSpot? {
-        let request = NSFetchRequest<CDWalkSpot>(entityName: "CDWalkSpot")
-        request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
-        request.fetchLimit = 1
-        return try? context.fetch(request).first
     }
 
     /// Fetch favorite spots
