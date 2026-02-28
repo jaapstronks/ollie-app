@@ -15,7 +15,9 @@ extension Strings {
         static let pottyAlarmTitle = String(localized: "Potty alarm!", table: table)
         static let goOutsideNowTitle = String(localized: "Go outside now!", table: table)
         static let mealTimeTitle = String(localized: "Time to eat!", table: table)
+        static let mealOverdueTitle = String(localized: "Meal time!", table: table)
         static let walkTimeTitle = String(localized: "Time for a walk!", table: table)
+        static let appointmentReminderTitle = String(localized: "Upcoming appointment", table: table)
 
         static func needsToPeeSoon(name: String) -> String {
             String(localized: "\(name) needs to pee soon!", table: table)
@@ -35,6 +37,9 @@ extension Strings {
         static let napNeededTitle = String(localized: "Nap needed?", table: table)
         static func napNeededBody(name: String, minutes: Int) -> String {
             String(localized: "\(name) has been awake for \(minutes) minutes", table: table)
+        }
+        static func appointmentReminder(name: String, title: String, time: String) -> String {
+            String(localized: "\(name) has '\(title)' at \(time)", table: table)
         }
     }
 

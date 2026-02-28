@@ -34,6 +34,7 @@ extension Strings {
         static let getStarted = String(localized: "Get Started", table: table)
 
         static let nameQuestion = String(localized: "What's your puppy's name?", table: table)
+        static let nameSubtitle = String(localized: "We'll use this throughout the app", table: table)
         static let namePlaceholder = String(localized: "Name", table: table)
         static let nameAccessibility = String(localized: "Enter your puppy's name", table: table)
 
@@ -76,6 +77,35 @@ extension Strings {
         static let born = String(localized: "Born", table: table)
         static let cameHome = String(localized: "Came home", table: table)
         static let breedOptional = String(localized: "Breed (optional)", table: table)
+
+        // Progress accessibility
+        static let progressAccessibility = String(localized: "Setup progress", table: table)
+        static func progressValue(current: Int, total: Int) -> String {
+            String(localized: "Step \(current) of \(total)", table: table)
+        }
+    }
+
+    // MARK: - Permissions (Onboarding)
+    enum Permissions {
+        // Notifications
+        static let notificationsTitle = String(localized: "Never miss a potty break", table: table)
+        static let notificationsSubtitle = String(localized: "Smart reminders help you stay ahead of your puppy's needs.", table: table)
+        static let notificationsBenefit1 = String(localized: "Potty reminders based on patterns", table: table)
+        static let notificationsBenefit2 = String(localized: "Meal time alerts", table: table)
+        static let notificationsBenefit3 = String(localized: "Nap reminders when awake too long", table: table)
+        static let enableNotifications = String(localized: "Enable Notifications", table: table)
+
+        // Location
+        static let locationTitle = String(localized: "Track walks & check weather", table: table)
+        static let locationSubtitle = String(localized: "Save favorite spots and get weather forecasts for your walks.", table: table)
+        static let locationBenefit1 = String(localized: "Save and revisit walk spots", table: table)
+        static let locationBenefit2 = String(localized: "Weather forecasts for planning", table: table)
+        static let locationBenefit3 = String(localized: "Track routes and distances", table: table)
+        static let enableLocation = String(localized: "Enable Location", table: table)
+
+        // Shared
+        static let notNow = String(localized: "Not Now", table: table)
+        static let letsGo = String(localized: "Let's Go!", table: table)
     }
 
     // MARK: - Plan Tab

@@ -2,6 +2,7 @@
   "sourceLanguage" : "en",
   "strings" : {
     "Adult man" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -12,6 +13,7 @@
       }
     },
     "Adult woman" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -22,6 +24,7 @@
       }
     },
     "Alarm/siren" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -32,6 +35,7 @@
       }
     },
     "Ambulance, fire truck, police car" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -42,6 +46,7 @@
       }
     },
     "Animals" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -52,6 +57,7 @@
       }
     },
     "Balloons" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -62,6 +68,7 @@
       }
     },
     "Bathing" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -72,6 +79,7 @@
       }
     },
     "Beach" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -82,6 +90,7 @@
       }
     },
     "Being picked up" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -92,6 +101,7 @@
       }
     },
     "Bicycle" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -102,6 +112,7 @@
       }
     },
     "Bird" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -112,6 +123,7 @@
       }
     },
     "Bridges, grates, manhole covers" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -122,6 +134,7 @@
       }
     },
     "Broom/mop" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -132,6 +145,7 @@
       }
     },
     "Brushing" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -142,6 +156,7 @@
       }
     },
     "Bus" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -152,6 +167,7 @@
       }
     },
     "Busy street" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -162,6 +178,7 @@
       }
     },
     "Car" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -172,6 +189,7 @@
       }
     },
     "Cat" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -182,6 +200,7 @@
       }
     },
     "Child (6-12 years)" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -192,6 +211,7 @@
       }
     },
     "Church bells" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -202,6 +222,7 @@
       }
     },
     "Cold weather" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -212,6 +233,7 @@
       }
     },
     "Collar grab" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -222,6 +244,7 @@
       }
     },
     "Construction noise" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -232,6 +255,7 @@
       }
     },
     "Cow/sheep" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -242,6 +266,7 @@
       }
     },
     "Crying baby" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -252,6 +277,7 @@
       }
     },
     "Darkness/night walk" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -262,6 +288,7 @@
       }
     },
     "Dishwasher" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -272,6 +299,7 @@
       }
     },
     "Doorbell" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -282,6 +310,7 @@
       }
     },
     "Duck/goose" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -292,6 +321,7 @@
       }
     },
     "Elderly person" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -302,6 +332,7 @@
       }
     },
     "Elevator" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -312,6 +343,7 @@
       }
     },
     "Emergency vehicle" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -322,6 +354,7 @@
       }
     },
     "Environments" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -332,6 +365,7 @@
       }
     },
     "Fireworks" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -342,6 +376,7 @@
       }
     },
     "Flags/banners" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -352,6 +387,7 @@
       }
     },
     "Forest" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -362,6 +398,7 @@
       }
     },
     "Garbage bags" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -372,6 +409,7 @@
       }
     },
     "Grass" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -382,6 +420,7 @@
       }
     },
     "Gravel" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -392,6 +431,7 @@
       }
     },
     "Group of people" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -402,6 +442,7 @@
       }
     },
     "Hair dryer" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -412,6 +453,7 @@
       }
     },
     "Handling" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -422,6 +464,7 @@
       }
     },
     "Horse" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -432,6 +475,7 @@
       }
     },
     "Hot weather" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -442,6 +486,7 @@
       }
     },
     "Important for safety" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -452,6 +497,7 @@
       }
     },
     "Large dog" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -462,6 +508,7 @@
       }
     },
     "Leaves/mulch" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -472,6 +519,7 @@
       }
     },
     "Loud music" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -482,6 +530,7 @@
       }
     },
     "Metal grating" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -492,6 +541,7 @@
       }
     },
     "Mirror" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -502,6 +552,7 @@
       }
     },
     "Motorcycle" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -512,6 +563,7 @@
       }
     },
     "Moving furniture" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -522,6 +574,7 @@
       }
     },
     "Mud" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -532,6 +585,7 @@
       }
     },
     "Nail trimming" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -542,6 +596,7 @@
       }
     },
     "Objects" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -552,6 +607,7 @@
       }
     },
     "Opening mouth" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -562,6 +618,7 @@
       }
     },
     "Opening umbrella" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -572,6 +629,7 @@
       }
     },
     "Other puppy" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -582,6 +640,7 @@
       }
     },
     "Outdoor cafe/terrace" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -592,6 +651,7 @@
       }
     },
     "Park" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -602,6 +662,7 @@
       }
     },
     "Parking garage" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -612,6 +673,7 @@
       }
     },
     "People" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -622,6 +684,7 @@
       }
     },
     "Person in uniform" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -632,6 +695,7 @@
       }
     },
     "Person in wheelchair" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -642,6 +706,7 @@
       }
     },
     "Person with beard" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -652,6 +717,7 @@
       }
     },
     "Person with crutches/walker" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -662,6 +728,7 @@
       }
     },
     "Person with hat" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -672,6 +739,7 @@
       }
     },
     "Person with large backpack" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -682,6 +750,7 @@
       }
     },
     "Person with sunglasses" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -692,6 +761,7 @@
       }
     },
     "Person with umbrella" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -702,6 +772,7 @@
       }
     },
     "Pet store" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -712,6 +783,7 @@
       }
     },
     "Phone ringing" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -722,6 +794,7 @@
       }
     },
     "Plastic bags (sound)" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -732,6 +805,7 @@
       }
     },
     "Playground" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -742,6 +816,7 @@
       }
     },
     "Police, delivery person, postal worker" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -752,6 +827,7 @@
       }
     },
     "Rain" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -762,6 +838,7 @@
       }
     },
     "Running person" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -772,6 +849,7 @@
       }
     },
     "Sand" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -782,6 +860,7 @@
       }
     },
     "Scooter/moped" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -792,6 +871,7 @@
       }
     },
     "Shallow water" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -802,6 +882,7 @@
       }
     },
     "Shopping street" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -812,6 +893,7 @@
       }
     },
     "Shouting/cheering" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -822,6 +904,7 @@
       }
     },
     "Skateboard/rollerblades" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -832,6 +915,7 @@
       }
     },
     "Small dog" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -842,6 +926,7 @@
       }
     },
     "Snow" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -852,6 +937,7 @@
       }
     },
     "Snow/hail" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -862,6 +948,7 @@
       }
     },
     "Sounds" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -872,6 +959,7 @@
       }
     },
     "Stairs" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -882,6 +970,7 @@
       }
     },
     "Start with just touching clippers" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -892,6 +981,7 @@
       }
     },
     "Start with recordings at low volume" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -902,6 +992,7 @@
       }
     },
     "Statues/mannequins" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -912,6 +1003,7 @@
       }
     },
     "Stroller/pram" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -922,6 +1014,7 @@
       }
     },
     "Strong wind" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -932,6 +1025,7 @@
       }
     },
     "Surfaces" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -942,6 +1036,7 @@
       }
     },
     "Teenager" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -952,6 +1047,7 @@
       }
     },
     "Thunder" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -962,6 +1058,7 @@
       }
     },
     "Tiles/pavement" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -972,6 +1069,7 @@
       }
     },
     "Toddler (0-5 years)" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -982,6 +1080,7 @@
       }
     },
     "Touching ears" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -992,6 +1091,7 @@
       }
     },
     "Touching paws" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -1002,6 +1102,7 @@
       }
     },
     "Touching tail" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -1012,6 +1113,7 @@
       }
     },
     "Towel drying" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -1022,6 +1124,7 @@
       }
     },
     "Train/bus station" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -1032,6 +1135,7 @@
       }
     },
     "Tram/train" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -1042,6 +1146,7 @@
       }
     },
     "Trash bins/dumpsters" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -1052,6 +1157,7 @@
       }
     },
     "Truck" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -1062,6 +1168,7 @@
       }
     },
     "Vacuum cleaner" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -1072,6 +1179,7 @@
       }
     },
     "Vehicles" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -1082,6 +1190,7 @@
       }
     },
     "Washing machine" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -1092,6 +1201,7 @@
       }
     },
     "Weather" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -1102,6 +1212,7 @@
       }
     },
     "Wood/decking" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {

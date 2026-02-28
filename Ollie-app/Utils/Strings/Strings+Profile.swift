@@ -16,5 +16,7 @@ extension Strings {
         static let changePhoto = String(localized: "Change Photo", table: table)
         static let removePhoto = String(localized: "Remove Photo", table: table)
         static let photoTitle = String(localized: "Profile Photo", table: table)
+        static let adjustPhoto = String(localized: "Adjust Photo", table: table)
+        static let cropHint = String(localized: "Pinch to zoom, drag to position", table: table)
     }
 }

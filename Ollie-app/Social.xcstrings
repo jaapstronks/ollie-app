@@ -386,6 +386,17 @@
         }
       }
     },
+    "Needs practice" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oefening nodig"
+          }
+        }
+      }
+    },
     "Neutral" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -404,16 +415,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Nog geen ervaringen gelogd"
-          }
-        }
-      }
-    },
-    "Needs practice" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Oefening nodig"
           }
         }
       }

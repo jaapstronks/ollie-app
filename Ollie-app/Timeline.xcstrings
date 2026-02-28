@@ -497,6 +497,7 @@
       }
     },
     "Day %lld with %@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -1650,6 +1651,17 @@
         }
       }
     },
+    "Timeline" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tijdlijn"
+          }
+        }
+      }
+    },
     "times measured" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -1657,16 +1669,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "keer gemeten"
-          }
-        }
-      }
-    },
-    "Timeline" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tijdlijn"
           }
         }
       }

@@ -653,6 +653,15 @@ public enum Strings {
         public static var endGapAccessibilityHint: String { String(localized: "Double-tap to end the coverage gap", bundle: Strings.bundle) }
     }
 
+    // MARK: - Places Discovery
+    public enum PlacesDiscovery {
+        public static var categoryDogPark: String { String(localized: "Dog park", bundle: Strings.bundle) }
+        public static var categoryOffLeash: String { String(localized: "Off-leash area", bundle: Strings.bundle) }
+        public static var categoryDogBeach: String { String(localized: "Dog beach", bundle: Strings.bundle) }
+        public static var categoryDogForest: String { String(localized: "Dog forest", bundle: Strings.bundle) }
+        public static var categoryDogFriendly: String { String(localized: "Dog-friendly park", bundle: Strings.bundle) }
+    }
+
     // MARK: - Walk Schedule
     public enum WalkSchedule {
         // Mode labels

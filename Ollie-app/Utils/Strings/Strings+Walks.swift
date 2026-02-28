@@ -107,6 +107,12 @@ extension Strings {
         static let moveMapToSelect = String(localized: "Move map to position the pin", table: table)
         static let photosHere = String(localized: "Photos here", table: table)
         static let noPhotosHint = String(localized: "No photos yet. Take one on your next visit!", table: table)
+
+        // Place personality stats
+        static let firstVisited = String(localized: "First visited", table: table)
+        static let dogsMet = String(localized: "Dogs met", table: table)
+        static let pottySuccesses = String(localized: "Potty successes", table: table)
+        static let placeStats = String(localized: "Place stats", table: table)
     }
 
     // MARK: - Edit Walk

@@ -56,6 +56,17 @@
         }
       }
     },
+    "Add a photo of %@?" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Foto van %@ toevoegen?"
+          }
+        }
+      }
+    },
     "All milestones completed!" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -166,6 +177,28 @@
         }
       }
     },
+    "Enable Location" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Locatie inschakelen"
+          }
+        }
+      }
+    },
+    "Enable Notifications" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meldingen inschakelen"
+          }
+        }
+      }
+    },
     "Enter custom" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -265,6 +298,28 @@
         }
       }
     },
+    "Let's Go!" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laten we beginnen!"
+          }
+        }
+      }
+    },
+    "Meal time alerts" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Waarschuwingen voor maaltijden"
+          }
+        }
+      }
+    },
     "Medium (10-25kg)" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -298,6 +353,28 @@
         }
       }
     },
+    "Nap reminders when awake too long" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dutje-herinneringen als te lang wakker"
+          }
+        }
+      }
+    },
+    "Never miss a potty break" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mis nooit meer een plasmoment"
+          }
+        }
+      }
+    },
     "Next up" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -316,6 +393,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Geen komende mijlpalen"
+          }
+        }
+      }
+    },
+    "Not Now" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nu niet"
           }
         }
       }
@@ -353,6 +441,17 @@
         }
       }
     },
+    "Potty reminders based on patterns" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plasherinneringen op basis van patronen"
+          }
+        }
+      }
+    },
     "Preparing for your puppy?" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -386,6 +485,28 @@
         }
       }
     },
+    "Save and revisit walk spots" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bewaar en herbezoek wandelplekken"
+          }
+        }
+      }
+    },
+    "Save favorite spots and get weather forecasts for your walks." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bewaar favoriete plekjes en krijg weersverwachtingen voor je wandelingen."
+          }
+        }
+      }
+    },
     "See all moments" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -393,6 +514,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Bekijk alle momenten"
+          }
+        }
+      }
+    },
+    "Skip" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Overslaan"
           }
         }
       }
@@ -408,6 +540,17 @@
         }
       }
     },
+    "Smart reminders help you stay ahead of your puppy's needs." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Slimme herinneringen helpen je vooruit te blijven op de behoeften van je pup."
+          }
+        }
+      }
+    },
     "Start logging from day one. You'll thank yourself in week two." : {
       "extractionState" : "stale",
       "localizations" : {
@@ -415,6 +558,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Begin met loggen vanaf dag een. Je bedankt jezelf in week twee."
+          }
+        }
+      }
+    },
+    "This is optional — you can always add one later." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dit is optioneel — je kunt later altijd een foto toevoegen."
           }
         }
       }
@@ -430,6 +584,28 @@
         }
       }
     },
+    "Track routes and distances" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Routes en afstanden volgen"
+          }
+        }
+      }
+    },
+    "Track walks & check weather" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wandelingen volgen & weer bekijken"
+          }
+        }
+      }
+    },
     "Upcoming milestones" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -437,6 +613,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Komende mijlpalen"
+          }
+        }
+      }
+    },
+    "Weather forecasts for planning" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weersverwachtingen voor planning"
           }
         }
       }

@@ -1,7 +1,41 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "%lld pages" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld pagina's"
+          }
+        }
+      }
+    },
+    "1 page" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 pagina"
+          }
+        }
+      }
+    },
+    "Add attachment" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voeg bijlage toe"
+          }
+        }
+      }
+    },
     "Add Document" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -11,7 +45,19 @@
         }
       }
     },
+    "Attachment" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bijlage"
+          }
+        }
+      }
+    },
     "Chip Registration" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -21,7 +67,19 @@
         }
       }
     },
+    "Choose from Files" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kies uit Bestanden"
+          }
+        }
+      }
+    },
     "Delete Document?" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -32,6 +90,7 @@
       }
     },
     "Document Date" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -42,6 +101,7 @@
       }
     },
     "Documents" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -52,6 +112,7 @@
       }
     },
     "Edit Document" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -62,6 +123,7 @@
       }
     },
     "Expired" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -72,6 +134,7 @@
       }
     },
     "Expired %lld days ago" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -82,6 +145,7 @@
       }
     },
     "Expired 1 day ago" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -92,6 +156,7 @@
       }
     },
     "Expires in %lld days" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -102,6 +167,7 @@
       }
     },
     "Expires in 1 day" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -112,6 +178,7 @@
       }
     },
     "Expires Soon" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -122,6 +189,7 @@
       }
     },
     "Expiry Date" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -131,7 +199,19 @@
         }
       }
     },
+    "File too large. Maximum size is 50 MB." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bestand te groot. Maximale grootte is 50 MB."
+          }
+        }
+      }
+    },
     "Has Expiry Date" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -142,6 +222,7 @@
       }
     },
     "Insurance" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -151,7 +232,19 @@
         }
       }
     },
+    "Insurance Agency" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verzekeringsmaatschappij"
+          }
+        }
+      }
+    },
     "Leave empty to use the document type as title" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -162,6 +255,7 @@
       }
     },
     "Medical Record" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -171,7 +265,30 @@
         }
       }
     },
+    "Name of the insurance company" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Naam van de verzekeringsmaatschappij"
+          }
+        }
+      }
+    },
+    "No attachment" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geen bijlage"
+          }
+        }
+      }
+    },
     "No Documents" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -182,6 +299,7 @@
       }
     },
     "Notes" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -192,6 +310,7 @@
       }
     },
     "Optional custom title" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -202,6 +321,7 @@
       }
     },
     "Optional notes about this document..." : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -212,6 +332,7 @@
       }
     },
     "Other" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -222,6 +343,7 @@
       }
     },
     "Passport" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -231,7 +353,19 @@
         }
       }
     },
+    "PDF Document" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDF-document"
+          }
+        }
+      }
+    },
     "Pedigree" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -242,6 +376,7 @@
       }
     },
     "Photo" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -252,6 +387,7 @@
       }
     },
     "Registration" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -262,6 +398,7 @@
       }
     },
     "Share" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -272,6 +409,7 @@
       }
     },
     "Store scans of your dog's important documents here." : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -282,6 +420,7 @@
       }
     },
     "This will permanently delete this document and its photo." : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -292,6 +431,7 @@
       }
     },
     "Title" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -302,6 +442,7 @@
       }
     },
     "Training Certificate" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -312,6 +453,7 @@
       }
     },
     "Type" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -322,6 +464,7 @@
       }
     },
     "Vaccination Record" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -332,6 +475,7 @@
       }
     },
     "View Full Size" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {

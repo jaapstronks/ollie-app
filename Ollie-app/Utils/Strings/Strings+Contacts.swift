@@ -49,6 +49,15 @@ extension Strings {
         // Validation
         static let nameRequired = String(localized: "Name is required", table: table)
 
+        // Import from Contacts
+        static let importFromContacts = String(localized: "Import from Contacts", table: table)
+        static let importAction = String(localized: "Import", table: table)
+        static let selectContact = String(localized: "Select a Contact", table: table)
+        static let selectContactHint = String(localized: "Choose a contact from your address book to import their details.", table: table)
+        static let chooseContact = String(localized: "Choose Contact", table: table)
+        static let chooseAnotherContact = String(localized: "Choose Another Contact", table: table)
+        static let nameAlwaysImported = String(localized: "The name will always be imported.", table: table)
+
         // Contact types (for picker)
         static let typeVet = String(localized: "Veterinarian", table: table)
         static let typeEmergencyVet = String(localized: "Emergency Vet", table: table)
@@ -60,5 +69,18 @@ extension Strings {
         static let typePetStore = String(localized: "Pet Store", table: table)
         static let typeBreeder = String(localized: "Breeder", table: table)
         static let typeOther = String(localized: "Other", table: table)
+
+        // Location
+        static let location = String(localized: "Location", table: table, comment: "Section header for contact location")
+        static let locationSet = String(localized: "Location set", table: table, comment: "Indicates location is set")
+        static let setOnMap = String(localized: "Set on map", table: table, comment: "Button to open location picker")
+        static let removeLocation = String(localized: "Remove location", table: table, comment: "Button to remove location")
+        static let locationFooter = String(localized: "Add a location to show this contact on the Places map.", table: table, comment: "Footer explaining location feature")
+
+        // Appointments
+        static let nextAppointment = String(localized: "Next appointment", table: table, comment: "Section header for upcoming appointment")
+        static let visitHistory = String(localized: "Visit history", table: table, comment: "Section header for past appointments")
+        static let noAppointments = String(localized: "No appointments scheduled", table: table, comment: "Empty state when no appointments")
+        static let viewInCalendar = String(localized: "View in Calendar", table: table, comment: "Button to navigate to calendar")
     }
 }

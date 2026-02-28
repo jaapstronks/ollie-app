@@ -1,442 +1,310 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "Add Contact" : {
+    "%@, %lld appointments" : {
       "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Contact toevoegen"
+            "value" : "%@, %lld afspraken"
           }
         }
       }
     },
-    "Address" : {
+    "%@, 1 appointment" : {
       "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Adres"
+            "value" : "%@, 1 afspraak"
           }
         }
       }
     },
-    "Breeder" : {
+    "Add Appointment" : {
       "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Fokker"
+            "value" : "Voeg afspraak toe"
           }
         }
       }
     },
-    "Call" : {
+    "All milestones completed!" : {
       "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bellen"
+            "value" : "Alle mijlpalen voltooid!"
           }
         }
       }
     },
-    "Choose a contact from your address book to import their details." : {
+    "Calendar" : {
       "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kies een contact uit je adresboek om de gegevens te importeren."
+            "value" : "Kalender"
           }
         }
       }
     },
-    "Choose Another Contact" : {
+    "Coming Up" : {
       "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kies ander contact"
+            "value" : "Binnenkort"
           }
         }
       }
     },
-    "Choose Contact" : {
+    "days home" : {
       "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kies contact"
+            "value" : "dagen thuis"
           }
         }
       }
     },
-    "Contact Info" : {
+    "Development" : {
       "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Contactgegevens"
+            "value" : "Ontwikkeling"
           }
         }
       }
     },
-    "Contact name" : {
+    "Due this week" : {
       "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Naam van contact"
+            "value" : "Gepland deze week"
           }
         }
       }
     },
-    "Contacts" : {
+    "Milestone Timeline" : {
       "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Contacten"
+            "value" : "Mijlpalen tijdlijn"
           }
         }
       }
     },
-    "Daycare" : {
+    "Month" : {
       "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dagopvang"
+            "value" : "Maand"
           }
         }
       }
     },
-    "Delete Contact?" : {
+    "No appointments" : {
       "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Contact verwijderen?"
+            "value" : "Geen afspraken"
           }
         }
       }
     },
-    "Dog Walker" : {
+    "No upcoming appointments" : {
       "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hondenuitlater"
+            "value" : "Geen komende afspraken"
           }
         }
       }
     },
-    "Edit Contact" : {
+    "No upcoming milestones" : {
       "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Contact bewerken"
+            "value" : "Geen komende mijlpalen"
           }
         }
       }
     },
-    "Email" : {
+    "Nothing coming up in the next few weeks" : {
       "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "E-mail"
+            "value" : "Niets op komst de komende weken"
           }
         }
       }
     },
-    "Email address" : {
+    "Nothing scheduled this week" : {
       "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "E-mailadres"
+            "value" : "Niets gepland deze week"
           }
         }
       }
     },
-    "Emergency Vet" : {
+    "Overdue" : {
       "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Spoeddierenarts"
+            "value" : "Te laat"
           }
         }
       }
     },
-    "Groomer" : {
+    "Right Now" : {
       "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Trimsalon"
+            "value" : "Op dit moment"
           }
         }
       }
     },
-    "Import" : {
+    "Schedule vet visits, grooming, and training classes." : {
       "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Importeren"
+            "value" : "Plan dierenarts bezoeken, verzorging en trainingslessen."
           }
         }
       }
     },
-    "Import from Contacts" : {
+    "See development roadmap" : {
       "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Importeren uit Contacten"
+            "value" : "Bekijk ontwikkelingsroadmap"
           }
         }
       }
     },
-    "Name" : {
+    "This Week" : {
       "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Naam"
+            "value" : "Deze week"
           }
         }
       }
     },
-    "Name is required" : {
+    "Today" : {
       "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Naam is verplicht"
+            "value" : "Vandaag"
           }
         }
       }
     },
-    "No Contacts" : {
+    "Upcoming Appointments" : {
       "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Geen contacten"
+            "value" : "Komende afspraken"
           }
         }
       }
     },
-    "Notes" : {
+    "View All Appointments" : {
       "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Notities"
+            "value" : "Bekijk alle afspraken"
           }
         }
       }
     },
-    "Open in Maps" : {
+    "View All Milestones" : {
       "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Open in Kaarten"
+            "value" : "Bekijk alle mijlpalen"
           }
         }
       }
     },
-    "Optional notes about this contact..." : {
+    "Week" : {
       "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Optionele notities over dit contact..."
+            "value" : "Week"
           }
         }
       }
     },
-    "Other" : {
+    "Week %lld of %lld socialization" : {
       "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Overig"
+            "value" : "Week %lld van %lld socialisatie"
           }
         }
       }
     },
-    "Pet Sitter" : {
+    "weeks old" : {
       "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Oppas"
-          }
-        }
-      }
-    },
-    "Pet Store" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dierenwinkel"
-          }
-        }
-      }
-    },
-    "Phone" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Telefoon"
-          }
-        }
-      }
-    },
-    "Phone number" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Telefoonnummer"
-          }
-        }
-      }
-    },
-    "Select a Contact" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Selecteer een contact"
-          }
-        }
-      }
-    },
-    "Send Email" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "E-mail sturen"
-          }
-        }
-      }
-    },
-    "Store your vet, groomer, sitter, and other important contacts here." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bewaar hier je dierenarts, trimsalon, oppas en andere belangrijke contacten."
-          }
-        }
-      }
-    },
-    "Street address" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Straat en huisnummer"
-          }
-        }
-      }
-    },
-    "The name will always be imported." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "De naam wordt altijd geïmporteerd."
-          }
-        }
-      }
-    },
-    "This will permanently delete this contact." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dit verwijdert dit contact permanent."
-          }
-        }
-      }
-    },
-    "Trainer" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Trainer"
-          }
-        }
-      }
-    },
-    "Type" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Type"
-          }
-        }
-      }
-    },
-    "Veterinarian" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dierenarts"
+            "value" : "weken oud"
           }
         }
       }

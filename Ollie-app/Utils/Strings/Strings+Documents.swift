@@ -31,6 +31,21 @@ extension Strings {
         static let notes = String(localized: "Notes", table: table)
         static let notesPlaceholder = String(localized: "Optional notes about this document...", table: table)
         static let photo = String(localized: "Photo", table: table)
+        static let attachment = String(localized: "Attachment", table: table)
+        static let noAttachment = String(localized: "No attachment", table: table)
+
+        // PDF
+        static let pdfDocument = String(localized: "PDF Document", table: table)
+        static let chooseFromFiles = String(localized: "Choose from Files", table: table)
+        static let fileTooLarge = String(localized: "File too large. Maximum size is 50 MB.", table: table)
+
+        static func pageCount(_ count: Int) -> String {
+            if count == 1 {
+                return String(localized: "1 page", table: table)
+            } else {
+                return String(localized: "\(count) pages", table: table)
+            }
+        }
 
         // Expiry status
         static let expired = String(localized: "Expired", table: table)
@@ -65,6 +80,14 @@ extension Strings {
 
         // Hints
         static let titleHint = String(localized: "Leave empty to use the document type as title", table: table)
+
+        // Insurance
+        static let insuranceAgency = String(localized: "Insurance Agency", table: table)
+        static let insuranceAgencyPlaceholder = String(localized: "Name of the insurance company", table: table)
+
+        // Attachment button
+        static let addAttachment = String(localized: "Add attachment", table: table)
+        static let addAttachmentTitle = String(localized: "Add attachment", table: table)
 
         // Actions
         static let viewFullSize = String(localized: "View Full Size", table: table)

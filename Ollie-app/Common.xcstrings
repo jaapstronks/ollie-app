@@ -430,17 +430,6 @@
         }
       }
     },
-    "Places" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Plekken"
-          }
-        }
-      }
-    },
     "Plan" : {
       "extractionState" : "stale",
       "localizations" : {

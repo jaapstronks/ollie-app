@@ -56,6 +56,28 @@
         }
       }
     },
+    "%lld outdoor pees in a row today! %@ is doing amazing!" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld keer buiten geplast vandaag op rij! %@ doet het geweldig!"
+          }
+        }
+      }
+    },
+    "%lld outdoor pees today!" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld keer buiten geplast vandaag!"
+          }
+        }
+      }
+    },
     "%lld outside" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -441,6 +463,17 @@
         }
       }
     },
+    "Keep it up!" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ga zo door!"
+          }
+        }
+      }
+    },
     "Longest" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -591,6 +624,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "procent van doel"
+          }
+        }
+      }
+    },
+    "Perfect day so far!" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Perfecte dag tot nu toe!"
           }
         }
       }

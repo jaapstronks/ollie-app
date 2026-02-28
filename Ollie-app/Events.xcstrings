@@ -848,16 +848,6 @@
         }
       }
     },
-    "Woke up" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Is wakker"
-          }
-        }
-      }
-    },
     "Walk" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -942,6 +932,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Met wie"
+          }
+        }
+      }
+    },
+    "Woke up" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Is wakker"
           }
         }
       }
