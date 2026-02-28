@@ -17,7 +17,7 @@ struct MemoriesCard: View {
     var body: some View {
         if viewModel.shouldShowCard {
             VStack(alignment: .leading, spacing: 12) {
-                // Header with time frame
+                // Header with time frame (tappable)
                 header
 
                 // Primary memory
@@ -34,13 +34,26 @@ struct MemoriesCard: View {
                     }
                 }
 
-                // Expand/collapse button
-                if viewModel.additionalEventCount > 0 {
-                    expandCollapseButton
+                // Expand/collapse hint (only when there are more events)
+                if viewModel.additionalEventCount > 0 && !isExpanded {
+                    HStack {
+                        Spacer()
+                        Text(Strings.Memories.moreEvents(viewModel.additionalEventCount))
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        Spacer()
+                    }
                 }
             }
             .padding()
             .glassCard(tint: .accent)
+            .contentShape(Rectangle())
+            .onTapGesture {
+                withAnimation(.easeInOut(duration: 0.25)) {
+                    isExpanded.toggle()
+                }
+                HapticFeedback.selection()
+            }
             .onAppear {
                 Analytics.track(.memoriesCardViewed)
             }
@@ -61,6 +74,10 @@ struct MemoriesCard: View {
                 .foregroundStyle(.primary)
 
             Spacer()
+
+            Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
+                .font(.caption)
+                .foregroundStyle(.secondary)
         }
     }
 
@@ -100,44 +117,6 @@ struct MemoriesCard: View {
                     .clipShape(RoundedRectangle(cornerRadius: 8))
             }
         }
-    }
-
-    // MARK: - Expand/Collapse Button
-
-    @ViewBuilder
-    private var expandCollapseButton: some View {
-        Button {
-            withAnimation(.easeInOut(duration: 0.2)) {
-                isExpanded.toggle()
-            }
-            HapticFeedback.selection()
-        } label: {
-            HStack {
-                Spacer()
-
-                if isExpanded {
-                    Text(Strings.Socialization.showLess)
-                        .font(.caption)
-                        .foregroundStyle(Color.ollieAccent)
-
-                    Image(systemName: "chevron.up")
-                        .font(.caption)
-                        .foregroundStyle(Color.ollieAccent)
-                } else {
-                    Text(Strings.Memories.moreEvents(viewModel.additionalEventCount))
-                        .font(.caption)
-                        .foregroundStyle(Color.ollieAccent)
-
-                    Image(systemName: "chevron.down")
-                        .font(.caption)
-                        .foregroundStyle(Color.ollieAccent)
-                }
-
-                Spacer()
-            }
-            .padding(.top, 4)
-        }
-        .buttonStyle(.plain)
     }
 
     // MARK: - Helpers
