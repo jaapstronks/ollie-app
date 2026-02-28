@@ -61,6 +61,7 @@ class PlacesMapViewModel: ObservableObject {
     @Published var activeFilters: Set<PlacesFilterCategory> = [.spots, .discovered, .contacts, .photos]
     @Published var selectedContactTypes: Set<ContactType> = Set(ContactType.allCases)
     @Published var selectedSpotCategories: Set<SpotCategory> = Set(SpotCategory.allCases)
+    @Published var selectedDiscoveryTypes: Set<DiscoverablePlaceType> = Set(DiscoverablePlaceType.allCases)
 
     @Published var selectedMarker: PlaceMarker?
     @Published var cameraPosition: MapCameraPosition = .automatic
@@ -112,9 +113,33 @@ class PlacesMapViewModel: ObservableObject {
             markers.append(contentsOf: filteredSpots.map { .spot($0) })
         }
 
-        // Add discovered dog park markers
+        // Add discovered markers (filtered by selected discovery types)
         if activeFilters.contains(.discovered) {
-            markers.append(contentsOf: discoveryService.discoveredSpots.map { .discoveredSpot($0) })
+            let filteredDiscovered = discoveryService.discoveredSpots.filter { spot in
+                // Check if this spot's category matches any of the selected discovery types
+                for type in selectedDiscoveryTypes {
+                    switch type {
+                    case .dogParks:
+                        if [.dogPark, .offLeashArea, .dogBeach, .dogForest, .dogFriendlyPark].contains(spot.category) {
+                            return true
+                        }
+                    case .vetClinics:
+                        if spot.category == .vetClinic {
+                            return true
+                        }
+                    case .petStores:
+                        if spot.category == .petStore {
+                            return true
+                        }
+                    case .dogFriendlyPlaces:
+                        if spot.category == .dogFriendlyCafe {
+                            return true
+                        }
+                    }
+                }
+                return false
+            }
+            markers.append(contentsOf: filteredDiscovered.map { .discoveredSpot($0) })
         }
 
         // Add contact markers (only those with location)
@@ -207,9 +232,17 @@ class PlacesMapViewModel: ObservableObject {
         selectedMarker = nil
     }
 
-    // MARK: - Dog Park Discovery
+    // MARK: - Place Discovery
 
-    /// Discover dog parks near a location
+    /// Discover places near a location based on selected place types
+    func discoverPlacesNearby(latitude: Double, longitude: Double) async {
+        // Sync selected types to the service
+        discoveryService.activePlaceTypes = selectedDiscoveryTypes
+        // Discover all active types
+        await discoveryService.discoverAllActiveTypes(latitude: latitude, longitude: longitude)
+    }
+
+    /// Discover dog parks near a location (legacy method for backwards compatibility)
     func discoverDogParksNearby(latitude: Double, longitude: Double) async {
         await discoveryService.discoverNearby(latitude: latitude, longitude: longitude, radiusKm: 5.0)
     }
@@ -221,5 +254,11 @@ class PlacesMapViewModel: ObservableObject {
 
     func selectDiscoveredSpot(_ spot: DiscoveredSpot) {
         selectedMarker = .discoveredSpot(spot)
+    }
+
+    /// Refresh discovery with current selected types
+    func refreshDiscovery(latitude: Double, longitude: Double) async {
+        discoveryService.activePlaceTypes = selectedDiscoveryTypes
+        await discoveryService.discoverAllActiveTypes(latitude: latitude, longitude: longitude)
     }
 }

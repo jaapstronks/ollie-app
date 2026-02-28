@@ -12,6 +12,32 @@ import OllieShared
 import os
 import CoreLocation
 
+/// Place types that can be discovered via Overpass API
+enum DiscoverablePlaceType: CaseIterable {
+    case dogParks
+    case vetClinics
+    case petStores
+    case dogFriendlyPlaces
+
+    var label: String {
+        switch self {
+        case .dogParks: return Strings.PlacesDiscovery.filterDogAreas
+        case .vetClinics: return Strings.PlacesDiscovery.filterVets
+        case .petStores: return Strings.PlacesDiscovery.filterPetStores
+        case .dogFriendlyPlaces: return Strings.PlacesDiscovery.filterDogFriendly
+        }
+    }
+
+    var defaultRadius: Double {
+        switch self {
+        case .dogParks: return 5.0
+        case .vetClinics: return 10.0
+        case .petStores: return 5.0
+        case .dogFriendlyPlaces: return 3.0
+        }
+    }
+}
+
 /// Service for discovering dog parks from external data sources
 @MainActor
 class DogParkDiscoveryService: ObservableObject {
@@ -21,6 +47,9 @@ class DogParkDiscoveryService: ObservableObject {
     @Published var discoveredSpots: [DiscoveredSpot] = []
     @Published var isLoading = false
     @Published var lastError: Error?
+
+    /// Active place type filters (which types are currently being shown)
+    @Published var activePlaceTypes: Set<DiscoverablePlaceType> = [.dogParks]
 
     // MARK: - Private Properties
 
@@ -169,6 +198,142 @@ class DogParkDiscoveryService: ObservableObject {
         }
     }
 
+    // MARK: - Multi-Type Discovery
+
+    /// Discover all active place types near a location
+    func discoverAllActiveTypes(latitude: Double, longitude: Double) async {
+        isLoading = true
+        lastError = nil
+
+        var allSpots: [DiscoveredSpot] = []
+
+        // Fetch each active place type
+        for placeType in activePlaceTypes {
+            let spots = await discoverPlaceType(
+                placeType,
+                latitude: latitude,
+                longitude: longitude,
+                radiusKm: placeType.defaultRadius
+            )
+            allSpots.append(contentsOf: spots)
+        }
+
+        // Deduplicate by proximity
+        discoveredSpots = deduplicateSpots(allSpots)
+        isLoading = false
+
+        logger.info("Discovered \(discoveredSpots.count) total spots across \(activePlaceTypes.count) place types")
+    }
+
+    /// Discover a specific place type
+    func discoverPlaceType(
+        _ type: DiscoverablePlaceType,
+        latitude: Double,
+        longitude: Double,
+        radiusKm: Double? = nil
+    ) async -> [DiscoveredSpot] {
+        let radius = radiusKm ?? type.defaultRadius
+
+        switch type {
+        case .dogParks:
+            // Use existing dog park discovery (includes government sources)
+            do {
+                var spots = try await fetchFromOverpass(latitude: latitude, longitude: longitude, radiusKm: radius)
+                let govSpots = await fetchGovernmentData(latitude: latitude, longitude: longitude)
+                spots.append(contentsOf: govSpots)
+                return spots
+            } catch {
+                logger.error("Failed to fetch dog parks: \(error.localizedDescription)")
+                return []
+            }
+
+        case .vetClinics:
+            return await fetchSafely("vet clinics") {
+                try await self.fetchVetClinics(latitude: latitude, longitude: longitude, radiusKm: radius)
+            }
+
+        case .petStores:
+            return await fetchSafely("pet stores") {
+                try await self.fetchPetStores(latitude: latitude, longitude: longitude, radiusKm: radius)
+            }
+
+        case .dogFriendlyPlaces:
+            return await fetchSafely("dog-friendly places") {
+                try await self.fetchDogFriendlyPlaces(latitude: latitude, longitude: longitude, radiusKm: radius)
+            }
+        }
+    }
+
+    /// Toggle a place type filter
+    func togglePlaceType(_ type: DiscoverablePlaceType) {
+        if activePlaceTypes.contains(type) {
+            activePlaceTypes.remove(type)
+        } else {
+            activePlaceTypes.insert(type)
+        }
+    }
+
+    // MARK: - Vet Clinics (Overpass)
+
+    private func fetchVetClinics(
+        latitude: Double,
+        longitude: Double,
+        radiusKm: Double
+    ) async throws -> [DiscoveredSpot] {
+        let radiusMeters = Int(radiusKm * 1000)
+        let query = """
+        [out:json][timeout:25];
+        (
+          nwr["amenity"="veterinary"](around:\(radiusMeters),\(latitude),\(longitude));
+        );
+        out center tags;
+        """
+
+        let data = try await executeOverpassQueryRaw(query)
+        return try parseOverpassResponseWithCategory(data, category: .vetClinic)
+    }
+
+    // MARK: - Pet Stores (Overpass)
+
+    private func fetchPetStores(
+        latitude: Double,
+        longitude: Double,
+        radiusKm: Double
+    ) async throws -> [DiscoveredSpot] {
+        let radiusMeters = Int(radiusKm * 1000)
+        let query = """
+        [out:json][timeout:25];
+        (
+          nwr["shop"="pet"](around:\(radiusMeters),\(latitude),\(longitude));
+        );
+        out center tags;
+        """
+
+        let data = try await executeOverpassQueryRaw(query)
+        return try parseOverpassResponseWithCategory(data, category: .petStore)
+    }
+
+    // MARK: - Dog-Friendly Places (Overpass)
+
+    private func fetchDogFriendlyPlaces(
+        latitude: Double,
+        longitude: Double,
+        radiusKm: Double
+    ) async throws -> [DiscoveredSpot] {
+        let radiusMeters = Int(radiusKm * 1000)
+        // Query for cafes, restaurants, and pubs that explicitly allow dogs
+        let query = """
+        [out:json][timeout:25];
+        (
+          nwr["dog"="yes"]["amenity"~"cafe|restaurant|pub|bar"](around:\(radiusMeters),\(latitude),\(longitude));
+        );
+        out center tags;
+        """
+
+        let data = try await executeOverpassQueryRaw(query)
+        return try parseOverpassResponseWithCategory(data, category: .dogFriendlyCafe)
+    }
+
     // MARK: - Overpass API
 
     private func fetchFromOverpass(
@@ -209,6 +374,12 @@ class DogParkDiscoveryService: ObservableObject {
     }
 
     private func executeOverpassQuery(_ query: String) async throws -> [DiscoveredSpot] {
+        let data = try await executeOverpassQueryRaw(query)
+        return try parseOverpassResponse(data)
+    }
+
+    /// Execute Overpass query and return raw data (for parsing with different categories)
+    private func executeOverpassQueryRaw(_ query: String) async throws -> Data {
         guard let url = URL(string: overpassEndpoint) else {
             throw DiscoveryError.invalidURL
         }
@@ -229,7 +400,7 @@ class DogParkDiscoveryService: ObservableObject {
             throw DiscoveryError.serverError(httpResponse.statusCode)
         }
 
-        return try parseOverpassResponse(data)
+        return data
     }
 
     private func parseOverpassResponse(_ data: Data) throws -> [DiscoveredSpot] {
@@ -288,6 +459,110 @@ class DogParkDiscoveryService: ObservableObject {
         let latDir = lat >= 0 ? "N" : "S"
         let lonDir = lon >= 0 ? "E" : "W"
         return "Dog Park (\(abs(lat).formatted(.number.precision(.fractionLength(2))))\(latDir), \(abs(lon).formatted(.number.precision(.fractionLength(2))))\(lonDir))"
+    }
+
+    /// Parse Overpass response with a specific category (for vets, pet stores, etc.)
+    private func parseOverpassResponseWithCategory(_ data: Data, category: DiscoveredSpotCategory) throws -> [DiscoveredSpot] {
+        let decoder = JSONDecoder()
+        let response = try decoder.decode(OverpassResponse.self, from: data)
+
+        return response.elements.compactMap { element -> DiscoveredSpot? in
+            let lat: Double
+            let lon: Double
+
+            if let centerLat = element.center?.lat, let centerLon = element.center?.lon {
+                lat = centerLat
+                lon = centerLon
+            } else if let directLat = element.lat, let directLon = element.lon {
+                lat = directLat
+                lon = directLon
+            } else {
+                return nil
+            }
+
+            let sourceId = "\(element.id)"
+            let id = "osm:\(element.type):\(sourceId)"
+
+            let tags = element.tags ?? [:]
+
+            // Get name or generate placeholder based on category
+            let name: String
+            if let tagName = tags["name"] ?? tags["name:en"] {
+                name = tagName
+            } else {
+                name = generatePlaceholderNameForCategory(category, lat: lat, lon: lon)
+            }
+
+            // Build address from OSM address tags
+            var address: String?
+            if let street = tags["addr:street"] {
+                if let houseNumber = tags["addr:housenumber"] {
+                    address = "\(street) \(houseNumber)"
+                } else {
+                    address = street
+                }
+                if let city = tags["addr:city"] {
+                    address = "\(address!), \(city)"
+                }
+            }
+
+            // Category-specific amenities
+            var amenities: [String] = []
+            switch category {
+            case .vetClinic:
+                if tags["emergency"] == "yes" { amenities.append("24h emergency") }
+                if tags["wheelchair"] == "yes" { amenities.append("wheelchair accessible") }
+            case .petStore:
+                if tags["grooming"] == "yes" { amenities.append("grooming") }
+            case .dogFriendlyCafe:
+                if tags["outdoor_seating"] == "yes" { amenities.append("outdoor seating") }
+                if tags["wifi"] == "yes" { amenities.append("wifi") }
+            default:
+                break
+            }
+
+            // Parse opening hours if available
+            if let hours = tags["opening_hours"] {
+                amenities.append(hours)
+            }
+
+            // Parse phone/website
+            if tags["phone"] != nil || tags["contact:phone"] != nil {
+                amenities.append("phone available")
+            }
+
+            return DiscoveredSpot(
+                id: id,
+                name: name,
+                latitude: lat,
+                longitude: lon,
+                source: .openStreetMap,
+                sourceId: sourceId,
+                category: category,
+                address: address,
+                amenities: amenities,
+                isFenced: nil,
+                surface: nil,
+                fetchedAt: Date()
+            )
+        }
+    }
+
+    private func generatePlaceholderNameForCategory(_ category: DiscoveredSpotCategory, lat: Double, lon: Double) -> String {
+        let latDir = lat >= 0 ? "N" : "S"
+        let lonDir = lon >= 0 ? "E" : "W"
+        let coords = "(\(abs(lat).formatted(.number.precision(.fractionLength(2))))\(latDir), \(abs(lon).formatted(.number.precision(.fractionLength(2))))\(lonDir))"
+
+        switch category {
+        case .vetClinic:
+            return "Vet Clinic \(coords)"
+        case .petStore:
+            return "Pet Store \(coords)"
+        case .dogFriendlyCafe:
+            return "Dog-Friendly Café \(coords)"
+        default:
+            return category.label + " \(coords)"
+        }
     }
 
     // MARK: - Government Data (All Regions)

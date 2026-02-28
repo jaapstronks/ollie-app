@@ -55,9 +55,11 @@ struct PlacesFilterBar: View {
     @Binding var activeFilters: Set<PlacesFilterCategory>
     @Binding var selectedContactTypes: Set<ContactType>
     @Binding var selectedSpotCategories: Set<SpotCategory>
+    @Binding var selectedDiscoveryTypes: Set<DiscoverablePlaceType>
 
     @State private var showingContactTypeSheet = false
     @State private var showingSpotCategorySheet = false
+    @State private var showingDiscoveryTypeSheet = false
 
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
@@ -69,7 +71,7 @@ struct PlacesFilterBar: View {
                         icon: category.icon,
                         isSelected: activeFilters.contains(category),
                         selectedColor: category.categoryColor,
-                        hasSubfilter: category == .contacts || category == .spots,
+                        hasSubfilter: category == .contacts || category == .spots || category == .discovered,
                         subfilterCount: subfilterCount(for: category)
                     ) {
                         toggleFilter(category)
@@ -90,6 +92,10 @@ struct PlacesFilterBar: View {
             SpotCategoryFilterSheet(selectedCategories: $selectedSpotCategories)
                 .presentationDetents([.medium])
         }
+        .sheet(isPresented: $showingDiscoveryTypeSheet) {
+            DiscoveryTypeFilterSheet(selectedTypes: $selectedDiscoveryTypes)
+                .presentationDetents([.medium])
+        }
     }
 
     private func toggleFilter(_ category: PlacesFilterCategory) {
@@ -108,6 +114,8 @@ struct PlacesFilterBar: View {
             showingContactTypeSheet = true
         case .spots:
             showingSpotCategorySheet = true
+        case .discovered:
+            showingDiscoveryTypeSheet = true
         default:
             break
         }
@@ -121,6 +129,9 @@ struct PlacesFilterBar: View {
         case .spots:
             let allCount = SpotCategory.allCases.count
             return selectedSpotCategories.count < allCount ? selectedSpotCategories.count : nil
+        case .discovered:
+            let allCount = DiscoverablePlaceType.allCases.count
+            return selectedDiscoveryTypes.count < allCount ? selectedDiscoveryTypes.count : nil
         default:
             return nil
         }
@@ -311,6 +322,80 @@ struct SpotCategoryFilterSheet: View {
     }
 }
 
+// MARK: - Discovery Type Filter Sheet
+
+struct DiscoveryTypeFilterSheet: View {
+    @Binding var selectedTypes: Set<DiscoverablePlaceType>
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        NavigationStack {
+            List {
+                Section {
+                    Button {
+                        if selectedTypes.count == DiscoverablePlaceType.allCases.count {
+                            selectedTypes.removeAll()
+                        } else {
+                            selectedTypes = Set(DiscoverablePlaceType.allCases)
+                        }
+                    } label: {
+                        HStack {
+                            Text(Strings.Places.selectAll)
+                            Spacer()
+                            if selectedTypes.count == DiscoverablePlaceType.allCases.count {
+                                Image(systemName: "checkmark")
+                                    .foregroundStyle(Color.ollieAccent)
+                            }
+                        }
+                    }
+                }
+
+                Section {
+                    ForEach(DiscoverablePlaceType.allCases, id: \.self) { type in
+                        Button {
+                            if selectedTypes.contains(type) {
+                                selectedTypes.remove(type)
+                            } else {
+                                selectedTypes.insert(type)
+                            }
+                        } label: {
+                            HStack {
+                                Label(type.label, systemImage: iconForPlaceType(type))
+                                    .foregroundStyle(.primary)
+
+                                Spacer()
+
+                                if selectedTypes.contains(type) {
+                                    Image(systemName: "checkmark")
+                                        .foregroundStyle(Color.ollieAccent)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            .navigationTitle(Strings.Places.filterDiscoveryTypes)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button(Strings.Common.done) {
+                        dismiss()
+                    }
+                }
+            }
+        }
+    }
+
+    private func iconForPlaceType(_ type: DiscoverablePlaceType) -> String {
+        switch type {
+        case .dogParks: return "dog.fill"
+        case .vetClinics: return "stethoscope"
+        case .petStores: return "bag.fill"
+        case .dogFriendlyPlaces: return "cup.and.saucer.fill"
+        }
+    }
+}
+
 // MARK: - Preview
 
 #Preview {
@@ -318,7 +403,8 @@ struct SpotCategoryFilterSheet: View {
         PlacesFilterBar(
             activeFilters: .constant([.spots, .contacts]),
             selectedContactTypes: .constant(Set(ContactType.allCases)),
-            selectedSpotCategories: .constant(Set(SpotCategory.allCases))
+            selectedSpotCategories: .constant(Set(SpotCategory.allCases)),
+            selectedDiscoveryTypes: .constant(Set(DiscoverablePlaceType.allCases))
         )
         Spacer()
     }

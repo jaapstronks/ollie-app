@@ -90,15 +90,15 @@ struct SpotMapMarker: View {
     }
 }
 
-/// Map marker for a discovered dog park (from OpenStreetMap or government data)
+/// Map marker for a discovered place (dog parks, vets, pet stores, etc.)
 struct DiscoveredSpotMapMarker: View {
     let spot: DiscoveredSpot
 
     var body: some View {
         ZStack {
-            // Background glow
+            // Background glow (category-colored)
             Circle()
-                .fill(Color.ollieInfo.opacity(0.2))
+                .fill(markerColor.opacity(0.2))
                 .frame(width: 32, height: 32)
                 .blur(radius: 3)
 
@@ -109,17 +109,17 @@ struct DiscoveredSpotMapMarker: View {
                     .frame(width: 28, height: 28)
                     .shadow(color: .black.opacity(0.15), radius: 2, x: 0, y: 1)
 
-                // Blue ring to distinguish from saved spots
+                // Colored ring to distinguish by category
                 Circle()
-                    .stroke(Color.ollieInfo, lineWidth: 2)
+                    .stroke(markerColor, lineWidth: 2)
                     .frame(width: 28, height: 28)
 
                 Image(systemName: spot.category.icon)
                     .font(.system(size: 14, weight: .semibold))
-                    .foregroundStyle(Color.ollieInfo)
+                    .foregroundStyle(markerColor)
             }
 
-            // Fenced indicator badge
+            // Fenced indicator badge (only for dog areas)
             if spot.isFenced == true {
                 Circle()
                     .fill(Color.ollieSuccess)
@@ -131,6 +131,20 @@ struct DiscoveredSpotMapMarker: View {
                     )
                     .offset(x: 10, y: -10)
             }
+        }
+    }
+
+    /// Category-specific color for the marker
+    private var markerColor: Color {
+        switch spot.category {
+        case .dogPark, .offLeashArea, .dogBeach, .dogForest, .dogFriendlyPark:
+            return .ollieInfo
+        case .vetClinic:
+            return .ollieHealthRed
+        case .petStore:
+            return .ollieAccent
+        case .dogFriendlyCafe:
+            return .olliePurple
         }
     }
 }

@@ -81,7 +81,7 @@ struct DiscoveredSpotDetailSheet: View {
             // Category badge
             HStack {
                 Image(systemName: spot.category.icon)
-                    .foregroundStyle(Color.ollieInfo)
+                    .foregroundStyle(categoryColor)
                 Text(spot.category.label)
                     .font(.subheadline)
                     .fontWeight(.medium)
@@ -204,6 +204,20 @@ struct DiscoveredSpotDetailSheet: View {
         default: return surface.capitalized
         }
     }
+
+    /// Category-specific color for visual distinction
+    private var categoryColor: Color {
+        switch spot.category {
+        case .dogPark, .offLeashArea, .dogBeach, .dogForest, .dogFriendlyPark:
+            return .ollieInfo
+        case .vetClinic:
+            return .ollieHealthRed
+        case .petStore:
+            return .ollieAccent
+        case .dogFriendlyCafe:
+            return .olliePurple
+        }
+    }
 }
 
 // MARK: - Amenity Badge
@@ -225,13 +239,24 @@ struct AmenityBadge: View {
     }
 
     private func iconForAmenity(_ amenity: String) -> String {
-        switch amenity.lowercased() {
-        case "waste bin", "waste_bin": return "trash.fill"
-        case "bench": return "chair.fill"
-        case "water": return "drop.fill"
-        case "lighting": return "lightbulb.fill"
-        default: return "checkmark"
-        }
+        let lowered = amenity.lowercased()
+        // Dog park amenities
+        if lowered.contains("waste") { return "trash.fill" }
+        if lowered.contains("bench") { return "chair.fill" }
+        if lowered.contains("water") || lowered.contains("drinking") { return "drop.fill" }
+        if lowered.contains("light") { return "lightbulb.fill" }
+        // Service amenities
+        if lowered.contains("emergency") || lowered.contains("24h") { return "cross.case.fill" }
+        if lowered.contains("wheelchair") { return "figure.roll" }
+        if lowered.contains("grooming") { return "scissors" }
+        if lowered.contains("phone") { return "phone.fill" }
+        // Cafe amenities
+        if lowered.contains("outdoor") || lowered.contains("seating") { return "sun.max.fill" }
+        if lowered.contains("wifi") { return "wifi" }
+        // Opening hours
+        if lowered.contains(":") && (lowered.contains("mo") || lowered.contains("tu")) { return "clock.fill" }
+
+        return "checkmark"
     }
 }
 

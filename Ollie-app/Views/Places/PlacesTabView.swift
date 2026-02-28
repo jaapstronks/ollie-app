@@ -20,6 +20,10 @@ struct PlacesTabView: View {
     @EnvironmentObject var profileStore: ProfileStore
     @StateObject private var mapViewModel: PlacesMapViewModel
 
+    // View mode toggle (Map vs Gallery)
+    @AppStorage("exploreViewMode") private var viewMode: ExploreViewMode = .map
+    @AppStorage("momentsViewMode") private var momentsViewMode: MomentsViewMode = .gallery
+
     @State private var showingAddSpot = false
     @State private var showingAddContact = false
     @State private var selectedSpot: WalkSpot?
@@ -27,6 +31,7 @@ struct PlacesTabView: View {
     @State private var selectedContact: DogContact?
     @State private var selectedCluster: PhotoCluster?
     @State private var selectedPhotoEvent: PuppyEvent?
+    @Namespace private var heroNamespace
 
     init(
         spotStore: SpotStore,
@@ -49,38 +54,21 @@ struct PlacesTabView: View {
 
     var body: some View {
         NavigationStack {
-            ZStack(alignment: .bottom) {
-                // Full-screen map with filter bar
-                ZStack(alignment: .top) {
-                    mapView
-                        .ignoresSafeArea(edges: .bottom)
-
-                    // Filter bar overlay at top
-                    VStack(spacing: 0) {
-                        PlacesFilterBar(
-                            activeFilters: $mapViewModel.activeFilters,
-                            selectedContactTypes: $mapViewModel.selectedContactTypes,
-                            selectedSpotCategories: $mapViewModel.selectedSpotCategories
-                        )
-                        Spacer()
-                    }
-                }
-
-                // Floating Add Button
-                HStack {
-                    Spacer()
-                    addSpotFAB
+            Group {
+                switch viewMode {
+                case .map:
+                    mapContent
+                case .gallery:
+                    galleryContent
                 }
             }
             .navigationTitle(Strings.Places.title)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
+                // View mode toggle (leading)
                 ToolbarItem(placement: .topBarLeading) {
-                    Button {
-                        mapViewModel.centerOnUserLocation()
-                    } label: {
-                        Image(systemName: "location.fill")
-                    }
+                    ExploreViewModeToggle(mode: $viewMode)
+                        .frame(width: 140)
                 }
             }
             .profileToolbar(profile: profileStore.profile) {
@@ -137,9 +125,159 @@ struct PlacesTabView: View {
             mapViewModel.fitMapToMarkers()
         }
         .task {
-            // Discover dog parks near user's location or default location
+            // Discover places near user's location or default location
             let coords = locationManager.currentCoordinates ?? (51.9225, 4.4792) // Rotterdam fallback
-            await mapViewModel.discoverDogParksNearby(latitude: coords.0, longitude: coords.1)
+            await mapViewModel.discoverPlacesNearby(latitude: coords.0, longitude: coords.1)
+        }
+        .onChange(of: mapViewModel.selectedDiscoveryTypes) { _, _ in
+            // Refresh discovery when selected types change
+            Task {
+                let coords = locationManager.currentCoordinates ?? (51.9225, 4.4792)
+                await mapViewModel.refreshDiscovery(latitude: coords.0, longitude: coords.1)
+            }
+        }
+    }
+
+    // MARK: - Map Content
+
+    private var mapContent: some View {
+        ZStack(alignment: .bottom) {
+            // Full-screen map with filter bar
+            ZStack(alignment: .top) {
+                mapView
+                    .ignoresSafeArea(edges: .bottom)
+
+                // Filter bar overlay at top
+                VStack(spacing: 0) {
+                    PlacesFilterBar(
+                        activeFilters: $mapViewModel.activeFilters,
+                        selectedContactTypes: $mapViewModel.selectedContactTypes,
+                        selectedSpotCategories: $mapViewModel.selectedSpotCategories,
+                        selectedDiscoveryTypes: $mapViewModel.selectedDiscoveryTypes
+                    )
+                    Spacer()
+                }
+            }
+
+            // Floating Add Button
+            HStack {
+                Spacer()
+                addSpotFAB
+            }
+        }
+    }
+
+    // MARK: - Gallery Content
+
+    private var galleryContent: some View {
+        Group {
+            if momentsViewModel.isLoading {
+                // Skeleton loading grid
+                ScrollView {
+                    LazyVGrid(columns: galleryColumns, spacing: 2) {
+                        ForEach(0..<12, id: \.self) { index in
+                            SkeletonRect(height: 120, cornerRadius: 0)
+                                .aspectRatio(1, contentMode: .fill)
+                                .animatedAppear(delay: StaggeredAnimation.delay(for: index))
+                        }
+                    }
+                    .padding(.top)
+                }
+                .skeleton(isLoading: true)
+            } else if momentsViewModel.events.isEmpty {
+                EmptyMomentsView()
+            } else {
+                VStack(spacing: 0) {
+                    // Gallery/Diary sub-toggle
+                    MomentsViewModeToggle(mode: $momentsViewMode)
+                        .padding(.horizontal)
+                        .padding(.vertical, 8)
+
+                    switch momentsViewMode {
+                    case .gallery:
+                        galleryGridContent
+                    case .diary:
+                        diaryListContent
+                    }
+                }
+            }
+        }
+        .refreshable {
+            momentsViewModel.loadEventsWithMedia()
+        }
+    }
+
+    private let galleryColumns = [
+        GridItem(.flexible(), spacing: 2),
+        GridItem(.flexible(), spacing: 2),
+        GridItem(.flexible(), spacing: 2)
+    ]
+
+    private var galleryGridContent: some View {
+        ScrollView {
+            LazyVStack(alignment: .leading, spacing: 16) {
+                ForEach(Array(momentsViewModel.eventsByMonth.enumerated()), id: \.element.month) { sectionIndex, section in
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text(section.month)
+                            .font(.headline)
+                            .padding(.horizontal)
+                            .animatedAppear(delay: StaggeredAnimation.delay(for: sectionIndex))
+
+                        LazyVGrid(columns: galleryColumns, spacing: 2) {
+                            ForEach(Array(section.events.enumerated()), id: \.element.id) { eventIndex, event in
+                                GalleryThumbnail(event: event)
+                                    .aspectRatio(1, contentMode: .fill)
+                                    .zoomTransitionSource(id: event.id, in: heroNamespace)
+                                    .onTapGesture {
+                                        selectedPhotoEvent = event
+                                    }
+                                    .animatedAppear(delay: StaggeredAnimation.delay(for: eventIndex, baseDelay: 0.03, maxDelay: 0.2))
+                                    .onAppear {
+                                        momentsViewModel.loadMoreIfNeeded(currentEvent: event)
+                                    }
+                            }
+                        }
+                    }
+                }
+
+                if momentsViewModel.isLoadingMore {
+                    HStack {
+                        Spacer()
+                        ProgressView()
+                            .padding()
+                        Spacer()
+                    }
+                }
+            }
+            .padding(.vertical)
+        }
+    }
+
+    private var diaryListContent: some View {
+        ScrollView {
+            LazyVStack(spacing: 24) {
+                ForEach(Array(momentsViewModel.eventsPerDay.enumerated()), id: \.element.id) { index, event in
+                    DiaryCardView(event: event)
+                        .zoomTransitionSource(id: event.id, in: heroNamespace)
+                        .onTapGesture {
+                            selectedPhotoEvent = event
+                        }
+                        .animatedAppear(delay: StaggeredAnimation.delay(for: index, baseDelay: 0.05, maxDelay: 0.3))
+                        .onAppear {
+                            momentsViewModel.loadMoreIfNeeded(currentEvent: event)
+                        }
+                }
+
+                if momentsViewModel.isLoadingMore {
+                    HStack {
+                        Spacer()
+                        ProgressView()
+                            .padding()
+                        Spacer()
+                    }
+                }
+            }
+            .padding()
         }
     }
 

@@ -92,11 +92,17 @@ public enum DiscoveredSpotSource: String, Codable, CaseIterable, Sendable {
 
 /// Category for discovered spots
 public enum DiscoveredSpotCategory: String, Codable, CaseIterable, Sendable {
+    // Dog areas
     case dogPark = "dog_park"
     case offLeashArea = "off_leash"
     case dogBeach = "dog_beach"
     case dogForest = "dog_forest"
     case dogFriendlyPark = "dog_friendly"
+    // Services
+    case vetClinic = "vet_clinic"
+    case petStore = "pet_store"
+    // Dog-friendly establishments
+    case dogFriendlyCafe = "dog_friendly_cafe"
 
     public var label: String {
         switch self {
@@ -105,6 +111,9 @@ public enum DiscoveredSpotCategory: String, Codable, CaseIterable, Sendable {
         case .dogBeach: return Strings.PlacesDiscovery.categoryDogBeach
         case .dogForest: return Strings.PlacesDiscovery.categoryDogForest
         case .dogFriendlyPark: return Strings.PlacesDiscovery.categoryDogFriendly
+        case .vetClinic: return Strings.PlacesDiscovery.categoryVetClinic
+        case .petStore: return Strings.PlacesDiscovery.categoryPetStore
+        case .dogFriendlyCafe: return Strings.PlacesDiscovery.categoryDogFriendlyCafe
         }
     }
 
@@ -115,6 +124,62 @@ public enum DiscoveredSpotCategory: String, Codable, CaseIterable, Sendable {
         case .dogBeach: return "beach.umbrella.fill"
         case .dogForest: return "tree.fill"
         case .dogFriendlyPark: return "leaf.fill"
+        case .vetClinic: return "stethoscope"
+        case .petStore: return "bag.fill"
+        case .dogFriendlyCafe: return "cup.and.saucer.fill"
+        }
+    }
+
+    /// Group for filtering UI
+    public var filterGroup: DiscoveredSpotFilterGroup {
+        switch self {
+        case .dogPark, .offLeashArea, .dogBeach, .dogForest, .dogFriendlyPark:
+            return .dogAreas
+        case .vetClinic:
+            return .vets
+        case .petStore:
+            return .petStores
+        case .dogFriendlyCafe:
+            return .dogFriendly
+        }
+    }
+}
+
+/// Filter groups for discovered spots
+public enum DiscoveredSpotFilterGroup: String, CaseIterable, Sendable {
+    case dogAreas = "dog_areas"
+    case vets = "vets"
+    case petStores = "pet_stores"
+    case dogFriendly = "dog_friendly_places"
+
+    public var label: String {
+        switch self {
+        case .dogAreas: return Strings.PlacesDiscovery.filterDogAreas
+        case .vets: return Strings.PlacesDiscovery.filterVets
+        case .petStores: return Strings.PlacesDiscovery.filterPetStores
+        case .dogFriendly: return Strings.PlacesDiscovery.filterDogFriendly
+        }
+    }
+
+    public var icon: String {
+        switch self {
+        case .dogAreas: return "dog.fill"
+        case .vets: return "stethoscope"
+        case .petStores: return "bag.fill"
+        case .dogFriendly: return "cup.and.saucer.fill"
+        }
+    }
+
+    public var categories: [DiscoveredSpotCategory] {
+        switch self {
+        case .dogAreas:
+            return [.dogPark, .offLeashArea, .dogBeach, .dogForest, .dogFriendlyPark]
+        case .vets:
+            return [.vetClinic]
+        case .petStores:
+            return [.petStore]
+        case .dogFriendly:
+            return [.dogFriendlyCafe]
         }
     }
 }
@@ -158,6 +223,8 @@ extension DiscoveredSpot {
             return .beach
         case .dogForest:
             return .forest
+        case .vetClinic, .petStore, .dogFriendlyCafe:
+            return .other
         }
     }
 }
