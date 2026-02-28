@@ -27,6 +27,7 @@ struct AppSettingsView: View {
     @State private var isPreparingShare = false
     @State private var shareError: String?
     @State private var showStopSharingConfirm = false
+    @State private var showingExportSheet = false
     @AppStorage(UserPreferences.Key.appearanceMode.rawValue) private var appearanceMode = AppearanceMode.system.rawValue
     @AppStorage(UserPreferences.Key.temperatureUnit.rawValue) private var temperatureUnit = TemperatureUnit.celsius.rawValue
     @AppStorage(UserPreferences.Key.weightUnit.rawValue) private var weightUnit = WeightUnit.kg.rawValue
@@ -103,6 +104,13 @@ struct AppSettingsView: View {
                     Toggle(Strings.Settings.overwriteExisting, isOn: $overwriteExisting)
                 }
 
+                // Data export
+                Button {
+                    showingExportSheet = true
+                } label: {
+                    Label(Strings.Export.exportData, systemImage: "arrow.up.circle")
+                }
+
                 // Reset profile
                 Button(role: .destructive) {
                     HapticFeedback.warning()
@@ -152,6 +160,9 @@ struct AppSettingsView: View {
             }
         } message: {
             Text(Strings.CloudSharing.stopSharingConfirm)
+        }
+        .sheet(isPresented: $showingExportSheet) {
+            ExportDataView(profileStore: profileStore)
         }
     }
 

@@ -14,11 +14,15 @@ extension Strings {
     enum Settings {
         static let title = String(localized: "Settings", table: table)
 
-        // Hub navigation
+        // Hub navigation - 4 sections
         static let dogProfile = String(localized: "Dog Profile", table: table)
-        static let dogProfileSubtitle = String(localized: "Walks, meals, meds, spots", table: table)
+        static let dogProfileSubtitle = String(localized: "Name, breed, size, photo", table: table)
+        static let schedulePreferences = String(localized: "Schedule & Preferences", table: table)
+        static let schedulePreferencesSubtitle = String(localized: "Walks, meals, reminders", table: table)
+        static let healthDocuments = String(localized: "Health & Documents", table: table)
+        static let healthDocumentsSubtitle = String(localized: "Medications, documents, contacts", table: table)
         static let appSettings = String(localized: "App Settings", table: table)
-        static let appSettingsSubtitle = String(localized: "Subscription, notifications, sync", table: table)
+        static let appSettingsSubtitle = String(localized: "Sharing, appearance, sync", table: table)
 
         // Profile section
         static let profile = String(localized: "Profile", table: table)
@@ -177,7 +181,7 @@ extension Strings {
         static let notificationsDisabled = String(localized: "Notifications disabled", table: table)
         static let enableToReceive = String(localized: "Enable notifications to receive reminders", table: table)
 
-        static let remindersDescription = String(localized: "Receive smart reminders for potty, meals, naps, and walks.", table: table)
+        static let remindersDescription = String(localized: "Receive smart reminders for potty, meals, naps, walks, and appointments.", table: table)
 
         // Potty
         static let pottyReminders = String(localized: "Potty reminders", table: table)
@@ -216,7 +220,7 @@ extension Strings {
         static let enableInSettings = String(localized: "Enable notifications in Settings to receive reminders.", table: table)
         static let enableToReceive = String(localized: "Enable notifications to receive reminders", table: table)
         static let remindersLabel = String(localized: "Reminders", table: table)
-        static let remindersDescription = String(localized: "Receive smart reminders for potty, meals, naps, and walks.", table: table)
+        static let remindersDescription = String(localized: "Receive smart reminders for potty, meals, naps, walks, and appointments.", table: table)
         static let settings = String(localized: "Settings", table: table)
 
         // Potty
@@ -230,7 +234,7 @@ extension Strings {
         static func minutesBefore(_ minutes: Int) -> String {
             String(localized: "\(minutes) min before", table: table)
         }
-        static let mealReminderDescription = String(localized: "Reminder before it's time for the next meal.", table: table)
+        static let mealReminderDescription = String(localized: "Reminder when it's time for the next meal.", table: table)
 
         // Naps
         static let napNeeded = String(localized: "Nap needed", table: table)
@@ -248,9 +252,20 @@ extension Strings {
         static let addWalk = String(localized: "Add walk", table: table)
         static let removeLast = String(localized: "Remove last", table: table)
         static let label = String(localized: "Label", table: table)
-        static let walkReminderDescription = String(localized: "Reminder before it's time for a walk.", table: table)
+        static let walkReminderDescription = String(localized: "Reminder when it's time for a walk.", table: table)
         static func walkNumber(_ n: Int) -> String {
             String(localized: "Walk \(n)", table: table)
+        }
+
+        // Appointments
+        static let appointmentReminders = String(localized: "Appointment reminders", table: table)
+        static let appointmentsSection = String(localized: "Appointments", table: table)
+        static let appointmentReminderDescription = String(localized: "Reminder for upcoming vet visits, training, and other appointments.", table: table)
+
+        // Timing options
+        static let atScheduledTime = String(localized: "At scheduled time", table: table)
+        static func minutesOverdue(_ minutes: Int) -> String {
+            String(localized: "\(minutes) min overdue", table: table)
         }
     }
 
@@ -351,5 +366,78 @@ extension Strings {
         static let fahrenheit = String(localized: "Fahrenheit (°F)", table: table)
         static let kilograms = String(localized: "Kilograms (kg)", table: table)
         static let pounds = String(localized: "Pounds (lbs)", table: table)
+    }
+
+    // MARK: - Atmosphere Settings
+    enum Atmosphere {
+        static let title = String(localized: "Atmosphere", table: table)
+        static let description = String(localized: "Subtle visual changes based on time, weather, and your puppy's activity.", table: table)
+
+        static let timeOfDay = String(localized: "Time of day", table: table)
+        static let timeOfDayDescription = String(localized: "Background shifts from cool mornings to warm evenings.", table: table)
+
+        static let weather = String(localized: "Weather", table: table)
+        static let weatherDescription = String(localized: "Colors reflect current weather conditions.", table: table)
+
+        static let puppyState = String(localized: "Puppy state", table: table)
+        static let puppyStateDescription = String(localized: "Calmer visuals when sleeping, brighter when awake.", table: table)
+
+        static let seasonal = String(localized: "Seasonal touches", table: table)
+        static let seasonalDescription = String(localized: "Light color adjustments for the current season.", table: table)
+    }
+
+    // MARK: - Data Export
+    enum Export {
+        // Main UI
+        static let title = String(localized: "Export Data", table: table)
+        static let exportData = String(localized: "Export data", table: table)
+        static let exportDescription = String(localized: "Export all your puppy's data to share or back up.", table: table)
+        static let exportButton = String(localized: "Export", table: table)
+        static let share = String(localized: "Share", table: table)
+
+        // Options
+        static let optionsSection = String(localized: "Include in export", table: table)
+        static let includeProfile = String(localized: "Profile", table: table)
+        static let includeEvents = String(localized: "Events", table: table)
+        static let includeDocuments = String(localized: "Documents", table: table)
+        static let includeContacts = String(localized: "Contacts", table: table)
+        static let includeAppointments = String(localized: "Appointments", table: table)
+        static let includeMilestones = String(localized: "Milestones", table: table)
+        static let includeSocialization = String(localized: "Socialization", table: table)
+        static let includeWalkSpots = String(localized: "Saved places", table: table)
+        static let includeProfilePhoto = String(localized: "Profile photo", table: table)
+        static let includeMedia = String(localized: "Photos", table: table)
+        static let includeMediaDescription = String(localized: "Include all event photos (may be large)", table: table)
+
+        // Progress steps
+        static let stepPreparing = String(localized: "Preparing export...", table: table)
+        static let stepProfile = String(localized: "Exporting profile...", table: table)
+        static let stepEvents = String(localized: "Exporting events...", table: table)
+        static let stepDocuments = String(localized: "Exporting documents...", table: table)
+        static let stepContacts = String(localized: "Exporting contacts...", table: table)
+        static let stepAppointments = String(localized: "Exporting appointments...", table: table)
+        static let stepMilestones = String(localized: "Exporting milestones...", table: table)
+        static let stepExposures = String(localized: "Exporting socialization...", table: table)
+        static let stepWalkSpots = String(localized: "Exporting places...", table: table)
+        static let stepMedia = String(localized: "Exporting photos...", table: table)
+        static let stepProfilePhoto = String(localized: "Exporting profile photo...", table: table)
+        static let stepFinalizing = String(localized: "Finalizing export...", table: table)
+
+        // Results
+        static let exportComplete = String(localized: "Export Complete", table: table)
+        static func exportSummary(items: Int, size: String) -> String {
+            String(localized: "\(items) items exported (\(size))", table: table)
+        }
+        static let readyToShare = String(localized: "Your export is ready to share.", table: table)
+
+        // Errors
+        static let errorNoProfile = String(localized: "No puppy profile found. Please create a profile first.", table: table)
+        static func errorExportFailed(_ message: String) -> String {
+            String(localized: "Export failed: \(message)", table: table)
+        }
+        static let errorFileCreation = String(localized: "Could not create export files.", table: table)
+        static func errorEncoding(_ type: String) -> String {
+            String(localized: "Could not encode \(type) data.", table: table)
+        }
     }
 }
