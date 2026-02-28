@@ -369,6 +369,75 @@ extension Strings {
         static let pounds = String(localized: "Pounds (lbs)", table: table)
     }
 
+    // MARK: - Memorial
+    enum Memorial {
+        static let sectionTitle = String(localized: "Memories", table: table)
+        static let memoryBookTitle = String(localized: "Memory Book", table: table)
+        static let memoryBookDescription = String(localized: "When the time comes, create a keepsake with all your memories together.", table: table)
+        static let createMemoryBook = String(localized: "Create Memory Book", table: table)
+
+        // Marking as passed
+        static let markAsPassed = String(localized: "If your dog has passed away...", table: table)
+        static let passedDateLabel = String(localized: "Passed away", table: table)
+        static let confirmTitle = String(localized: "We're so sorry", table: table)
+        static func confirmMessage(name: String) -> String {
+            String(localized: "\(name) was clearly loved. We can see it in every walk logged, every milestone celebrated.\n\nWhen you're ready, we can help you create a memory book to remember \(name) by.", table: table)
+        }
+        static let notYet = String(localized: "Not yet", table: table)
+        static let idLikeThat = String(localized: "I'd like that", table: table)
+        static let whenDidPass = String(localized: "When did they pass?", table: table)
+        static let continue_ = String(localized: "Continue", table: table)
+
+        // Memory book content
+        static let generating = String(localized: "Creating your memory book...", table: table)
+        static let gatheringMemories = String(localized: "Gathering memories...", table: table)
+        static let coverTitle = String(localized: "In Loving Memory", table: table)
+        static let theBeginning = String(localized: "The Beginning", table: table)
+        static func cameHome(name: String, date: String) -> String {
+            String(localized: "On \(date), \(name) came home.", table: table)
+        }
+        static func weeksOldWhenArrived(weeks: Int) -> String {
+            String(localized: "\(weeks) weeks old when they arrived.", table: table)
+        }
+        static let milestones = String(localized: "Milestones", table: table)
+        static let adventures = String(localized: "Adventures", table: table)
+        static func exploredPlaces(count: Int) -> String {
+            String(localized: "Together, you explored \(count) places.", table: table)
+        }
+        static let learningAndGrowing = String(localized: "Learning & Growing", table: table)
+        static func practicedExercise(name: String, exercise: String, count: Int) -> String {
+            String(localized: "\(name) practiced \(exercise) \(count) times.", table: table)
+        }
+        static let friends = String(localized: "Friends", table: table)
+        static func madeFriends(count: Int) -> String {
+            String(localized: "Made \(count) friends along the way.", table: table)
+        }
+        static let theNumbers = String(localized: "By the Numbers", table: table)
+        static func daysTogether(count: Int) -> String {
+            String(localized: "\(count) days together", table: table)
+        }
+        static func walksShared(count: Int) -> String {
+            String(localized: "\(count) walks shared", table: table)
+        }
+        static func mealsTogether(count: Int) -> String {
+            String(localized: "\(count) meals together", table: table)
+        }
+        static func napsObserved(count: Int) -> String {
+            String(localized: "\(count) naps observed", table: table)
+        }
+        static let moments = String(localized: "Moments", table: table)
+        static let finalMessage = String(localized: "This is their story. Not all of it — the best parts happened between the logged moments. The head on your lap. The excited spin at the door. The way they looked at you.\n\nThose don't need an app to remember.", table: table)
+
+        // Share
+        static let shareMemoryBook = String(localized: "Share Memory Book", table: table)
+        static let memoryBookReady = String(localized: "Memory Book Ready", table: table)
+        static let saveOrShare = String(localized: "Your memory book is ready. You can save it or share it.", table: table)
+
+        // Undo passed status
+        static let undoPassedStatus = String(localized: "Undo passed status", table: table)
+        static let remembered = String(localized: "Remembered", table: table)
+    }
+
     // MARK: - Atmosphere Settings
     enum Atmosphere {
         static let title = String(localized: "Atmosphere", table: table)

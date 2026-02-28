@@ -22,6 +22,12 @@ struct DogProfileSettingsView: View {
                     profileStore: profileStore,
                     showingPhotoPicker: $showingPhotoPicker
                 )
+
+                // Memorial section (subtle, at the bottom)
+                MemorialSection(
+                    profile: profile,
+                    profileStore: profileStore
+                )
             }
         }
         .navigationTitle(profileStore.profile?.name ?? Strings.Settings.profile)
