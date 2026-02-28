@@ -101,6 +101,12 @@ class TimelineViewModel: ObservableObject {
     /// Cached weight delta from previous measurement
     @Published private(set) var cachedWeightDelta: (delta: Double, previousDate: Date)?
 
+    /// Cached growth story for the health tab
+    @Published private(set) var cachedGrowthStory: GrowthStory?
+
+    /// Cached first weight (for "journey begins" state)
+    @Published private(set) var cachedFirstWeight: (weight: Double, date: Date)?
+
     /// Last time stats were computed
     private var lastStatsUpdate: Date?
 
@@ -351,6 +357,16 @@ class TimelineViewModel: ObservableObject {
                 self.cachedYearEvents = yearEvents
                 self.cachedLatestWeight = WeightCalculations.latestWeight(events: yearEvents)
                 self.cachedWeightDelta = WeightCalculations.weightDelta(events: yearEvents)
+                self.cachedFirstWeight = WeightCalculations.firstWeight(events: yearEvents)
+
+                // Compute growth story if we have profile data
+                if let profile = self.profileStore.profile {
+                    self.cachedGrowthStory = WeightCalculations.growthStory(
+                        events: yearEvents,
+                        homeDate: profile.homeDate,
+                        sizeCategory: profile.sizeCategory
+                    )
+                }
             }
         }
     }

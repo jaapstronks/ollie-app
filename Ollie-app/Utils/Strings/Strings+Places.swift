@@ -30,6 +30,7 @@ extension Strings {
 
         // Actions
         static let addSpot = String(localized: "Add spot", table: table)
+        static let addContact = String(localized: "Add contact", table: table)
         static let addMoment = String(localized: "Add moment", table: table)
         static let expandMap = String(localized: "Expand map", table: table)
 
@@ -71,7 +72,13 @@ extension Strings {
             }
         }
 
-        static let olliesWorld = String(localized: "Ollie's World", table: table, comment: "Title for summary card showing exploration stats")
+        static func olliesWorld(name: String) -> String {
+            String(localized: "\(name)'s World", table: table, comment: "Title for summary card showing exploration stats, uses puppy name")
+        }
+
+        static let placesLabel = String(localized: "Places", table: table, comment: "Label for places count in summary card")
+        static let momentsLabel = String(localized: "Moments", table: table, comment: "Label for photos/moments count in summary card")
+        static let contactsLabel = String(localized: "Contacts", table: table, comment: "Label for contacts count in summary card")
 
         // Discovered spot categories
         static let categoryDogPark = String(localized: "Dog park", table: table, comment: "Category for fenced dog parks")

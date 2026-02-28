@@ -6,6 +6,56 @@
 
 import Foundation
 
+/// Growth story data for visual weight journey display
+public struct GrowthStory: Sendable {
+    public let firstWeight: Double
+    public let firstWeightDate: Date
+    public let currentWeight: Double
+    public let currentWeightDate: Date
+    public let growthRatio: Double      // current / first (e.g., 2.0 = doubled)
+    public let estimatedAdultWeight: Double
+    public let percentToAdult: Double   // 0-100%
+    public let daysSinceFirst: Int
+
+    public init(
+        firstWeight: Double,
+        firstWeightDate: Date,
+        currentWeight: Double,
+        currentWeightDate: Date,
+        growthRatio: Double,
+        estimatedAdultWeight: Double,
+        percentToAdult: Double,
+        daysSinceFirst: Int
+    ) {
+        self.firstWeight = firstWeight
+        self.firstWeightDate = firstWeightDate
+        self.currentWeight = currentWeight
+        self.currentWeightDate = currentWeightDate
+        self.growthRatio = growthRatio
+        self.estimatedAdultWeight = estimatedAdultWeight
+        self.percentToAdult = percentToAdult
+        self.daysSinceFirst = daysSinceFirst
+    }
+
+    /// Formatted growth multiplier for display (e.g., "2x", "1.5x", "3x")
+    public var formattedMultiplier: String {
+        if growthRatio >= 2.95 && growthRatio < 3.05 {
+            return "3x"
+        } else if growthRatio >= 1.95 && growthRatio < 2.05 {
+            return "2x"
+        } else if growthRatio >= 1.45 && growthRatio < 1.55 {
+            return "1.5x"
+        } else {
+            return String(format: "%.1fx", growthRatio)
+        }
+    }
+
+    /// Whether growth is significant enough to show story (at least 10% increase)
+    public var isSignificant: Bool {
+        growthRatio >= 1.1
+    }
+}
+
 /// Weight measurement with age context
 public struct WeightMeasurement: Identifiable, Sendable {
     public let id: UUID
@@ -173,5 +223,64 @@ public enum WeightCalculations {
         let center = interpolatedReferenceWeight(at: weeks, curve: curve)
         let tolerance = center * GrowthCurves.tolerancePercent
         return (center - tolerance, center + tolerance)
+    }
+
+    /// Build a growth story from weight events
+    /// Returns nil if there are fewer than 2 weight measurements
+    public static func growthStory(
+        events: [PuppyEvent],
+        homeDate: Date,
+        sizeCategory: PuppyProfile.SizeCategory
+    ) -> GrowthStory? {
+        let weightEvents = events.weights()
+            .filter { $0.weightKg != nil }
+            .sorted { $0.time < $1.time }
+
+        guard weightEvents.count >= 2,
+              let firstEvent = weightEvents.first,
+              let lastEvent = weightEvents.last,
+              let firstWeight = firstEvent.weightKg,
+              let currentWeight = lastEvent.weightKg,
+              firstWeight > 0 else {
+            return nil
+        }
+
+        // Calculate growth ratio
+        let growthRatio = currentWeight / firstWeight
+
+        // Get estimated adult weight from reference curve
+        let curve = GrowthCurves.curve(for: sizeCategory)
+        let estimatedAdultWeight = curve.last?.kg ?? currentWeight
+
+        // Calculate percent to adult weight (capped at 100%)
+        let percentToAdult = min(100.0, (currentWeight / estimatedAdultWeight) * 100.0)
+
+        // Calculate days since first measurement
+        let calendar = Calendar.current
+        let daysSinceFirst = calendar.dateComponents([.day], from: firstEvent.time, to: lastEvent.time).day ?? 0
+
+        return GrowthStory(
+            firstWeight: firstWeight,
+            firstWeightDate: firstEvent.time,
+            currentWeight: currentWeight,
+            currentWeightDate: lastEvent.time,
+            growthRatio: growthRatio,
+            estimatedAdultWeight: estimatedAdultWeight,
+            percentToAdult: percentToAdult,
+            daysSinceFirst: daysSinceFirst
+        )
+    }
+
+    /// Get the first weight measurement (for "journey begins" state)
+    public static func firstWeight(events: [PuppyEvent]) -> (weight: Double, date: Date)? {
+        let weightEvents = events.weights()
+            .filter { $0.weightKg != nil }
+            .sorted { $0.time < $1.time }
+
+        guard let first = weightEvents.first, let weight = first.weightKg else {
+            return nil
+        }
+
+        return (weight, first.time)
     }
 }

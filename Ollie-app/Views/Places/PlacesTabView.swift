@@ -21,6 +21,7 @@ struct PlacesTabView: View {
     @StateObject private var mapViewModel: PlacesMapViewModel
 
     @State private var showingAddSpot = false
+    @State private var showingAddContact = false
     @State private var selectedSpot: WalkSpot?
     @State private var selectedDiscoveredSpot: DiscoveredSpot?
     @State private var selectedContact: DogContact?
@@ -87,6 +88,9 @@ struct PlacesTabView: View {
             }
             .sheet(isPresented: $showingAddSpot) {
                 AddSpotSheet(spotStore: spotStore, locationManager: locationManager)
+            }
+            .sheet(isPresented: $showingAddContact) {
+                AddEditContactSheet(contactStore: contactStore)
             }
             .sheet(item: $selectedSpot) { spot in
                 SpotDetailView(
@@ -190,11 +194,21 @@ struct PlacesTabView: View {
         .mapStyle(.standard(elevation: .realistic))
     }
 
-    // MARK: - Add Spot FAB
+    // MARK: - Add FAB with Menu
 
     private var addSpotFAB: some View {
-        Button {
-            showingAddSpot = true
+        Menu {
+            Button {
+                showingAddSpot = true
+            } label: {
+                Label(Strings.Places.addSpot, systemImage: "mappin.circle.fill")
+            }
+
+            Button {
+                showingAddContact = true
+            } label: {
+                Label(Strings.Places.addContact, systemImage: "person.crop.circle.badge.plus")
+            }
         } label: {
             Image(systemName: "plus")
                 .font(.system(size: 20, weight: .semibold))
@@ -213,7 +227,7 @@ struct PlacesTabView: View {
         }
         .padding(.trailing, 16)
         .padding(.bottom, 100) // Above tab bar
-        .accessibilityLabel(Strings.Places.addSpot)
+        .accessibilityLabel(Strings.Common.add)
     }
 }
 

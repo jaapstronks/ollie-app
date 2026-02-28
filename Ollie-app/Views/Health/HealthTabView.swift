@@ -33,11 +33,13 @@ struct HealthTabView: View {
                             .animatedAppear(delay: 0)
                     }
 
-                    // Health section (weight tracking)
-                    InsightsHealthSection(
+                    // Health section (growth story)
+                    GrowthStoryCard(
+                        growthStory: viewModel.cachedGrowthStory,
                         latestWeight: latestWeight,
-                        weightDelta: weightDelta,
-                        viewModel: viewModel,
+                        firstWeight: viewModel.cachedFirstWeight,
+                        puppyName: profileStore.profile?.name ?? "Puppy",
+                        sizeCategory: profileStore.profile?.sizeCategory ?? .medium,
                         showWeightSheet: $showWeightSheet
                     )
                     .animatedAppear(delay: 0.05)

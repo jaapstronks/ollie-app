@@ -1,0 +1,259 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "%@ grew %lld%%!" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ groeide %2$lld%%!"
+          }
+        }
+      }
+    },
+    "%@ has doubled in weight!" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ is verdubbeld in gewicht!"
+          }
+        }
+      }
+    },
+    "%@ has tripled in weight!" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ is verdrievoudigd in gewicht!"
+          }
+        }
+      }
+    },
+    "%@ is 1.5x bigger now!" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ is nu anderhalf keer zo groot!"
+          }
+        }
+      }
+    },
+    "%@ is maintaining a healthy weight" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ houdt een gezond gewicht"
+          }
+        }
+      }
+    },
+    "%@ is now %@ bigger!" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ is nu %2$@ groter!"
+          }
+        }
+      }
+    },
+    "%lld%% of adult weight" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld%% van volwassen gewicht"
+          }
+        }
+      }
+    },
+    "%lld%% to adult weight" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld%% naar volwassen gewicht"
+          }
+        }
+      }
+    },
+    "Adult" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Volwassen"
+          }
+        }
+      }
+    },
+    "Growth" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Groei"
+          }
+        }
+      }
+    },
+    "Growth Story" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Groeiverhaal"
+          }
+        }
+      }
+    },
+    "in %lld days" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "in %lld dagen"
+          }
+        }
+      }
+    },
+    "in %lld weeks" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "in %lld weken"
+          }
+        }
+      }
+    },
+    "in 1 day" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "in 1 dag"
+          }
+        }
+      }
+    },
+    "in 1 week" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "in 1 week"
+          }
+        }
+      }
+    },
+    "Log another weight to see the growth story" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Log nog een gewicht om het groeiverhaal te zien"
+          }
+        }
+      }
+    },
+    "Log weight" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Log gewicht"
+          }
+        }
+      }
+    },
+    "Log your first weight to start tracking growth" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Log je eerste gewicht om de groei te volgen"
+          }
+        }
+      }
+    },
+    "Now" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nu"
+          }
+        }
+      }
+    },
+    "since %@" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "sinds %@"
+          }
+        }
+      }
+    },
+    "Since arrival" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sinds aankomst"
+          }
+        }
+      }
+    },
+    "Start" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start"
+          }
+        }
+      }
+    },
+    "The journey begins" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De reis begint"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}
