@@ -192,6 +192,13 @@ class ProfileStore: ObservableObject {
         saveProfile(currentProfile)
     }
 
+    /// Update the passed date (when the dog passed away)
+    func updatePassedDate(_ date: Date?) {
+        guard var currentProfile = profile else { return }
+        currentProfile.passedDate = date
+        saveProfile(currentProfile)
+    }
+
     /// Update the breed selection
     func updateBreed(name: String?, breedId: Int?, sizeCategory: PuppyProfile.SizeCategory?) {
         guard var currentProfile = profile else { return }

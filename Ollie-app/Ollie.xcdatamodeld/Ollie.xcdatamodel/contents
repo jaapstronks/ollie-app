@@ -13,6 +13,7 @@
         <attribute name="modifiedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="name" attributeType="String" defaultValueString=""/>
         <attribute name="notificationSettingsData" optional="YES" attributeType="Binary"/>
+        <attribute name="passedDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="predictionConfigData" optional="YES" attributeType="Binary"/>
         <attribute name="profilePhotoFilename" optional="YES" attributeType="String"/>
         <attribute name="sizeCategory" attributeType="String" defaultValueString="medium"/>

@@ -23,6 +23,7 @@ extension CDPuppyProfile {
         self.sizeCategory = profile.sizeCategory.rawValue
         self.modifiedAt = profile.modifiedAt
         self.profilePhotoFilename = profile.profilePhotoFilename
+        self.passedDate = profile.passedDate
         self.legacyPremiumUnlocked = profile.legacyPremiumUnlocked
 
         // Encode nested configs as JSON Data
@@ -127,6 +128,7 @@ extension CDPuppyProfile {
             medicationSchedule: medicationSchedule,
             modifiedAt: modifiedAt,
             profilePhotoFilename: self.profilePhotoFilename,
+            passedDate: self.passedDate,
             legacyPremiumUnlocked: self.legacyPremiumUnlocked
         )
     }

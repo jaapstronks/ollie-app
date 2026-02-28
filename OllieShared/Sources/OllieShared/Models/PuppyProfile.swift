@@ -26,6 +26,9 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
     /// Profile photo filename (stored in ProfilePhotos directory)
     public var profilePhotoFilename: String?
 
+    /// Date when the puppy passed away (nil if still alive)
+    public var passedDate: Date?
+
     // MARK: - Legacy Migration
     /// Legacy one-time purchasers are grandfathered into Ollie+
     /// This field is only used for migration from the old purchase model
@@ -128,6 +131,7 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
         webhookConfig: WebhookConfig = WebhookConfig.defaultConfig(),
         modifiedAt: Date? = nil,
         profilePhotoFilename: String? = nil,
+        passedDate: Date? = nil,
         legacyPremiumUnlocked: Bool = false
     ) {
         self.id = id
@@ -146,6 +150,7 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
         self.webhookConfig = webhookConfig
         self.modifiedAt = modifiedAt ?? Date()
         self.profilePhotoFilename = profilePhotoFilename
+        self.passedDate = passedDate
         self.legacyPremiumUnlocked = legacyPremiumUnlocked
     }
 
@@ -158,6 +163,7 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
         case walkSchedule, notificationSettings, medicationSchedule, webhookConfig
         case modifiedAt
         case profilePhotoFilename
+        case passedDate
         // Legacy fields for migration (read old values)
         case freeStartDate, isPremiumUnlocked
         // New field
@@ -182,6 +188,7 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
         webhookConfig = try container.decodeIfPresent(WebhookConfig.self, forKey: .webhookConfig) ?? WebhookConfig.defaultConfig()
         modifiedAt = try container.decodeIfPresent(Date.self, forKey: .modifiedAt) ?? Date()
         profilePhotoFilename = try container.decodeIfPresent(String.self, forKey: .profilePhotoFilename)
+        passedDate = try container.decodeIfPresent(Date.self, forKey: .passedDate)
 
         // Migration: check new field first, then fall back to old isPremiumUnlocked
         if let legacy = try container.decodeIfPresent(Bool.self, forKey: .legacyPremiumUnlocked) {
@@ -212,6 +219,7 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
         try container.encode(webhookConfig, forKey: .webhookConfig)
         try container.encode(modifiedAt, forKey: .modifiedAt)
         try container.encodeIfPresent(profilePhotoFilename, forKey: .profilePhotoFilename)
+        try container.encodeIfPresent(passedDate, forKey: .passedDate)
         try container.encode(legacyPremiumUnlocked, forKey: .legacyPremiumUnlocked)
         // Note: No longer writing freeStartDate or isPremiumUnlocked (subscription replaces these)
     }
