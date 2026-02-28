@@ -163,6 +163,23 @@ enum LayoutConstants {
 
     /// Slow animation duration
     static let animationSlow: Double = 0.4
+
+    // MARK: - Timeline Grid
+
+    /// Height per hour in the vertical timeline (60pt per hour)
+    static let timelineHourHeight: CGFloat = 60
+
+    /// Width of the time column showing hour labels
+    static let timelineTimeColumnWidth: CGFloat = 44
+
+    /// Width ratio for walk track (relative to available width)
+    static let timelineWalkTrackWidthRatio: CGFloat = 0.45
+
+    /// Minimum height for duration blocks
+    static let timelineMinBlockHeight: CGFloat = 50
+
+    /// Height for point event markers
+    static let timelineEventMarkerHeight: CGFloat = 40
 }
 
 // MARK: - Color Convenience (Urgency Mapping)

@@ -343,6 +343,7 @@
       }
     },
     "Also time for a meal" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -353,6 +354,7 @@
       }
     },
     "Also time for a walk" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -1748,16 +1750,6 @@
         }
       }
     },
-    "Woke up" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Wakker geworden"
-          }
-        }
-      }
-    },
     "Wake-up time" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -1886,6 +1878,46 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Wakker geworden"
+          }
+        }
+      }
+    },
+    "Sunrise" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zonsopgang"
+          }
+        }
+      }
+    },
+    "Sunset" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zonsondergang"
+          }
+        }
+      }
+    },
+    "Upcoming" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aankomend"
+          }
+        }
+      }
+    },
+    "Scheduled for %@" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gepland om %@"
           }
         }
       }
