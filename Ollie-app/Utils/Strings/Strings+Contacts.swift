@@ -58,17 +58,8 @@ extension Strings {
         static let chooseAnotherContact = String(localized: "Choose Another Contact", table: table)
         static let nameAlwaysImported = String(localized: "The name will always be imported.", table: table)
 
-        // Contact types (for picker)
-        static let typeVet = String(localized: "Veterinarian", table: table)
-        static let typeEmergencyVet = String(localized: "Emergency Vet", table: table)
-        static let typeSitter = String(localized: "Pet Sitter", table: table)
-        static let typeDaycare = String(localized: "Daycare", table: table)
-        static let typeGroomer = String(localized: "Groomer", table: table)
-        static let typeTrainer = String(localized: "Trainer", table: table)
-        static let typeWalker = String(localized: "Dog Walker", table: table)
-        static let typePetStore = String(localized: "Pet Store", table: table)
-        static let typeBreeder = String(localized: "Breeder", table: table)
-        static let typeOther = String(localized: "Other", table: table)
+        // Note: Contact type labels are defined in ContactType.displayName
+        // and use the same "Contacts" table for localization
 
         // Location
         static let location = String(localized: "Location", table: table, comment: "Section header for contact location")
