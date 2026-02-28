@@ -15,7 +15,24 @@ struct CombinedSleepPottyCard: View {
     let sleepDurationMin: Int
     let pottyUrgency: PottyUrgency
     let minutesOverdue: Int?
+    let pendingActionable: ActionableItem?
     let onWakeUp: () -> Void
+
+    init(
+        sleepingSince: Date,
+        sleepDurationMin: Int,
+        pottyUrgency: PottyUrgency,
+        minutesOverdue: Int?,
+        pendingActionable: ActionableItem? = nil,
+        onWakeUp: @escaping () -> Void
+    ) {
+        self.sleepingSince = sleepingSince
+        self.sleepDurationMin = sleepDurationMin
+        self.pottyUrgency = pottyUrgency
+        self.minutesOverdue = minutesOverdue
+        self.pendingActionable = pendingActionable
+        self.onWakeUp = onWakeUp
+    }
 
     @Environment(\.colorScheme) private var colorScheme
 
@@ -96,6 +113,29 @@ struct CombinedSleepPottyCard: View {
             }
             .padding(.leading, 6)
 
+            // Pending meal/walk section (if applicable)
+            if let actionable = pendingActionable {
+                HStack(spacing: 12) {
+                    Image(systemName: actionable.item.icon)
+                        .font(.system(size: 18))
+                        .foregroundStyle(.secondary)
+
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(pendingActionableText(actionable))
+                            .font(.subheadline)
+                            .fontWeight(.medium)
+                            .foregroundStyle(.primary)
+
+                        Text(pendingActionableSubtitle(actionable))
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+
+                    Spacer()
+                }
+                .padding(.leading, 6)
+            }
+
             // Wake up button
             Button(action: onWakeUp) {
                 Label(Strings.CombinedStatus.wakeUp, systemImage: "sun.max.fill")
@@ -128,6 +168,25 @@ struct CombinedSleepPottyCard: View {
     private var shadowColor: Color {
         let opacity = colorScheme == .dark ? 0.2 : 0.1
         return Color.ollieSleep.opacity(opacity)
+    }
+
+    // MARK: - Pending Actionable Helpers
+
+    /// Main text for pending meal/walk
+    private func pendingActionableText(_ actionable: ActionableItem) -> String {
+        switch actionable.item.itemType {
+        case .walk:
+            return Strings.CombinedStatus.alsoTimeForWalk
+        case .meal:
+            return Strings.CombinedStatus.alsoTimeForMeal
+        }
+    }
+
+    /// Subtitle showing specific meal/walk name and time
+    private func pendingActionableSubtitle(_ actionable: ActionableItem) -> String {
+        let label = actionable.item.localizedLabel
+        let time = actionable.item.timeString
+        return "\(label) \(Strings.Common.atTime) \(time)"
     }
 }
 

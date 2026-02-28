@@ -229,6 +229,7 @@ struct TodayView: View {
                     sleepDurationMin: duration,
                     pottyUrgency: urgency,
                     minutesOverdue: overdue,
+                    pendingActionable: pendingActionable,
                     onWakeUp: {
                         viewModel.sheetCoordinator.presentSheet(.endSleep(since))
                     }

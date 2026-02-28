@@ -54,6 +54,7 @@ extension Strings {
         static let weeks = String(localized: "weeks", table: table)
         static let days = String(localized: "days", table: table)
         static let hours = String(localized: "hours", table: table)
+        static let atTime = String(localized: "at", table: table)
 
         // Relative dates
         static let today = String(localized: "Today", table: table)
@@ -83,7 +84,7 @@ extension Strings {
         static let train = String(localized: "Train", table: table)
         static let walks = String(localized: "Walks", table: table)
         static let plan = String(localized: "Plan", table: table)
-        static let places = String(localized: "Places", table: table)
+        static let explore = String(localized: "Explore", table: table)
         static let calendar = String(localized: "Calendar", table: table)
         // Renamed tabs
         static let schedule = String(localized: "Schedule", table: table)

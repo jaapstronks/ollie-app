@@ -21,50 +21,36 @@ struct GetPottyStatusIntent: AppIntent {
             return .result(dialog: "Please set up your puppy profile in the Ollie app first.")
         }
 
-        let lastPee = store.lastEvent(ofType: .plassen)
-        let lastPoop = store.lastEvent(ofType: .poepen)
-
-        // No events at all
-        if lastPee == nil && lastPoop == nil {
-            return .result(dialog: "No potty events logged for \(profile.name) in the last week.")
+        // Use widget data which is synced by the main app
+        guard let widgetData = store.loadWidgetData() else {
+            return .result(dialog: "No data available. Please open the Ollie app to sync.")
         }
 
-        var parts: [String] = []
-
-        // Pee status
-        if let pee = lastPee {
-            let peeText = formatTimeAgo(from: pee.time, type: "peed", location: pee.location)
-            parts.append(peeText)
-        } else {
-            parts.append("No pee logged recently")
+        // Check if we have any potty data
+        guard let lastPeeTime = widgetData.lastPlasTime else {
+            return .result(dialog: "No potty events logged for \(profile.name) yet.")
         }
 
-        // Poop status
-        if let poop = lastPoop {
-            let poopText = formatTimeAgo(from: poop.time, type: "pooped", location: poop.location)
-            parts.append(poopText)
-        } else {
-            parts.append("no poop logged recently")
-        }
+        let locationText = widgetData.lastPlasLocation == "buiten" ? "outside" : "inside"
+        let peeText = formatTimeAgo(from: lastPeeTime, type: "peed", location: locationText)
 
-        return .result(dialog: "\(profile.name): \(parts.joined(separator: ". ")).")
+        return .result(dialog: "\(profile.name): \(peeText).")
     }
 
-    private func formatTimeAgo(from time: Date, type: String, location: EventLocation?) -> String {
+    private func formatTimeAgo(from time: Date, type: String, location: String) -> String {
         let minutesAgo = Int(Date().timeIntervalSince(time) / 60)
-        let locationText = location == .buiten ? "outside" : "inside"
 
         if minutesAgo < 1 {
-            return "just \(type) \(locationText)"
+            return "just \(type) \(location)"
         } else if minutesAgo < 60 {
-            return "\(type) \(locationText) \(minutesAgo) min ago"
+            return "\(type) \(location) \(minutesAgo) min ago"
         } else {
             let hours = minutesAgo / 60
             let mins = minutesAgo % 60
             if mins > 0 {
-                return "\(type) \(locationText) \(hours)h \(mins)m ago"
+                return "\(type) \(location) \(hours)h \(mins)m ago"
             } else {
-                return "\(type) \(locationText) \(hours)h ago"
+                return "\(type) \(location) \(hours)h ago"
             }
         }
     }
@@ -84,43 +70,38 @@ struct GetPuppyStatusIntent: AppIntent {
             return .result(dialog: "Please set up your puppy profile in the Ollie app first.")
         }
 
+        // Use widget data which is synced by the main app
+        guard let widgetData = store.loadWidgetData() else {
+            return .result(dialog: "No data available. Please open the Ollie app to sync.")
+        }
+
         var statusParts: [String] = []
 
         // 1. Sleep status
-        if let sleepEvent = store.ongoingSleepEvent() {
-            let minutesAsleep = Int(Date().timeIntervalSince(sleepEvent.time) / 60)
+        if widgetData.isCurrentlySleeping, let sleepStart = widgetData.sleepStartTime {
+            let minutesAsleep = Int(Date().timeIntervalSince(sleepStart) / 60)
             statusParts.append(formatSleepDuration(minutesAsleep, isAsleep: true))
-        } else if let lastWake = store.lastEvent(ofType: .ontwaken) {
-            let minutesAwake = Int(Date().timeIntervalSince(lastWake.time) / 60)
+        } else if let lastWake = widgetData.lastWakeTime {
+            let minutesAwake = Int(Date().timeIntervalSince(lastWake) / 60)
             statusParts.append(formatSleepDuration(minutesAwake, isAsleep: false))
         }
 
         // 2. Potty status (compact)
-        let lastPee = store.lastEvent(ofType: .plassen)
-        let lastPoop = store.lastEvent(ofType: .poepen)
-
-        var pottyParts: [String] = []
-        if let pee = lastPee {
-            pottyParts.append("pee \(formatCompactTime(from: pee.time))")
-        }
-        if let poop = lastPoop {
-            pottyParts.append("poop \(formatCompactTime(from: poop.time))")
-        }
-        if !pottyParts.isEmpty {
-            statusParts.append("Last \(pottyParts.joined(separator: ", "))")
+        if let lastPeeTime = widgetData.lastPlasTime {
+            statusParts.append("Last pee \(formatCompactTime(from: lastPeeTime))")
         }
 
         // 3. Today's activity summary
-        let todayEvents = store.readEvents(for: Date())
-        let mealCount = todayEvents.ofType(.eten).count
-        let walkCount = todayEvents.ofType(.uitlaten).count
-
         var todayParts: [String] = []
-        if mealCount > 0 {
-            todayParts.append("\(mealCount) meal\(mealCount == 1 ? "" : "s")")
+        if widgetData.mealsLoggedToday > 0 {
+            let meals = widgetData.mealsLoggedToday
+            todayParts.append("\(meals) meal\(meals == 1 ? "" : "s")")
         }
-        if walkCount > 0 {
-            todayParts.append("\(walkCount) walk\(walkCount == 1 ? "" : "s")")
+        if let lastWalkTime = widgetData.lastWalkTime {
+            // Check if the walk was today
+            if Calendar.current.isDateInToday(lastWalkTime) {
+                todayParts.append("walked \(formatCompactTime(from: lastWalkTime))")
+            }
         }
         if !todayParts.isEmpty {
             statusParts.append("Today: \(todayParts.joined(separator: ", "))")

@@ -129,28 +129,32 @@ struct SleepStatusCard: View {
     }
 
     /// Subtitle text for pending walk/meal when sleeping
+    /// Includes specific meal/walk name and scheduled time for clarity
     private func pendingActionableSubtitle(_ actionable: ActionableItem) -> String {
+        let label = actionable.item.localizedLabel
+        let time = actionable.item.timeString
+
         switch actionable.item.itemType {
         case .walk:
-            return Strings.SleepStatus.afterWakeTimeForWalk
+            return Strings.SleepStatus.afterWakeTimeForWalkWithDetails(label: label, time: time)
         case .meal:
-            return Strings.SleepStatus.afterWakeTimeForMeal
+            return Strings.SleepStatus.afterWakeTimeForMealWithDetails(label: label, time: time)
         }
     }
 
     private var indicatorColor: Color {
         switch sleepState {
         case .sleeping:
-            return .purple
+            return .ollieSleep
         case .awake(_, let durationMin):
             if durationMin >= SleepCalculations.maxAwakeMinutes {
-                return .red
+                return .ollieDanger
             } else if durationMin >= SleepCalculations.awakeWarningMinutes {
-                return .orange
+                return .ollieWarning
             }
-            return .green
+            return .ollieSuccess
         case .unknown:
-            return .gray
+            return .ollieMuted
         }
     }
 
@@ -160,9 +164,9 @@ struct SleepStatusCard: View {
             return .primary
         case .awake(_, let durationMin):
             if durationMin >= SleepCalculations.maxAwakeMinutes {
-                return .red
+                return .ollieDanger
             } else if durationMin >= SleepCalculations.awakeWarningMinutes {
-                return .orange
+                return .ollieWarning
             }
             return .primary
         case .unknown:

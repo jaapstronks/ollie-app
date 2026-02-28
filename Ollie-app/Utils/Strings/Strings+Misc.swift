@@ -45,6 +45,7 @@ extension Strings {
         static let title = String(localized: "Statistics", table: table)
         static let outdoorStreak = String(localized: "Outdoor Streak", table: table)
         static let pottyGaps = String(localized: "Pee Intervals (7 days)", table: table)
+        static let pottyTraining = String(localized: "Potty Training", table: table)
         static let today = String(localized: "Today", table: table)
         static let sleepToday = String(localized: "Sleep Today", table: table)
         static let patterns = String(localized: "Patterns (7 days)", table: table)
@@ -154,6 +155,18 @@ extension Strings {
     // MARK: - Streaks
     enum StreakMessages {
         static let startAgain = String(localized: "Start again!", table: table)
+    }
+
+    // MARK: - Celebration Messages
+    enum Celebration {
+        static func outdoorStreakToday(count: Int, puppyName: String) -> String {
+            String(localized: "\(count) outdoor pees in a row today! \(puppyName) is doing amazing!", table: table)
+        }
+        static func outdoorStreakTodayShort(count: Int) -> String {
+            String(localized: "\(count) outdoor pees today!", table: table)
+        }
+        static let perfectDaySoFar = String(localized: "Perfect day so far!", table: table)
+        static let keepItUp = String(localized: "Keep it up!", table: table)
     }
 
     // MARK: - Potty Progress Summary Card

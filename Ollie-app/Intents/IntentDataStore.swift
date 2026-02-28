@@ -76,6 +76,160 @@ final class IntentDataStore {
         sharedDefaults.set(data, forKey: Self.profileKey)
     }
 
+    // MARK: - Widget Data
+
+    private static let widgetDataKey = "widgetData"
+
+    /// Read widget data from App Group UserDefaults (synced by main app)
+    func loadWidgetData() -> WidgetData? {
+        guard let sharedDefaults = UserDefaults(suiteName: Self.suiteName),
+              let data = sharedDefaults.data(forKey: Self.widgetDataKey) else {
+            return nil
+        }
+
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        return try? decoder.decode(WidgetData.self, from: data)
+    }
+
+    /// Update widget data with a newly logged event
+    /// This allows status intents to immediately see events logged via Siri/Shortcuts
+    func updateWidgetData(with event: PuppyEvent) {
+        guard var widgetData = loadWidgetData() else {
+            logger.debug("No existing widget data to update")
+            return
+        }
+
+        // Create updated widget data based on the event type
+        switch event.type {
+        case .plassen:
+            widgetData = WidgetData(
+                lastPlasTime: event.time,
+                lastPlasLocation: event.location?.rawValue,
+                currentStreak: event.location == .buiten ? widgetData.currentStreak + 1 : 0,
+                bestStreak: widgetData.bestStreak,
+                todayPottyCount: widgetData.todayPottyCount + 1,
+                todayOutdoorCount: event.location == .buiten ? widgetData.todayOutdoorCount + 1 : widgetData.todayOutdoorCount,
+                isCurrentlySleeping: widgetData.isCurrentlySleeping,
+                sleepStartTime: widgetData.sleepStartTime,
+                lastWakeTime: widgetData.lastWakeTime,
+                lastMealTime: widgetData.lastMealTime,
+                nextScheduledMealTime: widgetData.nextScheduledMealTime,
+                mealsLoggedToday: widgetData.mealsLoggedToday,
+                mealsExpectedToday: widgetData.mealsExpectedToday,
+                lastWalkTime: widgetData.lastWalkTime,
+                nextScheduledWalkTime: widgetData.nextScheduledWalkTime,
+                puppyName: widgetData.puppyName,
+                lastUpdated: Date()
+            )
+
+        case .slapen:
+            widgetData = WidgetData(
+                lastPlasTime: widgetData.lastPlasTime,
+                lastPlasLocation: widgetData.lastPlasLocation,
+                currentStreak: widgetData.currentStreak,
+                bestStreak: widgetData.bestStreak,
+                todayPottyCount: widgetData.todayPottyCount,
+                todayOutdoorCount: widgetData.todayOutdoorCount,
+                isCurrentlySleeping: true,
+                sleepStartTime: event.time,
+                lastWakeTime: widgetData.lastWakeTime,
+                lastMealTime: widgetData.lastMealTime,
+                nextScheduledMealTime: widgetData.nextScheduledMealTime,
+                mealsLoggedToday: widgetData.mealsLoggedToday,
+                mealsExpectedToday: widgetData.mealsExpectedToday,
+                lastWalkTime: widgetData.lastWalkTime,
+                nextScheduledWalkTime: widgetData.nextScheduledWalkTime,
+                puppyName: widgetData.puppyName,
+                lastUpdated: Date()
+            )
+
+        case .ontwaken:
+            widgetData = WidgetData(
+                lastPlasTime: widgetData.lastPlasTime,
+                lastPlasLocation: widgetData.lastPlasLocation,
+                currentStreak: widgetData.currentStreak,
+                bestStreak: widgetData.bestStreak,
+                todayPottyCount: widgetData.todayPottyCount,
+                todayOutdoorCount: widgetData.todayOutdoorCount,
+                isCurrentlySleeping: false,
+                sleepStartTime: nil,
+                lastWakeTime: event.time,
+                lastMealTime: widgetData.lastMealTime,
+                nextScheduledMealTime: widgetData.nextScheduledMealTime,
+                mealsLoggedToday: widgetData.mealsLoggedToday,
+                mealsExpectedToday: widgetData.mealsExpectedToday,
+                lastWalkTime: widgetData.lastWalkTime,
+                nextScheduledWalkTime: widgetData.nextScheduledWalkTime,
+                puppyName: widgetData.puppyName,
+                lastUpdated: Date()
+            )
+
+        case .eten:
+            widgetData = WidgetData(
+                lastPlasTime: widgetData.lastPlasTime,
+                lastPlasLocation: widgetData.lastPlasLocation,
+                currentStreak: widgetData.currentStreak,
+                bestStreak: widgetData.bestStreak,
+                todayPottyCount: widgetData.todayPottyCount,
+                todayOutdoorCount: widgetData.todayOutdoorCount,
+                isCurrentlySleeping: widgetData.isCurrentlySleeping,
+                sleepStartTime: widgetData.sleepStartTime,
+                lastWakeTime: widgetData.lastWakeTime,
+                lastMealTime: event.time,
+                nextScheduledMealTime: widgetData.nextScheduledMealTime,
+                mealsLoggedToday: widgetData.mealsLoggedToday + 1,
+                mealsExpectedToday: widgetData.mealsExpectedToday,
+                lastWalkTime: widgetData.lastWalkTime,
+                nextScheduledWalkTime: widgetData.nextScheduledWalkTime,
+                puppyName: widgetData.puppyName,
+                lastUpdated: Date()
+            )
+
+        case .uitlaten:
+            widgetData = WidgetData(
+                lastPlasTime: widgetData.lastPlasTime,
+                lastPlasLocation: widgetData.lastPlasLocation,
+                currentStreak: widgetData.currentStreak,
+                bestStreak: widgetData.bestStreak,
+                todayPottyCount: widgetData.todayPottyCount,
+                todayOutdoorCount: widgetData.todayOutdoorCount,
+                isCurrentlySleeping: widgetData.isCurrentlySleeping,
+                sleepStartTime: widgetData.sleepStartTime,
+                lastWakeTime: widgetData.lastWakeTime,
+                lastMealTime: widgetData.lastMealTime,
+                nextScheduledMealTime: widgetData.nextScheduledMealTime,
+                mealsLoggedToday: widgetData.mealsLoggedToday,
+                mealsExpectedToday: widgetData.mealsExpectedToday,
+                lastWalkTime: event.time,
+                nextScheduledWalkTime: widgetData.nextScheduledWalkTime,
+                puppyName: widgetData.puppyName,
+                lastUpdated: Date()
+            )
+
+        default:
+            // No widget data update needed for other event types
+            return
+        }
+
+        // Save updated widget data
+        saveWidgetData(widgetData)
+    }
+
+    /// Save widget data to App Group UserDefaults
+    private func saveWidgetData(_ widgetData: WidgetData) {
+        guard let sharedDefaults = UserDefaults(suiteName: Self.suiteName) else {
+            return
+        }
+
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+
+        if let data = try? encoder.encode(widgetData) {
+            sharedDefaults.set(data, forKey: Self.widgetDataKey)
+        }
+    }
+
     // MARK: - Events
 
     /// Add an event via Siri/Shortcuts
@@ -119,6 +273,9 @@ final class IntentDataStore {
         try content.write(to: fileURL, atomically: true, encoding: .utf8)
 
         logger.info("Intent logged event: \(event.type.rawValue)")
+
+        // Update widget data so status intents immediately reflect the new event
+        updateWidgetData(with: event)
 
         // Notify widgets to refresh
         WidgetCenter.shared.reloadAllTimelines()

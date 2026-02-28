@@ -2,13 +2,13 @@
 //  HealthTabView.swift
 //  Ollie-app
 //
-//  The "Health" tab - patterns, stats, weight, and walks
+//  The "Health" tab - medical, weight, potty training, patterns, and stats
 //
 
 import SwiftUI
 import OllieShared
 
-/// Health tab showing patterns, stats, weight, and walks
+/// Health tab showing medical timeline, weight, potty training, and stats
 struct HealthTabView: View {
     @ObservedObject var viewModel: TimelineViewModel
     @ObservedObject var momentsViewModel: MomentsViewModel
@@ -17,6 +17,7 @@ struct HealthTabView: View {
     @EnvironmentObject var subscriptionManager: SubscriptionManager
     @EnvironmentObject var profileStore: ProfileStore
     @EnvironmentObject var milestoneStore: MilestoneStore
+    @EnvironmentObject var appointmentStore: AppointmentStore
 
     @State private var showWeightSheet = false
     @State private var showOlliePlusSheet = false
@@ -26,33 +27,40 @@ struct HealthTabView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 20) {
-                    // Week Overview section (grid + trend chart)
-                    InsightsWeekOverviewSection(weekStats: weekStats)
-                        .animatedAppear(delay: 0)
-
-                    // Streak section
-                    statsSection(title: Strings.Stats.outdoorStreak, icon: "flame.fill", tint: .ollieAccent) {
-                        StreakStatsCard(streakInfo: viewModel.streakInfo)
+                    // Medical milestones section (top priority)
+                    if let birthDate = profileStore.profile?.birthDate {
+                        medicalMilestonesSection(birthDate: birthDate)
+                            .animatedAppear(delay: 0)
                     }
+
+                    // Health section (weight tracking)
+                    InsightsHealthSection(
+                        latestWeight: latestWeight,
+                        weightDelta: weightDelta,
+                        viewModel: viewModel,
+                        showWeightSheet: $showWeightSheet
+                    )
                     .animatedAppear(delay: 0.05)
 
-                    // Potty gaps section
-                    statsSection(title: Strings.Stats.pottyGaps, icon: "chart.bar.fill", tint: .ollieInfo) {
-                        GapStatsCard(events: recentEvents)
-                    }
-                    .animatedAppear(delay: 0.10)
+                    // Combined potty training section (streak + gaps)
+                    pottyTrainingSection
+                        .animatedAppear(delay: 0.10)
+
+                    // Week Overview section (grid + trend chart)
+                    InsightsWeekOverviewSection(weekStats: weekStats)
+                        .animatedAppear(delay: 0.15)
 
                     // Today's summary
                     statsSection(title: Strings.Stats.today, icon: "calendar", tint: .ollieSuccess) {
                         TodayStatsCard(events: todayEvents)
                     }
-                    .animatedAppear(delay: 0.15)
+                    .animatedAppear(delay: 0.20)
 
                     // Sleep summary
                     statsSection(title: Strings.Stats.sleepToday, icon: "moon.fill", tint: .ollieSleep) {
                         SleepStatsCard(events: todayEvents)
                     }
-                    .animatedAppear(delay: 0.20)
+                    .animatedAppear(delay: 0.25)
 
                     // Pattern analysis (Ollie+ feature)
                     Group {
@@ -69,29 +77,14 @@ struct HealthTabView: View {
                             )
                         }
                     }
-                    .animatedAppear(delay: 0.25)
-
-                    // Health section (weight tracking only)
-                    InsightsHealthSection(
-                        latestWeight: latestWeight,
-                        weightDelta: weightDelta,
-                        viewModel: viewModel,
-                        showWeightSheet: $showWeightSheet
-                    )
                     .animatedAppear(delay: 0.30)
-
-                    // Medical milestones section
-                    if let birthDate = profileStore.profile?.birthDate {
-                        medicalMilestonesSection(birthDate: birthDate)
-                            .animatedAppear(delay: 0.35)
-                    }
 
                     // Walk history section
                     InsightsWalkHistorySection(
                         recentWalks: recentWalks,
                         weekWalkStats: weekWalkStats
                     )
-                    .animatedAppear(delay: 0.40)
+                    .animatedAppear(delay: 0.35)
                 }
                 .padding()
                 .padding(.bottom, 84) // Space for FAB
@@ -185,6 +178,27 @@ struct HealthTabView: View {
         }
     }
 
+    // MARK: - Combined Potty Training Section
+
+    @ViewBuilder
+    private var pottyTrainingSection: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            InsightsSectionHeader(
+                title: Strings.Stats.pottyTraining,
+                icon: "leaf.fill",
+                tint: .ollieSuccess
+            )
+
+            VStack(spacing: 12) {
+                // Outdoor streak card
+                StreakStatsCard(streakInfo: viewModel.streakInfo)
+
+                // Potty gaps card
+                GapStatsCard(events: recentEvents)
+            }
+        }
+    }
+
     // MARK: - Medical Milestones Section
 
     @ViewBuilder
@@ -195,11 +209,29 @@ struct HealthTabView: View {
             .sorted { ($0.targetAgeWeeks ?? 0) < ($1.targetAgeWeeks ?? 0) }
 
         VStack(alignment: .leading, spacing: 10) {
-            InsightsSectionHeader(
-                title: Strings.Health.medicalMilestones,
-                icon: "cross.case.fill",
-                tint: .ollieHealth
-            )
+            // Header with View All link
+            HStack {
+                InsightsSectionHeader(
+                    title: Strings.Health.medicalMilestones,
+                    icon: "cross.case.fill",
+                    tint: .ollieHealth
+                )
+
+                Spacer()
+
+                NavigationLink {
+                    MedicalTimelineView(
+                        milestoneStore: milestoneStore,
+                        appointmentStore: appointmentStore,
+                        birthDate: birthDate,
+                        puppyName: profileStore.profile?.name ?? "Puppy"
+                    )
+                } label: {
+                    Text(Strings.Common.seeAll)
+                        .font(.subheadline)
+                        .foregroundStyle(Color.ollieAccent)
+                }
+            }
 
             VStack(spacing: 8) {
                 // Upcoming health milestones (next 2)
@@ -349,4 +381,5 @@ private struct HealthMilestoneRow: View {
     .environmentObject(SubscriptionManager.shared)
     .environmentObject(profileStore)
     .environmentObject(MilestoneStore())
+    .environmentObject(AppointmentStore())
 }

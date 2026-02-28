@@ -89,6 +89,14 @@ extension Strings {
         // Pending activities while sleeping (shown in subtitle)
         static let afterWakeTimeForWalk = String(localized: "After waking: time for a walk", table: table)
         static let afterWakeTimeForMeal = String(localized: "After waking: time for a meal", table: table)
+
+        // Detailed pending activities (with meal/walk name and time)
+        static func afterWakeTimeForWalkWithDetails(label: String, time: String) -> String {
+            String(localized: "After waking: \(label) at \(time)", table: table)
+        }
+        static func afterWakeTimeForMealWithDetails(label: String, time: String) -> String {
+            String(localized: "After waking: \(label) at \(time)", table: table)
+        }
     }
 
     // MARK: - Sleep Session (Timeline display)
@@ -140,9 +148,7 @@ extension Strings {
         }
         static let notePlaceholder = String(localized: "Notes (optional)", table: table)
         static let logNap = String(localized: "Log Nap", table: table)
-        static let napDate = String(localized: "Date", table: table)
-        static let startedPreviousNight = String(localized: "Started previous night", table: table)
-        static let overnightHint = String(localized: "The nap started before midnight and ended on the selected date", table: table)
+        static let overnightHint = String(localized: "Overnight sleep", table: table)
     }
 
     // MARK: - Walk Session Row
@@ -390,6 +396,20 @@ extension Strings {
         static let openAppToEndNap = String(localized: "Open app to end nap", table: table)
     }
 
+    // MARK: - Assumed Overnight Sleep Card
+    enum AssumedSleep {
+        static func title(name: String) -> String {
+            String(localized: "Did \(name) sleep last night?", table: table)
+        }
+        static func subtitle(time: String) -> String {
+            String(localized: "Assuming sleep started at \(time)", table: table)
+        }
+        static let fellAsleepAt = String(localized: "Fell asleep at", table: table)
+        static let stillSleeping = String(localized: "Still sleeping", table: table)
+        static let alreadyAwake = String(localized: "Already awake", table: table)
+        static let accessibilityLabel = String(localized: "Assumed overnight sleep prompt", table: table)
+    }
+
     // MARK: - Combined Sleep + Potty Status
     enum CombinedStatus {
         // Combined card (sleeping + potty urgent)
@@ -408,6 +428,10 @@ extension Strings {
         static let whenWakesTakeOutside = String(localized: "When she wakes, take her outside", table: table)
         static let wakeUp = String(localized: "Wake Up", table: table)
         static let sleepingPottyLabel = String(localized: "Sleeping", table: table)
+
+        // Pending meal/walk while sleeping (shown in combined card)
+        static let alsoTimeForWalk = String(localized: "Also time for a walk", table: table)
+        static let alsoTimeForMeal = String(localized: "Also time for a meal", table: table)
 
         // Post-wake card
         static let awakeTimePotty = String(localized: "She's awake — time for potty!", table: table)

@@ -162,6 +162,38 @@ extension Strings {
         static func daysAgo(_ days: Int) -> String {
             String(localized: "\(days)d ago", table: table)
         }
+
+        // Medical Timeline
+        static let medicalTimeline = String(localized: "Medical Timeline", table: table)
+        static let birth = String(localized: "Birth", table: table)
+        static let noMedicalHistory = String(localized: "No medical history yet", table: table)
+        static let noMedicalHistoryHint = String(localized: "Health milestones and vet appointments will appear here", table: table)
+        static func ageAtEvent(weeks: Int) -> String {
+            if weeks == 0 {
+                return String(localized: "Birth", table: table)
+            } else if weeks < 4 {
+                return String(localized: "Week \(weeks)", table: table)
+            } else if weeks < 52 {
+                let months = weeks / 4
+                return String(localized: "\(months) months", table: table)
+            } else {
+                let years = weeks / 52
+                return String(localized: "\(years) year(s)", table: table)
+            }
+        }
+        static func currentAge(weeks: Int) -> String {
+            if weeks < 52 {
+                return String(localized: "Currently \(weeks) weeks old", table: table)
+            } else {
+                let years = weeks / 52
+                let remainingWeeks = weeks % 52
+                if remainingWeeks == 0 {
+                    return String(localized: "Currently \(years) year(s) old", table: table)
+                } else {
+                    return String(localized: "Currently \(years) year(s) and \(remainingWeeks) weeks old", table: table)
+                }
+            }
+        }
     }
 
     // MARK: - This Week Card
