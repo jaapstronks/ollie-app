@@ -15,6 +15,7 @@ struct AddDocumentSheet: View {
     var existingDocument: Document?
 
     @Environment(\.dismiss) private var dismiss
+    @Environment(ToastManager.self) private var toastManager
 
     @State private var documentType: DocumentType = .other
     @State private var customTitle: String = ""
@@ -275,6 +276,9 @@ struct AddDocumentSheet: View {
                 documentStore.addDocument(document)
             }
         }
+
+        // Show confirmation toast
+        toastManager.show(Strings.Toast.documentAdded, type: .success)
 
         dismiss()
     }

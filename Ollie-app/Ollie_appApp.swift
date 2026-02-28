@@ -183,6 +183,7 @@ struct OllieApp: App {
     @StateObject private var subscriptionManager = SubscriptionManager.shared
     @StateObject private var atmosphereProvider = AtmosphereProvider()
     @ObservedObject private var cloudKit = CloudKitService.shared
+    @State private var toastManager = ToastManager()
 
     init() {
         // Initialize crash reporting first (before any other code that might crash)
@@ -203,6 +204,7 @@ struct OllieApp: App {
         WindowGroup {
             ContentView()
                 .environment(\.managedObjectContext, persistenceController.viewContext)
+                .environment(toastManager)
                 .environmentObject(profileStore)
                 .environmentObject(eventStore)
                 .environmentObject(dataImporter)
@@ -219,6 +221,7 @@ struct OllieApp: App {
                 .environmentObject(subscriptionManager)
                 .environmentObject(cloudKit)
                 .environmentObject(atmosphereProvider)
+                .toastContainer()
                 .task {
                     // Run Core Data migration from JSONL files (one-time, on first launch after update)
                     do {

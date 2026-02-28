@@ -1,0 +1,196 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "Added to calendar" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toegevoegd aan agenda"
+          }
+        }
+      }
+    },
+    "Contact added" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Contact toegevoegd"
+          }
+        }
+      }
+    },
+    "Copied to clipboard" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gekopieerd naar klembord"
+          }
+        }
+      }
+    },
+    "Could not delete. Try again." : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kon niet verwijderen. Probeer opnieuw."
+          }
+        }
+      }
+    },
+    "Could not save. Try again." : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kon niet opslaan. Probeer opnieuw."
+          }
+        }
+      }
+    },
+    "Deleted" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verwijderd"
+          }
+        }
+      }
+    },
+    "Document added" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Document toegevoegd"
+          }
+        }
+      }
+    },
+    "Export complete" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Export voltooid"
+          }
+        }
+      }
+    },
+    "Export failed" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Export mislukt"
+          }
+        }
+      }
+    },
+    "Go outside now!" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ga nu naar buiten!"
+          }
+        }
+      }
+    },
+    "Logged!" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gelogd!"
+          }
+        }
+      }
+    },
+    "Network error. Check your connection." : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Netwerkfout. Controleer je verbinding."
+          }
+        }
+      }
+    },
+    "Removed from calendar" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verwijderd uit agenda"
+          }
+        }
+      }
+    },
+    "Saved" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opgeslagen"
+          }
+        }
+      }
+    },
+    "Spot saved" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plek opgeslagen"
+          }
+        }
+      }
+    },
+    "Syncing..." : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Synchroniseren..."
+          }
+        }
+      }
+    },
+    "Tap or swipe up to dismiss" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tik of veeg omhoog om te sluiten"
+          }
+        }
+      }
+    },
+    "%lld events imported" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld events geïmporteerd"
+          }
+        }
+      }
+    },
+    "%lld times outside in a row!" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld keer op rij buiten!"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

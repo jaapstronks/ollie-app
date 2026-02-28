@@ -13,6 +13,7 @@ struct AddEditContactSheet: View {
     var existingContact: DogContact?
 
     @Environment(\.dismiss) private var dismiss
+    @Environment(ToastManager.self) private var toastManager
 
     @State private var contactType: ContactType = .vet
     @State private var name: String = ""
@@ -207,8 +208,10 @@ struct AddEditContactSheet: View {
 
         if isEditing {
             contactStore.updateContact(contact)
+            toastManager.showSaved()
         } else {
             contactStore.addContact(contact)
+            toastManager.show(Strings.Toast.contactAdded, type: .success)
         }
 
         dismiss()
