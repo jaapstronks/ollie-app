@@ -34,34 +34,15 @@ struct MilestoneCompletionSheet: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(spacing: 20) {
-                    // Milestone info header
+                VStack(spacing: 12) {
+                    // Compact milestone info header
                     milestoneHeader
 
                     // Completion options
-                    VStack(alignment: .leading, spacing: 16) {
-                        // Quick complete button
-                        Button {
-                            completeAndDismiss()
-                        } label: {
-                            HStack {
-                                Image(systemName: "checkmark.circle.fill")
-                                Text(Strings.Health.completeMilestone)
-                            }
-                            .font(.headline)
-                            .foregroundStyle(.white)
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(Color.ollieSuccess)
-                            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-                        }
-
-                        Divider()
-                            .padding(.vertical, 8)
-
-                        // Completion date picker
-                        VStack(alignment: .leading, spacing: 8) {
-                            HStack(spacing: 8) {
+                    VStack(alignment: .leading, spacing: 10) {
+                        // Completion date picker - inline with label
+                        HStack {
+                            HStack(spacing: 6) {
                                 Image(systemName: "calendar")
                                     .font(.subheadline)
                                     .foregroundStyle(.secondary)
@@ -70,6 +51,8 @@ struct MilestoneCompletionSheet: View {
                                     .font(.subheadline)
                                     .fontWeight(.medium)
                             }
+
+                            Spacer()
 
                             DatePicker(
                                 "",
@@ -80,18 +63,10 @@ struct MilestoneCompletionSheet: View {
                             .datePickerStyle(.compact)
                             .labelsHidden()
                         }
-                        .padding()
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 10)
                         .background(Color(.secondarySystemBackground))
                         .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-
-                        Divider()
-                            .padding(.vertical, 8)
-
-                        // Premium features section
-                        Text(Strings.OlliePlus.title)
-                            .font(.caption)
-                            .fontWeight(.semibold)
-                            .foregroundStyle(.secondary)
 
                         // Notes field (Premium)
                         premiumField(
@@ -100,7 +75,7 @@ struct MilestoneCompletionSheet: View {
                             title: Strings.Health.addNotes
                         ) {
                             TextField(Strings.Health.notesPlaceholder, text: $notes, axis: .vertical)
-                                .lineLimit(3...6)
+                                .lineLimit(2...4)
                                 .textFieldStyle(.roundedBorder)
                         }
 
@@ -122,17 +97,17 @@ struct MilestoneCompletionSheet: View {
                             icon: "camera",
                             title: Strings.Health.addPhoto
                         ) {
-                            VStack(alignment: .leading, spacing: 12) {
+                            VStack(alignment: .leading, spacing: 8) {
                                 // Photo preview if selected
                                 if let image = selectedImage {
                                     HStack {
                                         Image(uiImage: image)
                                             .resizable()
                                             .scaledToFill()
-                                            .frame(width: 80, height: 80)
+                                            .frame(width: 60, height: 60)
                                             .clipShape(RoundedRectangle(cornerRadius: 8))
 
-                                        VStack(alignment: .leading) {
+                                        VStack(alignment: .leading, spacing: 2) {
                                             Text(Strings.Health.photoAdded)
                                                 .font(.subheadline)
                                                 .foregroundStyle(Color.ollieSuccess)
@@ -173,14 +148,32 @@ struct MilestoneCompletionSheet: View {
                         ) {
                             Toggle(isOn: $addToCalendar) {
                                 Text(Strings.Health.reminderNextOccurrence)
-                                    .font(.subheadline)
+                                    .font(.caption)
                             }
                         }
                     }
-                    .padding()
+                    .padding(12)
                     .glassCard(tint: .accent)
+
+                    // Complete button at bottom
+                    Button {
+                        completeAndDismiss()
+                    } label: {
+                        HStack {
+                            Image(systemName: "checkmark.circle.fill")
+                            Text(Strings.Health.completeMilestone)
+                        }
+                        .font(.headline)
+                        .foregroundStyle(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 14)
+                        .background(Color.ollieSuccess)
+                        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                    }
                 }
-                .padding()
+                .padding(.horizontal)
+                .padding(.top, 8)
+                .padding(.bottom, 16)
             }
             .navigationTitle(Strings.Health.completeTitle)
             .navigationBarTitleDisplayMode(.inline)
@@ -199,7 +192,7 @@ struct MilestoneCompletionSheet: View {
                 }
             }
         }
-        .presentationDetents([.medium, .large])
+        .presentationDetents([.large])
         // Photo source picker (camera vs library)
         .confirmationDialog(Strings.Health.addPhoto, isPresented: $showPhotoSourcePicker) {
             Button {
@@ -250,43 +243,45 @@ struct MilestoneCompletionSheet: View {
 
     @ViewBuilder
     private var milestoneHeader: some View {
-        VStack(spacing: 12) {
+        HStack(spacing: 12) {
             // Icon (uses category color)
             ZStack {
                 Circle()
                     .fill(milestone.category.color)
-                    .frame(width: 56, height: 56)
+                    .frame(width: 44, height: 44)
 
                 Image(systemName: milestone.icon)
-                    .font(.system(size: 24))
+                    .font(.system(size: 20))
                     .foregroundStyle(.white)
             }
 
-            // Title
-            Text(milestone.localizedLabel)
-                .font(.title3)
-                .fontWeight(.semibold)
-                .multilineTextAlignment(.center)
+            VStack(alignment: .leading, spacing: 4) {
+                // Title
+                Text(milestone.localizedLabel)
+                    .font(.headline)
+                    .fontWeight(.semibold)
 
-            // Detail
-            if let detail = milestone.localizedDetail {
-                Text(detail)
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-                    .multilineTextAlignment(.center)
+                // Detail
+                if let detail = milestone.localizedDetail {
+                    Text(detail)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .lineLimit(2)
+                }
             }
+
+            Spacer()
 
             // Category badge (uses category color)
             Text(milestone.category.displayName)
-                .font(.caption)
+                .font(.caption2)
                 .foregroundStyle(milestone.category.color)
-                .padding(.horizontal, 10)
+                .padding(.horizontal, 8)
                 .padding(.vertical, 4)
                 .background(milestone.category.tintColor)
                 .clipShape(Capsule())
         }
-        .frame(maxWidth: .infinity)
-        .padding()
+        .padding(12)
         .glassCard(tint: .accent)
     }
 
@@ -299,10 +294,10 @@ struct MilestoneCompletionSheet: View {
         title: String,
         @ViewBuilder content: () -> Content
     ) -> some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack(spacing: 8) {
+        VStack(alignment: .leading, spacing: 6) {
+            HStack(spacing: 6) {
                 Image(systemName: icon)
-                    .font(.subheadline)
+                    .font(.caption)
                     .foregroundStyle(.secondary)
 
                 Text(title)
@@ -313,7 +308,7 @@ struct MilestoneCompletionSheet: View {
 
                 if !subscriptionManager.hasAccess(to: feature) {
                     Image(systemName: "lock.fill")
-                        .font(.caption)
+                        .font(.caption2)
                         .foregroundStyle(.secondary)
                 }
             }
@@ -322,11 +317,12 @@ struct MilestoneCompletionSheet: View {
                 content()
             } else {
                 Text(feature.description)
-                    .font(.caption)
+                    .font(.caption2)
                     .foregroundStyle(.tertiary)
             }
         }
-        .padding()
+        .padding(.horizontal, 12)
+        .padding(.vertical, 10)
         .background(Color(.secondarySystemBackground))
         .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
         .opacity(subscriptionManager.hasAccess(to: feature) ? 1 : 0.6)

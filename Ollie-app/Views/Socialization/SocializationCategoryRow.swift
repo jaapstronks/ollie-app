@@ -82,7 +82,7 @@ struct SocializationCategoryRow: View {
         switch progressFraction {
         case 1.0: return .ollieSuccess
         case 0.5...: return .ollieAccent
-        case 0.25...: return .orange
+        case 0.25...: return .ollieWarning
         default: return .secondary
         }
     }

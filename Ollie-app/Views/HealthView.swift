@@ -71,6 +71,9 @@ struct HealthView: View {
         }
         .navigationTitle(Strings.Health.title)
         .navigationBarTitleDisplayMode(.inline)
+        .onAppear {
+            Analytics.track(.healthTimelineViewed)
+        }
         .sheet(isPresented: $showWeightSheet) {
             WeightLogSheet(isPresented: $showWeightSheet) { weight in
                 logWeight(weight)

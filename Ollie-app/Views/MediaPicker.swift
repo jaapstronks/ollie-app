@@ -7,17 +7,32 @@ import SwiftUI
 import OllieShared
 import PhotosUI
 import UIKit
+import UniformTypeIdentifiers
 
 enum MediaPickerSource {
     case camera
     case library
+    case files
 }
 
-/// SwiftUI wrapper for camera and photo library picker
+/// SwiftUI wrapper for camera, photo library, and document picker
 struct MediaPicker: UIViewControllerRepresentable {
     let source: MediaPickerSource
     let onImageSelected: (UIImage, Data?) -> Void
+    let onFileSelected: ((Data, UTType) -> Void)?
     let onCancel: () -> Void
+
+    init(
+        source: MediaPickerSource,
+        onImageSelected: @escaping (UIImage, Data?) -> Void,
+        onFileSelected: ((Data, UTType) -> Void)? = nil,
+        onCancel: @escaping () -> Void
+    ) {
+        self.source = source
+        self.onImageSelected = onImageSelected
+        self.onFileSelected = onFileSelected
+        self.onCancel = onCancel
+    }
 
     func makeUIViewController(context: Context) -> UIViewController {
         switch source {
@@ -25,13 +40,15 @@ struct MediaPicker: UIViewControllerRepresentable {
             return makeCameraController(context: context)
         case .library:
             return makeLibraryController(context: context)
+        case .files:
+            return makeDocumentController(context: context)
         }
     }
 
     func updateUIViewController(_ uiViewController: UIViewController, context: Context) {}
 
     func makeCoordinator() -> Coordinator {
-        Coordinator(onImageSelected: onImageSelected, onCancel: onCancel)
+        Coordinator(onImageSelected: onImageSelected, onFileSelected: onFileSelected, onCancel: onCancel)
     }
 
     // MARK: - Camera
@@ -56,14 +73,33 @@ struct MediaPicker: UIViewControllerRepresentable {
         return picker
     }
 
+    // MARK: - Document Picker (Files)
+
+    private func makeDocumentController(context: Context) -> UIViewController {
+        let supportedTypes: [UTType] = [.pdf, .jpeg, .png, .heic]
+        let picker = UIDocumentPickerViewController(forOpeningContentTypes: supportedTypes)
+        picker.allowsMultipleSelection = false
+        picker.delegate = context.coordinator
+        return picker
+    }
+
     // MARK: - Coordinator
 
-    class Coordinator: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate, PHPickerViewControllerDelegate {
+    class Coordinator: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate, PHPickerViewControllerDelegate, UIDocumentPickerDelegate {
         let onImageSelected: (UIImage, Data?) -> Void
+        let onFileSelected: ((Data, UTType) -> Void)?
         let onCancel: () -> Void
 
-        init(onImageSelected: @escaping (UIImage, Data?) -> Void, onCancel: @escaping () -> Void) {
+        /// Maximum file size: 50 MB
+        private let maxFileSize = 50 * 1024 * 1024
+
+        init(
+            onImageSelected: @escaping (UIImage, Data?) -> Void,
+            onFileSelected: ((Data, UTType) -> Void)?,
+            onCancel: @escaping () -> Void
+        ) {
             self.onImageSelected = onImageSelected
+            self.onFileSelected = onFileSelected
             self.onCancel = onCancel
         }
 
@@ -103,6 +139,58 @@ struct MediaPicker: UIViewControllerRepresentable {
                     }
                 }
             }
+        }
+
+        // UIDocumentPickerDelegate (files)
+        func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+            guard let url = urls.first else {
+                onCancel()
+                return
+            }
+
+            // Security-scoped access for files from other apps
+            guard url.startAccessingSecurityScopedResource() else {
+                onCancel()
+                return
+            }
+            defer { url.stopAccessingSecurityScopedResource() }
+
+            do {
+                let data = try Data(contentsOf: url)
+
+                // Check file size
+                guard data.count <= maxFileSize else {
+                    // File too large - cancel silently (UI will show error)
+                    onCancel()
+                    return
+                }
+
+                // Determine file type
+                let fileType: UTType
+                if let typeIdentifier = try? url.resourceValues(forKeys: [.typeIdentifierKey]).typeIdentifier,
+                   let utType = UTType(typeIdentifier) {
+                    fileType = utType
+                } else if url.pathExtension.lowercased() == "pdf" {
+                    fileType = .pdf
+                } else {
+                    fileType = .data
+                }
+
+                // Handle based on file type
+                if fileType.conforms(to: .pdf) {
+                    onFileSelected?(data, .pdf)
+                } else if fileType.conforms(to: .image), let image = UIImage(data: data) {
+                    onImageSelected(image, data)
+                } else {
+                    onCancel()
+                }
+            } catch {
+                onCancel()
+            }
+        }
+
+        func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
+            onCancel()
         }
     }
 }

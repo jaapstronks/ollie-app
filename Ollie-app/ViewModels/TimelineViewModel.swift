@@ -49,7 +49,7 @@ class TimelineViewModel: ObservableObject {
 
     /// Celebration trigger for milestone moments
     @Published var showCelebration = false
-    @Published var celebrationStyle: CelebrationStyle = .milestone
+    @Published var celebrationStyle: CelebrationPreset = .milestone
 
     /// Sheet coordinator for all sheet presentations
     @Published var sheetCoordinator = SheetCoordinator()
@@ -86,16 +86,34 @@ class TimelineViewModel: ObservableObject {
     /// Cached week stats for insights view
     @Published private(set) var cachedWeekStats: [DayStats] = []
 
+    /// Cached events for 1 year (for weight calculations)
+    @Published private(set) var cachedYearEvents: [PuppyEvent] = []
+
+    /// Cached recent walks (7 days)
+    @Published private(set) var cachedRecentWalks: [PuppyEvent] = []
+
+    /// Cached walk stats for the week
+    @Published private(set) var cachedWeekWalkStats: (count: Int, totalMinutes: Int) = (0, 0)
+
+    /// Cached latest weight measurement
+    @Published private(set) var cachedLatestWeight: (weight: Double, date: Date)?
+
+    /// Cached weight delta from previous measurement
+    @Published private(set) var cachedWeightDelta: (delta: Double, previousDate: Date)?
+
     /// Last time stats were computed
     private var lastStatsUpdate: Date?
 
     // MARK: - Combined Sleep + Potty State
 
     /// Captured potty state at wake time (for post-wake tracking)
-    @Published internal(set) var wakeTimePottyState: WakeTimePottyState?
+    @Published private(set) var wakeTimePottyState: WakeTimePottyState?
 
     /// Time of last potty event (for clearing post-wake state)
     internal var lastPottyLogTime: Date?
+
+    /// Date when user dismissed the assumed overnight sleep card (reset daily)
+    @Published internal var dismissedAssumedSleepDate: Date?
 
     /// Background notification task (stored for cancellation)
     private var notificationTask: Task<Void, Never>?
@@ -115,6 +133,7 @@ class TimelineViewModel: ObservableObject {
     var spotStore: SpotStore?
     var locationManager: LocationManager?
     var medicationStore: MedicationStore?
+    var appointmentStore: AppointmentStore?
 
     init(
         eventStore: EventStore,
@@ -122,7 +141,8 @@ class TimelineViewModel: ObservableObject {
         notificationService: NotificationService? = nil,
         spotStore: SpotStore? = nil,
         locationManager: LocationManager? = nil,
-        medicationStore: MedicationStore? = nil
+        medicationStore: MedicationStore? = nil,
+        appointmentStore: AppointmentStore? = nil
     ) {
         self.eventStore = eventStore
         self.profileStore = profileStore
@@ -130,6 +150,7 @@ class TimelineViewModel: ObservableObject {
         self.spotStore = spotStore
         self.locationManager = locationManager
         self.medicationStore = medicationStore
+        self.appointmentStore = appointmentStore
 
         // Forward SheetCoordinator's objectWillChange to this ViewModel
         // This ensures views are notified when sheet state changes
@@ -199,6 +220,21 @@ class TimelineViewModel: ObservableObject {
         sheetCoordinator.lastDeletedEvent
     }
 
+    /// Whether celebration banner is showing
+    var showingCelebrationBanner: Bool {
+        sheetCoordinator.showingCelebrationBanner
+    }
+
+    /// Celebration message to display
+    var celebrationMessage: String {
+        sheetCoordinator.celebrationMessage
+    }
+
+    /// Dismiss the celebration banner
+    func dismissCelebrationBanner() {
+        sheetCoordinator.dismissCelebrationBanner()
+    }
+
     // MARK: - Event Loading
 
     func loadEvents() {
@@ -255,6 +291,9 @@ class TimelineViewModel: ObservableObject {
         timelineItems = items.sorted { $0.sortTime < $1.sortTime }
     }
 
+    /// Task for async stats refresh (to cancel if a new refresh is requested)
+    private var statsRefreshTask: Task<Void, Never>?
+
     /// Refresh cached stats (debounced, only if data changed)
     /// - Parameter force: When true, bypasses debounce (use after event changes)
     internal func refreshCachedStats(force: Bool = false) {
@@ -266,9 +305,14 @@ class TimelineViewModel: ObservableObject {
         }
         lastStatsUpdate = now
 
-        // Update cached recent events
+        // Fetch 8 days of events in a single query (7 days + 1 for sleep overlap)
+        // This is small enough to do synchronously for immediate UI updates
+        let eightDaysAgo = Date().addingDays(-8)
+        let recentEvents = eventStore.getEvents(from: eightDaysAgo, to: Date())
+
+        // Update cached recent events (7 days)
         let sevenDaysAgo = Date().addingDays(-7)
-        cachedRecentEvents = eventStore.getEvents(from: sevenDaysAgo, to: Date())
+        cachedRecentEvents = recentEvents.filter { $0.time >= sevenDaysAgo }
 
         // Update cached pattern analysis
         cachedPatternAnalysis = PatternCalculations.analyzePatterns(
@@ -276,11 +320,38 @@ class TimelineViewModel: ObservableObject {
             periodDays: 7
         )
 
-        // Update cached week stats
-        cachedWeekStats = WeekCalculations.calculateWeekStats { date in
-            let startOfDay = date.startOfDay
-            let endOfDay = date.addingDays(1).startOfDay
-            return eventStore.getEvents(from: startOfDay, to: endOfDay)
+        // Update cached week stats using optimized batch method (single partition instead of 7 queries)
+        cachedWeekStats = WeekCalculations.calculateWeekStatsBatch(from: recentEvents)
+
+        // Update cached recent walks (7 days)
+        cachedRecentWalks = cachedRecentEvents.walks()
+
+        // Update cached walk stats
+        let totalWalkMinutes = cachedRecentWalks.compactMap { $0.durationMin }.reduce(0, +)
+        cachedWeekWalkStats = (cachedRecentWalks.count, totalWalkMinutes)
+
+        // Update cached year events for weight calculations (async - this is heavy)
+        // Only refresh when force is true or cache is empty
+        if force || cachedYearEvents.isEmpty {
+            // Cancel any existing refresh task
+            statsRefreshTask?.cancel()
+
+            statsRefreshTask = Task { [weak self] in
+                guard let self = self else { return }
+
+                let oneYearAgo = Calendar.current.date(byAdding: .year, value: -1, to: Date()) ?? Date()
+
+                // Fetch year events on background thread
+                let yearEvents = await self.eventStore.getEventsAsync(from: oneYearAgo, to: Date())
+
+                // Check if task was cancelled
+                guard !Task.isCancelled else { return }
+
+                // Update caches on main actor
+                self.cachedYearEvents = yearEvents
+                self.cachedLatestWeight = WeightCalculations.latestWeight(events: yearEvents)
+                self.cachedWeightDelta = WeightCalculations.weightDelta(events: yearEvents)
+            }
         }
     }
 
@@ -461,8 +532,9 @@ class TimelineViewModel: ObservableObject {
         // Cancel any existing notification task to prevent pile-up
         notificationTask?.cancel()
 
-        // Capture walk state before async task
+        // Capture walk state and appointments before async task
         let walkInProgress = isWalkInProgress
+        let upcomingAppointments = appointmentStore?.upcomingAppointments ?? []
 
         notificationTask = Task {
             guard !Task.isCancelled else { return }
@@ -470,6 +542,7 @@ class TimelineViewModel: ObservableObject {
             await service.refreshNotifications(
                 events: recentEvents,
                 profile: profile,
+                appointments: upcomingAppointments,
                 isWalkInProgress: walkInProgress
             )
         }

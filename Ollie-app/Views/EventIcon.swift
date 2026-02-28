@@ -115,13 +115,13 @@ extension EventType {
         case .gedrag:
             return .ollieMuted // Gray - neutral observation
         case .gewicht:
-            return .ollieInfo // Teal - data/stats
+            return .ollieHealth // Coral - health/medical
         case .moment:
             return .ollieAccent // Gold - brand accent for photos
         case .medicatie:
-            return .ollieAccent // Gold - health/care
+            return .ollieHealth // Coral - health/medical
         case .coverageGap:
-            return .orange // Orange - coverage gap status
+            return .ollieWarning // Coverage gap status
         }
     }
 }

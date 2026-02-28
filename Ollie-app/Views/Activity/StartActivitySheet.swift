@@ -17,9 +17,6 @@ struct StartActivitySheet: View {
 
     @Environment(\.colorScheme) private var colorScheme
 
-    @State private var isStartNowExpanded = false
-    @State private var selectedStartTime = Date()
-
     var body: some View {
         NavigationStack {
             VStack(spacing: 24) {
@@ -37,69 +34,32 @@ struct StartActivitySheet: View {
 
                 // Options
                 VStack(spacing: 16) {
-                    // Start now option (expandable with time picker)
-                    VStack(spacing: 0) {
-                        Button {
-                            withAnimation(.easeInOut(duration: 0.2)) {
-                                isStartNowExpanded.toggle()
-                            }
-                            HapticFeedback.selection()
-                        } label: {
-                            HStack {
-                                Image(systemName: "play.circle.fill")
-                                    .font(.title2)
-                                VStack(alignment: .leading, spacing: 2) {
-                                    Text(startNowTitle)
-                                        .font(.headline)
-                                    Text(startNowDescription)
-                                        .font(.caption)
-                                        .foregroundStyle(.secondary)
-                                }
-                                Spacer()
-                                Image(systemName: isStartNowExpanded ? "chevron.up" : "chevron.down")
+                    // Start now option - immediately starts with current time
+                    Button {
+                        HapticFeedback.medium()
+                        onStartNow(Date())
+                    } label: {
+                        HStack {
+                            Image(systemName: "play.circle.fill")
+                                .font(.title2)
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(startNowTitle)
+                                    .font(.headline)
+                                Text(startNowDescription)
+                                    .font(.caption)
                                     .foregroundStyle(.secondary)
                             }
-                            .padding()
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                                .foregroundStyle(.secondary)
                         }
-                        .buttonStyle(.plain)
-
-                        if isStartNowExpanded {
-                            Divider()
-                                .padding(.horizontal)
-
-                            VStack(spacing: 16) {
-                                // Time picker
-                                DatePicker(
-                                    Strings.QuickLogSheet.time,
-                                    selection: $selectedStartTime,
-                                    in: ...Date(),
-                                    displayedComponents: [.hourAndMinute]
-                                )
-                                .datePickerStyle(.wheel)
-                                .labelsHidden()
-                                .frame(height: 120)
-
-                                // Start button
-                                Button {
-                                    HapticFeedback.medium()
-                                    onStartNow(selectedStartTime)
-                                } label: {
-                                    Text(Strings.Activity.startActivity)
-                                        .font(.headline)
-                                        .foregroundStyle(.white)
-                                        .frame(maxWidth: .infinity)
-                                        .padding(.vertical, 14)
-                                        .background(iconColor)
-                                        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-                                }
-                            }
-                            .padding()
-                        }
+                        .padding()
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(glassBackground)
+                        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+                        .overlay(glassOverlay)
                     }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(glassBackground)
-                    .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-                    .overlay(glassOverlay)
+                    .buttonStyle(.plain)
 
                     // Log completed option
                     Button {

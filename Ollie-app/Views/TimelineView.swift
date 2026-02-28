@@ -15,26 +15,15 @@ struct TimelineView: View {
     let weatherService: WeatherService
     @StateObject private var mediaCaptureViewModel = MediaCaptureViewModel(mediaStore: MediaStore())
     @State private var selectedPhotoEvent: PuppyEvent?
+    @State private var viewMode: TimelineViewMode = ViewModeStorage.mode
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @EnvironmentObject private var spotStore: SpotStore
     @EnvironmentObject private var locationManager: LocationManager
 
     var body: some View {
         VStack(spacing: 0) {
-            // Date navigation header
-            DateHeader(
-                title: viewModel.dateTitle,
-                canGoForward: viewModel.canGoForward,
-                onPrevious: {
-                    HapticFeedback.selection()
-                    viewModel.goToPreviousDay()
-                },
-                onNext: {
-                    HapticFeedback.selection()
-                    viewModel.goToNextDay()
-                },
-                onToday: viewModel.goToToday
-            )
+            // Date navigation header with view mode toggle
+            dateHeaderWithToggle
 
             // Trial banner (show during last 7 days of free period)
             if viewModel.shouldShowTrialBanner {
@@ -52,6 +41,127 @@ struct TimelineView: View {
                 )
             }
 
+            // Content based on view mode
+            if viewMode == .visual {
+                visualTimelineContent
+            } else {
+                listTimelineContent
+            }
+
+            Spacer()
+
+            // Quick log bar (V3: smart contextual icons)
+            QuickLogBar(
+                context: viewModel.quickLogContext,
+                canLogEvents: viewModel.canLogEvents,
+                onPottyTap: viewModel.showPottySheet,
+                onQuickLog: { type in viewModel.quickLog(type: type) },
+                onShowAllEvents: viewModel.showAllEvents,
+                onCameraTap: viewModel.openCamera
+            )
+        }
+        // Swipe gestures for day navigation
+        .dayNavigation(
+            canGoForward: viewModel.canGoForward,
+            onPreviousDay: viewModel.goToPreviousDay,
+            onNextDay: viewModel.goToNextDay
+        )
+        // All sheets from shared modifier
+        .timelineSheetHandling(
+            viewModel: viewModel,
+            mediaCaptureViewModel: mediaCaptureViewModel,
+            selectedPhotoEvent: $selectedPhotoEvent,
+            reduceMotion: reduceMotion,
+            spotStore: spotStore,
+            locationManager: locationManager
+        )
+        .task {
+            // Fetch weather on appear
+            await weatherService.fetchForecasts()
+        }
+        .onAppear {
+            // Check for catch-up prompt on view appear (3-16 hour gaps)
+            // This takes priority over gap detection since it's less intrusive
+            if viewModel.events.isEmpty == false {
+                viewModel.checkForCatchUp()
+            }
+        }
+        .onChange(of: viewMode) { _, newMode in
+            ViewModeStorage.mode = newMode
+        }
+    }
+
+    // MARK: - Date Header with View Mode Toggle
+
+    private var dateHeaderWithToggle: some View {
+        HStack {
+            Button {
+                HapticFeedback.selection()
+                viewModel.goToPreviousDay()
+            } label: {
+                Image(systemName: "chevron.left")
+                    .font(.title2)
+                    .frame(width: 44, height: 44)
+                    .contentShape(Rectangle())
+            }
+            .accessibilityLabel(Strings.Timeline.previousDay)
+
+            Spacer()
+
+            Button(action: viewModel.goToToday) {
+                Text(viewModel.dateTitle)
+                    .font(.headline)
+                    .frame(minHeight: 44)
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel(Strings.Timeline.dateLabel(date: viewModel.dateTitle))
+            .accessibilityHint(Strings.Timeline.goToTodayHint)
+            .accessibilityAddTraits(.isHeader)
+
+            Spacer()
+
+            // View mode toggle button
+            Button {
+                withAnimation(.easeInOut(duration: 0.2)) {
+                    viewMode = viewMode == .visual ? .list : .visual
+                }
+                HapticFeedback.selection()
+            } label: {
+                Image(systemName: viewMode == .visual ? "list.bullet" : "chart.bar.fill")
+                    .font(.title2)
+                    .frame(width: 44, height: 44)
+                    .contentShape(Rectangle())
+            }
+            .accessibilityLabel(viewMode == .visual ? Strings.VisualTimeline.switchToList : Strings.VisualTimeline.switchToVisual)
+
+            Button {
+                HapticFeedback.selection()
+                viewModel.goToNextDay()
+            } label: {
+                Image(systemName: "chevron.right")
+                    .font(.title2)
+                    .frame(width: 44, height: 44)
+                    .contentShape(Rectangle())
+            }
+            .opacity(viewModel.canGoForward ? 1 : 0.3)
+            .disabled(!viewModel.canGoForward)
+            .accessibilityLabel(Strings.Timeline.nextDay)
+        }
+        .padding(.horizontal)
+        .padding(.vertical, 8)
+        .background(Color(.systemBackground))
+    }
+
+    // MARK: - Visual Timeline Content
+
+    private var visualTimelineContent: some View {
+        VisualTimelineView(viewModel: viewModel)
+    }
+
+    // MARK: - List Timeline Content
+
+    private var listTimelineContent: some View {
+        VStack(spacing: 0) {
             // Weather section container (isolates weather observation to avoid full view redraws)
             WeatherSectionContainer(
                 weatherService: weatherService,
@@ -110,44 +220,26 @@ struct TimelineView: View {
                     }
                 )
             }
-
-            Spacer()
-
-            // Quick log bar (V3: smart contextual icons)
-            QuickLogBar(
-                context: viewModel.quickLogContext,
-                canLogEvents: viewModel.canLogEvents,
-                onPottyTap: viewModel.showPottySheet,
-                onQuickLog: { type in viewModel.quickLog(type: type) },
-                onShowAllEvents: viewModel.showAllEvents,
-                onCameraTap: viewModel.openCamera
-            )
         }
-        // Swipe gestures for day navigation
-        .dayNavigation(
-            canGoForward: viewModel.canGoForward,
-            onPreviousDay: viewModel.goToPreviousDay,
-            onNextDay: viewModel.goToNextDay
-        )
-        // All sheets from shared modifier
-        .timelineSheetHandling(
-            viewModel: viewModel,
-            mediaCaptureViewModel: mediaCaptureViewModel,
-            selectedPhotoEvent: $selectedPhotoEvent,
-            reduceMotion: reduceMotion,
-            spotStore: spotStore,
-            locationManager: locationManager
-        )
-        .task {
-            // Fetch weather on appear
-            await weatherService.fetchForecasts()
-        }
-        .onAppear {
-            // Check for catch-up prompt on view appear (3-16 hour gaps)
-            // This takes priority over gap detection since it's less intrusive
-            if viewModel.events.isEmpty == false {
-                viewModel.checkForCatchUp()
+    }
+}
+
+// MARK: - View Mode Storage
+
+/// Persistence for timeline view mode preference
+enum ViewModeStorage {
+    private static let key = "timeline_view_mode"
+
+    static var mode: TimelineViewMode {
+        get {
+            if let rawValue = UserDefaults.standard.string(forKey: key),
+               let mode = TimelineViewMode(rawValue: rawValue) {
+                return mode
             }
+            return .list  // Default to list mode
+        }
+        set {
+            UserDefaults.standard.set(newValue.rawValue, forKey: key)
         }
     }
 }
@@ -188,6 +280,51 @@ struct UndoBanner: View {
         .accessibilityElement(children: .combine)
         .accessibilityLabel(Strings.Timeline.eventDeleted)
         .accessibilityHint(Strings.Timeline.undoAccessibility)
+    }
+}
+
+// MARK: - Celebration Banner
+
+/// Celebration banner shown when achieving outdoor potty streak
+struct CelebrationBanner: View {
+    let message: String
+    let onDismiss: () -> Void
+
+    var body: some View {
+        HStack(spacing: 12) {
+            Image(systemName: "pawprint.fill")
+                .font(.title2)
+                .foregroundStyle(.white)
+
+            Text(message)
+                .font(.subheadline)
+                .fontWeight(.medium)
+                .foregroundStyle(.white)
+                .multilineTextAlignment(.leading)
+
+            Spacer()
+
+            Button {
+                onDismiss()
+            } label: {
+                Image(systemName: "xmark")
+                    .foregroundStyle(.white.opacity(0.7))
+                    .frame(minWidth: 44, minHeight: 44)
+            }
+        }
+        .padding()
+        .background(
+            LinearGradient(
+                colors: [Color.ollieSuccess, Color.ollieSuccess.opacity(0.85)],
+                startPoint: .leading,
+                endPoint: .trailing
+            )
+        )
+        .cornerRadius(LayoutConstants.cornerRadiusM)
+        .padding(.horizontal)
+        .shadow(color: Color.ollieSuccess.opacity(0.3), radius: 8, y: 4)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(message)
     }
 }
 

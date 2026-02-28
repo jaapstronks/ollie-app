@@ -12,8 +12,9 @@ struct CelebrationSettingsView: View {
     @AppStorage(UserPreferences.Key.celebrationStyle.rawValue)
     private var celebrationStyleRaw: String = CelebrationStyle.full.rawValue
 
-    @State private var showingPreview = false
-    @State private var previewTier: CelebrationTier = .notable
+    @State private var showingTier1Preview = false
+    @State private var showingTier2Preview = false
+    @State private var showingTier3Preview = false
 
     @Environment(\.colorScheme) private var colorScheme
 
@@ -97,71 +98,128 @@ struct CelebrationSettingsView: View {
     @ViewBuilder
     private var previewSection: some View {
         Section {
-            VStack(spacing: 12) {
-                // Mini preview cards
-                HStack(spacing: 12) {
-                    previewCard(tier: .subtle, label: "Tier 1")
-                    previewCard(tier: .notable, label: "Tier 2")
-                    previewCard(tier: .major, label: "Tier 3")
+            VStack(spacing: 16) {
+                // Tier 1: Subtle - inline shimmer preview
+                Button {
+                    showingTier1Preview = true
+                    HapticFeedback.light()
+                    // Auto-dismiss after animation
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                        showingTier1Preview = false
+                    }
+                } label: {
+                    HStack {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Tier 1: Subtle")
+                                .font(.subheadline.weight(.medium))
+                            Text("Inline shimmer effect")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                        Spacer()
+                        Image(systemName: "play.circle.fill")
+                            .font(.title3)
+                            .foregroundStyle(Color.ollieAccent)
+                    }
+                    .padding()
+                    .background(Color.ollieAccent.opacity(0.08))
+                    .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                }
+                .buttonStyle(.plain)
+                .overlay {
+                    if showingTier1Preview {
+                        CelebrationView(style: .quickLog, isActive: $showingTier1Preview)
+                    }
                 }
 
-                // Preview button
+                // Tier 2: Notable - card preview
                 Button {
-                    showingPreview = true
-                    previewTier = .notable
+                    showingTier2Preview = true
                 } label: {
-                    Label("Preview Tier 2", systemImage: "play.circle.fill")
-                        .font(.subheadline.weight(.medium))
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 12)
+                    HStack {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Tier 2: Notable")
+                                .font(.subheadline.weight(.medium))
+                            Text("Card with confetti")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                        Spacer()
+                        Image(systemName: "play.circle.fill")
+                            .font(.title3)
+                            .foregroundStyle(Color.olliePurple)
+                    }
+                    .padding()
+                    .background(Color.olliePurple.opacity(0.08))
+                    .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
                 }
-                .buttonStyle(.glassPill(tint: .accent))
+                .buttonStyle(.plain)
+
+                // Tier 3: Major - full screen preview
+                Button {
+                    showingTier3Preview = true
+                } label: {
+                    HStack {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Tier 3: Major")
+                                .font(.subheadline.weight(.medium))
+                            Text("Full-screen celebration")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                        Spacer()
+                        Image(systemName: "play.circle.fill")
+                            .font(.title3)
+                            .foregroundStyle(Color.ollieRose)
+                    }
+                    .padding()
+                    .background(Color.ollieRose.opacity(0.08))
+                    .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                }
+                .buttonStyle(.plain)
             }
             .padding(.vertical, 8)
         } header: {
             Text("Preview")
+        } footer: {
+            Text("Tap to preview each celebration tier")
         }
-        .sheet(isPresented: $showingPreview) {
-            Tier2CelebrationCard(
-                achievement: Achievement(
-                    id: "preview.health",
-                    category: .health,
-                    tier: .notable,
-                    labelKey: "achievement.health.firstVaccination"
-                ),
-                puppyName: "Preview",
-                onAddPhoto: { showingPreview = false },
-                onShare: { showingPreview = false },
-                onDismiss: { showingPreview = false }
-            )
+        // Tier 2 sheet
+        .sheet(isPresented: $showingTier2Preview) {
+            ZStack {
+                Color.black.opacity(0.001) // Invisible background to capture taps
+                    .ignoresSafeArea()
+
+                Tier2CelebrationCard(
+                    achievement: Achievement(
+                        id: "preview.health",
+                        category: .health,
+                        tier: .notable,
+                        labelKey: "achievement.health.firstVaccination"
+                    ),
+                    puppyName: "Ollie",
+                    onAddPhoto: { showingTier2Preview = false },
+                    onShare: { showingTier2Preview = false },
+                    onDismiss: { showingTier2Preview = false }
+                )
+            }
             .presentationBackground(.clear)
         }
-    }
-
-    @ViewBuilder
-    private func previewCard(tier: CelebrationTier, label: String) -> some View {
-        let effectiveTier = celebrationStyle.transform(tier)
-
-        VStack(spacing: 6) {
-            ZStack {
-                RoundedRectangle(cornerRadius: 12, style: .continuous)
-                    .fill(effectiveTier != nil ? Color.ollieAccent.opacity(0.1) : Color.gray.opacity(0.1))
-                    .frame(height: 60)
-
-                if let effective = effectiveTier {
-                    Image(systemName: iconForTier(effective))
-                        .font(.title2)
-                        .foregroundStyle(effective == tier ? Color.ollieAccent : Color.secondary)
-                } else {
-                    Image(systemName: "xmark")
-                        .font(.title2)
-                        .foregroundStyle(.secondary)
-                }
-            }
-
-            Text(label)
-                .font(.caption2)
-                .foregroundStyle(.secondary)
+        // Tier 3 full screen
+        .fullScreenCover(isPresented: $showingTier3Preview) {
+            Tier3CelebrationView(
+                achievement: Achievement(
+                    id: "preview.potty.14",
+                    category: .pottyStreak,
+                    tier: .major,
+                    labelKey: "achievement.pottyStreak.14",
+                    value: 14
+                ),
+                puppyName: "Ollie",
+                onTakePhoto: { showingTier3Preview = false },
+                onAddFromLibrary: { showingTier3Preview = false },
+                onSkip: { showingTier3Preview = false }
+            )
         }
     }
 
@@ -233,14 +291,6 @@ struct CelebrationSettingsView: View {
         case .subtle: return .olliePurple
         case .minimal: return .ollieInfo
         case .off: return .secondary
-        }
-    }
-
-    private func iconForTier(_ tier: CelebrationTier) -> String {
-        switch tier {
-        case .subtle: return "sparkle"
-        case .notable: return "party.popper"
-        case .major: return "star.fill"
         }
     }
 }

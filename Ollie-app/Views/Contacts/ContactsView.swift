@@ -10,8 +10,10 @@ import OllieShared
 /// Main view for listing and managing contacts
 struct ContactsView: View {
     @ObservedObject var contactStore: ContactStore
+    var appointmentStore: AppointmentStore?
 
     @State private var showingAddSheet = false
+    @State private var showingImportSheet = false
     @State private var contactToDelete: DogContact?
     @State private var showingDeleteConfirmation = false
 
@@ -26,8 +28,18 @@ struct ContactsView: View {
         .navigationTitle(Strings.Contacts.title)
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
-                Button {
-                    showingAddSheet = true
+                Menu {
+                    Button {
+                        showingAddSheet = true
+                    } label: {
+                        Label(Strings.Contacts.addContact, systemImage: "plus")
+                    }
+
+                    Button {
+                        showingImportSheet = true
+                    } label: {
+                        Label(Strings.Contacts.importFromContacts, systemImage: "person.crop.circle.badge.plus")
+                    }
                 } label: {
                     Image(systemName: "plus")
                 }
@@ -35,6 +47,9 @@ struct ContactsView: View {
         }
         .sheet(isPresented: $showingAddSheet) {
             AddEditContactSheet(contactStore: contactStore)
+        }
+        .sheet(isPresented: $showingImportSheet) {
+            ContactImportSheet(contactStore: contactStore)
         }
         .alert(
             Strings.Contacts.deleteConfirmTitle,
@@ -83,7 +98,8 @@ struct ContactsView: View {
                         NavigationLink {
                             ContactDetailView(
                                 contact: contact,
-                                contactStore: contactStore
+                                contactStore: contactStore,
+                                appointmentStore: appointmentStore
                             )
                         } label: {
                             ContactRow(contact: contact)

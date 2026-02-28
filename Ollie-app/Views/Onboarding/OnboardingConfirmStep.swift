@@ -20,58 +20,117 @@ struct OnboardingConfirmStep: View {
     let onSave: () -> Void
     let onBack: () -> Void
 
+    @State private var hasAppeared = false
+
     var body: some View {
-        VStack(spacing: 24) {
+        VStack(spacing: 0) {
             Spacer()
+                .frame(height: 32)
 
             // Profile photo or icon
-            if let photo = profilePhoto {
-                Image(uiImage: photo)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 100, height: 100)
-                    .clipShape(Circle())
-                    .overlay(Circle().stroke(Color.ollieAccent, lineWidth: 3))
-            } else {
-                Image(systemName: "star.circle.fill")
-                    .font(.system(size: 60))
-                    .foregroundStyle(Color.ollieAccent)
+            Group {
+                if let photo = profilePhoto {
+                    Image(uiImage: photo)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 120, height: 120)
+                        .clipShape(Circle())
+                        .overlay(Circle().stroke(Color.ollieAccent, lineWidth: 3))
+                        .shadow(color: Color.ollieAccent.opacity(0.2), radius: 12, x: 0, y: 4)
+                } else {
+                    Circle()
+                        .fill(Color.ollieAccent.opacity(0.15))
+                        .frame(width: 120, height: 120)
+                        .overlay {
+                            Image(systemName: "checkmark")
+                                .font(.system(size: 48, weight: .medium))
+                                .foregroundStyle(Color.ollieAccent)
+                        }
+                }
             }
+            .scaleEffect(hasAppeared ? 1.0 : 0.8)
+            .opacity(hasAppeared ? 1.0 : 0.0)
+
+            Spacer()
+                .frame(height: 20)
 
             Text(Strings.Onboarding.readyToStart)
-                .font(.title)
+                .font(.title2)
                 .fontWeight(.bold)
+                .opacity(hasAppeared ? 1.0 : 0.0)
 
-            VStack(alignment: .leading, spacing: 12) {
-                ProfileRow(label: Strings.Settings.name, value: name)
+            Spacer()
+                .frame(height: 24)
+
+            // Profile summary card
+            VStack(alignment: .leading, spacing: 0) {
+                ConfirmProfileRow(label: Strings.Settings.name, value: name)
                 if !breedToSave.isEmpty {
-                    ProfileRow(label: Strings.Settings.breed, value: breedToSave)
+                    Divider().padding(.leading, 16)
+                    ConfirmProfileRow(label: Strings.Settings.breed, value: breedToSave)
                 }
-                ProfileRow(label: Strings.Onboarding.born, value: formatOnboardingDate(birthDate))
-                ProfileRow(label: Strings.Onboarding.cameHome, value: formatOnboardingDate(homeDate))
-                ProfileRow(label: Strings.Settings.size, value: sizeCategory.label)
+                Divider().padding(.leading, 16)
+                ConfirmProfileRow(label: Strings.Onboarding.born, value: formatOnboardingDate(birthDate))
+                Divider().padding(.leading, 16)
+                ConfirmProfileRow(label: Strings.Onboarding.cameHome, value: formatOnboardingDate(homeDate))
+                Divider().padding(.leading, 16)
+                ConfirmProfileRow(label: Strings.Settings.size, value: sizeCategory.label)
             }
-            .padding()
-            .background(Color(.secondarySystemBackground))
-            .cornerRadius(LayoutConstants.cornerRadiusM)
-            .padding(.horizontal)
+            .background(
+                RoundedRectangle(cornerRadius: 14)
+                    .fill(Color(.secondarySystemBackground))
+            )
+            .padding(.horizontal, 24)
+            .opacity(hasAppeared ? 1.0 : 0.0)
+            .offset(y: hasAppeared ? 0 : 15)
 
             Spacer()
 
-            HStack {
+            // Buttons
+            HStack(spacing: 12) {
                 OnboardingBackButton(action: onBack)
 
                 Button(action: onSave) {
                     Text(Strings.Common.start)
-                        .fontWeight(.semibold)
+                        .font(.headline)
                         .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.accentColor)
-                        .foregroundColor(.white)
-                        .cornerRadius(LayoutConstants.cornerRadiusM)
+                        .padding(.vertical, 16)
+                        .background(
+                            RoundedRectangle(cornerRadius: 14)
+                                .fill(Color.ollieAccent)
+                        )
+                        .foregroundStyle(.white)
                 }
             }
+            .padding(.horizontal, 24)
+            .padding(.bottom, 16)
+            .opacity(hasAppeared ? 1.0 : 0.0)
         }
-        .padding()
+        .onAppear {
+            withAnimation(.easeOut(duration: 0.5)) {
+                hasAppeared = true
+            }
+        }
+    }
+}
+
+// MARK: - Confirm Profile Row
+
+private struct ConfirmProfileRow: View {
+    let label: String
+    let value: String
+
+    var body: some View {
+        HStack {
+            Text(label)
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+            Spacer()
+            Text(value)
+                .font(.subheadline)
+                .fontWeight(.medium)
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 12)
     }
 }

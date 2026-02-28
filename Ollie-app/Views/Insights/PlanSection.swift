@@ -79,6 +79,9 @@ struct PlanSection: View {
                 upcomingMilestonesSection
             }
         }
+        .onAppear {
+            Analytics.track(.insightsPlanSectionViewed)
+        }
         // Week detail sheet
         .sheet(isPresented: $showWeekDetail) {
             if let week = selectedWeek, let profile = profile {
@@ -296,6 +299,10 @@ struct PlanSection: View {
                         birthDate: profile?.birthDate ?? Date(),
                         isOverdue: true
                     ) {
+                        Analytics.track(.milestoneDetailViewed, properties: [
+                            "category": milestone.category.rawValue,
+                            "is_overdue": true
+                        ])
                         selectedMilestone = milestone
                         showMilestoneDetail = true
                     }
@@ -346,6 +353,10 @@ struct PlanSection: View {
                         birthDate: profile?.birthDate ?? Date(),
                         isOverdue: false
                     ) {
+                        Analytics.track(.milestoneDetailViewed, properties: [
+                            "category": milestone.category.rawValue,
+                            "is_overdue": false
+                        ])
                         selectedMilestone = milestone
                         showMilestoneDetail = true
                     }

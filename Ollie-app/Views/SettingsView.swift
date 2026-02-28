@@ -2,36 +2,26 @@
 //  SettingsView.swift
 //  Ollie-app
 //
-//  Settings hub with navigation to Dog Profile and App Settings
+//  Settings hub with navigation to 4 sections
 
 import SwiftUI
 import OllieShared
 
-/// Settings hub screen with two main navigation options
+/// Settings hub screen with four main navigation options
 struct SettingsView: View {
     @ObservedObject var profileStore: ProfileStore
     @ObservedObject var dataImporter: DataImporter
     @ObservedObject var eventStore: EventStore
     @ObservedObject var notificationService: NotificationService
-    @ObservedObject var spotStore: SpotStore
-    @ObservedObject var viewModel: TimelineViewModel
-    @ObservedObject var milestoneStore: MilestoneStore
     @ObservedObject var documentStore: DocumentStore
     @ObservedObject var contactStore: ContactStore
 
     var body: some View {
         List {
-            // Dog Profile Section
+            // 1. Dog Profile Section
             Section {
                 NavigationLink {
-                    DogProfileSettingsView(
-                        profileStore: profileStore,
-                        spotStore: spotStore,
-                        viewModel: viewModel,
-                        milestoneStore: milestoneStore,
-                        documentStore: documentStore,
-                        contactStore: contactStore
-                    )
+                    DogProfileSettingsView(profileStore: profileStore)
                 } label: {
                     SettingsHubRow(
                         icon: "pawprint.fill",
@@ -42,14 +32,47 @@ struct SettingsView: View {
                 }
             }
 
-            // App Settings Section
+            // 2. Schedule & Preferences Section
+            Section {
+                NavigationLink {
+                    SchedulePreferencesView(
+                        profileStore: profileStore,
+                        notificationService: notificationService
+                    )
+                } label: {
+                    SettingsHubRow(
+                        icon: "calendar.badge.clock",
+                        iconColor: .blue,
+                        title: Strings.Settings.schedulePreferences,
+                        subtitle: Strings.Settings.schedulePreferencesSubtitle
+                    )
+                }
+            }
+
+            // 3. Health & Documents Section
+            Section {
+                NavigationLink {
+                    HealthDocumentsView(
+                        profileStore: profileStore,
+                        documentStore: documentStore
+                    )
+                } label: {
+                    SettingsHubRow(
+                        icon: "heart.text.square.fill",
+                        iconColor: .red,
+                        title: Strings.Settings.healthDocuments,
+                        subtitle: Strings.Settings.healthDocumentsSubtitle
+                    )
+                }
+            }
+
+            // 4. App Settings Section
             Section {
                 NavigationLink {
                     AppSettingsView(
                         profileStore: profileStore,
                         dataImporter: dataImporter,
-                        eventStore: eventStore,
-                        notificationService: notificationService
+                        eventStore: eventStore
                     )
                 } label: {
                     SettingsHubRow(
@@ -92,24 +115,14 @@ private struct SettingsHubRow: View {
 }
 
 #Preview {
-    let eventStore = EventStore()
-    let profileStore = ProfileStore()
-    let milestoneStore = MilestoneStore()
-    let documentStore = DocumentStore()
-    let contactStore = ContactStore()
-    let viewModel = TimelineViewModel(eventStore: eventStore, profileStore: profileStore)
-
     NavigationStack {
         SettingsView(
-            profileStore: profileStore,
+            profileStore: ProfileStore(),
             dataImporter: DataImporter(),
-            eventStore: eventStore,
+            eventStore: EventStore(),
             notificationService: NotificationService(),
-            spotStore: SpotStore(),
-            viewModel: viewModel,
-            milestoneStore: milestoneStore,
-            documentStore: documentStore,
-            contactStore: contactStore
+            documentStore: DocumentStore(),
+            contactStore: ContactStore()
         )
     }
 }

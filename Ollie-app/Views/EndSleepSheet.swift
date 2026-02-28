@@ -69,7 +69,7 @@ struct EndSleepSheet: View {
             }
             .padding()
             .frame(maxWidth: .infinity)
-            .background(Color.purple.opacity(0.1))
+            .background(Color.ollieSleep.opacity(0.1))
             .cornerRadius(LayoutConstants.cornerRadiusM)
 
             // Wake-up time section

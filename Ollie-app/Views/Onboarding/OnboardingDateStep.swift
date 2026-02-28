@@ -15,19 +15,28 @@ struct OnboardingBirthStep: View {
     let onNext: () -> Void
     let onBack: () -> Void
 
+    @State private var hasAppeared = false
+
     var body: some View {
-        VStack(spacing: 24) {
-            Spacer()
+        VStack(spacing: 0) {
+            // Header
+            VStack(spacing: 12) {
+                Image(systemName: "gift.fill")
+                    .font(.system(size: 56))
+                    .foregroundStyle(Color.ollieAccent)
+                    .scaleEffect(hasAppeared ? 1.0 : 0.8)
+                    .opacity(hasAppeared ? 1.0 : 0.0)
 
-            Image(systemName: "gift.fill")
-                .font(.system(size: 60))
-                .foregroundStyle(Color.ollieAccent)
+                Text(Strings.Onboarding.birthDateQuestion(name: puppyName))
+                    .font(.title2)
+                    .fontWeight(.bold)
+                    .multilineTextAlignment(.center)
+                    .opacity(hasAppeared ? 1.0 : 0.0)
+            }
+            .padding(.top, 16)
+            .padding(.bottom, 8)
 
-            Text(Strings.Onboarding.birthDateQuestion(name: puppyName))
-                .font(.title2)
-                .fontWeight(.bold)
-                .multilineTextAlignment(.center)
-
+            // Date picker
             DatePicker(
                 Strings.Onboarding.birthDate,
                 selection: $birthDate,
@@ -35,17 +44,27 @@ struct OnboardingBirthStep: View {
                 displayedComponents: .date
             )
             .datePickerStyle(.graphical)
-            .padding(.horizontal)
+            .tint(Color.ollieAccent)
+            .padding(.horizontal, 8)
+            .opacity(hasAppeared ? 1.0 : 0.0)
             .accessibilityLabel(Strings.Onboarding.birthDateAccessibility(name: puppyName))
 
             Spacer()
 
-            HStack {
+            // Buttons
+            HStack(spacing: 12) {
                 OnboardingBackButton(action: onBack)
                 OnboardingNextButton(enabled: true, action: onNext)
             }
+            .padding(.horizontal, 24)
+            .padding(.bottom, 16)
+            .opacity(hasAppeared ? 1.0 : 0.0)
         }
-        .padding()
+        .onAppear {
+            withAnimation(.easeOut(duration: 0.5)) {
+                hasAppeared = true
+            }
+        }
     }
 }
 
@@ -57,19 +76,28 @@ struct OnboardingHomeStep: View {
     let onNext: () -> Void
     let onBack: () -> Void
 
+    @State private var hasAppeared = false
+
     var body: some View {
-        VStack(spacing: 24) {
-            Spacer()
+        VStack(spacing: 0) {
+            // Header
+            VStack(spacing: 12) {
+                Image(systemName: "house.fill")
+                    .font(.system(size: 56))
+                    .foregroundStyle(Color.ollieAccent)
+                    .scaleEffect(hasAppeared ? 1.0 : 0.8)
+                    .opacity(hasAppeared ? 1.0 : 0.0)
 
-            Image(systemName: "house.fill")
-                .font(.system(size: 60))
-                .foregroundStyle(Color.ollieAccent)
+                Text(Strings.Onboarding.homeDateQuestion(name: puppyName))
+                    .font(.title2)
+                    .fontWeight(.bold)
+                    .multilineTextAlignment(.center)
+                    .opacity(hasAppeared ? 1.0 : 0.0)
+            }
+            .padding(.top, 16)
+            .padding(.bottom, 8)
 
-            Text(Strings.Onboarding.homeDateQuestion(name: puppyName))
-                .font(.title2)
-                .fontWeight(.bold)
-                .multilineTextAlignment(.center)
-
+            // Date picker
             DatePicker(
                 Strings.Onboarding.homeDate,
                 selection: $homeDate,
@@ -77,16 +105,26 @@ struct OnboardingHomeStep: View {
                 displayedComponents: .date
             )
             .datePickerStyle(.graphical)
-            .padding(.horizontal)
+            .tint(Color.ollieAccent)
+            .padding(.horizontal, 8)
+            .opacity(hasAppeared ? 1.0 : 0.0)
             .accessibilityLabel(Strings.Onboarding.homeDateAccessibility(name: puppyName))
 
             Spacer()
 
-            HStack {
+            // Buttons
+            HStack(spacing: 12) {
                 OnboardingBackButton(action: onBack)
                 OnboardingNextButton(enabled: true, action: onNext)
             }
+            .padding(.horizontal, 24)
+            .padding(.bottom, 16)
+            .opacity(hasAppeared ? 1.0 : 0.0)
         }
-        .padding()
+        .onAppear {
+            withAnimation(.easeOut(duration: 0.5)) {
+                hasAppeared = true
+            }
+        }
     }
 }

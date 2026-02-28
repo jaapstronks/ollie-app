@@ -2,112 +2,65 @@
 //  PlacesTabView.swift
 //  Ollie-app
 //
-//  Places tab combining spots (map) and moments (photos) with a view toggle
+//  Explore tab - map view of saved spots and photo moments
 //
 
 import SwiftUI
 import OllieShared
 import MapKit
 
-/// View mode for the Places tab
-enum PlacesViewMode: String, CaseIterable {
-    case map
-    case timeline
-
-    var label: String {
-        switch self {
-        case .map: return Strings.Places.mapView
-        case .timeline: return Strings.Places.timelineView
-        }
-    }
-
-    var icon: String {
-        switch self {
-        case .map: return "map"
-        case .timeline: return "calendar"
-        }
-    }
-}
-
-/// Places tab - map view of spots and photos, with timeline toggle
+/// Explore tab - map view of spots and photos
 struct PlacesTabView: View {
     @ObservedObject var spotStore: SpotStore
+    @ObservedObject var contactStore: ContactStore
     @ObservedObject var momentsViewModel: MomentsViewModel
     @ObservedObject var viewModel: TimelineViewModel
     @ObservedObject var locationManager: LocationManager
     var onSettingsTap: (() -> Void)?
 
-    @State private var viewMode: PlacesViewMode = .map
+    @EnvironmentObject var profileStore: ProfileStore
+    @Environment(\.colorScheme) private var colorScheme
+
     @State private var showingAddSpot = false
-    @State private var showingAllSpotsMap = false
+    @State private var showingExpandedMap = false
     @State private var selectedSpot: WalkSpot?
     @State private var selectedPhotoEvent: PuppyEvent?
     @State private var selectedCluster: PhotoCluster?
 
     var body: some View {
         NavigationStack {
-            Group {
-                switch viewMode {
-                case .map:
-                    PlacesMapModeView(
-                        spotStore: spotStore,
-                        momentsViewModel: momentsViewModel,
-                        onShowAllSpots: { showingAllSpotsMap = true },
-                        onSelectSpot: { spot in selectedSpot = spot },
-                        onSelectPhoto: { event in selectedPhotoEvent = event },
-                        onSelectCluster: { cluster in
-                            // For single photo clusters, show the photo directly
-                            // For multi-photo clusters, show cluster preview
-                            if cluster.isSinglePhoto, let event = cluster.firstEvent {
-                                selectedPhotoEvent = event
-                            } else {
-                                selectedCluster = cluster
-                            }
-                        }
-                    )
-                case .timeline:
-                    PlacesTimelineView(
-                        momentsViewModel: momentsViewModel,
-                        viewModel: viewModel,
-                        onSelectPhoto: { event in selectedPhotoEvent = event }
-                    )
-                }
+            ZStack(alignment: .bottomTrailing) {
+                PlacesMapModeView(
+                    spotStore: spotStore,
+                    momentsViewModel: momentsViewModel,
+                    puppyName: profileStore.profile?.name ?? "Ollie",
+                    onShowAllSpots: { showingExpandedMap = true },
+                    onSelectSpot: { spot in selectedSpot = spot },
+                    onSelectPhoto: { event in selectedPhotoEvent = event },
+                    onSelectCluster: { cluster in
+                        // Always show detail card (handles single and multi-photo)
+                        selectedCluster = cluster
+                    }
+                )
+
+                // Floating Add Button
+                addSpotFAB
             }
             .navigationTitle(Strings.Places.title)
             .navigationBarTitleDisplayMode(.large)
-            .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    // View mode toggle
-                    Picker("View", selection: $viewMode) {
-                        ForEach(PlacesViewMode.allCases, id: \.self) { mode in
-                            Label(mode.label, systemImage: mode.icon)
-                                .tag(mode)
-                        }
-                    }
-                    .pickerStyle(.segmented)
-                    .fixedSize()
-                }
-
-                ToolbarItem(placement: .topBarTrailing) {
-                    Menu {
-                        Button {
-                            showingAddSpot = true
-                        } label: {
-                            Label(Strings.Places.addSpot, systemImage: "mappin.and.ellipse")
-                        }
-
-                        // TODO: Add moment button - will open camera
-                    } label: {
-                        Image(systemName: "plus")
-                    }
-                    .accessibilityLabel(Strings.Places.addSpot)
-                }
+            .profileToolbar(profile: profileStore.profile) {
+                onSettingsTap?()
             }
             .sheet(isPresented: $showingAddSpot) {
                 AddSpotSheet(spotStore: spotStore, locationManager: locationManager)
             }
-            .sheet(isPresented: $showingAllSpotsMap) {
-                AllSpotsMapView(spots: spotStore.spots)
+            .fullScreenCover(isPresented: $showingExpandedMap) {
+                ExpandedPlacesMapView(
+                    spotStore: spotStore,
+                    contactStore: contactStore,
+                    momentsViewModel: momentsViewModel,
+                    locationManager: locationManager
+                )
             }
             .sheet(item: $selectedSpot) { spot in
                 SpotDetailView(
@@ -117,16 +70,18 @@ struct PlacesTabView: View {
                 )
             }
             .sheet(item: $selectedCluster) { cluster in
-                PhotoClusterPreviewSheet(
+                PhotoPinDetailCard(
                     cluster: cluster,
+                    spots: spotStore.spots,
                     onSelectPhoto: { event in
                         selectedCluster = nil
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                             selectedPhotoEvent = event
                         }
-                    }
+                    },
+                    onSaveSpot: nil // Save spot handled separately
                 )
-                .presentationDetents([.medium])
+                .presentationDetents([.medium, .large])
             }
             .fullScreenCover(item: $selectedPhotoEvent) { event in
                 MediaPreviewView(
@@ -142,14 +97,41 @@ struct PlacesTabView: View {
             momentsViewModel.loadEventsWithMedia()
         }
     }
+
+    // MARK: - Add Spot FAB
+
+    private var addSpotFAB: some View {
+        Button {
+            showingAddSpot = true
+        } label: {
+            Image(systemName: "plus")
+                .font(.system(size: 20, weight: .semibold))
+                .foregroundStyle(.white)
+                .frame(width: 56, height: 56)
+                .background(
+                    Circle()
+                        .fill(Color.ollieAccent)
+                        .shadow(
+                            color: Color.ollieAccent.opacity(0.4),
+                            radius: 8,
+                            x: 0,
+                            y: 4
+                        )
+                )
+        }
+        .padding(.trailing, 16)
+        .padding(.bottom, 100) // Above tab bar
+        .accessibilityLabel(Strings.Places.addSpot)
+    }
 }
 
 // MARK: - Map Mode View
 
-/// Map view showing spots and recent moments
+/// Map view showing spots and photo pins
 struct PlacesMapModeView: View {
     @ObservedObject var spotStore: SpotStore
     @ObservedObject var momentsViewModel: MomentsViewModel
+    var puppyName: String = "Ollie"
     let onShowAllSpots: () -> Void
     let onSelectSpot: (WalkSpot) -> Void
     let onSelectPhoto: (PuppyEvent) -> Void
@@ -158,6 +140,14 @@ struct PlacesMapModeView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
+                // Summary card (only show if there are spots)
+                if spotStore.spots.count > 0 {
+                    OlliesWorldSummaryCard(
+                        spotsCount: spotStore.spots.count,
+                        puppyName: puppyName
+                    )
+                }
+
                 // Map section
                 mapSection
 
@@ -166,18 +156,13 @@ struct PlacesMapModeView: View {
                     favoriteSpotsSection
                 }
 
-                // Recent moments section
-                if !momentsViewModel.events.isEmpty {
-                    recentMomentsSection
-                }
-
                 // All spots section (if any non-favorites)
                 if !spotStore.spots.isEmpty {
                     allSpotsSection
                 }
 
                 // Empty state when no content
-                if spotStore.spots.isEmpty && momentsViewModel.events.isEmpty {
+                if spotStore.spots.isEmpty {
                     emptyStateView
                 }
             }
@@ -240,42 +225,6 @@ struct PlacesMapModeView: View {
                                 onSelectSpot(spot)
                             }
                     }
-                }
-            }
-        }
-    }
-
-    // MARK: - Recent Moments Section
-
-    private var recentMomentsSection: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            HStack {
-                SectionHeader(
-                    title: Strings.Places.recentMoments,
-                    icon: "photo.fill",
-                    tint: .ollieAccent
-                )
-
-                Spacer()
-
-                // TODO: Navigate to full gallery
-            }
-
-            // 3x2 grid of recent photos
-            let columns = [
-                GridItem(.flexible(), spacing: 4),
-                GridItem(.flexible(), spacing: 4),
-                GridItem(.flexible(), spacing: 4)
-            ]
-
-            LazyVGrid(columns: columns, spacing: 4) {
-                ForEach(momentsViewModel.events.prefix(6)) { event in
-                    GalleryThumbnail(event: event)
-                        .aspectRatio(1, contentMode: .fill)
-                        .clipShape(RoundedRectangle(cornerRadius: 8))
-                        .onTapGesture {
-                            onSelectPhoto(event)
-                        }
                 }
             }
         }
@@ -351,6 +300,7 @@ struct PlacesMapModeView: View {
 
     return PlacesTabView(
         spotStore: SpotStore(),
+        contactStore: ContactStore(),
         momentsViewModel: momentsViewModel,
         viewModel: viewModel,
         locationManager: LocationManager()

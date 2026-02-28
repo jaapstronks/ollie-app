@@ -6,6 +6,12 @@
 
 import SwiftUI
 
+/// Wrapper to make UIImage identifiable for sheet presentation
+private struct IdentifiableImage: Identifiable {
+    let id = UUID()
+    let image: UIImage
+}
+
 /// Sheet for selecting or capturing a profile photo
 struct ProfilePhotoPicker: View {
     let currentImage: UIImage?
@@ -16,6 +22,7 @@ struct ProfilePhotoPicker: View {
     @State private var selectedImage: UIImage?
     @State private var showingMediaPicker = false
     @State private var selectedSource: MediaPickerSource = .library
+    @State private var imageToCrop: IdentifiableImage?
 
     var body: some View {
         NavigationStack {
@@ -96,11 +103,24 @@ struct ProfilePhotoPicker: View {
                 MediaPicker(
                     source: selectedSource,
                     onImageSelected: { image, _ in
-                        selectedImage = image
                         showingMediaPicker = false
+                        // Show crop view after selecting an image
+                        imageToCrop = IdentifiableImage(image: image)
                     },
                     onCancel: {
                         showingMediaPicker = false
+                    }
+                )
+            }
+            .fullScreenCover(item: $imageToCrop) { identifiableImage in
+                ImageCropView(
+                    image: identifiableImage.image,
+                    onConfirm: { croppedImage in
+                        selectedImage = croppedImage
+                        imageToCrop = nil
+                    },
+                    onCancel: {
+                        imageToCrop = nil
                     }
                 )
             }

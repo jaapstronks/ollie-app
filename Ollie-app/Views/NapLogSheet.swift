@@ -16,11 +16,15 @@ struct NapLogSheet: View {
     /// Default duration in minutes (average nap time, or 30 if unknown)
     var defaultDurationMinutes: Int = 30
 
-    @State private var selectedDate: Date
-    @State private var startTime: Date
-    @State private var endTime: Date
+    /// Full start date+time (allows multi-day naps)
+    @State private var startDateTime: Date
+    /// Full end date+time
+    @State private var endDateTime: Date
     @State private var note = ""
-    @State private var spansNight: Bool = false
+
+    /// Track which picker is expanded
+    @State private var showStartPicker = false
+    @State private var showEndPicker = false
 
     private let now = Date()
 
@@ -33,91 +37,150 @@ struct NapLogSheet: View {
         self.onCancel = onCancel
         self.defaultDurationMinutes = defaultDurationMinutes
 
-        // Calculate defaults: end time = now (or rounded), start = end - duration
+        // Calculate defaults: end time = now, start = end - duration
         let defaultEndTime = Date()
         let defaultStartTime = defaultEndTime.addingTimeInterval(-Double(defaultDurationMinutes) * 60)
 
-        _selectedDate = State(initialValue: defaultEndTime)
-        _startTime = State(initialValue: defaultStartTime)
-        _endTime = State(initialValue: defaultEndTime)
+        _startDateTime = State(initialValue: defaultStartTime)
+        _endDateTime = State(initialValue: defaultEndTime)
     }
 
     /// Computed duration in minutes
     private var durationMinutes: Int {
-        max(1, Int(actualEndTime.timeIntervalSince(actualStartTime) / 60))
+        max(1, Int(endDateTime.timeIntervalSince(startDateTime) / 60))
     }
 
-    /// The actual start time considering the selected date
-    private var actualStartTime: Date {
-        // If spans night, start is on the day BEFORE selectedDate
-        let calendar = Calendar.current
-        let startDate = spansNight ? calendar.date(byAdding: .day, value: -1, to: selectedDate)! : selectedDate
-
-        let startComponents = calendar.dateComponents([.hour, .minute], from: startTime)
-        return calendar.date(bySettingHour: startComponents.hour ?? 0,
-                            minute: startComponents.minute ?? 0,
-                            second: 0,
-                            of: startDate) ?? startTime
+    /// Formatted duration string
+    private var durationString: String {
+        durationMinutes.formatAsDuration()
     }
 
-    /// The actual end time considering the selected date
-    private var actualEndTime: Date {
-        let calendar = Calendar.current
-        let endComponents = calendar.dateComponents([.hour, .minute], from: endTime)
-        return calendar.date(bySettingHour: endComponents.hour ?? 0,
-                            minute: endComponents.minute ?? 0,
-                            second: 0,
-                            of: selectedDate) ?? endTime
+    /// Whether the nap spans multiple days
+    private var spansMultipleDays: Bool {
+        !Calendar.current.isDate(startDateTime, inSameDayAs: endDateTime)
+    }
+
+    /// Whether the times are valid (start before end)
+    private var isValid: Bool {
+        startDateTime < endDateTime
     }
 
     var body: some View {
         NavigationView {
             Form {
-                // Date picker (for logging naps on previous days)
+                // Start date+time section
                 Section {
-                    DatePicker(
-                        Strings.NapLog.napDate,
-                        selection: $selectedDate,
-                        in: ...now,
-                        displayedComponents: .date
-                    )
-                    .onChange(of: selectedDate) { _, newDate in
-                        // Update times to match new date while keeping time components
-                        let calendar = Calendar.current
-                        if let newStart = calendar.date(bySettingHour: calendar.component(.hour, from: startTime),
-                                                        minute: calendar.component(.minute, from: startTime),
-                                                        second: 0, of: newDate) {
-                            startTime = newStart
+                    Button {
+                        withAnimation(.easeInOut(duration: 0.2)) {
+                            showStartPicker.toggle()
+                            if showStartPicker { showEndPicker = false }
                         }
-                        if let newEnd = calendar.date(bySettingHour: calendar.component(.hour, from: endTime),
-                                                      minute: calendar.component(.minute, from: endTime),
-                                                      second: 0, of: newDate) {
-                            endTime = newEnd
+                        HapticFeedback.selection()
+                    } label: {
+                        HStack {
+                            Label(Strings.NapLog.startTime, systemImage: "moon.zzz.fill")
+                                .foregroundStyle(.primary)
+
+                            Spacer()
+
+                            VStack(alignment: .trailing, spacing: 2) {
+                                Text(startDateTime.formatted(date: .abbreviated, time: .shortened))
+                                    .font(.body)
+                                    .foregroundStyle(showStartPicker ? Color.ollieSleep : .primary)
+                            }
+
+                            Image(systemName: showStartPicker ? "chevron.up" : "chevron.down")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                    .buttonStyle(.plain)
+
+                    if showStartPicker {
+                        DatePicker(
+                            "",
+                            selection: $startDateTime,
+                            in: ...now,
+                            displayedComponents: [.date, .hourAndMinute]
+                        )
+                        .datePickerStyle(.graphical)
+                        .labelsHidden()
+                        .onChange(of: startDateTime) { oldValue, newValue in
+                            // Maintain minimum duration of 1 minute
+                            if newValue >= endDateTime {
+                                endDateTime = newValue.addingTimeInterval(60)
+                            }
                         }
                     }
                 }
 
-                // Toggle for overnight naps (spanning midnight)
+                // End date+time section
                 Section {
-                    Toggle(Strings.NapLog.startedPreviousNight, isOn: $spansNight)
-                } footer: {
-                    if spansNight {
-                        Text(Strings.NapLog.overnightHint)
-                            .font(.caption)
+                    Button {
+                        withAnimation(.easeInOut(duration: 0.2)) {
+                            showEndPicker.toggle()
+                            if showEndPicker { showStartPicker = false }
+                        }
+                        HapticFeedback.selection()
+                    } label: {
+                        HStack {
+                            Label(Strings.NapLog.endTime, systemImage: "sun.max.fill")
+                                .foregroundStyle(.primary)
+
+                            Spacer()
+
+                            VStack(alignment: .trailing, spacing: 2) {
+                                Text(endDateTime.formatted(date: .abbreviated, time: .shortened))
+                                    .font(.body)
+                                    .foregroundStyle(showEndPicker ? Color.ollieSleep : .primary)
+                            }
+
+                            Image(systemName: showEndPicker ? "chevron.up" : "chevron.down")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                    .buttonStyle(.plain)
+
+                    if showEndPicker {
+                        DatePicker(
+                            "",
+                            selection: $endDateTime,
+                            in: startDateTime.addingTimeInterval(60)...now,
+                            displayedComponents: [.date, .hourAndMinute]
+                        )
+                        .datePickerStyle(.graphical)
+                        .labelsHidden()
+                    }
+                }
+
+                // Duration display
+                Section {
+                    HStack {
+                        Label(Strings.NapLog.duration, systemImage: "clock")
                             .foregroundStyle(.secondary)
-                    }
-                }
 
-                // Time section with linked start/end/duration
-                Section {
-                    DurationTimePicker(
-                        startTime: $startTime,
-                        endTime: $endTime,
-                        accentColor: .purple,
-                        maxEndTime: .distantFuture  // Allow any time for historical logging
-                    )
-                    .listRowInsets(EdgeInsets())
-                    .listRowBackground(Color.clear)
+                        Spacer()
+
+                        Text(durationString)
+                            .font(.body.monospacedDigit().weight(.medium))
+                            .foregroundStyle(Color.ollieSleep)
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 6)
+                            .background(Color.ollieSleep.opacity(0.1))
+                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                    }
+
+                    // Show hint when spanning multiple days
+                    if spansMultipleDays {
+                        HStack(spacing: 8) {
+                            Image(systemName: "moon.stars")
+                                .foregroundStyle(.secondary)
+                            Text(Strings.NapLog.overnightHint)
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
                 }
 
                 // Note section
@@ -139,8 +202,8 @@ struct NapLogSheet: View {
                     Button {
                         HapticFeedback.success()
                         onSave(
-                            actualStartTime,
-                            actualEndTime,
+                            startDateTime,
+                            endDateTime,
                             note.isEmpty ? nil : note
                         )
                     } label: {
@@ -149,9 +212,10 @@ struct NapLogSheet: View {
                             .foregroundColor(.white)
                             .padding(.horizontal, 16)
                             .padding(.vertical, 8)
-                            .background(Color.purple)
+                            .background(isValid ? Color.ollieSleep : Color.gray)
                             .clipShape(Capsule())
                     }
+                    .disabled(!isValid)
                 }
             }
         }

@@ -21,8 +21,8 @@ struct PostWakePottyCard: View {
     var body: some View {
         StatusCardHeader(
             iconName: "sun.max.fill",
-            iconColor: .orange,
-            tintColor: .orange,
+            iconColor: .ollieWarning,
+            tintColor: .ollieWarning,
             title: Strings.CombinedStatus.awakeTimePotty,
             titleColor: .primary,
             subtitle: subtitleText
@@ -31,10 +31,10 @@ struct PostWakePottyCard: View {
             Button(action: onLogPotty) {
                 Label(Strings.CombinedStatus.logPotty, systemImage: "drop.fill")
             }
-            .buttonStyle(.glassPillCompact(tint: .custom(.orange)))
+            .buttonStyle(.glassPillCompact(tint: .custom(.ollieWarning)))
         }
         .statusCardPadding()
-        .glassStatusCard(tintColor: .orange, cornerRadius: LayoutConstants.cornerRadiusL)
+        .glassStatusCard(tintColor: .ollieWarning, cornerRadius: LayoutConstants.cornerRadiusL)
         .shadow(color: shadowColor, radius: 10, y: 5)
         .accessibilityElement(children: .combine)
         .accessibilityLabel(Strings.CombinedStatus.postWakeCardAccessibility)
@@ -52,7 +52,7 @@ struct PostWakePottyCard: View {
 
     private var shadowColor: Color {
         let opacity = colorScheme == .dark ? 0.2 : 0.1
-        return Color.orange.opacity(opacity)
+        return Color.ollieWarning.opacity(opacity)
     }
 }
 

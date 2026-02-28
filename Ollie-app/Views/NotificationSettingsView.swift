@@ -29,6 +29,7 @@ struct NotificationSettingsView: View {
                     mealSection
                     napSection
                     walkSection
+                    appointmentSection
                 }
             }
             .navigationTitle(Strings.Notifications.title)
@@ -150,15 +151,6 @@ struct NotificationSettingsView: View {
                         .foregroundColor(.ollieSuccess)
                 }
             }
-
-            if settings.mealReminders.isEnabled {
-                Stepper(
-                    Strings.Notifications.minutesBefore(settings.mealReminders.minutesBefore),
-                    value: $settings.mealReminders.minutesBefore,
-                    in: 5...30,
-                    step: 5
-                )
-            }
         } header: {
             Text(Strings.Notifications.mealsSection)
         } footer: {
@@ -210,20 +202,32 @@ struct NotificationSettingsView: View {
                         .foregroundColor(.ollieAccent)
                 }
             }
-
-            if settings.walkReminders.isEnabled {
-                Stepper(
-                    Strings.Notifications.minutesBefore(settings.walkReminders.minutesBefore),
-                    value: $settings.walkReminders.minutesBefore,
-                    in: 5...30,
-                    step: 5
-                )
-            }
         } header: {
             Text(Strings.Notifications.walksSection)
         } footer: {
             if settings.walkReminders.isEnabled {
                 Text(Strings.Notifications.walkReminderDescription)
+            }
+        }
+    }
+
+    // MARK: - Appointment Section
+
+    private var appointmentSection: some View {
+        Section {
+            Toggle(isOn: $settings.appointmentReminders.isEnabled) {
+                Label {
+                    Text(Strings.Notifications.appointmentReminders)
+                } icon: {
+                    Image(systemName: "calendar")
+                        .foregroundColor(.ollieAccent)
+                }
+            }
+        } header: {
+            Text(Strings.Notifications.appointmentsSection)
+        } footer: {
+            if settings.appointmentReminders.isEnabled {
+                Text(Strings.Notifications.appointmentReminderDescription)
             }
         }
     }

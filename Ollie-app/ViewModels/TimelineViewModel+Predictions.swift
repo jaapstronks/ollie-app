@@ -74,10 +74,13 @@ extension TimelineViewModel {
             }
         }
 
+        let recentEvents = getRecentEvents()
         return CombinedStatusCalculations.calculateCombinedState(
             sleepState: currentSleepState,
             pottyPrediction: pottyPrediction,
-            wakeTimePottyState: wakeTimePottyState
+            wakeTimePottyState: wakeTimePottyState,
+            recentEvents: recentEvents,
+            dismissedAssumedSleepDate: dismissedAssumedSleepDate
         )
     }
 

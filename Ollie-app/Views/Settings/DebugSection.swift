@@ -85,7 +85,7 @@ struct DebugSection: View {
                     .foregroundStyle(.secondary)
                 Spacer()
                 Text(subscriptionManager.effectiveStatus.displayLabel)
-                    .foregroundStyle(subscriptionManager.effectiveStatus.hasOlliePlus ? .green : .orange)
+                    .foregroundStyle(subscriptionManager.effectiveStatus.hasOlliePlus ? Color.ollieSuccess : Color.ollieWarning)
             }
             .font(.caption)
         } header: {

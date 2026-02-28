@@ -19,21 +19,32 @@ struct OnboardingBreedStep: View {
     let onNext: () -> Void
     let onBack: () -> Void
 
+    @State private var hasAppeared = false
+
     var body: some View {
-        VStack(spacing: 16) {
-            Image(systemName: "dog.fill")
-                .font(.system(size: 60))
-                .foregroundStyle(Color.ollieAccent)
+        VStack(spacing: 0) {
+            // Header
+            VStack(spacing: 12) {
+                Image(systemName: "dog.fill")
+                    .font(.system(size: 56))
+                    .foregroundStyle(Color.ollieAccent)
+                    .scaleEffect(hasAppeared ? 1.0 : 0.8)
+                    .opacity(hasAppeared ? 1.0 : 0.0)
 
-            Text(Strings.Onboarding.breedQuestion(name: puppyName))
-                .font(.title2)
-                .fontWeight(.bold)
-                .multilineTextAlignment(.center)
+                Text(Strings.Onboarding.breedQuestion(name: puppyName))
+                    .font(.title2)
+                    .fontWeight(.bold)
+                    .multilineTextAlignment(.center)
+                    .opacity(hasAppeared ? 1.0 : 0.0)
+            }
+            .padding(.top, 8)
+            .padding(.bottom, 16)
 
+            // Breed list
             ScrollView {
                 VStack(spacing: 10) {
                     // Predefined breeds
-                    ForEach(DogBreed.breeds) { breed in
+                    ForEach(Array(DogBreed.breeds.enumerated()), id: \.element.id) { index, breed in
                         BreedSelectionButton(
                             breed: breed,
                             isSelected: selectedBreed?.name == breed.name && !isCustomBreed,
@@ -45,6 +56,9 @@ struct OnboardingBreedStep: View {
                                 customBreed = ""
                             }
                         )
+                        .opacity(hasAppeared ? 1.0 : 0.0)
+                        .offset(y: hasAppeared ? 0 : 15)
+                        .animation(.easeOut(duration: 0.4).delay(Double(index) * 0.03), value: hasAppeared)
                     }
 
                     // "Other" option
@@ -57,24 +71,38 @@ struct OnboardingBreedStep: View {
                             isCustomBreedFieldFocused = true
                         }
                     )
+                    .opacity(hasAppeared ? 1.0 : 0.0)
 
                     // Custom breed text field (shown when "Other" selected)
                     if isCustomBreed {
-                        TextField(Strings.Onboarding.breedOptional, text: $customBreed)
-                            .textFieldStyle(.roundedBorder)
-                            .focused($isCustomBreedFieldFocused)
-                            .padding(.top, 8)
+                        OnboardingTextField(
+                            placeholder: Strings.Onboarding.breedOptional,
+                            text: $customBreed,
+                            isFocused: $isCustomBreedFieldFocused
+                        )
+                        .padding(.top, 8)
+                        .transition(.opacity.combined(with: .move(edge: .top)))
                     }
                 }
-                .padding(.horizontal)
+                .padding(.horizontal, 24)
+                .padding(.bottom, 16)
             }
+            .scrollDismissesKeyboard(.interactively)
 
-            HStack {
+            // Buttons
+            HStack(spacing: 12) {
                 OnboardingBackButton(action: onBack)
                 OnboardingNextButton(enabled: selectedBreed != nil || isCustomBreed, action: onNext)
             }
+            .padding(.horizontal, 24)
+            .padding(.bottom, 16)
+            .opacity(hasAppeared ? 1.0 : 0.0)
         }
-        .padding()
+        .onAppear {
+            withAnimation(.easeOut(duration: 0.5)) {
+                hasAppeared = true
+            }
+        }
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()
@@ -97,28 +125,32 @@ private struct BreedSelectionButton: View {
     var body: some View {
         Button(action: onSelect) {
             HStack {
-                VStack(alignment: .leading, spacing: 2) {
+                VStack(alignment: .leading, spacing: 4) {
                     Text(breed.name)
-                        .font(.headline)
+                        .font(.body)
+                        .fontWeight(.medium)
                     Text(breed.weightRange)
                         .font(.caption)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 }
                 Spacer()
-                if isSelected {
-                    Image(systemName: "checkmark.circle.fill")
-                        .foregroundColor(.accentColor)
-                }
+                Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
+                    .font(.title3)
+                    .foregroundStyle(isSelected ? Color.ollieAccent : Color(.tertiaryLabel))
             }
-            .padding()
+            .padding(.horizontal, 16)
+            .padding(.vertical, 14)
             .background(
-                RoundedRectangle(cornerRadius: 10)
-                    .fill(isSelected
-                          ? Color.accentColor.opacity(0.1)
-                          : Color(.secondarySystemBackground))
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(isSelected ? Color.ollieAccent.opacity(0.1) : Color(.secondarySystemBackground))
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 12)
+                    .strokeBorder(isSelected ? Color.ollieAccent.opacity(0.3) : Color.clear, lineWidth: 1.5)
             )
         }
         .buttonStyle(.plain)
+        .animation(.easeInOut(duration: 0.15), value: isSelected)
     }
 }
 
@@ -131,27 +163,31 @@ private struct OtherBreedButton: View {
     var body: some View {
         Button(action: onSelect) {
             HStack {
-                VStack(alignment: .leading, spacing: 2) {
+                VStack(alignment: .leading, spacing: 4) {
                     Text(Strings.Onboarding.otherBreed)
-                        .font(.headline)
+                        .font(.body)
+                        .fontWeight(.medium)
                     Text(Strings.Onboarding.enterCustom)
                         .font(.caption)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 }
                 Spacer()
-                if isSelected {
-                    Image(systemName: "checkmark.circle.fill")
-                        .foregroundColor(.accentColor)
-                }
+                Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
+                    .font(.title3)
+                    .foregroundStyle(isSelected ? Color.ollieAccent : Color(.tertiaryLabel))
             }
-            .padding()
+            .padding(.horizontal, 16)
+            .padding(.vertical, 14)
             .background(
-                RoundedRectangle(cornerRadius: 10)
-                    .fill(isSelected
-                          ? Color.accentColor.opacity(0.1)
-                          : Color(.secondarySystemBackground))
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(isSelected ? Color.ollieAccent.opacity(0.1) : Color(.secondarySystemBackground))
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 12)
+                    .strokeBorder(isSelected ? Color.ollieAccent.opacity(0.3) : Color.clear, lineWidth: 1.5)
             )
         }
         .buttonStyle(.plain)
+        .animation(.easeInOut(duration: 0.15), value: isSelected)
     }
 }

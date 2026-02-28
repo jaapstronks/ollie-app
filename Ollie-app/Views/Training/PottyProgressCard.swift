@@ -96,8 +96,8 @@ struct PottyProgressCard: View {
         switch outdoorPercentage {
         case 90...: return .ollieSuccess
         case 70...: return .ollieAccent
-        case 50...: return .orange
-        default: return .ollieWarning
+        case 50...: return .ollieWarning
+        default: return .ollieDanger
         }
     }
 

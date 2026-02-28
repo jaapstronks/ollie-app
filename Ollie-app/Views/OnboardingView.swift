@@ -12,6 +12,8 @@ import OllieShared
 /// Onboarding flow for new users
 struct OnboardingView: View {
     @ObservedObject var profileStore: ProfileStore
+    @EnvironmentObject var notificationService: NotificationService
+    @EnvironmentObject var locationManager: LocationManager
     let onComplete: () -> Void
 
     // Step state
@@ -51,17 +53,18 @@ struct OnboardingView: View {
         isCustomBreed
     }
 
-    /// Total steps shown in progress bar (excludes welcome and size step when not needed)
-    /// Welcome step (0) doesn't show progress, so we count from step 1 onwards
+    /// Total steps shown in progress bar (excludes welcome, size step when not needed, and permission steps)
+    /// Welcome step (0) doesn't show progress, permission steps don't show progress
     /// Steps: Name(1), Breed(2), Birth(3), Home(4), [Size(5)], Photo(6), Confirm(7)
+    /// Permission steps (8, 9) are not counted in progress bar
     private var totalSteps: Int {
         shouldShowSizeStep ? 7 : 6
     }
 
     /// Maps the visual step (for progress indicator) to actual step
-    /// Welcome step (0) is not shown in progress bar
+    /// Welcome step (0) and permission steps (8, 9) are not shown in progress bar
     private var visualStep: Int {
-        if currentStep == 0 {
+        if currentStep == 0 || currentStep >= 8 {
             return -1 // Not shown in progress bar
         }
         var adjustedStep = currentStep - 1
@@ -72,9 +75,9 @@ struct OnboardingView: View {
         return adjustedStep
     }
 
-    /// Whether to show progress indicator (hidden on welcome step)
+    /// Whether to show progress indicator (hidden on welcome step and permission steps)
     private var showProgress: Bool {
-        currentStep > 0
+        currentStep > 0 && currentStep < 8
     }
 
     // MARK: - Body
@@ -148,6 +151,14 @@ struct OnboardingView: View {
                     onSave: saveProfile,
                     onBack: { navigateToStep(6) }
                 ).tag(7)
+
+                OnboardingNotificationsStep(
+                    onNext: { navigateToStep(9) }
+                ).tag(8)
+
+                OnboardingLocationStep(
+                    onComplete: completeOnboarding
+                ).tag(9)
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
             .animation(reduceMotion ? nil : .easeInOut, value: currentStep)
@@ -168,6 +179,9 @@ struct OnboardingView: View {
         }
         .padding()
         .animation(reduceMotion ? nil : .easeInOut, value: totalSteps)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Strings.Onboarding.progressAccessibility)
+        .accessibilityValue(Strings.Onboarding.progressValue(current: visualStep + 1, total: totalSteps))
     }
 
     // MARK: - Navigation
@@ -212,10 +226,16 @@ struct OnboardingView: View {
 
         profileStore.saveProfile(profile)
 
-        // Small delay to ensure profile is saved before completing
+        // Navigate to permission screens after saving profile
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            onComplete()
+            navigateToStep(8)
         }
+    }
+
+    // MARK: - Complete Onboarding
+
+    private func completeOnboarding() {
+        onComplete()
     }
 }
 
@@ -223,4 +243,6 @@ struct OnboardingView: View {
     OnboardingView(profileStore: ProfileStore()) {
         print("Onboarding complete")
     }
+    .environmentObject(NotificationService())
+    .environmentObject(LocationManager())
 }

@@ -46,12 +46,15 @@ struct CalendarTabView: View {
                     CalendarGridView(
                         appointmentStore: appointmentStore,
                         milestoneStore: milestoneStore,
-                        birthDate: profileStore.profile?.birthDate,
+                        profile: profileStore.profile,
                         onAppointmentTap: { appointment in
                             selectedAppointment = appointment
                         },
                         onMilestoneTap: { milestone in
                             selectedMilestone = milestone
+                        },
+                        onSocializationTap: {
+                            // Navigate to Train tab (socialization is there)
                         }
                     )
                 case .contacts:
@@ -182,7 +185,6 @@ struct CalendarTabView: View {
                 }
             }
             .padding()
-            .padding(.bottom, 84) // Space for FAB
         }
     }
 

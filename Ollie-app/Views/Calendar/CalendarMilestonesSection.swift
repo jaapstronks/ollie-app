@@ -11,20 +11,25 @@ import OllieShared
 struct CalendarMilestonesSection: View {
     @ObservedObject var milestoneStore: MilestoneStore
     let birthDate: Date
+    var onCelebration: ((Achievement, Milestone) -> Void)?
 
-    @State private var showMilestoneDetail = false
     @State private var selectedMilestone: Milestone?
+    @StateObject private var achievementService = AchievementService.shared
 
     @Environment(\.colorScheme) private var colorScheme
 
     // MARK: - Computed Properties
 
     private var overdueMilestones: [Milestone] {
+        // Filter out non-actionable milestones (developmental periods are shown as banners)
         milestoneStore.overdueMilestones(birthDate: birthDate)
+            .filter { $0.isActionable }
     }
 
     private var upcomingMilestones: [Milestone] {
+        // Filter out non-actionable milestones (developmental periods are shown as banners)
         milestoneStore.upcomingMilestones(birthDate: birthDate, withinDays: 30)
+            .filter { $0.isActionable }
             .prefix(5)
             .map { $0 }
     }
@@ -52,24 +57,34 @@ struct CalendarMilestonesSection: View {
                 emptyState
             }
         }
-        // Milestone completion sheet
-        .sheet(isPresented: $showMilestoneDetail) {
-            if let milestone = selectedMilestone {
-                MilestoneCompletionSheet(
-                    milestone: milestone,
-                    onDismiss: { showMilestoneDetail = false },
-                    onComplete: { notes, photoID, vetClinic, completionDate in
-                        milestoneStore.completeMilestone(
-                            milestone,
-                            notes: notes,
-                            photoID: photoID,
-                            vetClinicName: vetClinic,
-                            completionDate: completionDate
-                        )
-                        showMilestoneDetail = false
+        // Milestone completion sheet - using item binding to prevent empty sheet race condition
+        .sheet(item: $selectedMilestone) { milestone in
+            MilestoneCompletionSheet(
+                milestone: milestone,
+                onDismiss: { selectedMilestone = nil },
+                onComplete: { notes, photoID, vetClinic, completionDate in
+                    // Complete the milestone
+                    milestoneStore.completeMilestone(
+                        milestone,
+                        notes: notes,
+                        photoID: photoID,
+                        vetClinicName: vetClinic,
+                        completionDate: completionDate
+                    )
+
+                    // Check for achievement and trigger celebration
+                    if let achievement = achievementService.checkMilestoneCompletion(milestone: milestone) {
+                        // Dismiss completion sheet first, then trigger celebration
+                        selectedMilestone = nil
+                        // Small delay to allow sheet dismissal animation
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                            onCelebration?(achievement, milestone)
+                        }
+                    } else {
+                        selectedMilestone = nil
                     }
-                )
-            }
+                }
+            )
         }
     }
 
@@ -92,7 +107,6 @@ struct CalendarMilestonesSection: View {
                         isOverdue: true
                     ) {
                         selectedMilestone = milestone
-                        showMilestoneDetail = true
                     }
                 }
             }
@@ -142,7 +156,6 @@ struct CalendarMilestonesSection: View {
                         isOverdue: false
                     ) {
                         selectedMilestone = milestone
-                        showMilestoneDetail = true
                     }
                 }
             }
@@ -200,7 +213,7 @@ struct CalendarMilestoneRow: View {
                         .fontWeight(.medium)
                         .foregroundStyle(.primary)
 
-                    if let period = milestone.periodLabel(birthDate: birthDate) {
+                    if let period = milestone.periodLabelWithDate(birthDate: birthDate) {
                         Text(period)
                             .font(.caption)
                             .foregroundStyle(.secondary)
@@ -247,7 +260,10 @@ struct CalendarMilestoneRow: View {
         ScrollView {
             CalendarMilestonesSection(
                 milestoneStore: MilestoneStore(),
-                birthDate: Calendar.current.date(byAdding: .weekOfYear, value: -12, to: Date())!
+                birthDate: Calendar.current.date(byAdding: .weekOfYear, value: -12, to: Date())!,
+                onCelebration: { achievement, milestone in
+                    print("Celebration: \(achievement.localizedLabel)")
+                }
             )
             .padding()
         }

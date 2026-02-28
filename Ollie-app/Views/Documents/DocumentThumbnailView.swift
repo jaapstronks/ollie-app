@@ -23,6 +23,19 @@ struct DocumentThumbnailView: View {
                     .scaledToFill()
                     .frame(width: size, height: size)
                     .clipShape(RoundedRectangle(cornerRadius: 8))
+                    .overlay(alignment: .bottomTrailing) {
+                        // Show PDF badge for PDF documents
+                        if document.hasPDF {
+                            Text("PDF")
+                                .font(.system(size: max(8, size * 0.15)))
+                                .fontWeight(.bold)
+                                .foregroundColor(.white)
+                                .padding(.horizontal, 4)
+                                .padding(.vertical, 2)
+                                .background(.red, in: RoundedRectangle(cornerRadius: 3))
+                                .padding(4)
+                        }
+                    }
             } else {
                 // Placeholder with document type icon
                 RoundedRectangle(cornerRadius: 8)
@@ -41,7 +54,7 @@ struct DocumentThumbnailView: View {
     }
 
     private func loadThumbnail() async {
-        guard document.hasImage else { return }
+        guard document.hasAttachment else { return }
         self.image = documentStore.loadThumbnail(for: document)
     }
 }

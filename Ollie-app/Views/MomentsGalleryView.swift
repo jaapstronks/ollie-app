@@ -57,8 +57,22 @@ struct MomentsGalleryView: View {
                                                     selectedEvent = event
                                                 }
                                                 .animatedAppear(delay: StaggeredAnimation.delay(for: eventIndex, baseDelay: 0.03, maxDelay: 0.2))
+                                                .onAppear {
+                                                    // Trigger infinite scroll when near the end
+                                                    viewModel.loadMoreIfNeeded(currentEvent: event)
+                                                }
                                         }
                                     }
+                                }
+                            }
+
+                            // Loading indicator at bottom when loading more
+                            if viewModel.isLoadingMore {
+                                HStack {
+                                    Spacer()
+                                    ProgressView()
+                                        .padding()
+                                    Spacer()
                                 }
                             }
                         }

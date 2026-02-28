@@ -12,65 +12,89 @@ import OllieShared
 struct OnboardingWelcomeStep: View {
     let onNext: () -> Void
 
+    @State private var hasAppeared = false
+
     var body: some View {
-        VStack(spacing: 32) {
+        VStack(spacing: 0) {
             Spacer()
+                .frame(height: 60)
 
             // Logo and tagline
-            VStack(spacing: 16) {
+            VStack(spacing: 12) {
                 Image(systemName: "pawprint.fill")
-                    .font(.system(size: 72))
-                    .foregroundColor(.accentColor)
+                    .font(.system(size: 64))
+                    .foregroundStyle(Color.ollieAccent)
+                    .scaleEffect(hasAppeared ? 1.0 : 0.7)
+                    .opacity(hasAppeared ? 1.0 : 0.0)
 
                 Text(Strings.App.name)
                     .font(.largeTitle)
                     .fontWeight(.bold)
+                    .opacity(hasAppeared ? 1.0 : 0.0)
 
                 Text(Strings.App.tagline)
-                    .font(.title3)
-                    .fontWeight(.medium)
+                    .font(.title2)
+                    .fontWeight(.semibold)
                     .multilineTextAlignment(.center)
-                    .foregroundColor(.primary)
+                    .foregroundStyle(.primary)
+                    .opacity(hasAppeared ? 1.0 : 0.0)
+                    .offset(y: hasAppeared ? 0 : 8)
 
                 Text(Strings.Onboarding.welcomeSubtitle)
-                    .font(.body)
+                    .font(.callout)
                     .multilineTextAlignment(.center)
-                    .foregroundColor(.secondary)
-                    .padding(.horizontal)
+                    .foregroundStyle(.secondary)
+                    .padding(.horizontal, 8)
+                    .padding(.top, 4)
+                    .opacity(hasAppeared ? 1.0 : 0.0)
+                    .offset(y: hasAppeared ? 0 : 8)
             }
 
             Spacer()
+                .frame(height: 40)
 
             // Two personas
-            VStack(spacing: 16) {
+            VStack(spacing: 12) {
                 PersonaCard(
                     icon: "book.fill",
                     title: Strings.Onboarding.preparingTitle,
                     subtitle: Strings.Onboarding.preparingSubtitle
                 )
+                .opacity(hasAppeared ? 1.0 : 0.0)
+                .offset(y: hasAppeared ? 0 : 20)
 
                 PersonaCard(
                     icon: "exclamationmark.bubble.fill",
                     title: Strings.Onboarding.alreadyInTitle,
                     subtitle: Strings.Onboarding.alreadyInSubtitle
                 )
+                .opacity(hasAppeared ? 1.0 : 0.0)
+                .offset(y: hasAppeared ? 0 : 20)
             }
-            .padding(.horizontal)
 
             Spacer()
 
             // Get started button
             Button(action: onNext) {
                 Text(Strings.Onboarding.getStarted)
-                    .fontWeight(.semibold)
+                    .font(.headline)
                     .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.accentColor)
-                    .foregroundColor(.white)
-                    .cornerRadius(LayoutConstants.cornerRadiusM)
+                    .padding(.vertical, 16)
+                    .background(Color.ollieAccent)
+                    .foregroundStyle(.white)
+                    .cornerRadius(14)
+            }
+            .opacity(hasAppeared ? 1.0 : 0.0)
+
+            Spacer()
+                .frame(height: 8)
+        }
+        .padding(.horizontal, 24)
+        .onAppear {
+            withAnimation(.easeOut(duration: 0.6)) {
+                hasAppeared = true
             }
         }
-        .padding()
     }
 }
 

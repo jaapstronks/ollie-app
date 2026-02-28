@@ -2,7 +2,7 @@
 //  OlliesWorldSummaryCard.swift
 //  Ollie-app
 //
-//  Summary card showing exploration stats: places discovered, walks logged, distance explored
+//  Summary card showing spots discovered
 //
 
 import SwiftUI
@@ -10,9 +10,7 @@ import OllieShared
 
 /// Compact summary card showing exploration stats
 struct OlliesWorldSummaryCard: View {
-    let placesCount: Int
-    let walksCount: Int
-    let estimatedKm: Double
+    let spotsCount: Int
     let puppyName: String
 
     var body: some View {
@@ -28,34 +26,12 @@ struct OlliesWorldSummaryCard: View {
                 Spacer()
             }
 
-            // Stats row
-            HStack(spacing: 0) {
-                // Places discovered
-                statItem(
-                    value: "\(placesCount)",
-                    icon: "mappin.circle.fill",
-                    color: .ollieAccent
-                )
-
-                Divider()
-                    .frame(height: 32)
-
-                // Walks logged
-                statItem(
-                    value: "\(walksCount)",
-                    icon: "figure.walk",
-                    color: .ollieSuccess
-                )
-
-                Divider()
-                    .frame(height: 32)
-
-                // Distance explored
-                statItem(
-                    value: String(format: "%.1f km", estimatedKm),
-                    icon: "point.topleft.down.to.point.bottomright.curvepath.fill",
-                    color: .ollieInfo
-                )
+            // Single stat: spots discovered
+            HStack {
+                Image(systemName: "mappin.circle.fill")
+                    .foregroundStyle(Color.ollieAccent)
+                Text(Strings.Places.placesDiscovered(spotsCount))
+                    .font(.subheadline)
             }
         }
         .padding()
@@ -70,18 +46,6 @@ struct OlliesWorldSummaryCard: View {
         // Using localized string with puppy name
         String(localized: "\(puppyName)'s World", table: "Places")
     }
-
-    private func statItem(value: String, icon: String, color: Color) -> some View {
-        HStack(spacing: 6) {
-            Image(systemName: icon)
-                .font(.subheadline)
-                .foregroundStyle(color)
-            Text(value)
-                .font(.subheadline)
-                .fontWeight(.semibold)
-        }
-        .frame(maxWidth: .infinity)
-    }
 }
 
 // MARK: - Preview
@@ -89,17 +53,13 @@ struct OlliesWorldSummaryCard: View {
 #Preview {
     VStack {
         OlliesWorldSummaryCard(
-            placesCount: 12,
-            walksCount: 47,
-            estimatedKm: 23.5,
+            spotsCount: 12,
             puppyName: "Ollie"
         )
         .padding()
 
         OlliesWorldSummaryCard(
-            placesCount: 0,
-            walksCount: 0,
-            estimatedKm: 0,
+            spotsCount: 0,
             puppyName: "Max"
         )
         .padding()

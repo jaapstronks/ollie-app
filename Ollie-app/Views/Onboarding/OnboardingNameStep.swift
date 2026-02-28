@@ -14,36 +14,81 @@ struct OnboardingNameStep: View {
     @FocusState.Binding var isNameFieldFocused: Bool
     let onNext: () -> Void
 
+    @State private var hasAppeared = false
+
     var body: some View {
-        VStack(spacing: 24) {
-            Spacer()
+        GeometryReader { geometry in
+            ScrollView {
+                VStack(spacing: 0) {
+                    Spacer()
+                        .frame(height: geometry.size.height * 0.12)
 
-            Image(systemName: "pawprint.circle.fill")
-                .font(.system(size: 80))
-                .foregroundColor(.accentColor)
+                    // Icon with subtle animation
+                    Image(systemName: "pawprint.circle.fill")
+                        .font(.system(size: 72))
+                        .foregroundStyle(Color.ollieAccent)
+                        .scaleEffect(hasAppeared ? 1.0 : 0.8)
+                        .opacity(hasAppeared ? 1.0 : 0.0)
 
-            Text(Strings.Onboarding.nameQuestion)
-                .font(.title)
-                .fontWeight(.bold)
+                    Spacer()
+                        .frame(height: 24)
 
-            TextField(Strings.Onboarding.namePlaceholder, text: $name)
-                .textFieldStyle(.roundedBorder)
-                .font(.title2)
-                .multilineTextAlignment(.center)
-                .padding(.horizontal, 40)
-                .focused($isNameFieldFocused)
-                .submitLabel(.done)
-                .onSubmit {
-                    isNameFieldFocused = false
+                    // Title
+                    Text(Strings.Onboarding.nameQuestion)
+                        .font(.title)
+                        .fontWeight(.bold)
+                        .multilineTextAlignment(.center)
+                        .opacity(hasAppeared ? 1.0 : 0.0)
+                        .offset(y: hasAppeared ? 0 : 10)
+
+                    Spacer()
+                        .frame(height: 8)
+
+                    // Subtitle
+                    Text(Strings.Onboarding.nameSubtitle)
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
+                        .opacity(hasAppeared ? 1.0 : 0.0)
+                        .offset(y: hasAppeared ? 0 : 10)
+
+                    Spacer()
+                        .frame(height: 32)
+
+                    // Custom styled text field
+                    OnboardingTextField(
+                        placeholder: Strings.Onboarding.namePlaceholder,
+                        text: $name,
+                        isFocused: $isNameFieldFocused
+                    )
+                    .opacity(hasAppeared ? 1.0 : 0.0)
+                    .offset(y: hasAppeared ? 0 : 15)
+
+                    Spacer()
+                        .frame(minHeight: 40)
+
+                    // Next button
+                    OnboardingNextButton(enabled: !name.isEmpty, action: onNext)
+                        .opacity(hasAppeared ? 1.0 : 0.0)
+
+                    Spacer()
+                        .frame(height: 16)
                 }
-                .accessibilityLabel(Strings.Onboarding.namePlaceholder)
-                .accessibilityHint(Strings.Onboarding.nameAccessibility)
-
-            Spacer()
-
-            OnboardingNextButton(enabled: !name.isEmpty, action: onNext)
+                .frame(minHeight: geometry.size.height)
+                .padding(.horizontal, 24)
+            }
+            .scrollDismissesKeyboard(.interactively)
         }
-        .padding()
+        .onAppear {
+            // Auto-focus the text field after a brief delay
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                isNameFieldFocused = true
+            }
+            // Animate content in
+            withAnimation(.easeOut(duration: 0.5)) {
+                hasAppeared = true
+            }
+        }
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()
@@ -61,6 +106,42 @@ struct OnboardingNameStep: View {
     }
 }
 
+// MARK: - Custom Text Field
+
+/// Styled text field for onboarding screens
+struct OnboardingTextField: View {
+    let placeholder: String
+    @Binding var text: String
+    @FocusState.Binding var isFocused: Bool
+
+    var body: some View {
+        TextField(placeholder, text: $text)
+            .font(.title2)
+            .fontWeight(.medium)
+            .multilineTextAlignment(.center)
+            .padding(.horizontal, 20)
+            .padding(.vertical, 18)
+            .background(
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(Color(.secondarySystemBackground))
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 16)
+                    .strokeBorder(
+                        isFocused ? Color.ollieAccent : Color.clear,
+                        lineWidth: 2
+                    )
+            )
+            .focused($isFocused)
+            .submitLabel(.done)
+            .onSubmit {
+                isFocused = false
+            }
+            .accessibilityLabel(placeholder)
+            .accessibilityHint(Strings.Onboarding.nameAccessibility)
+    }
+}
+
 // MARK: - Reusable Buttons
 
 /// Next button used across onboarding steps
@@ -71,14 +152,17 @@ struct OnboardingNextButton: View {
     var body: some View {
         Button(action: action) {
             Text(Strings.Common.next)
-                .fontWeight(.semibold)
+                .font(.headline)
                 .frame(maxWidth: .infinity)
-                .padding()
-                .background(enabled ? Color.accentColor : Color.gray)
-                .foregroundColor(.white)
-                .cornerRadius(LayoutConstants.cornerRadiusM)
+                .padding(.vertical, 16)
+                .background(
+                    RoundedRectangle(cornerRadius: 14)
+                        .fill(enabled ? Color.ollieAccent : Color.ollieAccent.opacity(0.35))
+                )
+                .foregroundStyle(.white)
         }
         .disabled(!enabled)
+        .animation(.easeInOut(duration: 0.2), value: enabled)
     }
 }
 
@@ -89,12 +173,14 @@ struct OnboardingBackButton: View {
     var body: some View {
         Button(action: action) {
             Text(Strings.Common.back)
-                .fontWeight(.semibold)
+                .font(.headline)
                 .frame(maxWidth: .infinity)
-                .padding()
-                .background(Color(.secondarySystemBackground))
-                .foregroundColor(.primary)
-                .cornerRadius(LayoutConstants.cornerRadiusM)
+                .padding(.vertical, 16)
+                .background(
+                    RoundedRectangle(cornerRadius: 14)
+                        .fill(Color.ollieAccent.opacity(0.12))
+                )
+                .foregroundStyle(Color.ollieAccent)
         }
     }
 }

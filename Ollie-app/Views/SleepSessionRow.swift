@@ -99,7 +99,7 @@ struct SleepSessionRow: View {
             if session.isShortNap {
                 Text("(\(Strings.SleepSession.shortNap))")
                     .font(.caption)
-                    .foregroundColor(.orange)
+                    .foregroundColor(.ollieWarning)
             }
         }
     }

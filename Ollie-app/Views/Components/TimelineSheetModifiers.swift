@@ -114,6 +114,18 @@ struct TimelineSheetModifiers: ViewModifier {
                 }
             }
             .animation(reduceMotion ? nil : .easeInOut(duration: 0.2), value: viewModel.showingUndoBanner)
+            // Celebration banner overlay (shows above undo banner position)
+            .overlay(alignment: .top) {
+                if viewModel.showingCelebrationBanner {
+                    CelebrationBanner(
+                        message: viewModel.celebrationMessage,
+                        onDismiss: viewModel.dismissCelebrationBanner
+                    )
+                    .transition(reduceMotion ? .opacity : .move(edge: .top).combined(with: .opacity))
+                    .padding(.top, 60)
+                }
+            }
+            .animation(reduceMotion ? nil : .spring(response: 0.4, dampingFraction: 0.8), value: viewModel.showingCelebrationBanner)
     }
 
     // MARK: - Sheet Content Builder
@@ -277,6 +289,7 @@ struct TimelineSheetModifiers: ViewModifier {
                 activityType: activityType,
                 onStartNow: { startTime in
                     viewModel.startActivity(type: activityType, startTime: startTime)
+                    viewModel.sheetCoordinator.dismissSheet()
                 },
                 onLogCompleted: {
                     // Transition to specialized sheet for retrospective logging
@@ -405,6 +418,10 @@ struct TimelineSheetModifiers: ViewModifier {
 
         // Placeholder cases for future sheets (handled elsewhere or not yet implemented)
         case .weightLog, .trainingLog, .socializationLog, .settings, .profileEdit, .notificationSettings:
+            EmptyView()
+
+        // Celebration sheets are handled via separate sheet/fullScreenCover modifiers in CalendarTabView
+        case .tier2Celebration, .tier3Celebration:
             EmptyView()
         }
     }

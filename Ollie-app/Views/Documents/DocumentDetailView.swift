@@ -6,6 +6,7 @@
 
 import SwiftUI
 import OllieShared
+import PDFKit
 
 /// Detail view for a document
 struct DocumentDetailView: View {
@@ -17,7 +18,9 @@ struct DocumentDetailView: View {
     @State private var showingEditSheet = false
     @State private var showingDeleteConfirmation = false
     @State private var showingFullImage = false
+    @State private var showingFullPDF = false
     @State private var fullImage: UIImage?
+    @State private var pdfData: Data?
 
     var body: some View {
         ScrollView {
@@ -53,6 +56,13 @@ struct DocumentDetailView: View {
                         ) {
                             Label(Strings.Documents.share, systemImage: "square.and.arrow.up")
                         }
+                    } else if document.hasPDF, let data = pdfData {
+                        // Share PDF as file
+                        Button {
+                            sharePDF(data: data)
+                        } label: {
+                            Label(Strings.Documents.share, systemImage: "square.and.arrow.up")
+                        }
                     }
 
                     Divider()
@@ -76,6 +86,9 @@ struct DocumentDetailView: View {
         .fullScreenCover(isPresented: $showingFullImage) {
             fullImageView
         }
+        .fullScreenCover(isPresented: $showingFullPDF) {
+            fullPDFView
+        }
         .alert(
             Strings.Documents.deleteConfirmTitle,
             isPresented: $showingDeleteConfirmation
@@ -89,16 +102,17 @@ struct DocumentDetailView: View {
             Text(Strings.Documents.deleteConfirmMessage)
         }
         .task {
-            // Load full image on appear for share functionality
-            await loadFullImage()
+            // Load full attachment on appear for share functionality
+            await loadAttachment()
         }
     }
 
-    // MARK: - Image Section
+    // MARK: - Attachment Section
 
     @ViewBuilder
     private var imageSection: some View {
-        if document.hasImage {
+        switch document.attachmentType {
+        case .image:
             AsyncDocumentImageLoader(
                 document: document,
                 documentStore: documentStore
@@ -120,7 +134,39 @@ struct DocumentDetailView: View {
                 }
                 .padding(12)
             }
-        } else {
+
+        case .pdf:
+            PDFPreviewView(pdfData: pdfData)
+                .frame(maxWidth: .infinity)
+                .frame(height: 300)
+                .clipShape(RoundedRectangle(cornerRadius: 12))
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    showingFullPDF = true
+                }
+                .overlay(alignment: .bottomTrailing) {
+                    Button {
+                        showingFullPDF = true
+                    } label: {
+                        Image(systemName: "arrow.up.left.and.arrow.down.right")
+                            .padding(8)
+                            .background(.ultraThinMaterial, in: Circle())
+                    }
+                    .padding(12)
+                }
+                .overlay(alignment: .topLeading) {
+                    // PDF badge
+                    Text("PDF")
+                        .font(.caption2)
+                        .fontWeight(.semibold)
+                        .foregroundColor(.white)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 4)
+                        .background(.red, in: RoundedRectangle(cornerRadius: 4))
+                        .padding(12)
+                }
+
+        case .none:
             RoundedRectangle(cornerRadius: 12)
                 .fill(Color(.systemGray5))
                 .frame(height: 200)
@@ -128,7 +174,7 @@ struct DocumentDetailView: View {
                     VStack(spacing: 8) {
                         Image(systemName: document.type.icon)
                             .font(.system(size: 48))
-                        Text(Strings.Documents.photo)
+                        Text(Strings.Documents.noAttachment)
                             .font(.caption)
                     }
                     .foregroundColor(.secondary)
@@ -147,6 +193,16 @@ struct DocumentDetailView: View {
                 title: Strings.Documents.documentType,
                 value: document.type.displayName
             )
+
+            // Insurance agency (for insurance documents)
+            if document.type == .insurance, let agency = document.insuranceAgency, !agency.isEmpty {
+                Divider()
+                detailRow(
+                    icon: "building.2",
+                    title: Strings.Documents.insuranceAgency,
+                    value: agency
+                )
+            }
 
             if let date = document.documentDate {
                 Divider()
@@ -282,12 +338,124 @@ struct DocumentDetailView: View {
         }
     }
 
+    // MARK: - Full PDF View
+
+    @ViewBuilder
+    private var fullPDFView: some View {
+        NavigationStack {
+            Group {
+                if let data = pdfData {
+                    PDFKitView(data: data)
+                        .ignoresSafeArea()
+                } else {
+                    ProgressView()
+                }
+            }
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button {
+                        showingFullPDF = false
+                    } label: {
+                        Image(systemName: "xmark")
+                            .foregroundColor(.primary)
+                    }
+                }
+            }
+            .navigationTitle(document.displayTitle)
+            .navigationBarTitleDisplayMode(.inline)
+        }
+    }
+
     // MARK: - Helpers
 
-    private func loadFullImage() async {
-        guard document.hasImage else { return }
-        self.fullImage = documentStore.loadImage(for: document)
+    private func loadAttachment() async {
+        switch document.attachmentType {
+        case .image:
+            self.fullImage = documentStore.loadImage(for: document)
+        case .pdf:
+            self.pdfData = documentStore.loadPDFData(for: document)
+        case .none:
+            break
+        }
     }
+
+    private func sharePDF(data: Data) {
+        // Create a temporary file for sharing
+        let fileName = "\(document.displayTitle).pdf"
+        let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(fileName)
+
+        do {
+            try data.write(to: tempURL)
+
+            let activityVC = UIActivityViewController(activityItems: [tempURL], applicationActivities: nil)
+
+            // Present the share sheet
+            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+               let rootViewController = windowScene.windows.first?.rootViewController {
+                rootViewController.present(activityVC, animated: true)
+            }
+        } catch {
+            // Silently fail if we can't write the temp file
+        }
+    }
+}
+
+// MARK: - PDF Preview View
+
+private struct PDFPreviewView: View {
+    let pdfData: Data?
+
+    var body: some View {
+        Group {
+            if let data = pdfData, let pdfDocument = PDFDocument(data: data) {
+                PDFKitThumbnailView(pdfDocument: pdfDocument)
+            } else {
+                Rectangle()
+                    .fill(Color(.systemGray5))
+                    .overlay {
+                        ProgressView()
+                    }
+            }
+        }
+    }
+}
+
+// MARK: - PDF Kit Views
+
+/// UIViewRepresentable wrapper for PDFView (full document viewer)
+private struct PDFKitView: UIViewRepresentable {
+    let data: Data
+
+    func makeUIView(context: Context) -> PDFView {
+        let pdfView = PDFView()
+        pdfView.autoScales = true
+        pdfView.displayMode = .singlePageContinuous
+        pdfView.displayDirection = .vertical
+        pdfView.document = PDFDocument(data: data)
+        return pdfView
+    }
+
+    func updateUIView(_ uiView: PDFView, context: Context) {
+        if uiView.document == nil {
+            uiView.document = PDFDocument(data: data)
+        }
+    }
+}
+
+/// UIViewRepresentable wrapper for PDFView (thumbnail/preview)
+private struct PDFKitThumbnailView: UIViewRepresentable {
+    let pdfDocument: PDFDocument
+
+    func makeUIView(context: Context) -> PDFView {
+        let pdfView = PDFView()
+        pdfView.autoScales = true
+        pdfView.displayMode = .singlePage
+        pdfView.document = pdfDocument
+        pdfView.isUserInteractionEnabled = false
+        return pdfView
+    }
+
+    func updateUIView(_ uiView: PDFView, context: Context) {}
 }
 
 // MARK: - Async Document Image Loader
@@ -325,7 +493,7 @@ private struct AsyncDocumentImageLoader: View {
                 type: .passport,
                 title: "EU Pet Passport",
                 note: "This is the official EU pet passport with all vaccination records.",
-                hasImage: true,
+                attachmentType: .image,
                 documentDate: Date(),
                 expiryDate: Calendar.current.date(byAdding: .day, value: 25, to: Date())
             ),

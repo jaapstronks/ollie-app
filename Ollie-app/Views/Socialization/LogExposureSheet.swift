@@ -13,6 +13,7 @@ struct LogExposureSheet: View {
     var onLogged: ((SocializationReaction) -> Void)?
 
     @EnvironmentObject var socializationStore: SocializationStore
+    @EnvironmentObject var profileStore: ProfileStore
     @Environment(\.dismiss) private var dismiss
     @Environment(\.colorScheme) private var colorScheme
 
@@ -253,6 +254,15 @@ struct LogExposureSheet: View {
         guard let distance = selectedDistance,
               let reaction = selectedReaction else { return }
 
+        // Track analytics
+        if let category = socializationStore.category(forItemId: item.id) {
+            Analytics.trackExposureLogged(
+                category: category.id,
+                reaction: reaction.rawValue,
+                weekNumber: profileStore.profile?.ageInWeeks ?? 0
+            )
+        }
+
         socializationStore.addExposure(
             itemId: item.id,
             distance: distance,
@@ -279,4 +289,5 @@ struct LogExposureSheet: View {
         )
     )
     .environmentObject(SocializationStore())
+    .environmentObject(ProfileStore())
 }

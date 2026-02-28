@@ -20,8 +20,11 @@ struct AddEditContactSheet: View {
     @State private var email: String = ""
     @State private var address: String = ""
     @State private var notes: String = ""
+    @State private var latitude: Double?
+    @State private var longitude: Double?
 
     @State private var showingNameError = false
+    @State private var showingLocationPicker = false
 
     private var isEditing: Bool {
         existingContact != nil
@@ -79,6 +82,49 @@ struct AddEditContactSheet: View {
                     TextField(Strings.Contacts.notesPlaceholder, text: $notes, axis: .vertical)
                         .lineLimit(3...6)
                 }
+
+                // Location section
+                Section {
+                    if hasLocation {
+                        // Show current location
+                        HStack {
+                            Image(systemName: "mappin.circle.fill")
+                                .foregroundStyle(Color.ollieAccent)
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(Strings.Contacts.locationSet)
+                                    .font(.subheadline)
+                                Text(locationString)
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                            Spacer()
+                            Button {
+                                showingLocationPicker = true
+                            } label: {
+                                Text(Strings.Common.edit)
+                                    .font(.subheadline)
+                            }
+                        }
+
+                        Button(role: .destructive) {
+                            latitude = nil
+                            longitude = nil
+                        } label: {
+                            Label(Strings.Contacts.removeLocation, systemImage: "trash")
+                        }
+                    } else {
+                        // No location set
+                        Button {
+                            showingLocationPicker = true
+                        } label: {
+                            Label(Strings.Contacts.setOnMap, systemImage: "mappin.and.ellipse")
+                        }
+                    }
+                } header: {
+                    Text(Strings.Contacts.location)
+                } footer: {
+                    Text(Strings.Contacts.locationFooter)
+                }
             }
             .navigationTitle(isEditing ? Strings.Contacts.editContact : Strings.Contacts.addContact)
             .navigationBarTitleDisplayMode(.inline)
@@ -98,7 +144,26 @@ struct AddEditContactSheet: View {
             .onAppear {
                 loadExistingContact()
             }
+            .sheet(isPresented: $showingLocationPicker) {
+                LocationPickerMapView(
+                    selectedLatitude: $latitude,
+                    selectedLongitude: $longitude,
+                    address: address.isEmpty ? nil : address,
+                    onConfirm: {}
+                )
+            }
         }
+    }
+
+    // MARK: - Location Helpers
+
+    private var hasLocation: Bool {
+        latitude != nil && longitude != nil
+    }
+
+    private var locationString: String {
+        guard let lat = latitude, let lon = longitude else { return "" }
+        return String(format: "%.5f, %.5f", lat, lon)
     }
 
     // MARK: - Load Existing Contact
@@ -112,6 +177,8 @@ struct AddEditContactSheet: View {
         email = contact.email ?? ""
         address = contact.address ?? ""
         notes = contact.notes ?? ""
+        latitude = contact.latitude
+        longitude = contact.longitude
     }
 
     // MARK: - Save
@@ -132,6 +199,8 @@ struct AddEditContactSheet: View {
             email: email.isEmpty ? nil : email,
             address: address.isEmpty ? nil : address,
             notes: notes.isEmpty ? nil : notes,
+            latitude: latitude,
+            longitude: longitude,
             createdAt: existingContact?.createdAt ?? Date(),
             modifiedAt: Date()
         )

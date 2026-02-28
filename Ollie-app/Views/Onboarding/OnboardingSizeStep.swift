@@ -15,38 +15,63 @@ struct OnboardingSizeStep: View {
     let onNext: () -> Void
     let onBack: () -> Void
 
+    @State private var hasAppeared = false
+
     var body: some View {
-        VStack(spacing: 24) {
+        VStack(spacing: 0) {
             Spacer()
+                .frame(height: 24)
 
-            Image(systemName: "ruler.fill")
-                .font(.system(size: 60))
-                .foregroundStyle(Color.ollieAccent)
-
-            Text(Strings.Onboarding.sizeQuestion(name: puppyName))
-                .font(.title2)
-                .fontWeight(.bold)
-                .multilineTextAlignment(.center)
-
+            // Header
             VStack(spacing: 12) {
-                ForEach(PuppyProfile.SizeCategory.allCases) { size in
+                Image(systemName: "ruler.fill")
+                    .font(.system(size: 56))
+                    .foregroundStyle(Color.ollieAccent)
+                    .scaleEffect(hasAppeared ? 1.0 : 0.8)
+                    .opacity(hasAppeared ? 1.0 : 0.0)
+
+                Text(Strings.Onboarding.sizeQuestion(name: puppyName))
+                    .font(.title2)
+                    .fontWeight(.bold)
+                    .multilineTextAlignment(.center)
+                    .opacity(hasAppeared ? 1.0 : 0.0)
+            }
+            .padding(.bottom, 24)
+
+            // Size options
+            VStack(spacing: 10) {
+                ForEach(Array(PuppyProfile.SizeCategory.allCases.enumerated()), id: \.element) { index, size in
                     SizeCategoryButton(
                         size: size,
                         isSelected: sizeCategory == size,
-                        onSelect: { sizeCategory = size }
+                        onSelect: {
+                            HapticFeedback.light()
+                            sizeCategory = size
+                        }
                     )
+                    .opacity(hasAppeared ? 1.0 : 0.0)
+                    .offset(y: hasAppeared ? 0 : 15)
+                    .animation(.easeOut(duration: 0.4).delay(Double(index) * 0.05), value: hasAppeared)
                 }
             }
-            .padding(.horizontal)
+            .padding(.horizontal, 24)
 
             Spacer()
 
-            HStack {
+            // Buttons
+            HStack(spacing: 12) {
                 OnboardingBackButton(action: onBack)
                 OnboardingNextButton(enabled: true, action: onNext)
             }
+            .padding(.horizontal, 24)
+            .padding(.bottom, 16)
+            .opacity(hasAppeared ? 1.0 : 0.0)
         }
-        .padding()
+        .onAppear {
+            withAnimation(.easeOut(duration: 0.5)) {
+                hasAppeared = true
+            }
+        }
     }
 }
 
@@ -60,25 +85,32 @@ private struct SizeCategoryButton: View {
     var body: some View {
         Button(action: onSelect) {
             HStack {
-                VStack(alignment: .leading) {
+                VStack(alignment: .leading, spacing: 4) {
                     Text(size.label)
-                        .font(.headline)
+                        .font(.body)
+                        .fontWeight(.medium)
                     Text(size.examples)
                         .font(.caption)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
+                        .lineLimit(1)
                 }
                 Spacer()
-                if isSelected {
-                    Image(systemName: "checkmark.circle.fill")
-                        .foregroundColor(.accentColor)
-                }
+                Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
+                    .font(.title3)
+                    .foregroundStyle(isSelected ? Color.ollieAccent : Color(.tertiaryLabel))
             }
-            .padding()
+            .padding(.horizontal, 16)
+            .padding(.vertical, 14)
             .background(
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(isSelected ? Color.accentColor.opacity(0.1) : Color(.secondarySystemBackground))
+                    .fill(isSelected ? Color.ollieAccent.opacity(0.1) : Color(.secondarySystemBackground))
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 12)
+                    .strokeBorder(isSelected ? Color.ollieAccent.opacity(0.3) : Color.clear, lineWidth: 1.5)
             )
         }
         .buttonStyle(.plain)
+        .animation(.easeInOut(duration: 0.15), value: isSelected)
     }
 }

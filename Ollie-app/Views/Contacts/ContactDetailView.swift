@@ -11,12 +11,28 @@ import OllieShared
 struct ContactDetailView: View {
     let contact: DogContact
     @ObservedObject var contactStore: ContactStore
+    var appointmentStore: AppointmentStore?
 
     @Environment(\.dismiss) private var dismiss
     @Environment(\.openURL) private var openURL
 
     @State private var showingEditSheet = false
     @State private var showingDeleteConfirmation = false
+
+    // Appointments linked to this contact
+    private var linkedAppointments: [DogAppointment] {
+        appointmentStore?.appointments(linkedToContactId: contact.id) ?? []
+    }
+
+    private var upcomingAppointments: [DogAppointment] {
+        linkedAppointments.filter { $0.isUpcoming || $0.isToday }
+            .sorted { $0.startDate < $1.startDate }
+    }
+
+    private var pastAppointments: [DogAppointment] {
+        linkedAppointments.filter { $0.isPast }
+            .sorted { $0.startDate > $1.startDate }
+    }
 
     var body: some View {
         ScrollView {
@@ -35,6 +51,11 @@ struct ContactDetailView: View {
                 // Notes section
                 if let notes = contact.notes, !notes.isEmpty {
                     notesCard(notes)
+                }
+
+                // Appointments section (only if we have appointment store)
+                if appointmentStore != nil {
+                    appointmentsSection
                 }
             }
             .padding()
@@ -109,7 +130,7 @@ struct ContactDetailView: View {
                 actionButton(
                     icon: "phone.fill",
                     label: Strings.Contacts.call,
-                    color: .green
+                    color: .ollieSuccess
                 ) {
                     callPhone(phone)
                 }
@@ -119,7 +140,7 @@ struct ContactDetailView: View {
                 actionButton(
                     icon: "envelope.fill",
                     label: Strings.Contacts.sendEmail,
-                    color: .blue
+                    color: .ollieInfo
                 ) {
                     sendEmail(email)
                 }
@@ -129,7 +150,7 @@ struct ContactDetailView: View {
                 actionButton(
                     icon: "map.fill",
                     label: Strings.Contacts.openInMaps,
-                    color: .orange
+                    color: .ollieAccent
                 ) {
                     openInMaps(address)
                 }
@@ -232,6 +253,104 @@ struct ContactDetailView: View {
                     .foregroundColor(.secondary)
                 Text(value)
                     .font(.body)
+            }
+        }
+    }
+
+    // MARK: - Appointments Section
+
+    @ViewBuilder
+    private var appointmentsSection: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            // Next appointment
+            if let nextAppointment = upcomingAppointments.first {
+                VStack(alignment: .leading, spacing: 8) {
+                    Label(Strings.Contacts.nextAppointment, systemImage: "calendar.badge.clock")
+                        .font(.headline)
+                        .foregroundStyle(.primary)
+
+                    appointmentRow(nextAppointment)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding()
+                .background(Color(.systemBackground))
+                .clipShape(RoundedRectangle(cornerRadius: 12))
+                .shadow(color: .black.opacity(0.05), radius: 5, y: 2)
+            }
+
+            // Visit history
+            if !pastAppointments.isEmpty {
+                VStack(alignment: .leading, spacing: 8) {
+                    Label(Strings.Contacts.visitHistory, systemImage: "clock.arrow.circlepath")
+                        .font(.headline)
+                        .foregroundStyle(.primary)
+
+                    ForEach(pastAppointments.prefix(5)) { appointment in
+                        if appointment.id != pastAppointments.first?.id {
+                            Divider()
+                        }
+                        appointmentRow(appointment)
+                    }
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding()
+                .background(Color(.systemBackground))
+                .clipShape(RoundedRectangle(cornerRadius: 12))
+                .shadow(color: .black.opacity(0.05), radius: 5, y: 2)
+            }
+
+            // Empty state when no appointments
+            if upcomingAppointments.isEmpty && pastAppointments.isEmpty {
+                VStack(spacing: 8) {
+                    Image(systemName: "calendar")
+                        .font(.title)
+                        .foregroundStyle(.secondary)
+                    Text(Strings.Contacts.noAppointments)
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(Color(.systemBackground))
+                .clipShape(RoundedRectangle(cornerRadius: 12))
+                .shadow(color: .black.opacity(0.05), radius: 5, y: 2)
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func appointmentRow(_ appointment: DogAppointment) -> some View {
+        HStack(spacing: 12) {
+            // Type icon
+            Image(systemName: appointment.appointmentType.icon)
+                .font(.title3)
+                .foregroundStyle(Color(appointment.appointmentType.color))
+                .frame(width: 32)
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text(appointment.title)
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+
+                HStack(spacing: 4) {
+                    Text(appointment.startDate, format: .dateTime.month(.abbreviated).day())
+                    Text("·")
+                    if appointment.isAllDay {
+                        Text(Strings.Appointments.allDay)
+                    } else {
+                        Text(appointment.startDate, format: .dateTime.hour().minute())
+                    }
+                }
+                .font(.caption)
+                .foregroundStyle(.secondary)
+            }
+
+            Spacer()
+
+            // Completed checkmark for past appointments
+            if appointment.isCompleted {
+                Image(systemName: "checkmark.circle.fill")
+                    .foregroundStyle(Color.ollieSuccess)
             }
         }
     }

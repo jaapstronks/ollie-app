@@ -61,6 +61,9 @@ struct ThisWeekCard: View {
             }
             .padding()
             .glassCard(tint: .accent)
+            .onAppear {
+                Analytics.track(.thisWeekCardViewed)
+            }
         }
     }
 

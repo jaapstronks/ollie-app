@@ -26,7 +26,6 @@ struct ContactRow: View {
                 // Name
                 Text(contact.name)
                     .font(.headline)
-                    .lineLimit(1)
 
                 // Type + phone preview
                 HStack(spacing: 8) {

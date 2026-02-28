@@ -280,7 +280,7 @@ struct CatchUpSheet: View {
                 .foregroundStyle(.white)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 14)
-                .background(canComplete ? Color.blue : Color.gray.opacity(0.5))
+                .background(canComplete ? Color.ollieInfo : Color.gray.opacity(0.5))
                 .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
         }
         .disabled(!canComplete)
@@ -389,12 +389,12 @@ private struct PottyOptionButton: View {
                 .padding(.vertical, 12)
                 .background(
                     RoundedRectangle(cornerRadius: 10, style: .continuous)
-                        .fill(isSelected ? Color.blue : GlassButtonHelpers.glassColor(for: colorScheme))
+                        .fill(isSelected ? Color.ollieInfo : GlassButtonHelpers.glassColor(for: colorScheme))
                 )
                 .overlay(
                     RoundedRectangle(cornerRadius: 10, style: .continuous)
                         .strokeBorder(
-                            isSelected ? Color.blue : Color.primary.opacity(0.1),
+                            isSelected ? Color.ollieInfo : Color.primary.opacity(0.1),
                             lineWidth: isSelected ? 2 : 0.5
                         )
                 )
@@ -420,12 +420,12 @@ private struct YesNoButton: View {
                 .padding(.vertical, 12)
                 .background(
                     RoundedRectangle(cornerRadius: 10, style: .continuous)
-                        .fill(isSelected ? Color.blue : GlassButtonHelpers.glassColor(for: colorScheme))
+                        .fill(isSelected ? Color.ollieInfo : GlassButtonHelpers.glassColor(for: colorScheme))
                 )
                 .overlay(
                     RoundedRectangle(cornerRadius: 10, style: .continuous)
                         .strokeBorder(
-                            isSelected ? Color.blue : Color.primary.opacity(0.1),
+                            isSelected ? Color.ollieInfo : Color.primary.opacity(0.1),
                             lineWidth: isSelected ? 2 : 0.5
                         )
                 )

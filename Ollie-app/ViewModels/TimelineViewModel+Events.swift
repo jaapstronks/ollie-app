@@ -80,7 +80,41 @@ extension TimelineViewModel {
             logEvent(type: .plassen, time: time, location: location, note: note)
             logEvent(type: .poepen, time: time, location: location, note: note)
         }
+
+        // Check for outdoor pee streak celebration (plassen or beide with buiten)
+        if (selection == .plassen || selection == .beide) && location == .buiten {
+            checkAndTriggerPottyStreakCelebration()
+        }
+
         sheetCoordinator.dismissSheet()
+    }
+
+    /// Check if the user has achieved a same-day outdoor pee streak worth celebrating
+    /// Triggers celebration if 3+ outdoor pees today with NO indoor pees
+    private func checkAndTriggerPottyStreakCelebration() {
+        let calendar = Calendar.current
+
+        // Get today's pee events from the current events array (just synced)
+        let todayPeeEvents = events.filter { event in
+            event.type == .plassen && calendar.isDateInToday(event.time)
+        }
+
+        // Count outdoor and indoor pees today
+        let outdoorCount = todayPeeEvents.filter { $0.location == .buiten }.count
+        let indoorCount = todayPeeEvents.filter { $0.location == .binnen }.count
+
+        // Celebrate if 3+ outdoor pees AND no indoor pees today
+        if outdoorCount >= 3 && indoorCount == 0 {
+            // Trigger the potty success celebration animation
+            triggerCelebration(.pottySuccess)
+
+            // Show celebration banner with message
+            let message = Strings.Celebration.outdoorStreakToday(
+                count: outdoorCount,
+                puppyName: puppyName
+            )
+            sheetCoordinator.showCelebration(message: message)
+        }
     }
 
     // MARK: - Quick Log Context
@@ -179,7 +213,7 @@ extension TimelineViewModel {
     }
 
     /// Trigger a celebration animation
-    func triggerCelebration(_ style: CelebrationStyle) {
+    func triggerCelebration(_ style: CelebrationPreset) {
         celebrationStyle = style
         showCelebration = true
     }
@@ -367,5 +401,72 @@ extension TimelineViewModel {
     /// Dismiss the undo banner
     func dismissUndoBanner() {
         sheetCoordinator.dismissUndoBanner()
+    }
+
+    // MARK: - Assumed Overnight Sleep
+
+    /// Dismiss the assumed overnight sleep card for today
+    func dismissAssumedOvernightSleep() {
+        dismissedAssumedSleepDate = Date()
+        HapticFeedback.selection()
+    }
+
+    /// Confirm the assumed overnight sleep with the given start time
+    /// This logs a sleep event at the suggested/adjusted start time
+    func confirmAssumedOvernightSleep(sleepStartTime: Date) {
+        let sessionId = UUID()
+
+        // Log sleep event at the provided start time
+        let sleepEvent = PuppyEvent(
+            time: sleepStartTime,
+            type: .slapen,
+            sleepSessionId: sessionId
+        )
+        eventStore.addEvent(sleepEvent)
+
+        // Clear the dismissed date (no longer needed)
+        dismissedAssumedSleepDate = Date()
+
+        // Immediately sync for instant UI updates
+        syncEventsFromStore()
+
+        notifyRefreshNotifications()
+
+        HapticFeedback.success()
+    }
+
+    /// Log wake-up for the assumed overnight sleep
+    /// This confirms the sleep and logs the wake event at the current time (or specified time)
+    func confirmAssumedOvernightSleepAndWakeUp(sleepStartTime: Date, wakeTime: Date = Date()) {
+        let sessionId = UUID()
+
+        // Log sleep event at the start time
+        let sleepEvent = PuppyEvent(
+            time: sleepStartTime,
+            type: .slapen,
+            sleepSessionId: sessionId
+        )
+        eventStore.addEvent(sleepEvent)
+
+        // Log wake event at the wake time
+        let wakeEvent = PuppyEvent(
+            time: wakeTime,
+            type: .ontwaken,
+            sleepSessionId: sessionId
+        )
+        eventStore.addEvent(wakeEvent)
+
+        // Clear the dismissed date
+        dismissedAssumedSleepDate = Date()
+
+        // Immediately sync for instant UI updates
+        syncEventsFromStore()
+
+        notifyRefreshNotifications()
+
+        // Capture potty state at wake time for post-wake tracking
+        captureWakeTimePottyState()
+
+        HapticFeedback.success()
     }
 }

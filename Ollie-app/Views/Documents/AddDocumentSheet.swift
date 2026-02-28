@@ -6,6 +6,8 @@
 
 import SwiftUI
 import OllieShared
+import UniformTypeIdentifiers
+import PDFKit
 
 /// Sheet for adding or editing a document
 struct AddDocumentSheet: View {
@@ -21,9 +23,12 @@ struct AddDocumentSheet: View {
     @State private var hasExpiry: Bool = false
     @State private var expiryDate: Date = Calendar.current.date(byAdding: .year, value: 1, to: Date()) ?? Date()
     @State private var notes: String = ""
+    @State private var insuranceAgency: String = ""
     @State private var selectedImage: UIImage?
-    @State private var imageWasChanged: Bool = false
-    @State private var imageWasRemoved: Bool = false
+    @State private var selectedPDFData: Data?
+    @State private var attachmentType: AttachmentType = .none
+    @State private var attachmentWasChanged: Bool = false
+    @State private var attachmentWasRemoved: Bool = false
 
     @State private var isSaving = false
 
@@ -34,21 +39,74 @@ struct AddDocumentSheet: View {
     var body: some View {
         NavigationStack {
             Form {
-                // Photo section
-                Section(Strings.Documents.photo) {
-                    MediaAttachmentButton(
-                        selectedImage: $selectedImage,
-                        onImageSelected: { image, _ in
-                            selectedImage = image
-                            imageWasChanged = true
-                            imageWasRemoved = false
+                // Attachment section (photo or PDF)
+                Section(Strings.Documents.attachment) {
+                    if attachmentType == .pdf, let pdfData = selectedPDFData {
+                        // Show PDF preview with remove option
+                        HStack {
+                            PDFThumbnailPreview(pdfData: pdfData)
+                                .frame(width: 80, height: 80)
+                                .clipShape(RoundedRectangle(cornerRadius: 8))
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 8)
+                                        .stroke(Color(.systemGray4), lineWidth: 1)
+                                )
+
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(Strings.Documents.pdfDocument)
+                                    .font(.subheadline)
+                                if let pageCount = PDFDocument(data: pdfData)?.pageCount {
+                                    Text(Strings.Documents.pageCount(pageCount))
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                }
+                            }
+
+                            Spacer()
+
+                            Button {
+                                withAnimation {
+                                    selectedPDFData = nil
+                                    attachmentType = .none
+                                    attachmentWasRemoved = true
+                                    attachmentWasChanged = true
+                                }
+                            } label: {
+                                Label(Strings.MediaAttachment.remove, systemImage: "xmark.circle.fill")
+                                    .foregroundColor(.red)
+                            }
                         }
-                    )
-                    .onChange(of: selectedImage) { oldValue, newValue in
-                        // Track if image was removed (had image, now nil)
-                        if oldValue != nil && newValue == nil {
-                            imageWasRemoved = true
-                            imageWasChanged = true
+                    } else {
+                        MediaAttachmentButton(
+                            selectedImage: $selectedImage,
+                            onImageSelected: { image, _ in
+                                selectedImage = image
+                                selectedPDFData = nil
+                                attachmentType = .image
+                                attachmentWasChanged = true
+                                attachmentWasRemoved = false
+                            },
+                            onFileSelected: { data, fileType in
+                                if fileType == .pdf {
+                                    selectedPDFData = data
+                                    selectedImage = nil
+                                    attachmentType = .pdf
+                                    attachmentWasChanged = true
+                                    attachmentWasRemoved = false
+                                }
+                            },
+                            showFilesOption: true,
+                            buttonLabel: Strings.Documents.addAttachment,
+                            buttonIcon: "paperclip",
+                            dialogTitle: Strings.Documents.addAttachmentTitle
+                        )
+                        .onChange(of: selectedImage) { oldValue, newValue in
+                            // Track if image was removed (had image, now nil)
+                            if oldValue != nil && newValue == nil && attachmentType == .image {
+                                attachmentWasRemoved = true
+                                attachmentWasChanged = true
+                                attachmentType = .none
+                            }
                         }
                     }
                 }
@@ -63,6 +121,13 @@ struct AddDocumentSheet: View {
                     }
                     .pickerStyle(.menu)
                     .labelsHidden()
+                }
+
+                // Insurance-specific field
+                if documentType == .insurance {
+                    Section(Strings.Documents.insuranceAgency) {
+                        TextField(Strings.Documents.insuranceAgencyPlaceholder, text: $insuranceAgency)
+                    }
                 }
 
                 // Details section
@@ -148,10 +213,17 @@ struct AddDocumentSheet: View {
             expiryDate = expiry
         }
         notes = document.note ?? ""
+        insuranceAgency = document.insuranceAgency ?? ""
+        attachmentType = document.attachmentType
 
-        // Load existing image from DocumentStore
-        if document.hasImage {
+        // Load existing attachment from DocumentStore
+        switch document.attachmentType {
+        case .image:
             selectedImage = documentStore.loadImage(for: document)
+        case .pdf:
+            selectedPDFData = documentStore.loadPDFData(for: document)
+        case .none:
+            break
         }
     }
 
@@ -165,7 +237,8 @@ struct AddDocumentSheet: View {
             type: documentType,
             title: customTitle.isEmpty ? nil : customTitle,
             note: notes.isEmpty ? nil : notes,
-            hasImage: selectedImage != nil,
+            insuranceAgency: insuranceAgency.isEmpty ? nil : insuranceAgency,
+            attachmentType: attachmentType,
             documentDate: hasDocumentDate ? documentDate : nil,
             expiryDate: hasExpiry ? expiryDate : nil,
             createdAt: existingDocument?.createdAt ?? Date(),
@@ -174,22 +247,88 @@ struct AddDocumentSheet: View {
 
         if isEditing {
             // Update existing document
-            if imageWasRemoved {
-                // Image was explicitly removed
-                documentStore.updateDocument(document, image: nil, removeImage: true)
-            } else if imageWasChanged, let image = selectedImage {
-                // New image was selected
-                documentStore.updateDocument(document, image: image)
+            if attachmentWasRemoved {
+                // Attachment was explicitly removed
+                documentStore.updateDocument(document, image: nil, removeAttachment: true)
+            } else if attachmentWasChanged {
+                // New attachment was selected
+                switch attachmentType {
+                case .image:
+                    documentStore.updateDocument(document, image: selectedImage)
+                case .pdf:
+                    documentStore.updateDocument(document, pdfData: selectedPDFData)
+                case .none:
+                    documentStore.updateDocument(document, image: nil, removeAttachment: true)
+                }
             } else {
-                // Just metadata update, keep existing image
+                // Just metadata update, keep existing attachment
                 documentStore.updateDocument(document)
             }
         } else {
             // New document
-            documentStore.addDocument(document, image: selectedImage)
+            switch attachmentType {
+            case .image:
+                documentStore.addDocument(document, image: selectedImage)
+            case .pdf:
+                documentStore.addDocument(document, pdfData: selectedPDFData)
+            case .none:
+                documentStore.addDocument(document)
+            }
         }
 
         dismiss()
+    }
+}
+
+// MARK: - PDF Thumbnail Preview
+
+private struct PDFThumbnailPreview: View {
+    let pdfData: Data
+
+    @State private var thumbnail: UIImage?
+
+    var body: some View {
+        Group {
+            if let thumbnail = thumbnail {
+                Image(uiImage: thumbnail)
+                    .resizable()
+                    .scaledToFill()
+            } else {
+                Rectangle()
+                    .fill(Color(.systemGray5))
+                    .overlay {
+                        Image(systemName: "doc.fill")
+                            .foregroundColor(.secondary)
+                    }
+            }
+        }
+        .task {
+            thumbnail = generateThumbnail()
+        }
+    }
+
+    private func generateThumbnail() -> UIImage? {
+        guard let pdfDocument = PDFDocument(data: pdfData),
+              let page = pdfDocument.page(at: 0) else {
+            return nil
+        }
+
+        let pageRect = page.bounds(for: .mediaBox)
+        let scale: CGFloat = 200 / max(pageRect.width, pageRect.height)
+        let scaledSize = CGSize(
+            width: pageRect.width * scale,
+            height: pageRect.height * scale
+        )
+
+        let renderer = UIGraphicsImageRenderer(size: scaledSize)
+        return renderer.image { context in
+            UIColor.white.setFill()
+            context.fill(CGRect(origin: .zero, size: scaledSize))
+
+            context.cgContext.translateBy(x: 0, y: scaledSize.height)
+            context.cgContext.scaleBy(x: scale, y: -scale)
+            page.draw(with: .mediaBox, to: context.cgContext)
+        }
     }
 }
 
