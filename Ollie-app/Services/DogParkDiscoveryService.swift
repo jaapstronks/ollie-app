@@ -42,9 +42,27 @@ class DogParkDiscoveryService: ObservableObject {
     private let eindhovenEndpoint = "https://data.eindhoven.nl/api/explore/v2.1/catalog/datasets/hondenlosloopterreinen/records"
     private let amsterdamEndpoint = "https://maps.amsterdam.nl/open_geodata/geojson_lnglat.php?KAARTLAAG=HONDEN&THEMA=honden"
 
+    // German government data endpoints
+    private let berlinEndpoint = "https://gdi.berlin.de/services/wfs/hundefreilauf?service=wfs&version=2.0.0&request=GetFeature&typenames=hundefreilauf:hundefreilauf&outputFormat=application/json&srsName=EPSG:4326"
+    private let hamburgEndpoint = "https://api.hamburg.de/datasets/v1/hundeauslaufzonen_paragraf_8/collections/hundeauslaufzonen_paragraf_8/items?f=json&limit=200"
+
+    // USA government data endpoints (Socrata / ArcGIS)
+    private let nycEndpoint = "https://data.cityofnewyork.us/resource/ipbu-mtcs.json"
+    private let seattleEndpoint = "https://services.arcgis.com/ZOyb2t4B0UYuYNYH/arcgis/rest/services/Dog_Off_Leash_Areas/FeatureServer/0/query?f=json&where=1=1&outFields=*&outSR=4326"
+    private let sanFranciscoEndpoint = "https://data.sfgov.org/resource/fjzq-yb2u.json"
+
     // Bounding boxes for Dutch cities (to determine when to fetch local data)
     private let eindhovenBounds = (south: 51.35, west: 5.35, north: 51.52, east: 5.60)
     private let amsterdamBounds = (south: 52.28, west: 4.73, north: 52.43, east: 5.07)
+
+    // Bounding boxes for German cities
+    private let berlinBounds = (south: 52.34, west: 13.09, north: 52.68, east: 13.76)
+    private let hamburgBounds = (south: 53.39, west: 9.73, north: 53.72, east: 10.33)
+
+    // Bounding boxes for US cities
+    private let nycBounds = (south: 40.49, west: -74.26, north: 40.92, east: -73.70)
+    private let seattleBounds = (south: 47.49, west: -122.46, north: 47.74, east: -122.22)
+    private let sanFranciscoBounds = (south: 37.70, west: -122.52, north: 37.83, east: -122.35)
 
     // MARK: - Public Methods
 
@@ -75,16 +93,16 @@ class DogParkDiscoveryService: ObservableObject {
                 radiusKm: radiusKm
             )
 
-            // Also fetch from Dutch government sources if in range
-            let dutchSpots = await fetchDutchGovernmentData(latitude: latitude, longitude: longitude)
-            allSpots.append(contentsOf: dutchSpots)
+            // Also fetch from government sources if in range
+            let govSpots = await fetchGovernmentData(latitude: latitude, longitude: longitude)
+            allSpots.append(contentsOf: govSpots)
 
             // Deduplicate by proximity (spots within 50m are considered duplicates)
             let uniqueSpots = deduplicateSpots(allSpots)
 
             discoveredSpots = uniqueSpots
             cache[cacheKey] = CacheEntry(spots: uniqueSpots, fetchedAt: Date())
-            logger.info("Discovered \(uniqueSpots.count) dog parks near (\(latitude), \(longitude)) (OSM: \(allSpots.count - dutchSpots.count), Dutch gov: \(dutchSpots.count))")
+            logger.info("Discovered \(uniqueSpots.count) dog parks near (\(latitude), \(longitude)) (OSM: \(allSpots.count - govSpots.count), gov: \(govSpots.count))")
         } catch {
             lastError = error
             logger.error("Failed to discover dog parks: \(error.localizedDescription)")
@@ -272,35 +290,52 @@ class DogParkDiscoveryService: ObservableObject {
         return "Dog Park (\(abs(lat).formatted(.number.precision(.fractionLength(2))))\(latDir), \(abs(lon).formatted(.number.precision(.fractionLength(2))))\(lonDir))"
     }
 
-    // MARK: - Dutch Government Data
+    // MARK: - Government Data (All Regions)
 
-    /// Fetch dog parks from Dutch government sources based on location
-    private func fetchDutchGovernmentData(latitude: Double, longitude: Double) async -> [DiscoveredSpot] {
+    /// Fetch dog parks from government sources based on location
+    private func fetchGovernmentData(latitude: Double, longitude: Double) async -> [DiscoveredSpot] {
         var spots: [DiscoveredSpot] = []
 
-        // Check if we're near Eindhoven
+        // Netherlands
         if isInBounds(lat: latitude, lon: longitude, bounds: eindhovenBounds) {
-            do {
-                let eindhovenSpots = try await fetchFromEindhoven()
-                spots.append(contentsOf: eindhovenSpots)
-                logger.debug("Fetched \(eindhovenSpots.count) spots from Eindhoven open data")
-            } catch {
-                logger.warning("Failed to fetch Eindhoven data: \(error.localizedDescription)")
-            }
+            spots.append(contentsOf: await fetchSafely("Eindhoven") { try await self.fetchFromEindhoven() })
+        }
+        if isInBounds(lat: latitude, lon: longitude, bounds: amsterdamBounds) {
+            spots.append(contentsOf: await fetchSafely("Amsterdam") { try await self.fetchFromAmsterdam() })
         }
 
-        // Check if we're near Amsterdam
-        if isInBounds(lat: latitude, lon: longitude, bounds: amsterdamBounds) {
-            do {
-                let amsterdamSpots = try await fetchFromAmsterdam()
-                spots.append(contentsOf: amsterdamSpots)
-                logger.debug("Fetched \(amsterdamSpots.count) spots from Amsterdam open data")
-            } catch {
-                logger.warning("Failed to fetch Amsterdam data: \(error.localizedDescription)")
-            }
+        // Germany
+        if isInBounds(lat: latitude, lon: longitude, bounds: berlinBounds) {
+            spots.append(contentsOf: await fetchSafely("Berlin") { try await self.fetchFromBerlin() })
+        }
+        if isInBounds(lat: latitude, lon: longitude, bounds: hamburgBounds) {
+            spots.append(contentsOf: await fetchSafely("Hamburg") { try await self.fetchFromHamburg() })
+        }
+
+        // USA
+        if isInBounds(lat: latitude, lon: longitude, bounds: nycBounds) {
+            spots.append(contentsOf: await fetchSafely("NYC") { try await self.fetchFromNYC() })
+        }
+        if isInBounds(lat: latitude, lon: longitude, bounds: seattleBounds) {
+            spots.append(contentsOf: await fetchSafely("Seattle") { try await self.fetchFromSeattle() })
+        }
+        if isInBounds(lat: latitude, lon: longitude, bounds: sanFranciscoBounds) {
+            spots.append(contentsOf: await fetchSafely("San Francisco") { try await self.fetchFromSanFrancisco() })
         }
 
         return spots
+    }
+
+    /// Safely fetch from a source, logging errors but not throwing
+    private func fetchSafely(_ source: String, _ fetcher: () async throws -> [DiscoveredSpot]) async -> [DiscoveredSpot] {
+        do {
+            let spots = try await fetcher()
+            logger.debug("Fetched \(spots.count) spots from \(source)")
+            return spots
+        } catch {
+            logger.warning("Failed to fetch \(source) data: \(error.localizedDescription)")
+            return []
+        }
     }
 
     private func isInBounds(lat: Double, lon: Double, bounds: (south: Double, west: Double, north: Double, east: Double)) -> Bool {
@@ -421,6 +456,305 @@ class DogParkDiscoveryService: ObservableObject {
         return nil
     }
 
+    // MARK: - Berlin API (WFS GeoJSON)
+
+    private func fetchFromBerlin() async throws -> [DiscoveredSpot] {
+        guard let url = URL(string: berlinEndpoint) else {
+            throw DiscoveryError.invalidURL
+        }
+
+        let (data, response) = try await URLSession.shared.data(from: url)
+
+        guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+            throw DiscoveryError.networkError
+        }
+
+        return try parseBerlinResponse(data)
+    }
+
+    private func parseBerlinResponse(_ data: Data) throws -> [DiscoveredSpot] {
+        let decoder = JSONDecoder()
+        let response = try decoder.decode(BerlinWFSResponse.self, from: data)
+
+        return response.features.compactMap { feature -> DiscoveredSpot? in
+            guard let centroid = calculateGeoJSONCentroid(from: feature.geometry) else { return nil }
+
+            let props = feature.properties
+            let gisId = props.gisid.map { String($0) } ?? UUID().uuidString
+            let id = "gov_de:berlin:\(gisId)"
+
+            // Build name from designation or address
+            let name = props.bezeich ?? props.adresse ?? "Hundefreilauffläche"
+
+            // Parse area from info field (e.g., "9186 m²")
+            var amenities: [String] = []
+            if let info = props.info, info.contains("m²") {
+                amenities.append(info)
+            }
+
+            return DiscoveredSpot(
+                id: id,
+                name: name,
+                latitude: centroid.lat,
+                longitude: centroid.lon,
+                source: .governmentDE,
+                sourceId: gisId,
+                category: .offLeashArea,
+                address: props.adresse,
+                amenities: amenities,
+                isFenced: nil,
+                surface: nil,
+                fetchedAt: Date()
+            )
+        }
+    }
+
+    // MARK: - Hamburg API (OGC Features)
+
+    private func fetchFromHamburg() async throws -> [DiscoveredSpot] {
+        guard let url = URL(string: hamburgEndpoint) else {
+            throw DiscoveryError.invalidURL
+        }
+
+        let (data, response) = try await URLSession.shared.data(from: url)
+
+        guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+            throw DiscoveryError.networkError
+        }
+
+        return try parseHamburgResponse(data)
+    }
+
+    private func parseHamburgResponse(_ data: Data) throws -> [DiscoveredSpot] {
+        let decoder = JSONDecoder()
+        let response = try decoder.decode(HamburgOGCResponse.self, from: data)
+
+        return response.features.compactMap { feature -> DiscoveredSpot? in
+            guard let centroid = calculateGeoJSONCentroid(from: feature.geometry) else { return nil }
+
+            let props = feature.properties
+            let featureId = feature.id ?? UUID().uuidString
+            let id = "gov_de:hamburg:\(featureId)"
+
+            let name = props.bezeichnung ?? "Hundeauslaufzone"
+
+            // Parse area if available
+            var amenities: [String] = []
+            if let area = props.flaeche_in_qm {
+                let areaNum = Double(area) ?? 0
+                if areaNum > 0 {
+                    amenities.append("\(Int(areaNum)) m²")
+                }
+            }
+
+            return DiscoveredSpot(
+                id: id,
+                name: name,
+                latitude: centroid.lat,
+                longitude: centroid.lon,
+                source: .governmentDE,
+                sourceId: featureId,
+                category: .offLeashArea,
+                address: nil,
+                amenities: amenities,
+                isFenced: nil,
+                surface: nil,
+                fetchedAt: Date()
+            )
+        }
+    }
+
+    // MARK: - NYC API (Socrata)
+
+    private func fetchFromNYC() async throws -> [DiscoveredSpot] {
+        guard let url = URL(string: "\(nycEndpoint)?$limit=500") else {
+            throw DiscoveryError.invalidURL
+        }
+
+        let (data, response) = try await URLSession.shared.data(from: url)
+
+        guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+            throw DiscoveryError.networkError
+        }
+
+        return try parseNYCResponse(data)
+    }
+
+    private func parseNYCResponse(_ data: Data) throws -> [DiscoveredSpot] {
+        let decoder = JSONDecoder()
+        let records = try decoder.decode([NYCDogRun].self, from: data)
+
+        return records.compactMap { record -> DiscoveredSpot? in
+            // Try to get coordinates from various possible fields
+            guard let lat = record.latitude ?? record.the_geom?.coordinates?.last,
+                  let lon = record.longitude ?? record.the_geom?.coordinates?.first else {
+                return nil
+            }
+
+            let recordId = record.prop_id ?? UUID().uuidString
+            let id = "gov_us:nyc:\(recordId)"
+
+            // Build name from park name and dog run name
+            var name = record.name ?? record.dogruns_type ?? "Dog Run"
+            if let parkName = record.park_name, !name.contains(parkName) {
+                name = "\(parkName) - \(name)"
+            }
+
+            return DiscoveredSpot(
+                id: id,
+                name: name,
+                latitude: lat,
+                longitude: lon,
+                source: .governmentUS,
+                sourceId: recordId,
+                category: .dogPark,
+                address: record.address,
+                amenities: [],
+                isFenced: record.dogruns_type?.lowercased().contains("run") == true,
+                surface: nil,
+                fetchedAt: Date()
+            )
+        }
+    }
+
+    // MARK: - Seattle API (ArcGIS)
+
+    private func fetchFromSeattle() async throws -> [DiscoveredSpot] {
+        guard let url = URL(string: seattleEndpoint) else {
+            throw DiscoveryError.invalidURL
+        }
+
+        let (data, response) = try await URLSession.shared.data(from: url)
+
+        guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+            throw DiscoveryError.networkError
+        }
+
+        return try parseSeattleResponse(data)
+    }
+
+    private func parseSeattleResponse(_ data: Data) throws -> [DiscoveredSpot] {
+        let decoder = JSONDecoder()
+        let response = try decoder.decode(SeattleArcGISResponse.self, from: data)
+
+        return response.features.compactMap { feature -> DiscoveredSpot? in
+            let attrs = feature.attributes
+
+            // Use LATITUDE/LONGITUDE fields, or geometry centroid
+            let lat: Double
+            let lon: Double
+
+            if let attrLat = attrs.LATITUDE, let attrLon = attrs.LONGITUDE {
+                lat = attrLat
+                lon = attrLon
+            } else if let geom = feature.geometry {
+                lat = geom.y ?? 0
+                lon = geom.x ?? 0
+            } else {
+                return nil
+            }
+
+            guard lat != 0 && lon != 0 else { return nil }
+
+            let objectId = attrs.OBJECTID.map { String($0) } ?? UUID().uuidString
+            let id = "gov_us:seattle:\(objectId)"
+
+            let name = attrs.NAME ?? "Off-Leash Dog Area"
+
+            return DiscoveredSpot(
+                id: id,
+                name: name,
+                latitude: lat,
+                longitude: lon,
+                source: .governmentUS,
+                sourceId: objectId,
+                category: .offLeashArea,
+                address: nil,
+                amenities: [],
+                isFenced: nil,
+                surface: nil,
+                fetchedAt: Date()
+            )
+        }
+    }
+
+    // MARK: - San Francisco API (Socrata)
+
+    private func fetchFromSanFrancisco() async throws -> [DiscoveredSpot] {
+        guard let url = URL(string: "\(sanFranciscoEndpoint)?$limit=200") else {
+            throw DiscoveryError.invalidURL
+        }
+
+        let (data, response) = try await URLSession.shared.data(from: url)
+
+        guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+            throw DiscoveryError.networkError
+        }
+
+        return try parseSanFranciscoResponse(data)
+    }
+
+    private func parseSanFranciscoResponse(_ data: Data) throws -> [DiscoveredSpot] {
+        let decoder = JSONDecoder()
+        let records = try decoder.decode([SFDogPlayArea].self, from: data)
+
+        return records.compactMap { record -> DiscoveredSpot? in
+            guard let lat = record.latitude,
+                  let lon = record.longitude else {
+                return nil
+            }
+
+            let recordId = record.objectid.map { String($0) } ?? UUID().uuidString
+            let id = "gov_us:sf:\(recordId)"
+
+            let name = record.park_name ?? record.dpa_name ?? "Dog Play Area"
+
+            return DiscoveredSpot(
+                id: id,
+                name: name,
+                latitude: lat,
+                longitude: lon,
+                source: .governmentUS,
+                sourceId: recordId,
+                category: .offLeashArea,
+                address: nil,
+                amenities: [],
+                isFenced: nil,
+                surface: nil,
+                fetchedAt: Date()
+            )
+        }
+    }
+
+    // MARK: - GeoJSON Centroid Helper
+
+    private func calculateGeoJSONCentroid(from geometry: GeoJSONGeometry) -> (lat: Double, lon: Double)? {
+        switch geometry.type {
+        case "Point":
+            if let coords = geometry.pointCoordinates, coords.count >= 2 {
+                return (lat: coords[1], lon: coords[0])
+            }
+        case "Polygon":
+            if let coords = geometry.polygonCoordinates,
+               let ring = coords.first, !ring.isEmpty {
+                let sumLon = ring.reduce(0.0) { $0 + $1[0] }
+                let sumLat = ring.reduce(0.0) { $0 + $1[1] }
+                return (lat: sumLat / Double(ring.count), lon: sumLon / Double(ring.count))
+            }
+        case "MultiPolygon":
+            if let coords = geometry.multiPolygonCoordinates,
+               let firstPolygon = coords.first,
+               let ring = firstPolygon.first, !ring.isEmpty {
+                let sumLon = ring.reduce(0.0) { $0 + $1[0] }
+                let sumLat = ring.reduce(0.0) { $0 + $1[1] }
+                return (lat: sumLat / Double(ring.count), lon: sumLon / Double(ring.count))
+            }
+        default:
+            break
+        }
+        return nil
+    }
+
     // MARK: - Deduplication
 
     /// Remove duplicate spots that are within 50 meters of each other
@@ -439,8 +773,8 @@ class DogParkDiscoveryService: ObservableObject {
 
             if !isDuplicate {
                 unique.append(spot)
-            } else if spot.source == .governmentNL {
-                // Replace OSM spot with government data if duplicate
+            } else if spot.source != .openStreetMap {
+                // Replace OSM spot with government data if duplicate (gov data preferred)
                 if let index = unique.firstIndex(where: { existing in
                     let distance = haversineDistance(
                         lat1: spot.latitude, lon1: spot.longitude,
@@ -573,6 +907,166 @@ private struct AmsterdamGeometry: Codable {
         } else if let coords = polygonCoordinates {
             try container.encode(coords, forKey: .coordinates)
         }
+    }
+}
+
+// MARK: - Generic GeoJSON Geometry
+
+private struct GeoJSONGeometry: Codable {
+    let type: String
+    var pointCoordinates: [Double]?
+    var polygonCoordinates: [[[Double]]]?
+    var multiPolygonCoordinates: [[[[Double]]]]?
+
+    private enum CodingKeys: String, CodingKey {
+        case type
+        case coordinates
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        type = try container.decode(String.self, forKey: .type)
+
+        switch type {
+        case "Point":
+            pointCoordinates = try container.decode([Double].self, forKey: .coordinates)
+        case "MultiPolygon":
+            multiPolygonCoordinates = try container.decode([[[[Double]]]].self, forKey: .coordinates)
+        case "Polygon":
+            polygonCoordinates = try container.decode([[[Double]]].self, forKey: .coordinates)
+        default:
+            // Try polygon as fallback
+            polygonCoordinates = try? container.decode([[[Double]]].self, forKey: .coordinates)
+        }
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(type, forKey: .type)
+        if let coords = pointCoordinates {
+            try container.encode(coords, forKey: .coordinates)
+        } else if let coords = multiPolygonCoordinates {
+            try container.encode(coords, forKey: .coordinates)
+        } else if let coords = polygonCoordinates {
+            try container.encode(coords, forKey: .coordinates)
+        }
+    }
+}
+
+// MARK: - Berlin WFS Response Models
+
+private struct BerlinWFSResponse: Codable {
+    let type: String
+    let features: [BerlinFeature]
+}
+
+private struct BerlinFeature: Codable {
+    let type: String
+    let properties: BerlinProperties
+    let geometry: GeoJSONGeometry
+}
+
+private struct BerlinProperties: Codable {
+    let gisid: Int?
+    let uid: String?
+    let bezirk: String?
+    let typ: String?
+    let info: String?
+    let adresse: String?
+    let bezeich: String?
+    let zustaendig: String?
+}
+
+// MARK: - Hamburg OGC Response Models
+
+private struct HamburgOGCResponse: Codable {
+    let type: String
+    let features: [HamburgFeature]
+}
+
+private struct HamburgFeature: Codable {
+    let type: String
+    let id: String?
+    let properties: HamburgProperties
+    let geometry: GeoJSONGeometry
+}
+
+private struct HamburgProperties: Codable {
+    let bezeichnung: String?
+    let ortsteilnummer: Int?
+    let flaeche_in_qm: String?
+}
+
+// MARK: - NYC Socrata Response Models
+
+private struct NYCDogRun: Codable {
+    let prop_id: String?
+    let name: String?
+    let park_name: String?
+    let dogruns_type: String?
+    let address: String?
+    let latitude: Double?
+    let longitude: Double?
+    let the_geom: NYCGeometry?
+
+    private enum CodingKeys: String, CodingKey {
+        case prop_id
+        case name
+        case park_name = "park_name"
+        case dogruns_type
+        case address
+        case latitude
+        case longitude
+        case the_geom
+    }
+}
+
+private struct NYCGeometry: Codable {
+    let type: String?
+    let coordinates: [Double]?
+}
+
+// MARK: - Seattle ArcGIS Response Models
+
+private struct SeattleArcGISResponse: Codable {
+    let features: [SeattleFeature]
+}
+
+private struct SeattleFeature: Codable {
+    let attributes: SeattleAttributes
+    let geometry: SeattleGeometry?
+}
+
+private struct SeattleAttributes: Codable {
+    let OBJECTID: Int?
+    let ID: Int?
+    let NAME: String?
+    let LATITUDE: Double?
+    let LONGITUDE: Double?
+    let PMAID: String?
+    let LOCID: String?
+}
+
+private struct SeattleGeometry: Codable {
+    let x: Double?
+    let y: Double?
+}
+
+// MARK: - San Francisco Socrata Response Models
+
+private struct SFDogPlayArea: Codable {
+    let objectid: Int?
+    let park_name: String?
+    let dpa_name: String?
+    let latitude: Double?
+    let longitude: Double?
+
+    private enum CodingKeys: String, CodingKey {
+        case objectid
+        case park_name
+        case dpa_name
+        case latitude
+        case longitude
     }
 }
 

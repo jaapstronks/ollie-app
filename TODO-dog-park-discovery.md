@@ -11,7 +11,7 @@ Pre-populate the Explore/Places map with dog parks from open data sources.
 
 ## Implementation Phases
 
-### Phase 1: OpenStreetMap + Dutch Government Data ✅ IN PROGRESS
+### Phase 1: OpenStreetMap + Dutch Government Data ✅ DONE
 
 **Goal:** Fetch dog parks from Overpass API and Dutch open data portals
 
@@ -52,20 +52,22 @@ Pre-populate the Explore/Places map with dog parks from open data sources.
 - [x] Attribution footer per source
 - [x] Auto-discovery on map appear (5km radius around user)
 
-### Phase 2: Regional Expansion (Future)
+### Phase 2: Regional Expansion ✅ PARTIALLY DONE
 
 **Goal:** Add more government data sources
 
-#### 2.1 Germany
-- [ ] Berlin: `gdi.berlin.de` Hundefreilaufflächen
-- [ ] GovData.de national search
+#### 2.1 Germany ✅ DONE
+- [x] Berlin: `gdi.berlin.de/services/wfs/hundefreilauf` WFS GeoJSON (~30 parks)
+- [x] Hamburg: `api.hamburg.de/datasets/v1/hundeauslaufzonen_paragraf_8` OGC Features (139 parks)
+- [ ] GovData.de national search (future - metadata only)
 
-#### 2.2 United States
-- [ ] NYC Open Data: `data.cityofnewyork.us` dog runs
-- [ ] Seattle: `data.seattle.gov` off-leash parks
-- [ ] Data.gov aggregated search
+#### 2.2 United States ✅ DONE
+- [x] NYC Open Data: `data.cityofnewyork.us/resource/ipbu-mtcs.json` Socrata API
+- [x] Seattle: ArcGIS FeatureServer `services.arcgis.com/.../Dog_Off_Leash_Areas`
+- [x] San Francisco: `data.sfgov.org/resource/fjzq-yb2u.json` Socrata API
+- [ ] Data.gov aggregated search (future)
 
-#### 2.3 Australia
+#### 2.3 Australia (Future)
 - [ ] Brisbane: `data.brisbane.qld.gov.au` dog off-leash areas
 - [ ] ACT: `data.act.gov.au` dog parks
 - [ ] data.gov.au national search
@@ -176,18 +178,20 @@ out center tags;
 | Amsterdam Maps | Amsterdam | TBD | ? |
 | data.overheid.nl | National | Yes | Various |
 
-### Germany
-| Source | Coverage | API | Format |
-|--------|----------|-----|--------|
-| Berlin GDI | Berlin | Yes | GeoData |
-| GovData.de | National | Yes | Various |
+### Germany ✅ IMPLEMENTED
+| Source | Coverage | API | Format | Status |
+|--------|----------|-----|--------|--------|
+| Berlin GDI WFS | Berlin | `gdi.berlin.de/services/wfs/hundefreilauf` | GeoJSON | ✅ |
+| Hamburg OGC API | Hamburg | `api.hamburg.de/datasets/v1/hundeauslaufzonen_paragraf_8` | GeoJSON | ✅ |
+| GovData.de | National | Metadata only | Various | Future |
 
-### United States
-| Source | Coverage | API | Format |
-|--------|----------|-----|--------|
-| NYC Open Data | NYC | Yes | JSON/CSV |
-| Seattle Open Data | Seattle | Yes | Various |
-| Data.gov | National | Yes | Various |
+### United States ✅ IMPLEMENTED
+| Source | Coverage | API | Format | Status |
+|--------|----------|-----|--------|--------|
+| NYC Open Data | NYC | `data.cityofnewyork.us/resource/ipbu-mtcs.json` | Socrata JSON | ✅ |
+| Seattle ArcGIS | Seattle | `services.arcgis.com/.../Dog_Off_Leash_Areas` | ArcGIS REST | ✅ |
+| San Francisco | SF | `data.sfgov.org/resource/fjzq-yb2u.json` | Socrata JSON | ✅ |
+| Data.gov | National | Aggregator | Various | Future |
 
 ### Australia
 | Source | Coverage | API | Format |
