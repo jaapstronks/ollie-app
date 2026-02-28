@@ -12,19 +12,28 @@ extension MilestoneCategory {
     var color: Color {
         switch self {
         case .health:
-            return .red
+            return .ollieHealthRed
         case .developmental:
-            return .purple
+            return .ollieDevelopmental
         case .administrative:
-            return .blue
+            return .ollieAdministrative
         case .custom:
-            return .orange
+            return .ollieCustomOrange
         }
     }
 
     /// A lighter tint version of the category color for backgrounds
     var tintColor: Color {
-        color.opacity(0.15)
+        switch self {
+        case .health:
+            return .ollieHealthRedTint
+        case .developmental:
+            return .ollieDevelopmentalTint
+        case .administrative:
+            return .ollieAdministrativeTint
+        case .custom:
+            return .ollieCustomOrangeTint
+        }
     }
 }
 

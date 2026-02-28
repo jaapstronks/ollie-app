@@ -151,6 +151,13 @@ enum UserPreferences {
         case appearanceMode = "appearanceMode"
         case temperatureUnit = "temperatureUnit"
         case weightUnit = "weightUnit"
+        case celebrationStyle = "celebrationStyle"
+
+        // Atmosphere settings
+        case atmosphereTimeOfDay = "atmosphereTimeOfDay"
+        case atmosphereWeather = "atmosphereWeather"
+        case atmosphereState = "atmosphereState"
+        case atmosphereSeasonal = "atmosphereSeasonal"
     }
 
     // MARK: - Defaults
@@ -162,7 +169,14 @@ enum UserPreferences {
         Key.enableHaptics.rawValue: true,
         Key.appearanceMode.rawValue: AppearanceMode.system.rawValue,
         Key.temperatureUnit.rawValue: TemperatureUnit.celsius.rawValue,
-        Key.weightUnit.rawValue: WeightUnit.kg.rawValue
+        Key.weightUnit.rawValue: WeightUnit.kg.rawValue,
+        Key.celebrationStyle.rawValue: CelebrationStyle.full.rawValue,
+
+        // Atmosphere defaults (time/weather/state on by default, seasonal opt-in)
+        Key.atmosphereTimeOfDay.rawValue: true,
+        Key.atmosphereWeather.rawValue: true,
+        Key.atmosphereState.rawValue: true,
+        Key.atmosphereSeasonal.rawValue: false
     ]
 
     /// Register default values on app launch

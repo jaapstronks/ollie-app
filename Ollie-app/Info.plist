@@ -2,6 +2,17 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>CloudKit Share</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>cloudkit-iCloud.nl.jaapstronks.Ollie</string>
+			</array>
+		</dict>
+	</array>
 	<key>SENTRY_DSN</key>
 	<string>$(SENTRY_DSN)</string>
 	<key>NSCameraUsageDescription</key>
@@ -12,6 +23,8 @@
 	<string>Ollie wants access to your photos to add moments.</string>
 	<key>NSCalendarsFullAccessUsageDescription</key>
 	<string>Ollie uses your calendar to add reminders for upcoming milestones like vaccinations and vet visits.</string>
+	<key>NSContactsUsageDescription</key>
+	<string>Ollie uses your contacts to quickly import your vet, groomer, or pet sitter details.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>

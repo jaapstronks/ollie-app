@@ -7,6 +7,28 @@
 import SwiftUI
 import OllieShared
 
+// MARK: - Color Usage Philosophy
+//
+// CATEGORY COLORS (What type of event/content):
+// - Timeline events, filter chips, stats section headers
+// - Sleep events → ollieSleep (muted blue)
+// - Food/meals → ollieAccent (gold)
+// - Walks/outdoor → ollieSuccess (green)
+// - Training → olliePurple (purple)
+// - Health/medical → ollieHealth (coral)
+// - Milestones → ollieRose (rose)
+//
+// OUTCOME COLORS (Success/failure):
+// - Potty location: outdoor = ollieSuccess, indoor = ollieDanger
+// - Completion states: completed = ollieSuccess
+//
+// URGENCY COLORS (Attention level):
+// - Status cards, reminders, alerts
+// - Just happened/good → ollieSuccess (green)
+// - Normal/info → ollieInfo (teal)
+// - Attention needed → ollieWarning (gold)
+// - Urgent/overdue → ollieDanger (red)
+
 /// Ollie brand color palette
 extension Color {
     // MARK: - Brand Colors
@@ -48,6 +70,14 @@ extension Color {
     /// Gray — secondary text, neutral
     /// Adjusted for WCAG 4.5:1 contrast ratio
     static let ollieMuted = Color(hex: "6B7280")
+
+    // MARK: - Health/Medical Colors
+
+    /// Coral — health events (weight, medication, vet)
+    static let ollieHealth = Color(hex: "E87B6B")
+
+    /// Light coral — health event backgrounds
+    static let ollieHealthTint = Color(hex: "FDF0EE")
 
     // MARK: - Milestone Category Colors
 

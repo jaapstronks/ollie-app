@@ -201,7 +201,7 @@ struct MainTabView: View {
                     onNavigateToAppointments: { selectedTab = 3 }
                 )
                 .tabItem {
-                    Label(Strings.Tabs.today, systemImage: "calendar")
+                    Label(Strings.Tabs.today, systemImage: "pawprint.fill")
                 }
                 .tag(0)
 
@@ -215,7 +215,7 @@ struct MainTabView: View {
                 }
                 .tag(1)
 
-                // Tab 2: Places (spots + moments combined)
+                // Tab 2: Explore (spots + photo moments on map)
                 PlacesTabView(
                     spotStore: spotStore,
                     contactStore: contactStore,
@@ -225,7 +225,7 @@ struct MainTabView: View {
                     onSettingsTap: { showingSettings = true }
                 )
                 .tabItem {
-                    Label(Strings.Tabs.places, systemImage: "map.fill")
+                    Label(Strings.Tabs.explore, systemImage: "map.fill")
                 }
                 .tag(2)
 
@@ -254,8 +254,8 @@ struct MainTabView: View {
                 .tag(4)
             }
 
-            // Floating Action Button (hidden on Places tab)
-            if selectedTab != 2 {
+            // Floating Action Button (hidden on Places and Schedule tabs)
+            if selectedTab != 2 && selectedTab != 3 {
                 HStack {
                     Spacer()
 
