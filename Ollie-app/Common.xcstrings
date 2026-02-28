@@ -34,6 +34,17 @@
         }
       }
     },
+    "at" : {
+      "comment" : "Preposition used to indicate time, e.g. 'Vroege middag om 16:43'",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "om"
+          }
+        }
+      }
+    },
     "Back" : {
       "extractionState" : "stale",
       "localizations" : {
