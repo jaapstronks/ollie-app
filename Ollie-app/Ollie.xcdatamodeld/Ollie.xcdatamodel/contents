@@ -65,6 +65,7 @@
         <attribute name="modifiedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="name" attributeType="String" defaultValueString=""/>
         <attribute name="notes" optional="YES" attributeType="String"/>
+        <attribute name="photoFilename" optional="YES" attributeType="String"/>
         <attribute name="visitCount" attributeType="Integer 32" defaultValueString="1" usesScalarValueType="YES"/>
     </entity>
     <entity name="CDMasteredSkill" representedClassName="CDMasteredSkill" syncable="YES" codeGenerationType="class">

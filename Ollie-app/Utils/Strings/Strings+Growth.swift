@@ -80,5 +80,37 @@ extension Strings {
         static func maintainingWeight(name: String) -> String {
             String(localized: "\(name) is maintaining a healthy weight", table: table)
         }
+
+        // Weigh reminder
+        static let timeToWeigh = String(localized: "Time to weigh", table: table)
+        static let weighNow = String(localized: "Weigh now", table: table)
+
+        static func lastWeighed(_ days: Int) -> String {
+            if days == 1 {
+                return String(localized: "Last weighed 1 day ago", table: table)
+            } else {
+                return String(localized: "Last weighed \(days) days ago", table: table)
+            }
+        }
+
+        static let neverWeighed = String(localized: "Never weighed", table: table)
+
+        static func weighEveryDays(_ days: Int) -> String {
+            if days == 7 {
+                return String(localized: "Weigh weekly during rapid growth", table: table)
+            } else if days == 14 {
+                return String(localized: "Weigh every 2 weeks to track growth", table: table)
+            } else if days == 30 {
+                return String(localized: "Monthly weigh-ins recommended", table: table)
+            } else {
+                return String(localized: "Weigh every \(days) days", table: table)
+            }
+        }
+
+        // Current weight display
+        static let currentWeightLabel = String(localized: "Current weight", table: table)
+        static func weightChange(_ delta: String) -> String {
+            String(localized: "\(delta) since last", table: table)
+        }
     }
 }

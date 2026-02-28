@@ -13,6 +13,8 @@ struct GrowthStoryCard: View {
     let growthStory: GrowthStory?
     let latestWeight: (weight: Double, date: Date)?
     let firstWeight: (weight: Double, date: Date)?
+    let weightDelta: (delta: Double, previousDate: Date)?
+    let weighReminder: WeighReminder?
     let puppyName: String
     let sizeCategory: PuppyProfile.SizeCategory
     @Binding var showWeightSheet: Bool
@@ -33,13 +35,21 @@ struct GrowthStoryCard: View {
             )
 
             VStack(spacing: 16) {
+                // Current weight hero (always shown if we have weight data)
+                if let latest = latestWeight {
+                    currentWeightHero(weight: latest.weight, date: latest.date)
+                }
+
+                // Weigh reminder banner (if due)
+                if let reminder = weighReminder {
+                    weighReminderBanner(reminder: reminder)
+                }
+
+                // Growth story or journey begins
                 if let story = growthStory, story.isSignificant {
                     // Full growth story view
                     fullGrowthStoryView(story: story)
-                } else if let first = firstWeight {
-                    // Journey begins state (only one weight)
-                    journeyBeginsView(firstWeight: first)
-                } else {
+                } else if latestWeight == nil {
                     // Empty state (no weights)
                     emptyStateView
                 }
@@ -50,6 +60,99 @@ struct GrowthStoryCard: View {
             .padding()
             .glassCard(tint: .accent)
         }
+    }
+
+    // MARK: - Current Weight Hero
+
+    @ViewBuilder
+    private func currentWeightHero(weight: Double, date: Date) -> some View {
+        VStack(spacing: 8) {
+            // Big weight number
+            Text(weightUnit.format(weight))
+                .font(.system(size: 44, weight: .bold, design: .rounded))
+                .foregroundStyle(.primary)
+
+            // Weight change badge (if available)
+            if let delta = weightDelta {
+                HStack(spacing: 4) {
+                    Image(systemName: delta.delta >= 0 ? "arrow.up.right" : "arrow.down.right")
+                        .font(.caption)
+                    Text(Strings.Growth.weightChange(weightUnit.formatDelta(delta.delta)))
+                        .font(.caption)
+                }
+                .foregroundStyle(delta.delta >= 0 ? Color.ollieSuccess : Color.ollieWarning)
+                .padding(.horizontal, 10)
+                .padding(.vertical, 4)
+                .background(
+                    (delta.delta >= 0 ? Color.ollieSuccess : Color.ollieWarning)
+                        .opacity(colorScheme == .dark ? 0.2 : 0.1)
+                )
+                .clipShape(Capsule())
+            }
+
+            // Date of last measurement
+            Text(formattedDate(date))
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 4)
+    }
+
+    // MARK: - Weigh Reminder Banner
+
+    @ViewBuilder
+    private func weighReminderBanner(reminder: WeighReminder) -> some View {
+        let isHighUrgency = reminder.urgency == .high
+        let tintColor = isHighUrgency ? Color.ollieWarning : Color.ollieAccent
+
+        HStack(spacing: 12) {
+            Image(systemName: "scalemass.fill")
+                .font(.title3)
+                .foregroundStyle(tintColor)
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text(Strings.Growth.timeToWeigh)
+                    .font(.subheadline)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(.primary)
+
+                if let days = reminder.daysSinceLastWeigh {
+                    Text(Strings.Growth.lastWeighed(days))
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                } else {
+                    Text(Strings.Growth.neverWeighed)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            }
+
+            Spacer()
+
+            Button {
+                showWeightSheet = true
+            } label: {
+                Text(Strings.Growth.weighNow)
+                    .font(.caption)
+                    .fontWeight(.semibold)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 6)
+                    .background(tintColor)
+                    .foregroundStyle(.white)
+                    .clipShape(Capsule())
+            }
+        }
+        .padding(12)
+        .background(tintColor.opacity(colorScheme == .dark ? 0.15 : 0.08))
+        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+    }
+
+    private func formattedDate(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .none
+        return formatter.string(from: date)
     }
 
     // MARK: - Full Growth Story View
@@ -224,6 +327,24 @@ struct GrowthStoryCard: View {
             growthStory: story,
             latestWeight: (8.1, Date()),
             firstWeight: (4.0, Date().addingTimeInterval(-60 * 24 * 3600)),
+            weightDelta: (0.8, Date().addingTimeInterval(-7 * 24 * 3600)),
+            weighReminder: nil,
+            puppyName: "Ollie",
+            sizeCategory: .large,
+            showWeightSheet: .constant(false)
+        )
+        .padding()
+    }
+}
+
+#Preview("With Weigh Reminder") {
+    ScrollView {
+        GrowthStoryCard(
+            growthStory: nil,
+            latestWeight: (7.5, Date().addingTimeInterval(-14 * 24 * 3600)),
+            firstWeight: (4.5, Date().addingTimeInterval(-30 * 24 * 3600)),
+            weightDelta: (1.2, Date().addingTimeInterval(-21 * 24 * 3600)),
+            weighReminder: WeighReminder(urgency: .medium, daysSinceLastWeigh: 14, recommendedIntervalDays: 7),
             puppyName: "Ollie",
             sizeCategory: .large,
             showWeightSheet: .constant(false)
@@ -238,6 +359,8 @@ struct GrowthStoryCard: View {
             growthStory: nil,
             latestWeight: (4.5, Date()),
             firstWeight: (4.5, Date()),
+            weightDelta: nil,
+            weighReminder: nil,
             puppyName: "Ollie",
             sizeCategory: .large,
             showWeightSheet: .constant(false)
@@ -252,6 +375,8 @@ struct GrowthStoryCard: View {
             growthStory: nil,
             latestWeight: nil,
             firstWeight: nil,
+            weightDelta: nil,
+            weighReminder: WeighReminder(urgency: .high, daysSinceLastWeigh: nil, recommendedIntervalDays: 7),
             puppyName: "Ollie",
             sizeCategory: .large,
             showWeightSheet: .constant(false)

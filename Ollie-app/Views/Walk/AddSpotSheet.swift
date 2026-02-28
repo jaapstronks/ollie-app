@@ -23,6 +23,9 @@ struct AddSpotSheet: View {
     @State private var showingMapPicker = false
     @State private var errorMessage: String?
     @State private var isSaving = false
+    @State private var selectedImage: UIImage?
+    @State private var showingMediaPicker = false
+    @State private var selectedMediaSource: MediaPickerSource = .library
 
     var body: some View {
         NavigationStack {
@@ -99,6 +102,48 @@ struct AddSpotSheet: View {
                 } header: {
                     Text(Strings.SpotDetail.notesOptional)
                 }
+
+                // Photo section
+                Section {
+                    if let image = selectedImage {
+                        // Show selected photo with option to remove
+                        HStack {
+                            Image(uiImage: image)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 80, height: 80)
+                                .clipShape(RoundedRectangle(cornerRadius: 8))
+
+                            Spacer()
+
+                            Button(role: .destructive) {
+                                selectedImage = nil
+                            } label: {
+                                Image(systemName: "xmark.circle.fill")
+                                    .font(.title2)
+                                    .foregroundStyle(.secondary)
+                            }
+                            .buttonStyle(.plain)
+                        }
+                    } else {
+                        // Photo selection options
+                        Button {
+                            selectedMediaSource = .camera
+                            showingMediaPicker = true
+                        } label: {
+                            Label(Strings.MediaAttachment.camera, systemImage: "camera")
+                        }
+
+                        Button {
+                            selectedMediaSource = .library
+                            showingMediaPicker = true
+                        } label: {
+                            Label(Strings.MediaAttachment.photoLibrary, systemImage: "photo.on.rectangle")
+                        }
+                    }
+                } header: {
+                    Text(Strings.SpotDetail.photoOptional)
+                }
             }
             .navigationTitle(Strings.SpotDetail.addSpot)
             .navigationBarTitleDisplayMode(.inline)
@@ -126,6 +171,18 @@ struct AddSpotSheet: View {
                     onSelect: { coordinate in
                         selectedLocation = coordinate
                         errorMessage = nil
+                    }
+                )
+            }
+            .fullScreenCover(isPresented: $showingMediaPicker) {
+                MediaPicker(
+                    source: selectedMediaSource,
+                    onImageSelected: { image, _ in
+                        selectedImage = image
+                        showingMediaPicker = false
+                    },
+                    onCancel: {
+                        showingMediaPicker = false
                     }
                 )
             }
@@ -160,11 +217,18 @@ struct AddSpotSheet: View {
         let trimmedName = spotName.trimmingCharacters(in: .whitespaces)
         let trimmedNotes = spotNotes.trimmingCharacters(in: .whitespaces)
 
+        // Save photo if selected
+        var photoFilename: String?
+        if let image = selectedImage {
+            photoFilename = try? SpotPhotoStore.shared.save(image: image)
+        }
+
         _ = spotStore.addSpot(
             name: trimmedName,
             latitude: location.latitude,
             longitude: location.longitude,
-            notes: trimmedNotes.isEmpty ? nil : trimmedNotes
+            notes: trimmedNotes.isEmpty ? nil : trimmedNotes,
+            photoFilename: photoFilename
         )
 
         HapticFeedback.success()

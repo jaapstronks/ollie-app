@@ -38,6 +38,8 @@ struct HealthTabView: View {
                         growthStory: viewModel.cachedGrowthStory,
                         latestWeight: latestWeight,
                         firstWeight: viewModel.cachedFirstWeight,
+                        weightDelta: weightDelta,
+                        weighReminder: weighReminder,
                         puppyName: profileStore.profile?.name ?? "Puppy",
                         sizeCategory: profileStore.profile?.sizeCategory ?? .medium,
                         showWeightSheet: $showWeightSheet
@@ -131,6 +133,16 @@ struct HealthTabView: View {
     /// Uses cached weight delta from ViewModel
     private var weightDelta: (delta: Double, previousDate: Date)? {
         viewModel.cachedWeightDelta
+    }
+
+    /// Smart weigh reminder based on puppy age and time since last measurement
+    private var weighReminder: WeighReminder? {
+        guard let profile = profileStore.profile else { return nil }
+        let ageInWeeks = profile.ageInWeeks
+        return WeightCalculations.weighReminder(
+            lastWeightDate: latestWeight?.date,
+            ageInWeeks: ageInWeeks
+        )
     }
 
     /// Today's events from in-memory array

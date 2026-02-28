@@ -13,20 +13,11 @@ import os
 
 /// Manages saved walk spots with Core Data and automatic CloudKit sync
 @MainActor
-class SpotStore: ObservableObject {
+final class SpotStore: BaseStore {
 
     // MARK: - Published State
 
     @Published var spots: [WalkSpot] = []
-    @Published private(set) var isSyncing = false
-
-    private let persistenceController: PersistenceController
-    private let logger = Logger.ollie(category: "SpotStore")
-    private var cancellables = Set<AnyCancellable>()
-
-    private var viewContext: NSManagedObjectContext {
-        persistenceController.viewContext
-    }
 
     // MARK: - Computed Properties
 
@@ -52,91 +43,76 @@ class SpotStore: ObservableObject {
     // MARK: - Init
 
     init(persistenceController: PersistenceController = .shared) {
-        self.persistenceController = persistenceController
-        loadSpots()
-        setupRemoteChangeObserver()
+        super.init(persistenceController: persistenceController, logCategory: "SpotStore")
     }
 
-    // MARK: - Setup
+    // MARK: - Data Loading
 
-    private func setupRemoteChangeObserver() {
-        NotificationCenter.default.publisher(for: .NSPersistentStoreRemoteChange)
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.handleRemoteChange()
-            }
-            .store(in: &cancellables)
-    }
-
-    private func handleRemoteChange() {
-        logger.debug("Detected CloudKit remote change for spots")
-        loadSpots()
-    }
-
-    // MARK: - Initial Sync
-
-    /// Perform initial sync on app launch
-    func initialSync() async {
-        // With NSPersistentCloudKitContainer, sync is automatic
-        viewContext.refreshAllObjects()
-        loadSpots()
+    override func performInitialLoad() {
+        let cdSpots = CDWalkSpot.fetchAllSpots(in: viewContext)
+        spots = cdSpots.compactMap { $0.toWalkSpot() }
+        logger.info("Loaded \(self.spots.count) spots from Core Data")
     }
 
     // MARK: - CRUD Operations
 
     /// Add a new spot
-    func addSpot(_ spot: WalkSpot) {
+    @discardableResult
+    func addSpot(_ spot: WalkSpot) -> Bool {
         _ = CDWalkSpot.create(from: spot, in: viewContext)
 
-        do {
-            try persistenceController.save()
+        return performSave(operation: "Added spot: \(spot.name)") {
             spots.append(spot)
-        } catch {
-            logger.error("Failed to add spot: \(error.localizedDescription)")
         }
     }
 
     /// Create and add a spot from coordinates
-    func addSpot(name: String, latitude: Double, longitude: Double, notes: String? = nil) -> WalkSpot {
+    @discardableResult
+    func addSpot(name: String, latitude: Double, longitude: Double, notes: String? = nil, photoFilename: String? = nil) -> WalkSpot {
         let spot = WalkSpot(
             name: name,
             latitude: latitude,
             longitude: longitude,
-            notes: notes
+            notes: notes,
+            photoFilename: photoFilename
         )
         addSpot(spot)
         return spot
     }
 
     /// Update an existing spot
-    func updateSpot(_ spot: WalkSpot) {
+    @discardableResult
+    func updateSpot(_ spot: WalkSpot) -> Bool {
         let updatedSpot = spot.withUpdatedTimestamp()
 
-        if let existing = CDWalkSpot.fetch(byId: spot.id, in: viewContext) {
-            existing.update(from: updatedSpot)
+        guard let existing = CDWalkSpot.fetch(byId: spot.id, in: viewContext) else {
+            logger.warning("Spot not found for update: \(spot.id)")
+            setError(Strings.Common.notFound)
+            return false
+        }
 
-            do {
-                try persistenceController.save()
-                if let index = spots.firstIndex(where: { $0.id == spot.id }) {
-                    spots[index] = updatedSpot
-                }
-            } catch {
-                logger.error("Failed to update spot: \(error.localizedDescription)")
+        existing.update(from: updatedSpot)
+
+        return performSave(operation: "Updated spot: \(spot.name)") {
+            if let index = spots.firstIndex(where: { $0.id == spot.id }) {
+                spots[index] = updatedSpot
             }
         }
     }
 
     /// Delete a spot
-    func deleteSpot(_ spot: WalkSpot) {
-        if let existing = CDWalkSpot.fetch(byId: spot.id, in: viewContext) {
-            viewContext.delete(existing)
+    @discardableResult
+    func deleteSpot(_ spot: WalkSpot) -> Bool {
+        guard let existing = CDWalkSpot.fetch(byId: spot.id, in: viewContext) else {
+            logger.warning("Spot not found for deletion: \(spot.id)")
+            setError(Strings.Common.notFound)
+            return false
+        }
 
-            do {
-                try persistenceController.save()
-                spots.removeAll { $0.id == spot.id }
-            } catch {
-                logger.error("Failed to delete spot: \(error.localizedDescription)")
-            }
+        viewContext.delete(existing)
+
+        return performDelete(operation: "Deleted spot: \(spot.name)") {
+            spots.removeAll { $0.id == spot.id }
         }
     }
 
@@ -174,26 +150,6 @@ class SpotStore: ObservableObject {
             )
             return distance <= radiusMeters
         }
-    }
-
-    // MARK: - Persistence
-
-    private func loadSpots() {
-        let cdSpots = CDWalkSpot.fetchAllSpots(in: viewContext)
-        spots = cdSpots.compactMap { $0.toWalkSpot() }
-    }
-
-    // MARK: - Sync
-
-    /// Fetch from CloudKit (no-op with automatic sync)
-    func fetchFromCloud() async {
-        viewContext.refreshAllObjects()
-        loadSpots()
-    }
-
-    /// Force a full sync with CloudKit
-    func forceSync() async {
-        await fetchFromCloud()
     }
 
     // MARK: - Helpers

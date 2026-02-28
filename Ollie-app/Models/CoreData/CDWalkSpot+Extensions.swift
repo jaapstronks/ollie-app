@@ -24,6 +24,7 @@ extension CDWalkSpot {
         self.notes = spot.notes
         self.visitCount = Int32(spot.visitCount)
         self.category = spot.category?.rawValue
+        self.photoFilename = spot.photoFilename
     }
 
     /// Create a new CDWalkSpot from a WalkSpot struct
@@ -56,7 +57,8 @@ extension CDWalkSpot {
             isFavorite: self.isFavorite,
             notes: self.notes,
             visitCount: Int(self.visitCount),
-            category: spotCategory
+            category: spotCategory,
+            photoFilename: self.photoFilename
         )
     }
 }

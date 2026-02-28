@@ -100,6 +100,7 @@ extension Strings {
         static let created = String(localized: "Created", table: table)
         static let deleteConfirmMessage = String(localized: "This will permanently delete this spot.", table: table)
         static let notesOptional = String(localized: "Notes (optional)", table: table)
+        static let photoOptional = String(localized: "Photo (optional)", table: table)
         static let recapture = String(localized: "Recapture", table: table)
         static let tryAgain = String(localized: "Try again", table: table)
         static let pickOnMap = String(localized: "Pick on map", table: table)

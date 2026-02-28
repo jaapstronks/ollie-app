@@ -22,6 +22,9 @@ struct SpotDetailView: View {
     @State private var showingDeleteConfirmation = false
     @State private var selectedPhotoEvent: PuppyEvent?
     @State private var placeStats: PlaceStats?
+    @State private var showingPhotoOptions = false
+    @State private var showingMediaPicker = false
+    @State private var selectedMediaSource: MediaPickerSource = .library
 
     /// Full initializer with photo support
     init(spotStore: SpotStore, spot: WalkSpot, momentsViewModel: MomentsViewModel) {
@@ -58,17 +61,66 @@ struct SpotDetailView: View {
         GridItem(.flexible(), spacing: 4)
     ]
 
+    /// Load spot photo from storage
+    private var spotPhoto: UIImage? {
+        guard let filename = currentSpot.photoFilename else { return nil }
+        return SpotPhotoStore.shared.load(filename: filename)
+    }
+
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
-                // Map preview
-                SpotMapView(
-                    latitude: currentSpot.latitude,
-                    longitude: currentSpot.longitude,
-                    spotName: currentSpot.name
-                )
-                .frame(height: 200)
-                .padding(.horizontal)
+                // Spot photo (if available) or map preview
+                if let photo = spotPhoto {
+                    ZStack(alignment: .bottomTrailing) {
+                        Image(uiImage: photo)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(height: 200)
+                            .clipped()
+
+                        // Edit photo button when editing
+                        if isEditing {
+                            Button {
+                                showingPhotoOptions = true
+                            } label: {
+                                Image(systemName: "pencil.circle.fill")
+                                    .font(.title)
+                                    .foregroundStyle(.white)
+                                    .shadow(radius: 2)
+                            }
+                            .padding(12)
+                        }
+                    }
+                    .padding(.horizontal)
+                } else {
+                    // Map preview when no photo
+                    ZStack(alignment: .bottomTrailing) {
+                        SpotMapView(
+                            latitude: currentSpot.latitude,
+                            longitude: currentSpot.longitude,
+                            spotName: currentSpot.name
+                        )
+                        .frame(height: 200)
+
+                        // Add photo button when editing
+                        if isEditing {
+                            Button {
+                                showingPhotoOptions = true
+                            } label: {
+                                Label(Strings.MediaAttachment.addPhoto, systemImage: "photo.badge.plus")
+                                    .font(.caption)
+                                    .fontWeight(.medium)
+                                    .padding(.horizontal, 10)
+                                    .padding(.vertical, 6)
+                                    .background(.ultraThinMaterial)
+                                    .clipShape(Capsule())
+                            }
+                            .padding(8)
+                        }
+                    }
+                    .padding(.horizontal)
+                }
 
                 // Spot details card
                 VStack(alignment: .leading, spacing: 16) {
@@ -240,6 +292,76 @@ struct SpotDetailView: View {
                 placeStats = await viewModel.loadStatsForSpot(currentSpot)
             }
         }
+        .confirmationDialog(
+            Strings.SpotDetail.photoOptional,
+            isPresented: $showingPhotoOptions,
+            titleVisibility: .visible
+        ) {
+            Button {
+                selectedMediaSource = .camera
+                showingMediaPicker = true
+            } label: {
+                Label(Strings.MediaAttachment.camera, systemImage: "camera")
+            }
+
+            Button {
+                selectedMediaSource = .library
+                showingMediaPicker = true
+            } label: {
+                Label(Strings.MediaAttachment.photoLibrary, systemImage: "photo.on.rectangle")
+            }
+
+            if currentSpot.photoFilename != nil {
+                Button(Strings.Profile.removePhoto, role: .destructive) {
+                    removeSpotPhoto()
+                }
+            }
+
+            Button(Strings.Common.cancel, role: .cancel) {}
+        }
+        .fullScreenCover(isPresented: $showingMediaPicker) {
+            MediaPicker(
+                source: selectedMediaSource,
+                onImageSelected: { image, _ in
+                    updateSpotPhoto(image)
+                    showingMediaPicker = false
+                },
+                onCancel: {
+                    showingMediaPicker = false
+                }
+            )
+        }
+    }
+
+    // MARK: - Photo Management
+
+    private func updateSpotPhoto(_ image: UIImage) {
+        guard var updated = spotStore.spot(withId: spot.id) else { return }
+
+        // Delete old photo if exists
+        if let oldFilename = updated.photoFilename {
+            SpotPhotoStore.shared.delete(filename: oldFilename)
+        }
+
+        // Save new photo
+        if let newFilename = try? SpotPhotoStore.shared.save(image: image) {
+            updated.photoFilename = newFilename
+            spotStore.updateSpot(updated)
+            HapticFeedback.success()
+        }
+    }
+
+    private func removeSpotPhoto() {
+        guard var updated = spotStore.spot(withId: spot.id) else { return }
+
+        // Delete photo file
+        if let filename = updated.photoFilename {
+            SpotPhotoStore.shared.delete(filename: filename)
+        }
+
+        updated.photoFilename = nil
+        spotStore.updateSpot(updated)
+        HapticFeedback.light()
     }
 
     // MARK: - Place Stats Section

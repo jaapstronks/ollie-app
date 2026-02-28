@@ -283,4 +283,85 @@ public enum WeightCalculations {
 
         return (weight, first.time)
     }
+
+    // MARK: - Smart Weigh Reminder
+
+    /// Determines if it's time to weigh the puppy based on age and time since last measurement
+    /// Returns a suggestion message if it's time to weigh, nil otherwise
+    public static func weighReminder(
+        lastWeightDate: Date?,
+        ageInWeeks: Int,
+        now: Date = Date()
+    ) -> WeighReminder? {
+        let calendar = Calendar.current
+
+        // If never weighed, always suggest
+        guard let lastDate = lastWeightDate else {
+            return WeighReminder(
+                urgency: .high,
+                daysSinceLastWeigh: nil,
+                recommendedIntervalDays: recommendedWeighInterval(ageInWeeks: ageInWeeks)
+            )
+        }
+
+        let daysSinceLastWeigh = calendar.dateComponents([.day], from: lastDate, to: now).day ?? 0
+        let recommendedInterval = recommendedWeighInterval(ageInWeeks: ageInWeeks)
+
+        // Check if overdue
+        if daysSinceLastWeigh >= recommendedInterval {
+            let urgency: WeighReminder.Urgency
+            if daysSinceLastWeigh >= recommendedInterval * 2 {
+                urgency = .high
+            } else {
+                urgency = .medium
+            }
+            return WeighReminder(
+                urgency: urgency,
+                daysSinceLastWeigh: daysSinceLastWeigh,
+                recommendedIntervalDays: recommendedInterval
+            )
+        }
+
+        // Not due yet
+        return nil
+    }
+
+    /// Recommended weighing interval based on puppy age
+    /// - Young puppies (< 12 weeks): Weekly
+    /// - Growing puppies (12-26 weeks): Every 2 weeks
+    /// - Adolescent (26-52 weeks): Monthly
+    /// - Adult (> 52 weeks): Every 2-3 months
+    /// - Senior dogs (> 7 years / 364 weeks): Monthly (health monitoring)
+    private static func recommendedWeighInterval(ageInWeeks: Int) -> Int {
+        switch ageInWeeks {
+        case ..<12:
+            return 7  // Weekly for young puppies
+        case 12..<26:
+            return 14  // Every 2 weeks during rapid growth
+        case 26..<52:
+            return 30  // Monthly for adolescents
+        case 52..<364:
+            return 60  // Every 2 months for adults
+        default:
+            return 30  // Monthly for senior dogs
+        }
+    }
+}
+
+/// Represents a reminder to weigh the puppy
+public struct WeighReminder: Sendable {
+    public enum Urgency: Sendable {
+        case medium  // Due soon or recently due
+        case high    // Significantly overdue or never weighed
+    }
+
+    public let urgency: Urgency
+    public let daysSinceLastWeigh: Int?
+    public let recommendedIntervalDays: Int
+
+    public init(urgency: Urgency, daysSinceLastWeigh: Int?, recommendedIntervalDays: Int) {
+        self.urgency = urgency
+        self.daysSinceLastWeigh = daysSinceLastWeigh
+        self.recommendedIntervalDays = recommendedIntervalDays
+    }
 }

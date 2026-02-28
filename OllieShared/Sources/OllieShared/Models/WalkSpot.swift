@@ -17,6 +17,7 @@ public struct WalkSpot: Codable, Identifiable, Equatable, Sendable {
     public var notes: String?
     public var visitCount: Int
     public var category: SpotCategory?
+    public var photoFilename: String?
 
     public init(
         id: UUID = UUID(),
@@ -28,7 +29,8 @@ public struct WalkSpot: Codable, Identifiable, Equatable, Sendable {
         isFavorite: Bool = false,
         notes: String? = nil,
         visitCount: Int = 1,
-        category: SpotCategory? = nil
+        category: SpotCategory? = nil,
+        photoFilename: String? = nil
     ) {
         self.id = id
         self.name = name
@@ -40,6 +42,7 @@ public struct WalkSpot: Codable, Identifiable, Equatable, Sendable {
         self.notes = notes
         self.visitCount = visitCount
         self.category = category
+        self.photoFilename = photoFilename
     }
 
     // MARK: - Coding Keys
@@ -55,6 +58,7 @@ public struct WalkSpot: Codable, Identifiable, Equatable, Sendable {
         case notes
         case visitCount = "visit_count"
         case category
+        case photoFilename = "photo_filename"
     }
 
     // MARK: - Custom Decoding (handle missing modifiedAt for migration)
@@ -72,6 +76,7 @@ public struct WalkSpot: Codable, Identifiable, Equatable, Sendable {
         notes = try container.decodeIfPresent(String.self, forKey: .notes)
         visitCount = try container.decodeIfPresent(Int.self, forKey: .visitCount) ?? 1
         category = try container.decodeIfPresent(SpotCategory.self, forKey: .category)
+        photoFilename = try container.decodeIfPresent(String.self, forKey: .photoFilename)
     }
 
     // MARK: - Mutation Helpers
