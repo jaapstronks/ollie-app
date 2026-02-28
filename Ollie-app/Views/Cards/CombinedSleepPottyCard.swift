@@ -82,8 +82,6 @@ struct CombinedSleepPottyCard: View {
                 }
 
                 Spacer()
-
-                GlassStatusPill(text: Strings.CombinedStatus.sleepingPottyLabel, tintColor: .ollieSleep)
             }
 
             // Divider

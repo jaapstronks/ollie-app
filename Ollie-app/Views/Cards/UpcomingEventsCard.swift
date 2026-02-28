@@ -132,14 +132,6 @@ struct ActionableEventCard: View {
         }
     }
 
-    private var statusLabel: String {
-        switch actionableItem.state {
-        case .approaching: return Strings.Actionable.approaching
-        case .due: return Strings.Actionable.due
-        case .overdue: return Strings.Actionable.overdueLabel
-        }
-    }
-
     private var indicatorColor: Color {
         switch actionableItem.state {
         case .approaching: return .ollieInfo

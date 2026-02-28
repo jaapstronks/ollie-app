@@ -18,7 +18,6 @@ struct StatusCardHeaderData {
     let title: String
     let titleColor: Color
     let subtitle: String?
-    let statusLabel: String
     let iconSize: CGFloat
 
     init(
@@ -28,7 +27,6 @@ struct StatusCardHeaderData {
         title: String,
         titleColor: Color = .primary,
         subtitle: String? = nil,
-        statusLabel: String,
         iconSize: CGFloat = 44
     ) {
         self.iconName = iconName
@@ -37,7 +35,6 @@ struct StatusCardHeaderData {
         self.title = title
         self.titleColor = titleColor
         self.subtitle = subtitle
-        self.statusLabel = statusLabel
         self.iconSize = iconSize
     }
 }
@@ -261,8 +258,7 @@ private struct StatusCardContainerModifier: ViewModifier {
                 iconColor: .green,
                 tintColor: .green,
                 title: "Potty status is good",
-                subtitle: "Last: 30 min ago",
-                statusLabel: "OK"
+                subtitle: "Last: 30 min ago"
             ),
             action: StatusCardAction(
                 label: "Log Now",
@@ -281,7 +277,6 @@ private struct StatusCardContainerModifier: ViewModifier {
                 tintColor: .purple,
                 title: "Sleeping for 45 min",
                 subtitle: "Started at 14:30",
-                statusLabel: "Sleeping",
                 iconSize: 40
             ),
             action: StatusCardAction(
@@ -307,8 +302,7 @@ private struct StatusCardContainerModifier: ViewModifier {
                 iconColor: .green,
                 tintColor: .green,
                 title: "2 poops today (2-3 expected)",
-                subtitle: "Last: 2 hours ago",
-                statusLabel: "Good"
+                subtitle: "Last: 2 hours ago"
             ),
             tintColor: .green,
             accessibilityLabel: "Poop Status",
@@ -329,8 +323,7 @@ private struct StatusCardContainerModifier: ViewModifier {
                 tintColor: .orange,
                 title: "Time to go outside!",
                 titleColor: .orange,
-                subtitle: "90 min since last potty",
-                statusLabel: "Soon"
+                subtitle: "90 min since last potty"
             ),
             action: StatusCardAction(
                 label: "Log Potty",
