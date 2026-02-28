@@ -51,7 +51,7 @@ public struct DayStats: Identifiable, Sendable {
 /// Week calculation utilities
 public struct WeekCalculations {
 
-    /// Calculate stats for the last 7 days
+    /// Calculate stats for the last 7 days (legacy - calls closure per day)
     public static func calculateWeekStats(getEventsForDate: (Date) -> [PuppyEvent]) -> [DayStats] {
         let calendar = Calendar.current
         let today = Date()
@@ -96,6 +96,80 @@ public struct WeekCalculations {
             let sleepMinutes = calculateDaySleepMinutes(
                 date: date,
                 todayEvents: events,
+                previousDayEvents: previousDayEvents
+            )
+            let sleepHours = Double(sleepMinutes) / 60.0
+
+            stats.append(DayStats(
+                date: date,
+                outdoorPotty: outdoorPotty,
+                indoorPotty: indoorPotty,
+                meals: meals,
+                walks: walks,
+                sleepHours: sleepHours,
+                trainingSessions: trainingSessions
+            ))
+        }
+
+        return stats
+    }
+
+    /// Calculate stats for the last 7 days using a batch of events (optimized - single query)
+    /// - Parameter events: All events from the past 8 days (7 days + 1 for sleep overlap)
+    /// - Returns: Array of DayStats for the last 7 days
+    public static func calculateWeekStatsBatch(from events: [PuppyEvent]) -> [DayStats] {
+        let calendar = Calendar.current
+        let today = Date()
+
+        // Partition events by day (O(n) single pass)
+        var eventsByDay: [Date: [PuppyEvent]] = [:]
+        for event in events {
+            let dayStart = calendar.startOfDay(for: event.time)
+            eventsByDay[dayStart, default: []].append(event)
+        }
+
+        var stats: [DayStats] = []
+
+        for daysAgo in (0...6).reversed() {
+            guard let date = calendar.date(byAdding: .day, value: -daysAgo, to: today) else { continue }
+
+            let dayStart = calendar.startOfDay(for: date)
+            let previousDayStart = calendar.date(byAdding: .day, value: -1, to: dayStart)!
+
+            let dayEvents = eventsByDay[dayStart] ?? []
+            let previousDayEvents = eventsByDay[previousDayStart] ?? []
+
+            var outdoorPotty = 0
+            var indoorPotty = 0
+            var meals = 0
+            var walks = 0
+            var trainingSessions = 0
+
+            for event in dayEvents {
+                let isPotty = event.type == .plassen || event.type == .poepen
+
+                if isPotty && event.location == .buiten {
+                    outdoorPotty += 1
+                } else if isPotty && event.location == .binnen {
+                    indoorPotty += 1
+                }
+
+                if event.type == .eten {
+                    meals += 1
+                }
+
+                if event.type == .uitlaten {
+                    walks += 1
+                }
+
+                if event.type == .training {
+                    trainingSessions += 1
+                }
+            }
+
+            let sleepMinutes = calculateDaySleepMinutes(
+                date: date,
+                todayEvents: dayEvents,
                 previousDayEvents: previousDayEvents
             )
             let sleepHours = Double(sleepMinutes) / 60.0

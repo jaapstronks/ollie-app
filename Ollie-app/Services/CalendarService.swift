@@ -77,6 +77,7 @@ actor CalendarService {
         do {
             try eventStore.save(event, span: .thisEvent)
             logger.info("Added milestone to calendar: \(milestone.localizedLabel)")
+            Analytics.trackCalendarEvent(added: true, milestoneCategory: milestone.category.rawValue)
             return event.eventIdentifier
         } catch {
             logger.error("Failed to save calendar event: \(error.localizedDescription)")
@@ -98,6 +99,7 @@ actor CalendarService {
         do {
             try eventStore.remove(event, span: .thisEvent)
             logger.info("Removed calendar event: \(identifier)")
+            Analytics.trackCalendarEvent(added: false, milestoneCategory: "unknown")
         } catch {
             logger.error("Failed to remove calendar event: \(error.localizedDescription)")
             throw CalendarError.removeFailed(error)

@@ -17,8 +17,8 @@ final class PersistenceController: @unchecked Sendable {
 
     // MARK: - Singleton
 
-    // nonisolated to allow use in default parameter values
-    nonisolated(unsafe) static let shared = PersistenceController()
+    /// Shared singleton - explicitly nonisolated for access from default parameter expressions
+    nonisolated static let shared = PersistenceController()
 
     // MARK: - Container
 
@@ -62,8 +62,9 @@ final class PersistenceController: @unchecked Sendable {
     init(inMemory: Bool = false) {
         container = NSPersistentCloudKitContainer(name: "Ollie")
 
-        // Check iCloud availability before configuring stores
-        let iCloudAvailable = Self.checkiCloudAccountStatus()
+        // Use fast synchronous check only (ubiquityIdentityToken) to avoid blocking main thread.
+        // The async CKContainer.accountStatus() check is deferred to background.
+        let iCloudAvailable = Self.checkiCloudAccountStatusSync()
         isCloudKitAvailable = iCloudAvailable
 
         // Configure stores
@@ -78,7 +79,7 @@ final class PersistenceController: @unchecked Sendable {
             configureLocalOnlyStore()
         }
 
-        // Load stores
+        // Load stores (callback is synchronous for local SQLite stores)
         loadStores()
 
         // Configure view context
@@ -92,64 +93,47 @@ final class PersistenceController: @unchecked Sendable {
 
         // Listen for iCloud account changes
         setupAccountChangeNotifications()
+
+        // Verify CloudKit availability asynchronously (may update isCloudKitAvailable)
+        if iCloudAvailable {
+            Task { await self.verifyCloudKitAvailabilityAsync() }
+        }
     }
 
     // MARK: - iCloud Account Status Check
 
-    /// Check if iCloud account is available and signed in
-    private static func checkiCloudAccountStatus() -> Bool {
-        // Check if iCloud is available via FileManager
+    /// Fast synchronous check using ubiquityIdentityToken only.
+    /// Does NOT call CKContainer.accountStatus() — that is deferred to background.
+    private static func checkiCloudAccountStatusSync() -> Bool {
         guard FileManager.default.ubiquityIdentityToken != nil else {
             print("iCloud ubiquity token not available - user may not be signed in")
             return false
         }
+        print("iCloud ubiquity token present - assuming available")
+        return true
+    }
 
-        // Additional check: verify we can access the CloudKit container
-        // This is a synchronous check that catches most availability issues
-        let container = CKContainer(identifier: cloudKitContainerIdentifier)
-        var isAvailable = false
-        let semaphore = DispatchSemaphore(value: 0)
-
-        container.accountStatus { status, error in
-            defer { semaphore.signal() }
-
-            if let error = error {
-                print("CloudKit account status check failed: \(error.localizedDescription)")
-                isAvailable = false
-                return
-            }
-
+    /// Async verification of CloudKit account status, called after init completes.
+    /// Updates isCloudKitAvailable if the account turns out to be unavailable.
+    private func verifyCloudKitAvailabilityAsync() async {
+        do {
+            let status = try await CKContainer(identifier: Self.cloudKitContainerIdentifier).accountStatus()
             switch status {
             case .available:
-                print("iCloud account available")
-                isAvailable = true
-            case .noAccount:
-                print("No iCloud account signed in")
-                isAvailable = false
-            case .restricted:
-                print("iCloud account restricted (parental controls, MDM, etc.)")
-                isAvailable = false
-            case .couldNotDetermine:
-                print("Could not determine iCloud account status")
-                isAvailable = false
+                print("CloudKit account verified: available")
             case .temporarilyUnavailable:
-                print("iCloud temporarily unavailable")
-                // Still try to use CloudKit - it may become available
-                isAvailable = true
+                print("CloudKit account temporarily unavailable - keeping sync enabled")
+            case .noAccount, .restricted, .couldNotDetermine:
+                print("CloudKit account not usable (status: \(status)) - sync may not work")
+                await MainActor.run {
+                    self.isCloudKitAvailable = false
+                }
             @unknown default:
-                print("Unknown iCloud account status")
-                isAvailable = false
+                print("Unknown CloudKit account status")
             }
+        } catch {
+            print("CloudKit account status check failed: \(error.localizedDescription)")
         }
-
-        // Wait with timeout to avoid blocking forever
-        let result = semaphore.wait(timeout: .now() + 5)
-        if result == .timedOut {
-            print("iCloud account status check timed out - assuming unavailable")
-            return false
-        }
-
-        return isAvailable
     }
 
     // MARK: - Account Change Notifications
@@ -168,7 +152,15 @@ final class PersistenceController: @unchecked Sendable {
         print("iCloud account changed - checking new status")
 
         Task {
-            let newStatus = Self.checkiCloudAccountStatus()
+            // Use async account status check — never block a thread with semaphores
+            let newStatus: Bool
+            do {
+                let status = try await CKContainer(identifier: Self.cloudKitContainerIdentifier).accountStatus()
+                newStatus = (status == .available || status == .temporarilyUnavailable)
+            } catch {
+                print("CloudKit account status check failed: \(error.localizedDescription)")
+                newStatus = false
+            }
 
             if !newStatus && isCloudKitAvailable {
                 // User signed out of iCloud while app was running
@@ -250,34 +242,29 @@ final class PersistenceController: @unchecked Sendable {
     }
 
     private func loadStores() {
-        // Use a semaphore to wait for both stores to load
-        let semaphore = DispatchSemaphore(value: 0)
-        var loadedStoreCount = 0
         let expectedStoreCount = container.persistentStoreDescriptions.count
+        var loadedStoreCount = 0
 
         print("Loading \(expectedStoreCount) persistent stores...")
 
+        // loadPersistentStores calls the completion handler synchronously for each
+        // store description when using local SQLite stores. No semaphore needed.
         container.loadPersistentStores { [weak self] storeDescription, error in
-            defer {
-                loadedStoreCount += 1
-                print("Store load callback \(loadedStoreCount)/\(expectedStoreCount)")
-                if loadedStoreCount >= expectedStoreCount {
-                    semaphore.signal()
-                }
-            }
+            loadedStoreCount += 1
+            print("Store load callback \(loadedStoreCount)/\(expectedStoreCount)")
 
             if let error = error as NSError? {
-                print("❌ Core Data store failed to load: \(error.localizedDescription)")
+                print("Core Data store failed to load: \(error.localizedDescription)")
                 print("   Error details: \(error.userInfo)")
                 return
             }
 
             guard let url = storeDescription.url else {
-                print("⚠️ Store loaded but no URL available")
+                print("Store loaded but no URL available")
                 return
             }
 
-            print("✅ Store loaded: \(url.lastPathComponent)")
+            print("Store loaded: \(url.lastPathComponent)")
 
             if url.lastPathComponent == "Ollie.sqlite" {
                 self?.privateStore = self?.container.persistentStoreCoordinator.persistentStore(for: url)
@@ -286,15 +273,8 @@ final class PersistenceController: @unchecked Sendable {
             }
         }
 
-        // Wait for all stores to load (with timeout)
-        print("Waiting for stores to load...")
-        let result = semaphore.wait(timeout: .now() + 10)
-        if result == .timedOut {
-            print("⚠️ Warning: Core Data stores took too long to load")
-        } else {
-            let storeCount = container.persistentStoreCoordinator.persistentStores.count
-            print("✅ All stores loaded. Total: \(storeCount)")
-        }
+        let storeCount = container.persistentStoreCoordinator.persistentStores.count
+        print("All stores loaded. Total: \(storeCount)")
     }
 
     // MARK: - Store URL Helper

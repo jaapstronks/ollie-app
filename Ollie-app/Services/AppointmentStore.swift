@@ -250,6 +250,66 @@ class AppointmentStore: ObservableObject {
         upcomingAppointments.count
     }
 
+    /// Appointments within this week (7 days)
+    var appointmentsThisWeek: [DogAppointment] {
+        let calendar = Calendar.current
+        let now = Date()
+        guard let weekFromNow = calendar.date(byAdding: .day, value: 7, to: now) else {
+            return []
+        }
+
+        return appointments.filter { appointment in
+            let startDay = calendar.startOfDay(for: appointment.startDate)
+            let today = calendar.startOfDay(for: now)
+            let endOfWeek = calendar.startOfDay(for: weekFromNow)
+
+            return startDay >= today && startDay <= endOfWeek && !appointment.isCompleted
+        }.sorted { $0.startDate < $1.startDate }
+    }
+
+    /// Appointments coming up in 2-4 weeks
+    var appointmentsComingUp: [DogAppointment] {
+        let calendar = Calendar.current
+        let now = Date()
+        guard let weekFromNow = calendar.date(byAdding: .day, value: 7, to: now),
+              let monthFromNow = calendar.date(byAdding: .day, value: 28, to: now) else {
+            return []
+        }
+
+        return appointments.filter { appointment in
+            let startDay = calendar.startOfDay(for: appointment.startDate)
+            let afterThisWeek = calendar.startOfDay(for: weekFromNow)
+            let endOfMonth = calendar.startOfDay(for: monthFromNow)
+
+            return startDay > afterThisWeek && startDay <= endOfMonth && !appointment.isCompleted
+        }.sorted { $0.startDate < $1.startDate }
+    }
+
+    /// Get appointments for a date range (for calendar month view efficiency)
+    func appointments(from startDate: Date, to endDate: Date) -> [DogAppointment] {
+        appointments.filter { appointment in
+            appointment.startDate >= startDate && appointment.startDate < endDate
+        }
+    }
+
+    /// Get appointments within the month containing the given date
+    func appointments(inMonthOf date: Date) -> [DogAppointment] {
+        let calendar = Calendar.current
+        let components = calendar.dateComponents([.year, .month], from: date)
+        guard let monthStart = calendar.date(from: components),
+              let monthEnd = calendar.date(byAdding: .month, value: 1, to: monthStart) else {
+            return []
+        }
+
+        // Add buffer for days from adjacent months visible in the grid
+        guard let startBuffer = calendar.date(byAdding: .day, value: -7, to: monthStart),
+              let endBuffer = calendar.date(byAdding: .day, value: 7, to: monthEnd) else {
+            return []
+        }
+
+        return appointments(from: startBuffer, to: endBuffer)
+    }
+
     // MARK: - CloudKit Sync
 
     /// Force refresh appointments from Core Data (useful after CloudKit sync)

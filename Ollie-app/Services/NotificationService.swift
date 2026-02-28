@@ -26,6 +26,7 @@ class NotificationService: ObservableObject {
     private let mealScheduler = MealNotificationScheduler()
     private let napScheduler = NapNotificationScheduler()
     private let walkScheduler = WalkNotificationScheduler()
+    private let appointmentScheduler = AppointmentNotificationScheduler()
 
     // MARK: - Initialization
 
@@ -60,10 +61,15 @@ class NotificationService: ObservableObject {
 
     /// Refresh all notifications based on current state
     /// Called after event logging or settings changes
-    /// - Parameter isWalkInProgress: When true, suppresses walk notifications since user is already walking
+    /// - Parameters:
+    ///   - events: Recent puppy events
+    ///   - profile: The puppy profile
+    ///   - appointments: Upcoming appointments to schedule reminders for
+    ///   - isWalkInProgress: When true, suppresses walk notifications since user is already walking
     func refreshNotifications(
         events: [PuppyEvent],
         profile: PuppyProfile,
+        appointments: [DogAppointment] = [],
         isWalkInProgress: Bool = false
     ) async {
         guard profile.notificationSettings.isEnabled && isAuthorized else {
@@ -104,6 +110,13 @@ class NotificationService: ObservableObject {
             await walkScheduler.schedule(events: events, profile: profile)
         } else {
             await walkScheduler.cancel()
+        }
+
+        // Schedule appointment reminders
+        if settings.appointmentReminders.isEnabled {
+            await appointmentScheduler.schedule(appointments: appointments, profile: profile)
+        } else {
+            await appointmentScheduler.cancel()
         }
     }
 

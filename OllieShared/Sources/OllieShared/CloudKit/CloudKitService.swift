@@ -173,16 +173,11 @@ public final class CloudKitService: ObservableObject {
 
     // MARK: - Share Acceptance
 
-    /// Accept a share invitation
-    public func acceptShare(_ metadata: CKShare.Metadata) async throws {
-        try await container.accept(metadata)
-
-        // Post notification for stores to reload data
-        NotificationCenter.default.post(name: .cloudKitShareAccepted, object: nil)
-
-        // Update participant status
+    /// Mark the user as a participant after share acceptance
+    /// Call this after accepting a share via PersistenceController.acceptShareInvitation
+    public func markAsParticipant() {
         isParticipant = true
-        logger.info("Share accepted successfully")
+        logger.info("Marked as participant after share acceptance")
     }
 
     // MARK: - Container Access

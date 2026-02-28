@@ -4,11 +4,22 @@
 //
 
 import Foundation
+import CoreData
 import OllieShared
 
 enum SeedData {
+    /// Check if running in UI testing mode
+    static var isUITesting: Bool {
+        CommandLine.arguments.contains("--uitesting")
+    }
+
     // Sample events for development/testing
     static func installSeedDataIfNeeded() {
+        // Install test profile for UI tests
+        if isUITesting {
+            installTestProfileIfNeeded()
+        }
+
         let fileManager = FileManager.default
         let docs = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
         let dataDir = docs.appendingPathComponent("data", isDirectory: true)
@@ -57,6 +68,31 @@ enum SeedData {
         // Write to file
         let content = events.joined(separator: "\n") + "\n"
         try? content.write(to: todayFile, atomically: true, encoding: .utf8)
+    }
+
+    /// Install a test profile for UI testing
+    private static func installTestProfileIfNeeded() {
+        let context = PersistenceController.shared.viewContext
+
+        // Check if profile already exists
+        if CDPuppyProfile.fetchProfile(in: context) != nil {
+            return
+        }
+
+        // Create test profile: "Test Puppy", 12 weeks old, medium size
+        let calendar = Calendar.current
+        let birthDate = calendar.date(byAdding: .weekOfYear, value: -12, to: Date()) ?? Date()
+        let homeDate = calendar.date(byAdding: .weekOfYear, value: -4, to: Date()) ?? Date()
+
+        let testProfile = PuppyProfile.defaultProfile(
+            name: "Test Puppy",
+            birthDate: birthDate,
+            homeDate: homeDate,
+            size: .medium
+        )
+
+        _ = CDPuppyProfile.create(from: testProfile, in: context)
+        try? context.save()
     }
 
     private static func makeEvent(time: Date, type: String, location: String? = nil, note: String? = nil) -> String {

@@ -50,6 +50,7 @@ class MediaStore: ObservableObject {
     // MARK: - Public Methods
 
     /// Save a photo and generate thumbnail, returns the relative path to the saved photo
+    /// Legacy sync version - prefer savePhotoAsync for better performance
     func savePhoto(_ image: UIImage) -> (photoPath: String, thumbnailPath: String)? {
         ensureDirectoriesExist()
 
@@ -85,6 +86,78 @@ class MediaStore: ObservableObject {
         } catch {
             logger.error("Error saving photo: \(error.localizedDescription)")
             return nil
+        }
+    }
+
+    /// Save a photo asynchronously (image processing on background thread)
+    /// This is the preferred method - keeps main thread responsive
+    func savePhotoAsync(_ image: UIImage) async -> (photoPath: String, thumbnailPath: String)? {
+        ensureDirectoriesExist()
+
+        let id = UUID().uuidString
+        let photoFilename = "\(id).jpg"
+        let thumbnailFilename = "\(id).jpg"
+
+        // Capture URLs before leaving MainActor
+        let mediaDir = mediaDirectoryURL
+        let thumbnailDir = thumbnailDirectoryURL
+
+        // Perform heavy image processing on background thread
+        let result = await Task.detached(priority: .userInitiated) { () -> (photoData: Data, thumbnailData: Data)? in
+            // Resize photo to max size (CPU intensive)
+            guard let resizedImage = Self.resizeImageStatic(image, maxSize: Constants.maxPhotoSize),
+                  let photoData = resizedImage.jpegData(compressionQuality: 0.85) else {
+                return nil
+            }
+
+            // Generate thumbnail (CPU intensive)
+            guard let thumbnailImage = Self.resizeImageStatic(image, maxSize: Constants.thumbnailSize),
+                  let thumbnailData = thumbnailImage.jpegData(compressionQuality: 0.7) else {
+                return nil
+            }
+
+            return (photoData, thumbnailData)
+        }.value
+
+        guard let (photoData, thumbnailData) = result else {
+            return nil
+        }
+
+        // Save photo
+        let photoURL = mediaDir.appendingPathComponent(photoFilename)
+        let thumbnailURL = thumbnailDir.appendingPathComponent(thumbnailFilename)
+
+        do {
+            try photoData.write(to: photoURL)
+            try thumbnailData.write(to: thumbnailURL)
+
+            // Return relative paths for storage in event JSON
+            let photoRelativePath = "\(Constants.mediaDirectoryName)/\(photoFilename)"
+            let thumbnailRelativePath = "\(Constants.thumbnailDirectoryName)/\(thumbnailFilename)"
+
+            return (photoRelativePath, thumbnailRelativePath)
+        } catch {
+            logger.error("Error saving photo: \(error.localizedDescription)")
+            return nil
+        }
+    }
+
+    /// Static version of resizeImage for use in detached tasks
+    /// nonisolated because this is pure CPU work that doesn't need MainActor access
+    private nonisolated static func resizeImageStatic(_ image: UIImage, maxSize: CGFloat) -> UIImage? {
+        let size = image.size
+        let maxDimension = max(size.width, size.height)
+
+        if maxDimension <= maxSize {
+            return image
+        }
+
+        let scale = maxSize / maxDimension
+        let newSize = CGSize(width: size.width * scale, height: size.height * scale)
+
+        let renderer = UIGraphicsImageRenderer(size: newSize)
+        return renderer.image { _ in
+            image.draw(in: CGRect(origin: .zero, size: newSize))
         }
     }
 

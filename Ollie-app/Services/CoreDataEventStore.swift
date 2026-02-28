@@ -221,12 +221,68 @@ final class CoreDataEventStore: @unchecked Sendable {
 
     // MARK: - Cache Management
 
-    /// Invalidate cache for a specific date
+    /// Invalidate cache for a specific date (smart invalidation)
+    /// Only removes cache entries whose date range includes the affected date
     func invalidateCache(for date: Date) {
         rangeCacheLock.lock()
-        // Remove all range caches that might include this date
-        rangeCache.removeAll()
-        rangeCacheLock.unlock()
+        defer { rangeCacheLock.unlock() }
+
+        let affectedDateString = date.dateString
+
+        // Find and remove only cache entries that contain the affected date
+        let keysToRemove = rangeCache.keys.filter { key in
+            // Key format: "YYYY-MM-DD_to_YYYY-MM-DD"
+            let parts = key.split(separator: "_")
+            guard parts.count >= 3,
+                  let startDateString = parts.first,
+                  let endDateString = parts.last else {
+                return true // Remove malformed keys
+            }
+
+            // Check if the affected date falls within this range
+            let start = String(startDateString)
+            let end = String(endDateString)
+
+            // String comparison works for YYYY-MM-DD format
+            return affectedDateString >= start && affectedDateString <= end
+        }
+
+        for key in keysToRemove {
+            rangeCache.removeValue(forKey: key)
+        }
+
+        logger.debug("Invalidated \(keysToRemove.count) cache entries for date \(affectedDateString)")
+    }
+
+    /// Invalidate cache for a date range (smart invalidation)
+    /// Removes cache entries that overlap with the given range
+    func invalidateCache(from startDate: Date, to endDate: Date) {
+        rangeCacheLock.lock()
+        defer { rangeCacheLock.unlock() }
+
+        let rangeStart = startDate.dateString
+        let rangeEnd = endDate.dateString
+
+        // Find cache entries that overlap with the given range
+        let keysToRemove = rangeCache.keys.filter { key in
+            let parts = key.split(separator: "_")
+            guard parts.count >= 3,
+                  let cacheStartString = parts.first,
+                  let cacheEndString = parts.last else {
+                return true
+            }
+
+            let cacheStart = String(cacheStartString)
+            let cacheEnd = String(cacheEndString)
+
+            // Check for overlap: ranges overlap if neither is completely before or after the other
+            let noOverlap = cacheEnd < rangeStart || cacheStart > rangeEnd
+            return !noOverlap
+        }
+
+        for key in keysToRemove {
+            rangeCache.removeValue(forKey: key)
+        }
     }
 
     /// Invalidate all caches
@@ -234,6 +290,26 @@ final class CoreDataEventStore: @unchecked Sendable {
         rangeCacheLock.lock()
         rangeCache.removeAll()
         rangeCacheLock.unlock()
+        logger.debug("Invalidated all caches")
+    }
+
+    /// Clean up expired cache entries (call periodically to prevent memory growth)
+    func cleanupExpiredCaches() {
+        rangeCacheLock.lock()
+        defer { rangeCacheLock.unlock() }
+
+        let now = Date()
+        let expiredKeys = rangeCache.filter { _, value in
+            now.timeIntervalSince(value.timestamp) > rangeCacheMaxAge
+        }.keys
+
+        for key in expiredKeys {
+            rangeCache.removeValue(forKey: key)
+        }
+
+        if !expiredKeys.isEmpty {
+            logger.debug("Cleaned up \(expiredKeys.count) expired cache entries")
+        }
     }
 
     // MARK: - Batch Operations

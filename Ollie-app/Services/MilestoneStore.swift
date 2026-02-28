@@ -306,6 +306,148 @@ class MilestoneStore: ObservableObject {
         milestones.filter { $0.status(birthDate: birthDate) == status }
     }
 
+    /// Get actionable milestones due within this week (7 days)
+    /// Excludes developmental milestones (isActionable: false)
+    func milestonesThisWeek(birthDate: Date) -> [Milestone] {
+        let now = Date()
+        return milestones.filter { milestone in
+            guard !milestone.isCompleted,
+                  milestone.isActionable,
+                  let daysUntil = milestone.daysUntil(birthDate: birthDate, from: now) else {
+                return false
+            }
+            // Include overdue (negative) and within 7 days
+            return daysUntil <= 7
+        }.sorted { milestone1, milestone2 in
+            let days1 = milestone1.daysUntil(birthDate: birthDate, from: now) ?? Int.max
+            let days2 = milestone2.daysUntil(birthDate: birthDate, from: now) ?? Int.max
+            return days1 < days2
+        }
+    }
+
+    /// Get actionable milestones coming up in 2-4 weeks
+    /// Excludes developmental milestones (isActionable: false)
+    func milestonesComingUp(birthDate: Date) -> [Milestone] {
+        let now = Date()
+        return milestones.filter { milestone in
+            guard !milestone.isCompleted,
+                  milestone.isActionable,
+                  let daysUntil = milestone.daysUntil(birthDate: birthDate, from: now) else {
+                return false
+            }
+            // Between 8 and 28 days (2-4 weeks)
+            return daysUntil > 7 && daysUntil <= 28
+        }.sorted { milestone1, milestone2 in
+            let days1 = milestone1.daysUntil(birthDate: birthDate, from: now) ?? Int.max
+            let days2 = milestone2.daysUntil(birthDate: birthDate, from: now) ?? Int.max
+            return days1 < days2
+        }
+    }
+
+    /// Get active developmental periods (non-actionable milestones that apply to current age)
+    /// These include socialization window markers and fear periods
+    func activeDevelopmentalPeriods(birthDate: Date) -> [Milestone] {
+        let ageInWeeks = Calendar.current.dateComponents([.weekOfYear], from: birthDate, to: Date()).weekOfYear ?? 0
+
+        return milestones.filter { milestone in
+            guard !milestone.isActionable,
+                  milestone.category == .developmental else {
+                return false
+            }
+
+            // Check if this developmental period is currently active
+            if let targetWeeks = milestone.targetAgeWeeks {
+                // Socialization periods are active from their start week
+                if milestone.labelKey.contains("socialization") {
+                    // Socialization window: 8-16 weeks
+                    if milestone.labelKey.contains("Start") {
+                        return ageInWeeks >= targetWeeks && ageInWeeks <= 16
+                    }
+                    if milestone.labelKey.contains("Peak") {
+                        return ageInWeeks >= targetWeeks && ageInWeeks <= 16
+                    }
+                    if milestone.labelKey.contains("End") {
+                        return ageInWeeks >= 14 && ageInWeeks <= 18
+                    }
+                }
+                // Fear periods are active for about 2-3 weeks around target
+                if milestone.labelKey.contains("fearPeriod") {
+                    return abs(ageInWeeks - targetWeeks) <= 2
+                }
+            }
+
+            if let targetMonths = milestone.targetAgeMonths {
+                let ageInMonths = ageInWeeks / 4
+                // Fear period 2 around 6 months
+                if milestone.labelKey.contains("fearPeriod") {
+                    return abs(ageInMonths - targetMonths) <= 1
+                }
+            }
+
+            return false
+        }
+    }
+
+    // MARK: - Calendar Grid Support
+
+    /// Get milestones that fall within the week containing the given date
+    /// Returns actionable milestones due in that week
+    func milestones(inWeekOf date: Date, birthDate: Date) -> [Milestone] {
+        let calendar = Calendar.current
+
+        // Get the start of the week containing the date
+        guard let weekStart = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: date)),
+              let weekEnd = calendar.date(byAdding: .day, value: 7, to: weekStart) else {
+            return []
+        }
+
+        return milestones.filter { milestone in
+            guard !milestone.isCompleted,
+                  milestone.isActionable,
+                  let targetDate = milestone.targetDate(birthDate: birthDate) else {
+                return false
+            }
+            let targetDay = calendar.startOfDay(for: targetDate)
+            return targetDay >= weekStart && targetDay < weekEnd
+        }.sorted { milestone1, milestone2 in
+            let date1 = milestone1.targetDate(birthDate: birthDate) ?? .distantFuture
+            let date2 = milestone2.targetDate(birthDate: birthDate) ?? .distantFuture
+            return date1 < date2
+        }
+    }
+
+    /// Get milestone spans for a date range (for calendar month view)
+    /// Returns MilestoneSpan objects with their week ranges for background tinting
+    func milestoneSpans(from startDate: Date, to endDate: Date, birthDate: Date) -> [MilestoneSpan] {
+        let calendar = Calendar.current
+
+        return milestones.compactMap { milestone -> MilestoneSpan? in
+            guard !milestone.isCompleted,
+                  milestone.isActionable,
+                  let targetDate = milestone.targetDate(birthDate: birthDate) else {
+                return nil
+            }
+
+            // Get the week containing the target date
+            guard let weekStart = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: targetDate)),
+                  let weekEnd = calendar.date(byAdding: .day, value: 7, to: weekStart) else {
+                return nil
+            }
+
+            // Check if this week overlaps with the date range
+            guard weekEnd > startDate && weekStart < endDate else {
+                return nil
+            }
+
+            return MilestoneSpan(
+                id: milestone.id,
+                milestone: milestone,
+                weekStartDate: weekStart,
+                weekEndDate: weekEnd
+            )
+        }
+    }
+
     // MARK: - CloudKit Sync
 
     /// Sync milestones from CloudKit (no-op with automatic sync)

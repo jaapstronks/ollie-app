@@ -144,7 +144,7 @@ class DocumentStore: ObservableObject {
 
         do {
             try persistenceController.save()
-            // Reload to get the updated document with hasImage flag
+            // Reload to get the updated document with attachment info
             loadDocuments()
             lastError = nil
             logger.info("Added document: \(document.displayTitle)")
@@ -157,14 +157,48 @@ class DocumentStore: ObservableObject {
         }
     }
 
+    /// Add a new document with PDF data
+    /// - Parameters:
+    ///   - document: The document metadata
+    ///   - pdfData: PDF data to attach
+    /// - Returns: `true` if the document was saved successfully
+    @discardableResult
+    func addDocument(_ document: Document, pdfData: Data?) -> Bool {
+        guard let profile = getCurrentProfile() else {
+            lastError = (Strings.Common.notFound, Date())
+            return false
+        }
+
+        let cdDocument = CDDocument.create(from: document, profile: profile, in: viewContext)
+
+        // Set PDF if provided
+        if let pdfData = pdfData {
+            cdDocument.setPDF(pdfData)
+        }
+
+        do {
+            try persistenceController.save()
+            // Reload to get the updated document with attachment info
+            loadDocuments()
+            lastError = nil
+            logger.info("Added PDF document: \(document.displayTitle)")
+            return true
+        } catch {
+            viewContext.rollback()
+            lastError = (Strings.Common.saveFailed, Date())
+            logger.error("Failed to add PDF document: \(error.localizedDescription)")
+            return false
+        }
+    }
+
     /// Update an existing document
     /// - Parameters:
     ///   - document: The updated document metadata
     ///   - image: New image (nil to keep existing, pass explicit UIImage to replace)
-    ///   - removeImage: Set to true to remove the existing image
+    ///   - removeAttachment: Set to true to remove the existing attachment (image or PDF)
     /// - Returns: `true` if the document was updated successfully
     @discardableResult
-    func updateDocument(_ document: Document, image: UIImage? = nil, removeImage: Bool = false) -> Bool {
+    func updateDocument(_ document: Document, image: UIImage? = nil, removeAttachment: Bool = false) -> Bool {
         guard let cdDocument = CDDocument.fetch(byId: document.id, in: viewContext) else {
             logger.warning("Document not found for update: \(document.id)")
             lastError = (Strings.Common.notFound, Date())
@@ -173,13 +207,14 @@ class DocumentStore: ObservableObject {
 
         cdDocument.update(from: document)
 
-        // Handle image updates
-        if removeImage {
-            cdDocument.setImage(nil)
+        // Handle attachment updates
+        if removeAttachment {
+            cdDocument.clearAttachment()
         } else if let image = image {
+            cdDocument.clearAttachment()
             cdDocument.setImage(image)
         }
-        // If neither removeImage nor new image, keep existing
+        // If neither removeAttachment nor new image, keep existing
 
         do {
             try persistenceController.save()
@@ -191,6 +226,41 @@ class DocumentStore: ObservableObject {
             viewContext.rollback()
             lastError = (Strings.Common.saveFailed, Date())
             logger.error("Failed to update document: \(error.localizedDescription)")
+            return false
+        }
+    }
+
+    /// Update an existing document with PDF data
+    /// - Parameters:
+    ///   - document: The updated document metadata
+    ///   - pdfData: New PDF data to attach
+    /// - Returns: `true` if the document was updated successfully
+    @discardableResult
+    func updateDocument(_ document: Document, pdfData: Data?) -> Bool {
+        guard let cdDocument = CDDocument.fetch(byId: document.id, in: viewContext) else {
+            logger.warning("Document not found for update: \(document.id)")
+            lastError = (Strings.Common.notFound, Date())
+            return false
+        }
+
+        cdDocument.update(from: document)
+
+        // Replace attachment with PDF
+        if let pdfData = pdfData {
+            cdDocument.clearAttachment()
+            cdDocument.setPDF(pdfData)
+        }
+
+        do {
+            try persistenceController.save()
+            loadDocuments()
+            lastError = nil
+            logger.info("Updated document with PDF: \(document.displayTitle)")
+            return true
+        } catch {
+            viewContext.rollback()
+            lastError = (Strings.Common.saveFailed, Date())
+            logger.error("Failed to update document with PDF: \(error.localizedDescription)")
             return false
         }
     }
@@ -253,6 +323,24 @@ class DocumentStore: ObservableObject {
             return nil
         }
         return cdDocument.getImage()
+    }
+
+    // MARK: - PDF Access
+
+    /// Load PDF data for a document
+    func loadPDFData(for document: Document) -> Data? {
+        guard let cdDocument = CDDocument.fetch(byId: document.id, in: viewContext) else {
+            return nil
+        }
+        return cdDocument.getPDFData()
+    }
+
+    /// Load PDF data by document ID
+    func loadPDFData(forDocumentId id: UUID) -> Data? {
+        guard let cdDocument = CDDocument.fetch(byId: id, in: viewContext) else {
+            return nil
+        }
+        return cdDocument.getPDFData()
     }
 
     // MARK: - Filtering & Queries

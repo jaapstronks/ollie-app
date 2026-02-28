@@ -21,7 +21,8 @@ final class WalkNotificationScheduler: NotificationScheduler {
     func schedule(events: [PuppyEvent], profile: PuppyProfile) async {
         await cancel()
 
-        let minutesBefore = profile.notificationSettings.walkReminders.minutesBefore
+        // minutesOffset: 0 = at time, negative = after walk time (overdue), positive = before
+        let minutesOffset = profile.notificationSettings.walkReminders.minutesOffset
 
         guard let suggestion = WalkSuggestionCalculations.calculateNextSuggestion(
             events: events,
@@ -30,12 +31,15 @@ final class WalkNotificationScheduler: NotificationScheduler {
             return
         }
 
-        let notificationDate = suggestion.suggestedTime.addingTimeInterval(TimeInterval(-minutesBefore * 60))
+        // Subtract offset (negative offset = later notification time)
+        let notificationDate = suggestion.suggestedTime.addingTimeInterval(TimeInterval(-minutesOffset * 60))
         let now = Date()
+        let isOverdueNotification = minutesOffset < 0
 
         if notificationDate <= now {
-            if suggestion.isOverdue && suggestion.minutesUntilSuggested > -30 {
-                await sendImmediateNotification(profile: profile, suggestion: suggestion)
+            // If we missed the notification window, send immediate if within 30 min
+            if suggestion.minutesUntilSuggested > -30 {
+                await sendImmediateNotification(profile: profile, suggestion: suggestion, isOverdue: isOverdueNotification || suggestion.isOverdue)
             }
             return
         }
@@ -66,11 +70,11 @@ final class WalkNotificationScheduler: NotificationScheduler {
         }
     }
 
-    private func sendImmediateNotification(profile: PuppyProfile, suggestion: WalkSuggestion) async {
+    private func sendImmediateNotification(profile: PuppyProfile, suggestion: WalkSuggestion, isOverdue: Bool) async {
         let content = UNMutableNotificationContent()
         content.sound = .default
 
-        if suggestion.isOverdue {
+        if isOverdue {
             content.title = Strings.PushNotifications.walkTimeTitle
             content.body = "\(profile.name) - \(suggestion.label) (\(Strings.Upcoming.overdue))"
         } else {

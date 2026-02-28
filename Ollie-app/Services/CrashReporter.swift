@@ -144,29 +144,4 @@ enum CrashReporter {
         }
     }
 
-    // MARK: - Breadcrumbs
-
-    /// Add a navigation breadcrumb
-    static func addNavigationBreadcrumb(from: String, to: String) {
-        let crumb = Breadcrumb(level: .info, category: "navigation")
-        crumb.message = "Navigated from \(from) to \(to)"
-        crumb.data = ["from": from, "to": to]
-        SentrySDK.addBreadcrumb(crumb)
-    }
-
-    /// Add a user action breadcrumb
-    static func addActionBreadcrumb(_ action: String, data: [String: Any]? = nil) {
-        let crumb = Breadcrumb(level: .info, category: "user")
-        crumb.message = action
-        crumb.data = data
-        SentrySDK.addBreadcrumb(crumb)
-    }
-
-    /// Add a data operation breadcrumb
-    static func addDataBreadcrumb(_ operation: String, data: [String: Any]? = nil) {
-        let crumb = Breadcrumb(level: .info, category: "data")
-        crumb.message = operation
-        crumb.data = data
-        SentrySDK.addBreadcrumb(crumb)
-    }
 }

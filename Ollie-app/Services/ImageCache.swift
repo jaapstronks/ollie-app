@@ -57,15 +57,6 @@ actor ImageCache {
         return result
     }
 
-    /// Preload images for upcoming cells (call during scroll)
-    func preloadImages(relativePaths: [String]) {
-        for path in relativePaths {
-            Task {
-                _ = await loadImage(relativePath: path, isThumbnail: true)
-            }
-        }
-    }
-
     /// Clear all cached images (call on memory warning)
     func clearCache() {
         cache.removeAllObjects()
