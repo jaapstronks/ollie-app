@@ -2,72 +2,66 @@
 //  CalendarTabView.swift
 //  Ollie-app
 //
-//  Calendar tab showing age, appointments, and milestones
+//  Schedule tab showing age, appointments, milestones, and contacts
 
 import SwiftUI
 import OllieShared
 
-/// Main Calendar tab view displaying age header, appointments, and milestones
+/// Main Schedule tab view displaying age header, appointments, milestones, and contacts
 struct CalendarTabView: View {
     @ObservedObject var milestoneStore: MilestoneStore
     @ObservedObject var appointmentStore: AppointmentStore
     @ObservedObject var socializationStore: SocializationStore
+    @ObservedObject var contactStore: ContactStore
     let onSettingsTap: () -> Void
 
     @EnvironmentObject var profileStore: ProfileStore
+    @StateObject private var achievementService = AchievementService.shared
+
+    // View mode state with persistence
+    @AppStorage("calendarViewMode") private var viewMode: CalendarViewMode = .development
 
     @State private var showAppointmentsView = false
     @State private var showRoadmap = false
     @State private var selectedMilestone: Milestone?
+    @State private var selectedAppointment: DogAppointment?
+    @State private var celebrationAchievement: Achievement?
+    @State private var celebrationMilestone: Milestone?
+    @State private var showTier2Celebration = false
+    @State private var showTier3Celebration = false
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(spacing: 20) {
-                    // Age header
-                    if let profile = profileStore.profile {
-                        CalendarAgeHeader(profile: profile)
-                            .animatedAppear(delay: 0)
-                    }
+            VStack(spacing: 0) {
+                // View mode toggle
+                CalendarViewModeToggle(mode: $viewMode)
+                    .padding(.horizontal)
+                    .padding(.top, 8)
 
-                    // Active developmental period banners
-                    if let birthDate = profileStore.profile?.birthDate {
-                        let activePeriods = milestoneStore.activeDevelopmentalPeriods(birthDate: birthDate)
-                        if !activePeriods.isEmpty {
-                            DevelopmentalPeriodBanners(
-                                milestones: activePeriods,
-                                birthDate: birthDate
-                            )
-                            .animatedAppear(delay: 0.05)
+                // Content based on view mode
+                switch viewMode {
+                case .development:
+                    developmentView
+                case .calendar:
+                    CalendarGridView(
+                        appointmentStore: appointmentStore,
+                        milestoneStore: milestoneStore,
+                        birthDate: profileStore.profile?.birthDate,
+                        onAppointmentTap: { appointment in
+                            selectedAppointment = appointment
+                        },
+                        onMilestoneTap: { milestone in
+                            selectedMilestone = milestone
                         }
-                    }
-
-                    // This Week section
-                    if let birthDate = profileStore.profile?.birthDate {
-                        thisWeekSection(birthDate: birthDate)
-                            .animatedAppear(delay: 0.10)
-                    }
-
-                    // Coming Up section (2-4 weeks)
-                    if let birthDate = profileStore.profile?.birthDate {
-                        comingUpSection(birthDate: birthDate)
-                            .animatedAppear(delay: 0.15)
-                    }
-
-                    // Socialization timeline (if in socialization window)
-                    if let profile = profileStore.profile, showSocializationTimeline(for: profile) {
-                        socializationSection(for: profile)
-                            .animatedAppear(delay: 0.20)
-                    }
-
-                    // See roadmap link
-                    roadmapLink
-                        .animatedAppear(delay: 0.25)
+                    )
+                case .contacts:
+                    ContactsView(
+                        contactStore: contactStore,
+                        appointmentStore: appointmentStore
+                    )
                 }
-                .padding()
-                .padding(.bottom, 84) // Space for FAB
             }
-            .navigationTitle(Strings.Tabs.calendar)
+            .navigationTitle(Strings.Tabs.schedule)
             .navigationBarTitleDisplayMode(.large)
             .profileToolbar(profile: profileStore.profile, action: onSettingsTap)
             .navigationDestination(isPresented: $showAppointmentsView) {
@@ -93,8 +87,184 @@ struct CalendarTabView: View {
                             vetClinicName: vetClinic,
                             completionDate: completionDate
                         )
-                        selectedMilestone = nil
+
+                        // Check for achievement
+                        if let achievement = achievementService.checkMilestoneCompletion(milestone: milestone) {
+                            selectedMilestone = nil
+                            celebrationMilestone = milestone
+                            celebrationAchievement = achievement
+                            // Delay celebration to allow sheet dismissal
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                                triggerCelebration(for: achievement)
+                            }
+                        } else {
+                            selectedMilestone = nil
+                        }
                     }
+                )
+            }
+            // Tier 2 celebration sheet
+            .sheet(isPresented: $showTier2Celebration) {
+                if let achievement = celebrationAchievement {
+                    Tier2CelebrationCard(
+                        achievement: achievement,
+                        puppyName: profileStore.profile?.name ?? "Puppy",
+                        onAddPhoto: {
+                            // TODO: Open photo picker
+                            showTier2Celebration = false
+                        },
+                        onShare: {
+                            // TODO: Share functionality
+                            showTier2Celebration = false
+                        },
+                        onDismiss: {
+                            showTier2Celebration = false
+                            celebrationAchievement = nil
+                            celebrationMilestone = nil
+                        }
+                    )
+                    .presentationBackground(.clear)
+                }
+            }
+            // Tier 3 celebration full screen
+            .fullScreenCover(isPresented: $showTier3Celebration) {
+                if let achievement = celebrationAchievement {
+                    Tier3CelebrationView(
+                        achievement: achievement,
+                        puppyName: profileStore.profile?.name ?? "Puppy",
+                        onTakePhoto: {
+                            // TODO: Open camera
+                            showTier3Celebration = false
+                        },
+                        onAddFromLibrary: {
+                            // TODO: Open photo library
+                            showTier3Celebration = false
+                        },
+                        onSkip: {
+                            showTier3Celebration = false
+                            celebrationAchievement = nil
+                            celebrationMilestone = nil
+                        }
+                    )
+                }
+            }
+        }
+    }
+
+    // MARK: - Development View
+
+    @ViewBuilder
+    private var developmentView: some View {
+        ScrollView {
+            VStack(spacing: 20) {
+                // Age header
+                if let profile = profileStore.profile {
+                    CalendarAgeHeader(profile: profile)
+                        .animatedAppear(delay: 0)
+                }
+
+                // Right Now section - developmental periods and socialization
+                if let profile = profileStore.profile {
+                    rightNowSection(for: profile)
+                        .animatedAppear(delay: 0.05)
+                }
+
+                // This Week section
+                if let birthDate = profileStore.profile?.birthDate {
+                    thisWeekSection(birthDate: birthDate)
+                        .animatedAppear(delay: 0.10)
+                }
+
+                // Coming Up section (2-4 weeks) with roadmap link
+                if let birthDate = profileStore.profile?.birthDate {
+                    comingUpSection(birthDate: birthDate)
+                        .animatedAppear(delay: 0.15)
+                }
+            }
+            .padding()
+            .padding(.bottom, 84) // Space for FAB
+        }
+    }
+
+    // MARK: - Celebration Handling
+
+    private func triggerCelebration(for achievement: Achievement) {
+        guard let effectiveTier = achievementService.determineEffectiveTier(for: achievement) else {
+            // Celebrations disabled
+            return
+        }
+
+        switch effectiveTier {
+        case .major:
+            showTier3Celebration = true
+        case .notable:
+            showTier2Celebration = true
+        case .subtle:
+            // Subtle celebrations are inline, no sheet needed
+            // Could trigger a banner or shimmer effect here
+            break
+        }
+    }
+
+    // MARK: - Right Now Section
+
+    @ViewBuilder
+    private func rightNowSection(for profile: PuppyProfile) -> some View {
+        let activePeriods = milestoneStore.activeDevelopmentalPeriods(birthDate: profile.birthDate)
+        let showSocialization = showSocializationTimeline(for: profile)
+
+        // Only show if there's content
+        if !activePeriods.isEmpty || showSocialization {
+            VStack(alignment: .leading, spacing: 10) {
+                SectionHeader(
+                    title: Strings.Calendar.rightNow,
+                    icon: "sparkles",
+                    tint: .olliePurple
+                )
+
+                VStack(spacing: 12) {
+                    // Developmental period banners
+                    if !activePeriods.isEmpty {
+                        DevelopmentalPeriodBanners(
+                            milestones: activePeriods,
+                            birthDate: profile.birthDate
+                        )
+                    }
+
+                    // Socialization week timeline
+                    if showSocialization {
+                        socializationContent(for: profile)
+                    }
+                }
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func socializationContent(for profile: PuppyProfile) -> some View {
+        let weeklyProgress = socializationStore.allWeeklyProgress(profile: profile)
+
+        VStack(alignment: .leading, spacing: 8) {
+            SocializationWeekTimeline(
+                weeklyProgress: weeklyProgress,
+                currentWeek: profile.ageInWeeks,
+                onWeekTap: { _ in
+                    // Week taps handled by timeline component
+                }
+            )
+
+            // Window status badge
+            if socializationStore.socializationWindowClosed(profile: profile) {
+                windowBadge(
+                    icon: "clock.badge.checkmark.fill",
+                    text: Strings.Socialization.windowClosed,
+                    color: .secondary
+                )
+            } else if SocializationWindow.weeksRemaining(ageWeeks: profile.ageInWeeks) <= 2 {
+                windowBadge(
+                    icon: "exclamationmark.triangle.fill",
+                    text: Strings.Socialization.windowClosing,
+                    color: .ollieWarning
                 )
             }
         }
@@ -190,15 +360,15 @@ struct CalendarTabView: View {
         let appointments = appointmentStore.appointmentsComingUp
         let milestones = milestoneStore.milestonesComingUp(birthDate: birthDate)
 
-        if !appointments.isEmpty || !milestones.isEmpty {
-            VStack(alignment: .leading, spacing: 10) {
-                SectionHeader(
-                    title: Strings.Calendar.comingUp,
-                    icon: "calendar.badge.clock",
-                    tint: .ollieInfo
-                )
+        VStack(alignment: .leading, spacing: 10) {
+            SectionHeader(
+                title: Strings.Calendar.comingUp,
+                icon: "calendar.badge.clock",
+                tint: .ollieInfo
+            )
 
-                VStack(spacing: 8) {
+            VStack(spacing: 8) {
+                if !appointments.isEmpty || !milestones.isEmpty {
                     // Appointments coming up
                     ForEach(appointments.prefix(3)) { appointment in
                         ComingUpAppointmentRow(appointment: appointment)
@@ -213,40 +383,26 @@ struct CalendarTabView: View {
                             selectedMilestone = milestone
                         }
                     }
+                } else {
+                    // Empty state
+                    HStack(spacing: 12) {
+                        Image(systemName: "checkmark.circle")
+                            .font(.title3)
+                            .foregroundStyle(.secondary)
+
+                        Text(Strings.Calendar.nothingComingUp)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+
+                        Spacer()
+                    }
+                    .padding()
+                    .background(Color(.tertiarySystemBackground))
+                    .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
                 }
-            }
-        }
-    }
 
-    // MARK: - Socialization Section
-
-    @ViewBuilder
-    private func socializationSection(for profile: PuppyProfile) -> some View {
-        VStack(alignment: .leading, spacing: 8) {
-            // Socialization week timeline
-            let weeklyProgress = socializationStore.allWeeklyProgress(profile: profile)
-
-            SocializationWeekTimeline(
-                weeklyProgress: weeklyProgress,
-                currentWeek: profile.ageInWeeks,
-                onWeekTap: { _ in
-                    // Week taps handled by timeline component
-                }
-            )
-
-            // Window status badge
-            if socializationStore.socializationWindowClosed(profile: profile) {
-                windowBadge(
-                    icon: "clock.badge.checkmark.fill",
-                    text: Strings.Socialization.windowClosed,
-                    color: .secondary
-                )
-            } else if SocializationWindow.weeksRemaining(ageWeeks: profile.ageInWeeks) <= 2 {
-                windowBadge(
-                    icon: "exclamationmark.triangle.fill",
-                    text: Strings.Socialization.windowClosing,
-                    color: .ollieWarning
-                )
+                // Roadmap link - always show
+                roadmapLink
             }
         }
     }
@@ -513,12 +669,14 @@ private struct ComingUpMilestoneRow: View {
     let milestoneStore = MilestoneStore()
     let appointmentStore = AppointmentStore()
     let socializationStore = SocializationStore()
+    let contactStore = ContactStore()
     let profileStore = ProfileStore()
 
     CalendarTabView(
         milestoneStore: milestoneStore,
         appointmentStore: appointmentStore,
         socializationStore: socializationStore,
+        contactStore: contactStore,
         onSettingsTap: { print("Settings tapped") }
     )
     .environmentObject(profileStore)

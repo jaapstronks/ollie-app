@@ -46,6 +46,7 @@
       }
     },
     "Calendar" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -502,6 +503,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Bewaar"
+          }
+        }
+      }
+    },
+    "Schedule" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Agenda"
           }
         }
       }

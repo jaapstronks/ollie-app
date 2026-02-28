@@ -7,7 +7,7 @@
 import OllieShared
 import SwiftUI
 
-/// Train tab - unified view with potty progress, socialization checklist, and skills tracker
+/// Train tab - unified view with potty progress, socialization checklist, skills tracker, and developmental milestones
 struct TrainTabView: View {
     @ObservedObject var viewModel: TimelineViewModel
     let onSettingsTap: () -> Void
@@ -15,6 +15,7 @@ struct TrainTabView: View {
     @EnvironmentObject var eventStore: EventStore
     @EnvironmentObject var socializationStore: SocializationStore
     @EnvironmentObject var profileStore: ProfileStore
+    @EnvironmentObject var milestoneStore: MilestoneStore
 
     @Environment(\.colorScheme) private var colorScheme
 
@@ -39,17 +40,23 @@ struct TrainTabView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 20) {
+                    // Section 0: Developmental Milestones (fear periods, socialization window)
+                    if let profile = profileStore.profile {
+                        developmentalMilestonesSection(for: profile)
+                            .animatedAppear(delay: 0)
+                    }
+
                     // Section 1: Potty Progress
                     pottyProgressSection
-                        .animatedAppear(delay: 0)
+                        .animatedAppear(delay: 0.05)
 
                     // Section 2: Skills
                     skillsSection
-                        .animatedAppear(delay: 0.08)
+                        .animatedAppear(delay: 0.10)
 
                     // Section 3: Socialization
                     socializationSection
-                        .animatedAppear(delay: 0.16)
+                        .animatedAppear(delay: 0.15)
                 }
                 .padding()
                 .padding(.bottom, 84) // Space for FAB
@@ -57,6 +64,35 @@ struct TrainTabView: View {
             .navigationTitle(Strings.Tabs.train)
             .navigationBarTitleDisplayMode(.large)
             .profileToolbar(profile: profileStore.profile, action: onSettingsTap)
+        }
+    }
+
+    // MARK: - Developmental Milestones Section
+
+    /// Section showing active developmental periods (fear periods, socialization window)
+    @ViewBuilder
+    private func developmentalMilestonesSection(for profile: PuppyProfile) -> some View {
+        let activePeriods = milestoneStore.activeDevelopmentalPeriods(birthDate: profile.birthDate)
+
+        // Only show if there are active developmental periods
+        if !activePeriods.isEmpty {
+            VStack(alignment: .leading, spacing: 10) {
+                HStack {
+                    Image(systemName: "brain.head.profile")
+                        .foregroundStyle(Color.olliePurple)
+                        .accessibilityHidden(true)
+                    Text(Strings.Development.title)
+                        .font(.headline)
+                        .fontWeight(.semibold)
+                        .accessibilityAddTraits(.isHeader)
+                    Spacer()
+                }
+
+                DevelopmentalPeriodBanners(
+                    milestones: activePeriods,
+                    birthDate: profile.birthDate
+                )
+            }
         }
     }
 
@@ -183,9 +219,11 @@ private struct SkillsPreviewCard: View {
             HStack {
                 Image(systemName: "graduationcap.fill")
                     .foregroundStyle(Color.ollieAccent)
+                    .accessibilityHidden(true)
                 Text(Strings.Train.skills)
                     .font(.headline)
                     .fontWeight(.semibold)
+                    .accessibilityAddTraits(.isHeader)
                 Spacer()
             }
 
@@ -221,6 +259,9 @@ private struct SkillsPreviewCard: View {
                             .foregroundStyle(.secondary)
                     }
                     .frame(width: 44, height: 44)
+                    .accessibilityElement(children: .ignore)
+                    .accessibilityLabel(Strings.Train.progressRingAccessibility)
+                    .accessibilityValue(Strings.Train.progressValue(started: trainingStore.weekProgress.started, total: trainingStore.weekProgress.total))
                 }
 
                 // Focus skills chips
@@ -290,6 +331,7 @@ private struct SkillsPreviewCard: View {
             Circle()
                 .fill(statusColor(for: status))
                 .frame(width: 6, height: 6)
+                .accessibilityHidden(true)
 
             Text(skill.name)
                 .font(.caption)
@@ -302,13 +344,24 @@ private struct SkillsPreviewCard: View {
             Capsule()
                 .fill(statusColor(for: status).opacity(colorScheme == .dark ? 0.2 : 0.1))
         )
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(Strings.Train.skillAccessibility(name: skill.name, status: statusAccessibilityLabel(for: status)))
+    }
+
+    private func statusAccessibilityLabel(for status: SkillStatus) -> String {
+        switch status {
+        case .notStarted: return Strings.Train.skillNotStarted
+        case .started: return Strings.Train.skillStarted
+        case .practicing: return Strings.Train.skillPracticing
+        case .mastered: return Strings.Train.skillMastered
+        }
     }
 
     private func statusColor(for status: SkillStatus) -> Color {
         switch status {
         case .notStarted: return .secondary
         case .started: return .ollieAccent
-        case .practicing: return .orange
+        case .practicing: return .ollieWarning
         case .mastered: return .ollieSuccess
         }
     }
@@ -328,4 +381,5 @@ private struct SkillsPreviewCard: View {
     .environmentObject(eventStore)
     .environmentObject(SocializationStore())
     .environmentObject(profileStore)
+    .environmentObject(MilestoneStore())
 }

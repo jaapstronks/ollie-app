@@ -58,6 +58,8 @@ extension Strings {
         static let nextUp = String(localized: "Next up", table: table)
         static let future = String(localized: "Upcoming", table: table)
         static let overdue = String(localized: "Overdue", table: table)
+        static let medicalMilestones = String(localized: "Medical Milestones", table: table)
+        static let noMedicalMilestones = String(localized: "No medical milestones yet", table: table)
 
         // Default milestones (Dutch vaccination schedule)
         static let firstDewormingBreeder = String(localized: "First deworming (breeder)", table: table)

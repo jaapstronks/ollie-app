@@ -20,6 +20,7 @@ struct ContentView: View {
     @EnvironmentObject var documentStore: DocumentStore
     @EnvironmentObject var contactStore: ContactStore
     @EnvironmentObject var appointmentStore: AppointmentStore
+    @EnvironmentObject var cloudKit: CloudKitService
 
     @State private var showOnboarding = false
     @AppStorage(UserPreferences.Key.lastSelectedTab.rawValue) private var selectedTab = 0
@@ -30,14 +31,30 @@ struct ContentView: View {
         AppearanceMode(rawValue: appearanceMode)?.colorScheme
     }
 
+    /// Determine if we should show onboarding
+    /// - Skip if user is a participant (accepted a share invitation)
+    /// - Skip if user already has a profile
+    private var shouldShowOnboarding: Bool {
+        // Never show onboarding while loading
+        guard !profileStore.isLoading else { return false }
+
+        // Don't show onboarding if user is a participant with shared data
+        if cloudKit.isParticipant {
+            return false
+        }
+
+        // Show onboarding only if no profile exists (and not forced)
+        return !profileStore.hasProfile || showOnboarding
+    }
+
     var body: some View {
         ZStack {
             Group {
                 if profileStore.isLoading {
                     // Loading state
                     LaunchScreen()
-                } else if !profileStore.hasProfile || showOnboarding {
-                    // Onboarding for new users
+                } else if shouldShowOnboarding {
+                    // Onboarding for new users (not for participants)
                     OnboardingView(profileStore: profileStore) {
                         showOnboarding = false
                     }
@@ -76,12 +93,17 @@ struct ContentView: View {
                 }
             }
         }
+        // Listen for share acceptance to skip onboarding and reload profile
+        .onReceive(NotificationCenter.default.publisher(for: .cloudKitShareAccepted)) { _ in
+            // Force dismiss onboarding if it was showing
+            showOnboarding = false
+        }
         .preferredColorScheme(colorScheme)
     }
 }
 
 /// Wrapper view that owns the TimelineViewModel as a @StateObject
-/// New structure: 5 tabs (Today, Train, Places, Calendar, Insights) + FAB for logging
+/// New structure: 5 tabs (Today, Train, Places, Schedule, Health) + FAB for logging
 struct MainTabView: View {
     @Binding var selectedTab: Int
     let eventStore: EventStore
@@ -139,7 +161,8 @@ struct MainTabView: View {
             eventStore: eventStore,
             profileStore: profileStore,
             notificationService: notificationService,
-            medicationStore: medicationStore
+            medicationStore: medicationStore,
+            appointmentStore: appointmentStore
         ))
         self._momentsViewModel = StateObject(wrappedValue: MomentsViewModel(
             eventStore: eventStore
@@ -195,6 +218,7 @@ struct MainTabView: View {
                 // Tab 2: Places (spots + moments combined)
                 PlacesTabView(
                     spotStore: spotStore,
+                    contactStore: contactStore,
                     momentsViewModel: momentsViewModel,
                     viewModel: viewModel,
                     locationManager: locationManager,
@@ -205,26 +229,27 @@ struct MainTabView: View {
                 }
                 .tag(2)
 
-                // Tab 3: Calendar (age, appointments, milestones)
+                // Tab 3: Schedule (appointments, contacts, calendar)
                 CalendarTabView(
                     milestoneStore: milestoneStore,
                     appointmentStore: appointmentStore,
                     socializationStore: socializationStore,
+                    contactStore: contactStore,
                     onSettingsTap: { showingSettings = true }
                 )
                 .tabItem {
-                    Label(Strings.Tabs.calendar, systemImage: "calendar.badge.clock")
+                    Label(Strings.Tabs.schedule, systemImage: "calendar.badge.clock")
                 }
                 .tag(3)
 
-                // Tab 4: Insights (stats only)
-                InsightsView(
+                // Tab 4: Health (stats, weight, patterns, walks)
+                HealthTabView(
                     viewModel: viewModel,
                     momentsViewModel: momentsViewModel,
                     onSettingsTap: { showingSettings = true }
                 )
                 .tabItem {
-                    Label(Strings.Tabs.insights, systemImage: "chart.bar.fill")
+                    Label(Strings.Tabs.health, systemImage: "heart.text.square.fill")
                 }
                 .tag(4)
             }
@@ -307,4 +332,5 @@ struct MainTabView: View {
         .environmentObject(DocumentStore())
         .environmentObject(ContactStore())
         .environmentObject(AppointmentStore())
+        .environmentObject(CloudKitService.shared)
 }

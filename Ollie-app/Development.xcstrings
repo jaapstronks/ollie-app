@@ -1,0 +1,402 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "%lld months · ~%@" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld maanden · ~%@"
+          }
+        }
+      }
+    },
+    "%lld weeks remaining" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld weken resterend"
+          }
+        }
+      }
+    },
+    "1 week remaining" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 week resterend"
+          }
+        }
+      }
+    },
+    "2-3 weeks" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "2-3 weken"
+          }
+        }
+      }
+    },
+    "3-16 weeks" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "3-16 weken"
+          }
+        }
+      }
+    },
+    "4-6 months" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "4-6 maanden"
+          }
+        }
+      }
+    },
+    "6-18 months" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "6-18 maanden"
+          }
+        }
+      }
+    },
+    "18+ months" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "18+ maanden"
+          }
+        }
+      }
+    },
+    "Active Periods" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actieve periodes"
+          }
+        }
+      }
+    },
+    "Adolescent" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adolescent"
+          }
+        }
+      }
+    },
+    "Adult" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Volwassen"
+          }
+        }
+      }
+    },
+    "Age week %lld · ~%@" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leeftijd week %lld · ~%@"
+          }
+        }
+      }
+    },
+    "Avoid overwhelming situations. Keep new experiences positive and low-pressure." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vermijd overweldigende situaties. Houd nieuwe ervaringen positief en laagdrempelig."
+          }
+        }
+      }
+    },
+    "Be extra gentle with new experiences" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wees extra voorzichtig met nieuwe ervaringen"
+          }
+        }
+      }
+    },
+    "Birth to 2 weeks" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geboorte tot 2 weken"
+          }
+        }
+      }
+    },
+    "Coming Up" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Binnenkort"
+          }
+        }
+      }
+    },
+    "Current stage" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Huidige fase"
+          }
+        }
+      }
+    },
+    "Development" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ontwikkeling"
+          }
+        }
+      }
+    },
+    "Development Roadmap" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ontwikkelingsroadmap"
+          }
+        }
+      }
+    },
+    "Fear Period" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Angstperiode"
+          }
+        }
+      }
+    },
+    "Focus on positive experiences with new people, places, sounds, and other animals." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Focus op positieve ervaringen met nieuwe mensen, plekken, geluiden en andere dieren."
+          }
+        }
+      }
+    },
+    "Juvenile" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Juveniel"
+          }
+        }
+      }
+    },
+    "Later" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Later"
+          }
+        }
+      }
+    },
+    "Neonatal" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neonataal"
+          }
+        }
+      }
+    },
+    "No active developmental periods" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geen actieve ontwikkelingsperiodes"
+          }
+        }
+      }
+    },
+    "Nothing coming up" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Niets op komst"
+          }
+        }
+      }
+    },
+    "Nothing scheduled this week" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Niets gepland deze week"
+          }
+        }
+      }
+    },
+    "See development roadmap" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bekijk ontwikkelingsroadmap"
+          }
+        }
+      }
+    },
+    "Socialization" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Socialisatie"
+          }
+        }
+      }
+    },
+    "Socialization Window" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Socialisatievenster"
+          }
+        }
+      }
+    },
+    "Socialization window has closed" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Socialisatievenster is gesloten"
+          }
+        }
+      }
+    },
+    "Socialization window is closing" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Socialisatievenster sluit"
+          }
+        }
+      }
+    },
+    "Socialization window is open" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Socialisatievenster is open"
+          }
+        }
+      }
+    },
+    "This Week" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deze week"
+          }
+        }
+      }
+    },
+    "Transitional" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Overgang"
+          }
+        }
+      }
+    },
+    "You are here" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je bent hier"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

@@ -33,6 +33,8 @@ extension Strings {
         static let remove = String(localized: "Remove", table: table)
         static let yes = String(localized: "Yes", table: table)
         static let no = String(localized: "No", table: table)
+        static let share = String(localized: "Share", table: table)
+        static let addPhoto = String(localized: "Add Photo", table: table)
 
         // Error messages
         static let saveFailed = String(localized: "Failed to save. Please try again.", table: table)
@@ -48,6 +50,7 @@ extension Strings {
         // Time units
         static let minutes = String(localized: "min", table: table)
         static let minutesFull = String(localized: "minutes", table: table)
+        static let week = String(localized: "week", table: table)
         static let weeks = String(localized: "weeks", table: table)
         static let days = String(localized: "days", table: table)
         static let hours = String(localized: "hours", table: table)
@@ -74,13 +77,17 @@ extension Strings {
         static let stats = String(localized: "Stats", table: table)
         static let moments = String(localized: "Moments", table: table)
         static let settings = String(localized: "Settings", table: table)
-        // 4-tab structure
+        // 5-tab structure
         static let today = String(localized: "Today", table: table)
         static let insights = String(localized: "Insights", table: table)
         static let train = String(localized: "Train", table: table)
         static let walks = String(localized: "Walks", table: table)
         static let plan = String(localized: "Plan", table: table)
         static let places = String(localized: "Places", table: table)
+        static let calendar = String(localized: "Calendar", table: table)
+        // Renamed tabs
+        static let schedule = String(localized: "Schedule", table: table)
+        static let health = String(localized: "Health", table: table)
     }
 
     // MARK: - FAB (Floating Action Button)
