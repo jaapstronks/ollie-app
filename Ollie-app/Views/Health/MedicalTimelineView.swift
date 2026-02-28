@@ -36,6 +36,7 @@ struct MedicalTimelineView: View {
     let birthDate: Date
     let puppyName: String
 
+    @EnvironmentObject var profileStore: ProfileStore
     @State private var selectedMilestone: Milestone?
 
     @Environment(\.colorScheme) private var colorScheme
@@ -160,16 +161,8 @@ struct MedicalTimelineView: View {
     @ViewBuilder
     private var birthHeaderCard: some View {
         VStack(spacing: 12) {
-            // Birth icon
-            ZStack {
-                Circle()
-                    .fill(Color.ollieAccent.opacity(0.15))
-                    .frame(width: 60, height: 60)
-
-                Image(systemName: "star.fill")
-                    .font(.system(size: 24))
-                    .foregroundStyle(Color.ollieAccent)
-            }
+            // Profile photo
+            ProfilePhotoView(profile: profileStore.profile, size: 60)
 
             // Puppy name and birth date
             VStack(spacing: 4) {
@@ -416,4 +409,5 @@ struct MedicalTimelineView: View {
             puppyName: "Luna"
         )
     }
+    .environmentObject(ProfileStore())
 }
