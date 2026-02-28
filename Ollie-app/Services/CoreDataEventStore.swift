@@ -97,6 +97,11 @@ final class CoreDataEventStore: @unchecked Sendable {
         return cdEvent.toPuppyEvent()
     }
 
+    /// Get the date of the earliest logged event
+    func getEarliestEventDate() -> Date? {
+        CDPuppyEvent.fetchEarliestEvent(in: viewContext)?.time
+    }
+
     /// Fetch events by type
     func fetchEvents(ofType type: EventType) -> [PuppyEvent] {
         let cdEvents = CDPuppyEvent.fetchEvents(ofType: type, in: viewContext)

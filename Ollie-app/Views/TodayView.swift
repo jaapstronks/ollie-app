@@ -13,6 +13,7 @@ import TipKit
 struct TodayView: View {
     @ObservedObject var viewModel: TimelineViewModel
     @ObservedObject var thisWeekViewModel: ThisWeekViewModel
+    @ObservedObject var memoriesViewModel: MemoriesViewModel
     @ObservedObject var appointmentStore: AppointmentStore
     /// Weather service passed down but not observed here to avoid full view redraws
     /// Weather-dependent sections use their own observation via WeatherSectionContainer
@@ -50,6 +51,12 @@ struct TodayView: View {
                     if viewModel.isShowingToday {
                         statusCardsSection
                             .animatedAppear(delay: 0.05)
+                    }
+
+                    // Memories card ("On This Day")
+                    if viewModel.isShowingToday {
+                        MemoriesCard(viewModel: memoriesViewModel)
+                            .animatedAppear(delay: 0.08)
                     }
 
                     // This Week card (socialization + milestones)
@@ -359,6 +366,7 @@ struct EmptyTimelineCard: View {
         milestoneStore: milestoneStore,
         socializationStore: socializationStore
     )
+    let memoriesViewModel = MemoriesViewModel(eventStore: eventStore)
     let weatherService = WeatherService()
     let atmosphereProvider = AtmosphereProvider()
     let foodRecallService = FoodRecallService()
@@ -366,6 +374,7 @@ struct EmptyTimelineCard: View {
     return TodayView(
         viewModel: viewModel,
         thisWeekViewModel: thisWeekViewModel,
+        memoriesViewModel: memoriesViewModel,
         appointmentStore: appointmentStore,
         weatherService: weatherService,
         onSettingsTap: { print("Settings tapped") },

@@ -175,4 +175,13 @@ extension CDPuppyEvent {
 
         return (try? context.fetch(request)) ?? []
     }
+
+    /// Fetch the earliest event by time
+    static func fetchEarliestEvent(in context: NSManagedObjectContext) -> CDPuppyEvent? {
+        let request = NSFetchRequest<CDPuppyEvent>(entityName: "CDPuppyEvent")
+        request.sortDescriptors = [NSSortDescriptor(keyPath: \CDPuppyEvent.time, ascending: true)]
+        request.fetchLimit = 1
+
+        return try? context.fetch(request).first
+    }
 }

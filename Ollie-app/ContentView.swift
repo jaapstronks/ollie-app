@@ -125,6 +125,7 @@ struct MainTabView: View {
     @StateObject private var momentsViewModel: MomentsViewModel
     @StateObject private var mediaCaptureViewModel = MediaCaptureViewModel(mediaStore: MediaStore())
     @StateObject private var thisWeekViewModel: ThisWeekViewModel
+    @StateObject private var memoriesViewModel: MemoriesViewModel
     @State private var showingSettings = false
     @State private var selectedPhotoEvent: PuppyEvent?
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -173,6 +174,9 @@ struct MainTabView: View {
             milestoneStore: milestoneStore,
             socializationStore: socializationStore
         ))
+        self._memoriesViewModel = StateObject(wrappedValue: MemoriesViewModel(
+            eventStore: eventStore
+        ))
     }
 
     var body: some View {
@@ -195,6 +199,7 @@ struct MainTabView: View {
                 TodayView(
                     viewModel: viewModel,
                     thisWeekViewModel: thisWeekViewModel,
+                    memoriesViewModel: memoriesViewModel,
                     appointmentStore: appointmentStore,
                     weatherService: weatherService,
                     onSettingsTap: { showingSettings = true },

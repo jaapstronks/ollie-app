@@ -90,6 +90,12 @@ extension Strings {
         static func lastExposure(date: String) -> String {
             String(localized: "Last: \(date)", table: table)
         }
+
+        // Social event summary
+        static func metName(_ name: String) -> String {
+            String(localized: "Met \(name)", table: table, comment: "Summary for social event, e.g. 'Met Luna the Labrador'")
+        }
+
         static func exposureCount(_ count: Int) -> String {
             String(localized: "\(count) exposures", table: table)
         }

@@ -279,6 +279,11 @@ class EventStore: ObservableObject {
         // With NSPersistentCloudKitContainer, retries are automatic
     }
 
+    /// Get the date of the earliest logged event
+    func getEarliestEventDate() -> Date? {
+        coreDataStore.getEarliestEventDate()
+    }
+
     // MARK: - App Group Event Import
 
     /// Import events logged via Siri/Shortcuts from the App Group JSONL files
