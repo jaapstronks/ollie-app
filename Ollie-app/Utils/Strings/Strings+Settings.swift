@@ -94,6 +94,7 @@ extension Strings {
 
         static let resetProfile = String(localized: "Reset profile", table: table)
         static let advanced = String(localized: "Advanced", table: table)
+        static let integrations = String(localized: "Integrations", table: table)
     }
 
     // MARK: - Exercise Edit View

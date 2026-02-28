@@ -141,6 +141,18 @@ class EventStore: ObservableObject {
                 let currentStreak = StreakCalculations.calculateCurrentStreak(events: allEvents)
                 ReviewService.shared.checkForStreakMilestoneReview(currentStreak: currentStreak)
             }
+
+            // Send webhook if configured
+            if let webhookConfig = profile?.webhookConfig,
+               webhookConfig.shouldSendWebhook(for: newEvent.type) {
+                Task {
+                    await WebhookService.shared.sendEventWebhook(
+                        newEvent,
+                        config: webhookConfig,
+                        puppyName: profile?.name
+                    )
+                }
+            }
         } catch {
             logger.error("Failed to save event: \(error.localizedDescription)")
             syncError = error.localizedDescription

@@ -54,6 +54,9 @@ struct AppSettingsView: View {
             // Siri & Shortcuts
             SiriSection()
 
+            // Integrations (Webhooks)
+            integrationsSection
+
             // Appearance
             appearanceSection
 
@@ -136,6 +139,29 @@ struct AppSettingsView: View {
         }
         .sheet(isPresented: $showingExportSheet) {
             ExportDataView(profileStore: profileStore)
+        }
+    }
+
+    // MARK: - Integrations Section
+
+    private var integrationsSection: some View {
+        Section {
+            NavigationLink {
+                WebhookSettingsView(profileStore: profileStore)
+            } label: {
+                HStack {
+                    Label(Strings.Webhook.title, systemImage: "arrow.up.forward.app")
+                    Spacer()
+                    if profileStore.profile?.webhookConfig.isEnabled == true {
+                        Text(Strings.Common.on)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+            }
+        } header: {
+            Text(Strings.Settings.integrations)
+        } footer: {
+            Text(Strings.Webhook.description)
         }
     }
 

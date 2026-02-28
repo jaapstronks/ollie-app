@@ -4,6 +4,7 @@
 //
 //  Sends webhook notifications when events are logged
 
+import Combine
 import Foundation
 import OllieShared
 import os
