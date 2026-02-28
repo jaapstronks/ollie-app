@@ -22,6 +22,7 @@ struct HealthTabView: View {
     @State private var showWeightSheet = false
     @State private var showOlliePlusSheet = false
     @State private var selectedMilestone: Milestone?
+    @State private var showAllMilestones = false
 
     var body: some View {
         NavigationStack {
@@ -201,9 +202,45 @@ struct HealthTabView: View {
     @ViewBuilder
     private func medicalMilestonesSection(birthDate: Date) -> some View {
         let healthMilestones = milestoneStore.milestones(for: .health)
-        let completedMilestones = healthMilestones.filter { $0.isCompleted }
-        let upcomingMilestones = healthMilestones.filter { !$0.isCompleted }
-            .sorted { ($0.targetAgeWeeks ?? 0) < ($1.targetAgeWeeks ?? 0) }
+        let today = Date()
+        let calendar = Calendar.current
+
+        // Sort all milestones chronologically by target date
+        let sortedMilestones = healthMilestones.sorted { m1, m2 in
+            let date1 = m1.completedDate ?? m1.targetDate(birthDate: birthDate) ?? .distantFuture
+            let date2 = m2.completedDate ?? m2.targetDate(birthDate: birthDate) ?? .distantFuture
+            return date1 < date2
+        }
+
+        // Recent completed: within last 30 days, sorted most recent first
+        let recentCompleted = sortedMilestones
+            .filter { milestone in
+                guard milestone.isCompleted, let completedDate = milestone.completedDate else { return false }
+                let daysSinceCompletion = calendar.dateComponents([.day], from: completedDate, to: today).day ?? 0
+                return daysSinceCompletion <= 30
+            }
+            .sorted { ($0.completedDate ?? .distantPast) > ($1.completedDate ?? .distantPast) }
+
+        // Upcoming: not completed, within next 90 days (or overdue), sorted by target date
+        let upcomingMilestones = sortedMilestones
+            .filter { milestone in
+                guard !milestone.isCompleted else { return false }
+                guard let targetDate = milestone.targetDate(birthDate: birthDate) else { return false }
+                let daysUntil = calendar.dateComponents([.day], from: today, to: targetDate).day ?? 0
+                // Include overdue (negative days) and upcoming within 90 days
+                return daysUntil <= 90
+            }
+            .sorted { m1, m2 in
+                let date1 = m1.targetDate(birthDate: birthDate) ?? .distantFuture
+                let date2 = m2.targetDate(birthDate: birthDate) ?? .distantFuture
+                return date1 < date2
+            }
+
+        // Determine what to show in collapsed vs expanded state
+        let collapsedUpcomingCount = min(2, upcomingMilestones.count)
+        let collapsedCompletedCount = min(1, recentCompleted.count)
+        let hasMoreToShow = upcomingMilestones.count > collapsedUpcomingCount ||
+                           recentCompleted.count > collapsedCompletedCount
 
         VStack(alignment: .leading, spacing: 10) {
             // Header with View All link
@@ -231,9 +268,10 @@ struct HealthTabView: View {
             }
 
             VStack(spacing: 8) {
-                // Upcoming health milestones (next 2)
+                // Upcoming health milestones (next up first - overdue items appear first)
                 if !upcomingMilestones.isEmpty {
-                    ForEach(upcomingMilestones.prefix(2)) { milestone in
+                    let displayCount = showAllMilestones ? upcomingMilestones.count : collapsedUpcomingCount
+                    ForEach(upcomingMilestones.prefix(displayCount)) { milestone in
                         HealthMilestoneRow(
                             milestone: milestone,
                             birthDate: birthDate,
@@ -244,9 +282,10 @@ struct HealthTabView: View {
                     }
                 }
 
-                // Completed health milestones (last 3)
-                if !completedMilestones.isEmpty {
-                    ForEach(completedMilestones.suffix(3)) { milestone in
+                // Recently completed milestones
+                if !recentCompleted.isEmpty {
+                    let displayCount = showAllMilestones ? recentCompleted.count : collapsedCompletedCount
+                    ForEach(recentCompleted.prefix(displayCount)) { milestone in
                         HealthMilestoneRow(
                             milestone: milestone,
                             birthDate: birthDate,
@@ -257,8 +296,28 @@ struct HealthTabView: View {
                     }
                 }
 
-                // Empty state
-                if healthMilestones.isEmpty {
+                // Show more/less button
+                if hasMoreToShow {
+                    Button {
+                        withAnimation(.easeInOut(duration: 0.2)) {
+                            showAllMilestones.toggle()
+                        }
+                    } label: {
+                        HStack {
+                            Text(showAllMilestones ? Strings.Common.tapToCollapse : Strings.Common.tapToExpand)
+                                .font(.subheadline)
+                            Image(systemName: showAllMilestones ? "chevron.up" : "chevron.down")
+                                .font(.caption)
+                        }
+                        .foregroundStyle(Color.ollieAccent)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 8)
+                    }
+                    .buttonStyle(.plain)
+                }
+
+                // Empty state (only if no relevant milestones at all)
+                if upcomingMilestones.isEmpty && recentCompleted.isEmpty {
                     HStack(spacing: 12) {
                         Image(systemName: "checkmark.circle")
                             .font(.title3)
