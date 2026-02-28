@@ -62,7 +62,7 @@ struct TrainTabView: View {
                 .padding(.bottom, 84) // Space for FAB
             }
             .navigationTitle(Strings.Tabs.train)
-            .navigationBarTitleDisplayMode(.large)
+            .navigationBarTitleDisplayMode(.inline)
             .profileToolbar(profile: profileStore.profile, action: onSettingsTap)
         }
     }

@@ -90,7 +90,7 @@ struct HealthTabView: View {
                 .padding(.bottom, 84) // Space for FAB
             }
             .navigationTitle(Strings.Tabs.health)
-            .navigationBarTitleDisplayMode(.large)
+            .navigationBarTitleDisplayMode(.inline)
             .profileToolbar(profile: profileStore.profile, action: onSettingsTap)
             .sheet(isPresented: $showWeightSheet) {
                 WeightLogSheet(isPresented: $showWeightSheet) { weight in

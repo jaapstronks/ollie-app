@@ -2,65 +2,91 @@
 //  PlacesTabView.swift
 //  Ollie-app
 //
-//  Explore tab - map view of saved spots and photo moments
+//  Explore tab - full-screen map view of saved spots and photo moments
 //
 
 import SwiftUI
 import OllieShared
 import MapKit
 
-/// Explore tab - map view of spots and photos
+/// Explore tab - full-screen map with spots, contacts, and photo pins
 struct PlacesTabView: View {
     @ObservedObject var spotStore: SpotStore
     @ObservedObject var contactStore: ContactStore
     @ObservedObject var momentsViewModel: MomentsViewModel
-    @ObservedObject var viewModel: TimelineViewModel
     @ObservedObject var locationManager: LocationManager
     var onSettingsTap: (() -> Void)?
 
     @EnvironmentObject var profileStore: ProfileStore
-    @Environment(\.colorScheme) private var colorScheme
+    @StateObject private var mapViewModel: PlacesMapViewModel
 
     @State private var showingAddSpot = false
-    @State private var showingExpandedMap = false
     @State private var selectedSpot: WalkSpot?
-    @State private var selectedPhotoEvent: PuppyEvent?
+    @State private var selectedDiscoveredSpot: DiscoveredSpot?
+    @State private var selectedContact: DogContact?
     @State private var selectedCluster: PhotoCluster?
+    @State private var selectedPhotoEvent: PuppyEvent?
+
+    init(
+        spotStore: SpotStore,
+        contactStore: ContactStore,
+        momentsViewModel: MomentsViewModel,
+        locationManager: LocationManager,
+        onSettingsTap: (() -> Void)? = nil
+    ) {
+        self.spotStore = spotStore
+        self.contactStore = contactStore
+        self.momentsViewModel = momentsViewModel
+        self.locationManager = locationManager
+        self.onSettingsTap = onSettingsTap
+        self._mapViewModel = StateObject(wrappedValue: PlacesMapViewModel(
+            spotStore: spotStore,
+            contactStore: contactStore,
+            momentsViewModel: momentsViewModel
+        ))
+    }
 
     var body: some View {
         NavigationStack {
-            ZStack(alignment: .bottomTrailing) {
-                PlacesMapModeView(
-                    spotStore: spotStore,
-                    momentsViewModel: momentsViewModel,
-                    puppyName: profileStore.profile?.name ?? "Ollie",
-                    onShowAllSpots: { showingExpandedMap = true },
-                    onSelectSpot: { spot in selectedSpot = spot },
-                    onSelectPhoto: { event in selectedPhotoEvent = event },
-                    onSelectCluster: { cluster in
-                        // Always show detail card (handles single and multi-photo)
-                        selectedCluster = cluster
+            ZStack(alignment: .bottom) {
+                // Full-screen map with filter bar
+                ZStack(alignment: .top) {
+                    mapView
+                        .ignoresSafeArea(edges: .bottom)
+
+                    // Filter bar overlay at top
+                    VStack(spacing: 0) {
+                        PlacesFilterBar(
+                            activeFilters: $mapViewModel.activeFilters,
+                            selectedContactTypes: $mapViewModel.selectedContactTypes,
+                            selectedSpotCategories: $mapViewModel.selectedSpotCategories
+                        )
+                        Spacer()
                     }
-                )
+                }
 
                 // Floating Add Button
-                addSpotFAB
+                HStack {
+                    Spacer()
+                    addSpotFAB
+                }
             }
             .navigationTitle(Strings.Places.title)
-            .navigationBarTitleDisplayMode(.large)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button {
+                        mapViewModel.centerOnUserLocation()
+                    } label: {
+                        Image(systemName: "location.fill")
+                    }
+                }
+            }
             .profileToolbar(profile: profileStore.profile) {
                 onSettingsTap?()
             }
             .sheet(isPresented: $showingAddSpot) {
                 AddSpotSheet(spotStore: spotStore, locationManager: locationManager)
-            }
-            .fullScreenCover(isPresented: $showingExpandedMap) {
-                ExpandedPlacesMapView(
-                    spotStore: spotStore,
-                    contactStore: contactStore,
-                    momentsViewModel: momentsViewModel,
-                    locationManager: locationManager
-                )
             }
             .sheet(item: $selectedSpot) { spot in
                 SpotDetailView(
@@ -68,6 +94,15 @@ struct PlacesTabView: View {
                     spot: spot,
                     momentsViewModel: momentsViewModel
                 )
+            }
+            .sheet(item: $selectedDiscoveredSpot) { spot in
+                DiscoveredSpotDetailSheet(
+                    spot: spot,
+                    spotStore: spotStore
+                )
+            }
+            .sheet(item: $selectedContact) { contact in
+                ContactDetailView(contact: contact, contactStore: contactStore)
             }
             .sheet(item: $selectedCluster) { cluster in
                 PhotoPinDetailCard(
@@ -79,7 +114,7 @@ struct PlacesTabView: View {
                             selectedPhotoEvent = event
                         }
                     },
-                    onSaveSpot: nil // Save spot handled separately
+                    onSaveSpot: nil
                 )
                 .presentationDetents([.medium, .large])
             }
@@ -95,7 +130,64 @@ struct PlacesTabView: View {
         }
         .onAppear {
             momentsViewModel.loadEventsWithMedia()
+            mapViewModel.fitMapToMarkers()
         }
+        .task {
+            // Discover dog parks near user's location or default location
+            let coords = locationManager.currentCoordinates ?? (51.9225, 4.4792) // Rotterdam fallback
+            await mapViewModel.discoverDogParksNearby(latitude: coords.0, longitude: coords.1)
+        }
+    }
+
+    // MARK: - Map View
+
+    private var mapView: some View {
+        Map(position: $mapViewModel.cameraPosition) {
+            // User location
+            UserAnnotation()
+
+            // Render all visible markers
+            ForEach(mapViewModel.visibleMarkers) { marker in
+                switch marker {
+                case .spot(let spot):
+                    Annotation("", coordinate: marker.coordinate) {
+                        SpotMapMarker(spot: spot)
+                            .onTapGesture {
+                                selectedSpot = spot
+                            }
+                    }
+
+                case .contact(let contact):
+                    Annotation("", coordinate: marker.coordinate) {
+                        ContactMapMarker(contact: contact)
+                            .onTapGesture {
+                                selectedContact = contact
+                            }
+                    }
+
+                case .discoveredSpot(let spot):
+                    Annotation("", coordinate: marker.coordinate) {
+                        DiscoveredSpotMapMarker(spot: spot)
+                            .onTapGesture {
+                                selectedDiscoveredSpot = spot
+                            }
+                    }
+
+                case .photoCluster(let cluster):
+                    Annotation("", coordinate: marker.coordinate) {
+                        PhotoClusterMapMarker(cluster: cluster)
+                            .onTapGesture {
+                                selectedCluster = cluster
+                            }
+                    }
+                }
+            }
+        }
+        .mapControls {
+            MapCompass()
+            MapScaleView()
+        }
+        .mapStyle(.standard(elevation: .realistic))
     }
 
     // MARK: - Add Spot FAB
@@ -125,184 +217,14 @@ struct PlacesTabView: View {
     }
 }
 
-// MARK: - Map Mode View
-
-/// Map view showing spots and photo pins
-struct PlacesMapModeView: View {
-    @ObservedObject var spotStore: SpotStore
-    @ObservedObject var momentsViewModel: MomentsViewModel
-    var puppyName: String = "Ollie"
-    let onShowAllSpots: () -> Void
-    let onSelectSpot: (WalkSpot) -> Void
-    let onSelectPhoto: (PuppyEvent) -> Void
-    let onSelectCluster: (PhotoCluster) -> Void
-
-    var body: some View {
-        ScrollView {
-            VStack(spacing: 20) {
-                // Summary card (only show if there are spots)
-                if spotStore.spots.count > 0 {
-                    OlliesWorldSummaryCard(
-                        spotsCount: spotStore.spots.count,
-                        puppyName: puppyName
-                    )
-                }
-
-                // Map section
-                mapSection
-
-                // Favorite spots section
-                if !spotStore.favoriteSpots.isEmpty {
-                    favoriteSpotsSection
-                }
-
-                // All spots section (if any non-favorites)
-                if !spotStore.spots.isEmpty {
-                    allSpotsSection
-                }
-
-                // Empty state when no content
-                if spotStore.spots.isEmpty {
-                    emptyStateView
-                }
-            }
-            .padding()
-        }
-    }
-
-    // MARK: - Map Section
-
-    private var mapSection: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            HStack {
-                SectionHeader(
-                    title: Strings.WalksTab.yourSpots,
-                    icon: "map.fill",
-                    tint: .ollieSuccess
-                )
-
-                Spacer()
-
-                if !spotStore.spots.isEmpty {
-                    Button {
-                        onShowAllSpots()
-                    } label: {
-                        Text(Strings.Places.expandMap)
-                            .font(.caption)
-                            .fontWeight(.medium)
-                            .foregroundStyle(Color.ollieAccent)
-                    }
-                }
-            }
-
-            // Map with spots and clustered photo markers
-            PlacesMapPreview(
-                spots: spotStore.spots,
-                photoClusters: momentsViewModel.clusterPhotos(),
-                onTapSpot: onSelectSpot,
-                onTapCluster: onSelectCluster
-            )
-            .frame(height: 220)
-            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-        }
-    }
-
-    // MARK: - Favorite Spots Section
-
-    private var favoriteSpotsSection: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            SectionHeader(
-                title: Strings.Places.favoriteSpots,
-                icon: "star.fill",
-                tint: .yellow
-            )
-
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 12) {
-                    ForEach(spotStore.favoriteSpots.prefix(5)) { spot in
-                        SpotCard(spot: spot)
-                            .onTapGesture {
-                                onSelectSpot(spot)
-                            }
-                    }
-                }
-            }
-        }
-    }
-
-    // MARK: - All Spots Section
-
-    private var allSpotsSection: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            SectionHeader(
-                title: Strings.Places.allSpots,
-                icon: "mappin.circle.fill",
-                tint: .secondary
-            )
-
-            VStack(spacing: 8) {
-                // Show favorites first, then recents
-                let orderedSpots = spotStore.favoriteSpots + spotStore.recentSpots
-                let uniqueSpots = orderedSpots.reduce(into: [WalkSpot]()) { result, spot in
-                    if !result.contains(where: { $0.id == spot.id }) {
-                        result.append(spot)
-                    }
-                }
-
-                ForEach(uniqueSpots.prefix(5)) { spot in
-                    SpotRowCompact(spot: spot, isSelected: false)
-                        .onTapGesture {
-                            onSelectSpot(spot)
-                        }
-                }
-            }
-        }
-    }
-
-    // MARK: - Empty State
-
-    private var emptyStateView: some View {
-        VStack(spacing: 20) {
-            Spacer()
-                .frame(height: 40)
-
-            Image(systemName: "map")
-                .font(.system(size: 50))
-                .foregroundColor(.secondary)
-
-            VStack(spacing: 8) {
-                Text(Strings.Places.noSpotsYet)
-                    .font(.headline)
-                    .foregroundColor(.primary)
-
-                Text(Strings.Places.noSpotsHint)
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-                    .multilineTextAlignment(.center)
-            }
-
-            Spacer()
-                .frame(height: 40)
-        }
-        .padding()
-    }
-}
-
 // MARK: - Preview
-// Map components (PlacesMapPreview, SpotMapMarker, PhotoClusterMapMarker, SpotCard, PhotoClusterPreviewSheet)
-// are in PlacesMapComponents.swift
 
 #Preview {
-    let eventStore = EventStore()
-    let profileStore = ProfileStore()
-    let viewModel = TimelineViewModel(eventStore: eventStore, profileStore: profileStore)
-    let momentsViewModel = MomentsViewModel(eventStore: eventStore)
-
-    return PlacesTabView(
+    PlacesTabView(
         spotStore: SpotStore(),
         contactStore: ContactStore(),
-        momentsViewModel: momentsViewModel,
-        viewModel: viewModel,
+        momentsViewModel: MomentsViewModel(eventStore: EventStore()),
         locationManager: LocationManager()
     )
+    .environmentObject(ProfileStore())
 }

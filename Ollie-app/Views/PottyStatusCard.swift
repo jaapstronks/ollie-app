@@ -57,7 +57,14 @@ struct PottyStatusCard: View {
     }
 
     private var shouldShowAction: Bool {
-        prediction.urgency.isUrgent
+        // Show action for urgent states EXCEPT postAccident
+        // (user just logged indoor pee, no point showing "log plas" button)
+        switch prediction.urgency {
+        case .soon, .overdue:
+            return true
+        default:
+            return false
+        }
     }
 
     private var indicatorColor: Color {

@@ -26,54 +26,62 @@ struct CalendarGridView: View {
     private var birthDate: Date? { profile?.birthDate }
 
     var body: some View {
-        ScrollView {
-            VStack(spacing: 16) {
-                // Week/Month toggle
-                gridModeToggle
+        ZStack(alignment: .bottom) {
+            ScrollView {
+                VStack(spacing: 16) {
+                    // Context header (age + socialization) - reactive to selected date in month view
+                    if let profile = profile {
+                        calendarContextHeader(profile: profile, forDate: gridMode == .month ? selectedDate : Date())
+                    }
 
-                // Context header (age + socialization)
-                if let profile = profile {
-                    calendarContextHeader(profile: profile)
-                }
-
-                // Grid based on mode
-                switch gridMode {
-                case .week:
-                    CalendarWeekGrid(
-                        displayedWeek: $displayedWeek,
-                        selectedDate: $selectedDate,
-                        appointments: appointmentsForDisplayedWeek,
-                        milestoneSpans: milestoneSpansForDisplayedWeek,
-                        birthDate: birthDate,
-                        onAppointmentTap: onAppointmentTap,
-                        onMilestoneTap: onMilestoneTap
-                    )
-
-                case .month:
-                    VStack(spacing: 20) {
-                        // Month grid
-                        CalendarMonthGrid(
-                            displayedMonth: $displayedMonth,
+                    // Grid based on mode
+                    switch gridMode {
+                    case .week:
+                        CalendarWeekGrid(
+                            displayedWeek: $displayedWeek,
                             selectedDate: $selectedDate,
-                            appointments: appointmentsForDisplayedMonth,
-                            milestoneSpans: milestoneSpansForDisplayedMonth,
-                            birthDate: birthDate
-                        )
-
-                        // Selected day detail
-                        CalendarDayDetailView(
-                            date: selectedDate,
-                            appointments: appointmentsForSelectedDate,
-                            milestones: milestonesForSelectedWeek,
+                            appointments: appointmentsForDisplayedWeek,
+                            milestoneSpans: milestoneSpansForDisplayedWeek,
                             birthDate: birthDate,
                             onAppointmentTap: onAppointmentTap,
                             onMilestoneTap: onMilestoneTap
                         )
+
+                    case .month:
+                        VStack(spacing: 20) {
+                            // Month grid
+                            CalendarMonthGrid(
+                                displayedMonth: $displayedMonth,
+                                selectedDate: $selectedDate,
+                                appointments: appointmentsForDisplayedMonth,
+                                milestoneSpans: milestoneSpansForDisplayedMonth,
+                                birthDate: birthDate
+                            )
+
+                            // Selected day detail
+                            CalendarDayDetailView(
+                                date: selectedDate,
+                                appointments: appointmentsForSelectedDate,
+                                milestones: milestonesForSelectedWeek,
+                                birthDate: birthDate,
+                                onAppointmentTap: onAppointmentTap,
+                                onMilestoneTap: onMilestoneTap
+                            )
+                        }
                     }
                 }
+                .padding()
+                .padding(.bottom, 80) // Space for sticky toggle
             }
-            .padding()
-            .padding(.bottom, 40)
+
+            // Sticky bottom toggle
+            VStack(spacing: 0) {
+                Divider()
+                gridModeToggle
+                    .padding(.horizontal)
+                    .padding(.vertical, 12)
+                    .background(.regularMaterial)
+            }
         }
         .animation(.easeInOut(duration: 0.2), value: selectedDate)
         .animation(.easeInOut(duration: 0.2), value: gridMode)
@@ -97,13 +105,15 @@ struct CalendarGridView: View {
     // MARK: - Context Header
 
     @ViewBuilder
-    private func calendarContextHeader(profile: PuppyProfile) -> some View {
+    private func calendarContextHeader(profile: PuppyProfile, forDate date: Date) -> some View {
+        let ageWeeks = ageInWeeks(birthDate: profile.birthDate, atDate: date)
+
         VStack(spacing: 8) {
             // Age row
             HStack(spacing: 12) {
                 // Age badge
                 HStack(spacing: 6) {
-                    Text("\(profile.ageInWeeks)")
+                    Text("\(ageWeeks)")
                         .font(.system(size: 20, weight: .bold, design: .rounded))
                         .foregroundStyle(Color.ollieAccent)
                     Text(Strings.Common.weeks)
@@ -114,25 +124,25 @@ struct CalendarGridView: View {
                 Spacer()
 
                 // Developmental stage
-                Text(ageStageLabel(for: profile))
+                Text(ageStageLabel(weeks: ageWeeks))
                     .font(.caption)
                     .fontWeight(.medium)
                     .foregroundStyle(.white)
                     .padding(.horizontal, 8)
                     .padding(.vertical, 4)
-                    .background(ageStageColor(for: profile))
+                    .background(ageStageColor(weeks: ageWeeks))
                     .clipShape(Capsule())
             }
 
             // Socialization banner (if in window)
-            if SocializationWindow.isInWindow(ageWeeks: profile.ageInWeeks) {
+            if SocializationWindow.isInWindow(ageWeeks: ageWeeks) {
                 Button(action: onSocializationTap) {
                     HStack(spacing: 8) {
                         Image(systemName: "sparkles")
                             .font(.caption)
                             .foregroundStyle(Color.ollieAccent)
 
-                        Text(socializationBannerText(for: profile))
+                        Text(socializationBannerText(ageWeeks: ageWeeks))
                             .font(.caption)
                             .fontWeight(.medium)
                             .foregroundStyle(.primary)
@@ -140,7 +150,7 @@ struct CalendarGridView: View {
                         Spacer()
 
                         // Weeks remaining
-                        let remaining = SocializationWindow.weeksRemaining(ageWeeks: profile.ageInWeeks)
+                        let remaining = SocializationWindow.weeksRemaining(ageWeeks: ageWeeks)
                         if remaining <= 4 && remaining > 0 {
                             Text(Strings.Socialization.weeksRemaining(remaining))
                                 .font(.caption2)
@@ -161,14 +171,20 @@ struct CalendarGridView: View {
         }
     }
 
-    private func socializationBannerText(for profile: PuppyProfile) -> String {
-        let weekInWindow = profile.ageInWeeks - SocializationWindow.startWeek + 1
+    /// Calculate age in weeks at a specific date
+    private func ageInWeeks(birthDate: Date, atDate date: Date) -> Int {
+        let components = calendar.dateComponents([.day], from: birthDate, to: date)
+        let days = components.day ?? 0
+        return max(0, days / 7)
+    }
+
+    private func socializationBannerText(ageWeeks: Int) -> String {
+        let weekInWindow = ageWeeks - SocializationWindow.startWeek + 1
         let totalWeeks = SocializationWindow.endWeek - SocializationWindow.startWeek + 1
         return Strings.Calendar.socializationWeek(weekInWindow, of: totalWeeks)
     }
 
-    private func ageStageLabel(for profile: PuppyProfile) -> String {
-        let weeks = profile.ageInWeeks
+    private func ageStageLabel(weeks: Int) -> String {
         if weeks < 8 {
             return Strings.PlanTab.ageStageNewborn
         } else if weeks <= 16 {
@@ -182,8 +198,7 @@ struct CalendarGridView: View {
         }
     }
 
-    private func ageStageColor(for profile: PuppyProfile) -> Color {
-        let weeks = profile.ageInWeeks
+    private func ageStageColor(weeks: Int) -> Color {
         if weeks < 8 {
             return .ollieSleep
         } else if weeks <= 16 {

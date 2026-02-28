@@ -65,7 +65,7 @@ struct CalendarTabView: View {
                 }
             }
             .navigationTitle(Strings.Tabs.schedule)
-            .navigationBarTitleDisplayMode(.large)
+            .navigationBarTitleDisplayMode(.inline)
             .profileToolbar(profile: profileStore.profile, action: onSettingsTap)
             .navigationDestination(isPresented: $showAppointmentsView) {
                 AppointmentsView(appointmentStore: appointmentStore)
@@ -76,6 +76,15 @@ struct CalendarTabView: View {
                         profile: profile,
                         milestoneStore: milestoneStore
                     )
+                }
+            }
+            .sheet(item: $selectedAppointment) { appointment in
+                NavigationStack {
+                    AppointmentDetailView(
+                        appointment: appointment,
+                        appointmentStore: appointmentStore
+                    )
+                    .environmentObject(contactStore)
                 }
             }
             .sheet(item: $selectedMilestone) { milestone in

@@ -220,7 +220,6 @@ struct MainTabView: View {
                     spotStore: spotStore,
                     contactStore: contactStore,
                     momentsViewModel: momentsViewModel,
-                    viewModel: viewModel,
                     locationManager: locationManager,
                     onSettingsTap: { showingSettings = true }
                 )
