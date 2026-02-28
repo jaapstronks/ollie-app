@@ -8,36 +8,27 @@
 import Foundation
 import CoreData
 import OllieShared
-import Combine
-import os
 
 /// Manages saved walk spots with Core Data and automatic CloudKit sync
 @MainActor
-final class SpotStore: BaseStore {
+final class SpotStore: CRUDStore<WalkSpot, CDWalkSpot> {
 
-    // MARK: - Published State
+    // MARK: - Cached Computed Properties
 
-    @Published var spots: [WalkSpot] = []
+    private var _cachedFavoriteSpots: [WalkSpot]?
+    private var _cachedRecentSpots: [WalkSpot]?
+    private var _cachedPopularSpots: [WalkSpot]?
 
-    // MARK: - Computed Properties
+    // MARK: - Sort Order
 
-    /// Spots marked as favorite, sorted by name
-    var favoriteSpots: [WalkSpot] {
-        spots.filter { $0.isFavorite }.sorted { $0.name < $1.name }
-    }
-
-    /// Most recently used spots (last 5, non-favorites)
-    var recentSpots: [WalkSpot] {
-        spots
-            .filter { !$0.isFavorite }
-            .sorted { $0.createdAt > $1.createdAt }
-            .prefix(5)
-            .map { $0 }
-    }
-
-    /// All spots sorted by visit count (most visited first)
-    var popularSpots: [WalkSpot] {
-        spots.sorted { $0.visitCount > $1.visitCount }
+    override var sortOrder: StoreSortOrder<WalkSpot> {
+        .custom { spot1, spot2 in
+            // Favorites first, then by visit count
+            if spot1.isFavorite != spot2.isFavorite {
+                return spot1.isFavorite
+            }
+            return spot1.visitCount > spot2.visitCount
+        }
     }
 
     // MARK: - Init
@@ -49,21 +40,77 @@ final class SpotStore: BaseStore {
     // MARK: - Data Loading
 
     override func performInitialLoad() {
-        let cdSpots = CDWalkSpot.fetchAllSpots(in: viewContext)
-        spots = cdSpots.compactMap { $0.toWalkSpot() }
-        logger.info("Loaded \(self.spots.count) spots from Core Data")
+        invalidateCaches()
+        super.performInitialLoad()
     }
 
-    // MARK: - CRUD Operations
+    private func invalidateCaches() {
+        _cachedFavoriteSpots = nil
+        _cachedRecentSpots = nil
+        _cachedPopularSpots = nil
+    }
 
-    /// Add a new spot
+    // MARK: - Backward-Compatible Aliases
+
+    /// Alias for items (backward compatibility)
+    var spots: [WalkSpot] { items }
+
+    // MARK: - Cached Computed Properties
+
+    /// Spots marked as favorite, sorted by name
+    var favoriteSpots: [WalkSpot] {
+        if let cached = _cachedFavoriteSpots { return cached }
+        let result = items.filter { $0.isFavorite }.sorted { $0.name < $1.name }
+        _cachedFavoriteSpots = result
+        return result
+    }
+
+    /// Most recently used spots (last 5, non-favorites)
+    var recentSpots: [WalkSpot] {
+        if let cached = _cachedRecentSpots { return cached }
+        let result = items
+            .filter { !$0.isFavorite }
+            .sorted { $0.createdAt > $1.createdAt }
+            .prefix(5)
+            .map { $0 }
+        _cachedRecentSpots = result
+        return result
+    }
+
+    /// All spots sorted by visit count (most visited first)
+    var popularSpots: [WalkSpot] {
+        if let cached = _cachedPopularSpots { return cached }
+        let result = items.sorted { $0.visitCount > $1.visitCount }
+        _cachedPopularSpots = result
+        return result
+    }
+
+    // MARK: - CRUD Operations (with cache invalidation)
+
+    @discardableResult
+    override func add(_ item: WalkSpot) -> Bool {
+        invalidateCaches()
+        return super.add(item)
+    }
+
+    @discardableResult
+    override func update(_ item: WalkSpot) -> Bool {
+        invalidateCaches()
+        return super.update(item.withUpdatedTimestamp())
+    }
+
+    @discardableResult
+    override func delete(_ item: WalkSpot) -> Bool {
+        invalidateCaches()
+        return super.delete(item)
+    }
+
+    // MARK: - Backward-Compatible CRUD
+
+    /// Add a new spot (backward-compatible alias)
     @discardableResult
     func addSpot(_ spot: WalkSpot) -> Bool {
-        _ = CDWalkSpot.create(from: spot, in: viewContext)
-
-        return performSave(operation: "Added spot: \(spot.name)") {
-            spots.append(spot)
-        }
+        add(spot)
     }
 
     /// Create and add a spot from coordinates
@@ -76,74 +123,52 @@ final class SpotStore: BaseStore {
             notes: notes,
             photoFilename: photoFilename
         )
-        addSpot(spot)
+        add(spot)
         return spot
     }
 
-    /// Update an existing spot
+    /// Update an existing spot (backward-compatible alias)
     @discardableResult
     func updateSpot(_ spot: WalkSpot) -> Bool {
-        let updatedSpot = spot.withUpdatedTimestamp()
-
-        guard let existing = CDWalkSpot.fetch(byId: spot.id, in: viewContext) else {
-            logger.warning("Spot not found for update: \(spot.id)")
-            setError(Strings.Common.notFound)
-            return false
-        }
-
-        existing.update(from: updatedSpot)
-
-        return performSave(operation: "Updated spot: \(spot.name)") {
-            if let index = spots.firstIndex(where: { $0.id == spot.id }) {
-                spots[index] = updatedSpot
-            }
-        }
+        update(spot)
     }
 
-    /// Delete a spot
+    /// Delete a spot (backward-compatible alias)
     @discardableResult
     func deleteSpot(_ spot: WalkSpot) -> Bool {
-        guard let existing = CDWalkSpot.fetch(byId: spot.id, in: viewContext) else {
-            logger.warning("Spot not found for deletion: \(spot.id)")
-            setError(Strings.Common.notFound)
-            return false
-        }
-
-        viewContext.delete(existing)
-
-        return performDelete(operation: "Deleted spot: \(spot.name)") {
-            spots.removeAll { $0.id == spot.id }
-        }
+        delete(spot)
     }
 
     /// Delete spot by ID
     func deleteSpot(id: UUID) {
-        guard let spot = spots.first(where: { $0.id == id }) else { return }
-        deleteSpot(spot)
+        guard let spot = item(withId: id) else { return }
+        delete(spot)
     }
+
+    // MARK: - Domain-Specific Operations
 
     /// Toggle favorite status
     func toggleFavorite(_ spot: WalkSpot) {
-        guard var updatedSpot = spots.first(where: { $0.id == spot.id }) else { return }
+        guard var updatedSpot = item(withId: spot.id) else { return }
         updatedSpot.isFavorite.toggle()
-        updateSpot(updatedSpot)
+        update(updatedSpot)
     }
 
     /// Increment visit count for a spot
     func incrementVisitCount(_ spot: WalkSpot) {
-        guard var updatedSpot = spots.first(where: { $0.id == spot.id }) else { return }
+        guard var updatedSpot = item(withId: spot.id) else { return }
         updatedSpot.visitCount += 1
-        updateSpot(updatedSpot)
+        update(updatedSpot)
     }
 
-    /// Find spot by ID
+    /// Find spot by ID (backward-compatible alias)
     func spot(withId id: UUID) -> WalkSpot? {
-        spots.first { $0.id == id }
+        item(withId: id)
     }
 
     /// Find spots near a location (within ~100m)
     func spotsNear(latitude: Double, longitude: Double, radiusMeters: Double = 100) -> [WalkSpot] {
-        spots.filter { spot in
+        filter { spot in
             let distance = haversineDistance(
                 lat1: latitude, lon1: longitude,
                 lat2: spot.latitude, lon2: spot.longitude
@@ -156,7 +181,7 @@ final class SpotStore: BaseStore {
 
     /// Calculate distance between two coordinates using Haversine formula
     private func haversineDistance(lat1: Double, lon1: Double, lat2: Double, lon2: Double) -> Double {
-        let earthRadius: Double = 6371000 // meters
+        let earthRadius: Double = 6_371_000 // meters
 
         let dLat = (lat2 - lat1) * .pi / 180
         let dLon = (lon2 - lon1) * .pi / 180

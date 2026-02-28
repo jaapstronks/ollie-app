@@ -39,6 +39,8 @@ extension Strings {
         // Error messages
         static let saveFailed = String(localized: "Failed to save. Please try again.", table: table)
         static let deleteFailed = String(localized: "Failed to delete. Please try again.", table: table)
+        static let loadFailed = String(localized: "Failed to load data. Please try again.", table: table)
+        static let syncFailed = String(localized: "Failed to sync. Please try again.", table: table)
         static let notFound = String(localized: "Item not found.", table: table)
         static let calendarSyncFailed = String(localized: "Failed to sync with calendar", table: table)
         static let calendarAccessDenied = String(localized: "Calendar access denied. Enable in Settings.", table: table)
@@ -63,6 +65,10 @@ extension Strings {
 
         // Navigation
         static let seeAll = String(localized: "See all", table: table)
+
+        // Accessibility hints
+        static let tapToExpand = String(localized: "Tap to read more", table: table)
+        static let tapToCollapse = String(localized: "Tap to show less", table: table)
     }
 
     // MARK: - App

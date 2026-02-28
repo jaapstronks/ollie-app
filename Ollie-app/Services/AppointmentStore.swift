@@ -13,30 +13,26 @@ import os
 
 /// Manages appointments with Core Data and automatic CloudKit sync
 @MainActor
-class AppointmentStore: ObservableObject {
+final class AppointmentStore: BaseStore {
 
     // MARK: - Published State
 
     @Published private(set) var appointments: [DogAppointment] = []
-    @Published private(set) var isSyncing = false
-
-    /// Last error that occurred during a store operation (for UI display)
-    @Published private(set) var lastError: (message: String, date: Date)?
-
-    /// Clear the last error (call when user dismisses error banner)
-    func clearError() {
-        lastError = nil
-    }
 
     // MARK: - Dependencies
 
-    private let persistenceController: PersistenceController
     private weak var profileStore: ProfileStore?
-    private let logger = Logger.ollie(category: "AppointmentStore")
-    private var cancellables = Set<AnyCancellable>()
 
-    private var viewContext: NSManagedObjectContext {
-        persistenceController.viewContext
+    // MARK: - Cached Computed Properties
+
+    private var _cachedUpcoming: [DogAppointment]?
+    private var _cachedThisWeek: [DogAppointment]?
+    private var _cachedComingUp: [DogAppointment]?
+
+    private func invalidateCaches() {
+        _cachedUpcoming = nil
+        _cachedThisWeek = nil
+        _cachedComingUp = nil
     }
 
     // MARK: - Computed Properties
@@ -48,8 +44,11 @@ class AppointmentStore: ObservableObject {
 
     /// Upcoming appointments (sorted by start date)
     var upcomingAppointments: [DogAppointment] {
-        appointments.filter { $0.isUpcoming || $0.isToday }
+        if let cached = _cachedUpcoming { return cached }
+        let result = appointments.filter { $0.isUpcoming || $0.isToday }
             .sorted { $0.startDate < $1.startDate }
+        _cachedUpcoming = result
+        return result
     }
 
     /// Past appointments (sorted by start date, most recent first)
@@ -69,39 +68,85 @@ class AppointmentStore: ObservableObject {
         Dictionary(grouping: appointments, by: { $0.appointmentType })
     }
 
+    /// Get count of upcoming appointments
+    var upcomingCount: Int {
+        upcomingAppointments.count
+    }
+
+    /// Appointments within this week (7 days)
+    var appointmentsThisWeek: [DogAppointment] {
+        if let cached = _cachedThisWeek { return cached }
+
+        let calendar = Calendar.current
+        let now = Date()
+        guard let weekFromNow = calendar.date(byAdding: .day, value: 7, to: now) else {
+            return []
+        }
+
+        let result = appointments.filter { appointment in
+            let startDay = calendar.startOfDay(for: appointment.startDate)
+            let today = calendar.startOfDay(for: now)
+            let endOfWeek = calendar.startOfDay(for: weekFromNow)
+
+            return startDay >= today && startDay <= endOfWeek && !appointment.isCompleted
+        }.sorted { $0.startDate < $1.startDate }
+
+        _cachedThisWeek = result
+        return result
+    }
+
+    /// Appointments coming up in 2-4 weeks
+    var appointmentsComingUp: [DogAppointment] {
+        if let cached = _cachedComingUp { return cached }
+
+        let calendar = Calendar.current
+        let now = Date()
+        guard let weekFromNow = calendar.date(byAdding: .day, value: 7, to: now),
+              let monthFromNow = calendar.date(byAdding: .day, value: 28, to: now) else {
+            return []
+        }
+
+        let result = appointments.filter { appointment in
+            let startDay = calendar.startOfDay(for: appointment.startDate)
+            let afterThisWeek = calendar.startOfDay(for: weekFromNow)
+            let endOfMonth = calendar.startOfDay(for: monthFromNow)
+
+            return startDay > afterThisWeek && startDay <= endOfMonth && !appointment.isCompleted
+        }.sorted { $0.startDate < $1.startDate }
+
+        _cachedComingUp = result
+        return result
+    }
+
     // MARK: - Init
 
     init(
         persistenceController: PersistenceController = .shared,
         profileStore: ProfileStore? = nil
     ) {
-        self.persistenceController = persistenceController
         self.profileStore = profileStore
-        setupObservers()
-        loadAppointments()
+        super.init(persistenceController: persistenceController, logCategory: "AppointmentStore")
     }
 
     /// Set the profile store (for when it's not available at init time)
     func setProfileStore(_ profileStore: ProfileStore) {
         self.profileStore = profileStore
-        loadAppointments()
+        performInitialLoad()
     }
 
-    // MARK: - Setup
+    // MARK: - Data Loading
 
-    private func setupObservers() {
-        // Observe CloudKit remote changes
-        NotificationCenter.default.publisher(for: .NSPersistentStoreRemoteChange)
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.handleRemoteChange()
-            }
-            .store(in: &cancellables)
-    }
+    override func performInitialLoad() {
+        invalidateCaches()
 
-    private func handleRemoteChange() {
-        logger.debug("Detected CloudKit remote change for appointments")
-        loadAppointments()
+        guard let profile = getCurrentProfile() else {
+            appointments = []
+            return
+        }
+
+        let cdAppointments = CDDogAppointment.fetchAppointments(for: profile, in: viewContext)
+        appointments = cdAppointments.compactMap { $0.toAppointment() }
+        logger.info("Loaded \(self.appointments.count) appointments for profile")
     }
 
     // MARK: - Profile Access
@@ -115,19 +160,6 @@ class AppointmentStore: ObservableObject {
         return CDPuppyProfile.fetch(byId: profileId, in: viewContext)
     }
 
-    // MARK: - Appointment Loading
-
-    func loadAppointments() {
-        guard let profile = getCurrentProfile() else {
-            appointments = []
-            return
-        }
-
-        let cdAppointments = CDDogAppointment.fetchAppointments(for: profile, in: viewContext)
-        appointments = cdAppointments.compactMap { $0.toAppointment() }
-        logger.info("Loaded \(self.appointments.count) appointments for profile")
-    }
-
     // MARK: - CRUD Operations
 
     /// Add a new appointment
@@ -135,23 +167,14 @@ class AppointmentStore: ObservableObject {
     @discardableResult
     func addAppointment(_ appointment: DogAppointment) -> Bool {
         guard let profile = getCurrentProfile() else {
-            lastError = (Strings.Common.notFound, Date())
+            setError(Strings.Common.notFound)
             return false
         }
 
         _ = CDDogAppointment.create(from: appointment, profile: profile, in: viewContext)
 
-        do {
-            try persistenceController.save()
-            loadAppointments()
-            lastError = nil
-            logger.info("Added appointment: \(appointment.title)")
-            return true
-        } catch {
-            viewContext.rollback()
-            lastError = (Strings.Common.saveFailed, Date())
-            logger.error("Failed to add appointment: \(error.localizedDescription)")
-            return false
+        return performSave(operation: "Added appointment: \(appointment.title)") {
+            performInitialLoad()
         }
     }
 
@@ -161,23 +184,14 @@ class AppointmentStore: ObservableObject {
     func updateAppointment(_ appointment: DogAppointment) -> Bool {
         guard let cdAppointment = CDDogAppointment.fetch(byId: appointment.id, in: viewContext) else {
             logger.warning("Appointment not found for update: \(appointment.id)")
-            lastError = (Strings.Common.notFound, Date())
+            setError(Strings.Common.notFound)
             return false
         }
 
         cdAppointment.update(from: appointment)
 
-        do {
-            try persistenceController.save()
-            loadAppointments()
-            lastError = nil
-            logger.info("Updated appointment: \(appointment.title)")
-            return true
-        } catch {
-            viewContext.rollback()
-            lastError = (Strings.Common.saveFailed, Date())
-            logger.error("Failed to update appointment: \(error.localizedDescription)")
-            return false
+        return performSave(operation: "Updated appointment: \(appointment.title)") {
+            performInitialLoad()
         }
     }
 
@@ -187,23 +201,14 @@ class AppointmentStore: ObservableObject {
     func deleteAppointment(_ appointment: DogAppointment) -> Bool {
         guard let cdAppointment = CDDogAppointment.fetch(byId: appointment.id, in: viewContext) else {
             logger.warning("Appointment not found for deletion: \(appointment.id)")
-            lastError = (Strings.Common.notFound, Date())
+            setError(Strings.Common.notFound)
             return false
         }
 
         viewContext.delete(cdAppointment)
 
-        do {
-            try persistenceController.save()
+        return performDelete(operation: "Deleted appointment: \(appointment.title)") {
             appointments.removeAll { $0.id == appointment.id }
-            lastError = nil
-            logger.info("Deleted appointment: \(appointment.title)")
-            return true
-        } catch {
-            viewContext.rollback()
-            lastError = (Strings.Common.deleteFailed, Date())
-            logger.error("Failed to delete appointment: \(error.localizedDescription)")
-            return false
         }
     }
 
@@ -245,46 +250,6 @@ class AppointmentStore: ObservableObject {
         appointments.filter { $0.linkedContactID == contactId }
     }
 
-    /// Get count of upcoming appointments
-    var upcomingCount: Int {
-        upcomingAppointments.count
-    }
-
-    /// Appointments within this week (7 days)
-    var appointmentsThisWeek: [DogAppointment] {
-        let calendar = Calendar.current
-        let now = Date()
-        guard let weekFromNow = calendar.date(byAdding: .day, value: 7, to: now) else {
-            return []
-        }
-
-        return appointments.filter { appointment in
-            let startDay = calendar.startOfDay(for: appointment.startDate)
-            let today = calendar.startOfDay(for: now)
-            let endOfWeek = calendar.startOfDay(for: weekFromNow)
-
-            return startDay >= today && startDay <= endOfWeek && !appointment.isCompleted
-        }.sorted { $0.startDate < $1.startDate }
-    }
-
-    /// Appointments coming up in 2-4 weeks
-    var appointmentsComingUp: [DogAppointment] {
-        let calendar = Calendar.current
-        let now = Date()
-        guard let weekFromNow = calendar.date(byAdding: .day, value: 7, to: now),
-              let monthFromNow = calendar.date(byAdding: .day, value: 28, to: now) else {
-            return []
-        }
-
-        return appointments.filter { appointment in
-            let startDay = calendar.startOfDay(for: appointment.startDate)
-            let afterThisWeek = calendar.startOfDay(for: weekFromNow)
-            let endOfMonth = calendar.startOfDay(for: monthFromNow)
-
-            return startDay > afterThisWeek && startDay <= endOfMonth && !appointment.isCompleted
-        }.sorted { $0.startDate < $1.startDate }
-    }
-
     /// Get appointments for a date range (for calendar month view efficiency)
     func appointments(from startDate: Date, to endDate: Date) -> [DogAppointment] {
         appointments.filter { appointment in
@@ -310,14 +275,6 @@ class AppointmentStore: ObservableObject {
         return appointments(from: startBuffer, to: endBuffer)
     }
 
-    // MARK: - CloudKit Sync
-
-    /// Force refresh appointments from Core Data (useful after CloudKit sync)
-    func syncFromCloud() async {
-        viewContext.refreshAllObjects()
-        loadAppointments()
-    }
-
     // MARK: - Migration Support
 
     /// Migrate orphaned appointments to the current profile
@@ -336,13 +293,8 @@ class AppointmentStore: ObservableObject {
             cdAppointment.profile = profile
         }
 
-        do {
-            try persistenceController.save()
-            loadAppointments()
-            logger.info("Successfully migrated orphaned appointments")
-        } catch {
-            viewContext.rollback()
-            logger.error("Failed to migrate orphaned appointments: \(error.localizedDescription)")
+        performSave(operation: "Migrated orphaned appointments") {
+            performInitialLoad()
         }
     }
 }
