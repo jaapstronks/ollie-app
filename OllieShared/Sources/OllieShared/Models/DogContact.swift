@@ -15,6 +15,8 @@ public struct DogContact: Identifiable, Codable, Sendable, Hashable {
     public var email: String?
     public var address: String?
     public var notes: String?
+    public var latitude: Double?
+    public var longitude: Double?
     public var createdAt: Date
     public var modifiedAt: Date
 
@@ -28,6 +30,8 @@ public struct DogContact: Identifiable, Codable, Sendable, Hashable {
         email: String? = nil,
         address: String? = nil,
         notes: String? = nil,
+        latitude: Double? = nil,
+        longitude: Double? = nil,
         createdAt: Date = Date(),
         modifiedAt: Date = Date()
     ) {
@@ -38,6 +42,8 @@ public struct DogContact: Identifiable, Codable, Sendable, Hashable {
         self.email = email
         self.address = address
         self.notes = notes
+        self.latitude = latitude
+        self.longitude = longitude
         self.createdAt = createdAt
         self.modifiedAt = modifiedAt
     }
@@ -49,6 +55,11 @@ public struct DogContact: Identifiable, Codable, Sendable, Hashable {
         (phone != nil && !phone!.isEmpty) ||
         (email != nil && !email!.isEmpty) ||
         (address != nil && !address!.isEmpty)
+    }
+
+    /// Whether the contact has a valid location (both lat and long)
+    public var hasLocation: Bool {
+        latitude != nil && longitude != nil
     }
 }
 

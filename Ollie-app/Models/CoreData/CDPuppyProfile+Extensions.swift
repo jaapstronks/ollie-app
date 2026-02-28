@@ -134,9 +134,17 @@ extension CDPuppyProfile {
 
 extension CDPuppyProfile {
 
-    /// Fetch the profile from Core Data
+    /// Fetch the profile from Core Data (prefers shared store if user is participant)
     static func fetchProfile(in context: NSManagedObjectContext) -> CDPuppyProfile? {
         let request = NSFetchRequest<CDPuppyProfile>(entityName: "CDPuppyProfile")
+        request.fetchLimit = 1
+        return try? context.fetch(request).first
+    }
+
+    /// Fetch profile from a specific store
+    static func fetchProfile(in context: NSManagedObjectContext, from store: NSPersistentStore) -> CDPuppyProfile? {
+        let request = NSFetchRequest<CDPuppyProfile>(entityName: "CDPuppyProfile")
+        request.affectedStores = [store]
         request.fetchLimit = 1
         return try? context.fetch(request).first
     }
@@ -147,5 +155,25 @@ extension CDPuppyProfile {
         request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
         request.fetchLimit = 1
         return try? context.fetch(request).first
+    }
+
+    /// Check if a profile exists in a specific store
+    static func hasProfile(in context: NSManagedObjectContext, store: NSPersistentStore) -> Bool {
+        let request = NSFetchRequest<CDPuppyProfile>(entityName: "CDPuppyProfile")
+        request.affectedStores = [store]
+        request.fetchLimit = 1
+        let count = (try? context.count(for: request)) ?? 0
+        return count > 0
+    }
+
+    /// Delete all profiles from a specific store
+    static func deleteAllProfiles(in context: NSManagedObjectContext, from store: NSPersistentStore) {
+        let request = NSFetchRequest<CDPuppyProfile>(entityName: "CDPuppyProfile")
+        request.affectedStores = [store]
+
+        guard let profiles = try? context.fetch(request) else { return }
+        for profile in profiles {
+            context.delete(profile)
+        }
     }
 }

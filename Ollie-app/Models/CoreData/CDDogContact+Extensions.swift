@@ -20,6 +20,8 @@ extension CDDogContact {
         self.email = contact.email
         self.address = contact.address
         self.notes = contact.notes
+        self.latitude = contact.latitude as NSNumber?
+        self.longitude = contact.longitude as NSNumber?
         self.createdAt = contact.createdAt
         self.modifiedAt = Date()
     }
@@ -52,6 +54,8 @@ extension CDDogContact {
             email: self.email,
             address: self.address,
             notes: self.notes,
+            latitude: self.latitude?.doubleValue,
+            longitude: self.longitude?.doubleValue,
             createdAt: createdAt,
             modifiedAt: modifiedAt
         )

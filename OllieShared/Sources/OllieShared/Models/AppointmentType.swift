@@ -37,6 +37,20 @@ public enum AppointmentType: String, Codable, CaseIterable, Sendable {
         }
     }
 
+    /// Color name for the appointment type (uses asset catalog colors)
+    public var color: String {
+        switch self {
+        case .vetCheckup, .vetVaccination, .vetSurgery: return "vetBlue"
+        case .vetEmergency: return "emergencyRed"
+        case .grooming: return "groomingPurple"
+        case .training: return "trainingGreen"
+        case .daycare, .boarding: return "careOrange"
+        case .dogWalker: return "walkTeal"
+        case .playdate: return "playdatePink"
+        case .other: return "otherGray"
+        }
+    }
+
     /// Localized display name for the appointment type
     public var displayName: String {
         switch self {

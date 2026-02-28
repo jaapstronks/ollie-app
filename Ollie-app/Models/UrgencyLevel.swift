@@ -79,7 +79,7 @@ extension PottyUrgency: UrgencyPresentable {
         case .postAccident:
             return .ollieDanger
         case .coverageGap:
-            return .orange
+            return .ollieWarning
         case .unknown:
             return .ollieMuted
         }
@@ -96,7 +96,7 @@ extension PottyUrgency: UrgencyPresentable {
         case .overdue, .postAccident:
             return .ollieDanger
         case .coverageGap:
-            return .orange
+            return .ollieWarning
         case .unknown:
             return .secondary
         }
@@ -128,7 +128,7 @@ extension PoopUrgency: UrgencyPresentable {
     var iconColor: Color {
         switch self {
         case .hidden:
-            return .gray
+            return .ollieMuted
         case .good:
             return .ollieSuccess
         case .info:

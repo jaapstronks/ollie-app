@@ -7,17 +7,20 @@
 import CoreData
 import OllieShared
 import UIKit
+import PDFKit
 
 extension CDDocument {
 
     // MARK: - Convert from Swift Struct
 
-    /// Update Core Data object from Document struct (does not update image data)
+    /// Update Core Data object from Document struct (does not update image/PDF data)
     func update(from document: Document) {
         self.id = document.id
         self.type = document.type.rawValue
         self.title = document.title
         self.note = document.note
+        self.insuranceAgency = document.insuranceAgency
+        self.attachmentType = document.attachmentType.rawValue
         self.documentDate = document.documentDate
         self.expiryDate = document.expiryDate
         self.createdAt = document.createdAt
@@ -44,12 +47,26 @@ extension CDDocument {
             return nil
         }
 
+        // Determine attachment type from stored value or infer from data
+        let attachment: AttachmentType
+        if let attachmentTypeString = self.attachmentType,
+           let storedType = AttachmentType(rawValue: attachmentTypeString) {
+            attachment = storedType
+        } else if self.pdfData != nil {
+            attachment = .pdf
+        } else if self.imageData != nil {
+            attachment = .image
+        } else {
+            attachment = .none
+        }
+
         return Document(
             id: id,
             type: type,
             title: self.title,
             note: self.note,
-            hasImage: self.imageData != nil,
+            insuranceAgency: self.insuranceAgency,
+            attachmentType: attachment,
             documentDate: self.documentDate,
             expiryDate: self.expiryDate,
             createdAt: createdAt,
@@ -73,11 +90,13 @@ extension CDDocument {
         guard let image = image else {
             self.imageData = nil
             self.thumbnailData = nil
+            self.attachmentType = AttachmentType.none.rawValue
             return
         }
 
         // Save full-size image
         self.imageData = image.jpegData(compressionQuality: Self.imageCompressionQuality)
+        self.attachmentType = AttachmentType.image.rawValue
 
         // Generate and save thumbnail
         let thumbnail = Self.generateThumbnail(from: image, size: Self.thumbnailSize)
@@ -129,6 +148,68 @@ extension CDDocument {
         let resized = UIGraphicsGetImageFromCurrentImageContext() ?? image
         UIGraphicsEndImageContext()
         return resized
+    }
+
+    // MARK: - PDF Handling
+
+    /// Set PDF data (generates thumbnail from first page automatically)
+    func setPDF(_ data: Data?) {
+        guard let data = data else {
+            self.pdfData = nil
+            self.thumbnailData = nil
+            self.attachmentType = AttachmentType.none.rawValue
+            return
+        }
+
+        self.pdfData = data
+        self.attachmentType = AttachmentType.pdf.rawValue
+
+        // Generate thumbnail from first page
+        if let thumbnail = Self.generatePDFThumbnail(from: data, size: Self.thumbnailSize) {
+            self.thumbnailData = thumbnail.jpegData(compressionQuality: Self.thumbnailCompressionQuality)
+        }
+    }
+
+    /// Get PDF data
+    func getPDFData() -> Data? {
+        return self.pdfData
+    }
+
+    /// Generate a thumbnail from a PDF's first page
+    private static func generatePDFThumbnail(from data: Data, size: CGFloat) -> UIImage? {
+        guard let pdfDocument = PDFDocument(data: data),
+              let page = pdfDocument.page(at: 0) else {
+            return nil
+        }
+
+        let pageRect = page.bounds(for: .mediaBox)
+        let scale = size / max(pageRect.width, pageRect.height)
+        let scaledSize = CGSize(
+            width: pageRect.width * scale,
+            height: pageRect.height * scale
+        )
+
+        let renderer = UIGraphicsImageRenderer(size: scaledSize)
+        let thumbnail = renderer.image { context in
+            // Fill with white background
+            UIColor.white.setFill()
+            context.fill(CGRect(origin: .zero, size: scaledSize))
+
+            // Draw PDF page
+            context.cgContext.translateBy(x: 0, y: scaledSize.height)
+            context.cgContext.scaleBy(x: scale, y: -scale)
+            page.draw(with: .mediaBox, to: context.cgContext)
+        }
+
+        return thumbnail
+    }
+
+    /// Clear all attachment data (image and PDF)
+    func clearAttachment() {
+        self.imageData = nil
+        self.pdfData = nil
+        self.thumbnailData = nil
+        self.attachmentType = AttachmentType.none.rawValue
     }
 }
 

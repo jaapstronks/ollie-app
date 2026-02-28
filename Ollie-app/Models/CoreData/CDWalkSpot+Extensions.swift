@@ -23,6 +23,7 @@ extension CDWalkSpot {
         self.isFavorite = spot.isFavorite
         self.notes = spot.notes
         self.visitCount = Int32(spot.visitCount)
+        self.category = spot.category?.rawValue
     }
 
     /// Create a new CDWalkSpot from a WalkSpot struct
@@ -43,6 +44,8 @@ extension CDWalkSpot {
             return nil
         }
 
+        let spotCategory: SpotCategory? = self.category.flatMap { SpotCategory(rawValue: $0) }
+
         return WalkSpot(
             id: id,
             name: name,
@@ -52,7 +55,8 @@ extension CDWalkSpot {
             modifiedAt: modifiedAt,
             isFavorite: self.isFavorite,
             notes: self.notes,
-            visitCount: Int(self.visitCount)
+            visitCount: Int(self.visitCount),
+            category: spotCategory
         )
     }
 }

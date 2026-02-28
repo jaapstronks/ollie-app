@@ -225,6 +225,31 @@ public struct Milestone: Identifiable, Codable, Sendable, Hashable {
         return nil
     }
 
+    /// Enhanced period label showing both age week AND approximate calendar date
+    /// Example: "Age week 12 · ~March 15"
+    public func periodLabelWithDate(birthDate: Date) -> String? {
+        guard let targetDate = targetDate(birthDate: birthDate) else { return nil }
+
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MMM d"
+
+        let approximateDate = "~\(dateFormatter.string(from: targetDate))"
+
+        if let weeks = targetAgeWeeks {
+            return String(localized: "Age week \(weeks) · \(approximateDate)")
+        }
+        if let months = targetAgeMonths {
+            return String(localized: "\(months) months · \(approximateDate)")
+        }
+        if let days = targetAgeDays {
+            let weeks = days / 7
+            return String(localized: "Age week \(weeks) · \(approximateDate)")
+        }
+
+        // For fixed date milestones, just show the date
+        return dateFormatter.string(from: targetDate)
+    }
+
     /// Formatted target date string
     public func formattedTargetDate(birthDate: Date) -> String? {
         guard let date = targetDate(birthDate: birthDate) else { return nil }

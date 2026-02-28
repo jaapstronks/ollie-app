@@ -12,19 +12,22 @@ public struct NotificationSettings: Codable, Sendable {
     public var mealReminders: MealReminderSettings
     public var napReminders: NapReminderSettings
     public var walkReminders: WalkReminderSettings
+    public var appointmentReminders: AppointmentReminderSettings
 
     public init(
         isEnabled: Bool,
         pottyReminders: PottyReminderSettings,
         mealReminders: MealReminderSettings,
         napReminders: NapReminderSettings,
-        walkReminders: WalkReminderSettings
+        walkReminders: WalkReminderSettings,
+        appointmentReminders: AppointmentReminderSettings = AppointmentReminderSettings()
     ) {
         self.isEnabled = isEnabled
         self.pottyReminders = pottyReminders
         self.mealReminders = mealReminders
         self.napReminders = napReminders
         self.walkReminders = walkReminders
+        self.appointmentReminders = appointmentReminders
     }
 
     public static func defaultSettings() -> NotificationSettings {
@@ -33,7 +36,8 @@ public struct NotificationSettings: Codable, Sendable {
             pottyReminders: PottyReminderSettings(),
             mealReminders: MealReminderSettings(),
             napReminders: NapReminderSettings(),
-            walkReminders: WalkReminderSettings()
+            walkReminders: WalkReminderSettings(),
+            appointmentReminders: AppointmentReminderSettings()
         )
     }
 }
@@ -86,11 +90,18 @@ public enum PottyNotificationLevel: String, Codable, CaseIterable, Identifiable,
 /// Settings for meal reminders
 public struct MealReminderSettings: Codable, Sendable {
     public var isEnabled: Bool
-    public var minutesBefore: Int
+    /// Minutes relative to scheduled time: 0 = at time, negative = after (overdue)
+    public var minutesOffset: Int
 
-    public init(isEnabled: Bool = true, minutesBefore: Int = 10) {
+    public init(isEnabled: Bool = true, minutesOffset: Int = 0) {
         self.isEnabled = isEnabled
-        self.minutesBefore = minutesBefore
+        self.minutesOffset = minutesOffset
+    }
+
+    /// For backwards compatibility with old settings
+    public var minutesBefore: Int {
+        get { minutesOffset }
+        set { minutesOffset = newValue }
     }
 }
 
@@ -108,10 +119,26 @@ public struct NapReminderSettings: Codable, Sendable {
 /// Settings for walk reminders
 public struct WalkReminderSettings: Codable, Sendable {
     public var isEnabled: Bool
-    public var minutesBefore: Int
+    /// Minutes relative to scheduled time: 0 = at time, negative = after (overdue)
+    public var minutesOffset: Int
 
-    public init(isEnabled: Bool = true, minutesBefore: Int = 15) {
+    public init(isEnabled: Bool = true, minutesOffset: Int = 0) {
         self.isEnabled = isEnabled
-        self.minutesBefore = minutesBefore
+        self.minutesOffset = minutesOffset
+    }
+
+    /// For backwards compatibility with old settings
+    public var minutesBefore: Int {
+        get { minutesOffset }
+        set { minutesOffset = newValue }
+    }
+}
+
+/// Settings for appointment reminders
+public struct AppointmentReminderSettings: Codable, Sendable {
+    public var isEnabled: Bool
+
+    public init(isEnabled: Bool = true) {
+        self.isEnabled = isEnabled
     }
 }

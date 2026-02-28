@@ -6,6 +6,15 @@
 
 import Foundation
 
+// MARK: - Attachment Type
+
+/// Type of attachment for a document
+public enum AttachmentType: String, Codable, CaseIterable, Sendable {
+    case none
+    case image
+    case pdf
+}
+
 // MARK: - Document Type
 
 /// Types of documents that can be stored
@@ -63,13 +72,14 @@ public enum DocumentType: String, Codable, CaseIterable, Sendable {
 // MARK: - Document
 
 /// A stored document (scan/photo) for the dog profile
-/// Note: Image data is stored in Core Data and loaded separately via DocumentStore
+/// Note: Image/PDF data is stored in Core Data and loaded separately via DocumentStore
 public struct Document: Identifiable, Codable, Sendable, Hashable {
     public let id: UUID
     public var type: DocumentType
     public var title: String?
     public var note: String?
-    public var hasImage: Bool
+    public var insuranceAgency: String?
+    public var attachmentType: AttachmentType
     public var documentDate: Date?
     public var expiryDate: Date?
     public var createdAt: Date
@@ -82,7 +92,8 @@ public struct Document: Identifiable, Codable, Sendable, Hashable {
         type: DocumentType,
         title: String? = nil,
         note: String? = nil,
-        hasImage: Bool = false,
+        insuranceAgency: String? = nil,
+        attachmentType: AttachmentType = .none,
         documentDate: Date? = nil,
         expiryDate: Date? = nil,
         createdAt: Date = Date(),
@@ -92,11 +103,29 @@ public struct Document: Identifiable, Codable, Sendable, Hashable {
         self.type = type
         self.title = title
         self.note = note
-        self.hasImage = hasImage
+        self.insuranceAgency = insuranceAgency
+        self.attachmentType = attachmentType
         self.documentDate = documentDate
         self.expiryDate = expiryDate
         self.createdAt = createdAt
         self.modifiedAt = modifiedAt
+    }
+
+    // MARK: - Attachment Computed Properties
+
+    /// Whether the document has an image attachment
+    public var hasImage: Bool {
+        attachmentType == .image
+    }
+
+    /// Whether the document has a PDF attachment
+    public var hasPDF: Bool {
+        attachmentType == .pdf
+    }
+
+    /// Whether the document has any attachment
+    public var hasAttachment: Bool {
+        attachmentType != .none
     }
 
     // MARK: - Computed Properties
