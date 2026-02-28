@@ -316,8 +316,8 @@ struct UpcomingEventsCard: View {
                 }
             }
 
-            // Label
-            Text(item.label)
+            // Label (re-localized to current locale)
+            Text(item.localizedLabel)
                 .font(.subheadline)
                 .foregroundStyle(.primary)
                 .lineLimit(1)

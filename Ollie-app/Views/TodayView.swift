@@ -22,6 +22,7 @@ struct TodayView: View {
     var onNavigateToAppointments: (() -> Void)?
 
     @State private var selectedPhotoEvent: PuppyEvent?
+    @EnvironmentObject private var atmosphereProvider: AtmosphereProvider
 
     var body: some View {
         VStack(spacing: 0) {
@@ -38,14 +39,6 @@ struct TodayView: View {
 
             ScrollView {
                 VStack(spacing: 16) {
-                    // Weather section container (isolates weather observation)
-                    WeatherSectionContainer(
-                        weatherService: weatherService,
-                        isToday: Calendar.current.isDateInToday(viewModel.currentDate),
-                        predictedPottyTime: viewModel.predictedNextPlasTime
-                    )
-                    .animatedAppear(delay: 0)
-
                     // Status cards section (only for today)
                     if viewModel.isShowingToday {
                         statusCardsSection
@@ -96,6 +89,7 @@ struct TodayView: View {
                 viewModel.loadEvents()
             }
         }
+        .atmosphereBackground()
         // Swipe gestures for day navigation
         .dayNavigation(
             canGoForward: viewModel.canGoForward,
@@ -107,6 +101,14 @@ struct TodayView: View {
         }
         // Celebration overlay for milestone moments
         .celebration(style: viewModel.celebrationStyle, trigger: $viewModel.showCelebration)
+        // Sync puppy sleep state to atmosphere provider
+        .onChange(of: viewModel.currentSleepState.isSleeping) { _, isSleeping in
+            atmosphereProvider.updatePuppyState(isSleeping: isSleeping)
+        }
+        .onAppear {
+            // Initial sync of sleep state
+            atmosphereProvider.updatePuppyState(isSleeping: viewModel.currentSleepState.isSleeping)
+        }
     }
 
     // MARK: - Nav Bar
@@ -175,7 +177,7 @@ struct TodayView: View {
             )
         }
         .padding()
-        .background(Color(.systemBackground))
+        .atmosphereNavBar()
     }
 
     // MARK: - Status Cards Section
@@ -199,6 +201,24 @@ struct TodayView: View {
                     minutesSinceWake: minutesSinceWake,
                     pottyWasOverdueBy: overdueBy,
                     onLogPotty: { viewModel.sheetCoordinator.presentSheet(.potty) }
+                )
+            }
+
+            // Assumed overnight sleep card (when user likely forgot to log sleep)
+            if case .assumedOvernightSleep(let suggestedStart, let minutesSleeping, _) = combinedState {
+                AssumedOvernightSleepCard(
+                    suggestedSleepStart: suggestedStart,
+                    minutesSleeping: minutesSleeping,
+                    puppyName: viewModel.puppyName,
+                    onConfirmSleeping: { sleepStart in
+                        viewModel.confirmAssumedOvernightSleep(sleepStartTime: sleepStart)
+                    },
+                    onConfirmAwake: { sleepStart, wakeTime in
+                        viewModel.confirmAssumedOvernightSleepAndWakeUp(sleepStartTime: sleepStart, wakeTime: wakeTime)
+                    },
+                    onDismiss: {
+                        viewModel.dismissAssumedOvernightSleep()
+                    }
                 )
             }
 
@@ -280,38 +300,34 @@ struct TodayView: View {
             if viewModel.events.isEmpty {
                 EmptyTimelineCard()
             } else {
-                // Event cards in timeline - wrapped in List for swipe actions
-                List {
+                // Event cards in timeline - LazyVStack for proper virtualization
+                // Using context menu for edit/delete (swipe actions only work in List)
+                LazyVStack(spacing: 0) {
                     ForEach(viewModel.events) { event in
                         EventRow(event: event)
-                            .listRowInsets(EdgeInsets())
-                            .listRowSeparator(.hidden)
-                            .listRowBackground(Color.clear)
+                            .padding(.vertical, 2)
+                            .contentShape(Rectangle())
                             .onTapGesture {
                                 if event.photo != nil {
                                     selectedPhotoEvent = event
                                 }
                             }
-                            .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                            .contextMenu {
+                                Button {
+                                    viewModel.editEvent(event)
+                                } label: {
+                                    Label(Strings.Common.edit, systemImage: "pencil")
+                                }
+
                                 Button(role: .destructive) {
                                     HapticFeedback.warning()
                                     viewModel.deleteEvent(event)
                                 } label: {
                                     Label(Strings.Common.delete, systemImage: "trash")
                                 }
-
-                                Button {
-                                    viewModel.editEvent(event)
-                                } label: {
-                                    Label(Strings.Common.edit, systemImage: "pencil")
-                                }
-                                .tint(.blue)
                             }
                     }
                 }
-                .listStyle(.plain)
-                .scrollDisabled(true)
-                .frame(minHeight: CGFloat(viewModel.events.count) * Constants.eventRowEstimatedHeight)
             }
         }
     }
@@ -366,6 +382,7 @@ struct EmptyTimelineCard: View {
         socializationStore: socializationStore
     )
     let weatherService = WeatherService()
+    let atmosphereProvider = AtmosphereProvider()
 
     return TodayView(
         viewModel: viewModel,
@@ -376,4 +393,5 @@ struct EmptyTimelineCard: View {
         onNavigateToInsights: { print("Navigate to Insights") },
         onNavigateToAppointments: { print("Navigate to Appointments") }
     )
+    .environmentObject(atmosphereProvider)
 }
