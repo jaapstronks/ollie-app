@@ -30,6 +30,8 @@ struct CalendarTabView: View {
     @State private var celebrationMilestone: Milestone?
     @State private var showTier2Celebration = false
     @State private var showTier3Celebration = false
+    @State private var showWeekDetail = false
+    @State private var selectedWeek: WeeklyProgress?
 
     var body: some View {
         NavigationStack {
@@ -37,7 +39,9 @@ struct CalendarTabView: View {
                 // View mode toggle
                 CalendarViewModeToggle(mode: $viewMode)
                     .padding(.horizontal)
-                    .padding(.top, 8)
+                    .padding(.vertical, 12)
+                    .frame(maxWidth: .infinity)
+                    .background(Color(.systemGroupedBackground))
 
                 // Content based on view mode
                 switch viewMode {
@@ -63,6 +67,7 @@ struct CalendarTabView: View {
                     )
                 }
             }
+            .background(Color(.systemGroupedBackground))
             .navigationTitle(Strings.Tabs.schedule)
             .navigationBarTitleDisplayMode(.inline)
             .profileToolbar(profile: profileStore.profile, action: onSettingsTap)
@@ -113,6 +118,31 @@ struct CalendarTabView: View {
                         }
                     }
                 )
+            }
+            // Week detail sheet for socialization timeline
+            .sheet(isPresented: $showWeekDetail) {
+                if let week = selectedWeek, let profile = profileStore.profile {
+                    let rawProgress = socializationStore.categoryProgressForWeek(week, profile: profile)
+                    let categoryProgress = rawProgress.map { item in
+                        CategoryWeekProgress(
+                            id: item.category.id,
+                            category: item.category,
+                            count: item.count,
+                            total: item.total
+                        )
+                    }
+
+                    WeekDetailSheet(
+                        weekProgress: week,
+                        categoryProgress: categoryProgress,
+                        focusSuggestions: socializationStore.focusSuggestions(for: week, profile: profile),
+                        onLogExposure: {
+                            // Navigate to socialization after dismissing
+                            showWeekDetail = false
+                            onNavigateToSocialization()
+                        }
+                    )
+                }
             }
             // Tier 2 celebration sheet
             .sheet(isPresented: $showTier2Celebration) {
@@ -237,7 +267,8 @@ struct CalendarTabView: View {
                     if !activePeriods.isEmpty {
                         DevelopmentalPeriodBanners(
                             milestones: activePeriods,
-                            birthDate: profile.birthDate
+                            birthDate: profile.birthDate,
+                            puppyName: profile.name
                         )
                     }
 
@@ -258,8 +289,11 @@ struct CalendarTabView: View {
             SocializationWeekTimeline(
                 weeklyProgress: weeklyProgress,
                 currentWeek: profile.ageInWeeks,
-                onWeekTap: { _ in
-                    // Week taps handled by timeline component
+                onWeekTap: { weekNumber in
+                    if let week = weeklyProgress.first(where: { $0.weekNumber == weekNumber }) {
+                        selectedWeek = week
+                        showWeekDetail = true
+                    }
                 }
             )
 
@@ -469,211 +503,7 @@ struct CalendarTabView: View {
     }
 }
 
-// MARK: - This Week Rows
-
-private struct ThisWeekAppointmentRow: View {
-    let appointment: DogAppointment
-
-    var body: some View {
-        HStack(spacing: 12) {
-            ZStack {
-                Circle()
-                    .fill(Color.ollieAccent.opacity(0.2))
-                    .frame(width: 36, height: 36)
-
-                Image(systemName: appointment.appointmentType.icon)
-                    .font(.system(size: 14))
-                    .foregroundStyle(Color.ollieAccent)
-            }
-
-            VStack(alignment: .leading, spacing: 2) {
-                Text(appointment.title)
-                    .font(.subheadline)
-                    .fontWeight(.medium)
-
-                Text(formattedDateTime)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-
-            Spacer()
-
-            if appointment.isToday {
-                Text(Strings.Health.today)
-                    .font(.caption)
-                    .fontWeight(.medium)
-                    .foregroundStyle(Color.ollieAccent)
-            }
-        }
-        .padding()
-        .background(Color(.secondarySystemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-    }
-
-    private var formattedDateTime: String {
-        let calendar = Calendar.current
-        if calendar.isDateInToday(appointment.startDate) {
-            if appointment.isAllDay {
-                return Strings.Common.today
-            } else {
-                return appointment.startDate.formatted(date: .omitted, time: .shortened)
-            }
-        } else if calendar.isDateInTomorrow(appointment.startDate) {
-            if appointment.isAllDay {
-                return Strings.Common.tomorrow
-            } else {
-                let timeString = appointment.startDate.formatted(date: .omitted, time: .shortened)
-                return "\(Strings.Common.tomorrow), \(timeString)"
-            }
-        } else {
-            if appointment.isAllDay {
-                return appointment.startDate.formatted(.dateTime.month(.abbreviated).day())
-            } else {
-                return appointment.startDate.formatted(.dateTime.month(.abbreviated).day().hour().minute())
-            }
-        }
-    }
-}
-
-private struct ThisWeekMilestoneRow: View {
-    let milestone: Milestone
-    let birthDate: Date
-    let onTap: () -> Void
-
-    var body: some View {
-        Button(action: onTap) {
-            HStack(spacing: 12) {
-                ZStack {
-                    Circle()
-                        .fill(Color.ollieAccent.opacity(0.2))
-                        .frame(width: 36, height: 36)
-
-                    Image(systemName: milestone.icon)
-                        .font(.system(size: 14))
-                        .foregroundStyle(Color.ollieAccent)
-                }
-
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(milestone.localizedLabel)
-                        .font(.subheadline)
-                        .fontWeight(.medium)
-                        .foregroundStyle(.primary)
-
-                    if let periodLabel = milestone.periodLabelWithDate(birthDate: birthDate) {
-                        Text(periodLabel)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                }
-
-                Spacer()
-
-                if let days = milestone.daysUntil(birthDate: birthDate) {
-                    if days < 0 {
-                        Text(Strings.Health.daysOverdue(abs(days)))
-                            .font(.caption)
-                            .foregroundStyle(Color.ollieWarning)
-                    } else if days == 0 {
-                        Text(Strings.Health.today)
-                            .font(.caption)
-                            .fontWeight(.medium)
-                            .foregroundStyle(Color.ollieAccent)
-                    } else {
-                        Text(Strings.Health.inDays(days))
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                }
-            }
-            .padding()
-            .background(Color(.secondarySystemBackground))
-            .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-        }
-        .buttonStyle(.plain)
-    }
-}
-
-// MARK: - Coming Up Rows
-
-private struct ComingUpAppointmentRow: View {
-    let appointment: DogAppointment
-
-    var body: some View {
-        HStack(spacing: 12) {
-            ZStack {
-                Circle()
-                    .fill(Color.ollieInfo.opacity(0.15))
-                    .frame(width: 32, height: 32)
-
-                Image(systemName: appointment.appointmentType.icon)
-                    .font(.system(size: 12))
-                    .foregroundStyle(Color.ollieInfo)
-            }
-
-            VStack(alignment: .leading, spacing: 2) {
-                Text(appointment.title)
-                    .font(.caption)
-                    .fontWeight(.medium)
-
-                Text(appointment.dateString)
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
-            }
-
-            Spacer()
-        }
-        .padding(.vertical, 8)
-        .padding(.horizontal, 12)
-        .background(Color(.tertiarySystemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
-    }
-}
-
-private struct ComingUpMilestoneRow: View {
-    let milestone: Milestone
-    let birthDate: Date
-    let onTap: () -> Void
-
-    var body: some View {
-        Button(action: onTap) {
-            HStack(spacing: 12) {
-                ZStack {
-                    Circle()
-                        .fill(Color.ollieInfo.opacity(0.15))
-                        .frame(width: 32, height: 32)
-
-                    Image(systemName: milestone.icon)
-                        .font(.system(size: 12))
-                        .foregroundStyle(Color.ollieInfo)
-                }
-
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(milestone.localizedLabel)
-                        .font(.caption)
-                        .fontWeight(.medium)
-                        .foregroundStyle(.primary)
-
-                    if let periodLabel = milestone.periodLabelWithDate(birthDate: birthDate) {
-                        Text(periodLabel)
-                            .font(.caption2)
-                            .foregroundStyle(.secondary)
-                    }
-                }
-
-                Spacer()
-
-                Image(systemName: "chevron.right")
-                    .font(.caption2)
-                    .foregroundStyle(.tertiary)
-            }
-            .padding(.vertical, 8)
-            .padding(.horizontal, 12)
-            .background(Color(.tertiarySystemBackground))
-            .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
-        }
-        .buttonStyle(.plain)
-    }
-}
+// MARK: - Preview
 
 #Preview {
     let milestoneStore = MilestoneStore()
