@@ -37,6 +37,94 @@ public enum GrowthCurves {
         GrowthReference(weeks: 78, kg: 27.0, label: "18 months")
     ]
 
+    // MARK: - Breed-Specific Curve Generation
+
+    /// Generate a growth curve for a specific breed based on its expected adult weight
+    /// Uses research-based growth factors for different size categories
+    public static func curve(for breed: Breed) -> [GrowthReference] {
+        generateCurve(
+            adultWeight: breed.weightRange.midpoint,
+            size: breed.weightRange.sizeCategory
+        )
+    }
+
+    /// Generate a custom growth curve based on expected adult weight
+    /// Growth factors are based on veterinary research on puppy development
+    public static func generateCurve(adultWeight: Double, size: PuppyProfile.SizeCategory) -> [GrowthReference] {
+        // Growth factors based on research:
+        // Small dogs mature faster, large dogs mature slower
+        let factors: [(weeks: Int, factor: Double, label: String)] = switch size {
+        case .small:
+            // Small dogs reach adult weight by ~10-12 months
+            [
+                (0, 0.05, "Birth"),        // 5% of adult weight at birth
+                (4, 0.15, "4 weeks"),      // 15%
+                (8, 0.25, "8 weeks"),      // 25%
+                (12, 0.45, "12 weeks"),    // 45%
+                (16, 0.60, "16 weeks"),    // 60%
+                (20, 0.75, "20 weeks"),    // 75%
+                (26, 0.85, "6 months"),    // 85%
+                (34, 0.95, "8 months"),    // 95%
+                (42, 0.98, "10 months"),   // 98%
+                (52, 1.00, "12 months"),   // 100%
+                (78, 1.00, "18 months")    // Fully grown
+            ]
+        case .medium:
+            // Medium dogs reach adult weight by ~12-14 months
+            [
+                (0, 0.05, "Birth"),
+                (4, 0.12, "4 weeks"),
+                (8, 0.22, "8 weeks"),
+                (12, 0.40, "12 weeks"),
+                (16, 0.55, "16 weeks"),
+                (20, 0.65, "20 weeks"),
+                (26, 0.75, "6 months"),
+                (34, 0.85, "8 months"),
+                (42, 0.92, "10 months"),
+                (52, 0.97, "12 months"),
+                (78, 1.00, "18 months")
+            ]
+        case .large:
+            // Large dogs reach adult weight by ~14-18 months
+            [
+                (0, 0.05, "Birth"),
+                (4, 0.10, "4 weeks"),
+                (8, 0.18, "8 weeks"),
+                (12, 0.32, "12 weeks"),
+                (16, 0.45, "16 weeks"),
+                (20, 0.55, "20 weeks"),
+                (26, 0.65, "6 months"),
+                (34, 0.78, "8 months"),
+                (42, 0.88, "10 months"),
+                (52, 0.95, "12 months"),
+                (78, 1.00, "18 months")
+            ]
+        case .extraLarge:
+            // Extra large dogs reach adult weight by ~18-24 months
+            [
+                (0, 0.04, "Birth"),
+                (4, 0.08, "4 weeks"),
+                (8, 0.15, "8 weeks"),
+                (12, 0.28, "12 weeks"),
+                (16, 0.38, "16 weeks"),
+                (20, 0.48, "20 weeks"),
+                (26, 0.58, "6 months"),
+                (34, 0.70, "8 months"),
+                (42, 0.82, "10 months"),
+                (52, 0.90, "12 months"),
+                (78, 1.00, "18 months")
+            ]
+        }
+
+        return factors.map { factor in
+            GrowthReference(
+                weeks: factor.weeks,
+                kg: adultWeight * factor.factor,
+                label: factor.label
+            )
+        }
+    }
+
     /// Returns the reference curve for a given size category
     public static func curve(for size: PuppyProfile.SizeCategory) -> [GrowthReference] {
         switch size {

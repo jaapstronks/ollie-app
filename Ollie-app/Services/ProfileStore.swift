@@ -104,6 +104,31 @@ class ProfileStore: ObservableObject {
         // Just refresh the view context
         viewContext.refreshAllObjects()
         loadProfile()
+
+        // Run breed migration if needed
+        await migrateBreedNameToId()
+    }
+
+    /// Migrate breed name to breedId if profile has breed but no breedId
+    private func migrateBreedNameToId() async {
+        guard let profile = profile,
+              let breedName = profile.breed,
+              !breedName.isEmpty,
+              profile.breedId == nil else {
+            return
+        }
+
+        logger.info("Migrating breed name '\(breedName)' to breedId")
+
+        // Fetch breeds and find matching breed
+        await BreedService.shared.fetchBreeds()
+
+        if let matchedBreed = BreedService.shared.findBreed(named: breedName) {
+            updateBreedId(matchedBreed.id)
+            logger.info("Migrated breed '\(breedName)' to breedId \(matchedBreed.id)")
+        } else {
+            logger.warning("Could not find breed match for '\(breedName)'")
+        }
     }
 
     /// Force sync with CloudKit
@@ -153,10 +178,35 @@ class ProfileStore: ObservableObject {
         saveProfile(currentProfile)
     }
 
+    /// Update the webhook configuration
+    func updateWebhookConfig(_ config: WebhookConfig) {
+        guard var currentProfile = profile else { return }
+        currentProfile.webhookConfig = config
+        saveProfile(currentProfile)
+    }
+
     /// Update the dog's name
     func updateName(_ name: String) {
         guard var currentProfile = profile else { return }
         currentProfile.name = name
+        saveProfile(currentProfile)
+    }
+
+    /// Update the breed selection
+    func updateBreed(name: String?, breedId: Int?, sizeCategory: PuppyProfile.SizeCategory?) {
+        guard var currentProfile = profile else { return }
+        currentProfile.breed = name
+        currentProfile.breedId = breedId
+        if let size = sizeCategory {
+            currentProfile.sizeCategory = size
+        }
+        saveProfile(currentProfile)
+    }
+
+    /// Update just the breedId (for migration from breed name)
+    func updateBreedId(_ breedId: Int) {
+        guard var currentProfile = profile else { return }
+        currentProfile.breedId = breedId
         saveProfile(currentProfile)
     }
 

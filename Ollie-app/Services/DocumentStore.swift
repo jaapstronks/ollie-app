@@ -14,31 +14,15 @@ import os
 
 /// Manages documents with Core Data and automatic CloudKit sync
 @MainActor
-class DocumentStore: ObservableObject {
+final class DocumentStore: BaseStore {
 
     // MARK: - Published State
 
     @Published private(set) var documents: [Document] = []
-    @Published private(set) var isSyncing = false
-
-    /// Last error that occurred during a store operation (for UI display)
-    @Published private(set) var lastError: (message: String, date: Date)?
-
-    /// Clear the last error (call when user dismisses error banner)
-    func clearError() {
-        lastError = nil
-    }
 
     // MARK: - Dependencies
 
-    private let persistenceController: PersistenceController
     private weak var profileStore: ProfileStore?
-    private let logger = Logger.ollie(category: "DocumentStore")
-    private var cancellables = Set<AnyCancellable>()
-
-    private var viewContext: NSManagedObjectContext {
-        persistenceController.viewContext
-    }
 
     // MARK: - Computed Properties
 
@@ -68,33 +52,27 @@ class DocumentStore: ObservableObject {
         persistenceController: PersistenceController = .shared,
         profileStore: ProfileStore? = nil
     ) {
-        self.persistenceController = persistenceController
         self.profileStore = profileStore
-        setupObservers()
-        loadDocuments()
+        super.init(persistenceController: persistenceController, logCategory: "DocumentStore")
     }
 
     /// Set the profile store (for when it's not available at init time)
     func setProfileStore(_ profileStore: ProfileStore) {
         self.profileStore = profileStore
-        loadDocuments()
+        performInitialLoad()
     }
 
-    // MARK: - Setup
+    // MARK: - Data Loading
 
-    private func setupObservers() {
-        // Observe CloudKit remote changes
-        NotificationCenter.default.publisher(for: .NSPersistentStoreRemoteChange)
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.handleRemoteChange()
-            }
-            .store(in: &cancellables)
-    }
+    override func performInitialLoad() {
+        guard let profile = getCurrentProfile() else {
+            documents = []
+            return
+        }
 
-    private func handleRemoteChange() {
-        logger.debug("Detected CloudKit remote change for documents")
-        loadDocuments()
+        let cdDocuments = CDDocument.fetchDocuments(for: profile, in: viewContext)
+        documents = cdDocuments.compactMap { $0.toDocument() }
+        logger.info("Loaded \(self.documents.count) documents for profile")
     }
 
     // MARK: - Profile Access
@@ -108,19 +86,6 @@ class DocumentStore: ObservableObject {
         return CDPuppyProfile.fetch(byId: profileId, in: viewContext)
     }
 
-    // MARK: - Document Loading
-
-    func loadDocuments() {
-        guard let profile = getCurrentProfile() else {
-            documents = []
-            return
-        }
-
-        let cdDocuments = CDDocument.fetchDocuments(for: profile, in: viewContext)
-        documents = cdDocuments.compactMap { $0.toDocument() }
-        logger.info("Loaded \(self.documents.count) documents for profile")
-    }
-
     // MARK: - CRUD Operations
 
     /// Add a new document with optional image
@@ -131,7 +96,7 @@ class DocumentStore: ObservableObject {
     @discardableResult
     func addDocument(_ document: Document, image: UIImage? = nil) -> Bool {
         guard let profile = getCurrentProfile() else {
-            lastError = (Strings.Common.notFound, Date())
+            setError(Strings.Common.notFound)
             return false
         }
 
@@ -142,18 +107,8 @@ class DocumentStore: ObservableObject {
             cdDocument.setImage(image)
         }
 
-        do {
-            try persistenceController.save()
-            // Reload to get the updated document with attachment info
-            loadDocuments()
-            lastError = nil
-            logger.info("Added document: \(document.displayTitle)")
-            return true
-        } catch {
-            viewContext.rollback()
-            lastError = (Strings.Common.saveFailed, Date())
-            logger.error("Failed to add document: \(error.localizedDescription)")
-            return false
+        return performSave(operation: "Added document: \(document.displayTitle)") {
+            performInitialLoad()
         }
     }
 
@@ -165,7 +120,7 @@ class DocumentStore: ObservableObject {
     @discardableResult
     func addDocument(_ document: Document, pdfData: Data?) -> Bool {
         guard let profile = getCurrentProfile() else {
-            lastError = (Strings.Common.notFound, Date())
+            setError(Strings.Common.notFound)
             return false
         }
 
@@ -176,18 +131,8 @@ class DocumentStore: ObservableObject {
             cdDocument.setPDF(pdfData)
         }
 
-        do {
-            try persistenceController.save()
-            // Reload to get the updated document with attachment info
-            loadDocuments()
-            lastError = nil
-            logger.info("Added PDF document: \(document.displayTitle)")
-            return true
-        } catch {
-            viewContext.rollback()
-            lastError = (Strings.Common.saveFailed, Date())
-            logger.error("Failed to add PDF document: \(error.localizedDescription)")
-            return false
+        return performSave(operation: "Added PDF document: \(document.displayTitle)") {
+            performInitialLoad()
         }
     }
 
@@ -201,7 +146,7 @@ class DocumentStore: ObservableObject {
     func updateDocument(_ document: Document, image: UIImage? = nil, removeAttachment: Bool = false) -> Bool {
         guard let cdDocument = CDDocument.fetch(byId: document.id, in: viewContext) else {
             logger.warning("Document not found for update: \(document.id)")
-            lastError = (Strings.Common.notFound, Date())
+            setError(Strings.Common.notFound)
             return false
         }
 
@@ -214,19 +159,9 @@ class DocumentStore: ObservableObject {
             cdDocument.clearAttachment()
             cdDocument.setImage(image)
         }
-        // If neither removeAttachment nor new image, keep existing
 
-        do {
-            try persistenceController.save()
-            loadDocuments()
-            lastError = nil
-            logger.info("Updated document: \(document.displayTitle)")
-            return true
-        } catch {
-            viewContext.rollback()
-            lastError = (Strings.Common.saveFailed, Date())
-            logger.error("Failed to update document: \(error.localizedDescription)")
-            return false
+        return performSave(operation: "Updated document: \(document.displayTitle)") {
+            performInitialLoad()
         }
     }
 
@@ -239,7 +174,7 @@ class DocumentStore: ObservableObject {
     func updateDocument(_ document: Document, pdfData: Data?) -> Bool {
         guard let cdDocument = CDDocument.fetch(byId: document.id, in: viewContext) else {
             logger.warning("Document not found for update: \(document.id)")
-            lastError = (Strings.Common.notFound, Date())
+            setError(Strings.Common.notFound)
             return false
         }
 
@@ -251,17 +186,8 @@ class DocumentStore: ObservableObject {
             cdDocument.setPDF(pdfData)
         }
 
-        do {
-            try persistenceController.save()
-            loadDocuments()
-            lastError = nil
-            logger.info("Updated document with PDF: \(document.displayTitle)")
-            return true
-        } catch {
-            viewContext.rollback()
-            lastError = (Strings.Common.saveFailed, Date())
-            logger.error("Failed to update document with PDF: \(error.localizedDescription)")
-            return false
+        return performSave(operation: "Updated document with PDF: \(document.displayTitle)") {
+            performInitialLoad()
         }
     }
 
@@ -271,23 +197,14 @@ class DocumentStore: ObservableObject {
     func deleteDocument(_ document: Document) -> Bool {
         guard let cdDocument = CDDocument.fetch(byId: document.id, in: viewContext) else {
             logger.warning("Document not found for deletion: \(document.id)")
-            lastError = (Strings.Common.notFound, Date())
+            setError(Strings.Common.notFound)
             return false
         }
 
         viewContext.delete(cdDocument)
 
-        do {
-            try persistenceController.save()
+        return performDelete(operation: "Deleted document: \(document.displayTitle)") {
             documents.removeAll { $0.id == document.id }
-            lastError = nil
-            logger.info("Deleted document: \(document.displayTitle)")
-            return true
-        } catch {
-            viewContext.rollback()
-            lastError = (Strings.Common.deleteFailed, Date())
-            logger.error("Failed to delete document: \(error.localizedDescription)")
-            return false
         }
     }
 
@@ -368,14 +285,6 @@ class DocumentStore: ObservableObject {
         }.sorted { ($0.expiryDate ?? .distantFuture) < ($1.expiryDate ?? .distantFuture) }
     }
 
-    // MARK: - CloudKit Sync
-
-    /// Force refresh documents from Core Data (useful after CloudKit sync)
-    func syncFromCloud() async {
-        viewContext.refreshAllObjects()
-        loadDocuments()
-    }
-
     // MARK: - Migration Support
 
     /// Migrate orphaned documents to the current profile
@@ -394,13 +303,8 @@ class DocumentStore: ObservableObject {
             cdDocument.profile = profile
         }
 
-        do {
-            try persistenceController.save()
-            loadDocuments()
-            logger.info("Successfully migrated orphaned documents")
-        } catch {
-            viewContext.rollback()
-            logger.error("Failed to migrate orphaned documents: \(error.localizedDescription)")
+        performSave(operation: "Migrated orphaned documents") {
+            performInitialLoad()
         }
     }
 }

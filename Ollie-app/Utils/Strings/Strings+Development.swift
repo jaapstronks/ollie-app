@@ -46,12 +46,16 @@ extension Strings {
         static let socializationWindowOpen = String(localized: "Socialization window is open", table: table)
         static let socializationWindowClosing = String(localized: "Socialization window is closing", table: table)
         static let socializationWindowClosed = String(localized: "Socialization window has closed", table: table)
-        static let fearPeriod = String(localized: "Fear Period", table: table)
-        static let fearPeriodActive = String(localized: "Be extra gentle with new experiences", table: table)
+        static let sensitivePeriod = String(localized: "Sensitive Phase", table: table)
+        static func sensitivePeriodActive(name: String) -> String {
+            String(localized: "\(name) is extra sensitive right now", table: table)
+        }
 
         // MARK: - Period Advice
         static let socializationAdvice = String(localized: "Focus on positive experiences with new people, places, sounds, and other animals.", table: table)
-        static let fearPeriodAdvice = String(localized: "Avoid overwhelming situations. Keep new experiences positive and low-pressure.", table: table)
+        static func sensitivePeriodAdvice(name: String) -> String {
+            String(localized: "Small positive experiences make a big difference for \(name). Celebrate every tiny win together.", table: table)
+        }
 
         // MARK: - Age Labels
         static func ageWeekWithDate(week: Int, date: String) -> String {

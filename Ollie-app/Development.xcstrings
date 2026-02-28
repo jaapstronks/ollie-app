@@ -1,6 +1,17 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "%@ is extra sensitive right now" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ is nu extra gevoelig"
+          }
+        }
+      }
+    },
     "%lld months · ~%@" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -133,28 +144,6 @@
         }
       }
     },
-    "Avoid overwhelming situations. Keep new experiences positive and low-pressure." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Vermijd overweldigende situaties. Houd nieuwe ervaringen positief en laagdrempelig."
-          }
-        }
-      }
-    },
-    "Be extra gentle with new experiences" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Wees extra voorzichtig met nieuwe ervaringen"
-          }
-        }
-      }
-    },
     "Birth to 2 weeks" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -206,17 +195,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ontwikkelingsroadmap"
-          }
-        }
-      }
-    },
-    "Fear Period" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Angstperiode"
           }
         }
       }
@@ -305,6 +283,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Bekijk ontwikkelingsroadmap"
+          }
+        }
+      }
+    },
+    "Sensitive Phase" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gevoelige fase"
+          }
+        }
+      }
+    },
+    "Small positive experiences make a big difference for %@. Celebrate every tiny win together." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kleine positieve ervaringen maken nu een groot verschil voor %@. Vier samen elk succesje."
           }
         }
       }

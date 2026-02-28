@@ -227,10 +227,16 @@ public enum WeightCalculations {
 
     /// Build a growth story from weight events
     /// Returns nil if there are fewer than 2 weight measurements
+    /// - Parameters:
+    ///   - events: All puppy events
+    ///   - homeDate: Date puppy came home
+    ///   - sizeCategory: Size category for default curve
+    ///   - breed: Optional breed for breed-specific adult weight estimation
     public static func growthStory(
         events: [PuppyEvent],
         homeDate: Date,
-        sizeCategory: PuppyProfile.SizeCategory
+        sizeCategory: PuppyProfile.SizeCategory,
+        breed: Breed? = nil
     ) -> GrowthStory? {
         let weightEvents = events.weights()
             .filter { $0.weightKg != nil }
@@ -248,8 +254,13 @@ public enum WeightCalculations {
         // Calculate growth ratio
         let growthRatio = currentWeight / firstWeight
 
-        // Get estimated adult weight from reference curve
-        let curve = GrowthCurves.curve(for: sizeCategory)
+        // Get estimated adult weight from breed-specific curve if available
+        let curve: [GrowthReference]
+        if let breed = breed {
+            curve = GrowthCurves.curve(for: breed)
+        } else {
+            curve = GrowthCurves.curve(for: sizeCategory)
+        }
         let estimatedAdultWeight = curve.last?.kg ?? currentWeight
 
         // Calculate percent to adult weight (capped at 100%)
@@ -269,6 +280,28 @@ public enum WeightCalculations {
             percentToAdult: percentToAdult,
             daysSinceFirst: daysSinceFirst
         )
+    }
+
+    /// Compare current weight to breed-specific reference curve
+    public static func compareToBreedReference(
+        currentWeight: Double,
+        ageWeeks: Int,
+        breed: Breed
+    ) -> GrowthComparison? {
+        let curve = GrowthCurves.curve(for: breed)
+        return compareToReference(currentWeight: currentWeight, ageWeeks: ageWeeks, curve: curve)
+    }
+
+    /// Get the expected weight for a breed at a given age
+    public static func expectedWeight(at weeks: Int, breed: Breed) -> Double {
+        let curve = GrowthCurves.curve(for: breed)
+        return interpolatedReferenceWeight(at: weeks, curve: curve)
+    }
+
+    /// Get the expected weight for a size category at a given age
+    public static func expectedWeight(at weeks: Int, size: PuppyProfile.SizeCategory) -> Double {
+        let curve = GrowthCurves.curve(for: size)
+        return interpolatedReferenceWeight(at: weeks, curve: curve)
     }
 
     /// Get the first weight measurement (for "journey begins" state)

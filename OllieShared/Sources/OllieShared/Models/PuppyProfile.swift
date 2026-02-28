@@ -10,6 +10,7 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
     public let id: UUID
     public var name: String
     public var breed: String?
+    public var breedId: Int?  // TheDogAPI breed ID for breed-specific features
     public var birthDate: Date
     public var homeDate: Date
     public var sizeCategory: SizeCategory
@@ -19,6 +20,7 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
     public var walkSchedule: WalkSchedule
     public var notificationSettings: NotificationSettings
     public var medicationSchedule: MedicationSchedule
+    public var webhookConfig: WebhookConfig
     public var modifiedAt: Date
 
     /// Profile photo filename (stored in ProfilePhotos directory)
@@ -91,6 +93,7 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
             id: UUID(),
             name: name,
             breed: nil,
+            breedId: nil,
             birthDate: birthDate,
             homeDate: homeDate,
             sizeCategory: size,
@@ -100,6 +103,7 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
             walkSchedule: WalkSchedule.defaultSchedule(),
             notificationSettings: NotificationSettings.defaultSettings(),
             medicationSchedule: MedicationSchedule.empty(),
+            webhookConfig: WebhookConfig.defaultConfig(),
             modifiedAt: Date(),
             legacyPremiumUnlocked: false
         )
@@ -111,6 +115,7 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
         id: UUID = UUID(),
         name: String,
         breed: String? = nil,
+        breedId: Int? = nil,
         birthDate: Date,
         homeDate: Date,
         sizeCategory: SizeCategory,
@@ -120,6 +125,7 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
         walkSchedule: WalkSchedule,
         notificationSettings: NotificationSettings,
         medicationSchedule: MedicationSchedule = MedicationSchedule.empty(),
+        webhookConfig: WebhookConfig = WebhookConfig.defaultConfig(),
         modifiedAt: Date? = nil,
         profilePhotoFilename: String? = nil,
         legacyPremiumUnlocked: Bool = false
@@ -127,6 +133,7 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
         self.id = id
         self.name = name
         self.breed = breed
+        self.breedId = breedId
         self.birthDate = birthDate
         self.homeDate = homeDate
         self.sizeCategory = sizeCategory
@@ -136,6 +143,7 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
         self.walkSchedule = walkSchedule
         self.notificationSettings = notificationSettings
         self.medicationSchedule = medicationSchedule
+        self.webhookConfig = webhookConfig
         self.modifiedAt = modifiedAt ?? Date()
         self.profilePhotoFilename = profilePhotoFilename
         self.legacyPremiumUnlocked = legacyPremiumUnlocked
@@ -145,9 +153,9 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
 
     public enum CodingKeys: String, CodingKey {
         case id
-        case name, breed, birthDate, homeDate, sizeCategory
+        case name, breed, breedId, birthDate, homeDate, sizeCategory
         case mealSchedule, exerciseConfig, predictionConfig
-        case walkSchedule, notificationSettings, medicationSchedule
+        case walkSchedule, notificationSettings, medicationSchedule, webhookConfig
         case modifiedAt
         case profilePhotoFilename
         // Legacy fields for migration (read old values)
@@ -161,6 +169,7 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
         id = try container.decodeIfPresent(UUID.self, forKey: .id) ?? UUID()
         name = try container.decode(String.self, forKey: .name)
         breed = try container.decodeIfPresent(String.self, forKey: .breed)
+        breedId = try container.decodeIfPresent(Int.self, forKey: .breedId)
         birthDate = try container.decode(Date.self, forKey: .birthDate)
         homeDate = try container.decode(Date.self, forKey: .homeDate)
         sizeCategory = try container.decode(SizeCategory.self, forKey: .sizeCategory)
@@ -170,6 +179,7 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
         walkSchedule = try container.decodeIfPresent(WalkSchedule.self, forKey: .walkSchedule) ?? WalkSchedule.defaultSchedule()
         notificationSettings = try container.decodeIfPresent(NotificationSettings.self, forKey: .notificationSettings) ?? NotificationSettings.defaultSettings()
         medicationSchedule = try container.decodeIfPresent(MedicationSchedule.self, forKey: .medicationSchedule) ?? MedicationSchedule.empty()
+        webhookConfig = try container.decodeIfPresent(WebhookConfig.self, forKey: .webhookConfig) ?? WebhookConfig.defaultConfig()
         modifiedAt = try container.decodeIfPresent(Date.self, forKey: .modifiedAt) ?? Date()
         profilePhotoFilename = try container.decodeIfPresent(String.self, forKey: .profilePhotoFilename)
 
@@ -189,6 +199,7 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
         try container.encode(id, forKey: .id)
         try container.encode(name, forKey: .name)
         try container.encodeIfPresent(breed, forKey: .breed)
+        try container.encodeIfPresent(breedId, forKey: .breedId)
         try container.encode(birthDate, forKey: .birthDate)
         try container.encode(homeDate, forKey: .homeDate)
         try container.encode(sizeCategory, forKey: .sizeCategory)
@@ -198,6 +209,7 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
         try container.encode(walkSchedule, forKey: .walkSchedule)
         try container.encode(notificationSettings, forKey: .notificationSettings)
         try container.encode(medicationSchedule, forKey: .medicationSchedule)
+        try container.encode(webhookConfig, forKey: .webhookConfig)
         try container.encode(modifiedAt, forKey: .modifiedAt)
         try container.encodeIfPresent(profilePhotoFilename, forKey: .profilePhotoFilename)
         try container.encode(legacyPremiumUnlocked, forKey: .legacyPremiumUnlocked)

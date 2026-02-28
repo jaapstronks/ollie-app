@@ -90,7 +90,8 @@ struct TrainTabView: View {
 
                 DevelopmentalPeriodBanners(
                     milestones: activePeriods,
-                    birthDate: profile.birthDate
+                    birthDate: profile.birthDate,
+                    puppyName: profile.name
                 )
             }
         }

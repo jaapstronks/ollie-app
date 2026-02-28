@@ -43,6 +43,11 @@ extension Strings {
         }
         static let otherBreed = String(localized: "Other / Unknown", table: table)
         static let enterCustom = String(localized: "Enter custom", table: table)
+        static let searchBreeds = String(localized: "Search breeds...", table: table)
+        static let noBreedResults = String(localized: "No breeds found. Try a different search.", table: table)
+        static func searchForMore(count: Int) -> String {
+            String(localized: "Search to find more breeds (\(count) total)", table: table)
+        }
 
         static func birthDateQuestion(name: String) -> String {
             String(localized: "When was \(name) born?", table: table)

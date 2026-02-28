@@ -13,22 +13,13 @@ import os
 
 /// Manages socialization items and user exposures with Core Data and automatic CloudKit sync
 @MainActor
-class SocializationStore: ObservableObject {
+final class SocializationStore: BaseStore {
 
     // MARK: - Published State
 
     @Published var categories: [SocializationCategory] = []
     @Published private(set) var exposuresByItem: [String: [Exposure]] = [:]
     @Published var startedDate: Date?
-    @Published private(set) var isSyncing = false
-
-    private let persistenceController: PersistenceController
-    private let logger = Logger.ollie(category: "SocializationStore")
-    private var cancellables = Set<AnyCancellable>()
-
-    private var viewContext: NSManagedObjectContext {
-        persistenceController.viewContext
-    }
 
     // MARK: - Computed Properties
 
@@ -52,26 +43,19 @@ class SocializationStore: ObservableObject {
     // MARK: - Init
 
     init(persistenceController: PersistenceController = .shared) {
-        self.persistenceController = persistenceController
+        super.init(persistenceController: persistenceController, logCategory: "SocializationStore")
         loadCategories()
-        loadExposures()
-        setupRemoteChangeObserver()
     }
 
-    // MARK: - Setup
+    // MARK: - Data Loading
 
-    private func setupRemoteChangeObserver() {
-        NotificationCenter.default.publisher(for: .NSPersistentStoreRemoteChange)
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.handleRemoteChange()
-            }
-            .store(in: &cancellables)
-    }
+    override func performInitialLoad() {
+        let cdExposures = CDExposure.fetchAllExposures(in: viewContext)
+        let exposures = cdExposures.compactMap { $0.toExposure() }
 
-    private func handleRemoteChange() {
-        logger.debug("Detected CloudKit remote change for exposures")
-        loadExposures()
+        // Group by itemId
+        exposuresByItem = Dictionary(grouping: exposures, by: { $0.itemId })
+        logger.info("Loaded \(exposures.count) exposures from Core Data")
     }
 
     // MARK: - Category Loading
@@ -111,18 +95,12 @@ class SocializationStore: ObservableObject {
             note: note
         )
 
-        // Save to Core Data
         _ = CDExposure.create(from: exposure, in: viewContext)
 
-        do {
-            try persistenceController.save()
-
-            // Update in-memory
+        performSave(operation: "Added exposure for item: \(itemId)") {
             var exposures = exposuresByItem[itemId] ?? []
             exposures.append(exposure)
             exposuresByItem[itemId] = exposures
-        } catch {
-            logger.error("Failed to save exposure: \(error.localizedDescription)")
         }
 
         return exposure
@@ -135,15 +113,15 @@ class SocializationStore: ObservableObject {
 
     /// Delete an exposure
     func deleteExposure(_ exposure: Exposure) {
-        if let cdExposure = CDExposure.fetch(byId: exposure.id, in: viewContext) {
-            viewContext.delete(cdExposure)
+        guard let cdExposure = CDExposure.fetch(byId: exposure.id, in: viewContext) else {
+            logger.warning("Exposure not found for deletion: \(exposure.id)")
+            return
+        }
 
-            do {
-                try persistenceController.save()
-                exposuresByItem[exposure.itemId]?.removeAll { $0.id == exposure.id }
-            } catch {
-                logger.error("Failed to delete exposure: \(error.localizedDescription)")
-            }
+        viewContext.delete(cdExposure)
+
+        performDelete(operation: "Deleted exposure: \(exposure.id)") {
+            exposuresByItem[exposure.itemId]?.removeAll { $0.id == exposure.id }
         }
     }
 
@@ -237,30 +215,6 @@ class SocializationStore: ObservableObject {
             .sorted { $0.1 > $1.1 }
             .prefix(limit)
             .map { $0.0 }
-    }
-
-    // MARK: - Persistence
-
-    private func loadExposures() {
-        let cdExposures = CDExposure.fetchAllExposures(in: viewContext)
-        let exposures = cdExposures.compactMap { $0.toExposure() }
-
-        // Group by itemId
-        exposuresByItem = Dictionary(grouping: exposures, by: { $0.itemId })
-        logger.info("Loaded \(exposures.count) exposures from Core Data")
-    }
-
-    // MARK: - CloudKit Sync
-
-    /// Sync exposures from CloudKit (no-op with automatic sync)
-    func syncFromCloud() async {
-        viewContext.refreshAllObjects()
-        loadExposures()
-    }
-
-    /// Retry pending operations (no-op with automatic sync)
-    func retryPendingOperations() async {
-        // With NSPersistentCloudKitContainer, retries are automatic
     }
 
     // MARK: - Weekly Progress

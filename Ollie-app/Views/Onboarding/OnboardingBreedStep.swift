@@ -2,7 +2,7 @@
 //  OnboardingBreedStep.swift
 //  Ollie-app
 //
-//  Breed selection step for onboarding
+//  Breed selection step for onboarding with searchable breed list from TheDogAPI
 //
 
 import SwiftUI
@@ -11,7 +11,7 @@ import OllieShared
 /// Breed selection step
 struct OnboardingBreedStep: View {
     let puppyName: String
-    @Binding var selectedBreed: DogBreed?
+    @Binding var selectedBreed: Breed?
     @Binding var customBreed: String
     @Binding var isCustomBreed: Bool
     @Binding var sizeCategory: PuppyProfile.SizeCategory
@@ -19,7 +19,25 @@ struct OnboardingBreedStep: View {
     let onNext: () -> Void
     let onBack: () -> Void
 
+    @StateObject private var breedService = BreedService.shared
+    @State private var searchQuery = ""
     @State private var hasAppeared = false
+    @FocusState private var isSearchFocused: Bool
+
+    /// Filtered breeds based on search query
+    private var filteredBreeds: [Breed] {
+        breedService.searchBreeds(query: searchQuery)
+    }
+
+    /// Popular breeds to show when no search query (first 15)
+    private var popularBreeds: [Breed] {
+        Array(breedService.breeds.prefix(15))
+    }
+
+    /// Breeds to display - either search results or popular breeds
+    private var displayedBreeds: [Breed] {
+        searchQuery.isEmpty ? popularBreeds : filteredBreeds
+    }
 
     var body: some View {
         VStack(spacing: 0) {
@@ -40,54 +58,107 @@ struct OnboardingBreedStep: View {
             .padding(.top, 8)
             .padding(.bottom, 16)
 
+            // Search bar
+            HStack {
+                Image(systemName: "magnifyingglass")
+                    .foregroundStyle(.secondary)
+                TextField(Strings.Onboarding.searchBreeds, text: $searchQuery)
+                    .textFieldStyle(.plain)
+                    .autocorrectionDisabled()
+                    .focused($isSearchFocused)
+                if !searchQuery.isEmpty {
+                    Button {
+                        searchQuery = ""
+                    } label: {
+                        Image(systemName: "xmark.circle.fill")
+                            .foregroundStyle(.secondary)
+                    }
+                }
+            }
+            .padding(.horizontal, 12)
+            .padding(.vertical, 10)
+            .background(Color(.secondarySystemBackground))
+            .clipShape(RoundedRectangle(cornerRadius: 10))
+            .padding(.horizontal, 24)
+            .padding(.bottom, 12)
+            .opacity(hasAppeared ? 1.0 : 0.0)
+
             // Breed list
-            ScrollView {
-                VStack(spacing: 10) {
-                    // Predefined breeds
-                    ForEach(Array(DogBreed.breeds.enumerated()), id: \.element.id) { index, breed in
-                        BreedSelectionButton(
-                            breed: breed,
-                            isSelected: selectedBreed?.name == breed.name && !isCustomBreed,
+            if breedService.isLoading && breedService.breeds.isEmpty {
+                Spacer()
+                ProgressView()
+                    .padding()
+                Text(Strings.Common.loading)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                Spacer()
+            } else {
+                ScrollView {
+                    LazyVStack(spacing: 10) {
+                        // Show search hint if no results
+                        if displayedBreeds.isEmpty && !searchQuery.isEmpty {
+                            Text(Strings.Onboarding.noBreedResults)
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                                .padding(.vertical, 20)
+                        }
+
+                        // Breed buttons
+                        ForEach(Array(displayedBreeds.enumerated()), id: \.element.id) { index, breed in
+                            BreedSelectionButton(
+                                breed: breed,
+                                isSelected: selectedBreed?.id == breed.id && !isCustomBreed,
+                                onSelect: {
+                                    HapticFeedback.light()
+                                    selectedBreed = breed
+                                    isCustomBreed = false
+                                    sizeCategory = breed.weightRange.sizeCategory
+                                    customBreed = ""
+                                    isSearchFocused = false
+                                }
+                            )
+                            .opacity(hasAppeared ? 1.0 : 0.0)
+                            .offset(y: hasAppeared ? 0 : 15)
+                            .animation(.easeOut(duration: 0.4).delay(Double(min(index, 10)) * 0.02), value: hasAppeared)
+                        }
+
+                        // "Other" option
+                        OtherBreedButton(
+                            isSelected: isCustomBreed,
                             onSelect: {
                                 HapticFeedback.light()
-                                selectedBreed = breed
-                                isCustomBreed = false
-                                sizeCategory = breed.size
-                                customBreed = ""
+                                isCustomBreed = true
+                                selectedBreed = nil
+                                isCustomBreedFieldFocused = true
+                                isSearchFocused = false
                             }
                         )
                         .opacity(hasAppeared ? 1.0 : 0.0)
-                        .offset(y: hasAppeared ? 0 : 15)
-                        .animation(.easeOut(duration: 0.4).delay(Double(index) * 0.03), value: hasAppeared)
-                    }
 
-                    // "Other" option
-                    OtherBreedButton(
-                        isSelected: isCustomBreed,
-                        onSelect: {
-                            HapticFeedback.light()
-                            isCustomBreed = true
-                            selectedBreed = nil
-                            isCustomBreedFieldFocused = true
+                        // Custom breed text field (shown when "Other" selected)
+                        if isCustomBreed {
+                            OnboardingTextField(
+                                placeholder: Strings.Onboarding.breedOptional,
+                                text: $customBreed,
+                                isFocused: $isCustomBreedFieldFocused
+                            )
+                            .padding(.top, 8)
+                            .transition(.opacity.combined(with: .move(edge: .top)))
                         }
-                    )
-                    .opacity(hasAppeared ? 1.0 : 0.0)
 
-                    // Custom breed text field (shown when "Other" selected)
-                    if isCustomBreed {
-                        OnboardingTextField(
-                            placeholder: Strings.Onboarding.breedOptional,
-                            text: $customBreed,
-                            isFocused: $isCustomBreedFieldFocused
-                        )
-                        .padding(.top, 8)
-                        .transition(.opacity.combined(with: .move(edge: .top)))
+                        // Show total breed count hint
+                        if searchQuery.isEmpty && breedService.breeds.count > popularBreeds.count {
+                            Text(Strings.Onboarding.searchForMore(count: breedService.breeds.count))
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                                .padding(.top, 8)
+                        }
                     }
+                    .padding(.horizontal, 24)
+                    .padding(.bottom, 16)
                 }
-                .padding(.horizontal, 24)
-                .padding(.bottom, 16)
+                .scrollDismissesKeyboard(.interactively)
             }
-            .scrollDismissesKeyboard(.interactively)
 
             // Buttons
             HStack(spacing: 12) {
@@ -97,6 +168,10 @@ struct OnboardingBreedStep: View {
             .padding(.horizontal, 24)
             .padding(.bottom, 16)
             .opacity(hasAppeared ? 1.0 : 0.0)
+        }
+        .task {
+            // Fetch breeds on appear
+            await breedService.fetchBreeds()
         }
         .onAppear {
             withAnimation(.easeOut(duration: 0.5)) {
@@ -108,6 +183,7 @@ struct OnboardingBreedStep: View {
                 Spacer()
                 Button(Strings.Common.done) {
                     isCustomBreedFieldFocused = false
+                    isSearchFocused = false
                 }
                 .fontWeight(.semibold)
             }
@@ -118,7 +194,7 @@ struct OnboardingBreedStep: View {
 // MARK: - Breed Selection Button
 
 private struct BreedSelectionButton: View {
-    let breed: DogBreed
+    let breed: Breed
     let isSelected: Bool
     let onSelect: () -> Void
 
@@ -129,7 +205,7 @@ private struct BreedSelectionButton: View {
                     Text(breed.name)
                         .font(.body)
                         .fontWeight(.medium)
-                    Text(breed.weightRange)
+                    Text(breed.weightRange.displayString)
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }

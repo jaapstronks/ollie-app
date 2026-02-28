@@ -13,6 +13,7 @@ struct MomentsGalleryView: View {
     var onSettingsTap: (() -> Void)? = nil
     @State private var selectedEvent: PuppyEvent?
     @Namespace private var heroNamespace
+    @AppStorage("momentsViewMode") private var viewMode: MomentsViewMode = .gallery
 
     private let columns = [
         GridItem(.flexible(), spacing: 2),
@@ -39,49 +40,20 @@ struct MomentsGalleryView: View {
                 } else if viewModel.events.isEmpty {
                     EmptyMomentsView()
                 } else {
-                    ScrollView {
-                        LazyVStack(alignment: .leading, spacing: 16) {
-                            ForEach(Array(viewModel.eventsByMonth.enumerated()), id: \.element.month) { sectionIndex, section in
-                                VStack(alignment: .leading, spacing: 8) {
-                                    Text(section.month)
-                                        .font(.headline)
-                                        .padding(.horizontal)
-                                        .animatedAppear(delay: StaggeredAnimation.delay(for: sectionIndex))
-
-                                    LazyVGrid(columns: columns, spacing: 2) {
-                                        ForEach(Array(section.events.enumerated()), id: \.element.id) { eventIndex, event in
-                                            GalleryThumbnail(event: event)
-                                                .aspectRatio(1, contentMode: .fill)
-                                                .zoomTransitionSource(id: event.id, in: heroNamespace)
-                                                .onTapGesture {
-                                                    selectedEvent = event
-                                                }
-                                                .animatedAppear(delay: StaggeredAnimation.delay(for: eventIndex, baseDelay: 0.03, maxDelay: 0.2))
-                                                .onAppear {
-                                                    // Trigger infinite scroll when near the end
-                                                    viewModel.loadMoreIfNeeded(currentEvent: event)
-                                                }
-                                        }
-                                    }
-                                }
-                            }
-
-                            // Loading indicator at bottom when loading more
-                            if viewModel.isLoadingMore {
-                                HStack {
-                                    Spacer()
-                                    ProgressView()
-                                        .padding()
-                                    Spacer()
-                                }
-                            }
-                        }
-                        .padding(.vertical)
+                    switch viewMode {
+                    case .gallery:
+                        galleryContent
+                    case .diary:
+                        diaryContent
                     }
                 }
             }
             .navigationTitle(Strings.MomentsGallery.title)
             .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    MomentsViewModeToggle(mode: $viewMode)
+                        .frame(width: 140)
+                }
                 if let onSettingsTap = onSettingsTap {
                     ToolbarItem(placement: .topBarTrailing) {
                         Button {
@@ -108,6 +80,82 @@ struct MomentsGalleryView: View {
             .refreshable {
                 viewModel.loadEventsWithMedia()
             }
+        }
+    }
+
+    // MARK: - Gallery View Content
+
+    private var galleryContent: some View {
+        ScrollView {
+            LazyVStack(alignment: .leading, spacing: 16) {
+                ForEach(Array(viewModel.eventsByMonth.enumerated()), id: \.element.month) { sectionIndex, section in
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text(section.month)
+                            .font(.headline)
+                            .padding(.horizontal)
+                            .animatedAppear(delay: StaggeredAnimation.delay(for: sectionIndex))
+
+                        LazyVGrid(columns: columns, spacing: 2) {
+                            ForEach(Array(section.events.enumerated()), id: \.element.id) { eventIndex, event in
+                                GalleryThumbnail(event: event)
+                                    .aspectRatio(1, contentMode: .fill)
+                                    .zoomTransitionSource(id: event.id, in: heroNamespace)
+                                    .onTapGesture {
+                                        selectedEvent = event
+                                    }
+                                    .animatedAppear(delay: StaggeredAnimation.delay(for: eventIndex, baseDelay: 0.03, maxDelay: 0.2))
+                                    .onAppear {
+                                        // Trigger infinite scroll when near the end
+                                        viewModel.loadMoreIfNeeded(currentEvent: event)
+                                    }
+                            }
+                        }
+                    }
+                }
+
+                // Loading indicator at bottom when loading more
+                if viewModel.isLoadingMore {
+                    HStack {
+                        Spacer()
+                        ProgressView()
+                            .padding()
+                        Spacer()
+                    }
+                }
+            }
+            .padding(.vertical)
+        }
+    }
+
+    // MARK: - Diary View Content
+
+    private var diaryContent: some View {
+        ScrollView {
+            LazyVStack(spacing: 24) {
+                ForEach(Array(viewModel.eventsPerDay.enumerated()), id: \.element.id) { index, event in
+                    DiaryCardView(event: event)
+                        .zoomTransitionSource(id: event.id, in: heroNamespace)
+                        .onTapGesture {
+                            selectedEvent = event
+                        }
+                        .animatedAppear(delay: StaggeredAnimation.delay(for: index, baseDelay: 0.05, maxDelay: 0.3))
+                        .onAppear {
+                            // Trigger infinite scroll when near the end
+                            viewModel.loadMoreIfNeeded(currentEvent: event)
+                        }
+                }
+
+                // Loading indicator at bottom when loading more
+                if viewModel.isLoadingMore {
+                    HStack {
+                        Spacer()
+                        ProgressView()
+                            .padding()
+                        Spacer()
+                    }
+                }
+            }
+            .padding()
         }
     }
 }

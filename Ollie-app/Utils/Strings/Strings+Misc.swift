@@ -48,7 +48,8 @@ extension Strings {
         static let pottyTraining = String(localized: "Potty Training", table: table)
         static let today = String(localized: "Today", table: table)
         static let sleepToday = String(localized: "Sleep Today", table: table)
-        static let patterns = String(localized: "Patterns (7 days)", table: table)
+        static let patterns = String(localized: "Potty Triggers (7 days)", table: table)
+        static let patternsSubtitle = String(localized: "Outdoor success rate by trigger", table: table)
 
         // Expanded Stats tab sections
         static let health = String(localized: "Health", table: table)
@@ -138,6 +139,7 @@ extension Strings {
         static let couldNotShare = String(localized: "Could not share", table: table)
         static let couldNotStopSharing = String(localized: "Could not stop sharing", table: table)
         static let couldNotProcessWeather = String(localized: "Could not process weather data", table: table)
+        static let couldNotProcessData = String(localized: "Could not process data", table: table)
 
         // Weather errors
         static let invalidURL = String(localized: "Invalid URL", table: table)

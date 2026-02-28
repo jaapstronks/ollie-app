@@ -62,13 +62,13 @@ extension Strings {
         static let calmIsGoal = String(localized: "Calm, neutral behavior is the goal — not interaction!", table: table)
 
         // Fear protocol
-        static let fearProtocolTitle = String(localized: "Tips for Fearful Reactions", table: table)
-        static let fearProtocolTip1 = String(localized: "Don't force interaction — increase distance", table: table)
+        static let fearProtocolTitle = String(localized: "Building Confidence Together", table: table)
+        static let fearProtocolTip1 = String(localized: "Give more space — distance is your friend", table: table)
         static let fearProtocolTip2 = String(localized: "Pair the stimulus with treats (look, treat, look away)", table: table)
-        static let fearProtocolTip3 = String(localized: "Keep sessions very short", table: table)
-        static let fearProtocolTip4 = String(localized: "End on a positive note if possible", table: table)
-        static let fearProtocolTip5 = String(localized: "Consult a professional trainer if fear persists", table: table)
-        static let understood = String(localized: "Understood", table: table)
+        static let fearProtocolTip3 = String(localized: "Short sessions = big wins", table: table)
+        static let fearProtocolTip4 = String(localized: "End on a positive note — even a small one counts", table: table)
+        static let fearProtocolTip5 = String(localized: "A professional trainer can help if this continues", table: table)
+        static let understood = String(localized: "Got it", table: table)
 
         // Item states
         static let notStarted = String(localized: "Not started", table: table)

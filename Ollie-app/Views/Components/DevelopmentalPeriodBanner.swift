@@ -12,62 +12,80 @@ import OllieShared
 struct DevelopmentalPeriodBanner: View {
     let milestone: Milestone
     let birthDate: Date
+    let puppyName: String
 
+    @State private var isExpanded: Bool = false
     @Environment(\.colorScheme) private var colorScheme
 
     var body: some View {
-        HStack(spacing: 12) {
-            // Icon
-            ZStack {
-                Circle()
-                    .fill(periodColor.opacity(0.2))
-                    .frame(width: 40, height: 40)
-
-                Image(systemName: periodIcon)
-                    .font(.system(size: 18))
-                    .foregroundStyle(periodColor)
+        Button {
+            withAnimation(.easeInOut(duration: 0.2)) {
+                isExpanded.toggle()
             }
+        } label: {
+            HStack(spacing: 12) {
+                // Icon
+                ZStack {
+                    Circle()
+                        .fill(periodColor.opacity(0.2))
+                        .frame(width: 40, height: 40)
 
-            // Content
-            VStack(alignment: .leading, spacing: 2) {
-                Text(periodTitle)
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
-                    .foregroundStyle(.primary)
-
-                Text(periodAdvice)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                    .lineLimit(2)
-            }
-
-            Spacer()
-
-            // Weeks remaining indicator (for socialization window)
-            if let weeksRemaining = weeksRemaining {
-                VStack(alignment: .trailing, spacing: 2) {
-                    Text("\(weeksRemaining)")
-                        .font(.title3)
-                        .fontWeight(.bold)
+                    Image(systemName: periodIcon)
+                        .font(.system(size: 18))
                         .foregroundStyle(periodColor)
-                    Text(weeksRemaining == 1 ? Strings.Common.week : Strings.Common.weeks)
-                        .font(.caption2)
+                }
+
+                // Content
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(periodTitle)
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(.primary)
+
+                    Text(periodAdvice)
+                        .font(.caption)
                         .foregroundStyle(.secondary)
+                        .lineLimit(isExpanded ? nil : 2)
+                        .multilineTextAlignment(.leading)
+                }
+
+                Spacer()
+
+                // Weeks remaining indicator (for socialization window) and expand chevron
+                HStack(spacing: 12) {
+                    if let weeksRemaining = weeksRemaining {
+                        VStack(alignment: .trailing, spacing: 2) {
+                            Text("\(weeksRemaining)")
+                                .font(.title3)
+                                .fontWeight(.bold)
+                                .foregroundStyle(periodColor)
+                            Text(weeksRemaining == 1 ? Strings.Common.week : Strings.Common.weeks)
+                                .font(.caption2)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+
+                    Image(systemName: "chevron.down")
+                        .font(.system(size: 12, weight: .semibold))
+                        .foregroundStyle(.secondary)
+                        .rotationEffect(.degrees(isExpanded ? 180 : 0))
                 }
             }
+            .padding()
+            .background(
+                RoundedRectangle(cornerRadius: 12, style: .continuous)
+                    .fill(periodColor.opacity(colorScheme == .dark ? 0.15 : 0.08))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 12, style: .continuous)
+                            .strokeBorder(periodColor.opacity(0.3), lineWidth: 1)
+                    )
+            )
         }
-        .padding()
-        .background(
-            RoundedRectangle(cornerRadius: 12, style: .continuous)
-                .fill(periodColor.opacity(colorScheme == .dark ? 0.15 : 0.08))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 12, style: .continuous)
-                        .strokeBorder(periodColor.opacity(0.3), lineWidth: 1)
-                )
-        )
+        .buttonStyle(.plain)
         .accessibilityElement(children: .combine)
         .accessibilityLabel(periodTitle)
         .accessibilityValue(periodAdvice)
+        .accessibilityHint(isExpanded ? Strings.Common.tapToCollapse : Strings.Common.tapToExpand)
     }
 
     // MARK: - Computed Properties
@@ -76,7 +94,7 @@ struct DevelopmentalPeriodBanner: View {
         if milestone.labelKey.contains("socialization") {
             return Strings.Development.socializationWindow
         } else if milestone.labelKey.contains("fearPeriod") {
-            return Strings.Development.fearPeriod
+            return Strings.Development.sensitivePeriod
         }
         return milestone.localizedLabel
     }
@@ -85,7 +103,7 @@ struct DevelopmentalPeriodBanner: View {
         if milestone.labelKey.contains("socialization") {
             return Strings.Development.socializationAdvice
         } else if milestone.labelKey.contains("fearPeriod") {
-            return Strings.Development.fearPeriodAdvice
+            return Strings.Development.sensitivePeriodAdvice(name: puppyName)
         }
         return milestone.localizedDetail ?? ""
     }
@@ -94,7 +112,7 @@ struct DevelopmentalPeriodBanner: View {
         if milestone.labelKey.contains("socialization") {
             return "person.3.fill"
         } else if milestone.labelKey.contains("fearPeriod") {
-            return "exclamationmark.triangle.fill"
+            return "heart.fill"
         }
         return milestone.icon
     }
@@ -103,7 +121,7 @@ struct DevelopmentalPeriodBanner: View {
         if milestone.labelKey.contains("socialization") {
             return .ollieAccent
         } else if milestone.labelKey.contains("fearPeriod") {
-            return .ollieWarning
+            return .ollieRose
         }
         return .ollieInfo
     }
@@ -133,6 +151,7 @@ struct DevelopmentalPeriodBanner: View {
 struct DevelopmentalPeriodBanners: View {
     let milestones: [Milestone]
     let birthDate: Date
+    let puppyName: String
 
     var body: some View {
         if !milestones.isEmpty {
@@ -140,7 +159,8 @@ struct DevelopmentalPeriodBanners: View {
                 ForEach(uniquePeriods) { milestone in
                     DevelopmentalPeriodBanner(
                         milestone: milestone,
-                        birthDate: birthDate
+                        birthDate: birthDate,
+                        puppyName: puppyName
                     )
                 }
             }
@@ -187,12 +207,13 @@ struct DevelopmentalPeriodBanners: View {
 
     DevelopmentalPeriodBanner(
         milestone: milestone,
-        birthDate: birthDate
+        birthDate: birthDate,
+        puppyName: "Ollie"
     )
     .padding()
 }
 
-#Preview("Fear Period") {
+#Preview("Sensitive Phase") {
     let birthDate = Calendar.current.date(byAdding: .weekOfYear, value: -8, to: Date())!
 
     let milestone = Milestone(
@@ -200,13 +221,14 @@ struct DevelopmentalPeriodBanners: View {
         labelKey: "milestone.fearPeriod1",
         detailKey: "milestone.fearPeriod1.detail",
         targetAgeWeeks: 8,
-        icon: "exclamationmark.triangle.fill",
+        icon: "heart.fill",
         isActionable: false
     )
 
     DevelopmentalPeriodBanner(
         milestone: milestone,
-        birthDate: birthDate
+        birthDate: birthDate,
+        puppyName: "Ollie"
     )
     .padding()
 }
@@ -226,14 +248,15 @@ struct DevelopmentalPeriodBanners: View {
             category: .developmental,
             labelKey: "milestone.fearPeriod1",
             targetAgeWeeks: 8,
-            icon: "exclamationmark.triangle.fill",
+            icon: "heart.fill",
             isActionable: false
         )
     ]
 
     DevelopmentalPeriodBanners(
         milestones: milestones,
-        birthDate: birthDate
+        birthDate: birthDate,
+        puppyName: "Ollie"
     )
     .padding()
 }

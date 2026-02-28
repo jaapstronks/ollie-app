@@ -17,6 +17,7 @@ extension CDPuppyProfile {
         self.id = profile.id
         self.name = profile.name
         self.breed = profile.breed
+        self.breedId = profile.breedId.map { NSNumber(value: $0) }
         self.birthDate = profile.birthDate
         self.homeDate = profile.homeDate
         self.sizeCategory = profile.sizeCategory.rawValue
@@ -114,6 +115,7 @@ extension CDPuppyProfile {
             id: id,
             name: name,
             breed: self.breed,
+            breedId: self.breedId?.intValue,
             birthDate: birthDate,
             homeDate: homeDate,
             sizeCategory: sizeCategory,

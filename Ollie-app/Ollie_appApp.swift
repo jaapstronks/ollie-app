@@ -182,6 +182,7 @@ struct OllieApp: App {
     @StateObject private var appointmentStore = AppointmentStore()
     @StateObject private var subscriptionManager = SubscriptionManager.shared
     @StateObject private var atmosphereProvider = AtmosphereProvider()
+    @StateObject private var foodRecallService = FoodRecallService()
     @ObservedObject private var cloudKit = CloudKitService.shared
     @State private var toastManager = ToastManager()
 
@@ -204,7 +205,6 @@ struct OllieApp: App {
         WindowGroup {
             ContentView()
                 .environment(\.managedObjectContext, persistenceController.viewContext)
-                .environment(toastManager)
                 .environmentObject(profileStore)
                 .environmentObject(eventStore)
                 .environmentObject(dataImporter)
@@ -221,7 +221,9 @@ struct OllieApp: App {
                 .environmentObject(subscriptionManager)
                 .environmentObject(cloudKit)
                 .environmentObject(atmosphereProvider)
+                .environmentObject(foodRecallService)
                 .toastContainer()
+                .environment(toastManager)
                 .task {
                     // Run Core Data migration from JSONL files (one-time, on first launch after update)
                     do {
@@ -264,6 +266,9 @@ struct OllieApp: App {
 
                     // Initial sync to Apple Watch
                     WatchSyncService.shared.syncToWatch()
+
+                    // Check for food recalls if enabled
+                    await foodRecallService.checkForRecalls()
                 }
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
                     // Import any events logged via Siri/Shortcuts while app was in background

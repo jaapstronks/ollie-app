@@ -15,6 +15,7 @@ struct SettingsView: View {
     @ObservedObject var notificationService: NotificationService
     @ObservedObject var documentStore: DocumentStore
     @ObservedObject var contactStore: ContactStore
+    @ObservedObject var foodRecallService: FoodRecallService
 
     var body: some View {
         List {
@@ -54,7 +55,8 @@ struct SettingsView: View {
                 NavigationLink {
                     HealthDocumentsView(
                         profileStore: profileStore,
-                        documentStore: documentStore
+                        documentStore: documentStore,
+                        foodRecallService: foodRecallService
                     )
                 } label: {
                     SettingsHubRow(
@@ -122,7 +124,8 @@ private struct SettingsHubRow: View {
             eventStore: EventStore(),
             notificationService: NotificationService(),
             documentStore: DocumentStore(),
-            contactStore: ContactStore()
+            contactStore: ContactStore(),
+            foodRecallService: FoodRecallService()
         )
     }
 }

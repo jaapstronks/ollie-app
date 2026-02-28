@@ -21,6 +21,7 @@ struct ContentView: View {
     @EnvironmentObject var contactStore: ContactStore
     @EnvironmentObject var appointmentStore: AppointmentStore
     @EnvironmentObject var cloudKit: CloudKitService
+    @EnvironmentObject var foodRecallService: FoodRecallService
 
     @State private var showOnboarding = false
     @AppStorage(UserPreferences.Key.lastSelectedTab.rawValue) private var selectedTab = 0
@@ -293,7 +294,8 @@ struct MainTabView: View {
                     eventStore: eventStore,
                     notificationService: notificationService,
                     documentStore: documentStore,
-                    contactStore: contactStore
+                    contactStore: contactStore,
+                    foodRecallService: foodRecallService
                 )
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {

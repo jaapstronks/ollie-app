@@ -13,18 +13,16 @@ import os
 
 /// Manages the training plan and skill progress with Core Data storage
 @MainActor
-class TrainingPlanStore: ObservableObject {
+final class TrainingPlanStore: BaseStore {
+
+    // MARK: - Published State
+
     @Published private(set) var trainingPlan: TrainingPlan?
     @Published private(set) var masteredSkills: [MasteredSkill] = []
     @Published private(set) var isLoading: Bool = true
-    @Published private(set) var isSyncing: Bool = false
 
     /// The start date for the 6-week training program
     static let startDate = Date.fromDateString("2026-02-14") ?? Date()
-
-    private let persistenceController: PersistenceController
-    private let logger = Logger.ollie(category: "TrainingPlanStore")
-    private var cancellables = Set<AnyCancellable>()
 
     private var eventStore: EventStore?
 
@@ -33,10 +31,6 @@ class TrainingPlanStore: ObservableObject {
         decoder.dateDecodingStrategy = .iso8601
         return decoder
     }()
-
-    private var viewContext: NSManagedObjectContext {
-        persistenceController.viewContext
-    }
 
     // MARK: - Computed Properties
 
@@ -50,41 +44,19 @@ class TrainingPlanStore: ObservableObject {
         masteredSkills.first { $0.skillId == skillId }
     }
 
+    // MARK: - Init
+
     init(persistenceController: PersistenceController = .shared) {
-        self.persistenceController = persistenceController
-
+        super.init(persistenceController: persistenceController, logCategory: "TrainingPlanStore")
         loadTrainingPlan()
-        loadMasteredSkills()
-        setupRemoteChangeObserver()
     }
 
-    // MARK: - Setup
+    // MARK: - Data Loading
 
-    private func setupRemoteChangeObserver() {
-        NotificationCenter.default.publisher(for: .NSPersistentStoreRemoteChange)
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.handleRemoteChange()
-            }
-            .store(in: &cancellables)
-    }
-
-    private func handleRemoteChange() {
-        logger.debug("Detected CloudKit remote change for mastered skills")
-        loadMasteredSkills()
-    }
-
-    // MARK: - CloudKit Sync
-
-    /// Perform initial sync on app launch
-    func initialSync() async {
-        viewContext.refreshAllObjects()
-        loadMasteredSkills()
-    }
-
-    /// Force sync with CloudKit
-    func forceSync() async {
-        await initialSync()
+    override func performInitialLoad() {
+        let cdSkills = CDMasteredSkill.fetchAllSkills(in: viewContext)
+        masteredSkills = cdSkills.compactMap { $0.toMasteredSkill() }
+        logger.debug("Loaded \(self.masteredSkills.count) mastered skills from Core Data")
     }
 
     // MARK: - Setup
@@ -225,15 +197,10 @@ class TrainingPlanStore: ObservableObject {
 
         let skill = MasteredSkill(skillId: skillId)
 
-        // Save to Core Data
         _ = CDMasteredSkill.create(from: skill, in: viewContext)
 
-        do {
-            try persistenceController.save()
+        performSave(operation: "Marked skill as mastered: \(skillId)") {
             masteredSkills.append(skill)
-            logger.info("Marked skill as mastered: \(skillId)")
-        } catch {
-            logger.error("Failed to save mastered skill: \(error.localizedDescription)")
         }
     }
 
@@ -244,12 +211,8 @@ class TrainingPlanStore: ObservableObject {
         if let cdSkill = CDMasteredSkill.fetch(bySkillId: skillId, in: viewContext) {
             viewContext.delete(cdSkill)
 
-            do {
-                try persistenceController.save()
+            performDelete(operation: "Unmarked skill as mastered: \(skillId)") {
                 masteredSkills.removeAll { $0.skillId == skillId }
-                logger.info("Unmarked skill as mastered: \(skillId)")
-            } catch {
-                logger.error("Failed to delete mastered skill: \(error.localizedDescription)")
             }
         }
     }
@@ -277,14 +240,6 @@ class TrainingPlanStore: ObservableObject {
         }
 
         trainingPlan = plan
-    }
-
-    // MARK: - Private: Mastered Skills Persistence
-
-    private func loadMasteredSkills() {
-        let cdSkills = CDMasteredSkill.fetchAllSkills(in: viewContext)
-        masteredSkills = cdSkills.compactMap { $0.toMasteredSkill() }
-        logger.debug("Loaded \(self.masteredSkills.count) mastered skills from Core Data")
     }
 }
 

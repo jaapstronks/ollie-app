@@ -21,7 +21,7 @@ struct OnboardingView: View {
 
     // Profile data
     @State private var name: String = ""
-    @State private var selectedBreed: DogBreed? = nil
+    @State private var selectedBreed: Breed? = nil
     @State private var customBreed: String = ""
     @State private var isCustomBreed: Bool = false
     @State private var birthDate: Date = Calendar.current.date(byAdding: .month, value: -2, to: Date()) ?? Date()
@@ -213,8 +213,13 @@ struct OnboardingView: View {
             homeDate: homeDate,
             size: sizeCategory
         )
+
+        // Set breed info
         if !breedToSave.isEmpty {
             profile.breed = breedToSave
+        }
+        if let breed = selectedBreed {
+            profile.breedId = breed.id
         }
 
         // Save profile photo if selected

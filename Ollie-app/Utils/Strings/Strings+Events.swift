@@ -162,6 +162,10 @@ extension Strings {
         static let title = String(localized: "Moments", table: table)
         static let noPhotos = String(localized: "No photos yet", table: table)
         static let makePhotosHint = String(localized: "Take photos using the camera button\nin the timeline", table: table)
+
+        // View modes
+        static let galleryMode = String(localized: "Gallery", table: table)
+        static let diaryMode = String(localized: "Diary", table: table)
     }
 
     // MARK: - Media Attachment Button

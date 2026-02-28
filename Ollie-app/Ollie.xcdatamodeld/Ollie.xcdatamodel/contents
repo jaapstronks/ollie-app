@@ -3,6 +3,7 @@
     <entity name="CDPuppyProfile" representedClassName="CDPuppyProfile" syncable="YES" codeGenerationType="class">
         <attribute name="birthDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="breed" optional="YES" attributeType="String"/>
+        <attribute name="breedId" optional="YES" attributeType="Integer 32" usesScalarValueType="NO"/>
         <attribute name="exerciseConfigData" optional="YES" attributeType="Binary"/>
         <attribute name="homeDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>

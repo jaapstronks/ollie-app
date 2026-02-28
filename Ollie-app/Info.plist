@@ -15,6 +15,8 @@
 	</array>
 	<key>SENTRY_DSN</key>
 	<string>$(SENTRY_DSN)</string>
+	<key>TheDogAPIKey</key>
+	<string>$(THE_DOG_API_KEY)</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Ollie wants to use the camera to take photos of your puppy.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>

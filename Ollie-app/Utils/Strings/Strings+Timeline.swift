@@ -328,9 +328,12 @@ extension Strings {
         static let loading = String(localized: "Loading weather...", table: table)
         static let rainExpected = String(localized: "Rain expected", table: table)
         static let dryAhead = String(localized: "Dry ahead", table: table)
+        static let dryAheadGoodAir = String(localized: "Dry ahead, air quality good", table: table)
         static let rainSoon = String(localized: "Rain soon", table: table)
         static let freezing = String(localized: "Freezing", table: table)
         static let windy = String(localized: "Windy", table: table)
+        static let airQualityPoor = String(localized: "Poor air quality — limit outdoor time", table: table)
+        static let highUV = String(localized: "High UV — avoid prolonged sun", table: table)
         static func temperature(_ temp: Int) -> String {
             String(localized: "\(temp)°", table: table)
         }

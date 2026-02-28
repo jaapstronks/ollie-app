@@ -7,10 +7,11 @@
 import SwiftUI
 import OllieShared
 
-/// Settings screen for health documents: medications and documents
+/// Settings screen for health documents: medications, documents, and food alerts
 struct HealthDocumentsView: View {
     @ObservedObject var profileStore: ProfileStore
     @ObservedObject var documentStore: DocumentStore
+    @ObservedObject var foodRecallService: FoodRecallService
 
     var body: some View {
         List {
@@ -36,6 +37,18 @@ struct HealthDocumentsView: View {
                         iconColor: .blue,
                         title: Strings.Documents.title,
                         count: documentStore.documentCount
+                    )
+                }
+
+                // Food Recall Alerts
+                NavigationLink {
+                    FoodRecallSettingsView(foodRecallService: foodRecallService)
+                } label: {
+                    SettingsItemRow(
+                        icon: "exclamationmark.triangle.fill",
+                        iconColor: .orange,
+                        title: Strings.FoodRecall.title,
+                        count: foodRecallService.unacknowledgedRecalls.count
                     )
                 }
             }
@@ -72,7 +85,8 @@ private struct SettingsItemRow: View {
     NavigationStack {
         HealthDocumentsView(
             profileStore: ProfileStore(),
-            documentStore: DocumentStore()
+            documentStore: DocumentStore(),
+            foodRecallService: FoodRecallService()
         )
     }
 }

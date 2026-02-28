@@ -23,6 +23,7 @@ struct TodayView: View {
 
     @State private var selectedPhotoEvent: PuppyEvent?
     @EnvironmentObject private var atmosphereProvider: AtmosphereProvider
+    @EnvironmentObject private var foodRecallService: FoodRecallService
 
     var body: some View {
         VStack(spacing: 0) {
@@ -35,6 +36,12 @@ struct TodayView: View {
                     daysRemaining: viewModel.freeDaysRemaining,
                     onTap: { viewModel.sheetCoordinator.presentSheet(.olliePlus) }
                 )
+            }
+
+            // Food recall alert (if any matching recalls)
+            if viewModel.isShowingToday && !foodRecallService.unacknowledgedRecalls.isEmpty {
+                RecallAlertCard(foodRecallService: foodRecallService)
+                    .padding(.horizontal)
             }
 
             ScrollView {
@@ -289,48 +296,18 @@ struct TodayView: View {
 
     @ViewBuilder
     private var timelineSection: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            // Section header
-            Text(Strings.Timeline.sectionTitle)
-                .font(.subheadline)
-                .fontWeight(.semibold)
-                .foregroundStyle(.secondary)
-                .padding(.horizontal, 4)
-                .accessibilityAddTraits(.isHeader)
-
-            if viewModel.events.isEmpty {
-                EmptyTimelineCard()
-            } else {
-                // Event cards in timeline - LazyVStack for proper virtualization
-                // Using context menu for edit/delete (swipe actions only work in List)
-                LazyVStack(spacing: 0) {
-                    ForEach(viewModel.events) { event in
-                        EventRow(event: event)
-                            .padding(.vertical, 2)
-                            .contentShape(Rectangle())
-                            .onTapGesture {
-                                if event.photo != nil {
-                                    selectedPhotoEvent = event
-                                }
-                            }
-                            .contextMenu {
-                                Button {
-                                    viewModel.editEvent(event)
-                                } label: {
-                                    Label(Strings.Common.edit, systemImage: "pencil")
-                                }
-
-                                Button(role: .destructive) {
-                                    HapticFeedback.warning()
-                                    viewModel.deleteEvent(event)
-                                } label: {
-                                    Label(Strings.Common.delete, systemImage: "trash")
-                                }
-                            }
-                    }
-                }
+        VerticalTimelineView(
+            viewModel: viewModel,
+            onEditEvent: { event in
+                viewModel.editEvent(event)
+            },
+            onDeleteEvent: { event in
+                viewModel.deleteEvent(event)
+            },
+            onPhotoTap: { event in
+                selectedPhotoEvent = event
             }
-        }
+        )
     }
 
 }
@@ -384,6 +361,7 @@ struct EmptyTimelineCard: View {
     )
     let weatherService = WeatherService()
     let atmosphereProvider = AtmosphereProvider()
+    let foodRecallService = FoodRecallService()
 
     return TodayView(
         viewModel: viewModel,
@@ -395,4 +373,5 @@ struct EmptyTimelineCard: View {
         onNavigateToAppointments: { print("Navigate to Appointments") }
     )
     .environmentObject(atmosphereProvider)
+    .environmentObject(foodRecallService)
 }

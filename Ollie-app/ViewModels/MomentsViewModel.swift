@@ -174,6 +174,16 @@ class MomentsViewModel: ObservableObject {
             }
     }
 
+    /// One photo per day for diary view (most recent photo from each day)
+    var eventsPerDay: [PuppyEvent] {
+        let grouped = Dictionary(grouping: events) { event in
+            Calendar.current.startOfDay(for: event.time)
+        }
+        return grouped.values
+            .compactMap { $0.sorted { $0.time > $1.time }.first }
+            .sorted { $0.time > $1.time }
+    }
+
     // MARK: - Location-Based Filtering
 
     /// Find photos taken near a specific spot (within radius meters)

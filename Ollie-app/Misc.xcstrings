@@ -595,6 +595,17 @@
         }
       }
     },
+    "Outdoor success rate by trigger" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buitenplassucces per trigger"
+          }
+        }
+      }
+    },
     "Patterns (7 days)" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -613,16 +624,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Plasintervallen (7 dagen)"
-          }
-        }
-      }
-    },
-    "Potty Training" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zindelijkheidstraining"
           }
         }
       }
@@ -656,6 +657,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Probeer het later opnieuw."
+          }
+        }
+      }
+    },
+    "Potty Training" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zindelijkheidstraining"
+          }
+        }
+      }
+    },
+    "Potty Triggers (7 days)" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plastriggers (7 dagen)"
           }
         }
       }
