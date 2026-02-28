@@ -234,7 +234,8 @@ struct MainTabView: View {
                     appointmentStore: appointmentStore,
                     socializationStore: socializationStore,
                     contactStore: contactStore,
-                    onSettingsTap: { showingSettings = true }
+                    onSettingsTap: { showingSettings = true },
+                    onNavigateToSocialization: { selectedTab = 1 }
                 )
                 .tabItem {
                     Label(Strings.Tabs.schedule, systemImage: "calendar.badge.clock")

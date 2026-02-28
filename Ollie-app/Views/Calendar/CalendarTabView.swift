@@ -14,6 +14,7 @@ struct CalendarTabView: View {
     @ObservedObject var socializationStore: SocializationStore
     @ObservedObject var contactStore: ContactStore
     let onSettingsTap: () -> Void
+    let onNavigateToSocialization: () -> Void
 
     @EnvironmentObject var profileStore: ProfileStore
     @StateObject private var achievementService = AchievementService.shared
@@ -53,9 +54,7 @@ struct CalendarTabView: View {
                         onMilestoneTap: { milestone in
                             selectedMilestone = milestone
                         },
-                        onSocializationTap: {
-                            // Navigate to Train tab (socialization is there)
-                        }
+                        onSocializationTap: onNavigateToSocialization
                     )
                 case .contacts:
                     ContactsView(
@@ -688,7 +687,8 @@ private struct ComingUpMilestoneRow: View {
         appointmentStore: appointmentStore,
         socializationStore: socializationStore,
         contactStore: contactStore,
-        onSettingsTap: { print("Settings tapped") }
+        onSettingsTap: { print("Settings tapped") },
+        onNavigateToSocialization: { print("Navigate to socialization") }
     )
     .environmentObject(profileStore)
 }
