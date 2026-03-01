@@ -89,3 +89,6 @@ import-data/
 *.cer
 *.p12
 *.mobileprovision
+
+# Analytics secrets
+Ollie-app/Config/Secrets.plist

@@ -1,5 +1,5 @@
 /**
- * Ollie Analytics Worker
+ * Otis Analytics Worker
  * Cloudflare Worker for collecting app analytics
  */
 

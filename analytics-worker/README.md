@@ -1,4 +1,4 @@
-# Ollie Analytics Worker
+# Otis Analytics Worker
 
 Minimal, privacy-respecting analytics backend using Cloudflare Workers + D1 (SQLite).
 
@@ -31,7 +31,7 @@ npm run db:init
 
 ```bash
 wrangler secret put API_KEY
-# Enter a random key like: ollie_ak_xxxxxxxxxxxxxx
+# Enter a random key like: otis_ak_xxxxxxxxxxxxxx
 ```
 
 ### 5. Deploy
@@ -40,14 +40,14 @@ wrangler secret put API_KEY
 npm run deploy
 ```
 
-Note the deployed URL (e.g., `https://ollie-analytics.YOUR_SUBDOMAIN.workers.dev`)
+Note the deployed URL (e.g., `https://otis-analytics.YOUR_SUBDOMAIN.workers.dev`)
 
 ### 6. Update iOS App
 
-Edit `Ollie-app/Services/OllieAnalytics.swift`:
+Edit `Ollie-app/Services/OtisAnalytics.swift`:
 
 ```swift
-private let endpoint = URL(string: "https://ollie-analytics.YOUR_SUBDOMAIN.workers.dev/events")!
+private let endpoint = URL(string: "https://otis-analytics.YOUR_SUBDOMAIN.workers.dev/events")!
 private let apiKey = "YOUR_API_KEY"
 ```
 
@@ -64,10 +64,10 @@ private let apiKey = "YOUR_API_KEY"
 
 ```bash
 # Via CLI
-wrangler d1 execute ollie-analytics --command "SELECT COUNT(*) FROM events"
+wrangler d1 execute otis-analytics --command "SELECT COUNT(*) FROM events"
 
 # Via API
-curl -H "X-API-Key: YOUR_KEY" https://ollie-analytics.YOUR_SUBDOMAIN.workers.dev/stats?period=7d
+curl -H "X-API-Key: YOUR_KEY" https://otis-analytics.YOUR_SUBDOMAIN.workers.dev/stats?period=7d
 ```
 
 ### Common Queries
