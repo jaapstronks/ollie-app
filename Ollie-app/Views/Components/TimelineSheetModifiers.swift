@@ -133,10 +133,11 @@ struct TimelineSheetModifiers: ViewModifier {
     @ViewBuilder
     private func sheetContent(for sheet: SheetCoordinator.ActiveSheet) -> some View {
         switch sheet {
-        case .potty:
+        case .potty(let preselected):
             PottyQuickLogSheet(
                 onSave: viewModel.logPottyEvent,
-                onCancel: viewModel.cancelPottySheet
+                onCancel: viewModel.cancelPottySheet,
+                preselected: preselected
             )
             .presentationDetents([.height(580)])
 
@@ -277,6 +278,7 @@ struct TimelineSheetModifiers: ViewModifier {
                 sleepStartTime: startTime,
                 onSave: { wakeUpTime in
                     viewModel.logWakeUp(time: wakeUpTime)
+                    viewModel.sheetCoordinator.dismissSheet()
                 },
                 onCancel: {
                     viewModel.sheetCoordinator.dismissSheet()
@@ -287,6 +289,7 @@ struct TimelineSheetModifiers: ViewModifier {
         case .startActivity(let activityType):
             StartActivitySheet(
                 activityType: activityType,
+                puppyName: viewModel.puppyName,
                 onStartNow: { startTime in
                     viewModel.startActivity(type: activityType, startTime: startTime)
                     viewModel.sheetCoordinator.dismissSheet()
@@ -306,7 +309,7 @@ struct TimelineSheetModifiers: ViewModifier {
                     viewModel.sheetCoordinator.dismissSheet()
                 }
             )
-            .presentationDetents([.height(350), .medium])
+            .presentationDetents([.height(350), .medium, .large])
 
         case .endActivity:
             if let activity = viewModel.currentActivity {
