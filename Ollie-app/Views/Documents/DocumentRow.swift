@@ -1,11 +1,11 @@
 //
 //  DocumentRow.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Row component for displaying a document in a list
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Row view for displaying a document in a list
 struct DocumentRow: View {

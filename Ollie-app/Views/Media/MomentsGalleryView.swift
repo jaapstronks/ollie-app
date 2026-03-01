@@ -1,10 +1,10 @@
 //
 //  MomentsGalleryView.swift
-//  Ollie-app
+//  Otis-app
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 import UIKit
 
 /// Grid gallery view of all photo moments
@@ -221,14 +221,14 @@ struct EmptyMomentsView: View {
                 // Background photo (rotated)
                 Image(systemName: "photo.fill")
                     .font(.system(size: 45))
-                    .foregroundStyle(Color.ollieAccent.opacity(0.2))
+                    .foregroundStyle(Color.otisAccent.opacity(0.2))
                     .offset(x: -20, y: 10)
                     .rotationEffect(.degrees(-12))
 
                 // Middle photo
                 Image(systemName: "photo.fill")
                     .font(.system(size: 50))
-                    .foregroundStyle(Color.ollieAccent.opacity(0.4))
+                    .foregroundStyle(Color.otisAccent.opacity(0.4))
                     .offset(x: 15, y: -5)
                     .rotationEffect(.degrees(8))
 
@@ -237,7 +237,7 @@ struct EmptyMomentsView: View {
                     .font(.system(size: 65))
                     .foregroundStyle(
                         LinearGradient(
-                            colors: [Color.ollieAccent, Color.ollieAccent.opacity(0.6)],
+                            colors: [Color.otisAccent, Color.otisAccent.opacity(0.6)],
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
                         )
@@ -280,7 +280,7 @@ struct EmptyMomentsView: View {
                         .font(.headline)
                         .padding(.horizontal, 24)
                         .padding(.vertical, 12)
-                        .background(Color.ollieAccent)
+                        .background(Color.otisAccent)
                         .foregroundStyle(.white)
                         .clipShape(Capsule())
                 }

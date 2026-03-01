@@ -1,7 +1,7 @@
-# Ollie iOS — Puppy Logbook App
+# Otis iOS — Puppy Logbook App
 
 ## Project
-Native iOS app (SwiftUI, Swift) for tracking daily puppy events. Sister project of the [Ollie web PWA](https://github.com/jaapstronks/Ollie). Works for any puppy — user creates a profile during onboarding with name, birth date, home date, and size category.
+Native iOS app (SwiftUI, Swift) for tracking daily puppy events. Sister project of the [Otis web PWA](https://github.com/jaapstronks/Otis). Works for any puppy — user creates a profile during onboarding with name, birth date, home date, and size category.
 
 ## Architecture
 
@@ -107,7 +107,7 @@ eventType.label  // Returns localized string
 5. **Quick-log bar** — bottom bar with common event types (plassen, poepen, eten, slapen, etc.)
 6. **Stats dashboard** — potty gaps, sleep analysis, meal tracking
 7. **Potty predictions** — "time since last plas" + predicted next based on patterns
-8. **Data import** — import existing data from GitHub (Ollie web app repo)
+8. **Data import** — import existing data from GitHub (Otis web app repo)
 9. **Settings** — view/edit profile, meal schedule, import data
 10. **Photo attachment** — camera or library, stored with event (TODO)
 11. **Notifications** — "het is X min geleden sinds laatste plas" (TODO)
@@ -123,10 +123,10 @@ The web app (JS) has battle-tested calculation modules to port:
 **Important rule:** Naps < 15 minutes count toward total sleep time but do NOT trigger post-sleep potty predictions.
 
 ## Build & Run
-- Open `Ollie-app.xcodeproj` in Xcode
+- Open `Otis-app.xcodeproj` in Xcode
 - Select iPhone simulator or connected device
 - `Cmd+R` to build and run
-- Or from terminal: `xcodebuild -scheme Ollie-app -destination 'platform=iOS Simulator,name=iPhone 16'`
+- Or from terminal: `xcodebuild -scheme Otis-app -destination 'platform=iOS Simulator,name=iPhone 16'`
 
 ## Conventions
 - Swift naming conventions (camelCase properties, PascalCase types)

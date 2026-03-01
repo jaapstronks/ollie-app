@@ -1,10 +1,10 @@
 //
 //  DataImporter.swift
-//  Ollie-app
+//  Otis-app
 //
 
 import Foundation
-import OllieShared
+import OtisShared
 import Combine
 
 /// Preview of what will be imported
@@ -33,7 +33,7 @@ struct ImportResult {
     var errors: [String]
 }
 
-/// Service for importing data from the Ollie web app GitHub repo
+/// Service for importing data from the Otis web app GitHub repo
 @MainActor
 class DataImporter: ObservableObject {
     @Published private(set) var isImporting: Bool = false

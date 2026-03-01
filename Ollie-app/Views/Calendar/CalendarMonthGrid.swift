@@ -1,11 +1,11 @@
 //
 //  CalendarMonthGrid.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Month grid view with day cells for the calendar view
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Month grid view displaying days with appointment and milestone indicators
 struct CalendarMonthGrid: View {
@@ -44,7 +44,7 @@ struct CalendarMonthGrid: View {
             } label: {
                 Image(systemName: "chevron.left")
                     .font(.body.weight(.medium))
-                    .foregroundStyle(Color.ollieAccent)
+                    .foregroundStyle(Color.otisAccent)
                     .frame(width: 44, height: 44)
                     .contentShape(Rectangle())
             }
@@ -66,7 +66,7 @@ struct CalendarMonthGrid: View {
                 Text(Strings.Calendar.today)
                     .font(.caption)
                     .fontWeight(.medium)
-                    .foregroundStyle(Color.ollieAccent)
+                    .foregroundStyle(Color.otisAccent)
             }
 
             // Next month button
@@ -75,7 +75,7 @@ struct CalendarMonthGrid: View {
             } label: {
                 Image(systemName: "chevron.right")
                     .font(.body.weight(.medium))
-                    .foregroundStyle(Color.ollieAccent)
+                    .foregroundStyle(Color.otisAccent)
                     .frame(width: 44, height: 44)
                     .contentShape(Rectangle())
             }

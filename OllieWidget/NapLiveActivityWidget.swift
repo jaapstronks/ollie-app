@@ -1,12 +1,12 @@
 //
 //  NapLiveActivityWidget.swift
-//  OllieWidget
+//  OtisWidget
 //
 //  Live Activity widget views for nap tracking
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 import WidgetKit
 import ActivityKit
 import AppIntents
@@ -180,7 +180,7 @@ struct NapLiveActivityWidget: Widget {
 @available(iOS 16.1, *)
 struct NapLiveActivityWidget_Previews: PreviewProvider {
     static let attributes = NapActivityAttributes(
-        puppyName: "Ollie",
+        puppyName: "Max",
         startTime: Date().addingTimeInterval(-15 * 60),  // 15 min ago
         activityId: UUID()
     )

@@ -1,6 +1,6 @@
 # Scenario: Quick Log Menu Usage
 # Tests the FAB long-press quick log menu for rapid event logging
-appId: nl.jaapstronks.Ollie
+appId: nl.jaapstronks.Otis
 ---
 - launchApp
 - waitForAnimationToEnd

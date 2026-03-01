@@ -1,5 +1,5 @@
 # Test event logging functionality
-appId: nl.jaapstronks.Ollie
+appId: nl.jaapstronks.Otis
 ---
 - launchApp
 - waitForAnimationToEnd

@@ -1,24 +1,24 @@
 //
 //  MilestoneCategory+Color.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Adds SwiftUI Color support to MilestoneCategory
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 extension MilestoneCategory {
     /// The color associated with this milestone category
     var color: Color {
         switch self {
         case .health:
-            return .ollieHealthRed
+            return .otisHealthRed
         case .developmental:
-            return .ollieDevelopmental
+            return .otisDevelopmental
         case .administrative:
-            return .ollieAdministrative
+            return .otisAdministrative
         case .custom:
-            return .ollieCustomOrange
+            return .otisCustomOrange
         }
     }
 
@@ -26,13 +26,13 @@ extension MilestoneCategory {
     var tintColor: Color {
         switch self {
         case .health:
-            return .ollieHealthRedTint
+            return .otisHealthRedTint
         case .developmental:
-            return .ollieDevelopmentalTint
+            return .otisDevelopmentalTint
         case .administrative:
-            return .ollieAdministrativeTint
+            return .otisAdministrativeTint
         case .custom:
-            return .ollieCustomOrangeTint
+            return .otisCustomOrangeTint
         }
     }
 }
@@ -44,11 +44,11 @@ extension MilestoneStatus {
         case .upcoming:
             return .secondary
         case .nextUp:
-            return .ollieAccent
+            return .otisAccent
         case .overdue:
-            return .ollieWarning
+            return .otisWarning
         case .completed:
-            return .ollieSuccess
+            return .otisSuccess
         }
     }
 }

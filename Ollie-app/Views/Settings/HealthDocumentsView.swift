@@ -1,11 +1,11 @@
 //
 //  HealthDocumentsView.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Health and documents settings: medications and documents
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Settings screen for health documents: medications, documents, and food alerts
 struct HealthDocumentsView: View {

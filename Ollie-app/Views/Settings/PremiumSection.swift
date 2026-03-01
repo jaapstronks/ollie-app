@@ -1,25 +1,25 @@
 //
 //  PremiumSection.swift
-//  Ollie-app
+//  Otis-app
 //
-//  Ollie+ subscription section for SettingsView
+//  Otis+ subscription section for SettingsView
 
 import StoreKit
 import SwiftUI
-import OllieShared
+import OtisShared
 
-/// Ollie+ subscription status and management section
+/// Otis+ subscription status and management section
 struct PremiumSection: View {
     let profile: PuppyProfile
     @ObservedObject var subscriptionManager = SubscriptionManager.shared
-    @Binding var showingOlliePlusSheet: Bool
+    @Binding var showingOtisPlusSheet: Bool
     @Binding var showingSubscriptionSuccess: Bool
 
     var body: some View {
-        Section(Strings.OlliePlus.settingsTitle) {
+        Section(Strings.OtisPlus.settingsTitle) {
             // Status row
             HStack {
-                Text(Strings.OlliePlus.settingsStatus)
+                Text(Strings.OtisPlus.settingsStatus)
                 Spacer()
                 Text(subscriptionManager.effectiveStatus.displayLabel)
                     .foregroundColor(statusColor)
@@ -30,12 +30,12 @@ struct PremiumSection: View {
             case .free, .expired:
                 // Upgrade button
                 Button {
-                    showingOlliePlusSheet = true
+                    showingOtisPlusSheet = true
                 } label: {
                     HStack {
                         Image(systemName: "plus.circle.fill")
-                            .foregroundStyle(Color.ollieAccent)
-                        Text(Strings.OlliePlus.tryOlliePlus)
+                            .foregroundStyle(Color.otisAccent)
+                        Text(Strings.OtisPlus.tryOtisPlus)
                         Spacer()
                         Image(systemName: "chevron.right")
                             .font(.caption)
@@ -49,7 +49,7 @@ struct PremiumSection: View {
                         await subscriptionManager.restorePurchases()
                     }
                 } label: {
-                    Text(Strings.OlliePlus.restorePurchases)
+                    Text(Strings.OtisPlus.restorePurchases)
                 }
 
             case .trial, .active:
@@ -60,7 +60,7 @@ struct PremiumSection: View {
                     }
                 } label: {
                     HStack {
-                        Text(Strings.OlliePlus.manageSubscription)
+                        Text(Strings.OtisPlus.manageSubscription)
                         Spacer()
                         Image(systemName: "arrow.up.forward")
                             .font(.caption)
@@ -72,19 +72,19 @@ struct PremiumSection: View {
                 // Legacy purchasers - just show status, no action needed
                 HStack {
                     Image(systemName: "checkmark.seal.fill")
-                        .foregroundStyle(Color.ollieSuccess)
+                        .foregroundStyle(Color.otisSuccess)
                     Text(Strings.Premium.premium)
                         .foregroundStyle(.secondary)
                 }
             }
         }
-        .sheet(isPresented: $showingOlliePlusSheet) {
-            OlliePlusSheet(
+        .sheet(isPresented: $showingOtisPlusSheet) {
+            OtisPlusSheet(
                 onDismiss: {
-                    showingOlliePlusSheet = false
+                    showingOtisPlusSheet = false
                 },
                 onSubscribed: {
-                    showingOlliePlusSheet = false
+                    showingOtisPlusSheet = false
                     showingSubscriptionSuccess = true
                 }
             )
@@ -115,11 +115,11 @@ struct PremiumSection: View {
         case .free:
             return Color.secondary
         case .trial:
-            return Color.ollieAccent
+            return Color.otisAccent
         case .active, .legacy:
-            return Color.ollieSuccess
+            return Color.otisSuccess
         case .expired:
-            return Color.ollieWarning
+            return Color.otisWarning
         }
     }
 }
@@ -128,12 +128,12 @@ struct PremiumSection: View {
     Form {
         PremiumSection(
             profile: PuppyProfile.defaultProfile(
-                name: "Ollie",
+                name: "Max",
                 birthDate: Date().addingTimeInterval(-90 * 24 * 60 * 60),
                 homeDate: Date().addingTimeInterval(-30 * 24 * 60 * 60),
                 size: .medium
             ),
-            showingOlliePlusSheet: .constant(false),
+            showingOtisPlusSheet: .constant(false),
             showingSubscriptionSuccess: .constant(false)
         )
     }

@@ -1,11 +1,11 @@
 //
 //  DocumentsView.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Main view for managing dog documents
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Main view for listing and managing documents
 struct DocumentsView: View {

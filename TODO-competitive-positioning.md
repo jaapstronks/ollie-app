@@ -2,17 +2,17 @@
 
 > Dit is geen TODO maar een referentiedocument. Niet verwijderen na implementatie.
 
-## Ollie's Positionering
+## Otis's Positionering
 
 **"De slimme puppy-app die meeleert"**
 
-Andere apps vertellen je wat je moet doen. Ollie laat je zien wat er werkelijk gebeurt met je puppy en helpt je betere beslissingen maken op basis van echte data.
+Andere apps vertellen je wat je moet doen. Otis laat je zien wat er werkelijk gebeurt met je puppy en helpt je betere beslissingen maken op basis van echte data.
 
 **One-liner:** "Track your puppy's day. Train smarter, not harder."
 
 ## Concurrentievoordelen (gratis waar anderen betaald)
 
-| Feature | Dogo | Zigzag | Ollie |
+| Feature | Dogo | Zigzag | Otis |
 |---------|------|--------|-------|
 | Potty tracking + insights | €5.99+/mo | ❌ | ✅ gratis |
 | Slaapanalyse | ❌ | ❌ | ✅ gratis |
@@ -41,7 +41,7 @@ Andere apps vertellen je wat je moet doen. Ollie laat je zien wat er werkelijk g
 - Meer training content (20-30 commando's)
 - Puppy development milestones per week
 - Feeding schedule tracking
-- Ollie Pro tier (indien traction)
+- Otis Pro tier (indien traction)
 
 ### v2.0 — Differentiatie
 - Predictive insights ("je puppy plast gemiddeld elke 2u12m")
@@ -53,20 +53,20 @@ Andere apps vertellen je wat je moet doen. Ollie laat je zien wat er werkelijk g
 - Live trainer chat (operationeel onhaalbaar)
 - Community/forum (moderatie-nachtmerrie)
 - GPS walk tracking (Apple Health doet dit beter)
-- Gamification/streaks (annoying, niet Ollie's stijl)
+- Gamification/streaks (annoying, niet Otis's stijl)
 - AI chatbot (commodity)
 
 ## Pricing Strategie
 
-**Freemium model: core gratis, Ollie+ voor power users.**
+**Freemium model: core gratis, Otis+ voor power users.**
 
-De markt is ziek van paywalls. Ollie's gratis core genereert:
+De markt is ziek van paywalls. Otis's gratis core genereert:
 - Maximale downloads en reviews
 - Mond-tot-mond via puppy-eigenaar communities
 - Goodwill en vertrouwen
 - Data-dependency voordat premium zichtbaar wordt
 
-**Ollie+ (vanaf launch):**
+**Otis+ (vanaf launch):**
 - €2.99/maand of €24.99/jaar
 - 7 dagen gratis proberen
 - Slimme voorspellingen, geavanceerde analytics, volledige trainingsbibliotheek, foto's, export

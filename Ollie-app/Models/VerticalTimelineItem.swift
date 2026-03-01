@@ -1,11 +1,11 @@
 //
 //  VerticalTimelineItem.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Item model for the vertical day-planner timeline view
 
 import Foundation
-import OllieShared
+import OtisShared
 
 /// An item prepared for vertical day-planner timeline display
 struct VerticalTimelineItem: Identifiable {
@@ -18,8 +18,10 @@ struct VerticalTimelineItem: Identifiable {
 
     /// Which track the item should render in
     enum TrackType {
-        case main   // Full width - point events, appointments
-        case walk   // Right-side track - walks (with concurrent potties alongside)
+        case main       // Full width - appointments
+        case activity   // Left side - sleep sessions, walks (duration blocks)
+        case potty      // Right side - pee, poo events
+        case walk       // Legacy: same as activity (for backwards compatibility)
     }
 
     let id: UUID
@@ -96,6 +98,24 @@ struct VerticalTimelineItem: Identifiable {
     var isAppointment: Bool {
         if case .appointmentItem = type { return true }
         return false
+    }
+
+    /// Whether this is a potty event (pee or poo)
+    var isPottyEvent: Bool {
+        if case .pointEvent(let event) = type {
+            return event.type == .plassen || event.type == .poepen
+        }
+        return false
+    }
+
+    /// Whether this is an activity block (sleep or walk)
+    var isActivityBlock: Bool {
+        switch type {
+        case .sleepSession, .walkEvent:
+            return true
+        default:
+            return false
+        }
     }
 
     /// Formatted duration string

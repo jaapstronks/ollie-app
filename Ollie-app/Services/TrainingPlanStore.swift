@@ -1,13 +1,13 @@
 //
 //  TrainingPlanStore.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Manages training plan data and skill progress tracking with Core Data and automatic CloudKit sync
 //
 
 import Foundation
 import CoreData
-import OllieShared
+import OtisShared
 import Combine
 import os
 

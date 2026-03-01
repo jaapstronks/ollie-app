@@ -1,6 +1,6 @@
 //
 //  ExportOptions.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Options and result types for data export functionality
 //

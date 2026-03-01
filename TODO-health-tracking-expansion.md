@@ -2,7 +2,7 @@
 
 ## Executive Summary
 
-This document analyzes how to expand Ollie's health tracking capabilities beyond puppy-specific features to support dogs throughout their entire lifespan. The app already has a solid foundation with weight tracking, medications, vaccinations, appointments, documents, and contacts. This analysis identifies gaps and opportunities for comprehensive health management.
+This document analyzes how to expand Otis's health tracking capabilities beyond puppy-specific features to support dogs throughout their entire lifespan. The app already has a solid foundation with weight tracking, medications, vaccinations, appointments, documents, and contacts. This analysis identifies gaps and opportunities for comprehensive health management.
 
 ---
 
@@ -610,7 +610,7 @@ extension PuppyEvent {
 | **Pawtrack** | Activity tracking | Hardware dependent |
 | **PetDesk** | Appointment booking | Less personal health tracking |
 
-**Opportunity:** No app does both simple daily logging AND comprehensive medical tracking well. Ollie could bridge this gap.
+**Opportunity:** No app does both simple daily logging AND comprehensive medical tracking well. Otis could bridge this gap.
 
 ---
 

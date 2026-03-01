@@ -1,13 +1,13 @@
 //
 //  PlacesMapComponents.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Map-related components for the Places tab
 //  Extracted from PlacesTabView for better organization
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 import MapKit
 
 // MARK: - Map Preview with Spots and Photos
@@ -81,7 +81,7 @@ struct SpotMapMarker: View {
     var body: some View {
         Image(systemName: "mappin.circle.fill")
             .font(.title3)
-            .foregroundStyle(.ollieAccent)
+            .foregroundStyle(Color.otisAccent)
             .background(
                 Circle()
                     .fill(.white)
@@ -122,7 +122,7 @@ struct DiscoveredSpotMapMarker: View {
             // Fenced indicator badge (only for dog areas)
             if spot.isFenced == true {
                 Circle()
-                    .fill(Color.ollieSuccess)
+                    .fill(Color.otisSuccess)
                     .frame(width: 10, height: 10)
                     .overlay(
                         Image(systemName: "checkmark")
@@ -138,13 +138,13 @@ struct DiscoveredSpotMapMarker: View {
     private var markerColor: Color {
         switch spot.category {
         case .dogPark, .offLeashArea, .dogBeach, .dogForest, .dogFriendlyPark:
-            return .ollieInfo
+            return .otisInfo
         case .vetClinic:
-            return .ollieHealthRed
+            return .otisHealthRed
         case .petStore:
-            return .ollieAccent
+            return .otisAccent
         case .dogFriendlyCafe:
-            return .olliePurple
+            return .otisPurple
         }
     }
 }
@@ -169,19 +169,19 @@ struct ContactMapMarker: View {
     private var markerColor: Color {
         switch contact.contactType {
         case .vet, .emergencyVet:
-            return .ollieHealthRed
+            return .otisHealthRed
         case .daycare, .sitter:
-            return .ollieInfo
+            return .otisInfo
         case .groomer:
-            return .olliePurple
+            return .otisPurple
         case .trainer, .walker:
-            return .ollieSuccess
+            return .otisSuccess
         case .petStore:
-            return .ollieAccent
+            return .otisAccent
         case .breeder:
-            return .ollieAccent
+            return .otisAccent
         case .other:
-            return .ollieMuted
+            return .otisMuted
         }
     }
 }
@@ -251,7 +251,7 @@ struct SpotCard: View {
 
                 Image(systemName: "mappin.circle.fill")
                     .font(.title2)
-                    .foregroundColor(.ollieAccent)
+                    .foregroundColor(.otisAccent)
             }
             .frame(width: 80, height: 60)
 

@@ -1,6 +1,6 @@
 # Complete Settings Tests
 # Tests: Opening settings, profile view, navigation
-appId: nl.jaapstronks.Ollie
+appId: nl.jaapstronks.Otis
 ---
 - launchApp
 - waitForAnimationToEnd

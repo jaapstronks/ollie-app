@@ -1,12 +1,12 @@
 //
 //  MealNotificationScheduler.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Handles scheduling meal reminder notifications
 //
 
 import Foundation
-import OllieShared
+import OtisShared
 import UserNotifications
 import os
 
@@ -16,7 +16,7 @@ final class MealNotificationScheduler: NotificationScheduler {
     let notificationPrefix = "meal_"
 
     private let notificationCenter = UNUserNotificationCenter.current()
-    private let logger = Logger.ollie(category: "MealNotificationScheduler")
+    private let logger = Logger.otis(category: "MealNotificationScheduler")
 
     func schedule(events: [PuppyEvent], profile: PuppyProfile) async {
         await cancel()

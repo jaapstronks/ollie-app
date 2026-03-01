@@ -1,12 +1,12 @@
 //
 //  InsightsWeekOverviewSection.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Week overview section with grid and trend chart
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Week overview section showing grid and potty trend
 struct InsightsWeekOverviewSection: View {
@@ -18,7 +18,7 @@ struct InsightsWeekOverviewSection: View {
             HStack(spacing: 8) {
                 Image(systemName: "calendar.badge.clock")
                     .font(.system(size: 14, weight: .semibold))
-                    .foregroundStyle(Color.ollieInfo)
+                    .foregroundStyle(Color.otisInfo)
                     .accessibilityHidden(true)
 
                 Text(Strings.Insights.weekOverview)

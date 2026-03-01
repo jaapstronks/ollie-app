@@ -1,6 +1,6 @@
 //
 //  Strings.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Main enum for all user-facing strings.
 //  Strings are organized into domain-based extensions in separate files.

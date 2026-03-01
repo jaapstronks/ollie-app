@@ -1,12 +1,12 @@
 //
 //  OnboardingNameStep.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Name input step for onboarding
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Name input step - first step of onboarding
 struct OnboardingNameStep: View {
@@ -26,7 +26,7 @@ struct OnboardingNameStep: View {
                     // Icon with subtle animation
                     Image(systemName: "pawprint.circle.fill")
                         .font(.system(size: 72))
-                        .foregroundStyle(Color.ollieAccent)
+                        .foregroundStyle(Color.otisAccent)
                         .scaleEffect(hasAppeared ? 1.0 : 0.8)
                         .opacity(hasAppeared ? 1.0 : 0.0)
 
@@ -128,7 +128,7 @@ struct OnboardingTextField: View {
             .overlay(
                 RoundedRectangle(cornerRadius: 16)
                     .strokeBorder(
-                        isFocused ? Color.ollieAccent : Color.clear,
+                        isFocused ? Color.otisAccent : Color.clear,
                         lineWidth: 2
                     )
             )
@@ -157,7 +157,7 @@ struct OnboardingNextButton: View {
                 .padding(.vertical, 16)
                 .background(
                     RoundedRectangle(cornerRadius: 14)
-                        .fill(enabled ? Color.ollieAccent : Color.ollieAccent.opacity(0.35))
+                        .fill(enabled ? Color.otisAccent : Color.otisAccent.opacity(0.35))
                 )
                 .foregroundStyle(.white)
         }
@@ -178,9 +178,9 @@ struct OnboardingBackButton: View {
                 .padding(.vertical, 16)
                 .background(
                     RoundedRectangle(cornerRadius: 14)
-                        .fill(Color.ollieAccent.opacity(0.12))
+                        .fill(Color.otisAccent.opacity(0.12))
                 )
-                .foregroundStyle(Color.ollieAccent)
+                .foregroundStyle(Color.otisAccent)
         }
     }
 }

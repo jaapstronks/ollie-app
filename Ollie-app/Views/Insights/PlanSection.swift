@@ -1,11 +1,11 @@
 //
 //  PlanSection.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Plan section for InsightsView - age stage, socialization, milestones
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Plan section showing puppy age, socialization progress, and upcoming milestones
 struct PlanSection: View {
@@ -138,7 +138,7 @@ struct PlanSection: View {
                     VStack(spacing: 2) {
                         Text("\(profile.ageInWeeks)")
                             .font(.system(size: 32, weight: .bold, design: .rounded))
-                            .foregroundStyle(Color.ollieAccent)
+                            .foregroundStyle(Color.otisAccent)
                         Text(Strings.Common.weeks)
                             .font(.caption)
                             .foregroundStyle(.secondary)
@@ -153,7 +153,7 @@ struct PlanSection: View {
                     VStack(spacing: 2) {
                         Text("\(profile.daysHome)")
                             .font(.system(size: 32, weight: .bold, design: .rounded))
-                            .foregroundStyle(Color.ollieSuccess)
+                            .foregroundStyle(Color.otisSuccess)
                         Text(Strings.Common.days)
                             .font(.caption)
                             .foregroundStyle(.secondary)
@@ -210,13 +210,13 @@ struct PlanSection: View {
     private func ageStageColor(for profile: PuppyProfile) -> Color {
         let weeks = profile.ageInWeeks
         if weeks < 8 {
-            return .ollieSleep
+            return .otisSleep
         } else if weeks <= 16 {
-            return .ollieAccent
+            return .otisAccent
         } else if weeks <= 26 {
-            return .ollieInfo
+            return .otisInfo
         } else if weeks <= 52 {
-            return .ollieSuccess
+            return .otisSuccess
         } else {
             return .secondary
         }
@@ -271,10 +271,10 @@ struct PlanSection: View {
                         Text(Strings.Socialization.windowClosing)
                     }
                     .font(.caption)
-                    .foregroundStyle(Color.ollieWarning)
+                    .foregroundStyle(Color.otisWarning)
                     .padding(.horizontal, 10)
                     .padding(.vertical, 6)
-                    .background(Color.ollieWarning.opacity(colorScheme == .dark ? 0.2 : 0.1))
+                    .background(Color.otisWarning.opacity(colorScheme == .dark ? 0.2 : 0.1))
                     .clipShape(Capsule())
                 }
             }
@@ -289,7 +289,7 @@ struct PlanSection: View {
             SectionHeader(
                 title: Strings.Health.overdue,
                 icon: "exclamationmark.triangle.fill",
-                tint: .ollieWarning
+                tint: .otisWarning
             )
 
             VStack(spacing: 8) {
@@ -320,7 +320,7 @@ struct PlanSection: View {
                 SectionHeader(
                     title: Strings.Health.upcomingMilestones,
                     icon: "calendar.badge.clock",
-                    tint: .ollieAccent
+                    tint: .otisAccent
                 )
 
                 Spacer()
@@ -342,7 +342,7 @@ struct PlanSection: View {
                     }
                     .font(.caption)
                     .fontWeight(.medium)
-                    .foregroundStyle(Color.ollieAccent)
+                    .foregroundStyle(Color.otisAccent)
                 }
             }
 
@@ -371,7 +371,7 @@ struct PlanSection: View {
     private func errorBanner(message: String) -> some View {
         HStack(spacing: 10) {
             Image(systemName: "exclamationmark.triangle.fill")
-                .foregroundStyle(Color.ollieWarning)
+                .foregroundStyle(Color.otisWarning)
 
             Text(message)
                 .font(.subheadline)
@@ -389,7 +389,7 @@ struct PlanSection: View {
         }
         .padding()
         .background(
-            Color.ollieWarning.opacity(colorScheme == .dark ? 0.15 : 0.1)
+            Color.otisWarning.opacity(colorScheme == .dark ? 0.15 : 0.1)
         )
         .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
     }
@@ -411,7 +411,7 @@ struct MilestonePreviewRow: View {
                 // Icon
                 ZStack {
                     Circle()
-                        .fill(isOverdue ? Color.ollieWarning : Color.ollieAccent)
+                        .fill(isOverdue ? Color.otisWarning : Color.otisAccent)
                         .frame(width: 32, height: 32)
 
                     Image(systemName: milestone.icon)
@@ -440,12 +440,12 @@ struct MilestonePreviewRow: View {
                     if days < 0 {
                         Text(Strings.Health.daysOverdue(abs(days)))
                             .font(.caption)
-                            .foregroundStyle(Color.ollieWarning)
+                            .foregroundStyle(Color.otisWarning)
                     } else if days == 0 {
                         Text(Strings.Health.today)
                             .font(.caption)
                             .fontWeight(.medium)
-                            .foregroundStyle(Color.ollieAccent)
+                            .foregroundStyle(Color.otisAccent)
                     } else {
                         Text(Strings.Health.inDays(days))
                             .font(.caption)
@@ -459,7 +459,7 @@ struct MilestonePreviewRow: View {
             }
             .padding()
             .background(
-                (isOverdue ? Color.ollieWarning : Color.ollieAccent)
+                (isOverdue ? Color.otisWarning : Color.otisAccent)
                     .opacity(colorScheme == .dark ? 0.1 : 0.05)
             )
             .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))

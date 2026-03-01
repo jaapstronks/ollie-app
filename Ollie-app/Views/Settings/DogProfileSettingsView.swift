@@ -1,11 +1,11 @@
 //
 //  DogProfileSettingsView.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Dog profile settings: name, breed, size, photo
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Settings screen for dog profile identity information
 struct DogProfileSettingsView: View {

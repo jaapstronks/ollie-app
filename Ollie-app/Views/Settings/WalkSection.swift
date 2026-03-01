@@ -1,11 +1,11 @@
 //
 //  WalkSection.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Walk schedule settings section for SettingsView
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Walk schedule settings section
 struct WalkSection: View {
@@ -20,7 +20,7 @@ struct WalkSection: View {
                 // Mode indicator
                 HStack {
                     Image(systemName: profile.walkSchedule.mode == .flexible ? "clock.arrow.2.circlepath" : "clock")
-                        .foregroundColor(.ollieAccent)
+                        .foregroundColor(.otisAccent)
                     Text(profile.walkSchedule.mode.label)
                         .font(.subheadline)
                     Spacer()
@@ -78,7 +78,7 @@ struct WalkSection: View {
             Text(Strings.WalkScheduleEditor.title)
             Spacer()
             Image(systemName: "figure.walk")
-                .foregroundColor(.ollieAccent)
+                .foregroundColor(.otisAccent)
         }
     }
 }
@@ -87,7 +87,7 @@ struct WalkSection: View {
     Form {
         WalkSection(
             profile: PuppyProfile.defaultProfile(
-                name: "Ollie",
+                name: "Max",
                 birthDate: Date().addingTimeInterval(-86400 * 90),
                 homeDate: Date().addingTimeInterval(-86400 * 30),
                 size: .medium

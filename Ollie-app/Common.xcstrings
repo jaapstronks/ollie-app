@@ -36,6 +36,7 @@
     },
     "at" : {
       "comment" : "Preposition used to indicate time, e.g. 'Vroege middag om 16:43'",
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -386,13 +387,13 @@
         }
       }
     },
-    "Ollie" : {
+    "Otis" : {
       "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ollie"
+            "value" : "Otis"
           }
         }
       }
@@ -474,13 +475,13 @@
         }
       }
     },
-    "Puppyhood is chaos. Ollie brings the calm." : {
+    "Puppyhood is chaos. Otis brings the calm." : {
       "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Puppytijd is chaos. Ollie brengt rust."
+            "value" : "Puppytijd is chaos. Otis brengt rust."
           }
         }
       }

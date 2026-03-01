@@ -1,12 +1,12 @@
 //
 //  ExportDataView.swift
-//  Ollie-app
+//  Otis-app
 //
 //  UI for exporting puppy data with options and progress
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// View for exporting puppy data with configurable options
 struct ExportDataView: View {
@@ -143,7 +143,7 @@ struct ExportDataView: View {
             VStack(spacing: 16) {
                 Image(systemName: "checkmark.circle.fill")
                     .font(.system(size: 48))
-                    .foregroundStyle(Color.ollieSuccess)
+                    .foregroundStyle(Color.otisSuccess)
 
                 Text(Strings.Export.exportComplete)
                     .font(.headline)

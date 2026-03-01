@@ -1,4 +1,4 @@
--- Ollie Analytics Database Schema
+-- Otis Analytics Database Schema
 -- Cloudflare D1 (SQLite)
 
 -- events table

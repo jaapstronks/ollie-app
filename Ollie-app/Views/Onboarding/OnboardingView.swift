@@ -1,13 +1,13 @@
 //
 //  OnboardingView.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Orchestrator for the onboarding flow
 //
 
 import SwiftUI
 import UIKit
-import OllieShared
+import OtisShared
 
 /// Onboarding flow for new users
 struct OnboardingView: View {

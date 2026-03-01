@@ -1,4 +1,4 @@
-# Ollie App - UI Testing
+# Otis App - UI Testing
 
 This directory contains automated UI tests using Maestro.
 

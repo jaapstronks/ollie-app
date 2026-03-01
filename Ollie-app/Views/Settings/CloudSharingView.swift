@@ -1,16 +1,16 @@
 //
 //  CloudSharingView.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Simple UIKit wrapper for CloudKit sharing controller (Apple's recommended pattern)
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 import CloudKit
 import os
 
-private let logger = Logger.ollie(category: "CloudSharingView")
+private let logger = Logger.otis(category: "CloudSharingView")
 
 /// Simple SwiftUI wrapper for UICloudSharingController (Apple's pattern)
 /// Pass an already-created CKShare - no async share creation inside the view
@@ -45,7 +45,7 @@ struct CloudSharingView: UIViewControllerRepresentable {
         }
 
         func itemTitle(for csc: UICloudSharingController) -> String? {
-            "Ollie - Puppy Events"
+            "Otis - Puppy Events"
         }
 
         func itemThumbnailData(for csc: UICloudSharingController) -> Data? {
@@ -96,7 +96,7 @@ struct SyncStatusView: View {
             } else if let error = eventStore.syncError {
                 Image(systemName: "exclamationmark.icloud")
                     .font(.caption)
-                    .foregroundStyle(Color.ollieWarning)
+                    .foregroundStyle(Color.otisWarning)
                 Text(error)
                     .font(.caption)
                     .foregroundStyle(.secondary)
@@ -104,7 +104,7 @@ struct SyncStatusView: View {
             } else if cloudKit.isCloudAvailable {
                 Image(systemName: "checkmark.icloud")
                     .font(.caption)
-                    .foregroundStyle(Color.ollieSuccess)
+                    .foregroundStyle(Color.otisSuccess)
             }
         }
     }

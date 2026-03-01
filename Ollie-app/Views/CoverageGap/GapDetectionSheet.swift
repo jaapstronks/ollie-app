@@ -1,12 +1,12 @@
 //
 //  GapDetectionSheet.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Sheet shown on app launch when a potential coverage gap is detected
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Sheet prompting user about a detected coverage gap
 struct GapDetectionSheet: View {
@@ -24,7 +24,7 @@ struct GapDetectionSheet: View {
                 // Icon
                 Image(systemName: "clock.badge.questionmark.fill")
                     .font(.system(size: 64))
-                    .foregroundStyle(Color.ollieWarning)
+                    .foregroundStyle(Color.otisWarning)
                     .padding(.top, 40)
 
                 // Message
@@ -53,7 +53,7 @@ struct GapDetectionSheet: View {
                         .foregroundStyle(.white)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 14)
-                        .background(Color.ollieWarning)
+                        .background(Color.otisWarning)
                         .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
                     }
 
@@ -86,7 +86,7 @@ struct GapDetectionSheet: View {
 #Preview {
     GapDetectionSheet(
         hours: 18,
-        puppyName: "Ollie",
+        puppyName: "Max",
         suggestedStartTime: Date().addingTimeInterval(-18 * 3600),
         onLogCoverage: {},
         onDismiss: {}

@@ -1,11 +1,11 @@
 //
 //  CelebrationSettingsView.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Settings for celebration style preferences
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Settings view for controlling celebration behavior
 struct CelebrationSettingsView: View {
@@ -78,7 +78,7 @@ struct CelebrationSettingsView: View {
                         if celebrationStyle == style {
                             Image(systemName: "checkmark.circle.fill")
                                 .font(.title3)
-                                .foregroundStyle(Color.ollieAccent)
+                                .foregroundStyle(Color.otisAccent)
                         }
                     }
                     .contentShape(Rectangle())
@@ -116,10 +116,10 @@ struct CelebrationSettingsView: View {
                         Spacer()
                         Image(systemName: "play.circle.fill")
                             .font(.title3)
-                            .foregroundStyle(Color.olliePurple)
+                            .foregroundStyle(Color.otisPurple)
                     }
                     .padding()
-                    .background(Color.olliePurple.opacity(0.08))
+                    .background(Color.otisPurple.opacity(0.08))
                     .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
                 }
                 .buttonStyle(.plain)
@@ -139,10 +139,10 @@ struct CelebrationSettingsView: View {
                         Spacer()
                         Image(systemName: "play.circle.fill")
                             .font(.title3)
-                            .foregroundStyle(Color.ollieRose)
+                            .foregroundStyle(Color.otisRose)
                     }
                     .padding()
-                    .background(Color.ollieRose.opacity(0.08))
+                    .background(Color.otisRose.opacity(0.08))
                     .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
                 }
                 .buttonStyle(.plain)
@@ -200,7 +200,7 @@ struct CelebrationSettingsView: View {
         HStack(alignment: .top, spacing: 12) {
             Image(systemName: icon)
                 .font(.body)
-                .foregroundStyle(Color.ollieAccent)
+                .foregroundStyle(Color.otisAccent)
                 .frame(width: 24)
 
             VStack(alignment: .leading, spacing: 2) {
@@ -227,9 +227,9 @@ struct CelebrationSettingsView: View {
 
     private func iconColor(for style: CelebrationStyle) -> Color {
         switch style {
-        case .full: return .ollieAccent
-        case .subtle: return .olliePurple
-        case .minimal: return .ollieInfo
+        case .full: return .otisAccent
+        case .subtle: return .otisPurple
+        case .minimal: return .otisInfo
         case .off: return .secondary
         }
     }

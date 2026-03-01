@@ -1,12 +1,12 @@
 //
 //  UpcomingItem.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Models for upcoming scheduled items (meals, walks)
 //
 
 import Foundation
-import OllieShared
+import OtisShared
 
 // MARK: - Upcoming Item Type
 

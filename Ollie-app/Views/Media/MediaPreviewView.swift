@@ -1,10 +1,10 @@
 //
 //  MediaPreviewView.swift
-//  Ollie-app
+//  Otis-app
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 import UIKit
 
 /// Full-screen photo viewer with pinch-to-zoom

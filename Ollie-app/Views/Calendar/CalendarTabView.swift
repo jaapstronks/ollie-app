@@ -1,11 +1,11 @@
 //
 //  CalendarTabView.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Schedule tab showing age, appointments, milestones, and contacts
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Main Schedule tab view displaying age header, appointments, milestones, and contacts
 struct CalendarTabView: View {
@@ -23,6 +23,8 @@ struct CalendarTabView: View {
     @AppStorage("calendarViewMode") private var viewMode: CalendarViewMode = .development
 
     @State private var showAppointmentsView = false
+    @State private var showAddAppointment = false
+    @State private var showAddContact = false
     @State private var showRoadmap = false
     @State private var selectedMilestone: Milestone?
     @State private var selectedAppointment: DogAppointment?
@@ -34,43 +36,44 @@ struct CalendarTabView: View {
     @State private var selectedWeek: WeeklyProgress?
 
     var body: some View {
-        NavigationStack {
-            VStack(spacing: 0) {
-                // View mode toggle
-                CalendarViewModeToggle(mode: $viewMode)
-                    .padding(.horizontal)
-                    .padding(.vertical, 12)
-                    .frame(maxWidth: .infinity)
-                    .background(Color(.systemGroupedBackground))
+        ZStack(alignment: .bottomTrailing) {
+            NavigationStack {
+                VStack(spacing: 0) {
+                    // View mode toggle
+                    CalendarViewModeToggle(mode: $viewMode)
+                        .padding(.horizontal)
+                        .padding(.vertical, 12)
+                        .frame(maxWidth: .infinity)
+                        .background(Color(.systemGroupedBackground))
 
-                // Content based on view mode
-                switch viewMode {
-                case .development:
-                    developmentView
-                case .calendar:
-                    CalendarGridView(
-                        appointmentStore: appointmentStore,
-                        milestoneStore: milestoneStore,
-                        profile: profileStore.profile,
-                        onAppointmentTap: { appointment in
-                            selectedAppointment = appointment
-                        },
-                        onMilestoneTap: { milestone in
-                            selectedMilestone = milestone
-                        },
-                        onSocializationTap: onNavigateToSocialization
-                    )
-                case .contacts:
-                    ContactsView(
-                        contactStore: contactStore,
-                        appointmentStore: appointmentStore
-                    )
+                    // Content based on view mode
+                    switch viewMode {
+                    case .development:
+                        developmentView
+                    case .calendar:
+                        CalendarGridView(
+                            appointmentStore: appointmentStore,
+                            milestoneStore: milestoneStore,
+                            profile: profileStore.profile,
+                            onAppointmentTap: { appointment in
+                                selectedAppointment = appointment
+                            },
+                            onMilestoneTap: { milestone in
+                                selectedMilestone = milestone
+                            },
+                            onSocializationTap: onNavigateToSocialization
+                        )
+                    case .contacts:
+                        ContactsView(
+                            contactStore: contactStore,
+                            appointmentStore: appointmentStore
+                        )
+                    }
                 }
-            }
-            .background(Color(.systemGroupedBackground))
-            .navigationTitle(Strings.Tabs.schedule)
-            .navigationBarTitleDisplayMode(.inline)
-            .profileToolbar(profile: profileStore.profile, action: onSettingsTap)
+                .background(Color(.systemGroupedBackground))
+                .navigationTitle(Strings.Tabs.schedule)
+                .navigationBarTitleDisplayMode(.inline)
+                .profileToolbar(profile: profileStore.profile, action: onSettingsTap)
             .navigationDestination(isPresented: $showAppointmentsView) {
                 AppointmentsView(appointmentStore: appointmentStore)
             }
@@ -90,6 +93,10 @@ struct CalendarTabView: View {
                     )
                     .environmentObject(contactStore)
                 }
+            }
+            .sheet(isPresented: $showAddAppointment) {
+                AddEditAppointmentSheet(appointmentStore: appointmentStore)
+                    .environmentObject(contactStore)
             }
             .sheet(item: $selectedMilestone) { milestone in
                 MilestoneCompletionSheet(
@@ -189,14 +196,48 @@ struct CalendarTabView: View {
                     )
                 }
             }
+            }
+
+            // Floating Action Button
+            scheduleFAB
         }
+        .sheet(isPresented: $showAddContact) {
+            AddEditContactSheet(contactStore: contactStore)
+        }
+    }
+
+    // MARK: - Floating Action Button
+
+    @ViewBuilder
+    private var scheduleFAB: some View {
+        Button {
+            if viewMode == .contacts {
+                showAddContact = true
+            } else {
+                showAddAppointment = true
+            }
+        } label: {
+            ZStack {
+                Circle()
+                    .fill(Color.otisAccent)
+                    .frame(width: 56, height: 56)
+                    .shadow(color: Color.otisAccent.opacity(0.4), radius: 8, y: 4)
+
+                Image(systemName: "plus")
+                    .font(.system(size: 24, weight: .semibold))
+                    .foregroundStyle(.white)
+            }
+        }
+        .padding(.trailing, 16)
+        .padding(.bottom, 60) // Above tab bar
+        .accessibilityLabel(viewMode == .contacts ? Strings.Contacts.addContact : Strings.Calendar.addAppointment)
     }
 
     // MARK: - Development View
 
     @ViewBuilder
     private var developmentView: some View {
-        ScrollView {
+        ScrollView(.vertical) {
             VStack(spacing: 20) {
                 // Age header
                 if let profile = profileStore.profile {
@@ -259,7 +300,7 @@ struct CalendarTabView: View {
                 SectionHeader(
                     title: Strings.Calendar.rightNow,
                     icon: "sparkles",
-                    tint: .olliePurple
+                    tint: .otisPurple
                 )
 
                 VStack(spacing: 12) {
@@ -308,7 +349,7 @@ struct CalendarTabView: View {
                 windowBadge(
                     icon: "exclamationmark.triangle.fill",
                     text: Strings.Socialization.windowClosing,
-                    color: .ollieWarning
+                    color: .otisWarning
                 )
             }
         }
@@ -326,7 +367,7 @@ struct CalendarTabView: View {
                 SectionHeader(
                     title: Strings.Calendar.thisWeek,
                     icon: "calendar",
-                    tint: .ollieAccent
+                    tint: .otisAccent
                 )
 
                 VStack(spacing: 8) {
@@ -356,7 +397,7 @@ struct CalendarTabView: View {
                             }
                             .font(.caption)
                             .fontWeight(.medium)
-                            .foregroundStyle(Color.ollieAccent)
+                            .foregroundStyle(Color.otisAccent)
                         }
                         .frame(maxWidth: .infinity, alignment: .trailing)
                         .padding(.top, 4)
@@ -369,7 +410,7 @@ struct CalendarTabView: View {
                 SectionHeader(
                     title: Strings.Calendar.thisWeek,
                     icon: "calendar",
-                    tint: .ollieAccent
+                    tint: .otisAccent
                 )
 
                 emptyThisWeekState
@@ -408,7 +449,7 @@ struct CalendarTabView: View {
             SectionHeader(
                 title: Strings.Calendar.comingUp,
                 icon: "calendar.badge.clock",
-                tint: .ollieInfo
+                tint: .otisInfo
             )
 
             VStack(spacing: 8) {
@@ -471,9 +512,9 @@ struct CalendarTabView: View {
                 Image(systemName: "chevron.right")
                     .font(.caption)
             }
-            .foregroundStyle(Color.ollieAccent)
+            .foregroundStyle(Color.otisAccent)
             .padding()
-            .background(Color.ollieAccent.opacity(0.08))
+            .background(Color.otisAccent.opacity(0.08))
             .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
         }
         .buttonStyle(.plain)

@@ -1,6 +1,6 @@
 //
 //  PersistenceController.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Core Data persistence with NSPersistentCloudKitContainer for automatic CloudKit sync.
 //  Uses two-store architecture: private store for owner data, shared store for participant data.
@@ -31,8 +31,8 @@ final class PersistenceController: @unchecked Sendable {
 
     // MARK: - CloudKit Container Identifier
 
-    private static let cloudKitContainerIdentifier = "iCloud.nl.jaapstronks.Ollie"
-    private static let appGroupIdentifier = "group.jaapstronks.Ollie"
+    private static let cloudKitContainerIdentifier = "iCloud.nl.jaapstronks.Otis"
+    private static let appGroupIdentifier = "group.jaapstronks.Otis"
 
     // MARK: - iCloud Availability
 
@@ -60,7 +60,7 @@ final class PersistenceController: @unchecked Sendable {
     // MARK: - Initialization
 
     init(inMemory: Bool = false) {
-        container = NSPersistentCloudKitContainer(name: "Ollie")
+        container = NSPersistentCloudKitContainer(name: "Max")
 
         // Use fast synchronous check only (ubiquityIdentityToken) to avoid blocking main thread.
         // The async CKContainer.accountStatus() check is deferred to background.
@@ -190,7 +190,7 @@ final class PersistenceController: @unchecked Sendable {
     /// Configure local-only SQLite store without CloudKit sync
     /// Used as fallback when iCloud is unavailable to prevent data loss
     private func configureLocalOnlyStore() {
-        guard let storeURL = Self.storeURL(for: "Ollie-local.sqlite") else {
+        guard let storeURL = Self.storeURL(for: "Otis-local.sqlite") else {
             fatalError("Unable to resolve app group container URL for local store")
         }
 
@@ -209,8 +209,8 @@ final class PersistenceController: @unchecked Sendable {
     }
 
     private func configurePersistentStores() {
-        guard let storeURL = Self.storeURL(for: "Ollie.sqlite"),
-              let sharedStoreURL = Self.storeURL(for: "Ollie-shared.sqlite") else {
+        guard let storeURL = Self.storeURL(for: "Otis.sqlite"),
+              let sharedStoreURL = Self.storeURL(for: "Otis-shared.sqlite") else {
             fatalError("Unable to resolve app group container URL")
         }
 
@@ -266,9 +266,9 @@ final class PersistenceController: @unchecked Sendable {
 
             print("Store loaded: \(url.lastPathComponent)")
 
-            if url.lastPathComponent == "Ollie.sqlite" {
+            if url.lastPathComponent == "Otis.sqlite" {
                 self?.privateStore = self?.container.persistentStoreCoordinator.persistentStore(for: url)
-            } else if url.lastPathComponent == "Ollie-shared.sqlite" {
+            } else if url.lastPathComponent == "Otis-shared.sqlite" {
                 self?.sharedStore = self?.container.persistentStoreCoordinator.persistentStore(for: url)
             }
         }

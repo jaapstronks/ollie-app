@@ -1,13 +1,13 @@
 //
 //  FoodRecallService.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Service for fetching pet food recall alerts from FDA API
 
 import Foundation
 import Combine
 import os
-import OllieShared
+import OtisShared
 
 /// Service for fetching and managing pet food recall alerts
 @MainActor
@@ -31,7 +31,7 @@ class FoodRecallService: ObservableObject {
 
     // MARK: - Private
 
-    private let logger = Logger.ollie(category: "FoodRecallService")
+    private let logger = Logger.otis(category: "FoodRecallService")
     private var cache: (recalls: [FoodRecall], fetchedAt: Date)?
     private let cacheValidityHours: Double = 6
 

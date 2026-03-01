@@ -1,11 +1,11 @@
 //
 //  CalendarAgeHeader.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Age header component showing weeks old, days home, and age stage badge
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Displays puppy age information with weeks old, days home, and developmental stage
 struct CalendarAgeHeader: View {
@@ -19,7 +19,7 @@ struct CalendarAgeHeader: View {
                 VStack(spacing: 2) {
                     Text("\(profile.ageInWeeks)")
                         .font(.system(size: 32, weight: .bold, design: .rounded))
-                        .foregroundStyle(Color.ollieAccent)
+                        .foregroundStyle(Color.otisAccent)
                     Text(Strings.Common.weeks)
                         .font(.caption)
                         .foregroundStyle(.secondary)
@@ -34,7 +34,7 @@ struct CalendarAgeHeader: View {
                 VStack(spacing: 2) {
                     Text("\(profile.daysHome)")
                         .font(.system(size: 32, weight: .bold, design: .rounded))
-                        .foregroundStyle(Color.ollieSuccess)
+                        .foregroundStyle(Color.otisSuccess)
                     Text(Strings.Common.days)
                         .font(.caption)
                         .foregroundStyle(.secondary)
@@ -92,13 +92,13 @@ struct CalendarAgeHeader: View {
     private var ageStageColor: Color {
         let weeks = profile.ageInWeeks
         if weeks < 8 {
-            return .ollieSleep
+            return .otisSleep
         } else if weeks <= 16 {
-            return .ollieAccent
+            return .otisAccent
         } else if weeks <= 26 {
-            return .ollieInfo
+            return .otisInfo
         } else if weeks <= 52 {
-            return .ollieSuccess
+            return .otisSuccess
         } else {
             return .secondary
         }

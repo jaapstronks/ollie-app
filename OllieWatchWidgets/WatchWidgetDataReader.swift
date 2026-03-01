@@ -1,6 +1,6 @@
 //
 //  WatchWidgetDataReader.swift
-//  OllieWatchWidgets
+//  OtisWatchWidgets
 //
 //  Reads widget data from App Group shared container for watch complications
 
@@ -123,8 +123,8 @@ struct WatchWidgetData: Codable {
 
 /// Reads widget data from shared App Group UserDefaults
 struct WatchWidgetDataReader {
-    // Matches Constants.appGroupIdentifier from OllieShared
-    static let suiteName = "group.jaapstronks.Ollie"
+    // Matches Constants.appGroupIdentifier from OtisShared
+    static let suiteName = "group.jaapstronks.Otis"
     static let dataKey = "widgetData"
 
     static func read() -> WatchWidgetData? {

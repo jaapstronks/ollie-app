@@ -1,12 +1,12 @@
 //
 //  MilestoneStore.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Manages milestones with Core Data and automatic CloudKit sync
 
 import Foundation
 import CoreData
-import OllieShared
+import OtisShared
 import os
 
 /// Manages milestones with Core Data and automatic CloudKit sync

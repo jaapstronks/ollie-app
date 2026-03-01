@@ -1,12 +1,12 @@
 //
 //  PottyNotificationScheduler.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Handles scheduling potty reminder notifications
 //
 
 import Foundation
-import OllieShared
+import OtisShared
 import UserNotifications
 import os
 
@@ -16,7 +16,7 @@ final class PottyNotificationScheduler: NotificationScheduler {
     let notificationPrefix = "potty_"
 
     private let notificationCenter = UNUserNotificationCenter.current()
-    private let logger = Logger.ollie(category: "PottyNotificationScheduler")
+    private let logger = Logger.otis(category: "PottyNotificationScheduler")
 
     func schedule(events: [PuppyEvent], profile: PuppyProfile) async {
         await cancel()

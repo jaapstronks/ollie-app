@@ -1,12 +1,12 @@
 //
 //  Strings+SocializationItems.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Localized names for socialization checklist items
 //
 
 import Foundation
-import OllieShared
+import OtisShared
 
 private let table = "SocializationItems"
 

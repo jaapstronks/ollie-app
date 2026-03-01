@@ -1,12 +1,12 @@
 //
 //  WeekHeroCard.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Hero card showing current week and focus skills
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Hero card displaying the current training week and focus skills
 struct WeekHeroCard: View {
@@ -43,7 +43,7 @@ struct WeekHeroCard: View {
 
                     ProgressView(value: progress.total > 0 ? Double(progress.started) / Double(progress.total) : 0)
                         .frame(width: 80)
-                        .tint(Color.ollieAccent)
+                        .tint(Color.otisAccent)
                 }
             }
 
@@ -63,7 +63,7 @@ struct WeekHeroCard: View {
                             HStack(spacing: 6) {
                                 Image(systemName: skill.icon)
                                     .font(.caption)
-                                    .foregroundStyle(Color.ollieAccent)
+                                    .foregroundStyle(Color.otisAccent)
                                 Text(skill.name)
                                     .font(.subheadline)
                                     .fontWeight(.medium)
@@ -75,7 +75,7 @@ struct WeekHeroCard: View {
                             .overlay(
                                 Capsule()
                                     .strokeBorder(
-                                        Color.ollieAccent.opacity(colorScheme == .dark ? 0.3 : 0.2),
+                                        Color.otisAccent.opacity(colorScheme == .dark ? 0.3 : 0.2),
                                         lineWidth: 1
                                     )
                             )
@@ -86,15 +86,15 @@ struct WeekHeroCard: View {
             }
         }
         .padding()
-        .glassStatusCard(tintColor: Color.ollieAccent)
+        .glassStatusCard(tintColor: Color.otisAccent)
     }
 
     @ViewBuilder
     private var skillChipBackground: some View {
         if colorScheme == .dark {
-            Color.ollieAccent.opacity(0.15)
+            Color.otisAccent.opacity(0.15)
         } else {
-            Color.ollieAccent.opacity(0.1)
+            Color.otisAccent.opacity(0.1)
         }
     }
 }

@@ -1,11 +1,11 @@
 //
 //  SpotRowView.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Reusable row component for displaying a walk spot
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Row view for displaying a saved walk spot in lists
 struct SpotRowView: View {
@@ -17,7 +17,7 @@ struct SpotRowView: View {
             // Pin icon
             Image(systemName: "mappin.circle.fill")
                 .font(.title2)
-                .foregroundStyle(.ollieAccent)
+                .foregroundStyle(Color.otisAccent)
                 .frame(width: 32)
 
             // Spot info
@@ -73,12 +73,12 @@ struct SpotRowCompact: View {
             if isSelected {
                 Image(systemName: "checkmark")
                     .font(.caption)
-                    .foregroundStyle(Color.ollieAccent)
+                    .foregroundStyle(Color.otisAccent)
             }
         }
         .padding(.vertical, 8)
         .padding(.horizontal, 12)
-        .background(isSelected ? Color.ollieAccent.opacity(0.1) : Color.clear)
+        .background(isSelected ? Color.otisAccent.opacity(0.1) : Color.clear)
         .cornerRadius(8)
         .contentShape(Rectangle())
     }

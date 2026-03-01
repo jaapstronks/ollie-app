@@ -1,6 +1,6 @@
 //
 //  WatchSyncService.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Syncs data from iPhone to Apple Watch via WatchConnectivity
 //
@@ -10,7 +10,7 @@
 import Foundation
 import Combine
 import WatchConnectivity
-import OllieShared
+import OtisShared
 import CoreData
 import os
 
@@ -19,7 +19,7 @@ final class WatchSyncService: NSObject {
     static let shared = WatchSyncService()
 
     private var session: WCSession?
-    private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "Ollie", category: "WatchSync")
+    private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "Otis", category: "WatchSync")
     private let eventStore = CoreDataEventStore()
 
     // MARK: - Sync Status

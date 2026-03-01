@@ -1,13 +1,13 @@
 //
 //  MedicationStore.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Manages medication completion tracking with Core Data and automatic CloudKit sync
 //
 
 import Foundation
 import CoreData
-import OllieShared
+import OtisShared
 import Combine
 import os
 

@@ -1,12 +1,12 @@
 //
 //  AtmosphereProvider.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Main observable object providing contextual atmosphere state
 
 import SwiftUI
 import Combine
-import OllieShared
+import OtisShared
 
 /// Provides contextual atmosphere based on time, weather, and puppy state
 @MainActor

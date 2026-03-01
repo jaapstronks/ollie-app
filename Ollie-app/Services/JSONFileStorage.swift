@@ -1,12 +1,12 @@
 //
 //  JSONFileStorage.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Reusable JSON file storage utilities for store classes
 //
 
 import Foundation
-import OllieShared
+import OtisShared
 import os
 
 /// Shared utilities for JSON-based file storage

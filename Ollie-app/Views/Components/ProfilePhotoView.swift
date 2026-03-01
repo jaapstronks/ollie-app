@@ -1,11 +1,11 @@
 //
 //  ProfilePhotoView.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Reusable profile photo display component
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Displays the dog's profile photo or a paw placeholder
 struct ProfilePhotoView: View {
@@ -29,7 +29,7 @@ struct ProfilePhotoView: View {
                 Circle()
                     .fill(
                         LinearGradient(
-                            colors: [Color.ollieAccent, Color.ollieAccent.opacity(0.8)],
+                            colors: [Color.otisAccent, Color.otisAccent.opacity(0.8)],
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
                         )

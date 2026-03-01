@@ -1,12 +1,12 @@
 //
 //  MedicationReminderCard.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Card showing pending medication with swipe-to-complete
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Card displaying a pending medication with swipe-to-complete slider
 struct MedicationReminderCard: View {
@@ -24,7 +24,7 @@ struct MedicationReminderCard: View {
     @Environment(\.colorScheme) private var colorScheme
 
     private var tintColor: Color {
-        isOverdue ? .ollieWarning : .ollieAccent
+        isOverdue ? .otisWarning : .otisAccent
     }
 
     private var timeFormatter: DateFormatter {
@@ -87,7 +87,7 @@ struct MedicationReminderCard: View {
         HStack(spacing: 12) {
             ZStack {
                 Circle()
-                    .fill(Color.ollieSuccess)
+                    .fill(Color.otisSuccess)
                     .frame(width: 44, height: 44)
 
                 Image(systemName: "checkmark")
@@ -109,11 +109,11 @@ struct MedicationReminderCard: View {
 
             Image(systemName: "arrow.down.circle.fill")
                 .font(.title2)
-                .foregroundStyle(Color.ollieSuccess.opacity(0.6))
+                .foregroundStyle(Color.otisSuccess.opacity(0.6))
         }
         .padding()
         .frame(maxWidth: .infinity)
-        .glassStatusCard(tintColor: .ollieSuccess)
+        .glassStatusCard(tintColor: .otisSuccess)
     }
 
     // MARK: - Header Row
@@ -148,7 +148,7 @@ struct MedicationReminderCard: View {
                             .foregroundStyle(.white)
                             .padding(.horizontal, 8)
                             .padding(.vertical, 2)
-                            .background(Capsule().fill(Color.ollieWarning))
+                            .background(Capsule().fill(Color.otisWarning))
                     }
                 }
             }

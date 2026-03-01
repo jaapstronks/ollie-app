@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document outlines the recommended approach for evolving the Plan tab and Insights (formerly Stats) functionality in Ollie. The goal is to create a cohesive experience that helps puppy parents understand where they are in their puppy's developmental journey, what's coming up, and how to stay on track.
+This document outlines the recommended approach for evolving the Plan tab and Insights (formerly Stats) functionality in Otis. The goal is to create a cohesive experience that helps puppy parents understand where they are in their puppy's developmental journey, what's coming up, and how to stay on track.
 
 **Key decision:** No users yet, so we make clean architectural cuts. No migration paths, no backwards compatibility—just build it right.
 
@@ -15,19 +15,19 @@ This document outlines the recommended approach for evolving the Plan tab and In
 | Component | Location | Status | Action |
 |-----------|----------|--------|--------|
 | PlanTabView | `Views/PlanTabView.swift` | Exists | Remove, merge into Insights |
-| HealthMilestone | `OllieShared/Models/HealthMilestone.swift` | Basic | Replace with new Milestone model |
+| HealthMilestone | `OtisShared/Models/HealthMilestone.swift` | Basic | Replace with new Milestone model |
 | HealthTimelineView | `Views/HealthTimelineView.swift` | Exists | Enhance significantly |
 | SocializationStore | `Services/SocializationStore.swift` | Complete | Extend with weekly progress |
 | TrainingPlan | `Models/TrainingPlan.swift` | Exists | Keep as-is for now |
-| WalkSchedule | `OllieShared/Models/WalkSchedule.swift` | Complete | Keep as-is |
+| WalkSchedule | `OtisShared/Models/WalkSchedule.swift` | Complete | Keep as-is |
 | InsightsView | `Views/InsightsView.swift` | Exists | Restructure to include Plan |
 
 ### What We're Building
 
 - Week-by-week socialization window visualization
-- Calendar export/sync for appointments (Ollie+)
+- Calendar export/sync for appointments (Otis+)
 - Developmental milestones (fear periods, teething, adolescence)
-- User-created custom milestones/appointments (Ollie+)
+- User-created custom milestones/appointments (Otis+)
 - "This Week" card on Today view
 - Unified Insights tab with Plan section
 
@@ -46,7 +46,7 @@ This document outlines the recommended approach for evolving the Plan tab and In
 | Developmental phase awareness | Fear period warnings are safety-critical |
 | "This Week" card on Today | Surfaces free features, teases premium |
 
-### Ollie+ (Premium)
+### Otis+ (Premium)
 
 | Feature | Rationale |
 |---------|-----------|
@@ -71,7 +71,7 @@ When free users tap a premium feature:
 │  never miss a vaccination or vet visit.         │
 │                                                 │
 │  ┌─────────────────────────────────────────┐    │
-│  │       Unlock with Ollie+                │    │
+│  │       Unlock with Otis+                │    │
 │  └─────────────────────────────────────────┘    │
 │                                                 │
 │  [Maybe Later]                                  │
@@ -128,8 +128,8 @@ Insights View ◄─────────────────────
 └── Walk History (collapsible)
 
 Health Timeline View (Full Screen)
-├── Header: "Ollie's Health & Development"
-├── [+ Add Milestone] (Ollie+ gated)
+├── Header: "Puppy's Health & Development"
+├── [+ Add Milestone] (Otis+ gated)
 ├── Next Up Section
 │   └── Milestone Cards with actions
 ├── Future Section
@@ -187,7 +187,7 @@ Health Timeline View (Full Screen)
 │  │                                           │  │
 │  │    ┌──────────────┐  ┌──────────────┐     │  │
 │  │    │   Done ✓     │  │ Calendar 📅  │     │  │
-│  │    │              │  │    Ollie+    │     │  │
+│  │    │              │  │    Otis+    │     │  │
 │  │    └──────────────┘  └──────────────┘     │  │
 │  └───────────────────────────────────────────┘  │
 │                                                 │
@@ -213,7 +213,7 @@ Health Timeline View (Full Screen)
 | Card header "▶" | Navigate to Insights (Plan section) | — |
 | Milestone row | Expand inline details | — |
 | "Done ✓" button | Open completion sheet | — |
-| "Calendar 📅" button | Add to calendar (or show Ollie+ upsell) | — |
+| "Calendar 📅" button | Add to calendar (or show Otis+ upsell) | — |
 | Socialization section | Navigate to Socialization Categories | — |
 | Week dot | Show that week's stats in tooltip | — |
 
@@ -348,7 +348,7 @@ enum MilestoneCategory: String, Codable, CaseIterable {
     case health         // Vaccinations, vet visits, deworming
     case developmental  // Fear periods, teething, adolescence
     case administrative // Insurance, registration, microchip
-    case custom         // User-created (Ollie+ only)
+    case custom         // User-created (Otis+ only)
 
     var icon: String {
         switch self {
@@ -405,14 +405,14 @@ struct Milestone: Identifiable, Codable {
     var isRecurring: Bool = false
     var recurrenceMonths: Int?        // e.g., 12 for annual
 
-    // Completion (Ollie+ for notes/photos)
+    // Completion (Otis+ for notes/photos)
     var isCompleted: Bool = false
     var completedDate: Date?
-    var completionNotes: String?      // Ollie+ only
-    var completionPhotoID: UUID?      // Ollie+ only
-    var vetClinicName: String?        // Ollie+ only
+    var completionNotes: String?      // Otis+ only
+    var completionPhotoID: UUID?      // Otis+ only
+    var vetClinicName: String?        // Otis+ only
 
-    // Calendar (Ollie+ only)
+    // Calendar (Otis+ only)
     var calendarEventID: String?
     var reminderDaysBefore: Int = 7
 
@@ -685,7 +685,7 @@ InsightsView
 ├─────────────────────────────────────────────────┤
 │                                                 │
 │ ┌───────────────────────────────────────────┐   │
-│ │  🐕 Ollie · Week 10                       │   │
+│ │  🐕 Otis · Week 10                       │   │
 │ │     10 weeks old · 2 weeks home           │   │
 │ │     Socialization window: OPEN            │   │
 │ └───────────────────────────────────────────┘   │
@@ -752,7 +752,7 @@ InsightsView
 ```
 ┌─────────────────────────────────────────────────┐
 │ ← Health & Development               [+ Add]   │
-│                                       Ollie+   │
+│                                       Otis+   │
 ├─────────────────────────────────────────────────┤
 │                                                 │
 │ NEXT UP                                         │
@@ -768,7 +768,7 @@ InsightsView
 │ │                                           │   │
 │ │        ┌────────┐  ┌────────────────┐     │   │
 │ │        │ Done ✓ │  │ Add to Cal 📅  │     │   │
-│ │        └────────┘  │    Ollie+      │     │   │
+│ │        └────────┘  │    Otis+      │     │   │
 │ │                    └────────────────┘     │   │
 │ └───────────────────────────────────────────┘   │
 │ │                                               │
@@ -796,7 +796,7 @@ InsightsView
 │ │                                               │
 │ ├─✓ Feb 14 · 1st Vaccination                    │
 │ │    ✓ Completed · Dierenkliniek Amsterdam     │
-│ │    [View details]     Ollie+ badge           │
+│ │    [View details]     Otis+ badge           │
 │ │                                               │
 │ ├─✓ Feb 7 · First Vet Visit                     │
 │ │    ✓ Completed · Weight: 4.2 kg              │
@@ -809,7 +809,7 @@ InsightsView
 
 ---
 
-### 6. Calendar Integration (Ollie+ Only)
+### 6. Calendar Integration (Otis+ Only)
 
 **EventKit Implementation:**
 
@@ -854,7 +854,7 @@ actor CalendarService {
         }
 
         guard let targetDate = milestone.targetDate(birthDate: profile.birthDate) else {
-            throw CalendarError.saveFailed(NSError(domain: "Ollie", code: 1))
+            throw CalendarError.saveFailed(NSError(domain: "Otis", code: 1))
         }
 
         let event = EKEvent(eventStore: store)
@@ -912,7 +912,7 @@ For users with multiple calendars, show picker on first use:
 │ Choose Calendar                        [Cancel] │
 ├─────────────────────────────────────────────────┤
 │                                                 │
-│  Which calendar should Ollie use?               │
+│  Which calendar should Otis use?               │
 │                                                 │
 │  ○ Personal                                     │
 │  ● Family (shared)                              │
@@ -929,7 +929,7 @@ For users with multiple calendars, show picker on first use:
 
 ---
 
-### 7. Custom Milestone Creation (Ollie+ Only)
+### 7. Custom Milestone Creation (Otis+ Only)
 
 **Use Cases:**
 - Grooming appointments
@@ -998,8 +998,8 @@ For users with multiple calendars, show picker on first use:
 5. Create computed properties for status, target date, etc.
 
 **Files:**
-- Delete: `OllieShared/Models/HealthMilestone.swift`
-- Create: `OllieShared/Models/Milestone.swift`
+- Delete: `OtisShared/Models/HealthMilestone.swift`
+- Create: `OtisShared/Models/Milestone.swift`
 - Create: `Services/MilestoneStore.swift`
 - Update: `Strings+Health.swift` (add milestone keys)
 
@@ -1085,7 +1085,7 @@ For users with multiple calendars, show picker on first use:
 
 ---
 
-### Phase 6: Calendar Integration (Ollie+)
+### Phase 6: Calendar Integration (Otis+)
 
 **Goal:** EventKit integration for premium users.
 
@@ -1104,7 +1104,7 @@ For users with multiple calendars, show picker on first use:
 
 ---
 
-### Phase 7: Custom Milestones (Ollie+)
+### Phase 7: Custom Milestones (Otis+)
 
 **Goal:** User-created milestones for premium users.
 
@@ -1141,10 +1141,10 @@ For users with multiple calendars, show picker on first use:
 ## File Structure (Final)
 
 ```
-Ollie-app/
+Otis-app/
 ├── Models/
 │   └── (keep existing)
-├── OllieShared/Sources/OllieShared/Models/
+├── OtisShared/Sources/OtisShared/Models/
 │   ├── Milestone.swift (NEW - replaces HealthMilestone)
 │   ├── WeeklyProgress.swift (NEW)
 │   └── (keep others)
@@ -1241,8 +1241,8 @@ enum Milestone {
 |--------|--------|-------------|
 | This Week card taps | 30% of daily users | Analytics: `this_week_card_tapped` |
 | Socialization completion | 60% hit weekly goals | `weekly_progress.isComplete` |
-| Calendar exports | 20% of Ollie+ users | `milestone_calendar_added` |
-| Custom milestones | 15% of Ollie+ create 1+ | `custom_milestone_created` |
+| Calendar exports | 20% of Otis+ users | `milestone_calendar_added` |
+| Custom milestones | 15% of Otis+ create 1+ | `custom_milestone_created` |
 | Milestone completion | 80% mark vaccines done | `milestone_completed` where category=health |
 
 ---

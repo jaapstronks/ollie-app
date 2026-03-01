@@ -1,12 +1,12 @@
 //
 //  NotificationScheduling.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Protocol and shared types for notification scheduling
 //
 
 import Foundation
-import OllieShared
+import OtisShared
 import UserNotifications
 
 /// Protocol for notification schedulers

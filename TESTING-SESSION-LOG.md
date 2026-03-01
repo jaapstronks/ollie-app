@@ -1,4 +1,4 @@
-# Ollie App Testing Session Log
+# Otis App Testing Session Log
 
 ## Session 1: 2026-02-25 - Initial Exploration & Potty Logging
 
@@ -9,7 +9,7 @@
 - **Device**: iPhone 17 Simulator, iOS 26.2
 
 ### Pre-Session State Check
-- Day 12 with Ollie
+- Day 12 with puppy
 - No events logged today initially
 - Scheduled: Afternoon walk (20:00), Evening walk (22:00)
 - Socialization items configured (Pet store 0/2)

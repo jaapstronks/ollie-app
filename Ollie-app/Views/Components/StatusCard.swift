@@ -1,6 +1,6 @@
 //
 //  StatusCard.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Generic status card wrapper for consistent styling across
 //  PottyStatusCard, SleepStatusCard, PoopStatusCard, etc.

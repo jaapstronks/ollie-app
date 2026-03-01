@@ -1,11 +1,11 @@
 //
 //  TimelineAppointmentMarker.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Appointment marker for the vertical timeline (dashed outline style)
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Appointment card for the vertical timeline with dashed outline style
 struct TimelineAppointmentMarker: View {

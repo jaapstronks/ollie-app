@@ -1,11 +1,11 @@
 //
 //  MomentSourcePickerSheet.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Sheet for choosing camera or photo library when logging a moment
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Simple sheet to choose between camera and photo library for moments
 struct MomentSourcePickerSheet: View {

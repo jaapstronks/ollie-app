@@ -1,6 +1,6 @@
 //
 //  GlassTypes.swift
-//  Ollie-app
+//  Otis-app
 //
 //  iOS 26 "Liquid Glass" design system - Type definitions
 //
@@ -35,12 +35,12 @@ enum GlassTint {
     var color: Color? {
         switch self {
         case .none: return nil
-        case .accent: return Color.ollieAccent
-        case .success: return Color.ollieSuccess
-        case .warning: return Color.ollieWarning
-        case .danger: return Color.ollieDanger
-        case .info: return Color.ollieInfo
-        case .sleep: return Color.ollieSleep
+        case .accent: return Color.otisAccent
+        case .success: return Color.otisSuccess
+        case .warning: return Color.otisWarning
+        case .danger: return Color.otisDanger
+        case .info: return Color.otisInfo
+        case .sleep: return Color.otisSleep
         case .custom(let color): return color
         }
     }

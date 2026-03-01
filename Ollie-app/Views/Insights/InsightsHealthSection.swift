@@ -1,12 +1,12 @@
 //
 //  InsightsHealthSection.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Health section with weight tracking
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Health section showing weight tracking
 struct InsightsHealthSection: View {
@@ -27,7 +27,7 @@ struct InsightsHealthSection: View {
             InsightsSectionHeader(
                 title: Strings.Health.weight,
                 icon: "scalemass.fill",
-                tint: .ollieAccent
+                tint: .otisAccent
             )
 
             // Weight summary card
@@ -55,11 +55,11 @@ struct InsightsHealthSection: View {
                                 Text(weightUnit.formatDelta(delta.delta))
                                     .font(.caption)
                             }
-                            .foregroundStyle(delta.delta >= 0 ? Color.ollieSuccess : Color.ollieWarning)
+                            .foregroundStyle(delta.delta >= 0 ? Color.otisSuccess : Color.otisWarning)
                             .padding(.horizontal, 8)
                             .padding(.vertical, 4)
                             .background(
-                                (delta.delta >= 0 ? Color.ollieSuccess : Color.ollieWarning)
+                                (delta.delta >= 0 ? Color.otisSuccess : Color.otisWarning)
                                     .opacity(colorScheme == .dark ? 0.2 : 0.1)
                             )
                             .clipShape(Capsule())
@@ -79,7 +79,7 @@ struct InsightsHealthSection: View {
                     }
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 8)
-                    .background(Color.ollieAccent.opacity(colorScheme == .dark ? 0.2 : 0.1))
+                    .background(Color.otisAccent.opacity(colorScheme == .dark ? 0.2 : 0.1))
                     .cornerRadius(8)
                 } else {
                     // Empty state

@@ -1,12 +1,12 @@
 //
 //  TrainingLogSheet.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Sheet for logging a training session
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Sheet for logging a training session for a specific skill
 struct TrainingLogSheet: View {
@@ -52,7 +52,7 @@ struct TrainingLogSheet: View {
                         title: skill.name,
                         icon: .skill(skill),
                         subtitle: skill.category.label,
-                        tintColor: .ollieAccent
+                        tintColor: .otisAccent
                     )
 
                     // Session summary (if from training mode)
@@ -192,7 +192,7 @@ struct TrainingLogSheet: View {
         .padding()
         .background(
             RoundedRectangle(cornerRadius: 12, style: .continuous)
-                .fill(Color.ollieAccent.opacity(colorScheme == .dark ? 0.15 : 0.1))
+                .fill(Color.otisAccent.opacity(colorScheme == .dark ? 0.15 : 0.1))
         )
     }
 

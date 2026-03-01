@@ -1,12 +1,12 @@
 //
 //  ArrivalPhotoPromptSheet.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Prompts user to take a photo when their expected puppy arrives
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Sheet shown when an expected puppy's home date arrives and no profile photo exists
 struct ArrivalPhotoPromptSheet: View {
@@ -24,7 +24,7 @@ struct ArrivalPhotoPromptSheet: View {
             // Icon
             Image(systemName: "camera.fill")
                 .font(.system(size: 64))
-                .foregroundStyle(Color.ollieAccent)
+                .foregroundStyle(Color.otisAccent)
                 .scaleEffect(hasAppeared ? 1.0 : 0.8)
                 .opacity(hasAppeared ? 1.0 : 0.0)
 
@@ -56,7 +56,7 @@ struct ArrivalPhotoPromptSheet: View {
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 16)
-                    .background(Color.ollieAccent)
+                    .background(Color.otisAccent)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
                 }
 

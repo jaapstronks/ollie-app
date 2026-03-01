@@ -1,12 +1,12 @@
 //
 //  CDWalkSpot+Extensions.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Extensions for converting between WalkSpot and CDWalkSpot
 //
 
 import CoreData
-import OllieShared
+import OtisShared
 
 // MARK: - CDEntityConvertible Conformance
 

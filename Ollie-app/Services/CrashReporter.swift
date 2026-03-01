@@ -1,12 +1,12 @@
 //
 //  CrashReporter.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Sentry crash reporting and error tracking
 //
 
 import Foundation
-import OllieShared
+import OtisShared
 import Sentry
 
 /// Centralized crash reporting and error tracking using Sentry

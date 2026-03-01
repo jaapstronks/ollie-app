@@ -1,12 +1,12 @@
 //
 //  QuickLogSheet.swift
-//  Ollie-app
+//  Otis-app
 //
 //  V2: Unified logging sheet with time adjustment for all events
 //  V3: Added walk location support
 
 import SwiftUI
-import OllieShared
+import OtisShared
 import CoreLocation
 
 /// Sheet for quick logging with time adjustment

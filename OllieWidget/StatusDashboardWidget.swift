@@ -1,11 +1,11 @@
 //
 //  StatusDashboardWidget.swift
-//  OllieWidget
+//  OtisWidget
 //
 //  Smart dashboard widget showing sleep state, potty timer, meals, and walks
 
 import WidgetKit
-import OllieShared
+import OtisShared
 import SwiftUI
 
 // MARK: - Timeline Provider
@@ -737,7 +737,7 @@ struct StatusDashboardWidget: Widget {
         mealsExpectedToday: 3,
         lastWalkTime: Date().addingTimeInterval(-1 * 60 * 60),
         nextScheduledWalkTime: Date().addingTimeInterval(-10 * 60), // overdue
-        puppyName: "Ollie",
+        puppyName: "Max",
         lastUpdated: Date()
     ))
 }
@@ -764,7 +764,7 @@ struct StatusDashboardWidget: Widget {
         mealsExpectedToday: 3,
         lastWalkTime: Date().addingTimeInterval(-2 * 60 * 60),
         nextScheduledWalkTime: nil,
-        puppyName: "Ollie",
+        puppyName: "Max",
         lastUpdated: Date()
     ))
 }

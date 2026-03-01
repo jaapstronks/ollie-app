@@ -1,13 +1,13 @@
 //
 //  NotificationService.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Manages scheduling and canceling smart notifications
 //  Orchestrates individual notification schedulers
 //
 
 import Foundation
-import OllieShared
+import OtisShared
 import UserNotifications
 import Combine
 import os
@@ -19,7 +19,7 @@ class NotificationService: ObservableObject {
     @Published private(set) var isAuthorized: Bool = false
 
     private let notificationCenter = UNUserNotificationCenter.current()
-    private let logger = Logger.ollie(category: "NotificationService")
+    private let logger = Logger.otis(category: "NotificationService")
 
     // Individual schedulers
     private let pottyScheduler = PottyNotificationScheduler()

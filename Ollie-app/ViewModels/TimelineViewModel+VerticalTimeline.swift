@@ -1,12 +1,12 @@
 //
 //  TimelineViewModel+VerticalTimeline.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Extension for the vertical day-planner timeline view
 //  VerticalTimelineItem model is in Models/VerticalTimelineItem.swift
 
 import Foundation
-import OllieShared
+import OtisShared
 
 // MARK: - ViewModel Extension
 

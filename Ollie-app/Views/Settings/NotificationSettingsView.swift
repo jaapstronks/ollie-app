@@ -1,12 +1,12 @@
 //
 //  NotificationSettingsView.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Settings view for smart notifications
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// View for configuring notification settings
 struct NotificationSettingsView: View {
@@ -68,7 +68,7 @@ struct NotificationSettingsView: View {
             Section {
                 HStack {
                     Image(systemName: "bell.slash.fill")
-                        .foregroundColor(.ollieWarning)
+                        .foregroundColor(.otisWarning)
                     VStack(alignment: .leading, spacing: 4) {
                         Text(Strings.Notifications.disabledTitle)
                             .font(.headline)
@@ -95,7 +95,7 @@ struct NotificationSettingsView: View {
                     Text(Strings.Notifications.remindersLabel)
                 } icon: {
                     Image(systemName: "bell.fill")
-                        .foregroundColor(.ollieAccent)
+                        .foregroundColor(.otisAccent)
                 }
             }
             .onChange(of: settings.isEnabled) { _, newValue in
@@ -118,7 +118,7 @@ struct NotificationSettingsView: View {
                     Text(Strings.Notifications.pottyReminders)
                 } icon: {
                     Image(systemName: "drop.fill")
-                        .foregroundColor(.ollieInfo)
+                        .foregroundColor(.otisInfo)
                 }
             }
 
@@ -148,7 +148,7 @@ struct NotificationSettingsView: View {
                     Text(Strings.Notifications.mealReminder)
                 } icon: {
                     Image(systemName: "fork.knife")
-                        .foregroundColor(.ollieSuccess)
+                        .foregroundColor(.otisSuccess)
                 }
             }
         } header: {
@@ -169,7 +169,7 @@ struct NotificationSettingsView: View {
                     Text(Strings.Notifications.napNeeded)
                 } icon: {
                     Image(systemName: "moon.fill")
-                        .foregroundColor(.ollieMuted)
+                        .foregroundColor(.otisMuted)
                 }
             }
 
@@ -199,7 +199,7 @@ struct NotificationSettingsView: View {
                     Text(Strings.Notifications.walkReminders)
                 } icon: {
                     Image(systemName: "figure.walk")
-                        .foregroundColor(.ollieAccent)
+                        .foregroundColor(.otisAccent)
                 }
             }
         } header: {
@@ -220,7 +220,7 @@ struct NotificationSettingsView: View {
                     Text(Strings.Notifications.appointmentReminders)
                 } icon: {
                     Image(systemName: "calendar")
-                        .foregroundColor(.ollieAccent)
+                        .foregroundColor(.otisAccent)
                 }
             }
         } header: {

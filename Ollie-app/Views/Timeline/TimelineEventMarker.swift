@@ -1,11 +1,11 @@
 //
 //  TimelineEventMarker.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Point event marker for the vertical day-planner timeline
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Point event marker (pee, poo, meals, etc.) for vertical timeline
 /// Times are shown on the hour grid, not on individual markers
@@ -18,10 +18,7 @@ struct TimelineEventMarker: View {
     var body: some View {
         Button(action: onTap) {
             HStack(spacing: 8) {
-                // Left pin marker
-                PinMarker(color: iconColor)
-
-                // Event icon
+                // Event icon (single icon, no separate pin marker)
                 EventMarkerIcon(item: item, color: iconColor)
 
                 // Description and details
@@ -67,14 +64,14 @@ struct TimelineEventMarker: View {
         case .pointEvent(let event):
             return colorForEvent(event)
         default:
-            return .ollieAccent
+            return .otisAccent
         }
     }
 
     private var cardBackground: Color {
         colorScheme == .dark
-            ? Color.ollieCardDark.opacity(0.9)
-            : Color.ollieCardLight
+            ? Color.otisCardDark.opacity(0.9)
+            : Color.otisCardLight
     }
 
     private var shadowColor: Color {
@@ -96,41 +93,29 @@ struct TimelineEventMarker: View {
         case .plassen, .poepen:
             // Green for outdoor, red for indoor
             if event.location == .buiten {
-                return .ollieSuccess
+                return .otisSuccess
             } else {
-                return .ollieDanger
+                return .otisDanger
             }
         case .eten, .drinken:
-            return .ollieAccent
+            return .otisAccent
         case .training:
-            return .olliePurple
+            return .otisPurple
         case .sociaal:
-            return .ollieSuccess
+            return .otisSuccess
         case .tuin:
-            return .ollieSuccess
+            return .otisSuccess
         case .milestone:
-            return .ollieRose
+            return .otisRose
         case .gewicht:
-            return .ollieHealth
+            return .otisHealth
         case .medicatie:
-            return .ollieHealth
+            return .otisHealth
         case .coverageGap:
             return .secondary
         default:
             return .secondary
         }
-    }
-}
-
-// MARK: - Pin Marker
-
-private struct PinMarker: View {
-    let color: Color
-
-    var body: some View {
-        Circle()
-            .fill(color)
-            .frame(width: 8, height: 8)
     }
 }
 

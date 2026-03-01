@@ -1,6 +1,6 @@
 # Test Training Tab functionality
 # Tests: Navigation, skill cards, logging sessions, category sections
-appId: nl.jaapstronks.Ollie
+appId: nl.jaapstronks.Otis
 ---
 - launchApp
 - waitForAnimationToEnd

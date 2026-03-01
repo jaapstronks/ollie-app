@@ -1,12 +1,12 @@
 //
 //  TrainingView.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Main training view showing skills by category with progress tracking
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Main training view with skill tracker
 struct TrainingView: View {
@@ -21,7 +21,7 @@ struct TrainingView: View {
     @State private var skillForQuickLog: Skill?
     @State private var completedSessionData: TrainingSessionData?
     @State private var scrollToSkillId: String?
-    @State private var showOlliePlusSheet = false
+    @State private var showOtisPlusSheet = false
 
     @Environment(\.colorScheme) private var colorScheme
 
@@ -137,11 +137,11 @@ struct TrainingView: View {
             )
             .presentationDetents([.height(500)])
         }
-        // Ollie+ upsell sheet
-        .sheet(isPresented: $showOlliePlusSheet) {
-            OlliePlusSheet(
-                onDismiss: { showOlliePlusSheet = false },
-                onSubscribed: { showOlliePlusSheet = false }
+        // Otis+ upsell sheet
+        .sheet(isPresented: $showOtisPlusSheet) {
+            OtisPlusSheet(
+                onDismiss: { showOtisPlusSheet = false },
+                onSubscribed: { showOtisPlusSheet = false }
             )
         }
     }
@@ -235,11 +235,11 @@ struct TrainingView: View {
                         )
                         .id(skill.id)
                     } else {
-                        // Locked skill card for Ollie+ upsell
+                        // Locked skill card for Otis+ upsell
                         PremiumLockedSkillCard(
                             skillName: skill.name,
                             category: category.label,
-                            onUnlock: { showOlliePlusSheet = true }
+                            onUnlock: { showOtisPlusSheet = true }
                         )
                         .id(skill.id)
                     }

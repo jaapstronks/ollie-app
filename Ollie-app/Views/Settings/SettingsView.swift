@@ -1,11 +1,11 @@
 //
 //  SettingsView.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Settings hub with navigation to 4 sections
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Settings hub screen with four main navigation options
 struct SettingsView: View {
@@ -26,7 +26,7 @@ struct SettingsView: View {
                 } label: {
                     SettingsHubRow(
                         icon: "pawprint.fill",
-                        iconColor: .ollieAccent,
+                        iconColor: .otisAccent,
                         title: profileStore.profile?.name ?? Strings.Settings.dogProfile,
                         subtitle: Strings.Settings.dogProfileSubtitle
                     )

@@ -1,4 +1,4 @@
-appId: com.jaapstronks.Ollie-app
+appId: com.jaapstronks.Otis-app
 ---
 # Check current state
 - takeScreenshot: testing-screenshots/current-state

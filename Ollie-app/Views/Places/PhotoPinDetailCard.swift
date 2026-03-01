@@ -1,12 +1,12 @@
 //
 //  PhotoPinDetailCard.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Rich detail card for photo pins on the map, showing context and metadata
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Rich detail card showing photo context when tapping a map pin
 struct PhotoPinDetailCard: View {
@@ -145,7 +145,7 @@ struct PhotoPinDetailCard: View {
                                 .frame(maxWidth: .infinity)
                         }
                         .buttonStyle(.bordered)
-                        .tint(.ollieAccent)
+                        .tint(.otisAccent)
                     }
                 }
                 .padding()

@@ -1,12 +1,12 @@
 //
 //  MedicationSettingsView.swift
-//  Ollie-app
+//  Otis-app
 //
 //  List of medications with add/edit/delete
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Settings view for managing medications
 struct MedicationSettingsView: View {
@@ -155,7 +155,7 @@ private struct MedicationRow: View {
                 // Icon
                 Image(systemName: medication.icon)
                     .font(.title2)
-                    .foregroundStyle(medication.isActive ? Color.ollieAccent : .secondary)
+                    .foregroundStyle(medication.isActive ? Color.otisAccent : .secondary)
                     .frame(width: 32)
 
                 // Name and schedule
@@ -182,12 +182,12 @@ private struct MedicationRow: View {
                 // Active/Paused indicator
                 Text(medication.isActive ? Strings.Medications.active : Strings.Medications.paused)
                     .font(.caption)
-                    .foregroundStyle(medication.isActive ? Color.ollieSuccess : .secondary)
+                    .foregroundStyle(medication.isActive ? Color.otisSuccess : .secondary)
                     .padding(.horizontal, 8)
                     .padding(.vertical, 4)
                     .background(
                         Capsule()
-                            .fill(medication.isActive ? Color.ollieSuccess.opacity(0.15) : Color.secondary.opacity(0.1))
+                            .fill(medication.isActive ? Color.otisSuccess.opacity(0.15) : Color.secondary.opacity(0.1))
                     )
 
                 Image(systemName: "chevron.right")

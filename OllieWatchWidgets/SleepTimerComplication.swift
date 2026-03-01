@@ -1,6 +1,6 @@
 //
 //  SleepTimerComplication.swift
-//  OllieWatchWidgets
+//  OtisWatchWidgets
 //
 //  Watch complication showing sleep/awake timer with state indicator
 
@@ -332,7 +332,7 @@ struct SleepTimerComplication: Widget {
         mealsExpectedToday: 3,
         lastWalkTime: nil,
         nextScheduledWalkTime: nil,
-        puppyName: "Ollie",
+        puppyName: "Max",
         lastUpdated: Date()
     ))
     // Awake state
@@ -352,7 +352,7 @@ struct SleepTimerComplication: Widget {
         mealsExpectedToday: 3,
         lastWalkTime: nil,
         nextScheduledWalkTime: nil,
-        puppyName: "Ollie",
+        puppyName: "Max",
         lastUpdated: Date()
     ))
 }
@@ -377,7 +377,7 @@ struct SleepTimerComplication: Widget {
         mealsExpectedToday: 3,
         lastWalkTime: nil,
         nextScheduledWalkTime: nil,
-        puppyName: "Ollie",
+        puppyName: "Max",
         lastUpdated: Date()
     ))
 }

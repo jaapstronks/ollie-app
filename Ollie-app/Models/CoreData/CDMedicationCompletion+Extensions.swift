@@ -1,12 +1,12 @@
 //
 //  CDMedicationCompletion+Extensions.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Extensions for converting between MedicationCompletion and CDMedicationCompletion
 //
 
 import CoreData
-import OllieShared
+import OtisShared
 
 extension CDMedicationCompletion {
 

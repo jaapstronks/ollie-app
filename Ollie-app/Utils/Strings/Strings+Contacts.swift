@@ -1,6 +1,6 @@
 //
 //  Strings+Contacts.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Contact storage strings
 

@@ -1,11 +1,11 @@
 //
 //  PatternAnalysisCard.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Card showing trigger pattern success rates
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Card displaying pattern analysis with trigger success rates
 struct PatternAnalysisCard: View {
@@ -95,13 +95,13 @@ struct TriggerRow: View {
     private var successColor: Color {
         let rate = trigger.successRate
         if rate >= 80 {
-            return .ollieSuccess
+            return .otisSuccess
         } else if rate >= 60 {
-            return .ollieAccent
+            return .otisAccent
         } else if rate >= 40 {
-            return .ollieWarning
+            return .otisWarning
         } else {
-            return .ollieDanger
+            return .otisDanger
         }
     }
 }
@@ -156,13 +156,13 @@ struct CompactTriggerBadge: View {
     private var successColor: Color {
         let rate = trigger.successRate
         if rate >= 80 {
-            return .ollieSuccess
+            return .otisSuccess
         } else if rate >= 60 {
-            return .ollieAccent
+            return .otisAccent
         } else if rate >= 40 {
-            return .ollieWarning
+            return .otisWarning
         } else {
-            return .ollieDanger
+            return .otisDanger
         }
     }
 }
@@ -174,10 +174,10 @@ struct CompactTriggerBadge: View {
         PatternAnalysisCard(
             analysis: PatternAnalysis(
                 triggers: [
-                    PatternTrigger(id: "sleep", name: Strings.Patterns.afterSleep, iconName: "moon.zzz.fill", iconColor: .ollieSleep, outdoorCount: 8, indoorCount: 2),
-                    PatternTrigger(id: "meal", name: Strings.Patterns.afterEating, iconName: "fork.knife", iconColor: .ollieAccent, outdoorCount: 5, indoorCount: 1),
-                    PatternTrigger(id: "walk", name: Strings.Patterns.duringWalk, iconName: "figure.walk", iconColor: .ollieAccent, outdoorCount: 12, indoorCount: 0),
-                    PatternTrigger(id: "water", name: Strings.Patterns.afterDrinking, iconName: "drop.fill", iconColor: .ollieInfo, outdoorCount: 3, indoorCount: 2)
+                    PatternTrigger(id: "sleep", name: Strings.Patterns.afterSleep, iconName: "moon.zzz.fill", iconColor: .otisSleep, outdoorCount: 8, indoorCount: 2),
+                    PatternTrigger(id: "meal", name: Strings.Patterns.afterEating, iconName: "fork.knife", iconColor: .otisAccent, outdoorCount: 5, indoorCount: 1),
+                    PatternTrigger(id: "walk", name: Strings.Patterns.duringWalk, iconName: "figure.walk", iconColor: .otisAccent, outdoorCount: 12, indoorCount: 0),
+                    PatternTrigger(id: "water", name: Strings.Patterns.afterDrinking, iconName: "drop.fill", iconColor: .otisInfo, outdoorCount: 3, indoorCount: 2)
                 ],
                 periodDays: 7
             )
@@ -202,9 +202,9 @@ struct CompactTriggerBadge: View {
         PatternAnalysisCompact(
             analysis: PatternAnalysis(
                 triggers: [
-                    PatternTrigger(id: "sleep", name: Strings.Patterns.afterSleep, iconName: "moon.zzz.fill", iconColor: .ollieSleep, outdoorCount: 8, indoorCount: 2),
-                    PatternTrigger(id: "meal", name: Strings.Patterns.afterEating, iconName: "fork.knife", iconColor: .ollieAccent, outdoorCount: 5, indoorCount: 1),
-                    PatternTrigger(id: "walk", name: Strings.Patterns.duringWalk, iconName: "figure.walk", iconColor: .ollieAccent, outdoorCount: 12, indoorCount: 0)
+                    PatternTrigger(id: "sleep", name: Strings.Patterns.afterSleep, iconName: "moon.zzz.fill", iconColor: .otisSleep, outdoorCount: 8, indoorCount: 2),
+                    PatternTrigger(id: "meal", name: Strings.Patterns.afterEating, iconName: "fork.knife", iconColor: .otisAccent, outdoorCount: 5, indoorCount: 1),
+                    PatternTrigger(id: "walk", name: Strings.Patterns.duringWalk, iconName: "figure.walk", iconColor: .otisAccent, outdoorCount: 12, indoorCount: 0)
                 ],
                 periodDays: 7
             )

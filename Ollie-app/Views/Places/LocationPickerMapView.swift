@@ -1,6 +1,6 @@
 //
 //  LocationPickerMapView.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Map-based location picker for selecting contact locations
 //
@@ -104,7 +104,7 @@ struct LocationPickerMapView: View {
             if let coordinate = pinCoordinate {
                 HStack {
                     Image(systemName: "mappin.circle.fill")
-                        .foregroundStyle(Color.ollieAccent)
+                        .foregroundStyle(Color.otisAccent)
 
                     VStack(alignment: .leading, spacing: 2) {
                         Text(Strings.Places.selectedLocation)
@@ -230,11 +230,11 @@ struct LocationPin: View {
         VStack(spacing: 0) {
             Image(systemName: "mappin.circle.fill")
                 .font(.system(size: 36))
-                .foregroundStyle(Color.ollieAccent)
+                .foregroundStyle(Color.otisAccent)
 
             Image(systemName: "arrowtriangle.down.fill")
                 .font(.system(size: 12))
-                .foregroundStyle(Color.ollieAccent)
+                .foregroundStyle(Color.otisAccent)
                 .offset(y: -6)
         }
         .shadow(color: .black.opacity(0.3), radius: 2, x: 0, y: 2)
@@ -260,12 +260,14 @@ struct GeocoderService {
     }
 
     private func geocodeAddress(_ address: String) async throws -> CLLocationCoordinate2D {
-        let geocoder = CLGeocoder()
-        let placemarks = try await geocoder.geocodeAddressString(address)
-        guard let location = placemarks.first?.location else {
+        let searchRequest = MKLocalSearch.Request()
+        searchRequest.naturalLanguageQuery = address
+        let search = MKLocalSearch(request: searchRequest)
+        let response = try await search.start()
+        guard let mapItem = response.mapItems.first else {
             throw NSError(domain: "GeocoderService", code: -1, userInfo: [NSLocalizedDescriptionKey: "No results found"])
         }
-        return location.coordinate
+        return mapItem.location.coordinate
     }
 }
 

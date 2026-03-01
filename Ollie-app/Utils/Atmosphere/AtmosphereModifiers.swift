@@ -1,6 +1,6 @@
 //
 //  AtmosphereModifiers.swift
-//  Ollie-app
+//  Otis-app
 //
 //  View modifiers for applying contextual atmosphere
 

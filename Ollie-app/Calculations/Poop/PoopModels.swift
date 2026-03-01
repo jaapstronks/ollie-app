@@ -1,6 +1,6 @@
 //
 //  PoopModels.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Data models for poop status and pattern tracking
 //

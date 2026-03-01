@@ -1,12 +1,12 @@
 //
 //  OnboardingDateStep.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Birth date and home date steps for onboarding
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Birth date selection step
 struct OnboardingBirthStep: View {
@@ -23,7 +23,7 @@ struct OnboardingBirthStep: View {
             VStack(spacing: 12) {
                 Image(systemName: "gift.fill")
                     .font(.system(size: 56))
-                    .foregroundStyle(Color.ollieAccent)
+                    .foregroundStyle(Color.otisAccent)
                     .scaleEffect(hasAppeared ? 1.0 : 0.8)
                     .opacity(hasAppeared ? 1.0 : 0.0)
 
@@ -44,7 +44,7 @@ struct OnboardingBirthStep: View {
                 displayedComponents: .date
             )
             .datePickerStyle(.graphical)
-            .tint(Color.ollieAccent)
+            .tint(Color.otisAccent)
             .padding(.horizontal, 8)
             .opacity(hasAppeared ? 1.0 : 0.0)
             .accessibilityLabel(Strings.Onboarding.birthDateAccessibility(name: puppyName))
@@ -115,7 +115,7 @@ struct OnboardingHomeStep: View {
             VStack(spacing: 12) {
                 Image(systemName: isExpecting ? "calendar.badge.clock" : "house.fill")
                     .font(.system(size: 56))
-                    .foregroundStyle(Color.ollieAccent)
+                    .foregroundStyle(Color.otisAccent)
                     .scaleEffect(hasAppeared ? 1.0 : 0.8)
                     .opacity(hasAppeared ? 1.0 : 0.0)
 
@@ -136,7 +136,7 @@ struct OnboardingHomeStep: View {
                 displayedComponents: .date
             )
             .datePickerStyle(.graphical)
-            .tint(Color.ollieAccent)
+            .tint(Color.otisAccent)
             .padding(.horizontal, 8)
             .opacity(hasAppeared ? 1.0 : 0.0)
             .accessibilityLabel(accessibilityLabel)

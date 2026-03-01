@@ -1,13 +1,13 @@
 //
 //  PlacesMapViewModel.swift
-//  Ollie-app
+//  Otis-app
 //
 //  ViewModel for the expanded places map with filter state
 //
 
 import SwiftUI
 import MapKit
-import OllieShared
+import OtisShared
 import Combine
 
 /// Unified marker type for the places map

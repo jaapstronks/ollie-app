@@ -1,12 +1,12 @@
 //
 //  PoopUrgencyCalculator.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Determines poop urgency level based on patterns and current state
 //
 
 import Foundation
-import OllieShared
+import OtisShared
 
 /// Determines poop urgency level and generates appropriate messages
 struct PoopUrgencyCalculator {

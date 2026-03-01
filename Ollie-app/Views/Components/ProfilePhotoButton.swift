@@ -1,11 +1,11 @@
 //
 //  ProfilePhotoButton.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Toolbar button showing profile photo (replaces gear icon)
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Toolbar button displaying the dog's profile photo or a paw placeholder
 struct ProfilePhotoButton: View {
@@ -31,7 +31,7 @@ struct ProfilePhotoButton: View {
                     Circle()
                         .fill(
                             LinearGradient(
-                                colors: [Color.ollieAccent, Color.ollieAccent.opacity(0.8)],
+                                colors: [Color.otisAccent, Color.otisAccent.opacity(0.8)],
                                 startPoint: .topLeading,
                                 endPoint: .bottomTrailing
                             )

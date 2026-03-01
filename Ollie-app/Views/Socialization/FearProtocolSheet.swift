@@ -1,11 +1,11 @@
 //
 //  FearProtocolSheet.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Tips sheet shown when puppy has a fearful reaction
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Sheet showing tips for handling fearful reactions
 struct FearProtocolSheet: View {
@@ -30,7 +30,7 @@ struct FearProtocolSheet: View {
                             .font(.headline)
                             .frame(maxWidth: .infinity)
                             .padding()
-                            .background(Color.ollieAccent)
+                            .background(Color.otisAccent)
                             .foregroundStyle(.white)
                             .clipShape(RoundedRectangle(cornerRadius: 12))
                     }
@@ -61,12 +61,12 @@ struct FearProtocolSheet: View {
             // Warning icon
             ZStack {
                 Circle()
-                    .fill(Color.ollieWarning.opacity(0.2))
+                    .fill(Color.otisWarning.opacity(0.2))
                     .frame(width: 80, height: 80)
 
                 Image(systemName: "heart.fill")
                     .font(.system(size: 36))
-                    .foregroundStyle(Color.ollieWarning)
+                    .foregroundStyle(Color.otisWarning)
             }
 
             Text("It's okay — this is a learning opportunity!")
@@ -122,7 +122,7 @@ struct FearProtocolSheet: View {
         HStack(alignment: .top, spacing: 12) {
             Image(systemName: icon)
                 .font(.system(size: 20))
-                .foregroundStyle(Color.ollieAccent)
+                .foregroundStyle(Color.otisAccent)
                 .frame(width: 32)
 
             VStack(alignment: .leading, spacing: 4) {

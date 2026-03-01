@@ -1,6 +1,6 @@
 # Test new features: Profile Photo, Documents, Contacts
 # Tests the recently added functionalities
-appId: nl.jaapstronks.Ollie
+appId: nl.jaapstronks.Otis
 ---
 - launchApp
 - waitForAnimationToEnd

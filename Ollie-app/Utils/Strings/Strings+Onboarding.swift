@@ -1,6 +1,6 @@
 //
 //  Strings+Onboarding.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Onboarding and size category strings
 

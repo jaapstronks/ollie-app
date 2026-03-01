@@ -1,6 +1,6 @@
 //
 //  FoodRecall.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Pet food recall data model
 

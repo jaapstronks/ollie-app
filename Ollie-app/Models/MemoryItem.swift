@@ -1,11 +1,11 @@
 //
 //  MemoryItem.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Model for "On This Day" memories feature
 
 import Foundation
-import OllieShared
+import OtisShared
 
 /// Represents a memory from a past date
 struct MemoryItem: Identifiable {

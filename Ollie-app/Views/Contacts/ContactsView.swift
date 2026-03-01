@@ -1,11 +1,11 @@
 //
 //  ContactsView.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Main view for managing dog contacts
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Main view for listing and managing contacts
 struct ContactsView: View {

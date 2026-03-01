@@ -1,11 +1,11 @@
 //
 //  CalendarDayDetailView.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Detail view for selected day showing appointments and milestones
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Detail view showing appointments and milestones for the selected day
 struct CalendarDayDetailView: View {
@@ -78,7 +78,7 @@ struct CalendarDayDetailView: View {
             HStack {
                 Image(systemName: "star.fill")
                     .font(.caption)
-                    .foregroundStyle(Color.ollieAccent)
+                    .foregroundStyle(Color.otisAccent)
 
                 Text(Strings.Calendar.milestonesDueThisWeek)
                     .font(.caption)
@@ -173,21 +173,21 @@ private struct DayDetailAppointmentRow: View {
     private var typeColor: Color {
         switch appointment.appointmentType.color {
         case "vetBlue":
-            return .ollieInfo
+            return .otisInfo
         case "emergencyRed":
-            return .ollieDanger
+            return .otisDanger
         case "groomingPurple":
-            return .olliePurple
+            return .otisPurple
         case "trainingGreen":
-            return .ollieSuccess
+            return .otisSuccess
         case "careOrange":
-            return .ollieAccent
+            return .otisAccent
         case "walkTeal":
-            return .ollieInfo
+            return .otisInfo
         case "playdatePink":
-            return .ollieRose
+            return .otisRose
         default:
-            return .ollieMuted
+            return .otisMuted
         }
     }
 }

@@ -1,11 +1,11 @@
 //
 //  MealScheduleEditor.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Editor for configuring meal schedule with add/delete/reorder support
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Editor view for meal schedule configuration
 struct MealScheduleEditor: View {

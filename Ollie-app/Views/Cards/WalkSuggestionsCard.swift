@@ -1,11 +1,11 @@
 //
 //  WalkSuggestionsCard.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Card showing suggested socialization items to watch for during walks
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Card displaying walkable socialization items to watch for
 /// Shows 1 item by default, expandable to show all 3
@@ -44,7 +44,7 @@ struct WalkSuggestionsCard: View {
                 // Header with "See all" link
                 HStack {
                     Image(systemName: "eye.fill")
-                        .foregroundStyle(Color.ollieAccent)
+                        .foregroundStyle(Color.otisAccent)
                     Text(Strings.Socialization.walkSuggestionsTitle)
                         .font(.subheadline)
                         .fontWeight(.semibold)
@@ -149,7 +149,7 @@ struct WalkSuggestionsCard: View {
                             Text(Strings.Socialization.needsPractice)
                         }
                         .font(.caption2)
-                        .foregroundStyle(Color.ollieWarning)
+                        .foregroundStyle(Color.otisWarning)
                     } else {
                         Text("\(positiveCount)/\(item.targetExposures)")
                             .font(.caption2)
@@ -162,7 +162,7 @@ struct WalkSuggestionsCard: View {
                 // Tap indicator
                 Image(systemName: "plus.circle.fill")
                     .font(.title3)
-                    .foregroundStyle(Color.ollieAccent)
+                    .foregroundStyle(Color.otisAccent)
             }
             .padding(.horizontal, 12)
             .padding(.vertical, 10)

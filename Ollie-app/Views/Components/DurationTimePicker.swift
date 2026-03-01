@@ -1,6 +1,6 @@
 //
 //  DurationTimePicker.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Reusable component for selecting start time, end time, and duration
 //  with linked updates (changing one updates the others)

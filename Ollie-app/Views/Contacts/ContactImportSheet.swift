@@ -1,12 +1,12 @@
 //
 //  ContactImportSheet.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Sheet for importing a contact from the iOS Contacts app
 
 import SwiftUI
 import ContactsUI
-import OllieShared
+import OtisShared
 
 /// Data extracted from a CNContact for import
 struct ImportedContactData {

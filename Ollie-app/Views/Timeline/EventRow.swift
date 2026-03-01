@@ -1,10 +1,10 @@
 //
 //  EventRow.swift
-//  Ollie-app
+//  Otis-app
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 import UIKit
 
 /// Single event row in the timeline
@@ -71,7 +71,7 @@ struct EventRow: View {
                 if event.type == .uitlaten, let spotName = event.spotName {
                     Label(spotName, systemImage: "mappin.circle.fill")
                         .font(.caption)
-                        .foregroundStyle(Color.ollieAccent)
+                        .foregroundStyle(Color.otisAccent)
                 }
             }
 

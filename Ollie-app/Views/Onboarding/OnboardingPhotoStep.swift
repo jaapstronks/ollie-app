@@ -1,6 +1,6 @@
 //
 //  OnboardingPhotoStep.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Optional photo selection step for onboarding
 //
@@ -34,8 +34,8 @@ struct OnboardingPhotoStep: View {
                         .scaledToFill()
                         .frame(width: 160, height: 160)
                         .clipShape(Circle())
-                        .overlay(Circle().stroke(Color.ollieAccent, lineWidth: 3))
-                        .shadow(color: Color.ollieAccent.opacity(0.2), radius: 12, x: 0, y: 4)
+                        .overlay(Circle().stroke(Color.otisAccent, lineWidth: 3))
+                        .shadow(color: Color.otisAccent.opacity(0.2), radius: 12, x: 0, y: 4)
                 } else {
                     Circle()
                         .fill(Color(.secondarySystemBackground))
@@ -43,7 +43,7 @@ struct OnboardingPhotoStep: View {
                         .overlay {
                             Image(systemName: "camera.fill")
                                 .font(.system(size: 48))
-                                .foregroundStyle(Color.ollieAccent)
+                                .foregroundStyle(Color.otisAccent)
                         }
                 }
             }
@@ -123,7 +123,7 @@ struct OnboardingPhotoStep: View {
                         .padding(.vertical, 16)
                         .background(
                             RoundedRectangle(cornerRadius: 14)
-                                .fill(Color.ollieAccent)
+                                .fill(Color.otisAccent)
                         )
                         .foregroundStyle(.white)
                 }
@@ -199,7 +199,7 @@ private struct PhotoOptionButton: View {
             )
         }
         .buttonStyle(.plain)
-        .foregroundStyle(Color.ollieAccent)
+        .foregroundStyle(Color.otisAccent)
     }
 }
 

@@ -1,5 +1,5 @@
 # Complete user journey test - simulates real user interactions
-appId: jaapstronks.Ollie-app
+appId: jaapstronks.Otis-app
 ---
 - launchApp
 - waitForAnimationToEnd

@@ -1,11 +1,11 @@
 //
 //  PatternCalculations.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Pattern analysis calculations for trigger success rates
 
 import Foundation
-import OllieShared
+import OtisShared
 import SwiftUI
 
 /// A trigger pattern that may lead to potty events
@@ -107,7 +107,7 @@ struct PatternCalculations {
             id: "sleep",
             name: Strings.Patterns.afterSleep,
             iconName: "moon.zzz.fill",
-            iconColor: .ollieSleep,
+            iconColor: .otisSleep,
             outdoorCount: outdoorCount,
             indoorCount: indoorCount
         )
@@ -134,7 +134,7 @@ struct PatternCalculations {
             id: "meal",
             name: Strings.Patterns.afterEating,
             iconName: "fork.knife",
-            iconColor: .ollieAccent,
+            iconColor: .otisAccent,
             outdoorCount: outdoorCount,
             indoorCount: indoorCount
         )
@@ -163,7 +163,7 @@ struct PatternCalculations {
             id: "walk",
             name: Strings.Patterns.duringWalk,
             iconName: "figure.walk",
-            iconColor: .ollieAccent,
+            iconColor: .otisAccent,
             outdoorCount: outdoorCount,
             indoorCount: indoorCount
         )
@@ -191,7 +191,7 @@ struct PatternCalculations {
             id: "water",
             name: Strings.Patterns.afterDrinking,
             iconName: "drop.fill",
-            iconColor: .ollieInfo,
+            iconColor: .otisInfo,
             outdoorCount: outdoorCount,
             indoorCount: indoorCount
         )
@@ -219,7 +219,7 @@ struct PatternCalculations {
             id: "play",
             name: Strings.Patterns.afterPlaying,
             iconName: "tennisball.fill",
-            iconColor: .ollieAccent,
+            iconColor: .otisAccent,
             outdoorCount: outdoorCount,
             indoorCount: indoorCount
         )

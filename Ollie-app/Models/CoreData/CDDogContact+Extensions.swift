@@ -1,11 +1,11 @@
 //
 //  CDDogContact+Extensions.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Extensions for converting between DogContact and CDDogContact
 
 import CoreData
-import OllieShared
+import OtisShared
 
 // MARK: - CDEntityConvertible Conformance
 

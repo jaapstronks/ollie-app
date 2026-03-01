@@ -1,6 +1,6 @@
 //
 //  GlassComponents.swift
-//  Ollie-app
+//  Otis-app
 //
 //  iOS 26 "Liquid Glass" design system - Reusable components
 //

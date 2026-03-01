@@ -1,12 +1,12 @@
 //
 //  Tier3CelebrationView.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Tier 3 celebration: Full-screen with multi-burst confetti sequence
 //  Used for major achievements like potty trained, all vaccinations complete
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Tier 3 full-screen celebration for major achievements
 struct Tier3CelebrationView: View {
@@ -283,12 +283,12 @@ struct Tier3CelebrationView: View {
 
     private var categoryColor: Color {
         switch achievement.category {
-        case .pottyStreak: return .ollieAccent
-        case .training: return .olliePurple
-        case .socialization: return .ollieAccent
-        case .health: return .ollieSuccess
-        case .lifestyle: return .olliePurple
-        case .timeBased: return .ollieRose
+        case .pottyStreak: return .otisAccent
+        case .training: return .otisPurple
+        case .socialization: return .otisAccent
+        case .health: return .otisSuccess
+        case .lifestyle: return .otisPurple
+        case .timeBased: return .otisRose
         }
     }
 }
@@ -330,7 +330,7 @@ private struct ShimmeringOverlay: View {
             labelKey: "achievement.pottyStreak.14",
             value: 14
         ),
-        puppyName: "Ollie",
+        puppyName: "Max",
         onTakePhoto: { print("Take photo") },
         onAddFromLibrary: { print("Add from library") },
         onSkip: { print("Skip") }
@@ -340,7 +340,7 @@ private struct ShimmeringOverlay: View {
 #Preview("Tier 3 - First Birthday") {
     Tier3CelebrationView(
         achievement: Achievement.monthlyBirthday(months: 12),
-        puppyName: "Ollie",
+        puppyName: "Max",
         onTakePhoto: { print("Take photo") },
         onAddFromLibrary: { print("Add from library") },
         onSkip: { print("Skip") }

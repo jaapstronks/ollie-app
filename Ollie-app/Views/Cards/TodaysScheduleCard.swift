@@ -1,11 +1,11 @@
 //
 //  TodaysScheduleCard.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Shows today's appointments on the Today view
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Card showing today's scheduled appointments
 struct TodaysScheduleCard: View {
@@ -50,7 +50,7 @@ struct TodaysScheduleCard: View {
         } label: {
             HStack {
                 Image(systemName: "calendar")
-                    .foregroundStyle(Color.ollieAccent)
+                    .foregroundStyle(Color.otisAccent)
 
                 Text(Strings.Appointments.todaysSchedule)
                     .font(.subheadline)
@@ -85,9 +85,9 @@ struct TodaysScheduleCard: View {
             // Type icon
             Image(systemName: appointment.appointmentType.icon)
                 .font(.system(size: 12))
-                .foregroundStyle(Color.ollieAccent)
+                .foregroundStyle(Color.otisAccent)
                 .frame(width: 28, height: 28)
-                .background(Color.ollieAccent.opacity(colorScheme == .dark ? 0.2 : 0.1))
+                .background(Color.otisAccent.opacity(colorScheme == .dark ? 0.2 : 0.1))
                 .clipShape(Circle())
 
             // Title and time
@@ -134,7 +134,7 @@ struct TodaysScheduleCard: View {
             // Completed indicator
             if appointment.isCompleted {
                 Image(systemName: "checkmark.circle.fill")
-                    .foregroundStyle(Color.ollieSuccess)
+                    .foregroundStyle(Color.otisSuccess)
                     .font(.system(size: 16))
             }
         }
@@ -152,7 +152,7 @@ struct TodaysScheduleCard: View {
                 Spacer()
                 Text(Strings.Appointments.moreAppointments(count: todaysAppointments.count - 3))
                     .font(.caption)
-                    .foregroundStyle(Color.ollieAccent)
+                    .foregroundStyle(Color.otisAccent)
                 Spacer()
             }
             .padding(.vertical, 4)

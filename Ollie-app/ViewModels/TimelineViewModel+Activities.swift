@@ -1,13 +1,13 @@
 //
 //  TimelineViewModel+Activities.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Extension containing activity tracking methods (walks and naps)
 //  Extracted from TimelineViewModel to improve code organization
 //
 
 import Foundation
-import OllieShared
+import OtisShared
 import SwiftUI
 
 // MARK: - Activity State Helpers

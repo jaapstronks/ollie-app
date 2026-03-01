@@ -1,11 +1,11 @@
 //
 //  EndSleepSheet.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Sheet for ending an ongoing sleep session with wake-up time adjustment
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Sheet for logging a wake-up event to end an ongoing sleep session
 struct EndSleepSheet: View {
@@ -69,7 +69,7 @@ struct EndSleepSheet: View {
             }
             .padding()
             .frame(maxWidth: .infinity)
-            .background(Color.ollieSleep.opacity(0.1))
+            .background(Color.otisSleep.opacity(0.1))
             .cornerRadius(LayoutConstants.cornerRadiusM)
 
             // Wake-up time section

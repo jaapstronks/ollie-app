@@ -1,6 +1,6 @@
 //
 //  ToastView.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Toast notification UI component.
 
@@ -72,7 +72,7 @@ extension View {
         Spacer()
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity)
-    .background(Color.ollieBackgroundLight)
+    .background(Color.otisBackgroundLight)
     .overlay(alignment: .top) {
         ToastView(
             toast: Toast(type: .success, message: "Logged!"),
@@ -87,7 +87,7 @@ extension View {
         Spacer()
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity)
-    .background(Color.ollieBackgroundLight)
+    .background(Color.otisBackgroundLight)
     .overlay(alignment: .top) {
         ToastView(
             toast: Toast(type: .warning, message: "Go outside now!"),
@@ -102,7 +102,7 @@ extension View {
         Spacer()
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity)
-    .background(Color.ollieBackgroundLight)
+    .background(Color.otisBackgroundLight)
     .overlay(alignment: .top) {
         ToastView(
             toast: Toast(type: .error, message: "Could not save. Try again."),

@@ -1,13 +1,14 @@
 //
 //  MemoryBookService.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Generates a memory book PDF for a dog who has passed
 //
 
+import Combine
 import CoreData
 import Foundation
-import OllieShared
+import OtisShared
 import os
 import PDFKit
 import UIKit
@@ -26,7 +27,7 @@ class MemoryBookService: ObservableObject {
     // MARK: - Dependencies
 
     private let persistenceController: PersistenceController
-    private let logger = Logger.ollie(category: "MemoryBookService")
+    private let logger = Logger.otis(category: "MemoryBookService")
     private let fileManager = FileManager.default
 
     // MARK: - Constants
@@ -157,8 +158,8 @@ class MemoryBookService: ObservableObject {
 
     private func generatePDF(profile: PuppyProfile, data: MemoryBookData) throws -> URL {
         let pdfMetaData = [
-            kCGPDFContextCreator: "Ollie - Puppy Logbook",
-            kCGPDFContextAuthor: "Ollie App",
+            kCGPDFContextCreator: "Otis - Puppy Logbook",
+            kCGPDFContextAuthor: "Otis App",
             kCGPDFContextTitle: "In Loving Memory of \(profile.name)"
         ]
 
@@ -449,8 +450,6 @@ class MemoryBookService: ObservableObject {
 
                 if let photoPath = event.photo,
                    let image = loadEventPhoto(relativePath: photoPath) {
-                    let photoRect = CGRect(x: x, y: y, width: photoWidth, height: photoHeight)
-
                     // Draw photo
                     let aspectRatio = image.size.width / image.size.height
                     var drawRect: CGRect
@@ -481,7 +480,7 @@ class MemoryBookService: ObservableObject {
         context.beginPage()
 
         let contentRect = CGRect(x: margin + 30, y: margin, width: pageWidth - margin * 2 - 60, height: pageHeight - margin * 2)
-        var yOffset: CGFloat = contentRect.minY + 150
+        let yOffset: CGFloat = contentRect.minY + 150
 
         // Final message
         let paragraphStyle = NSMutableParagraphStyle()

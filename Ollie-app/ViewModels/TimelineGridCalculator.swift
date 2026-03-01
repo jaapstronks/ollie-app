@@ -1,13 +1,14 @@
 //
 //  TimelineGridCalculator.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Helper for calculating Y positions and heights in the 24-hour timeline grid
 
-import Foundation
+import SwiftUI
 
 /// Calculator for positioning items in a 24-hour vertical timeline grid
-/// Timeline is inverted: future at top (00:00), past at bottom (24:00)
+/// Timeline is INVERTED: recent times at top (small y), midnight at bottom (large y)
+/// This allows the most recent events to appear first when scrolling
 struct TimelineGridCalculator {
 
     // MARK: - Configuration
@@ -39,7 +40,9 @@ struct TimelineGridCalculator {
 
     // MARK: - Position Calculations
 
-    /// Y position for a given time (inverted: 00:00 at top, 24:00 at bottom)
+    /// Y position for a given time (INVERTED: later times have smaller y, earlier times have larger y)
+    /// - 23:59 → y ≈ 0 (top of grid)
+    /// - 00:00 → y = 24 * hourHeight (bottom of grid)
     /// - Parameter time: The time to calculate position for
     /// - Returns: Y offset from top of grid
     func yPosition(for time: Date) -> CGFloat {
@@ -48,24 +51,26 @@ struct TimelineGridCalculator {
         let hour = CGFloat(components.hour ?? 0)
         let minute = CGFloat(components.minute ?? 0)
 
-        // Position from top: hours + fraction of hour
-        return (hour + minute / 60.0) * hourHeight
+        // INVERTED: subtract from 24 so later times are at top
+        let timeInHours = hour + minute / 60.0
+        return (24.0 - timeInHours) * hourHeight
     }
 
     /// Height for a duration block between two times
     /// - Parameters:
     ///   - start: Start time
     ///   - end: End time
-    /// - Returns: Height in points
+    /// - Returns: Height in points (always positive)
     func blockHeight(from start: Date, to end: Date) -> CGFloat {
-        let duration = end.timeIntervalSince(start)
+        let duration = abs(end.timeIntervalSince(start))
         let hours = duration / 3600.0
         return CGFloat(hours) * hourHeight
     }
 
     /// Y position for a specific hour (0-23)
+    /// INVERTED: hour 23 is near top, hour 0 is at bottom
     func yPosition(forHour hour: Int) -> CGFloat {
-        CGFloat(hour) * hourHeight
+        CGFloat(24 - hour) * hourHeight
     }
 
     /// Whether a time is within the current day

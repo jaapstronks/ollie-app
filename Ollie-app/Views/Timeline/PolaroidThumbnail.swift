@@ -1,6 +1,6 @@
 //
 //  PolaroidThumbnail.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Polaroid-style photo thumbnail for timeline items
 

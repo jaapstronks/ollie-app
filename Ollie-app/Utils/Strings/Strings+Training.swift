@@ -1,6 +1,6 @@
 //
 //  Strings+Training.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Training module strings including skill content
 

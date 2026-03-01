@@ -86,7 +86,7 @@ From research on [PetDesk](https://petdesk.com/), [DaySmart Vet](https://www.day
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
-│                           Ollie App                                  │
+│                           Otis App                                  │
 │                                                                      │
 │  ┌──────────────────────────────────────────────────────────────┐   │
 │  │                    CDDogAppointment                          │   │
@@ -128,7 +128,7 @@ From research on [PetDesk](https://petdesk.com/), [DaySmart Vet](https://www.day
 | **Multi-device sync** | Core Data + CloudKit (already implemented) |
 | **Family sharing** | CloudKit CKShare (already implemented via existing sharing) |
 | **Appointments in Calendar app** | EventKit creates local calendar events |
-| **Calendar sharing with family** | Users share via native iCloud Calendar sharing OR all family members add to calendar from within Ollie |
+| **Calendar sharing with family** | Users share via native iCloud Calendar sharing OR all family members add to calendar from within Otis |
 | **Reminders** | EventKit alarms for calendar events; local notifications for in-app |
 
 **No custom server required!**
@@ -192,7 +192,7 @@ Add new relationship:
               destinationEntity="CDDogAppointment" inverseName="profile" inverseEntity="CDDogAppointment"/>
 ```
 
-### OllieShared Model: `AppointmentType`
+### OtisShared Model: `AppointmentType`
 
 ```swift
 // AppointmentType.swift
@@ -270,7 +270,7 @@ public enum AppointmentType: String, CaseIterable, Codable, Identifiable, Sendab
 }
 ```
 
-### OllieShared Model: `DogAppointment`
+### OtisShared Model: `DogAppointment`
 
 ```swift
 // DogAppointment.swift
@@ -424,8 +424,8 @@ public struct RecurrenceRule: Codable, Hashable, Sendable {
 
 **Dog contacts are now implemented!** Key patterns from the implementation:
 
-- `ContactType` enum in OllieShared: `vet`, `emergencyVet`, `sitter`, `daycare`, `groomer`, `trainer`, `walker`, `petStore`, `breeder`, `other`
-- `DogContact` struct in OllieShared with: name, phone, email, address, notes
+- `ContactType` enum in OtisShared: `vet`, `emergencyVet`, `sitter`, `daycare`, `groomer`, `trainer`, `walker`, `petStore`, `breeder`, `other`
+- `DogContact` struct in OtisShared with: name, phone, email, address, notes
 - `CDDogContact` entity (no profile relationship - household level)
 - `ContactStore` service with CRUD operations
 
@@ -517,7 +517,7 @@ if appointmentType.isHealthRelated {
 
 ## Premium Feature Analysis
 
-### What Should Be Premium (Ollie+)?
+### What Should Be Premium (Otis+)?
 
 | Feature | Free | Premium | Rationale |
 |---------|------|---------|-----------|
@@ -542,7 +542,7 @@ if appointmentType.isHealthRelated {
 │  so your whole family stays in sync.            │
 │                                                 │
 │  ┌─────────────────────────────────────────┐    │
-│  │       Unlock with Ollie+                │    │
+│  │       Unlock with Otis+                │    │
 │  └─────────────────────────────────────────┘    │
 │                                                 │
 │  [Maybe Later]                                  │
@@ -556,7 +556,7 @@ if appointmentType.isHealthRelated {
 
 ### Approach: "Opt-in Sync to User's Calendar"
 
-1. **Default:** Appointments live in Ollie, shown in Ollie's schedule view
+1. **Default:** Appointments live in Otis, shown in Otis's schedule view
 2. **Optional:** User can tap "Add to Calendar" to sync individual appointments
 3. **Bulk option:** "Sync all upcoming appointments" (premium)
 
@@ -657,7 +657,7 @@ extension RecurrenceRule {
 
 | Scenario | What Happens |
 |----------|--------------|
-| **User A creates appointment** | Syncs to CloudKit → User B sees it in Ollie app |
+| **User A creates appointment** | Syncs to CloudKit → User B sees it in Otis app |
 | **User A adds to Calendar** | Only User A's calendar has the event |
 | **User B opens same appointment** | Can tap "Add to Calendar" to add to their own calendar |
 | **Both add to Calendar** | Both have independent copies (this is expected iOS behavior) |
@@ -665,7 +665,7 @@ extension RecurrenceRule {
 ### Alternative: Shared iCloud Calendar
 
 Users can create a shared "Dog" calendar in iOS Calendar app, then:
-1. In Ollie, select this shared calendar for syncing
+1. In Otis, select this shared calendar for syncing
 2. All family members subscribed to that calendar see events
 
 **Implementation:**
@@ -809,9 +809,9 @@ Add to TodayView:
 ### Phase 1: Core Data Model
 1. Add `CDDogAppointment` entity to Core Data model
 2. Add relationship to `CDPuppyProfile`
-3. Create `AppointmentType` enum in OllieShared
-4. Create `DogAppointment` struct in OllieShared
-5. Create `RecurrenceRule` struct in OllieShared
+3. Create `AppointmentType` enum in OtisShared
+4. Create `DogAppointment` struct in OtisShared
+5. Create `RecurrenceRule` struct in OtisShared
 
 ### Phase 2: AppointmentStore Service
 1. Create `AppointmentStore.swift` with CRUD operations
@@ -866,29 +866,29 @@ Add to TodayView:
 
 | File | Location | Pattern Reference |
 |------|----------|-------------------|
-| `AppointmentType.swift` | `OllieShared/Sources/OllieShared/Models/` | Like `ContactType.swift` |
-| `DogAppointment.swift` | `OllieShared/Sources/OllieShared/Models/` | Like `DogContact.swift` |
-| `RecurrenceRule.swift` | `OllieShared/Sources/OllieShared/Models/` | New |
-| `CDDogAppointment+Extensions.swift` | `Ollie-app/Models/CoreData/` | Like `CDDogContact+Extensions.swift` |
-| `AppointmentStore.swift` | `Ollie-app/Services/` | Like `DocumentStore.swift` (with ProfileStore) |
-| `AppointmentsView.swift` | `Ollie-app/Views/Appointments/` | Like `ContactsView.swift` |
-| `AddAppointmentSheet.swift` | `Ollie-app/Views/Appointments/` | Like `AddContactSheet.swift` |
-| `EditAppointmentSheet.swift` | `Ollie-app/Views/Appointments/` | Like `EditContactSheet.swift` |
-| `AppointmentDetailView.swift` | `Ollie-app/Views/Appointments/` | Like `ContactDetailView.swift` |
-| `AppointmentRow.swift` | `Ollie-app/Views/Appointments/` | Like `ContactRow.swift` |
-| `RecurrenceEditor.swift` | `Ollie-app/Views/Appointments/` | New |
-| `TodaysScheduleCard.swift` | `Ollie-app/Views/Cards/` | New |
-| `Strings+Appointments.swift` | `Ollie-app/Utils/Strings/` | Like `Strings+Contacts.swift` |
+| `AppointmentType.swift` | `OtisShared/Sources/OtisShared/Models/` | Like `ContactType.swift` |
+| `DogAppointment.swift` | `OtisShared/Sources/OtisShared/Models/` | Like `DogContact.swift` |
+| `RecurrenceRule.swift` | `OtisShared/Sources/OtisShared/Models/` | New |
+| `CDDogAppointment+Extensions.swift` | `Otis-app/Models/CoreData/` | Like `CDDogContact+Extensions.swift` |
+| `AppointmentStore.swift` | `Otis-app/Services/` | Like `DocumentStore.swift` (with ProfileStore) |
+| `AppointmentsView.swift` | `Otis-app/Views/Appointments/` | Like `ContactsView.swift` |
+| `AddAppointmentSheet.swift` | `Otis-app/Views/Appointments/` | Like `AddContactSheet.swift` |
+| `EditAppointmentSheet.swift` | `Otis-app/Views/Appointments/` | Like `EditContactSheet.swift` |
+| `AppointmentDetailView.swift` | `Otis-app/Views/Appointments/` | Like `ContactDetailView.swift` |
+| `AppointmentRow.swift` | `Otis-app/Views/Appointments/` | Like `ContactRow.swift` |
+| `RecurrenceEditor.swift` | `Otis-app/Views/Appointments/` | New |
+| `TodaysScheduleCard.swift` | `Otis-app/Views/Cards/` | New |
+| `Strings+Appointments.swift` | `Otis-app/Utils/Strings/` | Like `Strings+Contacts.swift` |
 
 ### Modified Files
 
 | File | Change |
 |------|--------|
-| `Ollie.xcdatamodeld` | Add `CDDogAppointment` entity + `appointments` relationship on `CDPuppyProfile` |
+| `Otis.xcdatamodeld` | Add `CDDogAppointment` entity + `appointments` relationship on `CDPuppyProfile` |
 | `CalendarService.swift` | Add appointment methods (extend existing milestone methods) |
 | `DogProfileSettingsView.swift` | Add "Appointments" section (after Contacts) |
 | `TodayView.swift` | Add "Today's Schedule" card |
-| `Ollie_appApp.swift` | Add `AppointmentStore` to environment, wire with ProfileStore |
+| `Otis_appApp.swift` | Add `AppointmentStore` to environment, wire with ProfileStore |
 | `Localizable.xcstrings` | Add appointment strings |
 | `Settings.xcstrings` | Add settings-related appointment strings |
 
@@ -968,7 +968,7 @@ public enum Appointments {
 3. **Past appointments:** Show "Mark as attended" vs auto-complete?
    - Recommendation: Don't auto-complete, let user confirm
 
-4. **Notification sound:** Use custom Ollie sound for appointment reminders?
+4. **Notification sound:** Use custom Otis sound for appointment reminders?
    - Recommendation: Use system default for consistency
 
 5. **Conflict detection:** Warn when scheduling overlapping appointments?
@@ -1025,7 +1025,7 @@ This feature enables comprehensive appointment scheduling without requiring a cu
 3. **Local notifications** for reminders (existing infrastructure)
 
 The hybrid approach gives users the best of both worlds:
-- Full appointment data with custom fields lives in Ollie
+- Full appointment data with custom fields lives in Otis
 - Appointments optionally appear in their native Calendar app
 - Family members automatically see appointments via CloudKit
 - Calendar sharing works via standard iCloud Calendar sharing

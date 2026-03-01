@@ -1,10 +1,10 @@
 //
 //  LogEventSheet.swift
-//  Ollie-app
+//  Otis-app
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Sheet for adding details to an event (note, who, exercise, etc.)
 struct LogEventSheet: View {

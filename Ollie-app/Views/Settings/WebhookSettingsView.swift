@@ -1,11 +1,11 @@
 //
 //  WebhookSettingsView.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Settings screen for configuring webhooks
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 struct WebhookSettingsView: View {
     @ObservedObject var profileStore: ProfileStore

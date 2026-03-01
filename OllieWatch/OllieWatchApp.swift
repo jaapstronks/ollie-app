@@ -1,8 +1,8 @@
 //
-//  OllieWatchApp.swift
-//  OllieWatch
+//  OtisWatchApp.swift
+//  OtisWatch
 //
-//  Apple Watch companion app for Ollie puppy logbook
+//  Apple Watch companion app for Otis puppy logbook
 //
 //  IMPORTANT: WCSession must be activated as early as possible in the app lifecycle.
 //  Apple recommends activation in applicationDidFinishLaunching or equivalent.
@@ -10,7 +10,7 @@
 import SwiftUI
 
 @main
-struct OllieWatchApp: App {
+struct OtisWatchApp: App {
     /// WatchDataProvider manages WatchConnectivity session and data sync
     /// Using @StateObject ensures it's created once and persists for app lifetime
     @StateObject private var dataProvider = WatchDataProvider.shared

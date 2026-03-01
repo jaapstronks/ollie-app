@@ -1,5 +1,5 @@
 # Complete test suite - runs all flows in sequence
-appId: jaapstronks.Ollie-app
+appId: jaapstronks.Otis-app
 ---
 # Basic app launch
 - runFlow: launch-app.yaml

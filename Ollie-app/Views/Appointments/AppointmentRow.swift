@@ -1,11 +1,11 @@
 //
 //  AppointmentRow.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Row component for displaying an appointment in a list
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Row view for displaying an appointment in a list
 struct AppointmentRow: View {
@@ -16,9 +16,9 @@ struct AppointmentRow: View {
             // Icon
             Image(systemName: appointment.appointmentType.icon)
                 .font(.system(size: 20))
-                .foregroundColor(.ollieAccent)
+                .foregroundColor(.otisAccent)
                 .frame(width: 40, height: 40)
-                .background(Color.ollieAccent.opacity(0.1))
+                .background(Color.otisAccent.opacity(0.1))
                 .clipShape(Circle())
 
             // Content

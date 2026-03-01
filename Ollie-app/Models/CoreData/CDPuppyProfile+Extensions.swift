@@ -1,12 +1,12 @@
 //
 //  CDPuppyProfile+Extensions.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Extensions for converting between PuppyProfile and CDPuppyProfile
 //
 
 import CoreData
-import OllieShared
+import OtisShared
 
 extension CDPuppyProfile {
 

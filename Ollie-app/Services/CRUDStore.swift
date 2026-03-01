@@ -1,6 +1,6 @@
 //
 //  CRUDStore.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Generic CRUD store base class to reduce boilerplate across stores.
 //  Provides standard add/update/delete operations with Core Data.
@@ -8,7 +8,7 @@
 import Foundation
 import CoreData
 import Combine
-import OllieShared
+import OtisShared
 import os
 
 // MARK: - Storable Model Protocol

@@ -1,11 +1,11 @@
 //
 //  AddEditAppointmentSheet.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Sheet for adding or editing an appointment
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Sheet for adding or editing an appointment
 struct AddEditAppointmentSheet: View {

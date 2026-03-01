@@ -1,5 +1,5 @@
 # Test FAB (Floating Action Button) quick logging
-appId: jaapstronks.Ollie-app
+appId: jaapstronks.Otis-app
 ---
 - launchApp
 - waitForAnimationToEnd

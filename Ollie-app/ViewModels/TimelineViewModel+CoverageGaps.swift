@@ -1,12 +1,12 @@
 //
 //  TimelineViewModel+CoverageGaps.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Coverage gap and catch-up functionality for TimelineViewModel
 //
 
 import Foundation
-import OllieShared
+import OtisShared
 
 extension TimelineViewModel {
     // MARK: - Coverage Gaps
@@ -127,11 +127,21 @@ extension TimelineViewModel {
                 // Log that they fell asleep at the given time
                 logEvent(type: .slapen, time: sinceTime, note: Strings.CatchUp.approximateNote)
             } else {
-                // Log that they woke up at the given time
-                // Try to find an ongoing sleep session to link it to
+                // End the ongoing sleep by updating its duration (single-event model)
                 let recentEvents = getRecentEvents()
-                let sleepSessionId = SleepSession.ongoingSleepSessionId(from: recentEvents)
-                logEvent(type: .ontwaken, time: sinceTime, note: Strings.CatchUp.approximateNote, sleepSessionId: sleepSessionId)
+                if let sleepEvent = recentEvents
+                    .filter({ $0.type == .slapen && $0.durationMin == nil })
+                    .sorted(by: { $0.time > $1.time })
+                    .first {
+                    // Calculate duration and update sleep event
+                    let durationMinutes = Int(sinceTime.timeIntervalSince(sleepEvent.time) / 60)
+                    var updatedSleep = sleepEvent
+                    updatedSleep.durationMin = max(1, durationMinutes)
+                    if updatedSleep.note == nil {
+                        updatedSleep.note = Strings.CatchUp.approximateNote
+                    }
+                    updateEvent(updatedSleep)
+                }
             }
         }
 

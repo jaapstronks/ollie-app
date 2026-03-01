@@ -1,6 +1,6 @@
 //
 //  ProfilePhotoStore.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Manages storage of profile photos in the app's documents directory
 

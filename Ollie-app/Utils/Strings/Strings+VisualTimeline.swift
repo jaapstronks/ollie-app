@@ -1,6 +1,6 @@
 //
 //  Strings+VisualTimeline.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Localization strings for the visual timeline feature
 

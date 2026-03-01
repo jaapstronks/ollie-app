@@ -1,11 +1,11 @@
 //
 //  IntentDataStore.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Lightweight shared data access for App Intents via App Group
 
 import Foundation
-import OllieShared
+import OtisShared
 import WidgetKit
 import os
 
@@ -21,7 +21,7 @@ final class IntentDataStore {
     private let fileManager = FileManager.default
     private let encoder: JSONEncoder
     private let decoder: JSONDecoder
-    private let logger = Logger.ollie(category: "IntentDataStore")
+    private let logger = Logger.otis(category: "IntentDataStore")
 
     private init() {
         encoder = JSONEncoder()

@@ -1,6 +1,6 @@
 //
 //  Strings+Places.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Explore tab strings (spots and photo moments on map)
 
@@ -75,7 +75,7 @@ extension Strings {
             }
         }
 
-        static func olliesWorld(name: String) -> String {
+        static func puppysWorld(name: String) -> String {
             String(localized: "\(name)'s World", table: table, comment: "Title for summary card showing exploration stats, uses puppy name")
         }
 
@@ -106,6 +106,26 @@ extension Strings {
         static let surfaceGravel = String(localized: "Gravel", table: table, comment: "Gravel surface type")
         static let surfaceWoodChips = String(localized: "Wood chips", table: table, comment: "Wood chips surface type")
         static let surfaceAsphalt = String(localized: "Asphalt", table: table, comment: "Asphalt surface type")
+
+        // Opening hours
+        static let openingHours = String(localized: "Opening hours", table: table, comment: "Section header for opening hours")
+        static let hoursClosed = String(localized: "Closed", table: table, comment: "Indicates the place is closed")
+        static let hoursOpen24h = String(localized: "Open 24 hours", table: table, comment: "Indicates place is open 24/7")
+
+        // Contact
+        static let contact = String(localized: "Contact", table: table, comment: "Section header for contact info")
+
+        // Facilities
+        static let facilityWasteBin = String(localized: "Waste bin", table: table, comment: "Facility: waste disposal")
+        static let facilityBench = String(localized: "Bench", table: table, comment: "Facility: seating bench")
+        static let facilityWater = String(localized: "Water", table: table, comment: "Facility: drinking water")
+        static let facilityLighting = String(localized: "Lighting", table: table, comment: "Facility: lights for evening use")
+        static let facilityParking = String(localized: "Parking", table: table, comment: "Facility: parking available")
+        static let facilityRestroom = String(localized: "Restroom", table: table, comment: "Facility: restroom/toilet")
+        static let facilityAccessible = String(localized: "Accessible", table: table, comment: "Facility: wheelchair accessible")
+        static let facilityShelter = String(localized: "Shelter", table: table, comment: "Facility: shade or rain shelter")
+        static let facilityOutdoorSeating = String(localized: "Outdoor seating", table: table, comment: "Facility: outdoor seating area")
+        static let facilityAgility = String(localized: "Agility", table: table, comment: "Facility: dog agility equipment")
     }
 
     // MARK: - Photo Pin Detail

@@ -1,10 +1,10 @@
 //
 //  TrialBanner.swift
-//  Ollie-app
+//  Otis-app
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Compact trial banner shown during last 7 days of free period
 struct TrialBanner: View {
@@ -46,9 +46,9 @@ struct TrialBanner: View {
 
     private var bannerColor: Color {
         if daysRemaining <= 3 {
-            return .ollieWarning
+            return .otisWarning
         }
-        return .ollieAccent
+        return .otisAccent
     }
 
     private var bannerBackground: some ShapeStyle {

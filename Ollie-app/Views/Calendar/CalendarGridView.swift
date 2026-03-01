@@ -1,11 +1,11 @@
 //
 //  CalendarGridView.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Main calendar grid container view
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Main calendar grid view with month/week navigation and day detail
 struct CalendarGridView: View {
@@ -118,7 +118,7 @@ struct CalendarGridView: View {
                 HStack(spacing: 6) {
                     Text("\(ageWeeks)")
                         .font(.system(size: 20, weight: .bold, design: .rounded))
-                        .foregroundStyle(Color.ollieAccent)
+                        .foregroundStyle(Color.otisAccent)
                     Text(Strings.Common.weeks)
                         .font(.caption)
                         .foregroundStyle(.secondary)
@@ -143,7 +143,7 @@ struct CalendarGridView: View {
                     HStack(spacing: 8) {
                         Image(systemName: "sparkles")
                             .font(.caption)
-                            .foregroundStyle(Color.ollieAccent)
+                            .foregroundStyle(Color.otisAccent)
 
                         Text(socializationBannerText(ageWeeks: ageWeeks))
                             .font(.caption)
@@ -157,7 +157,7 @@ struct CalendarGridView: View {
                         if remaining <= 4 && remaining > 0 {
                             Text(Strings.Socialization.weeksRemaining(remaining))
                                 .font(.caption2)
-                                .foregroundStyle(remaining <= 2 ? Color.ollieWarning : .secondary)
+                                .foregroundStyle(remaining <= 2 ? Color.otisWarning : .secondary)
                         }
 
                         Image(systemName: "chevron.right")
@@ -166,7 +166,7 @@ struct CalendarGridView: View {
                     }
                     .padding(.horizontal, 12)
                     .padding(.vertical, 10)
-                    .background(Color.ollieAccent.opacity(0.08))
+                    .background(Color.otisAccent.opacity(0.08))
                     .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
                 }
                 .buttonStyle(.plain)
@@ -203,13 +203,13 @@ struct CalendarGridView: View {
 
     private func ageStageColor(weeks: Int) -> Color {
         if weeks < 8 {
-            return .ollieSleep
+            return .otisSleep
         } else if weeks <= 16 {
-            return .ollieAccent
+            return .otisAccent
         } else if weeks <= 26 {
-            return .ollieInfo
+            return .otisInfo
         } else if weeks <= 52 {
-            return .ollieSuccess
+            return .otisSuccess
         } else {
             return .secondary
         }

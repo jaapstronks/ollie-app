@@ -1,15 +1,18 @@
 //
 //  MemoriesCard.swift
-//  Ollie-app
+//  Otis-app
 //
 //  "On This Day" memories card for Today view
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Compact card showing memories from 1 week / 1 month / 1 year ago
 struct MemoriesCard: View {
     @ObservedObject var viewModel: MemoriesViewModel
+
+    /// Callback when a memory event is tapped - navigates to that date
+    var onMemoryTap: ((PuppyEvent) -> Void)?
 
     @State private var isExpanded = false
     @Environment(\.colorScheme) private var colorScheme
@@ -17,12 +20,24 @@ struct MemoriesCard: View {
     var body: some View {
         if viewModel.shouldShowCard {
             VStack(alignment: .leading, spacing: 12) {
-                // Header with time frame (tappable)
+                // Header with time frame (tappable for expand/collapse)
                 header
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        withAnimation(.easeInOut(duration: 0.25)) {
+                            isExpanded.toggle()
+                        }
+                        HapticFeedback.selection()
+                    }
 
                 // Primary memory
                 if let memory = viewModel.memoryItem {
                     memoryRow(event: memory.event, isHighlighted: true)
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            HapticFeedback.selection()
+                            onMemoryTap?(memory.event)
+                        }
                 }
 
                 // Expanded: show additional memories
@@ -31,6 +46,11 @@ struct MemoriesCard: View {
                         Divider()
                             .opacity(0.5)
                         memoryRow(event: event, isHighlighted: false)
+                            .contentShape(Rectangle())
+                            .onTapGesture {
+                                HapticFeedback.selection()
+                                onMemoryTap?(event)
+                            }
                     }
                 }
 
@@ -43,17 +63,17 @@ struct MemoriesCard: View {
                             .foregroundStyle(.secondary)
                         Spacer()
                     }
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        withAnimation(.easeInOut(duration: 0.25)) {
+                            isExpanded.toggle()
+                        }
+                        HapticFeedback.selection()
+                    }
                 }
             }
             .padding()
             .glassCard(tint: .accent)
-            .contentShape(Rectangle())
-            .onTapGesture {
-                withAnimation(.easeInOut(duration: 0.25)) {
-                    isExpanded.toggle()
-                }
-                HapticFeedback.selection()
-            }
             .onAppear {
                 Analytics.track(.memoriesCardViewed)
             }
@@ -66,7 +86,7 @@ struct MemoriesCard: View {
     private var header: some View {
         HStack(spacing: 8) {
             Image(systemName: viewModel.timeFrame.icon)
-                .foregroundStyle(Color.ollieAccent)
+                .foregroundStyle(Color.otisAccent)
 
             Text(viewModel.timeFrame.label)
                 .font(.subheadline)
@@ -89,9 +109,9 @@ struct MemoriesCard: View {
             // Event type icon
             Image(systemName: event.type.icon)
                 .font(.system(size: 14))
-                .foregroundStyle(Color.ollieAccent)
+                .foregroundStyle(Color.otisAccent)
                 .frame(width: 28, height: 28)
-                .background(Color.ollieAccent.opacity(colorScheme == .dark ? 0.2 : 0.1))
+                .background(Color.otisAccent.opacity(colorScheme == .dark ? 0.2 : 0.1))
                 .clipShape(Circle())
 
             // Event content

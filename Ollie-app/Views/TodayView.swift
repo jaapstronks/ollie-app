@@ -1,12 +1,12 @@
 //
 //  TodayView.swift
-//  Ollie-app
+//  Otis-app
 //
 //  The "Vandaag" (Today) tab - the daily hub showing everything needed right now
 //  Combines the web app's "home" and "dag" views into a single scrollable view
 
 import SwiftUI
-import OllieShared
+import OtisShared
 import TipKit
 
 /// Main "Today" tab showing the daily hub
@@ -34,7 +34,7 @@ struct TodayView: View {
             if viewModel.shouldShowTrialBanner {
                 TrialBanner(
                     daysRemaining: viewModel.freeDaysRemaining,
-                    onTap: { viewModel.sheetCoordinator.presentSheet(.olliePlus) }
+                    onTap: { viewModel.sheetCoordinator.presentSheet(.otisPlus) }
                 )
             }
 
@@ -119,59 +119,76 @@ struct TodayView: View {
 
     @ViewBuilder
     private var todayNavBar: some View {
-        HStack {
-            // Previous day button
-            Button {
-                HapticFeedback.selection()
-                viewModel.goToPreviousDay()
-            } label: {
-                Image(systemName: "chevron.left")
-                    .font(.title2)
-                    .frame(width: 44, height: 44)
-                    .contentShape(Rectangle())
-            }
-            .accessibilityLabel(Strings.Timeline.previousDay)
-
-            Spacer()
-
-            // Date title with subtle day counter (tappable to go to today)
-            Button {
-                viewModel.goToToday()
-            } label: {
-                VStack(spacing: 2) {
-                    Text(viewModel.dateTitle)
-                        .font(.headline)
-
-                    // Subtle day counter - only show when viewing today
-                    if viewModel.isShowingToday, let dayNumber = viewModel.dailyDigest.dayNumber {
-                        Text(Strings.Timeline.dayWithPuppyName(day: dayNumber, name: viewModel.puppyName))
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
+        HStack(spacing: 12) {
+            // Compact day navigation group
+            HStack(spacing: 0) {
+                // Previous day button
+                Button {
+                    HapticFeedback.selection()
+                    viewModel.goToPreviousDay()
+                } label: {
+                    Image(systemName: "chevron.left")
+                        .font(.system(size: 14, weight: .semibold))
+                        .frame(width: 32, height: 32)
+                        .contentShape(Rectangle())
                 }
-                .frame(minHeight: 44)
-            }
-            .buttonStyle(.plain)
-            .accessibilityLabel(Strings.Timeline.dateLabel(date: viewModel.dateTitle))
-            .accessibilityHint(Strings.Timeline.goToTodayHint)
-            .accessibilityAddTraits(.isHeader)
+                .accessibilityLabel(Strings.Timeline.previousDay)
 
-            Spacer()
-
-            // Next day button (when not showing today)
-            if !viewModel.isShowingToday {
+                // Next day button
                 Button {
                     HapticFeedback.selection()
                     viewModel.goToNextDay()
                 } label: {
                     Image(systemName: "chevron.right")
-                        .font(.title2)
-                        .frame(width: 44, height: 44)
+                        .font(.system(size: 14, weight: .semibold))
+                        .frame(width: 32, height: 32)
                         .contentShape(Rectangle())
                 }
                 .opacity(viewModel.canGoForward ? 1 : 0.3)
                 .disabled(!viewModel.canGoForward)
                 .accessibilityLabel(Strings.Timeline.nextDay)
+            }
+            .background(
+                Capsule()
+                    .fill(Color(.tertiarySystemFill))
+            )
+
+            // Date title with subtle day counter
+            VStack(spacing: 2) {
+                Text(viewModel.dateTitle)
+                    .font(.headline)
+
+                // Subtle day counter - only show when viewing today
+                if viewModel.isShowingToday, let dayNumber = viewModel.dailyDigest.dayNumber {
+                    Text(Strings.Timeline.dayWithPuppyName(day: dayNumber, name: viewModel.puppyName))
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            }
+            .frame(minHeight: 44)
+            .accessibilityLabel(Strings.Timeline.dateLabel(date: viewModel.dateTitle))
+            .accessibilityAddTraits(.isHeader)
+
+            Spacer()
+
+            // "Today" pill button - only show when viewing past days
+            if !viewModel.isShowingToday {
+                Button {
+                    HapticFeedback.selection()
+                    viewModel.goToToday()
+                } label: {
+                    Text(Strings.Common.today)
+                        .font(.subheadline.weight(.medium))
+                        .foregroundStyle(.white)
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 6)
+                        .background(
+                            Capsule()
+                                .fill(Color.accentColor)
+                        )
+                }
+                .accessibilityLabel(Strings.Common.today)
+                .accessibilityHint(Strings.Timeline.goToTodayHint)
             }
 
             // Profile photo button (opens settings)

@@ -1,12 +1,12 @@
 //
 //  StatsCards.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Card components for statistics display
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 // MARK: - Streak Stats Card
 
@@ -29,7 +29,7 @@ struct StreakStatsCard: View {
                     value: "\(streakInfo.bestStreak)",
                     label: Strings.Stats.bestEver,
                     iconName: "trophy.fill",
-                    iconColor: .ollieAccent
+                    iconColor: .otisAccent
                 )
             }
 
@@ -37,7 +37,7 @@ struct StreakStatsCard: View {
                 Text(StreakCalculations.message(for: streakInfo.currentStreak))
                     .font(.subheadline)
                     .fontWeight(.medium)
-                    .foregroundStyle(Color.ollieAccent)
+                    .foregroundStyle(Color.otisAccent)
             }
         }
         .cardPadding()
@@ -70,7 +70,7 @@ struct GapStatsCard: View {
                         value: GapCalculations.formatDuration(stats.medianMinutes),
                         label: Strings.Stats.median,
                         iconName: "chart.bar.fill",
-                        iconColor: .ollieInfo
+                        iconColor: .otisInfo
                     )
 
                     GlassSeparator()
@@ -79,7 +79,7 @@ struct GapStatsCard: View {
                         value: GapCalculations.formatDuration(stats.avgMinutes),
                         label: Strings.Stats.average,
                         iconName: "chart.line.uptrend.xyaxis",
-                        iconColor: .ollieInfo
+                        iconColor: .otisInfo
                     )
                 }
 
@@ -90,7 +90,7 @@ struct GapStatsCard: View {
                         value: GapCalculations.formatDuration(stats.minMinutes),
                         label: Strings.Stats.shortest,
                         iconName: "bolt.fill",
-                        iconColor: .ollieWarning
+                        iconColor: .otisWarning
                     )
 
                     GlassSeparator()
@@ -99,7 +99,7 @@ struct GapStatsCard: View {
                         value: GapCalculations.formatDuration(stats.maxMinutes),
                         label: Strings.Stats.longest,
                         iconName: "tortoise.fill",
-                        iconColor: .ollieMuted
+                        iconColor: .otisMuted
                     )
                 }
 
@@ -108,13 +108,13 @@ struct GapStatsCard: View {
                 // Indoor vs outdoor breakdown
                 HStack {
                     Label(Strings.Stats.outsideCount(stats.outdoorCount), systemImage: "leaf.fill")
-                        .foregroundStyle(Color.ollieSuccess)
+                        .foregroundStyle(Color.otisSuccess)
                         .font(.subheadline)
 
                     Spacer()
 
                     Label(Strings.Stats.insideCount(stats.indoorCount), systemImage: "house.fill")
-                        .foregroundStyle(stats.indoorCount > 0 ? Color.ollieDanger : .secondary)
+                        .foregroundStyle(stats.indoorCount > 0 ? Color.otisDanger : .secondary)
                         .font(.subheadline)
 
                     Spacer()
@@ -122,7 +122,7 @@ struct GapStatsCard: View {
                     Text("\(stats.outdoorPercentage)\(Strings.Stats.outsidePercent)")
                         .font(.subheadline)
                         .fontWeight(.semibold)
-                        .foregroundStyle(stats.outdoorPercentage >= 80 ? Color.ollieSuccess : Color.ollieWarning)
+                        .foregroundStyle(stats.outdoorPercentage >= 80 ? Color.otisSuccess : Color.otisWarning)
                 }
             }
         }
@@ -163,7 +163,7 @@ struct TodayStatsCard: View {
                     value: "\(pottyCount)",
                     label: Strings.Stats.timesPeed,
                     iconName: "drop.fill",
-                    iconColor: .ollieInfo
+                    iconColor: .otisInfo
                 )
 
                 GlassSeparator()
@@ -172,7 +172,7 @@ struct TodayStatsCard: View {
                     value: "\(mealCount)",
                     label: Strings.Stats.meals,
                     iconName: "fork.knife",
-                    iconColor: .ollieAccent
+                    iconColor: .otisAccent
                 )
 
                 GlassSeparator()
@@ -181,7 +181,7 @@ struct TodayStatsCard: View {
                     value: "\(poopCount)",
                     label: Strings.Stats.timesPooped,
                     iconName: "circle.inset.filled",
-                    iconColor: .ollieAccent
+                    iconColor: .otisAccent
                 )
             }
 
@@ -190,14 +190,14 @@ struct TodayStatsCard: View {
 
                 HStack {
                     Label(Strings.Stats.outsideCount(outdoorCount), systemImage: "leaf.fill")
-                        .foregroundStyle(Color.ollieSuccess)
+                        .foregroundStyle(Color.otisSuccess)
                         .font(.subheadline)
 
                     Spacer()
 
                     if indoorCount > 0 {
                         Label(Strings.Stats.insideCount(indoorCount), systemImage: "house.fill")
-                            .foregroundStyle(Color.ollieDanger)
+                            .foregroundStyle(Color.otisDanger)
                             .font(.subheadline)
                     }
                 }
@@ -230,7 +230,7 @@ struct SleepStatsCard: View {
     }
 
     private var progressColor: Color {
-        progress >= 0.8 ? Color.ollieSuccess : Color.ollieSleep
+        progress >= 0.8 ? Color.otisSuccess : Color.otisSleep
     }
 
     var body: some View {
@@ -240,7 +240,7 @@ struct SleepStatsCard: View {
                     value: formatSleepTime(totalSleepMinutes),
                     label: Strings.Stats.totalSlept,
                     iconName: "moon.zzz.fill",
-                    iconColor: .ollieSleep
+                    iconColor: .otisSleep
                 )
 
                 GlassSeparator()
@@ -249,7 +249,7 @@ struct SleepStatsCard: View {
                     value: "\(sleepSessions)",
                     label: Strings.Stats.naps,
                     iconName: "bed.double.fill",
-                    iconColor: .ollieSleep
+                    iconColor: .otisSleep
                 )
             }
 

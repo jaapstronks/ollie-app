@@ -1,12 +1,12 @@
 //
 //  TimelineSheetModifiers.swift
-//  Ollie-app
+//  Otis-app
 //
 //  ViewModifier that applies all shared sheet handling to timeline views
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// ViewModifier that applies all timeline sheet handling
 struct TimelineSheetModifiers: ViewModifier {
@@ -247,8 +247,8 @@ struct TimelineSheetModifiers: ViewModifier {
                 }
             )
 
-        case .olliePlus:
-            OlliePlusSheet(
+        case .otisPlus:
+            OtisPlusSheet(
                 onDismiss: {
                     viewModel.sheetCoordinator.dismissSheet()
                 },

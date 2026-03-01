@@ -1,13 +1,13 @@
 //
-//  Ollie_appUITestsLaunchTests.swift
-//  Ollie-appUITests
+//  Otis_appUITestsLaunchTests.swift
+//  Otis-appUITests
 //
 //  Created by Jaap Stronks on 2/21/26.
 //
 
 import XCTest
 
-final class Ollie_appUITestsLaunchTests: XCTestCase {
+final class Otis_appUITestsLaunchTests: XCTestCase {
 
     override class var runsForEachTargetApplicationUIConfiguration: Bool {
         true

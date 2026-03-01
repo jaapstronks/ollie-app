@@ -1,6 +1,6 @@
 //
 //  ProfilePhotoPicker.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Sheet for selecting or capturing a profile photo
 

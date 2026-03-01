@@ -1,13 +1,13 @@
 //
 //  CelebrationPreviewViews.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Preview views for celebration settings
 //  Extracted from CelebrationSettingsView.swift
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 // MARK: - Tier 1 Preview Button
 
@@ -31,10 +31,10 @@ struct CelebrationTier1PreviewButton: View {
                 Spacer()
                 Image(systemName: "play.circle.fill")
                     .font(.title3)
-                    .foregroundStyle(Color.ollieAccent)
+                    .foregroundStyle(Color.otisAccent)
             }
             .padding()
-            .background(Color.ollieAccent.opacity(0.08))
+            .background(Color.otisAccent.opacity(0.08))
             .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
         }
         .buttonStyle(.plain)
@@ -79,11 +79,11 @@ struct CelebrationTier2PreviewWrapper: View {
                     // Badge
                     ZStack {
                         Circle()
-                            .fill(Color.ollieSuccess.opacity(0.15))
+                            .fill(Color.otisSuccess.opacity(0.15))
                             .frame(width: 120, height: 120)
 
                         Circle()
-                            .fill(Color.ollieSuccess.gradient)
+                            .fill(Color.otisSuccess.gradient)
                             .frame(width: 88, height: 88)
 
                         Image(systemName: "heart.fill")
@@ -140,7 +140,7 @@ struct CelebrationTier2PreviewWrapper: View {
                 .padding(24)
                 .background(.ultraThinMaterial)
                 .clipShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
-                .shadow(color: Color.ollieSuccess.opacity(0.3), radius: 20, y: 10)
+                .shadow(color: Color.otisSuccess.opacity(0.3), radius: 20, y: 10)
                 .padding(.horizontal, 20)
                 .padding(.bottom, 40)
                 .offset(y: showContent ? 0 : 300)
@@ -192,7 +192,7 @@ struct CelebrationTier3PreviewWrapper: View {
             // Background gradient
             LinearGradient(
                 colors: [
-                    Color.ollieAccent.opacity(0.3),
+                    Color.otisAccent.opacity(0.3),
                     Color(UIColor.systemBackground)
                 ],
                 startPoint: .top,
@@ -207,14 +207,14 @@ struct CelebrationTier3PreviewWrapper: View {
                 // Badge
                 ZStack {
                     Circle()
-                        .fill(Color.ollieAccent.opacity(0.2))
+                        .fill(Color.otisAccent.opacity(0.2))
                         .frame(width: 160, height: 160)
                         .blur(radius: 20)
 
                     Circle()
-                        .fill(Color.ollieAccent.gradient)
+                        .fill(Color.otisAccent.gradient)
                         .frame(width: 140, height: 140)
-                        .shadow(color: Color.ollieAccent.opacity(0.5), radius: 20)
+                        .shadow(color: Color.otisAccent.opacity(0.5), radius: 20)
 
                     Image(systemName: "flame.fill")
                         .font(.system(size: 56, weight: .semibold))

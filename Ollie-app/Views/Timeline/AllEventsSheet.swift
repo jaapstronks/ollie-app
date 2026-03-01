@@ -1,12 +1,12 @@
 //
 //  AllEventsSheet.swift
-//  Ollie-app
+//  Otis-app
 //
 //  V2: Grid showing all event types for logging
 //  Uses liquid glass design for iOS 26 aesthetic
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Sheet showing all event types in a grid layout
 /// Uses liquid glass button styling
@@ -75,7 +75,7 @@ struct AllEventsSheet: View {
                     Button(Strings.Common.cancel) {
                         onCancel()
                     }
-                    .foregroundStyle(Color.ollieAccent)
+                    .foregroundStyle(Color.otisAccent)
                 }
             }
         }
@@ -86,7 +86,7 @@ struct AllEventsSheet: View {
         HStack(spacing: 8) {
             Image(systemName: icon)
                 .font(.system(size: 14, weight: .semibold))
-                .foregroundStyle(Color.ollieAccent)
+                .foregroundStyle(Color.otisAccent)
 
             Text(title)
                 .font(.subheadline)
@@ -175,13 +175,13 @@ struct EventTypeButton: View {
 
     private var iconColor: Color {
         switch type {
-        case .plassen, .poepen: return Color.ollieInfo
-        case .eten, .drinken: return Color.ollieAccent
-        case .slapen, .ontwaken: return Color.ollieSleep
-        case .uitlaten, .tuin: return Color.ollieSuccess
-        case .training: return Color.ollieAccent
-        case .sociaal: return Color.ollieInfo
-        default: return Color.ollieMuted
+        case .plassen, .poepen: return Color.otisInfo
+        case .eten, .drinken: return Color.otisAccent
+        case .slapen, .ontwaken: return Color.otisSleep
+        case .uitlaten, .tuin: return Color.otisSuccess
+        case .training: return Color.otisAccent
+        case .sociaal: return Color.otisInfo
+        default: return Color.otisMuted
         }
     }
 }

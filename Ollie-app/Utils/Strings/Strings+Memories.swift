@@ -1,6 +1,6 @@
 //
 //  Strings+Memories.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Localized strings for "On This Day" memories feature
 

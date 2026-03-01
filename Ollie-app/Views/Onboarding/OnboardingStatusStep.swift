@@ -1,6 +1,6 @@
 //
 //  OnboardingStatusStep.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Step to determine if the puppy is already home or expected
 //
@@ -23,7 +23,7 @@ struct OnboardingStatusStep: View {
             VStack(spacing: 12) {
                 Image(systemName: "house.fill")
                     .font(.system(size: 56))
-                    .foregroundStyle(Color.ollieAccent)
+                    .foregroundStyle(Color.otisAccent)
                     .scaleEffect(hasAppeared ? 1.0 : 0.8)
                     .opacity(hasAppeared ? 1.0 : 0.0)
 
@@ -97,7 +97,7 @@ private struct StatusOptionButton: View {
             HStack(spacing: 16) {
                 Image(systemName: icon)
                     .font(.title2)
-                    .foregroundStyle(isSelected ? Color.white : Color.ollieAccent)
+                    .foregroundStyle(isSelected ? Color.white : Color.otisAccent)
 
                 Text(title)
                     .font(.body)
@@ -116,11 +116,11 @@ private struct StatusOptionButton: View {
             .padding(.vertical, 16)
             .background(
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(isSelected ? Color.ollieAccent : Color(.secondarySystemBackground))
+                    .fill(isSelected ? Color.otisAccent : Color(.secondarySystemBackground))
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 12)
-                    .stroke(isSelected ? Color.clear : Color.ollieAccent.opacity(0.3), lineWidth: 1)
+                    .stroke(isSelected ? Color.clear : Color.otisAccent.opacity(0.3), lineWidth: 1)
             )
         }
         .buttonStyle(.plain)

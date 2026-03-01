@@ -1,12 +1,12 @@
 //
 //  WebhookService.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Sends webhook notifications when events are logged
 
 import Combine
 import Foundation
-import OllieShared
+import OtisShared
 import os
 
 /// Service for sending webhook notifications
@@ -19,7 +19,7 @@ class WebhookService: ObservableObject {
     @Published private(set) var lastSentTime: Date?
     @Published private(set) var lastStatusCode: Int?
 
-    private let logger = Logger.ollie(category: "WebhookService")
+    private let logger = Logger.otis(category: "WebhookService")
 
     /// Request timeout in seconds
     private let requestTimeout: TimeInterval = 10
@@ -119,7 +119,7 @@ class WebhookService: ObservableObject {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue("Ollie-iOS/1.0", forHTTPHeaderField: "User-Agent")
+        request.setValue("Otis-iOS/1.0", forHTTPHeaderField: "User-Agent")
         request.timeoutInterval = requestTimeout
 
         let encoder = JSONEncoder()

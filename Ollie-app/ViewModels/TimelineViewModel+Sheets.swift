@@ -1,13 +1,13 @@
 //
 //  TimelineViewModel+Sheets.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Extension containing sheet presentation helpers
 //  Extracted from TimelineViewModel to improve code organization
 //
 
 import Foundation
-import OllieShared
+import OtisShared
 import SwiftUI
 
 // MARK: - Sheet Presentation Helpers
@@ -34,9 +34,9 @@ extension TimelineViewModel {
 
 extension TimelineViewModel {
 
-    /// Show the Ollie+ subscription sheet
-    func showOlliePlusSheet() {
-        sheetCoordinator.presentSheet(.olliePlus)
+    /// Show the Otis+ subscription sheet
+    func showOtisPlusSheet() {
+        sheetCoordinator.presentSheet(.otisPlus)
     }
 
     /// Check if user can access a premium feature, showing paywall if not
@@ -45,7 +45,7 @@ extension TimelineViewModel {
         if subscriptionManager.hasAccess(to: feature) {
             return true
         }
-        showOlliePlusSheet()
+        showOtisPlusSheet()
         return false
     }
 }
@@ -117,11 +117,11 @@ extension TimelineViewModel {
         )
     }
 
-    /// Binding for showing Ollie+ sheet
-    var showingOlliePlusBinding: Binding<Bool> {
+    /// Binding for showing Otis+ sheet
+    var showingOtisPlusBinding: Binding<Bool> {
         Binding(
             get: {
-                if case .olliePlus = self.sheetCoordinator.activeSheet {
+                if case .otisPlus = self.sheetCoordinator.activeSheet {
                     return true
                 }
                 return false

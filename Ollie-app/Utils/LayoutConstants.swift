@@ -1,12 +1,12 @@
 //
 //  LayoutConstants.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Centralized layout constants to ensure consistency across views.
 //  Avoids magic numbers like .padding(.horizontal, 16) scattered throughout.
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 // MARK: - Layout Constants
 
@@ -189,15 +189,15 @@ enum StatusColors {
     static func forUrgency(_ level: UrgencyLevel) -> Color {
         switch level {
         case .low:
-            return .ollieSuccess
+            return .otisSuccess
         case .normal:
             return .primary
         case .medium:
-            return .ollieAccent
+            return .otisAccent
         case .high:
-            return .ollieWarning
+            return .otisWarning
         case .critical:
-            return .ollieDanger
+            return .otisDanger
         case .unknown:
             return .secondary
         }

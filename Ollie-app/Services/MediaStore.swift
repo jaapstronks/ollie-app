@@ -1,10 +1,10 @@
 //
 //  MediaStore.swift
-//  Ollie-app
+//  Otis-app
 //
 
 import Foundation
-import OllieShared
+import OtisShared
 import UIKit
 import Combine
 import os
@@ -13,7 +13,7 @@ import os
 @MainActor
 class MediaStore: ObservableObject {
     private let fileManager = FileManager.default
-    private let logger = Logger.ollie(category: "MediaStore")
+    private let logger = Logger.otis(category: "MediaStore")
 
     // MARK: - Directory URLs
 

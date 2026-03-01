@@ -1,11 +1,11 @@
 //
 //  ContactRow.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Row component for displaying a contact in a list
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Row view for displaying a contact in a list
 struct ContactRow: View {
@@ -16,9 +16,9 @@ struct ContactRow: View {
             // Icon
             Image(systemName: contact.contactType.icon)
                 .font(.system(size: 20))
-                .foregroundColor(.ollieAccent)
+                .foregroundColor(.otisAccent)
                 .frame(width: 40, height: 40)
-                .background(Color.ollieAccent.opacity(0.1))
+                .background(Color.otisAccent.opacity(0.1))
                 .clipShape(Circle())
 
             // Content

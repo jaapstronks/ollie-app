@@ -5,7 +5,7 @@ Upgrade the project from Swift 5.0 language mode to Swift 6.0 to enable strict c
 
 ## Current State
 - **Xcode project:** `SWIFT_VERSION = 5.0`
-- **OllieShared package:** `swift-tools-version: 5.9`
+- **OtisShared package:** `swift-tools-version: 5.9`
 - **Compiler:** Swift 6.x (running in Swift 5 compatibility mode)
 - **Concurrency warnings:** Currently warnings, will become errors in Swift 6 mode
 
@@ -13,7 +13,7 @@ Upgrade the project from Swift 5.0 language mode to Swift 6.0 to enable strict c
 
 ### 1. Update Version Settings
 - [ ] Change `SWIFT_VERSION` to `6.0` in Xcode project build settings (all targets)
-- [ ] Update `swift-tools-version: 6.0` in `OllieShared/Package.swift`
+- [ ] Update `swift-tools-version: 6.0` in `OtisShared/Package.swift`
 
 ### 2. Fix Concurrency Errors
 Common patterns to address:

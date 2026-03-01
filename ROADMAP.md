@@ -1,4 +1,4 @@
-# Ollie iOS — Feature Roadmap
+# Otis iOS — Feature Roadmap
 
 *Last updated: 2026-02-23*
 
@@ -40,7 +40,7 @@ Apple requires `PrivacyInfo.xcprivacy` declaring data collection and API usage.
 - Data types collected
 - Tracking status
 
-**Files:** `Ollie-app/PrivacyInfo.xcprivacy`
+**Files:** `Otis-app/PrivacyInfo.xcprivacy`
 
 ---
 
@@ -72,7 +72,7 @@ XCTest target for testing business logic.
 - `StreakCalculations` — outdoor streak counting
 - `EventStore` — JSONL parsing/writing
 
-**Files:** New target `Ollie-appTests/`
+**Files:** New target `Otis-appTests/`
 
 ---
 
@@ -130,9 +130,9 @@ Toggle features without app updates.
 Open specific screens from URLs or notifications.
 
 **Routes:**
-- `ollie://log/plassen` — open quick-log for potty
-- `ollie://stats` — open stats view
-- `ollie://today` — open today view
+- `otis://log/plassen` — open quick-log for potty
+- `otis://stats` — open stats view
+- `otis://today` — open today view
 
 **Files:**
 - `Utils/DeepLinkHandler.swift`
@@ -203,7 +203,7 @@ Contextual feature tips for new users.
 - ✅ "Ontdek patronen" (stats patterns)
 - ✅ "Voorspelling" (potty prediction)
 
-**Files:** `Utils/AppTips.swift`, `Ollie_appApp.swift`, `TimelineView.swift`, `SettingsView.swift`
+**Files:** `Utils/AppTips.swift`, `Otis_appApp.swift`, `TimelineView.swift`, `SettingsView.swift`
 
 **How to test:**
 1. Fresh install or reset tips: Tips appear contextually
@@ -234,13 +234,13 @@ Home screen widgets for at-a-glance info.
   - Walk status (time since last, upcoming/overdue)
 - ✅ **Dark mode support** — all widgets adapt to light/dark mode
 
-**Files:** Target `OllieWidget/`
-- `OllieWidget.swift` — Potty timer widget
+**Files:** Target `OtisWidget/`
+- `OtisWidget.swift` — Potty timer widget
 - `StreakWidget.swift` — Streak counter widget
 - `CombinedWidget.swift` — Combined overview widget
 - `StatusDashboardWidget.swift` — Smart dashboard widget
-- `OllieWidgetBundle.swift` — Widget bundle registration
-- `Ollie-app/Utils/WidgetDataProvider.swift` — Shared data access via App Groups
+- `OtisWidgetBundle.swift` — Widget bundle registration
+- `Otis-app/Utils/WidgetDataProvider.swift` — Shared data access via App Groups
 
 **Data shared to widgets:**
 - Potty: last time, location, streak, today's counts
@@ -279,7 +279,7 @@ Circular/rectangular lock screen widgets.
 - ✅ Potty timer (accessoryCircular, accessoryInline, accessoryRectangular)
 - ✅ Streak count (accessoryCircular, accessoryInline)
 
-**Files:** Included in `OllieWidget/OllieWidget.swift` and `StreakWidget.swift`
+**Files:** Included in `OtisWidget/OtisWidget.swift` and `StreakWidget.swift`
 
 ---
 
@@ -292,18 +292,18 @@ Circular/rectangular lock screen widgets.
 Enable Siri and Shortcuts integration.
 
 **Implemented intents:**
-- ✅ `LogPeeOutsideIntent` — "Ollie peed outside"
-- ✅ `LogPoopOutsideIntent` — "Ollie pooped outside"
-- ✅ `LogPottyIntent` — "Log potty with Ollie" (with type/location params)
-- ✅ `LogMealIntent` — "Ollie ate"
-- ✅ `LogWalkIntent` — "Ollie went for a walk"
-- ✅ `LogSleepIntent` — "Ollie is sleeping"
-- ✅ `LogWakeUpIntent` — "Ollie woke up"
+- ✅ `LogPeeOutsideIntent` — "Dog peed outside"
+- ✅ `LogPoopOutsideIntent` — "Dog pooped outside"
+- ✅ `LogPottyIntent` — "Log potty with Otis" (with type/location params)
+- ✅ `LogMealIntent` — "Dog ate"
+- ✅ `LogWalkIntent` — "Dog went for a walk"
+- ✅ `LogSleepIntent` — "Dog is sleeping"
+- ✅ `LogWakeUpIntent` — "Dog woke up"
 - ✅ `GetPottyStatusIntent` — "When did puppy last pee"
 - ✅ `GetPoopStatusIntent` — "When did puppy last poop"
 
 **Files:**
-- `Intents/OllieShortcuts.swift` (App Shortcuts provider)
+- `Intents/OtisShortcuts.swift` (App Shortcuts provider)
 - `Intents/IntentDataStore.swift` (shared data access)
 - `Intents/Entities/` (EventTypeEntity, LocationEntity)
 - `Intents/Intents/` (all intent implementations)
@@ -336,9 +336,9 @@ The foundation for watchOS support has been built:
 
 | Component | Status | Description |
 |-----------|--------|-------------|
-| **OllieShared Package** | ✅ | Swift Package targeting watchOS 10 with all models & calculations |
+| **OtisShared Package** | ✅ | Swift Package targeting watchOS 10 with all models & calculations |
 | **App Intents** | ✅ | 9 intents ready for watch (log potty, meal, walk, sleep, status queries) |
-| **App Groups** | ✅ | `group.jaapstronks.Ollie` configured for shared data access |
+| **App Groups** | ✅ | `group.jaapstronks.Otis` configured for shared data access |
 | **IntentDataStore** | ✅ | Shared data layer for reading/writing events from any extension |
 | **Calculation Modules** | ✅ | GapCalculations, StreakCalculations, SleepCalculations in shared package |
 
@@ -359,8 +359,8 @@ Minimal viable watch app focused on the #1 use case: hands-free logging during w
 - **Current Streak** — Outdoor streak counter with motivational icon
 - **Sleep Status** — "Currently sleeping" indicator when active
 
-**Files:** New target `OllieWatch/`
-- `OllieWatchApp.swift` — App entry point
+**Files:** New target `OtisWatch/`
+- `OtisWatchApp.swift` — App entry point
 - `ContentView.swift` — Main view with timer + streak
 - `QuickLogView.swift` — 6-button grid
 - `WatchDataProvider.swift` — Reads from App Group container
@@ -393,10 +393,10 @@ Feature-complete companion app. Build after MVP is validated.
 - **Sleep Quick Actions** — "Bedtime" button that logs sleep
 
 **Additional files:**
-- `OllieWatch/Complications/` — WidgetKit complications
-- `OllieWatch/Views/TodaySummaryView.swift`
-- `OllieWatch/Views/EventListView.swift`
-- `OllieWatch/Services/WatchNotificationManager.swift`
+- `OtisWatch/Complications/` — WidgetKit complications
+- `OtisWatch/Views/TodaySummaryView.swift`
+- `OtisWatch/Views/EventListView.swift`
+- `OtisWatch/Services/WatchNotificationManager.swift`
 
 **Considerations:**
 - Complications require WidgetKit for watchOS (similar to iOS widgets)
@@ -417,7 +417,7 @@ Part of Option B. Glanceable info on watch face.
 - Rectangular: timer + streak side by side
 - Corner: streak number with flame icon
 
-**Files:** `OllieWatch/Complications/`
+**Files:** `OtisWatch/Complications/`
 
 ---
 
@@ -431,7 +431,7 @@ Part of Option B. Gentle tap when predicted potty time approaches.
 - Use `.notification` haptic type for gentle alert
 - Respect Do Not Disturb / Sleep Focus
 
-**Files:** `OllieWatch/Services/WatchNotificationManager.swift`
+**Files:** `OtisWatch/Services/WatchNotificationManager.swift`
 
 ---
 
@@ -519,7 +519,7 @@ Quick log button in Control Center.
 
 Search events from iOS Spotlight.
 
-- "Ollie training februari"
+- "Otis training februari"
 - "Milestone eerste keer buiten"
 
 **Files:** `Services/SpotlightIndexer.swift`
@@ -537,7 +537,7 @@ Search events from iOS Spotlight.
 | 4 | Basic Widgets | ✅ Done | Most requested, high daily utility |
 | 5 | App Intents | ✅ Done | Enables voice, widgets, shortcuts |
 | 6 | Lock Screen Widgets | ✅ Done | Quick glance on lock screen |
-| 7 | Watch App Prerequisites | ✅ Done | OllieShared package, App Groups, IntentDataStore |
+| 7 | Watch App Prerequisites | ✅ Done | OtisShared package, App Groups, IntentDataStore |
 | 8 | **Watch App MVP** | **Next** | Perfect for walks, hands-free logging |
 | 9 | Interactive Widgets | | Killer feature: log without unlocking |
 | 10 | CI/CD Pipeline | | Automated testing on every PR |
@@ -557,10 +557,10 @@ Required for widget data sharing.
 
 ```swift
 // Capability: App Groups
-// Group: group.com.yourname.ollie
+// Group: group.com.yourname.otis
 
 // Shared UserDefaults
-let sharedDefaults = UserDefaults(suiteName: "group.com.yourname.ollie")
+let sharedDefaults = UserDefaults(suiteName: "group.com.yourname.otis")
 ```
 
 ### Shared Data Layer
@@ -580,7 +580,7 @@ Options:
 | 1.1 | Haptics, TipKit | iOS 17 | ✅ Done |
 | 1.2 | Widgets (basic + lock screen + smart dashboard) | iOS 16 | ✅ Done |
 | 1.3 | App Intents | iOS 16 | ✅ Done |
-| 1.4 | OllieShared package (watch prep) | iOS 17 | ✅ Done |
+| 1.4 | OtisShared package (watch prep) | iOS 17 | ✅ Done |
 | **2.0** | **Apple Watch MVP** | iOS 17 + watchOS 10 | **Next** |
 | 2.1 | Interactive widgets | iOS 17 | |
 | 2.2 | Watch complications + full features | iOS 17 + watchOS 10 | |

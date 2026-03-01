@@ -1,11 +1,11 @@
 //
 //  EventIcon.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Reusable icon component for event types
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Displays an SF Symbol icon for an event type with appropriate color
 struct EventIcon: View {
@@ -23,8 +23,8 @@ struct EventIcon: View {
     private var iconColor: Color {
         // Potty events: color based on location
         if type.requiresLocation {
-            guard let loc = location else { return .ollieMuted }
-            return loc == .buiten ? .ollieSuccess : .ollieDanger
+            guard let loc = location else { return .otisMuted }
+            return loc == .buiten ? .otisSuccess : .otisDanger
         }
         return type.iconColor
     }
@@ -81,7 +81,7 @@ extension EventType {
     }
 
     /// Default icon color (when location doesn't apply)
-    /// Colors match the Ollie semantic color system:
+    /// Colors match the Otis semantic color system:
     /// - Green: positive, outdoor, social
     /// - Gold: food, attention
     /// - Blue: rest, sleep, crate
@@ -91,37 +91,37 @@ extension EventType {
     var iconColor: Color {
         switch self {
         case .plassen, .poepen:
-            return .ollieMuted // Overridden by location
+            return .otisMuted // Overridden by location
         case .eten:
-            return .ollieAccent // Warm gold - nourishment
+            return .otisAccent // Warm gold - nourishment
         case .drinken:
-            return .ollieInfo // Teal - bodily/data
+            return .otisInfo // Teal - bodily/data
         case .slapen:
-            return .ollieSleep // Blue - rest
+            return .otisSleep // Blue - rest
         case .ontwaken:
-            return .ollieAccent // Warm gold - energy
+            return .otisAccent // Warm gold - energy
         case .uitlaten:
-            return .ollieSuccess // Green - outdoor activity
+            return .otisSuccess // Green - outdoor activity
         case .tuin:
-            return .ollieSuccess // Green - outdoor activity
+            return .otisSuccess // Green - outdoor activity
         case .training:
-            return .olliePurple // Purple - learning/mental
+            return .otisPurple // Purple - learning/mental
         case .bench:
-            return .ollieSleep // Blue - rest (matches sleep)
+            return .otisSleep // Blue - rest (matches sleep)
         case .sociaal:
-            return .ollieSuccess // Green - positive interaction
+            return .otisSuccess // Green - positive interaction
         case .milestone:
-            return .ollieRose // Rose - celebration
+            return .otisRose // Rose - celebration
         case .gedrag:
-            return .ollieMuted // Gray - neutral observation
+            return .otisMuted // Gray - neutral observation
         case .gewicht:
-            return .ollieHealth // Coral - health/medical
+            return .otisHealth // Coral - health/medical
         case .moment:
-            return .ollieAccent // Gold - brand accent for photos
+            return .otisAccent // Gold - brand accent for photos
         case .medicatie:
-            return .ollieHealth // Coral - health/medical
+            return .otisHealth // Coral - health/medical
         case .coverageGap:
-            return .ollieWarning // Coverage gap status
+            return .otisWarning // Coverage gap status
         }
     }
 }
@@ -140,8 +140,8 @@ extension EventLocation {
     /// Icon color for this location
     var iconColor: Color {
         switch self {
-        case .buiten: return .ollieSuccess
-        case .binnen: return .ollieDanger
+        case .buiten: return .otisSuccess
+        case .binnen: return .otisDanger
         }
     }
 }

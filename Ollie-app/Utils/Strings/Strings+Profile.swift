@@ -1,6 +1,6 @@
 //
 //  Strings+Profile.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Profile photo related strings
 

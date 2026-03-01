@@ -1,12 +1,12 @@
 //
 //  GrowthDetailSheet.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Detail view showing full weight chart and growth statistics
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Detail sheet showing the full weight chart and growth metrics
 struct GrowthDetailSheet: View {
@@ -136,7 +136,7 @@ struct GrowthDetailSheet: View {
                     Text(Strings.Growth.weightChange(weightUnit.formatDelta(delta.delta)))
                         .font(.subheadline)
                 }
-                .foregroundStyle(delta.delta >= 0 ? Color.ollieSuccess : Color.ollieWarning)
+                .foregroundStyle(delta.delta >= 0 ? Color.otisSuccess : Color.otisWarning)
             }
 
             Text(Strings.Growth.lastMeasured(formattedDate(date)))
@@ -187,28 +187,28 @@ struct GrowthDetailSheet: View {
                     title: Strings.Growth.totalGain,
                     value: weightUnit.format(story.currentWeight - story.firstWeight),
                     icon: "arrow.up.right.circle.fill",
-                    color: .ollieSuccess
+                    color: .otisSuccess
                 )
 
                 statCard(
                     title: Strings.Growth.growthRatioLabel,
                     value: String(format: "%.1fx", story.growthRatio),
                     icon: "chart.line.uptrend.xyaxis",
-                    color: .ollieAccent
+                    color: .otisAccent
                 )
 
                 statCard(
                     title: Strings.Growth.percentOfAdultShort,
                     value: "\(Int(story.percentToAdult))%",
                     icon: "dog.fill",
-                    color: .ollieInfo
+                    color: .otisInfo
                 )
 
                 statCard(
                     title: Strings.Growth.estimatedAdult,
                     value: weightUnit.format(story.estimatedAdultWeight),
                     icon: "target",
-                    color: .ollieMuted
+                    color: .otisMuted
                 )
             }
         }
@@ -312,7 +312,7 @@ struct GrowthDetailSheet: View {
 #Preview("With Data") {
     GrowthDetailSheet(
         referenceCurve: GrowthCurves.goldenRetrieverFemale,
-        puppyName: "Ollie",
+        puppyName: "Max",
         showWeightSheet: .constant(false)
     )
     .environmentObject(WeightStore())
@@ -322,7 +322,7 @@ struct GrowthDetailSheet: View {
 #Preview("Empty") {
     GrowthDetailSheet(
         referenceCurve: GrowthCurves.goldenRetrieverFemale,
-        puppyName: "Ollie",
+        puppyName: "Max",
         showWeightSheet: .constant(false)
     )
     .environmentObject(WeightStore())

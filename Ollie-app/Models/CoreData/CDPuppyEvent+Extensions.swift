@@ -1,12 +1,12 @@
 //
 //  CDPuppyEvent+Extensions.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Extensions for converting between PuppyEvent and CDPuppyEvent
 //
 
 import CoreData
-import OllieShared
+import OtisShared
 
 extension CDPuppyEvent {
 

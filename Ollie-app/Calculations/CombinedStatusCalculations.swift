@@ -1,12 +1,12 @@
 //
 //  CombinedStatusCalculations.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Combined sleep + potty state machine for intelligent status card display
 //  Prevents conflicting messages like "needs to pee NOW" while sleeping
 
 import Foundation
-import OllieShared
+import OtisShared
 
 /// Combined state for sleep + potty status display
 /// Determines which card(s) to show based on current conditions

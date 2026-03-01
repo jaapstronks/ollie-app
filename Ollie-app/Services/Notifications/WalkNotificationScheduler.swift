@@ -1,12 +1,12 @@
 //
 //  WalkNotificationScheduler.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Handles scheduling walk reminder notifications
 //
 
 import Foundation
-import OllieShared
+import OtisShared
 import UserNotifications
 import os
 
@@ -16,7 +16,7 @@ final class WalkNotificationScheduler: NotificationScheduler {
     let notificationPrefix = "walk_"
 
     private let notificationCenter = UNUserNotificationCenter.current()
-    private let logger = Logger.ollie(category: "WalkNotificationScheduler")
+    private let logger = Logger.otis(category: "WalkNotificationScheduler")
 
     func schedule(events: [PuppyEvent], profile: PuppyProfile) async {
         await cancel()

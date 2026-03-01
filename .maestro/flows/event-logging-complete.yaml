@@ -1,6 +1,6 @@
 # Event Logging Tests
 # Tests: FAB tap and long-press quick menu functionality
-appId: nl.jaapstronks.Ollie
+appId: nl.jaapstronks.Otis
 ---
 - launchApp
 - waitForAnimationToEnd

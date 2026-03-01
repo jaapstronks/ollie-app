@@ -1,5 +1,5 @@
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Compact horizontal weather strip showing upcoming hours
 struct WeatherBar: View {
@@ -51,7 +51,7 @@ struct WeatherHourCell: View {
                         .font(.caption2)
                 }
                 .font(.caption2)
-                .foregroundStyle(forecast.rainWarning ? Color.ollieDanger : Color.secondary)
+                .foregroundStyle(forecast.rainWarning ? Color.otisDanger : Color.secondary)
             }
 
             // Wind warning indicator
@@ -62,7 +62,7 @@ struct WeatherHourCell: View {
                     Text("\(Int(forecast.windSpeed))")
                         .font(.caption2)
                 }
-                .foregroundStyle(Color.ollieWarning)
+                .foregroundStyle(Color.otisWarning)
             }
         }
         .frame(minWidth: 44)
@@ -92,17 +92,17 @@ struct WeatherAlertBanner: View {
 
     private var backgroundColor: Color {
         switch alert.type {
-        case .warning: return Color.ollieWarning.opacity(0.15)
-        case .info: return Color.ollieInfo.opacity(0.15)
-        case .positive: return Color.ollieSuccess.opacity(0.15)
+        case .warning: return Color.otisWarning.opacity(0.15)
+        case .info: return Color.otisInfo.opacity(0.15)
+        case .positive: return Color.otisSuccess.opacity(0.15)
         }
     }
 
     private var textColor: Color {
         switch alert.type {
-        case .warning: return .ollieWarning
+        case .warning: return .otisWarning
         case .info: return .primary
-        case .positive: return .ollieSuccess
+        case .positive: return .otisSuccess
         }
     }
 }
@@ -170,9 +170,9 @@ struct WeatherSection: View {
 
     private func alertColor(for type: WeatherAlert.AlertType) -> Color {
         switch type {
-        case .warning: return .ollieWarning
+        case .warning: return .otisWarning
         case .info: return .secondary
-        case .positive: return .ollieSuccess
+        case .positive: return .otisSuccess
         }
     }
 }

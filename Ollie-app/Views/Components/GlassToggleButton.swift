@@ -1,6 +1,6 @@
 //
 //  GlassToggleButton.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Reusable glass toggle button component for selection UIs.
 //  Used by CatchUpSheet, StartCoverageGapSheet, and similar selection interfaces.

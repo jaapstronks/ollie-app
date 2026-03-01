@@ -1,6 +1,6 @@
 //
 //  FoodRecallSettingsView.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Settings view for configuring food recall alerts
 

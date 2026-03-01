@@ -1,12 +1,12 @@
 //
 //  ThisWeekViewModel.swift
-//  Ollie-app
+//  Otis-app
 //
 //  ViewModel for ThisWeekCard with visibility logic
 
 import Foundation
 import SwiftUI
-import OllieShared
+import OtisShared
 import Combine
 
 /// ViewModel for the "This Week" card on Today view

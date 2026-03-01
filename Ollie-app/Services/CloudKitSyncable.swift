@@ -1,6 +1,6 @@
 //
 //  CloudKitSyncable.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Protocol for Core Data stores with CloudKit sync support.
 //  Provides common patterns for remote change observation and error handling.
@@ -10,7 +10,7 @@ import Foundation
 import CoreData
 import Combine
 import os
-import OllieShared
+import OtisShared
 
 // MARK: - CloudKit Syncable Protocol
 
@@ -155,7 +155,7 @@ class BaseStore: ObservableObject, CloudKitSyncable, ErrorTrackable {
     ///   - logCategory: Category name for the logger (e.g., "ContactStore")
     init(persistenceController: PersistenceController = .shared, logCategory: String) {
         self.persistenceController = persistenceController
-        self.logger = Logger.ollie(category: logCategory)
+        self.logger = Logger.otis(category: logCategory)
         performInitialLoad()
         setupRemoteChangeObserver()
     }

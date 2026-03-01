@@ -1,6 +1,6 @@
 //
 //  Strings+Common.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Common, App, Tabs, and FAB strings
 
@@ -73,9 +73,9 @@ extension Strings {
 
     // MARK: - App
     enum App {
-        static let name = String(localized: "Ollie", table: table)
+        static let name = String(localized: "Otis", table: table)
         static let subtitle = String(localized: "Puppy Tracker", table: table)
-        static let tagline = String(localized: "Puppyhood is chaos. Ollie brings the calm.", table: table)
+        static let tagline = String(localized: "Puppyhood is chaos. Otis brings the calm.", table: table)
     }
 
     // MARK: - Tabs

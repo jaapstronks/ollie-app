@@ -1,12 +1,12 @@
 //
 //  SheetCoordinator.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Centralized sheet presentation management for TimelineView
 //
 
 import Combine
-import OllieShared
+import OtisShared
 import SwiftUI
 
 /// Manages sheet presentation state for the timeline view
@@ -26,7 +26,7 @@ final class SheetCoordinator: ObservableObject {
         case momentSourcePicker
         case logMoment
         case editEvent(PuppyEvent)
-        case olliePlus  // Ollie+ subscription upsell sheet
+        case otisPlus  // Otis+ subscription upsell sheet
         case subscriptionSuccess  // Shown after successful subscription
         case startActivity(ActivityType)
         case endActivity
@@ -61,7 +61,7 @@ final class SheetCoordinator: ObservableObject {
             case .momentSourcePicker: return "momentSourcePicker"
             case .logMoment: return "logMoment"
             case .editEvent(let event): return "editEvent-\(event.id.uuidString)"
-            case .olliePlus: return "olliePlus"
+            case .otisPlus: return "otisPlus"
             case .subscriptionSuccess: return "subscriptionSuccess"
             case .startActivity(let type): return "startActivity-\(type.rawValue)"
             case .endActivity: return "endActivity"

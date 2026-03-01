@@ -1,11 +1,11 @@
 //
 //  AddDocumentSheet.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Sheet for adding or editing a document
 
 import SwiftUI
-import OllieShared
+import OtisShared
 import UniformTypeIdentifiers
 import PDFKit
 

@@ -1,12 +1,12 @@
 //
 //  DurationPill.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Reusable duration pill component for session rows
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// A capsule-shaped pill showing a duration
 /// Used in session rows (sleep, walks) to display elapsed time
@@ -34,7 +34,7 @@ struct DurationPill: View {
 /// Live-updating duration pill for ongoing activities
 struct LiveDurationPill: View {
     let startTime: Date
-    var color: Color = .ollieSleep
+    var color: Color = .otisSleep
 
     var body: some View {
         SwiftUI.TimelineView(.periodic(from: Date(), by: 60)) { _ in
@@ -57,8 +57,8 @@ struct LiveDurationPill: View {
 #Preview("Static Duration") {
     VStack(spacing: 16) {
         DurationPill(text: "25 min")
-        DurationPill(text: "1h 30m", color: .ollieSuccess, isHighlighted: true)
-        DurationPill(text: "45 min", color: .ollieSleep, isHighlighted: true)
+        DurationPill(text: "1h 30m", color: .otisSuccess, isHighlighted: true)
+        DurationPill(text: "45 min", color: .otisSleep, isHighlighted: true)
     }
     .padding()
 }

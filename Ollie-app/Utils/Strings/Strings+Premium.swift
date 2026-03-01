@@ -1,6 +1,6 @@
 //
 //  Strings+Premium.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Premium and Siri strings
 
@@ -17,11 +17,11 @@ extension Strings {
         static let helpTitle = String(localized: "Voice Commands", table: table)
         static let helpDescription = String(localized: "Use Siri to log events and check on your puppy hands-free. Say \"Hey Siri\" followed by a command.", table: table)
         static let exampleCommands = String(localized: "Example commands:", table: table)
-        static let examplePeedOutside = String(localized: "My puppy peed outside in Ollie", table: table)
-        static let exampleSleeping = String(localized: "My puppy is sleeping in Ollie", table: table)
-        static let exampleStatus = String(localized: "How is my puppy in Ollie", table: table)
+        static let examplePeedOutside = String(localized: "My puppy peed outside in Otis", table: table)
+        static let exampleSleeping = String(localized: "My puppy is sleeping in Otis", table: table)
+        static let exampleStatus = String(localized: "How is my puppy in Otis", table: table)
         static let openShortcuts = String(localized: "Open Shortcuts App", table: table)
-        static let openShortcutsDescription = String(localized: "See all Ollie shortcuts", table: table)
+        static let openShortcutsDescription = String(localized: "See all Otis shortcuts", table: table)
         static let helpFooter = String(localized: "Siri will respond using your puppy's name from your profile.", table: table)
 
         // Intent titles
@@ -41,8 +41,8 @@ extension Strings {
         static let poopStatusDescription = String(localized: "Find out when your puppy last pooped", table: table)
 
         // Dialog responses
-        static let setupProfileFirst = String(localized: "Please set up your puppy profile in the Ollie app first.", table: table)
-        static let trialEnded = String(localized: "Your free trial has ended. Please upgrade in the Ollie app to continue logging.", table: table)
+        static let setupProfileFirst = String(localized: "Please set up your puppy profile in the Otis app first.", table: table)
+        static let trialEnded = String(localized: "Your free trial has ended. Please upgrade in the Otis app to continue logging.", table: table)
         static let failedToLog = String(localized: "Failed to log event", table: table)
 
         static func loggedPotty(type: String, location: String, name: String) -> String {
@@ -96,7 +96,7 @@ extension Strings {
 
     // MARK: - Premium / Monetization
     enum Premium {
-        static let title = String(localized: "Ollie Premium", table: table)
+        static let title = String(localized: "Otis Premium", table: table)
         static let free = String(localized: "Free", table: table)
         static let premium = String(localized: "Premium", table: table)
         static let expired = String(localized: "Expired", table: table)
@@ -111,10 +111,10 @@ extension Strings {
         // Settings section
         static let status = String(localized: "Status", table: table)
         static let restorePurchases = String(localized: "Restore purchases", table: table)
-        static let continueWithOllie = String(localized: "Continue with Ollie", table: table)
+        static let continueWithOtis = String(localized: "Continue with Otis", table: table)
         static let price = String(localized: "€19", table: table)
-        static func continueWithOlliePrice(_ price: String) -> String {
-            String(localized: "Continue with Ollie — \(price)", table: table)
+        static func continueWithOtisPrice(_ price: String) -> String {
+            String(localized: "Continue with Otis — \(price)", table: table)
         }
 
         // Upgrade prompt
@@ -122,7 +122,7 @@ extension Strings {
         static func freeTrialEndedTitle(name: String) -> String {
             String(localized: "Your free trial for \(name) has ended", table: table)
         }
-        static let firstWeeksMessage = String(localized: "The first weeks with a puppy are the most important. Ollie helps you track patterns and build good habits.", table: table)
+        static let firstWeeksMessage = String(localized: "The first weeks with a puppy are the most important. Otis helps you track patterns and build good habits.", table: table)
         static let unlockFeatures = String(localized: "Unlock unlimited logging, predictions, and insights for your puppy's journey.", table: table)
         static let oneTimePurchase = String(localized: "One-time purchase, per puppy profile", table: table)
 

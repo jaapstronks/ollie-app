@@ -1,6 +1,6 @@
 //
 //  DogParkDiscoveryService.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Discovers dog parks from external data sources (OpenStreetMap, government open data).
 //  Uses Overpass API for OSM queries and caches results locally.
@@ -8,7 +8,7 @@
 
 import Foundation
 import Combine
-import OllieShared
+import OtisShared
 import os
 import CoreLocation
 
@@ -21,10 +21,10 @@ enum DiscoverablePlaceType: CaseIterable {
 
     var label: String {
         switch self {
-        case .dogParks: return Strings.PlacesDiscovery.filterDogAreas
-        case .vetClinics: return Strings.PlacesDiscovery.filterVets
-        case .petStores: return Strings.PlacesDiscovery.filterPetStores
-        case .dogFriendlyPlaces: return Strings.PlacesDiscovery.filterDogFriendly
+        case .dogParks: return OtisShared.Strings.PlacesDiscovery.filterDogAreas
+        case .vetClinics: return OtisShared.Strings.PlacesDiscovery.filterVets
+        case .petStores: return OtisShared.Strings.PlacesDiscovery.filterPetStores
+        case .dogFriendlyPlaces: return OtisShared.Strings.PlacesDiscovery.filterDogFriendly
         }
     }
 
@@ -53,7 +53,7 @@ class DogParkDiscoveryService: ObservableObject {
 
     // MARK: - Private Properties
 
-    private let logger = Logger.ollie(category: "DogParkDiscovery")
+    private let logger = Logger.otis(category: "DogParkDiscovery")
 
     // Cache: keyed by grid cell (rounded lat/lon)
     private var cache: [String: CacheEntry] = [:]
@@ -222,7 +222,7 @@ class DogParkDiscoveryService: ObservableObject {
         discoveredSpots = deduplicateSpots(allSpots)
         isLoading = false
 
-        logger.info("Discovered \(discoveredSpots.count) total spots across \(activePlaceTypes.count) place types")
+        logger.info("Discovered \(self.discoveredSpots.count) total spots across \(self.activePlaceTypes.count) place types")
     }
 
     /// Discover a specific place type

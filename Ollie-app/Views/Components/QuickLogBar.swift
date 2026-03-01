@@ -1,10 +1,10 @@
 //
 //  QuickLogBar.swift
-//  Ollie-app
+//  Otis-app
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Context for smart quick log bar icon display
 struct QuickLogContext {

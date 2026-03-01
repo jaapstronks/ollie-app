@@ -1,6 +1,6 @@
 //
 //  AtmosphereTypes.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Type definitions for the contextual atmosphere system
 

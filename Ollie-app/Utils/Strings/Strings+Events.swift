@@ -1,6 +1,6 @@
 //
 //  Strings+Events.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Event types, locations, and logging strings
 

@@ -1,6 +1,6 @@
 //
 //  CalendarViewModeToggle.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Segmented control for switching between Development and Calendar view modes
 

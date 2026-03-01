@@ -44,7 +44,7 @@ Note the deployed URL (e.g., `https://otis-analytics.YOUR_SUBDOMAIN.workers.dev`
 
 ### 6. Update iOS App
 
-Edit `Ollie-app/Services/OtisAnalytics.swift`:
+Edit `Otis-app/Services/OtisAnalytics.swift`:
 
 ```swift
 private let endpoint = URL(string: "https://otis-analytics.YOUR_SUBDOMAIN.workers.dev/events")!

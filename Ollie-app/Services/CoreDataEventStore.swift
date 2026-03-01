@@ -1,6 +1,6 @@
 //
 //  CoreDataEventStore.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Handles Core Data operations for puppy events
 //  Replaces LocalEventFileStore with same public API
@@ -8,7 +8,7 @@
 
 import Foundation
 import CoreData
-import OllieShared
+import OtisShared
 import os
 
 /// Handles Core Data operations for puppy events
@@ -18,7 +18,7 @@ final class CoreDataEventStore: @unchecked Sendable {
     // MARK: - Properties
 
     private let persistenceController: PersistenceController
-    private let logger = Logger.ollie(category: "CoreDataEventStore")
+    private let logger = Logger.otis(category: "CoreDataEventStore")
 
     /// In-memory cache for frequently accessed date ranges
     private var rangeCache: [String: (events: [PuppyEvent], timestamp: Date)] = [:]

@@ -1,11 +1,11 @@
 //
 //  SleepSessionRow.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Timeline row for displaying sleep sessions with live timer for ongoing sleep
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Row displaying a sleep session in the timeline
 /// Shows start → end time as a single unified event
@@ -32,7 +32,7 @@ struct SleepSessionRow: View {
                     // Ongoing indicator
                     Text("...")
                         .font(.caption)
-                        .foregroundColor(.ollieSleep)
+                        .foregroundColor(.otisSleep)
                 }
             }
             .frame(width: 44, alignment: .trailing)
@@ -81,7 +81,7 @@ struct SleepSessionRow: View {
 
             // Pulsing dot indicator
             Circle()
-                .fill(Color.ollieSleep)
+                .fill(Color.otisSleep)
                 .frame(width: 8, height: 8)
                 .modifier(PulsingAnimation())
         }
@@ -99,7 +99,7 @@ struct SleepSessionRow: View {
             if session.isShortNap {
                 Text("(\(Strings.SleepSession.shortNap))")
                     .font(.caption)
-                    .foregroundColor(.ollieWarning)
+                    .foregroundColor(.otisWarning)
             }
         }
     }
@@ -109,7 +109,7 @@ struct SleepSessionRow: View {
     @ViewBuilder
     private var durationPill: some View {
         if session.isOngoing {
-            LiveDurationPill(startTime: session.startTime, color: .ollieSleep)
+            LiveDurationPill(startTime: session.startTime, color: .otisSleep)
         } else {
             DurationPill(text: session.durationString)
         }

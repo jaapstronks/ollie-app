@@ -1,6 +1,6 @@
 //
 //  StatusCardConfigurable.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Protocol for configuring status cards with consistent styling.
 //  Provides a standardized interface for status card properties.

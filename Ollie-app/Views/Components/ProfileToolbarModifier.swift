@@ -1,12 +1,12 @@
 //
 //  ProfileToolbarModifier.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Reusable modifier to add profile/settings button to navigation toolbar
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// View modifier that adds a ProfilePhotoButton to the navigation toolbar
 struct ProfileToolbarModifier: ViewModifier {

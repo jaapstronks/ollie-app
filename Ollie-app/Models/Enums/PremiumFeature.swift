@@ -1,12 +1,12 @@
 //
 //  PremiumFeature.swift
-//  Ollie-app
+//  Otis-app
 //
-//  Defines features gated behind Ollie+ subscription
+//  Defines features gated behind Otis+ subscription
 
 import Foundation
 
-/// Features that require Ollie+ subscription
+/// Features that require Otis+ subscription
 enum PremiumFeature: String, CaseIterable {
     /// AI-powered potty predictions based on patterns
     case pottyPredictions
@@ -48,29 +48,29 @@ enum PremiumFeature: String, CaseIterable {
     var displayName: String {
         switch self {
         case .pottyPredictions:
-            return Strings.OlliePlus.featurePottyPredictions
+            return Strings.OtisPlus.featurePottyPredictions
         case .advancedAnalytics:
-            return Strings.OlliePlus.featureAdvancedAnalytics
+            return Strings.OtisPlus.featureAdvancedAnalytics
         case .sleepInsights:
-            return Strings.OlliePlus.featureSleepInsights
+            return Strings.OtisPlus.featureSleepInsights
         case .weekInReview:
-            return Strings.OlliePlus.featureWeekInReview
+            return Strings.OtisPlus.featureWeekInReview
         case .fullTrainingLibrary:
-            return Strings.OlliePlus.featureFullTraining
+            return Strings.OtisPlus.featureFullTraining
         case .socializationProgress:
-            return Strings.OlliePlus.featureSocialization
+            return Strings.OtisPlus.featureSocialization
         case .photoVideoAttachments:
-            return Strings.OlliePlus.featurePhotoVideo
+            return Strings.OtisPlus.featurePhotoVideo
         case .unlimitedPartnerSharing:
-            return Strings.OlliePlus.featureUnlimitedSharing
+            return Strings.OtisPlus.featureUnlimitedSharing
         case .exportPDF:
-            return Strings.OlliePlus.featureExportPDF
+            return Strings.OtisPlus.featureExportPDF
         case .calendarIntegration:
-            return Strings.OlliePlus.featureCalendarIntegration
+            return Strings.OtisPlus.featureCalendarIntegration
         case .customMilestones:
-            return Strings.OlliePlus.featureCustomMilestones
+            return Strings.OtisPlus.featureCustomMilestones
         case .milestoneNotes:
-            return Strings.OlliePlus.featureMilestoneNotes
+            return Strings.OtisPlus.featureMilestoneNotes
         }
     }
 
@@ -78,29 +78,29 @@ enum PremiumFeature: String, CaseIterable {
     var description: String {
         switch self {
         case .pottyPredictions:
-            return Strings.OlliePlus.featurePottyPredictionsDesc
+            return Strings.OtisPlus.featurePottyPredictionsDesc
         case .advancedAnalytics:
-            return Strings.OlliePlus.featureAdvancedAnalyticsDesc
+            return Strings.OtisPlus.featureAdvancedAnalyticsDesc
         case .sleepInsights:
-            return Strings.OlliePlus.featureSleepInsightsDesc
+            return Strings.OtisPlus.featureSleepInsightsDesc
         case .weekInReview:
-            return Strings.OlliePlus.featureWeekInReviewDesc
+            return Strings.OtisPlus.featureWeekInReviewDesc
         case .fullTrainingLibrary:
-            return Strings.OlliePlus.featureFullTrainingDesc
+            return Strings.OtisPlus.featureFullTrainingDesc
         case .socializationProgress:
-            return Strings.OlliePlus.featureSocializationDesc
+            return Strings.OtisPlus.featureSocializationDesc
         case .photoVideoAttachments:
-            return Strings.OlliePlus.featurePhotoVideoDesc
+            return Strings.OtisPlus.featurePhotoVideoDesc
         case .unlimitedPartnerSharing:
-            return Strings.OlliePlus.featureUnlimitedSharingDesc
+            return Strings.OtisPlus.featureUnlimitedSharingDesc
         case .exportPDF:
-            return Strings.OlliePlus.featureExportPDFDesc
+            return Strings.OtisPlus.featureExportPDFDesc
         case .calendarIntegration:
-            return Strings.OlliePlus.featureCalendarIntegrationDesc
+            return Strings.OtisPlus.featureCalendarIntegrationDesc
         case .customMilestones:
-            return Strings.OlliePlus.featureCustomMilestonesDesc
+            return Strings.OtisPlus.featureCustomMilestonesDesc
         case .milestoneNotes:
-            return Strings.OlliePlus.featureMilestoneNotesDesc
+            return Strings.OtisPlus.featureMilestoneNotesDesc
         }
     }
 
@@ -138,5 +138,5 @@ enum PremiumFeature: String, CaseIterable {
 /// Number of free training skills (first N skills are free)
 let freeTrainingSkillCount = 10
 
-/// Number of partners free users can share with (0 = sharing is Ollie+ only)
+/// Number of partners free users can share with (0 = sharing is Otis+ only)
 let freePartnerLimit = 0

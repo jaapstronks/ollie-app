@@ -1,10 +1,10 @@
 # TODO: Smart Potty Reminders
 
-Data-driven push notifications op basis van daadwerkelijke plaspatronen. Waar Dogo irritante streak-notificaties stuurt, stuurt Ollie nuttige herinneringen gebaseerd op echte data.
+Data-driven push notifications op basis van daadwerkelijke plaspatronen. Waar Dogo irritante streak-notificaties stuurt, stuurt Otis nuttige herinneringen gebaseerd op echte data.
 
 ## Waarom
 
-- Ollie heeft al potty gap analyse en patroonherkenning
+- Otis heeft al potty gap analyse en patroonherkenning
 - De logische volgende stap: gebruik die data voor proactieve reminders
 - "Het is 2u15m geleden sinds de laatste plas — misschien tijd om naar buiten te gaan?"
 - Geen concurrent doet dit data-driven (Dogo doet streaks, niet plasinterval-reminders)

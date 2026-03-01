@@ -1,12 +1,12 @@
 //
 //  GrowthProgressArc.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Semi-circular progress arc showing journey to adult weight
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Progress arc showing journey from start weight to adult weight
 struct GrowthProgressArc: View {
@@ -40,7 +40,7 @@ struct GrowthProgressArc: View {
                 ArcShape(progress: animatedProgress)
                     .stroke(
                         LinearGradient(
-                            colors: [.ollieAccent.opacity(0.6), .ollieAccent],
+                            colors: [.otisAccent.opacity(0.6), .otisAccent],
                             startPoint: .leading,
                             endPoint: .trailing
                         ),
@@ -49,9 +49,9 @@ struct GrowthProgressArc: View {
 
                 // Current position indicator
                 Circle()
-                    .fill(Color.ollieAccent)
+                    .fill(Color.otisAccent)
                     .frame(width: 12, height: 12)
-                    .shadow(color: .ollieAccent.opacity(0.3), radius: 4)
+                    .shadow(color: .otisAccent.opacity(0.3), radius: 4)
                     .offset(x: indicatorOffset.x, y: indicatorOffset.y)
             }
             .frame(height: 60)
@@ -76,7 +76,7 @@ struct GrowthProgressArc: View {
                     Text(weightUnit.format(currentWeight))
                         .font(.caption)
                         .fontWeight(.semibold)
-                        .foregroundStyle(Color.ollieAccent)
+                        .foregroundStyle(Color.otisAccent)
                 }
 
                 Spacer()

@@ -1,6 +1,6 @@
 //
 //  TrainingSessionView.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Full-screen training session with clicker, timer, and instructions
 //
@@ -165,7 +165,7 @@ struct TrainingSessionView: View {
             } label: {
                 HStack {
                     Image(systemName: "lightbulb.fill")
-                        .foregroundStyle(Color.ollieWarning)
+                        .foregroundStyle(Color.otisWarning)
                     Text(Strings.Training.howTo)
                         .font(.subheadline)
                         .fontWeight(.medium)
@@ -230,7 +230,7 @@ struct TrainingSessionView: View {
                     .font(.subheadline)
             }
             .toggleStyle(.button)
-            .tint(soundEnabled ? .ollieAccent : .secondary)
+            .tint(soundEnabled ? .otisAccent : .secondary)
 
             // Vibration toggle
             Toggle(isOn: $vibrationEnabled) {
@@ -238,7 +238,7 @@ struct TrainingSessionView: View {
                     .font(.subheadline)
             }
             .toggleStyle(.button)
-            .tint(vibrationEnabled ? .ollieAccent : .secondary)
+            .tint(vibrationEnabled ? .otisAccent : .secondary)
         }
     }
 
@@ -257,7 +257,7 @@ struct TrainingSessionView: View {
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 16)
-                    .background(Color.ollieAccent)
+                    .background(Color.otisAccent)
                     .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
             }
             .padding()

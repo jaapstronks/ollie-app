@@ -1,11 +1,11 @@
 //
 //  LocationEntity.swift
-//  Ollie-app
+//  Otis-app
 //
 //  AppEntity for event locations (inside/outside)
 
 import AppIntents
-import OllieShared
+import OtisShared
 
 /// App Entity representing event location (inside/outside)
 struct LocationEntity: AppEntity {

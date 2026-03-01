@@ -1,10 +1,10 @@
 //
 //  LogMomentSheet.swift
-//  Ollie-app
+//  Otis-app
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Photo-first logging sheet: shows preview + extracted date/location + optional note
 struct LogMomentSheet: View {

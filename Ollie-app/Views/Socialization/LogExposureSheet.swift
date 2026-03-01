@@ -1,11 +1,11 @@
 //
 //  LogExposureSheet.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Sheet for logging a socialization exposure
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Sheet for logging an exposure to a socialization item
 struct LogExposureSheet: View {
@@ -125,11 +125,11 @@ struct LogExposureSheet: View {
             .padding(.vertical, 12)
             .background(
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(isSelected ? Color.ollieAccent.opacity(0.2) : Color.secondary.opacity(0.1))
+                    .fill(isSelected ? Color.otisAccent.opacity(0.2) : Color.secondary.opacity(0.1))
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 12)
-                    .stroke(isSelected ? Color.ollieAccent : Color.clear, lineWidth: 2)
+                    .stroke(isSelected ? Color.otisAccent : Color.clear, lineWidth: 2)
             )
         }
         .buttonStyle(.plain)
@@ -192,25 +192,25 @@ struct LogExposureSheet: View {
     private func backgroundColor(for reaction: SocializationReaction, isSelected: Bool) -> Color {
         if isSelected {
             return reaction.isPositive ?
-                Color.ollieSuccess.opacity(0.2) :
-                Color.ollieWarning.opacity(0.2)
+                Color.otisSuccess.opacity(0.2) :
+                Color.otisWarning.opacity(0.2)
         }
         return Color.secondary.opacity(0.1)
     }
 
     private func borderColor(for reaction: SocializationReaction, isSelected: Bool) -> Color {
         if isSelected {
-            return reaction.isPositive ? .ollieSuccess : .ollieWarning
+            return reaction.isPositive ? .otisSuccess : .otisWarning
         }
         return .clear
     }
 
     private func reactionIconColor(for reaction: SocializationReaction) -> Color {
         switch reaction {
-        case .positief: return .ollieSuccess
-        case .neutraal: return .ollieAccent
+        case .positief: return .otisSuccess
+        case .neutraal: return .otisAccent
         case .onzeker: return .orange
-        case .angstig: return .ollieWarning
+        case .angstig: return .otisWarning
         }
     }
 

@@ -1,12 +1,12 @@
 //
 //  ContactStore.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Manages dog contacts with Core Data and automatic CloudKit sync
 
 import Foundation
 import CoreData
-import OllieShared
+import OtisShared
 
 /// Manages dog contacts with Core Data and automatic CloudKit sync
 @MainActor

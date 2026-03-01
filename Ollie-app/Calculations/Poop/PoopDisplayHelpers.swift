@@ -1,13 +1,13 @@
 //
 //  PoopDisplayHelpers.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Display helpers for poop status (icons, colors, formatting)
 //
 
 import Foundation
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Display helpers for poop status
 struct PoopDisplayHelpers {
@@ -56,13 +56,13 @@ struct PoopDisplayHelpers {
         case .hidden:
             return .gray
         case .good:
-            return .ollieSuccess
+            return .otisSuccess
         case .info:
             return .secondary
         case .gentle:
-            return .ollieWarning
+            return .otisWarning
         case .attention:
-            return .ollieWarning
+            return .otisWarning
         }
     }
 }

@@ -1,11 +1,11 @@
 //
 //  WalkScheduleEditor.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Full CRUD editor for walk schedule
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Editor for walk schedule with mode selection, walk list, and timing settings
 struct WalkScheduleEditor: View {

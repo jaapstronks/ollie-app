@@ -1,11 +1,11 @@
 //
 //  WeekDetailSheet.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Detailed view of socialization progress for a specific week
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Category progress for the week detail view
 struct CategoryWeekProgress: Identifiable {
@@ -50,7 +50,7 @@ struct WeekDetailSheet: View {
                             .foregroundStyle(.white)
                             .frame(maxWidth: .infinity)
                             .padding()
-                            .background(Color.ollieAccent)
+                            .background(Color.otisAccent)
                             .clipShape(RoundedRectangle(cornerRadius: 12))
                     }
                     .padding(.horizontal)
@@ -117,7 +117,7 @@ struct WeekDetailSheet: View {
                     Text(weekProgress.isComplete ? Strings.Socialization.complete : Strings.WeekDetail.inProgress)
                         .font(.caption)
                         .fontWeight(.medium)
-                        .foregroundStyle(weekProgress.isComplete ? Color.ollieSuccess : Color.ollieAccent)
+                        .foregroundStyle(weekProgress.isComplete ? Color.otisSuccess : Color.otisAccent)
                 }
 
                 GeometryReader { geo in
@@ -127,7 +127,7 @@ struct WeekDetailSheet: View {
                             .frame(height: 8)
 
                         RoundedRectangle(cornerRadius: 4)
-                            .fill(weekProgress.isComplete ? Color.ollieSuccess : Color.ollieAccent)
+                            .fill(weekProgress.isComplete ? Color.otisSuccess : Color.otisAccent)
                             .frame(width: geo.size.width * weekProgress.overallProgress, height: 8)
                     }
                 }
@@ -144,7 +144,7 @@ struct WeekDetailSheet: View {
         VStack(spacing: 4) {
             Image(systemName: icon)
                 .font(.title3)
-                .foregroundStyle(Color.ollieAccent)
+                .foregroundStyle(Color.otisAccent)
 
             Text(value)
                 .font(.title2)
@@ -217,11 +217,11 @@ struct WeekDetailSheet: View {
                 if count >= total {
                     Image(systemName: "checkmark.circle.fill")
                         .font(.caption)
-                        .foregroundStyle(Color.ollieSuccess)
+                        .foregroundStyle(Color.otisSuccess)
                 } else if count == 0 {
                     Image(systemName: "exclamationmark.circle.fill")
                         .font(.caption)
-                        .foregroundStyle(Color.ollieWarning)
+                        .foregroundStyle(Color.otisWarning)
                 }
             }
         }
@@ -230,13 +230,13 @@ struct WeekDetailSheet: View {
     private func progressColor(count: Int, total: Int) -> Color {
         let progress = Double(count) / Double(max(1, total))
         if progress >= 1.0 {
-            return .ollieSuccess
+            return .otisSuccess
         } else if progress >= 0.5 {
-            return .ollieAccent
+            return .otisAccent
         } else if count > 0 {
-            return .ollieInfo
+            return .otisInfo
         } else {
-            return .ollieWarning
+            return .otisWarning
         }
     }
 
@@ -258,7 +258,7 @@ struct WeekDetailSheet: View {
                     HStack(spacing: 8) {
                         Image(systemName: "arrow.right.circle")
                             .font(.caption)
-                            .foregroundStyle(Color.ollieAccent)
+                            .foregroundStyle(Color.otisAccent)
 
                         Text(suggestion)
                             .font(.subheadline)

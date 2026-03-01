@@ -1,6 +1,6 @@
 //
 //  Strings+Timeline.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Timeline, upcoming events, potty status, and sleep status strings
 

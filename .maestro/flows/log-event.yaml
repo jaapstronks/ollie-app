@@ -1,5 +1,5 @@
 # Test logging an event via FAB tap
-appId: jaapstronks.Ollie-app
+appId: jaapstronks.Otis-app
 ---
 - launchApp
 - waitForAnimationToEnd

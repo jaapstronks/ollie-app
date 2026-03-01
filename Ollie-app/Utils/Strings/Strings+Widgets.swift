@@ -1,6 +1,6 @@
 //
 //  Strings+Widgets.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Widgets and push notification strings
 
@@ -55,7 +55,7 @@ extension Strings {
         static let now = String(localized: "Now", table: table)
 
         // Combined Widget
-        static let overviewName = String(localized: "Ollie Overview", table: table)
+        static let overviewName = String(localized: "Otis Overview", table: table)
         static let overviewDescription = String(localized: "Potty timer and streak in one widget.", table: table)
         static let outdoorStreak = String(localized: "outdoor streak", table: table)
         static let pottyBreakReminder = String(localized: "Time for a potty break!", table: table)

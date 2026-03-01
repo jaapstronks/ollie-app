@@ -1,11 +1,11 @@
 //
 //  DigestCard.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Compact daily digest card for timeline header
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Compact card showing daily summary at top of timeline
 /// Uses liquid glass design for iOS 26 aesthetic
@@ -25,17 +25,17 @@ struct DigestCard: View {
                         Text(Strings.Digest.dayNumber(dayNumber))
                             .font(.caption)
                             .fontWeight(.bold)
-                            .foregroundStyle(Color.ollieAccent)
+                            .foregroundStyle(Color.otisAccent)
                             .padding(.horizontal, 10)
                             .padding(.vertical, 4)
                             .background(
                                 Capsule()
-                                    .fill(Color.ollieAccent.opacity(colorScheme == .dark ? 0.2 : 0.12))
+                                    .fill(Color.otisAccent.opacity(colorScheme == .dark ? 0.2 : 0.12))
                             )
                             .overlay(
                                 Capsule()
                                     .strokeBorder(
-                                        Color.ollieAccent.opacity(0.2),
+                                        Color.otisAccent.opacity(0.2),
                                         lineWidth: 0.5
                                     )
                             )
@@ -115,7 +115,7 @@ struct DigestChips: View {
                 dayNumber: 5,
                 parts: ["5x plassen (100% buiten)", "3 maaltijden", "2 wandelingen"]
             ),
-            puppyName: "Ollie"
+            puppyName: "Max"
         )
 
         Spacer()
@@ -127,7 +127,7 @@ struct DigestChips: View {
     VStack {
         DigestCard(
             digest: DailyDigest(dayNumber: 1, parts: []),
-            puppyName: "Ollie"
+            puppyName: "Max"
         )
 
         Spacer()
@@ -139,7 +139,7 @@ struct DigestChips: View {
     VStack {
         DigestCard(
             digest: .empty,
-            puppyName: "Ollie"
+            puppyName: "Max"
         )
 
         Spacer()

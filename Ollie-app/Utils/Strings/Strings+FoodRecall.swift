@@ -1,6 +1,6 @@
 //
 //  Strings+FoodRecall.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Food recall alert strings
 

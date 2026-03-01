@@ -1,12 +1,12 @@
 //
 //  CDMasteredSkill+Extensions.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Extensions for converting between MasteredSkill and CDMasteredSkill
 //
 
 import CoreData
-import OllieShared
+import OtisShared
 
 extension CDMasteredSkill {
 

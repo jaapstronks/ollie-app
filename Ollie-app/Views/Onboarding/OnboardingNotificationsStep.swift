@@ -1,6 +1,6 @@
 //
 //  OnboardingNotificationsStep.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Pre-permission screen for notifications during onboarding
 //
@@ -23,7 +23,7 @@ struct OnboardingNotificationsStep: View {
             // Bell icon
             Image(systemName: "bell.badge.fill")
                 .font(.system(size: 64))
-                .foregroundStyle(Color.ollieAccent)
+                .foregroundStyle(Color.otisAccent)
                 .symbolRenderingMode(.hierarchical)
                 .scaleEffect(hasAppeared ? 1.0 : 0.8)
                 .opacity(hasAppeared ? 1.0 : 0.0)
@@ -80,7 +80,7 @@ struct OnboardingNotificationsStep: View {
                         .padding(.vertical, 16)
                         .background(
                             RoundedRectangle(cornerRadius: 14)
-                                .fill(Color.ollieAccent)
+                                .fill(Color.otisAccent)
                         )
                         .foregroundStyle(.white)
                 }
@@ -147,7 +147,7 @@ private struct PermissionBenefitRow: View {
         HStack(spacing: 14) {
             Image(systemName: icon)
                 .font(.system(size: 18))
-                .foregroundStyle(Color.ollieAccent)
+                .foregroundStyle(Color.otisAccent)
                 .frame(width: 28)
 
             Text(text)

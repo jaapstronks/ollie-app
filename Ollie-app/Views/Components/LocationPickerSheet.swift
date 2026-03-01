@@ -1,10 +1,10 @@
 //
 //  LocationPickerSheet.swift
-//  Ollie-app
+//  Otis-app
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Quick picker for potty location (binnen/buiten)
 struct LocationPickerSheet: View {

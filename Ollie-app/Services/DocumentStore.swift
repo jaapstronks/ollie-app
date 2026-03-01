@@ -1,13 +1,13 @@
 //
 //  DocumentStore.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Manages documents with Core Data and automatic CloudKit sync
 //  Documents are stored per-profile and images sync automatically via CloudKit
 
 import Foundation
 import CoreData
-import OllieShared
+import OtisShared
 import Combine
 import UIKit
 import os

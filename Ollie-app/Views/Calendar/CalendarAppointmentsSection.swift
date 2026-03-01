@@ -1,11 +1,11 @@
 //
 //  CalendarAppointmentsSection.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Inline appointments display for Calendar tab
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Section showing upcoming appointments with inline list
 struct CalendarAppointmentsSection: View {
@@ -26,7 +26,7 @@ struct CalendarAppointmentsSection: View {
                 SectionHeader(
                     title: Strings.Calendar.upcomingAppointments,
                     icon: "calendar.badge.clock",
-                    tint: .ollieAccent
+                    tint: .otisAccent
                 )
 
                 Spacer()
@@ -41,7 +41,7 @@ struct CalendarAppointmentsSection: View {
                         }
                         .font(.caption)
                         .fontWeight(.medium)
-                        .foregroundStyle(Color.ollieAccent)
+                        .foregroundStyle(Color.otisAccent)
                     }
                 }
             }
@@ -118,7 +118,7 @@ struct CalendarAppointmentRow: View {
             // Type icon
             ZStack {
                 Circle()
-                    .fill(Color.ollieAccent)
+                    .fill(Color.otisAccent)
                     .frame(width: 36, height: 36)
 
                 Image(systemName: appointment.appointmentType.icon)
@@ -159,7 +159,7 @@ struct CalendarAppointmentRow: View {
         }
         .padding()
         .background(
-            Color.ollieAccent.opacity(colorScheme == .dark ? 0.1 : 0.05)
+            Color.otisAccent.opacity(colorScheme == .dark ? 0.1 : 0.05)
         )
         .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
     }

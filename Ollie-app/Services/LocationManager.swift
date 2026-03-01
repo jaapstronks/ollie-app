@@ -1,11 +1,11 @@
 //
 //  LocationManager.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Wrapper for CLLocationManager with async/await support
 
 import Foundation
-import OllieShared
+import OtisShared
 import CoreLocation
 import Combine
 

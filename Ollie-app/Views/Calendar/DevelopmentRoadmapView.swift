@@ -1,11 +1,11 @@
 //
 //  DevelopmentRoadmapView.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Age-based vertical timeline showing the puppy's developmental journey
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Vertical timeline view showing the puppy's developmental journey
 struct DevelopmentRoadmapView: View {
@@ -164,11 +164,11 @@ enum DevelopmentStage: String, CaseIterable, Identifiable {
 
     var color: Color {
         switch self {
-        case .neonatal: return .ollieSleep
-        case .transitional: return .ollieInfo
-        case .socialization: return .ollieAccent
-        case .juvenile: return .ollieSuccess
-        case .adolescent: return .ollieWarning
+        case .neonatal: return .otisSleep
+        case .transitional: return .otisInfo
+        case .socialization: return .otisAccent
+        case .juvenile: return .otisSuccess
+        case .adolescent: return .otisWarning
         case .adult: return .secondary
         }
     }
@@ -345,12 +345,12 @@ private struct StageMilestoneRow: View {
 
     private var statusColor: Color {
         if milestone.isCompleted {
-            return .ollieSuccess
+            return .otisSuccess
         }
         let status = milestone.status(birthDate: birthDate)
         switch status {
-        case .overdue: return .ollieWarning
-        case .nextUp: return .ollieAccent
+        case .overdue: return .otisWarning
+        case .nextUp: return .otisAccent
         default: return .secondary
         }
     }

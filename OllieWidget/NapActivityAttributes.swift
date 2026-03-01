@@ -1,6 +1,6 @@
 //
 //  NapActivityAttributes.swift
-//  OllieWidget
+//  OtisWidget
 //
 //  ActivityAttributes definition for nap Live Activity (widget extension copy)
 //

@@ -1,12 +1,12 @@
 //
 //  GrowthSilhouetteView.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Visual before/after dog silhouette showing growth
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Visual representation of puppy growth with scaled dog silhouettes
 struct GrowthSilhouetteView: View {
@@ -51,7 +51,7 @@ struct GrowthSilhouetteView: View {
             VStack(spacing: 6) {
                 Image(systemName: "dog.fill")
                     .font(.system(size: showAnimation ? baseSize * sizeRatio : baseSize))
-                    .foregroundStyle(Color.ollieAccent)
+                    .foregroundStyle(Color.otisAccent)
                     .animation(.spring(response: 0.6, dampingFraction: 0.7), value: showAnimation)
 
                 Text(weightUnit.format(currentWeight))

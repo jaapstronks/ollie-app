@@ -1,12 +1,12 @@
 //
 //  PoopGapCalculator.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Calculates daytime gaps between poop events
 //
 
 import Foundation
-import OllieShared
+import OtisShared
 
 /// Calculates daytime-only gaps between poop events
 struct PoopGapCalculator {

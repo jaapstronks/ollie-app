@@ -1,12 +1,12 @@
 //
 //  Tier2CelebrationCard.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Tier 2 celebration: Card slide-up with gentle confetti
 //  Used for notable achievements like first vaccination, streak records
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Tier 2 celebration card that slides up from the bottom
 struct Tier2CelebrationCard: View {
@@ -240,12 +240,12 @@ struct Tier2CelebrationCard: View {
 
     private var categoryColor: Color {
         switch achievement.category {
-        case .pottyStreak: return .ollieAccent
-        case .training: return .olliePurple
-        case .socialization: return .ollieAccent
-        case .health: return .ollieSuccess
-        case .lifestyle: return .olliePurple
-        case .timeBased: return .ollieRose
+        case .pottyStreak: return .otisAccent
+        case .training: return .otisPurple
+        case .socialization: return .otisAccent
+        case .health: return .otisSuccess
+        case .lifestyle: return .otisPurple
+        case .timeBased: return .otisRose
         }
     }
 
@@ -272,7 +272,7 @@ struct Tier2CelebrationCard: View {
             labelKey: "achievement.health.firstVaccination",
             value: nil
         ),
-        puppyName: "Ollie",
+        puppyName: "Max",
         onAddPhoto: { print("Add photo") },
         onShare: { print("Share") },
         onDismiss: { print("Dismiss") }
@@ -282,7 +282,7 @@ struct Tier2CelebrationCard: View {
 #Preview("Tier 2 - Streak Record") {
     Tier2CelebrationCard(
         achievement: Achievement.pottyStreak(days: 7, isRecord: true),
-        puppyName: "Ollie",
+        puppyName: "Max",
         onAddPhoto: { print("Add photo") },
         onShare: { print("Share") },
         onDismiss: { print("Dismiss") }

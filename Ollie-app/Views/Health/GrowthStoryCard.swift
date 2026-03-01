@@ -1,12 +1,12 @@
 //
 //  GrowthStoryCard.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Main growth story card showing visual weight journey
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Main card displaying the puppy's growth story with visual elements
 struct GrowthStoryCard: View {
@@ -39,7 +39,7 @@ struct GrowthStoryCard: View {
                 InsightsSectionHeader(
                     title: Strings.Growth.growthStory,
                     icon: "chart.line.uptrend.xyaxis",
-                    tint: .ollieAccent
+                    tint: .otisAccent
                 )
 
                 Spacer()
@@ -52,7 +52,7 @@ struct GrowthStoryCard: View {
                             Image(systemName: "chevron.right")
                                 .font(.caption)
                         }
-                        .foregroundStyle(Color.ollieAccent)
+                        .foregroundStyle(Color.otisAccent)
                     }
                 }
             }
@@ -103,11 +103,11 @@ struct GrowthStoryCard: View {
                     Text(Strings.Growth.weightChange(weightUnit.formatDelta(delta.delta)))
                         .font(.caption)
                 }
-                .foregroundStyle(delta.delta >= 0 ? Color.ollieSuccess : Color.ollieWarning)
+                .foregroundStyle(delta.delta >= 0 ? Color.otisSuccess : Color.otisWarning)
                 .padding(.horizontal, 10)
                 .padding(.vertical, 4)
                 .background(
-                    (delta.delta >= 0 ? Color.ollieSuccess : Color.ollieWarning)
+                    (delta.delta >= 0 ? Color.otisSuccess : Color.otisWarning)
                         .opacity(colorScheme == .dark ? 0.2 : 0.1)
                 )
                 .clipShape(Capsule())
@@ -127,7 +127,7 @@ struct GrowthStoryCard: View {
     @ViewBuilder
     private func weighReminderBanner(reminder: WeighReminder) -> some View {
         let isHighUrgency = reminder.urgency == .high
-        let tintColor = isHighUrgency ? Color.ollieWarning : Color.ollieAccent
+        let tintColor = isHighUrgency ? Color.otisWarning : Color.otisAccent
 
         HStack(spacing: 12) {
             Image(systemName: "scalemass.fill")
@@ -226,7 +226,7 @@ struct GrowthStoryCard: View {
             // Single dog icon
             Image(systemName: "dog.fill")
                 .font(.system(size: 40))
-                .foregroundStyle(Color.ollieAccent)
+                .foregroundStyle(Color.otisAccent)
 
             Text(Strings.Growth.journeyBegins)
                 .font(.headline)
@@ -281,7 +281,7 @@ struct GrowthStoryCard: View {
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 8)
-        .background(Color.ollieAccent.opacity(colorScheme == .dark ? 0.2 : 0.1))
+        .background(Color.otisAccent.opacity(colorScheme == .dark ? 0.2 : 0.1))
         .cornerRadius(8)
     }
 
@@ -295,10 +295,10 @@ struct GrowthStoryCard: View {
             Text(Strings.Growth.percentOfAdult(percent))
                 .font(.caption)
         }
-        .foregroundStyle(Color.ollieAccent)
+        .foregroundStyle(Color.otisAccent)
         .padding(.horizontal, 10)
         .padding(.vertical, 4)
-        .background(Color.ollieAccent.opacity(colorScheme == .dark ? 0.2 : 0.1))
+        .background(Color.otisAccent.opacity(colorScheme == .dark ? 0.2 : 0.1))
         .clipShape(Capsule())
     }
 
@@ -352,7 +352,7 @@ struct GrowthStoryCard: View {
             firstWeight: (4.0, Date().addingTimeInterval(-60 * 24 * 3600)),
             weightDelta: (0.8, Date().addingTimeInterval(-7 * 24 * 3600)),
             weighReminder: nil,
-            puppyName: "Ollie",
+            puppyName: "Max",
             sizeCategory: .large,
             onShowChart: {},
             showWeightSheet: .constant(false)
@@ -369,7 +369,7 @@ struct GrowthStoryCard: View {
             firstWeight: (4.5, Date().addingTimeInterval(-30 * 24 * 3600)),
             weightDelta: (1.2, Date().addingTimeInterval(-21 * 24 * 3600)),
             weighReminder: WeighReminder(urgency: .medium, daysSinceLastWeigh: 14, recommendedIntervalDays: 7),
-            puppyName: "Ollie",
+            puppyName: "Max",
             sizeCategory: .large,
             onShowChart: {},
             showWeightSheet: .constant(false)
@@ -386,7 +386,7 @@ struct GrowthStoryCard: View {
             firstWeight: (4.5, Date()),
             weightDelta: nil,
             weighReminder: nil,
-            puppyName: "Ollie",
+            puppyName: "Max",
             sizeCategory: .large,
             onShowChart: {},
             showWeightSheet: .constant(false)
@@ -403,7 +403,7 @@ struct GrowthStoryCard: View {
             firstWeight: nil,
             weightDelta: nil,
             weighReminder: WeighReminder(urgency: .high, daysSinceLastWeigh: nil, recommendedIntervalDays: 7),
-            puppyName: "Ollie",
+            puppyName: "Max",
             sizeCategory: .large,
             onShowChart: {},
             showWeightSheet: .constant(false)

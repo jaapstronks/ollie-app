@@ -1,6 +1,6 @@
 //
 //  Strings+Social.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Socialization strings
 
@@ -80,6 +80,7 @@ extension Strings {
         // Walk suggestions
         static let walkSuggestionsTitle = String(localized: "Watch for during walk", table: table)
         static let walkSuggestionsTip = String(localized: "Tap to log exposure", table: table)
+        static let watchFor = String(localized: "Things to watch for", table: table)
         static let seeAll = String(localized: "See all", table: table)
         static func showMore(_ count: Int) -> String {
             String(localized: "Show \(count) more", table: table)

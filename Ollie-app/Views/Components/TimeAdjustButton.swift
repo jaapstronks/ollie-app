@@ -1,12 +1,12 @@
 //
 //  TimeAdjustButton.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Reusable time adjustment button for quick log sheets
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Button that adjusts a time by a specified number of minutes
 struct TimeAdjustButton: View {

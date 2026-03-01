@@ -1,6 +1,6 @@
 //
 //  Strings+Growth.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Growth story localization strings
 //

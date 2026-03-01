@@ -2,11 +2,11 @@
 
 ## Context
 
-The app currently has **four main tabs** (Vandaag/Today, Train, Plekken/Places, Inzichten/Insights) and a **Settings screen** accessible via the paw icon. The settings screen has two sections: one for the dog profile ("Ollie") and one for app settings.
+The app currently has **four main tabs** (Vandaag/Today, Train, Plekken/Places, Inzichten/Insights) and a **Settings screen** accessible via the paw icon. The settings screen has two sections: one for the dog profile ("Puppy Name") and one for app settings.
 
 After reviewing the full app structure, two key problems emerged:
 
-1. **The Ollie settings page is overloaded** — it mixes configuration (walk schedule, meal plan) with reference data (contacts, documents, appointments) and health tracking (milestones, medication) in a single scrollable list.
+1. **The Otis settings page is overloaded** — it mixes configuration (walk schedule, meal plan) with reference data (contacts, documents, appointments) and health tracking (milestones, medication) in a single scrollable list.
 2. **The Insights tab is a grab bag** — it combines pure statistics (potty success rate, sleep, weight) with actionable alerts ("vaccination overdue"), planning items (socialization window), and duplicates content from Train (socialization checklist) and Places (map).
 
 There is also a **missing concept**: there's no dedicated space for forward-looking planning — vet appointments, puppy classes, daycare visits, vaccination schedules, and milestone tracking. These currently live partly in Insights (as "overdue" alerts) and partly in Settings (Appointments), but neither is the right home.
@@ -79,7 +79,7 @@ With the Calendar tab handling planning, contacts, and milestones, Settings beco
 
 **Proposed structure (4 sections):**
 
-#### 1. Ollie's Profile
+#### 1. Puppy's Profile
 
 - Name, breed, size, photo, date of birth
 - Static identity information only
@@ -111,7 +111,7 @@ With the Calendar tab handling planning, contacts, and milestones, Settings beco
 
 ### "View daily" vs. "Configure once"
 
-Everything you check regularly belongs in a tab. Everything you set up once belongs in Settings. The current app mixes these two modes, especially in Insights and the Ollie settings page.
+Everything you check regularly belongs in a tab. Everything you set up once belongs in Settings. The current app mixes these two modes, especially in Insights and the Otis settings page.
 
 ### No duplicates across tabs
 
@@ -123,7 +123,7 @@ Overdue vaccinations and upcoming milestones shouldn't require navigating to Ins
 
 ### Settings should be scannable
 
-The current Ollie settings page has ~10 different categories behind a single tap. The proposed 4-section structure means each section has 3–5 items max, and the mental model matches how you think about the information: "who is my dog" / "what's the daily routine" / "health paperwork" / "app config."
+The current Otis settings page has ~10 different categories behind a single tap. The proposed 4-section structure means each section has 3–5 items max, and the mental model matches how you think about the information: "who is my dog" / "what's the daily routine" / "health paperwork" / "app config."
 
 ---
 
@@ -152,7 +152,7 @@ The Insights tab currently mixes pure statistics with action items, planning con
 | Gewicht                       | Growth tracking           |
 | Wandelgeschiedenis            | Walk frequency & duration |
 | Weekoverzicht (table)         | Weekly activity matrix    |
-| Patroonanalyse (Ollie+)       | Premium trend analysis    |
+| Patroonanalyse (Otis+)       | Premium trend analysis    |
 
 ### Design review request
 
@@ -169,16 +169,16 @@ After removing the items listed above, the Insights tab should be reviewed as a 
 
 | Current Location                       | Content                       | New Location                                                  |
 | -------------------------------------- | ----------------------------- | ------------------------------------------------------------- |
-| Settings → Ollie → Wandelschema        | Walk schedule config          | Settings → Schedule & Preferences                             |
-| Settings → Ollie → Meals               | Meal plan config              | Settings → Schedule & Preferences                             |
-| Settings → Ollie → Medicatie           | Medication settings           | Settings → Health & Documents                                 |
-| Settings → Ollie → Favoriete plekken   | Favorite places               | Places tab (already exists there)                             |
-| Settings → Ollie → Mijlpalen           | Milestones                    | Calendar tab → Milestone timeline                             |
-| Settings → Ollie → Documenten          | Documents                     | Settings → Health & Documents                                 |
-| Settings → Ollie → Contacten           | Contacts (vet, etc.)          | Places tab → Contacts (as place entries with contact details) |
-| Settings → Ollie → Appointments        | Appointments                  | Calendar tab → Appointments                                   |
-| Settings → Ollie → Profiel             | Name, breed, size             | Settings → Ollie's Profile                                    |
-| Settings → Ollie → Statistieken        | Age, days home                | Today tab header (dashboard info)                             |
+| Settings → Profile → Wandelschema        | Walk schedule config          | Settings → Schedule & Preferences                             |
+| Settings → Profile → Meals               | Meal plan config              | Settings → Schedule & Preferences                             |
+| Settings → Profile → Medicatie           | Medication settings           | Settings → Health & Documents                                 |
+| Settings → Profile → Favoriete plekken   | Favorite places               | Places tab (already exists there)                             |
+| Settings → Profile → Mijlpalen           | Milestones                    | Calendar tab → Milestone timeline                             |
+| Settings → Profile → Documenten          | Documents                     | Settings → Health & Documents                                 |
+| Settings → Profile → Contacten           | Contacts (vet, etc.)          | Places tab → Contacts (as place entries with contact details) |
+| Settings → Profile → Appointments        | Appointments                  | Calendar tab → Appointments                                   |
+| Settings → Profile → Profiel             | Name, breed, size             | Settings → Profile's Profile                                    |
+| Settings → Profile → Statistieken        | Age, days home                | Today tab header (dashboard info)                             |
 | Insights → Socialisatievenster         | Socialization window timeline | Calendar tab → Milestone timeline                             |
 | Insights → "Te laat" alerts            | Overdue vaccinations etc.     | Today tab (urgent alerts) + Calendar (source schedule)        |
 | Insights → Socialisatie Checklist      | Checklist duplicate           | Remove (lives in Train)                                       |
@@ -194,5 +194,5 @@ After removing the items listed above, the Insights tab should be reviewed as a 
 2. **Places tab redesign scope** — This is flagged as a separate workstream. Key question: should the filter system be the _primary_ navigation (open tab → pick a filter → see results) or secondary (open tab → see map with everything → filter to narrow down)?
 3. **Module toggles granularity** — How granular should "enable/disable tracking" be? Per-module (potty on/off) or per-feature (potty logging on, potty reminders off, potty insights off)?
 4. **Statistics on Today vs. Insights** — The "age: 9 weeks / days home: 13" info currently sits in Settings. It makes more sense as Today tab header info or a persistent app-wide element. Where does it feel most natural?
-5. **Premium (Ollie+) features** — Pattern analysis is currently in Insights behind a paywall. Should other proposed features (e.g., advanced milestone tracking, multi-dog support) also be gated here, or distributed across tabs?
+5. **Premium (Otis+) features** — Pattern analysis is currently in Insights behind a paywall. Should other proposed features (e.g., advanced milestone tracking, multi-dog support) also be gated here, or distributed across tabs?
 6. **Calendar ↔ Places linking** — Appointments in the Calendar tab should link to the relevant place/contact in Places. What does this interaction look like? Tap vet appointment → opens place detail with call button?

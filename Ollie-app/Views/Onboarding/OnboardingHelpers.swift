@@ -1,12 +1,12 @@
 //
 //  OnboardingHelpers.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Helper types and views for onboarding flow
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 // MARK: - Dog Breed
 

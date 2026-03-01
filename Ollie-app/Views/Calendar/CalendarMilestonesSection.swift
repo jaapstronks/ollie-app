@@ -1,11 +1,11 @@
 //
 //  CalendarMilestonesSection.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Milestones section for Calendar tab showing overdue and upcoming milestones
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Section displaying overdue and upcoming milestones
 struct CalendarMilestonesSection: View {
@@ -96,7 +96,7 @@ struct CalendarMilestonesSection: View {
             SectionHeader(
                 title: Strings.Calendar.overdueMilestones,
                 icon: "exclamationmark.triangle.fill",
-                tint: .ollieWarning
+                tint: .otisWarning
             )
 
             VStack(spacing: 8) {
@@ -122,7 +122,7 @@ struct CalendarMilestonesSection: View {
                 SectionHeader(
                     title: Strings.Calendar.upcomingMilestones,
                     icon: "calendar.badge.clock",
-                    tint: .ollieAccent
+                    tint: .otisAccent
                 )
 
                 Spacer()
@@ -144,7 +144,7 @@ struct CalendarMilestonesSection: View {
                     }
                     .font(.caption)
                     .fontWeight(.medium)
-                    .foregroundStyle(Color.ollieAccent)
+                    .foregroundStyle(Color.otisAccent)
                 }
             }
 
@@ -198,7 +198,7 @@ struct CalendarMilestoneRow: View {
                 // Icon
                 ZStack {
                     Circle()
-                        .fill(isOverdue ? Color.ollieWarning : Color.ollieAccent)
+                        .fill(isOverdue ? Color.otisWarning : Color.otisAccent)
                         .frame(width: 32, height: 32)
 
                     Image(systemName: milestone.icon)
@@ -227,12 +227,12 @@ struct CalendarMilestoneRow: View {
                     if days < 0 {
                         Text(Strings.Health.daysOverdue(abs(days)))
                             .font(.caption)
-                            .foregroundStyle(Color.ollieWarning)
+                            .foregroundStyle(Color.otisWarning)
                     } else if days == 0 {
                         Text(Strings.Health.today)
                             .font(.caption)
                             .fontWeight(.medium)
-                            .foregroundStyle(Color.ollieAccent)
+                            .foregroundStyle(Color.otisAccent)
                     } else {
                         Text(Strings.Health.inDays(days))
                             .font(.caption)
@@ -246,7 +246,7 @@ struct CalendarMilestoneRow: View {
             }
             .padding()
             .background(
-                (isOverdue ? Color.ollieWarning : Color.ollieAccent)
+                (isOverdue ? Color.otisWarning : Color.otisAccent)
                     .opacity(colorScheme == .dark ? 0.1 : 0.05)
             )
             .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))

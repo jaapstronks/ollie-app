@@ -1,12 +1,12 @@
 //
 //  BreedService.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Service for fetching dog breeds from TheDogAPI
 //
 
 import Foundation
-import OllieShared
+import OtisShared
 import Combine
 import os
 
@@ -26,7 +26,7 @@ class BreedService: ObservableObject {
 
     // MARK: - Private Properties
 
-    private let logger = Logger.ollie(category: "BreedService")
+    private let logger = Logger.otis(category: "BreedService")
 
     /// UserDefaults keys for caching
     private enum CacheKeys {

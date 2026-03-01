@@ -1,11 +1,11 @@
 //
 //  NapLogSheet.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Sheet for logging a completed nap with start time, end time, and duration
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Sheet for logging a completed nap with linked start/end/duration
 /// Supports logging naps from previous days and naps spanning midnight
@@ -89,7 +89,7 @@ struct NapLogSheet: View {
                             VStack(alignment: .trailing, spacing: 2) {
                                 Text(startDateTime.formatted(date: .abbreviated, time: .shortened))
                                     .font(.body)
-                                    .foregroundStyle(showStartPicker ? Color.ollieSleep : .primary)
+                                    .foregroundStyle(showStartPicker ? Color.otisSleep : .primary)
                             }
 
                             Image(systemName: showStartPicker ? "chevron.up" : "chevron.down")
@@ -135,7 +135,7 @@ struct NapLogSheet: View {
                             VStack(alignment: .trailing, spacing: 2) {
                                 Text(endDateTime.formatted(date: .abbreviated, time: .shortened))
                                     .font(.body)
-                                    .foregroundStyle(showEndPicker ? Color.ollieSleep : .primary)
+                                    .foregroundStyle(showEndPicker ? Color.otisSleep : .primary)
                             }
 
                             Image(systemName: showEndPicker ? "chevron.up" : "chevron.down")
@@ -167,10 +167,10 @@ struct NapLogSheet: View {
 
                         Text(durationString)
                             .font(.body.monospacedDigit().weight(.medium))
-                            .foregroundStyle(Color.ollieSleep)
+                            .foregroundStyle(Color.otisSleep)
                             .padding(.horizontal, 12)
                             .padding(.vertical, 6)
-                            .background(Color.ollieSleep.opacity(0.1))
+                            .background(Color.otisSleep.opacity(0.1))
                             .clipShape(RoundedRectangle(cornerRadius: 8))
                     }
 
@@ -243,7 +243,7 @@ struct NapLogSheet: View {
                             .foregroundColor(.white)
                             .padding(.horizontal, 16)
                             .padding(.vertical, 8)
-                            .background(isValid ? Color.ollieSleep : Color.gray)
+                            .background(isValid ? Color.otisSleep : Color.gray)
                             .clipShape(Capsule())
                     }
                     .disabled(!isValid)
@@ -270,25 +270,25 @@ private struct NapLogLocationButton: View {
                     .frame(width: 32, height: 32)
                     .background(
                         Circle()
-                            .fill(isSelected ? Color.ollieSleep : Color.ollieSleep.opacity(0.1))
+                            .fill(isSelected ? Color.otisSleep : Color.otisSleep.opacity(0.1))
                     )
-                    .foregroundStyle(isSelected ? .white : Color.ollieSleep)
+                    .foregroundStyle(isSelected ? .white : Color.otisSleep)
 
                 Text(location.label)
                     .font(.caption2)
                     .fontWeight(isSelected ? .semibold : .regular)
-                    .foregroundStyle(isSelected ? Color.ollieSleep : .secondary)
+                    .foregroundStyle(isSelected ? Color.otisSleep : .secondary)
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, 6)
             .background(
                 RoundedRectangle(cornerRadius: 10, style: .continuous)
-                    .fill(isSelected ? Color.ollieSleep.opacity(0.1) : Color.clear)
+                    .fill(isSelected ? Color.otisSleep.opacity(0.1) : Color.clear)
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 10, style: .continuous)
                     .strokeBorder(
-                        isSelected ? Color.ollieSleep : Color.clear,
+                        isSelected ? Color.otisSleep : Color.clear,
                         lineWidth: 1
                     )
             )

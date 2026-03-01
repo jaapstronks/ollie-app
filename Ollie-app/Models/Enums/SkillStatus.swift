@@ -1,12 +1,12 @@
 //
 //  SkillStatus.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Skill status tracking and calculations
 //
 
 import Foundation
-import OllieShared
+import OtisShared
 import SwiftUI
 
 // MARK: - Skill Status
@@ -30,9 +30,9 @@ enum SkillStatus: String, Codable {
     var color: Color {
         switch self {
         case .notStarted: return .secondary
-        case .started: return .ollieInfo
-        case .practicing: return .ollieWarning
-        case .mastered: return .ollieSuccess
+        case .started: return .otisInfo
+        case .practicing: return .otisWarning
+        case .mastered: return .otisSuccess
         }
     }
 

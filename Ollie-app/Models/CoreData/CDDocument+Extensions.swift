@@ -1,11 +1,11 @@
 //
 //  CDDocument+Extensions.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Extensions for converting between Document and CDDocument
 
 import CoreData
-import OllieShared
+import OtisShared
 import UIKit
 import PDFKit
 

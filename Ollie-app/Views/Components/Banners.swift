@@ -1,6 +1,6 @@
 //
 //  Banners.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Reusable banner components for undo and celebration feedback
 
@@ -78,14 +78,14 @@ struct CelebrationBanner: View {
         .padding()
         .background(
             LinearGradient(
-                colors: [Color.ollieSuccess, Color.ollieSuccess.opacity(0.85)],
+                colors: [Color.otisSuccess, Color.otisSuccess.opacity(0.85)],
                 startPoint: .leading,
                 endPoint: .trailing
             )
         )
         .cornerRadius(LayoutConstants.cornerRadiusM)
         .padding(.horizontal)
-        .shadow(color: Color.ollieSuccess.opacity(0.3), radius: 8, y: 4)
+        .shadow(color: Color.otisSuccess.opacity(0.3), radius: 8, y: 4)
         .accessibilityElement(children: .combine)
         .accessibilityLabel(message)
     }

@@ -1,6 +1,6 @@
 //
 //  Strings+Toast.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Localization strings for toast notifications.
 

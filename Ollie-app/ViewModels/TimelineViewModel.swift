@@ -1,6 +1,6 @@
 //
 //  TimelineViewModel.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Core timeline view model - manages event display and state
 //  Functionality is split across extensions:
@@ -12,7 +12,7 @@
 //
 
 import Foundation
-import OllieShared
+import OtisShared
 import SwiftUI
 import Combine
 
@@ -294,22 +294,22 @@ class TimelineViewModel: ObservableObject {
 
     // MARK: - Subscription
 
-    /// Subscription manager for Ollie+ status
+    /// Subscription manager for Otis+ status
     var subscriptionManager: SubscriptionManager {
         SubscriptionManager.shared
     }
 
-    /// Whether user has Ollie+ access
-    var hasOlliePlus: Bool {
-        subscriptionManager.effectiveStatus.hasOlliePlus
+    /// Whether user has Otis+ access
+    var hasOtisPlus: Bool {
+        subscriptionManager.effectiveStatus.hasOtisPlus
     }
 
-    /// Whether to show the Ollie+ upsell banner
+    /// Whether to show the Otis+ upsell banner
     /// Shows after first week of use if user is on free tier
-    var shouldShowOlliePlusBanner: Bool {
+    var shouldShowOtisPlusBanner: Bool {
         guard let profile = profileStore.profile else { return false }
         // Show if free tier and has been using app for at least 7 days
-        return !hasOlliePlus && profile.daysHome >= 7
+        return !hasOtisPlus && profile.daysHome >= 7
     }
 
     /// Whether to show the trial banner (during trial period)

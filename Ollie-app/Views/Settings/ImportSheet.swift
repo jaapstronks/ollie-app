@@ -1,11 +1,11 @@
 //
 //  ImportSheet.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Multi-stage import sheet with preview, progress, and completion states
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Import stages
 enum ImportStage {
@@ -63,7 +63,7 @@ struct ImportSheet: View {
             // Icon
             Image(systemName: "arrow.down.circle.fill")
                 .font(.system(size: 60))
-                .foregroundColor(.ollieInfo)
+                .foregroundColor(.otisInfo)
                 .padding(.top, 20)
 
             if dataImporter.isFetchingPreview {
@@ -142,7 +142,7 @@ struct ImportSheet: View {
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity)
                 .padding()
-                .background(Color.ollieInfo)
+                .background(Color.otisInfo)
                 .cornerRadius(LayoutConstants.cornerRadiusM)
             }
             .disabled(preview.newDays == 0 && !overwriteExisting)
@@ -158,7 +158,7 @@ struct ImportSheet: View {
             // Animated icon
             Image(systemName: "arrow.down.circle")
                 .font(.system(size: 60))
-                .foregroundColor(.ollieInfo)
+                .foregroundColor(.otisInfo)
                 .symbolEffect(.pulse.wholeSymbol, options: .repeating)
 
             Text("Importeren...")
@@ -206,7 +206,7 @@ struct ImportSheet: View {
             // Success icon
             Image(systemName: "checkmark.circle.fill")
                 .font(.system(size: 60))
-                .foregroundColor(.ollieSuccess)
+                .foregroundColor(.otisSuccess)
 
             Text("Import voltooid!")
                 .font(.headline)
@@ -228,7 +228,7 @@ struct ImportSheet: View {
                     if !result.errors.isEmpty {
                         Text("\(result.errors.count) fouten")
                             .font(.caption)
-                            .foregroundColor(.ollieWarning)
+                            .foregroundColor(.otisWarning)
                     }
                 }
             }
@@ -244,7 +244,7 @@ struct ImportSheet: View {
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(Color.ollieSuccess)
+                    .background(Color.otisSuccess)
                     .cornerRadius(LayoutConstants.cornerRadiusM)
             }
             .padding(.bottom, 20)
@@ -261,7 +261,7 @@ struct ImportSheet: View {
             // Error icon
             Image(systemName: "exclamationmark.triangle.fill")
                 .font(.system(size: 60))
-                .foregroundColor(.ollieWarning)
+                .foregroundColor(.otisWarning)
 
             Text("Import mislukt")
                 .font(.headline)
@@ -287,7 +287,7 @@ struct ImportSheet: View {
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(Color.ollieInfo)
+                        .background(Color.otisInfo)
                         .cornerRadius(LayoutConstants.cornerRadiusM)
                 }
 

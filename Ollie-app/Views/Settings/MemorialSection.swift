@@ -1,12 +1,12 @@
 //
 //  MemorialSection.swift
-//  Ollie-app
+//  Otis-app
 //
 //  A gentle section for remembering a dog who has passed
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Section in dog profile for memorial features
 struct MemorialSection: View {

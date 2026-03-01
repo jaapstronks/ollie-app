@@ -1,13 +1,13 @@
 //
 //  SharingSection.swift
-//  Ollie-app
+//  Otis-app
 //
 //  CloudKit sharing section for app settings
 //  Extracted from AppSettingsView.swift
 //
 
 import CloudKit
-import OllieShared
+import OtisShared
 import SwiftUI
 
 /// CloudKit sharing section for settings
@@ -19,7 +19,7 @@ struct SharingSection: View {
     @State private var isPreparingShare = false
     @State private var shareError: String?
     @State private var showStopSharingConfirm = false
-    @State private var showOlliePlusSheet = false
+    @State private var showOtisPlusSheet = false
 
     var body: some View {
         Section {
@@ -38,7 +38,7 @@ struct SharingSection: View {
             if let share = activeShare {
                 CloudSharingView(
                     share: share,
-                    container: CKContainer(identifier: "iCloud.nl.jaapstronks.Ollie"),
+                    container: CKContainer(identifier: "iCloud.nl.jaapstronks.Otis"),
                     onDismiss: {
                         activeShare = nil
                         Task { await cloudKit.updateShareState() }
@@ -54,10 +54,10 @@ struct SharingSection: View {
         } message: {
             Text(Strings.CloudSharing.stopSharingConfirm)
         }
-        .sheet(isPresented: $showOlliePlusSheet) {
-            OlliePlusSheet(
-                onDismiss: { showOlliePlusSheet = false },
-                onSubscribed: { showOlliePlusSheet = false }
+        .sheet(isPresented: $showOtisPlusSheet) {
+            OtisPlusSheet(
+                onDismiss: { showOtisPlusSheet = false },
+                onSubscribed: { showOtisPlusSheet = false }
             )
         }
         .task {
@@ -82,7 +82,7 @@ struct SharingSection: View {
         } else if cloudKit.isShared {
             sharedContentRows
         } else {
-            // Gate sharing for free users - Ollie+ required to share
+            // Gate sharing for free users - Otis+ required to share
             if subscriptionManager.hasAccess(to: .unlimitedPartnerSharing) {
                 shareButton
             } else {
@@ -102,7 +102,7 @@ struct SharingSection: View {
     private var iCloudUnavailableRow: some View {
         HStack {
             Image(systemName: "exclamationmark.icloud")
-                .foregroundStyle(Color.ollieWarning)
+                .foregroundStyle(Color.otisWarning)
             Text(Strings.CloudSharing.iCloudUnavailable)
                 .font(.subheadline)
         }
@@ -111,7 +111,7 @@ struct SharingSection: View {
     private var participantRow: some View {
         HStack {
             Image(systemName: "person.2.fill")
-                .foregroundStyle(Color.ollieInfo)
+                .foregroundStyle(Color.otisInfo)
             VStack(alignment: .leading, spacing: 2) {
                 Text(Strings.CloudSharing.sharedData)
                     .font(.subheadline)
@@ -127,7 +127,7 @@ struct SharingSection: View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
                 Image(systemName: "checkmark.circle.fill")
-                    .foregroundStyle(Color.ollieSuccess)
+                    .foregroundStyle(Color.otisSuccess)
                 Text(Strings.CloudSharing.shared)
                     .font(.subheadline.weight(.medium))
             }
@@ -170,20 +170,20 @@ struct SharingSection: View {
         cloudKit.shareParticipants.count
     }
 
-    /// Upsell row shown when free user tries to share (sharing is Ollie+ only)
+    /// Upsell row shown when free user tries to share (sharing is Otis+ only)
     private var sharingLockedUpsell: some View {
         Button {
-            showOlliePlusSheet = true
+            showOtisPlusSheet = true
         } label: {
             HStack(spacing: 12) {
                 Image(systemName: "person.badge.plus")
-                    .foregroundStyle(Color.ollieAccent)
+                    .foregroundStyle(Color.otisAccent)
 
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(Strings.OlliePlus.featureUnlimitedSharing)
+                    Text(Strings.OtisPlus.featureUnlimitedSharing)
                         .font(.subheadline)
                         .foregroundStyle(.primary)
-                    Text(Strings.OlliePlus.sharingRequiresPlus)
+                    Text(Strings.OtisPlus.sharingRequiresPlus)
                         .font(.caption)
                         .foregroundStyle(.secondary)
                         .lineLimit(2)
@@ -194,14 +194,14 @@ struct SharingSection: View {
                 HStack(spacing: 4) {
                     Image(systemName: "lock.fill")
                         .font(.caption2)
-                    Text(Strings.OlliePlus.plusBadge)
+                    Text(Strings.OtisPlus.plusBadge)
                         .font(.caption)
                         .fontWeight(.semibold)
                 }
                 .foregroundStyle(.white)
                 .padding(.horizontal, 8)
                 .padding(.vertical, 4)
-                .background(Capsule().fill(Color.ollieAccent))
+                .background(Capsule().fill(Color.otisAccent))
             }
         }
         .buttonStyle(.plain)
@@ -210,17 +210,17 @@ struct SharingSection: View {
     /// Upsell row shown when free user wants to add more partners
     private var partnerLimitUpsell: some View {
         Button {
-            showOlliePlusSheet = true
+            showOtisPlusSheet = true
         } label: {
             HStack(spacing: 12) {
                 Image(systemName: "person.badge.plus")
-                    .foregroundStyle(Color.ollieAccent)
+                    .foregroundStyle(Color.otisAccent)
 
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(Strings.OlliePlus.featureUnlimitedSharing)
+                    Text(Strings.OtisPlus.featureUnlimitedSharing)
                         .font(.subheadline)
                         .foregroundStyle(.primary)
-                    Text(Strings.OlliePlus.sharingRequiresPlus)
+                    Text(Strings.OtisPlus.sharingRequiresPlus)
                         .font(.caption)
                         .foregroundStyle(.secondary)
                         .lineLimit(2)
@@ -231,14 +231,14 @@ struct SharingSection: View {
                 HStack(spacing: 4) {
                     Image(systemName: "plus")
                         .font(.caption2.weight(.bold))
-                    Text(Strings.OlliePlus.plusBadge)
+                    Text(Strings.OtisPlus.plusBadge)
                         .font(.caption)
                         .fontWeight(.semibold)
                 }
                 .foregroundStyle(.white)
                 .padding(.horizontal, 8)
                 .padding(.vertical, 4)
-                .background(Capsule().fill(Color.ollieAccent))
+                .background(Capsule().fill(Color.otisAccent))
             }
         }
         .buttonStyle(.plain)

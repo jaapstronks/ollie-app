@@ -1,6 +1,6 @@
 //
 //  StatusView.swift
-//  OllieWatch
+//  OtisWatch
 //
 //  Shows potty timer and sleep status
 

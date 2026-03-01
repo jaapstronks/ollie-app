@@ -1,11 +1,11 @@
 //
 //  MilestoneCompletionSheet.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Sheet for completing a milestone with optional notes and photo
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Sheet for marking a milestone as complete with optional details
 struct MilestoneCompletionSheet: View {
@@ -110,7 +110,7 @@ struct MilestoneCompletionSheet: View {
                                         VStack(alignment: .leading, spacing: 2) {
                                             Text(Strings.Health.photoAdded)
                                                 .font(.subheadline)
-                                                .foregroundStyle(Color.ollieSuccess)
+                                                .foregroundStyle(Color.otisSuccess)
 
                                             Button {
                                                 selectedImage = nil
@@ -134,7 +134,7 @@ struct MilestoneCompletionSheet: View {
                                             Text(Strings.Health.addPhotoButton)
                                         }
                                         .font(.subheadline)
-                                        .foregroundStyle(Color.ollieAccent)
+                                        .foregroundStyle(Color.otisAccent)
                                     }
                                 }
                             }
@@ -167,7 +167,7 @@ struct MilestoneCompletionSheet: View {
                         .foregroundStyle(.white)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 14)
-                        .background(Color.ollieSuccess)
+                        .background(Color.otisSuccess)
                         .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
                     }
                 }

@@ -1,12 +1,12 @@
 //
 //  TimelineViewModel+Events.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Event CRUD operations for TimelineViewModel
 //
 
 import Foundation
-import OllieShared
+import OtisShared
 import SwiftUI
 
 extension TimelineViewModel {
@@ -130,18 +130,18 @@ extension TimelineViewModel {
     // MARK: - Photo Moment Capture
 
     func openCamera() {
-        // Photo/video attachments require Ollie+
+        // Photo/video attachments require Otis+
         guard subscriptionManager.hasAccess(to: .photoVideoAttachments) else {
-            sheetCoordinator.presentSheet(.olliePlus)
+            sheetCoordinator.presentSheet(.otisPlus)
             return
         }
         sheetCoordinator.presentSheet(.mediaPicker(.camera))
     }
 
     func openPhotoLibrary() {
-        // Photo/video attachments require Ollie+
+        // Photo/video attachments require Otis+
         guard subscriptionManager.hasAccess(to: .photoVideoAttachments) else {
-            sheetCoordinator.presentSheet(.olliePlus)
+            sheetCoordinator.presentSheet(.otisPlus)
             return
         }
         sheetCoordinator.presentSheet(.mediaPicker(.library))

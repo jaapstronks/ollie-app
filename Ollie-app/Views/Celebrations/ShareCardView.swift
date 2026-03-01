@@ -1,12 +1,12 @@
 //
 //  ShareCardView.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Share card template for achievements
 //  Generates visually appealing images for sharing
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// A shareable card view for achievements
 struct ShareCardView: View {
@@ -144,7 +144,7 @@ struct ShareCardView: View {
     private var branding: some View {
         HStack {
             Spacer()
-            Text("ollie.app")
+            Text("otis.pet")
                 .font(.system(size: brandingFontSize, weight: .medium))
                 .foregroundStyle(.tertiary)
         }
@@ -154,12 +154,12 @@ struct ShareCardView: View {
 
     private var categoryColor: Color {
         switch achievement.category {
-        case .pottyStreak: return .ollieAccent
-        case .training: return .olliePurple
-        case .socialization: return .ollieAccent
-        case .health: return .ollieSuccess
-        case .lifestyle: return .olliePurple
-        case .timeBased: return .ollieRose
+        case .pottyStreak: return .otisAccent
+        case .training: return .otisPurple
+        case .socialization: return .otisAccent
+        case .health: return .otisSuccess
+        case .lifestyle: return .otisPurple
+        case .timeBased: return .otisRose
         }
     }
 
@@ -283,7 +283,7 @@ enum ShareCardAspectRatio: String, CaseIterable {
 #Preview("Square") {
     ShareCardView(
         achievement: Achievement.pottyStreak(days: 7, isRecord: true),
-        puppyName: "Ollie",
+        puppyName: "Max",
         puppyPhoto: nil,
         achievementDate: Date(),
         aspectRatio: .square
@@ -294,7 +294,7 @@ enum ShareCardAspectRatio: String, CaseIterable {
 #Preview("Story") {
     ShareCardView(
         achievement: Achievement.monthlyBirthday(months: 6),
-        puppyName: "Ollie",
+        puppyName: "Max",
         puppyPhoto: nil,
         achievementDate: Date(),
         aspectRatio: .story

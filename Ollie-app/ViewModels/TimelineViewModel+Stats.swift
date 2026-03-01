@@ -1,13 +1,13 @@
 //
 //  TimelineViewModel+Stats.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Extension containing stats and predictions computed properties
 //  Extracted from TimelineViewModel to improve code organization
 //
 
 import Foundation
-import OllieShared
+import OtisShared
 import SwiftUI
 
 // MARK: - Stats & Predictions

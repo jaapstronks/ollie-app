@@ -1,6 +1,6 @@
 //
 //  ClickerButton.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Reusable clicker button component for training sessions
 //
@@ -29,8 +29,8 @@ struct ClickerButton: View {
                     .fill(
                         LinearGradient(
                             colors: [
-                                Color.ollieAccent.opacity(0.3),
-                                Color.ollieAccent.opacity(0.1)
+                                Color.otisAccent.opacity(0.3),
+                                Color.otisAccent.opacity(0.1)
                             ],
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
@@ -43,8 +43,8 @@ struct ClickerButton: View {
                     .fill(
                         LinearGradient(
                             colors: [
-                                Color.ollieAccent,
-                                Color.ollieAccent.opacity(0.8)
+                                Color.otisAccent,
+                                Color.otisAccent.opacity(0.8)
                             ],
                             startPoint: .top,
                             endPoint: .bottom
@@ -52,7 +52,7 @@ struct ClickerButton: View {
                     )
                     .frame(width: buttonSize, height: buttonSize)
                     .shadow(
-                        color: Color.ollieAccent.opacity(0.4),
+                        color: Color.otisAccent.opacity(0.4),
                         radius: isPressed ? 4 : 12,
                         y: isPressed ? 2 : 6
                     )

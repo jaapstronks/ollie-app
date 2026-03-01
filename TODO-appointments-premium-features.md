@@ -1,6 +1,6 @@
 # Appointments Premium Features
 
-Status: Models complete, UI implementation pending for Ollie+ premium tier.
+Status: Models complete, UI implementation pending for Otis+ premium tier.
 
 ---
 
@@ -9,7 +9,7 @@ Status: Models complete, UI implementation pending for Ollie+ premium tier.
 **Status:** Model complete, UI pending
 
 ### What's Ready
-- `RecurrenceRule` struct in OllieShared with full support for:
+- `RecurrenceRule` struct in OtisShared with full support for:
   - Daily, weekly, monthly, yearly frequencies
   - Custom intervals (every X days/weeks/months)
   - Days of week selection (for weekly recurrence)
@@ -144,7 +144,7 @@ func addAppointment(_ appointment: DogAppointment, profile: PuppyProfile) async 
 
 ## Premium Gating Strategy
 
-| Feature | Free Tier | Ollie+ |
+| Feature | Free Tier | Otis+ |
 |---------|-----------|--------|
 | View appointments | ✓ | ✓ |
 | Add one-time appointments | ✓ | ✓ |
@@ -158,7 +158,7 @@ func addAppointment(_ appointment: DogAppointment, profile: PuppyProfile) async 
 ### Paywall UX
 When user tries to access premium feature:
 1. Show feature explanation with benefit
-2. "Unlock with Ollie+" CTA button
+2. "Unlock with Otis+" CTA button
 3. "Maybe Later" dismiss option
 
 ---

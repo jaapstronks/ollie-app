@@ -1,12 +1,12 @@
 //
 //  AppointmentNotificationScheduler.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Handles scheduling appointment reminder notifications
 //
 
 import Foundation
-import OllieShared
+import OtisShared
 import UserNotifications
 import os
 
@@ -16,7 +16,7 @@ final class AppointmentNotificationScheduler {
     let notificationPrefix = "appointment_"
 
     private let notificationCenter = UNUserNotificationCenter.current()
-    private let logger = Logger.ollie(category: "AppointmentNotificationScheduler")
+    private let logger = Logger.otis(category: "AppointmentNotificationScheduler")
 
     /// Schedule notifications for upcoming appointments
     /// - Parameters:

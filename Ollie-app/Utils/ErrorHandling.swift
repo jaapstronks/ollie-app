@@ -1,10 +1,10 @@
 //
 //  ErrorHandling.swift
-//  Ollie-app
+//  Otis-app
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 import Combine
 
 /// App error types with user-friendly messages

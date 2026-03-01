@@ -1,11 +1,11 @@
 //
 //  WalkLogSheet.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Sheet for logging a walk with optional potty events
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Sheet for logging a completed walk with optional pee/poop
 struct WalkLogSheet: View {
@@ -75,14 +75,14 @@ struct WalkLogSheet: View {
                             isOn: $didPee,
                             label: Strings.WalkLog.pee,
                             icon: "drop.fill",
-                            color: .ollieInfo
+                            color: .otisInfo
                         )
 
                         pottyToggle(
                             isOn: $didPoop,
                             label: Strings.WalkLog.poop,
                             icon: "circle.inset.filled",
-                            color: .ollieWarning
+                            color: .otisWarning
                         )
 
                         Spacer()
@@ -97,7 +97,7 @@ struct WalkLogSheet: View {
                     } label: {
                         HStack {
                             Image(systemName: "mappin.circle.fill")
-                                .foregroundColor(.ollieAccent)
+                                .foregroundColor(.otisAccent)
 
                             if let spot = selectedSpot {
                                 Text(spot.name)
@@ -148,7 +148,7 @@ struct WalkLogSheet: View {
                             .foregroundColor(.white)
                             .padding(.horizontal, 16)
                             .padding(.vertical, 8)
-                            .background(Color.ollieAccent)
+                            .background(Color.otisAccent)
                             .clipShape(Capsule())
                     }
                 }

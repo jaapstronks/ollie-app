@@ -1,12 +1,12 @@
 //
 //  PostWakePottyCard.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Card shown after puppy wakes up when potty was urgent/overdue while sleeping
 //  Prompts user to take puppy outside for potty
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Post-wake prompt card for potty
 /// Shows after puppy wakes when potty was urgent while sleeping
@@ -21,8 +21,8 @@ struct PostWakePottyCard: View {
     var body: some View {
         StatusCardHeader(
             iconName: "sun.max.fill",
-            iconColor: .ollieWarning,
-            tintColor: .ollieWarning,
+            iconColor: .otisWarning,
+            tintColor: .otisWarning,
             title: Strings.CombinedStatus.awakeTimePotty,
             titleColor: .primary,
             subtitle: subtitleText
@@ -31,10 +31,10 @@ struct PostWakePottyCard: View {
             Button(action: onLogPotty) {
                 Label(Strings.CombinedStatus.logPotty, systemImage: "drop.fill")
             }
-            .buttonStyle(.glassPillCompact(tint: .custom(.ollieWarning)))
+            .buttonStyle(.glassPillCompact(tint: .custom(.otisWarning)))
         }
         .statusCardPadding()
-        .glassStatusCard(tintColor: .ollieWarning, cornerRadius: LayoutConstants.cornerRadiusL)
+        .glassStatusCard(tintColor: .otisWarning, cornerRadius: LayoutConstants.cornerRadiusL)
         .shadow(color: shadowColor, radius: 10, y: 5)
         .accessibilityElement(children: .combine)
         .accessibilityLabel(Strings.CombinedStatus.postWakeCardAccessibility)
@@ -52,7 +52,7 @@ struct PostWakePottyCard: View {
 
     private var shadowColor: Color {
         let opacity = colorScheme == .dark ? 0.2 : 0.1
-        return Color.ollieWarning.opacity(opacity)
+        return Color.otisWarning.opacity(opacity)
     }
 }
 

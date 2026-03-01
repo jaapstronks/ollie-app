@@ -1,12 +1,12 @@
 //
 //  MemoriesViewModel.swift
-//  Ollie-app
+//  Otis-app
 //
 //  ViewModel for "On This Day" memories feature
 
 import Foundation
 import SwiftUI
-import OllieShared
+import OtisShared
 import Combine
 
 /// ViewModel for the "On This Day" memories card on Today view

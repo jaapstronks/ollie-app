@@ -1,6 +1,6 @@
 //
 //  SpotPhotoStore.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Manages storage of spot photos in the app's documents directory
 

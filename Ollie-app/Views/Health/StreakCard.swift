@@ -1,12 +1,12 @@
 //
 //  StreakCard.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Card showing outdoor potty streak
 //  Uses liquid glass design for iOS 26 aesthetic
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Compact card showing current outdoor potty streak
 /// Uses liquid glass design with celebratory styling for high streaks
@@ -139,7 +139,7 @@ struct StreakCard: View {
 
     private var textColor: Color {
         if streakInfo.currentStreak >= 5 {
-            return .ollieAccent
+            return .otisAccent
         } else if streakInfo.currentStreak > 0 {
             return .primary
         } else {
@@ -149,9 +149,9 @@ struct StreakCard: View {
 
     private var backgroundColor: Color {
         if streakInfo.currentStreak >= 5 {
-            return Color.ollieAccent.opacity(0.1)
+            return Color.otisAccent.opacity(0.1)
         } else if streakInfo.currentStreak > 0 {
-            return Color.ollieSuccess.opacity(0.1)
+            return Color.otisSuccess.opacity(0.1)
         } else {
             return Color(.secondarySystemBackground)
         }
@@ -159,9 +159,9 @@ struct StreakCard: View {
 
     private var progressColor: Color {
         if streakInfo.currentStreak >= 5 {
-            return .ollieAccent
+            return .otisAccent
         } else {
-            return .ollieSuccess
+            return .otisSuccess
         }
     }
 

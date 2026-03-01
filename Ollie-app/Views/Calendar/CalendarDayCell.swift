@@ -1,11 +1,11 @@
 //
 //  CalendarDayCell.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Individual day cell in the calendar month grid
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Represents a milestone span for background tinting
 struct MilestoneSpan: Identifiable {
@@ -94,7 +94,7 @@ struct CalendarDayCell: View {
 
             // Today highlight
             if isToday {
-                Color.ollieAccent
+                Color.otisAccent
             }
         }
     }
@@ -103,7 +103,7 @@ struct CalendarDayCell: View {
     private var selectionOverlay: some View {
         if isSelected && !isToday {
             RoundedRectangle(cornerRadius: 8, style: .continuous)
-                .strokeBorder(Color.ollieAccent, lineWidth: 2)
+                .strokeBorder(Color.otisAccent, lineWidth: 2)
         }
     }
 
@@ -128,21 +128,21 @@ struct CalendarDayCell: View {
         // Map appointment type color names to actual colors
         switch appointment.appointmentType.color {
         case "vetBlue":
-            return .ollieInfo
+            return .otisInfo
         case "emergencyRed":
-            return .ollieDanger
+            return .otisDanger
         case "groomingPurple":
-            return .olliePurple
+            return .otisPurple
         case "trainingGreen":
-            return .ollieSuccess
+            return .otisSuccess
         case "careOrange":
-            return .ollieAccent
+            return .otisAccent
         case "walkTeal":
-            return .ollieInfo
+            return .otisInfo
         case "playdatePink":
-            return .ollieRose
+            return .otisRose
         default:
-            return .ollieMuted
+            return .otisMuted
         }
     }
 

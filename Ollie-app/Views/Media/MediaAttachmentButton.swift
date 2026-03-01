@@ -1,10 +1,10 @@
 //
 //  MediaAttachmentButton.swift
-//  Ollie-app
+//  Otis-app
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 import UIKit
 import UniformTypeIdentifiers
 

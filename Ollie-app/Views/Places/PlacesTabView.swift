@@ -1,12 +1,12 @@
 //
 //  PlacesTabView.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Explore tab - full-screen map view of saved spots and photo moments
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 import MapKit
 
 /// Explore tab - full-screen map with spots, contacts, and photo pins
@@ -364,9 +364,9 @@ struct PlacesTabView: View {
                 .frame(width: 56, height: 56)
                 .background(
                     Circle()
-                        .fill(Color.ollieAccent)
+                        .fill(Color.otisAccent)
                         .shadow(
-                            color: Color.ollieAccent.opacity(0.4),
+                            color: Color.otisAccent.opacity(0.4),
                             radius: 8,
                             x: 0,
                             y: 4
@@ -391,9 +391,9 @@ struct PlacesTabView: View {
                 .frame(width: 56, height: 56)
                 .background(
                     Circle()
-                        .fill(Color.ollieAccent)
+                        .fill(Color.otisAccent)
                         .shadow(
-                            color: Color.ollieAccent.opacity(0.4),
+                            color: Color.otisAccent.opacity(0.4),
                             radius: 8,
                             x: 0,
                             y: 4

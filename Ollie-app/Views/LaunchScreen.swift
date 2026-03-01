@@ -1,10 +1,10 @@
 //
 //  LaunchScreen.swift
-//  Ollie-app
+//  Otis-app
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Launch screen shown while app loads
 struct LaunchScreen: View {

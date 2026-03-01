@@ -1,6 +1,6 @@
 //
 //  ExportService.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Handles exporting all puppy data to a shareable folder
 //
@@ -8,7 +8,7 @@
 import Combine
 import CoreData
 import Foundation
-import OllieShared
+import OtisShared
 import os
 import UIKit
 
@@ -26,7 +26,7 @@ class ExportService: ObservableObject {
     // MARK: - Dependencies
 
     private let persistenceController: PersistenceController
-    private let logger = Logger.ollie(category: "ExportService")
+    private let logger = Logger.otis(category: "ExportService")
     private let fileManager = FileManager.default
     private let encoder: JSONEncoder
 
@@ -189,7 +189,7 @@ class ExportService: ObservableObject {
 
         let sanitizedName = puppyName.replacingOccurrences(of: "/", with: "-")
             .replacingOccurrences(of: ":", with: "-")
-        let folderName = "Ollie_Export_\(sanitizedName)_\(dateString)"
+        let folderName = "Otis_Export_\(sanitizedName)_\(dateString)"
 
         let tempURL = fileManager.temporaryDirectory.appendingPathComponent(folderName, isDirectory: true)
 

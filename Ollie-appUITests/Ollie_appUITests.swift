@@ -1,13 +1,13 @@
 //
-//  Ollie_appUITests.swift
-//  Ollie-appUITests
+//  Otis_appUITests.swift
+//  Otis-appUITests
 //
-//  Comprehensive UI tests for Ollie puppy logbook app
+//  Comprehensive UI tests for Otis puppy logbook app
 //
 
 import XCTest
 
-final class Ollie_appUITests: XCTestCase {
+final class Otis_appUITests: XCTestCase {
 
     var app: XCUIApplication!
 

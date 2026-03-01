@@ -1,6 +1,6 @@
 # Test Event Deletion
 # Tests: Log an event via quick menu, then swipe to delete from timeline
-appId: nl.jaapstronks.Ollie
+appId: nl.jaapstronks.Otis
 ---
 - launchApp
 - waitForAnimationToEnd

@@ -1,6 +1,6 @@
 //
 //  Strings+Webhook.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Strings for webhook settings and errors
 

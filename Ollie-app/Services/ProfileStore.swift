@@ -1,13 +1,13 @@
 //
 //  ProfileStore.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Manages reading and writing the puppy profile with Core Data and automatic CloudKit sync
 //
 
 import Foundation
 import CoreData
-import OllieShared
+import OtisShared
 import Combine
 import os
 
@@ -20,7 +20,7 @@ class ProfileStore: ObservableObject {
     @Published private(set) var isSyncing: Bool = false
 
     private let persistenceController: PersistenceController
-    private let logger = Logger.ollie(category: "ProfileStore")
+    private let logger = Logger.otis(category: "ProfileStore")
     private var cancellables = Set<AnyCancellable>()
 
     /// App Group suite name for sharing with Intents/Widgets

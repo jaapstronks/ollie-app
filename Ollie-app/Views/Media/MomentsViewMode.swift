@@ -1,6 +1,6 @@
 //
 //  MomentsViewMode.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Segmented control for switching between Gallery and Diary view modes
 

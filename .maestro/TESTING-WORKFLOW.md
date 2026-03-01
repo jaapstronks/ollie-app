@@ -1,6 +1,6 @@
 # Claude-in-the-Loop UI Testing Workflow
 
-This document describes how to use Claude as an automated QA tester for the Ollie app.
+This document describes how to use Claude as an automated QA tester for the Otis app.
 
 ## Overview
 
@@ -134,7 +134,7 @@ If the user says "fix the issues" or similar:
 
 ```yaml
 # scenarios/my-feature-test.yaml
-appId: jaapstronks.Ollie-app
+appId: jaapstronks.Otis-app
 ---
 - launchApp
 - waitForAnimationToEnd

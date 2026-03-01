@@ -1,11 +1,11 @@
 //
 //  PredictionCalculations.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Potty prediction calculations ported from web app's predictions.js
 
 import Foundation
-import OllieShared
+import OtisShared
 import SwiftUI
 
 /// Urgency level for potty predictions
@@ -181,21 +181,21 @@ struct PredictionCalculations {
     static func iconColor(for urgency: PottyUrgency) -> Color {
         switch urgency {
         case .justWent:
-            return .ollieSuccess
+            return .otisSuccess
         case .normal:
-            return .ollieInfo
+            return .otisInfo
         case .attention:
-            return .ollieAccent
+            return .otisAccent
         case .soon:
-            return .ollieWarning
+            return .otisWarning
         case .overdue:
-            return .ollieDanger
+            return .otisDanger
         case .postAccident:
-            return .ollieDanger
+            return .otisDanger
         case .coverageGap:
             return .orange
         case .unknown:
-            return .ollieMuted
+            return .otisMuted
         }
     }
 

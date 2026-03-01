@@ -1,12 +1,12 @@
 //
 //  TrainingPlan.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Training plan data models - skills, categories, and weekly plans
 //
 
 import Foundation
-import OllieShared
+import OtisShared
 import SwiftUI
 
 // MARK: - Training Category
@@ -49,11 +49,11 @@ enum TrainingCategory: String, Codable, CaseIterable, Identifiable {
     /// - Impulse Control: Purple (mental, focus)
     var color: Color {
         switch self {
-        case .foundations: return .ollieInfo
-        case .basicCommands: return .ollieSuccess
-        case .care: return .ollieRose
-        case .safety: return .ollieWarning
-        case .impulseControl: return .olliePurple
+        case .foundations: return .otisInfo
+        case .basicCommands: return .otisSuccess
+        case .care: return .otisRose
+        case .safety: return .otisWarning
+        case .impulseControl: return .otisPurple
         }
     }
 }

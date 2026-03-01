@@ -1,13 +1,13 @@
 //
 //  FABButton.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Floating Action Button for quick event logging
 //  Tap: Opens full LogEventSheet
 //  Long press: Shows radial quick menu for one-tap logging
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Quick action item for the FAB menu
 struct FABQuickAction: Identifiable {
@@ -20,13 +20,13 @@ struct FABQuickAction: Identifiable {
 
     static var defaultActions: [FABQuickAction] {
         [
-            FABQuickAction(type: .plassen, label: Strings.FAB.peeOutside, icon: "drop.fill", color: .ollieInfo, location: .buiten),
-            FABQuickAction(type: .poepen, label: Strings.FAB.poopOutside, icon: "circle.inset.filled", color: .ollieWarning, location: .buiten),
-            FABQuickAction(type: .eten, label: Strings.FAB.eat, icon: "fork.knife", color: .ollieAccent, location: nil),
-            FABQuickAction(type: .slapen, label: Strings.FAB.sleep, icon: "moon.zzz.fill", color: .ollieSleep, location: nil),
-            FABQuickAction(type: .ontwaken, label: Strings.FAB.wakeUp, icon: "sun.max.fill", color: .ollieAccent, location: nil),
-            FABQuickAction(type: .uitlaten, label: Strings.FAB.walk, icon: "figure.walk", color: .ollieSuccess, location: nil),
-            FABQuickAction(type: .training, label: Strings.FAB.training, icon: "graduationcap.fill", color: .ollieMuted, location: nil),
+            FABQuickAction(type: .plassen, label: Strings.FAB.peeOutside, icon: "drop.fill", color: .otisInfo, location: .buiten),
+            FABQuickAction(type: .poepen, label: Strings.FAB.poopOutside, icon: "circle.inset.filled", color: .otisWarning, location: .buiten),
+            FABQuickAction(type: .eten, label: Strings.FAB.eat, icon: "fork.knife", color: .otisAccent, location: nil),
+            FABQuickAction(type: .slapen, label: Strings.FAB.sleep, icon: "moon.zzz.fill", color: .otisSleep, location: nil),
+            FABQuickAction(type: .ontwaken, label: Strings.FAB.wakeUp, icon: "sun.max.fill", color: .otisAccent, location: nil),
+            FABQuickAction(type: .uitlaten, label: Strings.FAB.walk, icon: "figure.walk", color: .otisSuccess, location: nil),
+            FABQuickAction(type: .training, label: Strings.FAB.training, icon: "graduationcap.fill", color: .otisMuted, location: nil),
         ]
     }
 }
@@ -124,9 +124,9 @@ struct FABButton: View {
             ZStack {
                 // Background circle
                 Circle()
-                    .fill(Color.ollieAccent)
+                    .fill(Color.otisAccent)
                     .frame(width: fabSize, height: fabSize)
-                    .shadow(color: Color.ollieAccent.opacity(0.4), radius: 8, y: 4)
+                    .shadow(color: Color.otisAccent.opacity(0.4), radius: 8, y: 4)
 
                 // Icon - changes to X when menu is open
                 Image(systemName: isShowingMenu ? "xmark" : "plus")

@@ -1,12 +1,12 @@
 //
 //  PuppyEventStats.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Pre-computed statistics from a collection of PuppyEvents.
 //  Use this to avoid repeated computation of common metrics.
 
 import Foundation
-import OllieShared
+import OtisShared
 
 /// Pre-computed statistics from a collection of PuppyEvents
 struct PuppyEventStats {

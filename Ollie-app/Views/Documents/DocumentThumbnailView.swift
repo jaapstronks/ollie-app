@@ -1,11 +1,11 @@
 //
 //  DocumentThumbnailView.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Displays a document thumbnail with async loading from DocumentStore
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Async thumbnail view for documents
 struct DocumentThumbnailView: View {

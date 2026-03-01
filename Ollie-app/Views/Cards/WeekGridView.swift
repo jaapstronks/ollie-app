@@ -1,11 +1,11 @@
 //
 //  WeekGridView.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Week overview grid showing 7 days of metrics
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Row configuration for the week grid
 private struct WeekGridRow: Identifiable {
@@ -24,22 +24,22 @@ struct WeekGridView: View {
 
     private var rows: [WeekGridRow] {
         [
-            WeekGridRow(iconName: "tree.fill", label: Strings.Stats.outdoor, color: .ollieSuccess) { stats in
+            WeekGridRow(iconName: "tree.fill", label: Strings.Stats.outdoor, color: .otisSuccess) { stats in
                 stats.outdoorPotty > 0 ? "\(stats.outdoorPotty)" : "–"
             },
-            WeekGridRow(iconName: "house.fill", label: Strings.Stats.indoor, color: .ollieDanger) { stats in
+            WeekGridRow(iconName: "house.fill", label: Strings.Stats.indoor, color: .otisDanger) { stats in
                 stats.indoorPotty > 0 ? "\(stats.indoorPotty)" : "–"
             },
-            WeekGridRow(iconName: "fork.knife", label: Strings.Stats.mealsLabel, color: .ollieAccent) { stats in
+            WeekGridRow(iconName: "fork.knife", label: Strings.Stats.mealsLabel, color: .otisAccent) { stats in
                 stats.meals > 0 ? "\(stats.meals)" : "–"
             },
-            WeekGridRow(iconName: "figure.walk", label: Strings.Stats.walksLabel, color: .ollieInfo) { stats in
+            WeekGridRow(iconName: "figure.walk", label: Strings.Stats.walksLabel, color: .otisInfo) { stats in
                 stats.walks > 0 ? "\(stats.walks)" : "–"
             },
-            WeekGridRow(iconName: "moon.fill", label: Strings.Stats.sleepLabel, color: .ollieSleep) { stats in
+            WeekGridRow(iconName: "moon.fill", label: Strings.Stats.sleepLabel, color: .otisSleep) { stats in
                 stats.sleepHours > 0 ? String(format: "%.0f", stats.sleepHours) : "–"
             },
-            WeekGridRow(iconName: "scope", label: Strings.Stats.trainingLabel, color: .olliePurple) { stats in
+            WeekGridRow(iconName: "scope", label: Strings.Stats.trainingLabel, color: .otisPurple) { stats in
                 stats.trainingSessions > 0 ? "\(stats.trainingSessions)" : "–"
             }
         ]
@@ -73,13 +73,13 @@ struct WeekGridView: View {
                 Text(day.shortDateLabel)
                     .font(.caption2)
                     .fontWeight(day.isToday ? .bold : .regular)
-                    .foregroundStyle(day.isToday ? Color.ollieAccent : .secondary)
+                    .foregroundStyle(day.isToday ? Color.otisAccent : .secondary)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 6)
                     .background(
                         day.isToday ?
                         RoundedRectangle(cornerRadius: 6)
-                            .fill(Color.ollieAccent.opacity(colorScheme == .dark ? 0.2 : 0.15))
+                            .fill(Color.otisAccent.opacity(colorScheme == .dark ? 0.2 : 0.15))
                         : nil
                     )
             }
@@ -117,7 +117,7 @@ struct WeekGridView: View {
                     .background(
                         day.isToday ?
                         RoundedRectangle(cornerRadius: 4)
-                            .fill(Color.ollieAccent.opacity(colorScheme == .dark ? 0.1 : 0.08))
+                            .fill(Color.otisAccent.opacity(colorScheme == .dark ? 0.1 : 0.08))
                         : nil
                     )
             }

@@ -1,12 +1,12 @@
 //
 //  AudioService.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Audio service for playing training clicker sounds
 //
 
 import AVFoundation
-import OllieShared
+import OtisShared
 import os
 
 /// Service for playing audio feedback during training sessions
@@ -16,7 +16,7 @@ final class AudioService {
 
     private var clickPlayer: AVAudioPlayer?
     private var isEnabled = true
-    private let logger = Logger.ollie(category: "AudioService")
+    private let logger = Logger.otis(category: "AudioService")
 
     private init() {
         setupAudioSession()

@@ -1,12 +1,12 @@
 //
 //  CDWeightMeasurement+Extensions.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Extensions for converting between WeightMeasurement and CDWeightMeasurement
 //
 
 import CoreData
-import OllieShared
+import OtisShared
 
 // MARK: - StorableModel Conformance
 

@@ -1,6 +1,6 @@
 //
 //  Strings+Appointments.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Localized strings for appointments
 

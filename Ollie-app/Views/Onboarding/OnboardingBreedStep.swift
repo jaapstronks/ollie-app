@@ -1,12 +1,12 @@
 //
 //  OnboardingBreedStep.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Breed selection step for onboarding with searchable breed list from TheDogAPI
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Breed selection step
 struct OnboardingBreedStep: View {
@@ -45,7 +45,7 @@ struct OnboardingBreedStep: View {
             VStack(spacing: 12) {
                 Image(systemName: "dog.fill")
                     .font(.system(size: 56))
-                    .foregroundStyle(Color.ollieAccent)
+                    .foregroundStyle(Color.otisAccent)
                     .scaleEffect(hasAppeared ? 1.0 : 0.8)
                     .opacity(hasAppeared ? 1.0 : 0.0)
 
@@ -212,17 +212,17 @@ private struct BreedSelectionButton: View {
                 Spacer()
                 Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
                     .font(.title3)
-                    .foregroundStyle(isSelected ? Color.ollieAccent : Color(.tertiaryLabel))
+                    .foregroundStyle(isSelected ? Color.otisAccent : Color(.tertiaryLabel))
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 14)
             .background(
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(isSelected ? Color.ollieAccent.opacity(0.1) : Color(.secondarySystemBackground))
+                    .fill(isSelected ? Color.otisAccent.opacity(0.1) : Color(.secondarySystemBackground))
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 12)
-                    .strokeBorder(isSelected ? Color.ollieAccent.opacity(0.3) : Color.clear, lineWidth: 1.5)
+                    .strokeBorder(isSelected ? Color.otisAccent.opacity(0.3) : Color.clear, lineWidth: 1.5)
             )
         }
         .buttonStyle(.plain)
@@ -250,17 +250,17 @@ private struct OtherBreedButton: View {
                 Spacer()
                 Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
                     .font(.title3)
-                    .foregroundStyle(isSelected ? Color.ollieAccent : Color(.tertiaryLabel))
+                    .foregroundStyle(isSelected ? Color.otisAccent : Color(.tertiaryLabel))
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 14)
             .background(
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(isSelected ? Color.ollieAccent.opacity(0.1) : Color(.secondarySystemBackground))
+                    .fill(isSelected ? Color.otisAccent.opacity(0.1) : Color(.secondarySystemBackground))
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 12)
-                    .strokeBorder(isSelected ? Color.ollieAccent.opacity(0.3) : Color.clear, lineWidth: 1.5)
+                    .strokeBorder(isSelected ? Color.otisAccent.opacity(0.3) : Color.clear, lineWidth: 1.5)
             )
         }
         .buttonStyle(.plain)

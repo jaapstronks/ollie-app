@@ -1,6 +1,6 @@
 //
 //  AppError.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Structured error type for consistent error handling across stores
 

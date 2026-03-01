@@ -1,13 +1,13 @@
 //
 //  AchievementService.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Service for detecting achievements and managing celebration queue
 //  Implements fatigue prevention to avoid overwhelming users
 
 import Foundation
 import SwiftUI
-import OllieShared
+import OtisShared
 import Combine
 import os
 
@@ -31,7 +31,7 @@ final class AchievementService: ObservableObject {
 
     // MARK: - Private
 
-    private let logger = Logger.ollie(category: "AchievementService")
+    private let logger = Logger.otis(category: "AchievementService")
     private static let stateFileName = "achievement_state.json"
     private var cancellables = Set<AnyCancellable>()
 
@@ -253,7 +253,7 @@ final class AchievementService: ObservableObject {
             decoder.dateDecodingStrategy = .iso8601
             return try decoder.decode(AchievementState.self, from: data)
         } catch {
-            Logger.ollie(category: "AchievementService").error("Failed to load achievement state: \(error.localizedDescription)")
+            Logger.otis(category: "AchievementService").error("Failed to load achievement state: \(error.localizedDescription)")
             return .empty
         }
     }

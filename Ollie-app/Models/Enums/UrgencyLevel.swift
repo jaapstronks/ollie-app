@@ -1,12 +1,12 @@
 //
 //  UrgencyLevel.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Shared protocol for urgency presentation across different status types
 //  Consolidates icon, color, and text presentation for potty/poop urgency
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Protocol for types that represent urgency levels
 /// Provides consistent UI presentation across different urgency types
@@ -67,21 +67,21 @@ extension PottyUrgency: UrgencyPresentable {
     var iconColor: Color {
         switch self {
         case .justWent:
-            return .ollieSuccess
+            return .otisSuccess
         case .normal:
-            return .ollieInfo
+            return .otisInfo
         case .attention:
-            return .ollieAccent
+            return .otisAccent
         case .soon:
-            return .ollieWarning
+            return .otisWarning
         case .overdue:
-            return .ollieDanger
+            return .otisDanger
         case .postAccident:
-            return .ollieDanger
+            return .otisDanger
         case .coverageGap:
-            return .ollieWarning
+            return .otisWarning
         case .unknown:
-            return .ollieMuted
+            return .otisMuted
         }
     }
 
@@ -90,13 +90,13 @@ extension PottyUrgency: UrgencyPresentable {
         case .justWent, .normal:
             return .primary
         case .attention:
-            return .ollieAccent
+            return .otisAccent
         case .soon:
-            return .ollieWarning
+            return .otisWarning
         case .overdue, .postAccident:
-            return .ollieDanger
+            return .otisDanger
         case .coverageGap:
-            return .ollieWarning
+            return .otisWarning
         case .unknown:
             return .secondary
         }
@@ -128,15 +128,15 @@ extension PoopUrgency: UrgencyPresentable {
     var iconColor: Color {
         switch self {
         case .hidden:
-            return .ollieMuted
+            return .otisMuted
         case .good:
-            return .ollieSuccess
+            return .otisSuccess
         case .info:
             return .secondary
         case .gentle:
-            return .ollieWarning
+            return .otisWarning
         case .attention:
-            return .ollieWarning
+            return .otisWarning
         }
     }
 
@@ -145,7 +145,7 @@ extension PoopUrgency: UrgencyPresentable {
         case .hidden, .good, .info, .gentle:
             return .primary
         case .attention:
-            return .ollieWarning
+            return .otisWarning
         }
     }
 

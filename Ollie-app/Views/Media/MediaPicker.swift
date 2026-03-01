@@ -1,10 +1,10 @@
 //
 //  MediaPicker.swift
-//  Ollie-app
+//  Otis-app
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 import PhotosUI
 import UIKit
 import UniformTypeIdentifiers

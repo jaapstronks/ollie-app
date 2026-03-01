@@ -1,11 +1,11 @@
 //
 //  DocumentDetailView.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Detail view for viewing and editing a document
 
 import SwiftUI
-import OllieShared
+import OtisShared
 import PDFKit
 
 /// Detail view for a document
@@ -228,7 +228,7 @@ struct DocumentDetailView: View {
     private func detailRow(icon: String, title: String, value: String) -> some View {
         HStack(spacing: 12) {
             Image(systemName: icon)
-                .foregroundColor(.ollieAccent)
+                .foregroundColor(.otisAccent)
                 .frame(width: 24)
 
             VStack(alignment: .leading, spacing: 2) {
@@ -285,7 +285,7 @@ struct DocumentDetailView: View {
         } else if document.expiresSoon {
             return .orange
         }
-        return .ollieAccent
+        return .otisAccent
     }
 
     // MARK: - Notes Card

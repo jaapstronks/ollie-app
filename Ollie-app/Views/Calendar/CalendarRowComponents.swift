@@ -1,13 +1,13 @@
 //
 //  CalendarRowComponents.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Reusable row components for calendar/schedule views
 //  Extracted from CalendarTabView.swift
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 // MARK: - This Week Rows
 
@@ -18,12 +18,12 @@ struct ThisWeekAppointmentRow: View {
         HStack(spacing: 12) {
             ZStack {
                 Circle()
-                    .fill(Color.ollieAccent.opacity(0.2))
+                    .fill(Color.otisAccent.opacity(0.2))
                     .frame(width: 36, height: 36)
 
                 Image(systemName: appointment.appointmentType.icon)
                     .font(.system(size: 14))
-                    .foregroundStyle(Color.ollieAccent)
+                    .foregroundStyle(Color.otisAccent)
             }
 
             VStack(alignment: .leading, spacing: 2) {
@@ -42,7 +42,7 @@ struct ThisWeekAppointmentRow: View {
                 Text(Strings.Health.today)
                     .font(.caption)
                     .fontWeight(.medium)
-                    .foregroundStyle(Color.ollieAccent)
+                    .foregroundStyle(Color.otisAccent)
             }
         }
         .padding()
@@ -85,12 +85,12 @@ struct ThisWeekMilestoneRow: View {
             HStack(spacing: 12) {
                 ZStack {
                     Circle()
-                        .fill(Color.ollieAccent.opacity(0.2))
+                        .fill(Color.otisAccent.opacity(0.2))
                         .frame(width: 36, height: 36)
 
                     Image(systemName: milestone.icon)
                         .font(.system(size: 14))
-                        .foregroundStyle(Color.ollieAccent)
+                        .foregroundStyle(Color.otisAccent)
                 }
 
                 VStack(alignment: .leading, spacing: 2) {
@@ -112,12 +112,12 @@ struct ThisWeekMilestoneRow: View {
                     if days < 0 {
                         Text(Strings.Health.daysOverdue(abs(days)))
                             .font(.caption)
-                            .foregroundStyle(Color.ollieWarning)
+                            .foregroundStyle(Color.otisWarning)
                     } else if days == 0 {
                         Text(Strings.Health.today)
                             .font(.caption)
                             .fontWeight(.medium)
-                            .foregroundStyle(Color.ollieAccent)
+                            .foregroundStyle(Color.otisAccent)
                     } else {
                         Text(Strings.Health.inDays(days))
                             .font(.caption)
@@ -142,12 +142,12 @@ struct ComingUpAppointmentRow: View {
         HStack(spacing: 12) {
             ZStack {
                 Circle()
-                    .fill(Color.ollieInfo.opacity(0.15))
+                    .fill(Color.otisInfo.opacity(0.15))
                     .frame(width: 32, height: 32)
 
                 Image(systemName: appointment.appointmentType.icon)
                     .font(.system(size: 12))
-                    .foregroundStyle(Color.ollieInfo)
+                    .foregroundStyle(Color.otisInfo)
             }
 
             VStack(alignment: .leading, spacing: 2) {
@@ -179,12 +179,12 @@ struct ComingUpMilestoneRow: View {
             HStack(spacing: 12) {
                 ZStack {
                     Circle()
-                        .fill(Color.ollieInfo.opacity(0.15))
+                        .fill(Color.otisInfo.opacity(0.15))
                         .frame(width: 32, height: 32)
 
                     Image(systemName: milestone.icon)
                         .font(.system(size: 12))
-                        .foregroundStyle(Color.ollieInfo)
+                        .foregroundStyle(Color.otisInfo)
                 }
 
                 VStack(alignment: .leading, spacing: 2) {

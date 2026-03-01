@@ -4,7 +4,7 @@
 
 This document provides creative direction and instructions for generating **detailed design briefings** across multiple workstreams. Each workstream addresses a specific aspect of the app's visual and emotional design that needs to be evolved.
 
-The app is a puppy tracker (currently tracking a golden retriever named Ollie). It is functionally strong — logging, scheduling, insights, and training are all well-implemented. However, the app currently feels **utility-first**: white cards with rounded corners, a single orange accent color, and a list-heavy layout that reads more like a productivity tool than a companion app for one of the most emotional experiences in a dog owner's life.
+The app is a puppy tracker (currently tracking a golden retriever named Max). It is functionally strong — logging, scheduling, insights, and training are all well-implemented. However, the app currently feels **utility-first**: white cards with rounded corners, a single orange accent color, and a list-heavy layout that reads more like a productivity tool than a companion app for one of the most emotional experiences in a dog owner's life.
 
 The goal of these briefings is to bring **warmth, personality, and emotional resonance** to the app without sacrificing its functional clarity.
 
@@ -14,9 +14,9 @@ The goal of these briefings is to bring **warmth, personality, and emotional res
 
 These principles should guide every briefing produced from this document:
 
-### 1. It's Ollie's app, not a generic tracker
+### 1. It's the puppy's app, not a generic tracker
 
-The dog should be a visible, felt presence throughout the app. The owner opens this app multiple times a day — every time should feel like a small moment of connection with their puppy. The profile photo in the top corner is a start, but Ollie should permeate the experience more deeply.
+The dog should be a visible, felt presence throughout the app. The owner opens this app multiple times a day — every time should feel like a small moment of connection with their puppy. The profile photo in the top corner is a start, but the puppy should permeate the experience more deeply.
 
 ### 2. Track less, tell more
 
@@ -49,16 +49,16 @@ Each section below describes a workstream. For each workstream, produce a **stan
 
 ---
 
-### Briefing 1: "Ollie's Day" — Reimagining the Today Tab Hero Section
+### Briefing 1: "Today View" — Reimagining the Today Tab Hero Section
 
 **Context:** The Today tab currently opens with weather info and a status line ("Slaapt net 3 min"), then goes into a list of upcoming items and the timeline. The dog's photo is a small circle in the top-right corner.
 
-**Direction:** The top of the Today tab should be a **hero moment** — a larger, more immersive section that makes you feel like you're checking in on Ollie, not opening a task manager. This could include:
+**Direction:** The top of the Today tab should be a **hero moment** — a larger, more immersive section that makes you feel like you're checking in on Otis, not opening a task manager. This could include:
 
 - A larger photo area (today's photo if available, or the profile photo with a contextual background)
-- Ollie's current state prominently displayed (sleeping, awake, on a walk) with visual treatment that reflects the state (calmer colors when sleeping, brighter when active)
+- the puppy's current state prominently displayed (sleeping, awake, on a walk) with visual treatment that reflects the state (calmer colors when sleeping, brighter when active)
 - Key "right now" info integrated into the hero: time since last pee, awake duration, next scheduled item
-- The transition from hero → schedule → timeline should feel like zooming from "how is Ollie right now" into "what's the plan" into "what happened today"
+- The transition from hero → schedule → timeline should feel like zooming from "how is the puppy right now" into "what's the plan" into "what happened today"
 
 **Consider:** How does this hero section work when there's no photo uploaded? How does it behave in dark mode? Should the hero section be collapsible to quickly get to the timeline?
 
@@ -94,7 +94,7 @@ Each section below describes a workstream. For each workstream, produce a **stan
   - Tier 1 (subtle): Daily streak continuation, logging consistency → small visual acknowledgment (a glow, a micro-animation)
   - Tier 2 (notable): New streak record, first successful command, socialization category completed → a card with illustration, shareable
   - Tier 3 (major): Potty training complete, all puppy vaccinations done, socialization window completed → full-screen celebration moment, photo prompt, memory created
-- **Memory creation:** Tier 2 and 3 celebrations should prompt the user to take or attach a photo, creating a "memory" that lives in a timeline or scrapbook view. "The day Ollie learned 'sit'" with a photo, date, and the command badge.
+- **Memory creation:** Tier 2 and 3 celebrations should prompt the user to take or attach a photo, creating a "memory" that lives in a timeline or scrapbook view. "The day puppy learned 'sit'" with a photo, date, and the command badge.
 - **Shareability:** Celebrations should be easy to share (Instagram story format, WhatsApp-friendly image). Puppy owners love sharing progress.
 - **Retroactive celebrations:** If the user hasn't been logging and catches up, the celebrations should still fire — don't punish inconsistency.
 
@@ -140,7 +140,7 @@ Each section below describes a workstream. For each workstream, produce a **stan
 - **Photo pins:** Instead of a separate "Recente momenten" section below the map, show photo thumbnails directly as pins on the map. Tap a pin → see the photo with date, what happened (first time at the park, met a new dog, etc.)
 - **Place personality:** Each place could accumulate context: "Veldje — visited 8 times, 3 potty successes, met 2 dogs here." This turns a map pin into a story.
 - **Contacts as place cards:** When you tap a contact-type place (vet, daycare), the detail view should prominently show: call button, navigate button, next appointment (linked from Agenda tab), and notes.
-- **"Explore" suggestions:** Based on the socialization checklist (which needs exposure to different environments), the Places tab could suggest new types of places to visit: "Ollie hasn't been to a busy shopping area yet — here are some nearby options."
+- **"Explore" suggestions:** Based on the socialization checklist (which needs exposure to different environments), the Places tab could suggest new types of places to visit: "the puppy hasn't been to a busy shopping area yet — here are some nearby options."
 
 **Consider:** Privacy implications of route tracking. Performance with many pins/routes on the map. How to handle the transition from the current simple implementation to this richer vision. Whether this is a v2/v3 feature or can be incrementally built.
 
@@ -155,7 +155,7 @@ Each section below describes a workstream. For each workstream, produce a **stan
 **Direction:** Introduce **subtle contextual shifts** that make the app feel alive and aware:
 
 - **Time-of-day theming:** Warmer, darker tones in the evening. Cooler, brighter tones in the morning. Not a full theme switch, but subtle background tint shifts that make 6 AM and 9 PM feel different.
-- **State awareness:** When Ollie is sleeping, the app could feel calmer (muted colors, softer elements). When he's awake and it's walk time, it could feel more energetic. This reinforces the "checking in on Ollie" feeling.
+- **State awareness:** When the puppy is sleeping, the app could feel calmer (muted colors, softer elements). When he's awake and it's walk time, it could feel more energetic. This reinforces the "checking in on Otis" feeling.
 - **Weather integration beyond data:** The Today tab already shows weather. Could the hero section background subtly reflect conditions? Rainy = slightly cooler blue tint, sunny = warm golden tint. This is about atmosphere, not literal weather icons.
 - **Seasonal touches:** Optional — subtle seasonal elements that change over the months. This adds to the sense that the app is a living companion, not a static tool.
 
@@ -176,7 +176,7 @@ Name each briefing file: `design-briefing-[number]-[short-name].md`
 ## Priority Order
 
 1. **Semantic Color System** (Briefing 4) — this is foundational and affects all other workstreams
-2. **Ollie's Day Hero Section** (Briefing 1) — highest-impact single change, it's what users see first
+2. **Today View Hero Section** (Briefing 1) — highest-impact single change, it's what users see first
 3. **Milestone Celebrations** (Briefing 3) — strongest emotional design opportunity and retention driver
 4. **Visual Day Timeline** (Briefing 2) — significant UX improvement but more complex to implement
 5. **Contextual Atmosphere** (Briefing 6) — polish layer, should come after the fundamentals

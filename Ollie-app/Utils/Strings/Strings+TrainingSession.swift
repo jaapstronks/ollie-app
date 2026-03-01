@@ -1,6 +1,6 @@
 //
 //  Strings+TrainingSession.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Localized strings for training session mode
 //

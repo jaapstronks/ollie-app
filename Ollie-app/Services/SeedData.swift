@@ -1,11 +1,11 @@
 //
 //  SeedData.swift
-//  Ollie-app
+//  Otis-app
 //
 
 import Foundation
 import CoreData
-import OllieShared
+import OtisShared
 
 enum SeedData {
     /// Check if running in UI testing mode

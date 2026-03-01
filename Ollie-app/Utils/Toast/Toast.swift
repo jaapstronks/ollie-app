@@ -1,6 +1,6 @@
 //
 //  Toast.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Lightweight toast notification model for fleeting feedback messages.
 
@@ -25,10 +25,10 @@ enum ToastType {
 
     var color: Color {
         switch self {
-        case .success: return .ollieSuccess
-        case .info: return .ollieInfo
-        case .warning: return .ollieWarning
-        case .error: return .ollieDanger
+        case .success: return .otisSuccess
+        case .info: return .otisInfo
+        case .warning: return .otisWarning
+        case .error: return .otisDanger
         }
     }
 

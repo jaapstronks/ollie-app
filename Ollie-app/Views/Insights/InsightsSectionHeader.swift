@@ -1,6 +1,6 @@
 //
 //  InsightsSectionHeader.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Section header for Insights sections
 //

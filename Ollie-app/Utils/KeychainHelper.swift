@@ -1,6 +1,6 @@
 //
 //  KeychainHelper.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Secure storage for sensitive data using iOS Keychain
 //
@@ -23,7 +23,7 @@ enum KeychainHelper {
 
     // MARK: - Service Identifier
 
-    private static let service = "nl.jaapstronks.Ollie"
+    private static let service = "nl.jaapstronks.Otis"
 
     // MARK: - Public API
 

@@ -1,12 +1,12 @@
 //
 //  PottyStatusCard.swift
-//  Ollie-app
+//  Otis-app
 //
 //  V3: Hero widget with smart predictions and urgency levels
 //  Uses liquid glass design for iOS 26 aesthetic
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Prominent card showing potty status with smart predictions
 /// Uses liquid glass design with semantic tinting based on urgency
@@ -84,7 +84,7 @@ struct PottyStatusCard: View {
                 minutesSinceLast: 5,
                 lastWasIndoor: false
             ),
-            puppyName: "Ollie"
+            puppyName: "Max"
         )
         Spacer()
     }
@@ -101,7 +101,7 @@ struct PottyStatusCard: View {
                 minutesSinceLast: 45,
                 lastWasIndoor: false
             ),
-            puppyName: "Ollie"
+            puppyName: "Max"
         )
         Spacer()
     }
@@ -118,7 +118,7 @@ struct PottyStatusCard: View {
                 minutesSinceLast: 52,
                 lastWasIndoor: false
             ),
-            puppyName: "Ollie"
+            puppyName: "Max"
         )
         Spacer()
     }
@@ -135,7 +135,7 @@ struct PottyStatusCard: View {
                 minutesSinceLast: 85,
                 lastWasIndoor: false
             ),
-            puppyName: "Ollie"
+            puppyName: "Max"
         )
         Spacer()
     }
@@ -152,7 +152,7 @@ struct PottyStatusCard: View {
                 minutesSinceLast: 105,
                 lastWasIndoor: false
             ),
-            puppyName: "Ollie"
+            puppyName: "Max"
         )
         Spacer()
     }
@@ -169,7 +169,7 @@ struct PottyStatusCard: View {
                 minutesSinceLast: 5,
                 lastWasIndoor: true
             ),
-            puppyName: "Ollie"
+            puppyName: "Max"
         )
         Spacer()
     }
@@ -186,7 +186,7 @@ struct PottyStatusCard: View {
                 minutesSinceLast: nil,
                 lastWasIndoor: false
             ),
-            puppyName: "Ollie"
+            puppyName: "Max"
         )
         Spacer()
     }

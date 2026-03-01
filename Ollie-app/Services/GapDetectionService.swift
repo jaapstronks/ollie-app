@@ -1,12 +1,12 @@
 //
 //  GapDetectionService.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Service for detecting when a coverage gap should be prompted
 //
 
 import Foundation
-import OllieShared
+import OtisShared
 
 /// Service for detecting when to prompt for coverage gaps
 struct GapDetectionService {

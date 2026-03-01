@@ -1,12 +1,12 @@
 //
 //  DayHeroCard.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Simple hero card showing the day number with puppy
 //  Focused single purpose - no redundant stats
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Hero card displaying "Day X with [Puppy]"
 /// Clean, prominent display for the day counter
@@ -22,15 +22,15 @@ struct DayHeroCard: View {
                 // Day number badge
                 Text("\(day)")
                     .font(.system(size: 32, weight: .bold, design: .rounded))
-                    .foregroundStyle(Color.ollieAccent)
+                    .foregroundStyle(Color.otisAccent)
                     .frame(width: 56, height: 56)
                     .background(
                         Circle()
-                            .fill(Color.ollieAccent.opacity(colorScheme == .dark ? 0.2 : 0.12))
+                            .fill(Color.otisAccent.opacity(colorScheme == .dark ? 0.2 : 0.12))
                     )
                     .overlay(
                         Circle()
-                            .strokeBorder(Color.ollieAccent.opacity(0.2), lineWidth: 1)
+                            .strokeBorder(Color.otisAccent.opacity(0.2), lineWidth: 1)
                     )
 
                 VStack(alignment: .leading, spacing: 2) {
@@ -58,7 +58,7 @@ struct DayHeroCard: View {
 
 #Preview("Day 8") {
     VStack {
-        DayHeroCard(dayNumber: 8, puppyName: "Ollie")
+        DayHeroCard(dayNumber: 8, puppyName: "Max")
         Spacer()
     }
     .padding()
@@ -85,7 +85,7 @@ struct DayHeroCard: View {
 
 #Preview("No Day Number") {
     VStack {
-        DayHeroCard(dayNumber: nil, puppyName: "Ollie")
+        DayHeroCard(dayNumber: nil, puppyName: "Max")
         Text("(Shows nothing when no day number)")
             .foregroundStyle(.secondary)
         Spacer()

@@ -1,11 +1,11 @@
 //
 //  DiaryCardView.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Large photo card for diary view mode with date and caption
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// A large photo card showing one photo per day with date and caption
 struct DiaryCardView: View {

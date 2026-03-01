@@ -1,6 +1,6 @@
 //
 //  ToastManager.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Observable manager for toast notifications with queue support.
 

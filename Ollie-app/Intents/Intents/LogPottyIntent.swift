@@ -1,11 +1,11 @@
 //
 //  LogPottyIntent.swift
-//  Ollie-app
+//  Otis-app
 //
 //  App Intent for logging potty events via Siri/Shortcuts
 
 import AppIntents
-import OllieShared
+import OtisShared
 
 /// Log a potty event (pee or poop) with location
 struct LogPottyIntent: AppIntent {
@@ -28,11 +28,11 @@ struct LogPottyIntent: AppIntent {
         let store = IntentDataStore.shared
 
         guard let profile = store.loadProfile() else {
-            return .result(dialog: "Please set up your puppy profile in the Ollie app first.")
+            return .result(dialog: "Please set up your puppy profile in the Otis app first.")
         }
 
         guard profile.canLogEvents else {
-            return .result(dialog: "Your free trial has ended. Please upgrade in the Ollie app to continue logging.")
+            return .result(dialog: "Your free trial has ended. Please upgrade in the Otis app to continue logging.")
         }
 
         let event = PuppyEvent.potty(
@@ -64,11 +64,11 @@ struct LogPeeOutsideIntent: AppIntent {
         let store = IntentDataStore.shared
 
         guard let profile = store.loadProfile() else {
-            return .result(dialog: "Please set up your puppy profile in the Ollie app first.")
+            return .result(dialog: "Please set up your puppy profile in the Otis app first.")
         }
 
         guard profile.canLogEvents else {
-            return .result(dialog: "Your free trial has ended. Please upgrade in the Ollie app to continue logging.")
+            return .result(dialog: "Your free trial has ended. Please upgrade in the Otis app to continue logging.")
         }
 
         let event = PuppyEvent.potty(type: .plassen, location: .buiten)
@@ -93,11 +93,11 @@ struct LogPoopOutsideIntent: AppIntent {
         let store = IntentDataStore.shared
 
         guard let profile = store.loadProfile() else {
-            return .result(dialog: "Please set up your puppy profile in the Ollie app first.")
+            return .result(dialog: "Please set up your puppy profile in the Otis app first.")
         }
 
         guard profile.canLogEvents else {
-            return .result(dialog: "Your free trial has ended. Please upgrade in the Ollie app to continue logging.")
+            return .result(dialog: "Your free trial has ended. Please upgrade in the Otis app to continue logging.")
         }
 
         let event = PuppyEvent.potty(type: .poepen, location: .buiten)
@@ -122,11 +122,11 @@ struct LogPeeInsideIntent: AppIntent {
         let store = IntentDataStore.shared
 
         guard let profile = store.loadProfile() else {
-            return .result(dialog: "Please set up your puppy profile in the Ollie app first.")
+            return .result(dialog: "Please set up your puppy profile in the Otis app first.")
         }
 
         guard profile.canLogEvents else {
-            return .result(dialog: "Your free trial has ended. Please upgrade in the Ollie app to continue logging.")
+            return .result(dialog: "Your free trial has ended. Please upgrade in the Otis app to continue logging.")
         }
 
         let event = PuppyEvent.potty(type: .plassen, location: .binnen)
@@ -151,11 +151,11 @@ struct LogPoopInsideIntent: AppIntent {
         let store = IntentDataStore.shared
 
         guard let profile = store.loadProfile() else {
-            return .result(dialog: "Please set up your puppy profile in the Ollie app first.")
+            return .result(dialog: "Please set up your puppy profile in the Otis app first.")
         }
 
         guard profile.canLogEvents else {
-            return .result(dialog: "Your free trial has ended. Please upgrade in the Ollie app to continue logging.")
+            return .result(dialog: "Your free trial has ended. Please upgrade in the Otis app to continue logging.")
         }
 
         let event = PuppyEvent.potty(type: .poepen, location: .binnen)

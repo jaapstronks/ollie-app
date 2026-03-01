@@ -1,12 +1,12 @@
 //
 //  InsightsSpotsSection.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Spots section with map and favorites
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 import MapKit
 
 /// Spots section showing map and favorite locations
@@ -21,7 +21,7 @@ struct InsightsSpotsSection: View {
                     InsightsSectionHeader(
                         title: Strings.Stats.spots,
                         icon: "map.fill",
-                        tint: .ollieSuccess
+                        tint: .otisSuccess
                     )
 
                     Spacer()
@@ -36,7 +36,7 @@ struct InsightsSpotsSection: View {
                         }
                         .font(.caption)
                         .fontWeight(.medium)
-                        .foregroundStyle(Color.ollieAccent)
+                        .foregroundStyle(Color.otisAccent)
                     }
                 }
 
@@ -80,7 +80,7 @@ struct InsightsSpotRow: View {
         HStack(spacing: 12) {
             Image(systemName: "mappin.circle.fill")
                 .font(.body)
-                .foregroundStyle(Color.ollieAccent)
+                .foregroundStyle(Color.otisAccent)
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(spot.name)

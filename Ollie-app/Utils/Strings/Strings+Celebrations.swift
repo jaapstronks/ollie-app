@@ -1,6 +1,6 @@
 //
 //  Strings+Celebrations.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Localized strings for milestone celebrations
 

@@ -1,11 +1,11 @@
 //
 //  CalendarWeekGrid.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Week grid view showing 7 days with appointments and milestones
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Week grid view displaying a single week with detailed appointment and milestone info
 struct CalendarWeekGrid: View {
@@ -50,7 +50,7 @@ struct CalendarWeekGrid: View {
             } label: {
                 Image(systemName: "chevron.left")
                     .font(.body.weight(.medium))
-                    .foregroundStyle(Color.ollieAccent)
+                    .foregroundStyle(Color.otisAccent)
                     .frame(width: 44, height: 44)
                     .contentShape(Rectangle())
             }
@@ -80,7 +80,7 @@ struct CalendarWeekGrid: View {
                 Text(Strings.Calendar.today)
                     .font(.caption)
                     .fontWeight(.medium)
-                    .foregroundStyle(Color.ollieAccent)
+                    .foregroundStyle(Color.otisAccent)
             }
 
             // Next week button
@@ -89,7 +89,7 @@ struct CalendarWeekGrid: View {
             } label: {
                 Image(systemName: "chevron.right")
                     .font(.body.weight(.medium))
-                    .foregroundStyle(Color.ollieAccent)
+                    .foregroundStyle(Color.otisAccent)
                     .frame(width: 44, height: 44)
                     .contentShape(Rectangle())
             }
@@ -243,7 +243,7 @@ private struct WeekDayCell: View {
                 // Appointment indicator
                 if !appointments.isEmpty {
                     Circle()
-                        .fill(isSelected ? Color.white : Color.ollieAccent)
+                        .fill(isSelected ? Color.white : Color.otisAccent)
                         .frame(width: 5, height: 5)
                 }
 
@@ -251,7 +251,7 @@ private struct WeekDayCell: View {
                 if milestoneSpan != nil {
                     Image(systemName: "star.fill")
                         .font(.system(size: 6))
-                        .foregroundStyle(isSelected ? Color.white : Color.olliePurple)
+                        .foregroundStyle(isSelected ? Color.white : Color.otisPurple)
                 }
             }
             .frame(height: 8)
@@ -277,7 +277,7 @@ private struct WeekDayCell: View {
         if isSelected {
             return .white
         } else if isToday {
-            return Color.ollieAccent
+            return Color.otisAccent
         } else {
             return .primary
         }
@@ -286,7 +286,7 @@ private struct WeekDayCell: View {
     @ViewBuilder
     private var backgroundStyle: some View {
         if isSelected {
-            Color.ollieAccent
+            Color.otisAccent
         } else {
             Color(.secondarySystemBackground)
         }
@@ -296,7 +296,7 @@ private struct WeekDayCell: View {
     private var todayOverlay: some View {
         if isToday && !isSelected {
             RoundedRectangle(cornerRadius: 12, style: .continuous)
-                .stroke(Color.ollieAccent, lineWidth: 2)
+                .stroke(Color.otisAccent, lineWidth: 2)
         }
     }
 }

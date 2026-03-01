@@ -1,12 +1,12 @@
 //
 //  EventFilters.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Array extensions for filtering PuppyEvent collections.
 //  Eliminates repeated .filter { $0.type == ... } patterns across the codebase.
 
 import Foundation
-import OllieShared
+import OtisShared
 
 // MARK: - Event Filtering Extensions
 

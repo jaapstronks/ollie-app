@@ -1,12 +1,12 @@
 //
 //  MemoryBookGeneratorView.swift
-//  Ollie-app
+//  Otis-app
 //
 //  View for generating and sharing the memory book PDF
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// View that generates a memory book PDF and allows sharing
 struct MemoryBookGeneratorView: View {
@@ -165,25 +165,6 @@ struct MemoryBookGeneratorView: View {
     private func previewPDF(at url: URL) {
         // Open in system PDF viewer
         UIApplication.shared.open(url)
-    }
-}
-
-// MARK: - Share Sheet
-
-struct ShareSheet: UIViewControllerRepresentable {
-    let activityItems: [Any]
-    var applicationActivities: [UIActivity]? = nil
-
-    func makeUIViewController(context: Context) -> UIActivityViewController {
-        let controller = UIActivityViewController(
-            activityItems: activityItems,
-            applicationActivities: applicationActivities
-        )
-        return controller
-    }
-
-    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {
-        // No update needed
     }
 }
 

@@ -1,13 +1,13 @@
 //
 //  CoreDataMigrationCoordinator.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Migrates existing JSONL/JSON data to Core Data
 //
 
 import Foundation
 import CoreData
-import OllieShared
+import OtisShared
 import os
 
 /// Handles one-time migration from JSONL/JSON files to Core Data
@@ -31,11 +31,11 @@ final class CoreDataMigrationCoordinator {
 
     // MARK: - Properties
 
-    private let logger = Logger.ollie(category: "CoreDataMigration")
+    private let logger = Logger.otis(category: "CoreDataMigration")
     private let fileManager = FileManager.default
 
     /// App Group identifier for data access
-    private static let appGroupIdentifier = "group.jaapstronks.Ollie"
+    private static let appGroupIdentifier = "group.jaapstronks.Otis"
 
     // MARK: - File Names
 

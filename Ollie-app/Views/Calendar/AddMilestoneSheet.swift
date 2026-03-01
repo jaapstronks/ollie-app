@@ -1,11 +1,11 @@
 //
 //  AddMilestoneSheet.swift
-//  Ollie-app
+//  Otis-app
 //
-//  Sheet for creating custom milestones (Ollie+ feature)
+//  Sheet for creating custom milestones (Otis+ feature)
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Sheet for adding a custom milestone
 struct AddMilestoneSheet: View {

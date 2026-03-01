@@ -78,13 +78,13 @@
         }
       }
     },
-    "Ollie Overview" : {
+    "Otis Overview" : {
       "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ollie Overzicht"
+            "value" : "Otis Overzicht"
           }
         }
       }

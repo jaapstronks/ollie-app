@@ -1,13 +1,13 @@
 //
 //  AddSpotSheet.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Sheet for creating a new walk spot with location picker
 
 import CoreLocation
 import MapKit
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Sheet for adding a new walk spot
 struct AddSpotSheet: View {
@@ -57,7 +57,7 @@ struct AddSpotSheet: View {
                     if let location = selectedLocation {
                         HStack {
                             Image(systemName: "checkmark.circle.fill")
-                                .foregroundStyle(Color.ollieSuccess)
+                                .foregroundStyle(Color.otisSuccess)
                             Text(Strings.WalkLocations.locationCaptured)
                             Spacer()
                             Button(Strings.Common.edit) {
@@ -79,7 +79,7 @@ struct AddSpotSheet: View {
                     if let error = errorMessage {
                         HStack {
                             Image(systemName: "exclamationmark.triangle.fill")
-                                .foregroundStyle(Color.ollieWarning)
+                                .foregroundStyle(Color.otisWarning)
                             Text(error)
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
@@ -276,7 +276,7 @@ struct LocationMapPicker: View {
                     Annotation("", coordinate: selectedCoordinate) {
                         Image(systemName: "mappin.circle.fill")
                             .font(.largeTitle)
-                            .foregroundStyle(Color.ollieAccent)
+                            .foregroundStyle(Color.otisAccent)
                             .background(
                                 Circle()
                                     .fill(.white)

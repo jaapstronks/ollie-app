@@ -1,11 +1,11 @@
 //
 //  MedicalTimelineView.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Comprehensive medical timeline showing health milestones and medical appointments
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// A unified timeline item for sorting milestones and appointments together
 private struct MedicalTimelineItem: Identifiable {
@@ -244,7 +244,7 @@ struct MedicalTimelineView: View {
             VStack(spacing: 0) {
                 // Dot
                 Circle()
-                    .fill(item.isCompleted ? Color.ollieSuccess : Color.ollieHealth)
+                    .fill(item.isCompleted ? Color.otisSuccess : Color.otisHealth)
                     .frame(width: 12, height: 12)
                     .padding(.top, 6)
 
@@ -282,12 +282,12 @@ struct MedicalTimelineView: View {
                 // Icon
                 ZStack {
                     Circle()
-                        .fill(milestone.isCompleted ? Color.ollieSuccess.opacity(0.2) : Color.ollieHealth.opacity(0.2))
+                        .fill(milestone.isCompleted ? Color.otisSuccess.opacity(0.2) : Color.otisHealth.opacity(0.2))
                         .frame(width: 36, height: 36)
 
                     Image(systemName: milestone.isCompleted ? "checkmark.circle.fill" : milestone.icon)
                         .font(.system(size: 14))
-                        .foregroundStyle(milestone.isCompleted ? Color.ollieSuccess : Color.ollieHealth)
+                        .foregroundStyle(milestone.isCompleted ? Color.otisSuccess : Color.otisHealth)
                 }
 
                 // Content
@@ -346,12 +346,12 @@ struct MedicalTimelineView: View {
                 // Icon
                 ZStack {
                     Circle()
-                        .fill(Color.ollieAccent.opacity(0.2))
+                        .fill(Color.otisAccent.opacity(0.2))
                         .frame(width: 36, height: 36)
 
                     Image(systemName: appointment.appointmentType.icon)
                         .font(.system(size: 14))
-                        .foregroundStyle(Color.ollieAccent)
+                        .foregroundStyle(Color.otisAccent)
                 }
 
                 // Content
@@ -365,7 +365,7 @@ struct MedicalTimelineView: View {
                         if appointment.isCompleted {
                             Image(systemName: "checkmark.circle.fill")
                                 .font(.caption)
-                                .foregroundStyle(Color.ollieSuccess)
+                                .foregroundStyle(Color.otisSuccess)
                         }
                     }
 

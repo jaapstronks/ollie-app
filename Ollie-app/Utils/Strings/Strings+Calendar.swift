@@ -1,6 +1,6 @@
 //
 //  Strings+Calendar.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Localized strings for the Calendar tab
 

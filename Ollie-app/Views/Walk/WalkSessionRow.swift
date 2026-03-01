@@ -1,11 +1,11 @@
 //
 //  WalkSessionRow.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Timeline row for displaying walk sessions as a card container with nested potty events
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Card-style row displaying a walk session with nested child events
 struct WalkSessionRow: View {
@@ -32,7 +32,7 @@ struct WalkSessionRow: View {
         .clipShape(RoundedRectangle(cornerRadius: 12))
         .overlay(
             RoundedRectangle(cornerRadius: 12)
-                .strokeBorder(Color.ollieSuccess.opacity(0.3), lineWidth: 1)
+                .strokeBorder(Color.otisSuccess.opacity(0.3), lineWidth: 1)
         )
         .padding(.horizontal)
         .padding(.vertical, 4)
@@ -55,12 +55,12 @@ struct WalkSessionRow: View {
             // Walk icon with green accent
             ZStack {
                 Circle()
-                    .fill(Color.ollieSuccess.opacity(0.15))
+                    .fill(Color.otisSuccess.opacity(0.15))
                     .frame(width: 32, height: 32)
 
                 Image(systemName: "figure.walk")
                     .font(.system(size: 16, weight: .semibold))
-                    .foregroundColor(.ollieSuccess)
+                    .foregroundColor(.otisSuccess)
             }
 
             // Content
@@ -74,7 +74,7 @@ struct WalkSessionRow: View {
                     if let durationString = session.durationString {
                         DurationPill(
                             text: durationString,
-                            color: .ollieSuccess,
+                            color: .otisSuccess,
                             isHighlighted: true
                         )
                     }
@@ -84,7 +84,7 @@ struct WalkSessionRow: View {
                 if let spotName = session.spotName {
                     Label(spotName, systemImage: "mappin.circle.fill")
                         .font(.caption)
-                        .foregroundStyle(Color.ollieAccent)
+                        .foregroundStyle(Color.otisAccent)
                 }
 
                 // Note
@@ -153,9 +153,9 @@ struct WalkSessionRow: View {
         let (icon, color): (String, Color) = {
             switch type {
             case .plassen:
-                return ("drop.fill", .ollieInfo)
+                return ("drop.fill", .otisInfo)
             case .poepen:
-                return ("circle.inset.filled", .ollieWarning)
+                return ("circle.inset.filled", .otisWarning)
             default:
                 return (type.icon, .secondary)
             }

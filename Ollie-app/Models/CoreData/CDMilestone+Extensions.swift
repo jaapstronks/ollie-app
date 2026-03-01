@@ -1,11 +1,11 @@
 //
 //  CDMilestone+Extensions.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Extensions for converting between Milestone and CDMilestone
 
 import CoreData
-import OllieShared
+import OtisShared
 
 // MARK: - CDEntityConvertible Conformance
 

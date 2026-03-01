@@ -1,12 +1,12 @@
 //
 //  WatchIntentDataStore.swift
-//  OllieWatch
+//  OtisWatch
 //
 //  Watch-specific data store for writing events to App Group
 //  Similar to IntentDataStore but without WidgetKit dependency
 
 import Foundation
-import OllieShared
+import OtisShared
 import os
 
 /// Watch-specific data store for event logging
@@ -20,7 +20,7 @@ final class WatchIntentDataStore {
     private let fileManager = FileManager.default
     private let encoder: JSONEncoder
     private let decoder: JSONDecoder
-    private let logger = Logger.ollieWatch(category: "WatchIntentDataStore")
+    private let logger = Logger.otisWatch(category: "WatchIntentDataStore")
 
     private init() {
         encoder = JSONEncoder()

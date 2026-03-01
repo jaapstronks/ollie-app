@@ -12,7 +12,7 @@
 ---
 
 ## 1. Hero
-- **Headline:** "Puppyhood is chaos. Ollie brings the calm."
+- **Headline:** "Puppyhood is chaos. Otis brings the calm."
 - **Screen:** Timeline with morning routine (wake, potty, breakfast, walk)
 
 ## 2. One-Tap Logging

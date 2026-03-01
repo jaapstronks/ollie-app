@@ -1,12 +1,12 @@
 //
 //  AppGroupMigrator.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Handles one-time migration of event data from Documents to App Group container
 //
 
 import Foundation
-import OllieShared
+import OtisShared
 import os
 
 /// Migrates event data from the legacy Documents directory to the App Group container
@@ -19,7 +19,7 @@ struct AppGroupMigrator {
     private static let migrationCompletedKey = "eventDataMigratedToAppGroup"
 
     private let fileManager = FileManager.default
-    private let logger = Logger.ollie(category: "AppGroupMigrator")
+    private let logger = Logger.otis(category: "AppGroupMigrator")
     private let decoder: JSONDecoder
     private let encoder: JSONEncoder
 

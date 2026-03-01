@@ -1,15 +1,15 @@
 //
 //  CalendarService.swift
-//  Ollie-app
+//  Otis-app
 //
 //  EventKit integration for adding milestones to calendar
 
 import Foundation
 import EventKit
-import OllieShared
+import OtisShared
 import os
 
-/// Service for calendar integration (Ollie+ feature)
+/// Service for calendar integration (Otis+ feature)
 actor CalendarService {
 
     // MARK: - Singleton
@@ -19,7 +19,7 @@ actor CalendarService {
     // MARK: - Properties
 
     private let eventStore = EKEventStore()
-    private let logger = Logger.ollie(category: "CalendarService")
+    private let logger = Logger.otis(category: "CalendarService")
 
     // MARK: - Access
 
@@ -77,7 +77,9 @@ actor CalendarService {
         do {
             try eventStore.save(event, span: .thisEvent)
             logger.info("Added milestone to calendar: \(milestone.localizedLabel)")
-            Analytics.trackCalendarEvent(added: true, milestoneCategory: milestone.category.rawValue)
+            await MainActor.run {
+                Analytics.trackCalendarEvent(added: true, milestoneCategory: milestone.category.rawValue)
+            }
             return event.eventIdentifier
         } catch {
             logger.error("Failed to save calendar event: \(error.localizedDescription)")
@@ -99,7 +101,9 @@ actor CalendarService {
         do {
             try eventStore.remove(event, span: .thisEvent)
             logger.info("Removed calendar event: \(identifier)")
-            Analytics.trackCalendarEvent(added: false, milestoneCategory: "unknown")
+            await MainActor.run {
+                Analytics.trackCalendarEvent(added: false, milestoneCategory: "unknown")
+            }
         } catch {
             logger.error("Failed to remove calendar event: \(error.localizedDescription)")
             throw CalendarError.removeFailed(error)

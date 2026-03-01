@@ -1,6 +1,6 @@
 //
 //  WatchDataProvider.swift
-//  OllieWatch
+//  OtisWatch
 //
 //  Receives data from iPhone via WatchConnectivity
 
@@ -8,7 +8,7 @@ import Foundation
 import Combine
 import WatchConnectivity
 import WidgetKit
-import OllieShared
+import OtisShared
 import os
 
 /// Provides data received from iPhone via WatchConnectivity
@@ -28,11 +28,11 @@ final class WatchDataProvider: NSObject, ObservableObject {
     @Published var lastSyncTime: Date?
 
     private var session: WCSession?
-    private let logger = Logger.ollieWatch(category: "WatchDataProvider")
+    private let logger = Logger.otisWatch(category: "WatchDataProvider")
     private let localDataStore = WatchIntentDataStore.shared
 
     // Widget data sharing
-    private static let appGroupIdentifier = "group.jaapstronks.Ollie"
+    private static let appGroupIdentifier = "group.jaapstronks.Otis"
     private static let widgetDataKey = "widgetData"
 
     override init() {

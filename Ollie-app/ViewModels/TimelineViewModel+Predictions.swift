@@ -1,12 +1,12 @@
 //
 //  TimelineViewModel+Predictions.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Prediction-related functionality for TimelineViewModel
 //
 
 import Foundation
-import OllieShared
+import OtisShared
 
 extension TimelineViewModel {
     // MARK: - Potty Predictions

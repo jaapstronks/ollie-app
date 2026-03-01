@@ -1,6 +1,6 @@
 //
 //  AnalyticsService.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Analytics event tracking for user behavior insights
 

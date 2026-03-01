@@ -1,6 +1,6 @@
 //
 //  CelebrationView.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Dog-themed celebration animations for milestone moments.
 //  Custom particle system with paw prints, bones, stars, and hearts.
@@ -45,11 +45,11 @@ enum CelebrationSymbol: CaseIterable {
 
     var color: Color {
         switch self {
-        case .paw: return .ollieAccent
-        case .bone: return .olliePurple
-        case .star: return .ollieAccent
-        case .heart: return .ollieRose
-        case .sparkle: return .ollieAccent
+        case .paw: return .otisAccent
+        case .bone: return .otisPurple
+        case .star: return .otisAccent
+        case .heart: return .otisRose
+        case .sparkle: return .otisAccent
         }
     }
 }
@@ -326,7 +326,7 @@ final class CelebrationTrigger: ObservableObject {
                     Button("Training Complete") {
                         trainingActive = true
                     }
-                    .buttonStyle(.glassPill(tint: .custom(.olliePurple)))
+                    .buttonStyle(.glassPill(tint: .custom(.otisPurple)))
 
                     Button("Quick Log") {
                         quickLogActive = true

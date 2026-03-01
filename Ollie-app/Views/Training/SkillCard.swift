@@ -1,12 +1,12 @@
 //
 //  SkillCard.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Expandable card displaying a training skill with quick actions
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Card showing a training skill with expandable actions
 struct SkillCard: View {
@@ -109,7 +109,7 @@ struct SkillCard: View {
         ZStack(alignment: .topTrailing) {
             Image(systemName: skill.icon)
                 .font(.system(size: 24))
-                .foregroundStyle(isLocked ? .secondary : Color.ollieAccent)
+                .foregroundStyle(isLocked ? .secondary : Color.otisAccent)
                 .frame(width: 36)
 
             // Recency indicator badge (if has sessions and been a while)
@@ -120,7 +120,7 @@ struct SkillCard: View {
                         .font(.system(size: 10))
                         .foregroundStyle(.white)
                         .padding(3)
-                        .background(Color.ollieWarning)
+                        .background(Color.otisWarning)
                         .clipShape(Circle())
                         .offset(x: 6, y: -4)
                 }
@@ -175,7 +175,7 @@ struct SkillCard: View {
                                 Text(status == .mastered ? Strings.Training.unmarkMastered : Strings.Training.markMastered)
                                     .font(.caption2)
                             }
-                            .foregroundStyle(status == .mastered ? Color.ollieSuccess : .secondary)
+                            .foregroundStyle(status == .mastered ? Color.otisSuccess : .secondary)
                         }
                         .buttonStyle(ScaleButtonStyle())
                     }
@@ -220,7 +220,7 @@ struct SkillCard: View {
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
                     .frame(height: 40)
-                    .background(Color.ollieAccent)
+                    .background(Color.otisAccent)
                     .clipShape(Capsule())
                 }
                 .buttonStyle(ScaleButtonStyle())
@@ -237,12 +237,12 @@ struct SkillCard: View {
                             .font(.subheadline)
                             .fontWeight(.medium)
                     }
-                    .foregroundStyle(Color.ollieAccent)
+                    .foregroundStyle(Color.otisAccent)
                     .frame(maxWidth: .infinity)
                     .frame(height: 40)
                     .background(
                         Capsule()
-                            .strokeBorder(Color.ollieAccent, lineWidth: 1.5)
+                            .strokeBorder(Color.otisAccent, lineWidth: 1.5)
                     )
                 }
                 .buttonStyle(ScaleButtonStyle())
@@ -260,9 +260,9 @@ struct SkillCard: View {
         }
         switch status {
         case .notStarted: return nil
-        case .started: return Color.ollieInfo
-        case .practicing: return Color.ollieWarning
-        case .mastered: return Color.ollieSuccess
+        case .started: return Color.otisInfo
+        case .practicing: return Color.otisWarning
+        case .mastered: return Color.otisSuccess
         }
     }
 }

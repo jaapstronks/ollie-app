@@ -1,11 +1,11 @@
 //
 //  TimelineBlock.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Duration block for sleep sessions and walks in vertical timeline
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Duration block view for sleep sessions and walks
 /// Height is calculated externally based on grid position
@@ -20,13 +20,13 @@ struct TimelineBlock: View {
     private var blockColor: Color {
         switch item.type {
         case .sleepSession:
-            return .ollieSleep
+            return .otisSleep
         case .walkEvent:
-            return .ollieSuccess
+            return .otisSuccess
         case .pointEvent:
             return .secondary
         case .appointmentItem:
-            return .ollieAccent
+            return .otisAccent
         }
     }
 
@@ -41,54 +41,32 @@ struct TimelineBlock: View {
 
     var body: some View {
         Button(action: onTap) {
-            VStack(alignment: .leading, spacing: 4) {
-                // Header: Icon + Title + Duration pill
-                HStack(spacing: 8) {
-                    BlockIcon(item: item, color: blockColor)
+            HStack(spacing: 6) {
+                // Icon
+                BlockIcon(item: item, color: blockColor)
 
-                    HStack(spacing: 6) {
-                        Text(blockTitle)
-                            .font(.subheadline)
-                            .fontWeight(.medium)
+                // Title (just "Nap" or "Walk")
+                Text(blockTitle)
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+                    .lineLimit(1)
 
-                        if item.isOngoing {
-                            LiveDurationPill(startTime: item.startTime, color: blockColor)
-                        } else if let duration = item.durationString {
-                            DurationPill(text: duration, color: blockColor, isHighlighted: true)
-                        }
-                    }
+                Spacer()
 
-                    Spacer()
-
-                    // Polaroid thumbnail (if photo exists)
-                    if let thumbnailPath = item.photoThumbnail {
-                        PolaroidThumbnail(relativePath: thumbnailPath, size: 36, rotation: 3)
-                    }
+                // Duration pill
+                if item.isOngoing {
+                    LiveDurationPill(startTime: item.startTime, color: blockColor)
+                } else if let duration = item.durationString {
+                    DurationPill(text: duration, color: blockColor, isHighlighted: true)
                 }
 
-                // Description
-                Text(item.description)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                    .lineLimit(2)
-
-                // Note (if present)
-                if let note = item.note, !note.isEmpty {
-                    Text(note)
-                        .font(.caption2)
-                        .foregroundStyle(.tertiary)
-                        .lineLimit(1)
+                // Polaroid thumbnail (if photo exists)
+                if let thumbnailPath = item.photoThumbnail {
+                    PolaroidThumbnail(relativePath: thumbnailPath, size: 28, rotation: 2)
                 }
-
-                // Walk details (spot name)
-                if case .walkEvent(let event) = item.type {
-                    WalkBlockDetails(event: event)
-                }
-
-                Spacer(minLength: 0)
             }
-            .padding(.horizontal, 12)
-            .padding(.vertical, 10)
+            .padding(.horizontal, 10)
+            .padding(.vertical, 8)
             .frame(height: height)
             .background(
                 RoundedRectangle(cornerRadius: LayoutConstants.cornerRadiusM)
@@ -107,7 +85,7 @@ struct TimelineBlock: View {
     private var blockTitle: String {
         switch item.type {
         case .sleepSession:
-            return Strings.VerticalTimeline.sleep
+            return Strings.VerticalTimeline.sleep  // Localized as "Nap"
         case .walkEvent:
             return Strings.VerticalTimeline.walk
         case .pointEvent, .appointmentItem:
@@ -137,28 +115,11 @@ private struct BlockIcon: View {
         ZStack {
             Circle()
                 .fill(color.opacity(0.15))
-                .frame(width: 32, height: 32)
+                .frame(width: 26, height: 26)
 
             Image(systemName: item.icon)
-                .font(.system(size: 14, weight: .medium))
+                .font(.system(size: 12, weight: .medium))
                 .foregroundStyle(color)
-        }
-    }
-}
-
-// MARK: - Walk Block Details
-
-private struct WalkBlockDetails: View {
-    let event: PuppyEvent
-
-    var body: some View {
-        HStack(spacing: 12) {
-            // Spot name
-            if let spotName = event.spotName {
-                Label(spotName, systemImage: "mappin.circle.fill")
-                    .font(.caption2)
-                    .foregroundStyle(Color.ollieAccent)
-            }
         }
     }
 }

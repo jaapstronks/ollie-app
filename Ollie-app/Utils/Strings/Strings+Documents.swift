@@ -1,6 +1,6 @@
 //
 //  Strings+Documents.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Document storage strings
 

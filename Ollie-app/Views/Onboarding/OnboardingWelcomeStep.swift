@@ -1,12 +1,12 @@
 //
 //  OnboardingWelcomeStep.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Welcome step for onboarding - shows tagline and value prop
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Welcome step - first step of onboarding with brand messaging
 struct OnboardingWelcomeStep: View {
@@ -23,7 +23,7 @@ struct OnboardingWelcomeStep: View {
             VStack(spacing: 12) {
                 Image(systemName: "pawprint.fill")
                     .font(.system(size: 64))
-                    .foregroundStyle(Color.ollieAccent)
+                    .foregroundStyle(Color.otisAccent)
                     .scaleEffect(hasAppeared ? 1.0 : 0.7)
                     .opacity(hasAppeared ? 1.0 : 0.0)
 
@@ -80,7 +80,7 @@ struct OnboardingWelcomeStep: View {
                     .font(.headline)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 16)
-                    .background(Color.ollieAccent)
+                    .background(Color.otisAccent)
                     .foregroundStyle(.white)
                     .cornerRadius(14)
             }
@@ -108,7 +108,7 @@ private struct PersonaCard: View {
         HStack(alignment: .top, spacing: 12) {
             Image(systemName: icon)
                 .font(.title2)
-                .foregroundStyle(Color.ollieAccent)
+                .foregroundStyle(Color.otisAccent)
 
             VStack(alignment: .leading, spacing: 4) {
                 Text(title)

@@ -1,11 +1,11 @@
 //
 //  GetPottyStatusIntent.swift
-//  Ollie-app
+//  Otis-app
 //
 //  App Intent for querying potty status via Siri/Shortcuts
 
 import AppIntents
-import OllieShared
+import OtisShared
 
 /// Query when the puppy last peed and pooped (combined)
 struct GetPottyStatusIntent: AppIntent {
@@ -18,12 +18,12 @@ struct GetPottyStatusIntent: AppIntent {
         let store = IntentDataStore.shared
 
         guard let profile = store.loadProfile() else {
-            return .result(dialog: "Please set up your puppy profile in the Ollie app first.")
+            return .result(dialog: "Please set up your puppy profile in the Otis app first.")
         }
 
         // Use widget data which is synced by the main app
         guard let widgetData = store.loadWidgetData() else {
-            return .result(dialog: "No data available. Please open the Ollie app to sync.")
+            return .result(dialog: "No data available. Please open the Otis app to sync.")
         }
 
         // Check if we have any potty data
@@ -67,12 +67,12 @@ struct GetPuppyStatusIntent: AppIntent {
         let store = IntentDataStore.shared
 
         guard let profile = store.loadProfile() else {
-            return .result(dialog: "Please set up your puppy profile in the Ollie app first.")
+            return .result(dialog: "Please set up your puppy profile in the Otis app first.")
         }
 
         // Use widget data which is synced by the main app
         guard let widgetData = store.loadWidgetData() else {
-            return .result(dialog: "No data available. Please open the Ollie app to sync.")
+            return .result(dialog: "No data available. Please open the Otis app to sync.")
         }
 
         var statusParts: [String] = []

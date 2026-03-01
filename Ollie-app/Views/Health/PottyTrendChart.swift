@@ -1,11 +1,11 @@
 //
 //  PottyTrendChart.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Line chart showing outdoor potty percentage over the last 7 days
 
 import SwiftUI
-import OllieShared
+import OtisShared
 import Charts
 
 /// Data point for the potty trend chart
@@ -17,11 +17,11 @@ struct PottyTrendPoint: Identifiable {
     /// Color based on percentage: green (>=70%), orange (40-69%), red (<40%)
     var color: Color {
         if percentage >= 70 {
-            return .ollieSuccess
+            return .otisSuccess
         } else if percentage >= 40 {
-            return .ollieWarning
+            return .otisWarning
         } else {
-            return .ollieDanger
+            return .otisDanger
         }
     }
 
@@ -57,7 +57,7 @@ struct PottyTrendChart: View {
                 HStack(spacing: 8) {
                     Image(systemName: "chart.line.uptrend.xyaxis")
                         .font(.system(size: 14, weight: .semibold))
-                        .foregroundStyle(Color.ollieSuccess)
+                        .foregroundStyle(Color.otisSuccess)
 
                     Text(Strings.Insights.outdoorPottyTrend)
                         .font(.subheadline)
@@ -92,8 +92,8 @@ struct PottyTrendChart: View {
                 .foregroundStyle(
                     LinearGradient(
                         colors: [
-                            Color.ollieSuccess.opacity(0.3),
-                            Color.ollieSuccess.opacity(0.05)
+                            Color.otisSuccess.opacity(0.3),
+                            Color.otisSuccess.opacity(0.05)
                         ],
                         startPoint: .top,
                         endPoint: .bottom
@@ -108,7 +108,7 @@ struct PottyTrendChart: View {
                     x: .value("Date", point.date, unit: .day),
                     y: .value("Percentage", point.percentage)
                 )
-                .foregroundStyle(Color.ollieSuccess)
+                .foregroundStyle(Color.otisSuccess)
                 .interpolationMethod(.catmullRom)
                 .lineStyle(StrokeStyle(lineWidth: 2.5))
             }

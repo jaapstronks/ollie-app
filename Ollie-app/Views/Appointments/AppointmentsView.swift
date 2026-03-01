@@ -1,11 +1,11 @@
 //
 //  AppointmentsView.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Main view for managing dog appointments
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Main view for listing and managing appointments
 struct AppointmentsView: View {

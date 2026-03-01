@@ -1,11 +1,11 @@
 //
 //  SpotPickerSheet.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Sheet for selecting or creating a walk spot
 
 import SwiftUI
-import OllieShared
+import OtisShared
 import CoreLocation
 
 /// Sheet for picking a saved spot or capturing current location
@@ -104,7 +104,7 @@ struct SpotPickerSheet: View {
                     }
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 14)
-                    .background(Color.ollieAccent)
+                    .background(Color.otisAccent)
                     .foregroundStyle(.white)
                     .cornerRadius(LayoutConstants.cornerRadiusM)
                 }

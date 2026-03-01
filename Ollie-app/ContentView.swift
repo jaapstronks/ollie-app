@@ -1,10 +1,10 @@
 //
 //  ContentView.swift
-//  Ollie-app
+//  Otis-app
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Root view with tab navigation or onboarding
 struct ContentView: View {

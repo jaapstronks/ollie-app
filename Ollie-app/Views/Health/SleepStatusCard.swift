@@ -1,12 +1,12 @@
 //
 //  SleepStatusCard.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Status card showing current sleep state
 //  Uses liquid glass design for iOS 26 aesthetic
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Card showing current sleep/awake state
 /// Uses liquid glass design with semantic tinting
@@ -145,16 +145,16 @@ struct SleepStatusCard: View {
     private var indicatorColor: Color {
         switch sleepState {
         case .sleeping:
-            return .ollieSleep
+            return .otisSleep
         case .awake(_, let durationMin):
             if durationMin >= SleepCalculations.maxAwakeMinutes {
-                return .ollieDanger
+                return .otisDanger
             } else if durationMin >= SleepCalculations.awakeWarningMinutes {
-                return .ollieWarning
+                return .otisWarning
             }
-            return .ollieSuccess
+            return .otisSuccess
         case .unknown:
-            return .ollieMuted
+            return .otisMuted
         }
     }
 
@@ -164,9 +164,9 @@ struct SleepStatusCard: View {
             return .primary
         case .awake(_, let durationMin):
             if durationMin >= SleepCalculations.maxAwakeMinutes {
-                return .ollieDanger
+                return .otisDanger
             } else if durationMin >= SleepCalculations.awakeWarningMinutes {
-                return .ollieWarning
+                return .otisWarning
             }
             return .primary
         case .unknown:

@@ -1,12 +1,12 @@
 //
 //  HealthTabView.swift
-//  Ollie-app
+//  Otis-app
 //
 //  The "Health" tab - medical, weight, potty training, patterns, and stats
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Health tab showing medical timeline, weight, potty training, and stats
 struct HealthTabView: View {
@@ -22,7 +22,7 @@ struct HealthTabView: View {
 
     @State private var showWeightSheet = false
     @State private var showGrowthChart = false
-    @State private var showOlliePlusSheet = false
+    @State private var showOtisPlusSheet = false
     @State private var selectedMilestone: Milestone?
     @State private var showAllMilestones = false
 
@@ -59,29 +59,29 @@ struct HealthTabView: View {
                         .animatedAppear(delay: 0.15)
 
                     // Today's summary
-                    statsSection(title: Strings.Stats.today, icon: "calendar", tint: .ollieSuccess) {
+                    statsSection(title: Strings.Stats.today, icon: "calendar", tint: .otisSuccess) {
                         TodayStatsCard(events: todayEvents)
                     }
                     .animatedAppear(delay: 0.20)
 
                     // Sleep summary
-                    statsSection(title: Strings.Stats.sleepToday, icon: "moon.fill", tint: .ollieSleep) {
+                    statsSection(title: Strings.Stats.sleepToday, icon: "moon.fill", tint: .otisSleep) {
                         SleepStatsCard(events: todayEvents)
                     }
                     .animatedAppear(delay: 0.25)
 
-                    // Pattern analysis (Ollie+ feature)
+                    // Pattern analysis (Otis+ feature)
                     Group {
                         if subscriptionManager.hasAccess(to: .advancedAnalytics) {
-                            statsSection(title: Strings.Stats.patterns, icon: "waveform.path.ecg", tint: .ollieInfo) {
+                            statsSection(title: Strings.Stats.patterns, icon: "waveform.path.ecg", tint: .otisInfo) {
                                 PatternAnalysisCard(analysis: viewModel.patternAnalysis)
                             }
                         } else {
                             LockedFeatureCard(
-                                title: Strings.OlliePlus.lockedPatterns,
-                                description: Strings.OlliePlus.lockedPatternsDesc,
+                                title: Strings.OtisPlus.lockedPatterns,
+                                description: Strings.OtisPlus.lockedPatternsDesc,
                                 icon: "waveform.path.ecg",
-                                onUnlock: { showOlliePlusSheet = true }
+                                onUnlock: { showOtisPlusSheet = true }
                             )
                         }
                     }
@@ -103,10 +103,10 @@ struct HealthTabView: View {
                     showWeightSheet: $showWeightSheet
                 )
             }
-            .sheet(isPresented: $showOlliePlusSheet) {
-                OlliePlusSheet(
-                    onDismiss: { showOlliePlusSheet = false },
-                    onSubscribed: { showOlliePlusSheet = false }
+            .sheet(isPresented: $showOtisPlusSheet) {
+                OtisPlusSheet(
+                    onDismiss: { showOtisPlusSheet = false },
+                    onSubscribed: { showOtisPlusSheet = false }
                 )
             }
             .sheet(item: $selectedMilestone) { milestone in
@@ -220,7 +220,7 @@ struct HealthTabView: View {
             InsightsSectionHeader(
                 title: Strings.Stats.pottyTraining,
                 icon: "leaf.fill",
-                tint: .ollieSuccess
+                tint: .otisSuccess
             )
 
             VStack(spacing: 12) {
@@ -284,7 +284,7 @@ struct HealthTabView: View {
                 InsightsSectionHeader(
                     title: Strings.Health.medicalMilestones,
                     icon: "cross.case.fill",
-                    tint: .ollieHealth
+                    tint: .otisHealth
                 )
 
                 Spacer()
@@ -299,7 +299,7 @@ struct HealthTabView: View {
                 } label: {
                     Text(Strings.Common.seeAll)
                         .font(.subheadline)
-                        .foregroundStyle(Color.ollieAccent)
+                        .foregroundStyle(Color.otisAccent)
                 }
             }
 
@@ -345,7 +345,7 @@ struct HealthTabView: View {
                             Image(systemName: showAllMilestones ? "chevron.up" : "chevron.down")
                                 .font(.caption)
                         }
-                        .foregroundStyle(Color.ollieAccent)
+                        .foregroundStyle(Color.otisAccent)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 8)
                     }
@@ -389,12 +389,12 @@ private struct HealthMilestoneRow: View {
             HStack(spacing: 12) {
                 ZStack {
                     Circle()
-                        .fill(isCompleted ? Color.ollieSuccess.opacity(0.2) : Color.ollieHealth.opacity(0.2))
+                        .fill(isCompleted ? Color.otisSuccess.opacity(0.2) : Color.otisHealth.opacity(0.2))
                         .frame(width: 36, height: 36)
 
                     Image(systemName: isCompleted ? "checkmark.circle.fill" : milestone.icon)
                         .font(.system(size: 14))
-                        .foregroundStyle(isCompleted ? Color.ollieSuccess : Color.ollieHealth)
+                        .foregroundStyle(isCompleted ? Color.otisSuccess : Color.otisHealth)
                 }
 
                 VStack(alignment: .leading, spacing: 2) {
@@ -421,12 +421,12 @@ private struct HealthMilestoneRow: View {
                         if days < 0 {
                             Text(Strings.Health.daysOverdue(abs(days)))
                                 .font(.caption)
-                                .foregroundStyle(Color.ollieWarning)
+                                .foregroundStyle(Color.otisWarning)
                         } else if days == 0 {
                             Text(Strings.Health.today)
                                 .font(.caption)
                                 .fontWeight(.medium)
-                                .foregroundStyle(Color.ollieHealth)
+                                .foregroundStyle(Color.otisHealth)
                         } else {
                             Text(Strings.Health.inDays(days))
                                 .font(.caption)

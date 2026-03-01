@@ -1,6 +1,6 @@
 # Scenario: Potty Logging Flow
 # Tests the potty logging via quick-log menu
-appId: nl.jaapstronks.Ollie
+appId: nl.jaapstronks.Otis
 ---
 - launchApp
 - waitForAnimationToEnd

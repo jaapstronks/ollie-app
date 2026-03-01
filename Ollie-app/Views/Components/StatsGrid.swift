@@ -1,6 +1,6 @@
 //
 //  StatsGrid.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Reusable grid component for displaying statistics
 //  Reduces boilerplate in StatsCards.swift
@@ -172,7 +172,7 @@ struct TwoColumnStatsCard: View {
                 Text(text)
                     .font(.subheadline)
                     .fontWeight(.medium)
-                    .foregroundStyle(tint.color ?? Color.ollieAccent)
+                    .foregroundStyle(tint.color ?? Color.otisAccent)
             }
         }
         .cardPadding()
@@ -197,7 +197,7 @@ struct TwoColumnStatsCard: View {
                     value: "12",
                     label: "Best Ever",
                     iconName: "trophy.fill",
-                    iconColor: .ollieAccent
+                    iconColor: .otisAccent
                 ),
                 tint: .accent,
                 accentText: "Great job! Keep it up!"
@@ -207,25 +207,25 @@ struct TwoColumnStatsCard: View {
             StatsCardView(
                 rows: [
                     [
-                        StatItemData(value: "1h 15m", label: "Median", iconName: "chart.bar.fill", iconColor: .ollieInfo),
-                        StatItemData(value: "1h 20m", label: "Average", iconName: "chart.line.uptrend.xyaxis", iconColor: .ollieInfo)
+                        StatItemData(value: "1h 15m", label: "Median", iconName: "chart.bar.fill", iconColor: .otisInfo),
+                        StatItemData(value: "1h 20m", label: "Average", iconName: "chart.line.uptrend.xyaxis", iconColor: .otisInfo)
                     ],
                     [
-                        StatItemData(value: "45m", label: "Shortest", iconName: "bolt.fill", iconColor: .ollieWarning),
-                        StatItemData(value: "2h 30m", label: "Longest", iconName: "tortoise.fill", iconColor: .ollieMuted)
+                        StatItemData(value: "45m", label: "Shortest", iconName: "bolt.fill", iconColor: .otisWarning),
+                        StatItemData(value: "2h 30m", label: "Longest", iconName: "tortoise.fill", iconColor: .otisMuted)
                     ]
                 ],
                 tint: .info
             ) {
                 HStack {
                     Label("15 outside", systemImage: "leaf.fill")
-                        .foregroundStyle(Color.ollieSuccess)
+                        .foregroundStyle(Color.otisSuccess)
                         .font(.subheadline)
 
                     Spacer()
 
                     Label("2 inside", systemImage: "house.fill")
-                        .foregroundStyle(Color.ollieDanger)
+                        .foregroundStyle(Color.otisDanger)
                         .font(.subheadline)
 
                     Spacer()
@@ -233,7 +233,7 @@ struct TwoColumnStatsCard: View {
                     Text("88%")
                         .font(.subheadline)
                         .fontWeight(.semibold)
-                        .foregroundStyle(Color.ollieSuccess)
+                        .foregroundStyle(Color.otisSuccess)
                 }
             }
 
@@ -241,9 +241,9 @@ struct TwoColumnStatsCard: View {
             StatsCardView(
                 rows: [
                     [
-                        StatItemData(value: "8", label: "Times Peed", iconName: "drop.fill", iconColor: .ollieInfo),
-                        StatItemData(value: "3", label: "Meals", iconName: "fork.knife", iconColor: .ollieAccent),
-                        StatItemData(value: "2", label: "Poops", iconName: "circle.inset.filled", iconColor: .ollieAccent)
+                        StatItemData(value: "8", label: "Times Peed", iconName: "drop.fill", iconColor: .otisInfo),
+                        StatItemData(value: "3", label: "Meals", iconName: "fork.knife", iconColor: .otisAccent),
+                        StatItemData(value: "2", label: "Poops", iconName: "circle.inset.filled", iconColor: .otisAccent)
                     ]
                 ],
                 tint: .success

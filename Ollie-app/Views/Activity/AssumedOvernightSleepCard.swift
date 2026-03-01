@@ -1,12 +1,12 @@
 //
 //  AssumedOvernightSleepCard.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Card shown when the user likely forgot to log overnight sleep
 //  Suggests a sleep start time and allows confirming or dismissing
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Card shown when the app detects the user likely forgot to log overnight sleep
 /// Displays a suggested sleep start time and allows user to confirm, adjust, or dismiss
@@ -45,7 +45,7 @@ struct AssumedOvernightSleepCard: View {
                 // Icon
                 Image(systemName: "moon.stars.fill")
                     .font(.system(size: 28))
-                    .foregroundStyle(Color.ollieSleep)
+                    .foregroundStyle(Color.otisSleep)
                     .frame(width: 40)
 
                 VStack(alignment: .leading, spacing: 4) {
@@ -94,8 +94,8 @@ struct AssumedOvernightSleepCard: View {
                     }
                     .padding(.horizontal, 12)
                     .padding(.vertical, 6)
-                    .background(showTimePicker ? Color.ollieSleep.opacity(0.15) : Color(UIColor.tertiarySystemBackground))
-                    .foregroundStyle(showTimePicker ? Color.ollieSleep : .primary)
+                    .background(showTimePicker ? Color.otisSleep.opacity(0.15) : Color(UIColor.tertiarySystemBackground))
+                    .foregroundStyle(showTimePicker ? Color.otisSleep : .primary)
                     .clipShape(RoundedRectangle(cornerRadius: 8))
                 }
                 .buttonStyle(.plain)
@@ -123,8 +123,8 @@ struct AssumedOvernightSleepCard: View {
                         .font(.subheadline.weight(.medium))
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 10)
-                        .background(Color.ollieSleep.opacity(0.15))
-                        .foregroundStyle(Color.ollieSleep)
+                        .background(Color.otisSleep.opacity(0.15))
+                        .foregroundStyle(Color.otisSleep)
                         .clipShape(RoundedRectangle(cornerRadius: 10))
                 }
                 .buttonStyle(.plain)
@@ -137,8 +137,8 @@ struct AssumedOvernightSleepCard: View {
                         .font(.subheadline.weight(.medium))
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 10)
-                        .background(Color.ollieSuccess.opacity(0.15))
-                        .foregroundStyle(Color.ollieSuccess)
+                        .background(Color.otisSuccess.opacity(0.15))
+                        .foregroundStyle(Color.otisSuccess)
                         .clipShape(RoundedRectangle(cornerRadius: 10))
                 }
                 .buttonStyle(.plain)

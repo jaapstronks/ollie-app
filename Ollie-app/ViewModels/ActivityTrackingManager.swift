@@ -1,13 +1,13 @@
 //
 //  ActivityTrackingManager.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Manages activity tracking state and logic (walks and naps)
 //
 
 import Combine
 import Foundation
-import OllieShared
+import OtisShared
 import SwiftUI
 
 // MARK: - Event Log Request

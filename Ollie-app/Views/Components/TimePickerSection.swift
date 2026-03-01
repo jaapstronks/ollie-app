@@ -1,12 +1,12 @@
 //
 //  TimePickerSection.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Reusable time picker section with tappable display, quick adjustments, and expandable picker
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// A reusable time picker section that includes:
 /// - A tappable time display button

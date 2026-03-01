@@ -1,11 +1,11 @@
 //
 //  PottyQuickLogSheet.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Combined sheet for logging plassen, poepen, or both
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Selection options for potty events
 enum PottySelection: String, CaseIterable {
@@ -31,9 +31,9 @@ enum PottySelection: String, CaseIterable {
 
     var iconColor: Color {
         switch self {
-        case .plassen: return .ollieInfo
-        case .poepen: return .ollieWarning
-        case .beide: return .ollieInfo
+        case .plassen: return .otisInfo
+        case .poepen: return .otisWarning
+        case .beide: return .otisInfo
         }
     }
 }
@@ -71,8 +71,8 @@ struct PottyQuickLogSheet: View {
                         icon: .combined(
                             primary: "drop.fill",
                             secondary: "circle.inset.filled",
-                            primaryColor: .ollieInfo,
-                            secondaryColor: .ollieWarning
+                            primaryColor: .otisInfo,
+                            secondaryColor: .otisWarning
                         )
                     )
 
@@ -237,19 +237,19 @@ struct PottyToggleButton: View {
         case .plassen:
             Image(systemName: "drop.fill")
                 .font(.system(size: 24, weight: .semibold))
-                .foregroundStyle(isSelected ? Color.ollieInfo : .primary)
+                .foregroundStyle(isSelected ? Color.otisInfo : .primary)
         case .poepen:
             Image(systemName: "circle.inset.filled")
                 .font(.system(size: 22, weight: .semibold))
-                .foregroundStyle(isSelected ? Color.ollieWarning : .primary)
+                .foregroundStyle(isSelected ? Color.otisWarning : .primary)
         case .beide:
             HStack(spacing: 3) {
                 Image(systemName: "drop.fill")
                     .font(.system(size: 16, weight: .semibold))
-                    .foregroundStyle(isSelected ? Color.ollieInfo : .primary)
+                    .foregroundStyle(isSelected ? Color.otisInfo : .primary)
                 Image(systemName: "circle.inset.filled")
                     .font(.system(size: 14, weight: .semibold))
-                    .foregroundStyle(isSelected ? Color.ollieWarning : .primary)
+                    .foregroundStyle(isSelected ? Color.otisWarning : .primary)
             }
         }
     }

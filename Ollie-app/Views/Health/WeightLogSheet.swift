@@ -1,11 +1,11 @@
 //
 //  WeightLogSheet.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Quick weight entry sheet
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Sheet for logging a weight measurement
 struct WeightLogSheet: View {

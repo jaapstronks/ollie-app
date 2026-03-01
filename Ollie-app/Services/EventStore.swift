@@ -1,6 +1,6 @@
 //
 //  EventStore.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Manages reading and writing puppy events with Core Data and automatic CloudKit sync
 //
@@ -8,7 +8,7 @@
 import Combine
 import Foundation
 import CoreData
-import OllieShared
+import OtisShared
 import os
 
 /// Manages reading and writing puppy events
@@ -20,7 +20,7 @@ class EventStore: ObservableObject {
     @Published private(set) var isSyncing = false
     @Published private(set) var syncError: String?
 
-    private let logger = Logger.ollie(category: "EventStore")
+    private let logger = Logger.otis(category: "EventStore")
 
     /// Core Data event store
     private let coreDataStore: CoreDataEventStore
@@ -126,7 +126,7 @@ class EventStore: ObservableObject {
             events.sort { $0.time > $1.time }
 
             // Track analytics
-            OllieAnalytics.shared.trackEventLogged(
+            OtisAnalytics.shared.trackEventLogged(
                 type: newEvent.type.rawValue,
                 hasLocation: newEvent.location != nil,
                 hasNote: newEvent.note != nil,

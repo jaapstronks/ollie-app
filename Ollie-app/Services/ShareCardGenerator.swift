@@ -1,19 +1,19 @@
 //
 //  ShareCardGenerator.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Generates shareable images from achievements
 //  Uses ImageRenderer to convert SwiftUI views to UIImage
 
 import SwiftUI
-import OllieShared
+import OtisShared
 import os
 
 /// Generates shareable images for achievements
 @MainActor
 final class ShareCardGenerator {
 
-    private let logger = Logger.ollie(category: "ShareCardGenerator")
+    private let logger = Logger.otis(category: "ShareCardGenerator")
 
     // MARK: - Singleton
 

@@ -1,11 +1,11 @@
 //
 //  ThisWeekCard.swift
-//  Ollie-app
+//  Otis-app
 //
 //  "This Week" summary card for Today view
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Card showing this week's focus: socialization progress and upcoming milestones
 struct ThisWeekCard: View {
@@ -24,7 +24,7 @@ struct ThisWeekCard: View {
                 } label: {
                     HStack {
                         Image(systemName: "calendar.badge.clock")
-                            .foregroundStyle(Color.ollieAccent)
+                            .foregroundStyle(Color.otisAccent)
                         Text(Strings.ThisWeek.title)
                             .font(.subheadline)
                             .fontWeight(.semibold)
@@ -78,11 +78,11 @@ struct ThisWeekCard: View {
                     // Active window indicator
                     HStack(spacing: 4) {
                         Circle()
-                            .fill(Color.ollieSuccess)
+                            .fill(Color.otisSuccess)
                             .frame(width: 6, height: 6)
                         Text(Strings.ThisWeek.socializationActive)
                             .font(.caption)
-                            .foregroundStyle(Color.ollieSuccess)
+                            .foregroundStyle(Color.otisSuccess)
                     }
 
                     if let weeks = viewModel.weeksRemaining {
@@ -138,7 +138,7 @@ struct ThisWeekCard: View {
 
                         Circle()
                             .trim(from: 0, to: progress.overallProgress)
-                            .stroke(Color.ollieAccent, style: StrokeStyle(lineWidth: 4, lineCap: .round))
+                            .stroke(Color.otisAccent, style: StrokeStyle(lineWidth: 4, lineCap: .round))
                             .frame(width: 40, height: 40)
                             .rotationEffect(.degrees(-90))
 
@@ -161,7 +161,7 @@ struct ThisWeekCard: View {
                             .fontWeight(.medium)
                             .padding(.horizontal, 6)
                             .padding(.vertical, 2)
-                            .background(Color.ollieAccent.opacity(colorScheme == .dark ? 0.2 : 0.1))
+                            .background(Color.otisAccent.opacity(colorScheme == .dark ? 0.2 : 0.1))
                             .clipShape(Capsule())
                     }
                 }
@@ -169,7 +169,7 @@ struct ThisWeekCard: View {
         }
         .padding(.vertical, 8)
         .padding(.horizontal, 12)
-        .background(Color.ollieAccent.opacity(colorScheme == .dark ? 0.1 : 0.05))
+        .background(Color.otisAccent.opacity(colorScheme == .dark ? 0.1 : 0.05))
         .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
     }
 
@@ -188,9 +188,9 @@ struct ThisWeekCard: View {
                     // Icon
                     Image(systemName: milestone.icon)
                         .font(.system(size: 12))
-                        .foregroundStyle(Color.ollieAccent)
+                        .foregroundStyle(Color.otisAccent)
                         .frame(width: 24, height: 24)
-                        .background(Color.ollieAccent.opacity(colorScheme == .dark ? 0.2 : 0.1))
+                        .background(Color.otisAccent.opacity(colorScheme == .dark ? 0.2 : 0.1))
                         .clipShape(Circle())
 
                     // Label
@@ -206,11 +206,11 @@ struct ThisWeekCard: View {
                             Text(Strings.Health.today)
                                 .font(.caption)
                                 .fontWeight(.medium)
-                                .foregroundStyle(Color.ollieAccent)
+                                .foregroundStyle(Color.otisAccent)
                         } else if days < 0 {
                             Text(Strings.Health.daysAgo(abs(days)))
                                 .font(.caption)
-                                .foregroundStyle(Color.ollieWarning)
+                                .foregroundStyle(Color.otisWarning)
                         } else {
                             Text(Strings.Health.inDays(days))
                                 .font(.caption)

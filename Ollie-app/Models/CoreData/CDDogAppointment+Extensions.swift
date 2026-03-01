@@ -1,11 +1,11 @@
 //
 //  CDDogAppointment+Extensions.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Extensions for converting between DogAppointment and CDDogAppointment
 
 import CoreData
-import OllieShared
+import OtisShared
 import Foundation
 
 extension CDDogAppointment {

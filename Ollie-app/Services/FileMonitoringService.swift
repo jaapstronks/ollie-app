@@ -1,12 +1,12 @@
 //
 //  FileMonitoringService.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Monitors file system changes in the data directory for external updates
 //
 
 import Foundation
-import OllieShared
+import OtisShared
 import os
 
 /// Monitors file system changes to detect updates from App Intents or other processes
@@ -17,7 +17,7 @@ final class FileMonitoringService {
     var onFileChange: (() -> Void)?
 
     private var fileMonitorSource: DispatchSourceFileSystemObject?
-    private let logger = Logger.ollie(category: "FileMonitoring")
+    private let logger = Logger.otis(category: "FileMonitoring")
     private let fileManager = FileManager.default
 
     deinit {

@@ -1,12 +1,12 @@
 //
 //  StartActivitySheet.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Sheet shown when user taps Walk or Nap, offering choice between
 //  "Start now" (live tracking) or "Log completed" (retrospective)
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Sheet offering choice between starting live activity or logging completed one
 struct StartActivitySheet: View {
@@ -369,25 +369,25 @@ private struct NapLocationButton: View {
                     .frame(width: 36, height: 36)
                     .background(
                         Circle()
-                            .fill(isSelected ? Color.ollieSleep : Color.ollieSleep.opacity(0.1))
+                            .fill(isSelected ? Color.otisSleep : Color.otisSleep.opacity(0.1))
                     )
-                    .foregroundStyle(isSelected ? .white : Color.ollieSleep)
+                    .foregroundStyle(isSelected ? .white : Color.otisSleep)
 
                 Text(location.label)
                     .font(.caption2)
                     .fontWeight(isSelected ? .semibold : .regular)
-                    .foregroundStyle(isSelected ? Color.ollieSleep : .secondary)
+                    .foregroundStyle(isSelected ? Color.otisSleep : .secondary)
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, 8)
             .background(
                 RoundedRectangle(cornerRadius: 12, style: .continuous)
-                    .fill(isSelected ? Color.ollieSleep.opacity(0.1) : Color.clear)
+                    .fill(isSelected ? Color.otisSleep.opacity(0.1) : Color.clear)
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 12, style: .continuous)
                     .strokeBorder(
-                        isSelected ? Color.ollieSleep : Color.clear,
+                        isSelected ? Color.otisSleep : Color.clear,
                         lineWidth: 1
                     )
             )

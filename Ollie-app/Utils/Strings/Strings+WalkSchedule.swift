@@ -1,6 +1,6 @@
 //
 //  Strings+WalkSchedule.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Walk schedule editor strings
 

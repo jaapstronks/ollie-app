@@ -1,6 +1,6 @@
 //
 //  AtmosphereColors.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Color calculations for contextual atmosphere
 

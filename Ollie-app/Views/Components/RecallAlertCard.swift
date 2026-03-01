@@ -1,6 +1,6 @@
 //
 //  RecallAlertCard.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Alert card displayed on Today view when food recalls match user's brands
 

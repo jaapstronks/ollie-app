@@ -1,12 +1,12 @@
 //
 //  TimelineStatsCache.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Extracted from TimelineViewModel - manages cached stats to avoid recomputation
 //
 
 import Foundation
-import OllieShared
+import OtisShared
 import Combine
 
 /// Manages cached timeline statistics to avoid expensive recomputation on every frame

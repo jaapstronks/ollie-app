@@ -1,10 +1,10 @@
 //
 //  UpcomingEventsCard.swift
-//  Ollie-app
+//  Otis-app
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 // MARK: - Actionable Event Card
 
@@ -12,10 +12,19 @@ import OllieShared
 struct ActionableEventCard: View {
     let actionableItem: ActionableItem
     let onLogEvent: (EventType, Date?) -> Void
+    var onNavigateToSocialization: (() -> Void)?
+
+    @EnvironmentObject private var socializationStore: SocializationStore
     @AppStorage(UserPreferences.Key.temperatureUnit.rawValue) private var temperatureUnitRaw = TemperatureUnit.celsius.rawValue
+    @State private var showWalkTips = false
 
     private var temperatureUnit: TemperatureUnit {
         TemperatureUnit(rawValue: temperatureUnitRaw) ?? .celsius
+    }
+
+    /// Suggested items to watch for during walks (max 2)
+    private var walkTips: [SocializationItem] {
+        socializationStore.suggestedWalkItems(limit: 2)
     }
 
     var body: some View {
@@ -52,10 +61,85 @@ struct ActionableEventCard: View {
                 }
                 .buttonStyle(.glassPill(tint: buttonTint))
             }
+
+            // Walk tips section (only for walks with socialization items)
+            if actionableItem.item.itemType == .walk && !walkTips.isEmpty {
+                walkTipsSection
+            }
         }
         .padding(.horizontal, 14)
         .padding(.vertical, 12)
         .glassStatusCard(tintColor: indicatorColor)
+    }
+
+    // MARK: - Walk Tips Section
+
+    @ViewBuilder
+    private var walkTipsSection: some View {
+        VStack(spacing: 8) {
+            // Toggle button
+            Button {
+                withAnimation(.easeInOut(duration: 0.2)) {
+                    showWalkTips.toggle()
+                }
+            } label: {
+                HStack(spacing: 6) {
+                    Image(systemName: "eye")
+                        .font(.caption)
+                    Text(Strings.Socialization.watchFor)
+                        .font(.caption)
+                        .fontWeight(.medium)
+                    Spacer()
+                    Image(systemName: showWalkTips ? "chevron.up" : "chevron.down")
+                        .font(.caption2)
+                }
+                .foregroundStyle(.secondary)
+                .padding(.vertical, 6)
+                .padding(.horizontal, 10)
+                .background(Color.secondary.opacity(0.08))
+                .clipShape(Capsule())
+            }
+            .buttonStyle(.plain)
+
+            // Expanded tips
+            if showWalkTips {
+                VStack(spacing: 6) {
+                    ForEach(walkTips) { item in
+                        HStack(spacing: 8) {
+                            if let category = socializationStore.category(forItemId: item.id) {
+                                Image(systemName: category.icon)
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                                    .frame(width: 16)
+                            }
+                            Text(item.localizedDisplayName)
+                                .font(.caption)
+                                .foregroundStyle(.primary)
+                            Spacer()
+                        }
+                        .padding(.horizontal, 10)
+                    }
+
+                    // Link to full socialization view
+                    if let onNavigate = onNavigateToSocialization {
+                        Button {
+                            onNavigate()
+                        } label: {
+                            HStack(spacing: 4) {
+                                Text(Strings.Socialization.seeAll)
+                                    .font(.caption)
+                                Image(systemName: "chevron.right")
+                                    .font(.caption2)
+                            }
+                            .foregroundStyle(Color.otisAccent)
+                        }
+                        .buttonStyle(.plain)
+                        .padding(.top, 4)
+                    }
+                }
+                .transition(.opacity.combined(with: .move(edge: .top)))
+            }
+        }
     }
 
     // MARK: - Weather Badge
@@ -82,7 +166,7 @@ struct ActionableEventCard: View {
                     Text(Strings.Weather.rainExpected)
                         .font(.caption)
                 }
-                .foregroundStyle(Color.ollieDanger)
+                .foregroundStyle(Color.otisDanger)
             }
         }
         .padding(.horizontal, 12)
@@ -134,9 +218,9 @@ struct ActionableEventCard: View {
 
     private var indicatorColor: Color {
         switch actionableItem.state {
-        case .approaching: return .ollieInfo
-        case .due: return .ollieSuccess
-        case .overdue: return .ollieWarning
+        case .approaching: return .otisInfo
+        case .due: return .otisSuccess
+        case .overdue: return .otisWarning
         }
     }
 
@@ -144,7 +228,7 @@ struct ActionableEventCard: View {
         switch actionableItem.state {
         case .approaching: return .primary
         case .due: return .primary
-        case .overdue: return .ollieWarning
+        case .overdue: return .otisWarning
         }
     }
 
@@ -186,6 +270,9 @@ struct ScheduledEventsSection: View {
     /// Whether puppy is sleeping (passed in to avoid redundant state access)
     var isSleeping: Bool = false
 
+    /// Navigation callback for socialization (Train tab)
+    var onNavigateToSocialization: (() -> Void)?
+
     var body: some View {
         // Use precomputed values if available, otherwise compute here
         let separated = precomputedSeparated ?? viewModel.separatedUpcomingItems(forecasts: weatherService.forecasts)
@@ -198,7 +285,8 @@ struct ScheduledEventsSection: View {
                     actionableItem: actionableItem,
                     onLogEvent: { eventType, suggestedTime in
                         viewModel.quickLog(type: eventType, suggestedTime: suggestedTime)
-                    }
+                    },
+                    onNavigateToSocialization: onNavigateToSocialization
                 )
             }
         }
@@ -334,7 +422,7 @@ struct UpcomingEventsCard: View {
                             .font(.caption2)
                     }
                 }
-                .foregroundStyle(item.rainWarning ? Color.ollieDanger : Color.secondary)
+                .foregroundStyle(item.rainWarning ? Color.otisDanger : Color.secondary)
             }
         }
         .padding(.vertical, 4)
@@ -344,9 +432,9 @@ struct UpcomingEventsCard: View {
     private func iconColor(for itemType: UpcomingItemType) -> Color {
         switch itemType {
         case .walk:
-            return .ollieSuccess // Green for outdoor activities
+            return .otisSuccess // Green for outdoor activities
         case .meal:
-            return .ollieAccent  // Gold for meals
+            return .otisAccent  // Gold for meals
         }
     }
 }
@@ -376,6 +464,7 @@ struct UpcomingEventsCard: View {
         Spacer()
     }
     .padding()
+    .environmentObject(SocializationStore())
 }
 
 #Preview("Actionable - Due (meal)") {
@@ -396,6 +485,7 @@ struct UpcomingEventsCard: View {
         Spacer()
     }
     .padding()
+    .environmentObject(SocializationStore())
 }
 
 #Preview("Actionable - Due (walk, cloudy)") {
@@ -418,6 +508,7 @@ struct UpcomingEventsCard: View {
         Spacer()
     }
     .padding()
+    .environmentObject(SocializationStore())
 }
 
 #Preview("Actionable - Overdue (rainy)") {
@@ -441,6 +532,7 @@ struct UpcomingEventsCard: View {
         Spacer()
     }
     .padding()
+    .environmentObject(SocializationStore())
 }
 
 #Preview("Upcoming List") {

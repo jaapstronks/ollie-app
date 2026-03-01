@@ -1,11 +1,11 @@
 //
 //  AddEditContactSheet.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Sheet for adding or editing a contact
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Sheet for adding or editing a contact
 struct AddEditContactSheet: View {
@@ -90,7 +90,7 @@ struct AddEditContactSheet: View {
                         // Show current location
                         HStack {
                             Image(systemName: "mappin.circle.fill")
-                                .foregroundStyle(Color.ollieAccent)
+                                .foregroundStyle(Color.otisAccent)
                             VStack(alignment: .leading, spacing: 2) {
                                 Text(Strings.Contacts.locationSet)
                                     .font(.subheadline)

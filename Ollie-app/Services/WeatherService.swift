@@ -1,5 +1,5 @@
 import Foundation
-import OllieShared
+import OtisShared
 import Combine
 
 /// Service for fetching weather forecasts from Open-Meteo API

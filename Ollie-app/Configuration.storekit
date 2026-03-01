@@ -1,5 +1,5 @@
 {
-  "identifier" : "com.ollie.storekit.config",
+  "identifier" : "com.otis.storekit.config",
   "nonRenewingSubscriptions" : [
 
   ],
@@ -11,22 +11,22 @@
       "localizations" : [
         {
           "description" : "Unlock unlimited logging for your puppy",
-          "displayName" : "Ollie Premium",
+          "displayName" : "Otis Premium",
           "locale" : "en_US"
         },
         {
           "description" : "Ontgrendel onbeperkt loggen voor je puppy",
-          "displayName" : "Ollie Premium",
+          "displayName" : "Otis Premium",
           "locale" : "nl"
         }
       ],
-      "productID" : "com.ollie.premium.perdog",
-      "referenceName" : "Ollie Premium (Per Dog) [Legacy]",
+      "productID" : "com.otis.premium.perdog",
+      "referenceName" : "Otis Premium (Per Dog) [Legacy]",
       "type" : "NonConsumable"
     }
   ],
   "settings" : {
-    "_applicationInternalID" : "ollie-app",
+    "_applicationInternalID" : "otis-app",
     "_developerTeamID" : "local-testing",
     "_failTransactionsEnabled" : false,
     "_lastSynchronizedDate" : 728496000,
@@ -82,20 +82,20 @@
   },
   "subscriptionGroups" : [
     {
-      "id" : "ollie-plus",
+      "id" : "otis-plus",
       "localizations" : [
         {
-          "description" : "Ollie+ Premium Features",
-          "displayName" : "Ollie+",
+          "description" : "Otis+ Premium Features",
+          "displayName" : "Otis+",
           "locale" : "en_US"
         },
         {
-          "description" : "Ollie+ Premium Functies",
-          "displayName" : "Ollie+",
+          "description" : "Otis+ Premium Functies",
+          "displayName" : "Otis+",
           "locale" : "nl"
         }
       ],
-      "name" : "Ollie+",
+      "name" : "Otis+",
       "subscriptions" : [
         {
           "adHocOffers" : [
@@ -116,20 +116,20 @@
           },
           "localizations" : [
             {
-              "description" : "Monthly access to all Ollie+ features",
-              "displayName" : "Ollie+ Monthly",
+              "description" : "Monthly access to all Otis+ features",
+              "displayName" : "Otis+ Monthly",
               "locale" : "en_US"
             },
             {
-              "description" : "Maandelijkse toegang tot alle Ollie+ functies",
-              "displayName" : "Ollie+ Maandelijks",
+              "description" : "Maandelijkse toegang tot alle Otis+ functies",
+              "displayName" : "Otis+ Maandelijks",
               "locale" : "nl"
             }
           ],
-          "productID" : "com.ollie.plus.monthly",
+          "productID" : "com.otis.plus.monthly",
           "recurringSubscriptionPeriod" : "P1M",
-          "referenceName" : "Ollie+ Monthly",
-          "subscriptionGroupID" : "ollie-plus",
+          "referenceName" : "Otis+ Monthly",
+          "subscriptionGroupID" : "otis-plus",
           "type" : "RecurringSubscription"
         },
         {
@@ -151,20 +151,20 @@
           },
           "localizations" : [
             {
-              "description" : "Annual access to all Ollie+ features (save 30%)",
-              "displayName" : "Ollie+ Yearly",
+              "description" : "Annual access to all Otis+ features (save 30%)",
+              "displayName" : "Otis+ Yearly",
               "locale" : "en_US"
             },
             {
-              "description" : "Jaarlijkse toegang tot alle Ollie+ functies (bespaar 30%)",
-              "displayName" : "Ollie+ Jaarlijks",
+              "description" : "Jaarlijkse toegang tot alle Otis+ functies (bespaar 30%)",
+              "displayName" : "Otis+ Jaarlijks",
               "locale" : "nl"
             }
           ],
-          "productID" : "com.ollie.plus.yearly",
+          "productID" : "com.otis.plus.yearly",
           "recurringSubscriptionPeriod" : "P1Y",
-          "referenceName" : "Ollie+ Yearly",
-          "subscriptionGroupID" : "ollie-plus",
+          "referenceName" : "Otis+ Yearly",
+          "subscriptionGroupID" : "otis-plus",
           "type" : "RecurringSubscription"
         }
       ]

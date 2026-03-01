@@ -1,6 +1,6 @@
 # Test navigation between all 4 tabs
 # Tabs: Today, Train, Walks, Plan
-appId: nl.jaapstronks.Ollie
+appId: nl.jaapstronks.Otis
 ---
 - launchApp
 - waitForAnimationToEnd

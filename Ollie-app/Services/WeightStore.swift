@@ -1,6 +1,6 @@
 //
 //  WeightStore.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Manages weight measurements with Core Data and automatic CloudKit sync.
 //  Weight measurements are stored separately from daily events since they follow
@@ -9,7 +9,7 @@
 
 import Foundation
 import CoreData
-import OllieShared
+import OtisShared
 import Combine
 import os
 
@@ -110,7 +110,7 @@ final class WeightStore: ObservableObject {
     ) {
         self.persistenceController = persistenceController
         self.profileStore = profileStore
-        self.logger = Logger.ollie(category: "WeightStore")
+        self.logger = Logger.otis(category: "WeightStore")
         setupRemoteChangeObserver()
     }
 

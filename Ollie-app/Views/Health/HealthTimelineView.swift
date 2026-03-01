@@ -1,11 +1,11 @@
 //
 //  HealthTimelineView.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Vertical timeline of health milestones (vaccinations, deworming, vet visits)
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Vertical timeline showing milestones with status indicators
 struct HealthTimelineView: View {
@@ -54,7 +54,7 @@ struct HealthTimelineView: View {
                     Text(Strings.Health.nextUp)
                         .font(.caption)
                         .fontWeight(.semibold)
-                        .foregroundStyle(Color.ollieAccent)
+                        .foregroundStyle(Color.otisAccent)
                         .padding(.leading, 4)
 
                     ForEach(groupedMilestones.nextUp) { milestone in
@@ -232,7 +232,7 @@ struct MilestoneRow: View {
                 Text(Strings.Health.daysOverdue(abs(days)))
                     .font(.caption)
                     .fontWeight(.medium)
-                    .foregroundStyle(Color.ollieWarning)
+                    .foregroundStyle(Color.otisWarning)
             }
         case .nextUp:
             if let days = milestone.daysUntil(birthDate: birthDate) {
@@ -240,11 +240,11 @@ struct MilestoneRow: View {
                     Text(Strings.Health.today)
                         .font(.caption)
                         .fontWeight(.medium)
-                        .foregroundStyle(Color.ollieAccent)
+                        .foregroundStyle(Color.otisAccent)
                 } else {
                     Text(Strings.Health.inDays(days))
                         .font(.caption)
-                        .foregroundStyle(Color.ollieAccent)
+                        .foregroundStyle(Color.otisAccent)
                 }
             }
         case .upcoming:
@@ -260,10 +260,10 @@ struct MilestoneRow: View {
 
     private var indicatorBackgroundColor: Color {
         switch status {
-        case .completed: return .ollieSuccess
-        case .nextUp: return .ollieAccent
+        case .completed: return .otisSuccess
+        case .nextUp: return .otisAccent
         case .upcoming: return .secondary.opacity(0.2)
-        case .overdue: return .ollieWarning
+        case .overdue: return .otisWarning
         }
     }
 
@@ -288,16 +288,16 @@ struct MilestoneRow: View {
         case .completed: return .primary.opacity(0.5)
         case .nextUp: return .primary
         case .upcoming: return .secondary
-        case .overdue: return .ollieWarning
+        case .overdue: return .otisWarning
         }
     }
 
     private var rowBackground: Color {
         switch status {
         case .nextUp:
-            return colorScheme == .dark ? Color.ollieAccent.opacity(0.1) : Color.ollieAccent.opacity(0.05)
+            return colorScheme == .dark ? Color.otisAccent.opacity(0.1) : Color.otisAccent.opacity(0.05)
         case .overdue:
-            return colorScheme == .dark ? Color.ollieWarning.opacity(0.1) : Color.ollieWarning.opacity(0.05)
+            return colorScheme == .dark ? Color.otisWarning.opacity(0.1) : Color.otisWarning.opacity(0.05)
         default:
             return .clear
         }

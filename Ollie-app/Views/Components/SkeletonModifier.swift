@@ -1,6 +1,6 @@
 //
 //  SkeletonModifier.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Shimmer loading effect for skeleton screens.
 //  Creates a polished loading state that feels faster than spinners.

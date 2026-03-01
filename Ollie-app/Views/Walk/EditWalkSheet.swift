@@ -1,11 +1,11 @@
 //
 //  EditWalkSheet.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Sheet for editing an existing walk event
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Sheet for editing a walk event's details
 struct EditWalkSheet: View {
@@ -53,9 +53,9 @@ struct EditWalkSheet: View {
                     HStack(spacing: 12) {
                         Image(systemName: "figure.walk")
                             .font(.title)
-                            .foregroundStyle(Color.ollieAccent)
+                            .foregroundStyle(Color.otisAccent)
                             .frame(width: 44, height: 44)
-                            .background(Color.ollieAccent.opacity(0.15))
+                            .background(Color.otisAccent.opacity(0.15))
                             .clipShape(RoundedRectangle(cornerRadius: 10))
 
                         VStack(alignment: .leading, spacing: 2) {
@@ -93,7 +93,7 @@ struct EditWalkSheet: View {
                     if let spot = selectedSpot {
                         HStack {
                             Image(systemName: "mappin.circle.fill")
-                                .foregroundStyle(.ollieAccent)
+                                .foregroundStyle(Color.otisAccent)
                             Text(spot.name)
                             Spacer()
                             Button(Strings.EditWalk.changeSpot) {

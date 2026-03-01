@@ -11,7 +11,7 @@ The app already has onboarding. This is about making the experience **adaptive**
 ### Module Registry
 
 ```swift
-// TrackingModule.swift (OllieShared)
+// TrackingModule.swift (OtisShared)
 import Foundation
 
 public enum TrackingModule: String, CaseIterable, Codable, Identifiable {
@@ -684,17 +684,17 @@ var body: some View {
 ### New Files
 | File | Location |
 |------|----------|
-| `TrackingModule.swift` | `OllieShared/Sources/OllieShared/Models/` |
-| `ModulePreferences.swift` | `Ollie/Services/` |
-| `ModulePreferencesKey.swift` | `Ollie/Services/` |
-| `ModuleActivityTracker.swift` | `Ollie/Services/` |
-| `ModuleSettingsView.swift` | `Ollie/Views/Settings/` |
-| `ModuleToggleRow.swift` | `Ollie/Views/Settings/Components/` |
-| `OnboardingModuleSelectionView.swift` | `Ollie/Views/Onboarding/` |
-| `ModuleCard.swift` | `Ollie/Views/Onboarding/Components/` |
-| `NudgeType.swift` | `Ollie/Models/` |
-| `NudgeEngine.swift` | `Ollie/Services/` |
-| `NudgeCardView.swift` | `Ollie/Views/Components/` |
+| `TrackingModule.swift` | `OtisShared/Sources/OtisShared/Models/` |
+| `ModulePreferences.swift` | `Otis/Services/` |
+| `ModulePreferencesKey.swift` | `Otis/Services/` |
+| `ModuleActivityTracker.swift` | `Otis/Services/` |
+| `ModuleSettingsView.swift` | `Otis/Views/Settings/` |
+| `ModuleToggleRow.swift` | `Otis/Views/Settings/Components/` |
+| `OnboardingModuleSelectionView.swift` | `Otis/Views/Onboarding/` |
+| `ModuleCard.swift` | `Otis/Views/Onboarding/Components/` |
+| `NudgeType.swift` | `Otis/Models/` |
+| `NudgeEngine.swift` | `Otis/Services/` |
+| `NudgeCardView.swift` | `Otis/Views/Components/` |
 
 ### Modified Files
 | File | Change |
@@ -710,7 +710,7 @@ var body: some View {
 
 ## Implementation Order
 
-1. **TrackingModule enum** — Add to OllieShared
+1. **TrackingModule enum** — Add to OtisShared
 2. **ModulePreferences** — `@AppStorage`-based preference store
 3. **ModuleSettingsView** — Let users toggle modules
 4. **ContentView tab visibility** — Hide tabs for disabled modules

@@ -1,6 +1,6 @@
 //
 //  Strings+Health.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Health and medications strings
 
@@ -18,6 +18,7 @@ extension Strings {
         static let noWeightData = String(localized: "No weight data yet", table: table)
         static let logFirstWeight = String(localized: "Log your first weight measurement", table: table)
         static let logWeight = String(localized: "Log weight", table: table)
+        static let measurementDate = String(localized: "Date", table: table, comment: "Label for weight measurement date picker")
         static let currentWeight = String(localized: "Current weight", table: table)
         static let growthCurve = String(localized: "Growth curve", table: table)
         static let referenceRange = String(localized: "Reference range", table: table)
@@ -136,7 +137,7 @@ extension Strings {
         static let milestoneDogLicense = String(localized: "Dog license", table: table)
         static let milestoneDogLicenseDetail = String(localized: "Register with your municipality if required", table: table)
 
-        // Custom milestone (Ollie+)
+        // Custom milestone (Otis+)
         static let customMilestoneTitle = String(localized: "Title", table: table)
         static let customMilestoneDate = String(localized: "Date", table: table)
         static let customMilestoneCategory = String(localized: "Category", table: table)

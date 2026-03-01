@@ -1,12 +1,12 @@
 //
 //  NapActivityAttributes.swift
-//  Ollie-app
+//  Otis-app
 //
 //  ActivityAttributes definition for nap Live Activity
 //
 
 import Foundation
-import OllieShared
+import OtisShared
 import ActivityKit
 
 /// Attributes for the nap Live Activity

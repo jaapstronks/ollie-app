@@ -1,6 +1,6 @@
 //
 //  ContentView.swift
-//  OllieWatch
+//  OtisWatch
 //
 //  Main app structure with TabView for navigation
 

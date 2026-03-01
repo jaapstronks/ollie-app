@@ -1,10 +1,10 @@
 //
 //  TrainTabView.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Combined training tab with Potty Progress, Socialization, and Skills sections
 
-import OllieShared
+import OtisShared
 import SwiftUI
 
 /// Train tab - unified view with potty progress, socialization checklist, skills tracker, and developmental milestones
@@ -79,7 +79,7 @@ struct TrainTabView: View {
             VStack(alignment: .leading, spacing: 10) {
                 HStack {
                     Image(systemName: "brain.head.profile")
-                        .foregroundStyle(Color.olliePurple)
+                        .foregroundStyle(Color.otisPurple)
                         .accessibilityHidden(true)
                     Text(Strings.Development.title)
                         .font(.headline)
@@ -178,7 +178,7 @@ struct TrainTabView: View {
                             Text(Strings.Train.allCategories)
                                 .font(.subheadline)
                                 .fontWeight(.medium)
-                                .foregroundStyle(Color.ollieAccent)
+                                .foregroundStyle(Color.otisAccent)
 
                             Spacer()
 
@@ -219,7 +219,7 @@ private struct SkillsPreviewCard: View {
             // Header (matching Potty Progress and Socialization style)
             HStack {
                 Image(systemName: "graduationcap.fill")
-                    .foregroundStyle(Color.ollieAccent)
+                    .foregroundStyle(Color.otisAccent)
                     .accessibilityHidden(true)
                 Text(Strings.Train.skills)
                     .font(.headline)
@@ -252,7 +252,7 @@ private struct SkillsPreviewCard: View {
                             .stroke(Color.secondary.opacity(0.2), lineWidth: 4)
                         Circle()
                             .trim(from: 0, to: progressFraction)
-                            .stroke(Color.ollieAccent, style: StrokeStyle(lineWidth: 4, lineCap: .round))
+                            .stroke(Color.otisAccent, style: StrokeStyle(lineWidth: 4, lineCap: .round))
                             .rotationEffect(.degrees(-90))
 
                         Text("\(Int(progressFraction * 100))%")
@@ -297,7 +297,7 @@ private struct SkillsPreviewCard: View {
                         Text(Strings.Common.seeAll)
                             .font(.subheadline)
                             .fontWeight(.medium)
-                            .foregroundStyle(Color.ollieAccent)
+                            .foregroundStyle(Color.otisAccent)
 
                         Spacer()
 
@@ -361,9 +361,9 @@ private struct SkillsPreviewCard: View {
     private func statusColor(for status: SkillStatus) -> Color {
         switch status {
         case .notStarted: return .secondary
-        case .started: return .ollieAccent
-        case .practicing: return .ollieWarning
-        case .mastered: return .ollieSuccess
+        case .started: return .otisAccent
+        case .practicing: return .otisWarning
+        case .mastered: return .otisSuccess
         }
     }
 }

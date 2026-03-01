@@ -1,12 +1,12 @@
 //
 //  PlacesFilterBar.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Horizontal scrollable filter chips for the expanded places map
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Filter categories for the places map
 enum PlacesFilterCategory: String, CaseIterable, Identifiable {
@@ -38,10 +38,10 @@ enum PlacesFilterCategory: String, CaseIterable, Identifiable {
     /// Category-specific color for filter chips
     var categoryColor: Color {
         switch self {
-        case .spots: return .ollieSuccess     // Green - places/outdoor
-        case .discovered: return .ollieInfo   // Blue - discovery
-        case .contacts: return .olliePurple   // Purple - social/training
-        case .photos: return .ollieAccent     // Gold - moments
+        case .spots: return .otisSuccess     // Green - places/outdoor
+        case .discovered: return .otisInfo   // Blue - discovery
+        case .contacts: return .otisPurple   // Purple - social/training
+        case .photos: return .otisAccent     // Gold - moments
         }
     }
 }
@@ -140,7 +140,7 @@ struct FilterChip: View {
     let label: String
     let icon: String
     let isSelected: Bool
-    var selectedColor: Color = .ollieAccent
+    var selectedColor: Color = .otisAccent
     var hasSubfilter: Bool = false
     var subfilterCount: Int? = nil
     let onTap: () -> Void
@@ -210,7 +210,7 @@ struct ContactTypeFilterSheet: View {
                             Spacer()
                             if selectedTypes.count == ContactType.allCases.count {
                                 Image(systemName: "checkmark")
-                                    .foregroundStyle(Color.ollieAccent)
+                                    .foregroundStyle(Color.otisAccent)
                             }
                         }
                     }
@@ -233,7 +233,7 @@ struct ContactTypeFilterSheet: View {
 
                                 if selectedTypes.contains(type) {
                                     Image(systemName: "checkmark")
-                                        .foregroundStyle(Color.ollieAccent)
+                                        .foregroundStyle(Color.otisAccent)
                                 }
                             }
                         }
@@ -275,7 +275,7 @@ struct SpotCategoryFilterSheet: View {
                             Spacer()
                             if selectedCategories.count == SpotCategory.allCases.count {
                                 Image(systemName: "checkmark")
-                                    .foregroundStyle(Color.ollieAccent)
+                                    .foregroundStyle(Color.otisAccent)
                             }
                         }
                     }
@@ -298,7 +298,7 @@ struct SpotCategoryFilterSheet: View {
 
                                 if selectedCategories.contains(category) {
                                     Image(systemName: "checkmark")
-                                        .foregroundStyle(Color.ollieAccent)
+                                        .foregroundStyle(Color.otisAccent)
                                 }
                             }
                         }
@@ -340,7 +340,7 @@ struct DiscoveryTypeFilterSheet: View {
                             Spacer()
                             if selectedTypes.count == DiscoverablePlaceType.allCases.count {
                                 Image(systemName: "checkmark")
-                                    .foregroundStyle(Color.ollieAccent)
+                                    .foregroundStyle(Color.otisAccent)
                             }
                         }
                     }
@@ -363,7 +363,7 @@ struct DiscoveryTypeFilterSheet: View {
 
                                 if selectedTypes.contains(type) {
                                     Image(systemName: "checkmark")
-                                        .foregroundStyle(Color.ollieAccent)
+                                        .foregroundStyle(Color.otisAccent)
                                 }
                             }
                         }

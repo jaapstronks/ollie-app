@@ -1,11 +1,11 @@
 //
 //  HealthView.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Health tracking view: weight chart and health milestones timeline
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Main health view showing weight tracking and health milestones
 struct HealthView: View {
@@ -83,7 +83,7 @@ struct HealthView: View {
             HStack(spacing: 8) {
                 Image(systemName: "scalemass.fill")
                     .font(.system(size: 14, weight: .semibold))
-                    .foregroundStyle(Color.ollieAccent)
+                    .foregroundStyle(Color.otisAccent)
 
                 Text(Strings.Health.weight)
                     .font(.subheadline)
@@ -147,11 +147,11 @@ struct HealthView: View {
                     Text(Strings.Health.sinceLast(weightUnit.formatDelta(delta.delta)))
                         .font(.caption)
                 }
-                .foregroundStyle(delta.delta >= 0 ? Color.ollieSuccess : Color.ollieWarning)
+                .foregroundStyle(delta.delta >= 0 ? Color.otisSuccess : Color.otisWarning)
                 .padding(.horizontal, 10)
                 .padding(.vertical, 4)
                 .background(
-                    (delta.delta >= 0 ? Color.ollieSuccess : Color.ollieWarning)
+                    (delta.delta >= 0 ? Color.otisSuccess : Color.otisWarning)
                         .opacity(colorScheme == .dark ? 0.2 : 0.1)
                 )
                 .clipShape(Capsule())
@@ -170,7 +170,7 @@ struct HealthView: View {
             HStack(spacing: 8) {
                 Image(systemName: "heart.fill")
                     .font(.system(size: 14, weight: .semibold))
-                    .foregroundStyle(Color.ollieDanger)
+                    .foregroundStyle(Color.otisDanger)
 
                 Text(Strings.Health.milestones)
                     .font(.subheadline)

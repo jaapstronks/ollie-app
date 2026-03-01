@@ -1,6 +1,6 @@
 //
 //  Strings+Walks.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Walks, locations, and spots strings
 

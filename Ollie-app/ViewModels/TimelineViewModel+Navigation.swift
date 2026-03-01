@@ -1,12 +1,12 @@
 //
 //  TimelineViewModel+Navigation.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Navigation-related functionality for TimelineViewModel
 //
 
 import Foundation
-import OllieShared
+import OtisShared
 
 extension TimelineViewModel {
     // MARK: - Navigation

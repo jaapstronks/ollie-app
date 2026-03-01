@@ -1,13 +1,13 @@
 //
 //  AppointmentStore.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Manages appointments with Core Data and automatic CloudKit sync
 //  Appointments are stored per-profile and sync automatically via CloudKit
 
 import Foundation
 import CoreData
-import OllieShared
+import OtisShared
 import Combine
 import os
 

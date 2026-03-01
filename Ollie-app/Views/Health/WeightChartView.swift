@@ -1,11 +1,11 @@
 //
 //  WeightChartView.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Growth curve chart using Swift Charts
 
 import SwiftUI
-import OllieShared
+import OtisShared
 import Charts
 
 /// Growth curve chart showing puppy weight vs reference
@@ -45,8 +45,8 @@ struct WeightChartView: View {
         VStack(alignment: .leading, spacing: 12) {
             // Legend
             HStack(spacing: 16) {
-                legendItem(color: .ollieAccent, label: puppyName)
-                legendItem(color: .ollieMuted.opacity(0.5), label: Strings.Health.reference)
+                legendItem(color: .otisAccent, label: puppyName)
+                legendItem(color: .otisMuted.opacity(0.5), label: Strings.Health.reference)
             }
             .font(.caption)
             .padding(.horizontal, 4)
@@ -61,7 +61,7 @@ struct WeightChartView: View {
                         yStart: .value("Min", displayWeight(band.min)),
                         yEnd: .value("Max", displayWeight(band.max))
                     )
-                    .foregroundStyle(Color.ollieMuted.opacity(colorScheme == .dark ? 0.15 : 0.1))
+                    .foregroundStyle(Color.otisMuted.opacity(colorScheme == .dark ? 0.15 : 0.1))
                     .interpolationMethod(.catmullRom)
                 }
 
@@ -71,7 +71,7 @@ struct WeightChartView: View {
                         x: .value(Strings.Health.weeks, point.weeks),
                         y: .value(weightUnit.symbol, displayWeight(point.kg))
                     )
-                    .foregroundStyle(Color.ollieMuted.opacity(0.5))
+                    .foregroundStyle(Color.otisMuted.opacity(0.5))
                     .lineStyle(StrokeStyle(lineWidth: 1.5, dash: [5, 3]))
                     .interpolationMethod(.catmullRom)
                 }
@@ -82,7 +82,7 @@ struct WeightChartView: View {
                         x: .value(Strings.Health.weeks, measurement.ageWeeks),
                         y: .value(weightUnit.symbol, displayWeight(measurement.weightKg))
                     )
-                    .foregroundStyle(Color.ollieAccent)
+                    .foregroundStyle(Color.otisAccent)
                     .lineStyle(StrokeStyle(lineWidth: 2.5))
                     .interpolationMethod(.catmullRom)
                 }
@@ -93,7 +93,7 @@ struct WeightChartView: View {
                         x: .value(Strings.Health.weeks, measurement.ageWeeks),
                         y: .value(weightUnit.symbol, displayWeight(measurement.weightKg))
                     )
-                    .foregroundStyle(Color.ollieAccent)
+                    .foregroundStyle(Color.otisAccent)
                     .symbolSize(60)
                 }
             }
@@ -158,7 +158,7 @@ struct WeightChartEmptyView: View {
         VStack(alignment: .leading, spacing: 12) {
             // Legend
             HStack(spacing: 16) {
-                legendItem(color: .ollieMuted.opacity(0.5), label: Strings.Health.reference)
+                legendItem(color: .otisMuted.opacity(0.5), label: Strings.Health.reference)
             }
             .font(.caption)
             .padding(.horizontal, 4)
@@ -172,7 +172,7 @@ struct WeightChartEmptyView: View {
                         yStart: .value("Min", band.min),
                         yEnd: .value("Max", band.max)
                     )
-                    .foregroundStyle(Color.ollieMuted.opacity(colorScheme == .dark ? 0.15 : 0.1))
+                    .foregroundStyle(Color.otisMuted.opacity(colorScheme == .dark ? 0.15 : 0.1))
                     .interpolationMethod(.catmullRom)
                 }
 
@@ -181,7 +181,7 @@ struct WeightChartEmptyView: View {
                         x: .value(Strings.Health.weeks, point.weeks),
                         y: .value(Strings.Health.kg, point.kg)
                     )
-                    .foregroundStyle(Color.ollieMuted.opacity(0.5))
+                    .foregroundStyle(Color.otisMuted.opacity(0.5))
                     .lineStyle(StrokeStyle(lineWidth: 1.5, dash: [5, 3]))
                     .interpolationMethod(.catmullRom)
                 }
@@ -252,7 +252,7 @@ struct WeightChartEmptyView: View {
     return WeightChartView(
         measurements: measurements,
         referenceCurve: GrowthCurves.goldenRetrieverFemale,
-        puppyName: "Ollie"
+        puppyName: "Max"
     )
     .padding()
 }

@@ -1,12 +1,12 @@
 //
 //  SchedulePreferencesView.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Schedule and preferences settings: walks, meals, notifications
 
 import SwiftUI
 import TipKit
-import OllieShared
+import OtisShared
 
 /// Settings screen for schedules and preferences
 struct SchedulePreferencesView: View {
@@ -85,7 +85,7 @@ struct SchedulePreferencesView: View {
                         Text(Strings.Settings.notifications)
                     } icon: {
                         Image(systemName: "bell.fill")
-                            .foregroundColor(.ollieAccent)
+                            .foregroundColor(.otisAccent)
                     }
                     Spacer()
                     Text(profile.notificationSettings.isEnabled ? Strings.Common.on : Strings.Common.off)

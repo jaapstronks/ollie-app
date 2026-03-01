@@ -1,6 +1,6 @@
 //
 //  ExploreViewMode.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Toggle between Map and Gallery views in the Explore tab
 

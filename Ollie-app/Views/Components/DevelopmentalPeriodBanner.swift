@@ -1,12 +1,12 @@
 //
 //  DevelopmentalPeriodBanner.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Banner component for displaying active developmental periods
 //  (socialization window, fear periods) at the top of the Calendar view
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Banner displaying active developmental periods as prominent status indicators
 struct DevelopmentalPeriodBanner: View {
@@ -119,11 +119,11 @@ struct DevelopmentalPeriodBanner: View {
 
     private var periodColor: Color {
         if milestone.labelKey.contains("socialization") {
-            return .ollieAccent
+            return .otisAccent
         } else if milestone.labelKey.contains("fearPeriod") {
-            return .ollieRose
+            return .otisRose
         }
-        return .ollieInfo
+        return .otisInfo
     }
 
     private var weeksRemaining: Int? {
@@ -208,7 +208,7 @@ struct DevelopmentalPeriodBanners: View {
     DevelopmentalPeriodBanner(
         milestone: milestone,
         birthDate: birthDate,
-        puppyName: "Ollie"
+        puppyName: "Max"
     )
     .padding()
 }
@@ -228,7 +228,7 @@ struct DevelopmentalPeriodBanners: View {
     DevelopmentalPeriodBanner(
         milestone: milestone,
         birthDate: birthDate,
-        puppyName: "Ollie"
+        puppyName: "Max"
     )
     .padding()
 }
@@ -256,7 +256,7 @@ struct DevelopmentalPeriodBanners: View {
     DevelopmentalPeriodBanners(
         milestones: milestones,
         birthDate: birthDate,
-        puppyName: "Ollie"
+        puppyName: "Max"
     )
     .padding()
 }

@@ -1,12 +1,12 @@
 //
 //  CombinedSleepPottyCard.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Combined status card for when puppy is sleeping AND potty is urgent/overdue
 //  Shows both pieces of info together with contextual message
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Combined card showing sleep + potty urgency together
 /// Used when puppy is sleeping but potty is urgent/overdue
@@ -51,10 +51,10 @@ struct CombinedSleepPottyCard: View {
             HStack(spacing: 14) {
                 // Combined icon: moon with warning
                 ZStack {
-                    GlassIconCircle(tintColor: .ollieSleep, size: 44) {
+                    GlassIconCircle(tintColor: .otisSleep, size: 44) {
                         Image(systemName: "moon.zzz.fill")
                             .font(.system(size: 22, weight: .semibold))
-                            .foregroundStyle(Color.ollieSleep)
+                            .foregroundStyle(Color.otisSleep)
                     }
 
                     // Warning badge overlay
@@ -138,7 +138,7 @@ struct CombinedSleepPottyCard: View {
             Button(action: onWakeUp) {
                 Label(Strings.CombinedStatus.wakeUp, systemImage: "sun.max.fill")
             }
-            .buttonStyle(.glassPill(tint: .custom(.ollieSleep)))
+            .buttonStyle(.glassPill(tint: .custom(.otisSleep)))
         }
         .statusCardPadding()
         .glassStatusCard(tintColor: gradientColor, cornerRadius: LayoutConstants.cornerRadiusL)
@@ -160,12 +160,12 @@ struct CombinedSleepPottyCard: View {
     /// Gradient color combining sleep (purple) and warning (orange)
     private var gradientColor: Color {
         // Use purple as base with subtle orange influence
-        .ollieSleep
+        .otisSleep
     }
 
     private var shadowColor: Color {
         let opacity = colorScheme == .dark ? 0.2 : 0.1
-        return Color.ollieSleep.opacity(opacity)
+        return Color.otisSleep.opacity(opacity)
     }
 
     // MARK: - Pending Actionable Helpers

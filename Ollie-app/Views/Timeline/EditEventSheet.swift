@@ -1,10 +1,10 @@
 //
 //  EditEventSheet.swift
-//  Ollie-app
+//  Otis-app
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Sheet for editing an existing event
 struct EditEventSheet: View {

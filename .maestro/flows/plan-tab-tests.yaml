@@ -1,6 +1,6 @@
 # Test Plan Tab functionality
 # Tests: Navigation, moments gallery, week overview
-appId: nl.jaapstronks.Ollie
+appId: nl.jaapstronks.Otis
 ---
 - launchApp
 - waitForAnimationToEnd

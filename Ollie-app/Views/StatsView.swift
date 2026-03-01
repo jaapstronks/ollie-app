@@ -1,13 +1,13 @@
 //
 //  StatsView.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Statistics dashboard showing potty gaps, streaks, and sleep data
 //  Uses liquid glass design for iOS 26 aesthetic
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Full statistics view with all metrics
 /// Uses liquid glass card styling throughout
@@ -20,23 +20,23 @@ struct StatsView: View {
                 VStack(spacing: 20) {
                     // Streak section
                     StreakStatsCard(streakInfo: viewModel.streakInfo)
-                        .inSection(title: Strings.Stats.outdoorStreak, icon: "flame.fill", tint: .ollieAccent)
+                        .inSection(title: Strings.Stats.outdoorStreak, icon: "flame.fill", tint: .otisAccent)
 
                     // Potty gaps section
                     GapStatsCard(events: recentEvents)
-                        .inSection(title: Strings.Stats.pottyGaps, icon: "chart.bar.fill", tint: .ollieInfo)
+                        .inSection(title: Strings.Stats.pottyGaps, icon: "chart.bar.fill", tint: .otisInfo)
 
                     // Today's summary
                     TodayStatsCard(events: todayEvents)
-                        .inSection(title: Strings.Stats.today, icon: "calendar", tint: .ollieSuccess)
+                        .inSection(title: Strings.Stats.today, icon: "calendar", tint: .otisSuccess)
 
                     // Sleep summary
                     SleepStatsCard(events: todayEvents)
-                        .inSection(title: Strings.Stats.sleepToday, icon: "moon.fill", tint: .ollieSleep)
+                        .inSection(title: Strings.Stats.sleepToday, icon: "moon.fill", tint: .otisSleep)
 
                     // Pattern analysis
                     PatternAnalysisCard(analysis: viewModel.patternAnalysis)
-                        .inSection(title: Strings.Stats.patterns, icon: "waveform.path.ecg", tint: .ollieInfo)
+                        .inSection(title: Strings.Stats.patterns, icon: "waveform.path.ecg", tint: .otisInfo)
                 }
                 .padding()
             }

@@ -1,6 +1,6 @@
 //
 //  Strings+Development.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Localized strings for developmental periods, roadmap, and age-based content
 

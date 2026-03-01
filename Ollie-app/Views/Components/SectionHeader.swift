@@ -1,12 +1,12 @@
 //
 //  SectionHeader.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Reusable section header component with icon and title
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Styled section header with icon and title
 struct SectionHeader: View {

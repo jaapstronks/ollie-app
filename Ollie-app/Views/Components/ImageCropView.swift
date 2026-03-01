@@ -1,6 +1,6 @@
 //
 //  ImageCropView.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Circular image crop view with pan and zoom gestures
 

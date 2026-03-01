@@ -1,10 +1,10 @@
 //
 //  MomentsViewModel.swift
-//  Ollie-app
+//  Otis-app
 //
 
 import Foundation
-import OllieShared
+import OtisShared
 import Combine
 
 /// ViewModel for the moments gallery view
