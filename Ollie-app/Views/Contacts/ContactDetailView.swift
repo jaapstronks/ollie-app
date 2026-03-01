@@ -1,11 +1,11 @@
 //
 //  ContactDetailView.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Detail view for viewing and editing a contact
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Detail view for a contact
 struct ContactDetailView: View {
@@ -110,9 +110,9 @@ struct ContactDetailView: View {
         VStack(spacing: 12) {
             Image(systemName: contact.contactType.icon)
                 .font(.system(size: 40))
-                .foregroundColor(.ollieAccent)
+                .foregroundColor(.otisAccent)
                 .frame(width: 80, height: 80)
-                .background(Color.ollieAccent.opacity(0.1))
+                .background(Color.otisAccent.opacity(0.1))
                 .clipShape(Circle())
 
             Text(contact.contactType.displayName)
@@ -130,7 +130,7 @@ struct ContactDetailView: View {
                 actionButton(
                     icon: "phone.fill",
                     label: Strings.Contacts.call,
-                    color: .ollieSuccess
+                    color: .otisSuccess
                 ) {
                     callPhone(phone)
                 }
@@ -140,7 +140,7 @@ struct ContactDetailView: View {
                 actionButton(
                     icon: "envelope.fill",
                     label: Strings.Contacts.sendEmail,
-                    color: .ollieInfo
+                    color: .otisInfo
                 ) {
                     sendEmail(email)
                 }
@@ -150,7 +150,7 @@ struct ContactDetailView: View {
                 actionButton(
                     icon: "map.fill",
                     label: Strings.Contacts.openInMaps,
-                    color: .ollieAccent
+                    color: .otisAccent
                 ) {
                     openInMaps(address)
                 }
@@ -244,7 +244,7 @@ struct ContactDetailView: View {
     private func detailRow(icon: String, title: String, value: String) -> some View {
         HStack(spacing: 12) {
             Image(systemName: icon)
-                .foregroundColor(.ollieAccent)
+                .foregroundColor(.otisAccent)
                 .frame(width: 24)
 
             VStack(alignment: .leading, spacing: 2) {
@@ -350,7 +350,7 @@ struct ContactDetailView: View {
             // Completed checkmark for past appointments
             if appointment.isCompleted {
                 Image(systemName: "checkmark.circle.fill")
-                    .foregroundStyle(Color.ollieSuccess)
+                    .foregroundStyle(Color.otisSuccess)
             }
         }
     }
@@ -390,10 +390,7 @@ struct ContactDetailView: View {
     }
 
     private func openInMaps(_ address: String) {
-        let encoded = address.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
-        if let url = URL(string: "http://maps.apple.com/?address=\(encoded)") {
-            openURL(url)
-        }
+        MapsService.openAddress(address)
     }
 }
 

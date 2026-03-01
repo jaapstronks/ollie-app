@@ -1,11 +1,11 @@
 //
 //  SpotDetailView.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Full-screen detail view for a walk spot with inline editing
 
 import SwiftUI
-import OllieShared
+import OtisShared
 import MapKit
 
 /// Full detail view for viewing and editing a walk spot
@@ -354,7 +354,7 @@ struct SpotDetailView: View {
         VStack(alignment: .leading, spacing: 10) {
             HStack {
                 Image(systemName: "chart.bar.fill")
-                    .foregroundStyle(Color.ollieAccent)
+                    .foregroundStyle(Color.otisAccent)
                 Text(Strings.SpotDetail.placeStats)
                     .font(.headline)
             }
@@ -478,13 +478,11 @@ struct SpotDetailView: View {
     }
 
     private func openInMaps() {
-        let location = CLLocation(
+        MapsService.openLocation(
             latitude: currentSpot.latitude,
-            longitude: currentSpot.longitude
+            longitude: currentSpot.longitude,
+            name: currentSpot.name
         )
-        let mapItem = MKMapItem(location: location, address: nil)
-        mapItem.name = currentSpot.name
-        mapItem.openInMaps()
     }
 }
 

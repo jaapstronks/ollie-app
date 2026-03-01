@@ -1,6 +1,6 @@
 //
 //  AppSettingsView.swift
-//  Ollie-app
+//  Otis-app
 //
 //  App settings: subscription, sharing, sync, appearance
 
@@ -8,7 +8,7 @@ import CloudKit
 import CoreData
 import StoreKit
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Settings screen for all app-related configuration
 struct AppSettingsView: View {
@@ -17,7 +17,7 @@ struct AppSettingsView: View {
     @ObservedObject var eventStore: EventStore
     @ObservedObject var cloudKit = CloudKitService.shared
 
-    @State private var showingOlliePlusSheet = false
+    @State private var showingOtisPlusSheet = false
     @State private var showingSubscriptionSuccess = false
     @State private var showingImportConfirm = false
     @State private var overwriteExisting = false
@@ -27,6 +27,7 @@ struct AppSettingsView: View {
     @AppStorage(UserPreferences.Key.appearanceMode.rawValue) private var appearanceMode = AppearanceMode.system.rawValue
     @AppStorage(UserPreferences.Key.temperatureUnit.rawValue) private var temperatureUnit = TemperatureUnit.celsius.rawValue
     @AppStorage(UserPreferences.Key.weightUnit.rawValue) private var weightUnit = WeightUnit.kg.rawValue
+    @AppStorage(UserPreferences.Key.preferredMapsApp.rawValue) private var preferredMapsApp = PreferredMapsApp.appleMaps.rawValue
 
     // Atmosphere settings
     @AppStorage(UserPreferences.Key.atmosphereTimeOfDay.rawValue) private var atmosphereTimeOfDay = true
@@ -37,10 +38,10 @@ struct AppSettingsView: View {
     var body: some View {
         Form {
             if let profile = profileStore.profile {
-                // Ollie+ subscription
+                // Otis+ subscription
                 PremiumSection(
                     profile: profile,
-                    showingOlliePlusSheet: $showingOlliePlusSheet,
+                    showingOtisPlusSheet: $showingOtisPlusSheet,
                     showingSubscriptionSuccess: $showingSubscriptionSuccess
                 )
             }
@@ -62,6 +63,9 @@ struct AppSettingsView: View {
 
             // Units
             unitsSection
+
+            // Maps
+            mapsSection
 
             // Atmosphere
             atmosphereSection
@@ -204,6 +208,21 @@ struct AppSettingsView: View {
                         .tag(unit.rawValue)
                 }
             }
+        }
+    }
+
+    // MARK: - Maps Section
+
+    private var mapsSection: some View {
+        Section {
+            Picker(Strings.Settings.mapsApp, selection: $preferredMapsApp) {
+                ForEach(PreferredMapsApp.allCases) { app in
+                    Label(app.label, systemImage: app.icon)
+                        .tag(app.rawValue)
+                }
+            }
+        } footer: {
+            Text(Strings.Settings.mapsAppDescription)
         }
     }
 

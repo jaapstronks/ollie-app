@@ -1,11 +1,11 @@
 //
 //  FavoriteSpotsView.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Settings screen for managing favorite walk spots
 
 import SwiftUI
-import OllieShared
+import OtisShared
 import MapKit
 
 /// Full-screen view for managing favorite walk spots
@@ -79,11 +79,11 @@ struct FavoriteSpotsView: View {
     }
 
     private func openInMaps(_ spot: WalkSpot) {
-        let coordinate = CLLocationCoordinate2D(latitude: spot.latitude, longitude: spot.longitude)
-        let location = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
-        let mapItem = MKMapItem(location: location, address: nil)
-        mapItem.name = spot.name
-        mapItem.openInMaps()
+        MapsService.openLocation(
+            latitude: spot.latitude,
+            longitude: spot.longitude,
+            name: spot.name
+        )
     }
 }
 
@@ -133,7 +133,7 @@ struct AllSpotsMapView: View {
                         VStack(spacing: 2) {
                             Image(systemName: "mappin.circle.fill")
                                 .font(.title2)
-                                .foregroundStyle(.ollieAccent)
+                                .foregroundStyle(Color.otisAccent)
                                 .background(
                                     Circle()
                                         .fill(.white)
@@ -211,7 +211,7 @@ struct AllSpotsPreviewMap: View {
                 Annotation("", coordinate: CLLocationCoordinate2D(latitude: spot.latitude, longitude: spot.longitude)) {
                     Image(systemName: "mappin.circle.fill")
                         .font(.title3)
-                        .foregroundStyle(.ollieAccent)
+                        .foregroundStyle(Color.otisAccent)
                         .background(
                             Circle()
                                 .fill(.white)

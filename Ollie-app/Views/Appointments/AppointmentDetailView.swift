@@ -1,11 +1,11 @@
 //
 //  AppointmentDetailView.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Detail view for an appointment with actions
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Detail view for displaying and managing an appointment
 struct AppointmentDetailView: View {
@@ -26,9 +26,9 @@ struct AppointmentDetailView: View {
                 HStack {
                     Image(systemName: appointment.appointmentType.icon)
                         .font(.title2)
-                        .foregroundColor(.ollieAccent)
+                        .foregroundColor(.otisAccent)
                         .frame(width: 44, height: 44)
-                        .background(Color.ollieAccent.opacity(0.1))
+                        .background(Color.otisAccent.opacity(0.1))
                         .clipShape(Circle())
 
                     VStack(alignment: .leading, spacing: 4) {
@@ -55,7 +55,7 @@ struct AppointmentDetailView: View {
 
                     if appointment.isSyncedToCalendar {
                         Image(systemName: "calendar.badge.checkmark")
-                            .foregroundColor(.ollieAccent)
+                            .foregroundColor(.otisAccent)
                     }
                 }
             }
@@ -92,7 +92,7 @@ struct AppointmentDetailView: View {
                     } label: {
                         HStack {
                             Image(systemName: "map.fill")
-                                .foregroundColor(.ollieAccent)
+                                .foregroundColor(.otisAccent)
                             Text(location)
                                 .foregroundColor(.primary)
                             Spacer()
@@ -112,7 +112,7 @@ struct AppointmentDetailView: View {
                         // Contact header
                         HStack {
                             Image(systemName: contact.contactType.icon)
-                                .foregroundColor(.ollieAccent)
+                                .foregroundColor(.otisAccent)
                             Text(contact.name)
                                 .font(.headline)
                         }
@@ -224,10 +224,7 @@ struct AppointmentDetailView: View {
     }
 
     private func openMaps(_ address: String) {
-        let encoded = address.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
-        if let url = URL(string: "maps://?q=\(encoded)") {
-            UIApplication.shared.open(url)
-        }
+        MapsService.openAddress(address)
     }
 }
 

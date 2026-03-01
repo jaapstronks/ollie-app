@@ -1,6 +1,6 @@
 //
 //  Strings+Settings.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Settings, meals, exercise, and notification strings
 
@@ -64,6 +64,12 @@ extension Strings {
         static let units = String(localized: "Units", table: table)
         static let temperature = String(localized: "Temperature", table: table)
         static let weight = String(localized: "Weight", table: table)
+
+        // Maps preferences
+        static let mapsApp = String(localized: "Maps app", table: table)
+        static let appleMaps = String(localized: "Apple Maps", table: table)
+        static let googleMaps = String(localized: "Google Maps", table: table)
+        static let mapsAppDescription = String(localized: "Choose which app opens when viewing locations.", table: table)
 
         // Sync section
         static let sync = String(localized: "Sync", table: table)

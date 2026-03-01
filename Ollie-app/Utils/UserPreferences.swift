@@ -1,10 +1,10 @@
 //
 //  UserPreferences.swift
-//  Ollie-app
+//  Otis-app
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Appearance mode options
 enum AppearanceMode: String, CaseIterable, Identifiable {
@@ -138,6 +138,39 @@ enum WeightUnit: String, CaseIterable, Identifiable {
     }
 }
 
+/// Preferred maps application for opening locations
+enum PreferredMapsApp: String, CaseIterable, Identifiable {
+    case appleMaps = "appleMaps"
+    case googleMaps = "googleMaps"
+
+    var id: String { rawValue }
+
+    var label: String {
+        switch self {
+        case .appleMaps: return Strings.Settings.appleMaps
+        case .googleMaps: return Strings.Settings.googleMaps
+        }
+    }
+
+    var icon: String {
+        switch self {
+        case .appleMaps: return "map.fill"
+        case .googleMaps: return "globe"
+        }
+    }
+
+    /// Check if the app is available on this device
+    var isAvailable: Bool {
+        switch self {
+        case .appleMaps:
+            return true // Always available on iOS
+        case .googleMaps:
+            guard let url = URL(string: "comgooglemaps://") else { return false }
+            return UIApplication.shared.canOpenURL(url)
+        }
+    }
+}
+
 /// User preferences stored in UserDefaults via @AppStorage
 enum UserPreferences {
     // MARK: - Keys
@@ -152,6 +185,7 @@ enum UserPreferences {
         case temperatureUnit = "temperatureUnit"
         case weightUnit = "weightUnit"
         case celebrationStyle = "celebrationStyle"
+        case preferredMapsApp = "preferredMapsApp"
 
         // Atmosphere settings
         case atmosphereTimeOfDay = "atmosphereTimeOfDay"
@@ -171,6 +205,7 @@ enum UserPreferences {
         Key.temperatureUnit.rawValue: TemperatureUnit.celsius.rawValue,
         Key.weightUnit.rawValue: WeightUnit.kg.rawValue,
         Key.celebrationStyle.rawValue: CelebrationStyle.full.rawValue,
+        Key.preferredMapsApp.rawValue: PreferredMapsApp.appleMaps.rawValue,
 
         // Atmosphere defaults (time/weather/state on by default, seasonal opt-in)
         Key.atmosphereTimeOfDay.rawValue: true,
