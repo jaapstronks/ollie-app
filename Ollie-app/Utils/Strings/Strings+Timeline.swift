@@ -346,7 +346,13 @@ extension Strings {
     enum Activity {
         // Start activity
         static let startWalkNow = String(localized: "Start walk now", table: table)
-        static let startNapNow = String(localized: "Start nap now", table: table)
+        static func isSleepingNow(name: String) -> String {
+            String(localized: "\(name) is sleeping now", table: table)
+        }
+        static let sinceWhen = String(localized: "Since when?", table: table)
+        static let now = String(localized: "Now", table: table)
+        static let earlier = String(localized: "Earlier", table: table)
+        static let yesterday = String(localized: "Yesterday", table: table)
         static let logCompletedWalk = String(localized: "Log completed walk", table: table)
         static let logCompletedNap = String(localized: "Log completed nap", table: table)
 

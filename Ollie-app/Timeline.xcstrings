@@ -67,6 +67,17 @@
         }
       }
     },
+    "%@ is sleeping now" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ slaapt nu"
+          }
+        }
+      }
+    },
     "%@ needs to pee now!" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -613,6 +624,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tijdens wandeling"
+          }
+        }
+      }
+    },
+    "Earlier" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eerder"
           }
         }
       }
@@ -1365,6 +1387,17 @@
         }
       }
     },
+    "Scheduled for %@" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gepland om %@"
+          }
+        }
+      }
+    },
     "She's awake — time for potty!" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -1416,6 +1449,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Toont voorspelling wanneer %@ moet plassen"
+          }
+        }
+      }
+    },
+    "Since when?" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sinds wanneer?"
           }
         }
       }
@@ -1607,6 +1651,28 @@
         }
       }
     },
+    "Sunrise" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zonsopgang"
+          }
+        }
+      }
+    },
+    "Sunset" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zonsondergang"
+          }
+        }
+      }
+    },
     "Tap below to log the first one" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -1702,6 +1768,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Moe?"
+          }
+        }
+      }
+    },
+    "Upcoming" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aankomend"
           }
         }
       }
@@ -1882,42 +1959,13 @@
         }
       }
     },
-    "Sunrise" : {
+    "Yesterday" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Zonsopgang"
-          }
-        }
-      }
-    },
-    "Sunset" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zonsondergang"
-          }
-        }
-      }
-    },
-    "Upcoming" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aankomend"
-          }
-        }
-      }
-    },
-    "Scheduled for %@" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Gepland om %@"
+            "value" : "Gisteren"
           }
         }
       }
