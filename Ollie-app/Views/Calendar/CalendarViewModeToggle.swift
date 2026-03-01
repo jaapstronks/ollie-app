@@ -37,13 +37,16 @@ enum CalendarViewMode: String, CaseIterable, RawRepresentable {
     }
 }
 
-/// Sub-mode for the calendar view (week vs month)
+/// Sub-mode for the calendar view (list, week, or month)
 enum CalendarGridMode: String, CaseIterable {
+    case list   // List view showing all future events
     case week   // Week view showing 7 days
     case month  // Month grid view
 
     var label: String {
         switch self {
+        case .list:
+            return Strings.Calendar.listMode
         case .week:
             return Strings.Calendar.weekMode
         case .month:
@@ -53,6 +56,8 @@ enum CalendarGridMode: String, CaseIterable {
 
     var icon: String {
         switch self {
+        case .list:
+            return "list.bullet"
         case .week:
             return "calendar.day.timeline.left"
         case .month:

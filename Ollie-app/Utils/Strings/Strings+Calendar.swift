@@ -47,6 +47,9 @@ extension Strings {
         /// Calendar view mode label
         static let calendarMode = String(localized: "Calendar", table: table)
 
+        /// List view mode label
+        static let listMode = String(localized: "List", table: table)
+
         /// Week view mode label
         static let weekMode = String(localized: "Week", table: table)
 

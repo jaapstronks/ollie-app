@@ -162,6 +162,7 @@ extension Strings {
         static let title = String(localized: "Moments", table: table)
         static let noPhotos = String(localized: "No photos yet", table: table)
         static let makePhotosHint = String(localized: "Take photos using the camera button\nin the timeline", table: table)
+        static let addFirstMoment = String(localized: "Add first moment", table: table)
 
         // View modes
         static let galleryMode = String(localized: "Gallery", table: table)

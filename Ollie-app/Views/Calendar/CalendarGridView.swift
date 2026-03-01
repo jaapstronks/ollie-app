@@ -19,7 +19,7 @@ struct CalendarGridView: View {
     @State private var displayedMonth: Date = Date()
     @State private var displayedWeek: Date = Date()
     @State private var selectedDate: Date = Date()
-    @AppStorage("calendarGridMode") private var gridMode: CalendarGridMode = .week
+    @AppStorage("calendarGridMode") private var gridMode: CalendarGridMode = .list
 
     private let calendar = Calendar.current
 
@@ -36,6 +36,9 @@ struct CalendarGridView: View {
 
                     // Grid based on mode
                     switch gridMode {
+                    case .list:
+                        calendarListView
+
                     case .week:
                         CalendarWeekGrid(
                             displayedWeek: $displayedWeek,
@@ -282,6 +285,143 @@ struct CalendarGridView: View {
     private var milestonesForSelectedWeek: [Milestone] {
         guard let birthDate = birthDate else { return [] }
         return milestoneStore.milestones(inWeekOf: selectedDate, birthDate: birthDate)
+    }
+
+    // MARK: - List View
+
+    @ViewBuilder
+    private var calendarListView: some View {
+        let upcoming = appointmentStore.upcomingAppointments
+        let grouped = groupAppointmentsByDate(upcoming)
+
+        if upcoming.isEmpty {
+            emptyListState
+        } else {
+            VStack(alignment: .leading, spacing: 16) {
+                ForEach(grouped, id: \.date) { group in
+                    VStack(alignment: .leading, spacing: 8) {
+                        // Date header
+                        Text(listDateHeader(for: group.date))
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
+                            .foregroundStyle(.secondary)
+
+                        // Appointments for this date
+                        ForEach(group.appointments) { appointment in
+                            Button {
+                                onAppointmentTap(appointment)
+                            } label: {
+                                ListAppointmentRow(appointment: appointment)
+                            }
+                            .buttonStyle(.plain)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var emptyListState: some View {
+        VStack(spacing: 12) {
+            Image(systemName: "calendar.badge.plus")
+                .font(.system(size: 40))
+                .foregroundStyle(.tertiary)
+
+            Text(Strings.Calendar.noAppointments)
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+
+            Text(Strings.Calendar.noAppointmentsHint)
+                .font(.caption)
+                .foregroundStyle(.tertiary)
+                .multilineTextAlignment(.center)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 40)
+    }
+
+    /// Group appointments by date
+    private func groupAppointmentsByDate(_ appointments: [DogAppointment]) -> [(date: Date, appointments: [DogAppointment])] {
+        let grouped = Dictionary(grouping: appointments) { appointment in
+            calendar.startOfDay(for: appointment.startDate)
+        }
+        return grouped.map { (date: $0.key, appointments: $0.value.sorted { $0.startDate < $1.startDate }) }
+            .sorted { $0.date < $1.date }
+    }
+
+    /// Format date header for list view
+    private func listDateHeader(for date: Date) -> String {
+        if calendar.isDateInToday(date) {
+            return Strings.Calendar.today
+        } else if calendar.isDateInTomorrow(date) {
+            return String(localized: "Tomorrow")
+        } else {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "EEEE, MMM d"
+            return formatter.string(from: date)
+        }
+    }
+}
+
+// MARK: - List Appointment Row
+
+private struct ListAppointmentRow: View {
+    let appointment: DogAppointment
+
+    private var typeColor: Color {
+        Color(appointment.appointmentType.color)
+    }
+
+    var body: some View {
+        HStack(spacing: 12) {
+            // Type icon
+            Circle()
+                .fill(typeColor.opacity(0.15))
+                .frame(width: 40, height: 40)
+                .overlay {
+                    Image(systemName: appointment.appointmentType.icon)
+                        .font(.system(size: 16))
+                        .foregroundStyle(typeColor)
+                }
+
+            // Details
+            VStack(alignment: .leading, spacing: 2) {
+                Text(appointment.title)
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+                    .foregroundStyle(.primary)
+                    .lineLimit(1)
+
+                HStack(spacing: 6) {
+                    // Time
+                    Text(appointment.timeRangeString)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+
+                    // Location if present
+                    if let location = appointment.location, !location.isEmpty {
+                        Text("•")
+                            .font(.caption)
+                            .foregroundStyle(.tertiary)
+                        Text(location)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                            .lineLimit(1)
+                    }
+                }
+            }
+
+            Spacer()
+
+            // Chevron
+            Image(systemName: "chevron.right")
+                .font(.caption)
+                .foregroundStyle(.tertiary)
+        }
+        .padding(12)
+        .background(Color(.secondarySystemBackground))
+        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
     }
 }
 

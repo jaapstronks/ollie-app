@@ -16,6 +16,7 @@ struct PlacesTabView: View {
     @ObservedObject var momentsViewModel: MomentsViewModel
     @ObservedObject var locationManager: LocationManager
     var onSettingsTap: (() -> Void)?
+    var onAddMoment: (() -> Void)?
 
     @EnvironmentObject var profileStore: ProfileStore
     @StateObject private var mapViewModel: PlacesMapViewModel
@@ -38,13 +39,15 @@ struct PlacesTabView: View {
         contactStore: ContactStore,
         momentsViewModel: MomentsViewModel,
         locationManager: LocationManager,
-        onSettingsTap: (() -> Void)? = nil
+        onSettingsTap: (() -> Void)? = nil,
+        onAddMoment: (() -> Void)? = nil
     ) {
         self.spotStore = spotStore
         self.contactStore = contactStore
         self.momentsViewModel = momentsViewModel
         self.locationManager = locationManager
         self.onSettingsTap = onSettingsTap
+        self.onAddMoment = onAddMoment
         self._mapViewModel = StateObject(wrappedValue: PlacesMapViewModel(
             spotStore: spotStore,
             contactStore: contactStore,
@@ -170,40 +173,47 @@ struct PlacesTabView: View {
     // MARK: - Gallery Content
 
     private var galleryContent: some View {
-        Group {
-            if momentsViewModel.isLoading {
-                // Skeleton loading grid
-                ScrollView {
-                    LazyVGrid(columns: galleryColumns, spacing: 2) {
-                        ForEach(0..<12, id: \.self) { index in
-                            SkeletonRect(height: 120, cornerRadius: 0)
-                                .aspectRatio(1, contentMode: .fill)
-                                .animatedAppear(delay: StaggeredAnimation.delay(for: index))
+        ZStack(alignment: .bottomTrailing) {
+            Group {
+                if momentsViewModel.isLoading {
+                    // Skeleton loading grid
+                    ScrollView {
+                        LazyVGrid(columns: galleryColumns, spacing: 2) {
+                            ForEach(0..<12, id: \.self) { index in
+                                SkeletonRect(height: 120, cornerRadius: 0)
+                                    .aspectRatio(1, contentMode: .fill)
+                                    .animatedAppear(delay: StaggeredAnimation.delay(for: index))
+                            }
                         }
+                        .padding(.top)
                     }
-                    .padding(.top)
-                }
-                .skeleton(isLoading: true)
-            } else if momentsViewModel.events.isEmpty {
-                EmptyMomentsView()
-            } else {
-                VStack(spacing: 0) {
-                    // Gallery/Diary sub-toggle
-                    MomentsViewModeToggle(mode: $momentsViewMode)
-                        .padding(.horizontal)
-                        .padding(.vertical, 8)
+                    .skeleton(isLoading: true)
+                } else if momentsViewModel.events.isEmpty {
+                    EmptyMomentsView(onAddMoment: onAddMoment)
+                } else {
+                    VStack(spacing: 0) {
+                        // Gallery/Diary sub-toggle
+                        MomentsViewModeToggle(mode: $momentsViewMode)
+                            .padding(.horizontal)
+                            .padding(.vertical, 8)
 
-                    switch momentsViewMode {
-                    case .gallery:
-                        galleryGridContent
-                    case .diary:
-                        diaryListContent
+                        switch momentsViewMode {
+                        case .gallery:
+                            galleryGridContent
+                        case .diary:
+                            diaryListContent
+                        }
                     }
                 }
             }
-        }
-        .refreshable {
-            momentsViewModel.loadEventsWithMedia()
+            .refreshable {
+                momentsViewModel.loadEventsWithMedia()
+            }
+
+            // Add Moment FAB
+            if let onAddMoment = onAddMoment {
+                addMomentFAB(action: onAddMoment)
+            }
         }
     }
 
@@ -366,6 +376,33 @@ struct PlacesTabView: View {
         .padding(.trailing, 16)
         .padding(.bottom, 100) // Above tab bar
         .accessibilityLabel(Strings.Common.add)
+    }
+
+    // MARK: - Add Moment FAB
+
+    private func addMomentFAB(action: @escaping () -> Void) -> some View {
+        Button {
+            HapticFeedback.medium()
+            action()
+        } label: {
+            Image(systemName: "camera.fill")
+                .font(.system(size: 20, weight: .semibold))
+                .foregroundStyle(.white)
+                .frame(width: 56, height: 56)
+                .background(
+                    Circle()
+                        .fill(Color.ollieAccent)
+                        .shadow(
+                            color: Color.ollieAccent.opacity(0.4),
+                            radius: 8,
+                            x: 0,
+                            y: 4
+                        )
+                )
+        }
+        .padding(.trailing, 16)
+        .padding(.bottom, 100) // Above tab bar
+        .accessibilityLabel(Strings.LogMoment.title)
     }
 }
 

@@ -223,7 +223,10 @@ struct MainTabView: View {
                     contactStore: contactStore,
                     momentsViewModel: momentsViewModel,
                     locationManager: locationManager,
-                    onSettingsTap: { showingSettings = true }
+                    onSettingsTap: { showingSettings = true },
+                    onAddMoment: {
+                        viewModel.sheetCoordinator.presentSheet(.momentSourcePicker)
+                    }
                 )
                 .tabItem {
                     Label(Strings.Tabs.explore, systemImage: "map.fill")

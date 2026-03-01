@@ -11,6 +11,7 @@ import UIKit
 struct MomentsGalleryView: View {
     @ObservedObject var viewModel: MomentsViewModel
     var onSettingsTap: (() -> Void)? = nil
+    var onAddMoment: (() -> Void)? = nil
     @State private var selectedEvent: PuppyEvent?
     @Namespace private var heroNamespace
     @AppStorage("momentsViewMode") private var viewMode: MomentsViewMode = .gallery
@@ -38,7 +39,7 @@ struct MomentsGalleryView: View {
                     }
                     .skeleton(isLoading: true)
                 } else if viewModel.events.isEmpty {
-                    EmptyMomentsView()
+                    EmptyMomentsView(onAddMoment: onAddMoment)
                 } else {
                     switch viewMode {
                     case .gallery:
@@ -207,6 +208,7 @@ struct GalleryThumbnail: View {
 
 /// Enhanced empty state for moments gallery with animation
 struct EmptyMomentsView: View {
+    var onAddMoment: (() -> Void)? = nil
     @State private var isAnimating = false
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
@@ -266,6 +268,23 @@ struct EmptyMomentsView: View {
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
+            }
+
+            // Add first moment button (when callback provided)
+            if let onAddMoment = onAddMoment {
+                Button {
+                    HapticFeedback.medium()
+                    onAddMoment()
+                } label: {
+                    Label(Strings.MomentsGallery.addFirstMoment, systemImage: "camera.fill")
+                        .font(.headline)
+                        .padding(.horizontal, 24)
+                        .padding(.vertical, 12)
+                        .background(Color.ollieAccent)
+                        .foregroundStyle(.white)
+                        .clipShape(Capsule())
+                }
+                .padding(.top, 8)
             }
 
             Spacer()
