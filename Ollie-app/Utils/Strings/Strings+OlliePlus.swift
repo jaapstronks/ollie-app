@@ -32,7 +32,7 @@ extension Strings {
         static let featureFullTraining = String(localized: "Full Training Library", table: table)
         static let featureSocialization = String(localized: "Socialization Progress", table: table)
         static let featurePhotoVideo = String(localized: "Photo & Video Attachments", table: table)
-        static let featureUnlimitedSharing = String(localized: "Unlimited Partner Sharing", table: table)
+        static let featureUnlimitedSharing = String(localized: "Partner Sharing", table: table)
         static let featureExportPDF = String(localized: "Export to PDF", table: table)
         static let featureCalendarIntegration = String(localized: "Calendar Integration", table: table)
         static let featureCustomMilestones = String(localized: "Custom Milestones", table: table)
@@ -46,7 +46,7 @@ extension Strings {
         static let featureFullTrainingDesc = String(localized: "Access all training skills and exercises", table: table)
         static let featureSocializationDesc = String(localized: "Track socialization experiences and progress", table: table)
         static let featurePhotoVideoDesc = String(localized: "Attach photos and videos to any event", table: table)
-        static let featureUnlimitedSharingDesc = String(localized: "Share with your whole family, not just one partner", table: table)
+        static let featureUnlimitedSharingDesc = String(localized: "Share your puppy's data with family and caregivers", table: table)
         static let featureExportPDFDesc = String(localized: "Export logs and reports for your vet", table: table)
         static let featureCalendarIntegrationDesc = String(localized: "Add milestones to your calendar with reminders", table: table)
         static let featureCustomMilestonesDesc = String(localized: "Create your own custom milestones and events", table: table)
@@ -111,6 +111,9 @@ extension Strings {
         static let lockedSleepInsightsDesc = String(localized: "Get detailed sleep analysis with Ollie+", table: table)
         static let lockedTraining = String(localized: "More Training Skills", table: table)
         static let lockedTrainingDesc = String(localized: "Unlock all training skills with Ollie+", table: table)
+
+        // Partner sharing (Ollie+ only)
+        static let sharingRequiresPlus = String(localized: "Share your puppy's data with family members and caregivers with Ollie+.", table: table)
 
         // Banner
         static let tryOlliePlus = String(localized: "Try Ollie+", table: table)

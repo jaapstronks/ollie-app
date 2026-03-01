@@ -231,6 +231,18 @@ class SubscriptionManager: ObservableObject {
         index < freeTrainingSkillCount || effectiveStatus.hasOlliePlus
     }
 
+    /// Check if user can add more sharing partners
+    /// Free users: limited to `freePartnerLimit` partners
+    /// Ollie+ users: unlimited
+    func canAddMorePartners(currentPartnerCount: Int) -> Bool {
+        effectiveStatus.hasOlliePlus || currentPartnerCount < freePartnerLimit
+    }
+
+    /// Check if user has reached the free partner sharing limit
+    func hasReachedPartnerLimit(currentPartnerCount: Int) -> Bool {
+        !effectiveStatus.hasOlliePlus && currentPartnerCount >= freePartnerLimit
+    }
+
     // MARK: - Transaction Handling
 
     /// Listen for transaction updates

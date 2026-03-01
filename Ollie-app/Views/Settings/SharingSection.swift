@@ -13,11 +13,13 @@ import SwiftUI
 /// CloudKit sharing section for settings
 struct SharingSection: View {
     @ObservedObject var cloudKit: CloudKitService
+    @EnvironmentObject var subscriptionManager: SubscriptionManager
 
     @State private var activeShare: CKShare?
     @State private var isPreparingShare = false
     @State private var shareError: String?
     @State private var showStopSharingConfirm = false
+    @State private var showOlliePlusSheet = false
 
     var body: some View {
         Section {
@@ -52,6 +54,12 @@ struct SharingSection: View {
         } message: {
             Text(Strings.CloudSharing.stopSharingConfirm)
         }
+        .sheet(isPresented: $showOlliePlusSheet) {
+            OlliePlusSheet(
+                onDismiss: { showOlliePlusSheet = false },
+                onSubscribed: { showOlliePlusSheet = false }
+            )
+        }
         .task {
             let context = PersistenceController.shared.viewContext
             if let cdProfile = CDPuppyProfile.fetchProfile(in: context) {
@@ -74,7 +82,12 @@ struct SharingSection: View {
         } else if cloudKit.isShared {
             sharedContentRows
         } else {
-            shareButton
+            // Gate sharing for free users - Ollie+ required to share
+            if subscriptionManager.hasAccess(to: .unlimitedPartnerSharing) {
+                shareButton
+            } else {
+                sharingLockedUpsell
+            }
         }
 
         if let error = shareError {
@@ -141,8 +154,94 @@ struct SharingSection: View {
         }
 
         manageShareButton
-        inviteAnotherButton
+
+        // Show invite button or upsell based on partner limit
+        if subscriptionManager.canAddMorePartners(currentPartnerCount: currentPartnerCount) {
+            inviteAnotherButton
+        } else {
+            partnerLimitUpsell
+        }
+
         stopSharingButton
+    }
+
+    /// Count of current non-owner participants (accepted + pending)
+    private var currentPartnerCount: Int {
+        cloudKit.shareParticipants.count
+    }
+
+    /// Upsell row shown when free user tries to share (sharing is Ollie+ only)
+    private var sharingLockedUpsell: some View {
+        Button {
+            showOlliePlusSheet = true
+        } label: {
+            HStack(spacing: 12) {
+                Image(systemName: "person.badge.plus")
+                    .foregroundStyle(Color.ollieAccent)
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(Strings.OlliePlus.featureUnlimitedSharing)
+                        .font(.subheadline)
+                        .foregroundStyle(.primary)
+                    Text(Strings.OlliePlus.sharingRequiresPlus)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .lineLimit(2)
+                }
+
+                Spacer()
+
+                HStack(spacing: 4) {
+                    Image(systemName: "lock.fill")
+                        .font(.caption2)
+                    Text(Strings.OlliePlus.plusBadge)
+                        .font(.caption)
+                        .fontWeight(.semibold)
+                }
+                .foregroundStyle(.white)
+                .padding(.horizontal, 8)
+                .padding(.vertical, 4)
+                .background(Capsule().fill(Color.ollieAccent))
+            }
+        }
+        .buttonStyle(.plain)
+    }
+
+    /// Upsell row shown when free user wants to add more partners
+    private var partnerLimitUpsell: some View {
+        Button {
+            showOlliePlusSheet = true
+        } label: {
+            HStack(spacing: 12) {
+                Image(systemName: "person.badge.plus")
+                    .foregroundStyle(Color.ollieAccent)
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(Strings.OlliePlus.featureUnlimitedSharing)
+                        .font(.subheadline)
+                        .foregroundStyle(.primary)
+                    Text(Strings.OlliePlus.sharingRequiresPlus)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .lineLimit(2)
+                }
+
+                Spacer()
+
+                HStack(spacing: 4) {
+                    Image(systemName: "plus")
+                        .font(.caption2.weight(.bold))
+                    Text(Strings.OlliePlus.plusBadge)
+                        .font(.caption)
+                        .fontWeight(.semibold)
+                }
+                .foregroundStyle(.white)
+                .padding(.horizontal, 8)
+                .padding(.vertical, 4)
+                .background(Capsule().fill(Color.ollieAccent))
+            }
+        }
+        .buttonStyle(.plain)
     }
 
     private var shareButton: some View {

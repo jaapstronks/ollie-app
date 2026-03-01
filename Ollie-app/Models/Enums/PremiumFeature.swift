@@ -137,3 +137,6 @@ enum PremiumFeature: String, CaseIterable {
 
 /// Number of free training skills (first N skills are free)
 let freeTrainingSkillCount = 10
+
+/// Number of partners free users can share with (0 = sharing is Ollie+ only)
+let freePartnerLimit = 0
