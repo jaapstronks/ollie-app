@@ -34,6 +34,10 @@ public struct SleepCalculations {
 
     /// Determine the current sleep state from events
     /// Returns .unknown if there's an active coverage gap (tracking paused)
+    ///
+    /// Supports both:
+    /// - New single-event model: sleep event with `durationMin` set = completed sleep
+    /// - Legacy two-event model: `slapen` event followed by `ontwaken` event
     public static func currentSleepState(events: [PuppyEvent]) -> SleepState {
         // Check for active coverage gap - tracking is paused
         if CoverageGapFilter.hasActiveGap(gaps: events) {
@@ -49,11 +53,22 @@ public struct SleepCalculations {
         }
 
         let now = Date()
-        let durationMin = Int(now.timeIntervalSince(lastEvent.time) / 60)
 
         if isSleepEvent(lastEvent.type) {
-            return .sleeping(since: lastEvent.time, durationMin: durationMin)
+            // Check if this sleep has a duration set (single-event model = completed sleep)
+            if let duration = lastEvent.durationMin {
+                // Sleep is completed - calculate when they woke up
+                let wakeTime = lastEvent.time.addingTimeInterval(Double(duration) * 60)
+                let minutesAwake = Int(now.timeIntervalSince(wakeTime) / 60)
+                return .awake(since: wakeTime, durationMin: max(0, minutesAwake))
+            } else {
+                // Sleep is ongoing (no duration set)
+                let durationMin = Int(now.timeIntervalSince(lastEvent.time) / 60)
+                return .sleeping(since: lastEvent.time, durationMin: durationMin)
+            }
         } else if isWakeEvent(lastEvent.type) {
+            // Legacy wake event
+            let durationMin = Int(now.timeIntervalSince(lastEvent.time) / 60)
             return .awake(since: lastEvent.time, durationMin: durationMin)
         }
 
@@ -66,25 +81,36 @@ public struct SleepCalculations {
     }
 
     /// Calculate total sleep time today
+    /// Supports both single-event model (durationMin) and legacy two-event model
     public static func totalSleepToday(events: [PuppyEvent]) -> Int {
         let sleepEvents = events
             .filter { isSleepEvent($0.type) || isWakeEvent($0.type) }
             .sorted { $0.time < $1.time }
 
         var totalMinutes = 0
-        var sleepStartTime: Date?
+        var pendingSleepStart: Date?
+        var processedSleepIds = Set<UUID>()
 
         for event in sleepEvents {
             if isSleepEvent(event.type) {
-                sleepStartTime = event.time
-            } else if isWakeEvent(event.type), let start = sleepStartTime {
+                // New model: sleep event with durationMin
+                if let duration = event.durationMin {
+                    totalMinutes += duration
+                    processedSleepIds.insert(event.id)
+                } else {
+                    // Ongoing sleep or waiting for legacy wake event
+                    pendingSleepStart = event.time
+                }
+            } else if isWakeEvent(event.type), let start = pendingSleepStart {
+                // Legacy wake event
                 let duration = Int(event.time.timeIntervalSince(start) / 60)
                 totalMinutes += max(0, duration)
-                sleepStartTime = nil
+                pendingSleepStart = nil
             }
         }
 
-        if let start = sleepStartTime {
+        // Add ongoing sleep duration
+        if let start = pendingSleepStart {
             let duration = Int(Date().timeIntervalSince(start) / 60)
             totalMinutes += max(0, duration)
         }
@@ -92,17 +118,30 @@ public struct SleepCalculations {
         return totalMinutes
     }
 
-    /// Get the last sleep session
+    /// Get the last completed sleep session
+    /// Supports both single-event model (durationMin) and legacy two-event model
     public static func lastCompleteSleep(events: [PuppyEvent]) -> (start: Date, end: Date, durationMin: Int)? {
         let sleepEvents = events
+            .filter { isSleepEvent($0.type) }
+            .sorted { $0.time > $1.time }  // Most recent first
+
+        // First check for new model: sleep event with durationMin
+        if let lastCompletedSleep = sleepEvents.first(where: { $0.durationMin != nil }) {
+            let duration = lastCompletedSleep.durationMin!
+            let endTime = lastCompletedSleep.time.addingTimeInterval(Double(duration) * 60)
+            return (lastCompletedSleep.time, endTime, duration)
+        }
+
+        // Fall back to legacy model: find sleep/wake pairs
+        let allSleepWakeEvents = events
             .filter { isSleepEvent($0.type) || isWakeEvent($0.type) }
             .sorted { $0.time < $1.time }
 
         var lastSleepStart: Date?
         var lastSleepEnd: Date?
 
-        for event in sleepEvents {
-            if isSleepEvent(event.type) {
+        for event in allSleepWakeEvents {
+            if isSleepEvent(event.type) && event.durationMin == nil {
                 lastSleepStart = event.time
             } else if isWakeEvent(event.type), lastSleepStart != nil {
                 lastSleepEnd = event.time
@@ -163,7 +202,7 @@ public struct SleepCalculations {
     // MARK: - Private Helpers
 
     private static func isSleepEvent(_ type: EventType) -> Bool {
-        type == .slapen || type == .bench
+        type == .slapen
     }
 
     private static func isWakeEvent(_ type: EventType) -> Bool {

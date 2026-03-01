@@ -267,10 +267,17 @@ struct TimelineSheetModifiers: ViewModifier {
             .presentationDetents([.medium])
 
         case .editEvent(let event):
-            EditEventSheet(event: event) { updatedEvent in
-                viewModel.updateEvent(updatedEvent)
-                viewModel.sheetCoordinator.dismissSheet()
-            }
+            EditEventSheet(
+                event: event,
+                onSave: { updatedEvent in
+                    viewModel.updateEvent(updatedEvent)
+                    viewModel.sheetCoordinator.dismissSheet()
+                },
+                onDelete: {
+                    viewModel.deleteEvent(event)
+                    viewModel.sheetCoordinator.dismissSheet()
+                }
+            )
             .presentationDetents([.medium, .large])
 
         case .endSleep(let startTime):
@@ -290,8 +297,8 @@ struct TimelineSheetModifiers: ViewModifier {
             StartActivitySheet(
                 activityType: activityType,
                 puppyName: viewModel.puppyName,
-                onStartNow: { startTime in
-                    viewModel.startActivity(type: activityType, startTime: startTime)
+                onStartNow: { startTime, napLocation in
+                    viewModel.startActivity(type: activityType, startTime: startTime, napLocation: napLocation)
                     viewModel.sheetCoordinator.dismissSheet()
                 },
                 onLogCompleted: {
@@ -353,8 +360,8 @@ struct TimelineSheetModifiers: ViewModifier {
 
         case .napLog(let defaultDuration):
             NapLogSheet(
-                onSave: { startTime, endTime, note in
-                    viewModel.logCompletedNap(startTime: startTime, endTime: endTime, note: note)
+                onSave: { startTime, endTime, note, napLocation in
+                    viewModel.logCompletedNap(startTime: startTime, endTime: endTime, note: note, napLocation: napLocation)
                     viewModel.sheetCoordinator.dismissSheet()
                 },
                 onCancel: {
@@ -362,7 +369,7 @@ struct TimelineSheetModifiers: ViewModifier {
                 },
                 defaultDurationMinutes: defaultDuration
             )
-            .presentationDetents([.height(420), .medium])
+            .presentationDetents([.height(520), .medium])
 
         case .startCoverageGap:
             StartCoverageGapSheet(

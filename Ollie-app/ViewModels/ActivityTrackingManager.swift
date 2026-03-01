@@ -20,6 +20,7 @@ struct EventLogRequest {
     let note: String?
     let durationMin: Int?
     let sleepSessionId: UUID?
+    let napLocation: NapLocation?
 
     init(
         type: EventType,
@@ -27,7 +28,8 @@ struct EventLogRequest {
         location: EventLocation? = nil,
         note: String? = nil,
         durationMin: Int? = nil,
-        sleepSessionId: UUID? = nil
+        sleepSessionId: UUID? = nil,
+        napLocation: NapLocation? = nil
     ) {
         self.type = type
         self.time = time
@@ -35,6 +37,7 @@ struct EventLogRequest {
         self.note = note
         self.durationMin = durationMin
         self.sleepSessionId = sleepSessionId
+        self.napLocation = napLocation
     }
 }
 
@@ -72,19 +75,21 @@ class ActivityTrackingManager: ObservableObject {
     /// - Parameters:
     ///   - type: The type of activity to start
     ///   - startTime: Optional custom start time (defaults to now)
-    func startActivity(type: ActivityType, startTime: Date = Date()) {
+    ///   - napLocation: Optional location for naps (crate, dog bed, etc.)
+    func startActivity(type: ActivityType, startTime: Date = Date(), napLocation: NapLocation? = nil) {
         var sleepSessionId: UUID? = nil
 
         // For naps, log the sleep event immediately so it appears in timeline
         if type == .nap {
             sleepSessionId = UUID()
-            onLogEvent?(EventLogRequest(type: .slapen, time: startTime, sleepSessionId: sleepSessionId))
+            onLogEvent?(EventLogRequest(type: .slapen, time: startTime, sleepSessionId: sleepSessionId, napLocation: napLocation))
         }
 
         currentActivity = InProgressActivity(
             type: type,
             startTime: startTime,
-            sleepSessionId: sleepSessionId
+            sleepSessionId: sleepSessionId,
+            napLocation: napLocation
         )
 
         onDismiss?()
@@ -99,21 +104,20 @@ class ActivityTrackingManager: ObservableObject {
     }
 
     /// End the current activity
-    func endActivity(minutesAgo: Int, note: String?) -> (sleepSessionId: UUID?, sleepEvent: PuppyEvent?)? {
+    /// Returns sleep session info for naps so the caller can update the sleep event with duration
+    func endActivity(minutesAgo: Int, note: String?) -> (sleepSessionId: UUID?, startTime: Date?, durationMin: Int)? {
         guard let activity = currentActivity else { return nil }
 
         let endTime = Date().addingTimeInterval(-Double(minutesAgo) * 60)
-        let duration = Int(endTime.timeIntervalSince(activity.startTime) / 60)
+        let duration = max(1, Int(endTime.timeIntervalSince(activity.startTime) / 60))
 
         if activity.type == .nap {
-            // For naps, sleep was already logged at start - just log wake event
-            onLogEvent?(EventLogRequest(type: .ontwaken, time: endTime, sleepSessionId: activity.sleepSessionId))
-
-            // Return info for updating note if needed
+            // For naps, don't log a wake event - caller will update the sleep event with duration
             currentActivity = nil
             onDismiss?()
             HapticFeedback.success()
-            return (activity.sleepSessionId, nil)
+            // Return info for caller to update the sleep event
+            return (activity.sleepSessionId, activity.startTime, duration)
         } else {
             // For walks, log the walk event at start time
             onLogEvent?(EventLogRequest(
@@ -121,7 +125,7 @@ class ActivityTrackingManager: ObservableObject {
                 time: activity.startTime,
                 location: .buiten,
                 note: note,
-                durationMin: max(1, duration)
+                durationMin: duration
             ))
         }
 

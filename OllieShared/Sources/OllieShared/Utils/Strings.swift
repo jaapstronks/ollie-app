@@ -97,6 +97,14 @@ public enum Strings {
         public static var inside: String { String(localized: "Inside", bundle: Strings.bundle) }
     }
 
+    // MARK: - Nap Locations
+    public enum NapLocation {
+        public static var crate: String { String(localized: "Crate", bundle: Strings.bundle) }
+        public static var dogBed: String { String(localized: "Dog bed", bundle: Strings.bundle) }
+        public static var other: String { String(localized: "Other", bundle: Strings.bundle) }
+        public static var wherePrompt: String { String(localized: "Where?", bundle: Strings.bundle) }
+    }
+
     // MARK: - Size Categories
     public enum SizeCategory {
         public static var small: String { String(localized: "Small (<10kg)", bundle: Strings.bundle) }

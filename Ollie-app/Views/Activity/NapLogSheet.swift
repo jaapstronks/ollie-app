@@ -10,7 +10,7 @@ import OllieShared
 /// Sheet for logging a completed nap with linked start/end/duration
 /// Supports logging naps from previous days and naps spanning midnight
 struct NapLogSheet: View {
-    let onSave: (Date, Date, String?) -> Void
+    let onSave: (Date, Date, String?, NapLocation?) -> Void
     let onCancel: () -> Void
 
     /// Default duration in minutes (average nap time, or 30 if unknown)
@@ -21,15 +21,18 @@ struct NapLogSheet: View {
     /// Full end date+time
     @State private var endDateTime: Date
     @State private var note = ""
+    @State private var selectedNapLocation: NapLocation?
 
     /// Track which picker is expanded
     @State private var showStartPicker = false
     @State private var showEndPicker = false
 
+    @Environment(\.colorScheme) private var colorScheme
+
     private let now = Date()
 
     init(
-        onSave: @escaping (Date, Date, String?) -> Void,
+        onSave: @escaping (Date, Date, String?, NapLocation?) -> Void,
         onCancel: @escaping () -> Void,
         defaultDurationMinutes: Int = 30
     ) {
@@ -183,6 +186,33 @@ struct NapLogSheet: View {
                     }
                 }
 
+                // Location section
+                Section {
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text(Strings.NapLocation.wherePrompt)
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+
+                        HStack(spacing: 12) {
+                            ForEach(NapLocation.allCases, id: \.self) { location in
+                                NapLogLocationButton(
+                                    location: location,
+                                    isSelected: selectedNapLocation == location,
+                                    colorScheme: colorScheme
+                                ) {
+                                    HapticFeedback.selection()
+                                    if selectedNapLocation == location {
+                                        selectedNapLocation = nil
+                                    } else {
+                                        selectedNapLocation = location
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    .padding(.vertical, 4)
+                }
+
                 // Note section
                 Section {
                     TextField(Strings.NapLog.notePlaceholder, text: $note, axis: .vertical)
@@ -204,7 +234,8 @@ struct NapLogSheet: View {
                         onSave(
                             startDateTime,
                             endDateTime,
-                            note.isEmpty ? nil : note
+                            note.isEmpty ? nil : note,
+                            selectedNapLocation
                         )
                     } label: {
                         Text(Strings.NapLog.logNap)
@@ -222,13 +253,57 @@ struct NapLogSheet: View {
     }
 }
 
+// MARK: - Nap Location Button
+
+/// Button for selecting nap location in the log sheet
+private struct NapLogLocationButton: View {
+    let location: NapLocation
+    let isSelected: Bool
+    let colorScheme: ColorScheme
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            VStack(spacing: 4) {
+                Image(systemName: location.icon)
+                    .font(.system(size: 18))
+                    .frame(width: 32, height: 32)
+                    .background(
+                        Circle()
+                            .fill(isSelected ? Color.ollieSleep : Color.ollieSleep.opacity(0.1))
+                    )
+                    .foregroundStyle(isSelected ? .white : Color.ollieSleep)
+
+                Text(location.label)
+                    .font(.caption2)
+                    .fontWeight(isSelected ? .semibold : .regular)
+                    .foregroundStyle(isSelected ? Color.ollieSleep : .secondary)
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 6)
+            .background(
+                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                    .fill(isSelected ? Color.ollieSleep.opacity(0.1) : Color.clear)
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                    .strokeBorder(
+                        isSelected ? Color.ollieSleep : Color.clear,
+                        lineWidth: 1
+                    )
+            )
+        }
+        .buttonStyle(.plain)
+    }
+}
+
 // MARK: - Preview
 
 #Preview {
     NapLogSheet(
-        onSave: { start, end, note in
+        onSave: { start, end, note, location in
             let duration = Int(end.timeIntervalSince(start) / 60)
-            print("Nap: \(start) - \(end), \(duration)min, note: \(note ?? "")")
+            print("Nap: \(start) - \(end), \(duration)min, note: \(note ?? ""), location: \(String(describing: location))")
         },
         onCancel: { },
         defaultDurationMinutes: 25

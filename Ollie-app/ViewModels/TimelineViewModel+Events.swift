@@ -170,7 +170,8 @@ extension TimelineViewModel {
         exercise: String? = nil,
         result: String? = nil,
         durationMin: Int? = nil,
-        sleepSessionId: UUID? = nil
+        sleepSessionId: UUID? = nil,
+        napLocation: NapLocation? = nil
     ) {
         // Note: sleepSessionId is auto-generated for sleep events in PuppyEvent init
         let event = PuppyEvent(
@@ -182,7 +183,8 @@ extension TimelineViewModel {
             exercise: exercise,
             result: result,
             durationMin: durationMin,
-            sleepSessionId: sleepSessionId
+            sleepSessionId: sleepSessionId,
+            napLocation: napLocation
         )
 
         // Track potty event time for post-wake state clearing
@@ -270,26 +272,23 @@ extension TimelineViewModel {
         FeedbackManager.logEvent()
     }
 
-    /// Log a completed nap with start and end time (creates both sleep and wake events)
-    func logCompletedNap(startTime: Date, endTime: Date, note: String?) {
+    /// Log a completed nap with start and end time (single-event model with durationMin)
+    func logCompletedNap(startTime: Date, endTime: Date, note: String?, napLocation: NapLocation? = nil) {
         let sessionId = UUID()
 
-        // Log sleep event at start time
+        // Calculate duration in minutes
+        let durationMin = max(1, Int(endTime.timeIntervalSince(startTime) / 60))
+
+        // Log single sleep event with duration
         let sleepEvent = PuppyEvent(
             time: startTime,
             type: .slapen,
             note: note,
-            sleepSessionId: sessionId
+            durationMin: durationMin,
+            sleepSessionId: sessionId,
+            napLocation: napLocation
         )
         eventStore.addEvent(sleepEvent)
-
-        // Log wake event at end time
-        let wakeEvent = PuppyEvent(
-            time: endTime,
-            type: .ontwaken,
-            sleepSessionId: sessionId
-        )
-        eventStore.addEvent(wakeEvent)
 
         // Immediately sync for instant UI updates
         syncEventsFromStore()

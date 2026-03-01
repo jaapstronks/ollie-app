@@ -12,7 +12,7 @@ import OllieShared
 struct StartActivitySheet: View {
     let activityType: ActivityType
     let puppyName: String
-    let onStartNow: (Date) -> Void
+    let onStartNow: (Date, NapLocation?) -> Void
     let onLogCompleted: () -> Void
     let onCancel: () -> Void
 
@@ -23,6 +23,7 @@ struct StartActivitySheet: View {
     @State private var selectedTime = Date()
     @State private var selectedDate = Date()
     @State private var showingDatePicker = false
+    @State private var selectedNapLocation: NapLocation?
 
     var body: some View {
         NavigationStack {
@@ -80,7 +81,7 @@ struct StartActivitySheet: View {
                     showingTimePicker = true
                 } else {
                     // For walks, start immediately
-                    onStartNow(Date())
+                    onStartNow(Date(), nil)
                 }
             } label: {
                 HStack {
@@ -143,12 +144,36 @@ struct StartActivitySheet: View {
             Text(Strings.Activity.sinceWhen)
                 .font(.headline)
 
+            // Location picker
+            VStack(spacing: 8) {
+                Text(Strings.NapLocation.wherePrompt)
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+
+                HStack(spacing: 12) {
+                    ForEach(NapLocation.allCases, id: \.self) { location in
+                        NapLocationButton(
+                            location: location,
+                            isSelected: selectedNapLocation == location,
+                            colorScheme: colorScheme
+                        ) {
+                            HapticFeedback.selection()
+                            if selectedNapLocation == location {
+                                selectedNapLocation = nil
+                            } else {
+                                selectedNapLocation = location
+                            }
+                        }
+                    }
+                }
+            }
+
             // Quick options
             VStack(spacing: 12) {
                 // "Now" button
                 Button {
                     HapticFeedback.medium()
-                    onStartNow(Date())
+                    onStartNow(Date(), selectedNapLocation)
                 } label: {
                     HStack {
                         Image(systemName: "clock.fill")
@@ -239,7 +264,7 @@ struct StartActivitySheet: View {
                         dateComponents.hour = timeComponents.hour
                         dateComponents.minute = timeComponents.minute
                         let combinedDate = calendar.date(from: dateComponents) ?? selectedTime
-                        onStartNow(combinedDate)
+                        onStartNow(combinedDate, selectedNapLocation)
                     } label: {
                         Text(Strings.Activity.isSleepingNow(name: puppyName))
                             .font(.headline)
@@ -327,11 +352,55 @@ struct StartActivitySheet: View {
     }
 }
 
+// MARK: - Nap Location Button
+
+/// Button for selecting nap location (crate, dog bed, other)
+private struct NapLocationButton: View {
+    let location: NapLocation
+    let isSelected: Bool
+    let colorScheme: ColorScheme
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            VStack(spacing: 4) {
+                Image(systemName: location.icon)
+                    .font(.system(size: 20))
+                    .frame(width: 36, height: 36)
+                    .background(
+                        Circle()
+                            .fill(isSelected ? Color.ollieSleep : Color.ollieSleep.opacity(0.1))
+                    )
+                    .foregroundStyle(isSelected ? .white : Color.ollieSleep)
+
+                Text(location.label)
+                    .font(.caption2)
+                    .fontWeight(isSelected ? .semibold : .regular)
+                    .foregroundStyle(isSelected ? Color.ollieSleep : .secondary)
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 8)
+            .background(
+                RoundedRectangle(cornerRadius: 12, style: .continuous)
+                    .fill(isSelected ? Color.ollieSleep.opacity(0.1) : Color.clear)
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 12, style: .continuous)
+                    .strokeBorder(
+                        isSelected ? Color.ollieSleep : Color.clear,
+                        lineWidth: 1
+                    )
+            )
+        }
+        .buttonStyle(.plain)
+    }
+}
+
 #Preview("Walk") {
     StartActivitySheet(
         activityType: .walk,
         puppyName: "Luna",
-        onStartNow: { time in print("Start now at \(time)") },
+        onStartNow: { time, location in print("Start now at \(time), location: \(String(describing: location))") },
         onLogCompleted: { print("Log completed") },
         onCancel: { print("Cancel") }
     )
@@ -341,7 +410,7 @@ struct StartActivitySheet: View {
     StartActivitySheet(
         activityType: .nap,
         puppyName: "Luna",
-        onStartNow: { time in print("Start now at \(time)") },
+        onStartNow: { time, location in print("Start now at \(time), location: \(String(describing: location))") },
         onLogCompleted: { print("Log completed") },
         onCancel: { print("Cancel") }
     )

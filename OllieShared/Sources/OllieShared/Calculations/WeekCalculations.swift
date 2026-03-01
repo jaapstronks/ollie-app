@@ -253,7 +253,7 @@ public struct WeekCalculations {
     }
 
     private static func isSleepEvent(_ type: EventType) -> Bool {
-        type == .slapen || type == .bench
+        type == .slapen
     }
 
     private static func isWakeEvent(_ type: EventType) -> Bool {

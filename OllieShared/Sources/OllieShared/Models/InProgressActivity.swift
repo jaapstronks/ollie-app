@@ -26,12 +26,14 @@ public struct InProgressActivity: Codable, Equatable, Sendable {
     public var startTime: Date
     public let spotName: String?
     public let sleepSessionId: UUID?
+    public let napLocation: NapLocation?
 
-    public init(type: ActivityType, startTime: Date, spotName: String? = nil, sleepSessionId: UUID? = nil) {
+    public init(type: ActivityType, startTime: Date, spotName: String? = nil, sleepSessionId: UUID? = nil, napLocation: NapLocation? = nil) {
         self.type = type
         self.startTime = startTime
         self.spotName = spotName
         self.sleepSessionId = sleepSessionId
+        self.napLocation = napLocation
     }
 
     /// Duration in minutes since the activity started

@@ -141,6 +141,31 @@ public enum EventLocation: String, Codable, Sendable {
     }
 }
 
+// MARK: - Nap Location
+
+/// Location where a nap took place
+public enum NapLocation: String, Codable, CaseIterable, Sendable {
+    case crate
+    case dogBed
+    case other
+
+    public var label: String {
+        switch self {
+        case .crate: return Strings.NapLocation.crate
+        case .dogBed: return Strings.NapLocation.dogBed
+        case .other: return Strings.NapLocation.other
+        }
+    }
+
+    public var icon: String {
+        switch self {
+        case .crate: return "house.fill"
+        case .dogBed: return "bed.double.fill"
+        case .other: return "ellipsis.circle.fill"
+        }
+    }
+}
+
 // MARK: - Media Info
 
 /// Encapsulates media attachments for an event
@@ -226,6 +251,7 @@ public struct PuppyEvent: Codable, Identifiable, Equatable, Sendable {
     public var weightKg: Double?
     public var parentWalkId: UUID?
     public var sleepSessionId: UUID?
+    public var napLocation: NapLocation?
 
     // MARK: - Coverage Gap Fields
 
@@ -307,6 +333,7 @@ public struct PuppyEvent: Codable, Identifiable, Equatable, Sendable {
         spotName: String? = nil,
         parentWalkId: UUID? = nil,
         sleepSessionId: UUID? = nil,
+        napLocation: NapLocation? = nil,
         gapType: CoverageGapType? = nil,
         endTime: Date? = nil,
         gapLocation: String? = nil
@@ -335,6 +362,7 @@ public struct PuppyEvent: Codable, Identifiable, Equatable, Sendable {
         self.spotId = spotId
         self.spotName = spotName
         self.parentWalkId = parentWalkId
+        self.napLocation = napLocation
         self.gapType = gapType
         self.endTime = endTime
         self.gapLocation = gapLocation
@@ -377,6 +405,7 @@ public struct PuppyEvent: Codable, Identifiable, Equatable, Sendable {
         case spotName = "spot_name"
         case parentWalkId = "parent_walk_id"
         case sleepSessionId = "sleep_session_id"
+        case napLocation = "nap_location"
         case gapType = "gap_type"
         case endTime = "end_time"
         case gapLocation = "gap_location"
@@ -410,6 +439,7 @@ public struct PuppyEvent: Codable, Identifiable, Equatable, Sendable {
         spotId = try container.decodeIfPresent(UUID.self, forKey: .spotId)
         spotName = try container.decodeIfPresent(String.self, forKey: .spotName)
         parentWalkId = try container.decodeIfPresent(UUID.self, forKey: .parentWalkId)
+        napLocation = try container.decodeIfPresent(NapLocation.self, forKey: .napLocation)
 
         let decodedSleepSessionId = try container.decodeIfPresent(UUID.self, forKey: .sleepSessionId)
         if type == .slapen && decodedSleepSessionId == nil {

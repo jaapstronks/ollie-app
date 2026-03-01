@@ -320,7 +320,7 @@ struct CombinedStatusCalculations {
         let yesterdayAt9PM = calendar.date(bySettingHour: 21, minute: 0, second: 0, of: yesterday)!
 
         let overnightSleepEvents = recentEvents.filter { event in
-            let isSleepType = event.type == .slapen || event.type == .bench
+            let isSleepType = event.type == .slapen
             let isAfterYesterday9PM = event.time >= yesterdayAt9PM
             let isBeforeNow = event.time <= now
             return isSleepType && isAfterYesterday9PM && isBeforeNow

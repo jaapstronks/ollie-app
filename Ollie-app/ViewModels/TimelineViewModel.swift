@@ -43,6 +43,11 @@ class TimelineViewModel: ObservableObject {
     @Published var currentDate: Date = Date()
     @Published var events: [PuppyEvent] = []
 
+    /// Events filtered for timeline display (excludes weight events which belong on Health tab only)
+    var timelineDisplayEvents: [PuppyEvent] {
+        events.filter { $0.type != .gewicht }
+    }
+
     /// Pre-computed timeline items (events + sleep sessions)
     /// Updated only when events change to avoid O(n²) recomputation on every view render
     @Published private(set) var timelineItems: [TimelineItem] = []
@@ -84,13 +89,8 @@ class TimelineViewModel: ObservableObject {
     var cachedPatternAnalysis: PatternAnalysis? { statsCache.patternAnalysis }
     var cachedRecentEvents: [PuppyEvent] { statsCache.recentEvents }
     var cachedWeekStats: [DayStats] { statsCache.weekStats }
-    var cachedYearEvents: [PuppyEvent] { statsCache.yearEvents }
     var cachedRecentWalks: [PuppyEvent] { statsCache.recentWalks }
     var cachedWeekWalkStats: (count: Int, totalMinutes: Int) { statsCache.weekWalkStats }
-    var cachedLatestWeight: (weight: Double, date: Date)? { statsCache.latestWeight }
-    var cachedWeightDelta: (delta: Double, previousDate: Date)? { statsCache.weightDelta }
-    var cachedGrowthStory: GrowthStory? { statsCache.growthStory }
-    var cachedFirstWeight: (weight: Double, date: Date)? { statsCache.firstWeight }
 
     // MARK: - Combined Sleep + Potty State
 
@@ -277,8 +277,8 @@ class TimelineViewModel: ObservableObject {
         // Build timeline items
         var items: [TimelineItem] = []
 
-        // Add non-sleep events
-        for event in events where !sessionEventIds.contains(event.id) {
+        // Add non-sleep events (excluding weight events which belong on Health tab only)
+        for event in events where !sessionEventIds.contains(event.id) && event.type != .gewicht {
             items.append(.event(event))
         }
 
@@ -354,7 +354,8 @@ class TimelineViewModel: ObservableObject {
                 location: request.location,
                 note: request.note,
                 durationMin: request.durationMin,
-                sleepSessionId: request.sleepSessionId
+                sleepSessionId: request.sleepSessionId,
+                napLocation: request.napLocation
             )
         }
 

@@ -17,9 +17,10 @@ struct AllEventsSheet: View {
     @Environment(\.colorScheme) private var colorScheme
 
     // Event types not in quick log bar (excluding weight which is managed in Health tab)
+    // Also excludes bench which is deprecated in favor of napLocation on sleep events
     private var additionalEventTypes: [EventType] {
         EventType.allCases.filter { type in
-            !Constants.quickLogTypes.contains(type) && type != .gewicht
+            !Constants.quickLogTypes.contains(type) && type != .gewicht && type != .bench
         }
     }
 
