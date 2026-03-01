@@ -12,15 +12,14 @@ import TipKit
 /// Main "Today" tab showing the daily hub
 struct TodayView: View {
     @ObservedObject var viewModel: TimelineViewModel
-    @ObservedObject var thisWeekViewModel: ThisWeekViewModel
     @ObservedObject var memoriesViewModel: MemoriesViewModel
     @ObservedObject var appointmentStore: AppointmentStore
     /// Weather service passed down but not observed here to avoid full view redraws
     /// Weather-dependent sections use their own observation via WeatherSectionContainer
     let weatherService: WeatherService
     let onSettingsTap: () -> Void
-    var onNavigateToInsights: (() -> Void)?
     var onNavigateToAppointments: (() -> Void)?
+    var onNavigateToTrain: (() -> Void)?
 
     @State private var selectedPhotoEvent: PuppyEvent?
     @EnvironmentObject private var atmosphereProvider: AtmosphereProvider
@@ -55,17 +54,14 @@ struct TodayView: View {
 
                     // Memories card ("On This Day")
                     if viewModel.isShowingToday {
-                        MemoriesCard(viewModel: memoriesViewModel)
-                            .animatedAppear(delay: 0.08)
-                    }
-
-                    // This Week card (socialization + milestones)
-                    if viewModel.isShowingToday {
-                        ThisWeekCard(
-                            viewModel: thisWeekViewModel,
-                            onNavigateToInsights: onNavigateToInsights
+                        MemoriesCard(
+                            viewModel: memoriesViewModel,
+                            onMemoryTap: { event in
+                                // Navigate to the date of the memory
+                                viewModel.goToDate(event.time)
+                            }
                         )
-                        .animatedAppear(delay: 0.10)
+                        .animatedAppear(delay: 0.08)
                     }
 
                     // Today's scheduled appointments
@@ -74,13 +70,7 @@ struct TodayView: View {
                             appointmentStore: appointmentStore,
                             onViewAll: onNavigateToAppointments
                         )
-                        .animatedAppear(delay: 0.12)
-                    }
-
-                    // Walk suggestions (socialization items to watch for)
-                    if viewModel.isShowingToday {
-                        WalkSuggestionsCard()
-                            .animatedAppear(delay: 0.15)
+                        .animatedAppear(delay: 0.10)
                     }
 
                     // Combined potty progress card (streak + poop count)
@@ -89,12 +79,12 @@ struct TodayView: View {
                             streakInfo: viewModel.streakInfo,
                             poopStatus: viewModel.poopStatus
                         )
-                        .animatedAppear(delay: 0.20)
+                        .animatedAppear(delay: 0.12)
                     }
 
                     // Timeline section
                     timelineSection
-                        .animatedAppear(delay: 0.25)
+                        .animatedAppear(delay: 0.15)
                 }
                 .padding()
                 .padding(.bottom, 84) // Space for FAB
@@ -214,7 +204,7 @@ struct TodayView: View {
                     wokeAt: wokeAt,
                     minutesSinceWake: minutesSinceWake,
                     pottyWasOverdueBy: overdueBy,
-                    onLogPotty: { viewModel.sheetCoordinator.presentSheet(.potty) }
+                    onLogPotty: { viewModel.sheetCoordinator.presentSheet(.potty(preselected: .plassen)) }
                 )
             }
 
@@ -255,7 +245,7 @@ struct TodayView: View {
                 PottyStatusCard(
                     prediction: viewModel.pottyPrediction,
                     puppyName: viewModel.puppyName,
-                    onLogPotty: { viewModel.sheetCoordinator.presentSheet(.potty) }
+                    onLogPotty: { viewModel.sheetCoordinator.presentSheet(.potty(preselected: .plassen)) }
                 )
             }
 
@@ -294,7 +284,8 @@ struct TodayView: View {
                 viewModel: viewModel,
                 weatherService: weatherService,
                 precomputedSeparated: separated,
-                isSleeping: isSleeping
+                isSleeping: isSleeping,
+                onNavigateToSocialization: onNavigateToTrain
             )
         }
     }
@@ -357,15 +348,8 @@ struct EmptyTimelineCard: View {
 #Preview {
     let eventStore = EventStore()
     let profileStore = ProfileStore()
-    let milestoneStore = MilestoneStore()
-    let socializationStore = SocializationStore()
     let appointmentStore = AppointmentStore()
     let viewModel = TimelineViewModel(eventStore: eventStore, profileStore: profileStore)
-    let thisWeekViewModel = ThisWeekViewModel(
-        profileStore: profileStore,
-        milestoneStore: milestoneStore,
-        socializationStore: socializationStore
-    )
     let memoriesViewModel = MemoriesViewModel(eventStore: eventStore)
     let weatherService = WeatherService()
     let atmosphereProvider = AtmosphereProvider()
@@ -373,14 +357,14 @@ struct EmptyTimelineCard: View {
 
     return TodayView(
         viewModel: viewModel,
-        thisWeekViewModel: thisWeekViewModel,
         memoriesViewModel: memoriesViewModel,
         appointmentStore: appointmentStore,
         weatherService: weatherService,
         onSettingsTap: { print("Settings tapped") },
-        onNavigateToInsights: { print("Navigate to Insights") },
-        onNavigateToAppointments: { print("Navigate to Appointments") }
+        onNavigateToAppointments: { print("Navigate to Appointments") },
+        onNavigateToTrain: { print("Navigate to Train") }
     )
     .environmentObject(atmosphereProvider)
     .environmentObject(foodRecallService)
+    .environmentObject(SocializationStore())
 }

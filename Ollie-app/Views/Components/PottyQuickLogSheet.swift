@@ -42,12 +42,24 @@ enum PottySelection: String, CaseIterable {
 struct PottyQuickLogSheet: View {
     let onSave: (PottySelection, Date, EventLocation, String?) -> Void
     let onCancel: () -> Void
+    let preselected: PottySelection?
 
     @State private var selectedPotty: PottySelection?
     @State private var selectedTime: Date = Date()
     @State private var selectedLocation: EventLocation?
     @State private var note: String = ""
     @State private var showingTimePicker: Bool = false
+
+    init(
+        onSave: @escaping (PottySelection, Date, EventLocation, String?) -> Void,
+        onCancel: @escaping () -> Void,
+        preselected: PottySelection? = nil
+    ) {
+        self.onSave = onSave
+        self.onCancel = onCancel
+        self.preselected = preselected
+        self._selectedPotty = State(initialValue: preselected)
+    }
 
     var body: some View {
         VStack(spacing: 0) {

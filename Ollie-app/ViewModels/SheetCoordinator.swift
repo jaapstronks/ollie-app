@@ -18,7 +18,7 @@ final class SheetCoordinator: ObservableObject {
     /// All possible sheet types that can be presented
     enum ActiveSheet: Equatable, Identifiable {
         case quickLog(EventType, suggestedTime: Date? = nil)
-        case potty
+        case potty(preselected: PottySelection? = nil)
         case allEvents
         case logEvent(EventType)
         case locationPicker(EventType)

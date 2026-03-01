@@ -62,7 +62,7 @@ extension TimelineViewModel {
 
     func showPottySheet() {
         // Core logging is always free - no paywall check needed
-        sheetCoordinator.presentSheet(.potty)
+        sheetCoordinator.presentSheet(.potty())
     }
 
     func cancelPottySheet() {
