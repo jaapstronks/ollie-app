@@ -10,6 +10,7 @@ import OllieShared
 struct EditEventSheet: View {
     let event: PuppyEvent
     let onSave: (PuppyEvent) -> Void
+    var onDelete: (() -> Void)?
 
     @Environment(\.dismiss) private var dismiss
 
@@ -21,10 +22,12 @@ struct EditEventSheet: View {
     @State private var result: String
     @State private var durationMin: String
     @State private var weightKg: String
+    @State private var showingDeleteConfirmation = false
 
-    init(event: PuppyEvent, onSave: @escaping (PuppyEvent) -> Void) {
+    init(event: PuppyEvent, onSave: @escaping (PuppyEvent) -> Void, onDelete: (() -> Void)? = nil) {
         self.event = event
         self.onSave = onSave
+        self.onDelete = onDelete
 
         // Initialize state with existing values
         _time = State(initialValue: event.time)
@@ -107,8 +110,33 @@ struct EditEventSheet: View {
                     TextField(Strings.Common.minutesFull, text: $durationMin)
                         .keyboardType(.numberPad)
                 }
+
+                // Delete button
+                if onDelete != nil {
+                    Section {
+                        Button(role: .destructive) {
+                            showingDeleteConfirmation = true
+                        } label: {
+                            HStack {
+                                Spacer()
+                                Text(Strings.Common.delete)
+                                Spacer()
+                            }
+                        }
+                    }
+                }
             }
             .navigationTitle(Strings.Common.edit)
+            .confirmationDialog(
+                Strings.Timeline.deleteConfirmTitle,
+                isPresented: $showingDeleteConfirmation,
+                titleVisibility: .visible
+            ) {
+                Button(Strings.Common.delete, role: .destructive) {
+                    onDelete?()
+                }
+                Button(Strings.Common.cancel, role: .cancel) {}
+            }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {

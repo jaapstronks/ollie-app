@@ -56,6 +56,8 @@ public struct SleepSession: Identifiable, Sendable {
     // MARK: - Session Building
 
     /// Build sleep sessions from a list of events
+    /// Uses single-event model: sleep event has durationMin when ended
+    /// Falls back to pairing with wake events for legacy data
     public static func buildSessions(from events: [PuppyEvent]) -> [SleepSession] {
         let sleepEvents = events.sleeps()
         let wakeEvents = events.wakes()
@@ -64,6 +66,21 @@ public struct SleepSession: Identifiable, Sendable {
         var matchedWakeIds: Set<UUID> = []
 
         for sleepEvent in sleepEvents {
+            // New model: sleep event has durationMin set
+            if let duration = sleepEvent.durationMin {
+                let endTime = sleepEvent.time.addingTimeInterval(Double(duration) * 60)
+                let session = SleepSession(
+                    id: sleepEvent.sleepSessionId ?? sleepEvent.id,
+                    startTime: sleepEvent.time,
+                    endTime: endTime,
+                    startEventId: sleepEvent.id,
+                    endEventId: nil  // No separate wake event
+                )
+                sessions.append(session)
+                continue
+            }
+
+            // Legacy model: pair with wake event
             var matchingWake: PuppyEvent?
 
             if let sessionId = sleepEvent.sleepSessionId {
@@ -102,20 +119,25 @@ public struct SleepSession: Identifiable, Sendable {
     }
 
     /// Get the sleepSessionId for an ongoing sleep
+    /// A sleep is ongoing if it has no durationMin set (new model) and no matching wake event (legacy)
     public static func ongoingSleepSessionId(from events: [PuppyEvent]) -> UUID? {
         let sleepEvents = events.sleeps().reverseChronological()
         let wakeEvents = events.wakes()
 
         for sleepEvent in sleepEvents {
-            let hasMatchingWake: Bool
-            if let sessionId = sleepEvent.sleepSessionId {
-                hasMatchingWake = wakeEvents.contains { $0.sleepSessionId == sessionId }
-            } else {
-                hasMatchingWake = wakeEvents.contains { $0.time > sleepEvent.time }
-            }
+            // New model: sleep is ongoing if no durationMin
+            if sleepEvent.durationMin == nil {
+                // Also check legacy wake events for backwards compatibility
+                let hasMatchingWake: Bool
+                if let sessionId = sleepEvent.sleepSessionId {
+                    hasMatchingWake = wakeEvents.contains { $0.sleepSessionId == sessionId }
+                } else {
+                    hasMatchingWake = wakeEvents.contains { $0.time > sleepEvent.time }
+                }
 
-            if !hasMatchingWake {
-                return sleepEvent.sleepSessionId ?? sleepEvent.id
+                if !hasMatchingWake {
+                    return sleepEvent.sleepSessionId ?? sleepEvent.id
+                }
             }
         }
         return nil

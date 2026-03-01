@@ -53,7 +53,7 @@ extension TimelineViewModel {
                 photoThumbnail: photoThumbnail,
                 note: sleepEvent?.note,
                 description: description,
-                track: .main
+                track: .activity  // Sleep sessions go on the left (activity) track
             ))
         }
 
@@ -81,13 +81,17 @@ extension TimelineViewModel {
                 photoThumbnail: walk.thumbnailPath,
                 note: walk.note,
                 description: description,
-                track: .walk
+                track: .activity  // Walks go on the left (activity) track
             ))
         }
 
         // 3. Process remaining point events
-        for event in events where !processedEventIds.contains(event.id) {
+        // Skip wake events (ontwaken) - they're legacy data from the old two-event sleep model
+        for event in events where !processedEventIds.contains(event.id) && event.type != .ontwaken {
             let description = eventDescription(for: event, puppyName: puppyName)
+
+            // Potty events (pee/poo) go on the right track, others on main
+            let trackType: VerticalTimelineItem.TrackType = (event.type == .plassen || event.type == .poepen) ? .potty : .main
 
             items.append(VerticalTimelineItem(
                 id: event.id,
@@ -97,7 +101,7 @@ extension TimelineViewModel {
                 photoThumbnail: event.thumbnailPath,
                 note: event.note,
                 description: description,
-                track: .main
+                track: trackType
             ))
         }
 

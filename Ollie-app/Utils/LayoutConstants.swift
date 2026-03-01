@@ -166,8 +166,8 @@ enum LayoutConstants {
 
     // MARK: - Timeline Grid
 
-    /// Height per hour in the vertical timeline (60pt per hour)
-    static let timelineHourHeight: CGFloat = 60
+    /// Height per hour in the vertical timeline (90pt per hour - 50% more room)
+    static let timelineHourHeight: CGFloat = 90
 
     /// Width of the time column showing hour labels
     static let timelineTimeColumnWidth: CGFloat = 44
