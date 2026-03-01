@@ -94,7 +94,6 @@ extension CDWalkSpot {
     static func fetchAllSpots(in context: NSManagedObjectContext) -> [CDWalkSpot] {
         let request = NSFetchRequest<CDWalkSpot>(entityName: "CDWalkSpot")
         request.sortDescriptors = [
-            NSSortDescriptor(keyPath: \CDWalkSpot.isFavorite, ascending: false),
             NSSortDescriptor(keyPath: \CDWalkSpot.visitCount, ascending: false)
         ]
 

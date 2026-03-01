@@ -49,12 +49,12 @@ struct InsightsSpotsSection: View {
                             showAllSpots = true
                         }
 
-                    // Favorite spots (top 3)
-                    let favorites = spotStore.favoriteSpots.prefix(3)
-                    if !favorites.isEmpty {
+                    // Top spots (by visit count)
+                    let topSpots = spotStore.popularSpots.prefix(3)
+                    if !topSpots.isEmpty {
                         Divider()
 
-                        ForEach(Array(favorites)) { spot in
+                        ForEach(Array(topSpots)) { spot in
                             NavigationLink {
                                 SpotDetailView(spotStore: spotStore, spot: spot)
                             } label: {
@@ -78,9 +78,9 @@ struct InsightsSpotRow: View {
 
     var body: some View {
         HStack(spacing: 12) {
-            Image(systemName: spot.isFavorite ? "star.fill" : "mappin.circle.fill")
+            Image(systemName: "mappin.circle.fill")
                 .font(.body)
-                .foregroundStyle(spot.isFavorite ? .yellow : Color.ollieAccent)
+                .foregroundStyle(Color.ollieAccent)
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(spot.name)

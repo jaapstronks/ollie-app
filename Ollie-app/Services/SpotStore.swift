@@ -15,7 +15,6 @@ final class SpotStore: CRUDStore<WalkSpot, CDWalkSpot> {
 
     // MARK: - Cached Computed Properties
 
-    private var _cachedFavoriteSpots: [WalkSpot]?
     private var _cachedRecentSpots: [WalkSpot]?
     private var _cachedPopularSpots: [WalkSpot]?
 
@@ -23,11 +22,8 @@ final class SpotStore: CRUDStore<WalkSpot, CDWalkSpot> {
 
     override var sortOrder: StoreSortOrder<WalkSpot> {
         .custom { spot1, spot2 in
-            // Favorites first, then by visit count
-            if spot1.isFavorite != spot2.isFavorite {
-                return spot1.isFavorite
-            }
-            return spot1.visitCount > spot2.visitCount
+            // Sort by visit count (most visited first)
+            spot1.visitCount > spot2.visitCount
         }
     }
 
@@ -45,7 +41,6 @@ final class SpotStore: CRUDStore<WalkSpot, CDWalkSpot> {
     }
 
     private func invalidateCaches() {
-        _cachedFavoriteSpots = nil
         _cachedRecentSpots = nil
         _cachedPopularSpots = nil
     }
@@ -57,19 +52,10 @@ final class SpotStore: CRUDStore<WalkSpot, CDWalkSpot> {
 
     // MARK: - Cached Computed Properties
 
-    /// Spots marked as favorite, sorted by name
-    var favoriteSpots: [WalkSpot] {
-        if let cached = _cachedFavoriteSpots { return cached }
-        let result = items.filter { $0.isFavorite }.sorted { $0.name < $1.name }
-        _cachedFavoriteSpots = result
-        return result
-    }
-
-    /// Most recently used spots (last 5, non-favorites)
+    /// Most recently added spots (last 5)
     var recentSpots: [WalkSpot] {
         if let cached = _cachedRecentSpots { return cached }
         let result = items
-            .filter { !$0.isFavorite }
             .sorted { $0.createdAt > $1.createdAt }
             .prefix(5)
             .map { $0 }
@@ -146,13 +132,6 @@ final class SpotStore: CRUDStore<WalkSpot, CDWalkSpot> {
     }
 
     // MARK: - Domain-Specific Operations
-
-    /// Toggle favorite status
-    func toggleFavorite(_ spot: WalkSpot) {
-        guard var updatedSpot = item(withId: spot.id) else { return }
-        updatedSpot.isFavorite.toggle()
-        update(updatedSpot)
-    }
 
     /// Increment visit count for a spot
     func incrementVisitCount(_ spot: WalkSpot) {

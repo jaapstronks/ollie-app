@@ -144,7 +144,7 @@ struct DiscoveredSpotDetailSheet: View {
             Button {
                 saveToMySpots()
             } label: {
-                Label(Strings.Places.saveToMySpots, systemImage: "plus.circle.fill")
+                Label(Strings.Places.saveToFavorites, systemImage: "heart.circle.fill")
                     .font(.headline)
                     .frame(maxWidth: .infinity)
             }
@@ -186,8 +186,8 @@ struct DiscoveredSpotDetailSheet: View {
 
     private func openInMaps() {
         let coordinate = CLLocationCoordinate2D(latitude: spot.latitude, longitude: spot.longitude)
-        let placemark = MKPlacemark(coordinate: coordinate)
-        let mapItem = MKMapItem(placemark: placemark)
+        let location = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
+        let mapItem = MKMapItem(location: location, address: nil)
         mapItem.name = spot.name
         mapItem.openInMaps()
     }

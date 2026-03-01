@@ -92,8 +92,8 @@ struct EditWalkSheet: View {
                 Section(Strings.WalkLocations.walkLocation) {
                     if let spot = selectedSpot {
                         HStack {
-                            Image(systemName: spot.isFavorite ? "star.circle.fill" : "mappin.circle.fill")
-                                .foregroundStyle(spot.isFavorite ? .yellow : .ollieAccent)
+                            Image(systemName: "mappin.circle.fill")
+                                .foregroundStyle(.ollieAccent)
                             Text(spot.name)
                             Spacer()
                             Button(Strings.EditWalk.changeSpot) {
@@ -102,22 +102,8 @@ struct EditWalkSheet: View {
                             .font(.caption)
                         }
                     } else if !spotStore.spots.isEmpty {
-                        // Spot picker
-                        ForEach(spotStore.favoriteSpots.prefix(3)) { spot in
-                            Button {
-                                selectedSpot = spot
-                            } label: {
-                                HStack {
-                                    Image(systemName: "star.fill")
-                                        .foregroundStyle(.yellow)
-                                        .font(.caption)
-                                    Text(spot.name)
-                                        .foregroundStyle(.primary)
-                                }
-                            }
-                        }
-
-                        ForEach(spotStore.recentSpots.prefix(2)) { spot in
+                        // Spot picker (show top spots by visit count)
+                        ForEach(spotStore.popularSpots.prefix(5)) { spot in
                             Button {
                                 selectedSpot = spot
                             } label: {

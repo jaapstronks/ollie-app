@@ -210,22 +210,6 @@ struct SpotDetailView: View {
 
                 // Actions
                 VStack(spacing: 12) {
-                    // Favorite toggle
-                    Button {
-                        HapticFeedback.light()
-                        spotStore.toggleFavorite(currentSpot)
-                    } label: {
-                        Label(
-                            currentSpot.isFavorite
-                                ? Strings.WalkLocations.removeFromFavorites
-                                : Strings.WalkLocations.addToFavorites,
-                            systemImage: currentSpot.isFavorite ? "star.fill" : "star"
-                        )
-                        .frame(maxWidth: .infinity)
-                    }
-                    .buttonStyle(.bordered)
-                    .tint(currentSpot.isFavorite ? .yellow : .primary)
-
                     // Open in Maps
                     Button {
                         openInMaps()
@@ -515,7 +499,6 @@ struct SpotDetailView: View {
                 name: "Kralingse Bos",
                 latitude: 51.9225,
                 longitude: 4.4792,
-                isFavorite: true,
                 notes: "Great park with lots of trails",
                 visitCount: 15
             ),
@@ -532,7 +515,6 @@ struct SpotDetailView: View {
                 name: "Kralingse Bos",
                 latitude: 51.9225,
                 longitude: 4.4792,
-                isFavorite: true,
                 notes: "Great park with lots of trails",
                 visitCount: 15
             )

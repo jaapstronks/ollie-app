@@ -79,9 +79,9 @@ struct SpotMapMarker: View {
     let spot: WalkSpot
 
     var body: some View {
-        Image(systemName: spot.isFavorite ? "star.circle.fill" : "mappin.circle.fill")
+        Image(systemName: "mappin.circle.fill")
             .font(.title3)
-            .foregroundStyle(spot.isFavorite ? .yellow : .ollieAccent)
+            .foregroundStyle(.ollieAccent)
             .background(
                 Circle()
                     .fill(.white)
@@ -249,9 +249,9 @@ struct SpotCard: View {
                 RoundedRectangle(cornerRadius: 8)
                     .fill(Color(.tertiarySystemBackground))
 
-                Image(systemName: spot.isFavorite ? "star.circle.fill" : "mappin.circle.fill")
+                Image(systemName: "mappin.circle.fill")
                     .font(.title2)
-                    .foregroundColor(spot.isFavorite ? .yellow : .ollieAccent)
+                    .foregroundColor(.ollieAccent)
             }
             .frame(width: 80, height: 60)
 

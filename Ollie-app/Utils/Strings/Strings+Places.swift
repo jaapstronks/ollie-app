@@ -18,7 +18,7 @@ extension Strings {
         static let mapMode = String(localized: "Map", table: table)
 
         // Sections
-        static let favoriteSpots = String(localized: "Favorite spots", table: table)
+        static let savedPlaces = String(localized: "Saved places", table: table)
         static let allSpots = String(localized: "All spots", table: table)
 
         // Empty states
@@ -45,7 +45,6 @@ extension Strings {
         static let filterDogParks = String(localized: "Discover", table: table, comment: "Filter chip for discovered places (vets, pet stores, dog parks, etc.)")
         static let filterContacts = String(localized: "Contacts", table: table, comment: "Filter chip for contacts")
         static let filterPhotos = String(localized: "Photos", table: table, comment: "Filter chip for photos")
-        static let filterFavorites = String(localized: "Favorites", table: table, comment: "Filter chip for favorites only")
         static let filterContactTypes = String(localized: "Contact types", table: table, comment: "Title for contact type filter sheet")
         static let filterSpotCategories = String(localized: "Spot categories", table: table, comment: "Title for spot category filter sheet")
         static let filterDiscoveryTypes = String(localized: "Place types", table: table, comment: "Title for discovery type filter sheet")
@@ -94,7 +93,7 @@ extension Strings {
         // Discovery
         static let discoveredNearby = String(localized: "Nearby dog parks", table: table, comment: "Section header for discovered dog parks")
         static let dataAttribution = String(localized: "Data from %@", table: table, comment: "Attribution text, %@ is source name")
-        static let saveToMySpots = String(localized: "Save to my spots", table: table, comment: "Button to save discovered spot")
+        static let saveToFavorites = String(localized: "Save to favorites", table: table, comment: "Button to save discovered spot to user's collection")
         static let discovering = String(localized: "Finding dog parks...", table: table, comment: "Loading state for discovery")
         static let noParksNearby = String(localized: "No dog parks found nearby", table: table, comment: "Empty state for discovery")
         static let spotSaved = String(localized: "Spot saved!", table: table, comment: "Confirmation when spot is saved")

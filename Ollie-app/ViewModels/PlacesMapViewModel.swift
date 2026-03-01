@@ -42,14 +42,6 @@ enum PlaceMarker: Identifiable {
         }
     }
 
-    var isFavorite: Bool {
-        switch self {
-        case .spot(let spot): return spot.isFavorite
-        case .discoveredSpot: return false
-        case .contact: return false
-        case .photoCluster: return false
-        }
-    }
 }
 
 /// ViewModel for managing the expanded places map state
@@ -96,9 +88,6 @@ class PlacesMapViewModel: ObservableObject {
         // Add spot markers
         if activeFilters.contains(.spots) {
             let filteredSpots = spotStore.spots.filter { spot in
-                // Include spot if favorites filter is off, or if it's a favorite
-                let passessFavoriteFilter = !activeFilters.contains(.favorites) || spot.isFavorite
-
                 // Include spot if it matches a selected category, or has no category
                 let passesCategoryFilter: Bool
                 if let category = spot.category {
@@ -108,7 +97,7 @@ class PlacesMapViewModel: ObservableObject {
                     passesCategoryFilter = selectedSpotCategories.contains(.other)
                 }
 
-                return passessFavoriteFilter && passesCategoryFilter
+                return passesCategoryFilter
             }
             markers.append(contentsOf: filteredSpots.map { .spot($0) })
         }
@@ -155,11 +144,6 @@ class PlacesMapViewModel: ObservableObject {
         if activeFilters.contains(.photos) {
             let clusters = momentsViewModel.clusterPhotos()
             markers.append(contentsOf: clusters.map { .photoCluster($0) })
-        }
-
-        // If favorites filter is active, only show favorites
-        if activeFilters.contains(.favorites) {
-            markers = markers.filter { $0.isFavorite }
         }
 
         return markers

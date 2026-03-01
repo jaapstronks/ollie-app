@@ -14,7 +14,6 @@ enum PlacesFilterCategory: String, CaseIterable, Identifiable {
     case discovered
     case contacts
     case photos
-    case favorites
 
     var id: String { rawValue }
 
@@ -24,7 +23,6 @@ enum PlacesFilterCategory: String, CaseIterable, Identifiable {
         case .discovered: return Strings.Places.filterDogParks
         case .contacts: return Strings.Places.filterContacts
         case .photos: return Strings.Places.filterPhotos
-        case .favorites: return Strings.Places.filterFavorites
         }
     }
 
@@ -34,7 +32,6 @@ enum PlacesFilterCategory: String, CaseIterable, Identifiable {
         case .discovered: return "dog.fill"
         case .contacts: return "person.fill"
         case .photos: return "camera.fill"
-        case .favorites: return "star.fill"
         }
     }
 
@@ -45,7 +42,6 @@ enum PlacesFilterCategory: String, CaseIterable, Identifiable {
         case .discovered: return .ollieInfo   // Blue - discovery
         case .contacts: return .olliePurple   // Purple - social/training
         case .photos: return .ollieAccent     // Gold - moments
-        case .favorites: return .ollieRose    // Rose - special
         }
     }
 }

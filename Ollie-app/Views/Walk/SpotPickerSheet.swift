@@ -128,35 +128,16 @@ struct SpotPickerSheet: View {
     private var savedSpotsSection: some View {
         ScrollView {
             LazyVStack(spacing: 16) {
-                // Favorites
-                if !spotStore.favoriteSpots.isEmpty {
+                // All spots (sorted by visit count)
+                if !spotStore.spots.isEmpty {
                     VStack(alignment: .leading, spacing: 8) {
-                        Text(Strings.WalkLocations.favorites)
+                        Text(Strings.WalkLocations.savedSpots)
                             .font(.caption)
                             .fontWeight(.semibold)
                             .foregroundStyle(.secondary)
                             .padding(.horizontal)
 
-                        ForEach(spotStore.favoriteSpots) { spot in
-                            SpotRowCompact(spot: spot, isSelected: selectedSpot?.id == spot.id)
-                                .onTapGesture {
-                                    selectSpot(spot)
-                                }
-                        }
-                        .padding(.horizontal)
-                    }
-                }
-
-                // Recent
-                if !spotStore.recentSpots.isEmpty {
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text(Strings.WalkLocations.recent)
-                            .font(.caption)
-                            .fontWeight(.semibold)
-                            .foregroundStyle(.secondary)
-                            .padding(.horizontal)
-
-                        ForEach(spotStore.recentSpots) { spot in
+                        ForEach(spotStore.popularSpots) { spot in
                             SpotRowCompact(spot: spot, isSelected: selectedSpot?.id == spot.id)
                                 .onTapGesture {
                                     selectSpot(spot)
@@ -167,12 +148,12 @@ struct SpotPickerSheet: View {
                 }
 
                 // Empty state
-                if spotStore.favoriteSpots.isEmpty && spotStore.recentSpots.isEmpty {
+                if spotStore.spots.isEmpty {
                     VStack(spacing: 8) {
                         Image(systemName: "mappin.slash")
                             .font(.largeTitle)
                             .foregroundStyle(.secondary)
-                        Text(Strings.WalkLocations.noRecentSpots)
+                        Text(Strings.WalkLocations.noSavedSpots)
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
                     }
