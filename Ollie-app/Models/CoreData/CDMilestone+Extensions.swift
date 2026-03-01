@@ -1,11 +1,41 @@
 //
 //  CDMilestone+Extensions.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Extensions for converting between Milestone and CDMilestone
 
 import CoreData
-import OllieShared
+import OtisShared
+
+// MARK: - CDEntityConvertible Conformance
+
+extension CDMilestone: CDEntityConvertible {
+    typealias Model = Milestone
+
+    static func fetchAll(in context: NSManagedObjectContext) -> [NSManagedObject] {
+        fetchAllMilestones(in: context)
+    }
+
+    static func fetch(byId id: UUID, in context: NSManagedObjectContext) -> NSManagedObject? {
+        let request = NSFetchRequest<CDMilestone>(entityName: "CDMilestone")
+        request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
+        request.fetchLimit = 1
+        return try? context.fetch(request).first
+    }
+
+    @discardableResult
+    static func create(from milestone: Milestone, in context: NSManagedObjectContext) -> NSManagedObject {
+        let cdMilestone = CDMilestone(context: context)
+        cdMilestone.update(from: milestone)
+        return cdMilestone
+    }
+
+    func toModel() -> Milestone? {
+        toMilestone()
+    }
+}
+
+// MARK: - Core Data Operations
 
 extension CDMilestone {
 
@@ -39,12 +69,6 @@ extension CDMilestone {
         self.modifiedAt = Date()
     }
 
-    /// Create a new CDMilestone from a Milestone struct
-    static func create(from milestone: Milestone, in context: NSManagedObjectContext) -> CDMilestone {
-        let cdMilestone = CDMilestone(context: context)
-        cdMilestone.update(from: milestone)
-        return cdMilestone
-    }
 
     // MARK: - Convert to Swift Struct
 
@@ -122,14 +146,6 @@ extension CDMilestone {
         request.predicate = NSPredicate(format: "isCompleted == NO")
         request.sortDescriptors = [NSSortDescriptor(keyPath: \CDMilestone.sortOrder, ascending: true)]
         return (try? context.fetch(request)) ?? []
-    }
-
-    /// Fetch milestone by ID
-    static func fetch(byId id: UUID, in context: NSManagedObjectContext) -> CDMilestone? {
-        let request = NSFetchRequest<CDMilestone>(entityName: "CDMilestone")
-        request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
-        request.fetchLimit = 1
-        return try? context.fetch(request).first
     }
 
     /// Fetch custom milestones only

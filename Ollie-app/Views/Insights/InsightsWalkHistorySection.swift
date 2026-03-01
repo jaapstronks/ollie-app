@@ -1,12 +1,12 @@
 //
 //  InsightsWalkHistorySection.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Walk history section
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Walk history section showing recent walks
 struct InsightsWalkHistorySection: View {
@@ -18,7 +18,7 @@ struct InsightsWalkHistorySection: View {
             InsightsSectionHeader(
                 title: Strings.Stats.walkHistory,
                 icon: "figure.walk",
-                tint: .ollieAccent
+                tint: .otisAccent
             )
 
             VStack(spacing: 12) {
@@ -58,7 +58,7 @@ struct InsightsWalkHistorySection: View {
 
                     Image(systemName: "figure.walk")
                         .font(.title)
-                        .foregroundStyle(Color.ollieAccent)
+                        .foregroundStyle(Color.otisAccent)
                 }
 
                 // Recent walks list (last 5)

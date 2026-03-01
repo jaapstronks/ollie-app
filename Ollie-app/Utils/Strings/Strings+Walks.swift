@@ -1,6 +1,6 @@
 //
 //  Strings+Walks.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Walks, locations, and spots strings
 
@@ -51,12 +51,10 @@ extension Strings {
         static let nameThisSpot = String(localized: "Name this spot", table: table)
         static let spotNamePlaceholder = String(localized: "e.g. Park, Trail, Corner", table: table)
         static let saveSpot = String(localized: "Save spot", table: table)
-        static let noFavorites = String(localized: "No favorite spots yet", table: table)
+        static let noSavedSpots = String(localized: "No saved spots yet", table: table)
         static let noRecentSpots = String(localized: "No recent spots", table: table)
-        static let addToFavorites = String(localized: "Add to favorites", table: table)
-        static let removeFromFavorites = String(localized: "Remove from favorites", table: table)
         static let deleteSpot = String(localized: "Delete spot", table: table)
-        static let favoriteSpots = String(localized: "Favorite spots", table: table)
+        static let savedPlaces = String(localized: "Saved places", table: table)
         static let manageSpots = String(localized: "Manage spots", table: table)
         static let gettingLocation = String(localized: "Getting location...", table: table)
         static let locationCaptured = String(localized: "Location captured", table: table)
@@ -100,6 +98,7 @@ extension Strings {
         static let created = String(localized: "Created", table: table)
         static let deleteConfirmMessage = String(localized: "This will permanently delete this spot.", table: table)
         static let notesOptional = String(localized: "Notes (optional)", table: table)
+        static let photoOptional = String(localized: "Photo (optional)", table: table)
         static let recapture = String(localized: "Recapture", table: table)
         static let tryAgain = String(localized: "Try again", table: table)
         static let pickOnMap = String(localized: "Pick on map", table: table)
@@ -107,6 +106,12 @@ extension Strings {
         static let moveMapToSelect = String(localized: "Move map to position the pin", table: table)
         static let photosHere = String(localized: "Photos here", table: table)
         static let noPhotosHint = String(localized: "No photos yet. Take one on your next visit!", table: table)
+
+        // Place personality stats
+        static let firstVisited = String(localized: "First visited", table: table)
+        static let dogsMet = String(localized: "Dogs met", table: table)
+        static let pottySuccesses = String(localized: "Potty successes", table: table)
+        static let placeStats = String(localized: "Place stats", table: table)
     }
 
     // MARK: - Edit Walk

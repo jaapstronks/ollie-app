@@ -1,5 +1,5 @@
 #!/bin/bash
-# Ollie App - UI Test Runner
+# Otis App - UI Test Runner
 # Generates Claude-parseable test reports with screenshots
 
 set -e
@@ -90,7 +90,7 @@ mkdir -p "$REPORT_DIR"
 mkdir -p "$SCREENSHOTS_DIR"
 
 echo -e "${BLUE}╔════════════════════════════════════════════════════════════╗${NC}"
-echo -e "${BLUE}║              Ollie App - UI Test Runner                    ║${NC}"
+echo -e "${BLUE}║              Otis App - UI Test Runner                    ║${NC}"
 echo -e "${BLUE}╚════════════════════════════════════════════════════════════╝${NC}"
 echo ""
 echo -e "${YELLOW}Timestamp:${NC} $TIMESTAMP"

@@ -1,6 +1,6 @@
 //
 //  Strings+CoverageGap.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Localization strings for Coverage Gap feature
 //

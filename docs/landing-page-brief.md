@@ -1,29 +1,29 @@
 # Landing Page Brief
 
 ## Brand
-- **Tagline:** Puppyhood is chaos. Ollie brings the calm.
+- **Tagline:** Puppyhood is chaos. Otis brings the calm.
 - **Tone:** Warm, honest, slightly funny. Speaks to the overwhelm without being patronizing.
 
 ---
 
 ## Hero Section
 **Headline:**
-> Puppyhood is chaos. Ollie brings the calm.
+> Puppyhood is chaos. Otis brings the calm.
 
 **Subheadline:**
 > Track meals, potty, sleep & walks — and actually understand what your puppy needs.
 
 **CTA:** Download on the App Store
-**Secondary CTA:** See a day with Ollie →
+**Secondary CTA:** See a day with Otis →
 
 ---
 
 ## Value Proposition
 **Headline:**
-> Your puppy lives in the now. Ollie helps you think ahead.
+> Your puppy lives in the now. Otis helps you think ahead.
 
 **Body:**
-> Log your puppy's day in seconds. Ollie spots the patterns you can't see yet — so you know when the next potty break is coming, whether they slept enough, and if that second walk actually helped.
+> Log your puppy's day in seconds. Otis spots the patterns you can't see yet — so you know when the next potty break is coming, whether they slept enough, and if that second walk actually helped.
 
 ---
 

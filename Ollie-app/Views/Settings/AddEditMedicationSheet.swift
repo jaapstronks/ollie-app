@@ -1,12 +1,12 @@
 //
 //  AddEditMedicationSheet.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Form for creating/editing medications
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Sheet for adding or editing a medication
 struct AddEditMedicationSheet: View {
@@ -115,7 +115,7 @@ struct AddEditMedicationSheet: View {
                                 .frame(width: 44, height: 44)
                                 .background(
                                     Circle()
-                                        .fill(icon == iconName ? Color.ollieAccent : Color.secondary.opacity(0.1))
+                                        .fill(icon == iconName ? Color.otisAccent : Color.secondary.opacity(0.1))
                                 )
                                 .foregroundStyle(icon == iconName ? .white : .primary)
                         }
@@ -172,7 +172,7 @@ struct AddEditMedicationSheet: View {
                             .frame(width: 36, height: 36)
                             .background(
                                 Circle()
-                                    .fill(selectedDays.contains(dayIndex) ? Color.ollieAccent : Color.secondary.opacity(0.1))
+                                    .fill(selectedDays.contains(dayIndex) ? Color.otisAccent : Color.secondary.opacity(0.1))
                             )
                             .foregroundStyle(selectedDays.contains(dayIndex) ? .white : .primary)
                     }

@@ -34,6 +34,18 @@
         }
       }
     },
+    "at" : {
+      "comment" : "Preposition used to indicate time, e.g. 'Vroege middag om 16:43'",
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "om"
+          }
+        }
+      }
+    },
     "Back" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -41,6 +53,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Terug"
+          }
+        }
+      }
+    },
+    "Calendar" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Agenda"
           }
         }
       }
@@ -364,13 +387,13 @@
         }
       }
     },
-    "Ollie" : {
+    "Otis" : {
       "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ollie"
+            "value" : "Otis"
           }
         }
       }
@@ -419,17 +442,6 @@
         }
       }
     },
-    "Places" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Plekken"
-          }
-        }
-      }
-    },
     "Plan" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -463,13 +475,13 @@
         }
       }
     },
-    "Puppyhood is chaos. Ollie brings the calm." : {
+    "Puppyhood is chaos. Otis brings the calm." : {
       "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Puppytijd is chaos. Ollie brengt rust."
+            "value" : "Puppytijd is chaos. Otis brengt rust."
           }
         }
       }
@@ -492,6 +504,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Bewaar"
+          }
+        }
+      }
+    },
+    "Schedule" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Agenda"
           }
         }
       }
@@ -679,6 +702,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Wandelingen"
+          }
+        }
+      }
+    },
+    "week" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "week"
           }
         }
       }

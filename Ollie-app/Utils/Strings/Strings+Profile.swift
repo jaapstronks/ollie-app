@@ -1,0 +1,22 @@
+//
+//  Strings+Profile.swift
+//  Otis-app
+//
+//  Profile photo related strings
+
+import Foundation
+
+private let table = "Settings"
+
+extension Strings {
+
+    // MARK: - Profile Photo
+    enum Profile {
+        static let addPhoto = String(localized: "Add Photo", table: table)
+        static let changePhoto = String(localized: "Change Photo", table: table)
+        static let removePhoto = String(localized: "Remove Photo", table: table)
+        static let photoTitle = String(localized: "Profile Photo", table: table)
+        static let adjustPhoto = String(localized: "Adjust Photo", table: table)
+        static let cropHint = String(localized: "Pinch to zoom, drag to position", table: table)
+    }
+}

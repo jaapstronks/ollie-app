@@ -1,6 +1,6 @@
 //
 //  Strings+Health.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Health and medications strings
 
@@ -18,6 +18,7 @@ extension Strings {
         static let noWeightData = String(localized: "No weight data yet", table: table)
         static let logFirstWeight = String(localized: "Log your first weight measurement", table: table)
         static let logWeight = String(localized: "Log weight", table: table)
+        static let measurementDate = String(localized: "Date", table: table, comment: "Label for weight measurement date picker")
         static let currentWeight = String(localized: "Current weight", table: table)
         static let growthCurve = String(localized: "Growth curve", table: table)
         static let referenceRange = String(localized: "Reference range", table: table)
@@ -35,9 +36,21 @@ extension Strings {
             String(localized: "\(delta) since \(date)", table: table)
         }
 
+        // Accessibility
+        static func currentWeight(_ weight: String) -> String {
+            String(localized: "Current weight: \(weight)", table: table)
+        }
+        static func weightIncreased(_ delta: String) -> String {
+            String(localized: "Gained \(delta)", table: table)
+        }
+        static func weightDecreased(_ delta: String) -> String {
+            String(localized: "Lost \(delta)", table: table)
+        }
+
         // Chart
         static let weeks = String(localized: "Weeks", table: table)
         static let kg = String(localized: "kg", table: table)
+        static let lbs = String(localized: "lbs", table: table)
         static let yourPuppy = String(localized: "Your puppy", table: table)
         static let reference = String(localized: "Reference", table: table)
 
@@ -46,6 +59,8 @@ extension Strings {
         static let nextUp = String(localized: "Next up", table: table)
         static let future = String(localized: "Upcoming", table: table)
         static let overdue = String(localized: "Overdue", table: table)
+        static let medicalMilestones = String(localized: "Medical Milestones", table: table)
+        static let noMedicalMilestones = String(localized: "No medical milestones yet", table: table)
 
         // Default milestones (Dutch vaccination schedule)
         static let firstDewormingBreeder = String(localized: "First deworming (breeder)", table: table)
@@ -67,8 +82,10 @@ extension Strings {
 
         // Weight log sheet
         static let weightKg = String(localized: "Weight (kg)", table: table)
+        static let weightLbs = String(localized: "Weight (lbs)", table: table)
         static let enterWeight = String(localized: "Enter weight", table: table)
         static let weightPlaceholder = String(localized: "e.g. 8.5", table: table)
+        static let weightPlaceholderLbs = String(localized: "e.g. 18.7", table: table)
 
         // Milestone sections
         static let upcomingMilestones = String(localized: "Coming Up", table: table)
@@ -120,7 +137,7 @@ extension Strings {
         static let milestoneDogLicense = String(localized: "Dog license", table: table)
         static let milestoneDogLicenseDetail = String(localized: "Register with your municipality if required", table: table)
 
-        // Custom milestone (Ollie+)
+        // Custom milestone (Otis+)
         static let customMilestoneTitle = String(localized: "Title", table: table)
         static let customMilestoneDate = String(localized: "Date", table: table)
         static let customMilestoneCategory = String(localized: "Category", table: table)
@@ -145,6 +162,38 @@ extension Strings {
 
         static func daysAgo(_ days: Int) -> String {
             String(localized: "\(days)d ago", table: table)
+        }
+
+        // Medical Timeline
+        static let medicalTimeline = String(localized: "Medical Timeline", table: table)
+        static let birth = String(localized: "Birth", table: table)
+        static let noMedicalHistory = String(localized: "No medical history yet", table: table)
+        static let noMedicalHistoryHint = String(localized: "Health milestones and vet appointments will appear here", table: table)
+        static func ageAtEvent(weeks: Int) -> String {
+            if weeks == 0 {
+                return String(localized: "Birth", table: table)
+            } else if weeks < 4 {
+                return String(localized: "Week \(weeks)", table: table)
+            } else if weeks < 52 {
+                let months = weeks / 4
+                return String(localized: "\(months) months", table: table)
+            } else {
+                let years = weeks / 52
+                return String(localized: "\(years) year(s)", table: table)
+            }
+        }
+        static func currentAge(weeks: Int) -> String {
+            if weeks < 52 {
+                return String(localized: "Currently \(weeks) weeks old", table: table)
+            } else {
+                let years = weeks / 52
+                let remainingWeeks = weeks % 52
+                if remainingWeeks == 0 {
+                    return String(localized: "Currently \(years) year(s) old", table: table)
+                } else {
+                    return String(localized: "Currently \(years) year(s) and \(remainingWeeks) weeks old", table: table)
+                }
+            }
         }
     }
 

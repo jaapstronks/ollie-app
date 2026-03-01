@@ -1,11 +1,11 @@
 //
 //  SpotMapView.swift
-//  Ollie-app
+//  Otis-app
 //
 //  MapKit mini-map component for displaying a single location
 
 import SwiftUI
-import OllieShared
+import OtisShared
 import MapKit
 
 /// Non-interactive mini-map showing a single pinned location
@@ -31,7 +31,7 @@ struct SpotMapView: View {
                 VStack(spacing: 2) {
                     Image(systemName: "mappin.circle.fill")
                         .font(.title)
-                        .foregroundStyle(Color.ollieAccent)
+                        .foregroundStyle(Color.otisAccent)
                         .background(
                             Circle()
                                 .fill(.white)

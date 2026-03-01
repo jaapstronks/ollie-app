@@ -1,10 +1,10 @@
 //
 //  PottyProgressCard.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Compact card showing potty training progress: streak, outdoor %, and top triggers
 
-import OllieShared
+import OtisShared
 import SwiftUI
 
 /// Compact potty progress card for the Train tab
@@ -28,7 +28,7 @@ struct PottyProgressCard: View {
             // Header
             HStack {
                 Image(systemName: "target")
-                    .foregroundStyle(Color.ollieAccent)
+                    .foregroundStyle(Color.otisAccent)
                 Text(Strings.Train.pottyProgress)
                     .font(.headline)
                     .fontWeight(.semibold)
@@ -94,10 +94,10 @@ struct PottyProgressCard: View {
 
     private var percentageColor: Color {
         switch outdoorPercentage {
-        case 90...: return .ollieSuccess
-        case 70...: return .ollieAccent
-        case 50...: return .orange
-        default: return .ollieWarning
+        case 90...: return .otisSuccess
+        case 70...: return .otisAccent
+        case 50...: return .otisWarning
+        default: return .otisDanger
         }
     }
 
@@ -156,9 +156,9 @@ struct PottyProgressCard: View {
         ),
         patternAnalysis: PatternAnalysis(
             triggers: [
-                PatternTrigger(id: "sleep", name: Strings.Patterns.afterSleep, iconName: "moon.zzz.fill", iconColor: .ollieSleep, outdoorCount: 9, indoorCount: 1),
-                PatternTrigger(id: "meal", name: Strings.Patterns.afterEating, iconName: "fork.knife", iconColor: .ollieAccent, outdoorCount: 7, indoorCount: 2),
-                PatternTrigger(id: "walk", name: Strings.Patterns.duringWalk, iconName: "figure.walk", iconColor: .ollieAccent, outdoorCount: 10, indoorCount: 0)
+                PatternTrigger(id: "sleep", name: Strings.Patterns.afterSleep, iconName: "moon.zzz.fill", iconColor: .otisSleep, outdoorCount: 9, indoorCount: 1),
+                PatternTrigger(id: "meal", name: Strings.Patterns.afterEating, iconName: "fork.knife", iconColor: .otisAccent, outdoorCount: 7, indoorCount: 2),
+                PatternTrigger(id: "walk", name: Strings.Patterns.duringWalk, iconName: "figure.walk", iconColor: .otisAccent, outdoorCount: 10, indoorCount: 0)
             ],
             periodDays: 7
         ),

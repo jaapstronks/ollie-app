@@ -1,10 +1,10 @@
 //
 //  MediaCaptureViewModel.swift
-//  Ollie-app
+//  Otis-app
 //
 
 import Foundation
-import OllieShared
+import OtisShared
 import UIKit
 import Combine
 

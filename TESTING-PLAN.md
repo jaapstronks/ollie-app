@@ -1,4 +1,4 @@
-# Ollie App UI/UX Testing Plan
+# Otis App UI/UX Testing Plan
 
 ## Testing System Overview
 
@@ -440,7 +440,7 @@ Naming convention: `{test-id}-{step}-{timestamp}.png`
 ## How to Run Tests
 
 ### Before Testing Session
-1. Open Ollie app in Simulator
+1. Open Otis app in Simulator
 2. Note current date/time
 3. Check existing data state
 4. Decide which test category to focus on

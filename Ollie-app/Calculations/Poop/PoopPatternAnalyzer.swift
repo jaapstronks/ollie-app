@@ -1,12 +1,12 @@
 //
 //  PoopPatternAnalyzer.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Analyzes historical poop patterns for pattern-aware predictions
 //
 
 import Foundation
-import OllieShared
+import OtisShared
 
 /// Analyzes historical poop patterns
 struct PoopPatternAnalyzer {

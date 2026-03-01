@@ -1,5 +1,5 @@
 #!/bin/bash
-# Ollie App - Test and Prepare for Analysis
+# Otis App - Test and Prepare for Analysis
 # Runs UI tests and prepares output for Claude Code analysis
 
 set -e
@@ -16,7 +16,7 @@ BLUE='\033[0;34m'
 NC='\033[0m'
 
 echo -e "${BLUE}╔════════════════════════════════════════════════════════════╗${NC}"
-echo -e "${BLUE}║         Ollie App - Test & Prepare for Analysis            ║${NC}"
+echo -e "${BLUE}║         Otis App - Test & Prepare for Analysis            ║${NC}"
 echo -e "${BLUE}╚════════════════════════════════════════════════════════════╝${NC}"
 echo ""
 
@@ -37,7 +37,7 @@ echo -e "${GREEN}Simulator detected:${NC} $BOOTED_SIM"
 echo ""
 
 # Check if app is installed
-APP_INSTALLED=$(xcrun simctl listapps booted 2>/dev/null | grep "jaapstronks.Ollie-app" || true)
+APP_INSTALLED=$(xcrun simctl listapps booted 2>/dev/null | grep "jaapstronks.Otis-app" || true)
 if [ -z "$APP_INSTALLED" ]; then
     echo -e "${YELLOW}App not installed on simulator.${NC}"
     echo ""

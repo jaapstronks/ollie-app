@@ -1,173 +1,153 @@
 //
 //  SpotStore.swift
-//  Ollie-app
+//  Otis-app
 //
 //  CRUD operations and persistence for WalkSpot with Core Data and automatic CloudKit sync
 //
 
 import Foundation
 import CoreData
-import OllieShared
-import Combine
-import os
+import OtisShared
 
 /// Manages saved walk spots with Core Data and automatic CloudKit sync
 @MainActor
-class SpotStore: ObservableObject {
+final class SpotStore: CRUDStore<WalkSpot, CDWalkSpot> {
 
-    // MARK: - Published State
+    // MARK: - Cached Computed Properties
 
-    @Published var spots: [WalkSpot] = []
-    @Published private(set) var isSyncing = false
+    private var _cachedRecentSpots: [WalkSpot]?
+    private var _cachedPopularSpots: [WalkSpot]?
 
-    private let persistenceController: PersistenceController
-    private let logger = Logger.ollie(category: "SpotStore")
-    private var cancellables = Set<AnyCancellable>()
+    // MARK: - Sort Order
 
-    private var viewContext: NSManagedObjectContext {
-        persistenceController.viewContext
-    }
-
-    // MARK: - Computed Properties
-
-    /// Spots marked as favorite, sorted by name
-    var favoriteSpots: [WalkSpot] {
-        spots.filter { $0.isFavorite }.sorted { $0.name < $1.name }
-    }
-
-    /// Most recently used spots (last 5, non-favorites)
-    var recentSpots: [WalkSpot] {
-        spots
-            .filter { !$0.isFavorite }
-            .sorted { $0.createdAt > $1.createdAt }
-            .prefix(5)
-            .map { $0 }
-    }
-
-    /// All spots sorted by visit count (most visited first)
-    var popularSpots: [WalkSpot] {
-        spots.sorted { $0.visitCount > $1.visitCount }
+    override var sortOrder: StoreSortOrder<WalkSpot> {
+        .custom { spot1, spot2 in
+            // Sort by visit count (most visited first)
+            spot1.visitCount > spot2.visitCount
+        }
     }
 
     // MARK: - Init
 
     init(persistenceController: PersistenceController = .shared) {
-        self.persistenceController = persistenceController
-        loadSpots()
-        setupRemoteChangeObserver()
+        super.init(persistenceController: persistenceController, logCategory: "SpotStore")
     }
 
-    // MARK: - Setup
+    // MARK: - Data Loading
 
-    private func setupRemoteChangeObserver() {
-        NotificationCenter.default.publisher(for: .NSPersistentStoreRemoteChange)
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.handleRemoteChange()
-            }
-            .store(in: &cancellables)
+    override func performInitialLoad() {
+        invalidateCaches()
+        super.performInitialLoad()
     }
 
-    private func handleRemoteChange() {
-        logger.debug("Detected CloudKit remote change for spots")
-        loadSpots()
+    private func invalidateCaches() {
+        _cachedRecentSpots = nil
+        _cachedPopularSpots = nil
     }
 
-    // MARK: - Initial Sync
+    // MARK: - Backward-Compatible Aliases
 
-    /// Perform initial sync on app launch
-    func initialSync() async {
-        // With NSPersistentCloudKitContainer, sync is automatic
-        viewContext.refreshAllObjects()
-        loadSpots()
+    /// Alias for items (backward compatibility)
+    var spots: [WalkSpot] { items }
+
+    // MARK: - Cached Computed Properties
+
+    /// Most recently added spots (last 5)
+    var recentSpots: [WalkSpot] {
+        if let cached = _cachedRecentSpots { return cached }
+        let result = items
+            .sorted { $0.createdAt > $1.createdAt }
+            .prefix(5)
+            .map { $0 }
+        _cachedRecentSpots = result
+        return result
     }
 
-    // MARK: - CRUD Operations
+    /// All spots sorted by visit count (most visited first)
+    var popularSpots: [WalkSpot] {
+        if let cached = _cachedPopularSpots { return cached }
+        let result = items.sorted { $0.visitCount > $1.visitCount }
+        _cachedPopularSpots = result
+        return result
+    }
 
-    /// Add a new spot
-    func addSpot(_ spot: WalkSpot) {
-        _ = CDWalkSpot.create(from: spot, in: viewContext)
+    // MARK: - CRUD Operations (with cache invalidation)
 
-        do {
-            try persistenceController.save()
-            spots.append(spot)
-        } catch {
-            logger.error("Failed to add spot: \(error.localizedDescription)")
-        }
+    @discardableResult
+    override func add(_ item: WalkSpot) -> Bool {
+        invalidateCaches()
+        return super.add(item)
+    }
+
+    @discardableResult
+    override func update(_ item: WalkSpot) -> Bool {
+        invalidateCaches()
+        return super.update(item.withUpdatedTimestamp())
+    }
+
+    @discardableResult
+    override func delete(_ item: WalkSpot) -> Bool {
+        invalidateCaches()
+        return super.delete(item)
+    }
+
+    // MARK: - Backward-Compatible CRUD
+
+    /// Add a new spot (backward-compatible alias)
+    @discardableResult
+    func addSpot(_ spot: WalkSpot) -> Bool {
+        add(spot)
     }
 
     /// Create and add a spot from coordinates
-    func addSpot(name: String, latitude: Double, longitude: Double, notes: String? = nil) -> WalkSpot {
+    @discardableResult
+    func addSpot(name: String, latitude: Double, longitude: Double, notes: String? = nil, photoFilename: String? = nil) -> WalkSpot {
         let spot = WalkSpot(
             name: name,
             latitude: latitude,
             longitude: longitude,
-            notes: notes
+            notes: notes,
+            photoFilename: photoFilename
         )
-        addSpot(spot)
+        add(spot)
         return spot
     }
 
-    /// Update an existing spot
-    func updateSpot(_ spot: WalkSpot) {
-        let updatedSpot = spot.withUpdatedTimestamp()
-
-        if let existing = CDWalkSpot.fetch(byId: spot.id, in: viewContext) {
-            existing.update(from: updatedSpot)
-
-            do {
-                try persistenceController.save()
-                if let index = spots.firstIndex(where: { $0.id == spot.id }) {
-                    spots[index] = updatedSpot
-                }
-            } catch {
-                logger.error("Failed to update spot: \(error.localizedDescription)")
-            }
-        }
+    /// Update an existing spot (backward-compatible alias)
+    @discardableResult
+    func updateSpot(_ spot: WalkSpot) -> Bool {
+        update(spot)
     }
 
-    /// Delete a spot
-    func deleteSpot(_ spot: WalkSpot) {
-        if let existing = CDWalkSpot.fetch(byId: spot.id, in: viewContext) {
-            viewContext.delete(existing)
-
-            do {
-                try persistenceController.save()
-                spots.removeAll { $0.id == spot.id }
-            } catch {
-                logger.error("Failed to delete spot: \(error.localizedDescription)")
-            }
-        }
+    /// Delete a spot (backward-compatible alias)
+    @discardableResult
+    func deleteSpot(_ spot: WalkSpot) -> Bool {
+        delete(spot)
     }
 
     /// Delete spot by ID
     func deleteSpot(id: UUID) {
-        guard let spot = spots.first(where: { $0.id == id }) else { return }
-        deleteSpot(spot)
+        guard let spot = item(withId: id) else { return }
+        delete(spot)
     }
 
-    /// Toggle favorite status
-    func toggleFavorite(_ spot: WalkSpot) {
-        guard var updatedSpot = spots.first(where: { $0.id == spot.id }) else { return }
-        updatedSpot.isFavorite.toggle()
-        updateSpot(updatedSpot)
-    }
+    // MARK: - Domain-Specific Operations
 
     /// Increment visit count for a spot
     func incrementVisitCount(_ spot: WalkSpot) {
-        guard var updatedSpot = spots.first(where: { $0.id == spot.id }) else { return }
+        guard var updatedSpot = item(withId: spot.id) else { return }
         updatedSpot.visitCount += 1
-        updateSpot(updatedSpot)
+        update(updatedSpot)
     }
 
-    /// Find spot by ID
+    /// Find spot by ID (backward-compatible alias)
     func spot(withId id: UUID) -> WalkSpot? {
-        spots.first { $0.id == id }
+        item(withId: id)
     }
 
     /// Find spots near a location (within ~100m)
     func spotsNear(latitude: Double, longitude: Double, radiusMeters: Double = 100) -> [WalkSpot] {
-        spots.filter { spot in
+        filter { spot in
             let distance = haversineDistance(
                 lat1: latitude, lon1: longitude,
                 lat2: spot.latitude, lon2: spot.longitude
@@ -176,31 +156,11 @@ class SpotStore: ObservableObject {
         }
     }
 
-    // MARK: - Persistence
-
-    private func loadSpots() {
-        let cdSpots = CDWalkSpot.fetchAllSpots(in: viewContext)
-        spots = cdSpots.compactMap { $0.toWalkSpot() }
-    }
-
-    // MARK: - Sync
-
-    /// Fetch from CloudKit (no-op with automatic sync)
-    func fetchFromCloud() async {
-        viewContext.refreshAllObjects()
-        loadSpots()
-    }
-
-    /// Force a full sync with CloudKit
-    func forceSync() async {
-        await fetchFromCloud()
-    }
-
     // MARK: - Helpers
 
     /// Calculate distance between two coordinates using Haversine formula
     private func haversineDistance(lat1: Double, lon1: Double, lat2: Double, lon2: Double) -> Double {
-        let earthRadius: Double = 6371000 // meters
+        let earthRadius: Double = 6_371_000 // meters
 
         let dLat = (lat2 - lat1) * .pi / 180
         let dLon = (lon2 - lon1) * .pi / 180

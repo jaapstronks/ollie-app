@@ -1,11 +1,11 @@
 //
 //  FavoriteSpotsView.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Settings screen for managing favorite walk spots
 
 import SwiftUI
-import OllieShared
+import OtisShared
 import MapKit
 
 /// Full-screen view for managing favorite walk spots
@@ -26,53 +26,14 @@ struct FavoriteSpotsView: View {
                 }
             }
 
-            // Favorites section
-            if !spotStore.favoriteSpots.isEmpty {
-                Section(Strings.WalkLocations.favorites) {
-                    ForEach(spotStore.favoriteSpots) { spot in
+            // All spots section (sorted by visit count)
+            if !spotStore.spots.isEmpty {
+                Section {
+                    ForEach(spotStore.spots.sorted { $0.visitCount > $1.visitCount }) { spot in
                         NavigationLink {
                             SpotDetailView(spotStore: spotStore, spot: spot)
                         } label: {
-                            SpotRowView(
-                                spot: spot,
-                                onFavoriteToggle: {
-                                    spotStore.toggleFavorite(spot)
-                                }
-                            )
-                        }
-                        .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                            Button(role: .destructive) {
-                                spotStore.deleteSpot(spot)
-                            } label: {
-                                Label(Strings.Common.delete, systemImage: "trash")
-                            }
-                        }
-                        .swipeActions(edge: .leading) {
-                            Button {
-                                openInMaps(spot)
-                            } label: {
-                                Label(Strings.WalkLocations.openInMaps, systemImage: "map")
-                            }
-                            .tint(.blue)
-                        }
-                    }
-                }
-            }
-
-            // Other spots section
-            let otherSpots = spotStore.spots.filter { !$0.isFavorite }
-            if !otherSpots.isEmpty {
-                Section(Strings.WalkLocations.recent) {
-                    ForEach(otherSpots.sorted { $0.visitCount > $1.visitCount }) { spot in
-                        NavigationLink {
-                            SpotDetailView(spotStore: spotStore, spot: spot)
-                        } label: {
-                            SpotRowView(
-                                spot: spot,
-                                onFavoriteToggle: {
-                                    spotStore.toggleFavorite(spot)
-                                }
-                            )
+                            SpotRowView(spot: spot)
                         }
                         .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                             Button(role: .destructive) {
@@ -101,7 +62,7 @@ struct FavoriteSpotsView: View {
                             .font(.largeTitle)
                             .foregroundStyle(.secondary)
 
-                        Text(Strings.WalkLocations.noRecentSpots)
+                        Text(Strings.WalkLocations.noSavedSpots)
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
                             .multilineTextAlignment(.center)
@@ -111,18 +72,18 @@ struct FavoriteSpotsView: View {
                 }
             }
         }
-        .navigationTitle(Strings.WalkLocations.favoriteSpots)
+        .navigationTitle(Strings.WalkLocations.savedPlaces)
         .sheet(isPresented: $showingMap) {
             AllSpotsMapView(spots: spotStore.spots)
         }
     }
 
     private func openInMaps(_ spot: WalkSpot) {
-        let coordinate = CLLocationCoordinate2D(latitude: spot.latitude, longitude: spot.longitude)
-        let location = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
-        let mapItem = MKMapItem(location: location, address: nil)
-        mapItem.name = spot.name
-        mapItem.openInMaps()
+        MapsService.openLocation(
+            latitude: spot.latitude,
+            longitude: spot.longitude,
+            name: spot.name
+        )
     }
 }
 
@@ -170,9 +131,9 @@ struct AllSpotsMapView: View {
                 ForEach(spots) { spot in
                     Annotation(spot.name, coordinate: CLLocationCoordinate2D(latitude: spot.latitude, longitude: spot.longitude)) {
                         VStack(spacing: 2) {
-                            Image(systemName: spot.isFavorite ? "star.circle.fill" : "mappin.circle.fill")
+                            Image(systemName: "mappin.circle.fill")
                                 .font(.title2)
-                                .foregroundStyle(spot.isFavorite ? .yellow : .ollieAccent)
+                                .foregroundStyle(Color.otisAccent)
                                 .background(
                                     Circle()
                                         .fill(.white)
@@ -190,7 +151,7 @@ struct AllSpotsMapView: View {
                     }
                 }
             }
-            .navigationTitle(Strings.WalkLocations.favoriteSpots)
+            .navigationTitle(Strings.WalkLocations.savedPlaces)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
@@ -207,7 +168,6 @@ struct SpotAnnotation: Identifiable {
     let id: UUID
     let name: String
     let coordinate: CLLocationCoordinate2D
-    let isFavorite: Bool
 }
 
 /// Compact map preview showing all spots (non-interactive)
@@ -249,9 +209,9 @@ struct AllSpotsPreviewMap: View {
         Map(initialPosition: cameraPosition) {
             ForEach(spots) { spot in
                 Annotation("", coordinate: CLLocationCoordinate2D(latitude: spot.latitude, longitude: spot.longitude)) {
-                    Image(systemName: spot.isFavorite ? "star.circle.fill" : "mappin.circle.fill")
+                    Image(systemName: "mappin.circle.fill")
                         .font(.title3)
-                        .foregroundStyle(spot.isFavorite ? .yellow : .ollieAccent)
+                        .foregroundStyle(Color.otisAccent)
                         .background(
                             Circle()
                                 .fill(.white)

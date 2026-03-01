@@ -1,11 +1,11 @@
 //
 //  SharedProfile.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Minimal profile for App Intents - shared via App Group
 
 import Foundation
-import OllieShared
+import OtisShared
 
 /// Minimal profile struct shared with App Intents via App Group
 /// Contains only what intents need to function

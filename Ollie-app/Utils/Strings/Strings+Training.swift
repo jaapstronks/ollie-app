@@ -1,6 +1,6 @@
 //
 //  Strings+Training.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Training module strings including skill content
 
@@ -19,6 +19,19 @@ extension Strings {
         static let dayStreak = String(localized: "day streak", table: table)
         static let topTriggers = String(localized: "Top triggers", table: table)
         static let allCategories = String(localized: "All categories", table: table)
+
+        // Accessibility
+        static let progressRingAccessibility = String(localized: "Training progress", table: table)
+        static func progressValue(started: Int, total: Int) -> String {
+            String(localized: "\(started) of \(total) skills started", table: table)
+        }
+        static func skillAccessibility(name: String, status: String) -> String {
+            String(localized: "\(name), \(status)", table: table)
+        }
+        static let skillNotStarted = String(localized: "not started", table: table)
+        static let skillStarted = String(localized: "started", table: table)
+        static let skillPracticing = String(localized: "practicing", table: table)
+        static let skillMastered = String(localized: "mastered", table: table)
     }
 
     // MARK: - Training
@@ -63,6 +76,7 @@ extension Strings {
         static let tips = String(localized: "Tips", table: table)
         static let recentSessions = String(localized: "Recent sessions", table: table)
         static let logSession = String(localized: "Log session", table: table)
+        static let trainInApp = String(localized: "Train in-app", table: table)
         static let markMastered = String(localized: "Mark as mastered", table: table)
         static let unmarkMastered = String(localized: "Unmark mastered", table: table)
 

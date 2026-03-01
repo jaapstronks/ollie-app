@@ -1,12 +1,12 @@
 //
 //  PottyProgressSummaryCard.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Compact card combining streak and poop count in a single row
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Compact inline card showing both streak and poop stats in a single row
 /// Design: two stat "pills" side by side with subtle glass styling

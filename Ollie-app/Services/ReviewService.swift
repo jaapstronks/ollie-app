@@ -1,6 +1,6 @@
 //
 //  ReviewService.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Handles App Store review request timing
 //

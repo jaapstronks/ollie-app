@@ -1,11 +1,11 @@
 //
 //  SpotDetailView.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Full-screen detail view for a walk spot with inline editing
 
 import SwiftUI
-import OllieShared
+import OtisShared
 import MapKit
 
 /// Full detail view for viewing and editing a walk spot
@@ -21,6 +21,10 @@ struct SpotDetailView: View {
     @State private var isEditing = false
     @State private var showingDeleteConfirmation = false
     @State private var selectedPhotoEvent: PuppyEvent?
+    @State private var placeStats: PlaceStats?
+    @State private var showingPhotoOptions = false
+    @State private var showingMediaPicker = false
+    @State private var selectedMediaSource: MediaPickerSource = .library
 
     /// Full initializer with photo support
     init(spotStore: SpotStore, spot: WalkSpot, momentsViewModel: MomentsViewModel) {
@@ -57,17 +61,66 @@ struct SpotDetailView: View {
         GridItem(.flexible(), spacing: 4)
     ]
 
+    /// Load spot photo from storage
+    private var spotPhoto: UIImage? {
+        guard let filename = currentSpot.photoFilename else { return nil }
+        return SpotPhotoStore.shared.load(filename: filename)
+    }
+
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
-                // Map preview
-                SpotMapView(
-                    latitude: currentSpot.latitude,
-                    longitude: currentSpot.longitude,
-                    spotName: currentSpot.name
-                )
-                .frame(height: 200)
-                .padding(.horizontal)
+                // Spot photo (if available) or map preview
+                if let photo = spotPhoto {
+                    ZStack(alignment: .bottomTrailing) {
+                        Image(uiImage: photo)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(height: 200)
+                            .clipped()
+
+                        // Edit photo button when editing
+                        if isEditing {
+                            Button {
+                                showingPhotoOptions = true
+                            } label: {
+                                Image(systemName: "pencil.circle.fill")
+                                    .font(.title)
+                                    .foregroundStyle(.white)
+                                    .shadow(radius: 2)
+                            }
+                            .padding(12)
+                        }
+                    }
+                    .padding(.horizontal)
+                } else {
+                    // Map preview when no photo
+                    ZStack(alignment: .bottomTrailing) {
+                        SpotMapView(
+                            latitude: currentSpot.latitude,
+                            longitude: currentSpot.longitude,
+                            spotName: currentSpot.name
+                        )
+                        .frame(height: 200)
+
+                        // Add photo button when editing
+                        if isEditing {
+                            Button {
+                                showingPhotoOptions = true
+                            } label: {
+                                Label(Strings.MediaAttachment.addPhoto, systemImage: "photo.badge.plus")
+                                    .font(.caption)
+                                    .fontWeight(.medium)
+                                    .padding(.horizontal, 10)
+                                    .padding(.vertical, 6)
+                                    .background(.ultraThinMaterial)
+                                    .clipShape(Capsule())
+                            }
+                            .padding(8)
+                        }
+                    }
+                    .padding(.horizontal)
+                }
 
                 // Spot details card
                 VStack(alignment: .leading, spacing: 16) {
@@ -145,6 +198,11 @@ struct SpotDetailView: View {
                 .cornerRadius(LayoutConstants.cornerRadiusM)
                 .padding(.horizontal)
 
+                // Place stats section
+                if let stats = placeStats, stats.hasStats {
+                    placeStatsSection(stats: stats)
+                }
+
                 // Photos section
                 if !photosHere.isEmpty {
                     photosSection
@@ -152,22 +210,6 @@ struct SpotDetailView: View {
 
                 // Actions
                 VStack(spacing: 12) {
-                    // Favorite toggle
-                    Button {
-                        HapticFeedback.light()
-                        spotStore.toggleFavorite(currentSpot)
-                    } label: {
-                        Label(
-                            currentSpot.isFavorite
-                                ? Strings.WalkLocations.removeFromFavorites
-                                : Strings.WalkLocations.addToFavorites,
-                            systemImage: currentSpot.isFavorite ? "star.fill" : "star"
-                        )
-                        .frame(maxWidth: .infinity)
-                    }
-                    .buttonStyle(.bordered)
-                    .tint(currentSpot.isFavorite ? .yellow : .primary)
-
                     // Open in Maps
                     Button {
                         openInMaps()
@@ -228,6 +270,152 @@ struct SpotDetailView: View {
                 }
             )
         }
+        .task {
+            // Load place stats asynchronously
+            if let viewModel = momentsViewModel {
+                placeStats = await viewModel.loadStatsForSpot(currentSpot)
+            }
+        }
+        .confirmationDialog(
+            Strings.SpotDetail.photoOptional,
+            isPresented: $showingPhotoOptions,
+            titleVisibility: .visible
+        ) {
+            Button {
+                selectedMediaSource = .camera
+                showingMediaPicker = true
+            } label: {
+                Label(Strings.MediaAttachment.camera, systemImage: "camera")
+            }
+
+            Button {
+                selectedMediaSource = .library
+                showingMediaPicker = true
+            } label: {
+                Label(Strings.MediaAttachment.photoLibrary, systemImage: "photo.on.rectangle")
+            }
+
+            if currentSpot.photoFilename != nil {
+                Button(Strings.Profile.removePhoto, role: .destructive) {
+                    removeSpotPhoto()
+                }
+            }
+
+            Button(Strings.Common.cancel, role: .cancel) {}
+        }
+        .fullScreenCover(isPresented: $showingMediaPicker) {
+            MediaPicker(
+                source: selectedMediaSource,
+                onImageSelected: { image, _ in
+                    updateSpotPhoto(image)
+                    showingMediaPicker = false
+                },
+                onCancel: {
+                    showingMediaPicker = false
+                }
+            )
+        }
+    }
+
+    // MARK: - Photo Management
+
+    private func updateSpotPhoto(_ image: UIImage) {
+        guard var updated = spotStore.spot(withId: spot.id) else { return }
+
+        // Delete old photo if exists
+        if let oldFilename = updated.photoFilename {
+            SpotPhotoStore.shared.delete(filename: oldFilename)
+        }
+
+        // Save new photo
+        if let newFilename = try? SpotPhotoStore.shared.save(image: image) {
+            updated.photoFilename = newFilename
+            spotStore.updateSpot(updated)
+            HapticFeedback.success()
+        }
+    }
+
+    private func removeSpotPhoto() {
+        guard var updated = spotStore.spot(withId: spot.id) else { return }
+
+        // Delete photo file
+        if let filename = updated.photoFilename {
+            SpotPhotoStore.shared.delete(filename: filename)
+        }
+
+        updated.photoFilename = nil
+        spotStore.updateSpot(updated)
+        HapticFeedback.light()
+    }
+
+    // MARK: - Place Stats Section
+
+    private func placeStatsSection(stats: PlaceStats) -> some View {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack {
+                Image(systemName: "chart.bar.fill")
+                    .foregroundStyle(Color.otisAccent)
+                Text(Strings.SpotDetail.placeStats)
+                    .font(.headline)
+            }
+            .padding(.horizontal)
+
+            // Stats grid
+            HStack(spacing: 16) {
+                // First visited
+                if let firstVisited = stats.firstVisited {
+                    statItem(
+                        value: firstVisited.formatted(.dateTime.month(.abbreviated).day()),
+                        label: Strings.SpotDetail.firstVisited,
+                        icon: "calendar",
+                        color: .blue
+                    )
+                }
+
+                // Dogs met
+                if stats.dogsMetCount > 0 {
+                    statItem(
+                        value: "\(stats.dogsMetCount)",
+                        label: Strings.SpotDetail.dogsMet,
+                        icon: "dog.fill",
+                        color: .orange
+                    )
+                }
+
+                // Potty successes
+                if stats.pottySuccessCount > 0 {
+                    statItem(
+                        value: "\(stats.pottySuccessCount)",
+                        label: Strings.SpotDetail.pottySuccesses,
+                        icon: "checkmark.circle.fill",
+                        color: .green
+                    )
+                }
+            }
+            .padding(.horizontal)
+        }
+        .padding()
+        .background(Color(.secondarySystemGroupedBackground))
+        .cornerRadius(LayoutConstants.cornerRadiusM)
+        .padding(.horizontal)
+    }
+
+    private func statItem(value: String, label: String, icon: String, color: Color) -> some View {
+        VStack(spacing: 4) {
+            HStack(spacing: 4) {
+                Image(systemName: icon)
+                    .font(.caption)
+                    .foregroundStyle(color)
+                Text(value)
+                    .font(.subheadline)
+                    .fontWeight(.semibold)
+            }
+            Text(label)
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+                .lineLimit(1)
+        }
+        .frame(maxWidth: .infinity)
     }
 
     // MARK: - Photos Section
@@ -290,13 +478,11 @@ struct SpotDetailView: View {
     }
 
     private func openInMaps() {
-        let location = CLLocation(
+        MapsService.openLocation(
             latitude: currentSpot.latitude,
-            longitude: currentSpot.longitude
+            longitude: currentSpot.longitude,
+            name: currentSpot.name
         )
-        let mapItem = MKMapItem(location: location, address: nil)
-        mapItem.name = currentSpot.name
-        mapItem.openInMaps()
     }
 }
 
@@ -311,7 +497,6 @@ struct SpotDetailView: View {
                 name: "Kralingse Bos",
                 latitude: 51.9225,
                 longitude: 4.4792,
-                isFavorite: true,
                 notes: "Great park with lots of trails",
                 visitCount: 15
             ),
@@ -328,7 +513,6 @@ struct SpotDetailView: View {
                 name: "Kralingse Bos",
                 latitude: 51.9225,
                 longitude: 4.4792,
-                isFavorite: true,
                 notes: "Great park with lots of trails",
                 visitCount: 15
             )

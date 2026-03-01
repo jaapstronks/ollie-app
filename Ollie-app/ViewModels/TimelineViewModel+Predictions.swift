@@ -1,12 +1,12 @@
 //
 //  TimelineViewModel+Predictions.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Prediction-related functionality for TimelineViewModel
 //
 
 import Foundation
-import OllieShared
+import OtisShared
 
 extension TimelineViewModel {
     // MARK: - Potty Predictions
@@ -74,10 +74,13 @@ extension TimelineViewModel {
             }
         }
 
+        let recentEvents = getRecentEvents()
         return CombinedStatusCalculations.calculateCombinedState(
             sleepState: currentSleepState,
             pottyPrediction: pottyPrediction,
-            wakeTimePottyState: wakeTimePottyState
+            wakeTimePottyState: wakeTimePottyState,
+            recentEvents: recentEvents,
+            dismissedAssumedSleepDate: dismissedAssumedSleepDate
         )
     }
 

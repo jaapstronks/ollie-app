@@ -1,12 +1,12 @@
 //
 //  ThisWeekViewModel.swift
-//  Ollie-app
+//  Otis-app
 //
 //  ViewModel for ThisWeekCard with visibility logic
 
 import Foundation
 import SwiftUI
-import OllieShared
+import OtisShared
 import Combine
 
 /// ViewModel for the "This Week" card on Today view
@@ -117,7 +117,7 @@ class ThisWeekViewModel: ObservableObject {
             .store(in: &cancellables)
 
         // Watch for milestone changes
-        milestoneStore.$milestones
+        milestoneStore.$items
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 self?.refreshMilestones()

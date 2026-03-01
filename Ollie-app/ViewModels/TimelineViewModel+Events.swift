@@ -1,12 +1,12 @@
 //
 //  TimelineViewModel+Events.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Event CRUD operations for TimelineViewModel
 //
 
 import Foundation
-import OllieShared
+import OtisShared
 import SwiftUI
 
 extension TimelineViewModel {
@@ -62,7 +62,7 @@ extension TimelineViewModel {
 
     func showPottySheet() {
         // Core logging is always free - no paywall check needed
-        sheetCoordinator.presentSheet(.potty)
+        sheetCoordinator.presentSheet(.potty())
     }
 
     func cancelPottySheet() {
@@ -80,7 +80,41 @@ extension TimelineViewModel {
             logEvent(type: .plassen, time: time, location: location, note: note)
             logEvent(type: .poepen, time: time, location: location, note: note)
         }
+
+        // Check for outdoor pee streak celebration (plassen or beide with buiten)
+        if (selection == .plassen || selection == .beide) && location == .buiten {
+            checkAndTriggerPottyStreakCelebration()
+        }
+
         sheetCoordinator.dismissSheet()
+    }
+
+    /// Check if the user has achieved a same-day outdoor pee streak worth celebrating
+    /// Triggers celebration if 3+ outdoor pees today with NO indoor pees
+    private func checkAndTriggerPottyStreakCelebration() {
+        let calendar = Calendar.current
+
+        // Get today's pee events from the current events array (just synced)
+        let todayPeeEvents = events.filter { event in
+            event.type == .plassen && calendar.isDateInToday(event.time)
+        }
+
+        // Count outdoor and indoor pees today
+        let outdoorCount = todayPeeEvents.filter { $0.location == .buiten }.count
+        let indoorCount = todayPeeEvents.filter { $0.location == .binnen }.count
+
+        // Celebrate if 3+ outdoor pees AND no indoor pees today
+        if outdoorCount >= 3 && indoorCount == 0 {
+            // Trigger the potty success celebration animation
+            triggerCelebration(.pottySuccess)
+
+            // Show celebration banner with message
+            let message = Strings.Celebration.outdoorStreakToday(
+                count: outdoorCount,
+                puppyName: puppyName
+            )
+            sheetCoordinator.showCelebration(message: message)
+        }
     }
 
     // MARK: - Quick Log Context
@@ -96,18 +130,18 @@ extension TimelineViewModel {
     // MARK: - Photo Moment Capture
 
     func openCamera() {
-        // Photo/video attachments require Ollie+
+        // Photo/video attachments require Otis+
         guard subscriptionManager.hasAccess(to: .photoVideoAttachments) else {
-            sheetCoordinator.presentSheet(.olliePlus)
+            sheetCoordinator.presentSheet(.otisPlus)
             return
         }
         sheetCoordinator.presentSheet(.mediaPicker(.camera))
     }
 
     func openPhotoLibrary() {
-        // Photo/video attachments require Ollie+
+        // Photo/video attachments require Otis+
         guard subscriptionManager.hasAccess(to: .photoVideoAttachments) else {
-            sheetCoordinator.presentSheet(.olliePlus)
+            sheetCoordinator.presentSheet(.otisPlus)
             return
         }
         sheetCoordinator.presentSheet(.mediaPicker(.library))
@@ -136,7 +170,8 @@ extension TimelineViewModel {
         exercise: String? = nil,
         result: String? = nil,
         durationMin: Int? = nil,
-        sleepSessionId: UUID? = nil
+        sleepSessionId: UUID? = nil,
+        napLocation: NapLocation? = nil
     ) {
         // Note: sleepSessionId is auto-generated for sleep events in PuppyEvent init
         let event = PuppyEvent(
@@ -148,7 +183,8 @@ extension TimelineViewModel {
             exercise: exercise,
             result: result,
             durationMin: durationMin,
-            sleepSessionId: sleepSessionId
+            sleepSessionId: sleepSessionId,
+            napLocation: napLocation
         )
 
         // Track potty event time for post-wake state clearing
@@ -179,7 +215,7 @@ extension TimelineViewModel {
     }
 
     /// Trigger a celebration animation
-    func triggerCelebration(_ style: CelebrationStyle) {
+    func triggerCelebration(_ style: CelebrationPreset) {
         celebrationStyle = style
         showCelebration = true
     }
@@ -236,26 +272,23 @@ extension TimelineViewModel {
         FeedbackManager.logEvent()
     }
 
-    /// Log a completed nap with start and end time (creates both sleep and wake events)
-    func logCompletedNap(startTime: Date, endTime: Date, note: String?) {
+    /// Log a completed nap with start and end time (single-event model with durationMin)
+    func logCompletedNap(startTime: Date, endTime: Date, note: String?, napLocation: NapLocation? = nil) {
         let sessionId = UUID()
 
-        // Log sleep event at start time
+        // Calculate duration in minutes
+        let durationMin = max(1, Int(endTime.timeIntervalSince(startTime) / 60))
+
+        // Log single sleep event with duration
         let sleepEvent = PuppyEvent(
             time: startTime,
             type: .slapen,
             note: note,
-            sleepSessionId: sessionId
+            durationMin: durationMin,
+            sleepSessionId: sessionId,
+            napLocation: napLocation
         )
         eventStore.addEvent(sleepEvent)
-
-        // Log wake event at end time
-        let wakeEvent = PuppyEvent(
-            time: endTime,
-            type: .ontwaken,
-            sleepSessionId: sessionId
-        )
-        eventStore.addEvent(wakeEvent)
 
         // Immediately sync for instant UI updates
         syncEventsFromStore()
@@ -367,5 +400,72 @@ extension TimelineViewModel {
     /// Dismiss the undo banner
     func dismissUndoBanner() {
         sheetCoordinator.dismissUndoBanner()
+    }
+
+    // MARK: - Assumed Overnight Sleep
+
+    /// Dismiss the assumed overnight sleep card for today
+    func dismissAssumedOvernightSleep() {
+        dismissedAssumedSleepDate = Date()
+        HapticFeedback.selection()
+    }
+
+    /// Confirm the assumed overnight sleep with the given start time
+    /// This logs a sleep event at the suggested/adjusted start time
+    func confirmAssumedOvernightSleep(sleepStartTime: Date) {
+        let sessionId = UUID()
+
+        // Log sleep event at the provided start time
+        let sleepEvent = PuppyEvent(
+            time: sleepStartTime,
+            type: .slapen,
+            sleepSessionId: sessionId
+        )
+        eventStore.addEvent(sleepEvent)
+
+        // Clear the dismissed date (no longer needed)
+        dismissedAssumedSleepDate = Date()
+
+        // Immediately sync for instant UI updates
+        syncEventsFromStore()
+
+        notifyRefreshNotifications()
+
+        HapticFeedback.success()
+    }
+
+    /// Log wake-up for the assumed overnight sleep
+    /// This confirms the sleep and logs the wake event at the current time (or specified time)
+    func confirmAssumedOvernightSleepAndWakeUp(sleepStartTime: Date, wakeTime: Date = Date()) {
+        let sessionId = UUID()
+
+        // Log sleep event at the start time
+        let sleepEvent = PuppyEvent(
+            time: sleepStartTime,
+            type: .slapen,
+            sleepSessionId: sessionId
+        )
+        eventStore.addEvent(sleepEvent)
+
+        // Log wake event at the wake time
+        let wakeEvent = PuppyEvent(
+            time: wakeTime,
+            type: .ontwaken,
+            sleepSessionId: sessionId
+        )
+        eventStore.addEvent(wakeEvent)
+
+        // Clear the dismissed date
+        dismissedAssumedSleepDate = Date()
+
+        // Immediately sync for instant UI updates
+        syncEventsFromStore()
+
+        notifyRefreshNotifications()
+
+        // Capture potty state at wake time for post-wake tracking
+        captureWakeTimePottyState()
+
+        HapticFeedback.success()
     }
 }

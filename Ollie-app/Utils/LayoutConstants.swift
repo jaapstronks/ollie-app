@@ -1,12 +1,12 @@
 //
 //  LayoutConstants.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Centralized layout constants to ensure consistency across views.
 //  Avoids magic numbers like .padding(.horizontal, 16) scattered throughout.
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 // MARK: - Layout Constants
 
@@ -163,6 +163,23 @@ enum LayoutConstants {
 
     /// Slow animation duration
     static let animationSlow: Double = 0.4
+
+    // MARK: - Timeline Grid
+
+    /// Height per hour in the vertical timeline (90pt per hour - 50% more room)
+    static let timelineHourHeight: CGFloat = 90
+
+    /// Width of the time column showing hour labels
+    static let timelineTimeColumnWidth: CGFloat = 44
+
+    /// Width ratio for walk track (relative to available width)
+    static let timelineWalkTrackWidthRatio: CGFloat = 0.45
+
+    /// Minimum height for duration blocks
+    static let timelineMinBlockHeight: CGFloat = 50
+
+    /// Height for point event markers
+    static let timelineEventMarkerHeight: CGFloat = 40
 }
 
 // MARK: - Color Convenience (Urgency Mapping)
@@ -172,15 +189,15 @@ enum StatusColors {
     static func forUrgency(_ level: UrgencyLevel) -> Color {
         switch level {
         case .low:
-            return .ollieSuccess
+            return .otisSuccess
         case .normal:
             return .primary
         case .medium:
-            return .ollieAccent
+            return .otisAccent
         case .high:
-            return .ollieWarning
+            return .otisWarning
         case .critical:
-            return .ollieDanger
+            return .otisDanger
         case .unknown:
             return .secondary
         }

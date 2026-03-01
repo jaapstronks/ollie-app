@@ -1,12 +1,12 @@
 //
 //  LocationSelectionButton.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Reusable location selection button for binnen/buiten picker
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Button for selecting indoor/outdoor location with accessibility support
 struct LocationSelectionButton: View {

@@ -23,6 +23,17 @@
         }
       }
     },
+    "Add contact" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Contact toevoegen"
+          }
+        }
+      }
+    },
     "Add moment" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -67,6 +78,17 @@
         }
       }
     },
+    "Explore" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ontdek"
+          }
+        }
+      }
+    },
     "Favorite spots" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -85,17 +107,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Kaart"
-          }
-        }
-      }
-    },
-    "Moments & Walks" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Momenten & Wandelingen"
           }
         }
       }
@@ -133,28 +144,6 @@
         }
       }
     },
-    "Places" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Plekken"
-          }
-        }
-      }
-    },
-    "Recent moments" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Recente momenten"
-          }
-        }
-      }
-    },
     "Save your favorite walk locations to see them here" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -176,18 +165,7 @@
           }
         }
       }
-    },
-    "Timeline" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tijdlijn"
-          }
-        }
-      }
     }
   },
-  "version" : "1.0"
+  "version" : "1.1"
 }

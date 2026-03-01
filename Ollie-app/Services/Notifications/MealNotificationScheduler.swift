@@ -1,12 +1,12 @@
 //
 //  MealNotificationScheduler.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Handles scheduling meal reminder notifications
 //
 
 import Foundation
-import OllieShared
+import OtisShared
 import UserNotifications
 import os
 
@@ -16,12 +16,13 @@ final class MealNotificationScheduler: NotificationScheduler {
     let notificationPrefix = "meal_"
 
     private let notificationCenter = UNUserNotificationCenter.current()
-    private let logger = Logger.ollie(category: "MealNotificationScheduler")
+    private let logger = Logger.otis(category: "MealNotificationScheduler")
 
     func schedule(events: [PuppyEvent], profile: PuppyProfile) async {
         await cancel()
 
-        let minutesBefore = profile.notificationSettings.mealReminders.minutesBefore
+        // minutesOffset: 0 = at time, negative = after meal time (overdue), positive = before
+        let minutesOffset = profile.notificationSettings.mealReminders.minutesOffset
         let todayMealEvents = events.meals()
 
         for portion in profile.mealSchedule.portions {
@@ -39,15 +40,22 @@ final class MealNotificationScheduler: NotificationScheduler {
 
             if mealAlreadyLogged { continue }
 
-            // Calculate notification time
-            var notifyMinute = minute - minutesBefore
+            // Calculate notification time (subtract offset: negative offset = later time)
+            var notifyMinute = minute - minutesOffset
             var notifyHour = hour
-            if notifyMinute < 0 {
+            while notifyMinute < 0 {
                 notifyMinute += 60
                 notifyHour -= 1
             }
+            while notifyMinute >= 60 {
+                notifyMinute -= 60
+                notifyHour += 1
+            }
             if notifyHour < 0 {
                 notifyHour += 24
+            }
+            if notifyHour >= 24 {
+                notifyHour -= 24
             }
 
             // Check if notification time has already passed today
@@ -61,7 +69,12 @@ final class MealNotificationScheduler: NotificationScheduler {
             if notifyMinutes <= currentMinutes { continue }
 
             let content = UNMutableNotificationContent()
-            content.title = Strings.PushNotifications.mealTimeTitle
+            // Use different title if it's overdue
+            if minutesOffset < 0 {
+                content.title = Strings.PushNotifications.mealOverdueTitle
+            } else {
+                content.title = Strings.PushNotifications.mealTimeTitle
+            }
             content.body = Strings.PushNotifications.mealReminder(name: profile.name, meal: portion.label)
             content.sound = .default
 

@@ -1,6 +1,6 @@
 //
 //  GlassButtonStyles.swift
-//  Ollie-app
+//  Otis-app
 //
 //  iOS 26 "Liquid Glass" design system - Button styles
 //
@@ -194,7 +194,7 @@ struct GlassPrimaryButtonStyle: ButtonStyle {
                         tintColor
                             .opacity(isEnabled ? 1.0 : 0.5)
                     } else {
-                        Color.ollieAccent
+                        Color.otisAccent
                             .opacity(isEnabled ? 1.0 : 0.5)
                     }
 
@@ -211,7 +211,7 @@ struct GlassPrimaryButtonStyle: ButtonStyle {
             )
             .clipShape(RoundedRectangle(cornerRadius: LayoutConstants.cornerRadiusM, style: .continuous))
             .shadow(
-                color: (tint.color ?? .ollieAccent).opacity(isEnabled ? 0.3 : 0.1),
+                color: (tint.color ?? .otisAccent).opacity(isEnabled ? 0.3 : 0.1),
                 radius: configuration.isPressed ? 4 : 8,
                 y: configuration.isPressed ? 2 : 4
             )
@@ -290,16 +290,16 @@ struct GlassDestructiveButtonStyle: ButtonStyle {
         configuration.label
             .font(.body)
             .fontWeight(.medium)
-            .foregroundStyle(Color.ollieDanger)
+            .foregroundStyle(Color.otisDanger)
             .padding(.horizontal, 24)
             .padding(.vertical, 14)
             .frame(maxWidth: .infinity)
             .background(
                 ZStack {
-                    Color.ollieDanger.opacity(colorScheme == .dark ? 0.15 : 0.1)
+                    Color.otisDanger.opacity(colorScheme == .dark ? 0.15 : 0.1)
 
                     if configuration.isPressed {
-                        Color.ollieDanger.opacity(0.1)
+                        Color.otisDanger.opacity(0.1)
                     }
                 }
                 .background(.ultraThinMaterial)
@@ -308,7 +308,7 @@ struct GlassDestructiveButtonStyle: ButtonStyle {
             .overlay(
                 RoundedRectangle(cornerRadius: LayoutConstants.cornerRadiusM, style: .continuous)
                     .strokeBorder(
-                        Color.ollieDanger.opacity(0.3),
+                        Color.otisDanger.opacity(0.3),
                         lineWidth: 0.5
                     )
             )

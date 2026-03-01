@@ -7,7 +7,7 @@
 # 3. Poop count updating after logging
 # 4. Poop insights in the Insights tab
 #
-appId: jaapstronks.Ollie-app
+appId: jaapstronks.Otis-app
 ---
 - launchApp
 - waitForAnimationToEnd

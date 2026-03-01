@@ -2,16 +2,31 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>CloudKit Share</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>cloudkit-iCloud.nl.jaapstronks.Otis</string>
+			</array>
+		</dict>
+	</array>
 	<key>SENTRY_DSN</key>
 	<string>$(SENTRY_DSN)</string>
+	<key>TheDogAPIKey</key>
+	<string>$(THE_DOG_API_KEY)</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Ollie wants to use the camera to take photos of your puppy.</string>
+	<string>Otis wants to use the camera to take photos of your puppy.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Ollie uses your location to save walk spots so you can easily log walks at your favorite places.</string>
+	<string>Otis uses your location to save walk spots so you can easily log walks at your favorite places.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Ollie wants access to your photos to add moments.</string>
+	<string>Otis wants access to your photos to add moments.</string>
 	<key>NSCalendarsFullAccessUsageDescription</key>
-	<string>Ollie uses your calendar to add reminders for upcoming milestones like vaccinations and vet visits.</string>
+	<string>Otis uses your calendar to add reminders for upcoming milestones like vaccinations and vet visits.</string>
+	<key>NSContactsUsageDescription</key>
+	<string>Otis uses your contacts to quickly import your vet, groomer, or pet sitter details.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
@@ -19,5 +34,9 @@
 	</array>
 	<key>CKSharingSupported</key>
 	<true/>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>comgooglemaps</string>
+	</array>
 </dict>
 </plist>

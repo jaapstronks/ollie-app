@@ -1,12 +1,12 @@
 //
 //  QuickLogIconButton.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Generic quick log button component for QuickLogBar
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Generic button for quick logging actions
 struct QuickLogIconButton: View {
@@ -86,7 +86,7 @@ extension QuickLogIconButton {
         QuickLogIconButton(
             icon: .potty,
             label: Strings.QuickLog.toilet,
-            color: .ollieInfo,
+            color: .otisInfo,
             action: action,
             accessibilityLabel: Strings.QuickLog.toiletAccessibility,
             accessibilityHint: Strings.QuickLog.toiletAccessibilityHint,
@@ -99,7 +99,7 @@ extension QuickLogIconButton {
         QuickLogIconButton(
             icon: .system("camera.fill"),
             label: Strings.QuickLog.photo,
-            color: .ollieAccent,
+            color: .otisAccent,
             action: action,
             accessibilityLabel: Strings.QuickLog.photoAccessibility,
             accessibilityHint: Strings.QuickLog.photoAccessibilityHint,
@@ -113,7 +113,7 @@ extension QuickLogIconButton {
         QuickLogIconButton(
             icon: .system("plus"),
             label: Strings.QuickLog.more,
-            color: .ollieAccent,
+            color: .otisAccent,
             action: action,
             accessibilityLabel: Strings.QuickLog.moreAccessibility,
             accessibilityHint: Strings.QuickLog.moreAccessibilityHint,
@@ -129,11 +129,11 @@ extension EventType {
     /// Color to use in quick log buttons
     var quickLogColor: Color {
         switch self {
-        case .plassen, .poepen: return .ollieInfo
-        case .eten, .drinken: return .ollieAccent
-        case .slapen, .ontwaken: return .ollieSleep
-        case .uitlaten, .tuin: return .ollieSuccess
-        default: return .ollieMuted
+        case .plassen, .poepen: return .otisInfo
+        case .eten, .drinken: return .otisAccent
+        case .slapen, .ontwaken: return .otisSleep
+        case .uitlaten, .tuin: return .otisSuccess
+        default: return .otisMuted
         }
     }
 }

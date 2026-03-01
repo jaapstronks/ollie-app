@@ -1,12 +1,12 @@
 //
 //  SheetHeader.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Reusable header component for sheets with consistent styling
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 // MARK: - Sheet Header Icon
 
@@ -92,12 +92,12 @@ struct SheetHeader: View {
         case .skill(let skill):
             ZStack {
                 Circle()
-                    .fill(Color.ollieAccent.opacity(colorScheme == .dark ? 0.2 : 0.15))
+                    .fill(Color.otisAccent.opacity(colorScheme == .dark ? 0.2 : 0.15))
                     .frame(width: 44, height: 44)
 
                 Image(systemName: skill.icon)
                     .font(.system(size: 20))
-                    .foregroundStyle(Color.ollieAccent)
+                    .foregroundStyle(Color.otisAccent)
             }
         }
     }
@@ -110,7 +110,7 @@ struct SheetHeaderCard: View {
     let title: String
     let icon: SheetHeaderIcon
     var subtitle: String?
-    var tintColor: Color = .ollieAccent
+    var tintColor: Color = .otisAccent
 
     @Environment(\.colorScheme) private var colorScheme
 
@@ -212,8 +212,8 @@ struct SheetHeaderCard: View {
         icon: .combined(
             primary: "drop.fill",
             secondary: "circle.inset.filled",
-            primaryColor: .ollieInfo,
-            secondaryColor: .ollieWarning
+            primaryColor: .otisInfo,
+            secondaryColor: .otisWarning
         )
     )
     .padding()

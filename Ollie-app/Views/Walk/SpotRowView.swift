@@ -1,24 +1,23 @@
 //
 //  SpotRowView.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Reusable row component for displaying a walk spot
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Row view for displaying a saved walk spot in lists
 struct SpotRowView: View {
     let spot: WalkSpot
     var showVisitCount: Bool = true
-    var onFavoriteToggle: (() -> Void)?
 
     var body: some View {
         HStack(spacing: 12) {
             // Pin icon
-            Image(systemName: spot.isFavorite ? "star.circle.fill" : "mappin.circle.fill")
+            Image(systemName: "mappin.circle.fill")
                 .font(.title2)
-                .foregroundStyle(spot.isFavorite ? .yellow : .ollieAccent)
+                .foregroundStyle(Color.otisAccent)
                 .frame(width: 32)
 
             // Spot info
@@ -42,18 +41,6 @@ struct SpotRowView: View {
             }
 
             Spacer()
-
-            // Favorite button (if toggle provided)
-            if let toggle = onFavoriteToggle {
-                Button {
-                    HapticFeedback.light()
-                    toggle()
-                } label: {
-                    Image(systemName: spot.isFavorite ? "star.fill" : "star")
-                        .foregroundStyle(spot.isFavorite ? .yellow : .secondary)
-                }
-                .buttonStyle(.plain)
-            }
         }
         .contentShape(Rectangle())
     }
@@ -66,9 +53,9 @@ struct SpotRowCompact: View {
 
     var body: some View {
         HStack(spacing: 10) {
-            Image(systemName: spot.isFavorite ? "star.fill" : "mappin")
+            Image(systemName: "mappin")
                 .font(.caption)
-                .foregroundStyle(spot.isFavorite ? .yellow : .secondary)
+                .foregroundStyle(.secondary)
                 .frame(width: 20)
 
             Text(spot.name)
@@ -86,12 +73,12 @@ struct SpotRowCompact: View {
             if isSelected {
                 Image(systemName: "checkmark")
                     .font(.caption)
-                    .foregroundStyle(Color.ollieAccent)
+                    .foregroundStyle(Color.otisAccent)
             }
         }
         .padding(.vertical, 8)
         .padding(.horizontal, 12)
-        .background(isSelected ? Color.ollieAccent.opacity(0.1) : Color.clear)
+        .background(isSelected ? Color.otisAccent.opacity(0.1) : Color.clear)
         .cornerRadius(8)
         .contentShape(Rectangle())
     }
@@ -104,10 +91,8 @@ struct SpotRowCompact: View {
                 name: "Kralingse Bos",
                 latitude: 51.9225,
                 longitude: 4.4792,
-                isFavorite: true,
                 visitCount: 12
-            ),
-            onFavoriteToggle: {}
+            )
         )
         .padding()
 
@@ -120,8 +105,7 @@ struct SpotRowCompact: View {
                 longitude: 4.4792,
                 notes: "Nice open field for training",
                 visitCount: 3
-            ),
-            onFavoriteToggle: {}
+            )
         )
         .padding()
 
@@ -132,7 +116,6 @@ struct SpotRowCompact: View {
                 name: "Favorite Park",
                 latitude: 51.9225,
                 longitude: 4.4792,
-                isFavorite: true,
                 visitCount: 8
             ),
             isSelected: true

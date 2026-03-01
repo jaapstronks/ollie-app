@@ -1,6 +1,6 @@
 //
 //  Strings+Widgets.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Widgets and push notification strings
 
@@ -15,7 +15,9 @@ extension Strings {
         static let pottyAlarmTitle = String(localized: "Potty alarm!", table: table)
         static let goOutsideNowTitle = String(localized: "Go outside now!", table: table)
         static let mealTimeTitle = String(localized: "Time to eat!", table: table)
+        static let mealOverdueTitle = String(localized: "Meal time!", table: table)
         static let walkTimeTitle = String(localized: "Time for a walk!", table: table)
+        static let appointmentReminderTitle = String(localized: "Upcoming appointment", table: table)
 
         static func needsToPeeSoon(name: String) -> String {
             String(localized: "\(name) needs to pee soon!", table: table)
@@ -36,6 +38,9 @@ extension Strings {
         static func napNeededBody(name: String, minutes: Int) -> String {
             String(localized: "\(name) has been awake for \(minutes) minutes", table: table)
         }
+        static func appointmentReminder(name: String, title: String, time: String) -> String {
+            String(localized: "\(name) has '\(title)' at \(time)", table: table)
+        }
     }
 
     // MARK: - Widgets
@@ -50,7 +55,7 @@ extension Strings {
         static let now = String(localized: "Now", table: table)
 
         // Combined Widget
-        static let overviewName = String(localized: "Ollie Overview", table: table)
+        static let overviewName = String(localized: "Otis Overview", table: table)
         static let overviewDescription = String(localized: "Potty timer and streak in one widget.", table: table)
         static let outdoorStreak = String(localized: "outdoor streak", table: table)
         static let pottyBreakReminder = String(localized: "Time for a potty break!", table: table)

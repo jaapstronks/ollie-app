@@ -1,6 +1,6 @@
-# Ollie — Branding Assets Brief for Lovable
+# Otis — Branding Assets Brief for Lovable
 
-**Project:** Ollie — Puppy Journal App
+**Project:** Otis — Puppy Journal App
 **Platform:** iOS 26 (iPhone, iPad support TBD)
 **Design System:** Apple Liquid Glass (iOS 26)
 **Date:** February 2026
@@ -8,9 +8,9 @@
 
 ---
 
-## About Ollie
+## About Otis
 
-Ollie is a puppy journal app that helps new dog owners log daily events: meals, potty breaks, sleep/naps, walks, training sessions, social encounters, and milestones. The app predicts when the next potty break is needed, tracks outdoor streaks, and analyzes patterns over time.
+Otis is a puppy journal app that helps new dog owners log daily events: meals, potty breaks, sleep/naps, walks, training sessions, social encounters, and milestones. The app predicts when the next potty break is needed, tracks outdoor streaks, and analyzes patterns over time.
 
 The tone is **warm, playful, and reassuring** — like a best friend who happens to be really organized. The primary audience is first-time dog owners aged 25–45.
 
@@ -57,38 +57,38 @@ The app is functional. This brief is for **branding polish**, not from-scratch d
 
 Friendly, modern, slightly playful — but not babyish. Think: the design equivalent of a well-designed children's book for adults. Confident and clean, with warmth.
 
-### Color System (implemented in `OllieColors.swift`)
+### Color System (implemented in `OtisColors.swift`)
 
 | Token | Hex | HSL | Usage |
 |-------|-----|-----|-------|
-| `ollieAccent` | `#E8A855` | `38 75% 62%` | Primary warm gold — main accent |
-| `ollieAccentLight` | `#D4A04A` | `35 59% 56%` | Light gold — badges, backgrounds |
-| `ollieAccentDark` | `#A36B1D` | `30 72% 37%` | Deep amber — pressed states, poop/crate |
-| `ollieSuccess` | `#5BAA6E` | `135 32% 51%` | Green — "buiten" (outside), walks, garden |
-| `ollieDanger` | `#D4594E` | `3 63% 57%` | Red — "binnen" (inside), social events |
-| `ollieInfo` | `#5BA4B5` | `192 38% 53%` | Teal — drink, pee, weight, stats |
-| `ollieSleep` | `#7B8CC2` | `228 36% 61%` | Muted blue — sleep, moments |
-| `ollieMuted` | `#6B7280` | `220 9% 46%` | Gray — behavior, secondary text |
+| `otisAccent` | `#E8A855` | `38 75% 62%` | Primary warm gold — main accent |
+| `otisAccentLight` | `#D4A04A` | `35 59% 56%` | Light gold — badges, backgrounds |
+| `otisAccentDark` | `#A36B1D` | `30 72% 37%` | Deep amber — pressed states, poop/crate |
+| `otisSuccess` | `#5BAA6E` | `135 32% 51%` | Green — "buiten" (outside), walks, garden |
+| `otisDanger` | `#D4594E` | `3 63% 57%` | Red — "binnen" (inside), social events |
+| `otisInfo` | `#5BA4B5` | `192 38% 53%` | Teal — drink, pee, weight, stats |
+| `otisSleep` | `#7B8CC2` | `228 36% 61%` | Muted blue — sleep, moments |
+| `otisMuted` | `#6B7280` | `220 9% 46%` | Gray — behavior, secondary text |
 
 ### Event Type Color Mapping
 
 | Event Type | Color Token | Rationale |
 |------------|-------------|-----------|
-| `eten` (Eat) | `ollieAccent` | Warm gold — meals are nurturing |
-| `drinken` (Drink) | `ollieInfo` | Teal — water association |
-| `plassen` (Pee) | `ollieSuccess` / `ollieDanger` | Green outside, red inside |
-| `poepen` (Poop) | `ollieSuccess` / `ollieDanger` | Green outside, red inside |
-| `slapen` (Sleep) | `ollieSleep` | Muted blue — calm, restful |
-| `ontwaken` (Wake) | `ollieAccent` | Warm gold — new energy |
-| `uitlaten` (Walk) | `ollieSuccess` | Green — outdoor activity |
-| `tuin` (Garden) | `ollieSuccess` | Green — outdoor activity |
-| `training` (Training) | `ollieAccent` | Warm gold — achievement |
-| `bench` (Crate) | `ollieAccentDark` | Brown — den/home association |
-| `sociaal` (Social) | `ollieDanger` | Red — excitement, energy |
-| `milestone` (Milestone) | `ollieAccent` | Warm gold — celebration |
-| `gedrag` (Behavior) | `ollieMuted` | Gray — neutral observation |
-| `gewicht` (Weight) | `ollieInfo` | Teal — data/measurement |
-| `moment` (Moment) | `ollieSleep` | Muted blue — memory, reflection |
+| `eten` (Eat) | `otisAccent` | Warm gold — meals are nurturing |
+| `drinken` (Drink) | `otisInfo` | Teal — water association |
+| `plassen` (Pee) | `otisSuccess` / `otisDanger` | Green outside, red inside |
+| `poepen` (Poop) | `otisSuccess` / `otisDanger` | Green outside, red inside |
+| `slapen` (Sleep) | `otisSleep` | Muted blue — calm, restful |
+| `ontwaken` (Wake) | `otisAccent` | Warm gold — new energy |
+| `uitlaten` (Walk) | `otisSuccess` | Green — outdoor activity |
+| `tuin` (Garden) | `otisSuccess` | Green — outdoor activity |
+| `training` (Training) | `otisAccent` | Warm gold — achievement |
+| `bench` (Crate) | `otisAccentDark` | Brown — den/home association |
+| `sociaal` (Social) | `otisDanger` | Red — excitement, energy |
+| `milestone` (Milestone) | `otisAccent` | Warm gold — celebration |
+| `gedrag` (Behavior) | `otisMuted` | Gray — neutral observation |
+| `gewicht` (Weight) | `otisInfo` | Teal — data/measurement |
+| `moment` (Moment) | `otisSleep` | Muted blue — memory, reflection |
 
 ### Background Colors
 
@@ -110,10 +110,10 @@ Liquid Glass is inherently neutral and adaptive. The existing warm gold accent (
 |---------|------|--------|-------|
 | Body/UI text | SF Pro | Regular (400) | iOS system font |
 | Headlines | SF Pro | Bold (700–800) | Or Nunito for warmer feel |
-| Logo/wordmark | Nunito | ExtraBold (800) | Rounded, approachable |
+| Logo/wordmark | SF Pro Rounded | Semibold/Bold | Rounded, approachable |
 | Labels/badges | SF Pro | Semibold (600) | |
 
-**Brand font:** Nunito (Google Fonts) — used in landing page and marketing materials. The iOS app uses SF Pro for native feel, but Nunito can be used for branded elements.
+**Brand font:** SF Pro Rounded — used in landing page and marketing materials for a native iOS feel.
 
 ---
 
@@ -147,7 +147,7 @@ iOS 26 Liquid Glass layered icon. 3 discrete layers — system applies specular 
 - **Paw geometry:** 4 elliptical toe pads in arc + 1 large elliptical palm pad below
 
 #### SVG Source
-Available at: `ollie-puppy-s-best-friend/public/ollie-icon-layers.svg`
+Available at: `otis-puppy-journal/public/otis-icon-layers.svg`
 
 ```svg
 <!-- Background gradient -->
@@ -169,10 +169,10 @@ Available at: `ollie-puppy-s-best-friend/public/ollie-icon-layers.svg`
 
 For use in launch screen, onboarding, website, and App Store listing.
 
-**Current launch screen uses:** SF Symbol `pawprint.fill` + "Ollie" in SF Pro Bold + "Puppy Journal" subtitle. This works well — only create a custom wordmark if specifically requested.
+**Current launch screen uses:** SF Symbol `pawprint.fill` + "Otis" in SF Pro Bold + "Puppy Journal" subtitle. This works well — only create a custom wordmark if specifically requested.
 
 **If creating custom wordmark:**
-- Text: "Ollie"
+- Text: "Otis"
 - Style: Rounded, friendly, approachable (not childish)
 - Variants needed: full color, white, black
 - Horizontal layout only (no stacked variant needed)
@@ -281,7 +281,7 @@ Use device frames. Show actual UI with sample data.
 **Already implemented.** Current design:
 - Background: Linear gradient from `rgb(255, 194, 102)` to `rgb(255, 166, 77)` (warm gold/orange)
 - Centered: `pawprint.fill` SF Symbol (80pt, white)
-- Text: "Ollie" (SF Pro Bold, white) + "Puppy Journal" (SF Pro Headline, white 90% opacity)
+- Text: "Otis" (SF Pro Bold, white) + "Puppy Journal" (SF Pro Headline, white 90% opacity)
 
 **If replacing:**
 - Keep transition seamless to main app background
@@ -294,7 +294,7 @@ Use device frames. Show actual UI with sample data.
 
 iOS 26's Liquid Glass affects how branding appears:
 
-1. **Tint is the main brand expression.** The glass tints with your accent color. Ollie uses `#E8A855` (warm gold).
+1. **Tint is the main brand expression.** The glass tints with your accent color. Otis uses `#E8A855` (warm gold).
 2. **Don't fight the blur.** UI behind glass is intentionally distorted. Keep brand marks above glass layers.
 3. **Dark mode matters.** All assets need dark mode variants. OLED displays make this critical.
 4. **SF Symbols alignment.** Custom icons should match SF Symbols optical weight and metrics.
@@ -315,6 +315,6 @@ iOS 26's Liquid Glass affects how branding appears:
 
 ## Reference Apps
 
-For visual tone, reference: **Gentler Streak**, **Bear**, **Streaks**, **Day One**. Clean, opinionated, premium — but Ollie should feel warmer and more playful (puppy energy, not corporate wellness).
+For visual tone, reference: **Gentler Streak**, **Bear**, **Streaks**, **Day One**. Clean, opinionated, premium — but Otis should feel warmer and more playful (puppy energy, not corporate wellness).
 
 ---

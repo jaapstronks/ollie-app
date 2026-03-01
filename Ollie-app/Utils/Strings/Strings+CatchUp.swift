@@ -1,6 +1,6 @@
 //
 //  Strings+CatchUp.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Localization strings for Catch-Up feature
 //

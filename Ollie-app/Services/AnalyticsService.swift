@@ -1,6 +1,6 @@
 //
 //  AnalyticsService.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Analytics event tracking for user behavior insights
 
@@ -39,6 +39,9 @@ enum Analytics {
         case featureGated = "feature_gated"
         case premiumUpsellShown = "premium_upsell_shown"
         case premiumUpsellTapped = "premium_upsell_tapped"
+
+        // Memories
+        case memoriesCardViewed = "memories_card_viewed"
     }
 
     // MARK: - Tracking

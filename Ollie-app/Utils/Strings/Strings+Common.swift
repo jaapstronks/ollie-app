@@ -1,6 +1,6 @@
 //
 //  Strings+Common.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Common, App, Tabs, and FAB strings
 
@@ -33,10 +33,14 @@ extension Strings {
         static let remove = String(localized: "Remove", table: table)
         static let yes = String(localized: "Yes", table: table)
         static let no = String(localized: "No", table: table)
+        static let share = String(localized: "Share", table: table)
+        static let addPhoto = String(localized: "Add Photo", table: table)
 
         // Error messages
         static let saveFailed = String(localized: "Failed to save. Please try again.", table: table)
         static let deleteFailed = String(localized: "Failed to delete. Please try again.", table: table)
+        static let loadFailed = String(localized: "Failed to load data. Please try again.", table: table)
+        static let syncFailed = String(localized: "Failed to sync. Please try again.", table: table)
         static let notFound = String(localized: "Item not found.", table: table)
         static let calendarSyncFailed = String(localized: "Failed to sync with calendar", table: table)
         static let calendarAccessDenied = String(localized: "Calendar access denied. Enable in Settings.", table: table)
@@ -48,9 +52,11 @@ extension Strings {
         // Time units
         static let minutes = String(localized: "min", table: table)
         static let minutesFull = String(localized: "minutes", table: table)
+        static let week = String(localized: "week", table: table)
         static let weeks = String(localized: "weeks", table: table)
         static let days = String(localized: "days", table: table)
         static let hours = String(localized: "hours", table: table)
+        static let atTime = String(localized: "at", table: table)
 
         // Relative dates
         static let today = String(localized: "Today", table: table)
@@ -59,13 +65,17 @@ extension Strings {
 
         // Navigation
         static let seeAll = String(localized: "See all", table: table)
+
+        // Accessibility hints
+        static let tapToExpand = String(localized: "Tap to read more", table: table)
+        static let tapToCollapse = String(localized: "Tap to show less", table: table)
     }
 
     // MARK: - App
     enum App {
-        static let name = String(localized: "Ollie", table: table)
+        static let name = String(localized: "Otis", table: table)
         static let subtitle = String(localized: "Puppy Tracker", table: table)
-        static let tagline = String(localized: "Puppyhood is chaos. Ollie brings the calm.", table: table)
+        static let tagline = String(localized: "Puppyhood is chaos. Otis brings the calm.", table: table)
     }
 
     // MARK: - Tabs
@@ -74,13 +84,17 @@ extension Strings {
         static let stats = String(localized: "Stats", table: table)
         static let moments = String(localized: "Moments", table: table)
         static let settings = String(localized: "Settings", table: table)
-        // 4-tab structure
+        // 5-tab structure
         static let today = String(localized: "Today", table: table)
         static let insights = String(localized: "Insights", table: table)
         static let train = String(localized: "Train", table: table)
         static let walks = String(localized: "Walks", table: table)
         static let plan = String(localized: "Plan", table: table)
-        static let places = String(localized: "Places", table: table)
+        static let explore = String(localized: "Explore", table: table)
+        static let calendar = String(localized: "Calendar", table: table)
+        // Renamed tabs
+        static let schedule = String(localized: "Schedule", table: table)
+        static let health = String(localized: "Health", table: table)
     }
 
     // MARK: - FAB (Floating Action Button)

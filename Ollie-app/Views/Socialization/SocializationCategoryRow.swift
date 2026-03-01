@@ -1,11 +1,11 @@
 //
 //  SocializationCategoryRow.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Row displaying a socialization category with progress
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Row showing a category with emoji, name, and progress indicator
 struct SocializationCategoryRow: View {
@@ -37,7 +37,7 @@ struct SocializationCategoryRow: View {
 
             // Name and progress text
             VStack(alignment: .leading, spacing: 4) {
-                Text(category.name)
+                Text(category.localizedDisplayName)
                     .font(.subheadline)
                     .fontWeight(.medium)
 
@@ -64,7 +64,7 @@ struct SocializationCategoryRow: View {
                 if progress.completed == progress.total {
                     Image(systemName: "checkmark")
                         .font(.system(size: 12, weight: .bold))
-                        .foregroundStyle(Color.ollieSuccess)
+                        .foregroundStyle(Color.otisSuccess)
                 }
             }
             .frame(width: 32, height: 32)
@@ -80,9 +80,9 @@ struct SocializationCategoryRow: View {
 
     private var progressColor: Color {
         switch progressFraction {
-        case 1.0: return .ollieSuccess
-        case 0.5...: return .ollieAccent
-        case 0.25...: return .orange
+        case 1.0: return .otisSuccess
+        case 0.5...: return .otisAccent
+        case 0.25...: return .otisWarning
         default: return .secondary
         }
     }

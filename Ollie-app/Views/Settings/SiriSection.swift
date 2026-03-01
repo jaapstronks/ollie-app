@@ -1,6 +1,6 @@
 //
 //  SiriSection.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Siri & Shortcuts help section for SettingsView
 
@@ -50,7 +50,7 @@ struct SiriSection: View {
                     Text(Strings.Siri.helpTitle)
                 } icon: {
                     Image(systemName: "mic.fill")
-                        .foregroundStyle(Color.ollieAccent)
+                        .foregroundStyle(Color.otisAccent)
                 }
             }
 
@@ -70,7 +70,7 @@ struct SiriSection: View {
                         }
                     } icon: {
                         Image(systemName: "square.grid.2x2")
-                            .foregroundStyle(Color.ollieAccent)
+                            .foregroundStyle(Color.otisAccent)
                     }
                     Spacer()
                     Image(systemName: "arrow.up.right")

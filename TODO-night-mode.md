@@ -4,7 +4,7 @@
 Port the web app's night quick-log panel. During nighttime potty breaks, you want to log events with minimal screen brightness and interaction — no fumbling through the full UI at 3am.
 
 ## Priority: Low-Medium
-Useful but niche — only needed during the early weeks when nighttime potty breaks are frequent. May become less relevant as Ollie grows.
+Useful but niche — only needed during the early weeks when nighttime potty breaks are frequent. May become less relevant as the puppy grows.
 
 ## Where It Lives (App Navigation)
 **Modal presentation over the entire app.** When activated (automatically or manually), it presents a full-screen dark overlay on top of everything — both tabs, FAB, everything. See `TODO-app-navigation.md` for the overall structure.
@@ -41,7 +41,7 @@ After logging, auto-dismiss back to a minimal clock/dark screen after 3 seconds.
 ## Files to Create/Modify
 - `Views/NightQuickLogView.swift` — the night mode overlay (presented as fullScreenCover)
 - `Utils/NightModeHelper.swift` — time-based detection
-- `Ollie_appApp.swift` or `ContentView.swift` — present night mode overlay based on time/toggle
+- `Otis_appApp.swift` or `ContentView.swift` — present night mode overlay based on time/toggle
 
 ## Design Notes
 - Think of this as a "quick action sheet" optimized for darkness

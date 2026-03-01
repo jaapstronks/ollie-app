@@ -1,14 +1,14 @@
-# Ollie Launch & Marketing Plan
+# Otis Launch & Marketing Plan
 
 ## Executive Summary
 
-**Goal:** Launch Ollie as the go-to free puppy tracking app globally, then convert engaged users to Ollie+ subscribers — using LLM automation to minimize costs and maximize organic reach.
+**Goal:** Launch Otis as the go-to free puppy tracking app globally, then convert engaged users to Otis+ subscribers — using LLM automation to minimize costs and maximize organic reach.
 
 **Launch scope:**
 - iOS app (iPhone)
 - Apple Watch companion app
 - 20+ languages at launch (LLM-translated, ~€0 cost)
-- Freemium model: Free core + Ollie+ at €2.99/mo or €24.99/yr
+- Freemium model: Free core + Otis+ at €2.99/mo or €24.99/yr
 
 **LLM-Powered Advantages:**
 - Translation: 20+ languages in hours, not weeks
@@ -66,7 +66,7 @@
 - Agrees to provide feedback and/or App Store review
 
 **Beta incentives:**
-- Free Ollie+ for 1 year after launch (not 6 months — more generous = more reviews)
+- Free Otis+ for 1 year after launch (not 6 months — more generous = more reviews)
 - Name in credits ("Beta Testers" section)
 - Direct line to developer for feature requests
 - Early access to new features
@@ -90,7 +90,7 @@
 - Hero: "The free puppy logbook" + app screenshots
 - Feature highlights (timeline, predictions, training library)
 - "Coming soon to iOS & Apple Watch"
-- Email signup: "Get notified at launch + 7-day free Ollie+ trial"
+- Email signup: "Get notified at launch + 7-day free Otis+ trial"
 - Language selector (show commitment to localization)
 
 **Email sequence (post-signup):**
@@ -193,9 +193,9 @@ Script:
 I came across [Kennel Name] while researching [Breed] breeders in [Country].
 Your puppies look wonderful!
 
-I'm building a free app called Ollie that helps new puppy owners track potty
+I'm building a free app called Otis that helps new puppy owners track potty
 training, meals, and sleep. Many first-time owners struggle with "when did
-he last pee?" — Ollie solves that.
+he last pee?" — Otis solves that.
 
 Would you be open to recommending it to your puppy buyers? I'd be happy to
 send you some cards with a QR code, or just a link you can share.
@@ -222,7 +222,7 @@ Script:
 I've been following [Puppy Name]'s journey — that video of the zoomies
 was hilarious 😄
 
-I built a free puppy tracking app (Ollie) and would love to give you
+I built a free puppy tracking app (Otis) and would love to give you
 premium access. No obligation to post — just hoping it helps with
 [Puppy Name]'s training!
 
@@ -280,7 +280,7 @@ Topics:
 Each post:
 - 1,500-2,500 words
 - Genuinely helpful content
-- Natural mention of Ollie app where relevant
+- Natural mention of Otis app where relevant
 - Translated to 5-10 languages for local SEO
 
 Hosting: Simple blog on ollie-app.com or Medium
@@ -355,14 +355,14 @@ Hosting: Simple blog on ollie-app.com or Medium
 
 #### App Name & Subtitle
 ```
-Name: Ollie - Puppy Logbook
+Name: Otis - Puppy Logbook
 Subtitle: Track potty, sleep & training
 ```
 
 **Localized examples:**
-- 🇩🇪 "Ollie - Welpen Tagebuch" / "Protokolliere Pipi, Schlaf & Training"
-- 🇫🇷 "Ollie - Carnet Chiot" / "Suivez pipi, sommeil & dressage"
-- 🇳🇱 "Ollie - Puppy Logboek" / "Track plassen, slapen & training"
+- 🇩🇪 "Otis - Welpen Tagebuch" / "Protokolliere Pipi, Schlaf & Training"
+- 🇫🇷 "Otis - Carnet Chiot" / "Suivez pipi, sommeil & dressage"
+- 🇳🇱 "Otis - Puppy Logboek" / "Track plassen, slapen & training"
 
 #### Keywords (100 characters max)
 **English:**
@@ -380,15 +380,15 @@ puppy,tracker,potty,training,dog,logbook,sleep,journal,pet,housebreaking,crate,s
 
 **First 3 lines (visible without "more"):**
 ```
-Ollie is the free puppy logbook that helps you track everything — potty breaks, meals, sleep, training, and more. No limits, no trials, just a beautiful app for your new best friend.
+Otis is the free puppy logbook that helps you track everything — potty breaks, meals, sleep, training, and more. No limits, no trials, just a beautiful app for your new best friend.
 
-Upgrade to Ollie+ for smart predictions and advanced insights.
+Upgrade to Otis+ for smart predictions and advanced insights.
 ```
 
 **Full description structure:**
 1. Hook (problem + solution)
 2. Free features (bullet list)
-3. Ollie+ features (bullet list with ✨)
+3. Otis+ features (bullet list with ✨)
 4. Social proof (testimonials from beta)
 5. Privacy statement
 6. Support contact
@@ -473,14 +473,14 @@ Upgrade to Ollie+ for smart predictions and advanced insights.
 ```
 Hey PH! 👋
 
-I built Ollie because when I got my puppy, I was drowning in "was that pee or
+I built Otis because when I got my puppy, I was drowning in "was that pee or
 poop?", "when did he last eat?", and "is 4 hours of sleep normal?"
 
-Ollie is 100% free for the core features — log everything, see your timeline,
+Otis is 100% free for the core features — log everything, see your timeline,
 get basic stats. No trial, no limits.
 
 If you want smart predictions ("your puppy will need to pee in ~20 min") and
-advanced analytics, that's Ollie+ for €2.99/mo.
+advanced analytics, that's Otis+ for €2.99/mo.
 
 Would love your feedback! What features would help you with your puppy?
 ```
@@ -556,10 +556,10 @@ Hey [Name]!
 
 I've been following [Puppy's name]'s journey and love the content.
 
-I built a free puppy tracking app (Ollie) that helps log potty breaks, sleep,
+I built a free puppy tracking app (Otis) that helps log potty breaks, sleep,
 training, etc. No ads, no required subscription.
 
-Would you be open to trying it? I'd love to give you free Ollie+ (the premium
+Would you be open to trying it? I'd love to give you free Otis+ (the premium
 version) and hear your honest feedback.
 
 No obligation to post — just hoping it helps!
@@ -568,14 +568,14 @@ No obligation to post — just hoping it helps!
 ```
 
 **Compensation tiers:**
-- Micro (10-50K): Free Ollie+ lifetime
-- Mid (50-100K): Free Ollie+ + small fee ($100-200)
+- Micro (10-50K): Free Otis+ lifetime
+- Mid (50-100K): Free Otis+ + small fee ($100-200)
 - Large (100K+): Negotiate based on rates
 
 ### 3.4 Breeder & Shelter Partnerships
 
 **Value proposition:**
-- Recommend Ollie to new puppy owners
+- Recommend Otis to new puppy owners
 - Provide "New Puppy Kit" with app QR code
 - Track early data (meals, potty) before handoff
 
@@ -638,7 +638,7 @@ import FBSDKCoreKit
 
 // Standard events to track:
 AppEvents.shared.logEvent(.completedRegistration)  // Profile created
-AppEvents.shared.logEvent(.subscribe)              // Ollie+ purchased
+AppEvents.shared.logEvent(.subscribe)              // Otis+ purchased
 AppEvents.shared.logEvent(.startTrial)            // Trial started
 
 // Custom events:
@@ -654,17 +654,17 @@ AppEvents.shared.logEvent("day_7_active")         // Retained 7 days
 #### Campaign Structure
 
 ```
-Campaign: Ollie User Acquisition
+Campaign: Otis User Acquisition
 ├── Ad Set: Interest - New Puppy Owners
 │   ├── Ad: Video - "Track everything free"
 │   ├── Ad: Carousel - Feature showcase
 │   └── Ad: Static - Cute puppy + app screenshot
 ├── Ad Set: Interest - Dog Training
 │   └── [Same ad variations]
-├── Ad Set: Lookalike - Ollie+ Subscribers
+├── Ad Set: Lookalike - Otis+ Subscribers
 │   └── [Same ad variations]
 └── Ad Set: Retargeting - App Installers No Trial
-    └── Ad: "Unlock predictions with Ollie+"
+    └── Ad: "Unlock predictions with Otis+"
 ```
 
 #### Audience Targeting
@@ -683,7 +683,7 @@ Campaign: Ollie User Acquisition
 - Newlyweds (life event → pet)
 
 **Lookalike audiences (best performers):**
-- 1% lookalike of Ollie+ subscribers (once you have 100+)
+- 1% lookalike of Otis+ subscribers (once you have 100+)
 - 1% lookalike of 7-day retained users
 - 1% lookalike of high-engagement users (50+ events)
 
@@ -720,20 +720,20 @@ Hook: New puppy? You need this (free) app.
 Body: Track every potty break, meal, and nap in seconds.
 No more guessing when they last went out.
 
-CTA: Download Ollie — it's free.
+CTA: Download Otis — it's free.
 ```
 
 ```
 Hook: I wish I had this when I got my puppy.
 
-Body: Ollie tracks everything so you don't have to remember.
+Body: Otis tracks everything so you don't have to remember.
 - Potty predictions
 - Sleep patterns
 - Training progress
 
 Free to use. Premium insights if you want them.
 
-CTA: Get Ollie free →
+CTA: Get Otis free →
 ```
 
 #### Budget & Bidding
@@ -746,7 +746,7 @@ CTA: Get Ollie free →
 
 **Scale phase (Month 2+):**
 - Daily budget: €100-500/day (based on CAC targets)
-- Optimize for: Trial starts or Ollie+ purchases
+- Optimize for: Trial starts or Otis+ purchases
 - Bid strategy: Cost cap (set max CAC)
 
 **Target metrics:**
@@ -757,7 +757,7 @@ CTA: Get Ollie free →
 | CTR (click-through rate) | 1-3% |
 | CPI (cost per install) | €1-3 |
 | Cost per trial start | €3-8 |
-| Cost per Ollie+ subscription | €15-40 |
+| Cost per Otis+ subscription | €15-40 |
 | LTV:CAC ratio | > 3:1 |
 
 #### A/B Testing Roadmap
@@ -778,7 +778,7 @@ CTA: Get Ollie free →
 **Campaign setup:**
 
 ```
-Campaign: Ollie - Search Ads
+Campaign: Otis - Search Ads
 ├── Ad Group: Brand Terms
 │   └── Keywords: "ollie", "ollie app", "ollie puppy"
 ├── Ad Group: Category Terms
@@ -805,27 +805,27 @@ Campaign: Ollie - Search Ads
 **Touchpoint 1: Onboarding completion**
 ```
 After creating puppy profile:
-"Start your 7-day free Ollie+ trial?"
+"Start your 7-day free Otis+ trial?"
 [Start trial] [Maybe later]
 ```
 
 **Touchpoint 2: First premium feature hit**
 ```
 When user taps locked feature (predictions, training):
-Show OlliePlusSheet with context:
-"Unlock smart predictions with Ollie+"
+Show OtisPlusSheet with context:
+"Unlock smart predictions with Otis+"
 ```
 
 **Touchpoint 3: Day 3 engagement**
 ```
 In-app card after 20+ events logged:
 "You're tracking like a pro! 🎉
-See patterns with Ollie+ analytics."
+See patterns with Otis+ analytics."
 ```
 
 **Touchpoint 4: Day 6 trial reminder (push notification)**
 ```
-"Your Ollie+ trial ends tomorrow.
+"Your Otis+ trial ends tomorrow.
 Keep your smart predictions?"
 → Opens app to subscription screen
 ```
@@ -833,7 +833,7 @@ Keep your smart predictions?"
 **Touchpoint 5: Post-trial nudge (day 8)**
 ```
 "Miss your potty predictions?
-Resume Ollie+ anytime."
+Resume Otis+ anytime."
 ```
 
 #### Attribution & Analytics
@@ -897,7 +897,7 @@ THEN notify to refresh creative
 GATE 0: Pre-Launch (€0 ads)
 ├── Focus: 100% organic (Reddit, communities, beta testers)
 ├── Goal: 500+ installs, 20+ reviews, validate product-market fit
-├── Unlock Gate 1 when: 5+ organic Ollie+ conversions
+├── Unlock Gate 1 when: 5+ organic Otis+ conversions
 │
 GATE 1: Small Test (€200 total)
 ├── Focus: Test 2-3 ad creatives, measure CAC
@@ -1127,7 +1127,7 @@ GATE 4: Profit-Taking (future)
 **Launch week targets:**
 - 500+ installs
 - 50+ App Store reviews
-- 5+ organic Ollie+ subscribers
+- 5+ organic Otis+ subscribers
 
 ### Week 2-4: Organic Compound (€0)
 - [ ] Continue daily outreach routine (1 hour/day)
@@ -1211,7 +1211,7 @@ GATE 4: Profit-Taking (future)
 | Metric | Target | Why it matters |
 |--------|--------|----------------|
 | Installs | 3,000-5,000 | LLM outreach compounds |
-| Organic Ollie+ subs | 50+ | Proves value without ads |
+| Organic Otis+ subs | 50+ | Proves value without ads |
 | App Store rating | 4.5+ | Strong review push |
 | Trial-to-paid | 4%+ | Conversion works |
 | Blog traffic | 500+ visits/mo | SEO starting |
@@ -1296,7 +1296,7 @@ GATE 4: Profit-Taking (future)
 ```
 □ 500+ beta testers signed up
 □ 50+ App Store reviews ready
-□ 20+ organic Ollie+ subscribers
+□ 20+ organic Otis+ subscribers
 □ Trial-to-paid > 4%
 □ App Store rating > 4.3
 

@@ -1,37 +1,37 @@
 //
 //  SubscriptionManager.swift
-//  Ollie-app
+//  Otis-app
 //
-//  Manages Ollie+ subscription using StoreKit 2
+//  Manages Otis+ subscription using StoreKit 2
 
 import Combine
 import Foundation
-import OllieShared
+import OtisShared
 import StoreKit
 import UIKit
 import os
 
-/// Manages Ollie+ subscription state and purchases
+/// Manages Otis+ subscription state and purchases
 @MainActor
 class SubscriptionManager: ObservableObject {
     static let shared = SubscriptionManager()
 
     // MARK: - Product IDs
 
-    static let monthlyProductID = "com.ollie.plus.monthly"
-    static let yearlyProductID = "com.ollie.plus.yearly"
-    static let legacyProductID = "com.ollie.premium.perdog"  // For migration
+    static let monthlyProductID = "com.otis.plus.monthly"
+    static let yearlyProductID = "com.otis.plus.yearly"
+    static let legacyProductID = "com.otis.premium.perdog"  // For migration
 
     // MARK: - Cache Keys
 
-    private static let cachedStatusKey = "ollie.subscription.cachedStatus"
+    private static let cachedStatusKey = "otis.subscription.cachedStatus"
 
     // MARK: - Debug Override (DEBUG builds only)
 
     #if DEBUG
     /// When set, overrides the actual subscription status for testing
     /// Set to nil to use actual StoreKit status
-    @Published var debugOverrideStatus: OlliePlusStatus? = nil {
+    @Published var debugOverrideStatus: OtisPlusStatus? = nil {
         didSet {
             // Persist debug override across app launches
             if let status = debugOverrideStatus {
@@ -43,12 +43,12 @@ class SubscriptionManager: ObservableObject {
     }
 
     /// The effective subscription status (respects debug override)
-    var effectiveStatus: OlliePlusStatus {
+    var effectiveStatus: OtisPlusStatus {
         debugOverrideStatus ?? subscriptionStatus
     }
     #else
     /// In release builds, just return the real status
-    var effectiveStatus: OlliePlusStatus {
+    var effectiveStatus: OtisPlusStatus {
         subscriptionStatus
     }
     #endif
@@ -56,7 +56,7 @@ class SubscriptionManager: ObservableObject {
     // MARK: - Published State
 
     @Published var products: [Product] = []
-    @Published var subscriptionStatus: OlliePlusStatus = .free {
+    @Published var subscriptionStatus: OtisPlusStatus = .free {
         didSet {
             cacheSubscriptionStatus()
         }
@@ -65,7 +65,7 @@ class SubscriptionManager: ObservableObject {
     @Published var purchaseError: Error?
     @Published var isTrialEligible = false
 
-    private let logger = Logger.ollie(category: "SubscriptionManager")
+    private let logger = Logger.otis(category: "SubscriptionManager")
 
     // MARK: - Private
 
@@ -81,7 +81,7 @@ class SubscriptionManager: ObservableObject {
         #if DEBUG
         // Load persisted debug override
         if let data = UserDefaults.standard.data(forKey: "debug.subscriptionOverride"),
-           let status = try? JSONDecoder().decode(OlliePlusStatus.self, from: data) {
+           let status = try? JSONDecoder().decode(OtisPlusStatus.self, from: data) {
             debugOverrideStatus = status
         }
         #endif
@@ -222,13 +222,25 @@ class SubscriptionManager: ObservableObject {
 
     /// Check if user has access to a specific feature
     func hasAccess(to feature: PremiumFeature) -> Bool {
-        effectiveStatus.hasOlliePlus
+        effectiveStatus.hasOtisPlus
     }
 
     /// Check if user can access a training skill at the given index
-    /// First N skills are free, rest require Ollie+
+    /// First N skills are free, rest require Otis+
     func canAccessSkill(at index: Int) -> Bool {
-        index < freeTrainingSkillCount || effectiveStatus.hasOlliePlus
+        index < freeTrainingSkillCount || effectiveStatus.hasOtisPlus
+    }
+
+    /// Check if user can add more sharing partners
+    /// Free users: limited to `freePartnerLimit` partners
+    /// Otis+ users: unlimited
+    func canAddMorePartners(currentPartnerCount: Int) -> Bool {
+        effectiveStatus.hasOtisPlus || currentPartnerCount < freePartnerLimit
+    }
+
+    /// Check if user has reached the free partner sharing limit
+    func hasReachedPartnerLimit(currentPartnerCount: Int) -> Bool {
+        !effectiveStatus.hasOtisPlus && currentPartnerCount >= freePartnerLimit
     }
 
     // MARK: - Transaction Handling
@@ -315,7 +327,7 @@ class SubscriptionManager: ObservableObject {
 
         guard let cachedStatus = KeychainHelper.load(
             key: KeychainHelper.Key.subscriptionStatus,
-            as: OlliePlusStatus.self
+            as: OtisPlusStatus.self
         ) else {
             return
         }
@@ -352,7 +364,7 @@ class SubscriptionManager: ObservableObject {
         }
 
         // Migrate to Keychain
-        if let status = try? JSONDecoder().decode(OlliePlusStatus.self, from: data) {
+        if let status = try? JSONDecoder().decode(OtisPlusStatus.self, from: data) {
             try? KeychainHelper.save(status, for: KeychainHelper.Key.subscriptionStatus)
             logger.info("Migrated subscription status from UserDefaults to Keychain")
         }
@@ -374,15 +386,15 @@ enum SubscriptionError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .productNotFound:
-            return Strings.OlliePlus.errorProductNotFound
+            return Strings.OtisPlus.errorProductNotFound
         case .userCancelled:
-            return Strings.OlliePlus.errorCancelled
+            return Strings.OtisPlus.errorCancelled
         case .purchasePending:
-            return Strings.OlliePlus.errorPending
+            return Strings.OtisPlus.errorPending
         case .verificationFailed:
-            return Strings.OlliePlus.errorVerification
+            return Strings.OtisPlus.errorVerification
         case .unknown:
-            return Strings.OlliePlus.errorUnknown
+            return Strings.OtisPlus.errorUnknown
         }
     }
 }

@@ -1,12 +1,12 @@
 //
 //  SheetCoordinator.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Centralized sheet presentation management for TimelineView
 //
 
 import Combine
-import OllieShared
+import OtisShared
 import SwiftUI
 
 /// Manages sheet presentation state for the timeline view
@@ -18,7 +18,7 @@ final class SheetCoordinator: ObservableObject {
     /// All possible sheet types that can be presented
     enum ActiveSheet: Equatable, Identifiable {
         case quickLog(EventType, suggestedTime: Date? = nil)
-        case potty
+        case potty(preselected: PottySelection? = nil)
         case allEvents
         case logEvent(EventType)
         case locationPicker(EventType)
@@ -26,7 +26,7 @@ final class SheetCoordinator: ObservableObject {
         case momentSourcePicker
         case logMoment
         case editEvent(PuppyEvent)
-        case olliePlus  // Ollie+ subscription upsell sheet
+        case otisPlus  // Otis+ subscription upsell sheet
         case subscriptionSuccess  // Shown after successful subscription
         case startActivity(ActivityType)
         case endActivity
@@ -46,6 +46,9 @@ final class SheetCoordinator: ObservableObject {
         case gapDetection(hours: Int, puppyName: String, suggestedStartTime: Date)
         // Catch-up sheet (for 3-16 hour gaps)
         case catchUp(hours: Int, puppyName: String, context: CatchUpContext)
+        // Celebration sheets
+        case tier2Celebration(Achievement, milestone: Milestone?)
+        case tier3Celebration(Achievement, milestone: Milestone?)
 
         var id: String {
             switch self {
@@ -58,7 +61,7 @@ final class SheetCoordinator: ObservableObject {
             case .momentSourcePicker: return "momentSourcePicker"
             case .logMoment: return "logMoment"
             case .editEvent(let event): return "editEvent-\(event.id.uuidString)"
-            case .olliePlus: return "olliePlus"
+            case .otisPlus: return "otisPlus"
             case .subscriptionSuccess: return "subscriptionSuccess"
             case .startActivity(let type): return "startActivity-\(type.rawValue)"
             case .endActivity: return "endActivity"
@@ -75,6 +78,8 @@ final class SheetCoordinator: ObservableObject {
             case .endCoverageGap(let gap): return "endCoverageGap-\(gap.id.uuidString)"
             case .gapDetection: return "gapDetection"
             case .catchUp: return "catchUp"
+            case .tier2Celebration(let achievement, _): return "tier2Celebration-\(achievement.id)"
+            case .tier3Celebration(let achievement, _): return "tier3Celebration-\(achievement.id)"
             }
         }
     }
@@ -92,8 +97,15 @@ final class SheetCoordinator: ObservableObject {
     @Published var showingUndoBanner: Bool = false
     @Published var lastDeletedEvent: PuppyEvent?
 
+    /// Celebration banner state (separate from sheets - uses overlay)
+    @Published var showingCelebrationBanner: Bool = false
+    @Published var celebrationMessage: String = ""
+
     /// Undo task for auto-dismiss
     private var undoTask: Task<Void, Never>?
+
+    /// Celebration banner task for auto-dismiss
+    private var celebrationTask: Task<Void, Never>?
 
     // MARK: - Sheet Data Accessors
 
@@ -188,5 +200,30 @@ final class SheetCoordinator: ObservableObject {
         let event = lastDeletedEvent
         dismissUndoBanner()
         return event
+    }
+
+    // MARK: - Celebration Banner
+
+    /// Show celebration banner with message
+    func showCelebration(message: String) {
+        celebrationMessage = message
+        showingCelebrationBanner = true
+
+        // Auto-hide after 3 seconds
+        celebrationTask?.cancel()
+        celebrationTask = Task {
+            try? await Task.sleep(for: .seconds(3.0))
+            if !Task.isCancelled {
+                dismissCelebrationBanner()
+            }
+        }
+    }
+
+    /// Dismiss celebration banner
+    func dismissCelebrationBanner() {
+        celebrationTask?.cancel()
+        celebrationTask = nil
+        showingCelebrationBanner = false
+        celebrationMessage = ""
     }
 }

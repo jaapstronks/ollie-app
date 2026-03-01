@@ -1,5 +1,5 @@
 # Basic app launch test
-appId: jaapstronks.Ollie-app
+appId: jaapstronks.Otis-app
 ---
 - launchApp
 - waitForAnimationToEnd

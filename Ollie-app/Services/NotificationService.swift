@@ -1,13 +1,13 @@
 //
 //  NotificationService.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Manages scheduling and canceling smart notifications
 //  Orchestrates individual notification schedulers
 //
 
 import Foundation
-import OllieShared
+import OtisShared
 import UserNotifications
 import Combine
 import os
@@ -19,13 +19,14 @@ class NotificationService: ObservableObject {
     @Published private(set) var isAuthorized: Bool = false
 
     private let notificationCenter = UNUserNotificationCenter.current()
-    private let logger = Logger.ollie(category: "NotificationService")
+    private let logger = Logger.otis(category: "NotificationService")
 
     // Individual schedulers
     private let pottyScheduler = PottyNotificationScheduler()
     private let mealScheduler = MealNotificationScheduler()
     private let napScheduler = NapNotificationScheduler()
     private let walkScheduler = WalkNotificationScheduler()
+    private let appointmentScheduler = AppointmentNotificationScheduler()
 
     // MARK: - Initialization
 
@@ -60,10 +61,15 @@ class NotificationService: ObservableObject {
 
     /// Refresh all notifications based on current state
     /// Called after event logging or settings changes
-    /// - Parameter isWalkInProgress: When true, suppresses walk notifications since user is already walking
+    /// - Parameters:
+    ///   - events: Recent puppy events
+    ///   - profile: The puppy profile
+    ///   - appointments: Upcoming appointments to schedule reminders for
+    ///   - isWalkInProgress: When true, suppresses walk notifications since user is already walking
     func refreshNotifications(
         events: [PuppyEvent],
         profile: PuppyProfile,
+        appointments: [DogAppointment] = [],
         isWalkInProgress: Bool = false
     ) async {
         guard profile.notificationSettings.isEnabled && isAuthorized else {
@@ -104,6 +110,13 @@ class NotificationService: ObservableObject {
             await walkScheduler.schedule(events: events, profile: profile)
         } else {
             await walkScheduler.cancel()
+        }
+
+        // Schedule appointment reminders
+        if settings.appointmentReminders.isEnabled {
+            await appointmentScheduler.schedule(appointments: appointments, profile: profile)
+        } else {
+            await appointmentScheduler.cancel()
         }
     }
 

@@ -1,23 +1,44 @@
 //
 //  ActivityTrackingManager.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Manages activity tracking state and logic (walks and naps)
 //
 
 import Combine
 import Foundation
-import OllieShared
+import OtisShared
 import SwiftUI
 
-// MARK: - Activity Tracking Protocol
+// MARK: - Event Log Request
 
-/// Protocol for activity tracking actions
-protocol ActivityTrackingActions {
-    func startActivity(type: ActivityType, startTime: Date)
-    func endActivity(minutesAgo: Int, note: String?)
-    func cancelActivity()
-    func logWakeUp(time: Date)
+/// Parameters for logging an event from activity tracking
+struct EventLogRequest {
+    let type: EventType
+    let time: Date?
+    let location: EventLocation?
+    let note: String?
+    let durationMin: Int?
+    let sleepSessionId: UUID?
+    let napLocation: NapLocation?
+
+    init(
+        type: EventType,
+        time: Date? = nil,
+        location: EventLocation? = nil,
+        note: String? = nil,
+        durationMin: Int? = nil,
+        sleepSessionId: UUID? = nil,
+        napLocation: NapLocation? = nil
+    ) {
+        self.type = type
+        self.time = time
+        self.location = location
+        self.note = note
+        self.durationMin = durationMin
+        self.sleepSessionId = sleepSessionId
+        self.napLocation = napLocation
+    }
 }
 
 // MARK: - Activity Tracking Manager
@@ -30,7 +51,7 @@ class ActivityTrackingManager: ObservableObject {
     @Published var currentActivity: InProgressActivity?
 
     /// Callback to log an event (delegated to TimelineViewModel)
-    var onLogEvent: ((EventType, Date?, EventLocation?, String?, Int?, UUID?) -> Void)?
+    var onLogEvent: ((EventLogRequest) -> Void)?
 
     /// Callback when activity is dismissed
     var onDismiss: (() -> Void)?
@@ -54,19 +75,21 @@ class ActivityTrackingManager: ObservableObject {
     /// - Parameters:
     ///   - type: The type of activity to start
     ///   - startTime: Optional custom start time (defaults to now)
-    func startActivity(type: ActivityType, startTime: Date = Date()) {
+    ///   - napLocation: Optional location for naps (crate, dog bed, etc.)
+    func startActivity(type: ActivityType, startTime: Date = Date(), napLocation: NapLocation? = nil) {
         var sleepSessionId: UUID? = nil
 
         // For naps, log the sleep event immediately so it appears in timeline
         if type == .nap {
             sleepSessionId = UUID()
-            onLogEvent?(.slapen, startTime, nil, nil, nil, sleepSessionId)
+            onLogEvent?(EventLogRequest(type: .slapen, time: startTime, sleepSessionId: sleepSessionId, napLocation: napLocation))
         }
 
         currentActivity = InProgressActivity(
             type: type,
             startTime: startTime,
-            sleepSessionId: sleepSessionId
+            sleepSessionId: sleepSessionId,
+            napLocation: napLocation
         )
 
         onDismiss?()
@@ -81,31 +104,29 @@ class ActivityTrackingManager: ObservableObject {
     }
 
     /// End the current activity
-    func endActivity(minutesAgo: Int, note: String?) -> (sleepSessionId: UUID?, sleepEvent: PuppyEvent?)? {
+    /// Returns sleep session info for naps so the caller can update the sleep event with duration
+    func endActivity(minutesAgo: Int, note: String?) -> (sleepSessionId: UUID?, startTime: Date?, durationMin: Int)? {
         guard let activity = currentActivity else { return nil }
 
         let endTime = Date().addingTimeInterval(-Double(minutesAgo) * 60)
-        let duration = Int(endTime.timeIntervalSince(activity.startTime) / 60)
+        let duration = max(1, Int(endTime.timeIntervalSince(activity.startTime) / 60))
 
         if activity.type == .nap {
-            // For naps, sleep was already logged at start - just log wake event
-            onLogEvent?(.ontwaken, endTime, nil, nil, nil, activity.sleepSessionId)
-
-            // Return info for updating note if needed
+            // For naps, don't log a wake event - caller will update the sleep event with duration
             currentActivity = nil
             onDismiss?()
             HapticFeedback.success()
-            return (activity.sleepSessionId, nil)
+            // Return info for caller to update the sleep event
+            return (activity.sleepSessionId, activity.startTime, duration)
         } else {
             // For walks, log the walk event at start time
-            onLogEvent?(
-                .uitlaten,
-                activity.startTime,
-                .buiten,
-                note,
-                max(1, duration),
-                nil
-            )
+            onLogEvent?(EventLogRequest(
+                type: .uitlaten,
+                time: activity.startTime,
+                location: .buiten,
+                note: note,
+                durationMin: duration
+            ))
         }
 
         currentActivity = nil

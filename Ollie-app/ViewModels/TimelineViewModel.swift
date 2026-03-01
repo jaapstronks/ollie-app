@@ -1,6 +1,6 @@
 //
 //  TimelineViewModel.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Core timeline view model - manages event display and state
 //  Functionality is split across extensions:
@@ -12,7 +12,7 @@
 //
 
 import Foundation
-import OllieShared
+import OtisShared
 import SwiftUI
 import Combine
 
@@ -43,13 +43,18 @@ class TimelineViewModel: ObservableObject {
     @Published var currentDate: Date = Date()
     @Published var events: [PuppyEvent] = []
 
+    /// Events filtered for timeline display (excludes weight events which belong on Health tab only)
+    var timelineDisplayEvents: [PuppyEvent] {
+        events.filter { $0.type != .gewicht }
+    }
+
     /// Pre-computed timeline items (events + sleep sessions)
     /// Updated only when events change to avoid O(n²) recomputation on every view render
     @Published private(set) var timelineItems: [TimelineItem] = []
 
     /// Celebration trigger for milestone moments
     @Published var showCelebration = false
-    @Published var celebrationStyle: CelebrationStyle = .milestone
+    @Published var celebrationStyle: CelebrationPreset = .milestone
 
     /// Sheet coordinator for all sheet presentations
     @Published var sheetCoordinator = SheetCoordinator()
@@ -75,27 +80,28 @@ class TimelineViewModel: ObservableObject {
         activityManager.isNapInProgress
     }
 
-    // MARK: - Cached Stats (to avoid recomputation every frame)
+    // MARK: - Stats Cache (extracted to separate service)
 
-    /// Cached pattern analysis (updated when events change)
-    @Published private(set) var cachedPatternAnalysis: PatternAnalysis?
+    /// Stats cache service (manages cached stats to avoid recomputation)
+    let statsCache: TimelineStatsCache
 
-    /// Cached recent events for stats (7 days)
-    @Published private(set) var cachedRecentEvents: [PuppyEvent] = []
-
-    /// Cached week stats for insights view
-    @Published private(set) var cachedWeekStats: [DayStats] = []
-
-    /// Last time stats were computed
-    private var lastStatsUpdate: Date?
+    // Convenience accessors for cached stats (forward to statsCache)
+    var cachedPatternAnalysis: PatternAnalysis? { statsCache.patternAnalysis }
+    var cachedRecentEvents: [PuppyEvent] { statsCache.recentEvents }
+    var cachedWeekStats: [DayStats] { statsCache.weekStats }
+    var cachedRecentWalks: [PuppyEvent] { statsCache.recentWalks }
+    var cachedWeekWalkStats: (count: Int, totalMinutes: Int) { statsCache.weekWalkStats }
 
     // MARK: - Combined Sleep + Potty State
 
     /// Captured potty state at wake time (for post-wake tracking)
-    @Published internal(set) var wakeTimePottyState: WakeTimePottyState?
+    @Published private(set) var wakeTimePottyState: WakeTimePottyState?
 
     /// Time of last potty event (for clearing post-wake state)
     internal var lastPottyLogTime: Date?
+
+    /// Date when user dismissed the assumed overnight sleep card (reset daily)
+    @Published internal var dismissedAssumedSleepDate: Date?
 
     /// Background notification task (stored for cancellation)
     private var notificationTask: Task<Void, Never>?
@@ -109,12 +115,16 @@ class TimelineViewModel: ObservableObject {
     /// Subscription to observe EventStore events
     private var eventStoreCancellable: AnyCancellable?
 
+    /// Subscription to forward TimelineStatsCache changes
+    private var statsCacheCancellable: AnyCancellable?
+
     let eventStore: EventStore
     let profileStore: ProfileStore
     var notificationService: NotificationService?
     var spotStore: SpotStore?
     var locationManager: LocationManager?
     var medicationStore: MedicationStore?
+    var appointmentStore: AppointmentStore?
 
     init(
         eventStore: EventStore,
@@ -122,7 +132,8 @@ class TimelineViewModel: ObservableObject {
         notificationService: NotificationService? = nil,
         spotStore: SpotStore? = nil,
         locationManager: LocationManager? = nil,
-        medicationStore: MedicationStore? = nil
+        medicationStore: MedicationStore? = nil,
+        appointmentStore: AppointmentStore? = nil
     ) {
         self.eventStore = eventStore
         self.profileStore = profileStore
@@ -130,6 +141,10 @@ class TimelineViewModel: ObservableObject {
         self.spotStore = spotStore
         self.locationManager = locationManager
         self.medicationStore = medicationStore
+        self.appointmentStore = appointmentStore
+
+        // Create stats cache (extracted service)
+        self.statsCache = TimelineStatsCache(eventStore: eventStore, profileStore: profileStore)
 
         // Forward SheetCoordinator's objectWillChange to this ViewModel
         // This ensures views are notified when sheet state changes
@@ -140,6 +155,12 @@ class TimelineViewModel: ObservableObject {
 
         // Forward ActivityTrackingManager's objectWillChange to this ViewModel
         activityManagerCancellable = activityManager.objectWillChange
+            .sink { [weak self] _ in
+                self?.objectWillChange.send()
+            }
+
+        // Forward TimelineStatsCache's objectWillChange to this ViewModel
+        statsCacheCancellable = statsCache.objectWillChange
             .sink { [weak self] _ in
                 self?.objectWillChange.send()
             }
@@ -156,7 +177,7 @@ class TimelineViewModel: ObservableObject {
                 self.events = loadedEvents
                 // Rebuild timeline items and refresh stats since events changed
                 self.rebuildTimelineItems()
-                self.refreshCachedStats(force: true)
+                self.statsCache.refresh(force: true)
             }
 
         loadEvents()
@@ -197,6 +218,21 @@ class TimelineViewModel: ObservableObject {
     /// Last deleted event for undo
     var lastDeletedEvent: PuppyEvent? {
         sheetCoordinator.lastDeletedEvent
+    }
+
+    /// Whether celebration banner is showing
+    var showingCelebrationBanner: Bool {
+        sheetCoordinator.showingCelebrationBanner
+    }
+
+    /// Celebration message to display
+    var celebrationMessage: String {
+        sheetCoordinator.celebrationMessage
+    }
+
+    /// Dismiss the celebration banner
+    func dismissCelebrationBanner() {
+        sheetCoordinator.dismissCelebrationBanner()
     }
 
     // MARK: - Event Loading
@@ -241,8 +277,8 @@ class TimelineViewModel: ObservableObject {
         // Build timeline items
         var items: [TimelineItem] = []
 
-        // Add non-sleep events
-        for event in events where !sessionEventIds.contains(event.id) {
+        // Add non-sleep events (excluding weight events which belong on Health tab only)
+        for event in events where !sessionEventIds.contains(event.id) && event.type != .gewicht {
             items.append(.event(event))
         }
 
@@ -255,53 +291,25 @@ class TimelineViewModel: ObservableObject {
         timelineItems = items.sorted { $0.sortTime < $1.sortTime }
     }
 
-    /// Refresh cached stats (debounced, only if data changed)
-    /// - Parameter force: When true, bypasses debounce (use after event changes)
-    internal func refreshCachedStats(force: Bool = false) {
-        // Debounce: only update if more than 1 second since last update
-        // Skip debounce when force is true (e.g., after event edits)
-        let now = Date()
-        if !force, let lastUpdate = lastStatsUpdate, now.timeIntervalSince(lastUpdate) < 1.0 {
-            return
-        }
-        lastStatsUpdate = now
-
-        // Update cached recent events
-        let sevenDaysAgo = Date().addingDays(-7)
-        cachedRecentEvents = eventStore.getEvents(from: sevenDaysAgo, to: Date())
-
-        // Update cached pattern analysis
-        cachedPatternAnalysis = PatternCalculations.analyzePatterns(
-            events: cachedRecentEvents,
-            periodDays: 7
-        )
-
-        // Update cached week stats
-        cachedWeekStats = WeekCalculations.calculateWeekStats { date in
-            let startOfDay = date.startOfDay
-            let endOfDay = date.addingDays(1).startOfDay
-            return eventStore.getEvents(from: startOfDay, to: endOfDay)
-        }
-    }
 
     // MARK: - Subscription
 
-    /// Subscription manager for Ollie+ status
+    /// Subscription manager for Otis+ status
     var subscriptionManager: SubscriptionManager {
         SubscriptionManager.shared
     }
 
-    /// Whether user has Ollie+ access
-    var hasOlliePlus: Bool {
-        subscriptionManager.effectiveStatus.hasOlliePlus
+    /// Whether user has Otis+ access
+    var hasOtisPlus: Bool {
+        subscriptionManager.effectiveStatus.hasOtisPlus
     }
 
-    /// Whether to show the Ollie+ upsell banner
+    /// Whether to show the Otis+ upsell banner
     /// Shows after first week of use if user is on free tier
-    var shouldShowOlliePlusBanner: Bool {
+    var shouldShowOtisPlusBanner: Bool {
         guard let profile = profileStore.profile else { return false }
         // Show if free tier and has been using app for at least 7 days
-        return !hasOlliePlus && profile.daysHome >= 7
+        return !hasOtisPlus && profile.daysHome >= 7
     }
 
     /// Whether to show the trial banner (during trial period)
@@ -339,8 +347,16 @@ class TimelineViewModel: ObservableObject {
     /// Configure activity manager callbacks
     private func setupActivityManagerCallbacks() {
         // Log event callback
-        activityManager.onLogEvent = { [weak self] type, time, location, note, duration, sleepSessionId in
-            self?.logEvent(type: type, time: time ?? Date(), location: location, note: note, durationMin: duration, sleepSessionId: sleepSessionId)
+        activityManager.onLogEvent = { [weak self] request in
+            self?.logEvent(
+                type: request.type,
+                time: request.time ?? Date(),
+                location: request.location,
+                note: request.note,
+                durationMin: request.durationMin,
+                sleepSessionId: request.sleepSessionId,
+                napLocation: request.napLocation
+            )
         }
 
         // Dismiss sheet callback
@@ -377,7 +393,7 @@ class TimelineViewModel: ObservableObject {
 
     /// Notify to force refresh stats
     func notifyForceRefreshStats() {
-        refreshCachedStats(force: true)
+        statsCache.refresh(force: true)
     }
 
     /// Record potty log time for post-wake state tracking
@@ -454,8 +470,9 @@ class TimelineViewModel: ObservableObject {
         // Cancel any existing notification task to prevent pile-up
         notificationTask?.cancel()
 
-        // Capture walk state before async task
+        // Capture walk state and appointments before async task
         let walkInProgress = isWalkInProgress
+        let upcomingAppointments = appointmentStore?.upcomingAppointments ?? []
 
         notificationTask = Task {
             guard !Task.isCancelled else { return }
@@ -463,6 +480,7 @@ class TimelineViewModel: ObservableObject {
             await service.refreshNotifications(
                 events: recentEvents,
                 profile: profile,
+                appointments: upcomingAppointments,
                 isWalkInProgress: walkInProgress
             )
         }

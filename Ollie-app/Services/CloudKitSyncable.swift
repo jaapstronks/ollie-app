@@ -1,6 +1,6 @@
 //
 //  CloudKitSyncable.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Protocol for Core Data stores with CloudKit sync support.
 //  Provides common patterns for remote change observation and error handling.
@@ -10,6 +10,7 @@ import Foundation
 import CoreData
 import Combine
 import os
+import OtisShared
 
 // MARK: - CloudKit Syncable Protocol
 
@@ -89,8 +90,8 @@ extension CloudKitSyncable {
 
 /// Protocol for stores that track and display error state
 protocol ErrorTrackable: AnyObject {
-    /// Last error that occurred (message and timestamp)
-    var lastError: (message: String, date: Date)? { get set }
+    /// Last error that occurred
+    var lastError: AppError? { get set }
 }
 
 extension ErrorTrackable {
@@ -99,8 +100,138 @@ extension ErrorTrackable {
         lastError = nil
     }
 
-    /// Set an error with the current timestamp
+    /// Set an error using a message string (convenience method)
     func setError(_ message: String) {
-        lastError = (message, Date())
+        lastError = AppError(category: .save, message: message)
+    }
+
+    /// Set an error using an AppError
+    func setError(_ error: AppError) {
+        lastError = error
+    }
+
+    /// Set a not found error
+    func setNotFoundError() {
+        lastError = .notFound()
+    }
+
+    /// Set a save failed error
+    func setSaveError() {
+        lastError = .saveFailed()
+    }
+
+    /// Set a delete failed error
+    func setDeleteError() {
+        lastError = .deleteFailed()
+    }
+}
+
+// MARK: - Base Store
+
+/// Abstract base class for Core Data stores with CloudKit sync support.
+/// Subclasses should override `performInitialLoad()` to load their data.
+@MainActor
+class BaseStore: ObservableObject, CloudKitSyncable, ErrorTrackable {
+
+    // MARK: - CloudKitSyncable
+
+    let persistenceController: PersistenceController
+    var cancellables = Set<AnyCancellable>()
+    let logger: Logger
+
+    // MARK: - ErrorTrackable
+
+    @Published var lastError: AppError?
+
+    // MARK: - Common State
+
+    @Published private(set) var isSyncing = false
+
+    // MARK: - Init
+
+    /// Initialize the base store
+    /// - Parameters:
+    ///   - persistenceController: The Core Data persistence controller
+    ///   - logCategory: Category name for the logger (e.g., "ContactStore")
+    init(persistenceController: PersistenceController = .shared, logCategory: String) {
+        self.persistenceController = persistenceController
+        self.logger = Logger.otis(category: logCategory)
+        performInitialLoad()
+        setupRemoteChangeObserver()
+    }
+
+    // MARK: - Abstract Methods
+
+    /// Override in subclass to load data from Core Data.
+    /// Called during init and when remote changes are detected.
+    func performInitialLoad() {
+        fatalError("Subclass must override performInitialLoad()")
+    }
+
+    // MARK: - CloudKitSyncable
+
+    func handleRemoteChange() {
+        logger.debug("Detected CloudKit remote change")
+        performInitialLoad()
+    }
+
+    /// Sync data from CloudKit (refreshes context and reloads)
+    func syncFromCloud() async {
+        viewContext.refreshAllObjects()
+        performInitialLoad()
+    }
+
+    /// Force sync with CloudKit
+    func forceSync() async {
+        await syncFromCloud()
+    }
+
+    /// Perform initial sync on app launch
+    func initialSync() async {
+        await syncFromCloud()
+    }
+
+    // MARK: - Save Operations
+
+    /// Perform a save operation with error handling
+    /// - Parameters:
+    ///   - operation: Description of the operation for logging
+    ///   - onSuccess: Closure to execute after successful save (update in-memory state)
+    /// - Returns: `true` if save succeeded, `false` otherwise
+    @discardableResult
+    func performSave(operation: String, onSuccess: () -> Void) -> Bool {
+        do {
+            try persistenceController.save()
+            onSuccess()
+            lastError = nil
+            logger.info("\(operation)")
+            return true
+        } catch {
+            viewContext.rollback()
+            setError(Strings.Common.saveFailed)
+            logger.error("Failed to \(operation): \(error.localizedDescription)")
+            return false
+        }
+    }
+
+    /// Perform a delete operation with error handling
+    /// - Parameters:
+    ///   - operation: Description of the operation for logging
+    ///   - onSuccess: Closure to execute after successful delete (update in-memory state)
+    /// - Returns: `true` if delete succeeded, `false` otherwise
+    @discardableResult
+    func performDelete(operation: String, onSuccess: () -> Void) -> Bool {
+        do {
+            try persistenceController.save()
+            onSuccess()
+            lastError = nil
+            logger.info("\(operation)")
+            return true
+        } catch {
+            viewContext.rollback()
+            setError(Strings.Common.deleteFailed)
+            logger.error("Failed to \(operation): \(error.localizedDescription)")
+            return false
+        }
     }
 }

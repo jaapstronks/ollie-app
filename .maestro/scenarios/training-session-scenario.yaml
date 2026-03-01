@@ -1,6 +1,6 @@
 # Scenario: Training Session Logging
 # Tests logging a training session for a skill
-appId: nl.jaapstronks.Ollie
+appId: nl.jaapstronks.Otis
 ---
 - launchApp
 - waitForAnimationToEnd

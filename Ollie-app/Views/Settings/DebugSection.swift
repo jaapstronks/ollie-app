@@ -1,6 +1,6 @@
 //
 //  DebugSection.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Debug settings section - only included in DEBUG builds
 //
@@ -9,7 +9,7 @@
 
 import SwiftUI
 import CoreData
-import OllieShared
+import OtisShared
 
 /// Debug section for testing features like subscription states
 struct DebugSection: View {
@@ -42,7 +42,7 @@ struct DebugSection: View {
             }
         }
 
-        func toOlliePlusStatus() -> OlliePlusStatus? {
+        func toOtisPlusStatus() -> OtisPlusStatus? {
             switch self {
             case .useActual: return nil
             case .free: return .free
@@ -53,7 +53,7 @@ struct DebugSection: View {
             }
         }
 
-        static func from(_ status: OlliePlusStatus?) -> DebugSubscriptionState {
+        static func from(_ status: OtisPlusStatus?) -> DebugSubscriptionState {
             guard let status = status else { return .useActual }
             switch status {
             case .free: return .free
@@ -69,7 +69,7 @@ struct DebugSection: View {
         Section {
             Picker(selection: Binding(
                 get: { DebugSubscriptionState.from(subscriptionManager.debugOverrideStatus) },
-                set: { subscriptionManager.debugOverrideStatus = $0.toOlliePlusStatus() }
+                set: { subscriptionManager.debugOverrideStatus = $0.toOtisPlusStatus() }
             )) {
                 ForEach(DebugSubscriptionState.allCases) { state in
                     Label(state.rawValue, systemImage: state.icon)
@@ -85,7 +85,7 @@ struct DebugSection: View {
                     .foregroundStyle(.secondary)
                 Spacer()
                 Text(subscriptionManager.effectiveStatus.displayLabel)
-                    .foregroundStyle(subscriptionManager.effectiveStatus.hasOlliePlus ? .green : .orange)
+                    .foregroundStyle(subscriptionManager.effectiveStatus.hasOtisPlus ? Color.otisSuccess : Color.otisWarning)
             }
             .font(.caption)
         } header: {
@@ -132,7 +132,7 @@ struct DebugSection: View {
         } header: {
             Label("Data Management", systemImage: "externaldrive.fill")
         } footer: {
-            Text("Import loads JSONL files from ~/Github NW/Ollie/data. Reset deletes all Core Data and starts fresh.")
+            Text("Import loads JSONL files from ~/Github NW/Otis/data. Reset deletes all Core Data and starts fresh.")
         }
         .alert("Reset All Data?", isPresented: $showResetConfirm) {
             Button("Cancel", role: .cancel) {}
@@ -148,7 +148,7 @@ struct DebugSection: View {
                 Task { await performImport() }
             }
         } message: {
-            Text("This will import all JSONL files from the local Ollie web app directory into Core Data.")
+            Text("This will import all JSONL files from the local Otis web app directory into Core Data.")
         }
     }
 
@@ -183,7 +183,7 @@ struct DebugSection: View {
         isImporting = true
         importResult = nil
 
-        let webAppDataPath = NSString("~/Github NW/Ollie/data").expandingTildeInPath
+        let webAppDataPath = NSString("~/Github NW/Otis/data").expandingTildeInPath
         let fileManager = FileManager.default
 
         guard fileManager.fileExists(atPath: webAppDataPath) else {

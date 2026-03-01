@@ -1,12 +1,12 @@
 //
 //  SwipeToCompleteSlider.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Swipe gesture slider that prevents accidental taps for completing actions
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// A swipe-to-complete slider that requires deliberate gesture to trigger
 struct SwipeToCompleteSlider: View {
@@ -154,14 +154,14 @@ struct SwipeToCompleteSlider: View {
                 .fill(
                     LinearGradient(
                         colors: [
-                            isComplete ? Color.ollieSuccess : tintColor,
-                            (isComplete ? Color.ollieSuccess : tintColor).opacity(0.85)
+                            isComplete ? Color.otisSuccess : tintColor,
+                            (isComplete ? Color.otisSuccess : tintColor).opacity(0.85)
                         ],
                         startPoint: .top,
                         endPoint: .bottom
                     )
                 )
-                .shadow(color: (isComplete ? Color.ollieSuccess : tintColor).opacity(0.4), radius: isComplete ? 8 : 4, y: 2)
+                .shadow(color: (isComplete ? Color.otisSuccess : tintColor).opacity(0.4), radius: isComplete ? 8 : 4, y: 2)
 
             Image(systemName: isComplete ? "checkmark" : icon)
                 .font(.body.weight(.bold))
@@ -254,14 +254,14 @@ extension Strings.Common {
         SwipeToCompleteSlider(
             label: "Slide to complete",
             icon: "pills.fill",
-            tintColor: .ollieAccent,
+            tintColor: .otisAccent,
             onComplete: { print("Completed!") }
         )
 
         SwipeToCompleteSlider(
             label: "Mark as done",
             icon: "checkmark",
-            tintColor: .ollieSuccess,
+            tintColor: .otisSuccess,
             onComplete: { print("Done!") }
         )
     }

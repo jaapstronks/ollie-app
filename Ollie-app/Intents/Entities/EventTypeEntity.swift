@@ -1,11 +1,11 @@
 //
 //  EventTypeEntity.swift
-//  Ollie-app
+//  Otis-app
 //
 //  AppEntity for event types used in App Intents
 
 import AppIntents
-import OllieShared
+import OtisShared
 
 /// App Entity representing potty event types (pee/poop)
 struct PottyTypeEntity: AppEntity {

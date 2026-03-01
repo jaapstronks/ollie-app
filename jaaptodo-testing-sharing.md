@@ -24,5 +24,5 @@ Phase 3: Import Historical Data
 Once sharing works:
 
 1. Settings → Debug → Import from Web App
-2. This reads from /Users/jstronks/Github NW/Ollie/data/
+2. This reads from /Users/jstronks/Github NW/Otis/data/
 3. All events will sync to CloudKit automatically

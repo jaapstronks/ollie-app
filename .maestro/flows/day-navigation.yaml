@@ -1,5 +1,5 @@
 # Test day navigation (swipe and buttons)
-appId: jaapstronks.Ollie-app
+appId: jaapstronks.Otis-app
 ---
 - launchApp
 - waitForAnimationToEnd

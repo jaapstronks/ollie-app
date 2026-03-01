@@ -1,13 +1,13 @@
 //
 //  CatchUpSheet.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Quick catch-up sheet shown after a 3-10 hour logging gap
 //  Helps user quickly establish current state for accurate predictions
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Sheet for quickly catching up after a logging gap
 struct CatchUpSheet: View {
@@ -280,7 +280,7 @@ struct CatchUpSheet: View {
                 .foregroundStyle(.white)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 14)
-                .background(canComplete ? Color.blue : Color.gray.opacity(0.5))
+                .background(canComplete ? Color.otisInfo : Color.gray.opacity(0.5))
                 .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
         }
         .disabled(!canComplete)
@@ -389,12 +389,12 @@ private struct PottyOptionButton: View {
                 .padding(.vertical, 12)
                 .background(
                     RoundedRectangle(cornerRadius: 10, style: .continuous)
-                        .fill(isSelected ? Color.blue : GlassButtonHelpers.glassColor(for: colorScheme))
+                        .fill(isSelected ? Color.otisInfo : GlassButtonHelpers.glassColor(for: colorScheme))
                 )
                 .overlay(
                     RoundedRectangle(cornerRadius: 10, style: .continuous)
                         .strokeBorder(
-                            isSelected ? Color.blue : Color.primary.opacity(0.1),
+                            isSelected ? Color.otisInfo : Color.primary.opacity(0.1),
                             lineWidth: isSelected ? 2 : 0.5
                         )
                 )
@@ -420,12 +420,12 @@ private struct YesNoButton: View {
                 .padding(.vertical, 12)
                 .background(
                     RoundedRectangle(cornerRadius: 10, style: .continuous)
-                        .fill(isSelected ? Color.blue : GlassButtonHelpers.glassColor(for: colorScheme))
+                        .fill(isSelected ? Color.otisInfo : GlassButtonHelpers.glassColor(for: colorScheme))
                 )
                 .overlay(
                     RoundedRectangle(cornerRadius: 10, style: .continuous)
                         .strokeBorder(
-                            isSelected ? Color.blue : Color.primary.opacity(0.1),
+                            isSelected ? Color.otisInfo : Color.primary.opacity(0.1),
                             lineWidth: isSelected ? 2 : 0.5
                         )
                 )
@@ -491,7 +491,7 @@ private struct TimeSlider: View {
 
 #Preview {
     CatchUpSheet(
-        puppyName: "Ollie",
+        puppyName: "Max",
         hoursSinceLastEvent: 5,
         context: CatchUpContext(
             lastEventTime: Date().addingTimeInterval(-5 * 3600),

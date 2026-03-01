@@ -1,6 +1,6 @@
 //
 //  WatchDataProvider.swift
-//  OllieWatch
+//  OtisWatch
 //
 //  Receives data from iPhone via WatchConnectivity
 //  CRITICAL: App Groups do NOT sync between iPhone and Watch - they're different devices.
@@ -10,7 +10,7 @@ import Foundation
 import Combine
 import WatchConnectivity
 import WidgetKit
-import OllieShared
+import OtisShared
 import os
 
 /// Provides data received from iPhone via WatchConnectivity
@@ -31,7 +31,7 @@ final class WatchDataProvider: NSObject, ObservableObject {
     @Published var connectionState: ConnectionState = .unknown
 
     private var session: WCSession?
-    private let logger = Logger.ollieWatch(category: "WatchDataProvider")
+    private let logger = Logger.otisWatch(category: "WatchDataProvider")
     private let localDataStore = WatchIntentDataStore.shared
 
     // Sync state persistence keys
@@ -75,7 +75,7 @@ final class WatchDataProvider: NSObject, ObservableObject {
 
     // MARK: - Session Management
 
-    /// Call this as early as possible in app lifecycle (in OllieWatchApp.init or onAppear)
+    /// Call this as early as possible in app lifecycle (in OtisWatchApp.init or onAppear)
     func activateSession() {
         guard WCSession.isSupported() else {
             connectionState = .notSupported

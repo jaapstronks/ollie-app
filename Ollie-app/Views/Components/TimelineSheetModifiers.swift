@@ -1,12 +1,12 @@
 //
 //  TimelineSheetModifiers.swift
-//  Ollie-app
+//  Otis-app
 //
 //  ViewModifier that applies all shared sheet handling to timeline views
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// ViewModifier that applies all timeline sheet handling
 struct TimelineSheetModifiers: ViewModifier {
@@ -114,6 +114,18 @@ struct TimelineSheetModifiers: ViewModifier {
                 }
             }
             .animation(reduceMotion ? nil : .easeInOut(duration: 0.2), value: viewModel.showingUndoBanner)
+            // Celebration banner overlay (shows above undo banner position)
+            .overlay(alignment: .top) {
+                if viewModel.showingCelebrationBanner {
+                    CelebrationBanner(
+                        message: viewModel.celebrationMessage,
+                        onDismiss: viewModel.dismissCelebrationBanner
+                    )
+                    .transition(reduceMotion ? .opacity : .move(edge: .top).combined(with: .opacity))
+                    .padding(.top, 60)
+                }
+            }
+            .animation(reduceMotion ? nil : .spring(response: 0.4, dampingFraction: 0.8), value: viewModel.showingCelebrationBanner)
     }
 
     // MARK: - Sheet Content Builder
@@ -121,10 +133,11 @@ struct TimelineSheetModifiers: ViewModifier {
     @ViewBuilder
     private func sheetContent(for sheet: SheetCoordinator.ActiveSheet) -> some View {
         switch sheet {
-        case .potty:
+        case .potty(let preselected):
             PottyQuickLogSheet(
                 onSave: viewModel.logPottyEvent,
-                onCancel: viewModel.cancelPottySheet
+                onCancel: viewModel.cancelPottySheet,
+                preselected: preselected
             )
             .presentationDetents([.height(580)])
 
@@ -234,8 +247,8 @@ struct TimelineSheetModifiers: ViewModifier {
                 }
             )
 
-        case .olliePlus:
-            OlliePlusSheet(
+        case .otisPlus:
+            OtisPlusSheet(
                 onDismiss: {
                     viewModel.sheetCoordinator.dismissSheet()
                 },
@@ -254,10 +267,17 @@ struct TimelineSheetModifiers: ViewModifier {
             .presentationDetents([.medium])
 
         case .editEvent(let event):
-            EditEventSheet(event: event) { updatedEvent in
-                viewModel.updateEvent(updatedEvent)
-                viewModel.sheetCoordinator.dismissSheet()
-            }
+            EditEventSheet(
+                event: event,
+                onSave: { updatedEvent in
+                    viewModel.updateEvent(updatedEvent)
+                    viewModel.sheetCoordinator.dismissSheet()
+                },
+                onDelete: {
+                    viewModel.deleteEvent(event)
+                    viewModel.sheetCoordinator.dismissSheet()
+                }
+            )
             .presentationDetents([.medium, .large])
 
         case .endSleep(let startTime):
@@ -265,6 +285,7 @@ struct TimelineSheetModifiers: ViewModifier {
                 sleepStartTime: startTime,
                 onSave: { wakeUpTime in
                     viewModel.logWakeUp(time: wakeUpTime)
+                    viewModel.sheetCoordinator.dismissSheet()
                 },
                 onCancel: {
                     viewModel.sheetCoordinator.dismissSheet()
@@ -275,8 +296,10 @@ struct TimelineSheetModifiers: ViewModifier {
         case .startActivity(let activityType):
             StartActivitySheet(
                 activityType: activityType,
-                onStartNow: { startTime in
-                    viewModel.startActivity(type: activityType, startTime: startTime)
+                puppyName: viewModel.puppyName,
+                onStartNow: { startTime, napLocation in
+                    viewModel.startActivity(type: activityType, startTime: startTime, napLocation: napLocation)
+                    viewModel.sheetCoordinator.dismissSheet()
                 },
                 onLogCompleted: {
                     // Transition to specialized sheet for retrospective logging
@@ -293,7 +316,7 @@ struct TimelineSheetModifiers: ViewModifier {
                     viewModel.sheetCoordinator.dismissSheet()
                 }
             )
-            .presentationDetents([.height(350), .medium])
+            .presentationDetents([.height(350), .medium, .large])
 
         case .endActivity:
             if let activity = viewModel.currentActivity {
@@ -337,8 +360,8 @@ struct TimelineSheetModifiers: ViewModifier {
 
         case .napLog(let defaultDuration):
             NapLogSheet(
-                onSave: { startTime, endTime, note in
-                    viewModel.logCompletedNap(startTime: startTime, endTime: endTime, note: note)
+                onSave: { startTime, endTime, note, napLocation in
+                    viewModel.logCompletedNap(startTime: startTime, endTime: endTime, note: note, napLocation: napLocation)
                     viewModel.sheetCoordinator.dismissSheet()
                 },
                 onCancel: {
@@ -346,7 +369,7 @@ struct TimelineSheetModifiers: ViewModifier {
                 },
                 defaultDurationMinutes: defaultDuration
             )
-            .presentationDetents([.height(420), .medium])
+            .presentationDetents([.height(520), .medium])
 
         case .startCoverageGap:
             StartCoverageGapSheet(
@@ -405,6 +428,10 @@ struct TimelineSheetModifiers: ViewModifier {
 
         // Placeholder cases for future sheets (handled elsewhere or not yet implemented)
         case .weightLog, .trainingLog, .socializationLog, .settings, .profileEdit, .notificationSettings:
+            EmptyView()
+
+        // Celebration sheets are handled via separate sheet/fullScreenCover modifiers in CalendarTabView
+        case .tier2Celebration, .tier3Celebration:
             EmptyView()
         }
     }

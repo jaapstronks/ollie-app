@@ -1,6 +1,6 @@
 //
 //  StatusCard.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Generic status card wrapper for consistent styling across
 //  PottyStatusCard, SleepStatusCard, PoopStatusCard, etc.
@@ -18,7 +18,6 @@ struct StatusCardHeaderData {
     let title: String
     let titleColor: Color
     let subtitle: String?
-    let statusLabel: String
     let iconSize: CGFloat
 
     init(
@@ -28,7 +27,6 @@ struct StatusCardHeaderData {
         title: String,
         titleColor: Color = .primary,
         subtitle: String? = nil,
-        statusLabel: String,
         iconSize: CGFloat = 44
     ) {
         self.iconName = iconName
@@ -37,7 +35,6 @@ struct StatusCardHeaderData {
         self.title = title
         self.titleColor = titleColor
         self.subtitle = subtitle
-        self.statusLabel = statusLabel
         self.iconSize = iconSize
     }
 }
@@ -149,6 +146,108 @@ extension StatusCard where Content == EmptyView {
     }
 }
 
+// MARK: - Status Card Shadow Modifier
+
+extension View {
+    /// Applies semantic shadow for status cards based on tint color
+    /// - Parameters:
+    ///   - tint: The color to use for the shadow
+    ///   - isUrgent: If true, increases shadow opacity for emphasis
+    func statusCardShadow(tint: Color, isUrgent: Bool = false) -> some View {
+        modifier(StatusCardShadowModifier(tint: tint, isUrgent: isUrgent))
+    }
+}
+
+private struct StatusCardShadowModifier: ViewModifier {
+    let tint: Color
+    let isUrgent: Bool
+
+    @Environment(\.colorScheme) private var colorScheme
+
+    func body(content: Content) -> some View {
+        let baseOpacity = colorScheme == .dark ? 0.2 : 0.1
+        let shadowOpacity = isUrgent ? baseOpacity * 1.25 : baseOpacity
+        content
+            .shadow(color: tint.opacity(shadowOpacity), radius: 10, y: 5)
+    }
+}
+
+// MARK: - Status Card Container Modifier
+
+extension View {
+    /// Combines standard status card styling with visibility control
+    ///
+    /// This modifier encapsulates the common patterns used across all status cards:
+    /// - Night-time/conditional visibility
+    /// - Padding and glass effect styling
+    /// - Optional shadow with urgency support
+    /// - Accessibility attributes
+    ///
+    /// - Parameters:
+    ///   - tint: The semantic color for the card
+    ///   - cornerRadius: Corner radius for the glass effect
+    ///   - isVisible: Controls whether the card is shown or hidden
+    ///   - showShadow: Whether to apply the status card shadow
+    ///   - isUrgent: If true and showShadow is true, emphasizes the shadow
+    ///   - accessibilityLabel: VoiceOver label for the card
+    ///   - accessibilityValue: VoiceOver value describing current state
+    ///   - accessibilityHint: Optional VoiceOver hint for actions
+    func statusCardContainer(
+        tint: Color,
+        cornerRadius: CGFloat = LayoutConstants.cornerRadius,
+        isVisible: Bool = true,
+        showShadow: Bool = false,
+        isUrgent: Bool = false,
+        accessibilityLabel: String,
+        accessibilityValue: String,
+        accessibilityHint: String? = nil
+    ) -> some View {
+        modifier(StatusCardContainerModifier(
+            tint: tint,
+            cornerRadius: cornerRadius,
+            isVisible: isVisible,
+            showShadow: showShadow,
+            isUrgent: isUrgent,
+            accessibilityLabel: accessibilityLabel,
+            accessibilityValue: accessibilityValue,
+            accessibilityHint: accessibilityHint
+        ))
+    }
+}
+
+private struct StatusCardContainerModifier: ViewModifier {
+    let tint: Color
+    let cornerRadius: CGFloat
+    let isVisible: Bool
+    let showShadow: Bool
+    let isUrgent: Bool
+    let accessibilityLabel: String
+    let accessibilityValue: String
+    let accessibilityHint: String?
+
+    @ViewBuilder
+    func body(content: Content) -> some View {
+        if isVisible {
+            Group {
+                if showShadow {
+                    content
+                        .statusCardPadding()
+                        .glassStatusCard(tintColor: tint, cornerRadius: cornerRadius)
+                        .statusCardShadow(tint: tint, isUrgent: isUrgent)
+                } else {
+                    content
+                        .statusCardPadding()
+                        .glassStatusCard(tintColor: tint, cornerRadius: cornerRadius)
+                }
+            }
+            .accessibilityElement(children: .combine)
+            .accessibilityLabel(accessibilityLabel)
+            .accessibilityValue(accessibilityValue)
+            .accessibilityHint(accessibilityHint ?? "")
+        }
+    }
+}
+
 // MARK: - Preview
 
 #Preview("StatusCard - Basic") {
@@ -159,8 +258,7 @@ extension StatusCard where Content == EmptyView {
                 iconColor: .green,
                 tintColor: .green,
                 title: "Potty status is good",
-                subtitle: "Last: 30 min ago",
-                statusLabel: "OK"
+                subtitle: "Last: 30 min ago"
             ),
             action: StatusCardAction(
                 label: "Log Now",
@@ -179,7 +277,6 @@ extension StatusCard where Content == EmptyView {
                 tintColor: .purple,
                 title: "Sleeping for 45 min",
                 subtitle: "Started at 14:30",
-                statusLabel: "Sleeping",
                 iconSize: 40
             ),
             action: StatusCardAction(
@@ -205,8 +302,7 @@ extension StatusCard where Content == EmptyView {
                 iconColor: .green,
                 tintColor: .green,
                 title: "2 poops today (2-3 expected)",
-                subtitle: "Last: 2 hours ago",
-                statusLabel: "Good"
+                subtitle: "Last: 2 hours ago"
             ),
             tintColor: .green,
             accessibilityLabel: "Poop Status",
@@ -227,8 +323,7 @@ extension StatusCard where Content == EmptyView {
                 tintColor: .orange,
                 title: "Time to go outside!",
                 titleColor: .orange,
-                subtitle: "90 min since last potty",
-                statusLabel: "Soon"
+                subtitle: "90 min since last potty"
             ),
             action: StatusCardAction(
                 label: "Log Potty",

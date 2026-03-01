@@ -1,6 +1,6 @@
 //
 //  SoundFeedback.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Subtle audio feedback for key interactions.
 //  Sounds confirm actions and reduce "did it work?" anxiety.

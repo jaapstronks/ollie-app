@@ -1,12 +1,12 @@
 //
 //  StatusCardHeader.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Shared header component for status cards
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Reusable header component for status cards (PottyStatusCard, SleepStatusCard, etc.)
 /// Supports an optional trailing view (typically an action button) on the right side
@@ -60,7 +60,8 @@ struct StatusCardHeader<TrailingContent: View>: View {
                     Text(subtitle)
                         .font(.caption)
                         .foregroundStyle(.secondary)
-                        .lineLimit(1)
+                        .lineLimit(2)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
             }
 

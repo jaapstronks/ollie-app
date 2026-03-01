@@ -1,47 +1,34 @@
 //
 //  InsightsHealthSection.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Health section with weight tracking
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
-/// Health section showing weight and growth
+/// Health section showing weight tracking
 struct InsightsHealthSection: View {
     let latestWeight: (weight: Double, date: Date)?
     let weightDelta: (delta: Double, previousDate: Date)?
     @ObservedObject var viewModel: TimelineViewModel
-    @ObservedObject var milestoneStore: MilestoneStore
     @Binding var showWeightSheet: Bool
+    @AppStorage(UserPreferences.Key.weightUnit.rawValue) private var weightUnitRaw = WeightUnit.kg.rawValue
 
     @Environment(\.colorScheme) private var colorScheme
 
+    private var weightUnit: WeightUnit {
+        WeightUnit(rawValue: weightUnitRaw) ?? .kg
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            HStack {
-                InsightsSectionHeader(
-                    title: Strings.Stats.health,
-                    icon: "heart.fill",
-                    tint: .ollieDanger
-                )
-
-                Spacer()
-
-                // See all link
-                NavigationLink {
-                    HealthView(viewModel: viewModel, milestoneStore: milestoneStore)
-                } label: {
-                    HStack(spacing: 4) {
-                        Text(Strings.Common.seeAll)
-                        Image(systemName: "chevron.right")
-                    }
-                    .font(.caption)
-                    .fontWeight(.medium)
-                    .foregroundStyle(Color.ollieAccent)
-                }
-            }
+            InsightsSectionHeader(
+                title: Strings.Health.weight,
+                icon: "scalemass.fill",
+                tint: .otisAccent
+            )
 
             // Weight summary card
             VStack(spacing: 12) {
@@ -52,7 +39,7 @@ struct InsightsHealthSection: View {
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
 
-                            Text(WeightCalculations.formatWeight(latest.weight))
+                            Text(weightUnit.format(latest.weight))
                                 .font(.title2)
                                 .fontWeight(.bold)
                         }
@@ -64,19 +51,23 @@ struct InsightsHealthSection: View {
                             HStack(spacing: 4) {
                                 Image(systemName: delta.delta >= 0 ? "arrow.up.right" : "arrow.down.right")
                                     .font(.caption)
-                                Text(WeightCalculations.formatDelta(delta.delta))
+                                    .accessibilityHidden(true)
+                                Text(weightUnit.formatDelta(delta.delta))
                                     .font(.caption)
                             }
-                            .foregroundStyle(delta.delta >= 0 ? Color.ollieSuccess : Color.ollieWarning)
+                            .foregroundStyle(delta.delta >= 0 ? Color.otisSuccess : Color.otisWarning)
                             .padding(.horizontal, 8)
                             .padding(.vertical, 4)
                             .background(
-                                (delta.delta >= 0 ? Color.ollieSuccess : Color.ollieWarning)
+                                (delta.delta >= 0 ? Color.otisSuccess : Color.otisWarning)
                                     .opacity(colorScheme == .dark ? 0.2 : 0.1)
                             )
                             .clipShape(Capsule())
+                            .accessibilityLabel(delta.delta >= 0 ? Strings.Health.weightIncreased(weightUnit.formatDelta(delta.delta)) : Strings.Health.weightDecreased(weightUnit.formatDelta(abs(delta.delta))))
                         }
                     }
+                    .accessibilityElement(children: .combine)
+                    .accessibilityLabel(Strings.Health.currentWeight(weightUnit.format(latest.weight)))
 
                     // Log weight button
                     Button {
@@ -88,7 +79,7 @@ struct InsightsHealthSection: View {
                     }
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 8)
-                    .background(Color.ollieAccent.opacity(colorScheme == .dark ? 0.2 : 0.1))
+                    .background(Color.otisAccent.opacity(colorScheme == .dark ? 0.2 : 0.1))
                     .cornerRadius(8)
                 } else {
                     // Empty state
@@ -109,7 +100,7 @@ struct InsightsHealthSection: View {
                 }
             }
             .padding()
-            .glassCard(tint: .danger)
+            .glassCard(tint: .accent)
         }
     }
 }

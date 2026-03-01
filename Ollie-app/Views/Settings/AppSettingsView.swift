@@ -1,62 +1,77 @@
 //
 //  AppSettingsView.swift
-//  Ollie-app
+//  Otis-app
 //
-//  App settings: subscription, notifications, sharing, sync, appearance
+//  App settings: subscription, sharing, sync, appearance
 
 import CloudKit
 import CoreData
 import StoreKit
 import SwiftUI
-import TipKit
-import OllieShared
+import OtisShared
 
 /// Settings screen for all app-related configuration
 struct AppSettingsView: View {
     @ObservedObject var profileStore: ProfileStore
     @ObservedObject var dataImporter: DataImporter
     @ObservedObject var eventStore: EventStore
-    @ObservedObject var notificationService: NotificationService
     @ObservedObject var cloudKit = CloudKitService.shared
 
-    @State private var showingNotificationSettings = false
-    @State private var showingOlliePlusSheet = false
+    @State private var showingOtisPlusSheet = false
     @State private var showingSubscriptionSuccess = false
     @State private var showingImportConfirm = false
     @State private var overwriteExisting = false
     @State private var importError: String?
     @State private var showingError = false
-    @State private var activeShare: CKShare?
-    @State private var isPreparingShare = false
-    @State private var shareError: String?
-    @State private var showStopSharingConfirm = false
+    @State private var showingExportSheet = false
     @AppStorage(UserPreferences.Key.appearanceMode.rawValue) private var appearanceMode = AppearanceMode.system.rawValue
+    @AppStorage(UserPreferences.Key.temperatureUnit.rawValue) private var temperatureUnit = TemperatureUnit.celsius.rawValue
+    @AppStorage(UserPreferences.Key.weightUnit.rawValue) private var weightUnit = WeightUnit.kg.rawValue
+    @AppStorage(UserPreferences.Key.preferredMapsApp.rawValue) private var preferredMapsApp = PreferredMapsApp.appleMaps.rawValue
+
+    // Atmosphere settings
+    @AppStorage(UserPreferences.Key.atmosphereTimeOfDay.rawValue) private var atmosphereTimeOfDay = true
+    @AppStorage(UserPreferences.Key.atmosphereWeather.rawValue) private var atmosphereWeather = true
+    @AppStorage(UserPreferences.Key.atmosphereState.rawValue) private var atmosphereState = true
+    @AppStorage(UserPreferences.Key.atmosphereSeasonal.rawValue) private var atmosphereSeasonal = false
 
     var body: some View {
         Form {
             if let profile = profileStore.profile {
-                // Ollie+ subscription
+                // Otis+ subscription
                 PremiumSection(
                     profile: profile,
-                    showingOlliePlusSheet: $showingOlliePlusSheet,
+                    showingOtisPlusSheet: $showingOtisPlusSheet,
                     showingSubscriptionSuccess: $showingSubscriptionSuccess
                 )
-
-                // Notifications
-                notificationSection(profile)
             }
 
             // iCloud Sync
             SyncSection(eventStore: eventStore, cloudKit: cloudKit)
 
             // CloudKit sharing
-            sharingSectionContent
+            SharingSection(cloudKit: cloudKit)
 
             // Siri & Shortcuts
             SiriSection()
 
+            // Integrations (Webhooks)
+            integrationsSection
+
             // Appearance
             appearanceSection
+
+            // Units
+            unitsSection
+
+            // Maps
+            mapsSection
+
+            // Atmosphere
+            atmosphereSection
+
+            // Celebrations
+            celebrationsSection
 
             // Advanced section
             Section(Strings.Settings.advanced) {
@@ -92,6 +107,13 @@ struct AppSettingsView: View {
                     Toggle(Strings.Settings.overwriteExisting, isOn: $overwriteExisting)
                 }
 
+                // Data export
+                Button {
+                    showingExportSheet = true
+                } label: {
+                    Label(Strings.Export.exportData, systemImage: "arrow.up.circle")
+                }
+
                 // Reset profile
                 Button(role: .destructive) {
                     HapticFeedback.warning()
@@ -119,65 +141,31 @@ struct AppSettingsView: View {
         } message: {
             Text(importError ?? Strings.PottyStatus.unknown)
         }
-        .sheet(isPresented: Binding(
-            get: { activeShare != nil },
-            set: { if !$0 { activeShare = nil } }
-        )) {
-            if let share = activeShare {
-                CloudSharingView(
-                    share: share,
-                    container: CKContainer(identifier: "iCloud.nl.jaapstronks.Ollie"),
-                    onDismiss: {
-                        activeShare = nil
-                        Task { await cloudKit.updateShareState() }
-                    }
-                )
-            }
-        }
-        .alert(Strings.CloudSharing.stopSharing, isPresented: $showStopSharingConfirm) {
-            Button(Strings.Common.cancel, role: .cancel) {}
-            Button(Strings.CloudSharing.stopSharing, role: .destructive) {
-                Task { await stopSharing() }
-            }
-        } message: {
-            Text(Strings.CloudSharing.stopSharingConfirm)
+        .sheet(isPresented: $showingExportSheet) {
+            ExportDataView(profileStore: profileStore)
         }
     }
 
-    // MARK: - Notification Section
+    // MARK: - Integrations Section
 
-    private let mealRemindersTip = MealRemindersTip()
-
-    @ViewBuilder
-    private func notificationSection(_ profile: PuppyProfile) -> some View {
-        Section(Strings.Settings.reminders) {
-            TipView(mealRemindersTip)
-
-            Button {
-                showingNotificationSettings = true
+    private var integrationsSection: some View {
+        Section {
+            NavigationLink {
+                WebhookSettingsView(profileStore: profileStore)
             } label: {
                 HStack {
-                    Label {
-                        Text(Strings.Settings.notifications)
-                    } icon: {
-                        Image(systemName: "bell.fill")
-                            .foregroundColor(.ollieAccent)
-                    }
+                    Label(Strings.Webhook.title, systemImage: "arrow.up.forward.app")
                     Spacer()
-                    Text(profile.notificationSettings.isEnabled ? Strings.Common.on : Strings.Common.off)
-                        .foregroundColor(.secondary)
-                    Image(systemName: "chevron.right")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
+                    if profileStore.profile?.webhookConfig.isEnabled == true {
+                        Text(Strings.Common.on)
+                            .foregroundStyle(.secondary)
+                    }
                 }
             }
-            .foregroundColor(.primary)
-        }
-        .sheet(isPresented: $showingNotificationSettings) {
-            NotificationSettingsView(
-                profileStore: profileStore,
-                notificationService: notificationService
-            )
+        } header: {
+            Text(Strings.Settings.integrations)
+        } footer: {
+            Text(Strings.Webhook.description)
         }
     }
 
@@ -203,189 +191,109 @@ struct AppSettingsView: View {
         }
     }
 
-    // MARK: - Sharing Section
+    // MARK: - Units Section
 
-    @ViewBuilder
-    private var sharingSectionContent: some View {
-        Section {
-            if !cloudKit.isCloudAvailable {
-                HStack {
-                    Image(systemName: "exclamationmark.icloud")
-                        .foregroundStyle(.orange)
-                    Text(Strings.CloudSharing.iCloudUnavailable)
-                        .font(.subheadline)
+    private var unitsSection: some View {
+        Section(Strings.Settings.units) {
+            Picker(Strings.Settings.temperature, selection: $temperatureUnit) {
+                ForEach(TemperatureUnit.allCases) { unit in
+                    Text(unit.label)
+                        .tag(unit.rawValue)
                 }
-            } else if cloudKit.isParticipant {
-                HStack {
-                    Image(systemName: "person.2.fill")
-                        .foregroundStyle(.blue)
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(Strings.CloudSharing.sharedData)
-                            .font(.subheadline)
-                        Text(Strings.CloudSharing.viewingOthersData)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                }
-            } else if cloudKit.isShared {
-                VStack(alignment: .leading, spacing: 12) {
-                    HStack {
-                        Image(systemName: "checkmark.circle.fill")
-                            .foregroundStyle(.green)
-                        Text(Strings.CloudSharing.shared)
-                            .font(.subheadline.weight(.medium))
-                    }
-
-                    if cloudKit.shareParticipants.isEmpty {
-                        Text(Strings.CloudSharing.noParticipants)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    } else {
-                        ForEach(cloudKit.shareParticipants) { participant in
-                            HStack {
-                                Image(systemName: "person.fill")
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                                Text(participant.name)
-                                    .font(.subheadline)
-                                Spacer()
-                                Text(participant.status.label)
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                            }
-                        }
-                    }
-                }
-
-                Button {
-                    Task { await manageExistingShare() }
-                } label: {
-                    HStack {
-                        Label(Strings.CloudSharing.manageSharing, systemImage: "person.2.fill")
-                        if isPreparingShare {
-                            Spacer()
-                            ProgressView()
-                        }
-                    }
-                }
-                .disabled(isPreparingShare)
-
-                Button {
-                    Task { await prepareAndShowShare() }
-                } label: {
-                    HStack {
-                        Label(Strings.CloudSharing.inviteAnother, systemImage: "person.badge.plus")
-                        if isPreparingShare {
-                            Spacer()
-                            ProgressView()
-                        }
-                    }
-                }
-                .disabled(isPreparingShare)
-
-                Button(role: .destructive) {
-                    HapticFeedback.warning()
-                    showStopSharingConfirm = true
-                } label: {
-                    Label(Strings.CloudSharing.stopSharing, systemImage: "xmark.circle")
-                }
-            } else {
-                Button {
-                    Task { await prepareAndShowShare() }
-                } label: {
-                    HStack {
-                        Label(Strings.CloudSharing.shareWithPartner, systemImage: "person.badge.plus")
-                        if isPreparingShare {
-                            Spacer()
-                            ProgressView()
-                        }
-                    }
-                }
-                .disabled(isPreparingShare)
             }
 
-            if let error = shareError {
-                Text(error)
-                    .font(.caption)
-                    .foregroundStyle(.red)
+            Picker(Strings.Settings.weight, selection: $weightUnit) {
+                ForEach(WeightUnit.allCases) { unit in
+                    Text(unit.label)
+                        .tag(unit.rawValue)
+                }
+            }
+        }
+    }
+
+    // MARK: - Maps Section
+
+    private var mapsSection: some View {
+        Section {
+            Picker(Strings.Settings.mapsApp, selection: $preferredMapsApp) {
+                ForEach(PreferredMapsApp.allCases) { app in
+                    Label(app.label, systemImage: app.icon)
+                        .tag(app.rawValue)
+                }
+            }
+        } footer: {
+            Text(Strings.Settings.mapsAppDescription)
+        }
+    }
+
+    // MARK: - Atmosphere Section
+
+    private var atmosphereSection: some View {
+        Section {
+            Toggle(isOn: $atmosphereTimeOfDay) {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(Strings.Atmosphere.timeOfDay)
+                    Text(Strings.Atmosphere.timeOfDayDescription)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            }
+
+            Toggle(isOn: $atmosphereWeather) {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(Strings.Atmosphere.weather)
+                    Text(Strings.Atmosphere.weatherDescription)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            }
+
+            Toggle(isOn: $atmosphereState) {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(Strings.Atmosphere.puppyState)
+                    Text(Strings.Atmosphere.puppyStateDescription)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            }
+
+            Toggle(isOn: $atmosphereSeasonal) {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(Strings.Atmosphere.seasonal)
+                    Text(Strings.Atmosphere.seasonalDescription)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
             }
         } header: {
-            Text(Strings.CloudSharing.sharing)
+            Text(Strings.Atmosphere.title)
         } footer: {
-            if cloudKit.isCloudAvailable && !cloudKit.isParticipant {
-                Text(Strings.CloudSharing.sharingDescription)
-            }
-        }
-        .task {
-            let context = PersistenceController.shared.viewContext
-            if let cdProfile = CDPuppyProfile.fetchProfile(in: context) {
-                await cloudKit.refreshShareState(
-                    for: cdProfile,
-                    using: PersistenceController.shared.container
-                )
-            }
+            Text(Strings.Atmosphere.description)
         }
     }
 
-    // MARK: - Sharing Actions
+    // MARK: - Celebrations Section
 
-    private func prepareAndShowShare() async {
-        guard !isPreparingShare else { return }
-        isPreparingShare = true
-        shareError = nil
-
-        do {
-            let context = PersistenceController.shared.viewContext
-            guard let cdProfile = CDPuppyProfile.fetchProfile(in: context) else {
-                shareError = "No profile found. Please set up your puppy first."
-                isPreparingShare = false
-                return
+    private var celebrationsSection: some View {
+        Section {
+            NavigationLink {
+                CelebrationSettingsView()
+            } label: {
+                HStack {
+                    Label(Strings.Celebrations.celebrationStyle, systemImage: "sparkles")
+                    Spacer()
+                    Text(currentCelebrationStyle.displayName)
+                        .foregroundStyle(.secondary)
+                }
             }
-
-            let share = try await cloudKit.getOrCreateShare(
-                for: cdProfile,
-                using: PersistenceController.shared.container
-            )
-
-            activeShare = share
-        } catch {
-            shareError = error.localizedDescription
+        } header: {
+            Text(Strings.Celebrations.celebrationStyle)
         }
-
-        isPreparingShare = false
     }
 
-    private func manageExistingShare() async {
-        guard !isPreparingShare else { return }
-        isPreparingShare = true
-        shareError = nil
-
-        let context = PersistenceController.shared.viewContext
-        if let cdProfile = CDPuppyProfile.fetchProfile(in: context) {
-            await cloudKit.refreshShareState(
-                for: cdProfile,
-                using: PersistenceController.shared.container
-            )
-        }
-
-        if let share = cloudKit.currentShare {
-            activeShare = share
-        } else {
-            shareError = Strings.CloudSharing.couldNotLoadShare
-        }
-
-        isPreparingShare = false
-    }
-
-    private func stopSharing() async {
-        shareError = nil
-
-        do {
-            try await cloudKit.stopSharing()
-            await cloudKit.updateShareState()
-        } catch {
-            shareError = error.localizedDescription
-        }
+    private var currentCelebrationStyle: CelebrationStyle {
+        let rawValue = UserDefaults.standard.string(forKey: UserPreferences.Key.celebrationStyle.rawValue)
+        return CelebrationStyle(rawValue: rawValue ?? "") ?? .full
     }
 
     // MARK: - Import Actions
@@ -404,15 +312,11 @@ struct AppSettingsView: View {
 }
 
 #Preview {
-    let profileStore = ProfileStore()
-    let eventStore = EventStore()
-
-    return NavigationStack {
+    NavigationStack {
         AppSettingsView(
-            profileStore: profileStore,
+            profileStore: ProfileStore(),
             dataImporter: DataImporter(),
-            eventStore: eventStore,
-            notificationService: NotificationService()
+            eventStore: EventStore()
         )
     }
 }

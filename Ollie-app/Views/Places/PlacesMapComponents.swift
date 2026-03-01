@@ -1,13 +1,13 @@
 //
 //  PlacesMapComponents.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Map-related components for the Places tab
 //  Extracted from PlacesTabView for better organization
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 import MapKit
 
 // MARK: - Map Preview with Spots and Photos
@@ -79,9 +79,9 @@ struct SpotMapMarker: View {
     let spot: WalkSpot
 
     var body: some View {
-        Image(systemName: spot.isFavorite ? "star.circle.fill" : "mappin.circle.fill")
+        Image(systemName: "mappin.circle.fill")
             .font(.title3)
-            .foregroundStyle(spot.isFavorite ? .yellow : .ollieAccent)
+            .foregroundStyle(Color.otisAccent)
             .background(
                 Circle()
                     .fill(.white)
@@ -90,21 +90,138 @@ struct SpotMapMarker: View {
     }
 }
 
+/// Map marker for a discovered place (dog parks, vets, pet stores, etc.)
+struct DiscoveredSpotMapMarker: View {
+    let spot: DiscoveredSpot
+
+    var body: some View {
+        ZStack {
+            // Background glow (category-colored)
+            Circle()
+                .fill(markerColor.opacity(0.2))
+                .frame(width: 32, height: 32)
+                .blur(radius: 3)
+
+            // Main marker
+            ZStack {
+                Circle()
+                    .fill(.white)
+                    .frame(width: 28, height: 28)
+                    .shadow(color: .black.opacity(0.15), radius: 2, x: 0, y: 1)
+
+                // Colored ring to distinguish by category
+                Circle()
+                    .stroke(markerColor, lineWidth: 2)
+                    .frame(width: 28, height: 28)
+
+                Image(systemName: spot.category.icon)
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundStyle(markerColor)
+            }
+
+            // Fenced indicator badge (only for dog areas)
+            if spot.isFenced == true {
+                Circle()
+                    .fill(Color.otisSuccess)
+                    .frame(width: 10, height: 10)
+                    .overlay(
+                        Image(systemName: "checkmark")
+                            .font(.system(size: 6, weight: .bold))
+                            .foregroundStyle(.white)
+                    )
+                    .offset(x: 10, y: -10)
+            }
+        }
+    }
+
+    /// Category-specific color for the marker
+    private var markerColor: Color {
+        switch spot.category {
+        case .dogPark, .offLeashArea, .dogBeach, .dogForest, .dogFriendlyPark:
+            return .otisInfo
+        case .vetClinic:
+            return .otisHealthRed
+        case .petStore:
+            return .otisAccent
+        case .dogFriendlyCafe:
+            return .otisPurple
+        }
+    }
+}
+
+/// Map marker for a contact location
+struct ContactMapMarker: View {
+    let contact: DogContact
+
+    var body: some View {
+        ZStack {
+            Circle()
+                .fill(.white)
+                .frame(width: 32, height: 32)
+                .shadow(color: .black.opacity(0.2), radius: 2, x: 0, y: 1)
+
+            Image(systemName: contact.contactType.icon)
+                .font(.system(size: 16, weight: .semibold))
+                .foregroundStyle(markerColor)
+        }
+    }
+
+    private var markerColor: Color {
+        switch contact.contactType {
+        case .vet, .emergencyVet:
+            return .otisHealthRed
+        case .daycare, .sitter:
+            return .otisInfo
+        case .groomer:
+            return .otisPurple
+        case .trainer, .walker:
+            return .otisSuccess
+        case .petStore:
+            return .otisAccent
+        case .breeder:
+            return .otisAccent
+        case .other:
+            return .otisMuted
+        }
+    }
+}
+
 /// Map marker for a photo cluster - shows count badge when multiple photos
+/// Shows golden ring/glow when cluster contains milestone photos
 struct PhotoClusterMapMarker: View {
     let cluster: PhotoCluster
 
     var body: some View {
         ZStack(alignment: .topTrailing) {
-            Image(systemName: "camera.circle.fill")
-                .font(.title3)
-                .foregroundStyle(.pink)
-                .background(
-                    Circle()
-                        .fill(.white)
-                        .frame(width: 16, height: 16)
-                )
+            // Golden glow for milestone photos
+            if cluster.hasMilestonePhoto {
+                Circle()
+                    .fill(Color.yellow.opacity(0.3))
+                    .frame(width: 32, height: 32)
+                    .blur(radius: 4)
+            }
 
+            // Main marker
+            ZStack {
+                // White background circle
+                Circle()
+                    .fill(.white)
+                    .frame(width: 24, height: 24)
+                    .shadow(color: .black.opacity(0.15), radius: 2, x: 0, y: 1)
+
+                // Golden ring for milestone photos
+                if cluster.hasMilestonePhoto {
+                    Circle()
+                        .stroke(Color.yellow, lineWidth: 2)
+                        .frame(width: 24, height: 24)
+                }
+
+                Image(systemName: cluster.hasMilestonePhoto ? "star.circle.fill" : "camera.circle.fill")
+                    .font(.system(size: 20))
+                    .foregroundStyle(cluster.hasMilestonePhoto ? .yellow : .pink)
+            }
+
+            // Count badge
             if cluster.count > 1 {
                 Text("\(cluster.count)")
                     .font(.system(size: 10, weight: .bold))
@@ -113,7 +230,7 @@ struct PhotoClusterMapMarker: View {
                     .padding(.vertical, 1)
                     .background(
                         Capsule()
-                            .fill(.pink)
+                            .fill(cluster.hasMilestonePhoto ? Color.yellow : .pink)
                     )
                     .offset(x: 8, y: -6)
             }
@@ -132,9 +249,9 @@ struct SpotCard: View {
                 RoundedRectangle(cornerRadius: 8)
                     .fill(Color(.tertiarySystemBackground))
 
-                Image(systemName: spot.isFavorite ? "star.circle.fill" : "mappin.circle.fill")
+                Image(systemName: "mappin.circle.fill")
                     .font(.title2)
-                    .foregroundColor(spot.isFavorite ? .yellow : .ollieAccent)
+                    .foregroundColor(.otisAccent)
             }
             .frame(width: 80, height: 60)
 
@@ -194,7 +311,7 @@ struct PhotoClusterPreviewSheet: View {
                 }
                 .padding(.vertical)
             }
-            .navigationTitle(Strings.Places.recentMoments)
+            .navigationTitle(Strings.Places.filterPhotos)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {

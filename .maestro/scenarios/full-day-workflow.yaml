@@ -1,6 +1,6 @@
 # Scenario: Day Workflow Sample
 # Simulates logging a few activities using quick-log menu
-appId: nl.jaapstronks.Ollie
+appId: nl.jaapstronks.Otis
 ---
 - launchApp
 - waitForAnimationToEnd

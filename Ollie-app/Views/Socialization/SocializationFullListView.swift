@@ -1,11 +1,11 @@
 //
 //  SocializationFullListView.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Full list of all socialization categories
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Full list view showing all socialization categories
 struct SocializationFullListView: View {

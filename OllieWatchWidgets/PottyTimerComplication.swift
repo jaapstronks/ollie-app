@@ -1,6 +1,6 @@
 //
 //  PottyTimerComplication.swift
-//  OllieWatchWidgets
+//  OtisWatchWidgets
 //
 //  Watch complication showing time since last potty break with urgency indicator
 
@@ -317,7 +317,7 @@ struct PottyTimerComplication: Widget {
         mealsExpectedToday: 3,
         lastWalkTime: nil,
         nextScheduledWalkTime: nil,
-        puppyName: "Ollie",
+        puppyName: "Max",
         lastUpdated: Date()
     ))
 }

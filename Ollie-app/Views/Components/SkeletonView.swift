@@ -1,6 +1,6 @@
 //
 //  SkeletonView.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Skeleton loading placeholders for content
 

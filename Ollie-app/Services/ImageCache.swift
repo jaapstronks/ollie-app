@@ -1,10 +1,10 @@
 //
 //  ImageCache.swift
-//  Ollie-app
+//  Otis-app
 //
 //  High-performance image caching with async loading for thumbnails and photos
 
-import OllieShared
+import OtisShared
 import UIKit
 import os
 
@@ -13,7 +13,7 @@ actor ImageCache {
     static let shared = ImageCache()
 
     private let cache = NSCache<NSString, UIImage>()
-    private let logger = Logger.ollie(category: "ImageCache")
+    private let logger = Logger.otis(category: "ImageCache")
 
     /// In-flight loading tasks to prevent duplicate loads
     private var loadingTasks: [String: Task<UIImage?, Never>] = [:]
@@ -55,15 +55,6 @@ actor ImageCache {
         loadingTasks[relativePath] = nil
 
         return result
-    }
-
-    /// Preload images for upcoming cells (call during scroll)
-    func preloadImages(relativePaths: [String]) {
-        for path in relativePaths {
-            Task {
-                _ = await loadImage(relativePath: path, isThumbnail: true)
-            }
-        }
     }
 
     /// Clear all cached images (call on memory warning)

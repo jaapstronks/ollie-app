@@ -1,10 +1,10 @@
 //
 //  EXIFExtractor.swift
-//  Ollie-app
+//  Otis-app
 //
 
 import Foundation
-import OllieShared
+import OtisShared
 import ImageIO
 import UIKit
 import CoreLocation

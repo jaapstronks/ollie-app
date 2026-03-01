@@ -23,11 +23,11 @@ Replace the manual CloudKit sync implementation (raw CKRecord APIs + JSONL files
 ```
 ┌─────────────────────────────────────────────────────┐
 │  NSPersistentCloudKitContainer                      │
-│  Container: iCloud.nl.jaapstronks.Ollie             │
+│  Container: iCloud.nl.jaapstronks.Otis             │
 │                                                     │
 │  ┌─────────────────┐    ┌─────────────────┐        │
 │  │ Private Store   │    │ Shared Store    │        │
-│  │ Ollie.sqlite    │    │ Ollie-shared.sqlite │    │
+│  │ Otis.sqlite    │    │ Otis-shared.sqlite │    │
 │  │ scope: .private │    │ scope: .shared  │        │
 │  └─────────────────┘    └─────────────────┘        │
 └─────────────────────────────────────────────────────┘
@@ -39,7 +39,7 @@ Replace the manual CloudKit sync implementation (raw CKRecord APIs + JSONL files
 
 ### Phase 1: Core Data Model ✅
 
-Created `Ollie.xcdatamodeld` with 6 entities:
+Created `Otis.xcdatamodeld` with 6 entities:
 
 | Entity | Purpose |
 |--------|---------|
@@ -104,7 +104,7 @@ Created `CoreDataMigrationCoordinator.swift`:
 
 ### Phase 7: App Integration ✅
 
-Updated `Ollie_appApp.swift`:
+Updated `Otis_appApp.swift`:
 - Added `PersistenceController.shared` reference
 - Injected Core Data context via `.environment(\.managedObjectContext, ...)`
 - Migration runs on first launch via `.task { }`
@@ -116,8 +116,8 @@ Updated `Ollie_appApp.swift`:
 
 ```
 Ollie-app/
-├── Ollie.xcdatamodeld/
-│   └── Ollie.xcdatamodel/contents          # Core Data model XML
+├── Otis.xcdatamodeld/
+│   └── Otis.xcdatamodel/contents          # Core Data model XML
 ├── Services/
 │   ├── PersistenceController.swift         # Two-store container
 │   ├── CoreDataMigrationCoordinator.swift  # JSONL→Core Data migration

@@ -1,11 +1,11 @@
 //
 //  StreakWidget.swift
-//  OllieWidget
+//  OtisWidget
 //
 //  Streak counter widget showing consecutive outdoor potty events
 
 import WidgetKit
-import OllieShared
+import OtisShared
 import SwiftUI
 
 // MARK: - Timeline Provider
@@ -289,7 +289,7 @@ struct StreakWidget: Widget {
         mealsExpectedToday: 3,
         lastWalkTime: Date().addingTimeInterval(-1 * 60 * 60),
         nextScheduledWalkTime: Date().addingTimeInterval(30 * 60),
-        puppyName: "Ollie",
+        puppyName: "Max",
         lastUpdated: Date()
     ))
     StreakEntry(date: .now, data: WidgetData(
@@ -307,7 +307,7 @@ struct StreakWidget: Widget {
         mealsExpectedToday: 3,
         lastWalkTime: Date().addingTimeInterval(-1 * 60 * 60),
         nextScheduledWalkTime: Date().addingTimeInterval(30 * 60),
-        puppyName: "Ollie",
+        puppyName: "Max",
         lastUpdated: Date()
     ))
 }

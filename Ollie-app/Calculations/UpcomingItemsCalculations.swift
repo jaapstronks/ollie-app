@@ -1,12 +1,12 @@
 //
 //  UpcomingItemsCalculations.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Business logic for calculating upcoming meals and walks
 //
 
 import Foundation
-import OllieShared
+import OtisShared
 
 // MARK: - Upcoming Items Calculation
 

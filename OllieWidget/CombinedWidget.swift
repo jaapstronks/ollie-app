@@ -1,11 +1,11 @@
 //
 //  CombinedWidget.swift
-//  OllieWidget
+//  OtisWidget
 //
 //  Combined widget showing potty timer and streak together
 
 import WidgetKit
-import OllieShared
+import OtisShared
 import SwiftUI
 
 // MARK: - Timeline Provider
@@ -439,7 +439,7 @@ struct CombinedWidget: Widget {
         StaticConfiguration(kind: kind, provider: CombinedProvider()) { entry in
             CombinedWidgetEntryView(entry: entry)
         }
-        .configurationDisplayName(String(localized: "Ollie Overview"))
+        .configurationDisplayName(String(localized: "Otis Overview"))
         .description(String(localized: "Potty timer and streak in one widget."))
         .supportedFamilies([.systemMedium, .systemLarge])
     }
@@ -466,7 +466,7 @@ struct CombinedWidget: Widget {
         mealsExpectedToday: 3,
         lastWalkTime: Date().addingTimeInterval(-1 * 60 * 60),
         nextScheduledWalkTime: Date().addingTimeInterval(30 * 60),
-        puppyName: "Ollie",
+        puppyName: "Max",
         lastUpdated: Date()
     ))
 }

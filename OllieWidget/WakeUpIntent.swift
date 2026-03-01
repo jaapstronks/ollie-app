@@ -1,6 +1,6 @@
 //
 //  WakeUpIntent.swift
-//  OllieWidget
+//  OtisWidget
 //
 //  App Intent for interactive "Wake Up" button in Dynamic Island (iOS 17+)
 //

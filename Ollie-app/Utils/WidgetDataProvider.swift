@@ -1,11 +1,11 @@
 //
 //  WidgetDataProvider.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Shared data layer for widget communication via App Groups
 
 import Foundation
-import OllieShared
+import OtisShared
 import WidgetKit
 
 /// Data structure for widget display

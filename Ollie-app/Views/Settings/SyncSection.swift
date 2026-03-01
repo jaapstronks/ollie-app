@@ -1,11 +1,11 @@
 //
 //  SyncSection.swift
-//  Ollie-app
+//  Otis-app
 //
 //  iCloud sync section for SettingsView
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// iCloud sync status and controls section
 struct SyncSection: View {
@@ -23,7 +23,7 @@ struct SyncSection: View {
                         .foregroundStyle(.secondary)
                 } else if cloudKit.isCloudAvailable {
                     Image(systemName: "checkmark.icloud")
-                        .foregroundStyle(.green)
+                        .foregroundStyle(Color.otisSuccess)
                     VStack(alignment: .leading, spacing: 2) {
                         Text(Strings.Settings.iCloudActive)
                         Text("Sync is automatic")
@@ -32,7 +32,7 @@ struct SyncSection: View {
                     }
                 } else {
                     Image(systemName: "xmark.icloud")
-                        .foregroundStyle(.orange)
+                        .foregroundStyle(Color.orange)
                     Text(Strings.Settings.iCloudUnavailable)
                 }
                 Spacer()

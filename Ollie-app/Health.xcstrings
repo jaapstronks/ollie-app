@@ -716,6 +716,17 @@
         }
       }
     },
+    "Medical Milestones" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Medische mijlpalen"
+          }
+        }
+      }
+    },
     "Medications" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -789,6 +800,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Volgende"
+          }
+        }
+      }
+    },
+    "No medical milestones yet" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nog geen medische mijlpalen"
           }
         }
       }

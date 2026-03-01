@@ -1,12 +1,12 @@
 //
 //  AsyncThumbnailView.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Reusable async thumbnail loader with caching
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Async thumbnail loader with loading, error, and success states
 struct AsyncThumbnailView: View {

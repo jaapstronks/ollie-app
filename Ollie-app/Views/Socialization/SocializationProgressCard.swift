@@ -1,11 +1,11 @@
 //
 //  SocializationProgressCard.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Overall progress card for socialization checklist
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Card showing overall socialization progress and window status
 struct SocializationProgressCard: View {
@@ -28,7 +28,7 @@ struct SocializationProgressCard: View {
             // Header
             HStack {
                 Image(systemName: "pawprint.fill")
-                    .foregroundStyle(Color.ollieAccent)
+                    .foregroundStyle(Color.otisAccent)
                 Text(Strings.Socialization.sectionTitle)
                     .font(.headline)
                     .fontWeight(.semibold)
@@ -85,10 +85,10 @@ struct SocializationProgressCard: View {
 
     private var progressColor: Color {
         switch progressPercentage {
-        case 0..<0.25: return .ollieWarning
+        case 0..<0.25: return .otisWarning
         case 0.25..<0.5: return .orange
         case 0.5..<0.75: return .yellow
-        default: return .ollieSuccess
+        default: return .otisSuccess
         }
     }
 

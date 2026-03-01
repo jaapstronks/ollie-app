@@ -1,6 +1,6 @@
 # Test Walks Tab functionality
 # Tests: Navigation, favorite spots, walk locations
-appId: nl.jaapstronks.Ollie
+appId: nl.jaapstronks.Otis
 ---
 - launchApp
 - waitForAnimationToEnd

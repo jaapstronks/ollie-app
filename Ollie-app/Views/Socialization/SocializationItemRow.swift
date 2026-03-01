@@ -1,11 +1,11 @@
 //
 //  SocializationItemRow.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Row showing a single socialization item with progress
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Row displaying a socialization item with progress bar and last exposure info
 struct SocializationItemRow: View {
@@ -49,11 +49,11 @@ struct SocializationItemRow: View {
             // Name and status
             HStack {
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(item.name)
+                    Text(item.localizedDisplayName)
                         .font(.subheadline)
                         .fontWeight(.medium)
 
-                    if let description = item.description {
+                    if let description = item.localizedDescription {
                         Text(description)
                             .font(.caption)
                             .foregroundStyle(.secondary)
@@ -103,10 +103,10 @@ struct SocializationItemRow: View {
         HStack(spacing: 4) {
             if isComfortable {
                 Image(systemName: "checkmark.circle.fill")
-                    .foregroundStyle(Color.ollieSuccess)
+                    .foregroundStyle(Color.otisSuccess)
             } else if let last = lastExposure, !last.reaction.isPositive {
                 Image(systemName: "exclamationmark.triangle.fill")
-                    .foregroundStyle(Color.ollieWarning)
+                    .foregroundStyle(Color.otisWarning)
             }
         }
         .font(.system(size: 14))
@@ -120,7 +120,7 @@ struct SocializationItemRow: View {
             // Reaction icon
             Image(systemName: exposure.reaction.icon)
                 .font(.caption)
-                .foregroundStyle(exposure.reaction.isPositive ? Color.ollieSuccess : Color.ollieWarning)
+                .foregroundStyle(exposure.reaction.isPositive ? Color.otisSuccess : Color.otisWarning)
 
             // Distance
             Text(exposure.distance.label)
@@ -139,8 +139,8 @@ struct SocializationItemRow: View {
         .background(
             RoundedRectangle(cornerRadius: 6)
                 .fill(exposure.reaction.isPositive ?
-                      Color.ollieSuccess.opacity(0.1) :
-                      Color.ollieWarning.opacity(0.1))
+                      Color.otisSuccess.opacity(0.1) :
+                      Color.otisWarning.opacity(0.1))
         )
     }
 
@@ -148,11 +148,11 @@ struct SocializationItemRow: View {
 
     private var progressColor: Color {
         if isComfortable {
-            return .ollieSuccess
+            return .otisSuccess
         } else if let last = lastExposure, !last.reaction.isPositive {
-            return .ollieWarning
+            return .otisWarning
         } else if positiveCount > 0 {
-            return .ollieAccent
+            return .otisAccent
         } else {
             return .secondary
         }

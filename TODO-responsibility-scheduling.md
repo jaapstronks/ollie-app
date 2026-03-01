@@ -184,7 +184,7 @@ struct StatusSummary: Codable {
 
 | File | Changes |
 |------|---------|
-| `OllieWidget/OllieWidget.swift` | Display responsibility status; different visual treatment when user is/isn't responsible |
+| `OtisWidget/OtisWidget.swift` | Display responsibility status; different visual treatment when user is/isn't responsible |
 
 ---
 

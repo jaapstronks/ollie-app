@@ -1,12 +1,12 @@
 //
 //  CircleIconView.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Reusable icon in circular background component
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Icon displayed in a circular background with optional border
 struct CircleIconView: View {
@@ -50,10 +50,10 @@ struct CircleIconView: View {
             HStack(spacing: 2) {
                 Image(systemName: "drop.fill")
                     .font(.system(size: size * 0.36, weight: .medium))
-                    .foregroundStyle(Color.ollieInfo)
+                    .foregroundStyle(Color.otisInfo)
                 Image(systemName: "circle.inset.filled")
                     .font(.system(size: size * 0.32, weight: .medium))
-                    .foregroundStyle(Color.ollieWarning)
+                    .foregroundStyle(Color.otisWarning)
             }
 
         case .custom(let view):
@@ -75,15 +75,15 @@ enum CircleIconContent {
 #Preview("Circle Icons") {
     VStack(spacing: 20) {
         HStack(spacing: 16) {
-            CircleIconView(icon: .system("plus"), color: .ollieAccent, showBorder: true)
-            CircleIconView(icon: .system("camera.fill"), color: .ollieAccent, showBorder: true)
-            CircleIconView(icon: .potty, color: .ollieInfo)
+            CircleIconView(icon: .system("plus"), color: .otisAccent, showBorder: true)
+            CircleIconView(icon: .system("camera.fill"), color: .otisAccent, showBorder: true)
+            CircleIconView(icon: .potty, color: .otisInfo)
         }
 
         HStack(spacing: 16) {
-            CircleIconView(icon: .eventType(.eten), color: .ollieAccent)
-            CircleIconView(icon: .eventType(.slapen), color: .ollieSleep)
-            CircleIconView(icon: .eventType(.uitlaten), color: .ollieSuccess)
+            CircleIconView(icon: .eventType(.eten), color: .otisAccent)
+            CircleIconView(icon: .eventType(.slapen), color: .otisSleep)
+            CircleIconView(icon: .eventType(.uitlaten), color: .otisSuccess)
         }
     }
     .padding()

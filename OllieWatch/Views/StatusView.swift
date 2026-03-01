@@ -1,11 +1,11 @@
 //
 //  StatusView.swift
-//  OllieWatch
+//  OtisWatch
 //
 //  Shows potty timer, streak, and sleep status
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 struct StatusView: View {
     @ObservedObject var dataProvider: WatchDataProvider

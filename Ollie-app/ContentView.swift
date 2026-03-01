@@ -1,10 +1,10 @@
 //
 //  ContentView.swift
-//  Ollie-app
+//  Otis-app
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Root view with tab navigation or onboarding
 struct ContentView: View {
@@ -17,6 +17,11 @@ struct ContentView: View {
     @EnvironmentObject var medicationStore: MedicationStore
     @EnvironmentObject var socializationStore: SocializationStore
     @EnvironmentObject var milestoneStore: MilestoneStore
+    @EnvironmentObject var documentStore: DocumentStore
+    @EnvironmentObject var contactStore: ContactStore
+    @EnvironmentObject var appointmentStore: AppointmentStore
+    @EnvironmentObject var cloudKit: CloudKitService
+    @EnvironmentObject var foodRecallService: FoodRecallService
 
     @State private var showOnboarding = false
     @AppStorage(UserPreferences.Key.lastSelectedTab.rawValue) private var selectedTab = 0
@@ -27,14 +32,30 @@ struct ContentView: View {
         AppearanceMode(rawValue: appearanceMode)?.colorScheme
     }
 
+    /// Determine if we should show onboarding
+    /// - Skip if user is a participant (accepted a share invitation)
+    /// - Skip if user already has a profile
+    private var shouldShowOnboarding: Bool {
+        // Never show onboarding while loading
+        guard !profileStore.isLoading else { return false }
+
+        // Don't show onboarding if user is a participant with shared data
+        if cloudKit.isParticipant {
+            return false
+        }
+
+        // Show onboarding only if no profile exists (and not forced)
+        return !profileStore.hasProfile || showOnboarding
+    }
+
     var body: some View {
         ZStack {
             Group {
                 if profileStore.isLoading {
                     // Loading state
                     LaunchScreen()
-                } else if !profileStore.hasProfile || showOnboarding {
-                    // Onboarding for new users
+                } else if shouldShowOnboarding {
+                    // Onboarding for new users (not for participants)
                     OnboardingView(profileStore: profileStore) {
                         showOnboarding = false
                     }
@@ -50,7 +71,10 @@ struct ContentView: View {
                         spotStore: spotStore,
                         medicationStore: medicationStore,
                         socializationStore: socializationStore,
-                        milestoneStore: milestoneStore
+                        milestoneStore: milestoneStore,
+                        documentStore: documentStore,
+                        contactStore: contactStore,
+                        appointmentStore: appointmentStore
                     )
                 }
             }
@@ -70,12 +94,17 @@ struct ContentView: View {
                 }
             }
         }
+        // Listen for share acceptance to skip onboarding and reload profile
+        .onReceive(NotificationCenter.default.publisher(for: .cloudKitShareAccepted)) { _ in
+            // Force dismiss onboarding if it was showing
+            showOnboarding = false
+        }
         .preferredColorScheme(colorScheme)
     }
 }
 
 /// Wrapper view that owns the TimelineViewModel as a @StateObject
-/// New structure: 4 tabs (Today, Train, Moments, Stats) + FAB for logging
+/// New structure: 5 tabs (Today, Train, Places, Schedule, Health) + FAB for logging
 struct MainTabView: View {
     @Binding var selectedTab: Int
     let eventStore: EventStore
@@ -87,14 +116,20 @@ struct MainTabView: View {
     @ObservedObject var medicationStore: MedicationStore
     @ObservedObject var socializationStore: SocializationStore
     @ObservedObject var milestoneStore: MilestoneStore
+    @ObservedObject var documentStore: DocumentStore
+    @ObservedObject var contactStore: ContactStore
+    @ObservedObject var appointmentStore: AppointmentStore
     @EnvironmentObject var locationManager: LocationManager
+    @EnvironmentObject var foodRecallService: FoodRecallService
 
     @StateObject private var viewModel: TimelineViewModel
     @StateObject private var momentsViewModel: MomentsViewModel
     @StateObject private var mediaCaptureViewModel = MediaCaptureViewModel(mediaStore: MediaStore())
-    @StateObject private var thisWeekViewModel: ThisWeekViewModel
+    @StateObject private var memoriesViewModel: MemoriesViewModel
     @State private var showingSettings = false
     @State private var selectedPhotoEvent: PuppyEvent?
+    @State private var showingArrivalPhotoPrompt = false
+    @AppStorage("hasShownArrivalPhotoPrompt") private var hasShownArrivalPhotoPrompt = false
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     init(
@@ -107,7 +142,10 @@ struct MainTabView: View {
         spotStore: SpotStore,
         medicationStore: MedicationStore,
         socializationStore: SocializationStore,
-        milestoneStore: MilestoneStore
+        milestoneStore: MilestoneStore,
+        documentStore: DocumentStore,
+        contactStore: ContactStore,
+        appointmentStore: AppointmentStore
     ) {
         self._selectedTab = selectedTab
         self.eventStore = eventStore
@@ -119,20 +157,22 @@ struct MainTabView: View {
         self.medicationStore = medicationStore
         self.socializationStore = socializationStore
         self.milestoneStore = milestoneStore
+        self.documentStore = documentStore
+        self.contactStore = contactStore
+        self.appointmentStore = appointmentStore
         // StateObject init with autoclosure ensures single creation
         self._viewModel = StateObject(wrappedValue: TimelineViewModel(
             eventStore: eventStore,
             profileStore: profileStore,
             notificationService: notificationService,
-            medicationStore: medicationStore
+            medicationStore: medicationStore,
+            appointmentStore: appointmentStore
         ))
         self._momentsViewModel = StateObject(wrappedValue: MomentsViewModel(
             eventStore: eventStore
         ))
-        self._thisWeekViewModel = StateObject(wrappedValue: ThisWeekViewModel(
-            profileStore: profileStore,
-            milestoneStore: milestoneStore,
-            socializationStore: socializationStore
+        self._memoriesViewModel = StateObject(wrappedValue: MemoriesViewModel(
+            eventStore: eventStore
         ))
     }
 
@@ -155,20 +195,21 @@ struct MainTabView: View {
                 // Tab 0: Today
                 TodayView(
                     viewModel: viewModel,
-                    thisWeekViewModel: thisWeekViewModel,
+                    memoriesViewModel: memoriesViewModel,
+                    appointmentStore: appointmentStore,
                     weatherService: weatherService,
                     onSettingsTap: { showingSettings = true },
-                    onNavigateToInsights: { selectedTab = 3 }
+                    onNavigateToAppointments: { selectedTab = 3 },
+                    onNavigateToTrain: { selectedTab = 1 }
                 )
                 .tabItem {
-                    Label(Strings.Tabs.today, systemImage: "calendar")
+                    Label(Strings.Tabs.today, systemImage: "pawprint.fill")
                 }
                 .tag(0)
 
                 // Tab 1: Train (expanded with Potty + Socialization + Skills)
                 TrainTabView(
                     viewModel: viewModel,
-                    eventStore: eventStore,
                     onSettingsTap: { showingSettings = true }
                 )
                 .tabItem {
@@ -176,36 +217,50 @@ struct MainTabView: View {
                 }
                 .tag(1)
 
-                // Tab 2: Places (spots + moments combined)
+                // Tab 2: Explore (spots + photo moments on map)
                 PlacesTabView(
                     spotStore: spotStore,
+                    contactStore: contactStore,
                     momentsViewModel: momentsViewModel,
-                    viewModel: viewModel,
                     locationManager: locationManager,
-                    onSettingsTap: { showingSettings = true }
+                    onSettingsTap: { showingSettings = true },
+                    onAddMoment: {
+                        viewModel.sheetCoordinator.presentSheet(.momentSourcePicker)
+                    }
                 )
                 .tabItem {
-                    Label(Strings.Tabs.places, systemImage: "map.fill")
+                    Label(Strings.Tabs.explore, systemImage: "map.fill")
                 }
                 .tag(2)
 
-                // Tab 3: Insights (expanded with Health, Walks, Spots)
-                InsightsView(
+                // Tab 3: Schedule (appointments, contacts, calendar)
+                CalendarTabView(
+                    milestoneStore: milestoneStore,
+                    appointmentStore: appointmentStore,
+                    socializationStore: socializationStore,
+                    contactStore: contactStore,
+                    onSettingsTap: { showingSettings = true },
+                    onNavigateToSocialization: { selectedTab = 1 }
+                )
+                .tabItem {
+                    Label(Strings.Tabs.schedule, systemImage: "calendar.badge.clock")
+                }
+                .tag(3)
+
+                // Tab 4: Health (stats, weight, patterns, walks)
+                HealthTabView(
                     viewModel: viewModel,
                     momentsViewModel: momentsViewModel,
-                    spotStore: spotStore,
-                    socializationStore: socializationStore,
-                    milestoneStore: milestoneStore,
                     onSettingsTap: { showingSettings = true }
                 )
                 .tabItem {
-                    Label(Strings.Tabs.insights, systemImage: "chart.bar.fill")
+                    Label(Strings.Tabs.health, systemImage: "heart.text.square.fill")
                 }
-                .tag(3)
+                .tag(4)
             }
 
-            // Floating Action Button (hidden on Moments tab)
-            if selectedTab != 2 {
+            // Floating Action Button (hidden on Places and Schedule tabs)
+            if selectedTab != 2 && selectedTab != 3 {
                 HStack {
                     Spacer()
 
@@ -242,9 +297,9 @@ struct MainTabView: View {
                     dataImporter: dataImporter,
                     eventStore: eventStore,
                     notificationService: notificationService,
-                    spotStore: spotStore,
-                    viewModel: viewModel,
-                    milestoneStore: milestoneStore
+                    documentStore: documentStore,
+                    contactStore: contactStore,
+                    foodRecallService: foodRecallService
                 )
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
@@ -265,6 +320,50 @@ struct MainTabView: View {
             spotStore: spotStore,
             locationManager: locationManager
         )
+        // Arrival photo prompt - shown when expected puppy arrives without a photo
+        .sheet(isPresented: $showingArrivalPhotoPrompt) {
+            if let profile = profileStore.profile {
+                ArrivalPhotoPromptSheet(
+                    puppyName: profile.name,
+                    onTakePhoto: {
+                        showingArrivalPhotoPrompt = false
+                        hasShownArrivalPhotoPrompt = true
+                        // Navigate to settings to add a photo
+                        showingSettings = true
+                    },
+                    onDismiss: {
+                        showingArrivalPhotoPrompt = false
+                        hasShownArrivalPhotoPrompt = true
+                    }
+                )
+                .presentationDetents([.medium])
+            }
+        }
+        .onAppear {
+            checkForArrivalPhotoPrompt()
+        }
+    }
+
+    /// Check if we should show the arrival photo prompt
+    /// Conditions: no profile photo, home date has passed, hasn't been shown before
+    private func checkForArrivalPhotoPrompt() {
+        guard !hasShownArrivalPhotoPrompt,
+              let profile = profileStore.profile,
+              profile.profilePhotoFilename == nil else {
+            return
+        }
+
+        // Check if home date has arrived (today or earlier)
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        let homeDate = calendar.startOfDay(for: profile.homeDate)
+
+        if homeDate <= today {
+            // Slight delay to let the UI settle
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                showingArrivalPhotoPrompt = true
+            }
+        }
     }
 }
 
@@ -278,4 +377,10 @@ struct MainTabView: View {
         .environmentObject(SpotStore())
         .environmentObject(LocationManager())
         .environmentObject(MedicationStore())
+        .environmentObject(SocializationStore())
+        .environmentObject(MilestoneStore())
+        .environmentObject(DocumentStore())
+        .environmentObject(ContactStore())
+        .environmentObject(AppointmentStore())
+        .environmentObject(CloudKitService.shared)
 }

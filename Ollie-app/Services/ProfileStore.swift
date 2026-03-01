@@ -1,13 +1,13 @@
 //
 //  ProfileStore.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Manages reading and writing the puppy profile with Core Data and automatic CloudKit sync
 //
 
 import Foundation
 import CoreData
-import OllieShared
+import OtisShared
 import Combine
 import os
 
@@ -20,7 +20,7 @@ class ProfileStore: ObservableObject {
     @Published private(set) var isSyncing: Bool = false
 
     private let persistenceController: PersistenceController
-    private let logger = Logger.ollie(category: "ProfileStore")
+    private let logger = Logger.otis(category: "ProfileStore")
     private var cancellables = Set<AnyCancellable>()
 
     /// App Group suite name for sharing with Intents/Widgets
@@ -104,6 +104,31 @@ class ProfileStore: ObservableObject {
         // Just refresh the view context
         viewContext.refreshAllObjects()
         loadProfile()
+
+        // Run breed migration if needed
+        await migrateBreedNameToId()
+    }
+
+    /// Migrate breed name to breedId if profile has breed but no breedId
+    private func migrateBreedNameToId() async {
+        guard let profile = profile,
+              let breedName = profile.breed,
+              !breedName.isEmpty,
+              profile.breedId == nil else {
+            return
+        }
+
+        logger.info("Migrating breed name '\(breedName)' to breedId")
+
+        // Fetch breeds and find matching breed
+        await BreedService.shared.fetchBreeds()
+
+        if let matchedBreed = BreedService.shared.findBreed(named: breedName) {
+            updateBreedId(matchedBreed.id)
+            logger.info("Migrated breed '\(breedName)' to breedId \(matchedBreed.id)")
+        } else {
+            logger.warning("Could not find breed match for '\(breedName)'")
+        }
     }
 
     /// Force sync with CloudKit
@@ -143,6 +168,52 @@ class ProfileStore: ObservableObject {
     func updateWalkSchedule(_ schedule: WalkSchedule) {
         guard var currentProfile = profile else { return }
         currentProfile.walkSchedule = schedule
+        saveProfile(currentProfile)
+    }
+
+    /// Update the profile photo filename
+    func updateProfilePhoto(_ filename: String?) {
+        guard var currentProfile = profile else { return }
+        currentProfile.profilePhotoFilename = filename
+        saveProfile(currentProfile)
+    }
+
+    /// Update the webhook configuration
+    func updateWebhookConfig(_ config: WebhookConfig) {
+        guard var currentProfile = profile else { return }
+        currentProfile.webhookConfig = config
+        saveProfile(currentProfile)
+    }
+
+    /// Update the dog's name
+    func updateName(_ name: String) {
+        guard var currentProfile = profile else { return }
+        currentProfile.name = name
+        saveProfile(currentProfile)
+    }
+
+    /// Update the passed date (when the dog passed away)
+    func updatePassedDate(_ date: Date?) {
+        guard var currentProfile = profile else { return }
+        currentProfile.passedDate = date
+        saveProfile(currentProfile)
+    }
+
+    /// Update the breed selection
+    func updateBreed(name: String?, breedId: Int?, sizeCategory: PuppyProfile.SizeCategory?) {
+        guard var currentProfile = profile else { return }
+        currentProfile.breed = name
+        currentProfile.breedId = breedId
+        if let size = sizeCategory {
+            currentProfile.sizeCategory = size
+        }
+        saveProfile(currentProfile)
+    }
+
+    /// Update just the breedId (for migration from breed name)
+    func updateBreedId(_ breedId: Int) {
+        guard var currentProfile = profile else { return }
+        currentProfile.breedId = breedId
         saveProfile(currentProfile)
     }
 
@@ -203,7 +274,29 @@ class ProfileStore: ObservableObject {
         isLoading = true
         defer { isLoading = false }
 
-        // Try to load from Core Data
+        // Check if user is a participant (has shared data) - prioritize shared profile
+        if let sharedStore = persistenceController.getSharedStore(),
+           let cdProfile = CDPuppyProfile.fetchProfile(in: viewContext, from: sharedStore),
+           let loadedProfile = cdProfile.toPuppyProfile() {
+            logger.info("Loaded profile from shared store (participant mode)")
+            profile = loadedProfile
+            syncToAppGroup()
+            WidgetDataProvider.shared.updateProfileName(loadedProfile.name)
+            return
+        }
+
+        // Fall back to private store (owner mode)
+        if let privateStore = persistenceController.getPrivateStore(),
+           let cdProfile = CDPuppyProfile.fetchProfile(in: viewContext, from: privateStore),
+           let loadedProfile = cdProfile.toPuppyProfile() {
+            logger.info("Loaded profile from private store (owner mode)")
+            profile = loadedProfile
+            syncToAppGroup()
+            WidgetDataProvider.shared.updateProfileName(loadedProfile.name)
+            return
+        }
+
+        // No profile found in either store - try generic fetch as fallback
         guard let cdProfile = CDPuppyProfile.fetchProfile(in: viewContext),
               let loadedProfile = cdProfile.toPuppyProfile() else {
             profile = nil
@@ -213,6 +306,30 @@ class ProfileStore: ObservableObject {
         profile = loadedProfile
         syncToAppGroup()
         WidgetDataProvider.shared.updateProfileName(loadedProfile.name)
+    }
+
+    // MARK: - Share Acceptance Support
+
+    /// Check if user has an existing profile in their private store
+    /// Used to warn before accepting a share invitation
+    func hasExistingPrivateProfile() -> Bool {
+        guard let privateStore = persistenceController.getPrivateStore() else { return false }
+        return CDPuppyProfile.hasProfile(in: viewContext, store: privateStore)
+    }
+
+    /// Delete existing profile from private store (called when accepting a share)
+    /// Since multi-dog is not supported yet, we need to clear the private profile
+    func deletePrivateProfile() {
+        guard let privateStore = persistenceController.getPrivateStore() else { return }
+
+        CDPuppyProfile.deleteAllProfiles(in: viewContext, from: privateStore)
+
+        do {
+            try persistenceController.save()
+            logger.info("Deleted existing private profile to make room for shared profile")
+        } catch {
+            logger.error("Failed to delete private profile: \(error.localizedDescription)")
+        }
     }
 
     // MARK: - App Group Sync

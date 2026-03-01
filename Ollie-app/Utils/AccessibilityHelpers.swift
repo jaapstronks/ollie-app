@@ -1,11 +1,11 @@
 //
 //  AccessibilityHelpers.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Reusable accessibility utilities and extensions
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 // MARK: - Conditional Animation Extension
 

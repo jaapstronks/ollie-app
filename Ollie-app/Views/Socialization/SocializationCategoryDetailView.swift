@@ -1,11 +1,11 @@
 //
 //  SocializationCategoryDetailView.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Detail view showing all items in a socialization category
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Detail view for a socialization category, showing all items
 struct SocializationCategoryDetailView: View {
@@ -38,7 +38,7 @@ struct SocializationCategoryDetailView: View {
             }
         }
         .listStyle(.insetGrouped)
-        .navigationTitle(category.name)
+        .navigationTitle(category.localizedDisplayName)
         .navigationBarTitleDisplayMode(.large)
         .sheet(item: $selectedItem) { item in
             LogExposureSheet(item: item) { reaction in
@@ -146,8 +146,8 @@ struct SocializationCategoryDetailView: View {
     private func progressColor(for progress: (completed: Int, total: Int)) -> Color {
         let fraction = progressFraction(for: progress)
         switch fraction {
-        case 1.0: return .ollieSuccess
-        case 0.5...: return .ollieAccent
+        case 1.0: return .otisSuccess
+        case 0.5...: return .otisAccent
         default: return .orange
         }
     }

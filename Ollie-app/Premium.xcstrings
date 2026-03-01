@@ -155,24 +155,24 @@
         }
       }
     },
-    "Continue with Ollie" : {
+    "Continue with Otis" : {
       "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Doorgaan met Ollie"
+            "value" : "Doorgaan met Otis"
           }
         }
       }
     },
-    "Continue with Ollie — %@" : {
+    "Continue with Otis — %@" : {
       "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Doorgaan met Ollie — %@"
+            "value" : "Doorgaan met Otis — %@"
           }
         }
       }
@@ -243,13 +243,13 @@
         }
       }
     },
-    "How is my puppy in Ollie" : {
+    "How is my puppy in Otis" : {
       "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hoe gaat het met mijn puppy in Ollie"
+            "value" : "Hoe gaat het met mijn puppy in Otis"
           }
         }
       }
@@ -408,24 +408,24 @@
         }
       }
     },
-    "My puppy is sleeping in Ollie" : {
+    "My puppy is sleeping in Otis" : {
       "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mijn puppy slaapt in Ollie"
+            "value" : "Mijn puppy slaapt in Otis"
           }
         }
       }
     },
-    "My puppy peed outside in Ollie" : {
+    "My puppy peed outside in Otis" : {
       "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mijn puppy heeft buiten geplast in Ollie"
+            "value" : "Mijn puppy heeft buiten geplast in Otis"
           }
         }
       }
@@ -463,13 +463,13 @@
         }
       }
     },
-    "Ollie Premium" : {
+    "Otis Premium" : {
       "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ollie Premium"
+            "value" : "Otis Premium"
           }
         }
       }
@@ -496,13 +496,13 @@
         }
       }
     },
-    "Please set up your puppy profile in the Ollie app first." : {
+    "Please set up your puppy profile in the Otis app first." : {
       "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Stel eerst je puppyprofiel in via de Ollie-app."
+            "value" : "Stel eerst je puppyprofiel in via de Otis-app."
           }
         }
       }
@@ -584,13 +584,13 @@
         }
       }
     },
-    "See all Ollie shortcuts" : {
+    "See all Otis shortcuts" : {
       "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bekijk alle Ollie-snelkoppelingen"
+            "value" : "Bekijk alle Otis-snelkoppelingen"
           }
         }
       }
@@ -650,13 +650,13 @@
         }
       }
     },
-    "The first weeks with a puppy are the most important. Ollie helps you track patterns and build good habits." : {
+    "The first weeks with a puppy are the most important. Otis helps you track patterns and build good habits." : {
       "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "De eerste weken met een puppy zijn het belangrijkst. Ollie helpt je patronen te volgen en goede gewoontes op te bouwen."
+            "value" : "De eerste weken met een puppy zijn het belangrijkst. Otis helpt je patronen te volgen en goede gewoontes op te bouwen."
           }
         }
       }
@@ -738,13 +738,13 @@
         }
       }
     },
-    "Your free trial has ended. Please upgrade in the Ollie app to continue logging." : {
+    "Your free trial has ended. Please upgrade in the Otis app to continue logging." : {
       "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Je gratis proefperiode is afgelopen. Upgrade in de Ollie-app om door te gaan met loggen."
+            "value" : "Je gratis proefperiode is afgelopen. Upgrade in de Otis-app om door te gaan met loggen."
           }
         }
       }

@@ -1,6 +1,6 @@
 //
 //  LockedFeatureCard.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Placeholder card shown for premium-only features
 
@@ -21,12 +21,12 @@ struct LockedFeatureCard: View {
                 // Lock icon with feature icon
                 ZStack {
                     Circle()
-                        .fill(Color.ollieAccent.opacity(0.15))
+                        .fill(Color.otisAccent.opacity(0.15))
                         .frame(width: 56, height: 56)
 
                     Image(systemName: icon)
                         .font(.title2)
-                        .foregroundStyle(Color.ollieAccent)
+                        .foregroundStyle(Color.otisAccent)
                 }
 
                 // Title
@@ -45,14 +45,14 @@ struct LockedFeatureCard: View {
                     Image(systemName: "lock.fill")
                         .font(.caption)
 
-                    Text(Strings.OlliePlus.unlockWithPlus)
+                    Text(Strings.OtisPlus.unlockWithPlus)
                         .font(.subheadline)
                         .fontWeight(.medium)
                 }
                 .foregroundStyle(.white)
                 .padding(.horizontal, 16)
                 .padding(.vertical, 10)
-                .background(Capsule().fill(Color.ollieAccent))
+                .background(Capsule().fill(Color.otisAccent))
             }
             .padding(20)
             .frame(maxWidth: .infinity)
@@ -62,7 +62,7 @@ struct LockedFeatureCard: View {
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 16)
-                    .strokeBorder(Color.ollieAccent.opacity(0.3), style: StrokeStyle(lineWidth: 1, dash: [5]))
+                    .strokeBorder(Color.otisAccent.opacity(0.3), style: StrokeStyle(lineWidth: 1, dash: [5]))
             )
         }
         .buttonStyle(.plain)
@@ -82,7 +82,7 @@ struct LockedFeatureRow: View {
             HStack(spacing: 12) {
                 Image(systemName: icon)
                     .font(.body)
-                    .foregroundStyle(Color.ollieAccent)
+                    .foregroundStyle(Color.otisAccent)
                     .frame(width: 28)
 
                 Text(title)
@@ -95,14 +95,14 @@ struct LockedFeatureRow: View {
                     Image(systemName: "lock.fill")
                         .font(.caption2)
 
-                    Text(Strings.OlliePlus.plusBadge)
+                    Text(Strings.OtisPlus.plusBadge)
                         .font(.caption)
                         .fontWeight(.semibold)
                 }
                 .foregroundStyle(.white)
                 .padding(.horizontal, 8)
                 .padding(.vertical, 4)
-                .background(Capsule().fill(Color.ollieAccent))
+                .background(Capsule().fill(Color.otisAccent))
             }
             .padding(.vertical, 8)
             .padding(.horizontal, 12)
@@ -151,19 +151,19 @@ struct PremiumLockedSkillCard: View {
 
                 Spacer()
 
-                // Ollie+ badge
+                // Otis+ badge
                 HStack(spacing: 4) {
                     Image(systemName: "plus")
                         .font(.caption2.weight(.bold))
 
-                    Text(Strings.OlliePlus.plusBadge)
+                    Text(Strings.OtisPlus.plusBadge)
                         .font(.caption)
                         .fontWeight(.semibold)
                 }
                 .foregroundStyle(.white)
                 .padding(.horizontal, 8)
                 .padding(.vertical, 4)
-                .background(Capsule().fill(Color.ollieAccent))
+                .background(Capsule().fill(Color.otisAccent))
             }
             .padding(12)
             .background(

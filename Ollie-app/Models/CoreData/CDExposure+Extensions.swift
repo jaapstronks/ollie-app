@@ -1,12 +1,12 @@
 //
 //  CDExposure+Extensions.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Extensions for converting between Exposure and CDExposure
 //
 
 import CoreData
-import OllieShared
+import OtisShared
 
 extension CDExposure {
 

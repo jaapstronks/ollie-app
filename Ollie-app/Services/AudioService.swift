@@ -1,12 +1,12 @@
 //
 //  AudioService.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Audio service for playing training clicker sounds
 //
 
 import AVFoundation
-import OllieShared
+import OtisShared
 import os
 
 /// Service for playing audio feedback during training sessions
@@ -16,7 +16,7 @@ final class AudioService {
 
     private var clickPlayer: AVAudioPlayer?
     private var isEnabled = true
-    private let logger = Logger.ollie(category: "AudioService")
+    private let logger = Logger.otis(category: "AudioService")
 
     private init() {
         setupAudioSession()
@@ -88,13 +88,19 @@ final class AudioService {
                 AVLinearPCMIsFloatKey: true
             ]
         ) {
-            let buffer = AVAudioPCMBuffer(
+            guard let buffer = AVAudioPCMBuffer(
                 pcmFormat: audioFile.processingFormat,
                 frameCapacity: AVAudioFrameCount(samples)
-            )!
+            ) else {
+                logger.warning("Failed to allocate audio buffer")
+                return
+            }
             buffer.frameLength = AVAudioFrameCount(samples)
 
-            let channelData = buffer.floatChannelData![0]
+            guard let channelData = buffer.floatChannelData?[0] else {
+                logger.warning("Failed to get channel data from buffer")
+                return
+            }
             for i in 0..<samples {
                 channelData[i] = audioData[i]
             }

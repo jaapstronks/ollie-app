@@ -1,12 +1,12 @@
 //
 //  GlassBackground.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Reusable liquid glass background styling for iOS 26 aesthetic
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 // MARK: - Glass Background Configurations
 

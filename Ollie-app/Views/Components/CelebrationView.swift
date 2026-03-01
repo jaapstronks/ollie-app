@@ -1,6 +1,6 @@
 //
 //  CelebrationView.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Dog-themed celebration animations for milestone moments.
 //  Custom particle system with paw prints, bones, stars, and hearts.
@@ -45,17 +45,17 @@ enum CelebrationSymbol: CaseIterable {
 
     var color: Color {
         switch self {
-        case .paw: return .ollieAccent
-        case .bone: return .olliePurple
-        case .star: return .ollieAccent
-        case .heart: return .ollieRose
-        case .sparkle: return .ollieAccent
+        case .paw: return .otisAccent
+        case .bone: return .otisPurple
+        case .star: return .otisAccent
+        case .heart: return .otisRose
+        case .sparkle: return .otisAccent
         }
     }
 }
 
 /// Celebration style presets
-enum CelebrationStyle {
+enum CelebrationPreset {
     /// Full celebration with all particle types - for major milestones
     case milestone
     /// Paw-focused burst - for outdoor potty success
@@ -107,7 +107,7 @@ enum CelebrationStyle {
 
 /// Animated celebration overlay with dog-themed particles
 struct CelebrationView: View {
-    let style: CelebrationStyle
+    let style: CelebrationPreset
     @Binding var isActive: Bool
 
     @State private var particles: [CelebrationParticle] = []
@@ -127,6 +127,13 @@ struct CelebrationView: View {
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .onAppear {
+                // Handle case where view appears with isActive already true
+                // (e.g., after sheet dismissal causes view recreation)
+                if isActive {
+                    triggerCelebration(in: geometry.size)
+                }
+            }
             .onChange(of: isActive) { _, newValue in
                 if newValue {
                     triggerCelebration(in: geometry.size)
@@ -250,7 +257,7 @@ private struct ParticleView: View {
 
 /// Modifier to add celebration capability to any view
 struct CelebrationModifier: ViewModifier {
-    let style: CelebrationStyle
+    let style: CelebrationPreset
     @Binding var trigger: Bool
 
     func body(content: Content) -> some View {
@@ -263,7 +270,7 @@ struct CelebrationModifier: ViewModifier {
 
 extension View {
     /// Adds a celebration animation overlay triggered by the binding
-    func celebration(style: CelebrationStyle = .milestone, trigger: Binding<Bool>) -> some View {
+    func celebration(style: CelebrationPreset = .milestone, trigger: Binding<Bool>) -> some View {
         modifier(CelebrationModifier(style: style, trigger: trigger))
     }
 }
@@ -274,9 +281,9 @@ extension View {
 @MainActor
 final class CelebrationTrigger: ObservableObject {
     @Published var isActive = false
-    @Published var style: CelebrationStyle = .milestone
+    @Published var style: CelebrationPreset = .milestone
 
-    func trigger(_ style: CelebrationStyle = .milestone) {
+    func trigger(_ style: CelebrationPreset = .milestone) {
         self.style = style
         self.isActive = true
     }
@@ -319,7 +326,7 @@ final class CelebrationTrigger: ObservableObject {
                     Button("Training Complete") {
                         trainingActive = true
                     }
-                    .buttonStyle(.glassPill(tint: .custom(.olliePurple)))
+                    .buttonStyle(.glassPill(tint: .custom(.otisPurple)))
 
                     Button("Quick Log") {
                         quickLogActive = true

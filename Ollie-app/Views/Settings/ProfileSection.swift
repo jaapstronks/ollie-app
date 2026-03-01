@@ -1,23 +1,46 @@
 //
 //  ProfileSection.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Profile information section for SettingsView
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Profile information section showing puppy details
 struct ProfileSection: View {
     let profile: PuppyProfile
+    @ObservedObject var profileStore: ProfileStore
+    @Binding var showingPhotoPicker: Bool
+
+    @State private var showingNameEditor = false
+    @State private var editedName = ""
 
     var body: some View {
         Section(Strings.Settings.profile) {
+            // Profile photo row
             HStack {
-                Text(Strings.Settings.name)
+                ProfilePhotoView(profile: profile, size: 60)
+
                 Spacer()
-                Text(profile.name)
-                    .foregroundColor(.secondary)
+
+                Button(profile.profilePhotoFilename == nil ? Strings.Profile.addPhoto : Strings.Profile.changePhoto) {
+                    showingPhotoPicker = true
+                }
+            }
+            .padding(.vertical, 8)
+
+            Button {
+                editedName = profile.name
+                showingNameEditor = true
+            } label: {
+                HStack {
+                    Text(Strings.Settings.name)
+                        .foregroundColor(.primary)
+                    Spacer()
+                    Text(profile.name)
+                        .foregroundColor(.secondary)
+                }
             }
 
             if let breed = profile.breed {
@@ -34,6 +57,16 @@ struct ProfileSection: View {
                 Spacer()
                 Text(profile.sizeCategory.label)
                     .foregroundColor(.secondary)
+            }
+        }
+        .alert(Strings.Settings.changeName, isPresented: $showingNameEditor) {
+            TextField(Strings.Settings.name, text: $editedName)
+            Button(Strings.Common.cancel, role: .cancel) { }
+            Button(Strings.Common.save) {
+                let trimmed = editedName.trimmingCharacters(in: .whitespacesAndNewlines)
+                if !trimmed.isEmpty {
+                    profileStore.updateName(trimmed)
+                }
             }
         }
     }

@@ -173,7 +173,7 @@ Access from Settings or a new "Plekken" tab:
 
 Location permission flow:
 1. Request "When In Use" for MVP (not "Always")
-2. Show clear explanation: "Ollie uses location to save where you walked"
+2. Show clear explanation: "Otis uses location to save where you walked"
 3. Handle denied state gracefully (allow manual map tap to place pin)
 
 Already declared in `PrivacyInfo.xcprivacy` for weather functionality.
@@ -264,7 +264,7 @@ enum SpotSafetyTag: String, Codable {
 - "Safe for [puppy name]" indicator on spots
 
 ### Future: Community Spots
-- Share anonymized spot data with other Ollie users
+- Share anonymized spot data with other Otis users
 - Crowdsourced safety ratings
 - "Popular with puppies" indicators
 

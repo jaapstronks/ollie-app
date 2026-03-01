@@ -1,12 +1,12 @@
 //
 //  EndCoverageGapSheet.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Sheet for ending an active coverage gap
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Sheet for ending an active coverage gap
 struct EndCoverageGapSheet: View {
@@ -26,7 +26,7 @@ struct EndCoverageGapSheet: View {
                 VStack(spacing: 16) {
                     Image(systemName: gap.gapType?.icon ?? "person.badge.clock.fill")
                         .font(.system(size: 48))
-                        .foregroundStyle(.orange)
+                        .foregroundStyle(Color.otisWarning)
 
                     VStack(spacing: 4) {
                         Text(gap.gapType?.label ?? Strings.CoverageGap.eventLabel)
@@ -55,7 +55,7 @@ struct EndCoverageGapSheet: View {
                     .padding(.vertical, 8)
                     .background(
                         RoundedRectangle(cornerRadius: 8, style: .continuous)
-                            .fill(Color.orange.opacity(0.1))
+                            .fill(Color.otisWarning.opacity(0.1))
                     )
                 }
                 .padding(.top, 24)
@@ -100,7 +100,7 @@ struct EndCoverageGapSheet: View {
                         .foregroundStyle(.white)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 14)
-                        .background(Color.orange)
+                        .background(Color.otisWarning)
                         .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
                 }
                 .padding(.horizontal)

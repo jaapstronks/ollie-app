@@ -1,0 +1,239 @@
+//
+//  SleepStatusCard.swift
+//  Otis-app
+//
+//  Status card showing current sleep state
+//  Uses liquid glass design for iOS 26 aesthetic
+
+import SwiftUI
+import OtisShared
+
+/// Card showing current sleep/awake state
+/// Uses liquid glass design with semantic tinting
+struct SleepStatusCard: View {
+    let sleepState: SleepState
+    let pendingActionable: ActionableItem?
+    let onWakeUp: (() -> Void)?
+    let onStartNap: (() -> Void)?
+
+    init(
+        sleepState: SleepState,
+        pendingActionable: ActionableItem? = nil,
+        onWakeUp: (() -> Void)? = nil,
+        onStartNap: (() -> Void)? = nil
+    ) {
+        self.sleepState = sleepState
+        self.pendingActionable = pendingActionable
+        self.onWakeUp = onWakeUp
+        self.onStartNap = onStartNap
+    }
+
+    var body: some View {
+        StatusCardHeader(
+            iconName: iconName,
+            iconColor: indicatorColor,
+            tintColor: indicatorColor,
+            title: mainText,
+            titleColor: textColor,
+            subtitle: subtitleText.isEmpty ? nil : subtitleText,
+            iconSize: 40
+        ) {
+            actionButton
+        }
+        .statusCardContainer(
+            tint: indicatorColor,
+            isVisible: !Constants.isNightTimeNow() && sleepState != .unknown,
+            accessibilityLabel: Strings.SleepStatus.title,
+            accessibilityValue: mainText
+        )
+        .padding(.vertical, 4)
+    }
+
+    @ViewBuilder
+    private var actionButton: some View {
+        switch sleepState {
+        case .sleeping:
+            if let onWakeUp {
+                Button(action: onWakeUp) {
+                    Label(Strings.SleepStatus.wakeUp, systemImage: "sun.max.fill")
+                }
+                .buttonStyle(.glassPillCompact(tint: .custom(indicatorColor)))
+            }
+        case .awake(_, let durationMin):
+            // Show nap button when awake >= 45 minutes
+            if durationMin >= SleepCalculations.awakeWarningMinutes, let onStartNap {
+                Button(action: onStartNap) {
+                    Label(Strings.SleepStatus.startNap, systemImage: "moon.zzz.fill")
+                }
+                .buttonStyle(.glassPillCompact(tint: .custom(indicatorColor)))
+            }
+        case .unknown:
+            EmptyView()
+        }
+    }
+
+    // MARK: - Computed Properties
+
+    private var iconName: String {
+        switch sleepState {
+        case .sleeping:
+            return "moon.zzz.fill"
+        case .awake(_, let durationMin):
+            if durationMin >= SleepCalculations.maxAwakeMinutes {
+                return "alarm.fill"
+            } else if durationMin >= SleepCalculations.awakeWarningMinutes {
+                return "lightbulb.fill"
+            }
+            return "sun.max.fill"
+        case .unknown:
+            return "questionmark.circle"
+        }
+    }
+
+    private var mainText: String {
+        switch sleepState {
+        case .sleeping(_, let durationMin):
+            // Different text based on sleep duration
+            if durationMin <= 1 {
+                return Strings.SleepStatus.justFellAsleep
+            } else if durationMin <= 15 {
+                return Strings.SleepStatus.sleepingBriefly(duration: durationMin.formatAsDuration())
+            }
+            return Strings.SleepStatus.sleepingFor(duration: durationMin.formatAsDuration())
+        case .awake(_, let durationMin):
+            if durationMin >= SleepCalculations.maxAwakeMinutes {
+                return Strings.SleepStatus.awakeTooLong(duration: durationMin.formatAsDuration())
+            } else if durationMin >= SleepCalculations.awakeWarningMinutes {
+                let remaining = SleepCalculations.maxAwakeMinutes - durationMin
+                return Strings.SleepStatus.awakeWithNapSuggestion(duration: durationMin.formatAsDuration(), remaining: remaining)
+            }
+            return Strings.SleepStatus.awakeSince(duration: durationMin.formatAsDuration())
+        case .unknown:
+            return Strings.SleepStatus.noSleepData
+        }
+    }
+
+    private var subtitleText: String {
+        switch sleepState {
+        case .sleeping(let since, _):
+            // When sleeping with pending actionable, show what's due after waking
+            if let actionable = pendingActionable {
+                return pendingActionableSubtitle(actionable)
+            }
+            return Strings.SleepStatus.started(time: since.timeString)
+        case .awake(let since, _):
+            return Strings.SleepStatus.awakeSinceTime(time: since.timeString)
+        case .unknown:
+            return ""
+        }
+    }
+
+    /// Subtitle text for pending walk/meal when sleeping
+    /// Includes specific meal/walk name and scheduled time for clarity
+    private func pendingActionableSubtitle(_ actionable: ActionableItem) -> String {
+        let label = actionable.item.localizedLabel
+        let time = actionable.item.timeString
+
+        switch actionable.item.itemType {
+        case .walk:
+            return Strings.SleepStatus.afterWakeTimeForWalkWithDetails(label: label, time: time)
+        case .meal:
+            return Strings.SleepStatus.afterWakeTimeForMealWithDetails(label: label, time: time)
+        }
+    }
+
+    private var indicatorColor: Color {
+        switch sleepState {
+        case .sleeping:
+            return .otisSleep
+        case .awake(_, let durationMin):
+            if durationMin >= SleepCalculations.maxAwakeMinutes {
+                return .otisDanger
+            } else if durationMin >= SleepCalculations.awakeWarningMinutes {
+                return .otisWarning
+            }
+            return .otisSuccess
+        case .unknown:
+            return .otisMuted
+        }
+    }
+
+    private var textColor: Color {
+        switch sleepState {
+        case .sleeping:
+            return .primary
+        case .awake(_, let durationMin):
+            if durationMin >= SleepCalculations.maxAwakeMinutes {
+                return .otisDanger
+            } else if durationMin >= SleepCalculations.awakeWarningMinutes {
+                return .otisWarning
+            }
+            return .primary
+        case .unknown:
+            return .secondary
+        }
+    }
+
+}
+
+// MARK: - Previews
+
+#Preview("Sleeping") {
+    VStack {
+        SleepStatusCard(
+            sleepState: .sleeping(
+                since: Date().addingTimeInterval(-45 * 60),
+                durationMin: 45
+            )
+        )
+        Spacer()
+    }
+    .padding()
+}
+
+#Preview("Awake - Recent") {
+    VStack {
+        SleepStatusCard(
+            sleepState: .awake(
+                since: Date().addingTimeInterval(-20 * 60),
+                durationMin: 20
+            )
+        )
+        Spacer()
+    }
+    .padding()
+}
+
+#Preview("Awake - Warning") {
+    VStack {
+        SleepStatusCard(
+            sleepState: .awake(
+                since: Date().addingTimeInterval(-50 * 60),
+                durationMin: 50
+            )
+        )
+        Spacer()
+    }
+    .padding()
+}
+
+#Preview("Awake - Time for nap") {
+    VStack {
+        SleepStatusCard(
+            sleepState: .awake(
+                since: Date().addingTimeInterval(-75 * 60),
+                durationMin: 75
+            )
+        )
+        Spacer()
+    }
+    .padding()
+}
+
+#Preview("Unknown") {
+    VStack {
+        SleepStatusCard(sleepState: .unknown)
+        Spacer()
+    }
+    .padding()
+}

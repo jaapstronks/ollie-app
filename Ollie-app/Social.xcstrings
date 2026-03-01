@@ -67,6 +67,17 @@
         }
       }
     },
+    "A professional trainer can help if this continues" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Een professionele trainer kan helpen als dit aanhoudt"
+          }
+        }
+      }
+    },
     "Almost there" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -85,6 +96,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Dieren"
+          }
+        }
+      }
+    },
+    "Building Confidence Together" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Samen zelfvertrouwen opbouwen"
           }
         }
       }
@@ -155,17 +177,6 @@
         }
       }
     },
-    "Consult a professional trainer if fear persists" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Raadpleeg een professionele trainer als de angst aanhoudt"
-          }
-        }
-      }
-    },
     "Critical socialization period" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -232,24 +243,13 @@
         }
       }
     },
-    "Don't force interaction — increase distance" : {
+    "End on a positive note — even a small one counts" : {
       "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Forceer geen interactie — vergroot de afstand"
-          }
-        }
-      }
-    },
-    "End on a positive note if possible" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Eindig positief indien mogelijk"
+            "value" : "Eindig positief — ook een klein succesje telt"
           }
         }
       }
@@ -283,6 +283,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Angstig"
+          }
+        }
+      }
+    },
+    "Give more space — distance is your friend" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geef meer ruimte — afstand is je vriend"
+          }
+        }
+      }
+    },
+    "Got it" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Begrepen"
           }
         }
       }
@@ -342,17 +364,6 @@
         }
       }
     },
-    "Keep sessions very short" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Houd sessies heel kort"
-          }
-        }
-      }
-    },
     "Last: %@" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -382,6 +393,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Dichtbij"
+          }
+        }
+      }
+    },
+    "Needs practice" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oefening nodig"
           }
         }
       }
@@ -518,6 +540,17 @@
         }
       }
     },
+    "Short sessions = big wins" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Korte sessies = grote winst"
+          }
+        }
+      }
+    },
     "Show %lld more" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -613,28 +646,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tik om je eerste ervaring te loggen"
-          }
-        }
-      }
-    },
-    "Tips for Fearful Reactions" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tips bij Angstige Reacties"
-          }
-        }
-      }
-    },
-    "Understood" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Begrepen"
           }
         }
       }

@@ -1,6 +1,6 @@
 # Test Today View functionality
 # Tests: status cards, day navigation, timeline
-appId: nl.jaapstronks.Ollie
+appId: nl.jaapstronks.Otis
 ---
 - launchApp
 - waitForAnimationToEnd

@@ -1,113 +1,87 @@
 //
 //  PlacesTabView.swift
-//  Ollie-app
+//  Otis-app
 //
-//  Places tab combining spots (map) and moments (photos) with a view toggle
+//  Explore tab - full-screen map view of saved spots and photo moments
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 import MapKit
 
-/// View mode for the Places tab
-enum PlacesViewMode: String, CaseIterable {
-    case map
-    case timeline
-
-    var label: String {
-        switch self {
-        case .map: return Strings.Places.mapView
-        case .timeline: return Strings.Places.timelineView
-        }
-    }
-
-    var icon: String {
-        switch self {
-        case .map: return "map"
-        case .timeline: return "calendar"
-        }
-    }
-}
-
-/// Places tab - map view of spots and photos, with timeline toggle
+/// Explore tab - full-screen map with spots, contacts, and photo pins
 struct PlacesTabView: View {
     @ObservedObject var spotStore: SpotStore
+    @ObservedObject var contactStore: ContactStore
     @ObservedObject var momentsViewModel: MomentsViewModel
-    @ObservedObject var viewModel: TimelineViewModel
     @ObservedObject var locationManager: LocationManager
     var onSettingsTap: (() -> Void)?
+    var onAddMoment: (() -> Void)?
 
-    @State private var viewMode: PlacesViewMode = .map
+    @EnvironmentObject var profileStore: ProfileStore
+    @StateObject private var mapViewModel: PlacesMapViewModel
+
+    // View mode toggle (Map vs Gallery)
+    @AppStorage("exploreViewMode") private var viewMode: ExploreViewMode = .map
+    @AppStorage("momentsViewMode") private var momentsViewMode: MomentsViewMode = .gallery
+
     @State private var showingAddSpot = false
-    @State private var showingAllSpotsMap = false
+    @State private var showingAddContact = false
     @State private var selectedSpot: WalkSpot?
-    @State private var selectedPhotoEvent: PuppyEvent?
+    @State private var selectedDiscoveredSpot: DiscoveredSpot?
+    @State private var selectedContact: DogContact?
     @State private var selectedCluster: PhotoCluster?
+    @State private var selectedPhotoEvent: PuppyEvent?
+    @Namespace private var heroNamespace
+
+    init(
+        spotStore: SpotStore,
+        contactStore: ContactStore,
+        momentsViewModel: MomentsViewModel,
+        locationManager: LocationManager,
+        onSettingsTap: (() -> Void)? = nil,
+        onAddMoment: (() -> Void)? = nil
+    ) {
+        self.spotStore = spotStore
+        self.contactStore = contactStore
+        self.momentsViewModel = momentsViewModel
+        self.locationManager = locationManager
+        self.onSettingsTap = onSettingsTap
+        self.onAddMoment = onAddMoment
+        self._mapViewModel = StateObject(wrappedValue: PlacesMapViewModel(
+            spotStore: spotStore,
+            contactStore: contactStore,
+            momentsViewModel: momentsViewModel
+        ))
+    }
 
     var body: some View {
         NavigationStack {
             Group {
                 switch viewMode {
                 case .map:
-                    PlacesMapModeView(
-                        spotStore: spotStore,
-                        momentsViewModel: momentsViewModel,
-                        onShowAllSpots: { showingAllSpotsMap = true },
-                        onSelectSpot: { spot in selectedSpot = spot },
-                        onSelectPhoto: { event in selectedPhotoEvent = event },
-                        onSelectCluster: { cluster in
-                            // For single photo clusters, show the photo directly
-                            // For multi-photo clusters, show cluster preview
-                            if cluster.isSinglePhoto, let event = cluster.firstEvent {
-                                selectedPhotoEvent = event
-                            } else {
-                                selectedCluster = cluster
-                            }
-                        }
-                    )
-                case .timeline:
-                    PlacesTimelineView(
-                        momentsViewModel: momentsViewModel,
-                        viewModel: viewModel,
-                        onSelectPhoto: { event in selectedPhotoEvent = event }
-                    )
+                    mapContent
+                case .gallery:
+                    galleryContent
                 }
             }
             .navigationTitle(Strings.Places.title)
-            .navigationBarTitleDisplayMode(.large)
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
+                // View mode toggle (leading)
                 ToolbarItem(placement: .topBarLeading) {
-                    // View mode toggle
-                    Picker("View", selection: $viewMode) {
-                        ForEach(PlacesViewMode.allCases, id: \.self) { mode in
-                            Label(mode.label, systemImage: mode.icon)
-                                .tag(mode)
-                        }
-                    }
-                    .pickerStyle(.segmented)
-                    .fixedSize()
+                    ExploreViewModeToggle(mode: $viewMode)
+                        .frame(width: 140)
                 }
-
-                ToolbarItem(placement: .topBarTrailing) {
-                    Menu {
-                        Button {
-                            showingAddSpot = true
-                        } label: {
-                            Label(Strings.Places.addSpot, systemImage: "mappin.and.ellipse")
-                        }
-
-                        // TODO: Add moment button - will open camera
-                    } label: {
-                        Image(systemName: "plus")
-                    }
-                    .accessibilityLabel(Strings.Places.addSpot)
-                }
+            }
+            .profileToolbar(profile: profileStore.profile) {
+                onSettingsTap?()
             }
             .sheet(isPresented: $showingAddSpot) {
                 AddSpotSheet(spotStore: spotStore, locationManager: locationManager)
             }
-            .sheet(isPresented: $showingAllSpotsMap) {
-                AllSpotsMapView(spots: spotStore.spots)
+            .sheet(isPresented: $showingAddContact) {
+                AddEditContactSheet(contactStore: contactStore)
             }
             .sheet(item: $selectedSpot) { spot in
                 SpotDetailView(
@@ -116,17 +90,28 @@ struct PlacesTabView: View {
                     momentsViewModel: momentsViewModel
                 )
             }
+            .sheet(item: $selectedDiscoveredSpot) { spot in
+                DiscoveredSpotDetailSheet(
+                    spot: spot,
+                    spotStore: spotStore
+                )
+            }
+            .sheet(item: $selectedContact) { contact in
+                ContactDetailView(contact: contact, contactStore: contactStore)
+            }
             .sheet(item: $selectedCluster) { cluster in
-                PhotoClusterPreviewSheet(
+                PhotoPinDetailCard(
                     cluster: cluster,
+                    spots: spotStore.spots,
                     onSelectPhoto: { event in
                         selectedCluster = nil
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                             selectedPhotoEvent = event
                         }
-                    }
+                    },
+                    onSaveSpot: nil
                 )
-                .presentationDetents([.medium])
+                .presentationDetents([.medium, .large])
             }
             .fullScreenCover(item: $selectedPhotoEvent) { event in
                 MediaPreviewView(
@@ -140,219 +125,295 @@ struct PlacesTabView: View {
         }
         .onAppear {
             momentsViewModel.loadEventsWithMedia()
+            mapViewModel.fitMapToMarkers()
+        }
+        .task {
+            // Discover places near user's location or default location
+            let coords = locationManager.currentCoordinates ?? (51.9225, 4.4792) // Rotterdam fallback
+            await mapViewModel.discoverPlacesNearby(latitude: coords.0, longitude: coords.1)
+        }
+        .onChange(of: mapViewModel.selectedDiscoveryTypes) { _, _ in
+            // Refresh discovery when selected types change
+            Task {
+                let coords = locationManager.currentCoordinates ?? (51.9225, 4.4792)
+                await mapViewModel.refreshDiscovery(latitude: coords.0, longitude: coords.1)
+            }
         }
     }
-}
 
-// MARK: - Map Mode View
+    // MARK: - Map Content
 
-/// Map view showing spots and recent moments
-struct PlacesMapModeView: View {
-    @ObservedObject var spotStore: SpotStore
-    @ObservedObject var momentsViewModel: MomentsViewModel
-    let onShowAllSpots: () -> Void
-    let onSelectSpot: (WalkSpot) -> Void
-    let onSelectPhoto: (PuppyEvent) -> Void
-    let onSelectCluster: (PhotoCluster) -> Void
+    private var mapContent: some View {
+        ZStack(alignment: .bottom) {
+            // Full-screen map with filter bar
+            ZStack(alignment: .top) {
+                mapView
+                    .ignoresSafeArea(edges: .bottom)
 
-    var body: some View {
+                // Filter bar overlay at top
+                VStack(spacing: 0) {
+                    PlacesFilterBar(
+                        activeFilters: $mapViewModel.activeFilters,
+                        selectedContactTypes: $mapViewModel.selectedContactTypes,
+                        selectedSpotCategories: $mapViewModel.selectedSpotCategories,
+                        selectedDiscoveryTypes: $mapViewModel.selectedDiscoveryTypes
+                    )
+                    Spacer()
+                }
+            }
+
+            // Floating Add Button
+            HStack {
+                Spacer()
+                addSpotFAB
+            }
+        }
+    }
+
+    // MARK: - Gallery Content
+
+    private var galleryContent: some View {
+        ZStack(alignment: .bottomTrailing) {
+            Group {
+                if momentsViewModel.isLoading {
+                    // Skeleton loading grid
+                    ScrollView {
+                        LazyVGrid(columns: galleryColumns, spacing: 2) {
+                            ForEach(0..<12, id: \.self) { index in
+                                SkeletonRect(height: 120, cornerRadius: 0)
+                                    .aspectRatio(1, contentMode: .fill)
+                                    .animatedAppear(delay: StaggeredAnimation.delay(for: index))
+                            }
+                        }
+                        .padding(.top)
+                    }
+                    .skeleton(isLoading: true)
+                } else if momentsViewModel.events.isEmpty {
+                    EmptyMomentsView(onAddMoment: onAddMoment)
+                } else {
+                    VStack(spacing: 0) {
+                        // Gallery/Diary sub-toggle
+                        MomentsViewModeToggle(mode: $momentsViewMode)
+                            .padding(.horizontal)
+                            .padding(.vertical, 8)
+
+                        switch momentsViewMode {
+                        case .gallery:
+                            galleryGridContent
+                        case .diary:
+                            diaryListContent
+                        }
+                    }
+                }
+            }
+            .refreshable {
+                momentsViewModel.loadEventsWithMedia()
+            }
+
+            // Add Moment FAB
+            if let onAddMoment = onAddMoment {
+                addMomentFAB(action: onAddMoment)
+            }
+        }
+    }
+
+    private let galleryColumns = [
+        GridItem(.flexible(), spacing: 2),
+        GridItem(.flexible(), spacing: 2),
+        GridItem(.flexible(), spacing: 2)
+    ]
+
+    private var galleryGridContent: some View {
         ScrollView {
-            VStack(spacing: 20) {
-                // Map section
-                mapSection
+            LazyVStack(alignment: .leading, spacing: 16) {
+                ForEach(Array(momentsViewModel.eventsByMonth.enumerated()), id: \.element.month) { sectionIndex, section in
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text(section.month)
+                            .font(.headline)
+                            .padding(.horizontal)
+                            .animatedAppear(delay: StaggeredAnimation.delay(for: sectionIndex))
 
-                // Favorite spots section
-                if !spotStore.favoriteSpots.isEmpty {
-                    favoriteSpotsSection
+                        LazyVGrid(columns: galleryColumns, spacing: 2) {
+                            ForEach(Array(section.events.enumerated()), id: \.element.id) { eventIndex, event in
+                                GalleryThumbnail(event: event)
+                                    .aspectRatio(1, contentMode: .fill)
+                                    .zoomTransitionSource(id: event.id, in: heroNamespace)
+                                    .onTapGesture {
+                                        selectedPhotoEvent = event
+                                    }
+                                    .animatedAppear(delay: StaggeredAnimation.delay(for: eventIndex, baseDelay: 0.03, maxDelay: 0.2))
+                                    .onAppear {
+                                        momentsViewModel.loadMoreIfNeeded(currentEvent: event)
+                                    }
+                            }
+                        }
+                    }
                 }
 
-                // Recent moments section
-                if !momentsViewModel.events.isEmpty {
-                    recentMomentsSection
+                if momentsViewModel.isLoadingMore {
+                    HStack {
+                        Spacer()
+                        ProgressView()
+                            .padding()
+                        Spacer()
+                    }
+                }
+            }
+            .padding(.vertical)
+        }
+    }
+
+    private var diaryListContent: some View {
+        ScrollView {
+            LazyVStack(spacing: 24) {
+                ForEach(Array(momentsViewModel.eventsPerDay.enumerated()), id: \.element.id) { index, event in
+                    DiaryCardView(event: event)
+                        .zoomTransitionSource(id: event.id, in: heroNamespace)
+                        .onTapGesture {
+                            selectedPhotoEvent = event
+                        }
+                        .animatedAppear(delay: StaggeredAnimation.delay(for: index, baseDelay: 0.05, maxDelay: 0.3))
+                        .onAppear {
+                            momentsViewModel.loadMoreIfNeeded(currentEvent: event)
+                        }
                 }
 
-                // All spots section (if any non-favorites)
-                if !spotStore.spots.isEmpty {
-                    allSpotsSection
-                }
-
-                // Empty state when no content
-                if spotStore.spots.isEmpty && momentsViewModel.events.isEmpty {
-                    emptyStateView
+                if momentsViewModel.isLoadingMore {
+                    HStack {
+                        Spacer()
+                        ProgressView()
+                            .padding()
+                        Spacer()
+                    }
                 }
             }
             .padding()
         }
     }
 
-    // MARK: - Map Section
+    // MARK: - Map View
 
-    private var mapSection: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            HStack {
-                SectionHeader(
-                    title: Strings.WalksTab.yourSpots,
-                    icon: "map.fill",
-                    tint: .ollieSuccess
-                )
+    private var mapView: some View {
+        Map(position: $mapViewModel.cameraPosition) {
+            // User location
+            UserAnnotation()
 
-                Spacer()
-
-                if !spotStore.spots.isEmpty {
-                    Button {
-                        onShowAllSpots()
-                    } label: {
-                        Text(Strings.Places.expandMap)
-                            .font(.caption)
-                            .fontWeight(.medium)
-                            .foregroundStyle(Color.ollieAccent)
-                    }
-                }
-            }
-
-            // Map with spots and clustered photo markers
-            PlacesMapPreview(
-                spots: spotStore.spots,
-                photoClusters: momentsViewModel.clusterPhotos(),
-                onTapSpot: onSelectSpot,
-                onTapCluster: onSelectCluster
-            )
-            .frame(height: 220)
-            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-        }
-    }
-
-    // MARK: - Favorite Spots Section
-
-    private var favoriteSpotsSection: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            SectionHeader(
-                title: Strings.Places.favoriteSpots,
-                icon: "star.fill",
-                tint: .yellow
-            )
-
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 12) {
-                    ForEach(spotStore.favoriteSpots.prefix(5)) { spot in
-                        SpotCard(spot: spot)
+            // Render all visible markers
+            ForEach(mapViewModel.visibleMarkers) { marker in
+                switch marker {
+                case .spot(let spot):
+                    Annotation("", coordinate: marker.coordinate) {
+                        SpotMapMarker(spot: spot)
                             .onTapGesture {
-                                onSelectSpot(spot)
+                                selectedSpot = spot
+                            }
+                    }
+
+                case .contact(let contact):
+                    Annotation("", coordinate: marker.coordinate) {
+                        ContactMapMarker(contact: contact)
+                            .onTapGesture {
+                                selectedContact = contact
+                            }
+                    }
+
+                case .discoveredSpot(let spot):
+                    Annotation("", coordinate: marker.coordinate) {
+                        DiscoveredSpotMapMarker(spot: spot)
+                            .onTapGesture {
+                                selectedDiscoveredSpot = spot
+                            }
+                    }
+
+                case .photoCluster(let cluster):
+                    Annotation("", coordinate: marker.coordinate) {
+                        PhotoClusterMapMarker(cluster: cluster)
+                            .onTapGesture {
+                                selectedCluster = cluster
                             }
                     }
                 }
             }
         }
+        .mapControls {
+            MapCompass()
+            MapScaleView()
+        }
+        .mapStyle(.standard(elevation: .realistic))
     }
 
-    // MARK: - Recent Moments Section
+    // MARK: - Add FAB with Menu
 
-    private var recentMomentsSection: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            HStack {
-                SectionHeader(
-                    title: Strings.Places.recentMoments,
-                    icon: "photo.fill",
-                    tint: .ollieAccent
+    private var addSpotFAB: some View {
+        Menu {
+            Button {
+                showingAddSpot = true
+            } label: {
+                Label(Strings.Places.addSpot, systemImage: "mappin.circle.fill")
+            }
+
+            Button {
+                showingAddContact = true
+            } label: {
+                Label(Strings.Places.addContact, systemImage: "person.crop.circle.badge.plus")
+            }
+        } label: {
+            Image(systemName: "plus")
+                .font(.system(size: 20, weight: .semibold))
+                .foregroundStyle(.white)
+                .frame(width: 56, height: 56)
+                .background(
+                    Circle()
+                        .fill(Color.otisAccent)
+                        .shadow(
+                            color: Color.otisAccent.opacity(0.4),
+                            radius: 8,
+                            x: 0,
+                            y: 4
+                        )
                 )
-
-                Spacer()
-
-                // TODO: Navigate to full gallery
-            }
-
-            // 3x2 grid of recent photos
-            let columns = [
-                GridItem(.flexible(), spacing: 4),
-                GridItem(.flexible(), spacing: 4),
-                GridItem(.flexible(), spacing: 4)
-            ]
-
-            LazyVGrid(columns: columns, spacing: 4) {
-                ForEach(momentsViewModel.events.prefix(6)) { event in
-                    GalleryThumbnail(event: event)
-                        .aspectRatio(1, contentMode: .fill)
-                        .clipShape(RoundedRectangle(cornerRadius: 8))
-                        .onTapGesture {
-                            onSelectPhoto(event)
-                        }
-                }
-            }
         }
+        .padding(.trailing, 16)
+        .padding(.bottom, 100) // Above tab bar
+        .accessibilityLabel(Strings.Common.add)
     }
 
-    // MARK: - All Spots Section
+    // MARK: - Add Moment FAB
 
-    private var allSpotsSection: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            SectionHeader(
-                title: Strings.Places.allSpots,
-                icon: "mappin.circle.fill",
-                tint: .secondary
-            )
-
-            VStack(spacing: 8) {
-                // Show favorites first, then recents
-                let orderedSpots = spotStore.favoriteSpots + spotStore.recentSpots
-                let uniqueSpots = orderedSpots.reduce(into: [WalkSpot]()) { result, spot in
-                    if !result.contains(where: { $0.id == spot.id }) {
-                        result.append(spot)
-                    }
-                }
-
-                ForEach(uniqueSpots.prefix(5)) { spot in
-                    SpotRowCompact(spot: spot, isSelected: false)
-                        .onTapGesture {
-                            onSelectSpot(spot)
-                        }
-                }
-            }
+    private func addMomentFAB(action: @escaping () -> Void) -> some View {
+        Button {
+            HapticFeedback.medium()
+            action()
+        } label: {
+            Image(systemName: "camera.fill")
+                .font(.system(size: 20, weight: .semibold))
+                .foregroundStyle(.white)
+                .frame(width: 56, height: 56)
+                .background(
+                    Circle()
+                        .fill(Color.otisAccent)
+                        .shadow(
+                            color: Color.otisAccent.opacity(0.4),
+                            radius: 8,
+                            x: 0,
+                            y: 4
+                        )
+                )
         }
-    }
-
-    // MARK: - Empty State
-
-    private var emptyStateView: some View {
-        VStack(spacing: 20) {
-            Spacer()
-                .frame(height: 40)
-
-            Image(systemName: "map")
-                .font(.system(size: 50))
-                .foregroundColor(.secondary)
-
-            VStack(spacing: 8) {
-                Text(Strings.Places.noSpotsYet)
-                    .font(.headline)
-                    .foregroundColor(.primary)
-
-                Text(Strings.Places.noSpotsHint)
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-                    .multilineTextAlignment(.center)
-            }
-
-            Spacer()
-                .frame(height: 40)
-        }
-        .padding()
+        .padding(.trailing, 16)
+        .padding(.bottom, 100) // Above tab bar
+        .accessibilityLabel(Strings.LogMoment.title)
     }
 }
 
 // MARK: - Preview
-// Map components (PlacesMapPreview, SpotMapMarker, PhotoClusterMapMarker, SpotCard, PhotoClusterPreviewSheet)
-// are in PlacesMapComponents.swift
 
 #Preview {
-    let eventStore = EventStore()
-    let profileStore = ProfileStore()
-    let viewModel = TimelineViewModel(eventStore: eventStore, profileStore: profileStore)
-    let momentsViewModel = MomentsViewModel(eventStore: eventStore)
-
-    return PlacesTabView(
+    PlacesTabView(
         spotStore: SpotStore(),
-        momentsViewModel: momentsViewModel,
-        viewModel: viewModel,
+        contactStore: ContactStore(),
+        momentsViewModel: MomentsViewModel(eventStore: EventStore()),
         locationManager: LocationManager()
     )
+    .environmentObject(ProfileStore())
 }

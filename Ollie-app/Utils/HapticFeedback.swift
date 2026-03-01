@@ -1,6 +1,6 @@
 //
 //  HapticFeedback.swift
-//  Ollie-app
+//  Otis-app
 //
 
 import UIKit

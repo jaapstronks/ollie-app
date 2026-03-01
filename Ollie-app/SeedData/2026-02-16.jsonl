@@ -6,13 +6,13 @@
 {"time":"2026-02-16T07:00+01:00","type":"poepen","location":"buiten","where":"tuin","note":"Buiten gepoept bij ochtendrondje ✅"}
 {"time":"2026-02-16T07:00+01:00","type":"plassen","location":"buiten","where":"tuin","note":"Buiten geplast bij ochtendrondje ✅"}
 {"time":"2026-02-16T07:10+01:00","type":"eten","detail":"110g vlees compleet Farmfood","note":"Ontbijt — worst opgegeten"}
-{"time":"2026-02-16T07:15+01:00","type":"gedrag","note":"Lekker spelen met de eend 🦆","photo":"https://jaapstronks.s3.us-west-2.amazonaws.com/ollie/photos/2026-02-16-ochtend-eend.jpg"}
+{"time":"2026-02-16T07:15+01:00","type":"gedrag","note":"Lekker spelen met de eend 🦆","photo":"https://jaapstronks.s3.us-west-2.amazonaws.com/otis/photos/2026-02-16-ochtend-eend.jpg"}
 {"time":"2026-02-16T08:10+01:00","type":"plassen","location":"buiten","where":"tuin","note":"Buitenplas na ontbijt ✅"}
 {"time":"2026-02-16T08:25+01:00","type":"bench","note":"Slaapt in bench — ochtenddutje"}
 {"time":"2026-02-16T09:20+01:00","type":"ontwaken","note":"Wakker na ochtenddutje"}
 {"time":"2026-02-16T09:22+01:00","type":"plassen","location":"binnen","note":"Ongelukje — niet snel genoeg buiten"}
 {"time":"2026-02-16T09:25+01:00","type":"uitlaten","duration_min":8,"where":"straat","note":"Ochtendwandeling"}
-{"time":"2026-02-16T09:50+01:00","type":"uitlaten","where":"hondenveldje","note":"Rennen op het hondenveldje! 🌿","photo":"https://jaapstronks.s3.us-west-2.amazonaws.com/ollie/photos/2026-02-16-hondenveldje-rennen.jpg"}
+{"time":"2026-02-16T09:50+01:00","type":"uitlaten","where":"hondenveldje","note":"Rennen op het hondenveldje! 🌿","photo":"https://jaapstronks.s3.us-west-2.amazonaws.com/otis/photos/2026-02-16-hondenveldje-rennen.jpg"}
 {"time":"2026-02-16T10:15+01:00","type":"bench","note":"Dutje in bench na hondenveldje"}
 {"time":"2026-02-16T11:00+01:00","type":"ontwaken","note":"Wakker na dutje van 45 min"}
 {"time":"2026-02-16T11:05+01:00","type":"tuin","detail":"niet geplast","note":"Marjolein mee naar buiten, niet geplast"}
@@ -33,7 +33,7 @@
 {"time":"2026-02-16T17:05+01:00","type":"eten","detail":"110g vlees compleet Farmfood","note":"Middagmaal (uitgesteld, sliep tot 16:55)"}
 {"time":"2026-02-16T17:25+01:00","type":"uitlaten","duration_min":10,"where":"straat","note":"Avondwandeling na middagmaal"}
 {"time":"2026-02-16T17:25+01:00","type":"poepen","location":"buiten","where":"straat","note":"Buiten gepoept tijdens wandeling ✅"}
-{"time":"2026-02-16T17:25+01:00","type":"gedrag","note":"Wandeling door de straat — alert en nieuwsgierig 🐾","photo":"https://jaapstronks.s3.us-west-2.amazonaws.com/ollie/photos/2026-02-16-wandeling-stoep.jpg"}
+{"time":"2026-02-16T17:25+01:00","type":"gedrag","note":"Wandeling door de straat — alert en nieuwsgierig 🐾","photo":"https://jaapstronks.s3.us-west-2.amazonaws.com/otis/photos/2026-02-16-wandeling-stoep.jpg"}
 {"time":"2026-02-16T17:49+01:00","type":"bench","note":"Dutje na wandeling + eten"}
 {"time":"2026-02-16T18:35+01:00","type":"ontwaken","note":"Wakker na dutje van 46 min"}
 {"time":"2026-02-16T18:37+01:00","type":"tuin","detail":"niet geplast","note":"Buiten geweest, geen plasje"}
@@ -48,7 +48,7 @@
 {"time":"2026-02-16T21:30+01:00","type":"bench","note":"Slaapt in bench — avond"}
 {"time":"2026-02-16T22:15+01:00","type":"ontwaken","note":"Wakker na avonddutje"}
 {"time":"2026-02-16T22:15+01:00","type":"uitlaten","where":"straat","note":"Avondwandeling direct na ontwaken"}
-{"time":"2026-02-16T22:25+01:00","type":"gedrag","note":"Gaat steeds zitten/liggen op straat, geen zin in plassen 😂","photo":"https://jaapstronks.s3.us-west-2.amazonaws.com/ollie/photos/2026-02-16-avondwandeling-zitten.jpg"}
+{"time":"2026-02-16T22:25+01:00","type":"gedrag","note":"Gaat steeds zitten/liggen op straat, geen zin in plassen 😂","photo":"https://jaapstronks.s3.us-west-2.amazonaws.com/otis/photos/2026-02-16-avondwandeling-zitten.jpg"}
 {"time":"2026-02-16T22:40+01:00","type":"bench","note":"Slaapt in bench — start nachtritme. Plan: wakker ~23:30-00:00 → tuin → bench"}
 {"time":"2026-02-16T23:30+01:00","type":"ontwaken","note":"Kort wakker voor tuinpoging"}
 {"time":"2026-02-16T23:35+01:00","type":"tuin","detail":"niet geplast","note":"Tuin geprobeerd, nog te moe, niks"}

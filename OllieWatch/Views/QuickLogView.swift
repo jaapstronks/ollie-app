@@ -1,6 +1,6 @@
 //
 //  QuickLogView.swift
-//  OllieWatch
+//  OtisWatch
 //
 //  6-button grid for fast event logging
 
@@ -205,7 +205,7 @@ struct QuickLogButton: View {
 
 // MARK: - PuppyEvent factory extension for watch
 
-import OllieShared
+import OtisShared
 
 #Preview {
     QuickLogView(dataProvider: WatchDataProvider.shared)

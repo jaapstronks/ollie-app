@@ -1,11 +1,11 @@
 //
 //  MealSection.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Meal schedule section for SettingsView
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Meal schedule settings section
 struct MealSection: View {

@@ -1,6 +1,6 @@
 //
 //  HeroTransition.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Hero transition utilities for smooth view-to-view animations.
 //  Creates visual continuity when navigating between related views.
@@ -229,7 +229,7 @@ struct StaggeredAnimation {
                                 }
                             } label: {
                                 RoundedRectangle(cornerRadius: 12)
-                                    .fill(Color.ollieAccent.opacity(0.3))
+                                    .fill(Color.otisAccent.opacity(0.3))
                                     .frame(height: 100)
                                     .overlay {
                                         Text("Item \(index)")
@@ -254,7 +254,7 @@ struct StaggeredAnimation {
                             }
 
                         RoundedRectangle(cornerRadius: 24)
-                            .fill(Color.ollieAccent)
+                            .fill(Color.otisAccent)
                             .frame(width: 300, height: 400)
                             .overlay {
                                 VStack {
@@ -282,7 +282,7 @@ struct StaggeredAnimation {
                     ForEach(0..<10, id: \.self) { index in
                         HStack {
                             Circle()
-                                .fill(Color.ollieAccent)
+                                .fill(Color.otisAccent)
                                 .frame(width: 40, height: 40)
 
                             VStack(alignment: .leading) {

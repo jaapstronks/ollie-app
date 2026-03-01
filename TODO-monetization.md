@@ -4,20 +4,20 @@
 
 | Aspect | Decision |
 |--------|----------|
-| **Model** | Freemium + subscription (Ollie+) |
+| **Model** | Freemium + subscription (Otis+) |
 | **Free tier** | Core logging forever, basic features |
 | **Price** | €2.99/month or €24.99/year |
 | **Scope** | Per Apple ID (all dogs included) |
-| **Trial** | 7 days of Ollie+ free for new users |
+| **Trial** | 7 days of Otis+ free for new users |
 
 ## Positioning
 
-**"Ollie is gratis. Ollie+ geeft je superkrachten."**
+**"Otis is gratis. Otis+ geeft je superkrachten."**
 
-Core puppy tracking is free forever — no time limits, no event limits. Ollie+ unlocks smart insights, predictions, and advanced features for users who want more.
+Core puppy tracking is free forever — no time limits, no event limits. Otis+ unlocks smart insights, predictions, and advanced features for users who want more.
 
 **Key message:**
-> "Log alles over je puppy, helemaal gratis. Wil je slimme inzichten en voorspellingen? Probeer Ollie+ 7 dagen gratis."
+> "Log alles over je puppy, helemaal gratis. Wil je slimme inzichten en voorspellingen? Probeer Otis+ 7 dagen gratis."
 
 This framing:
 - Core value is genuinely free (not a crippled trial)
@@ -25,7 +25,7 @@ This framing:
 - Users build data dependency before seeing premium value
 - Competitive advantage: "the only free puppy tracker"
 
-## What's Free vs Ollie+
+## What's Free vs Otis+
 
 ### Free Forever
 - **All event logging** (unlimited, all types)
@@ -37,7 +37,7 @@ This framing:
 - **Clicker tool** (full functionality)
 - **1 partner sharing** (via CloudKit)
 
-### Ollie+ (€2.99/mo or €24.99/yr)
+### Otis+ (€2.99/mo or €24.99/yr)
 - Everything in Free, plus:
 - **Smart potty predictions** with trigger adjustments
 - **Advanced analytics** (patterns, trends, gaps analysis)
@@ -59,15 +59,15 @@ This framing:
 import Foundation
 
 struct SubscriptionStatus: Codable {
-    var isOlliePlus: Bool
+    var isOtisPlus: Bool
     var expirationDate: Date?
     var isInTrialPeriod: Bool
 
     var isActive: Bool {
-        isOlliePlus && (expirationDate == nil || expirationDate! > Date())
+        isOtisPlus && (expirationDate == nil || expirationDate! > Date())
     }
 
-    static let free = SubscriptionStatus(isOlliePlus: false, expirationDate: nil, isInTrialPeriod: false)
+    static let free = SubscriptionStatus(isOtisPlus: false, expirationDate: nil, isInTrialPeriod: false)
 }
 ```
 
@@ -123,7 +123,7 @@ for await result in Transaction.currentEntitlements {
     if case .verified(let transaction) = result {
         // User has active subscription
         subscriptionStatus = SubscriptionStatus(
-            isOlliePlus: true,
+            isOtisPlus: true,
             expirationDate: transaction.expirationDate,
             isInTrialPeriod: transaction.offerType == .introductory
         )
@@ -133,7 +133,7 @@ for await result in Transaction.currentEntitlements {
 
 ### 4. UI Changes
 
-#### Ollie+ Upsell Points
+#### Otis+ Upsell Points
 Show upgrade prompts when users try to access premium features:
 
 **Predictions card (InsightsView):**
@@ -141,11 +141,11 @@ Show upgrade prompts when users try to access premium features:
 ┌─────────────────────────────────────────┐
 │ 🔮 Slimme voorspellingen                │
 │                                         │
-│ Ollie+ voorspelt wanneer je puppy       │
+│ Otis+ voorspelt wanneer je puppy       │
 │ weer moet plassen op basis van          │
 │ zijn patronen.                          │
 │                                         │
-│   [Probeer Ollie+ gratis]               │
+│   [Probeer Otis+ gratis]               │
 └─────────────────────────────────────────┘
 ```
 
@@ -155,25 +155,25 @@ Show upgrade prompts when users try to access premium features:
 │ 🔒 20+ extra commando's                 │
 │                                         │
 │ Ontgrendel de volledige trainings-      │
-│ bibliotheek met Ollie+.                 │
+│ bibliotheek met Otis+.                 │
 │                                         │
-│   [Bekijk Ollie+]                       │
+│   [Bekijk Otis+]                       │
 └─────────────────────────────────────────┘
 ```
 
 #### Settings Screen
 Add section:
 ```
-Ollie+
-├─ Status: Gratis / Ollie+ (maandelijks) / Ollie+ (jaarlijks)
-├─ [Upgrade naar Ollie+]     (if free)
+Otis+
+├─ Status: Gratis / Otis+ (maandelijks) / Otis+ (jaarlijks)
+├─ [Upgrade naar Otis+]     (if free)
 ├─ [Beheer abonnement]       (if subscribed, opens App Store)
 └─ [Herstel aankoop]         (always visible)
 ```
 
-#### Subscription Sheet (OlliePlusSheet.swift)
+#### Subscription Sheet (OtisPlusSheet.swift)
 Full-screen sheet showing:
-- Feature comparison (free vs Ollie+)
+- Feature comparison (free vs Otis+)
 - Pricing options (monthly / yearly with savings badge)
 - 7-day free trial callout
 - Terms & restore link
@@ -207,7 +207,7 @@ extension SubscriptionManager {
 if subscriptionManager.hasAccess(to: .predictions) {
     PredictionsCard()
 } else {
-    PredictionsLockedCard(onUpgrade: { showOlliePlusSheet = true })
+    PredictionsLockedCard(onUpgrade: { showOtisPlusSheet = true })
 }
 
 // Photo attachment button
@@ -236,8 +236,8 @@ if subscriptionManager.hasAccess(to: .fullTrainingLibrary) {
 
 ## Dutch Copy
 
-### Ollie+ Sheet (main upsell)
-- Title: "Ollie+"
+### Otis+ Sheet (main upsell)
+- Title: "Otis+"
 - Subtitle: "Haal meer uit je puppy-data"
 - Trial callout: "Probeer 7 dagen gratis"
 - Monthly: "€2,99/maand"
@@ -246,49 +246,49 @@ if subscriptionManager.hasAccess(to: .fullTrainingLibrary) {
 - Footer: "Abonnement verlengt automatisch. Annuleer wanneer je wilt."
 
 ### Feature Locked States
-- Predictions: "Ontgrendel slimme voorspellingen met Ollie+"
-- Analytics: "Bekijk patronen en trends met Ollie+"
-- Training: "Ontgrendel 20+ extra commando's met Ollie+"
-- Photos: "Voeg foto's toe met Ollie+"
-- Export: "Exporteer naar PDF met Ollie+"
+- Predictions: "Ontgrendel slimme voorspellingen met Otis+"
+- Analytics: "Bekijk patronen en trends met Otis+"
+- Training: "Ontgrendel 20+ extra commando's met Otis+"
+- Photos: "Voeg foto's toe met Otis+"
+- Export: "Exporteer naar PDF met Otis+"
 
 ### Settings
-- Section title: "Ollie+"
-- Status values: "Gratis" / "Ollie+ (proefperiode)" / "Ollie+ (maandelijks)" / "Ollie+ (jaarlijks)"
-- Upgrade button: "Upgrade naar Ollie+"
+- Section title: "Otis+"
+- Status values: "Gratis" / "Otis+ (proefperiode)" / "Otis+ (maandelijks)" / "Otis+ (jaarlijks)"
+- Upgrade button: "Upgrade naar Otis+"
 - Manage button: "Beheer abonnement"
 - Restore button: "Herstel aankoop"
 
 ### Purchase Success
-- "Welkom bij Ollie+! Je hebt nu toegang tot alle functies."
+- "Welkom bij Otis+! Je hebt nu toegang tot alle functies."
 
 ### Restore Success
 - "Abonnement hersteld. Welkom terug!"
 
 ### Trial Ending (push notification, day 6)
-- "Je Ollie+ proefperiode eindigt morgen. Blijf genieten van slimme inzichten?"
+- "Je Otis+ proefperiode eindigt morgen. Blijf genieten van slimme inzichten?"
 
 ### App Store Description (snippet)
-- "Ollie is gratis — log alles over je puppy zonder limiet. Upgrade naar Ollie+ voor slimme voorspellingen, geavanceerde statistieken en meer."
+- "Otis is gratis — log alles over je puppy zonder limiet. Upgrade naar Otis+ voor slimme voorspellingen, geavanceerde statistieken en meer."
 
 ## App Store Setup
 
 ### 1. Create Subscription Group
 In App Store Connect → Subscriptions:
-- Group name: "Ollie+"
+- Group name: "Otis+"
 - Group ID: `ollie_plus`
 
 ### 2. Create Subscription Products
 
 **Monthly:**
 - Product ID: `com.ollie.plus.monthly`
-- Reference Name: "Ollie+ Monthly"
+- Reference Name: "Otis+ Monthly"
 - Price: €2.99 (Tier 3)
 - Duration: 1 month
 
 **Yearly:**
 - Product ID: `com.ollie.plus.yearly`
-- Reference Name: "Ollie+ Yearly"
+- Reference Name: "Otis+ Yearly"
 - Price: €24.99 (Tier 25)
 - Duration: 1 year
 
@@ -299,19 +299,19 @@ In App Store Connect → Subscriptions:
 
 ### 4. Localized Metadata (Dutch)
 
-**Display Name:** "Ollie+"
+**Display Name:** "Otis+"
 
 **Description:**
-"Haal meer uit Ollie met slimme voorspellingen, geavanceerde statistieken, de volledige trainingsbibliotheek, en meer."
+"Haal meer uit Otis met slimme voorspellingen, geavanceerde statistieken, de volledige trainingsbibliotheek, en meer."
 
-**Subscription Group Display Name:** "Ollie+ Abonnement"
+**Subscription Group Display Name:** "Otis+ Abonnement"
 
 ### 5. Review Notes
 ```
-Ollie is a puppy tracking app. Core features (event logging, timeline,
+Otis is a puppy tracking app. Core features (event logging, timeline,
 basic stats) are free forever with no limits.
 
-Ollie+ subscription unlocks:
+Otis+ subscription unlocks:
 - Smart potty predictions
 - Advanced analytics and patterns
 - Full training library (30+ commands)
@@ -324,7 +324,7 @@ Pricing:
 - €2.99/month or €24.99/year
 - 7-day free trial for new subscribers
 
-The app is fully functional without a subscription. Ollie+ adds
+The app is fully functional without a subscription. Otis+ adds
 convenience features and insights for power users.
 ```
 
@@ -338,7 +338,7 @@ convenience features and insights for power users.
 - [ ] Add `@EnvironmentObject` for SubscriptionManager in app
 
 ### Phase 2: App Store Connect Setup
-- [ ] Create subscription group "Ollie+"
+- [ ] Create subscription group "Otis+"
 - [ ] Create monthly product (com.ollie.plus.monthly)
 - [ ] Create yearly product (com.ollie.plus.yearly)
 - [ ] Configure 7-day free trial as introductory offer
@@ -355,9 +355,9 @@ convenience features and insights for power users.
 - [ ] Gate unlimited partner sharing (allow 1 free)
 
 ### Phase 4: Subscription UI
-- [ ] Create `OlliePlusSheet` (main upsell screen)
+- [ ] Create `OtisPlusSheet` (main upsell screen)
 - [ ] Create locked feature cards (predictions, training, etc.)
-- [ ] Add Ollie+ section to Settings
+- [ ] Add Otis+ section to Settings
 - [ ] Implement purchase flow with loading states
 - [ ] Implement restore purchases
 - [ ] Add "Manage subscription" link (opens App Store)

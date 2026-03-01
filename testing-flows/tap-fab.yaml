@@ -1,4 +1,4 @@
-appId: com.jaapstronks.Ollie-app
+appId: com.jaapstronks.Otis-app
 ---
 # Take initial screenshot
 - takeScreenshot: testing-screenshots/maestro-init

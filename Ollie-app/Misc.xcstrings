@@ -56,6 +56,28 @@
         }
       }
     },
+    "%lld outdoor pees in a row today! %@ is doing amazing!" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld keer buiten geplast vandaag op rij! %@ doet het geweldig!"
+          }
+        }
+      }
+    },
+    "%lld outdoor pees today!" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld keer buiten geplast vandaag!"
+          }
+        }
+      }
+    },
     "%lld outside" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -96,6 +118,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld poepjes"
+          }
+        }
+      }
+    },
+    "%lld poops (%lld expected)" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld poepjes (%lld verwacht)"
           }
         }
       }
@@ -441,6 +474,17 @@
         }
       }
     },
+    "Keep it up!" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ga zo door!"
+          }
+        }
+      }
+    },
     "Longest" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -562,6 +606,17 @@
         }
       }
     },
+    "Outdoor success rate by trigger" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buitenplassucces per trigger"
+          }
+        }
+      }
+    },
     "Patterns (7 days)" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -595,6 +650,17 @@
         }
       }
     },
+    "Perfect day so far!" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Perfecte dag tot nu toe!"
+          }
+        }
+      }
+    },
     "Please try again later." : {
       "extractionState" : "stale",
       "localizations" : {
@@ -602,6 +668,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Probeer het later opnieuw."
+          }
+        }
+      }
+    },
+    "Potty Training" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zindelijkheidstraining"
+          }
+        }
+      }
+    },
+    "Potty Triggers (7 days)" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plastriggers (7 dagen)"
           }
         }
       }

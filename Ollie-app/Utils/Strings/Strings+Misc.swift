@@ -1,6 +1,6 @@
 //
 //  Strings+Misc.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Stats, streak, tips, errors, and other miscellaneous strings
 
@@ -45,9 +45,11 @@ extension Strings {
         static let title = String(localized: "Statistics", table: table)
         static let outdoorStreak = String(localized: "Outdoor Streak", table: table)
         static let pottyGaps = String(localized: "Pee Intervals (7 days)", table: table)
+        static let pottyTraining = String(localized: "Potty Training", table: table)
         static let today = String(localized: "Today", table: table)
         static let sleepToday = String(localized: "Sleep Today", table: table)
-        static let patterns = String(localized: "Patterns (7 days)", table: table)
+        static let patterns = String(localized: "Potty Triggers (7 days)", table: table)
+        static let patternsSubtitle = String(localized: "Outdoor success rate by trigger", table: table)
 
         // Expanded Stats tab sections
         static let health = String(localized: "Health", table: table)
@@ -137,11 +139,36 @@ extension Strings {
         static let couldNotShare = String(localized: "Could not share", table: table)
         static let couldNotStopSharing = String(localized: "Could not stop sharing", table: table)
         static let couldNotProcessWeather = String(localized: "Could not process weather data", table: table)
+        static let couldNotProcessData = String(localized: "Could not process data", table: table)
+
+        // Weather errors
+        static let invalidURL = String(localized: "Invalid URL", table: table)
+
+        // Import errors
+        static let apiError = String(localized: "Could not reach GitHub API", table: table)
+        static let invalidResponse = String(localized: "Invalid response from GitHub", table: table)
+        static let downloadFailed = String(localized: "Download failed", table: table)
+        static let invalidContent = String(localized: "Invalid file content", table: table)
+        static let untrustedURL = String(localized: "Untrusted download URL", table: table)
+        static let contentTooLarge = String(localized: "File too large", table: table)
+        static let maliciousContent = String(localized: "Suspicious content detected", table: table)
     }
 
     // MARK: - Streaks
     enum StreakMessages {
         static let startAgain = String(localized: "Start again!", table: table)
+    }
+
+    // MARK: - Celebration Messages
+    enum Celebration {
+        static func outdoorStreakToday(count: Int, puppyName: String) -> String {
+            String(localized: "\(count) outdoor pees in a row today! \(puppyName) is doing amazing!", table: table)
+        }
+        static func outdoorStreakTodayShort(count: Int) -> String {
+            String(localized: "\(count) outdoor pees today!", table: table)
+        }
+        static let perfectDaySoFar = String(localized: "Perfect day so far!", table: table)
+        static let keepItUp = String(localized: "Keep it up!", table: table)
     }
 
     // MARK: - Potty Progress Summary Card
@@ -155,7 +182,11 @@ extension Strings {
         }
 
         static func poopCountWithExpected(count: Int, lower: Int, upper: Int) -> String {
-            String(localized: "\(count) poops (\(lower)-\(upper) expected)", table: table)
+            if lower == upper {
+                return String(localized: "\(count) poops (\(lower) expected)", table: table)
+            } else {
+                return String(localized: "\(count) poops (\(lower)-\(upper) expected)", table: table)
+            }
         }
 
         static func poopCountSimple(_ count: Int) -> String {

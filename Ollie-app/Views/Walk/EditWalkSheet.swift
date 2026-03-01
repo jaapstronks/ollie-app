@@ -1,11 +1,11 @@
 //
 //  EditWalkSheet.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Sheet for editing an existing walk event
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Sheet for editing a walk event's details
 struct EditWalkSheet: View {
@@ -53,9 +53,9 @@ struct EditWalkSheet: View {
                     HStack(spacing: 12) {
                         Image(systemName: "figure.walk")
                             .font(.title)
-                            .foregroundStyle(Color.ollieAccent)
+                            .foregroundStyle(Color.otisAccent)
                             .frame(width: 44, height: 44)
-                            .background(Color.ollieAccent.opacity(0.15))
+                            .background(Color.otisAccent.opacity(0.15))
                             .clipShape(RoundedRectangle(cornerRadius: 10))
 
                         VStack(alignment: .leading, spacing: 2) {
@@ -92,8 +92,8 @@ struct EditWalkSheet: View {
                 Section(Strings.WalkLocations.walkLocation) {
                     if let spot = selectedSpot {
                         HStack {
-                            Image(systemName: spot.isFavorite ? "star.circle.fill" : "mappin.circle.fill")
-                                .foregroundStyle(spot.isFavorite ? .yellow : .ollieAccent)
+                            Image(systemName: "mappin.circle.fill")
+                                .foregroundStyle(Color.otisAccent)
                             Text(spot.name)
                             Spacer()
                             Button(Strings.EditWalk.changeSpot) {
@@ -102,22 +102,8 @@ struct EditWalkSheet: View {
                             .font(.caption)
                         }
                     } else if !spotStore.spots.isEmpty {
-                        // Spot picker
-                        ForEach(spotStore.favoriteSpots.prefix(3)) { spot in
-                            Button {
-                                selectedSpot = spot
-                            } label: {
-                                HStack {
-                                    Image(systemName: "star.fill")
-                                        .foregroundStyle(.yellow)
-                                        .font(.caption)
-                                    Text(spot.name)
-                                        .foregroundStyle(.primary)
-                                }
-                            }
-                        }
-
-                        ForEach(spotStore.recentSpots.prefix(2)) { spot in
+                        // Spot picker (show top spots by visit count)
+                        ForEach(spotStore.popularSpots.prefix(5)) { spot in
                             Button {
                                 selectedSpot = spot
                             } label: {

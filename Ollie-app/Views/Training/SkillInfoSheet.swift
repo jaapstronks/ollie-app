@@ -1,12 +1,12 @@
 //
 //  SkillInfoSheet.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Info sheet for viewing skill details without starting a session
 //
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Sheet showing skill details without starting a training session
 struct SkillInfoSheet: View {
@@ -72,12 +72,12 @@ struct SkillInfoSheet: View {
             // Skill icon
             ZStack {
                 Circle()
-                    .fill(Color.ollieAccent.opacity(colorScheme == .dark ? 0.2 : 0.15))
+                    .fill(Color.otisAccent.opacity(colorScheme == .dark ? 0.2 : 0.15))
                     .frame(width: 56, height: 56)
 
                 Image(systemName: skill.icon)
                     .font(.system(size: 24))
-                    .foregroundStyle(Color.ollieAccent)
+                    .foregroundStyle(Color.otisAccent)
             }
 
             VStack(alignment: .leading, spacing: 4) {
@@ -102,7 +102,7 @@ struct SkillInfoSheet: View {
             Spacer()
         }
         .padding()
-        .glassStatusCard(tintColor: status == .mastered ? .ollieSuccess : nil)
+        .glassStatusCard(tintColor: status == .mastered ? .otisSuccess : nil)
     }
 
     // MARK: - How To Section
@@ -137,7 +137,7 @@ struct SkillInfoSheet: View {
             HStack(alignment: .top, spacing: 12) {
                 Image(systemName: "checkmark.circle.fill")
                     .font(.subheadline)
-                    .foregroundStyle(Color.ollieSuccess)
+                    .foregroundStyle(Color.otisSuccess)
                 Text(skill.doneWhen)
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
@@ -156,7 +156,7 @@ struct SkillInfoSheet: View {
                     HStack(alignment: .top, spacing: 12) {
                         Image(systemName: "lightbulb.fill")
                             .font(.caption)
-                            .foregroundStyle(Color.ollieWarning)
+                            .foregroundStyle(Color.otisWarning)
                         Text(tip)
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
@@ -221,7 +221,7 @@ struct SkillInfoSheet: View {
             .foregroundStyle(.white)
             .frame(maxWidth: .infinity)
             .padding(.vertical, 16)
-            .background(Color.ollieAccent)
+            .background(Color.otisAccent)
             .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
         }
     }

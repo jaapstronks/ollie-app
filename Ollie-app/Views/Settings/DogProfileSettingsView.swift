@@ -1,158 +1,83 @@
 //
 //  DogProfileSettingsView.swift
-//  Ollie-app
+//  Otis-app
 //
-//  Dog profile settings: walks, meals, meds, spots, health
+//  Dog profile settings: name, breed, size, photo
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
-/// Settings screen for all dog-related configuration
+/// Settings screen for dog profile identity information
 struct DogProfileSettingsView: View {
     @ObservedObject var profileStore: ProfileStore
-    @ObservedObject var spotStore: SpotStore
-    @ObservedObject var viewModel: TimelineViewModel
-    @ObservedObject var milestoneStore: MilestoneStore
 
-    @State private var showingMealEdit = false
-    @State private var showingWalkScheduleEdit = false
+    @State private var showingPhotoPicker = false
 
     var body: some View {
         Form {
             if let profile = profileStore.profile {
-                // Profile basics
-                ProfileSection(profile: profile)
-                StatsSection(profile: profile)
-
-                // Schedules
-                WalkSection(
+                // Profile basics only
+                ProfileSection(
                     profile: profile,
                     profileStore: profileStore,
-                    showingWalkScheduleEdit: $showingWalkScheduleEdit
+                    showingPhotoPicker: $showingPhotoPicker
                 )
 
-                MealSection(
+                // Memorial section (subtle, at the bottom)
+                MemorialSection(
                     profile: profile,
-                    profileStore: profileStore,
-                    showingMealEdit: $showingMealEdit
+                    profileStore: profileStore
                 )
-
-                // Medications
-                medicationsSection
-
-                // Walk spots
-                walkSpotsSection
-
-                // Health milestones
-                healthSection
             }
         }
         .navigationTitle(profileStore.profile?.name ?? Strings.Settings.profile)
-        .sheet(isPresented: $showingMealEdit) {
+        .sheet(isPresented: $showingPhotoPicker) {
             if let profile = profileStore.profile {
-                MealScheduleEditorWrapper(
-                    initialSchedule: profile.mealSchedule,
-                    onSave: { updatedSchedule in
-                        profileStore.updateMealSchedule(updatedSchedule)
-                    }
-                )
-            }
-        }
-        .sheet(isPresented: $showingWalkScheduleEdit) {
-            if let profile = profileStore.profile {
-                WalkScheduleEditorWrapper(
-                    initialSchedule: profile.walkSchedule,
-                    ageInMonths: profile.ageInMonths,
-                    onSave: { updatedSchedule in
-                        profileStore.updateWalkSchedule(updatedSchedule)
-                    }
+                ProfilePhotoPicker(
+                    currentImage: loadCurrentProfileImage(for: profile),
+                    onSave: { image in
+                        saveProfilePhoto(image)
+                    },
+                    onRemove: profile.profilePhotoFilename != nil ? {
+                        removeProfilePhoto()
+                    } : nil
                 )
             }
         }
     }
 
-    // MARK: - Sections
+    // MARK: - Profile Photo Helpers
 
-    @ViewBuilder
-    private var medicationsSection: some View {
-        Section(Strings.Medications.title) {
-            NavigationLink {
-                MedicationSettingsView(profileStore: profileStore)
-            } label: {
-                HStack {
-                    Label {
-                        Text(Strings.Medications.title)
-                    } icon: {
-                        Image(systemName: "pills.fill")
-                            .foregroundColor(.ollieAccent)
-                    }
-                    Spacer()
-                    let count = profileStore.profile?.medicationSchedule.medications.count ?? 0
-                    if count > 0 {
-                        Text("\(count)")
-                            .foregroundColor(.secondary)
-                    }
-                }
+    private func loadCurrentProfileImage(for profile: PuppyProfile) -> UIImage? {
+        guard let filename = profile.profilePhotoFilename else { return nil }
+        return ProfilePhotoStore.shared.load(filename: filename)
+    }
+
+    private func saveProfilePhoto(_ image: UIImage) {
+        guard let profile = profileStore.profile else { return }
+        do {
+            // Delete old photo if exists
+            if let oldFilename = profile.profilePhotoFilename {
+                ProfilePhotoStore.shared.delete(filename: oldFilename)
             }
+
+            let filename = try ProfilePhotoStore.shared.save(image: image)
+            profileStore.updateProfilePhoto(filename)
+        } catch {
+            print("Failed to save profile photo: \(error)")
         }
     }
 
-    @ViewBuilder
-    private var walkSpotsSection: some View {
-        Section(Strings.WalkLocations.walkLocation) {
-            NavigationLink {
-                FavoriteSpotsView(spotStore: spotStore)
-            } label: {
-                HStack {
-                    Label {
-                        Text(Strings.WalkLocations.favoriteSpots)
-                    } icon: {
-                        Image(systemName: "mappin.circle.fill")
-                            .foregroundColor(.ollieAccent)
-                    }
-                    Spacer()
-                    Text("\(spotStore.spots.count)")
-                        .foregroundColor(.secondary)
-                }
-            }
+    private func removeProfilePhoto() {
+        if let filename = profileStore.profile?.profilePhotoFilename {
+            ProfilePhotoStore.shared.delete(filename: filename)
         }
-    }
-
-    @ViewBuilder
-    private var healthSection: some View {
-        Section(Strings.Health.title) {
-            NavigationLink {
-                HealthView(viewModel: viewModel, milestoneStore: milestoneStore)
-            } label: {
-                HStack {
-                    Label {
-                        Text(Strings.Health.milestones)
-                    } icon: {
-                        Image(systemName: "heart.fill")
-                            .foregroundColor(.ollieDanger)
-                    }
-                    Spacer()
-                    Text(Strings.Insights.healthDescription)
-                        .foregroundColor(.secondary)
-                        .font(.caption)
-                }
-            }
-        }
+        profileStore.updateProfilePhoto(nil)
     }
 }
 
 #Preview {
-    let profileStore = ProfileStore()
-    let eventStore = EventStore()
-    let milestoneStore = MilestoneStore()
-    let viewModel = TimelineViewModel(eventStore: eventStore, profileStore: profileStore)
-
     NavigationStack {
-        DogProfileSettingsView(
-            profileStore: profileStore,
-            spotStore: SpotStore(),
-            viewModel: viewModel,
-            milestoneStore: milestoneStore
-        )
+        DogProfileSettingsView(profileStore: ProfileStore())
     }
 }

@@ -16,7 +16,7 @@ The CloudKit integration code has been implemented. You need to complete the Xco
 6. In the iCloud capability section that appears:
    - Check **"CloudKit"**
    - Under "Containers", click the **"+"** button
-   - Add: `iCloud.nl.jaapstronks.Ollie`
+   - Add: `iCloud.nl.jaapstronks.Otis`
 7. Xcode will auto-create the container in your Apple Developer account
 
 ### Step 2: Add Background Modes Capability (if not auto-added)
@@ -31,7 +31,7 @@ The CloudKit integration code has been implemented. You need to complete the Xco
 
 1. In Xcode, go to **Build Settings** for the Ollie-app target
 2. Search for "Code Signing Entitlements"
-3. Set it to: `Ollie-app/Ollie-app.entitlements`
+3. Set it to: `Otis-app/Ollie-app.entitlements`
 
 ### Step 4: Build and Test
 
@@ -45,7 +45,7 @@ The CloudKit integration code has been implemented. You need to complete the Xco
 
 - **`Services/CloudKitService.swift`** (NEW)
   - Full CloudKit sync service
-  - Zone management (custom zone "OllieEvents")
+  - Zone management (custom zone "OtisEvents")
   - Event save/fetch/delete
   - CKShare support for partner sharing
   - Change tracking with server tokens
@@ -67,7 +67,7 @@ The CloudKit integration code has been implemented. You need to complete the Xco
   - Added "Delen" (sharing) section
   - Added "Synchronisatie" section with sync status
 
-- **`Ollie_appApp.swift`** (MODIFIED)
+- **`Otis_appApp.swift`** (MODIFIED)
   - AppDelegate for remote notifications
   - Foreground sync trigger
 
@@ -110,7 +110,7 @@ The CloudKit integration code has been implemented. You need to complete the Xco
 1. **Owner** (Jaap) taps "Deel met partner" in Settings
 2. System shows share sheet with invite options (Messages, Mail, etc.)
 3. **Participant** (Marjolein) receives invite link, taps it
-4. Her phone opens Ollie app, CloudKit links her to the shared zone
+4. Her phone opens Otis app, CloudKit links her to the shared zone
 5. Both can now log events, both see all events
 
 The participant's data is stored in the owner's private database via CKShare. The participant accesses it via their shared database.
@@ -132,7 +132,7 @@ To inspect your CloudKit data:
 1. Go to https://icloud.developer.apple.com/
 2. Sign in with your Apple Developer account
 3. Select "CloudKit Database"
-4. Choose container: `iCloud.nl.jaapstronks.Ollie`
-5. Browse "Private Database" > "OllieEvents" zone
+4. Choose container: `iCloud.nl.jaapstronks.Otis`
+5. Browse "Private Database" > "OtisEvents" zone
 
 Delete this file when setup is complete and tested.

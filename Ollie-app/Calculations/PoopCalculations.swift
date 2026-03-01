@@ -1,6 +1,6 @@
 //
 //  PoopCalculations.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Pattern-based poop tracking — learns from the dog's actual behavior
 //  Provides subtle awareness without nagging
@@ -8,7 +8,7 @@
 //  Facade that delegates to focused calculators in Poop/ subdirectory
 
 import Foundation
-import OllieShared
+import OtisShared
 import SwiftUI
 
 // MARK: - Poop Calculations (Facade)

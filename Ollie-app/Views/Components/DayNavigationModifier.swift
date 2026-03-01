@@ -1,6 +1,6 @@
 //
 //  DayNavigationModifier.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Reusable modifier for swipe-to-navigate between days
 //

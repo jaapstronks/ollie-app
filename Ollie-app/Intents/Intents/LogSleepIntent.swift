@@ -1,11 +1,11 @@
 //
 //  LogSleepIntent.swift
-//  Ollie-app
+//  Otis-app
 //
 //  App Intent for logging sleep events via Siri/Shortcuts
 
 import AppIntents
-import OllieShared
+import OtisShared
 
 /// Log that your puppy is sleeping
 struct LogSleepIntent: AppIntent {
@@ -18,11 +18,11 @@ struct LogSleepIntent: AppIntent {
         let store = IntentDataStore.shared
 
         guard let profile = store.loadProfile() else {
-            return .result(dialog: "Please set up your puppy profile in the Ollie app first.")
+            return .result(dialog: "Please set up your puppy profile in the Otis app first.")
         }
 
         guard profile.canLogEvents else {
-            return .result(dialog: "Your free trial has ended. Please upgrade in the Ollie app to continue logging.")
+            return .result(dialog: "Your free trial has ended. Please upgrade in the Otis app to continue logging.")
         }
 
         // Check if already sleeping

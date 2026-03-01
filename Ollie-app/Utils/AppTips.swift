@@ -1,6 +1,6 @@
 //
 //  AppTips.swift
-//  Ollie-app
+//  Otis-app
 //
 //  TipKit integration for contextual feature discovery
 

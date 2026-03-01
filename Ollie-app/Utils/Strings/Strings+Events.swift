@@ -1,6 +1,6 @@
 //
 //  Strings+Events.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Event types, locations, and logging strings
 
@@ -17,7 +17,7 @@ extension Strings {
         static let pee = String(localized: "Pee", table: table)
         static let poop = String(localized: "Poop", table: table)
         static let sleep = String(localized: "Sleep", table: table)
-        static let wakeUp = String(localized: "Wake up", table: table)
+        static let wakeUp = String(localized: "Woke up", table: table)
         static let walk = String(localized: "Walk", table: table)
         static let garden = String(localized: "Garden", table: table)
         static let training = String(localized: "Training", table: table)
@@ -34,6 +34,14 @@ extension Strings {
     enum EventLocation {
         static let outside = String(localized: "Outside", table: table)
         static let inside = String(localized: "Inside", table: table)
+    }
+
+    // MARK: - Nap Locations
+    enum NapLocation {
+        static let crate = String(localized: "Crate", table: table)
+        static let dogBed = String(localized: "Dog bed", table: table)
+        static let other = String(localized: "Other", table: table)
+        static let wherePrompt = String(localized: "Where?", table: table)
     }
 
     // MARK: - Quick Log Bar
@@ -162,6 +170,11 @@ extension Strings {
         static let title = String(localized: "Moments", table: table)
         static let noPhotos = String(localized: "No photos yet", table: table)
         static let makePhotosHint = String(localized: "Take photos using the camera button\nin the timeline", table: table)
+        static let addFirstMoment = String(localized: "Add first moment", table: table)
+
+        // View modes
+        static let galleryMode = String(localized: "Gallery", table: table)
+        static let diaryMode = String(localized: "Diary", table: table)
     }
 
     // MARK: - Media Attachment Button

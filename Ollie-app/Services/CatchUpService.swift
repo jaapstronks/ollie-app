@@ -1,12 +1,12 @@
 //
 //  CatchUpService.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Service for detecting when user needs to catch up after a logging gap
 //
 
 import Foundation
-import OllieShared
+import OtisShared
 
 /// Service for detecting catch-up scenarios and providing smart defaults
 struct CatchUpService {

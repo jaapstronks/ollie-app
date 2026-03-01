@@ -1,13 +1,13 @@
 //
 //  TimelineViewModel+Activities.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Extension containing activity tracking methods (walks and naps)
 //  Extracted from TimelineViewModel to improve code organization
 //
 
 import Foundation
-import OllieShared
+import OtisShared
 import SwiftUI
 
 // MARK: - Activity State Helpers
@@ -87,10 +87,30 @@ extension TimelineViewModel {
         HapticFeedback.medium()
     }
 
-    /// End current nap
+    /// End current nap by updating the sleep event's duration
     func endNap(minutesAgo: Int = 0, note: String? = nil) {
-        _ = activityManager.endActivity(minutesAgo: minutesAgo, note: note)
+        if let napInfo = activityManager.endActivity(minutesAgo: minutesAgo, note: note) {
+            // Find and update the sleep event with the duration
+            updateSleepEventDuration(sessionId: napInfo.sleepSessionId, durationMin: napInfo.durationMin, note: note)
+        }
         HapticFeedback.success()
+    }
+
+    /// Helper to update a sleep event's duration (single-event model)
+    private func updateSleepEventDuration(sessionId: UUID?, durationMin: Int, note: String?) {
+        // Find the sleep event by sessionId or most recent ongoing
+        let recentEvents = getRecentEvents()
+        guard let sleepEvent = recentEvents
+            .filter({ $0.type == .slapen && $0.durationMin == nil })
+            .first(where: { sessionId == nil || $0.sleepSessionId == sessionId || $0.id == sessionId })
+        else { return }
+
+        var updatedSleep = sleepEvent
+        updatedSleep.durationMin = durationMin
+        if let note = note, !note.isEmpty {
+            updatedSleep.note = note
+        }
+        updateEvent(updatedSleep)
     }
 
     /// Get today's naps for display
@@ -104,14 +124,17 @@ extension TimelineViewModel {
 extension TimelineViewModel {
 
     /// Start an activity with a specific type and start time
-    func startActivity(type: ActivityType, startTime: Date) {
-        activityManager.startActivity(type: type, startTime: startTime)
+    func startActivity(type: ActivityType, startTime: Date, napLocation: NapLocation? = nil) {
+        activityManager.startActivity(type: type, startTime: startTime, napLocation: napLocation)
         HapticFeedback.medium()
     }
 
     /// End the current activity
     func endActivity(minutesAgo: Int = 0, note: String? = nil) {
-        _ = activityManager.endActivity(minutesAgo: minutesAgo, note: note)
+        if let napInfo = activityManager.endActivity(minutesAgo: minutesAgo, note: note) {
+            // For naps, update the sleep event with duration
+            updateSleepEventDuration(sessionId: napInfo.sleepSessionId, durationMin: napInfo.durationMin, note: note)
+        }
         HapticFeedback.success()
         sheetCoordinator.dismissSheet()
     }
@@ -123,17 +146,32 @@ extension TimelineViewModel {
         sheetCoordinator.dismissSheet()
     }
 
-    /// Log wake up event at a specific time
+    /// End nap by updating the sleep event's duration (single-event model)
     func logWakeUp(time: Date) {
-        // Find the ongoing sleep session to link the wake event
         let recentEvents = getRecentEvents()
-        let sleepSessionId = SleepSession.ongoingSleepSessionId(from: recentEvents)
+
+        // Find the ongoing sleep event
+        guard let sleepEvent = recentEvents
+            .filter({ $0.type == .slapen && $0.durationMin == nil })
+            .sorted(by: { $0.time > $1.time })
+            .first else {
+            // No ongoing sleep found - nothing to update
+            HapticFeedback.error()
+            return
+        }
+
+        // Calculate duration in minutes
+        let durationMinutes = Int(time.timeIntervalSince(sleepEvent.time) / 60)
+
+        // Update the sleep event with the duration
+        var updatedSleep = sleepEvent
+        updatedSleep.durationMin = max(1, durationMinutes)  // At least 1 minute
 
         // End any in-progress nap activity
         _ = activityManager.prepareWakeUp()
 
-        // Log the wake-up event
-        logEvent(type: .ontwaken, time: time, sleepSessionId: sleepSessionId)
+        // Save the updated sleep event (this replaces creating a wake event)
+        updateEvent(updatedSleep)
         HapticFeedback.success()
     }
 }

@@ -1,12 +1,12 @@
 //
 //  CDPuppyEvent+Extensions.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Extensions for converting between PuppyEvent and CDPuppyEvent
 //
 
 import CoreData
-import OllieShared
+import OtisShared
 
 extension CDPuppyEvent {
 
@@ -174,5 +174,14 @@ extension CDPuppyEvent {
         request.sortDescriptors = [NSSortDescriptor(keyPath: \CDPuppyEvent.modifiedAt, ascending: true)]
 
         return (try? context.fetch(request)) ?? []
+    }
+
+    /// Fetch the earliest event by time
+    static func fetchEarliestEvent(in context: NSManagedObjectContext) -> CDPuppyEvent? {
+        let request = NSFetchRequest<CDPuppyEvent>(entityName: "CDPuppyEvent")
+        request.sortDescriptors = [NSSortDescriptor(keyPath: \CDPuppyEvent.time, ascending: true)]
+        request.fetchLimit = 1
+
+        return try? context.fetch(request).first
     }
 }

@@ -1,5 +1,5 @@
 # Test Insights tab content and interactions
-appId: jaapstronks.Ollie-app
+appId: jaapstronks.Otis-app
 ---
 - launchApp
 - waitForAnimationToEnd

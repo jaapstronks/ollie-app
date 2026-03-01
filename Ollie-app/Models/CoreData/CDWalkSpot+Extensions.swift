@@ -1,12 +1,42 @@
 //
 //  CDWalkSpot+Extensions.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Extensions for converting between WalkSpot and CDWalkSpot
 //
 
 import CoreData
-import OllieShared
+import OtisShared
+
+// MARK: - CDEntityConvertible Conformance
+
+extension CDWalkSpot: CDEntityConvertible {
+    typealias Model = WalkSpot
+
+    static func fetchAll(in context: NSManagedObjectContext) -> [NSManagedObject] {
+        fetchAllSpots(in: context)
+    }
+
+    static func fetch(byId id: UUID, in context: NSManagedObjectContext) -> NSManagedObject? {
+        let request = NSFetchRequest<CDWalkSpot>(entityName: "CDWalkSpot")
+        request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
+        request.fetchLimit = 1
+        return try? context.fetch(request).first
+    }
+
+    @discardableResult
+    static func create(from spot: WalkSpot, in context: NSManagedObjectContext) -> NSManagedObject {
+        let cdSpot = CDWalkSpot(context: context)
+        cdSpot.update(from: spot)
+        return cdSpot
+    }
+
+    func toModel() -> WalkSpot? {
+        toWalkSpot()
+    }
+}
+
+// MARK: - Core Data Operations
 
 extension CDWalkSpot {
 
@@ -23,13 +53,8 @@ extension CDWalkSpot {
         self.isFavorite = spot.isFavorite
         self.notes = spot.notes
         self.visitCount = Int32(spot.visitCount)
-    }
-
-    /// Create a new CDWalkSpot from a WalkSpot struct
-    static func create(from spot: WalkSpot, in context: NSManagedObjectContext) -> CDWalkSpot {
-        let cdSpot = CDWalkSpot(context: context)
-        cdSpot.update(from: spot)
-        return cdSpot
+        self.category = spot.category?.rawValue
+        self.photoFilename = spot.photoFilename
     }
 
     // MARK: - Convert to Swift Struct
@@ -43,6 +68,8 @@ extension CDWalkSpot {
             return nil
         }
 
+        let spotCategory: SpotCategory? = self.category.flatMap { SpotCategory(rawValue: $0) }
+
         return WalkSpot(
             id: id,
             name: name,
@@ -52,7 +79,9 @@ extension CDWalkSpot {
             modifiedAt: modifiedAt,
             isFavorite: self.isFavorite,
             notes: self.notes,
-            visitCount: Int(self.visitCount)
+            visitCount: Int(self.visitCount),
+            category: spotCategory,
+            photoFilename: self.photoFilename
         )
     }
 }
@@ -65,19 +94,10 @@ extension CDWalkSpot {
     static func fetchAllSpots(in context: NSManagedObjectContext) -> [CDWalkSpot] {
         let request = NSFetchRequest<CDWalkSpot>(entityName: "CDWalkSpot")
         request.sortDescriptors = [
-            NSSortDescriptor(keyPath: \CDWalkSpot.isFavorite, ascending: false),
             NSSortDescriptor(keyPath: \CDWalkSpot.visitCount, ascending: false)
         ]
 
         return (try? context.fetch(request)) ?? []
-    }
-
-    /// Fetch spot by ID
-    static func fetch(byId id: UUID, in context: NSManagedObjectContext) -> CDWalkSpot? {
-        let request = NSFetchRequest<CDWalkSpot>(entityName: "CDWalkSpot")
-        request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
-        request.fetchLimit = 1
-        return try? context.fetch(request).first
     }
 
     /// Fetch favorite spots

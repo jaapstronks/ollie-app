@@ -1,11 +1,11 @@
 //
 //  SocializationWeekTimeline.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Week-by-week progress timeline for the socialization window
 
 import SwiftUI
-import OllieShared
+import OtisShared
 
 /// Horizontal timeline showing week-by-week socialization progress
 struct SocializationWeekTimeline: View {
@@ -42,7 +42,7 @@ struct SocializationWeekTimeline: View {
                         .foregroundStyle(.secondary)
                         .padding(.horizontal, 8)
                         .padding(.vertical, 4)
-                        .background(Color.ollieAccent.opacity(colorScheme == .dark ? 0.2 : 0.1))
+                        .background(Color.otisAccent.opacity(colorScheme == .dark ? 0.2 : 0.1))
                         .clipShape(Capsule())
                 }
             }
@@ -63,8 +63,8 @@ struct SocializationWeekTimeline: View {
 
             // Legend
             HStack(spacing: 16) {
-                legendItem(color: .ollieSuccess, label: Strings.Socialization.complete)
-                legendItem(color: .ollieAccent, label: Strings.Socialization.current)
+                legendItem(color: .otisSuccess, label: Strings.Socialization.complete)
+                legendItem(color: .otisAccent, label: Strings.Socialization.current)
                 legendItem(color: .secondary.opacity(0.3), label: Strings.Socialization.upcoming)
             }
             .font(.caption2)
@@ -133,17 +133,17 @@ struct WeekProgressNode: View {
                             .font(.system(size: 10, weight: .bold))
                             .foregroundStyle(.white)
                             .frame(width: 20, height: 20)
-                            .background(Color.ollieSuccess)
+                            .background(Color.otisSuccess)
                             .clipShape(Circle())
                     } else if isCurrent {
                         Circle()
-                            .fill(Color.ollieAccent)
+                            .fill(Color.otisAccent)
                             .frame(width: 12, height: 12)
                     } else if week.isPast && week.exposureCount == 0 {
                         // Missed week indicator
                         Image(systemName: "exclamationmark")
                             .font(.system(size: 8, weight: .bold))
-                            .foregroundStyle(Color.ollieWarning)
+                            .foregroundStyle(Color.otisWarning)
                     } else {
                         Circle()
                             .fill(Color.secondary.opacity(0.3))
@@ -168,11 +168,11 @@ struct WeekProgressNode: View {
 
     private var backgroundColor: Color {
         if week.isComplete {
-            return .ollieSuccess
+            return .otisSuccess
         } else if isCurrent {
-            return .ollieAccent
+            return .otisAccent
         } else if week.isPast {
-            return week.exposureCount > 0 ? .ollieInfo.opacity(0.5) : .ollieWarning.opacity(0.3)
+            return week.exposureCount > 0 ? .otisInfo.opacity(0.5) : .otisWarning.opacity(0.3)
         } else {
             return .secondary.opacity(0.2)
         }
@@ -180,11 +180,11 @@ struct WeekProgressNode: View {
 
     private var progressColor: Color {
         if week.isComplete {
-            return .ollieSuccess
+            return .otisSuccess
         } else if isCurrent {
-            return .ollieAccent
+            return .otisAccent
         } else {
-            return .ollieInfo
+            return .otisInfo
         }
     }
 }
@@ -222,7 +222,7 @@ struct CompactWeekDot: View {
             .overlay {
                 if isCurrent {
                     Circle()
-                        .stroke(Color.ollieAccent, lineWidth: 2)
+                        .stroke(Color.otisAccent, lineWidth: 2)
                         .frame(width: 14, height: 14)
                 }
             }
@@ -230,11 +230,11 @@ struct CompactWeekDot: View {
 
     private var dotColor: Color {
         if isComplete {
-            return .ollieSuccess
+            return .otisSuccess
         } else if isCurrent {
-            return .ollieAccent
+            return .otisAccent
         } else if isPast {
-            return hasProgress ? .ollieInfo.opacity(0.5) : .ollieWarning.opacity(0.3)
+            return hasProgress ? .otisInfo.opacity(0.5) : .otisWarning.opacity(0.3)
         } else {
             return .secondary.opacity(0.2)
         }
