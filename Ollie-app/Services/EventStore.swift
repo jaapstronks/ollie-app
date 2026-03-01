@@ -125,6 +125,14 @@ class EventStore: ObservableObject {
             events.append(newEvent)
             events.sort { $0.time > $1.time }
 
+            // Track analytics
+            OllieAnalytics.shared.trackEventLogged(
+                type: newEvent.type.rawValue,
+                hasLocation: newEvent.location != nil,
+                hasNote: newEvent.note != nil,
+                hasPhoto: newEvent.photo != nil
+            )
+
             // Update widgets
             updateWidgetData(profile: profile)
 

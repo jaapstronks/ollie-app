@@ -1,0 +1,12 @@
+name = "ollie-analytics"
+main = "src/index.ts"
+compatibility_date = "2024-01-01"
+
+# D1 database binding
+# Replace <your-database-id> with the ID from: wrangler d1 create ollie-analytics
+[[d1_databases]]
+binding = "DB"
+database_name = "ollie-analytics"
+database_id = "676b4b78-88bf-47a3-88e5-6902e7f66ffb"
+
+# Environment variables are set via: wrangler secret put API_KEY
