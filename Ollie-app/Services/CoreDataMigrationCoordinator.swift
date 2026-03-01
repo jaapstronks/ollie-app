@@ -22,6 +22,7 @@ final class CoreDataMigrationCoordinator {
     private enum UserDefaultsKey {
         static let migrationCompleted = "coreDataMigration.completed.v1"
         static let migrationVersion = "coreDataMigration.version"
+        static let weightMigrationCompleted = "weightMigration.completed"
     }
 
     // MARK: - Current Migration Version
@@ -229,6 +230,94 @@ final class CoreDataMigrationCoordinator {
             }
         }
         logger.info("Migrated \(totalMigratedCount) events from \(jsonlFiles.count) files")
+    }
+
+    // MARK: - Weight Events Migration
+
+    /// Migrate weight events from CDPuppyEvent to CDWeightMeasurement
+    /// This is a separate migration that can run independently and be called at app launch
+    func migrateWeightEventsIfNeeded(using persistenceController: PersistenceController) async {
+        // Check if already migrated
+        guard !UserDefaults.standard.bool(forKey: UserDefaultsKey.weightMigrationCompleted) else {
+            logger.debug("Weight migration already completed")
+            return
+        }
+
+        // Ensure stores are ready
+        guard persistenceController.isReady else {
+            logger.warning("Core Data stores not ready for weight migration")
+            return
+        }
+
+        let context = persistenceController.newBackgroundContext()
+
+        await context.perform {
+            self.migrateWeightEvents(in: context)
+
+            // Save if there are changes
+            if context.hasChanges {
+                do {
+                    try context.save()
+                    self.logger.info("Weight migration saved successfully")
+                } catch {
+                    self.logger.error("Failed to save weight migration: \(error.localizedDescription)")
+                    return
+                }
+            }
+
+            // Mark as completed
+            UserDefaults.standard.set(true, forKey: UserDefaultsKey.weightMigrationCompleted)
+        }
+    }
+
+    private func migrateWeightEvents(in context: NSManagedObjectContext) {
+        // Fetch all weight events
+        let request = NSFetchRequest<CDPuppyEvent>(entityName: "CDPuppyEvent")
+        request.predicate = NSPredicate(format: "type == %@", "gewicht")
+
+        guard let weightEvents = try? context.fetch(request), !weightEvents.isEmpty else {
+            logger.info("No weight events found to migrate")
+            return
+        }
+
+        logger.info("Found \(weightEvents.count) weight events to migrate")
+
+        var migratedCount = 0
+        for cdEvent in weightEvents {
+            // Skip if measurement already exists with this ID
+            if let eventId = cdEvent.id,
+               CDWeightMeasurement.fetchMeasurement(byId: eventId, in: context) != nil {
+                continue
+            }
+
+            // Create weight measurement from event
+            guard let eventId = cdEvent.id,
+                  let eventTime = cdEvent.time,
+                  cdEvent.weightKg > 0 else {
+                continue
+            }
+
+            let cdMeasurement = CDWeightMeasurement(context: context)
+            cdMeasurement.id = eventId  // Preserve original UUID
+            cdMeasurement.date = eventTime
+            cdMeasurement.weightKg = cdEvent.weightKg
+            cdMeasurement.note = cdEvent.note
+            cdMeasurement.createdAt = cdEvent.createdAt ?? eventTime
+            cdMeasurement.modifiedAt = Date()
+            cdMeasurement.profile = cdEvent.profile
+
+            migratedCount += 1
+        }
+
+        logger.info("Migrated \(migratedCount) weight events to CDWeightMeasurement")
+        // Note: Original weight events are kept in CDPuppyEvent for safety
+        // They will be filtered out from timeline display
+    }
+
+    /// Reset weight migration flag (for testing/debugging)
+    func resetWeightMigration() {
+        UserDefaults.standard.removeObject(forKey: UserDefaultsKey.weightMigrationCompleted)
+        logger.info("Weight migration state reset")
     }
 
     // MARK: - File Reading Helpers

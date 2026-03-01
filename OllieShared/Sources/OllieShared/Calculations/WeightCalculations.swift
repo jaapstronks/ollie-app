@@ -56,8 +56,9 @@ public struct GrowthStory: Sendable {
     }
 }
 
-/// Weight measurement with age context
-public struct WeightMeasurement: Identifiable, Sendable {
+/// Weight measurement with age context (used for chart display)
+/// Note: This is distinct from the WeightMeasurement domain model in Models/
+public struct WeightChartPoint: Identifiable, Sendable {
     public let id: UUID
     public let date: Date
     public let weightKg: Double
@@ -99,16 +100,45 @@ public struct GrowthComparison: Sendable {
 }
 
 public enum WeightCalculations {
-    /// Extract weight measurements from events
+
+    // MARK: - Chart Points (for display)
+
+    /// Convert WeightMeasurement array to chart points with age context
+    public static func chartPoints(
+        from measurements: [WeightMeasurement],
+        birthDate: Date
+    ) -> [WeightChartPoint] {
+        let calendar = Calendar.current
+
+        return measurements
+            .map { measurement in
+                let ageWeeks = calendar.dateComponents(
+                    [.weekOfYear],
+                    from: birthDate,
+                    to: measurement.date
+                ).weekOfYear ?? 0
+
+                return WeightChartPoint(
+                    id: measurement.id,
+                    date: measurement.date,
+                    weightKg: measurement.weightKg,
+                    ageWeeks: max(0, ageWeeks)
+                )
+            }
+            .sorted { $0.date < $1.date }
+    }
+
+    /// Extract weight chart points from events (deprecated - use chartPoints(from:birthDate:) with WeightMeasurement array)
+    @available(*, deprecated, message: "Use chartPoints(from:birthDate:) with WeightMeasurement array instead")
     public static func weightMeasurements(
         events: [PuppyEvent],
         birthDate: Date
-    ) -> [WeightMeasurement] {
+    ) -> [WeightChartPoint] {
         let calendar = Calendar.current
 
         return events.weights()
             .filter { $0.weightKg != nil }
-            .compactMap { event -> WeightMeasurement? in
+            .compactMap { event -> WeightChartPoint? in
                 guard let weight = event.weightKg else { return nil }
 
                 let ageWeeks = calendar.dateComponents(
@@ -117,7 +147,7 @@ public enum WeightCalculations {
                     to: event.time
                 ).weekOfYear ?? 0
 
-                return WeightMeasurement(
+                return WeightChartPoint(
                     id: event.id,
                     date: event.time,
                     weightKg: weight,
@@ -127,7 +157,88 @@ public enum WeightCalculations {
             .sorted { $0.date < $1.date }
     }
 
+    // MARK: - Weight Stats (WeightMeasurement-based)
+
     /// Get the most recent weight measurement
+    public static func latestWeight(from measurements: [WeightMeasurement]) -> (weight: Double, date: Date)? {
+        guard let latest = measurements.sortedByDateDescending().first else {
+            return nil
+        }
+        return (latest.weightKg, latest.date)
+    }
+
+    /// Calculate weight change since previous measurement
+    public static func weightDelta(from measurements: [WeightMeasurement]) -> (delta: Double, previousDate: Date)? {
+        let sorted = measurements.sortedByDateDescending()
+        guard sorted.count >= 2 else { return nil }
+
+        let current = sorted[0]
+        let previous = sorted[1]
+        return (current.weightKg - previous.weightKg, previous.date)
+    }
+
+    /// Get the first weight measurement (for "journey begins" state)
+    public static func firstWeight(from measurements: [WeightMeasurement]) -> (weight: Double, date: Date)? {
+        guard let first = measurements.sortedByDate().first else {
+            return nil
+        }
+        return (first.weightKg, first.date)
+    }
+
+    /// Build a growth story from weight measurements
+    public static func growthStory(
+        from measurements: [WeightMeasurement],
+        homeDate: Date,
+        sizeCategory: PuppyProfile.SizeCategory,
+        breed: Breed? = nil
+    ) -> GrowthStory? {
+        let sorted = measurements.sortedByDate()
+
+        guard sorted.count >= 2,
+              let first = sorted.first,
+              let last = sorted.last,
+              first.weightKg > 0 else {
+            return nil
+        }
+
+        let firstWeight = first.weightKg
+        let currentWeight = last.weightKg
+
+        // Calculate growth ratio
+        let growthRatio = currentWeight / firstWeight
+
+        // Get estimated adult weight from breed-specific curve if available
+        let curve: [GrowthReference]
+        if let breed = breed {
+            curve = GrowthCurves.curve(for: breed)
+        } else {
+            curve = GrowthCurves.curve(for: sizeCategory)
+        }
+        let estimatedAdultWeight = curve.last?.kg ?? currentWeight
+
+        // Calculate percent to adult weight (capped at 100%)
+        let percentToAdult = min(100.0, (currentWeight / estimatedAdultWeight) * 100.0)
+
+        // Calculate days since first measurement
+        let calendar = Calendar.current
+        let daysSinceFirst = calendar.dateComponents([.day], from: first.date, to: last.date).day ?? 0
+
+        return GrowthStory(
+            firstWeight: firstWeight,
+            firstWeightDate: first.date,
+            currentWeight: currentWeight,
+            currentWeightDate: last.date,
+            growthRatio: growthRatio,
+            estimatedAdultWeight: estimatedAdultWeight,
+            percentToAdult: percentToAdult,
+            daysSinceFirst: daysSinceFirst
+        )
+    }
+
+    // MARK: - Legacy PuppyEvent-based methods (deprecated)
+
+    /// Get the most recent weight measurement (deprecated - use latestWeight(from:) with WeightMeasurement array)
+    @available(*, deprecated, message: "Use latestWeight(from:) with WeightMeasurement array instead")
     public static func latestWeight(events: [PuppyEvent]) -> (weight: Double, date: Date)? {
         let weightEvents = events.weights()
             .filter { $0.weightKg != nil }
@@ -140,7 +251,8 @@ public enum WeightCalculations {
         return (weight, latest.time)
     }
 
-    /// Calculate weight change since previous measurement
+    /// Calculate weight change since previous measurement (deprecated - use weightDelta(from:) with WeightMeasurement array)
+    @available(*, deprecated, message: "Use weightDelta(from:) with WeightMeasurement array instead")
     public static func weightDelta(events: [PuppyEvent]) -> (delta: Double, previousDate: Date)? {
         let weightEvents = events.weights()
             .filter { $0.weightKg != nil }
@@ -154,6 +266,8 @@ public enum WeightCalculations {
 
         return (currentWeight - previousWeight, weightEvents[1].time)
     }
+
+    // MARK: - Reference Curve Methods
 
     /// Compare current weight to reference curve
     public static func compareToReference(
@@ -225,13 +339,14 @@ public enum WeightCalculations {
         return (center - tolerance, center + tolerance)
     }
 
-    /// Build a growth story from weight events
+    /// Build a growth story from weight events (deprecated - use growthStory(from:homeDate:sizeCategory:breed:) with WeightMeasurement array)
     /// Returns nil if there are fewer than 2 weight measurements
     /// - Parameters:
     ///   - events: All puppy events
     ///   - homeDate: Date puppy came home
     ///   - sizeCategory: Size category for default curve
     ///   - breed: Optional breed for breed-specific adult weight estimation
+    @available(*, deprecated, message: "Use growthStory(from:homeDate:sizeCategory:breed:) with WeightMeasurement array instead")
     public static func growthStory(
         events: [PuppyEvent],
         homeDate: Date,
@@ -304,7 +419,8 @@ public enum WeightCalculations {
         return interpolatedReferenceWeight(at: weeks, curve: curve)
     }
 
-    /// Get the first weight measurement (for "journey begins" state)
+    /// Get the first weight measurement (for "journey begins" state) (deprecated - use firstWeight(from:) with WeightMeasurement array)
+    @available(*, deprecated, message: "Use firstWeight(from:) with WeightMeasurement array instead")
     public static func firstWeight(events: [PuppyEvent]) -> (weight: Double, date: Date)? {
         let weightEvents = events.weights()
             .filter { $0.weightKg != nil }

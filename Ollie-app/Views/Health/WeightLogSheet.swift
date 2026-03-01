@@ -10,7 +10,7 @@ import OllieShared
 /// Sheet for logging a weight measurement
 struct WeightLogSheet: View {
     @Binding var isPresented: Bool
-    let onSave: (Double) -> Void
+    @EnvironmentObject var weightStore: WeightStore
 
     @State private var weightText: String = ""
     @State private var selectedDate: Date = Date()
@@ -56,9 +56,9 @@ struct WeightLogSheet: View {
                     .glassCard(tint: .accent)
                 }
 
-                // Date picker
+                // Date picker (date only - weight is logged once per day)
                 VStack(alignment: .leading, spacing: 8) {
-                    Text(Strings.QuickLogSheet.time)
+                    Text(Strings.Health.measurementDate)
                         .font(.subheadline)
                         .fontWeight(.medium)
                         .foregroundStyle(.secondary)
@@ -67,9 +67,9 @@ struct WeightLogSheet: View {
                         "",
                         selection: $selectedDate,
                         in: ...Date(),
-                        displayedComponents: [.date, .hourAndMinute]
+                        displayedComponents: [.date]
                     )
-                    .datePickerStyle(.compact)
+                    .datePickerStyle(.graphical)
                     .labelsHidden()
                     .padding()
                     .glassCard(tint: .none)
@@ -99,7 +99,7 @@ struct WeightLogSheet: View {
                 isWeightFocused = true
             }
         }
-        .presentationDetents([.medium])
+        .presentationDetents([.large])
         .presentationDragIndicator(.visible)
     }
 
@@ -119,7 +119,10 @@ struct WeightLogSheet: View {
         guard let weight = parseWeight() else { return }
         // Convert to kg for storage
         let weightInKg = weightUnit.toKg(weight)
-        onSave(weightInKg)
+        // Normalize to noon on the selected date (avoids timezone edge cases)
+        let calendar = Calendar.current
+        let noon = calendar.date(bySettingHour: 12, minute: 0, second: 0, of: selectedDate) ?? selectedDate
+        weightStore.addWeight(weightInKg, date: noon)
         isPresented = false
     }
 }
@@ -127,7 +130,6 @@ struct WeightLogSheet: View {
 // MARK: - Preview
 
 #Preview {
-    WeightLogSheet(isPresented: .constant(true)) { weight in
-        print("Logged weight: \(weight)")
-    }
+    WeightLogSheet(isPresented: .constant(true))
+        .environmentObject(WeightStore())
 }

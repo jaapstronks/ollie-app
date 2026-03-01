@@ -112,5 +112,24 @@ extension Strings {
         static func weightChange(_ delta: String) -> String {
             String(localized: "\(delta) since last", table: table)
         }
+
+        // Growth detail sheet
+        static let growthChart = String(localized: "Growth Chart", table: table)
+        static let growthStats = String(localized: "Growth Statistics", table: table)
+        static let totalGain = String(localized: "Total Gain", table: table)
+        static let growthRatioLabel = String(localized: "Growth", table: table)
+        static let percentOfAdultShort = String(localized: "Adult %", table: table)
+        static let estimatedAdult = String(localized: "Est. Adult", table: table)
+        static let measurementHistory = String(localized: "Measurement History", table: table)
+
+        static func lastMeasured(_ date: String) -> String {
+            String(localized: "Last measured \(date)", table: table)
+        }
+
+        // Delete measurement
+        static let deleteMeasurement = String(localized: "Delete Measurement", table: table)
+        static func deleteMeasurementMessage(_ weight: String) -> String {
+            String(localized: "Are you sure you want to delete the measurement of \(weight)?", table: table)
+        }
     }
 }

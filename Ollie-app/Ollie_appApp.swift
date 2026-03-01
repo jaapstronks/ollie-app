@@ -180,6 +180,7 @@ struct OllieApp: App {
     @StateObject private var documentStore = DocumentStore()
     @StateObject private var contactStore = ContactStore()
     @StateObject private var appointmentStore = AppointmentStore()
+    @StateObject private var weightStore = WeightStore()
     @StateObject private var subscriptionManager = SubscriptionManager.shared
     @StateObject private var atmosphereProvider = AtmosphereProvider()
     @StateObject private var foodRecallService = FoodRecallService()
@@ -189,6 +190,9 @@ struct OllieApp: App {
     init() {
         // Initialize crash reporting first (before any other code that might crash)
         CrashReporter.start()
+
+        // Track app launch for analytics
+        OllieAnalytics.shared.trackAppLaunch()
 
         UserPreferences.registerDefaults()
 
@@ -218,6 +222,7 @@ struct OllieApp: App {
                 .environmentObject(documentStore)
                 .environmentObject(contactStore)
                 .environmentObject(appointmentStore)
+                .environmentObject(weightStore)
                 .environmentObject(subscriptionManager)
                 .environmentObject(cloudKit)
                 .environmentObject(atmosphereProvider)
@@ -263,6 +268,11 @@ struct OllieApp: App {
                     // Wire up AppointmentStore with ProfileStore and migrate any orphaned appointments
                     appointmentStore.setProfileStore(profileStore)
                     appointmentStore.migrateOrphanedAppointments()
+
+                    // Wire up WeightStore with ProfileStore and run migration
+                    weightStore.setProfileStore(profileStore)
+                    await CoreDataMigrationCoordinator.shared.migrateWeightEventsIfNeeded(using: persistenceController)
+                    weightStore.migrateOrphanedMeasurements()
 
                     // Initial sync to Apple Watch
                     WatchSyncService.shared.syncToWatch()

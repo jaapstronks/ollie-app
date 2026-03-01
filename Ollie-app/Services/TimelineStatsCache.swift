@@ -30,34 +30,16 @@ final class TimelineStatsCache: ObservableObject {
     /// Cached week stats for insights view
     @Published private(set) var weekStats: [DayStats] = []
 
-    /// Cached events for 1 year (for weight calculations)
-    @Published private(set) var yearEvents: [PuppyEvent] = []
-
     /// Cached recent walks (7 days)
     @Published private(set) var recentWalks: [PuppyEvent] = []
 
     /// Cached walk stats for the week
     @Published private(set) var weekWalkStats: (count: Int, totalMinutes: Int) = (0, 0)
 
-    /// Cached latest weight measurement
-    @Published private(set) var latestWeight: (weight: Double, date: Date)?
-
-    /// Cached weight delta from previous measurement
-    @Published private(set) var weightDelta: (delta: Double, previousDate: Date)?
-
-    /// Cached growth story for the health tab
-    @Published private(set) var growthStory: GrowthStory?
-
-    /// Cached first weight (for "journey begins" state)
-    @Published private(set) var firstWeight: (weight: Double, date: Date)?
-
     // MARK: - Internal State
 
     /// Last time stats were computed (for debouncing)
     private var lastStatsUpdate: Date?
-
-    /// Task for async stats refresh (to cancel if a new refresh is requested)
-    private var statsRefreshTask: Task<Void, Never>?
 
     // MARK: - Init
 
@@ -103,55 +85,5 @@ final class TimelineStatsCache: ObservableObject {
         // Update cached walk stats
         let totalWalkMinutes = recentWalks.compactMap { $0.durationMin }.reduce(0, +)
         weekWalkStats = (recentWalks.count, totalWalkMinutes)
-
-        // Update cached year events for weight calculations (async - this is heavy)
-        // Only refresh when force is true or cache is empty
-        if force || yearEvents.isEmpty {
-            refreshYearEventsAsync()
-        }
-    }
-
-    /// Invalidate year events cache (call when weight is logged)
-    func invalidateYearCache() {
-        yearEvents = []
-        refreshYearEventsAsync()
-    }
-
-    // MARK: - Private Methods
-
-    private func refreshYearEventsAsync() {
-        // Cancel any existing refresh task
-        statsRefreshTask?.cancel()
-
-        statsRefreshTask = Task { [weak self] in
-            guard let self = self else { return }
-
-            let oneYearAgo = Calendar.current.date(byAdding: .year, value: -1, to: Date()) ?? Date()
-
-            // Fetch year events on background thread
-            let fetchedYearEvents = await self.eventStore.getEventsAsync(from: oneYearAgo, to: Date())
-
-            // Check if task was cancelled
-            guard !Task.isCancelled else { return }
-
-            // Update caches on main actor
-            self.yearEvents = fetchedYearEvents
-            self.latestWeight = WeightCalculations.latestWeight(events: fetchedYearEvents)
-            self.weightDelta = WeightCalculations.weightDelta(events: fetchedYearEvents)
-            self.firstWeight = WeightCalculations.firstWeight(events: fetchedYearEvents)
-
-            // Compute growth story if we have profile data
-            if let profile = self.profileStore.profile {
-                self.growthStory = WeightCalculations.growthStory(
-                    events: fetchedYearEvents,
-                    homeDate: profile.homeDate,
-                    sizeCategory: profile.sizeCategory
-                )
-            }
-        }
-    }
-
-    deinit {
-        statsRefreshTask?.cancel()
     }
 }

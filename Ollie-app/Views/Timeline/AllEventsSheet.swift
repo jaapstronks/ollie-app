@@ -16,9 +16,11 @@ struct AllEventsSheet: View {
 
     @Environment(\.colorScheme) private var colorScheme
 
-    // Event types not in quick log bar
+    // Event types not in quick log bar (excluding weight which is managed in Health tab)
     private var additionalEventTypes: [EventType] {
-        EventType.allCases.filter { !Constants.quickLogTypes.contains($0) }
+        EventType.allCases.filter { type in
+            !Constants.quickLogTypes.contains(type) && type != .gewicht
+        }
     }
 
     private let columns = [

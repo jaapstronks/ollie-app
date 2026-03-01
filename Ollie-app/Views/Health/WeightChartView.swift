@@ -10,7 +10,7 @@ import Charts
 
 /// Growth curve chart showing puppy weight vs reference
 struct WeightChartView: View {
-    let measurements: [WeightMeasurement]
+    let measurements: [WeightChartPoint]
     let referenceCurve: [GrowthReference]
     let puppyName: String
 
@@ -244,9 +244,9 @@ struct WeightChartEmptyView: View {
 
 #Preview("With Data") {
     let measurements = [
-        WeightMeasurement(id: UUID(), date: Date().addingTimeInterval(-86400 * 14), weightKg: 4.5, ageWeeks: 8),
-        WeightMeasurement(id: UUID(), date: Date().addingTimeInterval(-86400 * 7), weightKg: 6.2, ageWeeks: 9),
-        WeightMeasurement(id: UUID(), date: Date(), weightKg: 7.8, ageWeeks: 10)
+        WeightChartPoint(id: UUID(), date: Date().addingTimeInterval(-86400 * 14), weightKg: 4.5, ageWeeks: 8),
+        WeightChartPoint(id: UUID(), date: Date().addingTimeInterval(-86400 * 7), weightKg: 6.2, ageWeeks: 9),
+        WeightChartPoint(id: UUID(), date: Date(), weightKg: 7.8, ageWeeks: 10)
     ]
 
     return WeightChartView(

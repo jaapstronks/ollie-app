@@ -18,8 +18,10 @@ struct HealthTabView: View {
     @EnvironmentObject var profileStore: ProfileStore
     @EnvironmentObject var milestoneStore: MilestoneStore
     @EnvironmentObject var appointmentStore: AppointmentStore
+    @EnvironmentObject var weightStore: WeightStore
 
     @State private var showWeightSheet = false
+    @State private var showGrowthChart = false
     @State private var showOlliePlusSheet = false
     @State private var selectedMilestone: Milestone?
     @State private var showAllMilestones = false
@@ -36,13 +38,14 @@ struct HealthTabView: View {
 
                     // Health section (growth story)
                     GrowthStoryCard(
-                        growthStory: viewModel.cachedGrowthStory,
+                        growthStory: growthStory,
                         latestWeight: latestWeight,
-                        firstWeight: viewModel.cachedFirstWeight,
+                        firstWeight: firstWeight,
                         weightDelta: weightDelta,
                         weighReminder: weighReminder,
                         puppyName: profileStore.profile?.name ?? "Puppy",
                         sizeCategory: profileStore.profile?.sizeCategory ?? .medium,
+                        onShowChart: { showGrowthChart = true },
                         showWeightSheet: $showWeightSheet
                     )
                     .animatedAppear(delay: 0.05)
@@ -91,9 +94,14 @@ struct HealthTabView: View {
             .navigationBarTitleDisplayMode(.inline)
             .profileToolbar(profile: profileStore.profile, action: onSettingsTap)
             .sheet(isPresented: $showWeightSheet) {
-                WeightLogSheet(isPresented: $showWeightSheet) { weight in
-                    logWeight(weight)
-                }
+                WeightLogSheet(isPresented: $showWeightSheet)
+            }
+            .sheet(isPresented: $showGrowthChart) {
+                GrowthDetailSheet(
+                    referenceCurve: referenceCurve,
+                    puppyName: profileStore.profile?.name ?? "Puppy",
+                    showWeightSheet: $showWeightSheet
+                )
             }
             .sheet(isPresented: $showOlliePlusSheet) {
                 OlliePlusSheet(
@@ -120,20 +128,34 @@ struct HealthTabView: View {
         }
     }
 
-    // MARK: - Computed Properties (using ViewModel caches to avoid per-frame recomputation)
+    // MARK: - Computed Properties
 
     private var profile: PuppyProfile? {
         viewModel.profileStore.profile
     }
 
-    /// Uses cached year events from ViewModel (refreshed on event changes)
+    /// Latest weight from WeightStore
     private var latestWeight: (weight: Double, date: Date)? {
-        viewModel.cachedLatestWeight
+        weightStore.latestWeight
     }
 
-    /// Uses cached weight delta from ViewModel
+    /// Weight delta from WeightStore
     private var weightDelta: (delta: Double, previousDate: Date)? {
-        viewModel.cachedWeightDelta
+        weightStore.weightDelta
+    }
+
+    /// First weight from WeightStore (for "journey begins" state)
+    private var firstWeight: (weight: Double, date: Date)? {
+        weightStore.firstWeight
+    }
+
+    /// Growth story from WeightStore
+    private var growthStory: GrowthStory? {
+        guard let profile = profileStore.profile else { return nil }
+        return weightStore.growthStory(
+            homeDate: profile.homeDate,
+            sizeCategory: profile.sizeCategory
+        )
     }
 
     /// Smart weigh reminder based on puppy age and time since last measurement
@@ -144,6 +166,20 @@ struct HealthTabView: View {
             lastWeightDate: latestWeight?.date,
             ageInWeeks: ageInWeeks
         )
+    }
+
+    /// Chart points for the growth chart
+    private var chartPoints: [WeightChartPoint] {
+        guard let birthDate = profileStore.profile?.birthDate else { return [] }
+        return weightStore.chartPoints(birthDate: birthDate)
+    }
+
+    /// Reference growth curve based on size category
+    private var referenceCurve: [GrowthReference] {
+        guard let profile = profileStore.profile else {
+            return GrowthCurves.mediumDogCurve
+        }
+        return GrowthCurves.curve(for: profile.sizeCategory)
     }
 
     /// Today's events from in-memory array
@@ -337,16 +373,6 @@ struct HealthTabView: View {
         }
     }
 
-    // MARK: - Actions
-
-    private func logWeight(_ weight: Double) {
-        let event = PuppyEvent(
-            time: Date(),
-            type: .gewicht,
-            weightKg: weight
-        )
-        viewModel.addEvent(event)
-    }
 }
 
 // MARK: - Health Milestone Row
@@ -438,4 +464,5 @@ private struct HealthMilestoneRow: View {
     .environmentObject(profileStore)
     .environmentObject(MilestoneStore())
     .environmentObject(AppointmentStore())
+    .environmentObject(WeightStore())
 }

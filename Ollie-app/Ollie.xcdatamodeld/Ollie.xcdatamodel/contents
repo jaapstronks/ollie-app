@@ -25,6 +25,7 @@
         <relationship name="masteredSkills" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDMasteredSkill" inverseName="profile" inverseEntity="CDMasteredSkill"/>
         <relationship name="medicationCompletions" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDMedicationCompletion" inverseName="profile" inverseEntity="CDMedicationCompletion"/>
         <relationship name="milestones" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDMilestone" inverseName="profile" inverseEntity="CDMilestone"/>
+        <relationship name="weightMeasurements" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDWeightMeasurement" inverseName="profile" inverseEntity="CDWeightMeasurement"/>
     </entity>
     <entity name="CDPuppyEvent" representedClassName="CDPuppyEvent" syncable="YES" codeGenerationType="class">
         <attribute name="cloudPhotoSynced" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
@@ -193,6 +194,18 @@
         <relationship name="profile" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDPuppyProfile" inverseName="appointments" inverseEntity="CDPuppyProfile"/>
         <fetchIndex name="byStartDateIndex">
             <fetchIndexElement property="startDate" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="CDWeightMeasurement" representedClassName="CDWeightMeasurement" syncable="YES" codeGenerationType="class">
+        <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="modifiedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="note" optional="YES" attributeType="String"/>
+        <attribute name="weightKg" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <relationship name="profile" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDPuppyProfile" inverseName="weightMeasurements" inverseEntity="CDPuppyProfile"/>
+        <fetchIndex name="byDateIndex">
+            <fetchIndexElement property="date" type="Binary" order="descending"/>
         </fetchIndex>
     </entity>
 </model>

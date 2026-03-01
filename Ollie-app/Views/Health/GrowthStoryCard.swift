@@ -17,6 +17,7 @@ struct GrowthStoryCard: View {
     let weighReminder: WeighReminder?
     let puppyName: String
     let sizeCategory: PuppyProfile.SizeCategory
+    let onShowChart: () -> Void
     @Binding var showWeightSheet: Bool
 
     @AppStorage(UserPreferences.Key.weightUnit.rawValue) private var weightUnitRaw = WeightUnit.kg.rawValue
@@ -26,13 +27,35 @@ struct GrowthStoryCard: View {
         WeightUnit(rawValue: weightUnitRaw) ?? .kg
     }
 
+    /// Whether we have enough data to show a chart
+    private var hasChartData: Bool {
+        latestWeight != nil
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            InsightsSectionHeader(
-                title: Strings.Growth.growthStory,
-                icon: "chart.line.uptrend.xyaxis",
-                tint: .ollieAccent
-            )
+            // Header with chart button
+            HStack {
+                InsightsSectionHeader(
+                    title: Strings.Growth.growthStory,
+                    icon: "chart.line.uptrend.xyaxis",
+                    tint: .ollieAccent
+                )
+
+                Spacer()
+
+                if hasChartData {
+                    Button(action: onShowChart) {
+                        HStack(spacing: 4) {
+                            Text(Strings.Growth.growthChart)
+                                .font(.subheadline)
+                            Image(systemName: "chevron.right")
+                                .font(.caption)
+                        }
+                        .foregroundStyle(Color.ollieAccent)
+                    }
+                }
+            }
 
             VStack(spacing: 16) {
                 // Current weight hero (always shown if we have weight data)
@@ -331,6 +354,7 @@ struct GrowthStoryCard: View {
             weighReminder: nil,
             puppyName: "Ollie",
             sizeCategory: .large,
+            onShowChart: {},
             showWeightSheet: .constant(false)
         )
         .padding()
@@ -347,6 +371,7 @@ struct GrowthStoryCard: View {
             weighReminder: WeighReminder(urgency: .medium, daysSinceLastWeigh: 14, recommendedIntervalDays: 7),
             puppyName: "Ollie",
             sizeCategory: .large,
+            onShowChart: {},
             showWeightSheet: .constant(false)
         )
         .padding()
@@ -363,6 +388,7 @@ struct GrowthStoryCard: View {
             weighReminder: nil,
             puppyName: "Ollie",
             sizeCategory: .large,
+            onShowChart: {},
             showWeightSheet: .constant(false)
         )
         .padding()
@@ -379,6 +405,7 @@ struct GrowthStoryCard: View {
             weighReminder: WeighReminder(urgency: .high, daysSinceLastWeigh: nil, recommendedIntervalDays: 7),
             puppyName: "Ollie",
             sizeCategory: .large,
+            onShowChart: {},
             showWeightSheet: .constant(false)
         )
         .padding()

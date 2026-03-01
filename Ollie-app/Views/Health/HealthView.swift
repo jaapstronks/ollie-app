@@ -13,6 +13,7 @@ struct HealthView: View {
     @ObservedObject var milestoneStore: MilestoneStore
 
     @EnvironmentObject var subscriptionManager: SubscriptionManager
+    @EnvironmentObject var weightStore: WeightStore
 
     @State private var showWeightSheet = false
     @State private var showAddMilestoneSheet = false
@@ -30,23 +31,17 @@ struct HealthView: View {
         viewModel.profileStore.profile
     }
 
-    private var allEvents: [PuppyEvent] {
-        // Get all events, not just today's
-        let oneYearAgo = Calendar.current.date(byAdding: .year, value: -1, to: Date()) ?? Date()
-        return viewModel.eventStore.getEvents(from: oneYearAgo, to: Date())
-    }
-
-    private var weightMeasurements: [WeightMeasurement] {
+    private var chartPoints: [WeightChartPoint] {
         guard let birthDate = profile?.birthDate else { return [] }
-        return WeightCalculations.weightMeasurements(events: allEvents, birthDate: birthDate)
+        return weightStore.chartPoints(birthDate: birthDate)
     }
 
     private var latestWeight: (weight: Double, date: Date)? {
-        WeightCalculations.latestWeight(events: allEvents)
+        weightStore.latestWeight
     }
 
     private var weightDelta: (delta: Double, previousDate: Date)? {
-        WeightCalculations.weightDelta(events: allEvents)
+        weightStore.weightDelta
     }
 
     private var referenceCurve: [GrowthReference] {
@@ -75,9 +70,7 @@ struct HealthView: View {
             Analytics.track(.healthTimelineViewed)
         }
         .sheet(isPresented: $showWeightSheet) {
-            WeightLogSheet(isPresented: $showWeightSheet) { weight in
-                logWeight(weight)
-            }
+            WeightLogSheet(isPresented: $showWeightSheet)
         }
     }
 
@@ -118,11 +111,11 @@ struct HealthView: View {
                 }
 
                 // Growth curve chart
-                if weightMeasurements.isEmpty {
+                if chartPoints.isEmpty {
                     WeightChartEmptyView(referenceCurve: referenceCurve)
                 } else {
                     WeightChartView(
-                        measurements: weightMeasurements,
+                        measurements: chartPoints,
                         referenceCurve: referenceCurve,
                         puppyName: profile?.name ?? "Puppy"
                     )
@@ -217,17 +210,6 @@ struct HealthView: View {
         }
     }
 
-    // MARK: - Actions
-
-    private func logWeight(_ weight: Double) {
-        let event = PuppyEvent(
-            time: Date(),
-            type: .gewicht,
-            weightKg: weight
-        )
-        viewModel.addEvent(event)
-    }
-
     // MARK: - Helpers
 
     private func formattedDate(_ date: Date) -> String {
@@ -250,4 +232,5 @@ struct HealthView: View {
         HealthView(viewModel: viewModel, milestoneStore: milestoneStore)
     }
     .environmentObject(SubscriptionManager.shared)
+    .environmentObject(WeightStore())
 }
