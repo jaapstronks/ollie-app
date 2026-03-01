@@ -195,7 +195,11 @@ class ExportService: ObservableObject {
 
         // Clean up existing folder if any
         if fileManager.fileExists(atPath: tempURL.path) {
-            try? fileManager.removeItem(at: tempURL)
+            do {
+                try fileManager.removeItem(at: tempURL)
+            } catch {
+                logger.warning("Could not clean up existing export folder: \(error.localizedDescription)")
+            }
         }
 
         try fileManager.createDirectory(at: tempURL, withIntermediateDirectories: true)
@@ -357,7 +361,10 @@ class ExportService: ObservableObject {
         let mediaFolder = folder.appendingPathComponent("Media", isDirectory: true)
         try fileManager.createDirectory(at: mediaFolder, withIntermediateDirectories: true)
 
-        let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        guard let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            logger.error("Documents directory unavailable for media export")
+            return 0
+        }
         var exportedCount = 0
 
         for event in eventsWithMedia {
@@ -367,8 +374,12 @@ class ExportService: ObservableObject {
             guard fileManager.fileExists(atPath: sourceURL.path) else { continue }
 
             let destURL = mediaFolder.appendingPathComponent("\(event.id.uuidString).jpg")
-            try? fileManager.copyItem(at: sourceURL, to: destURL)
-            exportedCount += 1
+            do {
+                try fileManager.copyItem(at: sourceURL, to: destURL)
+                exportedCount += 1
+            } catch {
+                logger.warning("Could not export media file \(event.id): \(error.localizedDescription)")
+            }
 
             // Update progress incrementally during media export
             let mediaProgress = Double(exportedCount) / Double(eventsWithMedia.count)
@@ -399,9 +410,14 @@ class ExportService: ObservableObject {
         }
 
         for case let fileURL as URL in enumerator {
-            let resourceValues = try? fileURL.resourceValues(forKeys: resourceKeys)
-            if resourceValues?.isDirectory == false {
-                totalSize += Int64(resourceValues?.fileSize ?? 0)
+            do {
+                let resourceValues = try fileURL.resourceValues(forKeys: resourceKeys)
+                if resourceValues.isDirectory == false {
+                    totalSize += Int64(resourceValues.fileSize ?? 0)
+                }
+            } catch {
+                // Skip files we can't read metadata for
+                logger.debug("Could not read metadata for \(fileURL.lastPathComponent): \(error.localizedDescription)")
             }
         }
 
@@ -412,7 +428,11 @@ class ExportService: ObservableObject {
 
     /// Clean up export folder after sharing
     func cleanupExportFolder(_ url: URL) {
-        try? fileManager.removeItem(at: url)
-        logger.debug("Cleaned up export folder")
+        do {
+            try fileManager.removeItem(at: url)
+            logger.debug("Cleaned up export folder")
+        } catch {
+            logger.warning("Could not clean up export folder: \(error.localizedDescription)")
+        }
     }
 }

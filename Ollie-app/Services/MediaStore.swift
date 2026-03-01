@@ -17,8 +17,13 @@ class MediaStore: ObservableObject {
 
     // MARK: - Directory URLs
 
+    /// Documents directory URL
+    /// Falls back to temporary directory if documents directory is unavailable (should never happen in practice)
     private var documentsURL: URL {
-        fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        guard let url = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            return fileManager.temporaryDirectory
+        }
+        return url
     }
 
     private var mediaDirectoryURL: URL {
@@ -196,7 +201,12 @@ class MediaStore: ObservableObject {
                 return
             }
             let photoURL = documentsURL.appendingPathComponent(photoPath)
-            try? fileManager.removeItem(at: photoURL)
+            do {
+                try fileManager.removeItem(at: photoURL)
+            } catch {
+                // File may not exist, which is acceptable for deletion
+                logger.debug("Could not delete photo at \(photoPath): \(error.localizedDescription)")
+            }
         }
 
         if let thumbnailPath = thumbnailPath {
@@ -205,7 +215,12 @@ class MediaStore: ObservableObject {
                 return
             }
             let thumbnailURL = documentsURL.appendingPathComponent(thumbnailPath)
-            try? fileManager.removeItem(at: thumbnailURL)
+            do {
+                try fileManager.removeItem(at: thumbnailURL)
+            } catch {
+                // File may not exist, which is acceptable for deletion
+                logger.debug("Could not delete thumbnail at \(thumbnailPath): \(error.localizedDescription)")
+            }
         }
     }
 
@@ -263,10 +278,18 @@ class MediaStore: ObservableObject {
 
     private func ensureDirectoriesExist() {
         if !fileManager.fileExists(atPath: mediaDirectoryURL.path) {
-            try? fileManager.createDirectory(at: mediaDirectoryURL, withIntermediateDirectories: true)
+            do {
+                try fileManager.createDirectory(at: mediaDirectoryURL, withIntermediateDirectories: true)
+            } catch {
+                logger.error("Failed to create media directory: \(error.localizedDescription)")
+            }
         }
         if !fileManager.fileExists(atPath: thumbnailDirectoryURL.path) {
-            try? fileManager.createDirectory(at: thumbnailDirectoryURL, withIntermediateDirectories: true)
+            do {
+                try fileManager.createDirectory(at: thumbnailDirectoryURL, withIntermediateDirectories: true)
+            } catch {
+                logger.error("Failed to create thumbnail directory: \(error.localizedDescription)")
+            }
         }
     }
 

@@ -222,7 +222,11 @@ class ProfileStore: ObservableObject {
         // Delete from Core Data
         if let existing = CDPuppyProfile.fetchProfile(in: viewContext) {
             viewContext.delete(existing)
-            try? persistenceController.save()
+            do {
+                try persistenceController.save()
+            } catch {
+                logger.error("Failed to save after profile reset: \(error.localizedDescription)")
+            }
         }
         profile = nil
     }
@@ -340,12 +344,17 @@ class ProfileStore: ObservableObject {
         guard let profile = profile else { return }
 
         let sharedProfile = SharedProfile(from: profile)
-        guard let sharedDefaults = UserDefaults(suiteName: Self.appGroupSuiteName),
-              let data = try? JSONEncoder().encode(sharedProfile) else {
+        guard let sharedDefaults = UserDefaults(suiteName: Self.appGroupSuiteName) else {
+            logger.warning("App Group UserDefaults unavailable - widget sync skipped")
             return
         }
 
-        sharedDefaults.set(data, forKey: IntentDataStore.profileKey)
+        do {
+            let data = try JSONEncoder().encode(sharedProfile)
+            sharedDefaults.set(data, forKey: IntentDataStore.profileKey)
+        } catch {
+            logger.error("Failed to encode profile for App Group sync: \(error.localizedDescription)")
+        }
     }
 
     /// Force sync the current profile to App Group

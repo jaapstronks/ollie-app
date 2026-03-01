@@ -325,7 +325,11 @@ class EventStore: ObservableObject {
                 importedCount += importedEvents
 
                 // Delete the file after successful import
-                try? fileManager.removeItem(at: fileURL)
+                do {
+                    try fileManager.removeItem(at: fileURL)
+                } catch {
+                    logger.warning("Could not delete imported intent file \(fileURL.lastPathComponent): \(error.localizedDescription)")
+                }
             }
 
             if importedCount > 0 {
