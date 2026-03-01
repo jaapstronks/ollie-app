@@ -948,21 +948,12 @@
       }
     },
     "Meal" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Maaltijd"
-          }
-        }
-      }
-    },
-    "Medication" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Medicatie"
           }
         }
       }
@@ -985,6 +976,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Maaltijd %lld min te laat"
+          }
+        }
+      }
+    },
+    "Medication" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Medicatie"
           }
         }
       }
@@ -1495,16 +1497,6 @@
         }
       }
     },
-    "Social" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sociaal"
-          }
-        }
-      }
-    },
     "Sleep status" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -1545,6 +1537,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Slaapt..."
+          }
+        }
+      }
+    },
+    "Social" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sociaal"
           }
         }
       }
@@ -1780,16 +1783,6 @@
         }
       }
     },
-    "Training" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Training"
-          }
-        }
-      }
-    },
     "times measured" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -1808,6 +1801,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Moe?"
+          }
+        }
+      }
+    },
+    "Training" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Training"
           }
         }
       }
@@ -1956,6 +1960,7 @@
       }
     },
     "Water" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -1966,6 +1971,7 @@
       }
     },
     "Weighed" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {

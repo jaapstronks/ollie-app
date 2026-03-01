@@ -19,7 +19,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Otis-app"
+            "value" : "Ollie-app"
           }
         }
       }
@@ -49,6 +49,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Otis wil de camera gebruiken om foto's van je puppy te maken."
+          }
+        }
+      }
+    },
+    "NSContactsUsageDescription" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otis uses your contacts to quickly import your vet, groomer, or pet sitter details."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otis gebruikt je contacten om snel gegevens van je dierenarts, trimsalon of oppas te importeren."
           }
         }
       }
@@ -83,23 +100,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Otis wil toegang tot je foto's om momenten toe te voegen."
-          }
-        }
-      }
-    },
-    "NSContactsUsageDescription" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Otis uses your contacts to quickly import your vet, groomer, or pet sitter details."
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Otis gebruikt je contacten om snel gegevens van je dierenarts, trimsalon of oppas te importeren."
           }
         }
       }

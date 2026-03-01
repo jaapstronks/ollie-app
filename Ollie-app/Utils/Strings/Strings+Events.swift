@@ -36,6 +36,14 @@ extension Strings {
         static let inside = String(localized: "Inside", table: table)
     }
 
+    // MARK: - Nap Locations
+    enum NapLocation {
+        static let crate = String(localized: "Crate", table: table)
+        static let dogBed = String(localized: "Dog bed", table: table)
+        static let other = String(localized: "Other", table: table)
+        static let wherePrompt = String(localized: "Where?", table: table)
+    }
+
     // MARK: - Quick Log Bar
     enum QuickLog {
         static let toilet = String(localized: "Toilet", table: table)

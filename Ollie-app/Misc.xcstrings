@@ -122,6 +122,17 @@
         }
       }
     },
+    "%lld poops (%lld expected)" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld poepjes (%lld verwacht)"
+          }
+        }
+      }
+    },
     "%lld poops (%lld-%lld expected)" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -129,16 +140,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld poepjes (%lld-%lld verwacht)"
-          }
-        }
-      }
-    },
-    "%lld poops (%lld expected)" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld poepjes (%lld verwacht)"
           }
         }
       }

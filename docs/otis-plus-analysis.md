@@ -1,148 +1,146 @@
 # Otis+ Premium Features Analysis
 
-## Current State Summary
+## Philosophy
 
-**Key finding:** There's a mismatch between what's defined in `PremiumFeature` enum and what's actually gated in the app.
+**Core principle:** Basic daily logging is free. Premium unlocks collaboration, advanced insights, power-user features, and the full Apple ecosystem experience.
 
----
-
-## Features Actually Gated (6 features)
-
-These have real `hasAccess(to:)` checks in the code:
-
-| Feature | Where Gated | Description |
-|---------|-------------|-------------|
-| **Advanced Analytics** | `HealthTabView.swift:75` | PatternAnalysisCard shown to Otis+ users, LockedFeatureCard for free |
-| **Photo/Video Attachments** | `TimelineViewModel+Events.swift:134,143` | Adding photos to events requires Otis+ |
-| **Custom Milestones** | `HealthView.swift:183` | Creating custom milestones gated |
-| **Calendar Integration** | `AddMilestoneSheet.swift:99` | Adding milestones to calendar gated |
-| **Milestone Notes** | `MilestoneCompletionSheet.swift:302+` | Notes, photos, vet clinic on completions gated |
-| **Full Training Library** | `SubscriptionManager.canAccessSkill(at:)` | First 10 skills free, rest require Otis+ |
+**Competitive advantage:** Keep potty predictions and basic scheduling free — this is the core value prop that gets people hooked. Upgrade path is natural when they want to share with partner, go deeper on analytics, or use Watch/Siri.
 
 ---
 
-## Features Defined But NOT Gated (6 features)
+## Final Feature Split
 
-These exist in `PremiumFeature` enum but have no actual paywall checks:
+### Free (Otis Basic)
 
-| Feature | Actual Status | Notes |
-|---------|---------------|-------|
-| **Potty Predictions** | **FREE to all** | `PottyStatusCard` shows predictions without any premium check |
-| **Sleep Insights** | **Not implemented** | Only exists in strings/enum, no actual sleep insights view |
-| **Week in Review** | **Not implemented** | Only in enum, no weekly summary feature built |
-| **Socialization Progress** | **FREE to all** | `SocializationProgressCard` shows progress to everyone |
-| **Export PDF** | **FREE (JSON export)** | `ExportService` exports JSON, no premium gate and no PDF |
-| **Partner Sharing** | **NOW ENFORCED** | Any sharing requires Otis+ (free = single user only) |
+Everything a solo user needs for daily dog management:
+
+| Feature | Description |
+|---------|-------------|
+| **Daily Event Logging** | Log meals, potty, sleep, walks, training, socialization |
+| **Timeline View** | Beautiful chronological view of the day |
+| **Potty Predictions** | Smart predictions based on patterns and triggers |
+| **Basic Scheduling** | Meal times, basic reminders |
+| **Socialization Checklist** | Track socialization milestones |
+| **Dog Locations** | Save vet, parks, groomer (up to 10 locations) |
+| **Basic Widgets** | Today summary widget |
+| **Training Library** | First 10 training skills |
+| **Single User** | One account, one dog |
+
+### Otis+ (Premium)
+
+For power users, families, and the full experience:
+
+| Feature | Description | Status |
+|---------|-------------|--------|
+| **Partner/Family Sharing** | Share dog management with household | ✅ Implemented |
+| **Advanced Analytics** | Pattern analysis, behavior insights | ✅ Implemented |
+| **Photo/Video Attachments** | Add media to any event | ✅ Implemented |
+| **Custom Milestones** | Create your own milestone categories | ✅ Implemented |
+| **Milestone Enhancements** | Notes, photos, calendar sync | ✅ Implemented |
+| **Full Training Library** | All 30+ training skills | ✅ Implemented |
+| **Apple Watch App** | Quick logging from wrist | 🔨 To build |
+| **Siri Shortcuts** | "Hey Siri, log potty outside" | 🔨 To build |
+| **Advanced Widgets** | Multiple widget sizes, complications | 🔨 To build |
+| **Document Storage** | Vet records, vaccinations, insurance | 🔨 To build |
+| **Unlimited Locations** | Save unlimited dog-friendly places | 🔨 To build |
+| **Weather Integration** | Weather-aware walk suggestions | 🔨 To build |
+| **Smart Notifications** | Contextual, customizable reminders | 🔨 To build |
+| **Vet Report Export** | Professional PDF summaries | 🔨 To build |
+| **Sleep Insights** | Detailed sleep analysis, quality scores | 🔨 To build |
+| **Week in Review** | Weekly summary with trends | 🔨 To build |
+| **Multi-dog** | Manage 2+ dogs | 🔨 To build |
 
 ---
 
-## Misleading Descriptions
+## Implementation Status
 
-Current descriptions in `Strings+OtisPlus.swift` need updating:
+### Currently Gated (working)
 
-| Feature | Current Description | Reality |
-|---------|---------------------|---------|
-| Potty Predictions | "AI predicts when your puppy needs to go based on patterns" | **Rule-based** calculation with configurable gap multipliers (post-meal, post-sleep). Not ML/AI. |
-| Advanced Analytics | "Deep insights into behavior, health, and routines" | Shows `PatternAnalysisCard` - need to verify what this actually displays |
-| Export PDF | "Export logs and reports for your vet" | Currently exports **JSON files**, not PDF |
+| Feature | Where Gated | Notes |
+|---------|-------------|-------|
+| Partner Sharing | CloudKit sync | Free = single user only |
+| Advanced Analytics | `HealthTabView.swift:75` | PatternAnalysisCard |
+| Photo/Video | `TimelineViewModel+Events.swift:134,143` | Media attachments |
+| Custom Milestones | `HealthView.swift:183` | User-created milestones |
+| Milestone Enhancements | `MilestoneCompletionSheet.swift:302+` | Notes, photos, calendar |
+| Full Training Library | `SubscriptionManager.canAccessSkill(at:)` | Skills 11+ |
+
+### To Implement (priority order)
+
+| Feature | Effort | Value | Priority |
+|---------|--------|-------|----------|
+| Apple Watch App | High | High | P1 — Major selling point |
+| Document Storage | Medium | High | P1 — Real pain point |
+| Siri Shortcuts | Medium | Medium | P2 — Power users love this |
+| Vet Report PDF | Low | High | P2 — Easy win |
+| Smart Notifications | Medium | High | P2 — Daily value |
+| Weather Integration | Low | Medium | P3 — Nice to have |
+| Sleep Insights | Medium | Medium | P3 — Build on existing data |
+| Week in Review | Medium | Medium | P3 — Engagement feature |
+| Advanced Widgets | Medium | Medium | P3 — Visibility |
+| Multi-dog | High | Medium | P4 — Niche but important |
 
 ---
 
-## Recommended Actions
+## Pricing Recommendation
 
-### 1. Fix the Gating (decide what's premium)
+### Monthly
+- **Otis+:** $4.99/month
 
-**Option A: Gate what's promised**
-- Add `hasAccess(to: .pottyPredictions)` check to `PottyStatusCard`
-- Add partner sharing limit enforcement
-- Build actual Sleep Insights and Week in Review features
+### Annual (recommended)
+- **Otis+:** $29.99/year (~$2.50/month, 50% savings)
 
-**Option B: Update marketing to match reality**
-Remove features from Otis+ list that aren't actually gated:
-- Remove Potty Predictions (keep it free - it's a core feature)
-- Remove Socialization Progress (keep it free)
-- Remove Week in Review (not built yet)
-- Remove Sleep Insights (not built yet)
+### Lifetime (optional)
+- **Otis+ Forever:** $79.99 one-time
 
-**Recommendation:** Option B is more honest. Potty predictions being free is a competitive advantage. Focus the premium tier on features that genuinely add value beyond basics.
+**Rationale:**
+- Under $5/month is impulse-buy territory
+- Annual discount encourages commitment
+- Lifetime appeals to "I hate subscriptions" crowd
+- Undercuts competitors (Zigzag is $10+/month)
 
-### 2. Fix Descriptions
+---
+
+## Marketing Copy Updates
+
+### Fix Misleading Descriptions
 
 ```swift
-// Change from:
+// OLD (misleading):
 "AI predicts when your puppy needs to go based on patterns"
 
-// To:
+// NEW (accurate):
 "Smart predictions based on your puppy's schedule and triggers"
 ```
 
-### 3. Build Missing Features (if keeping them in Otis+)
+### Otis+ Value Proposition
 
-| Feature | Effort | Value |
-|---------|--------|-------|
-| Sleep Insights | Medium | Detailed night sleep analysis, nap tracking, quality score |
-| Week in Review | Medium | Weekly email/push with stats summary |
-| PDF Export | Low | Generate PDF instead of JSON in ExportService |
-| Partner Sharing Limit | Low | Add partner count check to CloudKit sync |
-
----
-
-## Revised Premium Feature List (Honest Version)
-
-Based on what's actually gated and valuable:
-
-### Currently Working Otis+ Features
-1. **Pattern Analysis** - Behavior pattern detection card
-2. **Photo/Video Attachments** - Add media to events
-3. **Full Training Library** - 30+ skills (first 10 free)
-4. **Custom Milestones** - Create your own milestones
-5. **Milestone Enhancements** - Notes, photos, calendar sync on completions
-
-### Features to Build/Gate
-6. ~~**Partner Sharing**~~ - ✅ Implemented (sharing requires Otis+, free = single user)
-7. **PDF Export** - Convert ExportService to generate PDF
-8. **Sleep Insights** - New feature needed
-9. **Week in Review** - New feature needed
-
-### Features to Keep Free (recommendation)
-- **Potty Predictions** - Core value, keep free as competitive advantage
-- **Socialization Checklist** - Basic tracking is core feature
-
----
-
-## Future Premium Feature Ideas
-
-Given the core philosophy: **"Basic logging free, collaboration/insights premium"**
-
-### High Value Additions
-
-| Feature | Description | Why Premium |
-|---------|-------------|-------------|
-| **Multi-dog (2+)** | Free: 1 dog, Premium: unlimited | Natural upgrade path |
-| **Partner Activity Log** | See who logged what | Collaboration feature |
-| **Smart Reminders** | "Time for evening walk" notifications | Proactive assistance |
-| **Vet Report Generator** | Professional PDF summary | Real pain point solver |
-| **Breed Benchmarks** | Compare to other dogs of same breed | Unique insights |
-
-### Lower Priority
-
-| Feature | Notes |
-|---------|-------|
-| Apple Watch | Significant dev effort |
-| Historical comparisons | "This week vs 4 weeks ago" |
-| Growth predictions | Predict adult weight |
+> **Otis+ unlocks the full experience:**
+> Share with your partner, log from your Apple Watch, ask Siri to track events, get smart notifications, store vet documents, and dive deep into your dog's patterns — all with no ads and complete privacy.
 
 ---
 
 ## Action Items
 
-1. [ ] Decide: Gate predictions or keep free?
-2. [ ] Fix pottyPredictions description (not AI)
-3. [x] ~~Implement partner sharing limit (1 free, unlimited premium)~~ **DONE**
-4. [ ] Build or remove Sleep Insights from list
-5. [ ] Build or remove Week in Review from list
-6. [ ] Convert ExportService to PDF output
-7. [ ] Update `OtisPlusSheet` to show only actually-gated features
+### Immediate
+- [x] Partner sharing gated ✅
+- [ ] Update `Strings+OtisPlus.swift` descriptions (remove "AI" claim)
+- [ ] Update `OtisPlusSheet` to show accurate feature list
+- [ ] Remove unbuilt features from premium UI until implemented
+
+### Near-term (P1-P2)
+- [ ] Build Apple Watch app (major differentiator)
+- [ ] Build document storage feature
+- [ ] Implement Siri Shortcuts
+- [ ] Add PDF export to ExportService
+- [ ] Build smart notifications system
+
+### Later (P3-P4)
+- [ ] Weather integration
+- [ ] Sleep insights view
+- [ ] Week in review
+- [ ] Advanced widgets
+- [ ] Multi-dog support
 
 ---
 

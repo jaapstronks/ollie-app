@@ -67,6 +67,17 @@
         }
       }
     },
+    "%@ since last" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ sinds vorige"
+          }
+        }
+      }
+    },
     "%lld%% of adult weight" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -100,6 +111,61 @@
         }
       }
     },
+    "Adult %" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Volwassen %"
+          }
+        }
+      }
+    },
+    "Are you sure you want to delete the measurement of %@?" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weet je zeker dat je de meting van %@ wilt verwijderen?"
+          }
+        }
+      }
+    },
+    "Current weight" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Huidig gewicht"
+          }
+        }
+      }
+    },
+    "Delete Measurement" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meting verwijderen"
+          }
+        }
+      }
+    },
+    "Est. Adult" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geschat volwassen"
+          }
+        }
+      }
+    },
     "Growth" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -107,6 +173,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Groei"
+          }
+        }
+      }
+    },
+    "Growth Chart" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Groeigrafiek"
+          }
+        }
+      }
+    },
+    "Growth Statistics" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Groeistatistieken"
           }
         }
       }
@@ -166,6 +254,39 @@
         }
       }
     },
+    "Last measured %@" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laatst gemeten %@"
+          }
+        }
+      }
+    },
+    "Last weighed %lld days ago" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laatst gewogen %lld dagen geleden"
+          }
+        }
+      }
+    },
+    "Last weighed 1 day ago" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laatst gewogen 1 dag geleden"
+          }
+        }
+      }
+    },
     "Log another weight to see the growth story" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -195,6 +316,39 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Log je eerste gewicht om de groei te volgen"
+          }
+        }
+      }
+    },
+    "Measurement History" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meetgeschiedenis"
+          }
+        }
+      }
+    },
+    "Monthly weigh-ins recommended" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maandelijks wegen aanbevolen"
+          }
+        }
+      }
+    },
+    "Never weighed" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nog nooit gewogen"
           }
         }
       }
@@ -254,117 +408,8 @@
         }
       }
     },
-    "Growth Chart" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Groeigrafiek"
-          }
-        }
-      }
-    },
-    "Growth Statistics" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Groeistatistieken"
-          }
-        }
-      }
-    },
-    "Total Gain" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Totale groei"
-          }
-        }
-      }
-    },
-    "Adult %" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Volwassen %"
-          }
-        }
-      }
-    },
-    "Est. Adult" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Geschat volwassen"
-          }
-        }
-      }
-    },
-    "Measurement History" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Meetgeschiedenis"
-          }
-        }
-      }
-    },
-    "Delete Measurement" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Meting verwijderen"
-          }
-        }
-      }
-    },
-    "Are you sure you want to delete the measurement of %@?" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Weet je zeker dat je de meting van %@ wilt verwijderen?"
-          }
-        }
-      }
-    },
-    "%@ since last" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ sinds vorige"
-          }
-        }
-      }
-    },
-    "Last measured %@" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Laatst gemeten %@"
-          }
-        }
-      }
-    },
-    "Current weight" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Huidig gewicht"
-          }
-        }
-      }
-    },
     "Time to weigh" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -374,57 +419,30 @@
         }
       }
     },
-    "Weigh now" : {
+    "Total Gain" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Weeg nu"
+            "value" : "Totale groei"
           }
         }
       }
     },
-    "Last weighed 1 day ago" : {
+    "Weigh every %lld days" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Laatst gewogen 1 dag geleden"
-          }
-        }
-      }
-    },
-    "Last weighed %lld days ago" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Laatst gewogen %lld dagen geleden"
-          }
-        }
-      }
-    },
-    "Never weighed" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nog nooit gewogen"
-          }
-        }
-      }
-    },
-    "Weigh weekly during rapid growth" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Weeg wekelijks tijdens snelle groei"
+            "value" : "Weeg elke %lld dagen"
           }
         }
       }
     },
     "Weigh every 2 weeks to track growth" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -434,22 +452,24 @@
         }
       }
     },
-    "Monthly weigh-ins recommended" : {
+    "Weigh now" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Maandelijks wegen aanbevolen"
+            "value" : "Weeg nu"
           }
         }
       }
     },
-    "Weigh every %lld days" : {
+    "Weigh weekly during rapid growth" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Weeg elke %lld dagen"
+            "value" : "Weeg wekelijks tijdens snelle groei"
           }
         }
       }
