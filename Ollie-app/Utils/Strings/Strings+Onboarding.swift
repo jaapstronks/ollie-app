@@ -57,12 +57,30 @@ extension Strings {
             String(localized: "\(name)'s birth date", table: table)
         }
 
-        static func homeDateQuestion(name: String) -> String {
+        // Puppy status step (is puppy already home or expected?)
+        static func statusQuestion(name: String) -> String {
+            String(localized: "Is \(name) already home?", table: table)
+        }
+        static func statusAlreadyHome(name: String) -> String {
+            String(localized: "Yes, \(name) is home", table: table)
+        }
+        static func statusExpecting(name: String) -> String {
+            String(localized: "Not yet, I'm expecting \(name)", table: table)
+        }
+
+        // Home date - conditional on status
+        static func homeDateQuestionPast(name: String) -> String {
             String(localized: "When did \(name) come home?", table: table)
         }
+        static func homeDateQuestionFuture(name: String) -> String {
+            String(localized: "When will \(name) come home?", table: table)
+        }
         static let homeDate = String(localized: "Home date", table: table)
-        static func homeDateAccessibility(name: String) -> String {
+        static func homeDateAccessibilityPast(name: String) -> String {
             String(localized: "Date \(name) came home", table: table)
+        }
+        static func homeDateAccessibilityFuture(name: String) -> String {
+            String(localized: "Date \(name) will come home", table: table)
         }
 
         static func sizeQuestion(name: String) -> String {
@@ -77,6 +95,13 @@ extension Strings {
         }
         static let photoSubtitle = String(localized: "This is optional — you can always add one later.", table: table)
         static let skip = String(localized: "Skip", table: table)
+
+        // Arrival photo prompt (shown when expected puppy arrives)
+        static func arrivalPhotoQuestion(name: String) -> String {
+            String(localized: "What does \(name) look like?", table: table)
+        }
+        static let arrivalPhotoSubtitle = String(localized: "Take a picture!", table: table)
+        static let arrivalPhotoLater = String(localized: "Maybe later", table: table)
 
         // Confirmation step
         static let born = String(localized: "Born", table: table)

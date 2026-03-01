@@ -177,6 +177,17 @@
         }
       }
     },
+    "Date %@ will come home" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Datum dat %@ thuiskomt"
+          }
+        }
+      }
+    },
     "Enable Location" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -265,6 +276,17 @@
         }
       }
     },
+    "Is %@ already home?" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Is %@ al thuis?"
+          }
+        }
+      }
+    },
     "Just start tracking. Patterns emerge fast." : {
       "extractionState" : "stale",
       "localizations" : {
@@ -305,6 +327,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Laten we beginnen!"
+          }
+        }
+      }
+    },
+    "Maybe later" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Misschien later"
           }
         }
       }
@@ -404,6 +437,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Nu niet"
+          }
+        }
+      }
+    },
+    "Not yet, I'm expecting %@" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nog niet, ik verwacht %@"
           }
         }
       }
@@ -562,6 +606,17 @@
         }
       }
     },
+    "Take a picture!" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maak een foto!"
+          }
+        }
+      }
+    },
     "This is optional — you can always add one later." : {
       "extractionState" : "stale",
       "localizations" : {
@@ -639,6 +694,17 @@
         }
       }
     },
+    "What does %@ look like?" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoe ziet %@ eruit?"
+          }
+        }
+      }
+    },
     "What's your puppy's name?" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -668,6 +734,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Wanneer is %@ geboren?"
+          }
+        }
+      }
+    },
+    "When will %@ come home?" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wanneer komt %@ thuis?"
+          }
+        }
+      }
+    },
+    "Yes, %@ is home" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ja, %@ is thuis"
           }
         }
       }

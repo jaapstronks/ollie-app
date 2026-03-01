@@ -120,14 +120,16 @@ struct MainTabView: View {
     @ObservedObject var contactStore: ContactStore
     @ObservedObject var appointmentStore: AppointmentStore
     @EnvironmentObject var locationManager: LocationManager
+    @EnvironmentObject var foodRecallService: FoodRecallService
 
     @StateObject private var viewModel: TimelineViewModel
     @StateObject private var momentsViewModel: MomentsViewModel
     @StateObject private var mediaCaptureViewModel = MediaCaptureViewModel(mediaStore: MediaStore())
-    @StateObject private var thisWeekViewModel: ThisWeekViewModel
     @StateObject private var memoriesViewModel: MemoriesViewModel
     @State private var showingSettings = false
     @State private var selectedPhotoEvent: PuppyEvent?
+    @State private var showingArrivalPhotoPrompt = false
+    @AppStorage("hasShownArrivalPhotoPrompt") private var hasShownArrivalPhotoPrompt = false
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     init(
@@ -169,11 +171,6 @@ struct MainTabView: View {
         self._momentsViewModel = StateObject(wrappedValue: MomentsViewModel(
             eventStore: eventStore
         ))
-        self._thisWeekViewModel = StateObject(wrappedValue: ThisWeekViewModel(
-            profileStore: profileStore,
-            milestoneStore: milestoneStore,
-            socializationStore: socializationStore
-        ))
         self._memoriesViewModel = StateObject(wrappedValue: MemoriesViewModel(
             eventStore: eventStore
         ))
@@ -198,13 +195,12 @@ struct MainTabView: View {
                 // Tab 0: Today
                 TodayView(
                     viewModel: viewModel,
-                    thisWeekViewModel: thisWeekViewModel,
                     memoriesViewModel: memoriesViewModel,
                     appointmentStore: appointmentStore,
                     weatherService: weatherService,
                     onSettingsTap: { showingSettings = true },
-                    onNavigateToInsights: { selectedTab = 4 },
-                    onNavigateToAppointments: { selectedTab = 3 }
+                    onNavigateToAppointments: { selectedTab = 3 },
+                    onNavigateToTrain: { selectedTab = 1 }
                 )
                 .tabItem {
                     Label(Strings.Tabs.today, systemImage: "pawprint.fill")
@@ -321,6 +317,50 @@ struct MainTabView: View {
             spotStore: spotStore,
             locationManager: locationManager
         )
+        // Arrival photo prompt - shown when expected puppy arrives without a photo
+        .sheet(isPresented: $showingArrivalPhotoPrompt) {
+            if let profile = profileStore.profile {
+                ArrivalPhotoPromptSheet(
+                    puppyName: profile.name,
+                    onTakePhoto: {
+                        showingArrivalPhotoPrompt = false
+                        hasShownArrivalPhotoPrompt = true
+                        // Navigate to settings to add a photo
+                        showingSettings = true
+                    },
+                    onDismiss: {
+                        showingArrivalPhotoPrompt = false
+                        hasShownArrivalPhotoPrompt = true
+                    }
+                )
+                .presentationDetents([.medium])
+            }
+        }
+        .onAppear {
+            checkForArrivalPhotoPrompt()
+        }
+    }
+
+    /// Check if we should show the arrival photo prompt
+    /// Conditions: no profile photo, home date has passed, hasn't been shown before
+    private func checkForArrivalPhotoPrompt() {
+        guard !hasShownArrivalPhotoPrompt,
+              let profile = profileStore.profile,
+              profile.profilePhotoFilename == nil else {
+            return
+        }
+
+        // Check if home date has arrived (today or earlier)
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        let homeDate = calendar.startOfDay(for: profile.homeDate)
+
+        if homeDate <= today {
+            // Slight delay to let the UI settle
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                showingArrivalPhotoPrompt = true
+            }
+        }
     }
 }
 

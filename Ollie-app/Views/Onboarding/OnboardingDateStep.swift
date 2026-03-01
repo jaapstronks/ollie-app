@@ -73,22 +73,53 @@ struct OnboardingHomeStep: View {
     let puppyName: String
     @Binding var homeDate: Date
     let minDate: Date  // birthDate
+    let isExpecting: Bool  // true = dog hasn't arrived yet, false = already home
     let onNext: () -> Void
     let onBack: () -> Void
 
     @State private var hasAppeared = false
 
+    /// Date range depends on whether dog is expected (future allowed) or already home (past only)
+    private var dateRange: ClosedRange<Date> {
+        if isExpecting {
+            // Expecting: from birth date to 1 year in the future
+            let maxDate = Calendar.current.date(byAdding: .year, value: 1, to: Date()) ?? Date()
+            return minDate...maxDate
+        } else {
+            // Already home: from birth date to today
+            return minDate...Date()
+        }
+    }
+
+    /// Question text based on status
+    private var questionText: String {
+        if isExpecting {
+            return Strings.Onboarding.homeDateQuestionFuture(name: puppyName)
+        } else {
+            return Strings.Onboarding.homeDateQuestionPast(name: puppyName)
+        }
+    }
+
+    /// Accessibility label based on status
+    private var accessibilityLabel: String {
+        if isExpecting {
+            return Strings.Onboarding.homeDateAccessibilityFuture(name: puppyName)
+        } else {
+            return Strings.Onboarding.homeDateAccessibilityPast(name: puppyName)
+        }
+    }
+
     var body: some View {
         VStack(spacing: 0) {
             // Header
             VStack(spacing: 12) {
-                Image(systemName: "house.fill")
+                Image(systemName: isExpecting ? "calendar.badge.clock" : "house.fill")
                     .font(.system(size: 56))
                     .foregroundStyle(Color.ollieAccent)
                     .scaleEffect(hasAppeared ? 1.0 : 0.8)
                     .opacity(hasAppeared ? 1.0 : 0.0)
 
-                Text(Strings.Onboarding.homeDateQuestion(name: puppyName))
+                Text(questionText)
                     .font(.title2)
                     .fontWeight(.bold)
                     .multilineTextAlignment(.center)
@@ -101,14 +132,14 @@ struct OnboardingHomeStep: View {
             DatePicker(
                 Strings.Onboarding.homeDate,
                 selection: $homeDate,
-                in: minDate...Date(),
+                in: dateRange,
                 displayedComponents: .date
             )
             .datePickerStyle(.graphical)
             .tint(Color.ollieAccent)
             .padding(.horizontal, 8)
             .opacity(hasAppeared ? 1.0 : 0.0)
-            .accessibilityLabel(Strings.Onboarding.homeDateAccessibility(name: puppyName))
+            .accessibilityLabel(accessibilityLabel)
 
             Spacer()
 
