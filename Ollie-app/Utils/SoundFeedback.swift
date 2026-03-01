@@ -6,7 +6,7 @@
 //  Sounds confirm actions and reduce "did it work?" anxiety.
 //
 
-import AVFoundation
+import AudioToolbox
 import SwiftUI
 
 /// Audio feedback utilities for UI interactions
@@ -111,6 +111,7 @@ enum SoundFeedback {
 // MARK: - Combined Feedback
 
 /// Combines haptic and sound feedback for richer interactions
+@MainActor
 enum FeedbackManager {
 
     /// Success feedback - haptic + optional sound
