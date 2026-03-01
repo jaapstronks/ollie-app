@@ -133,6 +133,16 @@
         }
       }
     },
+    "%lld poops (%lld expected)" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld poepjes (%lld verwacht)"
+          }
+        }
+      }
+    },
     "%lld poops today" : {
       "extractionState" : "stale",
       "localizations" : {

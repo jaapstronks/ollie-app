@@ -1,6 +1,6 @@
 //
 //  Strings+VerticalTimeline.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Localization strings for the vertical day-planner timeline
 
@@ -125,6 +125,13 @@ extension Strings {
         static let walk = String(localized: "Walk", table: table)
         static let pee = String(localized: "Pee", table: table)
         static let poop = String(localized: "Poop", table: table)
+        static let accident = String(localized: "Accident", table: table)
+        static let meal = String(localized: "Meal", table: table)
+        static let water = String(localized: "Water", table: table)
+        static let training = String(localized: "Training", table: table)
+        static let social = String(localized: "Social", table: table)
+        static let weighed = String(localized: "Weighed", table: table)
+        static let medication = String(localized: "Medication", table: table)
         static let outdoor = String(localized: "outdoor", table: table)
         static let indoor = String(localized: "indoor", table: table)
 

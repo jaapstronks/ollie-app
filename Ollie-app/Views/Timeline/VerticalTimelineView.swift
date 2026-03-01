@@ -1,12 +1,12 @@
 //
 //  VerticalTimelineView.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Vertical day-planner style timeline - fresh implementation
 //  Building step by step for clarity and correctness
 
 import SwiftUI
-import OllieShared
+import OtisShared
 import Combine
 
 /// Vertical day-planner style timeline with hour markers, duration blocks, and point events
@@ -345,11 +345,11 @@ struct VerticalTimelineView: View {
                     .foregroundStyle(.white)
                     .padding(.horizontal, 6)
                     .padding(.vertical, 2)
-                    .background(Capsule().fill(Color.ollieDanger))
+                    .background(Capsule().fill(Color.otisDanger))
 
                 // Red line extending to the right
                 Rectangle()
-                    .fill(Color.ollieDanger)
+                    .fill(Color.otisDanger)
                     .frame(height: 2)
             }
             .offset(y: yPosition)
@@ -399,7 +399,7 @@ private struct PointEventWithStem: View {
         case .pointEvent(let event):
             return colorForEvent(event)
         default:
-            return .ollieAccent
+            return .otisAccent
         }
     }
 
@@ -430,21 +430,21 @@ private struct PointEventWithStem: View {
     private func colorForEvent(_ event: PuppyEvent) -> Color {
         switch event.type {
         case .plassen, .poepen:
-            return event.location == .buiten ? .ollieSuccess : .ollieDanger
+            return event.location == .buiten ? .otisSuccess : .otisDanger
         case .eten, .drinken:
-            return .ollieAccent
+            return .otisAccent
         case .training:
-            return .olliePurple
+            return .otisPurple
         case .sociaal:
-            return .ollieSuccess
+            return .otisSuccess
         case .tuin:
-            return .ollieSuccess
+            return .otisSuccess
         case .milestone:
-            return .ollieRose
+            return .otisRose
         case .gewicht:
-            return .ollieHealth
+            return .otisHealth
         case .medicatie:
-            return .ollieHealth
+            return .otisHealth
         case .coverageGap:
             return .secondary
         default:
@@ -552,24 +552,24 @@ private struct PointEventCard: View {
         case .pointEvent(let event):
             switch event.type {
             case .plassen:
-                return event.location == .buiten ? "Pee" : "Accident"
+                return event.location == .buiten ? Strings.VerticalTimeline.pee : Strings.VerticalTimeline.accident
             case .poepen:
-                return event.location == .buiten ? "Poo" : "Accident"
+                return event.location == .buiten ? Strings.VerticalTimeline.poop : Strings.VerticalTimeline.accident
             case .eten:
-                return "Meal"
+                return Strings.VerticalTimeline.meal
             case .drinken:
-                return "Water"
+                return Strings.VerticalTimeline.water
             case .training:
-                return event.exercise ?? "Training"
+                return event.exercise ?? Strings.VerticalTimeline.training
             case .sociaal:
-                return event.who ?? "Social"
+                return event.who ?? Strings.VerticalTimeline.social
             case .gewicht:
                 if let kg = event.weightKg {
                     return String(format: "%.1f kg", kg)
                 }
-                return "Weighed"
+                return Strings.VerticalTimeline.weighed
             case .medicatie:
-                return "Medication"
+                return Strings.VerticalTimeline.medication
             default:
                 return event.type.label
             }
@@ -647,9 +647,9 @@ private struct DurationBlockView: View {
     private var blockColor: Color {
         switch item.type {
         case .sleepSession:
-            return .ollieSleep
+            return .otisSleep
         case .walkEvent:
-            return .ollieSuccess
+            return .otisSuccess
         default:
             return .secondary
         }

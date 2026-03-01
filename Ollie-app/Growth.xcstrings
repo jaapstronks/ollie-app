@@ -253,6 +253,206 @@
           }
         }
       }
+    },
+    "Growth Chart" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Groeigrafiek"
+          }
+        }
+      }
+    },
+    "Growth Statistics" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Groeistatistieken"
+          }
+        }
+      }
+    },
+    "Total Gain" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Totale groei"
+          }
+        }
+      }
+    },
+    "Adult %" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Volwassen %"
+          }
+        }
+      }
+    },
+    "Est. Adult" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geschat volwassen"
+          }
+        }
+      }
+    },
+    "Measurement History" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meetgeschiedenis"
+          }
+        }
+      }
+    },
+    "Delete Measurement" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meting verwijderen"
+          }
+        }
+      }
+    },
+    "Are you sure you want to delete the measurement of %@?" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weet je zeker dat je de meting van %@ wilt verwijderen?"
+          }
+        }
+      }
+    },
+    "%@ since last" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ sinds vorige"
+          }
+        }
+      }
+    },
+    "Last measured %@" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laatst gemeten %@"
+          }
+        }
+      }
+    },
+    "Current weight" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Huidig gewicht"
+          }
+        }
+      }
+    },
+    "Time to weigh" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tijd om te wegen"
+          }
+        }
+      }
+    },
+    "Weigh now" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weeg nu"
+          }
+        }
+      }
+    },
+    "Last weighed 1 day ago" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laatst gewogen 1 dag geleden"
+          }
+        }
+      }
+    },
+    "Last weighed %lld days ago" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laatst gewogen %lld dagen geleden"
+          }
+        }
+      }
+    },
+    "Never weighed" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nog nooit gewogen"
+          }
+        }
+      }
+    },
+    "Weigh weekly during rapid growth" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weeg wekelijks tijdens snelle groei"
+          }
+        }
+      }
+    },
+    "Weigh every 2 weeks to track growth" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weeg elke 2 weken om de groei te volgen"
+          }
+        }
+      }
+    },
+    "Monthly weigh-ins recommended" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maandelijks wegen aanbevolen"
+          }
+        }
+      }
+    },
+    "Weigh every %lld days" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weeg elke %lld dagen"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

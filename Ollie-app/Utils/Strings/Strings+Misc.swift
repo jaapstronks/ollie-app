@@ -1,6 +1,6 @@
 //
 //  Strings+Misc.swift
-//  Ollie-app
+//  Otis-app
 //
 //  Stats, streak, tips, errors, and other miscellaneous strings
 
@@ -182,7 +182,11 @@ extension Strings {
         }
 
         static func poopCountWithExpected(count: Int, lower: Int, upper: Int) -> String {
-            String(localized: "\(count) poops (\(lower)-\(upper) expected)", table: table)
+            if lower == upper {
+                return String(localized: "\(count) poops (\(lower) expected)", table: table)
+            } else {
+                return String(localized: "\(count) poops (\(lower)-\(upper) expected)", table: table)
+            }
         }
 
         static func poopCountSimple(_ count: Int) -> String {

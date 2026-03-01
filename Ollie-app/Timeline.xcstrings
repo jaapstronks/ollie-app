@@ -947,6 +947,26 @@
         }
       }
     },
+    "Meal" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maaltijd"
+          }
+        }
+      }
+    },
+    "Medication" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Medicatie"
+          }
+        }
+      }
+    },
     "Meal in %lld min" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -1475,6 +1495,16 @@
         }
       }
     },
+    "Social" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sociaal"
+          }
+        }
+      }
+    },
     "Sleep status" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -1750,6 +1780,16 @@
         }
       }
     },
+    "Training" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Training"
+          }
+        }
+      }
+    },
     "times measured" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -1911,6 +1951,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Was gepland om %@"
+          }
+        }
+      }
+    },
+    "Water" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Water"
+          }
+        }
+      }
+    },
+    "Weighed" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gewogen"
           }
         }
       }
