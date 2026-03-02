@@ -4,6 +4,12 @@
     "%lld events imported" : {
       "extractionState" : "stale",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld Ereignisse importiert"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15,6 +21,12 @@
     "%lld times outside in a row!" : {
       "extractionState" : "stale",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld Mal hintereinander draußen!"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -26,6 +38,12 @@
     "Added to calendar" : {
       "extractionState" : "stale",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zum Kalender hinzugefügt"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -37,6 +55,12 @@
     "Contact added" : {
       "extractionState" : "stale",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kontakt hinzugefügt"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -48,6 +72,12 @@
     "Copied to clipboard" : {
       "extractionState" : "stale",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In Zwischenablage kopiert"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -59,6 +89,12 @@
     "Could not delete. Try again." : {
       "extractionState" : "stale",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Löschen fehlgeschlagen. Erneut versuchen."
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -70,6 +106,12 @@
     "Could not save. Try again." : {
       "extractionState" : "stale",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Speichern fehlgeschlagen. Erneut versuchen."
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -81,6 +123,12 @@
     "Deleted" : {
       "extractionState" : "stale",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gelöscht"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -92,6 +140,12 @@
     "Document added" : {
       "extractionState" : "stale",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dokument hinzugefügt"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -103,6 +157,12 @@
     "Export complete" : {
       "extractionState" : "stale",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Export abgeschlossen"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -114,6 +174,12 @@
     "Export failed" : {
       "extractionState" : "stale",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Export fehlgeschlagen"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -125,6 +191,12 @@
     "Go outside now!" : {
       "extractionState" : "stale",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jetzt nach draußen!"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -136,6 +208,12 @@
     "Logged!" : {
       "extractionState" : "stale",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erfasst!"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -147,6 +225,12 @@
     "Network error. Check your connection." : {
       "extractionState" : "stale",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Netzwerkfehler. Überprüfe deine Verbindung."
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -158,6 +242,12 @@
     "Removed from calendar" : {
       "extractionState" : "stale",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aus Kalender entfernt"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -169,6 +259,12 @@
     "Saved" : {
       "extractionState" : "stale",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gespeichert"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -180,6 +276,12 @@
     "Spot saved" : {
       "extractionState" : "stale",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ort gespeichert"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -191,6 +293,12 @@
     "Syncing..." : {
       "extractionState" : "stale",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Synchronisiere..."
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -202,6 +310,12 @@
     "Tap or swipe up to dismiss" : {
       "extractionState" : "stale",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tippen oder nach oben wischen zum Schließen"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",

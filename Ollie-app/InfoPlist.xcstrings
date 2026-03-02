@@ -1,109 +1,193 @@
 {
-  "sourceLanguage" : "en",
-  "strings" : {
-    "CFBundleDisplayName" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Otis"
-          }
-        }
-      }
-    },
-    "CFBundleName" : {
-      "comment" : "Bundle name",
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Ollie-app"
-          }
-        }
-      }
-    },
-    "NSCalendarsFullAccessUsageDescription" : {
-      "comment" : "Privacy - Calendars Full Access Usage Description",
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Otis uses your calendar to add reminders for upcoming milestones like vaccinations and vet visits."
-          }
-        }
-      }
-    },
-    "NSCameraUsageDescription" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Otis wants to use the camera to take photos of your puppy."
+  "sourceLanguage": "en",
+  "strings": {
+    "CFBundleDisplayName": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis"
           }
         },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Otis wil de camera gebruiken om foto's van je puppy te maken."
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis"
           }
         }
       }
     },
-    "NSContactsUsageDescription" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Otis uses your contacts to quickly import your vet, groomer, or pet sitter details."
+    "CFBundleName": {
+      "comment": "Bundle name",
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ollie-app"
           }
         },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Otis gebruikt je contacten om snel gegevens van je dierenarts, trimsalon of oppas te importeren."
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Ollie-app"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ollie-app"
           }
         }
       }
     },
-    "NSLocationWhenInUseUsageDescription" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Otis uses your location to save walk spots so you can easily log walks at your favorite places."
+    "NSCalendarsFullAccessUsageDescription": {
+      "comment": "Privacy - Calendars Full Access Usage Description",
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis nutzt deinen Kalender, um Erinnerungen für kommende Meilensteine wie Impfungen und Tierarztbesuche hinzuzufügen."
           }
         },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Otis gebruikt je locatie om wandelplekken op te slaan zodat je makkelijk wandelingen kunt loggen op je favoriete plekken."
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Otis uses your calendar to add reminders for upcoming milestones like vaccinations and vet visits."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis usa tu calendario para agregar recordatorios de eventos importantes como vacunas y visitas al veterinario."
           }
         }
       }
     },
-    "NSPhotoLibraryUsageDescription" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Otis wants access to your photos to add moments."
+    "NSCameraUsageDescription": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis möchte die Kamera verwenden, um Fotos von deinem Welpen zu machen."
           }
         },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Otis wil toegang tot je foto's om momenten toe te voegen."
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis wants to use the camera to take photos of your puppy."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis quiere usar la camara para tomar fotos de tu cachorro."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis wil de camera gebruiken om foto's van je puppy te maken."
+          }
+        }
+      }
+    },
+    "NSContactsUsageDescription": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis nutzt deine Kontakte, um schnell Daten von Tierarzt, Hundefriseur oder Hundesitter zu importieren."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis uses your contacts to quickly import your vet, groomer, or pet sitter details."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis usa tus contactos para importar rapidamente los datos de tu veterinario, peluquero o cuidador de mascotas."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis gebruikt je contacten om snel gegevens van je dierenarts, trimsalon of oppas te importeren."
+          }
+        }
+      }
+    },
+    "NSLocationWhenInUseUsageDescription": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis nutzt deinen Standort, um Spaziergang-Orte zu speichern, damit du Spaziergänge an deinen Lieblingsorten einfach protokollieren kannst."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis uses your location to save walk spots so you can easily log walks at your favorite places."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis usa tu ubicacion para guardar lugares de paseo y que puedas registrar facilmente los paseos en tus lugares favoritos."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis gebruikt je locatie om wandelplekken op te slaan zodat je makkelijk wandelingen kunt loggen op je favoriete plekken."
+          }
+        }
+      }
+    },
+    "NSPhotoLibraryUsageDescription": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis möchte Zugriff auf deine Fotos, um Momente hinzuzufügen."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis wants access to your photos to add moments."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis quiere acceder a tus fotos para agregar momentos."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis wil toegang tot je foto's om momenten toe te voegen."
           }
         }
       }
     }
   },
-  "version" : "1.0"
+  "version": "1.0"
 }

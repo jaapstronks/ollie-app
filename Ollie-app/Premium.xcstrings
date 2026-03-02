@@ -1,754 +1,1594 @@
 {
-  "sourceLanguage" : "en",
-  "strings" : {
-    "%@ ate - logged!" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ heeft gegeten - gelogd!"
+  "sourceLanguage": "en",
+  "strings": {
+    "%@ ate - logged!": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ hat gefressen - erfasst!"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ comio - registrado!"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ heeft gegeten - gelogd!"
+          }
+        }
+      }
+    },
+    "%@ is already sleeping. Say '%@ woke up' when they wake.": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ schläft bereits. Sag '%2$@ ist aufgewacht', wenn er aufwacht."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ ya esta durmiendo. Di '%2$@ desperto' cuando despierte."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ slaapt al. Zeg '%2$@ is wakker' wanneer die wakker wordt."
           }
-        }
-      }
-    },
-    "%@ is already sleeping. Say '%@ woke up' when they wake." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$@ slaapt al. Zeg '%2$@ is wakker' wanneer die wakker wordt."
+        }
+      }
+    },
+    "%@ is sleeping - logged. Say '%@ woke up' when they wake.": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ schläft - erfasst. Sag '%2$@ ist aufgewacht', wenn er aufwacht."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ esta durmiendo - registrado. Di '%2$@ desperto' cuando despierte."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ slaapt - gelogd. Zeg '%2$@ is wakker' wanneer die wakker wordt."
           }
         }
-      }
-    },
-    "%@ is sleeping - logged. Say '%@ woke up' when they wake." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$@ slaapt - gelogd. Zeg '%2$@ is wakker' wanneer die wakker wordt."
+      }
+    },
+    "%@ just peed %@.": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ hat gerade %2$@ gepinkelt."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ acaba de hacer pipi %2$@."
           }
-        }
-      }
-    },
-    "%@ just peed %@." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$@ heeft net %2$@ geplast."
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ heeft net %2$@ geplast."
           }
         }
       }
-    },
-    "%@ peed %@ %lld hours ago." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$@ heeft %2$@ %3$lld uur geleden geplast."
+    },
+    "%@ peed %@ %lld hours ago.": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ hat %2$@ vor %3$lld Stunden gepinkelt."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ hizo pipi %2$@ hace %3$lld horas."
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ heeft %2$@ %3$lld uur geleden geplast."
+          }
         }
       }
     },
-    "%@ peed %@ %lld hours and %lld minutes ago." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$@ heeft %2$@ %3$lld uur en %4$lld minuten geleden geplast."
+    "%@ peed %@ %lld hours and %lld minutes ago.": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ hat %2$@ vor %3$lld Stunden und %4$lld Minuten gepinkelt."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ hizo pipi %2$@ hace %3$lld horas y %4$lld minutos."
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ heeft %2$@ %3$lld uur en %4$lld minuten geleden geplast."
+          }
         }
       }
     },
-    "%@ peed %@ %lld minutes ago." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$@ heeft %2$@ %3$lld minuten geleden geplast."
+    "%@ peed %@ %lld minutes ago.": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ hat %2$@ vor %3$lld Minuten gepinkelt."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ hizo pipi %2$@ hace %3$lld minutos."
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ heeft %2$@ %3$lld minuten geleden geplast."
+          }
         }
       }
     },
-    "%@ wasn't logged as sleeping. Logging wake up anyway." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ was niet als slapend gelogd. Wakker worden wordt toch gelogd."
+    "%@ wasn't logged as sleeping. Logging wake up anyway.": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ war nicht als schlafend erfasst. Aufwachen wird trotzdem erfasst."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ no estaba registrado como durmiendo. Registrando despertar de todos modos."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ was niet als slapend gelogd. Wakker worden wordt toch gelogd."
           }
         }
       }
     },
-    "%@ woke up - logged!" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ is wakker - gelogd!"
+    "%@ woke up - logged!": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ ist aufgewacht - erfasst!"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ desperto - registrado!"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ is wakker - gelogd!"
+          }
         }
       }
     },
-    "%@ woke up after %lld minutes - logged!" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ is wakker na %lld minuten - gelogd!"
+    "%@ woke up after %lld minutes - logged!": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ ist nach %lld Minuten aufgewacht - erfasst!"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ desperto despues de %lld minutos - registrado!"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ is wakker na %lld minuten - gelogd!"
           }
         }
       }
     },
-    "%lld days left free" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nog %lld dagen gratis"
+    "%lld days left free": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Noch %lld Tage kostenlos"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld dias gratis restantes"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nog %lld dagen gratis"
+          }
         }
       }
     },
-    "%lld days left in trial" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nog %lld dagen proefperiode"
+    "%lld days left in trial": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Noch %lld Tage Testphase"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld dias restantes de prueba"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nog %lld dagen proefperiode"
+          }
         }
       }
     },
-    "%lld days remaining" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nog %lld dagen"
+    "%lld days remaining": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Noch %lld Tage"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld dias restantes"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nog %lld dagen"
+          }
         }
       }
     },
-    "€19" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "€19"
+    "€19": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "19 €"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "19 €"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "€19"
+          }
         }
       }
     },
-    "Continue with Otis" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Doorgaan met Otis"
+    "Continue with Otis": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mit Otis fortfahren"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continuar con Otis"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Doorgaan met Otis"
+          }
         }
       }
     },
-    "Continue with Otis — %@" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Doorgaan met Otis — %@"
+    "Continue with Otis — %@": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mit Otis fortfahren — %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continuar con Otis — %@"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Doorgaan met Otis — %@"
+          }
         }
       }
     },
-    "Example commands:" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Voorbeeldopdrachten:"
+    "Example commands:": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beispielbefehle:"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Comandos de ejemplo:"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voorbeeldopdrachten:"
           }
         }
       }
     },
-    "Expired" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verlopen"
+    "Expired": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abgelaufen"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Expirado"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verlopen"
+          }
         }
       }
     },
-    "Failed to log event" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Gebeurtenis loggen mislukt"
+    "Failed to log event": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ereignis erfassen fehlgeschlagen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Error al registrar evento"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gebeurtenis loggen mislukt"
           }
         }
       }
     },
-    "Find out when your puppy last peed" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ontdek wanneer je puppy voor het laatst heeft geplast"
+    "Find out when your puppy last peed": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erfahre, wann dein Welpe zuletzt gepinkelt hat"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Descubre cuando tu cachorro hizo pipi por ultima vez"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ontdek wanneer je puppy voor het laatst heeft geplast"
+          }
         }
       }
     },
-    "Find out when your puppy last pooped" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ontdek wanneer je puppy voor het laatst heeft gepoept"
+    "Find out when your puppy last pooped": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erfahre, wann dein Welpe zuletzt gekackt hat"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Descubre cuando tu cachorro hizo popo por ultima vez"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ontdek wanneer je puppy voor het laatst heeft gepoept"
           }
         }
       }
     },
-    "Free" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Gratis"
+    "Free": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kostenlos"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gratis"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gratuit"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gratis"
+          }
         }
       }
     },
-    "How is my puppy in Otis" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Hoe gaat het met mijn puppy in Otis"
+    "How is my puppy in Otis": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wie geht es meinem Welpen in Otis"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Como esta mi cachorro en Otis"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hoe gaat het met mijn puppy in Otis"
+          }
         }
       }
     },
-    "Log a walk with your puppy" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Log een wandeling met je puppy"
+    "Log a walk with your puppy": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Einen Spaziergang mit deinem Welpen erfassen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registra un paseo con tu cachorro"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Log een wandeling met je puppy"
+          }
         }
       }
     },
-    "Log Meal" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Log Maaltijd"
+    "Log Meal": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mahlzeit erfassen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registrar Comida"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Log Maaltijd"
           }
         }
       }
     },
-    "Log Potty" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Log Plasje"
+    "Log Potty": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pipi erfassen"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registrar Pipi"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Log Plasje"
+          }
         }
       }
     },
-    "Log Sleep" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Log Slaap"
+    "Log Sleep": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schlaf erfassen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registrar Sueno"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Log Slaap"
           }
         }
       }
     },
-    "Log that your puppy ate" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Log dat je puppy heeft gegeten"
+    "Log that your puppy ate": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erfasse, dass dein Welpe gefressen hat"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registra que tu cachorro comio"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Log dat je puppy heeft gegeten"
+          }
         }
       }
     },
-    "Log that your puppy is sleeping" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Log dat je puppy slaapt"
+    "Log that your puppy is sleeping": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erfasse, dass dein Welpe schläft"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registra que tu cachorro esta durmiendo"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Log dat je puppy slaapt"
+          }
         }
       }
     },
-    "Log that your puppy woke up" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Log dat je puppy wakker is geworden"
+    "Log that your puppy woke up": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erfasse, dass dein Welpe aufgewacht ist"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registra que tu cachorro desperto"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Log dat je puppy wakker is geworden"
+          }
         }
       }
     },
-    "Log Wake Up" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Log Wakker"
+    "Log Wake Up": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aufwachen erfassen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registrar Despertar"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Log Wakker"
+          }
         }
       }
     },
-    "Log Walk" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Log Wandeling"
+    "Log Walk": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spaziergang erfassen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registrar Paseo"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Log Wandeling"
+          }
         }
       }
     },
-    "Log when your puppy peed or pooped" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Log wanneer je puppy heeft geplast of gepoept"
+    "Log when your puppy peed or pooped": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erfasse, wann dein Welpe gepinkelt oder gekackt hat"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registra cuando tu cachorro hizo pipi o popo"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Log wanneer je puppy heeft geplast of gepoept"
+          }
         }
       }
     },
-    "Logged %@ %@ for %@" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$@ %2$@ gelogd voor %3$@"
+    "Logged %@ %@ for %@": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ %2$@ für %3$@ erfasst"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registrado %1$@ %2$@ para %3$@"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ %2$@ gelogd voor %3$@"
           }
         }
       }
     },
-    "Logged %lld minute walk with %@" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Wandeling van %lld minuten met %@ gelogd"
+    "Logged %lld minute walk with %@": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld-minütiger Spaziergang mit %@ erfasst"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paseo de %lld minutos con %@ registrado"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wandeling van %lld minuten met %@ gelogd"
+          }
         }
       }
     },
-    "Logged walk with %@" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Wandeling met %@ gelogd"
+    "Logged walk with %@": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spaziergang mit %@ erfasst"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paseo con %@ registrado"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wandeling met %@ gelogd"
           }
         }
       }
     },
-    "Logging disabled" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Loggen uitgeschakeld"
+    "Logging disabled": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erfassung deaktiviert"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registro desactivado"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loggen uitgeschakeld"
+          }
         }
       }
     },
-    "My puppy is sleeping in Otis" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mijn puppy slaapt in Otis"
+    "My puppy is sleeping in Otis": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mein Welpe schläft in Otis"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mi cachorro esta durmiendo en Otis"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mijn puppy slaapt in Otis"
           }
         }
       }
     },
-    "My puppy peed outside in Otis" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mijn puppy heeft buiten geplast in Otis"
+    "My puppy peed outside in Otis": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mein Welpe hat draußen gepinkelt in Otis"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mi cachorro hizo pipi afuera en Otis"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mijn puppy heeft buiten geplast in Otis"
+          }
         }
       }
     },
-    "No pee events logged for %@ in the last week." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Geen plasjes gelogd voor %@ in de afgelopen week."
+    "No pee events logged for %@ in the last week.": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine Pipi-Ereignisse für %@ in der letzten Woche erfasst."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No hay eventos de pipi registrados para %@ en la ultima semana."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geen plasjes gelogd voor %@ in de afgelopen week."
           }
         }
       }
     },
-    "No poop events logged for %@ in the last week." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Geen poepjes gelogd voor %@ in de afgelopen week."
+    "No poop events logged for %@ in the last week.": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine Kack-Ereignisse für %@ in der letzten Woche erfasst."
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No hay eventos de popo registrados para %@ en la ultima semana."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geen poepjes gelogd voor %@ in de afgelopen week."
+          }
         }
       }
     },
-    "No restorable purchases found" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Geen herstelbare aankopen gevonden"
+    "No restorable purchases found": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine wiederherstellbaren Käufe gefunden"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se encontraron compras restaurables"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geen herstelbare aankopen gevonden"
+          }
         }
       }
     },
-    "Otis Premium" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Otis Premium"
+    "Otis Premium": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis Premium"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis Premium"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis Premium"
+          }
         }
       }
     },
-    "One-time purchase, per puppy profile" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Eenmalige aankoop, per puppyprofiel"
+    "One-time purchase, per puppy profile": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Einmaliger Kauf pro Welpenprofil"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Compra unica, por perfil de cachorro"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eenmalige aankoop, per puppyprofiel"
+          }
         }
       }
     },
-    "Open Shortcuts App" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Open Opdrachten-app"
+    "Open Shortcuts App": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kurzbefehle-App öffnen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abrir App de Atajos"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Opdrachten-app"
+          }
         }
       }
     },
-    "Please set up your puppy profile in the Otis app first." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Stel eerst je puppyprofiel in via de Otis-app."
+    "Please set up your puppy profile in the Otis app first.": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bitte richte zuerst dein Welpenprofil in der Otis-App ein."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Por favor, configura primero el perfil de tu cachorro en la app Otis."
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stel eerst je puppyprofiel in via de Otis-app."
+          }
         }
       }
     },
-    "Please try again" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Probeer het opnieuw"
+    "Please try again": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bitte erneut versuchen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Por favor, intentalo de nuevo"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Veuillez réessayer"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Probeer het opnieuw"
+          }
         }
       }
     },
-    "Poop Status" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Poep Status"
+    "Poop Status": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kack-Status"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Estado de Popo"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Poep Status"
+          }
         }
       }
     },
-    "Potty Status" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Plas Status"
+    "Potty Status": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pipi-Status"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Estado de Pipi"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plas Status"
+          }
         }
       }
     },
-    "Premium" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Premium"
+    "Premium": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Premium"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Premium"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Premium"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Premium"
+          }
         }
       }
     },
-    "Purchase failed" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aankoop mislukt"
+    "Purchase failed": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kauf fehlgeschlagen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Compra fallida"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aankoop mislukt"
+          }
         }
       }
     },
-    "Restore purchases" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aankopen herstellen"
+    "Restore purchases": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Käufe wiederherstellen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restaurar compras"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aankopen herstellen"
+          }
         }
       }
     },
-    "Restoring purchases..." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aankopen herstellen..."
+    "Restoring purchases...": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Käufe werden wiederhergestellt..."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restaurando compras..."
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aankopen herstellen..."
+          }
         }
       }
     },
-    "See all Otis shortcuts" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bekijk alle Otis-snelkoppelingen"
+    "See all Otis shortcuts": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alle Otis-Kurzbefehle anzeigen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ver todos los atajos de Otis"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bekijk alle Otis-snelkoppelingen"
+          }
         }
       }
     },
-    "Siri & Shortcuts" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Siri & Snelkoppelingen"
+    "Siri & Shortcuts": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Siri & Kurzbefehle"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Siri y Atajos"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Siri & Snelkoppelingen"
           }
         }
       }
     },
-    "Siri will respond using your puppy's name from your profile." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Siri antwoordt met de naam van je puppy uit je profiel."
+    "Siri will respond using your puppy's name from your profile.": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Siri antwortet mit dem Namen deines Welpen aus deinem Profil."
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Siri respondera usando el nombre de tu cachorro de tu perfil."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Siri antwoordt met de naam van je puppy uit je profiel."
+          }
         }
       }
     },
-    "Status" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Status"
+    "Status": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Status"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Estado"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Statut"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Status"
+          }
         }
       }
     },
-    "Success!" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Gelukt!"
+    "Success!": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erfolgreich!"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exito!"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gelukt!"
+          }
         }
       }
     },
-    "Tap to upgrade" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tik om te upgraden"
+    "Tap to upgrade": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tippen zum Upgraden"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toca para mejorar"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tik om te upgraden"
           }
         }
       }
     },
-    "The first weeks with a puppy are the most important. Otis helps you track patterns and build good habits." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "De eerste weken met een puppy zijn het belangrijkst. Otis helpt je patronen te volgen en goede gewoontes op te bouwen."
+    "The first weeks with a puppy are the most important. Otis helps you track patterns and build good habits.": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die ersten Wochen mit einem Welpen sind die wichtigsten. Otis hilft dir, Muster zu verfolgen und gute Gewohnheiten aufzubauen."
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Las primeras semanas con un cachorro son las mas importantes. Otis te ayuda a seguir patrones y crear buenos habitos."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "De eerste weken met een puppy zijn het belangrijkst. Otis helpt je patronen te volgen en goede gewoontes op te bouwen."
+          }
         }
       }
     },
-    "Unlock unlimited logging, predictions, and insights for your puppy's journey." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ontgrendel onbeperkt loggen, voorspellingen en inzichten voor de reis van je puppy."
+    "Unlock unlimited logging, predictions, and insights for your puppy's journey.": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schalte unbegrenztes Erfassen, Vorhersagen und Einblicke für die Reise deines Welpen frei."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Desbloquea registros ilimitados, predicciones e informacion para el viaje de tu cachorro."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ontgrendel onbeperkt loggen, voorspellingen en inzichten voor de reis van je puppy."
           }
         }
       }
     },
-    "Upgrade to continue logging events" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Upgrade om door te gaan met het loggen van gebeurtenissen"
+    "Upgrade to continue logging events": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Upgraden, um weiter Ereignisse zu erfassen"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mejora para continuar registrando eventos"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Upgrade om door te gaan met het loggen van gebeurtenissen"
+          }
         }
       }
     },
-    "Use Siri to log events and check on your puppy hands-free. Say \"Hey Siri\" followed by a command." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Gebruik Siri om gebeurtenissen te loggen en je puppy te checken zonder je handen te gebruiken. Zeg \"Hé Siri\" gevolgd door een opdracht."
+    "Use Siri to log events and check on your puppy hands-free. Say \"Hey Siri\" followed by a command.": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nutze Siri, um Ereignisse freihändig zu erfassen und deinen Welpen zu überprüfen. Sag \"Hey Siri\" gefolgt von einem Befehl."
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Usa Siri para registrar eventos y consultar sobre tu cachorro sin usar las manos. Di \"Oye Siri\" seguido de un comando."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gebruik Siri om gebeurtenissen te loggen en je puppy te checken zonder je handen te gebruiken. Zeg \"Hé Siri\" gevolgd door een opdracht."
+          }
         }
       }
     },
-    "Voice Commands" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Spraakopdrachten"
+    "Voice Commands": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sprachbefehle"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Comandos de Voz"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spraakopdrachten"
+          }
         }
       }
     },
-    "You can now log unlimited events for %@." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Je kunt nu onbeperkt gebeurtenissen loggen voor %@."
+    "You can now log unlimited events for %@.": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Du kannst jetzt unbegrenzt Ereignisse für %@ erfassen."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ahora puedes registrar eventos ilimitados para %@."
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je kunt nu onbeperkt gebeurtenissen loggen voor %@."
+          }
         }
       }
     },
-    "Your free trial for %@ has ended" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Je gratis proefperiode voor %@ is afgelopen"
+    "Your free trial for %@ has ended": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deine kostenlose Testphase für %@ ist beendet"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu prueba gratuita para %@ ha terminado"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je gratis proefperiode voor %@ is afgelopen"
+          }
         }
       }
     },
-    "Your free trial has ended" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Je gratis proefperiode is afgelopen"
+    "Your free trial has ended": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deine kostenlose Testphase ist beendet"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu prueba gratuita ha terminado"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je gratis proefperiode is afgelopen"
+          }
         }
       }
     },
-    "Your free trial has ended. Please upgrade in the Otis app to continue logging." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Je gratis proefperiode is afgelopen. Upgrade in de Otis-app om door te gaan met loggen."
+    "Your free trial has ended. Please upgrade in the Otis app to continue logging.": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deine kostenlose Testphase ist beendet. Bitte upgrade in der Otis-App, um weiter zu erfassen."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu prueba gratuita ha terminado. Por favor, mejora en la app Otis para continuar registrando."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je gratis proefperiode is afgelopen. Upgrade in de Otis-app om door te gaan met loggen."
           }
         }
       }
     }
   },
-  "version" : "1.0"
+  "version": "1.0"
 }

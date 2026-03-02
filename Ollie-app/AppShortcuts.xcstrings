@@ -1,13 +1,13 @@
 {
-  "sourceLanguage" : "en",
-  "strings" : {
-    "How is my puppy in ${applicationName}" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringSet" : {
-            "state" : "new",
-            "values" : [
+  "sourceLanguage": "en",
+  "strings": {
+    "How is my puppy in ${applicationName}": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringSet": {
+            "state": "new",
+            "values": [
               "How is my puppy in ${applicationName}",
               "Puppy status in ${applicationName}",
               "How is my dog doing in ${applicationName}",
@@ -16,10 +16,10 @@
             ]
           }
         },
-        "nl" : {
-          "stringSet" : {
-            "state" : "translated",
-            "values" : [
+        "nl": {
+          "stringSet": {
+            "state": "translated",
+            "values": [
               "Hoe gaat het met mijn puppy in ${applicationName}",
               "Puppy status in ${applicationName}",
               "Hoe gaat het met mijn hond in ${applicationName}",
@@ -27,16 +27,28 @@
               "Hoe lang slaapt mijn puppy al in ${applicationName}"
             ]
           }
+        },
+        "de": {
+          "stringSet": {
+            "state": "translated",
+            "values": [
+              "Wie geht es meinem Welpen in ${applicationName}",
+              "Welpenstatus in ${applicationName}",
+              "Wie geht es meinem Hund in ${applicationName}",
+              "Schläft mein Welpe in ${applicationName}",
+              "Wie lange schläft mein Welpe schon in ${applicationName}"
+            ]
+          }
         }
       }
     },
-    "Log meal in ${applicationName}" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringSet" : {
-            "state" : "new",
-            "values" : [
+    "Log meal in ${applicationName}": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringSet": {
+            "state": "new",
+            "values": [
               "Log meal in ${applicationName}",
               "My puppy ate in ${applicationName}",
               "My dog had food in ${applicationName}",
@@ -44,26 +56,37 @@
             ]
           }
         },
-        "nl" : {
-          "stringSet" : {
-            "state" : "translated",
-            "values" : [
+        "nl": {
+          "stringSet": {
+            "state": "translated",
+            "values": [
               "Log maaltijd in ${applicationName}",
               "Mijn puppy heeft gegeten in ${applicationName}",
               "Mijn hond heeft gegeten in ${applicationName}",
               "Log voeding in ${applicationName}"
             ]
           }
+        },
+        "de": {
+          "stringSet": {
+            "state": "translated",
+            "values": [
+              "Mahlzeit eintragen in ${applicationName}",
+              "Mein Welpe hat gegessen in ${applicationName}",
+              "Mein Hund hat gefressen in ${applicationName}",
+              "Fütterung eintragen in ${applicationName}"
+            ]
+          }
         }
       }
     },
-    "Log pee inside in ${applicationName}" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringSet" : {
-            "state" : "new",
-            "values" : [
+    "Log pee inside in ${applicationName}": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringSet": {
+            "state": "new",
+            "values": [
               "Log pee inside in ${applicationName}",
               "My puppy peed inside in ${applicationName}",
               "My dog had an accident in ${applicationName}",
@@ -71,26 +94,37 @@
             ]
           }
         },
-        "nl" : {
-          "stringSet" : {
-            "state" : "translated",
-            "values" : [
+        "nl": {
+          "stringSet": {
+            "state": "translated",
+            "values": [
               "Log plasje binnen in ${applicationName}",
               "Mijn puppy heeft binnen geplast in ${applicationName}",
               "Mijn hond had een ongelukje in ${applicationName}",
               "Log binnen plasje in ${applicationName}"
             ]
           }
+        },
+        "de": {
+          "stringSet": {
+            "state": "translated",
+            "values": [
+              "Pipi drinnen eintragen in ${applicationName}",
+              "Mein Welpe hat drinnen gepinkelt in ${applicationName}",
+              "Mein Hund hatte ein Missgeschick in ${applicationName}",
+              "Pipi drinnen protokollieren in ${applicationName}"
+            ]
+          }
         }
       }
     },
-    "Log pee outside in ${applicationName}" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringSet" : {
-            "state" : "new",
-            "values" : [
+    "Log pee outside in ${applicationName}": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringSet": {
+            "state": "new",
+            "values": [
               "Log pee outside in ${applicationName}",
               "My puppy peed outside in ${applicationName}",
               "My dog peed outside in ${applicationName}",
@@ -98,26 +132,37 @@
             ]
           }
         },
-        "nl" : {
-          "stringSet" : {
-            "state" : "translated",
-            "values" : [
+        "nl": {
+          "stringSet": {
+            "state": "translated",
+            "values": [
               "Log plasje buiten in ${applicationName}",
               "Mijn puppy heeft buiten geplast in ${applicationName}",
               "Mijn hond heeft buiten geplast in ${applicationName}",
               "Log buiten plasje in ${applicationName}"
             ]
           }
+        },
+        "de": {
+          "stringSet": {
+            "state": "translated",
+            "values": [
+              "Pipi draußen eintragen in ${applicationName}",
+              "Mein Welpe hat draußen gepinkelt in ${applicationName}",
+              "Mein Hund hat draußen gepinkelt in ${applicationName}",
+              "Pipi draußen protokollieren in ${applicationName}"
+            ]
+          }
         }
       }
     },
-    "Log poop inside in ${applicationName}" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringSet" : {
-            "state" : "new",
-            "values" : [
+    "Log poop inside in ${applicationName}": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringSet": {
+            "state": "new",
+            "values": [
               "Log poop inside in ${applicationName}",
               "My puppy pooped inside in ${applicationName}",
               "My dog pooped inside in ${applicationName}",
@@ -125,26 +170,37 @@
             ]
           }
         },
-        "nl" : {
-          "stringSet" : {
-            "state" : "translated",
-            "values" : [
+        "nl": {
+          "stringSet": {
+            "state": "translated",
+            "values": [
               "Log poepje binnen in ${applicationName}",
               "Mijn puppy heeft binnen gepoept in ${applicationName}",
               "Mijn hond heeft binnen gepoept in ${applicationName}",
               "Log binnen poepje in ${applicationName}"
             ]
           }
+        },
+        "de": {
+          "stringSet": {
+            "state": "translated",
+            "values": [
+              "Häufchen drinnen eintragen in ${applicationName}",
+              "Mein Welpe hat drinnen gekotet in ${applicationName}",
+              "Mein Hund hat drinnen gekotet in ${applicationName}",
+              "Häufchen drinnen protokollieren in ${applicationName}"
+            ]
+          }
         }
       }
     },
-    "Log poop outside in ${applicationName}" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringSet" : {
-            "state" : "new",
-            "values" : [
+    "Log poop outside in ${applicationName}": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringSet": {
+            "state": "new",
+            "values": [
               "Log poop outside in ${applicationName}",
               "My puppy pooped outside in ${applicationName}",
               "My dog pooped outside in ${applicationName}",
@@ -152,26 +208,37 @@
             ]
           }
         },
-        "nl" : {
-          "stringSet" : {
-            "state" : "translated",
-            "values" : [
+        "nl": {
+          "stringSet": {
+            "state": "translated",
+            "values": [
               "Log poepje buiten in ${applicationName}",
               "Mijn puppy heeft buiten gepoept in ${applicationName}",
               "Mijn hond heeft buiten gepoept in ${applicationName}",
               "Log buiten poepje in ${applicationName}"
             ]
           }
+        },
+        "de": {
+          "stringSet": {
+            "state": "translated",
+            "values": [
+              "Häufchen draußen eintragen in ${applicationName}",
+              "Mein Welpe hat draußen gekotet in ${applicationName}",
+              "Mein Hund hat draußen gekotet in ${applicationName}",
+              "Häufchen draußen protokollieren in ${applicationName}"
+            ]
+          }
         }
       }
     },
-    "Log sleep in ${applicationName}" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringSet" : {
-            "state" : "new",
-            "values" : [
+    "Log sleep in ${applicationName}": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringSet": {
+            "state": "new",
+            "values": [
               "Log sleep in ${applicationName}",
               "My puppy is sleeping in ${applicationName}",
               "My dog fell asleep in ${applicationName}",
@@ -179,26 +246,37 @@
             ]
           }
         },
-        "nl" : {
-          "stringSet" : {
-            "state" : "translated",
-            "values" : [
+        "nl": {
+          "stringSet": {
+            "state": "translated",
+            "values": [
               "Log slapen in ${applicationName}",
               "Mijn puppy slaapt in ${applicationName}",
               "Mijn hond is in slaap gevallen in ${applicationName}",
               "Log dutje in ${applicationName}"
             ]
           }
+        },
+        "de": {
+          "stringSet": {
+            "state": "translated",
+            "values": [
+              "Schlaf eintragen in ${applicationName}",
+              "Mein Welpe schläft in ${applicationName}",
+              "Mein Hund ist eingeschlafen in ${applicationName}",
+              "Nickerchen eintragen in ${applicationName}"
+            ]
+          }
         }
       }
     },
-    "Log wake up in ${applicationName}" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringSet" : {
-            "state" : "new",
-            "values" : [
+    "Log wake up in ${applicationName}": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringSet": {
+            "state": "new",
+            "values": [
               "Log wake up in ${applicationName}",
               "My puppy woke up in ${applicationName}",
               "My dog is awake in ${applicationName}",
@@ -206,26 +284,37 @@
             ]
           }
         },
-        "nl" : {
-          "stringSet" : {
-            "state" : "translated",
-            "values" : [
+        "nl": {
+          "stringSet": {
+            "state": "translated",
+            "values": [
               "Log wakker worden in ${applicationName}",
               "Mijn puppy is wakker geworden in ${applicationName}",
               "Mijn hond is wakker in ${applicationName}",
               "Log wakker in ${applicationName}"
             ]
           }
+        },
+        "de": {
+          "stringSet": {
+            "state": "translated",
+            "values": [
+              "Aufwachen eintragen in ${applicationName}",
+              "Mein Welpe ist aufgewacht in ${applicationName}",
+              "Mein Hund ist wach in ${applicationName}",
+              "Wach eintragen in ${applicationName}"
+            ]
+          }
         }
       }
     },
-    "Log walk in ${applicationName}" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringSet" : {
-            "state" : "new",
-            "values" : [
+    "Log walk in ${applicationName}": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringSet": {
+            "state": "new",
+            "values": [
               "Log walk in ${applicationName}",
               "My puppy went for a walk in ${applicationName}",
               "Log dog walk in ${applicationName}",
@@ -233,26 +322,37 @@
             ]
           }
         },
-        "nl" : {
-          "stringSet" : {
-            "state" : "translated",
-            "values" : [
+        "nl": {
+          "stringSet": {
+            "state": "translated",
+            "values": [
               "Log wandeling in ${applicationName}",
               "Mijn puppy is gaan wandelen in ${applicationName}",
               "Log hondenuitlaat in ${applicationName}",
               "We zijn gaan wandelen in ${applicationName}"
             ]
           }
+        },
+        "de": {
+          "stringSet": {
+            "state": "translated",
+            "values": [
+              "Spaziergang eintragen in ${applicationName}",
+              "Mein Welpe war spazieren in ${applicationName}",
+              "Gassirunde eintragen in ${applicationName}",
+              "Wir waren spazieren in ${applicationName}"
+            ]
+          }
         }
       }
     },
-    "Potty status in ${applicationName}" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringSet" : {
-            "state" : "new",
-            "values" : [
+    "Potty status in ${applicationName}": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringSet": {
+            "state": "new",
+            "values": [
               "Potty status in ${applicationName}",
               "When did my puppy last go potty in ${applicationName}",
               "Check potty status in ${applicationName}",
@@ -260,19 +360,30 @@
             ]
           }
         },
-        "nl" : {
-          "stringSet" : {
-            "state" : "translated",
-            "values" : [
+        "nl": {
+          "stringSet": {
+            "state": "translated",
+            "values": [
               "Plasje status in ${applicationName}",
               "Wanneer heeft mijn puppy voor het laatst geplast in ${applicationName}",
               "Check plasje status in ${applicationName}",
               "Wanneer heeft mijn hond voor het laatst geplast in ${applicationName}"
             ]
           }
+        },
+        "de": {
+          "stringSet": {
+            "state": "translated",
+            "values": [
+              "Toilettenstatus in ${applicationName}",
+              "Wann musste mein Welpe zuletzt aufs Klo in ${applicationName}",
+              "Toilettenstatus prüfen in ${applicationName}",
+              "Wann hat mein Hund zuletzt gepinkelt in ${applicationName}"
+            ]
+          }
         }
       }
     }
   },
-  "version" : "1.0"
+  "version": "1.0"
 }
