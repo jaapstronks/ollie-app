@@ -16,6 +16,18 @@
             "value": "%@ lleva %lld minutos despierto"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ est réveillé depuis %lld minutes"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ e sveglio da %lld minuti"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -37,6 +49,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "%@ necesita hacer pis en ~%lld min"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ doit faire pipi dans ~%lld min"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ deve fare pipi tra ~%lld min"
           }
         },
         "nl": {
@@ -62,6 +86,18 @@
             "value": "%@ necesita hacer pis ahora!"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ doit faire pipi maintenant !"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ deve fare pipi adesso!"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -83,6 +119,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "%@ necesita hacer pis pronto!"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ doit faire pipi bientôt !"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ deve fare pipi presto!"
           }
         },
         "nl": {
@@ -108,6 +156,18 @@
             "value": "Sal afuera ahora!"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sortez maintenant !"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esci subito!"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -129,6 +189,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Necesita siesta?"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Besoin d'une sieste ?"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pisolino necessario?"
           }
         },
         "nl": {
@@ -160,6 +232,12 @@
             "value": "Maintenant"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ora"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -181,6 +259,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Resumen de Otis"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aperçu Otis"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Panoramica Otis"
           }
         },
         "nl": {
@@ -206,6 +296,18 @@
             "value": "exterior"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "dehors"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "fuori"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -227,6 +329,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "racha exterior"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "série dehors"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "serie fuori"
           }
         },
         "nl": {
@@ -252,6 +366,18 @@
             "value": "pis"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "pipi"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "pipi"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -273,6 +399,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Alarma de pis!"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alerte pipi !"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allarme pipi!"
           }
         },
         "nl": {
@@ -298,6 +436,18 @@
             "value": "Temporizador de pis"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Minuteur pipi"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Timer Pipi"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -321,6 +471,18 @@
             "value": "Temporizador y racha de pis en un widget."
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Minuteur pipi et série dans un seul widget."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Timer pipi e serie in un widget."
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -339,6 +501,18 @@
           }
         },
         "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "record"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "record"
+          }
+        },
+        "it": {
           "stringUnit": {
             "state": "translated",
             "value": "record"
@@ -367,6 +541,18 @@
             "value": "Mira cuanto tiempo desde el ultimo descanso para pis."
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voyez combien de temps depuis la dernière pause pipi."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vedi quanto tempo dall'ultima pausa pipi."
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -388,6 +574,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "desde el ultimo pis"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "depuis le dernier pipi"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "dall'ultima pipi"
           }
         },
         "nl": {
@@ -413,6 +611,18 @@
             "value": "desde el pis"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "depuis pipi"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "dalla pipi"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -434,6 +644,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Empezar de nuevo!"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Repartir à zéro !"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ricomincia!"
           }
         },
         "nl": {
@@ -459,6 +681,18 @@
             "value": "Contador de racha"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Compteur de série"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contatore Serie"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -480,6 +714,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Hora del %2$@ de %1$@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "C'est l'heure du %2$@ de %1$@"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "E ora del %2$@ di %1$@"
           }
         },
         "nl": {
@@ -505,6 +751,18 @@
             "value": "Hora del paseo de %@"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "C'est l'heure de la promenade de %@"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "E ora della passeggiata di %@"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -526,6 +784,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Hora de hacer pis!"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "C'est l'heure d'une pause pipi !"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "E ora della pausa pipi!"
           }
         },
         "nl": {
@@ -551,6 +821,18 @@
             "value": "Hora del paseo!"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "C'est l'heure de la promenade !"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "E ora della passeggiata!"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -574,6 +856,18 @@
             "value": "Hora de comer!"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "C'est l'heure de manger !"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "E ora di mangiare!"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -595,6 +889,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sigue tu racha de pis al exterior."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suivez votre série de pipis dehors."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tieni traccia della serie di pipi fuori."
           }
         },
         "nl": {

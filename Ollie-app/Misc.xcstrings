@@ -16,6 +16,12 @@
             "value": "% afuera"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "% fuori"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -37,6 +43,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lld seguidos"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld di fila"
           }
         },
         "nl": {
@@ -62,6 +74,12 @@
             "value": "%lld adentro"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld dentro"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -83,6 +101,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lld de %lld"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld di %lld"
           }
         },
         "nl": {
@@ -108,6 +132,12 @@
             "value": "%lld pipís afuera seguidos"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld pipì fuori di fila"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -129,6 +159,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lld pipís afuera seguidos hoy. %@ lo está haciendo increíble!"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld pipì fuori di fila oggi! %@ sta andando alla grande!"
           }
         },
         "nl": {
@@ -154,6 +190,12 @@
             "value": "%lld pipís afuera hoy!"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld pipì fuori oggi!"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -175,6 +217,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lld afuera"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld fuori"
           }
         },
         "nl": {
@@ -200,6 +248,12 @@
             "value": "%lld pipís afuera seguidos"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld pipì fuori di fila"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -221,6 +275,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lld pipís afuera seguidos. Récord: %lld"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld pipì fuori di fila. Record: %lld"
           }
         },
         "nl": {
@@ -246,6 +306,12 @@
             "value": "%lld popós"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld cacche"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -267,6 +333,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lld popós (%lld esperados)"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld cacche (%lld previste)"
           }
         },
         "nl": {
@@ -292,6 +364,12 @@
             "value": "%lld popós (%lld-%lld esperados)"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld cacche (%lld-%lld previste)"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -313,6 +391,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lld popós hoy"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld cacche oggi"
           }
         },
         "nl": {
@@ -338,6 +422,12 @@
             "value": "%lld popós hoy, se esperan %lld a %lld"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld cacche oggi, da %lld a %lld previste"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -359,6 +449,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "1 seguido"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 di fila"
           }
         },
         "nl": {
@@ -384,6 +480,12 @@
             "value": "1 pipí afuera"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 pipì fuori"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -405,6 +507,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "1 popó"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 cacca"
           }
         },
         "nl": {
@@ -436,6 +544,12 @@
             "value": "Moyenne"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Media"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -457,6 +571,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Mejor de todos"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Miglior record"
           }
         },
         "nl": {
@@ -482,6 +602,12 @@
             "value": "Revisa las estadísticas para descubrir patrones en el comportamiento de tu cachorro."
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Controlla le statistiche per scoprire i pattern nel comportamento del tuo cucciolo."
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -503,6 +629,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Verifica tu conexión a internet e intenta de nuevo."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Controlla la connessione internet e riprova."
           }
         },
         "nl": {
@@ -528,6 +660,12 @@
             "value": "CloudKit no disponible"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CloudKit non disponibile"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -549,6 +687,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "CloudKit no disponible en el simulador"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CloudKit non disponibile sul simulatore"
           }
         },
         "nl": {
@@ -574,6 +718,12 @@
             "value": "CloudKit no configurado"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CloudKit non configurato"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -595,6 +745,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "No se pudieron procesar los datos del clima"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossibile elaborare i dati meteo"
           }
         },
         "nl": {
@@ -620,6 +776,12 @@
             "value": "No se pudo compartir"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossibile condividere"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -641,6 +803,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "No se pudo dejar de compartir"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossibile interrompere la condivisione"
           }
         },
         "nl": {
@@ -666,6 +834,12 @@
             "value": "Racha actual"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Serie attuale"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -689,6 +863,12 @@
             "value": "Datos corruptos"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dati corrotti"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -710,6 +890,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Descubre patrones"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scopri i pattern"
           }
         },
         "nl": {
@@ -741,6 +927,12 @@
             "value": "Erreur"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Errore"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -762,6 +954,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "¡Fantástico! 🎉"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fantastico! 🎉"
           }
         },
         "nl": {
@@ -787,6 +985,12 @@
             "value": "Error de archivo"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Errore file"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -808,6 +1012,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Recibe notificaciones cuando sea hora de la próxima comida."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ricevi una notifica quando è ora del prossimo pasto."
           }
         },
         "nl": {
@@ -833,6 +1043,12 @@
             "value": "Meta: 18 horas"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Obiettivo: 18 ore"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -854,6 +1070,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "¡Buen comienzo!"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Buon inizio!"
           }
         },
         "nl": {
@@ -885,6 +1107,12 @@
             "value": "Santé"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salute"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -906,6 +1134,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Mantén presionado un evento para opciones adicionales como editar."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tieni premuto un evento per opzioni extra come modifica."
           }
         },
         "nl": {
@@ -931,6 +1165,12 @@
             "value": "Mantén presionado para opciones"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tieni premuto per opzioni"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -952,6 +1192,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "¡seguidos!"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "di fila!"
           }
         },
         "nl": {
@@ -977,6 +1223,12 @@
             "value": "¡Increíble! 🏆"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Incredibile! 🏆"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -998,6 +1250,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Adentro"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dentro"
           }
         },
         "nl": {
@@ -1023,6 +1281,12 @@
             "value": "¡Sigue así!"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continua così!"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1044,6 +1308,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Más largo"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Più lunga"
           }
         },
         "nl": {
@@ -1075,6 +1345,12 @@
             "value": "Repas"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pasti"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1093,6 +1369,12 @@
           }
         },
         "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mediana"
+          }
+        },
+        "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Mediana"
@@ -1121,6 +1403,12 @@
             "value": "Siestas"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pisolini"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1142,6 +1430,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Error de red"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Errore di rete"
           }
         },
         "nl": {
@@ -1167,6 +1461,12 @@
             "value": "¡Buen trabajo!"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ottimo lavoro!"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1188,6 +1488,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Aún no hay suficientes datos"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Non ancora abbastanza dati"
           }
         },
         "nl": {
@@ -1213,6 +1519,12 @@
             "value": "¡En racha!"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alla grande!"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1234,6 +1546,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Afuera"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fuori"
           }
         },
         "nl": {
@@ -1259,6 +1577,12 @@
             "value": "Racha de pipí afuera"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Serie pipì fuori"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1280,6 +1604,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Racha afuera"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Serie fuori"
           }
         },
         "nl": {
@@ -1305,6 +1635,12 @@
             "value": "Tasa de éxito afuera por desencadenante"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tasso di successo fuori per trigger"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1326,6 +1662,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Patrones (7 días)"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pattern (7 giorni)"
           }
         },
         "nl": {
@@ -1351,6 +1693,12 @@
             "value": "Intervalos de pipí (7 días)"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Intervalli pipì (7 giorni)"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1372,6 +1720,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "por ciento de la meta"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "percento dell'obiettivo"
           }
         },
         "nl": {
@@ -1397,6 +1751,12 @@
             "value": "¡Día perfecto hasta ahora!"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Giornata perfetta finora!"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1418,6 +1778,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Por favor, intenta más tarde."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Per favore riprova più tardi."
           }
         },
         "nl": {
@@ -1443,6 +1809,12 @@
             "value": "Entrenamiento para ir al baño"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Educazione ai bisogni"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1464,6 +1836,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Desencadenantes de baño (7 días)"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trigger bisogni (7 giorni)"
           }
         },
         "nl": {
@@ -1489,6 +1867,12 @@
             "value": "Predicción"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Previsione"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1510,6 +1894,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Progreso hacia el próximo hito"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Progresso verso il prossimo traguardo"
           }
         },
         "nl": {
@@ -1535,6 +1925,12 @@
             "value": "Registro rápido"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registrazione rapida"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1556,6 +1952,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Récord: %lldx"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Record: %lldx"
           }
         },
         "nl": {
@@ -1581,6 +1983,12 @@
             "value": "Récord: %lldx — ¡intenta de nuevo!"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Record: %lldx — riprova!"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1604,6 +2012,12 @@
             "value": "Configurar recordatorios de comida"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Imposta promemoria pasti"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1625,6 +2039,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Más corto"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Più corta"
           }
         },
         "nl": {
@@ -1656,6 +2076,12 @@
             "value": "Dormir"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sonno"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1677,6 +2103,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Progreso de sueño"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Progresso sonno"
           }
         },
         "nl": {
@@ -1702,6 +2134,12 @@
             "value": "Sueño hoy"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sonno oggi"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1723,6 +2161,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Algo salió mal al guardar. Por favor, intenta de nuevo."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Qualcosa è andato storto durante il salvataggio. Per favore riprova."
           }
         },
         "nl": {
@@ -1748,6 +2192,12 @@
             "value": "Lugares"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Luoghi"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1769,6 +2219,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "¡Empieza de nuevo!"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ricomincia!"
           }
         },
         "nl": {
@@ -1800,6 +2256,12 @@
             "value": "Statistiques"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Statistiche"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1821,6 +2283,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Racha rota"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Serie interrotta"
           }
         },
         "nl": {
@@ -1846,6 +2314,12 @@
             "value": "¡Súper! ¡Sigue así!"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Super! Continua così!"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1867,6 +2341,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Desliza un evento hacia la izquierda para eliminarlo."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scorri un evento verso sinistra per eliminarlo."
           }
         },
         "nl": {
@@ -1892,6 +2372,12 @@
             "value": "Desliza para eliminar"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scorri per eliminare"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1913,6 +2399,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "La app aprende de los patrones y predice cuándo tu cachorro necesita hacer pipí."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L'app impara dai pattern e prevede quando il tuo cucciolo deve fare pipì."
           }
         },
         "nl": {
@@ -1938,6 +2430,12 @@
             "value": "No se pudieron leer los datos. Intenta reiniciar la app."
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossibile leggere i dati. Prova a riavviare l'app."
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1959,6 +2457,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Esta semana"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Questa settimana"
           }
         },
         "nl": {
@@ -1984,6 +2488,12 @@
             "value": "Veces que hizo pipí"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Volte pipì"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -2005,6 +2515,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Veces que hizo popó"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Volte cacca"
           }
         },
         "nl": {
@@ -2036,6 +2552,12 @@
             "value": "Aujourd'hui"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oggi"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -2057,6 +2579,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Total dormido"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Totale dormito"
           }
         },
         "nl": {
@@ -2088,6 +2616,12 @@
             "value": "Éducation"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Addestramento"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -2109,6 +2643,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Error desconocido"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Errore sconosciuto"
           }
         },
         "nl": {
@@ -2134,6 +2674,12 @@
             "value": "Usa la barra inferior para registrar eventos rápidamente con un toque."
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Usa la barra in basso per registrare velocemente eventi con un tocco."
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -2155,6 +2701,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Historial de paseos"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cronologia passeggiate"
           }
         },
         "nl": {
@@ -2184,6 +2736,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Promenades"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Passeggiate"
           }
         },
         "nl": {

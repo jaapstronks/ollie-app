@@ -4,16 +4,28 @@
     "Add Contact": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Contact toevoegen"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Kontakt hinzufugen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Agregar contacto"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aggiungi contatto"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contact toevoegen"
           }
         }
       }
@@ -21,16 +33,28 @@
     "Address": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Adres"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Adresse"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Direccion"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Indirizzo"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adres"
           }
         }
       }
@@ -38,16 +62,28 @@
     "Breeder": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fokker"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Zuchter"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Criador"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allevatore"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fokker"
           }
         }
       }
@@ -55,16 +91,28 @@
     "Call": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bellen"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Anrufen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Llamar"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chiama"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bellen"
           }
         }
       }
@@ -72,16 +120,28 @@
     "Choose a contact from your address book to import their details.": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kies een contact uit je adresboek om de gegevens te importeren."
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Wahle einen Kontakt aus deinem Adressbuch, um dessen Daten zu importieren."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elige un contacto de tu libreta de direcciones para importar sus datos."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scegli un contatto dalla rubrica per importare i suoi dati."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kies een contact uit je adresboek om de gegevens te importeren."
           }
         }
       }
@@ -89,16 +149,28 @@
     "Choose Another Contact": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kies ander contact"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Anderen Kontakt wahlen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elegir otro contacto"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scegli un altro contatto"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kies ander contact"
           }
         }
       }
@@ -106,16 +178,28 @@
     "Choose Contact": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kies contact"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Kontakt wahlen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elegir contacto"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scegli contatto"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kies contact"
           }
         }
       }
@@ -123,16 +207,28 @@
     "Contact Info": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Contactgegevens"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Kontaktinformationen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Informacion de contacto"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Info contatto"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contactgegevens"
           }
         }
       }
@@ -140,16 +236,28 @@
     "Contact name": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Naam van contact"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Kontaktname"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nombre del contacto"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nome del contatto"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Naam van contact"
           }
         }
       }
@@ -157,16 +265,28 @@
     "Contacts": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Contacten"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Kontakte"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contactos"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contatti"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contacten"
           }
         }
       }
@@ -174,16 +294,28 @@
     "Daycare": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dagopvang"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Tagesbetreuung"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Guarderia"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Asilo per cani"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dagopvang"
           }
         }
       }
@@ -191,16 +323,28 @@
     "Delete Contact?": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Contact verwijderen?"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Kontakt loschen?"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eliminar contacto?"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eliminare il contatto?"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contact verwijderen?"
           }
         }
       }
@@ -208,16 +352,28 @@
     "Dog Walker": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hondenuitlater"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Hundeausfuhrer"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paseador de perros"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dog sitter"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hondenuitlater"
           }
         }
       }
@@ -225,16 +381,28 @@
     "Edit Contact": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Contact bewerken"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Kontakt bearbeiten"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Editar contacto"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modifica contatto"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contact bewerken"
           }
         }
       }
@@ -242,10 +410,16 @@
     "Email": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "E-mail"
+            "value": "E-Mail"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Correo electronico"
           }
         },
         "fr": {
@@ -254,10 +428,16 @@
             "value": "E-mail"
           }
         },
-        "de": {
+        "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "E-Mail"
+            "value": "Email"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "E-mail"
           }
         }
       }
@@ -265,16 +445,28 @@
     "Email address": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "E-mailadres"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "E-Mail-Adresse"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Direccion de correo electronico"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Indirizzo email"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "E-mailadres"
           }
         }
       }
@@ -282,16 +474,28 @@
     "Emergency Vet": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Spoeddierenarts"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Notfall-Tierarzt"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Veterinario de emergencia"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Veterinario di emergenza"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spoeddierenarts"
           }
         }
       }
@@ -299,16 +503,28 @@
     "Groomer": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Trimsalon"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Hundefriseur"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Peluquero canino"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toelettatore"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trimsalon"
           }
         }
       }
@@ -316,10 +532,16 @@
     "Import": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Importeren"
+            "value": "Importieren"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Importar"
           }
         },
         "fr": {
@@ -328,10 +550,16 @@
             "value": "Importer"
           }
         },
-        "de": {
+        "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Importieren"
+            "value": "Importa"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Importeren"
           }
         }
       }
@@ -339,16 +567,28 @@
     "Import from Contacts": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Importeren uit Contacten"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Aus Kontakten importieren"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Importar desde Contactos"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Importa da Contatti"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Importeren uit Contacten"
           }
         }
       }
@@ -356,10 +596,16 @@
     "Name": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Naam"
+            "value": "Name"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nombre"
           }
         },
         "fr": {
@@ -368,10 +614,16 @@
             "value": "Nom"
           }
         },
-        "de": {
+        "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Name"
+            "value": "Nome"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Naam"
           }
         }
       }
@@ -379,16 +631,28 @@
     "Name is required": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Naam is verplicht"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Name ist erforderlich"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El nombre es obligatorio"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il nome e obbligatorio"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Naam is verplicht"
           }
         }
       }
@@ -396,16 +660,28 @@
     "No Contacts": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Geen contacten"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Keine Kontakte"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sin contactos"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nessun contatto"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geen contacten"
           }
         }
       }
@@ -413,10 +689,16 @@
     "Notes": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Notities"
+            "value": "Notizen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notas"
           }
         },
         "fr": {
@@ -425,10 +707,16 @@
             "value": "Notes"
           }
         },
-        "de": {
+        "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Notizen"
+            "value": "Note"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notities"
           }
         }
       }
@@ -436,16 +724,28 @@
     "Open in Maps": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Open in Kaarten"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "In Karten offnen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abrir en Mapas"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apri in Mappe"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open in Kaarten"
           }
         }
       }
@@ -453,16 +753,28 @@
     "Optional notes about this contact...": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Optionele notities over dit contact..."
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Optionale Notizen zu diesem Kontakt..."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notas opcionales sobre este contacto..."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Note opzionali su questo contatto..."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Optionele notities over dit contact..."
           }
         }
       }
@@ -470,10 +782,16 @@
     "Other": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Overig"
+            "value": "Sonstiges"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otro"
           }
         },
         "fr": {
@@ -482,10 +800,16 @@
             "value": "Autre"
           }
         },
-        "de": {
+        "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sonstiges"
+            "value": "Altro"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Overig"
           }
         }
       }
@@ -493,16 +817,28 @@
     "Pet Sitter": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Oppas"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Tiersitter"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cuidador de mascotas"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pet sitter"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oppas"
           }
         }
       }
@@ -510,16 +846,28 @@
     "Pet Store": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dierenwinkel"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Tierhandlung"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tienda de mascotas"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Negozio di animali"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dierenwinkel"
           }
         }
       }
@@ -527,16 +875,28 @@
     "Phone": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Telefoon"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Telefon"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Telefono"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Telefono"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Telefoon"
           }
         }
       }
@@ -544,16 +904,28 @@
     "Phone number": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Telefoonnummer"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Telefonnummer"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Numero de telefono"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Numero di telefono"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Telefoonnummer"
           }
         }
       }
@@ -561,16 +933,28 @@
     "Select a Contact": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Selecteer een contact"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Kontakt auswahlen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seleccionar un contacto"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seleziona un contatto"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selecteer een contact"
           }
         }
       }
@@ -578,16 +962,28 @@
     "Send Email": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "E-mail sturen"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "E-Mail senden"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enviar correo electronico"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Invia email"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "E-mail sturen"
           }
         }
       }
@@ -595,16 +991,28 @@
     "Store your vet, groomer, sitter, and other important contacts here.": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bewaar hier je dierenarts, trimsalon, oppas en andere belangrijke contacten."
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Speichere hier deinen Tierarzt, Hundefriseur, Sitter und andere wichtige Kontakte."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Guarda aqui tu veterinario, peluquero, cuidador y otros contactos importantes."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salva qui il tuo veterinario, toelettatore, pet sitter e altri contatti importanti."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bewaar hier je dierenarts, trimsalon, oppas en andere belangrijke contacten."
           }
         }
       }
@@ -612,16 +1020,28 @@
     "Street address": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Straat en huisnummer"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Strasse und Hausnummer"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Direccion"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Indirizzo"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Straat en huisnummer"
           }
         }
       }
@@ -629,16 +1049,28 @@
     "The name will always be imported.": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "De naam wordt altijd geïmporteerd."
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Der Name wird immer importiert."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El nombre siempre se importara."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il nome verra sempre importato."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "De naam wordt altijd geïmporteerd."
           }
         }
       }
@@ -646,16 +1078,28 @@
     "This will permanently delete this contact.": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dit verwijdert dit contact permanent."
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Dies loscht diesen Kontakt dauerhaft."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esto eliminara permanentemente este contacto."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Questo eliminera definitivamente il contatto."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dit verwijdert dit contact permanent."
           }
         }
       }
@@ -663,10 +1107,16 @@
     "Trainer": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
+        "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Trainer"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entrenador"
           }
         },
         "fr": {
@@ -675,7 +1125,13 @@
             "value": "Entraîneur"
           }
         },
-        "de": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Addestratore"
+          }
+        },
+        "nl": {
           "stringUnit": {
             "state": "translated",
             "value": "Trainer"
@@ -686,10 +1142,16 @@
     "Type": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Type"
+            "value": "Typ"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tipo"
           }
         },
         "fr": {
@@ -698,10 +1160,16 @@
             "value": "Type"
           }
         },
-        "de": {
+        "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Typ"
+            "value": "Tipo"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Type"
           }
         }
       }
@@ -709,10 +1177,16 @@
     "Veterinarian": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dierenarts"
+            "value": "Tierarzt"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Veterinario"
           }
         },
         "fr": {
@@ -721,10 +1195,16 @@
             "value": "Vétérinaire"
           }
         },
-        "de": {
+        "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tierarzt"
+            "value": "Veterinario"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dierenarts"
           }
         }
       }

@@ -16,6 +16,12 @@
             "value": "%@ comio - registrado!"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ ha mangiato - registrato!"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -37,6 +43,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%1$@ ya esta durmiendo. Di '%2$@ desperto' cuando despierte."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ sta già dormendo. Di '%2$@ si è svegliato' quando si sveglia."
           }
         },
         "nl": {
@@ -62,6 +74,12 @@
             "value": "%1$@ esta durmiendo - registrado. Di '%2$@ desperto' cuando despierte."
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ sta dormendo - registrato. Di '%2$@ si è svegliato' quando si sveglia."
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -83,6 +101,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%1$@ acaba de hacer pipi %2$@."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ ha appena fatto pipì %2$@."
           }
         },
         "nl": {
@@ -108,6 +132,12 @@
             "value": "%1$@ hizo pipi %2$@ hace %3$lld horas."
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ ha fatto pipì %2$@ %3$lld ore fa."
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -129,6 +159,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%1$@ hizo pipi %2$@ hace %3$lld horas y %4$lld minutos."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ ha fatto pipì %2$@ %3$lld ore e %4$lld minuti fa."
           }
         },
         "nl": {
@@ -154,6 +190,12 @@
             "value": "%1$@ hizo pipi %2$@ hace %3$lld minutos."
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ ha fatto pipì %2$@ %3$lld minuti fa."
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -175,6 +217,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%@ no estaba registrado como durmiendo. Registrando despertar de todos modos."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ non era registrato come addormentato. Registro comunque il risveglio."
           }
         },
         "nl": {
@@ -200,6 +248,12 @@
             "value": "%@ desperto - registrado!"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ si è svegliato - registrato!"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -221,6 +275,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%@ desperto despues de %lld minutos - registrado!"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ si è svegliato dopo %lld minuti - registrato!"
           }
         },
         "nl": {
@@ -246,6 +306,12 @@
             "value": "%lld dias gratis restantes"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ancora %lld giorni gratis"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -267,6 +333,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lld dias restantes de prueba"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ancora %lld giorni di prova"
           }
         },
         "nl": {
@@ -292,6 +364,12 @@
             "value": "%lld dias restantes"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ancora %lld giorni"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -310,6 +388,12 @@
           }
         },
         "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "19 €"
+          }
+        },
+        "it": {
           "stringUnit": {
             "state": "translated",
             "value": "19 €"
@@ -338,6 +422,12 @@
             "value": "Continuar con Otis"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continua con Otis"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -359,6 +449,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Continuar con Otis — %@"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continua con Otis — %@"
           }
         },
         "nl": {
@@ -384,6 +480,12 @@
             "value": "Comandos de ejemplo:"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Comandi di esempio:"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -405,6 +507,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Expirado"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scaduto"
           }
         },
         "nl": {
@@ -430,6 +538,12 @@
             "value": "Error al registrar evento"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registrazione evento fallita"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -453,6 +567,12 @@
             "value": "Descubre cuando tu cachorro hizo pipi por ultima vez"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scopri quando il tuo cucciolo ha fatto pipì l'ultima volta"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -474,6 +594,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Descubre cuando tu cachorro hizo popo por ultima vez"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scopri quando il tuo cucciolo ha fatto la cacca l'ultima volta"
           }
         },
         "nl": {
@@ -505,6 +631,12 @@
             "value": "Gratuit"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gratis"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -526,6 +658,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Como esta mi cachorro en Otis"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Come sta il mio cucciolo in Otis"
           }
         },
         "nl": {
@@ -551,6 +689,12 @@
             "value": "Registra un paseo con tu cachorro"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registra una passeggiata con il tuo cucciolo"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -572,6 +716,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Registrar Comida"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registra pasto"
           }
         },
         "nl": {
@@ -597,6 +747,12 @@
             "value": "Registrar Pipi"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registra pipì"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -618,6 +774,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Registrar Sueno"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registra sonno"
           }
         },
         "nl": {
@@ -643,6 +805,12 @@
             "value": "Registra que tu cachorro comio"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registra che il tuo cucciolo ha mangiato"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -664,6 +832,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Registra que tu cachorro esta durmiendo"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registra che il tuo cucciolo sta dormendo"
           }
         },
         "nl": {
@@ -689,6 +863,12 @@
             "value": "Registra que tu cachorro desperto"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registra che il tuo cucciolo si è svegliato"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -710,6 +890,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Registrar Despertar"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registra risveglio"
           }
         },
         "nl": {
@@ -735,6 +921,12 @@
             "value": "Registrar Paseo"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registra passeggiata"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -756,6 +948,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Registra cuando tu cachorro hizo pipi o popo"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registra quando il tuo cucciolo ha fatto pipì o cacca"
           }
         },
         "nl": {
@@ -781,6 +979,12 @@
             "value": "Registrado %1$@ %2$@ para %3$@"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registrato %1$@ %2$@ per %3$@"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -802,6 +1006,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Paseo de %lld minutos con %@ registrado"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Passeggiata di %lld minuti con %@ registrata"
           }
         },
         "nl": {
@@ -827,6 +1037,12 @@
             "value": "Paseo con %@ registrado"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Passeggiata con %@ registrata"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -848,6 +1064,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Registro desactivado"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registrazione disattivata"
           }
         },
         "nl": {
@@ -873,6 +1095,12 @@
             "value": "Mi cachorro esta durmiendo en Otis"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il mio cucciolo sta dormendo in Otis"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -894,6 +1122,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Mi cachorro hizo pipi afuera en Otis"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il mio cucciolo ha fatto pipì fuori in Otis"
           }
         },
         "nl": {
@@ -919,6 +1153,12 @@
             "value": "No hay eventos de pipi registrados para %@ en la ultima semana."
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nessun evento pipì registrato per %@ nell'ultima settimana."
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -940,6 +1180,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "No hay eventos de popo registrados para %@ en la ultima semana."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nessun evento cacca registrato per %@ nell'ultima settimana."
           }
         },
         "nl": {
@@ -965,6 +1211,12 @@
             "value": "No se encontraron compras restaurables"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nessun acquisto ripristinabile trovato"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -983,6 +1235,12 @@
           }
         },
         "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis Premium"
+          }
+        },
+        "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Otis Premium"
@@ -1011,6 +1269,12 @@
             "value": "Compra unica, por perfil de cachorro"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Acquisto singolo, per profilo cucciolo"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1034,6 +1298,12 @@
             "value": "Abrir App de Atajos"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apri app Comandi Rapidi"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1055,6 +1325,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Por favor, configura primero el perfil de tu cachorro en la app Otis."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Per favore configura prima il profilo del tuo cucciolo nell'app Otis."
           }
         },
         "nl": {
@@ -1086,6 +1362,12 @@
             "value": "Veuillez réessayer"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Per favore riprova"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1109,6 +1391,12 @@
             "value": "Estado de Popo"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stato cacca"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1130,6 +1418,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Estado de Pipi"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stato pipì"
           }
         },
         "nl": {
@@ -1161,6 +1455,12 @@
             "value": "Premium"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Premium"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1182,6 +1482,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Compra fallida"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Acquisto fallito"
           }
         },
         "nl": {
@@ -1207,6 +1513,12 @@
             "value": "Restaurar compras"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ripristina acquisti"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1228,6 +1540,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Restaurando compras..."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ripristino acquisti in corso..."
           }
         },
         "nl": {
@@ -1253,6 +1571,12 @@
             "value": "Ver todos los atajos de Otis"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vedi tutti i comandi rapidi di Otis"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1276,6 +1600,12 @@
             "value": "Siri y Atajos"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Siri e Comandi Rapidi"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1297,6 +1627,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Siri respondera usando el nombre de tu cachorro de tu perfil."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Siri risponderà usando il nome del tuo cucciolo dal tuo profilo."
           }
         },
         "nl": {
@@ -1328,6 +1664,12 @@
             "value": "Statut"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stato"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1349,6 +1691,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Exito!"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fatto!"
           }
         },
         "nl": {
@@ -1374,6 +1722,12 @@
             "value": "Toca para mejorar"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tocca per fare l'upgrade"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1395,6 +1749,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Las primeras semanas con un cachorro son las mas importantes. Otis te ayuda a seguir patrones y crear buenos habitos."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le prime settimane con un cucciolo sono le più importanti. Otis ti aiuta a monitorare i pattern e costruire buone abitudini."
           }
         },
         "nl": {
@@ -1420,6 +1780,12 @@
             "value": "Desbloquea registros ilimitados, predicciones e informacion para el viaje de tu cachorro."
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sblocca registrazioni illimitate, previsioni e approfondimenti per il percorso del tuo cucciolo."
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1441,6 +1807,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Mejora para continuar registrando eventos"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fai l'upgrade per continuare a registrare eventi"
           }
         },
         "nl": {
@@ -1466,6 +1838,12 @@
             "value": "Usa Siri para registrar eventos y consultar sobre tu cachorro sin usar las manos. Di \"Oye Siri\" seguido de un comando."
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Usa Siri per registrare eventi e controllare il tuo cucciolo a mani libere. Di \"Ehi Siri\" seguito da un comando."
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1487,6 +1865,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Comandos de Voz"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Comandi vocali"
           }
         },
         "nl": {
@@ -1512,6 +1896,12 @@
             "value": "Ahora puedes registrar eventos ilimitados para %@."
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ora puoi registrare eventi illimitati per %@."
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1533,6 +1923,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tu prueba gratuita para %@ ha terminado"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il tuo periodo di prova gratuito per %@ è terminato"
           }
         },
         "nl": {
@@ -1558,6 +1954,12 @@
             "value": "Tu prueba gratuita ha terminado"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il tuo periodo di prova gratuito è terminato"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1579,6 +1981,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tu prueba gratuita ha terminado. Por favor, mejora en la app Otis para continuar registrando."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il tuo periodo di prova gratuito è terminato. Fai l'upgrade nell'app Otis per continuare a registrare."
           }
         },
         "nl": {

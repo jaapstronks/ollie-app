@@ -16,6 +16,12 @@
             "value": "%1$@ crecio %2$lld%%!"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ è cresciuto del %2$lld%%!"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -37,6 +43,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%@ ha duplicado su peso!"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ ha raddoppiato il suo peso!"
           }
         },
         "nl": {
@@ -62,6 +74,12 @@
             "value": "%@ ha triplicado su peso!"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ ha triplicato il suo peso!"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -83,6 +101,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%@ ahora es 1.5 veces mas grande!"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ ora è 1,5 volte più grande!"
           }
         },
         "nl": {
@@ -108,6 +132,12 @@
             "value": "%@ mantiene un peso saludable"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ mantiene un peso sano"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -129,6 +159,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%1$@ ahora es %2$@ mas grande!"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ ora è %2$@ più grande!"
           }
         },
         "nl": {
@@ -154,6 +190,12 @@
             "value": "%@ desde la ultima"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ dall'ultima"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -172,6 +214,12 @@
           }
         },
         "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld%% del peso adulto"
+          }
+        },
+        "it": {
           "stringUnit": {
             "state": "translated",
             "value": "%lld%% del peso adulto"
@@ -198,6 +246,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lld%% para peso adulto"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld%% al peso adulto"
           }
         },
         "nl": {
@@ -229,6 +283,12 @@
             "value": "Adulte"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adulto"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -247,6 +307,12 @@
           }
         },
         "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adulto %"
+          }
+        },
+        "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Adulto %"
@@ -275,6 +341,12 @@
             "value": "Estas seguro de que quieres eliminar la medicion de %@?"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sei sicuro di voler eliminare la misurazione di %@?"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -296,6 +368,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Peso actual"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Peso attuale"
           }
         },
         "nl": {
@@ -321,6 +399,12 @@
             "value": "Eliminar medicion"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elimina misurazione"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -342,6 +426,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Adulto est."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adulto stim."
           }
         },
         "nl": {
@@ -367,6 +457,12 @@
             "value": "Crecimiento"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Crescita"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -388,6 +484,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Grafico de crecimiento"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Grafico di crescita"
           }
         },
         "nl": {
@@ -413,6 +515,12 @@
             "value": "Estadisticas de crecimiento"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Statistiche di crescita"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -434,6 +542,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Historia de crecimiento"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Storia della crescita"
           }
         },
         "nl": {
@@ -459,6 +573,12 @@
             "value": "en %lld dias"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "in %lld giorni"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -480,6 +600,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "en %lld semanas"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "in %lld settimane"
           }
         },
         "nl": {
@@ -505,6 +631,12 @@
             "value": "en 1 dia"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "in 1 giorno"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -526,6 +658,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "en 1 semana"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "in 1 settimana"
           }
         },
         "nl": {
@@ -551,6 +689,12 @@
             "value": "Ultima medicion %@"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ultima misurazione %@"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -572,6 +716,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ultimo pesaje hace %lld dias"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ultima pesata %lld giorni fa"
           }
         },
         "nl": {
@@ -597,6 +747,12 @@
             "value": "Ultimo pesaje hace 1 dia"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ultima pesata 1 giorno fa"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -618,6 +774,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Registra otro peso para ver la historia de crecimiento"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registra un altro peso per vedere la storia della crescita"
           }
         },
         "nl": {
@@ -643,6 +805,12 @@
             "value": "Registrar peso"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registra peso"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -664,6 +832,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Registra tu primer peso para comenzar a seguir el crecimiento"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registra il primo peso per iniziare a monitorare la crescita"
           }
         },
         "nl": {
@@ -689,6 +863,12 @@
             "value": "Historial de mediciones"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cronologia misurazioni"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -712,6 +892,12 @@
             "value": "Se recomienda pesaje mensual"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pesate mensili consigliate"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -733,6 +919,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nunca pesado"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mai pesato"
           }
         },
         "nl": {
@@ -764,6 +956,12 @@
             "value": "Maintenant"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ora"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -787,6 +985,12 @@
             "value": "desde %@"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "da %@"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -808,6 +1012,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Desde la llegada"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dall'arrivo"
           }
         },
         "nl": {
@@ -839,6 +1049,12 @@
             "value": "Démarrer"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inizio"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -860,6 +1076,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Comienza el viaje"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il viaggio inizia"
           }
         },
         "nl": {
@@ -885,6 +1107,12 @@
             "value": "Hora de pesar"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "È ora di pesare"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -906,6 +1134,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Aumento total"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aumento totale"
           }
         },
         "nl": {
@@ -931,6 +1165,12 @@
             "value": "Pesar cada %lld dias"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pesa ogni %lld giorni"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -952,6 +1192,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Pesar cada 2 semanas para seguir el crecimiento"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pesa ogni 2 settimane per monitorare la crescita"
           }
         },
         "nl": {
@@ -977,6 +1223,12 @@
             "value": "Pesar ahora"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pesa ora"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -998,6 +1250,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Pesar semanalmente durante el crecimiento rapido"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pesa settimanalmente durante la crescita rapida"
           }
         },
         "nl": {

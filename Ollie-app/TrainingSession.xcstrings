@@ -4,16 +4,28 @@
     "%lld clicks": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld klikken"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "%lld Klicks"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld clics"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld clic"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld klikken"
           }
         }
       }
@@ -21,16 +33,28 @@
     "Click": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Klik"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Klick"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clic"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clic"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Klik"
           }
         }
       }
@@ -38,13 +62,25 @@
     "Clicker": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
+        "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Clicker"
           }
         },
-        "de": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clicker"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clicker"
+          }
+        },
+        "nl": {
           "stringUnit": {
             "state": "translated",
             "value": "Clicker"
@@ -55,16 +91,28 @@
     "Clicker button": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Clickerknop"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Clicker-Taste"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Boton del clicker"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pulsante clicker"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clickerknop"
           }
         }
       }
@@ -72,16 +120,28 @@
     "clicks": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "klikken"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Klicks"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "clics"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "clic"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "klikken"
           }
         }
       }
@@ -89,16 +149,28 @@
     "Double tap to mark behavior": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dubbeltik om gedrag te markeren"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Doppeltippen, um Verhalten zu markieren"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toca dos veces para marcar el comportamiento"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tocca due volte per segnare il comportamento"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dubbeltik om gedrag te markeren"
           }
         }
       }
@@ -106,16 +178,28 @@
     "End Session": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sessie beëindigen"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Einheit beenden"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finalizar sesion"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Termina sessione"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sessie beëindigen"
           }
         }
       }
@@ -123,16 +207,28 @@
     "End Session?": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sessie beëindigen?"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Einheit beenden?"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finalizar sesion?"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terminare la sessione?"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sessie beëindigen?"
           }
         }
       }
@@ -140,16 +236,28 @@
     "Exit Without Saving": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Afsluiten zonder opslaan"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Beenden ohne Speichern"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salir sin guardar"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esci senza salvare"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Afsluiten zonder opslaan"
           }
         }
       }
@@ -157,7 +265,13 @@
     "Info": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Info"
+          }
+        },
+        "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Info"
@@ -169,7 +283,13 @@
             "value": "Info"
           }
         },
-        "de": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Info"
+          }
+        },
+        "nl": {
           "stringUnit": {
             "state": "translated",
             "value": "Info"
@@ -180,16 +300,28 @@
     "Last session: %@": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Laatste sessie: %@"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Letzte Einheit: %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ultima sesion: %@"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ultima sessione: %@"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Laatste sessie: %@"
           }
         }
       }
@@ -197,16 +329,28 @@
     "No sessions yet": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nog geen sessies"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Noch keine Einheiten"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aun no hay sesiones"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nessuna sessione"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nog geen sessies"
           }
         }
       }
@@ -214,16 +358,28 @@
     "Save & Exit": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Opslaan en afsluiten"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Speichern & Beenden"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Guardar y salir"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salva ed esci"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Opslaan en afsluiten"
           }
         }
       }
@@ -231,10 +387,16 @@
     "Sound": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Geluid"
+            "value": "Ton"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sonido"
           }
         },
         "fr": {
@@ -243,10 +405,16 @@
             "value": "Son"
           }
         },
-        "de": {
+        "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ton"
+            "value": "Suono"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geluid"
           }
         }
       }
@@ -254,16 +422,28 @@
     "Start Training": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Start training"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Training starten"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Iniciar entrenamiento"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inizia addestramento"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start training"
           }
         }
       }
@@ -271,10 +451,16 @@
     "Vibration": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Trillen"
+            "value": "Vibration"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vibracion"
           }
         },
         "fr": {
@@ -283,10 +469,16 @@
             "value": "Vibration"
           }
         },
-        "de": {
+        "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Vibration"
+            "value": "Vibrazione"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trillen"
           }
         }
       }
@@ -294,16 +486,28 @@
     "You have an active training session. Would you like to save it before exiting?": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Je hebt een actieve trainingssessie. Wil je deze opslaan voordat je afsluit?"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Du hast eine aktive Trainingseinheit. Mochtest du sie vor dem Beenden speichern?"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tienes una sesion de entrenamiento activa. Deseas guardarla antes de salir?"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hai una sessione di addestramento attiva. Vuoi salvarla prima di uscire?"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je hebt een actieve trainingssessie. Wil je deze opslaan voordat je afsluit?"
           }
         }
       }

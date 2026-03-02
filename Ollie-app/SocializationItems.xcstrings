@@ -10,6 +10,18 @@
             "value": "Erwachsener Mann"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hombre adulto"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uomo adulto"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -25,6 +37,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Erwachsene Frau"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mujer adulta"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Donna adulta"
           }
         },
         "nl": {
@@ -44,6 +68,18 @@
             "value": "Alarm/Sirene"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alarma/sirena"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allarme/sirena"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -59,6 +95,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Krankenwagen, Feuerwehr, Polizeiauto"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ambulancia, camión de bomberos, coche de policía"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ambulanza, pompieri, auto della polizia"
           }
         },
         "nl": {
@@ -78,6 +126,18 @@
             "value": "Tiere"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Animales"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Animali"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -93,6 +153,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Luftballons"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Globos"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Palloncini"
           }
         },
         "nl": {
@@ -112,6 +184,18 @@
             "value": "Baden"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Baño"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bagno"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -127,6 +211,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Strand"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Playa"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spiaggia"
           }
         },
         "nl": {
@@ -146,6 +242,18 @@
             "value": "Hochgehoben werden"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ser levantado en brazos"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Essere preso in braccio"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -161,6 +269,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Fahrrad"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bicicleta"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bicicletta"
           }
         },
         "nl": {
@@ -180,6 +300,18 @@
             "value": "Vogel"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pájaro"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uccello"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -195,6 +327,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Brucken, Gitter, Kanaldeckel"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Puentes, rejillas, tapas de alcantarilla"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ponti, griglie, tombini"
           }
         },
         "nl": {
@@ -214,6 +358,18 @@
             "value": "Besen/Wischmopp"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escoba/fregona"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scopa/mocio"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -229,6 +385,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Bursten"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cepillado"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spazzolatura"
           }
         },
         "nl": {
@@ -248,6 +416,18 @@
             "value": "Bus"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Autobús"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Autobus"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -265,6 +445,18 @@
             "value": "Belebte Strasse"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Calle concurrida"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Strada trafficata"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -277,6 +469,18 @@
       "extractionState": "stale",
       "localizations": {
         "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Auto"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Coche"
+          }
+        },
+        "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Auto"
@@ -299,6 +503,18 @@
             "value": "Katze"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gato"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gatto"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -314,6 +530,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Kind (6-12 Jahre)"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Niño (6-12 años)"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bambino (6-12 anni)"
           }
         },
         "nl": {
@@ -333,6 +561,18 @@
             "value": "Kirchenglocken"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Campanas de iglesia"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Campane della chiesa"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -348,6 +588,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Kaltes Wetter"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clima frío"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tempo freddo"
           }
         },
         "nl": {
@@ -367,6 +619,18 @@
             "value": "Halsband greifen"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Agarrar el collar"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Presa del collare"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -382,6 +646,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Baularm"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ruido de construcción"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rumore di cantiere"
           }
         },
         "nl": {
@@ -401,6 +677,18 @@
             "value": "Kuh/Schaf"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vaca/oveja"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mucca/pecora"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -416,6 +704,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Weinendes Baby"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bebé llorando"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bambino che piange"
           }
         },
         "nl": {
@@ -435,6 +735,18 @@
             "value": "Dunkelheit/Nachtspaziergang"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oscuridad/paseo nocturno"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Buio/passeggiata notturna"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -450,6 +762,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Geschirrspuler"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lavavajillas"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lavastoviglie"
           }
         },
         "nl": {
@@ -469,6 +793,18 @@
             "value": "Turklingel"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Timbre"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Campanello"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -484,6 +820,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ente/Gans"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pato/ganso"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anatra/oca"
           }
         },
         "nl": {
@@ -503,6 +851,18 @@
             "value": "Altere Person"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Persona mayor"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Persona anziana"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -518,6 +878,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Aufzug"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ascensor"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ascensore"
           }
         },
         "nl": {
@@ -537,6 +909,18 @@
             "value": "Einsatzfahrzeug"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vehículo de emergencia"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Veicolo di emergenza"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -552,6 +936,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Umgebungen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entornos"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ambienti"
           }
         },
         "nl": {
@@ -571,6 +967,18 @@
             "value": "Feuerwerk"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fuegos artificiales"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fuochi d'artificio"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -586,6 +994,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Flaggen/Banner"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Banderas/pancartas"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bandiere/striscioni"
           }
         },
         "nl": {
@@ -605,6 +1025,18 @@
             "value": "Wald"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bosque"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bosco"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -620,6 +1052,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Mullsacke"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bolsas de basura"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sacchi della spazzatura"
           }
         },
         "nl": {
@@ -639,6 +1083,18 @@
             "value": "Gras"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hierba"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erba"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -654,6 +1110,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Kies"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Grava"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ghiaia"
           }
         },
         "nl": {
@@ -673,6 +1141,18 @@
             "value": "Menschengruppe"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Grupo de personas"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gruppo di persone"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -688,6 +1168,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Fohn"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Secador de pelo"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Asciugacapelli"
           }
         },
         "nl": {
@@ -707,6 +1199,18 @@
             "value": "Anfassen"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Manipulación"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Manipolazione"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -722,6 +1226,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Pferd"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Caballo"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cavallo"
           }
         },
         "nl": {
@@ -741,6 +1257,18 @@
             "value": "Heisses Wetter"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clima caluroso"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tempo caldo"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -756,6 +1284,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Wichtig fur die Sicherheit"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Importante para la seguridad"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Importante per la sicurezza"
           }
         },
         "nl": {
@@ -775,6 +1315,18 @@
             "value": "Grosser Hund"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Perro grande"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cane grande"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -790,6 +1342,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Blatter/Mulch"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hojas/mantillo"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Foglie/pacciame"
           }
         },
         "nl": {
@@ -809,6 +1373,18 @@
             "value": "Laute Musik"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Música alta"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Musica alta"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -824,6 +1400,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Metallgitter"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rejilla metálica"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Grata metallica"
           }
         },
         "nl": {
@@ -843,6 +1431,18 @@
             "value": "Spiegel"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Espejo"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Specchio"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -858,6 +1458,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Motorrad"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Motocicleta"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Moto"
           }
         },
         "nl": {
@@ -877,6 +1489,18 @@
             "value": "Bewegte Mobel"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Muebles en movimiento"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mobili in movimento"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -892,6 +1516,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Schlamm"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Barro"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fango"
           }
         },
         "nl": {
@@ -911,6 +1547,18 @@
             "value": "Krallen schneiden"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Corte de uñas"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Taglio unghie"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -926,6 +1574,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Gegenstande"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Objetos"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oggetti"
           }
         },
         "nl": {
@@ -945,6 +1605,18 @@
             "value": "Maul offnen"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abrir la boca"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aprire la bocca"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -960,6 +1632,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Regenschirm offnen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abrir paraguas"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aprire l'ombrello"
           }
         },
         "nl": {
@@ -979,6 +1663,18 @@
             "value": "Anderer Welpe"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otro cachorro"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Altro cucciolo"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -994,6 +1690,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Strassencafe/Terrasse"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terraza/café al aire libre"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bar all'aperto/terrazza"
           }
         },
         "nl": {
@@ -1013,6 +1721,18 @@
             "value": "Park"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Parque"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Parco"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1028,6 +1748,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Parkhaus"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aparcamiento"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Parcheggio coperto"
           }
         },
         "nl": {
@@ -1047,10 +1779,22 @@
             "value": "Menschen"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personas"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
             "value": "Personnes"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Persone"
           }
         },
         "nl": {
@@ -1070,6 +1814,18 @@
             "value": "Person in Uniform"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Persona uniformada"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Persona in uniforme"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1085,6 +1841,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Person im Rollstuhl"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Persona en silla de ruedas"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Persona in sedia a rotelle"
           }
         },
         "nl": {
@@ -1104,6 +1872,18 @@
             "value": "Person mit Bart"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Persona con barba"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Persona con barba"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1119,6 +1899,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Person mit Krucken/Rollator"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Persona con muletas/andador"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Persona con stampelle/deambulatore"
           }
         },
         "nl": {
@@ -1138,6 +1930,18 @@
             "value": "Person mit Hut"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Persona con sombrero"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Persona con cappello"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1153,6 +1957,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Person mit grossem Rucksack"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Persona con mochila grande"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Persona con zaino grande"
           }
         },
         "nl": {
@@ -1172,6 +1988,18 @@
             "value": "Person mit Sonnenbrille"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Persona con gafas de sol"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Persona con occhiali da sole"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1187,6 +2015,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Person mit Regenschirm"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Persona con paraguas"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Persona con ombrello"
           }
         },
         "nl": {
@@ -1206,6 +2046,18 @@
             "value": "Tierhandlung"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tienda de mascotas"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Negozio di animali"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1221,6 +2073,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Telefonklingeln"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Teléfono sonando"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Telefono che squilla"
           }
         },
         "nl": {
@@ -1240,6 +2104,18 @@
             "value": "Plastiktuten (Gerausch)"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bolsas de plástico (sonido)"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sacchetti di plastica (rumore)"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1255,6 +2131,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Spielplatz"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Parque infantil"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Parco giochi"
           }
         },
         "nl": {
@@ -1274,6 +2162,18 @@
             "value": "Polizei, Lieferant, Postbote"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Policía, repartidor, cartero"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Polizia, corriere, postino"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1289,6 +2189,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Regen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lluvia"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pioggia"
           }
         },
         "nl": {
@@ -1308,6 +2220,18 @@
             "value": "Laufende Person"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Persona corriendo"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Persona che corre"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1323,6 +2247,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sand"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Arena"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sabbia"
           }
         },
         "nl": {
@@ -1342,6 +2278,18 @@
             "value": "Roller/Moped"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Patinete/ciclomotor"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scooter/motorino"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1357,6 +2305,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Flaches Wasser"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Agua poco profunda"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Acqua bassa"
           }
         },
         "nl": {
@@ -1376,6 +2336,18 @@
             "value": "Einkaufsstrasse"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Calle comercial"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Via dello shopping"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1391,6 +2363,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Rufen/Jubeln"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gritos/vítores"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Grida/applausi"
           }
         },
         "nl": {
@@ -1410,6 +2394,18 @@
             "value": "Skateboard/Inliner"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Monopatín/patines"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Skateboard/pattini"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1425,6 +2421,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Kleiner Hund"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Perro pequeño"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cane piccolo"
           }
         },
         "nl": {
@@ -1444,6 +2452,18 @@
             "value": "Schnee"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nieve"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Neve"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1459,6 +2479,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Schnee/Hagel"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nieve/granizo"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Neve/grandine"
           }
         },
         "nl": {
@@ -1478,6 +2510,18 @@
             "value": "Gerausche"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sonidos"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suoni"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1493,6 +2537,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Treppen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escaleras"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scale"
           }
         },
         "nl": {
@@ -1512,6 +2568,18 @@
             "value": "Beginne mit dem Beruhren der Krallenschere"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Empieza solo tocando el cortaúñas"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inizia solo toccando il tagliaunghie"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1527,6 +2595,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Beginne mit Aufnahmen bei niedriger Lautstarke"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Empieza con grabaciones a bajo volumen"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inizia con registrazioni a basso volume"
           }
         },
         "nl": {
@@ -1546,6 +2626,18 @@
             "value": "Statuen/Schaufensterpuppen"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Estatuas/maniquíes"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Statue/manichini"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1561,6 +2653,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Kinderwagen/Buggy"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cochecito/carrito de bebé"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Passeggino/carrozzina"
           }
         },
         "nl": {
@@ -1580,6 +2684,18 @@
             "value": "Starker Wind"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Viento fuerte"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vento forte"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1595,6 +2711,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Untergrunde"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Superficies"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Superfici"
           }
         },
         "nl": {
@@ -1614,6 +2742,18 @@
             "value": "Teenager"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adolescente"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adolescente"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1629,6 +2769,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Donner"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trueno"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tuono"
           }
         },
         "nl": {
@@ -1648,6 +2800,18 @@
             "value": "Fliesen/Pflaster"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Baldosas/pavimento"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Piastrelle/marciapiede"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1663,6 +2827,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Kleinkind (0-5 Jahre)"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Niño pequeño (0-5 años)"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bambino piccolo (0-5 anni)"
           }
         },
         "nl": {
@@ -1682,6 +2858,18 @@
             "value": "Ohren beruhren"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tocar las orejas"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toccare le orecchie"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1697,6 +2885,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Pfoten beruhren"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tocar las patas"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toccare le zampe"
           }
         },
         "nl": {
@@ -1716,6 +2916,18 @@
             "value": "Schwanz beruhren"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tocar la cola"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toccare la coda"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1731,6 +2943,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Mit Handtuch abtrocknen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Secado con toalla"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Asciugatura con asciugamano"
           }
         },
         "nl": {
@@ -1750,6 +2974,18 @@
             "value": "Bahn-/Busbahnhof"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Estación de tren/autobús"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stazione treni/autobus"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1765,6 +3001,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Strassenbahn/Zug"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tranvía/tren"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tram/treno"
           }
         },
         "nl": {
@@ -1784,6 +3032,18 @@
             "value": "Mulltonnen/Container"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cubos de basura/contenedores"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bidoni/cassonetti"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1799,6 +3059,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Lastwagen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Camión"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Camion"
           }
         },
         "nl": {
@@ -1818,6 +3090,18 @@
             "value": "Staubsauger"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aspiradora"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aspirapolvere"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1833,6 +3117,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Fahrzeuge"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vehículos"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Veicoli"
           }
         },
         "nl": {
@@ -1852,6 +3148,18 @@
             "value": "Waschmaschine"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lavadora"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lavatrice"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1869,10 +3177,22 @@
             "value": "Wetter"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clima"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
             "value": "Météo"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meteo"
           }
         },
         "nl": {
@@ -1890,6 +3210,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Holz/Terrasse"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Madera/tarima"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Legno/pedana"
           }
         },
         "nl": {

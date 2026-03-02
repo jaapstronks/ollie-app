@@ -16,6 +16,12 @@
             "value": "/mes"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "/mese"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -37,6 +43,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "/año"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "/anno"
           }
         },
         "nl": {
@@ -62,6 +74,12 @@
             "value": "7 días gratis"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 giorni gratis"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -83,6 +101,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Accede a todas las habilidades y ejercicios de entrenamiento"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Accedi a tutte le abilità e gli esercizi di addestramento"
           }
         },
         "nl": {
@@ -108,6 +132,12 @@
             "value": "Activo (se renueva el %@)"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Attivo (si rinnova il %@)"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -129,6 +159,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Añade hitos a tu calendario con recordatorios"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aggiungi traguardi al calendario con promemoria"
           }
         },
         "nl": {
@@ -154,6 +190,12 @@
             "value": "Añade notas y fotos al completar hitos"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aggiungi note e foto al completamento dei traguardi"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -175,6 +217,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Análisis avanzado"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Analisi avanzate"
           }
         },
         "nl": {
@@ -200,6 +248,12 @@
             "value": "La IA predice cuándo tu cachorro necesita salir según sus patrones"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L'IA prevede quando il cucciolo deve uscire in base ai pattern"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -220,6 +274,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ha ocurrido un error"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Si è verificato un errore"
           }
         },
         "nl": {
@@ -245,6 +305,12 @@
             "value": "Adjunta fotos y vídeos a cualquier evento"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allega foto e video a qualsiasi evento"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -268,6 +334,12 @@
             "value": "Integración con calendario"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Integrazione calendario"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -288,6 +360,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "No se pudo verificar la compra"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossibile verificare l'acquisto"
           }
         },
         "nl": {
@@ -313,6 +391,12 @@
             "value": "Crea tus propios hitos y eventos personalizados"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Crea i tuoi traguardi ed eventi personalizzati"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -334,6 +418,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Hitos personalizados"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Traguardi personalizzati"
           }
         },
         "nl": {
@@ -359,6 +449,12 @@
             "value": "Información detallada sobre comportamiento, salud y rutinas"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Approfondimenti su comportamento, salute e routine"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -380,6 +476,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Descubre patrones de comportamiento con Otis+"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scopri i pattern comportamentali con Otis+"
           }
         },
         "nl": {
@@ -405,6 +507,12 @@
             "value": "Descubre las funciones premium"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scopri le funzioni premium"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -426,6 +534,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Caducado"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scaduto"
           }
         },
         "nl": {
@@ -451,6 +565,12 @@
             "value": "Exporta registros e informes para tu veterinario"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esporta registri e report per il veterinario"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -472,6 +592,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Exportar a PDF"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esporta in PDF"
           }
         },
         "nl": {
@@ -503,6 +629,12 @@
             "value": "Gratuit"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gratis"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -524,6 +656,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Biblioteca completa de entrenamiento"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Libreria completa di addestramento"
           }
         },
         "nl": {
@@ -549,6 +687,12 @@
             "value": "Obtén información impulsada por IA, entrenamiento ilimitado y funciones premium para ayudar a tu cachorro a prosperar."
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ottieni analisi basate sull'IA, addestramento illimitato e funzioni premium per aiutare il tuo cucciolo a crescere al meglio."
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -570,6 +714,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Obtén análisis detallado del sueño con Otis+"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ottieni analisi dettagliate del sonno con Otis+"
           }
         },
         "nl": {
@@ -595,6 +745,12 @@
             "value": "Comenzar"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inizia"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -618,6 +774,12 @@
             "value": "Gestionar suscripción"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gestisci abbonamento"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -639,6 +801,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Notas y fotos de hitos"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Note e foto dei traguardi"
           }
         },
         "nl": {
@@ -670,6 +838,12 @@
             "value": "Mensuel"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mensile"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -693,6 +867,12 @@
             "value": "Más habilidades de entrenamiento"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Altre abilità di addestramento"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -711,6 +891,12 @@
           }
         },
         "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis+"
+          }
+        },
+        "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Otis+"
@@ -739,6 +925,12 @@
             "value": "Análisis de patrones"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Analisi dei pattern"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -760,6 +952,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Adjuntos de fotos y vídeos"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allegati foto e video"
           }
         },
         "nl": {
@@ -785,6 +983,12 @@
             "value": "Predicciones de necesidades"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Previsioni bisognini"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -806,6 +1010,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Premium (De por vida)"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Premium (A vita)"
           }
         },
         "nl": {
@@ -831,6 +1041,12 @@
             "value": "Política de privacidad"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Informativa sulla privacy"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -851,6 +1067,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Productos no disponibles"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prodotti non disponibili"
           }
         },
         "nl": {
@@ -876,6 +1098,12 @@
             "value": "Compra fallida"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Acquisto fallito"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -898,6 +1126,12 @@
             "value": "Compra pendiente de aprobación"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Acquisto in attesa di approvazione"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -918,6 +1152,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Compra cancelada"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Acquisto annullato"
           }
         },
         "nl": {
@@ -943,6 +1183,12 @@
             "value": "Restaurar compras"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ripristina acquisti"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -964,6 +1210,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ahorra %lld%%"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Risparmia %lld%%"
           }
         },
         "nl": {
@@ -989,6 +1241,12 @@
             "value": "Comparte con toda tu familia, no solo con una persona"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Condividi con tutta la famiglia, non solo con un partner"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1012,6 +1270,12 @@
             "value": "Información del sueño"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Analisi del sonno"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1033,6 +1297,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Progreso de socialización"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Progressi socializzazione"
           }
         },
         "nl": {
@@ -1064,6 +1334,12 @@
             "value": "Statut"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stato"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1093,6 +1369,12 @@
             "value": "S'abonner"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abbonati"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1114,6 +1396,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Las suscripciones se renuevan automáticamente a menos que se cancelen al menos 24 horas antes del final del período actual. El pago se cargará a tu cuenta de Apple ID. Gestiona tus suscripciones en Ajustes."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gli abbonamenti si rinnovano automaticamente a meno che non vengano annullati almeno 24 ore prima della fine del periodo corrente. Il pagamento verrà addebitato sul tuo account Apple ID. Gestisci i tuoi abbonamenti nelle Impostazioni."
           }
         },
         "nl": {
@@ -1139,6 +1427,12 @@
             "value": "Términos de servicio"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Termini di servizio"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1160,6 +1454,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Controla la calidad del sueño y optimiza los horarios de descanso"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Monitora la qualità del sonno e ottimizza gli orari di riposo"
           }
         },
         "nl": {
@@ -1185,6 +1485,12 @@
             "value": "Registra experiencias de socialización y su progreso"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Monitora le esperienze di socializzazione e i progressi"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1206,6 +1512,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Prueba (%lld días restantes)"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prova (%lld giorni rimasti)"
           }
         },
         "nl": {
@@ -1231,6 +1543,12 @@
             "value": "Prueba todas las funciones de Otis+ sin riesgo. Cancela cuando quieras."
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prova tutte le funzioni di Otis+ senza rischi. Annulla quando vuoi."
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1252,6 +1570,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Probar Otis+"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prova Otis+"
           }
         },
         "nl": {
@@ -1277,6 +1601,12 @@
             "value": "Compartir ilimitado con familia"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Condivisione illimitata con partner"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1298,6 +1628,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Desbloquea todas las habilidades de entrenamiento con Otis+"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sblocca tutte le abilità di addestramento con Otis+"
           }
         },
         "nl": {
@@ -1323,6 +1659,12 @@
             "value": "Desbloquea la experiencia completa de Otis"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sblocca l'esperienza completa di Otis"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1344,6 +1686,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Desbloquear con Otis+"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sblocca con Otis+"
           }
         },
         "nl": {
@@ -1369,6 +1717,12 @@
             "value": "Resumen semanal"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Riepilogo settimanale"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1390,6 +1744,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Resúmenes semanales con los logros destacados"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Riepiloghi settimanali con i progressi più importanti"
           }
         },
         "nl": {
@@ -1415,6 +1775,12 @@
             "value": "¡Bienvenido a Otis+!"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Benvenuto in Otis+!"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1436,6 +1802,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Qué incluye"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cosa include"
           }
         },
         "nl": {
@@ -1467,6 +1839,12 @@
             "value": "Annuel"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Annuale"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1488,6 +1866,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ahora tienes acceso a todas las funciones premium. Aprovechemos al máximo el viaje de tu cachorro juntos."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ora hai accesso a tutte le funzioni premium. Rendiamo insieme il viaggio del tuo cucciolo il migliore possibile."
           }
         },
         "nl": {

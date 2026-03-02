@@ -4,16 +4,28 @@
     "%@ is extra sensitive right now": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ is nu extra gevoelig"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "%@ ist gerade besonders sensibel"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ está muy sensible ahora mismo"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ e particolarmente sensibile ora"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ is nu extra gevoelig"
           }
         }
       }
@@ -21,16 +33,28 @@
     "%lld months · ~%@": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld maanden · ~%@"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "%lld Monate · ~%@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld meses · ~%@"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld mesi · ~%@"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld maanden · ~%@"
           }
         }
       }
@@ -38,16 +62,28 @@
     "%lld weeks remaining": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld weken resterend"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "%lld Wochen verbleibend"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld semanas restantes"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld settimane rimanenti"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld weken resterend"
           }
         }
       }
@@ -55,16 +91,28 @@
     "1 week remaining": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "1 week resterend"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "1 Woche verbleibend"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 semana restante"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 settimana rimanente"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 week resterend"
           }
         }
       }
@@ -72,16 +120,28 @@
     "2-3 weeks": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "2-3 weken"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "2-3 Wochen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "2-3 semanas"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "2-3 settimane"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "2-3 weken"
           }
         }
       }
@@ -89,16 +149,28 @@
     "3-16 weeks": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "3-16 weken"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "3-16 Wochen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "3-16 semanas"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "3-16 settimane"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "3-16 weken"
           }
         }
       }
@@ -106,16 +178,28 @@
     "4-6 months": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "4-6 maanden"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "4-6 Monate"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "4-6 meses"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "4-6 mesi"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "4-6 maanden"
           }
         }
       }
@@ -123,16 +207,28 @@
     "6-18 months": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "6-18 maanden"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "6-18 Monate"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "6-18 meses"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "6-18 mesi"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "6-18 maanden"
           }
         }
       }
@@ -140,16 +236,28 @@
     "18+ months": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "18+ maanden"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "18+ Monate"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "18+ meses"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "18+ mesi"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "18+ maanden"
           }
         }
       }
@@ -157,16 +265,28 @@
     "Active Periods": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Actieve periodes"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Aktive Phasen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Periodos activos"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Periodi attivi"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Actieve periodes"
           }
         }
       }
@@ -174,16 +294,28 @@
     "Adolescent": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Adolescent"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Jugendlich"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adolescente"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adolescente"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adolescent"
           }
         }
       }
@@ -191,16 +323,16 @@
     "Adult": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Volwassen"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Erwachsen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adulto"
           }
         },
         "fr": {
@@ -208,22 +340,46 @@
             "state": "translated",
             "value": "Adulte"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adulto"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Volwassen"
+          }
         }
       }
     },
     "Age week %lld · ~%@": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Leeftijd week %lld · ~%@"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Alter Woche %lld · ~%@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Semana %lld · ~%@"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Settimana %lld · ~%@"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Leeftijd week %lld · ~%@"
           }
         }
       }
@@ -231,16 +387,28 @@
     "Birth to 2 weeks": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Geboorte tot 2 weken"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Geburt bis 2 Wochen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Del nacimiento a 2 semanas"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dalla nascita a 2 settimane"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geboorte tot 2 weken"
           }
         }
       }
@@ -248,16 +416,28 @@
     "Coming Up": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Binnenkort"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Demnächst"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Proximamente"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In arrivo"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Binnenkort"
           }
         }
       }
@@ -265,16 +445,28 @@
     "Current stage": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Huidige fase"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Aktuelle Phase"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Etapa actual"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fase attuale"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Huidige fase"
           }
         }
       }
@@ -282,16 +474,28 @@
     "Development": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ontwikkeling"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Entwicklung"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Desarrollo"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sviluppo"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ontwikkeling"
           }
         }
       }
@@ -299,16 +503,28 @@
     "Development Roadmap": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ontwikkelingsroadmap"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Entwicklungs-Fahrplan"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hoja de ruta del desarrollo"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tappe dello sviluppo"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ontwikkelingsroadmap"
           }
         }
       }
@@ -316,16 +532,28 @@
     "Focus on positive experiences with new people, places, sounds, and other animals.": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Focus op positieve ervaringen met nieuwe mensen, plekken, geluiden en andere dieren."
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Fokus auf positive Erfahrungen mit neuen Menschen, Orten, Geräuschen und anderen Tieren."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enfocate en experiencias positivas con nuevas personas, lugares, sonidos y otros animales."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Concentrati su esperienze positive con nuove persone, luoghi, suoni e altri animali."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Focus op positieve ervaringen met nieuwe mensen, plekken, geluiden en andere dieren."
           }
         }
       }
@@ -333,16 +561,28 @@
     "Juvenile": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Juveniel"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Juvenil"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Juvenil"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Giovane"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Juveniel"
           }
         }
       }
@@ -350,16 +590,16 @@
     "Later": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Later"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Später"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mas tarde"
           }
         },
         "fr": {
@@ -367,22 +607,46 @@
             "state": "translated",
             "value": "Plus tard"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Piu tardi"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Later"
+          }
         }
       }
     },
     "Neonatal": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Neonataal"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Neugeborenenphase"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Neonatal"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Neonatale"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Neonataal"
           }
         }
       }
@@ -390,16 +654,28 @@
     "No active developmental periods": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Geen actieve ontwikkelingsperiodes"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Keine aktiven Entwicklungsphasen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sin periodos de desarrollo activos"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nessun periodo di sviluppo attivo"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geen actieve ontwikkelingsperiodes"
           }
         }
       }
@@ -407,16 +683,28 @@
     "Nothing coming up": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Niets op komst"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Nichts in Aussicht"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nada en camino"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Niente in programma"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Niets op komst"
           }
         }
       }
@@ -424,16 +712,28 @@
     "Nothing scheduled this week": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Niets gepland deze week"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Diese Woche nichts geplant"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nada programado esta semana"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Niente in programma questa settimana"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Niets gepland deze week"
           }
         }
       }
@@ -441,16 +741,28 @@
     "See development roadmap": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bekijk ontwikkelingsroadmap"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Entwicklungs-Fahrplan ansehen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ver hoja de ruta del desarrollo"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vedi tappe dello sviluppo"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bekijk ontwikkelingsroadmap"
           }
         }
       }
@@ -458,16 +770,28 @@
     "Sensitive Phase": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gevoelige fase"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Sensible Phase"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fase sensible"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fase sensibile"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gevoelige fase"
           }
         }
       }
@@ -475,16 +799,28 @@
     "Small positive experiences make a big difference for %@. Celebrate every tiny win together.": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kleine positieve ervaringen maken nu een groot verschil voor %@. Vier samen elk succesje."
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Kleine positive Erfahrungen machen einen großen Unterschied für %@. Feiere jeden kleinen Erfolg gemeinsam."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Las pequenas experiencias positivas marcan una gran diferencia para %@. Celebra cada pequeno logro juntos."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Piccole esperienze positive fanno una grande differenza per %@. Festeggia ogni piccolo successo insieme."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kleine positieve ervaringen maken nu een groot verschil voor %@. Vier samen elk succesje."
           }
         }
       }
@@ -492,16 +828,16 @@
     "Socialization": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Socialisatie"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Sozialisierung"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Socializacion"
           }
         },
         "fr": {
@@ -509,22 +845,46 @@
             "state": "translated",
             "value": "Socialisation"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Socializzazione"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Socialisatie"
+          }
         }
       }
     },
     "Socialization Window": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Socialisatievenster"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Sozialisierungsfenster"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ventana de socializacion"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finestra di socializzazione"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Socialisatievenster"
           }
         }
       }
@@ -532,16 +892,28 @@
     "Socialization window has closed": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Socialisatievenster is gesloten"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Sozialisierungsfenster ist geschlossen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La ventana de socializacion se ha cerrado"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La finestra di socializzazione si e chiusa"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Socialisatievenster is gesloten"
           }
         }
       }
@@ -549,16 +921,28 @@
     "Socialization window is closing": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Socialisatievenster sluit"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Sozialisierungsfenster schließt sich"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La ventana de socializacion se esta cerrando"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La finestra di socializzazione si sta chiudendo"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Socialisatievenster sluit"
           }
         }
       }
@@ -566,16 +950,28 @@
     "Socialization window is open": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Socialisatievenster is open"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Sozialisierungsfenster ist offen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La ventana de socializacion esta abierta"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La finestra di socializzazione e aperta"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Socialisatievenster is open"
           }
         }
       }
@@ -583,16 +979,28 @@
     "This Week": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Deze week"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Diese Woche"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esta semana"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Questa settimana"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deze week"
           }
         }
       }
@@ -600,16 +1008,28 @@
     "Transitional": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Overgang"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Übergangsphase"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Transicional"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Transizione"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Overgang"
           }
         }
       }
@@ -617,16 +1037,28 @@
     "You are here": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Je bent hier"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Du bist hier"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Estas aqui"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sei qui"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je bent hier"
           }
         }
       }

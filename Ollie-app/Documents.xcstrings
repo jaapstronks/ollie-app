@@ -16,6 +16,12 @@
             "value": "%lld páginas"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld pagine"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -37,6 +43,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "1 página"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 pagina"
           }
         },
         "nl": {
@@ -62,6 +74,12 @@
             "value": "Añadir adjunto"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aggiungi allegato"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -83,6 +101,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Añadir documento"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aggiungi documento"
           }
         },
         "nl": {
@@ -114,6 +138,12 @@
             "value": "Pièce jointe"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allegato"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -135,6 +165,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Registro de chip"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registrazione microchip"
           }
         },
         "nl": {
@@ -160,6 +196,12 @@
             "value": "Elegir de Archivos"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scegli da File"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -183,6 +225,12 @@
             "value": "¿Eliminar documento?"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eliminare il documento?"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -204,6 +252,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Fecha del documento"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Data documento"
           }
         },
         "nl": {
@@ -235,6 +289,12 @@
             "value": "Documents"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Documenti"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -256,6 +316,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Editar documento"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modifica documento"
           }
         },
         "nl": {
@@ -281,6 +347,12 @@
             "value": "Caducado"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scaduto"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -302,6 +374,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Caducó hace %lld días"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scaduto %lld giorni fa"
           }
         },
         "nl": {
@@ -327,6 +405,12 @@
             "value": "Caducó hace 1 día"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scaduto 1 giorno fa"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -348,6 +432,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Caduca en %lld días"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scade tra %lld giorni"
           }
         },
         "nl": {
@@ -373,6 +463,12 @@
             "value": "Caduca en 1 día"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scade tra 1 giorno"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -394,6 +490,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Caduca pronto"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scade presto"
           }
         },
         "nl": {
@@ -419,6 +521,12 @@
             "value": "Fecha de caducidad"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Data di scadenza"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -440,6 +548,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Archivo demasiado grande. El tamaño máximo es 50 MB."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "File troppo grande. La dimensione massima è 50 MB."
           }
         },
         "nl": {
@@ -465,6 +579,12 @@
             "value": "Tiene fecha de caducidad"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ha data di scadenza"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -486,6 +606,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Seguro"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Assicurazione"
           }
         },
         "nl": {
@@ -511,6 +637,12 @@
             "value": "Compañía de seguros"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Compagnia assicurativa"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -532,6 +664,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Dejar vacío para usar el tipo de documento como título"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lascia vuoto per usare il tipo di documento come titolo"
           }
         },
         "nl": {
@@ -557,6 +695,12 @@
             "value": "Historial médico"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cartella clinica"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -578,6 +722,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nombre de la compañía de seguros"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nome della compagnia assicurativa"
           }
         },
         "nl": {
@@ -603,6 +753,12 @@
             "value": "Sin adjunto"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nessun allegato"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -624,6 +780,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sin documentos"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nessun documento"
           }
         },
         "nl": {
@@ -655,6 +817,12 @@
             "value": "Notes"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Note"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -678,6 +846,12 @@
             "value": "Título personalizado opcional"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Titolo personalizzato opzionale"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -699,6 +873,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Notas opcionales sobre este documento..."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Note opzionali su questo documento..."
           }
         },
         "nl": {
@@ -730,6 +910,12 @@
             "value": "Autre"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Altro"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -753,6 +939,12 @@
             "value": "Pasaporte"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Passaporto"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -771,6 +963,12 @@
           }
         },
         "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Documento PDF"
+          }
+        },
+        "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Documento PDF"
@@ -797,6 +995,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Pedigrí"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pedigree"
           }
         },
         "nl": {
@@ -828,6 +1032,12 @@
             "value": "Photo"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Foto"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -849,6 +1059,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Registro"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registrazione"
           }
         },
         "nl": {
@@ -880,6 +1096,12 @@
             "value": "Partager"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Condividi"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -901,6 +1123,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Guarda aquí escaneos de los documentos importantes de tu perro."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Conserva qui le scansioni dei documenti importanti del tuo cane."
           }
         },
         "nl": {
@@ -926,6 +1154,12 @@
             "value": "Esto eliminará permanentemente este documento y su foto."
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Questo eliminerà definitivamente il documento e la sua foto."
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -949,6 +1183,12 @@
             "value": "Título"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Titolo"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -970,6 +1210,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Certificado de entrenamiento"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Certificato di addestramento"
           }
         },
         "nl": {
@@ -1001,6 +1247,12 @@
             "value": "Type"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tipo"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1024,6 +1276,12 @@
             "value": "Registro de vacunación"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Libretto vaccinazioni"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -1045,6 +1303,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ver tamaño completo"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Visualizza a schermo intero"
           }
         },
         "nl": {

@@ -4,16 +4,28 @@
     "%lld min": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld Min."
+          }
+        },
+        "es": {
           "stringUnit": {
             "state": "translated",
             "value": "%lld min"
           }
         },
-        "de": {
+        "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld Min."
+            "value": "%lld min"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld min"
           }
         }
       }
@@ -21,16 +33,28 @@
     "%lld min/month": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld min/maand"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "%lld Min./Monat"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld min/mes"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld min/mese"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld min/maand"
           }
         }
       }
@@ -38,16 +62,28 @@
     "%lld walks": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld wandelingen"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "%lld Spaziergänge"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld paseos"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld passeggiate"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld wandelingen"
           }
         }
       }
@@ -55,16 +91,28 @@
     "%lld walks/day": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld wandelingen/dag"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "%lld Spaziergänge/Tag"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld paseos/dia"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld passeggiate/giorno"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld wandelingen/dag"
           }
         }
       }
@@ -72,16 +120,28 @@
     "~%lld min interval": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "~%lld min interval"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "~%lld Min. Intervall"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "~%lld min de intervalo"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "~%lld min di intervallo"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "~%lld min interval"
           }
         }
       }
@@ -89,16 +149,28 @@
     "Add walk": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wandeling toevoegen"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Spaziergang hinzufügen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Agregar paseo"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aggiungi passeggiata"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wandeling toevoegen"
           }
         }
       }
@@ -106,16 +178,28 @@
     "At %lld months: max %lld min per walk": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bij %lld maanden: max %lld min per wandeling"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Mit %lld Monaten: max. %lld Min. pro Spaziergang"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A los %lld meses: max %lld min por paseo"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A %lld mesi: max %lld min per passeggiata"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bij %lld maanden: max %lld min per wandeling"
           }
         }
       }
@@ -123,16 +207,28 @@
     "Day Boundaries": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Daggrenzen"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Tagesgrenzen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Limites del dia"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Limiti giornalieri"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Daggrenzen"
           }
         }
       }
@@ -140,16 +236,28 @@
     "Delete walk": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wandeling verwijderen"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Spaziergang löschen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eliminar paseo"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elimina passeggiata"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wandeling verwijderen"
           }
         }
       }
@@ -157,16 +265,28 @@
     "e.g. Morning walk": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "bijv. Ochtendwandeling"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "z.B. Morgenspaziergang"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ej. Paseo matutino"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "es. Passeggiata mattutina"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "bijv. Ochtendwandeling"
           }
         }
       }
@@ -174,16 +294,28 @@
     "Edit walk": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wandeling bewerken"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Spaziergang bearbeiten"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Editar paseo"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modifica passeggiata"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wandeling bewerken"
           }
         }
       }
@@ -191,16 +323,28 @@
     "Edit walk schedule": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wandelschema bewerken"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Spaziergangsplan bearbeiten"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Editar horario de paseos"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modifica programma passeggiate"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wandelschema bewerken"
           }
         }
       }
@@ -208,16 +352,28 @@
     "Exercise Limits": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bewegingslimieten"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Bewegungsgrenzen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Limites de ejercicio"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Limiti di esercizio"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bewegingslimieten"
           }
         }
       }
@@ -225,16 +381,28 @@
     "First walk after": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Eerste wandeling na"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Erster Spaziergang nach"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Primer paseo despues de"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prima passeggiata dopo"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eerste wandeling na"
           }
         }
       }
@@ -242,13 +410,25 @@
     "Flexible": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
+        "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Flexibel"
           }
         },
-        "de": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Flexible"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Flessibile"
+          }
+        },
+        "nl": {
           "stringUnit": {
             "state": "translated",
             "value": "Flexibel"
@@ -259,16 +439,28 @@
     "Flexible (Recommended)": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Flexibel (Aanbevolen)"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Flexibel (Empfohlen)"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Flexible (Recomendado)"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Flessibile (Consigliato)"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Flexibel (Aanbevolen)"
           }
         }
       }
@@ -276,16 +468,28 @@
     "In flexible mode, this is the minimum time between walks.": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "In flexibele modus is dit de minimale tijd tussen wandelingen."
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Im flexiblen Modus ist dies die Mindestzeit zwischen Spaziergängen."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En modo flexible, este es el tiempo minimo entre paseos."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In modalita flessibile, questo e il tempo minimo tra le passeggiate."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In flexibele modus is dit de minimale tijd tussen wandelingen."
           }
         }
       }
@@ -293,16 +497,28 @@
     "Interval between walks": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Interval tussen wandelingen"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Intervall zwischen Spaziergängen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Intervalo entre paseos"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Intervallo tra le passeggiate"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Interval tussen wandelingen"
           }
         }
       }
@@ -310,16 +526,28 @@
     "Last walk before": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Laatste wandeling voor"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Letzter Spaziergang vor"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ultimo paseo antes de"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ultima passeggiata prima"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Laatste wandeling voor"
           }
         }
       }
@@ -327,16 +555,28 @@
     "Max %lld min/walk": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Max %lld min/wandeling"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Max. %lld Min./Spaziergang"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Max %lld min/paseo"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Max %lld min/passeggiata"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Max %lld min/wandeling"
           }
         }
       }
@@ -344,16 +584,28 @@
     "Max duration per walk": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Max duur per wandeling"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Max. Dauer pro Spaziergang"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Duracion maxima por paseo"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Durata massima per passeggiata"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Max duur per wandeling"
           }
         }
       }
@@ -361,16 +613,28 @@
     "Minutes per month of age": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Minuten per maand leeftijd"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Minuten pro Lebensmonat"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Minutos por mes de edad"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Minuti per mese di eta"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Minuten per maand leeftijd"
           }
         }
       }
@@ -378,16 +642,28 @@
     "Scheduling Mode": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Planningsmodus"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Planungsmodus"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modo de programacion"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modalita di pianificazione"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Planningsmodus"
           }
         }
       }
@@ -395,13 +671,25 @@
     "Strict": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
+        "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Strikt"
           }
         },
-        "de": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Estricto"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rigoroso"
+          }
+        },
+        "nl": {
           "stringUnit": {
             "state": "translated",
             "value": "Strikt"
@@ -412,16 +700,28 @@
     "The '5-minute rule' — puppies can walk 5 minutes per month of age per session.": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "De '5-minutenregel' — puppy's mogen 5 minuten per maand leeftijd per keer wandelen."
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Die '5-Minuten-Regel' — Welpen dürfen 5 Minuten pro Lebensmonat pro Spaziergang laufen."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La 'regla de los 5 minutos': los cachorros pueden caminar 5 minutos por mes de edad por sesion."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La 'regola dei 5 minuti' — i cuccioli possono camminare 5 minuti per mese di eta per sessione."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "De '5-minutenregel' — puppy's mogen 5 minuten per maand leeftijd per keer wandelen."
           }
         }
       }
@@ -429,16 +729,16 @@
     "Time": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tijd"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Zeit"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hora"
           }
         },
         "fr": {
@@ -446,22 +746,46 @@
             "state": "translated",
             "value": "Heure"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ora"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tijd"
+          }
         }
       }
     },
     "Timing": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Timing"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Zeitplanung"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Horarios"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Orari"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Timing"
           }
         }
       }
@@ -469,16 +793,28 @@
     "Walk name": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Naam wandeling"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Spaziergangsname"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nombre del paseo"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nome passeggiata"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Naam wandeling"
           }
         }
       }
@@ -486,16 +822,28 @@
     "Walk Schedule": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wandelschema"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Spaziergangsplan"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Horario de paseos"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Programma passeggiate"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wandelschema"
           }
         }
       }
@@ -503,16 +851,28 @@
     "Walk times adjust based on when the last walk happened. Good for adapting to real-world timing.": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wandeltijden passen zich aan op basis van de laatste wandeling. Ideaal om aan te passen aan de praktijk."
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Spaziergangszeiten passen sich an den letzten Spaziergang an. Ideal für flexible Alltagsplanung."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Los horarios de paseo se ajustan segun cuando fue el ultimo paseo. Ideal para adaptarse a la vida real."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gli orari delle passeggiate si adattano in base all'ultima passeggiata. Ideale per adattarsi alla vita reale."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wandeltijden passen zich aan op basis van de laatste wandeling. Ideaal om aan te passen aan de praktijk."
           }
         }
       }
@@ -520,16 +880,28 @@
     "Walk times are fixed to the scheduled times. Useful for strict routines or multiple caretakers.": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wandeltijden zijn vastgelegd op de geplande tijden. Handig voor strikte routines of meerdere verzorgers."
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Spaziergangszeiten sind fest geplant. Nützlich für strikte Routinen oder mehrere Betreuer."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Los horarios de paseo son fijos. Util para rutinas estrictas o multiples cuidadores."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gli orari delle passeggiate sono fissi. Utile per routine rigorose o piu persone che si occupano del cane."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wandeltijden zijn vastgelegd op de geplande tijden. Handig voor strikte routines of meerdere verzorgers."
           }
         }
       }
@@ -537,22 +909,34 @@
     "Walks": {
       "extractionState": "stale",
       "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wandelingen"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Spaziergänge"
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paseos"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
             "value": "Promenades"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Passeggiate"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wandelingen"
           }
         }
       }

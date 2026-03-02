@@ -21,6 +21,12 @@
             "state": "translated",
             "value": "- binnen"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "- dentro"
+          }
         }
       }
     },
@@ -40,6 +46,12 @@
           }
         },
         "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "(%lldx)"
+          }
+        },
+        "it": {
           "stringUnit": {
             "state": "translated",
             "value": "(%lldx)"
@@ -67,6 +79,12 @@
             "state": "translated",
             "value": "(na eten %lldm geleden)"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "(dopo pappa %lldm fa)"
+          }
         }
       }
     },
@@ -89,6 +107,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "(na dutje %lldm geleden)"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "(dopo nanna %lldm fa)"
           }
         }
       }
@@ -113,6 +137,12 @@
             "state": "translated",
             "value": "%@ verstreken"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ trascorso"
+          }
         }
       }
     },
@@ -135,6 +165,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%@ doet een dutje"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ sta facendo la nanna"
           }
         }
       }
@@ -159,6 +195,12 @@
             "state": "translated",
             "value": "%@ slaapt nu"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ sta dormendo ora"
+          }
         }
       }
     },
@@ -181,6 +223,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%@ moet nu plassen!"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ deve fare pipi adesso!"
           }
         }
       }
@@ -205,6 +253,12 @@
             "state": "translated",
             "value": "%@ moet nu plassen! (%lld min te laat)"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ deve fare pipi adesso! (%lld min in ritardo)"
+          }
         }
       }
     },
@@ -227,6 +281,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lld uur geleden"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld ore fa"
           }
         }
       }
@@ -251,6 +311,12 @@
             "state": "translated",
             "value": "%lld later vandaag"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld piu tardi oggi"
+          }
         }
       }
     },
@@ -270,6 +336,12 @@
           }
         },
         "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld min"
+          }
+        },
+        "it": {
           "stringUnit": {
             "state": "translated",
             "value": "%lld min"
@@ -297,6 +369,12 @@
             "state": "translated",
             "value": "%lld min geleden"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld min fa"
+          }
         }
       }
     },
@@ -319,6 +397,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lld keer gepoept vandaag"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld cacche oggi"
           }
         }
       }
@@ -343,6 +427,12 @@
             "state": "translated",
             "value": "%lld keer gepoept (verwacht ~%2$lld-%3$lld)"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld cacche oggi (previste ~%2$lld-%3$lld)"
+          }
         }
       }
     },
@@ -362,6 +452,12 @@
           }
         },
         "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld%%"
+          }
+        },
+        "it": {
           "stringUnit": {
             "state": "translated",
             "value": "%lld%%"
@@ -389,6 +485,12 @@
             "state": "translated",
             "value": "%lld°"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld°"
+          }
         }
       }
     },
@@ -411,6 +513,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lldu %lldm geleden"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lldh %lldm fa"
           }
         }
       }
@@ -435,6 +543,12 @@
             "state": "translated",
             "value": "%lld uur geleden"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lldh fa"
+          }
         }
       }
     },
@@ -457,6 +571,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lldu%lldm geleden"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lldh%lldm fa"
           }
         }
       }
@@ -481,6 +601,12 @@
             "state": "translated",
             "value": "~%lld min resterend"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "~%lld min rimanenti"
+          }
         }
       }
     },
@@ -503,6 +629,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "1 keer gepoept vandaag"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 cacca oggi"
           }
         }
       }
@@ -527,6 +659,12 @@
             "state": "translated",
             "value": "1 keer gepoept (verwacht ~%lld-%lld)"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 cacca oggi (previste ~%lld-%lld)"
+          }
         }
       }
     },
@@ -549,6 +687,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ongelukje"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Incidente"
           }
         }
       }
@@ -573,6 +717,12 @@
             "state": "translated",
             "value": "Na ongelukje — ga nu naar buiten!"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dopo l'incidente — esci subito!"
+          }
         }
       }
     },
@@ -595,6 +745,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Na drinken"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dopo aver bevuto"
           }
         }
       }
@@ -619,6 +775,12 @@
             "state": "translated",
             "value": "Na eten"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dopo la pappa"
+          }
         }
       }
     },
@@ -641,6 +803,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Na spelen"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dopo aver giocato"
           }
         }
       }
@@ -665,6 +833,12 @@
             "state": "translated",
             "value": "Na slaap"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dopo la nanna"
+          }
         }
       }
     },
@@ -687,6 +861,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Na wakker worden: tijd voor eten"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dopo il risveglio: ora della pappa"
           }
         }
       }
@@ -711,6 +891,12 @@
             "state": "translated",
             "value": "Na wakker worden: tijd voor wandeling"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dopo il risveglio: ora della passeggiata"
+          }
         }
       }
     },
@@ -733,6 +919,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Alles goed"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tutto bene"
           }
         }
       }
@@ -757,6 +949,12 @@
             "state": "translated",
             "value": "Ook tijd voor eten"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anche ora della pappa"
+          }
         }
       }
     },
@@ -779,6 +977,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ook tijd voor een wandeling"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anche ora della passeggiata"
           }
         }
       }
@@ -803,6 +1007,12 @@
             "state": "translated",
             "value": "Weet je zeker dat je '%@' van %@ wilt verwijderen?"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sei sicuro di voler eliminare '%@' da %@?"
+          }
         }
       }
     },
@@ -825,6 +1035,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Wakker"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sveglio"
           }
         }
       }
@@ -849,6 +1065,12 @@
             "state": "translated",
             "value": "Wakker %@ — dutje over %lld min?"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sveglio %@ — nanna tra %lld min?"
+          }
         }
       }
     },
@@ -871,6 +1093,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Wakker sinds %@"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sveglio da %@"
           }
         }
       }
@@ -895,6 +1123,12 @@
             "state": "translated",
             "value": "Al %@ wakker — tijd voor een dutje!"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sveglio da %@ — ora della nanna!"
+          }
         }
       }
     },
@@ -917,6 +1151,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Wakker sinds: %@"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sveglio dalle: %@"
           }
         }
       }
@@ -941,6 +1181,12 @@
             "state": "translated",
             "value": "Al een tijdje geleden sinds laatste poep"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "E passato un po' dall'ultima cacca"
+          }
         }
       }
     },
@@ -963,6 +1209,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Slaapt al %@"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dorme da %@"
           }
         }
       }
@@ -987,6 +1239,12 @@
             "state": "translated",
             "value": "Minder dan normaal op dit tijdstip"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sotto la media per quest'ora"
+          }
         }
       }
     },
@@ -1009,6 +1267,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Annuleer activiteit"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Annulla attivita"
           }
         }
       }
@@ -1033,6 +1297,12 @@
             "state": "translated",
             "value": "Binnenkort"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In arrivo"
+          }
         }
       }
     },
@@ -1055,6 +1325,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Datum: %@"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Data: %@"
           }
         }
       }
@@ -1085,6 +1361,12 @@
             "state": "translated",
             "value": "Dag"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Giorno"
+          }
         }
       }
     },
@@ -1107,6 +1389,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Dag %lld"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Giorno %lld"
           }
         }
       }
@@ -1131,6 +1419,12 @@
             "state": "translated",
             "value": "Dag %lld met %@"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Giorno %lld con %@"
+          }
         }
       }
     },
@@ -1153,6 +1447,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Slaapsessie verwijderen?"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eliminare la sessione di sonno?"
           }
         }
       }
@@ -1177,6 +1477,12 @@
             "state": "translated",
             "value": "Verwijderen?"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eliminare?"
+          }
         }
       }
     },
@@ -1199,6 +1505,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Negeer zonder te loggen"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scarta senza registrare"
           }
         }
       }
@@ -1223,6 +1535,12 @@
             "state": "translated",
             "value": "Dubbeltik om naar vandaag te gaan"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tocca due volte per andare a oggi"
+          }
         }
       }
     },
@@ -1246,6 +1564,12 @@
             "state": "translated",
             "value": "Dubbeltik Ongedaan maken om te herstellen"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tocca due volte Annulla per ripristinare"
+          }
         }
       }
     },
@@ -1268,6 +1592,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Komende uren droog"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Asciutto in vista"
           }
         }
       }
@@ -1298,6 +1628,12 @@
             "state": "translated",
             "value": "Duur"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Durata"
+          }
         }
       }
     },
@@ -1320,6 +1656,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tijdens wandeling"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Durante la passeggiata"
           }
         }
       }
@@ -1344,6 +1686,12 @@
             "state": "translated",
             "value": "Eerder"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prima"
+          }
         }
       }
     },
@@ -1367,6 +1715,12 @@
             "state": "translated",
             "value": "Bewerk slaaptijd"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modifica orario sonno"
+          }
         }
       }
     },
@@ -1389,6 +1743,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Bewerk wektijd"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modifica orario sveglia"
           }
         }
       }
@@ -1419,6 +1779,12 @@
             "state": "translated",
             "value": "Eind"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fine"
+          }
         }
       }
     },
@@ -1441,6 +1807,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Stop activiteit"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Termina attivita"
           }
         }
       }
@@ -1465,6 +1837,12 @@
             "state": "translated",
             "value": "Stop nu"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Termina ora"
+          }
         }
       }
     },
@@ -1487,6 +1865,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Stop slaap"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Termina sonno"
           }
         }
       }
@@ -1511,6 +1895,12 @@
             "state": "translated",
             "value": "Eindtijd"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ora fine"
+          }
         }
       }
     },
@@ -1533,6 +1923,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Stop wandeling"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Termina passeggiata"
           }
         }
       }
@@ -1557,6 +1953,12 @@
             "state": "translated",
             "value": "Gestopt %lld min geleden"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terminato %lld min fa"
+          }
         }
       }
     },
@@ -1579,6 +1981,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Gebeurtenis verwijderd"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Evento eliminato"
           }
         }
       }
@@ -1603,6 +2011,12 @@
             "state": "translated",
             "value": "In slaap gevallen"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Si e addormentato"
+          }
         }
       }
     },
@@ -1626,6 +2040,12 @@
             "state": "translated",
             "value": "Vrieskou"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gelido"
+          }
         }
       }
     },
@@ -1648,6 +2068,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Let op"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Attenzione"
           }
         }
       }
@@ -1678,6 +2104,12 @@
             "state": "translated",
             "value": "Info"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Info"
+          }
         }
       }
     },
@@ -1700,6 +2132,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Net in slaap gevallen"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Appena addormentato"
           }
         }
       }
@@ -1724,6 +2162,12 @@
             "state": "translated",
             "value": "Net geplast"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Appena fatto pipi"
+          }
         }
       }
     },
@@ -1746,6 +2190,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Net wakker"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Appena sveglio"
           }
         }
       }
@@ -1770,6 +2220,12 @@
             "state": "translated",
             "value": "Weer laden..."
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Caricamento meteo..."
+          }
         }
       }
     },
@@ -1792,6 +2248,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Log voltooid dutje"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registra nanna completata"
           }
         }
       }
@@ -1816,6 +2278,12 @@
             "state": "translated",
             "value": "Log voltooide wandeling"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registra passeggiata completata"
+          }
         }
       }
     },
@@ -1838,6 +2306,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Log dutje"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registra nanna"
           }
         }
       }
@@ -1862,6 +2336,12 @@
             "state": "translated",
             "value": "Log nu"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registra ora"
+          }
         }
       }
     },
@@ -1884,6 +2364,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Log poep"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registra cacca"
           }
         }
       }
@@ -1908,6 +2394,12 @@
             "state": "translated",
             "value": "Log plas"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registra pipi"
+          }
         }
       }
     },
@@ -1930,6 +2422,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Log plas"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registra pipi"
           }
         }
       }
@@ -1954,6 +2452,12 @@
             "state": "translated",
             "value": "Log wakker worden"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registra risveglio"
+          }
         }
       }
     },
@@ -1977,6 +2481,12 @@
             "state": "translated",
             "value": "Log wandeling"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registra passeggiata"
+          }
         }
       }
     },
@@ -1999,6 +2509,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Langere pauze dan normaal"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Intervallo piu lungo del solito"
           }
         }
       }
@@ -2029,6 +2545,12 @@
             "state": "translated",
             "value": "Maaltijd"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pappa"
+          }
         }
       }
     },
@@ -2051,6 +2573,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Maaltijd over %lld min"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pappa tra %lld min"
           }
         }
       }
@@ -2075,6 +2603,12 @@
             "state": "translated",
             "value": "Maaltijd %lld min te laat"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pappa in ritardo di %lld min"
+          }
         }
       }
     },
@@ -2097,6 +2631,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Medicatie"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Medicina"
           }
         }
       }
@@ -2127,6 +2667,12 @@
             "state": "translated",
             "value": "Dutje"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nanna"
+          }
         }
       }
     },
@@ -2149,6 +2695,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Dutje bijna voorbij"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nanna quasi finita"
           }
         }
       }
@@ -2173,6 +2725,12 @@
             "state": "translated",
             "value": "Tijd voor een dutje!"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ora della nanna!"
+          }
         }
       }
     },
@@ -2196,6 +2754,12 @@
             "state": "translated",
             "value": "Dutje"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nanna"
+          }
         }
       }
     },
@@ -2218,6 +2782,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Volgende dag"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Giorno successivo"
           }
         }
       }
@@ -2248,6 +2818,12 @@
             "state": "translated",
             "value": "Geen data"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nessun dato"
+          }
         }
       }
     },
@@ -2270,6 +2846,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nog geen gebeurtenissen"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ancora nessun evento"
           }
         }
       }
@@ -2294,6 +2876,12 @@
             "state": "translated",
             "value": "Nog niet gepoept vanochtend"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ancora nessuna cacca stamattina"
+          }
         }
       }
     },
@@ -2316,6 +2904,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nog niet gepoept vandaag"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ancora nessuna cacca oggi"
           }
         }
       }
@@ -2340,6 +2934,12 @@
             "state": "translated",
             "value": "Geen slaapgegevens"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nessun dato sul sonno"
+          }
         }
       }
     },
@@ -2362,6 +2962,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nog niet genoeg data voor patronen"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Non abbastanza dati per i modelli ancora"
           }
         }
       }
@@ -2392,6 +2998,12 @@
             "state": "translated",
             "value": "Opmerking"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nota"
+          }
         }
       }
     },
@@ -2414,6 +3026,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Notities (optioneel)"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Note (opzionale)"
           }
         }
       }
@@ -2444,6 +3062,12 @@
             "state": "translated",
             "value": "Nu"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ora"
+          }
         }
       }
     },
@@ -2466,6 +3090,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nu!"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ora!"
           }
         }
       }
@@ -2490,6 +3120,12 @@
             "state": "translated",
             "value": "Op schema"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In linea"
+          }
         }
       }
     },
@@ -2512,6 +3148,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Open app om dutje te stoppen"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apri l'app per terminare la nanna"
           }
         }
       }
@@ -2536,6 +3178,12 @@
             "state": "translated",
             "value": "te laat"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "in ritardo"
+          }
         }
       }
     },
@@ -2558,6 +3206,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Te laat"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In ritardo"
           }
         }
       }
@@ -2588,6 +3242,12 @@
             "state": "translated",
             "value": "Plas"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pipi"
+          }
         }
       }
     },
@@ -2610,6 +3270,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Plas over ~%lld min"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pipi tra ~%lld min"
           }
         }
       }
@@ -2634,6 +3300,12 @@
             "state": "translated",
             "value": "Snel plassen!"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pipi presto!"
+          }
         }
       }
     },
@@ -2656,6 +3328,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "geplast"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "fatto pipi"
           }
         }
       }
@@ -2680,6 +3358,12 @@
             "state": "translated",
             "value": "procent succes"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "percento successo"
+          }
         }
       }
     },
@@ -2702,6 +3386,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Kies plek"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scegli posto"
           }
         }
       }
@@ -2732,6 +3422,12 @@
             "state": "translated",
             "value": "Poep"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cacca"
+          }
         }
       }
     },
@@ -2754,6 +3450,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Poepstatus"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stato cacca"
           }
         }
       }
@@ -2778,6 +3480,12 @@
             "state": "translated",
             "value": "gepoept"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "fatto cacca"
+          }
         }
       }
     },
@@ -2800,6 +3508,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Plasje na dutje aanbevolen"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Consigliata pausa pipi dopo la nanna"
           }
         }
       }
@@ -2824,6 +3538,12 @@
             "state": "translated",
             "value": "Plasherinnering na wakker worden"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Promemoria pipi dopo il risveglio"
+          }
         }
       }
     },
@@ -2846,6 +3566,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Plas tijdens wandeling"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pipi durante la passeggiata"
           }
         }
       }
@@ -2870,6 +3596,12 @@
             "state": "translated",
             "value": "Plas is %lld min te laat"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pipi in ritardo di %lld min"
+          }
         }
       }
     },
@@ -2892,6 +3624,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Moet snel plassen"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pipi necessaria presto"
           }
         }
       }
@@ -2916,6 +3654,12 @@
             "state": "translated",
             "value": "Plasstatus"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stato pipi"
+          }
         }
       }
     },
@@ -2938,6 +3682,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Plas was %lld min te laat"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pipi era in ritardo di %lld min"
           }
         }
       }
@@ -2962,6 +3712,12 @@
             "state": "translated",
             "value": "Vorige dag"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Giorno precedente"
+          }
         }
       }
     },
@@ -2984,6 +3740,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Regen verwacht"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pioggia prevista"
           }
         }
       }
@@ -3008,6 +3770,12 @@
             "state": "translated",
             "value": "Binnenkort regen"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pioggia presto"
+          }
         }
       }
     },
@@ -3030,6 +3798,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Gepland om %@"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Programmato per %@"
           }
         }
       }
@@ -3054,6 +3828,12 @@
             "state": "translated",
             "value": "Ze is wakker — tijd om te plassen!"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "E sveglia — ora della pipi!"
+          }
         }
       }
     },
@@ -3077,6 +3857,12 @@
             "state": "translated",
             "value": "kort"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "breve"
+          }
         }
       }
     },
@@ -3099,6 +3885,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Toon alles (%lld)"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mostra tutto (%lld)"
           }
         }
       }
@@ -3129,6 +3921,12 @@
             "state": "translated",
             "value": "Toon minder"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mostra meno"
+          }
         }
       }
     },
@@ -3151,6 +3949,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Toont voorspelling wanneer %@ moet plassen"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mostra la previsione di quando %@ deve fare pipi"
           }
         }
       }
@@ -3175,6 +3979,12 @@
             "state": "translated",
             "value": "Sinds wanneer?"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Da quando?"
+          }
         }
       }
     },
@@ -3197,6 +4007,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Slaap- en plasstatus"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stato sonno e pipi"
           }
         }
       }
@@ -3221,6 +4037,12 @@
             "state": "translated",
             "value": "Slaapstatus"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stato sonno"
+          }
         }
       }
     },
@@ -3243,6 +4065,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Slaapt"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dorme"
           }
         }
       }
@@ -3267,6 +4095,12 @@
             "state": "translated",
             "value": "Slaapt net %@"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dorme da %@"
+          }
         }
       }
     },
@@ -3290,6 +4124,12 @@
             "state": "translated",
             "value": "Slaapt..."
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dorme..."
+          }
         }
       }
     },
@@ -3312,6 +4152,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sociaal"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sociale"
           }
         }
       }
@@ -3342,6 +4188,12 @@
             "state": "translated",
             "value": "Bijna"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Presto"
+          }
         }
       }
     },
@@ -3371,6 +4223,12 @@
             "state": "translated",
             "value": "Start"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inizio"
+          }
         }
       }
     },
@@ -3393,6 +4251,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Start eerder"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inizia prima"
           }
         }
       }
@@ -3417,6 +4281,12 @@
             "state": "translated",
             "value": "Start dutje"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inizia nanna"
+          }
         }
       }
     },
@@ -3439,6 +4309,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Start dutje nu"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inizia nanna ora"
           }
         }
       }
@@ -3463,6 +4339,12 @@
             "state": "translated",
             "value": "Starten of loggen?"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Iniziare o registrare?"
+          }
         }
       }
     },
@@ -3485,6 +4367,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Starttijd"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ora inizio"
           }
         }
       }
@@ -3509,6 +4397,12 @@
             "state": "translated",
             "value": "Start wandeling nu"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inizia passeggiata ora"
+          }
         }
       }
     },
@@ -3531,6 +4425,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Gestart"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Iniziato"
           }
         }
       }
@@ -3555,6 +4455,12 @@
             "state": "translated",
             "value": "Gestart %@"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Iniziato %@"
+          }
         }
       }
     },
@@ -3577,6 +4483,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Begonnen vorige nacht"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Iniziato la notte precedente"
           }
         }
       }
@@ -3601,6 +4513,12 @@
             "state": "translated",
             "value": "Gestart: %@"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Iniziato: %@"
+          }
         }
       }
     },
@@ -3623,6 +4541,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Zonsopgang"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alba"
           }
         }
       }
@@ -3647,6 +4571,12 @@
             "state": "translated",
             "value": "Zonsondergang"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tramonto"
+          }
         }
       }
     },
@@ -3669,6 +4599,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tik hieronder om de eerste te loggen"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tocca sotto per registrare il primo"
           }
         }
       }
@@ -3693,6 +4629,12 @@
             "state": "translated",
             "value": "Het dutje begon voor middernacht en eindigde op de geselecteerde datum"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La nanna e iniziata prima di mezzanotte ed e terminata nella data selezionata"
+          }
         }
       }
     },
@@ -3715,6 +4657,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Dit verwijdert zowel de slaap- als wakker-gebeurtenis."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Questo eliminera sia l'evento sonno che quello sveglia."
           }
         }
       }
@@ -3739,6 +4687,12 @@
             "state": "translated",
             "value": "Tijd voor een maaltijd"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ora della pappa"
+          }
         }
       }
     },
@@ -3762,6 +4716,12 @@
             "state": "translated",
             "value": "Tijd voor een wandeling"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ora della passeggiata"
+          }
         }
       }
     },
@@ -3784,6 +4744,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tijd om te plassen"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ora della pipi"
           }
         }
       }
@@ -3814,6 +4780,12 @@
             "state": "translated",
             "value": "Tijdlijn"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cronologia"
+          }
         }
       }
     },
@@ -3837,6 +4809,12 @@
             "state": "translated",
             "value": "keer gemeten"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "volte misurato"
+          }
         }
       }
     },
@@ -3859,6 +4837,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Moe?"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stanco?"
           }
         }
       }
@@ -3889,6 +4873,12 @@
             "state": "translated",
             "value": "Training"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Addestramento"
+          }
         }
       }
     },
@@ -3918,6 +4908,12 @@
             "state": "translated",
             "value": "Aankomend"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In arrivo"
+          }
         }
       }
     },
@@ -3941,6 +4937,12 @@
             "state": "translated",
             "value": "Wordt meestal nu wakker"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Di solito si sveglia a quest'ora"
+          }
         }
       }
     },
@@ -3963,6 +4965,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Wakker"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sveglia"
           }
         }
       }
@@ -3993,6 +5001,12 @@
             "state": "translated",
             "value": "Wakker"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sveglia"
+          }
         }
       }
     },
@@ -4016,6 +5030,12 @@
             "state": "translated",
             "value": "Wakker maken"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sveglia"
+          }
         }
       }
     },
@@ -4038,6 +5058,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Wektijd"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ora sveglia"
           }
         }
       }
@@ -4068,6 +5094,12 @@
             "state": "translated",
             "value": "Wandeling"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Passeggiata"
+          }
         }
       }
     },
@@ -4090,6 +5122,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Wandeling klaar — geen poep gelogd"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Passeggiata finita — nessuna cacca registrata"
           }
         }
       }
@@ -4114,6 +5152,12 @@
             "state": "translated",
             "value": "Wandeling over %lld min"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Passeggiata tra %lld min"
+          }
         }
       }
     },
@@ -4136,6 +5180,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Wandeling bezig"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Passeggiata in corso"
           }
         }
       }
@@ -4160,6 +5210,12 @@
             "state": "translated",
             "value": "Tijd voor wandeling"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "E ora della passeggiata"
+          }
         }
       }
     },
@@ -4183,6 +5239,12 @@
             "state": "translated",
             "value": "Wandeling %lld min te laat"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Passeggiata in ritardo di %lld min"
+          }
         }
       }
     },
@@ -4205,6 +5267,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Was gepland om %@"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Era programmato alle %@"
           }
         }
       }
@@ -4235,6 +5303,12 @@
             "state": "translated",
             "value": "Water"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Acqua"
+          }
         }
       }
     },
@@ -4258,6 +5332,12 @@
             "state": "translated",
             "value": "Gewogen"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pesato"
+          }
         }
       }
     },
@@ -4280,6 +5360,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Als ze wakker wordt, ga naar buiten"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quando si sveglia, portala fuori"
           }
         }
       }
@@ -4310,6 +5396,12 @@
             "state": "translated",
             "value": "Winderig"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ventoso"
+          }
         }
       }
     },
@@ -4333,6 +5425,12 @@
             "state": "translated",
             "value": "met %@"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "con %@"
+          }
         }
       }
     },
@@ -4355,6 +5453,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Wakker geworden"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Svegliato"
           }
         }
       }
@@ -4384,6 +5488,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Gisteren"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ieri"
           }
         }
       }

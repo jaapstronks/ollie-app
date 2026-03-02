@@ -21,6 +21,24 @@
             "state": "translated",
             "value": "Otis"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis"
+          }
         }
       }
     },
@@ -41,6 +59,24 @@
           }
         },
         "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ollie-app"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ollie-app"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ollie-app"
+          }
+        },
+        "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Ollie-app"
@@ -69,6 +105,24 @@
             "state": "translated",
             "value": "Otis usa tu calendario para agregar recordatorios de eventos importantes como vacunas y visitas al veterinario."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis utilise votre calendrier pour ajouter des rappels pour les événements importants comme les vaccinations et les visites vétérinaires."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis gebruikt je agenda om herinneringen toe te voegen voor belangrijke mijlpalen zoals vaccinaties en dierenartsbezoeken."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis usa il tuo calendario per aggiungere promemoria per eventi importanti come vaccinazioni e visite dal veterinario."
+          }
         }
       }
     },
@@ -93,10 +147,22 @@
             "value": "Otis quiere usar la camara para tomar fotos de tu cachorro."
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis souhaite utiliser l'appareil photo pour prendre des photos de votre chiot."
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
             "value": "Otis wil de camera gebruiken om foto's van je puppy te maken."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis vuole usare la fotocamera per scattare foto del tuo cucciolo."
           }
         }
       }
@@ -122,10 +188,22 @@
             "value": "Otis usa tus contactos para importar rapidamente los datos de tu veterinario, peluquero o cuidador de mascotas."
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis utilise vos contacts pour importer rapidement les coordonnées de votre vétérinaire, toiletteur ou gardien d'animaux."
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
             "value": "Otis gebruikt je contacten om snel gegevens van je dierenarts, trimsalon of oppas te importeren."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis usa i tuoi contatti per importare rapidamente i dati del veterinario, toelettatore o dog sitter."
           }
         }
       }
@@ -151,10 +229,22 @@
             "value": "Otis usa tu ubicacion para guardar lugares de paseo y que puedas registrar facilmente los paseos en tus lugares favoritos."
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis utilise votre position pour enregistrer vos lieux de promenade afin que vous puissiez facilement noter vos balades dans vos endroits préférés."
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
             "value": "Otis gebruikt je locatie om wandelplekken op te slaan zodat je makkelijk wandelingen kunt loggen op je favoriete plekken."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis usa la tua posizione per salvare i luoghi delle passeggiate, cosi puoi registrare facilmente le uscite nei tuoi posti preferiti."
           }
         }
       }
@@ -180,10 +270,22 @@
             "value": "Otis quiere acceder a tus fotos para agregar momentos."
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis souhaite accéder à vos photos pour ajouter des moments."
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
             "value": "Otis wil toegang tot je foto's om momenten toe te voegen."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis vuole accedere alle tue foto per aggiungere momenti."
           }
         }
       }

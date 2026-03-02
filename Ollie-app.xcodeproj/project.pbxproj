@@ -396,6 +396,7 @@
 				de,
 				es,
 				fr,
+				it,
 				Base,
 			);
 			mainGroup = 6786FEB72F470F4300CBFE93;

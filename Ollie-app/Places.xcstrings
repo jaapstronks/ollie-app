@@ -16,10 +16,22 @@
             "value": "%lld fotos"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld photos"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
             "value": "%lld foto's"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld foto"
           }
         }
       }
@@ -39,7 +51,19 @@
             "value": "1 foto"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 photo"
+          }
+        },
         "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 foto"
+          }
+        },
+        "it": {
           "stringUnit": {
             "state": "translated",
             "value": "1 foto"
@@ -62,10 +86,22 @@
             "value": "Agregar contacto"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajouter un contact"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
             "value": "Contact toevoegen"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aggiungi contatto"
           }
         }
       }
@@ -85,10 +121,22 @@
             "value": "Agregar momento"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajouter un moment"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
             "value": "Moment toevoegen"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aggiungi momento"
           }
         }
       }
@@ -108,10 +156,22 @@
             "value": "Agregar lugar"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajouter un lieu"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
             "value": "Plek toevoegen"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aggiungi luogo"
           }
         }
       }
@@ -131,10 +191,22 @@
             "value": "Todos los lugares"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tous les lieux"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
             "value": "Alle plekken"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tutti i luoghi"
           }
         }
       }
@@ -154,10 +226,22 @@
             "value": "Ampliar mapa"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Agrandir la carte"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
             "value": "Kaart vergroten"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Espandi mappa"
           }
         }
       }
@@ -188,6 +272,12 @@
             "state": "translated",
             "value": "Ontdek"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esplora"
+          }
         }
       }
     },
@@ -206,10 +296,22 @@
             "value": "Lugares favoritos"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lieux favoris"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
             "value": "Favoriete plekken"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Luoghi preferiti"
           }
         }
       }
@@ -240,6 +342,12 @@
             "state": "translated",
             "value": "Kaart"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mappa"
+          }
         }
       }
     },
@@ -258,10 +366,22 @@
             "value": "Sin ubicacion"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucune position"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
             "value": "Geen locatie"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nessuna posizione"
           }
         }
       }
@@ -281,10 +401,22 @@
             "value": "Aun no hay momentos"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pas encore de moments"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
             "value": "Nog geen momenten"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nessun momento"
           }
         }
       }
@@ -304,10 +436,22 @@
             "value": "Aun no hay lugares guardados"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun lieu enregistré"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
             "value": "Nog geen plekken opgeslagen"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nessun luogo salvato"
           }
         }
       }
@@ -327,10 +471,22 @@
             "value": "Guarda tus lugares de paseo favoritos para verlos aqui"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrez vos lieux de promenade favoris pour les voir ici"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
             "value": "Bewaar je favoriete wandelplekken om ze hier te zien"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salva i tuoi luoghi preferiti per le passeggiate per vederli qui"
           }
         }
       }
@@ -350,10 +506,22 @@
             "value": "Toma fotos de tus aventuras para verlas aqui"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prenez des photos de vos aventures pour les voir ici"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
             "value": "Maak foto's van jullie avonturen om ze hier te zien"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scatta foto delle vostre avventure per vederle qui"
           }
         }
       }

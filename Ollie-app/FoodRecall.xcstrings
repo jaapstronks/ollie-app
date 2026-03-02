@@ -10,6 +10,30 @@
             "state": "translated",
             "value": "Rückrufdaten konnten nicht verarbeitet werden"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se pudieron procesar los datos de retiro"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossible de traiter les données de rappel"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossibile elaborare i dati di richiamo"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kon terugroepgegevens niet verwerken"
+          }
         }
       }
     }

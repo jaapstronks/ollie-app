@@ -21,6 +21,12 @@
             "state": "translated",
             "value": "%1$@ sinds %2$@"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ da %2$@"
+          }
         }
       }
     },
@@ -43,6 +49,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%@ sinds vorige"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ dall'ultimo"
           }
         }
       }
@@ -67,6 +79,12 @@
             "state": "translated",
             "value": "%lld maanden"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld mesi"
+          }
         }
       }
     },
@@ -89,6 +107,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lldd geleden"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lldd fa"
           }
         }
       }
@@ -113,6 +137,12 @@
             "state": "translated",
             "value": "%lldd te laat"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lldd in ritardo"
+          }
         }
       }
     },
@@ -135,6 +165,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Boven referentie"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sopra il riferimento"
           }
         }
       }
@@ -165,6 +201,12 @@
             "state": "translated",
             "value": "Actief"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Attivo"
+          }
         }
       }
     },
@@ -187,6 +229,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Medicatie toevoegen"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aggiungi medicina"
           }
         }
       }
@@ -211,6 +259,12 @@
             "state": "translated",
             "value": "Mijlpaal toevoegen"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aggiungi traguardo"
+          }
         }
       }
     },
@@ -233,6 +287,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Notities toevoegen"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aggiungi note"
           }
         }
       }
@@ -257,6 +317,12 @@
             "state": "translated",
             "value": "Foto toevoegen"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aggiungi foto"
+          }
         }
       }
     },
@@ -279,6 +345,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Foto toevoegen"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aggiungi foto"
           }
         }
       }
@@ -303,6 +375,12 @@
             "state": "translated",
             "value": "Herinnering toevoegen voor volgende keer"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aggiungi promemoria per la prossima volta"
+          }
         }
       }
     },
@@ -325,6 +403,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Voeg deze mijlpaal toe aan je standaard agenda met een herinnering"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aggiungi questo traguardo al tuo calendario con un promemoria"
           }
         }
       }
@@ -349,6 +433,12 @@
             "state": "translated",
             "value": "Tijd toevoegen"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aggiungi orario"
+          }
         }
       }
     },
@@ -371,6 +461,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Toevoegen aan agenda"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aggiungi al calendario"
           }
         }
       }
@@ -395,6 +491,12 @@
             "state": "translated",
             "value": "Wees extra voorzichtig met nieuwe ervaringen"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sii molto delicato con le nuove esperienze"
+          }
         }
       }
     },
@@ -417,6 +519,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Onder referentie"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sotto il riferimento"
           }
         }
       }
@@ -441,6 +549,12 @@
             "state": "translated",
             "value": "Herhalingsvaccinatie bij 12 weken"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Richiamo vaccinazione a 12 settimane"
+          }
         }
       }
     },
@@ -463,6 +577,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "categorieën"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "categorie"
           }
         }
       }
@@ -493,6 +613,12 @@
             "state": "translated",
             "value": "Categorie"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Categoria"
+          }
         }
       }
     },
@@ -515,6 +641,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Naam kliniek (optioneel)"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nome clinica (opzionale)"
           }
         }
       }
@@ -539,6 +671,12 @@
             "state": "translated",
             "value": "Binnenkort"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In arrivo"
+          }
         }
       }
     },
@@ -562,6 +700,12 @@
             "state": "translated",
             "value": "Binnenkort"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In arrivo"
+          }
         }
       }
     },
@@ -584,6 +728,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Mijlpaal voltooien"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Completa traguardo"
           }
         }
       }
@@ -614,6 +764,12 @@
             "state": "translated",
             "value": "Voltooid"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Completato"
+          }
         }
       }
     },
@@ -636,6 +792,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Datum voltooid"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Data completamento"
           }
         }
       }
@@ -660,6 +822,12 @@
             "state": "translated",
             "value": "Overweeg een ziektekostenverzekering"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Considera un'assicurazione sanitaria"
+          }
         }
       }
     },
@@ -682,6 +850,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Basisvaccinatie bij 8 weken"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vaccinazione base a 8 settimane"
           }
         }
       }
@@ -706,6 +880,12 @@
             "state": "translated",
             "value": "Kritieke periode voor positieve ervaringen begint nu"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inizia il periodo critico per le esperienze positive"
+          }
         }
       }
     },
@@ -728,6 +908,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Huidig gewicht"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Peso attuale"
           }
         }
       }
@@ -758,6 +944,12 @@
             "state": "translated",
             "value": "Dagelijks"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Giornaliero"
+          }
         }
       }
     },
@@ -787,6 +979,12 @@
             "state": "translated",
             "value": "Datum"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Data"
+          }
         }
       }
     },
@@ -809,6 +1007,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "dagen van tevoren"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "giorni prima"
           }
         }
       }
@@ -833,6 +1037,12 @@
             "state": "translated",
             "value": "Dagen van de week"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Giorni della settimana"
+          }
         }
       }
     },
@@ -856,6 +1066,12 @@
             "state": "translated",
             "value": "Medicatie verwijderen?"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eliminare la medicina?"
+          }
         }
       }
     },
@@ -878,6 +1094,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Hondenbelasting"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Licenza cane"
           }
         }
       }
@@ -908,6 +1130,12 @@
             "state": "translated",
             "value": "Klaar"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fatto"
+          }
         }
       }
     },
@@ -930,6 +1158,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Dosering, notities..."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dosaggio, note..."
           }
         }
       }
@@ -960,6 +1194,12 @@
             "state": "translated",
             "value": "Duur"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Durata"
+          }
         }
       }
     },
@@ -982,6 +1222,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "bijv. 8,5"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "es. 8,5"
           }
         }
       }
@@ -1006,6 +1252,12 @@
             "state": "translated",
             "value": "Medicatie bewerken"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modifica medicina"
+          }
         }
       }
     },
@@ -1028,6 +1280,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Einddatum"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Data fine"
           }
         }
       }
@@ -1052,6 +1310,12 @@
             "state": "translated",
             "value": "Voer gewicht in"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inserisci peso"
+          }
         }
       }
     },
@@ -1074,6 +1338,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "ervaringen"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "esperienze"
           }
         }
       }
@@ -1098,6 +1368,12 @@
             "state": "translated",
             "value": "Laatste puppyvaccinatie bij 16 weken"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ultima vaccinazione cucciolo a 16 settimane"
+          }
         }
       }
     },
@@ -1120,6 +1396,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Eerste ontworming (fokker)"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prima sverminazione (allevatore)"
           }
         }
       }
@@ -1144,6 +1426,12 @@
             "state": "translated",
             "value": "Eerste ontworming (thuis)"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prima sverminazione (casa)"
+          }
         }
       }
     },
@@ -1166,6 +1454,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Eerste angstperiode"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Primo periodo di paura"
           }
         }
       }
@@ -1190,6 +1484,12 @@
             "state": "translated",
             "value": "Eerste vaccinatie (DHP + Lepto)"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prima vaccinazione (DHP + Lepto)"
+          }
         }
       }
     },
@@ -1212,6 +1512,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Eerste bezoek dierenarts"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prima visita dal veterinario"
           }
         }
       }
@@ -1236,6 +1542,12 @@
             "state": "translated",
             "value": "Focus op:"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Concentrati su:"
+          }
         }
       }
     },
@@ -1259,6 +1571,12 @@
             "state": "translated",
             "value": "Vr"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ven"
+          }
         }
       }
     },
@@ -1281,6 +1599,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Groeicurve"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Curva di crescita"
           }
         }
       }
@@ -1311,6 +1635,12 @@
             "state": "translated",
             "value": "Gezondheid"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salute"
+          }
         }
       }
     },
@@ -1333,6 +1663,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Icoon"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Icona"
           }
         }
       }
@@ -1357,6 +1693,12 @@
             "state": "translated",
             "value": "over %lldd"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "tra %lldd"
+          }
         }
       }
     },
@@ -1380,6 +1722,12 @@
             "state": "translated",
             "value": "Doorlopend"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Indefinitamente"
+          }
         }
       }
     },
@@ -1402,6 +1750,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Instructies"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Istruzioni"
           }
         }
       }
@@ -1432,6 +1786,12 @@
             "state": "translated",
             "value": "kg"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "kg"
+          }
         }
       }
     },
@@ -1454,6 +1814,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Koppelen aan maaltijd"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Collega al pasto"
           }
         }
       }
@@ -1478,6 +1844,12 @@
             "state": "translated",
             "value": "Gewicht loggen"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registra peso"
+          }
         }
       }
     },
@@ -1500,6 +1872,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Log je eerste gewichtsmeting"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registra la tua prima misurazione del peso"
           }
         }
       }
@@ -1524,6 +1902,12 @@
             "state": "translated",
             "value": "Markeer als voltooid"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Segna come completato"
+          }
         }
       }
     },
@@ -1546,6 +1930,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Markeer als niet voltooid"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Segna come incompleto"
           }
         }
       }
@@ -1570,6 +1960,12 @@
             "state": "translated",
             "value": "Medische mijlpalen"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Traguardi medici"
+          }
         }
       }
     },
@@ -1593,6 +1989,12 @@
             "state": "translated",
             "value": "Medicatie"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Medicine"
+          }
         }
       }
     },
@@ -1615,6 +2017,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Chipregistratie"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registrazione microchip"
           }
         }
       }
@@ -1645,6 +2053,12 @@
             "state": "translated",
             "value": "Mijlpalen"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Traguardi"
+          }
         }
       }
     },
@@ -1668,6 +2082,12 @@
             "state": "translated",
             "value": "Ma"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lun"
+          }
         }
       }
     },
@@ -1690,6 +2110,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Meest ontvankelijke tijd voor nieuwe ervaringen"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Momento piu ricettivo per nuove esperienze"
           }
         }
       }
@@ -1720,6 +2146,12 @@
             "state": "translated",
             "value": "Naam"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nome"
+          }
         }
       }
     },
@@ -1742,6 +2174,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Volgende"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prossimo"
           }
         }
       }
@@ -1766,6 +2204,12 @@
             "state": "translated",
             "value": "Nog geen medische mijlpalen"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nessun traguardo medico ancora"
+          }
         }
       }
     },
@@ -1788,6 +2232,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Geen medicatie"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nessuna medicina"
           }
         }
       }
@@ -1812,6 +2262,12 @@
             "state": "translated",
             "value": "Nog geen gewichtsgegevens"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nessun dato sul peso ancora"
+          }
         }
       }
     },
@@ -1834,6 +2290,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Op schema"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In linea"
           }
         }
       }
@@ -1858,6 +2320,12 @@
             "state": "translated",
             "value": "Optionele notities over deze mijlpaal"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Note opzionali su questo traguardo"
+          }
         }
       }
     },
@@ -1880,6 +2348,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Optionele notities over deze mijlpaal..."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Note opzionali su questo traguardo..."
           }
         }
       }
@@ -1904,6 +2378,12 @@
             "state": "translated",
             "value": "Te laat"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In ritardo"
+          }
         }
       }
     },
@@ -1926,6 +2406,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Gepauzeerd"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In pausa"
           }
         }
       }
@@ -1950,6 +2436,12 @@
             "state": "translated",
             "value": "Piek socialisatieperiode"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Periodo di socializzazione massimo"
+          }
         }
       }
     },
@@ -1972,6 +2464,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Huisdierenverzekering regelen"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configurazione assicurazione animali"
           }
         }
       }
@@ -1996,6 +2494,12 @@
             "state": "translated",
             "value": "Foto toegevoegd"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Foto aggiunta"
+          }
         }
       }
     },
@@ -2018,6 +2522,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Referentie"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Riferimento"
           }
         }
       }
@@ -2042,6 +2552,12 @@
             "state": "translated",
             "value": "Referentiebereik"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Intervallo di riferimento"
+          }
         }
       }
     },
@@ -2064,6 +2580,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Registreer bij je gemeente indien vereist"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registra presso il tuo comune se richiesto"
           }
         }
       }
@@ -2088,6 +2610,12 @@
             "state": "translated",
             "value": "Herinnering"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Promemoria"
+          }
         }
       }
     },
@@ -2111,6 +2639,12 @@
             "state": "translated",
             "value": "Verwijderen uit agenda"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rimuovi dal calendario"
+          }
         }
       }
     },
@@ -2133,6 +2667,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Za"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sab"
           }
         }
       }
@@ -2163,6 +2703,12 @@
             "state": "translated",
             "value": "Schema"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Programma"
+          }
         }
       }
     },
@@ -2185,6 +2731,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "ingepland"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "programmato"
           }
         }
       }
@@ -2209,6 +2761,12 @@
             "state": "translated",
             "value": "Tweede angstperiode"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Secondo periodo di paura"
+          }
         }
       }
     },
@@ -2231,6 +2789,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tweede vaccinatie (DHP + Lepto + Rabiës)"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seconda vaccinazione (DHP + Lepto + Rabbia)"
           }
         }
       }
@@ -2255,6 +2819,12 @@
             "state": "translated",
             "value": "Veeg om te voltooien"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scorri per completare"
+          }
         }
       }
     },
@@ -2277,6 +2847,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Socialisatie actief"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Socializzazione attiva"
           }
         }
       }
@@ -2301,6 +2877,12 @@
             "state": "translated",
             "value": "Socialisatieperiode begint"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inizia il periodo di socializzazione"
+          }
         }
       }
     },
@@ -2323,6 +2905,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Socialisatieperiode sluit"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il periodo di socializzazione sta finendo"
           }
         }
       }
@@ -2347,6 +2935,12 @@
             "state": "translated",
             "value": "Bespreking castratie/sterilisatie met dierenarts"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Discussione sterilizzazione con il veterinario"
+          }
         }
       }
     },
@@ -2369,6 +2963,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Startdatum"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Data inizio"
           }
         }
       }
@@ -2393,6 +2993,12 @@
             "state": "translated",
             "value": "Zo"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dom"
+          }
         }
       }
     },
@@ -2415,6 +3021,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tik om medicatie van je puppy toe te voegen"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tocca per aggiungere le medicine del tuo cucciolo"
           }
         }
       }
@@ -2439,6 +3051,12 @@
             "state": "translated",
             "value": "Tijdelijke toename van angst - blijf geduldig"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aumento temporaneo della paura - sii paziente"
+          }
         }
       }
     },
@@ -2461,6 +3079,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Derde vaccinatie (cocktail)"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terza vaccinazione (cocktail)"
           }
         }
       }
@@ -2485,6 +3109,12 @@
             "state": "translated",
             "value": "Deze week"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Questa settimana"
+          }
         }
       }
     },
@@ -2507,6 +3137,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Dit verwijdert de medicatie uit je schema."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Questo rimuovera la medicina dal tuo programma."
           }
         }
       }
@@ -2531,6 +3167,12 @@
             "state": "translated",
             "value": "Do"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gio"
+          }
         }
       }
     },
@@ -2554,6 +3196,12 @@
             "state": "translated",
             "value": "Tijden"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Orari"
+          }
         }
       }
     },
@@ -2576,6 +3224,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Titel"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Titolo"
           }
         }
       }
@@ -2606,6 +3260,12 @@
             "state": "translated",
             "value": "Vandaag"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oggi"
+          }
         }
       }
     },
@@ -2629,6 +3289,12 @@
             "state": "translated",
             "value": "Di"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mar"
+          }
         }
       }
     },
@@ -2651,6 +3317,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tot datum"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fino a data"
           }
         }
       }
@@ -2681,6 +3353,12 @@
             "state": "translated",
             "value": "Binnenkort"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In arrivo"
+          }
         }
       }
     },
@@ -2703,6 +3381,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Dierenkliniek"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clinica veterinaria"
           }
         }
       }
@@ -2727,6 +3411,12 @@
             "state": "translated",
             "value": "Wo"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mer"
+          }
         }
       }
     },
@@ -2749,6 +3439,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Week %lld"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Settimana %lld"
           }
         }
       }
@@ -2779,6 +3475,12 @@
             "state": "translated",
             "value": "Wekelijks"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Settimanale"
+          }
         }
       }
     },
@@ -2807,6 +3509,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Weken"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Settimane"
           }
         }
       }
@@ -2837,6 +3545,12 @@
             "state": "translated",
             "value": "Gewicht"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Peso"
+          }
         }
       }
     },
@@ -2859,6 +3573,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Gewicht (kg)"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Peso (kg)"
           }
         }
       }
@@ -2883,6 +3603,12 @@
             "state": "translated",
             "value": "Periode afgelopen"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Periodo terminato"
+          }
         }
       }
     },
@@ -2905,6 +3631,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Periode wordt korter - focus op resterende ervaringen"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il periodo si sta restringendo - concentrati sulle esperienze rimanenti"
           }
         }
       }
@@ -2929,6 +3661,12 @@
             "state": "translated",
             "value": "Jaarlijkse vaccinatie"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vaccinazione annuale"
+          }
         }
       }
     },
@@ -2951,6 +3689,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Jouw puppy"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il tuo cucciolo"
           }
         }
       }

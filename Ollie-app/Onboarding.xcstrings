@@ -21,6 +21,12 @@
             "state": "translated",
             "value": "Geburtsdatum von %@"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Data di nascita di %@"
+          }
         }
       }
     },
@@ -43,6 +49,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lld Tage zu Hause"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld giorni a casa"
           }
         }
       }
@@ -67,6 +79,12 @@
             "state": "translated",
             "value": "%lld Monate alt"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld mesi"
+          }
         }
       }
     },
@@ -89,6 +107,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lld Wochen alt"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld settimane"
           }
         }
       }
@@ -113,6 +137,12 @@
             "state": "translated",
             "value": "1 Monat alt"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 mese"
+          }
         }
       }
     },
@@ -135,6 +165,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ein Foto von %@ hinzufügen?"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aggiungere una foto di %@?"
           }
         }
       }
@@ -159,6 +195,12 @@
             "state": "translated",
             "value": "Alle Meilensteine erreicht!"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tutti i traguardi completati!"
+          }
         }
       }
     },
@@ -182,6 +224,12 @@
             "state": "translated",
             "value": "Schon mittendrin?"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gia nel pieno dell'avventura?"
+          }
         }
       }
     },
@@ -201,6 +249,12 @@
           }
         },
         "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beagle, Cocker Spaniel, Border Collie"
+          }
+        },
+        "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Beagle, Cocker Spaniel, Border Collie"
@@ -227,6 +281,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Berner Sennenhund, Deutsche Dogge, Bernhardiner"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bovaro del Bernese, Alano, San Bernardo"
           }
         }
       }
@@ -257,6 +317,12 @@
             "state": "translated",
             "value": "Date de naissance"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Data di nascita"
+          }
         }
       }
     },
@@ -279,6 +345,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Geboren"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nato"
           }
         }
       }
@@ -303,6 +375,12 @@
             "state": "translated",
             "value": "Rasse (optional)"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Razza (opzionale)"
+          }
         }
       }
     },
@@ -325,6 +403,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Eingezogen"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Arrivo a casa"
           }
         }
       }
@@ -349,6 +433,12 @@
             "state": "translated",
             "value": "Chihuahua, Malteser, Yorkshire Terrier"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chihuahua, Maltese, Yorkshire Terrier"
+          }
         }
       }
     },
@@ -371,6 +461,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Datum an dem %@ eingezogen ist"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Data in cui %@ e arrivato a casa"
           }
         }
       }
@@ -395,6 +491,12 @@
             "state": "translated",
             "value": "Datum an dem %@ einzieht"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Data in cui %@ arrivera a casa"
+          }
         }
       }
     },
@@ -417,6 +519,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Standort aktivieren"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abilita posizione"
           }
         }
       }
@@ -441,6 +549,12 @@
             "state": "translated",
             "value": "Mitteilungen aktivieren"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abilita notifiche"
+          }
         }
       }
     },
@@ -463,6 +577,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Eigene eingeben"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inserisci personalizzato"
           }
         }
       }
@@ -487,6 +607,12 @@
             "state": "translated",
             "value": "Name deines Welpen eingeben"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inserisci il nome del tuo cucciolo"
+          }
         }
       }
     },
@@ -510,6 +636,12 @@
             "state": "translated",
             "value": "Sehr gross (>45kg)"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Extra grande (>45kg)"
+          }
         }
       }
     },
@@ -532,6 +664,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Los geht's"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inizia"
           }
         }
       }
@@ -562,6 +700,12 @@
             "state": "translated",
             "value": "Date d'arrivée"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Data arrivo a casa"
+          }
         }
       }
     },
@@ -584,6 +728,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Wie gross wird %@?"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quanto diventera grande %@?"
           }
         }
       }
@@ -608,6 +758,12 @@
             "state": "translated",
             "value": "Ist %@ schon zu Hause?"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ e gia a casa?"
+          }
         }
       }
     },
@@ -630,6 +786,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Einfach anfangen zu tracken. Muster zeigen sich schnell."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inizia a registrare. I modelli emergono rapidamente."
           }
         }
       }
@@ -654,6 +816,12 @@
             "state": "translated",
             "value": "Labrador, Golden Retriever, Deutscher Schäferhund"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Labrador, Golden Retriever, Pastore Tedesco"
+          }
         }
       }
     },
@@ -676,6 +844,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Gross (25-45kg)"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Grande (25-45kg)"
           }
         }
       }
@@ -700,6 +874,12 @@
             "state": "translated",
             "value": "Los geht's!"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Andiamo!"
+          }
         }
       }
     },
@@ -722,6 +902,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Vielleicht später"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Forse piu tardi"
           }
         }
       }
@@ -746,6 +932,12 @@
             "state": "translated",
             "value": "Fütterungszeit-Benachrichtigungen"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Avvisi orario pappa"
+          }
         }
       }
     },
@@ -768,6 +960,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Mittel (10-25kg)"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Medio (10-25kg)"
           }
         }
       }
@@ -798,6 +996,12 @@
             "state": "translated",
             "value": "Moments"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Momenti"
+          }
         }
       }
     },
@@ -827,6 +1031,12 @@
             "state": "translated",
             "value": "Nom"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nome"
+          }
         }
       }
     },
@@ -849,6 +1059,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nickerchen-Erinnerungen wenn zu lange wach"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Promemoria nanna quando sveglio troppo a lungo"
           }
         }
       }
@@ -873,6 +1089,12 @@
             "state": "translated",
             "value": "Nie mehr eine Pipipipause verpassen"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Non perdere mai un momento pipi"
+          }
         }
       }
     },
@@ -895,6 +1117,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Als Nächstes"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prossimo"
           }
         }
       }
@@ -919,6 +1147,12 @@
             "state": "translated",
             "value": "Keine anstehenden Meilensteine"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nessun traguardo in arrivo"
+          }
         }
       }
     },
@@ -941,6 +1175,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nicht jetzt"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Non ora"
           }
         }
       }
@@ -965,6 +1205,12 @@
             "state": "translated",
             "value": "Noch nicht, ich erwarte %@"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Non ancora, aspetto %@"
+          }
         }
       }
     },
@@ -988,6 +1234,12 @@
             "state": "translated",
             "value": "Andere / Unbekannt"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Altro / Sconosciuto"
+          }
         }
       }
     },
@@ -1010,6 +1262,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Überfällig"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In ritardo"
           }
         }
       }
@@ -1040,6 +1298,12 @@
             "state": "translated",
             "value": "Plan"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Piano"
+          }
         }
       }
     },
@@ -1062,6 +1326,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Pipi-Erinnerungen basierend auf Mustern"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Promemoria pipi basati sui modelli"
           }
         }
       }
@@ -1086,6 +1356,12 @@
             "state": "translated",
             "value": "Bereitest du dich auf deinen Welpen vor?"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ti stai preparando per il tuo cucciolo?"
+          }
         }
       }
     },
@@ -1108,6 +1384,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Welpenalter"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eta del cucciolo"
           }
         }
       }
@@ -1132,6 +1414,12 @@
             "state": "translated",
             "value": "Bereit loszulegen!"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pronto per iniziare!"
+          }
         }
       }
     },
@@ -1154,6 +1442,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Spazierwege speichern und wieder besuchen"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salva e rivedi i posti delle passeggiate"
           }
         }
       }
@@ -1178,6 +1472,12 @@
             "state": "translated",
             "value": "Lieblingsplätze speichern und Wettervorhersagen für Spaziergänge erhalten."
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salva i posti preferiti e ottieni le previsioni meteo per le passeggiate."
+          }
         }
       }
     },
@@ -1200,6 +1500,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Alle Momente anzeigen"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vedi tutti i momenti"
           }
         }
       }
@@ -1230,6 +1536,12 @@
             "state": "translated",
             "value": "Ignorer"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salta"
+          }
         }
       }
     },
@@ -1252,6 +1564,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Klein (<10kg)"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Piccolo (<10kg)"
           }
         }
       }
@@ -1276,6 +1594,12 @@
             "state": "translated",
             "value": "Intelligente Erinnerungen helfen dir, den Bedürfnissen deines Welpen voraus zu sein."
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I promemoria intelligenti ti aiutano ad anticipare i bisogni del tuo cucciolo."
+          }
         }
       }
     },
@@ -1298,6 +1622,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ab Tag eins erfassen. Du wirst dir in Woche zwei danken."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inizia a registrare dal primo giorno. Te ne sarai grato nella seconda settimana."
           }
         }
       }
@@ -1322,6 +1652,12 @@
             "state": "translated",
             "value": "Mach ein Foto!"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scatta una foto!"
+          }
         }
       }
     },
@@ -1344,6 +1680,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Das ist optional — du kannst später jederzeit ein Foto hinzufügen."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Questo e opzionale — puoi sempre aggiungerne una dopo."
           }
         }
       }
@@ -1368,6 +1710,12 @@
             "state": "translated",
             "value": "Erfasse Mahlzeiten, Pipi, Schlaf & Spaziergänge — und verstehe endlich was dein Welpe braucht."
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registra pappa, pipi, nanna e passeggiate — e capisci davvero di cosa ha bisogno il tuo cucciolo."
+          }
         }
       }
     },
@@ -1390,6 +1738,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Routen und Entfernungen verfolgen"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Segui percorsi e distanze"
           }
         }
       }
@@ -1414,6 +1768,12 @@
             "state": "translated",
             "value": "Spaziergänge verfolgen & Wetter prüfen"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Segui le passeggiate e controlla il meteo"
+          }
         }
       }
     },
@@ -1436,6 +1796,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Anstehende Meilensteine"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prossimi traguardi"
           }
         }
       }
@@ -1460,6 +1826,12 @@
             "state": "translated",
             "value": "Wettervorhersagen zur Planung"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Previsioni meteo per pianificare"
+          }
         }
       }
     },
@@ -1482,6 +1854,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Welche Rasse ist %@?"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Che razza e %@?"
           }
         }
       }
@@ -1506,6 +1884,12 @@
             "state": "translated",
             "value": "Wie sieht %@ aus?"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Che aspetto ha %@?"
+          }
         }
       }
     },
@@ -1528,6 +1912,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Wie heisst dein Welpe?"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Come si chiama il tuo cucciolo?"
           }
         }
       }
@@ -1552,6 +1942,12 @@
             "state": "translated",
             "value": "Wann ist %@ eingezogen?"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quando e arrivato a casa %@?"
+          }
         }
       }
     },
@@ -1574,6 +1970,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Wann wurde %@ geboren?"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quando e nato %@?"
           }
         }
       }
@@ -1598,6 +2000,12 @@
             "state": "translated",
             "value": "Wann zieht %@ ein?"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quando arrivera a casa %@?"
+          }
         }
       }
     },
@@ -1620,6 +2028,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ja, %@ ist zu Hause"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Si, %@ e a casa"
           }
         }
       }
