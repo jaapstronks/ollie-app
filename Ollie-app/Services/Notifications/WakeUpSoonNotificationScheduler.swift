@@ -25,11 +25,12 @@ final class WakeUpSoonNotificationScheduler: NotificationScheduler {
     func schedule(events: [PuppyEvent], profile: PuppyProfile) async {
         await cancel()
 
+        let suppression = NotificationSuppressionManager.shared
         let sleepState = SleepCalculations.currentSleepState(events: events)
         let minutesBefore = profile.notificationSettings.napReminders.wakeUpSoonMinutesBefore
 
         // Only schedule if currently sleeping
-        guard case .sleeping(let since, let currentDurationMin) = sleepState else {
+        guard case .sleeping(let since, _) = sleepState else {
             return
         }
 
@@ -44,9 +45,17 @@ final class WakeUpSoonNotificationScheduler: NotificationScheduler {
         let notificationTime = expectedWakeTime.addingTimeInterval(TimeInterval(-minutesBefore * 60))
         let now = Date()
 
+        // Smart suppression: Check quiet hours (wake-up predictions aren't urgent)
+        // Don't wake the owner at 4 AM just because puppy might wake soon
+        if suppression.shouldSuppressForQuietHours(fireTime: notificationTime, settings: profile.notificationSettings) {
+            logger.debug("Suppressing wake-up notification: quiet hours")
+            return
+        }
+
         // Don't schedule if notification time has already passed
         guard notificationTime > now else {
             // If we're past notification time but before expected wake, send immediate
+            // (but still respect quiet hours - already checked above)
             if expectedWakeTime > now {
                 await sendImmediateNotification(
                     profile: profile,

@@ -15,15 +15,30 @@ import os
 final class MealNotificationScheduler: NotificationScheduler {
     let notificationPrefix = "meal_"
 
-    private let notificationCenter = UNUserNotificationCenter.current()
     private let logger = Logger.otis(category: "MealNotificationScheduler")
+
+    private var notificationCenter: UNUserNotificationCenter {
+        NotificationSchedulerHelpers.notificationCenter
+    }
 
     func schedule(events: [PuppyEvent], profile: PuppyProfile) async {
         await cancel()
 
+        let suppression = NotificationSuppressionManager.shared
+
         // minutesOffset: 0 = at time, negative = after meal time (overdue), positive = before
         let minutesOffset = profile.notificationSettings.mealReminders.minutesOffset
         let todayMealEvents = events.meals()
+
+        // Smart suppression: Check if any meal was logged very recently (within 5 min)
+        // User just fed the puppy, don't nag about other meals right away
+        if let lastMeal = todayMealEvents.last {
+            let minutesSinceMeal = Int(Date().timeIntervalSince(lastMeal.time) / 60)
+            if minutesSinceMeal < 5 {
+                logger.debug("Suppressing meal notifications: meal logged \(minutesSinceMeal) min ago")
+                return
+            }
+        }
 
         for portion in profile.mealSchedule.portions {
             guard let targetTimeStr = portion.targetTime,
@@ -68,6 +83,23 @@ final class MealNotificationScheduler: NotificationScheduler {
 
             if notifyMinutes <= currentMinutes { continue }
 
+            let minutesUntilFire = notifyMinutes - currentMinutes
+
+            // Smart suppression: If user just used app and notification would fire soon, skip it
+            if suppression.shouldSuppressForAppUsage(minutesUntilFire: minutesUntilFire) {
+                logger.debug("Suppressing meal notification for \(portion.label): app recently used")
+                continue
+            }
+
+            // Smart suppression: Check quiet hours (meals aren't urgent enough to override)
+            var fireDate = calendar.startOfDay(for: now)
+            fireDate = calendar.date(byAdding: .hour, value: notifyHour, to: fireDate) ?? fireDate
+            fireDate = calendar.date(byAdding: .minute, value: notifyMinute, to: fireDate) ?? fireDate
+            if suppression.shouldSuppressForQuietHours(fireTime: fireDate, settings: profile.notificationSettings) {
+                logger.debug("Suppressing meal notification for \(portion.label): quiet hours")
+                continue
+            }
+
             let content = UNMutableNotificationContent()
             // Use different title if it's overdue
             if minutesOffset < 0 {
@@ -95,6 +127,7 @@ final class MealNotificationScheduler: NotificationScheduler {
 
             do {
                 try await notificationCenter.add(request)
+                logger.debug("Scheduled meal notification for \(portion.label) at \(notifyHour):\(notifyMinute)")
             } catch {
                 logger.error("Failed to schedule meal reminder for \(portion.label): \(error.localizedDescription)")
             }

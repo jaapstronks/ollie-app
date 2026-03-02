@@ -73,6 +73,10 @@ class NotificationService: ObservableObject {
         appointments: [DogAppointment] = [],
         isWalkInProgress: Bool = false
     ) async {
+        // Record app usage - user is viewing the app, so they already see status cards
+        // This helps suppress redundant notifications that would fire right after closing the app
+        NotificationSuppressionManager.shared.recordAppUsage()
+
         guard profile.notificationSettings.isEnabled && isAuthorized else {
             await cancelAllNotifications()
             return
