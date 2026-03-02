@@ -15,6 +15,7 @@ struct EndSleepSheet: View {
 
     @State private var wakeUpTime: Date = Date()
     @State private var showingTimePicker: Bool = false
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     private var currentDurationMinutes: Int {
         wakeUpTime.minutesSince(sleepStartTime)
@@ -117,7 +118,7 @@ struct EndSleepSheet: View {
                     .datePickerStyle(.wheel)
                     .labelsHidden()
                     .frame(height: 120)
-                    .transition(.opacity.combined(with: .scale(scale: 0.95)))
+                    .transition(reduceMotion ? .opacity : .opacity.combined(with: .scale(scale: 0.95)))
                 }
             }
 
@@ -151,7 +152,7 @@ struct EndSleepSheet: View {
             }
         }
         .padding()
-        .animation(.easeInOut(duration: 0.2), value: showingTimePicker)
+        .animation(reduceMotion ? nil : .easeInOut(duration: 0.2), value: showingTimePicker)
     }
 }
 

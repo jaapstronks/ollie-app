@@ -18,6 +18,7 @@ struct CalendarWeekGrid: View {
     let onMilestoneTap: (Milestone) -> Void
 
     @Environment(\.calendar) private var calendar
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         VStack(spacing: 16) {
@@ -105,7 +106,7 @@ struct CalendarWeekGrid: View {
         HStack(spacing: 4) {
             ForEach(daysInWeek, id: \.self) { date in
                 Button {
-                    withAnimation(.easeInOut(duration: 0.15)) {
+                    withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.15)) {
                         selectedDate = date
                     }
                 } label: {
@@ -193,7 +194,7 @@ struct CalendarWeekGrid: View {
     }
 
     private func navigateWeek(by value: Int) {
-        withAnimation(.easeInOut(duration: 0.2)) {
+        withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.2)) {
             if let newWeek = calendar.date(byAdding: .weekOfYear, value: value, to: displayedWeek) {
                 displayedWeek = newWeek
                 // Also update selected date to first day of new week
@@ -205,7 +206,7 @@ struct CalendarWeekGrid: View {
     }
 
     private func goToToday() {
-        withAnimation(.easeInOut(duration: 0.2)) {
+        withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.2)) {
             let today = Date()
             displayedWeek = today
             selectedDate = today

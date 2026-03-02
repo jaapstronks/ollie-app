@@ -37,6 +37,7 @@ struct TrainingSessionView: View {
     @AppStorage("trainingSession.instructionsExpanded") private var instructionsExpanded = true
 
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
 
@@ -159,7 +160,7 @@ struct TrainingSessionView: View {
         VStack(alignment: .leading, spacing: 12) {
             // Header with toggle
             Button {
-                withAnimation(.easeInOut(duration: 0.2)) {
+                withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.2)) {
                     instructionsExpanded.toggle()
                 }
             } label: {
@@ -194,7 +195,7 @@ struct TrainingSessionView: View {
                         }
                     }
                 }
-                .transition(.opacity.combined(with: .move(edge: .top)))
+                .transition(reduceMotion ? .opacity : .opacity.combined(with: .move(edge: .top)))
             }
         }
         .padding()
@@ -212,7 +213,7 @@ struct TrainingSessionView: View {
                 .font(.system(size: 72, weight: .bold, design: .rounded))
                 .foregroundStyle(.primary)
                 .contentTransition(.numericText())
-                .animation(.spring(duration: 0.3), value: clickCount)
+                .animation(reduceMotion ? nil : .spring(duration: 0.3), value: clickCount)
 
             Text(Strings.TrainingSession.clicks)
                 .font(.title3)

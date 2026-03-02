@@ -22,6 +22,7 @@ struct CalendarGridView: View {
     @AppStorage("calendarGridMode") private var gridMode: CalendarGridMode = .list
 
     private let calendar = Calendar.current
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     private var birthDate: Date? { profile?.birthDate }
 
@@ -86,8 +87,8 @@ struct CalendarGridView: View {
                     .background(.regularMaterial)
             }
         }
-        .animation(.easeInOut(duration: 0.2), value: selectedDate)
-        .animation(.easeInOut(duration: 0.2), value: gridMode)
+        .animation(reduceMotion ? nil : .easeInOut(duration: 0.2), value: selectedDate)
+        .animation(reduceMotion ? nil : .easeInOut(duration: 0.2), value: gridMode)
     }
 
     // MARK: - Grid Mode Toggle

@@ -24,6 +24,7 @@ struct TrainingView: View {
     @State private var showOtisPlusSheet = false
 
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         ScrollViewReader { proxy in
@@ -51,8 +52,12 @@ struct TrainingView: View {
             }
             .onChange(of: scrollToSkillId) { _, skillId in
                 if let skillId = skillId {
-                    withAnimation {
+                    if reduceMotion {
                         proxy.scrollTo(skillId, anchor: .center)
+                    } else {
+                        withAnimation {
+                            proxy.scrollTo(skillId, anchor: .center)
+                        }
                     }
                     scrollToSkillId = nil
                 }

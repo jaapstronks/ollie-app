@@ -25,6 +25,7 @@ struct SpotDetailView: View {
     @State private var showingPhotoOptions = false
     @State private var showingMediaPicker = false
     @State private var selectedMediaSource: MediaPickerSource = .library
+    @State private var spotPhotoImage: UIImage?
 
     /// Full initializer with photo support
     init(spotStore: SpotStore, spot: WalkSpot, momentsViewModel: MomentsViewModel) {
@@ -61,17 +62,11 @@ struct SpotDetailView: View {
         GridItem(.flexible(), spacing: 4)
     ]
 
-    /// Load spot photo from storage
-    private var spotPhoto: UIImage? {
-        guard let filename = currentSpot.photoFilename else { return nil }
-        return SpotPhotoStore.shared.load(filename: filename)
-    }
-
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
                 // Spot photo (if available) or map preview
-                if let photo = spotPhoto {
+                if let photo = spotPhotoImage {
                     ZStack(alignment: .bottomTrailing) {
                         Image(uiImage: photo)
                             .resizable()
@@ -270,6 +265,14 @@ struct SpotDetailView: View {
                 }
             )
         }
+        .task(id: currentSpot.photoFilename) {
+            // Load spot photo asynchronously
+            if let filename = currentSpot.photoFilename {
+                spotPhotoImage = await SpotPhotoStore.shared.loadAsync(filename: filename)
+            } else {
+                spotPhotoImage = nil
+            }
+        }
         .task {
             // Load place stats asynchronously
             if let viewModel = momentsViewModel {
@@ -331,6 +334,7 @@ struct SpotDetailView: View {
         if let newFilename = try? SpotPhotoStore.shared.save(image: image) {
             updated.photoFilename = newFilename
             spotStore.updateSpot(updated)
+            spotPhotoImage = image  // Update local state immediately
             HapticFeedback.success()
         }
     }
@@ -345,6 +349,7 @@ struct SpotDetailView: View {
 
         updated.photoFilename = nil
         spotStore.updateSpot(updated)
+        spotPhotoImage = nil  // Clear local state immediately
         HapticFeedback.light()
     }
 

@@ -17,6 +17,7 @@ struct GrowthProgressArc: View {
     let animated: Bool
 
     @State private var animatedProgress: Double = 0
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     private var progress: Double {
         guard estimatedAdultWeight > startWeight else { return 1.0 }
@@ -92,7 +93,7 @@ struct GrowthProgressArc: View {
             }
         }
         .onAppear {
-            if animated {
+            if animated && !reduceMotion {
                 withAnimation(.easeOut(duration: 0.8).delay(0.3)) {
                     animatedProgress = progress
                 }

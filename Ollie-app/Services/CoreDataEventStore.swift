@@ -156,8 +156,11 @@ final class CoreDataEventStore: @unchecked Sendable {
 
         try persistenceController.save()
 
-        // Invalidate all caches
-        invalidateAllCaches()
+        // Smart cache invalidation: only invalidate affected date ranges
+        if let minDate = events.map(\.time).min(),
+           let maxDate = events.map(\.time).max() {
+            invalidateCache(from: minDate, to: maxDate)
+        }
     }
 
     /// Save multiple events for a date (compatibility API)
@@ -341,6 +344,11 @@ final class CoreDataEventStore: @unchecked Sendable {
         }
 
         try persistenceController.save()
-        invalidateAllCaches()
+
+        // Smart cache invalidation: only invalidate affected date ranges
+        if let minDate = events.map(\.time).min(),
+           let maxDate = events.map(\.time).max() {
+            invalidateCache(from: minDate, to: maxDate)
+        }
     }
 }

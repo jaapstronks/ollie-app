@@ -23,13 +23,14 @@ struct SkillCard: View {
 
     @State private var isExpanded: Bool = false
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         VStack(spacing: 0) {
             // Main card header (tappable to expand)
             Button {
                 guard !isLocked else { return }
-                withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
+                withAnimation(reduceMotion ? nil : .spring(response: 0.3, dampingFraction: 0.8)) {
                     isExpanded.toggle()
                 }
                 HapticFeedback.light()
@@ -249,7 +250,7 @@ struct SkillCard: View {
             }
             .padding()
         }
-        .transition(.opacity.combined(with: .move(edge: .top)))
+        .transition(reduceMotion ? .opacity : .opacity.combined(with: .move(edge: .top)))
     }
 
     // MARK: - Computed Properties
@@ -344,11 +345,13 @@ struct LockedSkillCard: View {
 
 /// A button style that provides scale feedback without blocking scroll gestures
 private struct ScaleButtonStyle: ButtonStyle {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .scaleEffect(configuration.isPressed ? 0.92 : 1.0)
             .opacity(configuration.isPressed ? 0.85 : 1.0)
-            .animation(.easeOut(duration: 0.1), value: configuration.isPressed)
+            .animation(reduceMotion ? nil : .easeOut(duration: 0.1), value: configuration.isPressed)
     }
 }
 

@@ -25,6 +25,7 @@ struct HealthTabView: View {
     @State private var showOtisPlusSheet = false
     @State private var selectedMilestone: Milestone?
     @State private var showAllMilestones = false
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         NavigationStack {
@@ -335,7 +336,7 @@ struct HealthTabView: View {
                 // Show more/less button
                 if hasMoreToShow {
                     Button {
-                        withAnimation(.easeInOut(duration: 0.2)) {
+                        withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.2)) {
                             showAllMilestones.toggle()
                         }
                     } label: {

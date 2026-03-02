@@ -13,12 +13,9 @@ import OtisShared
 extension TimelineViewModel {
 
     /// Set of event IDs that occurred during walks (for dual-track layout)
+    /// Uses cached lookup for O(n) instead of rebuilding every access
     var walkConcurrentEventIds: Set<UUID> {
-        var ids = Set<UUID>()
-        for event in events where event.parentWalkId != nil {
-            ids.insert(event.id)
-        }
-        return ids
+        Set(events.compactMap { $0.parentWalkId != nil ? $0.id : nil })
     }
 
     /// Items prepared for vertical timeline display
@@ -31,6 +28,15 @@ extension TimelineViewModel {
         // Track which event IDs are already included in sessions
         var processedEventIds: Set<UUID> = []
 
+        // Build lookup dictionary for child events by parentWalkId - O(n) once instead of O(n) per walk
+        let childEventsByWalkId: [UUID: [PuppyEvent]] = Dictionary(
+            grouping: events.filter { $0.parentWalkId != nil },
+            by: { $0.parentWalkId! }
+        )
+
+        // Build lookup dictionary for events by ID - O(1) lookup instead of O(n)
+        let eventsById: [UUID: PuppyEvent] = Dictionary(uniqueKeysWithValues: events.map { ($0.id, $0) })
+
         // 1. Build sleep sessions
         let sleepSessions = SleepSession.buildSessions(from: events)
         for session in sleepSessions {
@@ -39,8 +45,8 @@ extension TimelineViewModel {
                 processedEventIds.insert(endId)
             }
 
-            // Get photo from sleep event
-            let sleepEvent = events.first { $0.id == session.startEventId }
+            // Get photo from sleep event - O(1) lookup
+            let sleepEvent = eventsById[session.startEventId]
             let photoThumbnail = sleepEvent?.thumbnailPath
 
             let description = sleepDescription(for: session, puppyName: puppyName)
@@ -62,16 +68,17 @@ extension TimelineViewModel {
         for walk in walks {
             processedEventIds.insert(walk.id)
 
-            // Also mark child potty events as processed (they render alongside walks)
-            let childPottyEvents = events.filter { $0.parentWalkId == walk.id }
-            for child in childPottyEvents {
-                processedEventIds.insert(child.id)
+            // Mark child potty events as processed - O(1) lookup instead of O(n) filter
+            if let childEvents = childEventsByWalkId[walk.id] {
+                for child in childEvents {
+                    processedEventIds.insert(child.id)
+                }
             }
 
             let durationMin = walk.durationMin ?? 20 // Default 20 minutes if not specified
             let endTime = walk.time.addingTimeInterval(Double(durationMin) * 60)
 
-            let description = walkDescription(for: walk, puppyName: puppyName)
+            let description = walkDescription(for: walk, childEventsByWalkId: childEventsByWalkId, puppyName: puppyName)
 
             items.append(VerticalTimelineItem(
                 id: walk.id,
@@ -198,9 +205,9 @@ extension TimelineViewModel {
         return Strings.VerticalTimeline.tookNap(name: puppyName)
     }
 
-    private func walkDescription(for walk: PuppyEvent, puppyName: String) -> String {
-        // Check for child potty events
-        let childPottyEvents = events.filter { $0.parentWalkId == walk.id }
+    private func walkDescription(for walk: PuppyEvent, childEventsByWalkId: [UUID: [PuppyEvent]], puppyName: String) -> String {
+        // Check for child potty events using O(1) lookup
+        let childPottyEvents = childEventsByWalkId[walk.id] ?? []
         let didPee = childPottyEvents.contains { $0.type == .plassen }
         let didPoop = childPottyEvents.contains { $0.type == .poepen }
 

@@ -7,7 +7,7 @@
 import UIKit
 
 /// Manages spot photo storage in the app's documents directory
-final class SpotPhotoStore {
+final class SpotPhotoStore: @unchecked Sendable {
     static let shared = SpotPhotoStore()
 
     private let fileManager = FileManager.default
@@ -32,10 +32,18 @@ final class SpotPhotoStore {
         return filename
     }
 
-    /// Load an image by filename
+    /// Load an image by filename (synchronous - prefer loadAsync for UI)
     func load(filename: String) -> UIImage? {
         let url = directory.appendingPathComponent(filename)
         return UIImage(contentsOfFile: url.path)
+    }
+
+    /// Load an image asynchronously (non-blocking)
+    func loadAsync(filename: String) async -> UIImage? {
+        let url = directory.appendingPathComponent(filename)
+        return await Task.detached(priority: .userInitiated) {
+            UIImage(contentsOfFile: url.path)
+        }.value
     }
 
     /// Delete an image by filename

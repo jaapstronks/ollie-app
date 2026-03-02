@@ -16,6 +16,7 @@ struct CelebrationSettingsView: View {
     @State private var showingTier3Preview = false
 
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     private var celebrationStyle: CelebrationStyle {
         get { CelebrationStyle(rawValue: celebrationStyleRaw) ?? .full }
@@ -44,7 +45,7 @@ struct CelebrationSettingsView: View {
         Section {
             ForEach(CelebrationStyle.allCases) { style in
                 Button {
-                    withAnimation(.spring(response: 0.3)) {
+                    withAnimation(reduceMotion ? nil : .spring(response: 0.3)) {
                         celebrationStyleRaw = style.rawValue
                     }
                     HapticFeedback.light()
