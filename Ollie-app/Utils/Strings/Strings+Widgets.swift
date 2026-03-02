@@ -41,6 +41,24 @@ extension Strings {
         static func appointmentReminder(name: String, title: String, time: String) -> String {
             String(localized: "\(name) has '\(title)' at \(time)", table: table)
         }
+
+        // Wake up soon notifications
+        static let wakingUpSoonTitle = String(localized: "Waking up soon", table: table)
+        static func wakingUpSoonBody(name: String) -> String {
+            String(localized: "\(name) should wake up soon", table: table)
+        }
+        static func wakingUpSoonWithWalk(name: String) -> String {
+            String(localized: "\(name) should wake up soon – walk is due", table: table)
+        }
+        static func wakingUpSoonWithMeal(name: String) -> String {
+            String(localized: "\(name) should wake up soon – meal is due", table: table)
+        }
+        static func wakingUpSoonWithWalkAndMeal(name: String) -> String {
+            String(localized: "\(name) should wake up soon – walk and meal are due", table: table)
+        }
+        static func wakingUpSoonWithPotty(name: String) -> String {
+            String(localized: "\(name) should wake up soon – potty break needed", table: table)
+        }
     }
 
     // MARK: - Widgets

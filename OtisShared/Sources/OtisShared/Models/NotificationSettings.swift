@@ -109,10 +109,21 @@ public struct MealReminderSettings: Codable, Sendable {
 public struct NapReminderSettings: Codable, Sendable {
     public var isEnabled: Bool
     public var awakeThresholdMinutes: Int
+    /// Whether to send "waking up soon" notifications based on average nap duration
+    public var wakeUpSoonEnabled: Bool
+    /// Minutes before expected wake time to send notification
+    public var wakeUpSoonMinutesBefore: Int
 
-    public init(isEnabled: Bool = true, awakeThresholdMinutes: Int = 45) {
+    public init(
+        isEnabled: Bool = true,
+        awakeThresholdMinutes: Int = 45,
+        wakeUpSoonEnabled: Bool = true,
+        wakeUpSoonMinutesBefore: Int = 10
+    ) {
         self.isEnabled = isEnabled
         self.awakeThresholdMinutes = awakeThresholdMinutes
+        self.wakeUpSoonEnabled = wakeUpSoonEnabled
+        self.wakeUpSoonMinutesBefore = wakeUpSoonMinutesBefore
     }
 }
 
