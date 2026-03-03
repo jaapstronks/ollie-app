@@ -69,7 +69,7 @@ public enum DateFormatters {
     }()
 
     /// ISO 8601 with timezone
-    public static let iso8601: ISO8601DateFormatter = {
+    nonisolated(unsafe) public static let iso8601: ISO8601DateFormatter = {
         let formatter = ISO8601DateFormatter()
         formatter.formatOptions = [.withInternetDateTime, .withTimeZone]
         formatter.timeZone = TimeZone.current
@@ -77,7 +77,7 @@ public enum DateFormatters {
     }()
 
     /// ISO 8601 with fractional seconds
-    public static let iso8601WithFractional: ISO8601DateFormatter = {
+    nonisolated(unsafe) public static let iso8601WithFractional: ISO8601DateFormatter = {
         let formatter = ISO8601DateFormatter()
         formatter.formatOptions = [.withInternetDateTime, .withTimeZone, .withFractionalSeconds]
         return formatter

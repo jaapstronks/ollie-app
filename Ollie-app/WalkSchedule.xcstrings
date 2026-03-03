@@ -16,6 +16,12 @@
             "value": "%lld min"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld min"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -43,6 +49,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lld min/mes"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld min/mois"
           }
         },
         "it": {
@@ -74,6 +86,12 @@
             "value": "%lld paseos"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld promenades"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -101,6 +119,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lld paseos/dia"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld promenades/jour"
           }
         },
         "it": {
@@ -132,6 +156,12 @@
             "value": "~%lld min de intervalo"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "~%lld min d'intervalle"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -159,6 +189,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Agregar paseo"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajouter une promenade"
           }
         },
         "it": {
@@ -190,6 +226,12 @@
             "value": "A los %lld meses: max %lld min por paseo"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "À %lld mois : max %lld min par promenade"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -217,6 +259,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Limites del dia"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Limites de la journée"
           }
         },
         "it": {
@@ -248,6 +296,12 @@
             "value": "Eliminar paseo"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Supprimer la promenade"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -275,6 +329,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "ej. Paseo matutino"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ex. Promenade matinale"
           }
         },
         "it": {
@@ -306,6 +366,12 @@
             "value": "Editar paseo"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modifier la promenade"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -333,6 +399,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Editar horario de paseos"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modifier le programme de promenades"
           }
         },
         "it": {
@@ -364,6 +436,12 @@
             "value": "Limites de ejercicio"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Limites d'exercice"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -393,6 +471,12 @@
             "value": "Primer paseo despues de"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Première promenade après"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -417,6 +501,12 @@
           }
         },
         "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Flexible"
+          }
+        },
+        "fr": {
           "stringUnit": {
             "state": "translated",
             "value": "Flexible"
@@ -451,6 +541,12 @@
             "value": "Flexible (Recomendado)"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Flexible (Recommandé)"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -478,6 +574,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "En modo flexible, este es el tiempo minimo entre paseos."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En mode flexible, c'est le temps minimum entre les promenades."
           }
         },
         "it": {
@@ -509,6 +611,12 @@
             "value": "Intervalo entre paseos"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Intervalle entre les promenades"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -536,6 +644,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ultimo paseo antes de"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dernière promenade avant"
           }
         },
         "it": {
@@ -567,6 +681,12 @@
             "value": "Max %lld min/paseo"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Max %lld min/promenade"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -594,6 +714,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Duracion maxima por paseo"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Durée max par promenade"
           }
         },
         "it": {
@@ -625,6 +751,12 @@
             "value": "Minutos por mes de edad"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Minutes par mois d'âge"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -652,6 +784,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Modo de programacion"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mode de planification"
           }
         },
         "it": {
@@ -683,6 +821,12 @@
             "value": "Estricto"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Strict"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -710,6 +854,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "La 'regla de los 5 minutos': los cachorros pueden caminar 5 minutos por mes de edad por sesion."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La « règle des 5 minutes » — les chiots peuvent marcher 5 minutes par mois d'âge par session."
           }
         },
         "it": {
@@ -776,6 +926,12 @@
             "value": "Horarios"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Horaires"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -803,6 +959,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nombre del paseo"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nom de la promenade"
           }
         },
         "it": {
@@ -834,6 +996,12 @@
             "value": "Horario de paseos"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Programme de promenades"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -863,6 +1031,12 @@
             "value": "Los horarios de paseo se ajustan segun cuando fue el ultimo paseo. Ideal para adaptarse a la vida real."
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les horaires de promenade s'adaptent à la dernière promenade. Idéal pour s'ajuster à la réalité."
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -890,6 +1064,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Los horarios de paseo son fijos. Util para rutinas estrictas o multiples cuidadores."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les horaires de promenade sont fixes. Utile pour les routines strictes ou plusieurs personnes s'occupant du chien."
           }
         },
         "it": {

@@ -35,6 +35,7 @@ extension Strings {
         static let no = String(localized: "No", table: table)
         static let share = String(localized: "Share", table: table)
         static let addPhoto = String(localized: "Add Photo", table: table)
+        static let notSet = String(localized: "Not set", table: table)
 
         // Error messages
         static let saveFailed = String(localized: "Failed to save. Please try again.", table: table)

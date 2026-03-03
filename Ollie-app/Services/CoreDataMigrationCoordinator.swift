@@ -11,7 +11,7 @@ import OtisShared
 import os
 
 /// Handles one-time migration from JSONL/JSON files to Core Data
-final class CoreDataMigrationCoordinator {
+final class CoreDataMigrationCoordinator: @unchecked Sendable {
 
     // MARK: - Singleton
 
@@ -504,7 +504,7 @@ final class CoreDataMigrationCoordinator {
 enum MigrationError: LocalizedError {
     case storesNotReady
 
-    var errorDescription: String? {
+    nonisolated var errorDescription: String? {
         switch self {
         case .storesNotReady:
             return "Core Data stores are not ready. Please restart the app."

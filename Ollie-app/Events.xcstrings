@@ -27,6 +27,12 @@
             "state": "translated",
             "value": "Posizione %@"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Emplacement de %@"
+          }
         }
       }
     },
@@ -52,6 +58,12 @@
           }
         },
         "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld min"
+          }
+        },
+        "fr": {
           "stringUnit": {
             "state": "translated",
             "value": "%lld min"
@@ -85,6 +97,12 @@
             "state": "translated",
             "value": "%lld minuti fa"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il y a %lld minutes"
+          }
         }
       }
     },
@@ -113,6 +131,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Aggiungi foto"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajouter une photo"
           }
         }
       }
@@ -143,6 +167,12 @@
             "state": "translated",
             "value": "Sei sicuro di voler eliminare questo momento?"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voulez-vous vraiment supprimer ce moment ?"
+          }
         }
       }
     },
@@ -172,6 +202,12 @@
             "state": "translated",
             "value": "Comportamento"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Comportement"
+          }
         }
       }
     },
@@ -200,6 +236,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Entrambi"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les deux"
           }
         }
       }
@@ -335,6 +377,12 @@
             "state": "translated",
             "value": "Data dalla foto"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Date de la photo"
+          }
         }
       }
     },
@@ -364,6 +412,12 @@
             "state": "translated",
             "value": "Elimina foto"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Supprimer la photo"
+          }
         }
       }
     },
@@ -392,6 +446,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Eliminare?"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Supprimer ?"
           }
         }
       }
@@ -457,6 +517,12 @@
             "state": "translated",
             "value": "Tocca due volte per regolare l'ora"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Appuyez deux fois pour ajuster l'heure"
+          }
         }
       }
     },
@@ -485,6 +551,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tocca due volte per catturare un momento"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Appuyez deux fois pour capturer un moment photo"
           }
         }
       }
@@ -515,6 +587,12 @@
             "state": "translated",
             "value": "Tocca due volte per cambiare l'ora"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Appuyez deux fois pour changer l'heure"
+          }
         }
       }
     },
@@ -543,6 +621,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tocca due volte per registrare %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Appuyez deux fois pour enregistrer %@"
           }
         }
       }
@@ -573,6 +657,12 @@
             "state": "translated",
             "value": "Tocca due volte per registrare pipì o cacca"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Appuyez deux fois pour enregistrer pipi ou caca"
+          }
         }
       }
     },
@@ -601,6 +691,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tocca due volte per salvare"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Appuyez deux fois pour enregistrer"
           }
         }
       }
@@ -631,6 +727,12 @@
             "state": "translated",
             "value": "Tocca due volte per vedere tutti i tipi di eventi"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Appuyez deux fois pour voir tous les types d'événements"
+          }
         }
       }
     },
@@ -660,6 +762,12 @@
             "state": "translated",
             "value": "Tocca due volte per selezionare %@"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Appuyez deux fois pour sélectionner %@"
+          }
         }
       }
     },
@@ -688,6 +796,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tocca due volte per vedere i media allegati"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Appuyez deux fois pour voir les médias joints"
           }
         }
       }
@@ -788,6 +902,12 @@
             "state": "translated",
             "value": "Durata in minuti"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Durée en minutes"
+          }
         }
       }
     },
@@ -816,6 +936,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Es. dopo la pappa, in giardino..."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ex. après manger, dans le jardin..."
           }
         }
       }
@@ -881,6 +1007,12 @@
             "state": "translated",
             "value": "Inserisci una nota opzionale"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entrez une note facultative"
+          }
         }
       }
     },
@@ -909,6 +1041,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Inserisci la durata in minuti"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entrez la durée en minutes"
           }
         }
       }
@@ -939,6 +1077,12 @@
             "state": "translated",
             "value": "Inserisci il nome di una persona o animale"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entrez le nom d'une personne ou d'un animal"
+          }
         }
       }
     },
@@ -968,6 +1112,12 @@
             "state": "translated",
             "value": "Inserisci il nome dell'esercizio"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entrez le nom de l'exercice d'entraînement"
+          }
         }
       }
     },
@@ -996,6 +1146,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Inserisci il risultato dell'addestramento"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entrez le résultat de l'entraînement"
           }
         }
       }
@@ -1061,6 +1217,12 @@
             "state": "translated",
             "value": "Giardino"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jardin"
+          }
         }
       }
     },
@@ -1089,6 +1251,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ha dati di posizione"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contient des données de localisation"
           }
         }
       }
@@ -1154,6 +1322,12 @@
             "state": "translated",
             "value": "Posizione dalla foto"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Emplacement de la photo"
+          }
         }
       }
     },
@@ -1182,6 +1356,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Registra %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer %@"
           }
         }
       }
@@ -1247,6 +1427,12 @@
             "state": "translated",
             "value": "Registra bisognini"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer besoins"
+          }
         }
       }
     },
@@ -1276,6 +1462,12 @@
             "state": "translated",
             "value": "Registra evento bisognini"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer un événement besoins"
+          }
         }
       }
     },
@@ -1304,6 +1496,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Medicina"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Médicament"
           }
         }
       }
@@ -1368,6 +1566,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Momento"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Moment"
           }
         }
       }
@@ -1468,6 +1672,12 @@
             "state": "translated",
             "value": "Altri tipi di eventi"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus de types d'événements"
+          }
         }
       }
     },
@@ -1496,6 +1706,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Altri eventi"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus d'événements"
           }
         }
       }
@@ -1526,6 +1742,12 @@
             "state": "translated",
             "value": "Nome persona o animale"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nom de la personne ou de l'animal"
+          }
         }
       }
     },
@@ -1554,6 +1776,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nessuna foto ancora"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pas encore de photos"
           }
         }
       }
@@ -1619,6 +1847,12 @@
             "state": "translated",
             "value": "Nota (opzionale)"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Note (facultatif)"
+          }
         }
       }
     },
@@ -1648,6 +1882,12 @@
             "state": "translated",
             "value": "Adesso (nessuna data nella foto)"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Maintenant (pas de date dans la photo)"
+          }
         }
       }
     },
@@ -1676,6 +1916,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nota opzionale..."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Note facultative..."
           }
         }
       }
@@ -1811,6 +2057,12 @@
             "state": "translated",
             "value": "Libreria foto"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Photothèque"
+          }
         }
       }
     },
@@ -1839,6 +2091,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Foto non trovata"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Photo introuvable"
           }
         }
       }
@@ -1869,6 +2127,12 @@
             "state": "translated",
             "value": "Foto dell'evento %@"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Photo de l'événement %@"
+          }
         }
       }
     },
@@ -1897,6 +2161,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Pizzica per zoomare, tocca due volte per alternare lo zoom"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pincez pour zoomer, appuyez deux fois pour basculer le zoom"
           }
         }
       }
@@ -1961,6 +2231,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Eventi rapidi"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Événements rapides"
           }
         }
       }
@@ -2061,6 +2337,12 @@
             "state": "translated",
             "value": "Prima seleziona tipo e posizione"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sélectionnez d'abord le type et l'emplacement"
+          }
         }
       }
     },
@@ -2089,6 +2371,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Selezionato"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sélectionné"
           }
         }
       }
@@ -2154,6 +2442,12 @@
             "state": "translated",
             "value": "Sociale"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Social"
+          }
         }
       }
     },
@@ -2182,6 +2476,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Scatta foto"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prendre une photo"
           }
         }
       }
@@ -2212,6 +2512,12 @@
             "state": "translated",
             "value": "Scatta foto usando il pulsante fotocamera\nnella cronologia"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prenez des photos avec le bouton appareil photo\ndans la chronologie"
+          }
         }
       }
     },
@@ -2240,6 +2546,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tocca per vedere la foto"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Appuyez pour voir la photo"
           }
         }
       }
@@ -2305,6 +2617,12 @@
             "state": "translated",
             "value": "Ora: %@"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heure : %@"
+          }
         }
       }
     },
@@ -2333,6 +2651,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Bisognini"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Besoins"
           }
         }
       }
@@ -2468,6 +2792,12 @@
             "state": "translated",
             "value": "Cosa è successo?"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Que s'est-il passé ?"
+          }
         }
       }
     },
@@ -2496,6 +2826,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Cosa?"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quoi ?"
           }
         }
       }
@@ -2526,6 +2862,12 @@
             "state": "translated",
             "value": "Dove?"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Où ?"
+          }
         }
       }
     },
@@ -2554,6 +2896,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Chi?"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Qui ?"
           }
         }
       }
@@ -2584,6 +2932,12 @@
             "state": "translated",
             "value": "con %@"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "avec %@"
+          }
         }
       }
     },
@@ -2613,6 +2967,12 @@
             "state": "translated",
             "value": "Con chi"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Avec qui"
+          }
         }
       }
     },
@@ -2641,6 +3001,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sveglio"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réveillé"
           }
         }
       }

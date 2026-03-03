@@ -49,6 +49,13 @@ final class PottyNotificationScheduler: NotificationScheduler {
             return
         }
 
+        // Smart suppression: Don't notify during stale logging (user hasn't been logging)
+        // Check if last event was too long ago during daytime hours
+        if isStaleLogging(events: events) {
+            logger.debug("Suppressing potty notification: stale logging detected")
+            return
+        }
+
         let minutesBefore = profile.notificationSettings.pottyReminders.urgencyLevel.minutesBefore
 
         guard let minutesSinceLast = prediction.minutesSinceLast else { return }
@@ -142,5 +149,30 @@ final class PottyNotificationScheduler: NotificationScheduler {
         if !success {
             logger.error("Failed to send immediate potty notification")
         }
+    }
+
+    /// Check if logging has gone stale (no events for too long during daytime)
+    private func isStaleLogging(events: [PuppyEvent]) -> Bool {
+        let calendar = Calendar.current
+        let now = Date()
+        let currentHour = calendar.component(.hour, from: now)
+
+        // Only check during daytime hours (7 AM - 11 PM)
+        guard currentHour >= 7 && currentHour < 23 else {
+            return false
+        }
+
+        // Find the last event (excluding coverage gaps)
+        let lastEvent = events
+            .filter { $0.type != .coverageGap }
+            .max(by: { $0.time < $1.time })
+
+        guard let lastEventTime = lastEvent?.time else {
+            return false
+        }
+
+        // Check if 4+ hours since last event
+        let hoursSinceLastEvent = now.timeIntervalSince(lastEventTime) / 3600
+        return hoursSinceLastEvent >= 4
     }
 }

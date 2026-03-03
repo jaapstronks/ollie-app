@@ -27,6 +27,12 @@
             "state": "translated",
             "value": "/maand"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "/mois"
+          }
         }
       }
     },
@@ -55,6 +61,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "/jaar"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "/an"
           }
         }
       }
@@ -85,6 +97,12 @@
             "state": "translated",
             "value": "7 dagen gratis"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 jours gratuits"
+          }
         }
       }
     },
@@ -113,6 +131,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Toegang tot alle trainingsvaardigheden en oefeningen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Accédez à toutes les compétences et exercices d'entraînement"
           }
         }
       }
@@ -143,6 +167,12 @@
             "state": "translated",
             "value": "Actief (verlengt op %@)"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Actif (renouvellement %@)"
+          }
         }
       }
     },
@@ -171,6 +201,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Voeg mijlpalen toe aan je agenda met herinneringen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajoutez des étapes à votre calendrier avec des rappels"
           }
         }
       }
@@ -201,6 +237,12 @@
             "state": "translated",
             "value": "Voeg notities en foto's toe bij het voltooien van mijlpalen"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajoutez des notes et photos en complétant les étapes"
+          }
         }
       }
     },
@@ -229,6 +271,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Geavanceerde analyses"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Analyses avancées"
           }
         }
       }
@@ -259,6 +307,12 @@
             "state": "translated",
             "value": "AI voorspelt wanneer je puppy moet plassen op basis van patronen"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L'IA prédit quand votre chiot a besoin de sortir selon ses habitudes"
+          }
         }
       }
     },
@@ -286,6 +340,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Er is een fout opgetreden"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Une erreur s'est produite"
           }
         }
       }
@@ -316,6 +376,12 @@
             "state": "translated",
             "value": "Voeg foto's en video's toe aan elk event"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Joignez des photos et vidéos à n'importe quel événement"
+          }
         }
       }
     },
@@ -345,6 +411,12 @@
             "state": "translated",
             "value": "Agenda-integratie"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Intégration calendrier"
+          }
         }
       }
     },
@@ -372,6 +444,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Kon aankoop niet verifiëren"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossible de vérifier l'achat"
           }
         }
       }
@@ -402,6 +480,12 @@
             "state": "translated",
             "value": "Maak je eigen mijlpalen en events aan"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Créez vos propres étapes et événements personnalisés"
+          }
         }
       }
     },
@@ -430,6 +514,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Eigen mijlpalen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Étapes personnalisées"
           }
         }
       }
@@ -460,6 +550,12 @@
             "state": "translated",
             "value": "Diepgaande inzichten in gedrag, gezondheid en routines"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Analyses approfondies du comportement, de la santé et des routines"
+          }
         }
       }
     },
@@ -488,6 +584,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ontdek gedragspatronen met Otis+"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Découvrez les schémas comportementaux avec Otis+"
           }
         }
       }
@@ -518,6 +620,12 @@
             "state": "translated",
             "value": "Ontdek premium functies"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Découvrez les fonctionnalités premium"
+          }
         }
       }
     },
@@ -546,6 +654,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Verlopen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Expiré"
           }
         }
       }
@@ -576,6 +690,12 @@
             "state": "translated",
             "value": "Exporteer logboeken en rapporten voor je dierenarts"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exportez les journaux et rapports pour votre vétérinaire"
+          }
         }
       }
     },
@@ -604,6 +724,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Exporteren naar PDF"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exporter en PDF"
           }
         }
       }
@@ -669,6 +795,12 @@
             "state": "translated",
             "value": "Volledige trainingsbibliotheek"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bibliothèque d'entraînement complète"
+          }
         }
       }
     },
@@ -697,6 +829,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Krijg AI-gestuurde inzichten, onbeperkte training en premium functies om je puppy te helpen bloeien."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Obtenez des analyses par IA, un entraînement illimité et des fonctionnalités premium pour aider votre chiot à s'épanouir."
           }
         }
       }
@@ -727,6 +865,12 @@
             "state": "translated",
             "value": "Krijg gedetailleerde slaapanalyse met Otis+"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Obtenez une analyse détaillée du sommeil avec Otis+"
+          }
         }
       }
     },
@@ -755,6 +899,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Aan de slag"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Commencer"
           }
         }
       }
@@ -785,6 +935,12 @@
             "state": "translated",
             "value": "Abonnement beheren"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gérer l'abonnement"
+          }
         }
       }
     },
@@ -813,6 +969,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Notities en foto's bij mijlpalen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notes et photos des étapes"
           }
         }
       }
@@ -878,6 +1040,12 @@
             "state": "translated",
             "value": "Meer trainingsvaardigheden"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus de compétences d'entraînement"
+          }
         }
       }
     },
@@ -903,6 +1071,12 @@
           }
         },
         "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis+"
+          }
+        },
+        "fr": {
           "stringUnit": {
             "state": "translated",
             "value": "Otis+"
@@ -936,6 +1110,12 @@
             "state": "translated",
             "value": "Patroonanalyse"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Analyse des schémas"
+          }
         }
       }
     },
@@ -964,6 +1144,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Foto- en videobijlagen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pièces jointes photo et vidéo"
           }
         }
       }
@@ -994,6 +1180,12 @@
             "state": "translated",
             "value": "Plasvoorspellingen"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prédictions de besoins"
+          }
         }
       }
     },
@@ -1022,6 +1214,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Premium (Levenslang)"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Premium (à vie)"
           }
         }
       }
@@ -1052,6 +1250,12 @@
             "state": "translated",
             "value": "Privacybeleid"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Politique de confidentialité"
+          }
         }
       }
     },
@@ -1079,6 +1283,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Producten niet beschikbaar"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Produits non disponibles"
           }
         }
       }
@@ -1109,6 +1319,12 @@
             "state": "translated",
             "value": "Aankoop mislukt"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Achat échoué"
+          }
         }
       }
     },
@@ -1137,6 +1353,12 @@
             "state": "translated",
             "value": "Aankoop wacht op goedkeuring"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Achat en attente d'approbation"
+          }
         }
       }
     },
@@ -1164,6 +1386,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Aankoop is geannuleerd"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Achat annulé"
           }
         }
       }
@@ -1194,6 +1422,12 @@
             "state": "translated",
             "value": "Aankopen herstellen"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restaurer les achats"
+          }
         }
       }
     },
@@ -1222,6 +1456,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Bespaar %lld%%"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Économisez %lld %%"
           }
         }
       }
@@ -1252,6 +1492,12 @@
             "state": "translated",
             "value": "Deel met je hele gezin, niet alleen met een partner"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Partagez avec toute votre famille, pas seulement un partenaire"
+          }
         }
       }
     },
@@ -1281,6 +1527,12 @@
             "state": "translated",
             "value": "Slaapinzichten"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Analyses du sommeil"
+          }
         }
       }
     },
@@ -1309,6 +1561,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Socialisatievoortgang"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Progrès de socialisation"
           }
         }
       }
@@ -1409,6 +1667,12 @@
             "state": "translated",
             "value": "Abonnementen worden automatisch verlengd tenzij je minimaal 24 uur voor het einde van de huidige periode opzegt. De betaling wordt in rekening gebracht op je Apple ID-account. Beheer je abonnementen in Instellingen."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les abonnements se renouvellent automatiquement sauf annulation au moins 24 heures avant la fin de la période en cours. Le paiement sera prélevé sur votre compte Apple ID. Gérez vos abonnements dans Réglages."
+          }
         }
       }
     },
@@ -1437,6 +1701,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Gebruiksvoorwaarden"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Conditions d'utilisation"
           }
         }
       }
@@ -1467,6 +1737,12 @@
             "state": "translated",
             "value": "Volg slaapkwaliteit en optimaliseer rustschema's"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suivez la qualité du sommeil et optimisez les horaires de repos"
+          }
         }
       }
     },
@@ -1495,6 +1771,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Volg socialisatie-ervaringen en voortgang"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suivez les expériences de socialisation et les progrès"
           }
         }
       }
@@ -1525,6 +1807,12 @@
             "state": "translated",
             "value": "Proefperiode (%lld dagen over)"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Essai (%lld jours restants)"
+          }
         }
       }
     },
@@ -1553,6 +1841,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Probeer alle Otis+ functies risicovrij. Annuleer wanneer je wilt."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Essayez toutes les fonctionnalités Otis+ sans risque. Annulez à tout moment."
           }
         }
       }
@@ -1583,6 +1877,12 @@
             "state": "translated",
             "value": "Probeer Otis+"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Essayer Otis+"
+          }
         }
       }
     },
@@ -1611,6 +1911,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Onbeperkt delen met partners"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Partage illimité avec des partenaires"
           }
         }
       }
@@ -1641,6 +1947,12 @@
             "state": "translated",
             "value": "Ontgrendel alle trainingsvaardigheden met Otis+"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Débloquez toutes les compétences d'entraînement avec Otis+"
+          }
         }
       }
     },
@@ -1669,6 +1981,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ontgrendel de volledige Otis-ervaring"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Débloquez l'expérience Otis complète"
           }
         }
       }
@@ -1699,6 +2017,12 @@
             "state": "translated",
             "value": "Ontgrendel met Otis+"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Débloquer avec Otis+"
+          }
         }
       }
     },
@@ -1727,6 +2051,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Weekoverzicht"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bilan de la semaine"
           }
         }
       }
@@ -1757,6 +2087,12 @@
             "state": "translated",
             "value": "Wekelijkse samenvattingen met voortgangshoogtepunten"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Résumés hebdomadaires avec points forts des progrès"
+          }
         }
       }
     },
@@ -1786,6 +2122,12 @@
             "state": "translated",
             "value": "Welkom bij Otis+!"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bienvenue sur Otis+ !"
+          }
         }
       }
     },
@@ -1814,6 +2156,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Wat zit erin"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ce qui est inclus"
           }
         }
       }
@@ -1878,6 +2226,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Je hebt nu toegang tot alle premium functies. Laten we samen het meeste uit de reis van je puppy halen."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vous avez maintenant accès à toutes les fonctionnalités premium. Profitons ensemble au maximum du parcours de votre chiot."
           }
         }
       }

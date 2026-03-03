@@ -71,10 +71,19 @@ final class OtisAnalytics {
             return
         }
 
+        // Encode properties to JSON string now (on main actor)
+        let eventDataString: String
+        if let jsonData = try? JSONSerialization.data(withJSONObject: properties),
+           let jsonString = String(data: jsonData, encoding: .utf8) {
+            eventDataString = jsonString
+        } else {
+            eventDataString = "{}"
+        }
+
         let event = AnalyticsEvent(
             deviceId: deviceId,
             eventName: eventName,
-            eventData: properties,
+            eventData: eventDataString,
             appVersion: appVersion,
             iosVersion: iosVersion,
             deviceModel: deviceModel
@@ -138,10 +147,10 @@ final class OtisAnalytics {
 
 // MARK: - Event Model
 
-private struct AnalyticsEvent: Encodable {
+private struct AnalyticsEvent: Encodable, Sendable {
     let deviceId: String
     let eventName: String
-    let eventData: [String: Any]
+    let eventData: String  // Pre-encoded JSON string for Sendable conformance
     let appVersion: String
     let iosVersion: String
     let deviceModel: String
@@ -153,19 +162,5 @@ private struct AnalyticsEvent: Encodable {
         case appVersion = "app_version"
         case iosVersion = "ios_version"
         case deviceModel = "device_model"
-    }
-
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(deviceId, forKey: .deviceId)
-        try container.encode(eventName, forKey: .eventName)
-        try container.encode(appVersion, forKey: .appVersion)
-        try container.encode(iosVersion, forKey: .iosVersion)
-        try container.encode(deviceModel, forKey: .deviceModel)
-
-        // Encode eventData as JSON string (backend expects string, not nested object)
-        let jsonData = try JSONSerialization.data(withJSONObject: eventData)
-        let jsonString = String(data: jsonData, encoding: .utf8) ?? "{}"
-        try container.encode(jsonString, forKey: .eventData)
     }
 }

@@ -13,12 +13,17 @@ import os
 
 /// Handles Core Data operations for puppy events
 /// Architecture: Same API as LocalEventFileStore for easy migration
+/// Supports profile-scoped queries for multi-puppy feature
 final class CoreDataEventStore: @unchecked Sendable {
 
     // MARK: - Properties
 
     private let persistenceController: PersistenceController
     private let logger = Logger.otis(category: "CoreDataEventStore")
+
+    /// Active profile for scoped queries (set by EventStore)
+    /// When set, all read operations will filter by this profile
+    var activeProfile: CDPuppyProfile?
 
     /// In-memory cache for frequently accessed date ranges
     private var rangeCache: [String: (events: [PuppyEvent], timestamp: Date)] = [:]
@@ -43,15 +48,22 @@ final class CoreDataEventStore: @unchecked Sendable {
 
     // MARK: - Reading Events
 
-    /// Read events for a specific date
+    /// Read events for a specific date (filtered by active profile if set)
     func readEvents(for date: Date) -> [PuppyEvent] {
-        let cdEvents = CDPuppyEvent.fetchEvents(for: date, in: viewContext)
+        let cdEvents: [CDPuppyEvent]
+        if let profile = activeProfile {
+            cdEvents = CDPuppyEvent.fetchEvents(for: date, profile: profile, in: viewContext)
+        } else {
+            cdEvents = CDPuppyEvent.fetchEvents(for: date, in: viewContext)
+        }
         return cdEvents.compactMap { $0.toPuppyEvent() }.sorted { $0.time > $1.time }
     }
 
-    /// Read all events from a date range (with caching for frequently accessed ranges)
+    /// Read all events from a date range (with caching, filtered by active profile if set)
     func readEvents(from startDate: Date, to endDate: Date) -> [PuppyEvent] {
-        let cacheKey = "\(startDate.dateString)_to_\(endDate.dateString)"
+        // Include profile ID in cache key for profile-scoped caching
+        let profileSuffix = activeProfile?.id?.uuidString ?? "all"
+        let cacheKey = "\(startDate.dateString)_to_\(endDate.dateString)_\(profileSuffix)"
 
         // Check range cache first
         rangeCacheLock.lock()
@@ -62,8 +74,13 @@ final class CoreDataEventStore: @unchecked Sendable {
         }
         rangeCacheLock.unlock()
 
-        // Fetch from Core Data
-        let cdEvents = CDPuppyEvent.fetchEvents(from: startDate, to: endDate, in: viewContext)
+        // Fetch from Core Data (profile-scoped if profile is set)
+        let cdEvents: [CDPuppyEvent]
+        if let profile = activeProfile {
+            cdEvents = CDPuppyEvent.fetchEvents(from: startDate, to: endDate, profile: profile, in: viewContext)
+        } else {
+            cdEvents = CDPuppyEvent.fetchEvents(from: startDate, to: endDate, in: viewContext)
+        }
         let events = cdEvents.compactMap { $0.toPuppyEvent() }.sorted { $0.time > $1.time }
 
         // Update range cache
@@ -77,15 +94,28 @@ final class CoreDataEventStore: @unchecked Sendable {
     /// Async version of readEvents for date ranges - runs on background thread
     func readEventsAsync(from startDate: Date, to endDate: Date) async -> [PuppyEvent] {
         let context = newBackgroundContext()
+        let profileId = activeProfile?.id
+
         return await context.perform {
-            let cdEvents = CDPuppyEvent.fetchEvents(from: startDate, to: endDate, in: context)
+            let cdEvents: [CDPuppyEvent]
+            if let profileId = profileId,
+               let profile = CDPuppyProfile.fetch(byId: profileId, in: context) {
+                cdEvents = CDPuppyEvent.fetchEvents(from: startDate, to: endDate, profile: profile, in: context)
+            } else {
+                cdEvents = CDPuppyEvent.fetchEvents(from: startDate, to: endDate, in: context)
+            }
             return cdEvents.compactMap { $0.toPuppyEvent() }.sorted { $0.time > $1.time }
         }
     }
 
-    /// Read all events (for migration/export)
+    /// Read all events for the active profile (or all events if no profile set)
     func readAllEvents() -> [PuppyEvent] {
-        let cdEvents = CDPuppyEvent.fetchAllEvents(in: viewContext)
+        let cdEvents: [CDPuppyEvent]
+        if let profile = activeProfile {
+            cdEvents = CDPuppyEvent.fetchAllEvents(for: profile, in: viewContext)
+        } else {
+            cdEvents = CDPuppyEvent.fetchAllEvents(in: viewContext)
+        }
         return cdEvents.compactMap { $0.toPuppyEvent() }
     }
 
@@ -97,34 +127,55 @@ final class CoreDataEventStore: @unchecked Sendable {
         return cdEvent.toPuppyEvent()
     }
 
-    /// Get the date of the earliest logged event
+    /// Get the date of the earliest logged event (for active profile if set)
     func getEarliestEventDate() -> Date? {
-        CDPuppyEvent.fetchEarliestEvent(in: viewContext)?.time
+        if let profile = activeProfile {
+            return CDPuppyEvent.fetchEarliestEvent(for: profile, in: viewContext)?.time
+        }
+        return CDPuppyEvent.fetchEarliestEvent(in: viewContext)?.time
     }
 
-    /// Fetch events by type
+    /// Fetch events by type (for active profile if set)
     func fetchEvents(ofType type: EventType) -> [PuppyEvent] {
-        let cdEvents = CDPuppyEvent.fetchEvents(ofType: type, in: viewContext)
+        let cdEvents: [CDPuppyEvent]
+        if let profile = activeProfile {
+            cdEvents = CDPuppyEvent.fetchEvents(ofType: type, profile: profile, in: viewContext)
+        } else {
+            cdEvents = CDPuppyEvent.fetchEvents(ofType: type, in: viewContext)
+        }
         return cdEvents.compactMap { $0.toPuppyEvent() }
     }
 
-    /// Fetch recent events (last N events)
+    /// Fetch recent events (last N events, for active profile if set)
     func fetchRecentEvents(limit: Int) -> [PuppyEvent] {
-        let cdEvents = CDPuppyEvent.fetchRecentEvents(limit: limit, in: viewContext)
+        let cdEvents: [CDPuppyEvent]
+        if let profile = activeProfile {
+            cdEvents = CDPuppyEvent.fetchRecentEvents(limit: limit, profile: profile, in: viewContext)
+        } else {
+            cdEvents = CDPuppyEvent.fetchRecentEvents(limit: limit, in: viewContext)
+        }
         return cdEvents.compactMap { $0.toPuppyEvent() }
     }
 
     // MARK: - Writing Events
 
-    /// Save a single event
+    /// Save a single event (links to active profile if set)
     func saveEvent(_ event: PuppyEvent) throws {
         let context = viewContext
 
         // Check if event already exists
         if let existing = CDPuppyEvent.fetch(byId: event.id, in: context) {
             existing.update(from: event)
+            // Ensure profile link is maintained
+            if existing.profile == nil, let profile = activeProfile {
+                existing.profile = profile
+            }
         } else {
-            _ = CDPuppyEvent.create(from: event, in: context)
+            let cdEvent = CDPuppyEvent.create(from: event, in: context)
+            // Link to active profile
+            if let profile = activeProfile {
+                cdEvent.profile = profile
+            }
         }
 
         try persistenceController.save()
@@ -142,15 +193,23 @@ final class CoreDataEventStore: @unchecked Sendable {
         }
     }
 
-    /// Save multiple events
+    /// Save multiple events (links to active profile if set)
     func saveEvents(_ events: [PuppyEvent]) throws {
         let context = viewContext
 
         for event in events {
             if let existing = CDPuppyEvent.fetch(byId: event.id, in: context) {
                 existing.update(from: event)
+                // Ensure profile link is maintained
+                if existing.profile == nil, let profile = activeProfile {
+                    existing.profile = profile
+                }
             } else {
-                _ = CDPuppyEvent.create(from: event, in: context)
+                let cdEvent = CDPuppyEvent.create(from: event, in: context)
+                // Link to active profile
+                if let profile = activeProfile {
+                    cdEvent.profile = profile
+                }
             }
         }
 

@@ -85,45 +85,19 @@ struct QuickLogSheet: View {
             }
 
             // Note field
-            VStack(alignment: .leading, spacing: 4) {
-                Text(Strings.QuickLogSheet.noteOptional)
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-
-                TextField(Strings.QuickLogSheet.notePlaceholder, text: $note)
-                    .textFieldStyle(.roundedBorder)
-                    .accessibilityLabel(Strings.LogEvent.note)
-                    .accessibilityHint(Strings.QuickLogSheet.noteAccessibilityHint)
-                    .accessibilityIdentifier("QUICK_LOG_NOTE_FIELD")
-            }
-            .padding(.horizontal, 4)
+            LogSheetNoteField(
+                note: $note,
+                accessibilityIdentifier: "QUICK_LOG_NOTE_FIELD"
+            )
 
             // Action buttons
-            HStack(spacing: 16) {
-                Button(Strings.Common.cancel) {
-                    onCancel()
-                }
-                .foregroundColor(.secondary)
-                .accessibilityIdentifier("QUICK_LOG_CANCEL_BUTTON")
-
-                Button {
-                    HapticFeedback.success()
-                    saveEvent()
-                } label: {
-                    HStack {
-                        Image(systemName: "checkmark")
-                        Text(Strings.Common.log)
-                    }
-                    .font(.headline)
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 14)
-                    .background(canSave ? Color.accentColor : Color.gray)
-                    .cornerRadius(LayoutConstants.cornerRadiusM)
-                }
-                .disabled(!canSave)
-                .accessibilityIdentifier("QUICK_LOG_SAVE_BUTTON")
-            }
+            LogSheetActionButtons(
+                canSave: canSave,
+                onCancel: onCancel,
+                onSave: saveEvent,
+                cancelAccessibilityIdentifier: "QUICK_LOG_CANCEL_BUTTON",
+                saveAccessibilityIdentifier: "QUICK_LOG_SAVE_BUTTON"
+            )
         }
         .padding()
         .animation(.easeInOut(duration: 0.2), value: showingTimePicker)
@@ -196,7 +170,7 @@ struct QuickLogSheet: View {
                                 .font(.caption)
                                 .fontWeight(.semibold)
                         }
-                        .disabled(newSpotName.trimmingCharacters(in: .whitespaces).isEmpty)
+                        .disabled(newSpotName.isBlank)
                     }
                 }
                 .padding()
@@ -276,14 +250,12 @@ struct QuickLogSheet: View {
     }
 
     private func saveEvent() {
-        let noteValue = note.isEmpty ? nil : note
-
         if isWalkEvent, let onSaveWalkCallback = onSaveWalk {
             // Walk event with location support
-            onSaveWalkCallback(selectedTime, selectedSpot, capturedLatitude, capturedLongitude, noteValue)
+            onSaveWalkCallback(selectedTime, selectedSpot, capturedLatitude, capturedLongitude, note.nilIfBlank)
         } else {
             // Regular event
-            onSave(selectedTime, selectedLocation, noteValue)
+            onSave(selectedTime, selectedLocation, note.nilIfBlank)
         }
     }
 
@@ -309,10 +281,8 @@ struct QuickLogSheet: View {
     private func saveNewSpot() {
         guard let store = spotStore,
               let lat = capturedLatitude,
-              let lon = capturedLongitude else { return }
-
-        let name = newSpotName.trimmingCharacters(in: .whitespaces)
-        guard !name.isEmpty else { return }
+              let lon = capturedLongitude,
+              let name = newSpotName.nilIfBlank else { return }
 
         let spot = store.addSpot(name: name, latitude: lat, longitude: lon)
         selectedSpot = spot

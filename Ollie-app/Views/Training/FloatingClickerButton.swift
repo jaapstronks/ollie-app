@@ -80,6 +80,9 @@ struct FloatingClickerButton: View {
         .buttonStyle(FloatingClickerButtonStyle(isPressed: $isPressed))
         .accessibilityLabel(Strings.TrainingSession.clickerAccessibilityLabel)
         .accessibilityHint(Strings.TrainingSession.clickerAccessibilityHint)
+        .onAppear {
+            AudioService.shared.prepareClickSound()
+        }
     }
 
     private func handleClick() {

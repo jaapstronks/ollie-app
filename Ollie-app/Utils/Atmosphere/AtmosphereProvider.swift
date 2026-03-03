@@ -39,7 +39,7 @@ final class AtmosphereProvider: ObservableObject {
 
     private weak var weatherService: WeatherService?
     private var cancellables = Set<AnyCancellable>()
-    private var updateTimer: Timer?
+    nonisolated(unsafe) private var updateTimer: Timer?
 
     // Throttling
     private var lastUpdate = Date.distantPast

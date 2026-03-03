@@ -14,7 +14,7 @@ import Foundation
 
 public enum Strings {
     /// Bundle for localization - set this to your app's bundle to enable localization
-    public static var bundle: Bundle = .main
+    nonisolated(unsafe) public static var bundle: Bundle = .main
 
     // MARK: - Common
     public enum Common {

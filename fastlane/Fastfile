@@ -1,0 +1,67 @@
+# Fastfile - fastlane configuration
+# Run with: fastlane screenshots
+
+default_platform(:ios)
+
+platform :ios do
+  desc "Capture screenshots in all supported languages"
+  lane :screenshots do
+    capture_screenshots(
+      workspace: nil,
+      project: "Ollie-app.xcodeproj",
+      scheme: "Ollie-app",
+      output_directory: "./fastlane/screenshots",
+      clear_previous_screenshots: true,
+      override_status_bar: true,
+      localize_simulator: true,
+      dark_mode: false,
+      reinstall_app: false,
+      launch_arguments: ["--uitesting", "-FASTLANE_SNAPSHOT"],
+      testplan: nil,
+      only_testing: ["Ollie-appUITests/ScreenshotTests"],
+      skip_helper_version_check: true
+    )
+  end
+
+  desc "Capture screenshots for a single language (faster iteration)"
+  lane :screenshots_single do |options|
+    lang = options[:lang] || "en-US"
+    device = options[:device] || "iPhone 17 Pro"
+
+    capture_screenshots(
+      workspace: nil,
+      project: "Ollie-app.xcodeproj",
+      scheme: "Ollie-app",
+      output_directory: "./fastlane/screenshots",
+      clear_previous_screenshots: false,
+      override_status_bar: true,
+      localize_simulator: true,
+      dark_mode: false,
+      reinstall_app: false,
+      devices: [device],
+      languages: [lang],
+      launch_arguments: ["--uitesting", "-FASTLANE_SNAPSHOT"],
+      only_testing: ["Ollie-appUITests/ScreenshotTests"],
+      skip_helper_version_check: true,
+      concurrent_simulators: false
+    )
+  end
+
+  desc "Capture dark mode screenshots"
+  lane :screenshots_dark do
+    capture_screenshots(
+      workspace: nil,
+      project: "Ollie-app.xcodeproj",
+      scheme: "Ollie-app",
+      output_directory: "./fastlane/screenshots_dark",
+      clear_previous_screenshots: true,
+      override_status_bar: true,
+      localize_simulator: true,
+      dark_mode: true,
+      reinstall_app: false,
+      launch_arguments: ["--uitesting", "-FASTLANE_SNAPSHOT"],
+      only_testing: ["Ollie-appUITests/ScreenshotTests"],
+      skip_helper_version_check: true
+    )
+  end
+end

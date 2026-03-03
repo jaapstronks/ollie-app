@@ -373,7 +373,9 @@ struct CalendarTabView: View {
                 VStack(spacing: 8) {
                     // Appointments this week
                     ForEach(appointments.prefix(3)) { appointment in
-                        ThisWeekAppointmentRow(appointment: appointment)
+                        ThisWeekAppointmentRow(appointment: appointment) {
+                            selectedAppointment = appointment
+                        }
                     }
 
                     // Milestones this week
@@ -456,7 +458,9 @@ struct CalendarTabView: View {
                 if !appointments.isEmpty || !milestones.isEmpty {
                     // Appointments coming up
                     ForEach(appointments.prefix(3)) { appointment in
-                        ComingUpAppointmentRow(appointment: appointment)
+                        ComingUpAppointmentRow(appointment: appointment) {
+                            selectedAppointment = appointment
+                        }
                     }
 
                     // Milestones coming up

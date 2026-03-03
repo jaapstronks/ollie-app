@@ -27,6 +27,12 @@
             "state": "translated",
             "value": "(opzionale)"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "(facultatif)"
+          }
         }
       }
     },
@@ -55,6 +61,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lld min in ritardo"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld min de retard"
           }
         }
       }
@@ -85,6 +97,12 @@
             "state": "translated",
             "value": "%lld min totali"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld min au total"
+          }
         }
       }
     },
@@ -113,6 +131,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lld di %lld passeggiate"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld sur %lld promenades"
           }
         }
       }
@@ -143,6 +167,12 @@
             "state": "translated",
             "value": "%lld visite"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld visites"
+          }
         }
       }
     },
@@ -171,6 +201,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lld passeggiate"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld promenades"
           }
         }
       }
@@ -201,6 +237,12 @@
             "state": "translated",
             "value": "1 visita"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 visite"
+          }
         }
       }
     },
@@ -229,6 +271,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "1 passeggiata"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 promenade"
           }
         }
       }
@@ -259,6 +307,12 @@
             "state": "translated",
             "value": "Aggiungi posto"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajouter un lieu"
+          }
         }
       }
     },
@@ -287,6 +341,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Aggiungi posto"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajouter un lieu"
           }
         }
       }
@@ -352,6 +412,12 @@
             "state": "translated",
             "value": "Passeggiata pomeridiana"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Promenade d'après-midi"
+          }
         }
       }
     },
@@ -380,6 +446,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tutti i posti"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tous les lieux"
           }
         }
       }
@@ -410,6 +482,12 @@
             "state": "translated",
             "value": "Tutte le passeggiate fatte per oggi!"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toutes les promenades faites aujourd'hui !"
+          }
         }
       }
     },
@@ -438,6 +516,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Spiaggia"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plage"
           }
         }
       }
@@ -468,6 +552,12 @@
             "state": "translated",
             "value": "Cambia"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Changer"
+          }
         }
       }
     },
@@ -496,6 +586,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Creato"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Créé"
           }
         }
       }
@@ -526,6 +622,12 @@
             "state": "translated",
             "value": "Elimina posto"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Supprimer le lieu"
+          }
         }
       }
     },
@@ -554,6 +656,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Elimina passeggiata"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Supprimer la promenade"
           }
         }
       }
@@ -584,6 +692,12 @@
             "state": "translated",
             "value": "es. Parco, Sentiero, Angolo"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ex. Parc, Sentier, Coin"
+          }
         }
       }
     },
@@ -612,6 +726,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Primo pomeriggio"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Début d'après-midi"
           }
         }
       }
@@ -642,6 +762,12 @@
             "state": "translated",
             "value": "Prima mattina"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tôt le matin"
+          }
         }
       }
     },
@@ -670,6 +796,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Modifica passeggiata"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modifier la promenade"
           }
         }
       }
@@ -700,6 +832,12 @@
             "state": "translated",
             "value": "Abilita posizione nelle Impostazioni per salvare i posti delle passeggiate"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Activez la localisation dans Réglages pour capturer les lieux de promenade"
+          }
         }
       }
     },
@@ -729,6 +867,12 @@
             "state": "translated",
             "value": "Passeggiata serale"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Promenade du soir"
+          }
         }
       }
     },
@@ -757,6 +901,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Posti preferiti"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lieux favoris"
           }
         }
       }
@@ -822,6 +972,12 @@
             "state": "translated",
             "value": "Foresta"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Forêt"
+          }
         }
       }
     },
@@ -851,6 +1007,12 @@
             "state": "translated",
             "value": "Ottenendo posizione..."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Obtention de la position..."
+          }
         }
       }
     },
@@ -879,6 +1041,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Buon momento per una passeggiata"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bon moment pour une promenade"
           }
         }
       }
@@ -944,6 +1112,12 @@
             "state": "translated",
             "value": "Tardo pomeriggio"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fin d'après-midi"
+          }
         }
       }
     },
@@ -972,6 +1146,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tarda serata"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tard le soir"
           }
         }
       }
@@ -1036,6 +1216,12 @@
             "state": "translated",
             "value": "Accesso alla posizione non autorizzato"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Accès à la localisation non autorisé"
+          }
         }
       }
     },
@@ -1065,6 +1251,12 @@
             "state": "translated",
             "value": "Posizione acquisita"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Position capturée"
+          }
         }
       }
     },
@@ -1093,6 +1285,12 @@
             "state": "translated",
             "value": "Richiesta posizione scaduta"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Demande de localisation expirée"
+          }
         }
       }
     },
@@ -1120,6 +1318,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Posizione non disponibile"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Position non disponible"
           }
         }
       }
@@ -1150,6 +1354,12 @@
             "state": "translated",
             "value": "Registra la tua prima passeggiata per iniziare"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrez votre première promenade pour commencer le suivi"
+          }
         }
       }
     },
@@ -1178,6 +1388,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Passeggiata di pranzo"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Promenade de midi"
           }
         }
       }
@@ -1208,6 +1424,12 @@
             "state": "translated",
             "value": "Gestisci posti"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gérer les lieux"
+          }
         }
       }
     },
@@ -1236,6 +1458,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Meta mattina"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Milieu de matinée"
           }
         }
       }
@@ -1266,6 +1494,12 @@
             "state": "translated",
             "value": "Passeggiata mattutina"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Promenade du matin"
+          }
         }
       }
     },
@@ -1294,6 +1528,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Muovi la mappa per posizionare il segnaposto"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Déplacez la carte pour positionner l'épingle"
           }
         }
       }
@@ -1324,6 +1564,12 @@
             "state": "translated",
             "value": "Dai un nome a questo posto"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nommer ce lieu"
+          }
         }
       }
     },
@@ -1352,6 +1598,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Posti vicini"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lieux à proximité"
           }
         }
       }
@@ -1382,6 +1634,12 @@
             "state": "translated",
             "value": "Quartiere"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quartier"
+          }
         }
       }
     },
@@ -1410,6 +1668,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Prossima passeggiata"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prochaine promenade"
           }
         }
       }
@@ -1440,6 +1704,12 @@
             "state": "translated",
             "value": "Passeggiata notturna"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Promenade nocturne"
+          }
         }
       }
     },
@@ -1468,6 +1738,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nessun posto preferito ancora"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pas encore de lieux favoris"
           }
         }
       }
@@ -1498,6 +1774,12 @@
             "state": "translated",
             "value": "Nessuna foto ancora. Scattane una alla prossima visita!"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pas encore de photos. Prenez-en une lors de votre prochaine visite !"
+          }
         }
       }
     },
@@ -1526,6 +1808,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nessun posto recente"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pas de lieux récents"
           }
         }
       }
@@ -1556,6 +1844,12 @@
             "state": "translated",
             "value": "Nessuna passeggiata registrata oggi"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pas de promenades enregistrées aujourd'hui"
+          }
         }
       }
     },
@@ -1584,6 +1878,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Non ideale per una passeggiata"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pas idéal pour une promenade"
           }
         }
       }
@@ -1614,6 +1914,12 @@
             "state": "translated",
             "value": "Note (opzionale)"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notes (facultatif)"
+          }
         }
       }
     },
@@ -1642,6 +1948,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Apri in Mappe"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrir dans Plans"
           }
         }
       }
@@ -1707,6 +2019,12 @@
             "state": "translated",
             "value": "Parco"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Parc"
+          }
         }
       }
     },
@@ -1735,6 +2053,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Foto"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Photos"
           }
         }
       }
@@ -1765,6 +2089,12 @@
             "state": "translated",
             "value": "Foto qui"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Photos ici"
+          }
         }
       }
     },
@@ -1793,6 +2123,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Scegli un posto"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisir un lieu"
           }
         }
       }
@@ -1823,6 +2159,12 @@
             "state": "translated",
             "value": "Scegli sulla mappa"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisir sur la carte"
+          }
         }
       }
     },
@@ -1851,6 +2193,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Riprendi"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recapturer"
           }
         }
       }
@@ -1951,6 +2299,12 @@
             "state": "translated",
             "value": "Salva posto"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer le lieu"
+          }
         }
       }
     },
@@ -1979,6 +2333,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Posti salvati"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lieux enregistrés"
           }
         }
       }
@@ -2009,6 +2369,12 @@
             "state": "translated",
             "value": "Seleziona posizione"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sélectionner un emplacement"
+          }
         }
       }
     },
@@ -2037,6 +2403,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Mostra sulla mappa"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Afficher sur la carte"
           }
         }
       }
@@ -2067,6 +2439,12 @@
             "state": "translated",
             "value": "Inizia una passeggiata"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Commencer une promenade"
+          }
         }
       }
     },
@@ -2095,6 +2473,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Suggerito: ~%@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suggéré : ~%@"
           }
         }
       }
@@ -2125,6 +2509,12 @@
             "state": "translated",
             "value": "Questo eliminera permanentemente questo posto."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cela supprimera définitivement ce lieu."
+          }
         }
       }
     },
@@ -2153,6 +2543,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Questo eliminera permanentemente questa passeggiata."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cela supprimera définitivement cette promenade."
           }
         }
       }
@@ -2183,6 +2579,12 @@
             "state": "translated",
             "value": "Passeggiate di oggi"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Promenades d'aujourd'hui"
+          }
         }
       }
     },
@@ -2211,6 +2613,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sentiero"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sentier"
           }
         }
       }
@@ -2241,6 +2649,12 @@
             "state": "translated",
             "value": "Riprova"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réessayer"
+          }
         }
       }
     },
@@ -2269,6 +2683,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Usa posizione attuale"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Utiliser la position actuelle"
           }
         }
       }
@@ -2299,6 +2719,12 @@
             "state": "translated",
             "value": "Visite"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Visites"
+          }
         }
       }
     },
@@ -2327,6 +2753,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Luogo della passeggiata"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lieu de promenade"
           }
         }
       }
@@ -2357,6 +2789,12 @@
             "state": "translated",
             "value": "Meteo passeggiata"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Météo promenade"
+          }
         }
       }
     },
@@ -2385,6 +2823,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "passeggiate"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "promenades"
           }
         }
       }
@@ -2449,6 +2893,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "I tuoi posti"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vos lieux"
           }
         }
       }

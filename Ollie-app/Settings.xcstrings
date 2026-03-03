@@ -27,6 +27,12 @@
             "state": "translated",
             "value": "%lld giorni, %lld eventi"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld jours, %lld événements"
+          }
         }
       }
     },
@@ -55,6 +61,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lld min prima"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld min avant"
           }
         }
       }
@@ -85,6 +97,12 @@
             "state": "translated",
             "value": "%lld saltati (esistevano già)"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld ignorés (existaient déjà)"
+          }
         }
       }
     },
@@ -113,6 +131,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lldx al giorno"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lldx par jour"
           }
         }
       }
@@ -178,6 +202,12 @@
             "state": "translated",
             "value": "Aggiungi appuntamento"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajouter un rendez-vous"
+          }
         }
       }
     },
@@ -206,6 +236,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Aggiungi pasto"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajouter un repas"
           }
         }
       }
@@ -236,6 +272,12 @@
             "state": "translated",
             "value": "Aggiungi foto"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajouter une photo"
+          }
         }
       }
     },
@@ -264,6 +306,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Aggiungi al calendario"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajouter au calendrier"
           }
         }
       }
@@ -294,6 +342,12 @@
             "state": "translated",
             "value": "Aggiungi passeggiata"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajouter une promenade"
+          }
         }
       }
     },
@@ -323,6 +377,12 @@
             "state": "translated",
             "value": "Indirizzo o nome del luogo"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adresse ou nom du lieu"
+          }
         }
       }
     },
@@ -351,6 +411,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Regola foto"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajuster la photo"
           }
         }
       }
@@ -416,6 +482,12 @@
             "state": "translated",
             "value": "Dopo"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Après"
+          }
         }
       }
     },
@@ -444,6 +516,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Dopo %lld min sveglio"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Après %lld min éveillé"
           }
         }
       }
@@ -544,6 +622,12 @@
             "state": "translated",
             "value": "Tutto il giorno"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toute la journée"
+          }
         }
       }
     },
@@ -608,6 +692,12 @@
             "state": "translated",
             "value": "Quantità per %@"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quantité pour %@"
+          }
         }
       }
     },
@@ -636,6 +726,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Impostazioni app"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paramètres de l'app"
           }
         }
       }
@@ -701,6 +797,12 @@
             "state": "translated",
             "value": "Titolo appuntamento"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Titre du rendez-vous"
+          }
         }
       }
     },
@@ -765,6 +867,12 @@
             "state": "translated",
             "value": "Sei sicuro di voler smettere di condividere? L'altra persona perderà l'accesso."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voulez-vous vraiment arrêter le partage ? L'autre personne perdra l'accès."
+          }
         }
       }
     },
@@ -793,6 +901,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "A %lld mesi: max %lld minuti per passeggiata"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "À %lld mois : max %lld minutes par promenade"
           }
         }
       }
@@ -823,6 +937,12 @@
             "state": "translated",
             "value": "Atmosfera"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Atmosphère"
+          }
         }
       }
     },
@@ -851,6 +971,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Lo sfondo cambia da mattine fresche a sere calde."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L'arrière-plan passe des matins frais aux soirées chaudes."
           }
         }
       }
@@ -951,6 +1077,12 @@
             "state": "translated",
             "value": "L'accesso al calendario è necessario per sincronizzare gli appuntamenti."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L'accès au calendrier est requis pour synchroniser les rendez-vous."
+          }
         }
       }
     },
@@ -980,6 +1112,12 @@
             "state": "translated",
             "value": "Visuale più calma durante il sonno, più luminosa da sveglio."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Visuels plus calmes pendant le sommeil, plus vifs quand éveillé."
+          }
         }
       }
     },
@@ -1005,6 +1143,12 @@
           }
         },
         "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Celsius (°C)"
+          }
+        },
+        "fr": {
           "stringUnit": {
             "state": "translated",
             "value": "Celsius (°C)"
@@ -1038,6 +1182,12 @@
             "state": "translated",
             "value": "Cambia nome"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Changer le nom"
+          }
         }
       }
     },
@@ -1066,6 +1216,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Cambia foto"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Changer la photo"
           }
         }
       }
@@ -1096,6 +1252,12 @@
             "state": "translated",
             "value": "CloudKit non è disponibile"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CloudKit n'est pas disponible"
+          }
         }
       }
     },
@@ -1124,6 +1286,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "I colori riflettono le condizioni meteo attuali."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les couleurs reflètent les conditions météo actuelles."
           }
         }
       }
@@ -1189,6 +1357,12 @@
             "state": "translated",
             "value": "Contatto"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contact"
+          }
         }
       }
     },
@@ -1218,6 +1392,12 @@
             "state": "translated",
             "value": "Impossibile verificare lo stato di iCloud"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossible de vérifier le statut iCloud"
+          }
         }
       }
     },
@@ -1242,6 +1422,12 @@
             "state": "translated",
             "value": "Impossibile creare i file di esportazione."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossible de créer les fichiers d'export."
+          }
         }
       }
     },
@@ -1265,6 +1451,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Impossibile codificare i dati %@."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossible d'encoder les données %@."
           }
         }
       }
@@ -1295,6 +1487,12 @@
             "state": "translated",
             "value": "Impossibile caricare la condivisione"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossible de charger le partage"
+          }
         }
       }
     },
@@ -1323,6 +1521,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Impossibile raggiungere l'API di GitHub"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossible d'atteindre l'API GitHub"
           }
         }
       }
@@ -1388,6 +1592,12 @@
             "state": "translated",
             "value": "I dati vengono sincronizzati automaticamente tra tutti i tuoi dispositivi tramite iCloud."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les données sont automatiquement synchronisées entre tous vos appareils via iCloud."
+          }
         }
       }
     },
@@ -1452,6 +1662,12 @@
             "state": "translated",
             "value": "Giorni a casa"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jours à la maison"
+          }
         }
       }
     },
@@ -1480,6 +1696,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Eliminare l'appuntamento?"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Supprimer le rendez-vous ?"
           }
         }
       }
@@ -1510,6 +1732,12 @@
             "state": "translated",
             "value": "Eliminazione fallita"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Échec de la suppression"
+          }
         }
       }
     },
@@ -1538,6 +1766,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Eliminazione fallita: %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Échec de la suppression : %@"
           }
         }
       }
@@ -1603,6 +1837,12 @@
             "state": "translated",
             "value": "Vuoi importare i dati da GitHub? Verranno scaricati tutti i giorni disponibili."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voulez-vous importer des données depuis GitHub ? Cela récupérera tous les jours disponibles."
+          }
         }
       }
     },
@@ -1631,6 +1871,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Non si ripete"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ne se répète pas"
           }
         }
       }
@@ -1661,6 +1907,12 @@
             "state": "translated",
             "value": "Profilo cane"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Profil du chien"
+          }
         }
       }
     },
@@ -1689,6 +1941,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Fatto!"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terminé !"
           }
         }
       }
@@ -1719,6 +1977,12 @@
             "state": "translated",
             "value": "Download fallito"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Échec du téléchargement"
+          }
         }
       }
     },
@@ -1747,6 +2011,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Scaricamento: %lld/%lld"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Téléchargement : %lld/%lld"
           }
         }
       }
@@ -1777,6 +2047,12 @@
             "state": "translated",
             "value": "es. 80g"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ex. 80g"
+          }
         }
       }
     },
@@ -1805,6 +2081,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "es. Colazione"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ex. Petit-déjeuner"
           }
         }
       }
@@ -1835,6 +2117,12 @@
             "state": "translated",
             "value": "Presto (~20 min)"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tôt (~20 min)"
+          }
         }
       }
     },
@@ -1863,6 +2151,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Modifica appuntamento"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modifier le rendez-vous"
           }
         }
       }
@@ -1893,6 +2187,12 @@
             "state": "translated",
             "value": "Modifica limite esercizio"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modifier la limite d'exercice"
+          }
         }
       }
     },
@@ -1921,6 +2221,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Modifica pasto"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modifier le repas"
           }
         }
       }
@@ -1951,6 +2257,12 @@
             "state": "translated",
             "value": "Modifica pasti"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modifier les repas"
+          }
         }
       }
     },
@@ -1979,6 +2291,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Attiva le notifiche nelle Impostazioni per ricevere promemoria."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Activez les notifications dans Réglages pour recevoir des rappels."
           }
         }
       }
@@ -2009,6 +2327,12 @@
             "state": "translated",
             "value": "Attiva le notifiche per ricevere promemoria"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Activez les notifications pour recevoir des rappels"
+          }
         }
       }
     },
@@ -2037,6 +2361,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ora di fine"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heure de fin"
           }
         }
       }
@@ -2067,6 +2397,12 @@
             "state": "translated",
             "value": "Termina"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fin"
+          }
         }
       }
     },
@@ -2096,6 +2432,12 @@
             "state": "translated",
             "value": "Inserisci il nome per questo pasto, come Colazione o Cena"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entrez le nom de ce repas, comme Petit-déjeuner ou Dîner"
+          }
         }
       }
     },
@@ -2124,6 +2466,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Inserisci la porzione, come 80g"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entrez la taille de la portion, comme 80g"
           }
         }
       }
@@ -2189,6 +2537,12 @@
             "state": "translated",
             "value": "Ogni"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tous les"
+          }
         }
       }
     },
@@ -2253,6 +2607,12 @@
             "state": "translated",
             "value": "Limite esercizio"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Limite d'exercice"
+          }
         }
       }
     },
@@ -2276,6 +2636,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Esportazione fallita: %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Échec de l'export : %@"
           }
         }
       }
@@ -2301,6 +2667,12 @@
             "state": "translated",
             "value": "Esportazione appuntamenti..."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Export des rendez-vous..."
+          }
         }
       }
     },
@@ -2324,6 +2696,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Esportazione contatti..."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Export des contacts..."
           }
         }
       }
@@ -2349,6 +2727,12 @@
             "state": "translated",
             "value": "Esportazione documenti..."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Export des documents..."
+          }
         }
       }
     },
@@ -2372,6 +2756,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Esportazione eventi..."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Export des événements..."
           }
         }
       }
@@ -2397,6 +2787,12 @@
             "state": "translated",
             "value": "Esportazione traguardi..."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Export des étapes..."
+          }
         }
       }
     },
@@ -2420,6 +2816,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Esportazione foto..."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Export des photos..."
           }
         }
       }
@@ -2445,6 +2847,12 @@
             "state": "translated",
             "value": "Esportazione luoghi..."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Export des lieux..."
+          }
         }
       }
     },
@@ -2468,6 +2876,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Esportazione foto profilo..."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Export de la photo de profil..."
           }
         }
       }
@@ -2493,6 +2907,12 @@
             "state": "translated",
             "value": "Esportazione profilo..."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Export du profil..."
+          }
         }
       }
     },
@@ -2516,6 +2936,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Esportazione socializzazione..."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Export de la socialisation..."
           }
         }
       }
@@ -2542,6 +2968,12 @@
           }
         },
         "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fahrenheit (°F)"
+          }
+        },
+        "fr": {
           "stringUnit": {
             "state": "translated",
             "value": "Fahrenheit (°F)"
@@ -2575,6 +3007,12 @@
             "state": "translated",
             "value": "Recupero file..."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Récupération des fichiers..."
+          }
         }
       }
     },
@@ -2604,6 +3042,12 @@
             "state": "translated",
             "value": "Contenuto file non valido"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contenu du fichier invalide"
+          }
         }
       }
     },
@@ -2627,6 +3071,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Completamento esportazione..."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finalisation de l'export..."
           }
         }
       }
@@ -2657,6 +3107,12 @@
             "state": "translated",
             "value": "Trovati: %lld giorni"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trouvé : %lld jours"
+          }
         }
       }
     },
@@ -2685,6 +3141,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Frequenza"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fréquence"
           }
         }
       }
@@ -2715,6 +3177,12 @@
             "state": "translated",
             "value": "Salute e documenti"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Santé et documents"
+          }
         }
       }
     },
@@ -2743,6 +3211,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "iCloud è limitato"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud est restreint"
           }
         }
       }
@@ -2773,6 +3247,12 @@
             "state": "translated",
             "value": "iCloud non disponibile"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud non disponible"
+          }
         }
       }
     },
@@ -2801,6 +3281,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Stato iCloud sconosciuto"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Statut iCloud inconnu"
           }
         }
       }
@@ -2831,6 +3317,12 @@
             "state": "translated",
             "value": "Sincronizzazione iCloud attiva"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Synchronisation iCloud active"
+          }
         }
       }
     },
@@ -2860,6 +3352,12 @@
             "state": "translated",
             "value": "iCloud temporaneamente non disponibile"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud temporairement indisponible"
+          }
         }
       }
     },
@@ -2888,6 +3386,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "iCloud non disponibile"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud indisponible"
           }
         }
       }
@@ -2953,6 +3457,12 @@
             "state": "translated",
             "value": "Importa da GitHub"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Importer depuis GitHub"
+          }
         }
       }
     },
@@ -2981,6 +3491,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nel calendario"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dans le calendrier"
           }
         }
       }
@@ -3011,6 +3527,12 @@
             "state": "translated",
             "value": "Risposta non valida da GitHub"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réponse invalide de GitHub"
+          }
         }
       }
     },
@@ -3039,6 +3561,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Invita un'altra persona"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inviter une autre personne"
           }
         }
       }
@@ -3069,6 +3597,12 @@
             "state": "translated",
             "value": "Invitato"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Invité"
+          }
         }
       }
     },
@@ -3097,6 +3631,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Chilogrammi (kg)"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kilogrammes (kg)"
           }
         }
       }
@@ -3127,6 +3667,12 @@
             "state": "translated",
             "value": "Etichetta"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Libellé"
+          }
         }
       }
     },
@@ -3155,6 +3701,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ultima importazione: %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dernier import : %@"
           }
         }
       }
@@ -3185,6 +3737,12 @@
             "state": "translated",
             "value": "Ultimo: %@"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dernière : %@"
+          }
         }
       }
     },
@@ -3213,6 +3771,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Leggeri adattamenti di colore per la stagione corrente."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajustements légers des couleurs pour la saison actuelle."
           }
         }
       }
@@ -3243,6 +3807,12 @@
             "state": "translated",
             "value": "Collega contatto"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lier un contact"
+          }
         }
       }
     },
@@ -3271,6 +3841,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Collega traguardo"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lier une étape"
           }
         }
       }
@@ -3371,6 +3947,12 @@
             "state": "translated",
             "value": "Gestisci condivisione"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gérer le partage"
+          }
         }
       }
     },
@@ -3399,6 +3981,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Segna come completato"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Marquer comme terminé"
           }
         }
       }
@@ -3429,6 +4017,12 @@
             "state": "translated",
             "value": "Esercizio max"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exercice max"
+          }
         }
       }
     },
@@ -3457,6 +4051,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Pasto %lld"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Repas %lld"
           }
         }
       }
@@ -3487,6 +4087,12 @@
             "state": "translated",
             "value": "Nome pasto"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nom du repas"
+          }
         }
       }
     },
@@ -3515,6 +4121,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Promemoria pasto"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rappel de repas"
           }
         }
       }
@@ -3580,6 +4192,12 @@
             "state": "translated",
             "value": "Pasti (%lldx al giorno)"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Repas (%lldx par jour)"
+          }
         }
       }
     },
@@ -3608,6 +4226,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Pasti al giorno"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Repas par jour"
           }
         }
       }
@@ -3638,6 +4262,12 @@
             "state": "translated",
             "value": "Medicinali, documenti"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Médicaments, documents"
+          }
         }
       }
     },
@@ -3666,6 +4296,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Migrazione fallita: %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Migration échouée : %@"
           }
         }
       }
@@ -3731,6 +4367,12 @@
             "state": "translated",
             "value": "min/mese"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "min/mois"
+          }
         }
       }
     },
@@ -3760,6 +4402,12 @@
             "state": "translated",
             "value": "min/passeggiata"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "min/promenade"
+          }
         }
       }
     },
@@ -3788,6 +4436,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Minuti per mese di età"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Minutes par mois d'âge"
           }
         }
       }
@@ -3888,6 +4542,12 @@
             "state": "translated",
             "value": "Nome, razza, taglia, foto"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nom, race, taille, photo"
+          }
         }
       }
     },
@@ -3917,6 +4577,12 @@
             "state": "translated",
             "value": "Sonnellino necessario"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sieste nécessaire"
+          }
         }
       }
     },
@@ -3945,6 +4611,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sonnellini"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Siestes"
           }
         }
       }
@@ -4010,6 +4682,12 @@
             "state": "translated",
             "value": "Nessun appuntamento"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pas de rendez-vous"
+          }
         }
       }
     },
@@ -4038,6 +4716,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nessun appuntamento oggi"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pas de rendez-vous aujourd'hui"
           }
         }
       }
@@ -4068,6 +4752,12 @@
             "state": "translated",
             "value": "Nessun account iCloud configurato"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun compte iCloud configuré"
+          }
         }
       }
     },
@@ -4096,6 +4786,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ancora nessun partecipante"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pas encore de participants"
           }
         }
       }
@@ -4126,6 +4822,12 @@
             "state": "translated",
             "value": "Nessun appuntamento passato"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pas de rendez-vous passés"
+          }
         }
       }
     },
@@ -4149,6 +4851,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nessun profilo cucciolo trovato. Crea prima un profilo."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun profil de chiot trouvé. Veuillez d'abord créer un profil."
           }
         }
       }
@@ -4178,6 +4886,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nessun appuntamento in programma"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pas de rendez-vous à venir"
           }
         }
       }
@@ -4278,6 +4992,12 @@
             "state": "translated",
             "value": "Note dall'appuntamento"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notes du rendez-vous"
+          }
         }
       }
     },
@@ -4377,6 +5097,12 @@
             "state": "translated",
             "value": "Numero di pasti"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nombre de repas"
+          }
         }
       }
     },
@@ -4405,6 +5131,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "volte"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "occurrences"
           }
         }
       }
@@ -4435,6 +5167,12 @@
             "state": "translated",
             "value": "Alla data"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "À la date"
+          }
         }
       }
     },
@@ -4463,6 +5201,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "In orario (0 min)"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "À l'heure (0 min)"
           }
         }
       }
@@ -4493,6 +5237,12 @@
             "state": "translated",
             "value": "Note facoltative su questo appuntamento..."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notes facultatives sur ce rendez-vous..."
+          }
         }
       }
     },
@@ -4521,6 +5271,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sovrascrivi dati esistenti"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Écraser les données existantes"
           }
         }
       }
@@ -4586,6 +5342,12 @@
             "state": "translated",
             "value": "Pizzica per ingrandire, trascina per posizionare"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pincez pour zoomer, faites glisser pour positionner"
+          }
         }
       }
     },
@@ -4614,6 +5376,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Allarme pipì"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alarme besoins"
           }
         }
       }
@@ -4644,6 +5412,12 @@
             "state": "translated",
             "value": "Promemoria pipì"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rappels besoins"
+          }
         }
       }
     },
@@ -4673,6 +5447,12 @@
             "state": "translated",
             "value": "Libbre (lbs)"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Livres (lbs)"
+          }
         }
       }
     },
@@ -4696,6 +5476,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Preparazione esportazione..."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Préparation de l'export..."
           }
         }
       }
@@ -4761,6 +5547,12 @@
             "state": "translated",
             "value": "Foto profilo"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Photo de profil"
+          }
         }
       }
     },
@@ -4789,6 +5581,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Stato cucciolo"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "État du chiot"
           }
         }
       }
@@ -4819,6 +5617,12 @@
             "state": "translated",
             "value": "Ricevi promemoria intelligenti per pipì, pasti, sonnellini e passeggiate."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recevez des rappels intelligents pour les besoins, repas, siestes et promenades."
+          }
         }
       }
     },
@@ -4847,6 +5651,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Promemoria"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rappel"
           }
         }
       }
@@ -4877,6 +5687,12 @@
             "state": "translated",
             "value": "Promemoria prima che sia ora della passeggiata."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rappel avant l'heure de la promenade."
+          }
         }
       }
     },
@@ -4905,6 +5721,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Promemoria prima che sia ora del prossimo pasto."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rappel avant l'heure du prochain repas."
           }
         }
       }
@@ -4935,6 +5757,12 @@
             "state": "translated",
             "value": "Promemoria quando %@ è sveglio da troppo tempo."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rappel quand %@ est éveillé depuis trop longtemps."
+          }
         }
       }
     },
@@ -4963,6 +5791,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Promemoria quando mancano ~10 minuti"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rappel quand il reste ~10 minutes"
           }
         }
       }
@@ -4993,6 +5827,12 @@
             "state": "translated",
             "value": "Promemoria quando mancano ~20 minuti"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rappel quand il reste ~20 minutes"
+          }
         }
       }
     },
@@ -5021,6 +5861,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Promemoria quando è ora"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rappel quand c'est l'heure"
           }
         }
       }
@@ -5051,6 +5897,12 @@
             "state": "translated",
             "value": "Promemoria"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rappels"
+          }
         }
       }
     },
@@ -5079,6 +5931,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Rimuovi dal calendario"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Retirer du calendrier"
           }
         }
       }
@@ -5109,6 +5967,12 @@
             "state": "translated",
             "value": "Rimuovi ultimo"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Supprimer le dernier"
+          }
         }
       }
     },
@@ -5137,6 +6001,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Rimuovi foto"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Supprimer la photo"
           }
         }
       }
@@ -5167,6 +6037,12 @@
             "state": "translated",
             "value": "Rimosso"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Supprimé"
+          }
         }
       }
     },
@@ -5195,6 +6071,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ripeti programma"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Planification de répétition"
           }
         }
       }
@@ -5225,6 +6107,12 @@
             "state": "translated",
             "value": "Si ripete"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Répétitions"
+          }
         }
       }
     },
@@ -5253,6 +6141,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Reimposta profilo"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réinitialiser le profil"
           }
         }
       }
@@ -5283,6 +6177,12 @@
             "state": "translated",
             "value": "Salvataggio fallito"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Échec de l'enregistrement"
+          }
         }
       }
     },
@@ -5311,6 +6211,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Salvataggio fallito: %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Échec de l'enregistrement : %@"
           }
         }
       }
@@ -5341,6 +6247,12 @@
             "state": "translated",
             "value": "Programma e preferenze"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Horaires et préférences"
+          }
         }
       }
     },
@@ -5370,6 +6282,12 @@
             "state": "translated",
             "value": "Programma visite veterinarie, lezioni di addestramento, toelettatura e altro."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Planifiez les visites vétérinaires, cours d'éducation, toilettage, et plus."
+          }
         }
       }
     },
@@ -5398,6 +6316,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tocchi stagionali"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Touches saisonnières"
           }
         }
       }
@@ -5463,6 +6387,12 @@
             "state": "translated",
             "value": "Configurazione fallita: %@"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configuration échouée : %@"
+          }
         }
       }
     },
@@ -5492,6 +6422,12 @@
             "state": "translated",
             "value": "Condividi con il partner"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Partager avec un partenaire"
+          }
         }
       }
     },
@@ -5520,6 +6456,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Condividi i dati del tuo cucciolo con il partner così potete entrambi tracciare e registrare eventi."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Partagez les données de votre chiot avec votre partenaire pour que vous puissiez tous les deux suivre et enregistrer les événements."
           }
         }
       }
@@ -5585,6 +6527,12 @@
             "state": "translated",
             "value": "Dati condivisi"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Données partagées"
+          }
         }
       }
     },
@@ -5614,6 +6562,12 @@
             "state": "translated",
             "value": "Condivisione"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Partage"
+          }
         }
       }
     },
@@ -5642,6 +6596,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Condivisione, aspetto, sincronizzazione"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Partage, apparence, synchronisation"
           }
         }
       }
@@ -5707,6 +6667,12 @@
             "state": "translated",
             "value": "Presto (~10 min)"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bientôt (~10 min)"
+          }
         }
       }
     },
@@ -5736,6 +6702,12 @@
             "state": "translated",
             "value": "Feedback sonoro"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Retour sonore"
+          }
         }
       }
     },
@@ -5764,6 +6736,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ora di inizio"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heure de début"
           }
         }
       }
@@ -5829,6 +6807,12 @@
             "state": "translated",
             "value": "Smetti di condividere"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Arrêter le partage"
+          }
         }
       }
     },
@@ -5858,6 +6842,12 @@
             "state": "translated",
             "value": "Abbonamento, notifiche, sincronizzazione"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abonnement, notifications, synchronisation"
+          }
         }
       }
     },
@@ -5886,6 +6876,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sottili cambiamenti visivi basati su ora, meteo e attività del tuo cucciolo."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Changements visuels subtils basés sur l'heure, la météo et l'activité de votre chiot."
           }
         }
       }
@@ -5951,6 +6947,12 @@
             "state": "translated",
             "value": "Sincronizzazione fallita: %@"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Échec de synchronisation : %@"
+          }
         }
       }
     },
@@ -5979,6 +6981,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sincronizza ora"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Synchroniser maintenant"
           }
         }
       }
@@ -6009,6 +7017,12 @@
             "state": "translated",
             "value": "Sincronizzato %@"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Synchronisé %@"
+          }
         }
       }
     },
@@ -6038,6 +7052,12 @@
             "state": "translated",
             "value": "Sincronizzazione..."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Synchronisation..."
+          }
         }
       }
     },
@@ -6066,6 +7086,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tocca un pasto per modificarlo. Scorri per eliminare."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Appuyez sur un repas pour modifier. Balayez pour supprimer."
           }
         }
       }
@@ -6131,6 +7157,12 @@
             "state": "translated",
             "value": "La nota 'regola dei 5 minuti' — adatta in base al livello di energia del tuo cucciolo."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La règle bien connue des « 5 minutes » — ajustez selon le niveau d'énergie de votre chiot."
+          }
         }
       }
     },
@@ -6159,6 +7191,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "La nota 'regola dei 5 minuti' — i cuccioli possono camminare per un massimo di 5 minuti per mese di età a sessione. Adatta in base al livello di energia del tuo cucciolo."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La règle bien connue des « 5 minutes » — les chiots peuvent marcher maximum 5 minutes par mois d'âge par session. Ajustez selon le niveau d'énergie de votre chiot."
           }
         }
       }
@@ -6224,6 +7262,12 @@
             "state": "translated",
             "value": "Questo appuntamento verrà eliminato definitivamente."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ce rendez-vous sera définitivement supprimé."
+          }
         }
       }
     },
@@ -6288,6 +7332,12 @@
             "state": "translated",
             "value": "Ora di %@"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L'heure de %@"
+          }
         }
       }
     },
@@ -6316,6 +7366,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Momento della giornata"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Moment de la journée"
           }
         }
       }
@@ -6346,6 +7402,12 @@
             "state": "translated",
             "value": "Titolo"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Titre"
+          }
         }
       }
     },
@@ -6374,6 +7436,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Programma di oggi"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Programme du jour"
           }
         }
       }
@@ -6509,6 +7577,12 @@
             "state": "translated",
             "value": "Passeggiata %lld"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Promenade %lld"
+          }
         }
       }
     },
@@ -6537,6 +7611,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Promemoria passeggiate"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rappels de promenade"
           }
         }
       }
@@ -6602,6 +7682,12 @@
             "state": "translated",
             "value": "Passeggiate al giorno"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Promenades par jour"
+          }
         }
       }
     },
@@ -6630,6 +7716,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Passeggiate, pasti, medicinali, luoghi"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Promenades, repas, médicaments, lieux"
           }
         }
       }
@@ -6660,6 +7752,12 @@
             "state": "translated",
             "value": "Passeggiate, pasti, promemoria"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Promenades, repas, rappels"
+          }
         }
       }
     },
@@ -6688,6 +7786,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "passeggiate/giorno"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "promenades/jour"
           }
         }
       }
@@ -6788,6 +7892,12 @@
             "state": "translated",
             "value": "Cos'è successo a questo appuntamento?"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Que s'est-il passé à ce rendez-vous ?"
+          }
         }
       }
     },
@@ -6816,6 +7926,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Quando notificare"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quand notifier"
           }
         }
       }
@@ -6846,6 +7962,12 @@
             "state": "translated",
             "value": "Non puoi condividere come partecipante"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vous ne pouvez pas partager en tant que participant"
+          }
         }
       }
     },
@@ -6874,6 +7996,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Stai visualizzando i dati di qualcun altro"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vous consultez les données de quelqu'un d'autre"
           }
         }
       }

@@ -20,10 +20,29 @@ struct TodayView: View {
     let onSettingsTap: () -> Void
     var onNavigateToAppointments: (() -> Void)?
     var onNavigateToTrain: (() -> Void)?
+    var onAddDog: (() -> Void)?
 
     @State private var selectedPhotoEvent: PuppyEvent?
+    @State private var showProfilePicker = false
+    @State private var dismissedCrateNudgeDate: Date?
     @EnvironmentObject private var atmosphereProvider: AtmosphereProvider
     @EnvironmentObject private var foodRecallService: FoodRecallService
+    @EnvironmentObject private var eventStore: EventStore
+
+    /// Whether to show the crate nudge card
+    private var shouldShowCrateNudge: Bool {
+        // Check if dismissed today
+        if let dismissedDate = dismissedCrateNudgeDate,
+           Calendar.current.isDateInToday(dismissedDate) {
+            return false
+        }
+
+        return CombinedStatusCalculations.shouldShowCrateNudge(
+            sleepState: viewModel.currentSleepState,
+            todayEvents: viewModel.events,
+            allEvents: eventStore.events
+        )
+    }
 
     var body: some View {
         VStack(spacing: 0) {
@@ -128,8 +147,8 @@ struct TodayView: View {
                     viewModel.goToPreviousDay()
                 } label: {
                     Image(systemName: "chevron.left")
-                        .font(.system(size: 14, weight: .semibold))
-                        .frame(width: 32, height: 32)
+                        .font(.system(size: 18, weight: .semibold))
+                        .frame(width: 44, height: 44)
                         .contentShape(Rectangle())
                 }
                 .accessibilityLabel(Strings.Timeline.previousDay)
@@ -140,8 +159,8 @@ struct TodayView: View {
                     viewModel.goToNextDay()
                 } label: {
                     Image(systemName: "chevron.right")
-                        .font(.system(size: 14, weight: .semibold))
-                        .frame(width: 32, height: 32)
+                        .font(.system(size: 18, weight: .semibold))
+                        .frame(width: 44, height: 44)
                         .contentShape(Rectangle())
                 }
                 .opacity(viewModel.canGoForward ? 1 : 0.3)
@@ -191,14 +210,51 @@ struct TodayView: View {
                 .accessibilityHint(Strings.Timeline.goToTodayHint)
             }
 
-            // Profile photo button (opens settings)
+            // Profile photo button
+            // - Tap: Opens profile picker if multiple profiles exist, otherwise settings
+            // - Long press: Always opens settings
             ProfilePhotoButton(
                 profile: viewModel.profileStore.profile,
-                action: onSettingsTap
+                action: {
+                    if viewModel.profileStore.profiles.count > 1 {
+                        showProfilePicker = true
+                    } else {
+                        onSettingsTap()
+                    }
+                }
             )
+            .contextMenu {
+                Button {
+                    onSettingsTap()
+                } label: {
+                    Label(Strings.Tabs.settings, systemImage: "gearshape")
+                }
+
+                if viewModel.profileStore.profiles.count > 1 {
+                    Button {
+                        showProfilePicker = true
+                    } label: {
+                        Label(Strings.Profile.switchProfile, systemImage: "arrow.left.arrow.right")
+                    }
+                }
+            }
         }
         .padding()
         .atmosphereNavBar()
+        .sheet(isPresented: $showProfilePicker) {
+            ProfilePickerSheet(
+                profileStore: viewModel.profileStore,
+                isPresented: $showProfilePicker,
+                onAddDog: {
+                    // Dismiss profile picker first, then trigger onboarding
+                    showProfilePicker = false
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        onAddDog?()
+                    }
+                },
+                onManageProfiles: onSettingsTap
+            )
+        }
     }
 
     // MARK: - Status Cards Section
@@ -311,6 +367,22 @@ struct TodayView: View {
                 )
             }
 
+            // Crate nudge card (contextual suggestion for crate naps)
+            if shouldShowCrateNudge && !combinedState.shouldShowFirstRunCard {
+                CrateNudgeCard(
+                    puppyName: viewModel.puppyName,
+                    onStartCrateNap: {
+                        // Start a crate nap via the sheet with crate preselected
+                        viewModel.sheetCoordinator.presentSheet(.startActivity(.nap, preselectedLocation: .crate))
+                    },
+                    onDismiss: {
+                        // Dismiss for the rest of today
+                        dismissedCrateNudgeDate = Date()
+                    }
+                )
+                .animatedAppear(delay: 0.02)
+            }
+
             // Hide scheduled events and medications during first run to avoid confusing "missed" reminders
             if !combinedState.shouldShowFirstRunCard {
                 // Medication reminders
@@ -410,7 +482,8 @@ struct EmptyTimelineCard: View {
         weatherService: weatherService,
         onSettingsTap: { print("Settings tapped") },
         onNavigateToAppointments: { print("Navigate to Appointments") },
-        onNavigateToTrain: { print("Navigate to Train") }
+        onNavigateToTrain: { print("Navigate to Train") },
+        onAddDog: { print("Add dog") }
     )
     .environmentObject(atmosphereProvider)
     .environmentObject(foodRecallService)

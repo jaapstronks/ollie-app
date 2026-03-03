@@ -13,41 +13,46 @@ import OtisShared
 
 struct ThisWeekAppointmentRow: View {
     let appointment: DogAppointment
+    let onTap: () -> Void
 
     var body: some View {
-        HStack(spacing: 12) {
-            ZStack {
-                Circle()
-                    .fill(Color.otisAccent.opacity(0.2))
-                    .frame(width: 36, height: 36)
+        Button(action: onTap) {
+            HStack(spacing: 12) {
+                ZStack {
+                    Circle()
+                        .fill(Color.otisAccent.opacity(0.2))
+                        .frame(width: 36, height: 36)
 
-                Image(systemName: appointment.appointmentType.icon)
-                    .font(.system(size: 14))
-                    .foregroundStyle(Color.otisAccent)
+                    Image(systemName: appointment.appointmentType.icon)
+                        .font(.system(size: 14))
+                        .foregroundStyle(Color.otisAccent)
+                }
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(appointment.title)
+                        .font(.subheadline)
+                        .fontWeight(.medium)
+                        .foregroundStyle(.primary)
+
+                    Text(formattedDateTime)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+
+                Spacer()
+
+                if appointment.isToday {
+                    Text(Strings.Health.today)
+                        .font(.caption)
+                        .fontWeight(.medium)
+                        .foregroundStyle(Color.otisAccent)
+                }
             }
-
-            VStack(alignment: .leading, spacing: 2) {
-                Text(appointment.title)
-                    .font(.subheadline)
-                    .fontWeight(.medium)
-
-                Text(formattedDateTime)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-
-            Spacer()
-
-            if appointment.isToday {
-                Text(Strings.Health.today)
-                    .font(.caption)
-                    .fontWeight(.medium)
-                    .foregroundStyle(Color.otisAccent)
-            }
+            .padding()
+            .background(Color(.secondarySystemBackground))
+            .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
         }
-        .padding()
-        .background(Color(.secondarySystemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+        .buttonStyle(.plain)
     }
 
     private var formattedDateTime: String {
@@ -137,35 +142,40 @@ struct ThisWeekMilestoneRow: View {
 
 struct ComingUpAppointmentRow: View {
     let appointment: DogAppointment
+    let onTap: () -> Void
 
     var body: some View {
-        HStack(spacing: 12) {
-            ZStack {
-                Circle()
-                    .fill(Color.otisInfo.opacity(0.15))
-                    .frame(width: 32, height: 32)
+        Button(action: onTap) {
+            HStack(spacing: 12) {
+                ZStack {
+                    Circle()
+                        .fill(Color.otisInfo.opacity(0.15))
+                        .frame(width: 32, height: 32)
 
-                Image(systemName: appointment.appointmentType.icon)
-                    .font(.system(size: 12))
-                    .foregroundStyle(Color.otisInfo)
+                    Image(systemName: appointment.appointmentType.icon)
+                        .font(.system(size: 12))
+                        .foregroundStyle(Color.otisInfo)
+                }
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(appointment.title)
+                        .font(.caption)
+                        .fontWeight(.medium)
+                        .foregroundStyle(.primary)
+
+                    Text(appointment.dateString)
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                }
+
+                Spacer()
             }
-
-            VStack(alignment: .leading, spacing: 2) {
-                Text(appointment.title)
-                    .font(.caption)
-                    .fontWeight(.medium)
-
-                Text(appointment.dateString)
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
-            }
-
-            Spacer()
+            .padding(.vertical, 8)
+            .padding(.horizontal, 12)
+            .background(Color(.tertiarySystemBackground))
+            .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
         }
-        .padding(.vertical, 8)
-        .padding(.horizontal, 12)
-        .background(Color(.tertiarySystemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+        .buttonStyle(.plain)
     }
 }
 

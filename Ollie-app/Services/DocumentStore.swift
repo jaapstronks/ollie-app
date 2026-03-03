@@ -14,15 +14,15 @@ import os
 
 /// Manages documents with Core Data and automatic CloudKit sync
 @MainActor
-final class DocumentStore: BaseStore {
+final class DocumentStore: BaseStore, ProfileAccessible {
 
     // MARK: - Published State
 
     @Published private(set) var documents: [Document] = []
 
-    // MARK: - Dependencies
+    // MARK: - ProfileAccessible
 
-    private weak var profileStore: ProfileStore?
+    weak var profileStore: ProfileStore?
 
     // MARK: - Computed Properties
 
@@ -58,8 +58,7 @@ final class DocumentStore: BaseStore {
 
     /// Set the profile store (for when it's not available at init time)
     func setProfileStore(_ profileStore: ProfileStore) {
-        self.profileStore = profileStore
-        performInitialLoad()
+        configureProfileStore(profileStore)
     }
 
     // MARK: - Data Loading
@@ -73,17 +72,6 @@ final class DocumentStore: BaseStore {
         let cdDocuments = CDDocument.fetchDocuments(for: profile, in: viewContext)
         documents = cdDocuments.compactMap { $0.toDocument() }
         logger.info("Loaded \(self.documents.count) documents for profile")
-    }
-
-    // MARK: - Profile Access
-
-    /// Get the current CDPuppyProfile from Core Data
-    private func getCurrentProfile() -> CDPuppyProfile? {
-        guard let profileId = profileStore?.profile?.id else {
-            logger.warning("No profile available for document operations")
-            return nil
-        }
-        return CDPuppyProfile.fetch(byId: profileId, in: viewContext)
     }
 
     // MARK: - CRUD Operations

@@ -2,8 +2,8 @@
 //  TimelineViewModel+Stats.swift
 //  Otis-app
 //
-//  Extension containing stats and predictions computed properties
-//  Extracted from TimelineViewModel to improve code organization
+//  Extension containing stats computed properties
+//  Delegates to TodayStatsProvider for pure function logic
 //
 
 import Foundation
@@ -28,82 +28,77 @@ extension TimelineViewModel {
     }
 
     /// Formatted text for time since last plas
+    /// Delegates to TodayStatsProvider
     var timeSinceLastPlasText: String {
-        guard let minutes = minutesSinceLastPlas else {
-            return Strings.TimeFormat.noData
-        }
-
-        if minutes < 60 {
-            return Strings.TimeFormat.minutesAgo(minutes)
-        } else {
-            let hours = minutes / 60
-            let mins = minutes % 60
-            if mins == 0 {
-                return Strings.TimeFormat.hoursAgo(hours)
-            }
-            return Strings.TimeFormat.hoursMinutesAgo(hours: hours, minutes: mins)
-        }
+        TodayStatsProvider.formatTimeSinceLastPlas(minutes: minutesSinceLastPlas)
     }
 
     // MARK: - Sleep Stats
 
     /// Total sleep minutes today
+    /// Delegates to TodayStatsProvider
     var totalSleepMinutesToday: Int {
-        SleepCalculations.totalSleepToday(events: events)
+        TodayStatsProvider.totalSleepMinutes(events: events)
     }
 
     /// Number of naps today
+    /// Delegates to TodayStatsProvider
     var napCountToday: Int {
-        events.sleeps().count
+        TodayStatsProvider.napCount(events: events)
     }
 
     /// Sleep progress toward goal (0.0 - 1.0)
+    /// Delegates to TodayStatsProvider
     var sleepProgress: Double {
-        let goalMinutes = 18 * 60  // 18 hours
-        return min(1.0, Double(totalSleepMinutesToday) / Double(goalMinutes))
+        TodayStatsProvider.sleepProgress(events: events)
     }
 
     // MARK: - Poop Stats
 
     /// Today's poop count
+    /// Delegates to TodayStatsProvider
     var poopCountToday: Int {
-        events.poop().count
+        TodayStatsProvider.poopCount(events: events)
     }
 
     /// Today's outdoor poop count
+    /// Delegates to TodayStatsProvider
     var outdoorPoopCountToday: Int {
-        events.poop().outdoor().count
+        TodayStatsProvider.outdoorPoopCount(events: events)
     }
 
     // MARK: - Potty Stats
 
     /// Today's pee count
+    /// Delegates to TodayStatsProvider
     var peeCountToday: Int {
-        events.pee().count
+        TodayStatsProvider.peeCount(events: events)
     }
 
     /// Today's outdoor pee count
+    /// Delegates to TodayStatsProvider
     var outdoorPeeCountToday: Int {
-        events.outdoorPee().count
+        TodayStatsProvider.outdoorPeeCount(events: events)
     }
 
     /// Today's indoor pee count (accidents)
+    /// Delegates to TodayStatsProvider
     var indoorPeeCountToday: Int {
-        events.pee().indoor().count
+        TodayStatsProvider.indoorPeeCount(events: events)
     }
 
     /// Outdoor potty percentage today
+    /// Delegates to TodayStatsProvider
     var outdoorPercentageToday: Int {
-        let total = peeCountToday
-        guard total > 0 else { return 100 }
-        return Int((Double(outdoorPeeCountToday) / Double(total)) * 100)
+        TodayStatsProvider.outdoorPercentage(events: events)
     }
 
     // MARK: - Meal Stats
 
     /// Today's meal count
+    /// Delegates to TodayStatsProvider
     var mealCountToday: Int {
-        events.meals().count
+        TodayStatsProvider.mealCount(events: events)
     }
 
     /// Expected meal count from profile
@@ -119,13 +114,15 @@ extension TimelineViewModel {
     // MARK: - Walk Stats
 
     /// Today's walk count
+    /// Delegates to TodayStatsProvider
     var walkCountToday: Int {
-        events.walks().count
+        TodayStatsProvider.walkCount(events: events)
     }
 
     /// Total walk duration today (minutes)
+    /// Delegates to TodayStatsProvider
     var totalWalkDurationToday: Int {
-        events.walks().compactMap { $0.durationMin }.reduce(0, +)
+        TodayStatsProvider.totalWalkDuration(events: events)
     }
 }
 
@@ -134,6 +131,7 @@ extension TimelineViewModel {
 extension TimelineViewModel {
 
     /// Summary of today's stats for display
+    /// Kept for backward compatibility - delegates to TodayStatsProvider
     struct TodayStatsSummary {
         let peeCount: Int
         let poopCount: Int
@@ -145,15 +143,22 @@ extension TimelineViewModel {
     }
 
     /// Get a summary of today's stats
+    /// Delegates to TodayStatsProvider
     var todayStatsSummary: TodayStatsSummary {
-        TodayStatsSummary(
-            peeCount: peeCountToday,
-            poopCount: poopCountToday,
-            mealCount: mealCountToday,
-            walkCount: walkCountToday,
-            sleepMinutes: totalSleepMinutesToday,
-            outdoorPercentage: outdoorPercentageToday,
-            accidentCount: indoorPeeCountToday
+        let stats = TodayStatsProvider.compute(events: events, profile: profileStore.profile)
+        return TodayStatsSummary(
+            peeCount: stats.peeCount,
+            poopCount: stats.poopCount,
+            mealCount: stats.mealCount,
+            walkCount: stats.walkCount,
+            sleepMinutes: stats.sleepMinutes,
+            outdoorPercentage: stats.outdoorPercentage,
+            accidentCount: stats.accidentCount
         )
+    }
+
+    /// Get full today's stats using TodayStatsProvider
+    var todayStats: TodayStats {
+        TodayStatsProvider.compute(events: events, profile: profileStore.profile)
     }
 }

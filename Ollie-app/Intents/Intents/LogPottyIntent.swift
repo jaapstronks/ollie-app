@@ -9,9 +9,9 @@ import OtisShared
 
 /// Log a potty event (pee or poop) with location
 struct LogPottyIntent: AppIntent {
-    static var title: LocalizedStringResource = "Log Potty"
-    static var description = IntentDescription("Log when your puppy peed or pooped")
-    static var openAppWhenRun: Bool = false
+    static let title: LocalizedStringResource = "Log Potty"
+    static let description = IntentDescription("Log when your puppy peed or pooped")
+    static let openAppWhenRun: Bool = false
 
     @Parameter(title: "Type", description: "Pee or poop")
     var pottyType: PottyTypeEntity
@@ -55,9 +55,9 @@ struct LogPottyIntent: AppIntent {
 
 /// Quick shortcut for logging pee outside (most common action)
 struct LogPeeOutsideIntent: AppIntent {
-    static var title: LocalizedStringResource = "Log Pee Outside"
-    static var description = IntentDescription("Quickly log that your puppy peed outside")
-    static var openAppWhenRun: Bool = false
+    static let title: LocalizedStringResource = "Log Pee Outside"
+    static let description = IntentDescription("Quickly log that your puppy peed outside")
+    static let openAppWhenRun: Bool = false
 
     @MainActor
     func perform() async throws -> some IntentResult & ProvidesDialog {
@@ -84,9 +84,9 @@ struct LogPeeOutsideIntent: AppIntent {
 
 /// Quick shortcut for logging poop outside
 struct LogPoopOutsideIntent: AppIntent {
-    static var title: LocalizedStringResource = "Log Poop Outside"
-    static var description = IntentDescription("Quickly log that your puppy pooped outside")
-    static var openAppWhenRun: Bool = false
+    static let title: LocalizedStringResource = "Log Poop Outside"
+    static let description = IntentDescription("Quickly log that your puppy pooped outside")
+    static let openAppWhenRun: Bool = false
 
     @MainActor
     func perform() async throws -> some IntentResult & ProvidesDialog {
@@ -113,9 +113,9 @@ struct LogPoopOutsideIntent: AppIntent {
 
 /// Quick shortcut for logging pee inside (accident)
 struct LogPeeInsideIntent: AppIntent {
-    static var title: LocalizedStringResource = "Log Pee Inside"
-    static var description = IntentDescription("Quickly log that your puppy peed inside")
-    static var openAppWhenRun: Bool = false
+    static let title: LocalizedStringResource = "Log Pee Inside"
+    static let description = IntentDescription("Quickly log that your puppy peed inside")
+    static let openAppWhenRun: Bool = false
 
     @MainActor
     func perform() async throws -> some IntentResult & ProvidesDialog {
@@ -142,9 +142,9 @@ struct LogPeeInsideIntent: AppIntent {
 
 /// Quick shortcut for logging poop inside (accident)
 struct LogPoopInsideIntent: AppIntent {
-    static var title: LocalizedStringResource = "Log Poop Inside"
-    static var description = IntentDescription("Quickly log that your puppy pooped inside")
-    static var openAppWhenRun: Bool = false
+    static let title: LocalizedStringResource = "Log Poop Inside"
+    static let description = IntentDescription("Quickly log that your puppy pooped inside")
+    static let openAppWhenRun: Bool = false
 
     @MainActor
     func perform() async throws -> some IntentResult & ProvidesDialog {

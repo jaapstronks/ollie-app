@@ -64,7 +64,7 @@ final class PersistenceController: @unchecked Sendable {
     // MARK: - Initialization
 
     nonisolated init(inMemory: Bool = false) {
-        container = NSPersistentCloudKitContainer(name: "Max")
+        container = NSPersistentCloudKitContainer(name: "Ollie")
 
         // Use fast synchronous check only (ubiquityIdentityToken) to avoid blocking main thread.
         // The async CKContainer.accountStatus() check is deferred to background.

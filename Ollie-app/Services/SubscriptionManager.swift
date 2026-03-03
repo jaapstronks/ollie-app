@@ -383,7 +383,7 @@ enum SubscriptionError: LocalizedError {
     case verificationFailed
     case unknown
 
-    var errorDescription: String? {
+    nonisolated var errorDescription: String? {
         switch self {
         case .productNotFound:
             return Strings.OtisPlus.errorProductNotFound

@@ -2,15 +2,18 @@
 //  WeightLogSheet.swift
 //  Otis-app
 //
-//  Quick weight entry sheet
+//  Quick weight entry sheet - supports both adding new and editing existing measurements
 
 import SwiftUI
 import OtisShared
 
-/// Sheet for logging a weight measurement
+/// Sheet for logging or editing a weight measurement
 struct WeightLogSheet: View {
     @Binding var isPresented: Bool
     @EnvironmentObject var weightStore: WeightStore
+
+    /// Optional measurement to edit. If nil, creates a new measurement.
+    var measurementToEdit: WeightMeasurement?
 
     @State private var weightText: String = ""
     @State private var selectedDate: Date = Date()
@@ -18,6 +21,10 @@ struct WeightLogSheet: View {
     @AppStorage(UserPreferences.Key.weightUnit.rawValue) private var weightUnitRaw = WeightUnit.kg.rawValue
 
     @Environment(\.colorScheme) private var colorScheme
+
+    private var isEditing: Bool {
+        measurementToEdit != nil
+    }
 
     private var weightUnit: WeightUnit {
         WeightUnit(rawValue: weightUnitRaw) ?? .kg
@@ -29,6 +36,10 @@ struct WeightLogSheet: View {
 
     private var weightPlaceholder: String {
         weightUnit == .kg ? Strings.Health.weightPlaceholder : Strings.Health.weightPlaceholderLbs
+    }
+
+    private var navigationTitle: String {
+        isEditing ? Strings.Growth.editMeasurement : Strings.Health.logWeight
     }
 
     var body: some View {
@@ -78,7 +89,7 @@ struct WeightLogSheet: View {
                 Spacer()
             }
             .padding()
-            .navigationTitle(Strings.Health.logWeight)
+            .navigationTitle(navigationTitle)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -96,11 +107,21 @@ struct WeightLogSheet: View {
                 }
             }
             .onAppear {
+                setupInitialValues()
                 isWeightFocused = true
             }
         }
         .presentationDetents([.large])
         .presentationDragIndicator(.visible)
+    }
+
+    private func setupInitialValues() {
+        if let measurement = measurementToEdit {
+            // Convert stored kg to display unit
+            let displayWeight = weightUnit.convert(fromKg: measurement.weightKg)
+            weightText = String(format: "%.1f", displayWeight)
+            selectedDate = measurement.date
+        }
     }
 
     private var isValidWeight: Bool {
@@ -122,7 +143,22 @@ struct WeightLogSheet: View {
         // Normalize to noon on the selected date (avoids timezone edge cases)
         let calendar = Calendar.current
         let noon = calendar.date(bySettingHour: 12, minute: 0, second: 0, of: selectedDate) ?? selectedDate
-        weightStore.addWeight(weightInKg, date: noon)
+
+        if let existingMeasurement = measurementToEdit {
+            // Update existing measurement
+            let updatedMeasurement = WeightMeasurement(
+                id: existingMeasurement.id,
+                date: noon,
+                weightKg: weightInKg,
+                note: existingMeasurement.note,
+                createdAt: existingMeasurement.createdAt,
+                modifiedAt: Date()
+            )
+            weightStore.updateMeasurement(updatedMeasurement)
+        } else {
+            // Add new measurement
+            weightStore.addWeight(weightInKg, date: noon)
+        }
         isPresented = false
     }
 }

@@ -27,6 +27,12 @@
             "state": "translated",
             "value": "%1$@ groeide %2$lld%%!"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ a grandi de %lld%% !"
+          }
         }
       }
     },
@@ -55,6 +61,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%@ is verdubbeld in gewicht!"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ a doublé de poids !"
           }
         }
       }
@@ -85,6 +97,12 @@
             "state": "translated",
             "value": "%@ is verdrievoudigd in gewicht!"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ a triplé de poids !"
+          }
         }
       }
     },
@@ -113,6 +131,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%@ is nu anderhalf keer zo groot!"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ est maintenant 1,5x plus grand !"
           }
         }
       }
@@ -143,6 +167,12 @@
             "state": "translated",
             "value": "%@ houdt een gezond gewicht"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ maintient un poids sain"
+          }
         }
       }
     },
@@ -171,6 +201,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%1$@ is nu %2$@ groter!"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ est maintenant %2$@ plus grand !"
           }
         }
       }
@@ -201,6 +237,12 @@
             "state": "translated",
             "value": "%@ sinds vorige"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ depuis la dernière"
+          }
         }
       }
     },
@@ -230,6 +272,12 @@
             "state": "translated",
             "value": "%lld%% van volwassen gewicht"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld%% du poids adulte"
+          }
         }
       }
     },
@@ -258,6 +306,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lld%% naar volwassen gewicht"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld%% vers le poids adulte"
           }
         }
       }
@@ -323,6 +377,12 @@
             "state": "translated",
             "value": "Volwassen %"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "% adulte"
+          }
         }
       }
     },
@@ -351,6 +411,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Weet je zeker dat je de meting van %@ wilt verwijderen?"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Êtes-vous sûr de vouloir supprimer la mesure de %@ ?"
           }
         }
       }
@@ -381,6 +447,12 @@
             "state": "translated",
             "value": "Huidig gewicht"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Poids actuel"
+          }
         }
       }
     },
@@ -409,6 +481,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Meting verwijderen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Supprimer la mesure"
           }
         }
       }
@@ -439,6 +517,12 @@
             "state": "translated",
             "value": "Geschat volwassen"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adulte est."
+          }
         }
       }
     },
@@ -467,6 +551,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Groei"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Croissance"
           }
         }
       }
@@ -497,6 +587,12 @@
             "state": "translated",
             "value": "Groeigrafiek"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Courbe de croissance"
+          }
         }
       }
     },
@@ -525,6 +621,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Groeistatistieken"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Statistiques de croissance"
           }
         }
       }
@@ -555,6 +657,12 @@
             "state": "translated",
             "value": "Groeiverhaal"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Histoire de croissance"
+          }
         }
       }
     },
@@ -583,6 +691,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "in %lld dagen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "dans %lld jours"
           }
         }
       }
@@ -613,6 +727,12 @@
             "state": "translated",
             "value": "in %lld weken"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "dans %lld semaines"
+          }
         }
       }
     },
@@ -641,6 +761,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "in 1 dag"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "dans 1 jour"
           }
         }
       }
@@ -671,6 +797,12 @@
             "state": "translated",
             "value": "in 1 week"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "dans 1 semaine"
+          }
         }
       }
     },
@@ -699,6 +831,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Laatst gemeten %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dernière mesure %@"
           }
         }
       }
@@ -729,6 +867,12 @@
             "state": "translated",
             "value": "Laatst gewogen %lld dagen geleden"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dernière pesée il y a %lld jours"
+          }
         }
       }
     },
@@ -757,6 +901,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Laatst gewogen 1 dag geleden"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dernière pesée il y a 1 jour"
           }
         }
       }
@@ -787,6 +937,12 @@
             "state": "translated",
             "value": "Log nog een gewicht om het groeiverhaal te zien"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrez un autre poids pour voir l'histoire de croissance"
+          }
         }
       }
     },
@@ -815,6 +971,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Log gewicht"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer le poids"
           }
         }
       }
@@ -845,6 +1007,12 @@
             "state": "translated",
             "value": "Log je eerste gewicht om de groei te volgen"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrez votre premier poids pour commencer le suivi de croissance"
+          }
         }
       }
     },
@@ -873,6 +1041,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Meetgeschiedenis"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Historique des mesures"
           }
         }
       }
@@ -903,6 +1077,12 @@
             "state": "translated",
             "value": "Maandelijks wegen aanbevolen"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pesées mensuelles recommandées"
+          }
         }
       }
     },
@@ -931,6 +1111,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nog nooit gewogen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jamais pesé"
           }
         }
       }
@@ -996,6 +1182,12 @@
             "state": "translated",
             "value": "sinds %@"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "depuis %@"
+          }
         }
       }
     },
@@ -1024,6 +1216,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sinds aankomst"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Depuis l'arrivée"
           }
         }
       }
@@ -1089,6 +1287,12 @@
             "state": "translated",
             "value": "De reis begint"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le voyage commence"
+          }
         }
       }
     },
@@ -1117,6 +1321,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tijd om te wegen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "C'est l'heure de peser"
           }
         }
       }
@@ -1147,6 +1357,12 @@
             "state": "translated",
             "value": "Totale groei"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gain total"
+          }
         }
       }
     },
@@ -1175,6 +1391,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Weeg elke %lld dagen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Peser tous les %lld jours"
           }
         }
       }
@@ -1205,6 +1427,12 @@
             "state": "translated",
             "value": "Weeg elke 2 weken om de groei te volgen"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pesez toutes les 2 semaines pour suivre la croissance"
+          }
         }
       }
     },
@@ -1234,6 +1462,12 @@
             "state": "translated",
             "value": "Weeg nu"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Peser maintenant"
+          }
         }
       }
     },
@@ -1262,6 +1496,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Weeg wekelijks tijdens snelle groei"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pesez chaque semaine pendant la croissance rapide"
           }
         }
       }

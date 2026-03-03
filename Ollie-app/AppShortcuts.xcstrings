@@ -41,15 +41,9 @@
           }
         },
         "fr": {
-          "stringSet": {
+          "stringUnit": {
             "state": "translated",
-            "values": [
-              "Comment va mon chiot dans ${applicationName}",
-              "Statut du chiot dans ${applicationName}",
-              "Comment va mon chien dans ${applicationName}",
-              "Mon chiot dort-il dans ${applicationName}",
-              "Depuis combien de temps mon chiot dort dans ${applicationName}"
-            ]
+            "value": "Comment va mon chiot dans ${applicationName}"
           }
         },
         "it": {
@@ -115,14 +109,9 @@
           }
         },
         "fr": {
-          "stringSet": {
+          "stringUnit": {
             "state": "translated",
-            "values": [
-              "Enregistrer repas dans ${applicationName}",
-              "Mon chiot a mangé dans ${applicationName}",
-              "Mon chien a mangé dans ${applicationName}",
-              "Enregistrer nourriture dans ${applicationName}"
-            ]
+            "value": "Enregistrer repas dans ${applicationName}"
           }
         },
         "it": {
@@ -186,14 +175,9 @@
           }
         },
         "fr": {
-          "stringSet": {
+          "stringUnit": {
             "state": "translated",
-            "values": [
-              "Enregistrer pipi à l'intérieur dans ${applicationName}",
-              "Mon chiot a fait pipi à l'intérieur dans ${applicationName}",
-              "Mon chien a eu un accident dans ${applicationName}",
-              "Enregistrer pipi intérieur dans ${applicationName}"
-            ]
+            "value": "Enregistrer pipi à l'intérieur dans ${applicationName}"
           }
         },
         "it": {
@@ -257,14 +241,9 @@
           }
         },
         "fr": {
-          "stringSet": {
+          "stringUnit": {
             "state": "translated",
-            "values": [
-              "Enregistrer pipi dehors dans ${applicationName}",
-              "Mon chiot a fait pipi dehors dans ${applicationName}",
-              "Mon chien a fait pipi dehors dans ${applicationName}",
-              "Enregistrer pipi extérieur dans ${applicationName}"
-            ]
+            "value": "Enregistrer pipi dehors dans ${applicationName}"
           }
         },
         "it": {
@@ -328,14 +307,9 @@
           }
         },
         "fr": {
-          "stringSet": {
+          "stringUnit": {
             "state": "translated",
-            "values": [
-              "Enregistrer caca à l'intérieur dans ${applicationName}",
-              "Mon chiot a fait caca à l'intérieur dans ${applicationName}",
-              "Mon chien a fait caca à l'intérieur dans ${applicationName}",
-              "Enregistrer caca intérieur dans ${applicationName}"
-            ]
+            "value": "Enregistrer caca à l'intérieur dans ${applicationName}"
           }
         },
         "it": {
@@ -399,14 +373,9 @@
           }
         },
         "fr": {
-          "stringSet": {
+          "stringUnit": {
             "state": "translated",
-            "values": [
-              "Enregistrer caca dehors dans ${applicationName}",
-              "Mon chiot a fait caca dehors dans ${applicationName}",
-              "Mon chien a fait caca dehors dans ${applicationName}",
-              "Enregistrer caca extérieur dans ${applicationName}"
-            ]
+            "value": "Enregistrer caca dehors dans ${applicationName}"
           }
         },
         "it": {
@@ -470,14 +439,9 @@
           }
         },
         "fr": {
-          "stringSet": {
+          "stringUnit": {
             "state": "translated",
-            "values": [
-              "Enregistrer dodo dans ${applicationName}",
-              "Mon chiot dort dans ${applicationName}",
-              "Mon chien s'est endormi dans ${applicationName}",
-              "Enregistrer sieste dans ${applicationName}"
-            ]
+            "value": "Enregistrer sommeil dans ${applicationName}"
           }
         },
         "it": {
@@ -541,14 +505,9 @@
           }
         },
         "fr": {
-          "stringSet": {
+          "stringUnit": {
             "state": "translated",
-            "values": [
-              "Enregistrer réveil dans ${applicationName}",
-              "Mon chiot s'est réveillé dans ${applicationName}",
-              "Mon chien est réveillé dans ${applicationName}",
-              "Enregistrer réveillé dans ${applicationName}"
-            ]
+            "value": "Enregistrer réveil dans ${applicationName}"
           }
         },
         "it": {
@@ -612,14 +571,9 @@
           }
         },
         "fr": {
-          "stringSet": {
+          "stringUnit": {
             "state": "translated",
-            "values": [
-              "Enregistrer promenade dans ${applicationName}",
-              "Mon chiot est allé se promener dans ${applicationName}",
-              "Enregistrer balade du chien dans ${applicationName}",
-              "Nous sommes allés nous promener dans ${applicationName}"
-            ]
+            "value": "Enregistrer promenade dans ${applicationName}"
           }
         },
         "it": {
@@ -683,14 +637,9 @@
           }
         },
         "fr": {
-          "stringSet": {
+          "stringUnit": {
             "state": "translated",
-            "values": [
-              "Statut pipi dans ${applicationName}",
-              "Quand mon chiot a-t-il fait pipi pour la dernière fois dans ${applicationName}",
-              "Vérifier statut pipi dans ${applicationName}",
-              "Quand mon chien a-t-il fait pipi pour la dernière fois dans ${applicationName}"
-            ]
+            "value": "Statut besoins dans ${applicationName}"
           }
         },
         "it": {

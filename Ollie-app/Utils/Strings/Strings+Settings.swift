@@ -300,13 +300,24 @@ extension Strings {
         static let shareError = String(localized: "Share Error", table: table)
         static let couldNotFetchShareInfo = String(localized: "Could not fetch share information", table: table)
 
-        // Existing profile conflict warning
+        // Existing profile conflict warning (legacy - kept for backwards compatibility)
         static let existingProfileTitle = String(localized: "Replace Existing Profile?", table: table)
         static func existingProfileMessage(existingName: String, sharedOwner: String) -> String {
             String(localized: "You already have a profile for \(existingName). Accepting this share will replace it with the shared puppy from \(sharedOwner). Your current profile data will be deleted.", table: table)
         }
         static let existingProfileMessageGeneric = String(localized: "You already have a puppy profile. Accepting this share will replace it with the shared puppy. Your current profile data will be deleted.", table: table)
         static let acceptAndReplace = String(localized: "Accept & Replace", table: table)
+
+        // Non-destructive share acceptance (multi-puppy support)
+        static let addSharedProfileTitle = String(localized: "Add Shared Dog?", table: table)
+        static func addSharedProfileMessage(existingName: String, sharedOwner: String) -> String {
+            String(localized: "\(sharedOwner) wants to share their puppy with you. This will add their dog to your profile list alongside \(existingName).", table: table)
+        }
+        static func addSharedProfileMessageGeneric(ownerName: String) -> String {
+            String(localized: "\(ownerName) wants to share their puppy with you. This will add their dog to your profile list.", table: table)
+        }
+        static let acceptShare = String(localized: "Accept", table: table)
+
         static func lastSynced(time: String) -> String {
             String(localized: "Synced \(time)", table: table)
         }

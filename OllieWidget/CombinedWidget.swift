@@ -460,6 +460,7 @@ struct CombinedWidget: Widget {
         todayOutdoorCount: 5,
         isCurrentlySleeping: false,
         sleepStartTime: nil,
+        lastWakeTime: Date().addingTimeInterval(-95 * 60),
         lastMealTime: Date().addingTimeInterval(-2 * 60 * 60),
         nextScheduledMealTime: Date().addingTimeInterval(1 * 60 * 60),
         mealsLoggedToday: 2,

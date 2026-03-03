@@ -94,6 +94,8 @@ eventType.label  // Returns localized string
 - `de` — German (translations included)
 - `es` — Spanish (translations included)
 - `fr` — French (translations included)
+- `it` — Italian (translations included)
+- `sv` — Swedish (translations included)
 
 ## Design Principles
 - **Mobile-first UX** — Big tap targets, quick event logging (2 taps max for common events)

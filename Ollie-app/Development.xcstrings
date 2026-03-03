@@ -27,6 +27,12 @@
             "state": "translated",
             "value": "%@ is nu extra gevoelig"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ est particulièrement sensible en ce moment"
+          }
         }
       }
     },
@@ -55,6 +61,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lld maanden · ~%@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld mois · ~%@"
           }
         }
       }
@@ -85,6 +97,12 @@
             "state": "translated",
             "value": "%lld weken resterend"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld semaines restantes"
+          }
         }
       }
     },
@@ -113,6 +131,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "1 week resterend"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 semaine restante"
           }
         }
       }
@@ -143,6 +167,12 @@
             "state": "translated",
             "value": "2-3 weken"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "2-3 semaines"
+          }
         }
       }
     },
@@ -171,6 +201,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "3-16 weken"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "3-16 semaines"
           }
         }
       }
@@ -201,6 +237,12 @@
             "state": "translated",
             "value": "4-6 maanden"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "4-6 mois"
+          }
         }
       }
     },
@@ -229,6 +271,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "6-18 maanden"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "6-18 mois"
           }
         }
       }
@@ -259,6 +307,12 @@
             "state": "translated",
             "value": "18+ maanden"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "18+ mois"
+          }
         }
       }
     },
@@ -288,6 +342,12 @@
             "state": "translated",
             "value": "Actieve periodes"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Périodes actives"
+          }
         }
       }
     },
@@ -313,6 +373,12 @@
           }
         },
         "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adolescent"
+          }
+        },
+        "fr": {
           "stringUnit": {
             "state": "translated",
             "value": "Adolescent"
@@ -381,6 +447,12 @@
             "state": "translated",
             "value": "Leeftijd week %lld · ~%@"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Semaine %lld · ~%@"
+          }
         }
       }
     },
@@ -409,6 +481,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Geboorte tot 2 weken"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Naissance à 2 semaines"
           }
         }
       }
@@ -439,6 +517,12 @@
             "state": "translated",
             "value": "Binnenkort"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "À venir"
+          }
         }
       }
     },
@@ -467,6 +551,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Huidige fase"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Étape actuelle"
           }
         }
       }
@@ -497,6 +587,12 @@
             "state": "translated",
             "value": "Ontwikkeling"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Développement"
+          }
         }
       }
     },
@@ -525,6 +621,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ontwikkelingsroadmap"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Feuille de route du développement"
           }
         }
       }
@@ -555,6 +657,12 @@
             "state": "translated",
             "value": "Focus op positieve ervaringen met nieuwe mensen, plekken, geluiden en andere dieren."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Concentrez-vous sur les expériences positives avec de nouvelles personnes, lieux, sons et autres animaux."
+          }
         }
       }
     },
@@ -583,6 +691,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Juveniel"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Juvénile"
           }
         }
       }
@@ -648,6 +762,12 @@
             "state": "translated",
             "value": "Neonataal"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Néonatal"
+          }
         }
       }
     },
@@ -676,6 +796,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Geen actieve ontwikkelingsperiodes"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucune période de développement active"
           }
         }
       }
@@ -706,6 +832,12 @@
             "state": "translated",
             "value": "Niets op komst"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rien à venir"
+          }
         }
       }
     },
@@ -734,6 +866,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Niets gepland deze week"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rien de prévu cette semaine"
           }
         }
       }
@@ -764,6 +902,12 @@
             "state": "translated",
             "value": "Bekijk ontwikkelingsroadmap"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voir la feuille de route du développement"
+          }
         }
       }
     },
@@ -793,6 +937,12 @@
             "state": "translated",
             "value": "Gevoelige fase"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Phase sensible"
+          }
         }
       }
     },
@@ -821,6 +971,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Kleine positieve ervaringen maken nu een groot verschil voor %@. Vier samen elk succesje."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les petites expériences positives font une grande différence pour %@. Célébrez chaque petite victoire ensemble."
           }
         }
       }
@@ -886,6 +1042,12 @@
             "state": "translated",
             "value": "Socialisatievenster"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fenêtre de socialisation"
+          }
         }
       }
     },
@@ -914,6 +1076,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Socialisatievenster is gesloten"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La fenêtre de socialisation est fermée"
           }
         }
       }
@@ -944,6 +1112,12 @@
             "state": "translated",
             "value": "Socialisatievenster sluit"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La fenêtre de socialisation se ferme"
+          }
         }
       }
     },
@@ -972,6 +1146,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Socialisatievenster is open"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La fenêtre de socialisation est ouverte"
           }
         }
       }
@@ -1002,6 +1182,12 @@
             "state": "translated",
             "value": "Deze week"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cette semaine"
+          }
         }
       }
     },
@@ -1031,6 +1217,12 @@
             "state": "translated",
             "value": "Overgang"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Transitionnel"
+          }
         }
       }
     },
@@ -1059,6 +1251,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Je bent hier"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vous êtes ici"
           }
         }
       }

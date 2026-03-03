@@ -108,8 +108,8 @@ class ThisWeekViewModel: ObservableObject {
     // MARK: - Setup
 
     private func setupObservers() {
-        // Watch for profile changes
-        profileStore.$profile
+        // Watch for profile changes (using activeProfileId since activeProfile is computed)
+        profileStore.$activeProfileId
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 self?.refresh()

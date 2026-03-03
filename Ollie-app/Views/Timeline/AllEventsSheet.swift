@@ -16,11 +16,17 @@ struct AllEventsSheet: View {
 
     @Environment(\.colorScheme) private var colorScheme
 
-    // Event types not in quick log bar (excluding weight which is managed in Health tab)
-    // Also excludes bench which is deprecated in favor of napLocation on sleep events
+    // Event types not in quick log bar
+    // Excludes:
+    // - gewicht: managed in Health tab
+    // - bench: deprecated in favor of napLocation on sleep events
+    // - training: separate system in Train tab (skills tracking)
+    // - tuin: use walks instead
+    // - milestone, gedrag: not user-loggable
     private var additionalEventTypes: [EventType] {
-        EventType.allCases.filter { type in
-            !Constants.quickLogTypes.contains(type) && type != .gewicht && type != .bench
+        let excluded: Set<EventType> = [.gewicht, .bench, .training, .tuin, .milestone, .gedrag]
+        return EventType.allCases.filter { type in
+            !Constants.quickLogTypes.contains(type) && !excluded.contains(type)
         }
     }
 
@@ -178,8 +184,7 @@ struct EventTypeButton: View {
         case .plassen, .poepen: return Color.otisInfo
         case .eten, .drinken: return Color.otisAccent
         case .slapen, .ontwaken: return Color.otisSleep
-        case .uitlaten, .tuin: return Color.otisSuccess
-        case .training: return Color.otisAccent
+        case .uitlaten: return Color.otisSuccess
         case .sociaal: return Color.otisInfo
         default: return Color.otisMuted
         }

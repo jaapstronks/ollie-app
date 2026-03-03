@@ -79,20 +79,25 @@ enum SeedData {
             return
         }
 
-        // Create test profile: "Test Puppy", 12 weeks old, medium size
+        // Create test profile: "Oliver", 16 weeks old, medium size
+        // Use a realistic name and age for marketing screenshots
         let calendar = Calendar.current
-        let birthDate = calendar.date(byAdding: .weekOfYear, value: -12, to: Date()) ?? Date()
-        let homeDate = calendar.date(byAdding: .weekOfYear, value: -4, to: Date()) ?? Date()
+        let birthDate = calendar.date(byAdding: .weekOfYear, value: -16, to: Date()) ?? Date()
+        let homeDate = calendar.date(byAdding: .weekOfYear, value: -8, to: Date()) ?? Date()
 
-        let testProfile = PuppyProfile.defaultProfile(
-            name: "Test Puppy",
+        var testProfile = PuppyProfile.defaultProfile(
+            name: "Oliver",
             birthDate: birthDate,
             homeDate: homeDate,
             size: .medium
         )
+        testProfile.breed = "Golden Retriever"
 
         _ = CDPuppyProfile.create(from: testProfile, in: context)
         try? context.save()
+
+        // Post notification to reload ProfileStore - synchronous to ensure profile is ready before app continues
+        NotificationCenter.default.post(name: NSNotification.Name("ProfileStoreReload"), object: nil)
     }
 
     private static func makeEvent(time: Date, type: String, location: String? = nil, note: String? = nil) -> String {

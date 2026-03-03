@@ -43,6 +43,17 @@ enum CombinedSleepPottyState: Equatable {
     /// Unknown state - show nothing special
     case unknown
 
+    /// Stale logging state - user hasn't logged events for a while during daytime
+    /// Shows a "Start fresh" prompt instead of misleading status cards
+    case staleLogging(
+        hoursSinceLastEvent: Int,
+        lastEventTime: Date?
+    )
+
+    /// First run state - user just completed onboarding and has no logged events yet
+    /// Shows a friendly welcome prompt instead of misleading "missed meal" reminders
+    case firstRun(puppyName: String)
+
     // MARK: - Computed Properties
 
     /// Whether the puppy is currently sleeping
@@ -73,6 +84,18 @@ enum CombinedSleepPottyState: Equatable {
         return false
     }
 
+    /// Whether we should show the stale logging banner
+    var shouldShowStaleLoggingBanner: Bool {
+        if case .staleLogging = self { return true }
+        return false
+    }
+
+    /// Whether we should show the first run welcome card
+    var shouldShowFirstRunCard: Bool {
+        if case .firstRun = self { return true }
+        return false
+    }
+
     /// Whether we should show normal separate cards
     var shouldShowSeparateCards: Bool {
         if case .awake = self { return true }
@@ -82,7 +105,7 @@ enum CombinedSleepPottyState: Equatable {
     /// Whether we should hide the standalone potty card
     var shouldHidePottyCard: Bool {
         switch self {
-        case .sleepingPottyOkay, .sleepingPottyUrgent, .justWokeNeedsPotty, .assumedOvernightSleep:
+        case .sleepingPottyOkay, .sleepingPottyUrgent, .justWokeNeedsPotty, .assumedOvernightSleep, .staleLogging, .firstRun:
             return true
         default:
             return false
@@ -92,7 +115,7 @@ enum CombinedSleepPottyState: Equatable {
     /// Whether we should hide the standalone sleep card
     var shouldHideSleepCard: Bool {
         switch self {
-        case .sleepingPottyUrgent, .assumedOvernightSleep:
+        case .sleepingPottyUrgent, .assumedOvernightSleep, .staleLogging, .firstRun:
             return true
         default:
             return false
@@ -125,12 +148,23 @@ struct CombinedStatusCalculations {
     /// Default assumed bedtime (11 PM) if no historical data
     static let defaultBedtimeHour = 23
 
+    /// Daytime window during which crate nudge can appear (8 AM - 8 PM)
+    static let crateNudgeWindowStart = 8
+    static let crateNudgeWindowEnd = 20
+
     /// Minimum hours "awake" to trigger assumed overnight sleep detection
     static let minAwakeHoursForOvernightAssumption = 6
 
     /// Morning window during which we check for assumed overnight sleep (5 AM - 11 AM)
     static let morningWindowStart = 5
     static let morningWindowEnd = 11
+
+    /// Hours of no events during daytime to trigger stale logging state
+    static let staleLoggingThresholdHours = 4
+
+    /// Daytime window during which stale logging detection applies (7 AM - 11 PM)
+    static let daytimeWindowStart = 7
+    static let daytimeWindowEnd = 23
 
     // MARK: - Public Methods
 
@@ -141,13 +175,17 @@ struct CombinedStatusCalculations {
     ///   - wakeTimePottyState: Captured potty state at wake time (if any)
     ///   - recentEvents: Events from today and yesterday (for overnight sleep detection)
     ///   - dismissedAssumedSleepDate: Date when assumed sleep was dismissed (if any)
+    ///   - hasActiveCoverageGap: Whether there's an active coverage gap (tracking paused)
+    ///   - dismissedStaleLoggingDate: Date when stale logging was dismissed (if any)
     /// - Returns: Combined state for display logic
     static func calculateCombinedState(
         sleepState: SleepState,
         pottyPrediction: PottyPrediction,
         wakeTimePottyState: WakeTimePottyState?,
         recentEvents: [PuppyEvent] = [],
-        dismissedAssumedSleepDate: Date? = nil
+        dismissedAssumedSleepDate: Date? = nil,
+        hasActiveCoverageGap: Bool = false,
+        dismissedStaleLoggingDate: Date? = nil
     ) -> CombinedSleepPottyState {
 
         // Check for post-wake state first (takes priority if just woke with urgent potty)
@@ -161,6 +199,16 @@ struct CombinedStatusCalculations {
                 minutesSinceWake: minutesSinceWake,
                 pottyWasOverdueBy: wakeState.minutesOverdue
             )
+        }
+
+        // Check for stale logging (only if no active coverage gap)
+        // This takes priority over misleading states like "awake for 10 hours"
+        if !hasActiveCoverageGap,
+           let staleState = checkForStaleLogging(
+               recentEvents: recentEvents,
+               dismissedDate: dismissedStaleLoggingDate
+           ) {
+            return staleState
         }
 
         switch sleepState {
@@ -436,5 +484,110 @@ struct CombinedStatusCalculations {
 
         // Default: assume sleep at 11 PM
         return calendar.date(bySettingHour: defaultBedtimeHour, minute: 0, second: 0, of: yesterday)!
+    }
+
+    // MARK: - Stale Logging Detection
+
+    /// Check if logging has gone stale (too long without events during daytime)
+    /// Returns nil if not applicable, otherwise returns the stale logging state
+    private static func checkForStaleLogging(
+        recentEvents: [PuppyEvent],
+        dismissedDate: Date?
+    ) -> CombinedSleepPottyState? {
+        let calendar = Calendar.current
+        let now = Date()
+        let currentHour = calendar.component(.hour, from: now)
+
+        // Only check during daytime hours (7 AM - 11 PM)
+        guard currentHour >= daytimeWindowStart && currentHour < daytimeWindowEnd else {
+            return nil
+        }
+
+        // Check if user already dismissed stale logging today
+        if let dismissedDate = dismissedDate,
+           calendar.isDateInToday(dismissedDate) {
+            return nil
+        }
+
+        // Find the last event (excluding coverage gaps)
+        let lastEvent = recentEvents
+            .filter { $0.type != .coverageGap }
+            .max(by: { $0.time < $1.time })
+
+        guard let lastEventTime = lastEvent?.time else {
+            // No events at all - could be a new user, don't show stale banner
+            return nil
+        }
+
+        // Calculate hours since last event
+        let hoursSinceLastEvent = Int(now.timeIntervalSince(lastEventTime) / 3600)
+
+        // Only trigger if enough time has passed
+        guard hoursSinceLastEvent >= staleLoggingThresholdHours else {
+            return nil
+        }
+
+        // Don't trigger if last event was overnight (sleeping)
+        // Morning window handles this case with assumed overnight sleep
+        let lastEventHour = calendar.component(.hour, from: lastEventTime)
+        let isLastEventOvernight = lastEventHour >= 21 || lastEventHour < morningWindowStart
+        if isLastEventOvernight && currentHour < morningWindowEnd {
+            // This should be handled by assumed overnight sleep detection instead
+            return nil
+        }
+
+        return .staleLogging(
+            hoursSinceLastEvent: hoursSinceLastEvent,
+            lastEventTime: lastEventTime
+        )
+    }
+
+    // MARK: - Crate Nudge Detection
+
+    /// Check if conditions are right to show a crate nap nudge
+    /// Shows when:
+    /// - Puppy is awake
+    /// - At least one nap logged today
+    /// - None of today's naps are in crate
+    /// - User has logged crate naps before (established pattern)
+    /// - Daytime hours (8 AM - 8 PM)
+    /// - Returns: true if nudge should be shown
+    static func shouldShowCrateNudge(
+        sleepState: SleepState,
+        todayEvents: [PuppyEvent],
+        allEvents: [PuppyEvent]
+    ) -> Bool {
+        // Must be awake
+        guard sleepState.isAwake else { return false }
+
+        // Must be daytime hours
+        let calendar = Calendar.current
+        let currentHour = calendar.component(.hour, from: Date())
+        guard currentHour >= crateNudgeWindowStart && currentHour < crateNudgeWindowEnd else {
+            return false
+        }
+
+        // Get today's naps (sleep events that are naps, not overnight sleep)
+        let todayNaps = todayEvents.filter { event in
+            guard event.type == .slapen else { return false }
+            // Consider it a nap if it started after 6 AM (not overnight)
+            let hour = calendar.component(.hour, from: event.time)
+            return hour >= 6
+        }
+
+        // Must have at least one nap today
+        guard !todayNaps.isEmpty else { return false }
+
+        // None of today's naps should be in crate
+        let todayCrateNaps = todayNaps.filter { $0.napLocation == .crate }
+        guard todayCrateNaps.isEmpty else { return false }
+
+        // User must have used crate before (established pattern)
+        let allCrateNaps = allEvents.filter { event in
+            event.type == .slapen && event.napLocation == .crate
+        }
+        guard !allCrateNaps.isEmpty else { return false }
+
+        return true
     }
 }

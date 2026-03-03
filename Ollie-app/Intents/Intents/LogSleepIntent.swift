@@ -9,9 +9,9 @@ import OtisShared
 
 /// Log that your puppy is sleeping
 struct LogSleepIntent: AppIntent {
-    static var title: LocalizedStringResource = "Log Sleep"
-    static var description = IntentDescription("Log that your puppy is sleeping")
-    static var openAppWhenRun: Bool = false
+    static let title: LocalizedStringResource = "Log Sleep"
+    static let description = IntentDescription("Log that your puppy is sleeping")
+    static let openAppWhenRun: Bool = false
 
     @MainActor
     func perform() async throws -> some IntentResult & ProvidesDialog {

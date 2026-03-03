@@ -16,6 +16,12 @@
             "value": "Agregar contacto"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajouter un contact"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -43,6 +49,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Direccion"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adresse"
           }
         },
         "it": {
@@ -74,6 +86,12 @@
             "value": "Criador"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Éleveur"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -101,6 +119,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Llamar"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Appeler"
           }
         },
         "it": {
@@ -132,6 +156,12 @@
             "value": "Elige un contacto de tu libreta de direcciones para importar sus datos."
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisissez un contact dans votre carnet d'adresses pour importer ses coordonnées."
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -159,6 +189,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Elegir otro contacto"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisir un autre contact"
           }
         },
         "it": {
@@ -190,6 +226,12 @@
             "value": "Elegir contacto"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisir un contact"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -217,6 +259,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Informacion de contacto"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Coordonnées"
           }
         },
         "it": {
@@ -248,6 +296,12 @@
             "value": "Nombre del contacto"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nom du contact"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -275,6 +329,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Contactos"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contacts"
           }
         },
         "it": {
@@ -306,6 +366,12 @@
             "value": "Guarderia"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Garderie"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -333,6 +399,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Eliminar contacto?"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Supprimer le contact ?"
           }
         },
         "it": {
@@ -364,6 +436,12 @@
             "value": "Paseador de perros"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Promeneur de chiens"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -391,6 +469,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Editar contacto"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modifier le contact"
           }
         },
         "it": {
@@ -457,6 +541,12 @@
             "value": "Direccion de correo electronico"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adresse e-mail"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -486,6 +576,12 @@
             "value": "Veterinario de emergencia"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vétérinaire d'urgence"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -513,6 +609,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Peluquero canino"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toiletteur"
           }
         },
         "it": {
@@ -579,6 +681,12 @@
             "value": "Importar desde Contactos"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Importer depuis Contacts"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -643,6 +751,12 @@
             "value": "El nombre es obligatorio"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le nom est requis"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -670,6 +784,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sin contactos"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun contact"
           }
         },
         "it": {
@@ -736,6 +856,12 @@
             "value": "Abrir en Mapas"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrir dans Plans"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -763,6 +889,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Notas opcionales sobre este contacto..."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notes facultatives sur ce contact..."
           }
         },
         "it": {
@@ -829,6 +961,12 @@
             "value": "Cuidador de mascotas"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pet-sitter"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -856,6 +994,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tienda de mascotas"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Animalerie"
           }
         },
         "it": {
@@ -887,6 +1031,12 @@
             "value": "Telefono"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Téléphone"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -914,6 +1064,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Numero de telefono"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Numéro de téléphone"
           }
         },
         "it": {
@@ -945,6 +1101,12 @@
             "value": "Seleccionar un contacto"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sélectionner un contact"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -972,6 +1134,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Enviar correo electronico"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Envoyer un e-mail"
           }
         },
         "it": {
@@ -1003,6 +1171,12 @@
             "value": "Guarda aqui tu veterinario, peluquero, cuidador y otros contactos importantes."
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrez ici votre vétérinaire, toiletteur, pet-sitter et autres contacts importants."
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -1030,6 +1204,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Direccion"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adresse postale"
           }
         },
         "it": {
@@ -1061,6 +1241,12 @@
             "value": "El nombre siempre se importara."
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le nom sera toujours importé."
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -1088,6 +1274,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Esto eliminara permanentemente este contacto."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cela supprimera définitivement ce contact."
           }
         },
         "it": {
@@ -1122,7 +1314,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Entraîneur"
+            "value": "Éducateur"
           }
         },
         "it": {

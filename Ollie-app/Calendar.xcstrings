@@ -16,16 +16,22 @@
             "value": "%@, %lld citas"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@, %lld afspraken"
+            "value": "%@, %lld rendez-vous"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "%@, %lld appuntamenti"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@, %lld afspraken"
           }
         }
       }
@@ -45,16 +51,22 @@
             "value": "%@, 1 cita"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@, 1 afspraak"
+            "value": "%@, 1 rendez-vous"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "%@, 1 appuntamento"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@, 1 afspraak"
           }
         }
       }
@@ -74,16 +86,22 @@
             "value": "Agregar cita"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Voeg afspraak toe"
+            "value": "Ajouter un rendez-vous"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Aggiungi appuntamento"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voeg afspraak toe"
           }
         }
       }
@@ -103,16 +121,22 @@
             "value": "Todos los hitos completados!"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Alle mijlpalen voltooid!"
+            "value": "Toutes les étapes accomplies !"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Tutte le tappe completate!"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alle mijlpalen voltooid!"
           }
         }
       }
@@ -138,16 +162,16 @@
             "value": "Calendrier"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kalender"
-          }
-        },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Calendario"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kalender"
           }
         }
       }
@@ -167,16 +191,22 @@
             "value": "Proximamente"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Binnenkort"
+            "value": "À venir"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "In arrivo"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Binnenkort"
           }
         }
       }
@@ -196,16 +226,22 @@
             "value": "dias en casa"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "dagen thuis"
+            "value": "jours à la maison"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "giorni a casa"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "dagen thuis"
           }
         }
       }
@@ -225,16 +261,22 @@
             "value": "Desarrollo"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ontwikkeling"
+            "value": "Développement"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Sviluppo"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ontwikkeling"
           }
         }
       }
@@ -254,16 +296,22 @@
             "value": "Pendiente esta semana"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Gepland deze week"
+            "value": "Prévu cette semaine"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "In scadenza questa settimana"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gepland deze week"
           }
         }
       }
@@ -283,16 +331,22 @@
             "value": "Cronologia de hitos"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Mijlpalen tijdlijn"
+            "value": "Chronologie des étapes"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Cronologia tappe"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mijlpalen tijdlijn"
           }
         }
       }
@@ -318,16 +372,16 @@
             "value": "Mois"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Maand"
-          }
-        },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Mese"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Maand"
           }
         }
       }
@@ -347,16 +401,22 @@
             "value": "Sin citas"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Geen afspraken"
+            "value": "Aucun rendez-vous"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Nessun appuntamento"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geen afspraken"
           }
         }
       }
@@ -376,16 +436,22 @@
             "value": "No hay citas proximas"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Geen komende afspraken"
+            "value": "Aucun rendez-vous à venir"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Nessun appuntamento in programma"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geen komende afspraken"
           }
         }
       }
@@ -405,16 +471,22 @@
             "value": "No hay hitos proximos"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Geen komende mijlpalen"
+            "value": "Aucune étape à venir"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Nessuna tappa in arrivo"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geen komende mijlpalen"
           }
         }
       }
@@ -434,16 +506,22 @@
             "value": "Nada programado en las proximas semanas"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Niets op komst de komende weken"
+            "value": "Rien de prévu dans les prochaines semaines"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Niente in programma nelle prossime settimane"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Niets op komst de komende weken"
           }
         }
       }
@@ -463,16 +541,22 @@
             "value": "Nada programado esta semana"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Niets gepland deze week"
+            "value": "Rien de prévu cette semaine"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Niente in programma questa settimana"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Niets gepland deze week"
           }
         }
       }
@@ -492,16 +576,22 @@
             "value": "Vencido"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Te laat"
+            "value": "En retard"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "In ritardo"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Te laat"
           }
         }
       }
@@ -521,16 +611,22 @@
             "value": "Ahora mismo"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Op dit moment"
+            "value": "En ce moment"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "In questo momento"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Op dit moment"
           }
         }
       }
@@ -550,16 +646,22 @@
             "value": "Programa visitas al veterinario, peluqueria y clases de adiestramiento."
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plan dierenarts bezoeken, verzorging en trainingslessen."
+            "value": "Planifiez les visites chez le vétérinaire, le toilettage et les cours d'éducation."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Programma visite dal veterinario, toelettatura e lezioni di addestramento."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plan dierenarts bezoeken, verzorging en trainingslessen."
           }
         }
       }
@@ -579,16 +681,22 @@
             "value": "Ver hoja de ruta de desarrollo"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Bekijk ontwikkelingsroadmap"
+            "value": "Voir la feuille de route du développement"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Vedi tabella di sviluppo"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bekijk ontwikkelingsroadmap"
           }
         }
       }
@@ -608,16 +716,22 @@
             "value": "Esta semana"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Deze week"
+            "value": "Cette semaine"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Questa settimana"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deze week"
           }
         }
       }
@@ -643,16 +757,16 @@
             "value": "Aujourd'hui"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vandaag"
-          }
-        },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Oggi"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vandaag"
           }
         }
       }
@@ -672,16 +786,22 @@
             "value": "Citas proximas"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Komende afspraken"
+            "value": "Rendez-vous à venir"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Prossimi appuntamenti"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Komende afspraken"
           }
         }
       }
@@ -701,16 +821,22 @@
             "value": "Ver todas las citas"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Bekijk alle afspraken"
+            "value": "Voir tous les rendez-vous"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Vedi tutti gli appuntamenti"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bekijk alle afspraken"
           }
         }
       }
@@ -730,16 +856,22 @@
             "value": "Ver todos los hitos"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Bekijk alle mijlpalen"
+            "value": "Voir toutes les étapes"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Vedi tutte le tappe"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bekijk alle mijlpalen"
           }
         }
       }
@@ -759,16 +891,22 @@
             "value": "Semana"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Week"
+            "value": "Semaine"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Settimana"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Week"
           }
         }
       }
@@ -788,16 +926,22 @@
             "value": "Semana %lld de %lld de socializacion"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Week %lld van %lld socialisatie"
+            "value": "Semaine %lld sur %lld de socialisation"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Settimana %lld di %lld socializzazione"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Week %lld van %lld socialisatie"
           }
         }
       }
@@ -817,16 +961,22 @@
             "value": "semanas de edad"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "weken oud"
+            "value": "semaines"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "settimane"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "weken oud"
           }
         }
       }

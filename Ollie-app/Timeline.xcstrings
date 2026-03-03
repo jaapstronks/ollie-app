@@ -27,6 +27,12 @@
             "state": "translated",
             "value": "- dentro"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "- à l'intérieur"
+          }
         }
       }
     },
@@ -52,6 +58,12 @@
           }
         },
         "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "(%lldx)"
+          }
+        },
+        "fr": {
           "stringUnit": {
             "state": "translated",
             "value": "(%lldx)"
@@ -85,6 +97,12 @@
             "state": "translated",
             "value": "(dopo pappa %lldm fa)"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "(après manger il y a %lldm)"
+          }
         }
       }
     },
@@ -113,6 +131,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "(dopo nanna %lldm fa)"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "(après sieste il y a %lldm)"
           }
         }
       }
@@ -143,6 +167,12 @@
             "state": "translated",
             "value": "%@ trascorso"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ écoulé"
+          }
         }
       }
     },
@@ -171,6 +201,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%@ sta facendo la nanna"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ fait la sieste"
           }
         }
       }
@@ -201,6 +237,12 @@
             "state": "translated",
             "value": "%@ sta dormendo ora"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ dort maintenant"
+          }
         }
       }
     },
@@ -229,6 +271,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%@ deve fare pipi adesso!"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ doit faire pipi maintenant !"
           }
         }
       }
@@ -259,6 +307,12 @@
             "state": "translated",
             "value": "%@ deve fare pipi adesso! (%lld min in ritardo)"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ doit faire pipi maintenant ! (%lld min de retard)"
+          }
         }
       }
     },
@@ -287,6 +341,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lld ore fa"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il y a %lld heures"
           }
         }
       }
@@ -317,6 +377,12 @@
             "state": "translated",
             "value": "%lld piu tardi oggi"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld plus tard aujourd'hui"
+          }
         }
       }
     },
@@ -342,6 +408,12 @@
           }
         },
         "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld min"
+          }
+        },
+        "fr": {
           "stringUnit": {
             "state": "translated",
             "value": "%lld min"
@@ -375,6 +447,12 @@
             "state": "translated",
             "value": "%lld min fa"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il y a %lld min"
+          }
         }
       }
     },
@@ -403,6 +481,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lld cacche oggi"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld cacas aujourd'hui"
           }
         }
       }
@@ -433,6 +517,12 @@
             "state": "translated",
             "value": "%lld cacche oggi (previste ~%2$lld-%3$lld)"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld cacas aujourd'hui (attendu ~%lld-%lld)"
+          }
         }
       }
     },
@@ -462,6 +552,12 @@
             "state": "translated",
             "value": "%lld%%"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld %%"
+          }
         }
       }
     },
@@ -487,6 +583,12 @@
           }
         },
         "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld°"
+          }
+        },
+        "fr": {
           "stringUnit": {
             "state": "translated",
             "value": "%lld°"
@@ -520,6 +622,12 @@
             "state": "translated",
             "value": "%lldh %lldm fa"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il y a %lldh %lldm"
+          }
         }
       }
     },
@@ -548,6 +656,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lldh fa"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il y a %lldh"
           }
         }
       }
@@ -578,6 +692,12 @@
             "state": "translated",
             "value": "%lldh%lldm fa"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il y a %lldh%lldm"
+          }
         }
       }
     },
@@ -606,6 +726,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "~%lld min rimanenti"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "~%lld min restantes"
           }
         }
       }
@@ -636,6 +762,12 @@
             "state": "translated",
             "value": "1 cacca oggi"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 caca aujourd'hui"
+          }
         }
       }
     },
@@ -664,6 +796,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "1 cacca oggi (previste ~%lld-%lld)"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 caca aujourd'hui (attendu ~%lld-%lld)"
           }
         }
       }
@@ -694,6 +832,12 @@
             "state": "translated",
             "value": "Incidente"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Accident"
+          }
         }
       }
     },
@@ -722,6 +866,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Dopo l'incidente — esci subito!"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Après l'accident — sortez maintenant !"
           }
         }
       }
@@ -752,6 +902,12 @@
             "state": "translated",
             "value": "Dopo aver bevuto"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Après avoir bu"
+          }
         }
       }
     },
@@ -780,6 +936,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Dopo la pappa"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Après manger"
           }
         }
       }
@@ -810,6 +972,12 @@
             "state": "translated",
             "value": "Dopo aver giocato"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Après avoir joué"
+          }
         }
       }
     },
@@ -838,6 +1006,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Dopo la nanna"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Après le sommeil"
           }
         }
       }
@@ -868,6 +1042,12 @@
             "state": "translated",
             "value": "Dopo il risveglio: ora della pappa"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Au réveil : l'heure du repas"
+          }
         }
       }
     },
@@ -896,6 +1076,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Dopo il risveglio: ora della passeggiata"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Au réveil : l'heure de la promenade"
           }
         }
       }
@@ -926,6 +1112,12 @@
             "state": "translated",
             "value": "Tutto bene"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tout va bien"
+          }
         }
       }
     },
@@ -954,6 +1146,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Anche ora della pappa"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aussi l'heure du repas"
           }
         }
       }
@@ -984,6 +1182,12 @@
             "state": "translated",
             "value": "Anche ora della passeggiata"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aussi l'heure de la promenade"
+          }
         }
       }
     },
@@ -1012,6 +1216,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sei sicuro di voler eliminare '%@' da %@?"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voulez-vous vraiment supprimer « %@ » du %@ ?"
           }
         }
       }
@@ -1042,6 +1252,12 @@
             "state": "translated",
             "value": "Sveglio"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Éveillé"
+          }
         }
       }
     },
@@ -1070,6 +1286,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sveglio %@ — nanna tra %lld min?"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Éveillé %@ — sieste dans %lld min ?"
           }
         }
       }
@@ -1100,6 +1322,12 @@
             "state": "translated",
             "value": "Sveglio da %@"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Éveillé depuis %@"
+          }
         }
       }
     },
@@ -1128,6 +1356,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sveglio da %@ — ora della nanna!"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Éveillé depuis %@ — l'heure de la sieste !"
           }
         }
       }
@@ -1158,6 +1392,12 @@
             "state": "translated",
             "value": "Sveglio dalle: %@"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Éveillé depuis : %@"
+          }
         }
       }
     },
@@ -1186,6 +1426,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "E passato un po' dall'ultima cacca"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cela fait un moment depuis le dernier caca"
           }
         }
       }
@@ -1216,6 +1462,12 @@
             "state": "translated",
             "value": "Dorme da %@"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dort depuis %@"
+          }
         }
       }
     },
@@ -1244,6 +1496,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sotto la media per quest'ora"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En dessous de l'habituel pour cette heure"
           }
         }
       }
@@ -1274,6 +1532,12 @@
             "state": "translated",
             "value": "Annulla attivita"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Annuler l'activité"
+          }
         }
       }
     },
@@ -1303,6 +1567,12 @@
             "state": "translated",
             "value": "In arrivo"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "À venir"
+          }
         }
       }
     },
@@ -1331,6 +1601,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Data: %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Date : %@"
           }
         }
       }
@@ -1396,6 +1672,12 @@
             "state": "translated",
             "value": "Giorno %lld"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jour %lld"
+          }
         }
       }
     },
@@ -1424,6 +1706,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Giorno %lld con %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jour %lld avec %@"
           }
         }
       }
@@ -1454,6 +1742,12 @@
             "state": "translated",
             "value": "Eliminare la sessione di sonno?"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Supprimer la session de sommeil ?"
+          }
         }
       }
     },
@@ -1482,6 +1776,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Eliminare?"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Supprimer ?"
           }
         }
       }
@@ -1512,6 +1812,12 @@
             "state": "translated",
             "value": "Scarta senza registrare"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ignorer sans enregistrer"
+          }
         }
       }
     },
@@ -1540,6 +1846,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tocca due volte per andare a oggi"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Appuyez deux fois pour aller à aujourd'hui"
           }
         }
       }
@@ -1570,6 +1882,12 @@
             "state": "translated",
             "value": "Tocca due volte Annulla per ripristinare"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Appuyez deux fois sur Annuler pour restaurer"
+          }
         }
       }
     },
@@ -1598,6 +1916,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Asciutto in vista"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Temps sec à venir"
           }
         }
       }
@@ -1663,6 +1987,12 @@
             "state": "translated",
             "value": "Durante la passeggiata"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pendant la promenade"
+          }
         }
       }
     },
@@ -1691,6 +2021,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Prima"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus tôt"
           }
         }
       }
@@ -1721,6 +2057,12 @@
             "state": "translated",
             "value": "Modifica orario sonno"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modifier l'heure de sommeil"
+          }
         }
       }
     },
@@ -1749,6 +2091,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Modifica orario sveglia"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modifier l'heure de réveil"
           }
         }
       }
@@ -1814,6 +2162,12 @@
             "state": "translated",
             "value": "Termina attivita"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terminer l'activité"
+          }
         }
       }
     },
@@ -1842,6 +2196,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Termina ora"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terminer maintenant"
           }
         }
       }
@@ -1872,6 +2232,12 @@
             "state": "translated",
             "value": "Termina sonno"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fin du sommeil"
+          }
         }
       }
     },
@@ -1900,6 +2266,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ora fine"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heure de fin"
           }
         }
       }
@@ -1930,6 +2302,12 @@
             "state": "translated",
             "value": "Termina passeggiata"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fin de promenade"
+          }
         }
       }
     },
@@ -1958,6 +2336,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Terminato %lld min fa"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terminé il y a %lld min"
           }
         }
       }
@@ -1988,6 +2372,12 @@
             "state": "translated",
             "value": "Evento eliminato"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Événement supprimé"
+          }
         }
       }
     },
@@ -2016,6 +2406,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Si e addormentato"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "S'est endormi"
           }
         }
       }
@@ -2046,6 +2442,12 @@
             "state": "translated",
             "value": "Gelido"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Glacial"
+          }
         }
       }
     },
@@ -2074,6 +2476,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Attenzione"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Attention"
           }
         }
       }
@@ -2139,6 +2547,12 @@
             "state": "translated",
             "value": "Appena addormentato"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vient de s'endormir"
+          }
         }
       }
     },
@@ -2167,6 +2581,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Appena fatto pipi"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vient de faire pipi"
           }
         }
       }
@@ -2197,6 +2617,12 @@
             "state": "translated",
             "value": "Appena sveglio"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vient de se réveiller"
+          }
         }
       }
     },
@@ -2225,6 +2651,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Caricamento meteo..."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chargement météo..."
           }
         }
       }
@@ -2255,6 +2687,12 @@
             "state": "translated",
             "value": "Registra nanna completata"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer la sieste terminée"
+          }
         }
       }
     },
@@ -2283,6 +2721,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Registra passeggiata completata"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer la promenade terminée"
           }
         }
       }
@@ -2313,6 +2757,12 @@
             "state": "translated",
             "value": "Registra nanna"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer sieste"
+          }
         }
       }
     },
@@ -2341,6 +2791,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Registra ora"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer maintenant"
           }
         }
       }
@@ -2371,6 +2827,12 @@
             "state": "translated",
             "value": "Registra cacca"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer caca"
+          }
         }
       }
     },
@@ -2399,6 +2861,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Registra pipi"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer besoins"
           }
         }
       }
@@ -2429,6 +2897,12 @@
             "state": "translated",
             "value": "Registra pipi"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer besoins"
+          }
         }
       }
     },
@@ -2457,6 +2931,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Registra risveglio"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer réveil"
           }
         }
       }
@@ -2487,6 +2967,12 @@
             "state": "translated",
             "value": "Registra passeggiata"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer promenade"
+          }
         }
       }
     },
@@ -2515,6 +3001,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Intervallo piu lungo del solito"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Intervalle plus long que d'habitude"
           }
         }
       }
@@ -2580,6 +3072,12 @@
             "state": "translated",
             "value": "Pappa tra %lld min"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Repas dans %lld min"
+          }
         }
       }
     },
@@ -2609,6 +3107,12 @@
             "state": "translated",
             "value": "Pappa in ritardo di %lld min"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Repas en retard de %lld min"
+          }
         }
       }
     },
@@ -2637,6 +3141,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Medicina"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Médicament"
           }
         }
       }
@@ -2702,6 +3212,12 @@
             "state": "translated",
             "value": "Nanna quasi finita"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fin de sieste"
+          }
         }
       }
     },
@@ -2730,6 +3246,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ora della nanna!"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L'heure de la sieste !"
           }
         }
       }
@@ -2760,6 +3282,12 @@
             "state": "translated",
             "value": "Nanna"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En sieste"
+          }
         }
       }
     },
@@ -2788,6 +3316,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Giorno successivo"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jour suivant"
           }
         }
       }
@@ -2853,6 +3387,12 @@
             "state": "translated",
             "value": "Ancora nessun evento"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pas encore d'événements"
+          }
         }
       }
     },
@@ -2881,6 +3421,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ancora nessuna cacca stamattina"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pas encore de caca ce matin"
           }
         }
       }
@@ -2911,6 +3457,12 @@
             "state": "translated",
             "value": "Ancora nessuna cacca oggi"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pas encore de caca aujourd'hui"
+          }
         }
       }
     },
@@ -2940,6 +3492,12 @@
             "state": "translated",
             "value": "Nessun dato sul sonno"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pas de données de sommeil"
+          }
         }
       }
     },
@@ -2968,6 +3526,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Non abbastanza dati per i modelli ancora"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pas assez de données pour les tendances"
           }
         }
       }
@@ -3033,6 +3597,12 @@
             "state": "translated",
             "value": "Note (opzionale)"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notes (facultatif)"
+          }
         }
       }
     },
@@ -3097,6 +3667,12 @@
             "state": "translated",
             "value": "Ora!"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Maintenant !"
+          }
         }
       }
     },
@@ -3125,6 +3701,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "In linea"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sur la bonne voie"
           }
         }
       }
@@ -3155,6 +3737,12 @@
             "state": "translated",
             "value": "Apri l'app per terminare la nanna"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrir l'app pour terminer la sieste"
+          }
         }
       }
     },
@@ -3184,6 +3772,12 @@
             "state": "translated",
             "value": "in ritardo"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "en retard"
+          }
         }
       }
     },
@@ -3212,6 +3806,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "In ritardo"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En retard"
           }
         }
       }
@@ -3277,6 +3877,12 @@
             "state": "translated",
             "value": "Pipi tra ~%lld min"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pipi dans ~%lld min"
+          }
         }
       }
     },
@@ -3305,6 +3911,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Pipi presto!"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pipi bientôt !"
           }
         }
       }
@@ -3335,6 +3947,12 @@
             "state": "translated",
             "value": "fatto pipi"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "a fait pipi"
+          }
         }
       }
     },
@@ -3364,6 +3982,12 @@
             "state": "translated",
             "value": "percento successo"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "pour cent de réussite"
+          }
         }
       }
     },
@@ -3392,6 +4016,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Scegli posto"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisir un lieu"
           }
         }
       }
@@ -3457,6 +4087,12 @@
             "state": "translated",
             "value": "Stato cacca"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Statut caca"
+          }
         }
       }
     },
@@ -3485,6 +4121,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "fatto cacca"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "a fait caca"
           }
         }
       }
@@ -3515,6 +4157,12 @@
             "state": "translated",
             "value": "Consigliata pausa pipi dopo la nanna"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pause pipi recommandée après la sieste"
+          }
         }
       }
     },
@@ -3543,6 +4191,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Promemoria pipi dopo il risveglio"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rappel pipi après réveil"
           }
         }
       }
@@ -3573,6 +4227,12 @@
             "state": "translated",
             "value": "Pipi durante la passeggiata"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Besoins pendant la promenade"
+          }
         }
       }
     },
@@ -3601,6 +4261,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Pipi in ritardo di %lld min"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Besoins en retard de %lld min"
           }
         }
       }
@@ -3631,6 +4297,12 @@
             "state": "translated",
             "value": "Pipi necessaria presto"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Besoins bientôt nécessaires"
+          }
         }
       }
     },
@@ -3659,6 +4331,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Stato pipi"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Statut besoins"
           }
         }
       }
@@ -3689,6 +4367,12 @@
             "state": "translated",
             "value": "Pipi era in ritardo di %lld min"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Besoins étaient en retard de %lld min"
+          }
         }
       }
     },
@@ -3717,6 +4401,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Giorno precedente"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jour précédent"
           }
         }
       }
@@ -3747,6 +4437,12 @@
             "state": "translated",
             "value": "Pioggia prevista"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pluie attendue"
+          }
         }
       }
     },
@@ -3775,6 +4471,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Pioggia presto"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pluie bientôt"
           }
         }
       }
@@ -3805,6 +4507,12 @@
             "state": "translated",
             "value": "Programmato per %@"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prévu pour %@"
+          }
         }
       }
     },
@@ -3833,6 +4541,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "E sveglia — ora della pipi!"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elle est réveillée — l'heure du pipi !"
           }
         }
       }
@@ -3863,6 +4577,12 @@
             "state": "translated",
             "value": "breve"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "court"
+          }
         }
       }
     },
@@ -3891,6 +4611,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Mostra tutto (%lld)"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tout afficher (%lld)"
           }
         }
       }
@@ -3956,6 +4682,12 @@
             "state": "translated",
             "value": "Mostra la previsione di quando %@ deve fare pipi"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Affiche la prédiction de quand %@ doit faire pipi"
+          }
         }
       }
     },
@@ -3984,6 +4716,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Da quando?"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Depuis quand ?"
           }
         }
       }
@@ -4014,6 +4752,12 @@
             "state": "translated",
             "value": "Stato sonno e pipi"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Statut sommeil et besoins"
+          }
         }
       }
     },
@@ -4042,6 +4786,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Stato sonno"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Statut sommeil"
           }
         }
       }
@@ -4072,6 +4822,12 @@
             "state": "translated",
             "value": "Dorme"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dort"
+          }
         }
       }
     },
@@ -4100,6 +4856,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Dorme da %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dort depuis %@"
           }
         }
       }
@@ -4130,6 +4892,12 @@
             "state": "translated",
             "value": "Dorme..."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dort..."
+          }
         }
       }
     },
@@ -4158,6 +4926,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sociale"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Social"
           }
         }
       }
@@ -4258,6 +5032,12 @@
             "state": "translated",
             "value": "Inizia prima"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Commencez tôt"
+          }
         }
       }
     },
@@ -4286,6 +5066,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Inizia nanna"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Démarrer sieste"
           }
         }
       }
@@ -4316,6 +5102,12 @@
             "state": "translated",
             "value": "Inizia nanna ora"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Démarrer sieste maintenant"
+          }
         }
       }
     },
@@ -4344,6 +5136,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Iniziare o registrare?"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Démarrer ou enregistrer ?"
           }
         }
       }
@@ -4374,6 +5172,12 @@
             "state": "translated",
             "value": "Ora inizio"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heure de début"
+          }
         }
       }
     },
@@ -4402,6 +5206,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Inizia passeggiata ora"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Démarrer promenade maintenant"
           }
         }
       }
@@ -4432,6 +5242,12 @@
             "state": "translated",
             "value": "Iniziato"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Démarré"
+          }
         }
       }
     },
@@ -4460,6 +5276,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Iniziato %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Démarré %@"
           }
         }
       }
@@ -4490,6 +5312,12 @@
             "state": "translated",
             "value": "Iniziato la notte precedente"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Commencé la veille au soir"
+          }
         }
       }
     },
@@ -4518,6 +5346,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Iniziato: %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Démarré : %@"
           }
         }
       }
@@ -4548,6 +5382,12 @@
             "state": "translated",
             "value": "Alba"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lever du soleil"
+          }
         }
       }
     },
@@ -4576,6 +5416,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tramonto"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Coucher du soleil"
           }
         }
       }
@@ -4606,6 +5452,12 @@
             "state": "translated",
             "value": "Tocca sotto per registrare il primo"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Appuyez ci-dessous pour enregistrer le premier"
+          }
         }
       }
     },
@@ -4634,6 +5486,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "La nanna e iniziata prima di mezzanotte ed e terminata nella data selezionata"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La sieste a commencé avant minuit et s'est terminée à la date sélectionnée"
           }
         }
       }
@@ -4664,6 +5522,12 @@
             "state": "translated",
             "value": "Questo eliminera sia l'evento sonno che quello sveglia."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cela supprimera les événements de sommeil et de réveil."
+          }
         }
       }
     },
@@ -4692,6 +5556,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ora della pappa"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L'heure du repas"
           }
         }
       }
@@ -4722,6 +5592,12 @@
             "state": "translated",
             "value": "Ora della passeggiata"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L'heure de la promenade"
+          }
         }
       }
     },
@@ -4750,6 +5626,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ora della pipi"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L'heure des besoins"
           }
         }
       }
@@ -4815,6 +5697,12 @@
             "state": "translated",
             "value": "volte misurato"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "fois mesuré"
+          }
         }
       }
     },
@@ -4843,6 +5731,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Stanco?"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fatigué ?"
           }
         }
       }
@@ -4943,6 +5837,12 @@
             "state": "translated",
             "value": "Di solito si sveglia a quest'ora"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Se réveille habituellement vers maintenant"
+          }
         }
       }
     },
@@ -4971,6 +5871,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sveglia"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réveil"
           }
         }
       }
@@ -5036,6 +5942,12 @@
             "state": "translated",
             "value": "Sveglia"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réveil"
+          }
         }
       }
     },
@@ -5064,6 +5976,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ora sveglia"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heure de réveil"
           }
         }
       }
@@ -5129,6 +6047,12 @@
             "state": "translated",
             "value": "Passeggiata finita — nessuna cacca registrata"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Promenade terminée — pas de caca enregistré"
+          }
         }
       }
     },
@@ -5157,6 +6081,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Passeggiata tra %lld min"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Promenade dans %lld min"
           }
         }
       }
@@ -5187,6 +6117,12 @@
             "state": "translated",
             "value": "Passeggiata in corso"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Promenade en cours"
+          }
         }
       }
     },
@@ -5215,6 +6151,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "E ora della passeggiata"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Promenade prévue"
           }
         }
       }
@@ -5245,6 +6187,12 @@
             "state": "translated",
             "value": "Passeggiata in ritardo di %lld min"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Promenade en retard de %lld min"
+          }
         }
       }
     },
@@ -5273,6 +6221,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Era programmato alle %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Était prévu à %@"
           }
         }
       }
@@ -5338,6 +6292,12 @@
             "state": "translated",
             "value": "Pesato"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pesé"
+          }
         }
       }
     },
@@ -5366,6 +6326,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Quando si sveglia, portala fuori"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quand elle se réveille, sortez-la dehors"
           }
         }
       }
@@ -5431,6 +6397,12 @@
             "state": "translated",
             "value": "con %@"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "avec %@"
+          }
         }
       }
     },
@@ -5459,6 +6431,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Svegliato"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réveillé"
           }
         }
       }

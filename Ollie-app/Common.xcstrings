@@ -483,6 +483,12 @@
             "state": "translated",
             "value": "Tocca due volte per registrare %@"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Appuyez deux fois pour enregistrer %@"
+          }
         }
       }
     },

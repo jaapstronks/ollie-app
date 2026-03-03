@@ -78,24 +78,31 @@ struct PredictionCalculations {
     /// Threshold for "soon" state (minutes remaining)
     static let soonThresholdMinutes = 10
 
+    /// Minimum number of gaps required to use historical median
+    static let minGapsForMedian = 5
+
     // MARK: - Public Methods
 
     /// Calculate potty prediction with urgency level
     /// - Parameters:
     ///   - events: Recent puppy events (today + yesterday)
     ///   - config: Prediction configuration from profile
+    ///   - gapStats: Optional historical gap statistics for pattern-based predictions
     /// - Returns: Full prediction with urgency, triggers, and timing
     static func calculatePrediction(
         events: [PuppyEvent],
-        config: PredictionConfig
+        config: PredictionConfig,
+        gapStats: GapStats? = nil
     ) -> PottyPrediction {
+        // Determine base gap: use historical median if sufficient data, otherwise default
+        let baseGap = calculateBaseGap(gapStats: gapStats, config: config)
         // Check for active coverage gap first - tracking is paused
         if let activeGap = events.activeGaps().first,
            let gapType = activeGap.gapType {
             return PottyPrediction(
                 urgency: .coverageGap(type: gapType, since: activeGap.time),
                 trigger: .none,
-                expectedGapMinutes: config.defaultGapMinutes,
+                expectedGapMinutes: baseGap,
                 minutesSinceLast: nil,
                 lastWasIndoor: false
             )
@@ -122,7 +129,7 @@ struct PredictionCalculations {
             return PottyPrediction(
                 urgency: .unknown,
                 trigger: .none,
-                expectedGapMinutes: config.defaultGapMinutes,
+                expectedGapMinutes: baseGap,
                 minutesSinceLast: nil,
                 lastWasIndoor: false
             )
@@ -134,7 +141,7 @@ struct PredictionCalculations {
         // Check for triggers that shorten the expected gap
         let trigger = detectTrigger(events: events, lastPlasTime: last.time)
         let expectedGap = calculateExpectedGap(
-            baseGap: config.defaultGapMinutes,
+            baseGap: baseGap,
             trigger: trigger,
             config: config
         )
@@ -265,6 +272,17 @@ struct PredictionCalculations {
     }
 
     // MARK: - Private Helpers
+
+    /// Determine base gap from historical data or config default
+    /// Uses historical median when sufficient data is available (more robust to outliers)
+    private static func calculateBaseGap(gapStats: GapStats?, config: PredictionConfig) -> Int {
+        guard let stats = gapStats,
+              stats.count >= minGapsForMedian,
+              stats.medianMinutes > 0 else {
+            return config.defaultGapMinutes
+        }
+        return stats.medianMinutes
+    }
 
     /// Detect if a trigger is active (post-meal or post-sleep)
     private static func detectTrigger(events: [PuppyEvent], lastPlasTime: Date) -> PottyTrigger {

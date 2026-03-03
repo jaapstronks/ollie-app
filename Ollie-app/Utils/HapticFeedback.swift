@@ -6,6 +6,7 @@
 import UIKit
 
 /// Haptic feedback utilities for tactile responses
+@MainActor
 enum HapticFeedback {
     /// Light tap - for selections, toggles
     static func light() {

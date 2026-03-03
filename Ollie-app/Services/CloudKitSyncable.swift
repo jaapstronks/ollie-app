@@ -126,6 +126,47 @@ extension ErrorTrackable {
     }
 }
 
+// MARK: - Profile Accessible Protocol
+
+/// Protocol for stores that need profile access
+/// Provides common patterns for profile-scoped operations
+@MainActor
+protocol ProfileAccessible: AnyObject {
+    /// The profile store reference
+    var profileStore: ProfileStore? { get set }
+
+    /// Logger for logging profile access issues
+    var logger: Logger { get }
+
+    /// View context for Core Data operations
+    var viewContext: NSManagedObjectContext { get }
+
+    /// Called after profile store is set
+    func performInitialLoad()
+}
+
+extension ProfileAccessible {
+    /// Get the current profile ID
+    var currentProfileId: UUID? {
+        profileStore?.profile?.id
+    }
+
+    /// Get the current CDPuppyProfile from Core Data
+    func getCurrentProfile() -> CDPuppyProfile? {
+        guard let profileId = currentProfileId else {
+            logger.warning("No profile available for operations")
+            return nil
+        }
+        return CDPuppyProfile.fetch(byId: profileId, in: viewContext)
+    }
+
+    /// Set the profile store (for when it's not available at init time)
+    func configureProfileStore(_ profileStore: ProfileStore) {
+        self.profileStore = profileStore
+        performInitialLoad()
+    }
+}
+
 // MARK: - Base Store
 
 /// Abstract base class for Core Data stores with CloudKit sync support.

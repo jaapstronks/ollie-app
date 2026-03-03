@@ -27,6 +27,12 @@
             "state": "translated",
             "value": "%@ heeft gegeten - gelogd!"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ a mangé - enregistré !"
+          }
         }
       }
     },
@@ -55,6 +61,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%1$@ slaapt al. Zeg '%2$@ is wakker' wanneer die wakker wordt."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ dort déjà. Dites « %@ s'est réveillé » quand il se réveille."
           }
         }
       }
@@ -85,6 +97,12 @@
             "state": "translated",
             "value": "%1$@ slaapt - gelogd. Zeg '%2$@ is wakker' wanneer die wakker wordt."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ dort - enregistré. Dites « %@ s'est réveillé » quand il se réveille."
+          }
         }
       }
     },
@@ -113,6 +131,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%1$@ heeft net %2$@ geplast."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ vient de faire pipi %@."
           }
         }
       }
@@ -143,6 +167,12 @@
             "state": "translated",
             "value": "%1$@ heeft %2$@ %3$lld uur geleden geplast."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ a fait pipi %@ il y a %lld heures."
+          }
         }
       }
     },
@@ -171,6 +201,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%1$@ heeft %2$@ %3$lld uur en %4$lld minuten geleden geplast."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ a fait pipi %@ il y a %lld heures et %lld minutes."
           }
         }
       }
@@ -201,6 +237,12 @@
             "state": "translated",
             "value": "%1$@ heeft %2$@ %3$lld minuten geleden geplast."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ a fait pipi %@ il y a %lld minutes."
+          }
         }
       }
     },
@@ -229,6 +271,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%@ was niet als slapend gelogd. Wakker worden wordt toch gelogd."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ n'était pas enregistré comme dormant. Enregistrement du réveil quand même."
           }
         }
       }
@@ -259,6 +307,12 @@
             "state": "translated",
             "value": "%@ is wakker - gelogd!"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ s'est réveillé - enregistré !"
+          }
         }
       }
     },
@@ -287,6 +341,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%@ is wakker na %lld minuten - gelogd!"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ s'est réveillé après %lld minutes - enregistré !"
           }
         }
       }
@@ -317,6 +377,12 @@
             "state": "translated",
             "value": "Nog %lld dagen gratis"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld jours gratuits restants"
+          }
         }
       }
     },
@@ -345,6 +411,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nog %lld dagen proefperiode"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld jours restants dans l'essai"
           }
         }
       }
@@ -375,6 +447,12 @@
             "state": "translated",
             "value": "Nog %lld dagen"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld jours restants"
+          }
         }
       }
     },
@@ -403,6 +481,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "€19"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "19 €"
           }
         }
       }
@@ -433,6 +517,12 @@
             "state": "translated",
             "value": "Doorgaan met Otis"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continuer avec Otis"
+          }
         }
       }
     },
@@ -461,6 +551,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Doorgaan met Otis — %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continuer avec Otis — %@"
           }
         }
       }
@@ -491,6 +587,12 @@
             "state": "translated",
             "value": "Voorbeeldopdrachten:"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exemples de commandes :"
+          }
         }
       }
     },
@@ -519,6 +621,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Verlopen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Expiré"
           }
         }
       }
@@ -549,6 +657,12 @@
             "state": "translated",
             "value": "Gebeurtenis loggen mislukt"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Échec de l'enregistrement"
+          }
         }
       }
     },
@@ -578,6 +692,12 @@
             "state": "translated",
             "value": "Ontdek wanneer je puppy voor het laatst heeft geplast"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Découvrez quand votre chiot a fait pipi pour la dernière fois"
+          }
         }
       }
     },
@@ -606,6 +726,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ontdek wanneer je puppy voor het laatst heeft gepoept"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Découvrez quand votre chiot a fait caca pour la dernière fois"
           }
         }
       }
@@ -671,6 +797,12 @@
             "state": "translated",
             "value": "Hoe gaat het met mijn puppy in Otis"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Comment va mon chiot dans Otis"
+          }
         }
       }
     },
@@ -699,6 +831,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Log een wandeling met je puppy"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrez une promenade avec votre chiot"
           }
         }
       }
@@ -729,6 +867,12 @@
             "state": "translated",
             "value": "Log Maaltijd"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer repas"
+          }
         }
       }
     },
@@ -757,6 +901,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Log Plasje"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer besoins"
           }
         }
       }
@@ -787,6 +937,12 @@
             "state": "translated",
             "value": "Log Slaap"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer sommeil"
+          }
         }
       }
     },
@@ -815,6 +971,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Log dat je puppy heeft gegeten"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrez que votre chiot a mangé"
           }
         }
       }
@@ -845,6 +1007,12 @@
             "state": "translated",
             "value": "Log dat je puppy slaapt"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrez que votre chiot dort"
+          }
         }
       }
     },
@@ -873,6 +1041,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Log dat je puppy wakker is geworden"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrez que votre chiot s'est réveillé"
           }
         }
       }
@@ -903,6 +1077,12 @@
             "state": "translated",
             "value": "Log Wakker"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer réveil"
+          }
         }
       }
     },
@@ -931,6 +1111,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Log Wandeling"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer promenade"
           }
         }
       }
@@ -961,6 +1147,12 @@
             "state": "translated",
             "value": "Log wanneer je puppy heeft geplast of gepoept"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrez quand votre chiot a fait pipi ou caca"
+          }
         }
       }
     },
@@ -989,6 +1181,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%1$@ %2$@ gelogd voor %3$@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistré %@ %@ pour %@"
           }
         }
       }
@@ -1019,6 +1217,12 @@
             "state": "translated",
             "value": "Wandeling van %lld minuten met %@ gelogd"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Promenade de %lld minutes enregistrée avec %@"
+          }
         }
       }
     },
@@ -1047,6 +1251,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Wandeling met %@ gelogd"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Promenade enregistrée avec %@"
           }
         }
       }
@@ -1077,6 +1287,12 @@
             "state": "translated",
             "value": "Loggen uitgeschakeld"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrement désactivé"
+          }
         }
       }
     },
@@ -1105,6 +1321,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Mijn puppy slaapt in Otis"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mon chiot dort dans Otis"
           }
         }
       }
@@ -1135,6 +1357,12 @@
             "state": "translated",
             "value": "Mijn puppy heeft buiten geplast in Otis"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mon chiot a fait pipi dehors dans Otis"
+          }
         }
       }
     },
@@ -1163,6 +1391,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Geen plasjes gelogd voor %@ in de afgelopen week."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun pipi enregistré pour %@ la semaine dernière."
           }
         }
       }
@@ -1193,6 +1427,12 @@
             "state": "translated",
             "value": "Geen poepjes gelogd voor %@ in de afgelopen week."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun caca enregistré pour %@ la semaine dernière."
+          }
         }
       }
     },
@@ -1222,6 +1462,12 @@
             "state": "translated",
             "value": "Geen herstelbare aankopen gevonden"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun achat à restaurer trouvé"
+          }
         }
       }
     },
@@ -1247,6 +1493,12 @@
           }
         },
         "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis Premium"
+          }
+        },
+        "fr": {
           "stringUnit": {
             "state": "translated",
             "value": "Otis Premium"
@@ -1280,6 +1532,12 @@
             "state": "translated",
             "value": "Eenmalige aankoop, per puppyprofiel"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Achat unique, par profil de chiot"
+          }
         }
       }
     },
@@ -1309,6 +1567,12 @@
             "state": "translated",
             "value": "Open Opdrachten-app"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrir l'app Raccourcis"
+          }
         }
       }
     },
@@ -1337,6 +1601,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Stel eerst je puppyprofiel in via de Otis-app."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Veuillez d'abord configurer le profil de votre chiot dans l'app Otis."
           }
         }
       }
@@ -1402,6 +1672,12 @@
             "state": "translated",
             "value": "Poep Status"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Statut caca"
+          }
         }
       }
     },
@@ -1430,6 +1706,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Plas Status"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Statut besoins"
           }
         }
       }
@@ -1495,6 +1777,12 @@
             "state": "translated",
             "value": "Aankoop mislukt"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Achat échoué"
+          }
         }
       }
     },
@@ -1523,6 +1811,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Aankopen herstellen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restaurer les achats"
           }
         }
       }
@@ -1553,6 +1847,12 @@
             "state": "translated",
             "value": "Aankopen herstellen..."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restauration des achats..."
+          }
         }
       }
     },
@@ -1581,6 +1881,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Bekijk alle Otis-snelkoppelingen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voir tous les raccourcis Otis"
           }
         }
       }
@@ -1611,6 +1917,12 @@
             "state": "translated",
             "value": "Siri & Snelkoppelingen"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Siri et Raccourcis"
+          }
         }
       }
     },
@@ -1639,6 +1951,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Siri antwoordt met de naam van je puppy uit je profiel."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Siri répondra en utilisant le nom de votre chiot depuis votre profil."
           }
         }
       }
@@ -1704,6 +2022,12 @@
             "state": "translated",
             "value": "Gelukt!"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Succès !"
+          }
         }
       }
     },
@@ -1732,6 +2056,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tik om te upgraden"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Appuyez pour passer à la version supérieure"
           }
         }
       }
@@ -1762,6 +2092,12 @@
             "state": "translated",
             "value": "De eerste weken met een puppy zijn het belangrijkst. Otis helpt je patronen te volgen en goede gewoontes op te bouwen."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les premières semaines avec un chiot sont les plus importantes. Otis vous aide à suivre les habitudes et à créer de bonnes routines."
+          }
         }
       }
     },
@@ -1790,6 +2126,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ontgrendel onbeperkt loggen, voorspellingen en inzichten voor de reis van je puppy."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Débloquez l'enregistrement illimité, les prédictions et les analyses pour le parcours de votre chiot."
           }
         }
       }
@@ -1820,6 +2162,12 @@
             "state": "translated",
             "value": "Upgrade om door te gaan met het loggen van gebeurtenissen"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Passez à la version supérieure pour continuer à enregistrer"
+          }
         }
       }
     },
@@ -1848,6 +2196,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Gebruik Siri om gebeurtenissen te loggen en je puppy te checken zonder je handen te gebruiken. Zeg \"Hé Siri\" gevolgd door een opdracht."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Utilisez Siri pour enregistrer des événements et vérifier votre chiot les mains libres. Dites « Dis Siri » suivi d'une commande."
           }
         }
       }
@@ -1878,6 +2232,12 @@
             "state": "translated",
             "value": "Spraakopdrachten"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Commandes vocales"
+          }
         }
       }
     },
@@ -1906,6 +2266,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Je kunt nu onbeperkt gebeurtenissen loggen voor %@."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vous pouvez maintenant enregistrer des événements illimités pour %@."
           }
         }
       }
@@ -1936,6 +2302,12 @@
             "state": "translated",
             "value": "Je gratis proefperiode voor %@ is afgelopen"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Votre essai gratuit pour %@ est terminé"
+          }
         }
       }
     },
@@ -1965,6 +2337,12 @@
             "state": "translated",
             "value": "Je gratis proefperiode is afgelopen"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Votre essai gratuit est terminé"
+          }
         }
       }
     },
@@ -1993,6 +2371,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Je gratis proefperiode is afgelopen. Upgrade in de Otis-app om door te gaan met loggen."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Votre essai gratuit est terminé. Veuillez passer à la version supérieure dans l'app Otis pour continuer."
           }
         }
       }

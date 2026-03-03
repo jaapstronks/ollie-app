@@ -40,6 +40,12 @@ final class MealNotificationScheduler: NotificationScheduler {
             }
         }
 
+        // Smart suppression: Don't notify during stale logging (user hasn't been logging)
+        if isStaleLogging(events: events) {
+            logger.debug("Suppressing meal notifications: stale logging detected")
+            return
+        }
+
         for portion in profile.mealSchedule.portions {
             guard let targetTimeStr = portion.targetTime,
                   let (hour, minute) = NotificationSchedulerHelpers.parseTimeString(targetTimeStr) else { continue }
@@ -134,4 +140,28 @@ final class MealNotificationScheduler: NotificationScheduler {
         }
     }
 
+    /// Check if logging has gone stale (no events for too long during daytime)
+    private func isStaleLogging(events: [PuppyEvent]) -> Bool {
+        let calendar = Calendar.current
+        let now = Date()
+        let currentHour = calendar.component(.hour, from: now)
+
+        // Only check during daytime hours (7 AM - 11 PM)
+        guard currentHour >= 7 && currentHour < 23 else {
+            return false
+        }
+
+        // Find the last event (excluding coverage gaps)
+        let lastEvent = events
+            .filter { $0.type != .coverageGap }
+            .max(by: { $0.time < $1.time })
+
+        guard let lastEventTime = lastEvent?.time else {
+            return false
+        }
+
+        // Check if 4+ hours since last event
+        let hoursSinceLastEvent = now.timeIntervalSince(lastEventTime) / 3600
+        return hoursSinceLastEvent >= 4
+    }
 }

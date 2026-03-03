@@ -67,7 +67,7 @@ struct InsightsHealthSection: View {
                         }
                     }
                     .accessibilityElement(children: .combine)
-                    .accessibilityLabel(Strings.Health.currentWeight(weightUnit.format(latest.weight)))
+                    .accessibilityLabel(Strings.Health.currentWeightAccessibility(weightUnit.format(latest.weight)))
 
                     // Log weight button
                     Button {

@@ -69,6 +69,7 @@ extension TimelineViewModel {
         }
 
         HapticFeedback.success()
+        // Note: Celebration triggered via logEvent() callback from activityManager
     }
 
     /// Get today's walks for display
@@ -94,6 +95,9 @@ extension TimelineViewModel {
             updateSleepEventDuration(sessionId: napInfo.sleepSessionId, durationMin: napInfo.durationMin, note: note)
         }
         HapticFeedback.success()
+
+        // Celebrate completed nap
+        triggerCelebration(.quickLog)
     }
 
     /// Helper to update a sleep event's duration (single-event model)
@@ -134,7 +138,10 @@ extension TimelineViewModel {
         if let napInfo = activityManager.endActivity(minutesAgo: minutesAgo, note: note) {
             // For naps, update the sleep event with duration
             updateSleepEventDuration(sessionId: napInfo.sleepSessionId, durationMin: napInfo.durationMin, note: note)
+            // Celebrate completed nap (walks celebrate via onLogEvent → logEvent)
+            triggerCelebration(.quickLog)
         }
+        // Note: Walks celebrate via onLogEvent → logEvent
         HapticFeedback.success()
         sheetCoordinator.dismissSheet()
     }
@@ -173,6 +180,9 @@ extension TimelineViewModel {
         // Save the updated sleep event (this replaces creating a wake event)
         updateEvent(updatedSleep)
         HapticFeedback.success()
+
+        // Celebrate wake-up
+        triggerCelebration(.quickLog)
     }
 }
 

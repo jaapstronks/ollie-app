@@ -70,10 +70,10 @@ extension Strings {
         static let categoryForest = String(localized: "Forest", table: table)
         static let categoryOther = String(localized: "Other", table: table)
 
-        // Errors
-        static let locationNotAuthorized = String(localized: "Location access not authorized", table: table)
-        static let locationUnavailable = String(localized: "Location unavailable", table: table)
-        static let locationTimeout = String(localized: "Location request timed out", table: table)
+        // Errors (nonisolated for use in LocalizedError conformance - hardcoded table name)
+        nonisolated static let locationNotAuthorized = String(localized: "Location access not authorized", table: "Walks")
+        nonisolated static let locationUnavailable = String(localized: "Location unavailable", table: "Walks")
+        nonisolated static let locationTimeout = String(localized: "Location request timed out", table: "Walks")
         static let enableLocationInSettings = String(localized: "Enable location in Settings to capture walk spots", table: table)
 
         // Visit count

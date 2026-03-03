@@ -27,6 +27,12 @@
             "state": "translated",
             "value": "%lld klikken"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld clics"
+          }
         }
       }
     },
@@ -56,6 +62,12 @@
             "state": "translated",
             "value": "Klik"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clic"
+          }
         }
       }
     },
@@ -81,6 +93,12 @@
           }
         },
         "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clicker"
+          }
+        },
+        "fr": {
           "stringUnit": {
             "state": "translated",
             "value": "Clicker"
@@ -114,6 +132,12 @@
             "state": "translated",
             "value": "Clickerknop"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bouton clicker"
+          }
         }
       }
     },
@@ -142,6 +166,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "klikken"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "clics"
           }
         }
       }
@@ -172,6 +202,12 @@
             "state": "translated",
             "value": "Dubbeltik om gedrag te markeren"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Appuyez deux fois pour marquer le comportement"
+          }
         }
       }
     },
@@ -200,6 +236,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sessie beëindigen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terminer la session"
           }
         }
       }
@@ -230,6 +272,12 @@
             "state": "translated",
             "value": "Sessie beëindigen?"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terminer la session ?"
+          }
         }
       }
     },
@@ -258,6 +306,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Afsluiten zonder opslaan"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quitter sans enregistrer"
           }
         }
       }
@@ -323,6 +377,12 @@
             "state": "translated",
             "value": "Laatste sessie: %@"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dernière session : %@"
+          }
         }
       }
     },
@@ -352,6 +412,12 @@
             "state": "translated",
             "value": "Nog geen sessies"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pas encore de sessions"
+          }
         }
       }
     },
@@ -380,6 +446,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Opslaan en afsluiten"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer et quitter"
           }
         }
       }
@@ -445,6 +517,12 @@
             "state": "translated",
             "value": "Start training"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Commencer l'entraînement"
+          }
         }
       }
     },
@@ -508,6 +586,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Je hebt een actieve trainingssessie. Wil je deze opslaan voordat je afsluit?"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vous avez une session d'entraînement active. Voulez-vous l'enregistrer avant de quitter ?"
           }
         }
       }

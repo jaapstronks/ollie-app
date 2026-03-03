@@ -28,7 +28,7 @@ final class SheetCoordinator: ObservableObject {
         case editEvent(PuppyEvent)
         case otisPlus  // Otis+ subscription upsell sheet
         case subscriptionSuccess  // Shown after successful subscription
-        case startActivity(ActivityType)
+        case startActivity(ActivityType, preselectedLocation: NapLocation? = nil)
         case endActivity
         case endSleep(Date)
         // Additional sheets for settings and specialized logging
@@ -63,7 +63,7 @@ final class SheetCoordinator: ObservableObject {
             case .editEvent(let event): return "editEvent-\(event.id.uuidString)"
             case .otisPlus: return "otisPlus"
             case .subscriptionSuccess: return "subscriptionSuccess"
-            case .startActivity(let type): return "startActivity-\(type.rawValue)"
+            case .startActivity(let type, let location): return "startActivity-\(type.rawValue)-\(location?.rawValue ?? "none")"
             case .endActivity: return "endActivity"
             case .endSleep: return "endSleep"
             case .weightLog: return "weightLog"

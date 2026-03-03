@@ -39,6 +39,12 @@
             "state": "translated",
             "value": "Otis"
           }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis"
+          }
         }
       }
     },
@@ -77,6 +83,12 @@
           }
         },
         "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ollie-app"
+          }
+        },
+        "sv": {
           "stringUnit": {
             "state": "translated",
             "value": "Ollie-app"
@@ -123,6 +135,12 @@
             "state": "translated",
             "value": "Otis usa il tuo calendario per aggiungere promemoria per eventi importanti come vaccinazioni e visite dal veterinario."
           }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis använder din kalender för att lägga till påminnelser för kommande milstolpar som vaccinationer och veterinärbesök."
+          }
         }
       }
     },
@@ -163,6 +181,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Otis vuole usare la fotocamera per scattare foto del tuo cucciolo."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis vill använda kameran för att ta foton av din valp."
           }
         }
       }
@@ -205,6 +229,12 @@
             "state": "translated",
             "value": "Otis usa i tuoi contatti per importare rapidamente i dati del veterinario, toelettatore o dog sitter."
           }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis använder dina kontakter för att snabbt importera uppgifter om din veterinär, hundtrimmare eller hundsittare."
+          }
         }
       }
     },
@@ -246,6 +276,12 @@
             "state": "translated",
             "value": "Otis usa la tua posizione per salvare i luoghi delle passeggiate, cosi puoi registrare facilmente le uscite nei tuoi posti preferiti."
           }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis använder din plats för att spara promenadplatser så att du enkelt kan logga promenader på dina favoritställen."
+          }
         }
       }
     },
@@ -286,6 +322,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Otis vuole accedere alle tue foto per aggiungere momenti."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis vill ha åtkomst till dina foton för att lägga till ögonblick."
           }
         }
       }

@@ -7,7 +7,7 @@
 import Foundation
 
 /// A sleep session combining slapen + ontwaken events for display
-public struct SleepSession: Identifiable, Sendable {
+public struct SleepSession: Identifiable, Equatable, Sendable {
     public let id: UUID
     public let startTime: Date
     public let endTime: Date?

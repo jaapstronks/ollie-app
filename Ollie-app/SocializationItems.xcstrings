@@ -27,6 +27,12 @@
             "state": "translated",
             "value": "Volwassen man"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Homme adulte"
+          }
         }
       }
     },
@@ -55,6 +61,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Volwassen vrouw"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Femme adulte"
           }
         }
       }
@@ -85,6 +97,12 @@
             "state": "translated",
             "value": "Alarm/sirene"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alarme/sirène"
+          }
         }
       }
     },
@@ -113,6 +131,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ambulance, brandweer, politieauto"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ambulance, camion de pompiers, voiture de police"
           }
         }
       }
@@ -143,6 +167,12 @@
             "state": "translated",
             "value": "Dieren"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Animaux"
+          }
         }
       }
     },
@@ -171,6 +201,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ballonnen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ballons"
           }
         }
       }
@@ -201,6 +237,12 @@
             "state": "translated",
             "value": "Baden"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bain"
+          }
         }
       }
     },
@@ -229,6 +271,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Strand"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plage"
           }
         }
       }
@@ -259,6 +307,12 @@
             "state": "translated",
             "value": "Opgetild worden"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Être porté"
+          }
         }
       }
     },
@@ -287,6 +341,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Fiets"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vélo"
           }
         }
       }
@@ -317,6 +377,12 @@
             "state": "translated",
             "value": "Vogel"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oiseau"
+          }
         }
       }
     },
@@ -345,6 +411,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Bruggen, roosters, putdeksels"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ponts, grilles, plaques d'égout"
           }
         }
       }
@@ -375,6 +447,12 @@
             "state": "translated",
             "value": "Bezem/dweil"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Balai/serpillière"
+          }
         }
       }
     },
@@ -404,6 +482,12 @@
             "state": "translated",
             "value": "Borstelen"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Brossage"
+          }
         }
       }
     },
@@ -429,6 +513,12 @@
           }
         },
         "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bus"
+          }
+        },
+        "fr": {
           "stringUnit": {
             "state": "translated",
             "value": "Bus"
@@ -462,6 +552,12 @@
             "state": "translated",
             "value": "Drukke straat"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rue animée"
+          }
         }
       }
     },
@@ -490,6 +586,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Auto"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voiture"
           }
         }
       }
@@ -520,6 +622,12 @@
             "state": "translated",
             "value": "Kat"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chat"
+          }
         }
       }
     },
@@ -548,6 +656,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Kind (6-12 jaar)"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enfant (6-12 ans)"
           }
         }
       }
@@ -578,6 +692,12 @@
             "state": "translated",
             "value": "Kerkklokken"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cloches d'église"
+          }
         }
       }
     },
@@ -606,6 +726,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Koud weer"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Temps froid"
           }
         }
       }
@@ -636,6 +762,12 @@
             "state": "translated",
             "value": "Halsband vastpakken"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Attraper le collier"
+          }
         }
       }
     },
@@ -664,6 +796,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Bouwgeluiden"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bruit de chantier"
           }
         }
       }
@@ -694,6 +832,12 @@
             "state": "translated",
             "value": "Koe/schaap"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vache/mouton"
+          }
         }
       }
     },
@@ -722,6 +866,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Huilende baby"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bébé qui pleure"
           }
         }
       }
@@ -752,6 +902,12 @@
             "state": "translated",
             "value": "Donker/nachtwandeling"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Obscurité/promenade nocturne"
+          }
         }
       }
     },
@@ -780,6 +936,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Vaatwasser"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lave-vaisselle"
           }
         }
       }
@@ -810,6 +972,12 @@
             "state": "translated",
             "value": "Deurbel"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sonnette"
+          }
         }
       }
     },
@@ -838,6 +1006,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Eend/gans"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Canard/oie"
           }
         }
       }
@@ -868,6 +1042,12 @@
             "state": "translated",
             "value": "Oudere persoon"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personne âgée"
+          }
         }
       }
     },
@@ -896,6 +1076,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Lift"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ascenseur"
           }
         }
       }
@@ -926,6 +1112,12 @@
             "state": "translated",
             "value": "Hulpdienst"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Véhicule d'urgence"
+          }
         }
       }
     },
@@ -954,6 +1146,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Omgevingen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Environnements"
           }
         }
       }
@@ -984,6 +1182,12 @@
             "state": "translated",
             "value": "Vuurwerk"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Feux d'artifice"
+          }
         }
       }
     },
@@ -1012,6 +1216,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Vlaggen/spandoeken"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Drapeaux/bannières"
           }
         }
       }
@@ -1042,6 +1252,12 @@
             "state": "translated",
             "value": "Bos"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Forêt"
+          }
         }
       }
     },
@@ -1070,6 +1286,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Vuilniszakken"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sacs poubelles"
           }
         }
       }
@@ -1100,6 +1322,12 @@
             "state": "translated",
             "value": "Gras"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Herbe"
+          }
         }
       }
     },
@@ -1128,6 +1356,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Grind"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gravier"
           }
         }
       }
@@ -1158,6 +1392,12 @@
             "state": "translated",
             "value": "Groep mensen"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Groupe de personnes"
+          }
         }
       }
     },
@@ -1186,6 +1426,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Föhn"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sèche-cheveux"
           }
         }
       }
@@ -1216,6 +1462,12 @@
             "state": "translated",
             "value": "Aanraken"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Manipulation"
+          }
         }
       }
     },
@@ -1244,6 +1496,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Paard"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cheval"
           }
         }
       }
@@ -1274,6 +1532,12 @@
             "state": "translated",
             "value": "Warm weer"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Temps chaud"
+          }
         }
       }
     },
@@ -1302,6 +1566,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Belangrijk voor veiligheid"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Important pour la sécurité"
           }
         }
       }
@@ -1332,6 +1602,12 @@
             "state": "translated",
             "value": "Grote hond"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Grand chien"
+          }
         }
       }
     },
@@ -1360,6 +1636,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Bladeren/mulch"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Feuilles/paillis"
           }
         }
       }
@@ -1390,6 +1672,12 @@
             "state": "translated",
             "value": "Harde muziek"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Musique forte"
+          }
         }
       }
     },
@@ -1418,6 +1706,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Metalen rooster"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Grille métallique"
           }
         }
       }
@@ -1448,6 +1742,12 @@
             "state": "translated",
             "value": "Spiegel"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Miroir"
+          }
         }
       }
     },
@@ -1476,6 +1776,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Motor"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Moto"
           }
         }
       }
@@ -1506,6 +1812,12 @@
             "state": "translated",
             "value": "Verplaatsend meubilair"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Déplacement de meubles"
+          }
         }
       }
     },
@@ -1534,6 +1846,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Modder"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Boue"
           }
         }
       }
@@ -1564,6 +1882,12 @@
             "state": "translated",
             "value": "Nagels knippen"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Coupe des griffes"
+          }
         }
       }
     },
@@ -1592,6 +1916,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Voorwerpen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Objets"
           }
         }
       }
@@ -1622,6 +1952,12 @@
             "state": "translated",
             "value": "Bek openen"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrir la bouche"
+          }
         }
       }
     },
@@ -1650,6 +1986,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Paraplu openen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrir un parapluie"
           }
         }
       }
@@ -1680,6 +2022,12 @@
             "state": "translated",
             "value": "Andere puppy"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Autre chiot"
+          }
         }
       }
     },
@@ -1708,6 +2056,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Terras"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terrasse de café"
           }
         }
       }
@@ -1738,6 +2092,12 @@
             "state": "translated",
             "value": "Park"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Parc"
+          }
         }
       }
     },
@@ -1766,6 +2126,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Parkeergarage"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Parking souterrain"
           }
         }
       }
@@ -1831,6 +2197,12 @@
             "state": "translated",
             "value": "Persoon in uniform"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personne en uniforme"
+          }
         }
       }
     },
@@ -1859,6 +2231,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Persoon in rolstoel"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personne en fauteuil roulant"
           }
         }
       }
@@ -1889,6 +2267,12 @@
             "state": "translated",
             "value": "Persoon met baard"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personne avec une barbe"
+          }
         }
       }
     },
@@ -1917,6 +2301,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Persoon met krukken/rollator"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personne avec béquilles/déambulateur"
           }
         }
       }
@@ -1947,6 +2337,12 @@
             "state": "translated",
             "value": "Persoon met hoed"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personne avec un chapeau"
+          }
         }
       }
     },
@@ -1975,6 +2371,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Persoon met grote rugzak"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personne avec un grand sac à dos"
           }
         }
       }
@@ -2005,6 +2407,12 @@
             "state": "translated",
             "value": "Persoon met zonnebril"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personne avec des lunettes de soleil"
+          }
         }
       }
     },
@@ -2033,6 +2441,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Persoon met paraplu"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personne avec un parapluie"
           }
         }
       }
@@ -2063,6 +2477,12 @@
             "state": "translated",
             "value": "Dierenwinkel"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Animalerie"
+          }
         }
       }
     },
@@ -2091,6 +2511,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Telefoon rinkelen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Téléphone qui sonne"
           }
         }
       }
@@ -2121,6 +2547,12 @@
             "state": "translated",
             "value": "Plastic zakken (geluid)"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sacs plastiques (son)"
+          }
         }
       }
     },
@@ -2149,6 +2581,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Speeltuin"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aire de jeux"
           }
         }
       }
@@ -2179,6 +2617,12 @@
             "state": "translated",
             "value": "Politie, bezorger, postbode"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Policier, livreur, facteur"
+          }
         }
       }
     },
@@ -2207,6 +2651,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Regen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pluie"
           }
         }
       }
@@ -2237,6 +2687,12 @@
             "state": "translated",
             "value": "Rennende persoon"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personne qui court"
+          }
         }
       }
     },
@@ -2265,6 +2721,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Zand"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sable"
           }
         }
       }
@@ -2295,6 +2757,12 @@
             "state": "translated",
             "value": "Scooter/brommer"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scooter/cyclomoteur"
+          }
         }
       }
     },
@@ -2323,6 +2791,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ondiep water"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eau peu profonde"
           }
         }
       }
@@ -2353,6 +2827,12 @@
             "state": "translated",
             "value": "Winkelstraat"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rue commerçante"
+          }
         }
       }
     },
@@ -2381,6 +2861,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Geschreeuw/gejuich"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cris/acclamations"
           }
         }
       }
@@ -2411,6 +2897,12 @@
             "state": "translated",
             "value": "Skateboard/skeelers"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Skateboard/rollers"
+          }
         }
       }
     },
@@ -2439,6 +2931,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Kleine hond"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Petit chien"
           }
         }
       }
@@ -2469,6 +2967,12 @@
             "state": "translated",
             "value": "Sneeuw"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Neige"
+          }
         }
       }
     },
@@ -2497,6 +3001,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sneeuw/hagel"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Neige/grêle"
           }
         }
       }
@@ -2527,6 +3037,12 @@
             "state": "translated",
             "value": "Geluiden"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sons"
+          }
         }
       }
     },
@@ -2555,6 +3071,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Trap"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escaliers"
           }
         }
       }
@@ -2585,6 +3107,12 @@
             "state": "translated",
             "value": "Begin met alleen de nagelknipper aanraken"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Commencez par toucher simplement la tondeuse"
+          }
         }
       }
     },
@@ -2613,6 +3141,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Begin met opnames op laag volume"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Commencez avec des enregistrements à faible volume"
           }
         }
       }
@@ -2643,6 +3177,12 @@
             "state": "translated",
             "value": "Standbeelden/paspoppen"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Statues/mannequins"
+          }
         }
       }
     },
@@ -2671,6 +3211,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Kinderwagen/buggy"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Poussette/landau"
           }
         }
       }
@@ -2701,6 +3247,12 @@
             "state": "translated",
             "value": "Harde wind"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vent fort"
+          }
         }
       }
     },
@@ -2729,6 +3281,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ondergronden"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Surfaces"
           }
         }
       }
@@ -2759,6 +3317,12 @@
             "state": "translated",
             "value": "Tiener"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adolescent"
+          }
         }
       }
     },
@@ -2787,6 +3351,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Onweer"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tonnerre"
           }
         }
       }
@@ -2817,6 +3387,12 @@
             "state": "translated",
             "value": "Tegels/stoep"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Carrelage/trottoir"
+          }
         }
       }
     },
@@ -2845,6 +3421,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Peuter (0-5 jaar)"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tout-petit (0-5 ans)"
           }
         }
       }
@@ -2875,6 +3457,12 @@
             "state": "translated",
             "value": "Oren aanraken"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toucher les oreilles"
+          }
         }
       }
     },
@@ -2903,6 +3491,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Poten aanraken"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toucher les pattes"
           }
         }
       }
@@ -2933,6 +3527,12 @@
             "state": "translated",
             "value": "Staart aanraken"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toucher la queue"
+          }
         }
       }
     },
@@ -2961,6 +3561,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Afdrogen met handdoek"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Séchage à la serviette"
           }
         }
       }
@@ -2991,6 +3597,12 @@
             "state": "translated",
             "value": "Trein-/busstation"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gare/station de bus"
+          }
         }
       }
     },
@@ -3019,6 +3631,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tram/trein"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tramway/train"
           }
         }
       }
@@ -3049,6 +3667,12 @@
             "state": "translated",
             "value": "Kliko's/containers"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Poubelles/bennes"
+          }
         }
       }
     },
@@ -3077,6 +3701,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Vrachtwagen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Camion"
           }
         }
       }
@@ -3107,6 +3737,12 @@
             "state": "translated",
             "value": "Stofzuiger"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aspirateur"
+          }
         }
       }
     },
@@ -3136,6 +3772,12 @@
             "state": "translated",
             "value": "Voertuigen"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Véhicules"
+          }
         }
       }
     },
@@ -3164,6 +3806,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Wasmachine"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Machine à laver"
           }
         }
       }
@@ -3228,6 +3876,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Hout/vlonder"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bois/terrasse"
           }
         }
       }

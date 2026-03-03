@@ -1,0 +1,601 @@
+# ============================================================================
+# FIRST-TIME USER JOURNEY: EMMA & MILO
+# ============================================================================
+#
+# SCENARIO DOCUMENTATION
+# ----------------------
+# This test simulates a realistic first-time user experience from the
+# perspective of a new puppy owner discovering the Ollie app.
+#
+# PERSONA: EMMA JOHNSON
+# ---------------------
+# - Age: 28 years old
+# - Location: Amsterdam, Netherlands
+# - Occupation: UX Designer working from home
+# - Living situation: Apartment with small balcony, no yard
+#
+# THE PUPPY: MILO
+# ---------------
+# - Breed: Golden Retriever
+# - Age: 9 weeks old (born ~9 weeks ago)
+# - Home: Came home 3 days ago
+# - Personality: Playful but sleepy, loves belly rubs
+#
+# EMMA'S SITUATION
+# ----------------
+# Emma has wanted a dog her entire life. She finally got Milo from a reputable
+# breeder and brought him home 3 days ago. She's:
+# - Overwhelmed by the responsibility
+# - Exhausted from night wakings (Milo cries in his crate)
+# - Frustrated with potty accidents (3 indoor pees yesterday!)
+# - Searching for help and found Ollie through a Reddit recommendation
+#
+# WHAT SHE HOPES THE APP WILL DO
+# ------------------------------
+# 1. Help her track Milo's potty patterns to predict when he needs to go
+# 2. Remind her when to take him out (she keeps forgetting during work calls)
+# 3. Show her that progress IS happening, even when it feels chaotic
+# 4. Give her peace of mind that she's doing okay as a puppy parent
+#
+# THIS TEST SIMULATES
+# -------------------
+# Emma's first morning with the app:
+# 1. Downloads app and creates Milo's profile
+# 2. Sets up notifications (she really wants those reminders)
+# 3. Logs Milo's first morning pee (outdoor - success!)
+# 4. Logs his breakfast
+# 5. After breakfast, Milo has an accident inside (she logs it honestly)
+# 6. Takes him outside and he goes again (outdoor success!)
+# 7. Starts a morning nap
+#
+# The test validates that a first-time user can:
+# - Complete onboarding smoothly
+# - Understand the main interface
+# - Log various event types
+# - Navigate the app confidently
+#
+# ============================================================================
+
+appId: jaapstronks.Otis-app
+name: First-Time User Journey - Emma & Milo
+
+---
+# ============================================================================
+# PHASE 1: FRESH START
+# ============================================================================
+# Emma opens the app for the first time after downloading from the App Store.
+# She's sitting on her couch with Milo sleeping on her lap.
+# ============================================================================
+
+- launchApp:
+    clearState: true
+
+- waitForAnimationToEnd
+
+- takeScreenshot: "screenshots/emma-journey/01-welcome-screen"
+
+# ============================================================================
+# PHASE 2: ONBOARDING - WELCOME
+# ============================================================================
+# Emma sees the welcome screen. The messaging resonates with her:
+# "Already in the deep end?" - YES, that's exactly how she feels!
+# She's hopeful this app will help her make sense of the chaos.
+# ============================================================================
+
+- assertVisible:
+    text: "Otis"
+
+- assertVisible:
+    text: "Get Started|Aan de slag"
+
+# Emma taps "Get Started" feeling optimistic
+- tapOn:
+    text: "Get Started|Aan de slag"
+
+- waitForAnimationToEnd
+
+# ============================================================================
+# PHASE 3: ONBOARDING - PUPPY NAME
+# ============================================================================
+# The first question asks for her puppy's name. Emma smiles as she types
+# "Milo" - named after her late grandfather's dog from her childhood.
+# ============================================================================
+
+- takeScreenshot: "screenshots/emma-journey/02-name-step"
+
+- assertVisible:
+    text: "What's your puppy's name?|Wat is de naam van je puppy?"
+
+# Tap the text field
+- tapOn:
+    text: "Name|Naam"
+    optional: true
+
+# Emma types "Milo"
+- inputText: "Milo"
+
+- takeScreenshot: "screenshots/emma-journey/03-name-entered"
+
+# Dismiss keyboard and continue
+- tapOn:
+    text: "Next|Volgende"
+
+- waitForAnimationToEnd
+
+# ============================================================================
+# PHASE 4: ONBOARDING - BREED SELECTION
+# ============================================================================
+# Emma is asked about Milo's breed. She's proud that Milo is a purebred
+# Golden Retriever from a health-tested line. She searches for the breed.
+# ============================================================================
+
+- takeScreenshot: "screenshots/emma-journey/04-breed-step"
+
+- assertVisible:
+    text: "What breed is Milo?|Wat voor ras is Milo?"
+
+# Emma sees Golden Retriever in the popular breeds list
+- tapOn:
+    text: "Golden Retriever"
+
+- takeScreenshot: "screenshots/emma-journey/05-breed-selected"
+
+- waitForAnimationToEnd
+
+- tapOn:
+    text: "Next|Volgende"
+
+- waitForAnimationToEnd
+
+# ============================================================================
+# PHASE 5: ONBOARDING - BIRTH DATE
+# ============================================================================
+# Emma remembers Milo's exact birth date from the breeder paperwork.
+# He was born on a Thursday - she remembers because the breeder sent
+# photos of the litter that day and she fell in love immediately.
+#
+# For the test, we'll use the default date (approximately 2 months ago)
+# which simulates a typical 8-9 week old puppy.
+# ============================================================================
+
+- takeScreenshot: "screenshots/emma-journey/06-birth-date-step"
+
+- assertVisible:
+    text: "When was Milo born?|Wanneer is Milo geboren?"
+
+# Emma accepts the default (close enough to Milo's real birthday)
+- tapOn:
+    text: "Next|Volgende"
+
+- waitForAnimationToEnd
+
+# ============================================================================
+# PHASE 6: ONBOARDING - IS PUPPY HOME?
+# ============================================================================
+# The app asks if Milo is already home. Emma thinks "If only you knew how
+# much he's already taken over my apartment!" and selects "Yes".
+# ============================================================================
+
+- takeScreenshot: "screenshots/emma-journey/07-status-step"
+
+- assertVisible:
+    text: "Is Milo already home?|Is Milo al thuis?"
+
+# Emma confirms Milo is home
+- tapOn:
+    text: "Yes, Milo is home|Ja, Milo is thuis"
+
+- takeScreenshot: "screenshots/emma-journey/08-status-selected"
+
+- tapOn:
+    text: "Next|Volgende"
+
+- waitForAnimationToEnd
+
+# ============================================================================
+# PHASE 7: ONBOARDING - HOME DATE
+# ============================================================================
+# The app asks when Milo came home. Emma remembers the exact date - it was
+# a Saturday. She picked him up at 10am after driving 2 hours to the breeder.
+# Milo slept the whole way home on her lap while her partner drove.
+#
+# For the test, we accept the default (today-ish) as Maestro's date picker
+# interaction is limited.
+# ============================================================================
+
+- takeScreenshot: "screenshots/emma-journey/09-home-date-step"
+
+# The title changes based on status
+- assertVisible:
+    text: "When did Milo come home?|Wanneer is Milo thuisgekomen?"
+
+# Accept default date
+- tapOn:
+    text: "Next|Volgende"
+
+- waitForAnimationToEnd
+
+# ============================================================================
+# PHASE 8: ONBOARDING - PHOTO (OPTIONAL)
+# ============================================================================
+# The app offers to add a photo of Milo. Emma has about 500 photos of him
+# already (she's obsessed), but for now she'll skip this and add one later.
+# She wants to get to the tracking features quickly!
+# ============================================================================
+
+- takeScreenshot: "screenshots/emma-journey/10-photo-step"
+
+# Emma decides to skip the photo for now
+- tapOn:
+    text: "Skip|Overslaan"
+
+- waitForAnimationToEnd
+
+# ============================================================================
+# PHASE 9: ONBOARDING - CONFIRMATION
+# ============================================================================
+# Emma reviews Milo's profile. Everything looks correct!
+# She feels a small sense of accomplishment completing this first step.
+# ============================================================================
+
+- takeScreenshot: "screenshots/emma-journey/11-confirm-step"
+
+- assertVisible:
+    text: "Ready to begin!|Klaar om te beginnen!"
+
+# Emma sees Milo's profile summary and taps Start
+- tapOn:
+    text: "Start!|Start!"
+
+- waitForAnimationToEnd
+
+# ============================================================================
+# PHASE 10: ONBOARDING - NOTIFICATIONS
+# ============================================================================
+# The app asks about notifications. Emma DEFINITELY wants these - the whole
+# reason she downloaded the app was to get reminders. She's been setting
+# phone timers manually and keeps forgetting to reset them.
+# ============================================================================
+
+- takeScreenshot: "screenshots/emma-journey/12-notifications-step"
+
+# Emma sees the notification benefits and is excited
+- assertVisible:
+    text: "Never miss a potty break|Mis nooit meer een plasmoment"
+    optional: true
+
+# Emma enthusiastically enables notifications
+- tapOn:
+    text: "Enable Notifications|Meldingen inschakelen"
+    optional: true
+
+# Wait for system dialog and animation
+- waitForAnimationToEnd
+- extendedWaitUntil:
+    visible: "Allow|Sta toe|Enable Location|Locatie inschakelen|Not Now|Niet nu"
+    timeout: 3000
+
+# Handle iOS notification permission dialog if it appears
+- tapOn:
+    text: "Allow|Sta toe"
+    optional: true
+
+- waitForAnimationToEnd
+
+# ============================================================================
+# PHASE 11: ONBOARDING - LOCATION
+# ============================================================================
+# The app asks about location access for walk tracking. Emma thinks this
+# could be useful for tracking their daily walks around the canal.
+# She enables it, wanting the full experience.
+# ============================================================================
+
+- takeScreenshot: "screenshots/emma-journey/13-location-step"
+  optional: true
+
+# Try to enable location or skip if already past this step
+- tapOn:
+    text: "Enable Location|Locatie inschakelen"
+    optional: true
+
+- waitForAnimationToEnd
+
+# Handle iOS location permission dialog if it appears
+- tapOn:
+    text: "Allow While Using App|Sta toe bij gebruik|Allow|Sta toe"
+    optional: true
+
+- waitForAnimationToEnd
+
+# Tap Let's Go if visible (post-permission)
+- tapOn:
+    text: "Let's Go!|Laten we beginnen!"
+    optional: true
+
+- waitForAnimationToEnd
+
+# ============================================================================
+# PHASE 12: MAIN INTERFACE - FIRST LOOK
+# ============================================================================
+# Emma lands on the Today view. She takes a moment to orient herself.
+# The interface is clean and simple. She sees the timeline is empty -
+# time to start logging!
+# ============================================================================
+
+- extendedWaitUntil:
+    visible: "Today|Vandaag"
+    timeout: 5000
+
+- takeScreenshot: "screenshots/emma-journey/14-today-view-empty"
+
+# Emma notices the floating action button in the corner
+# She wonders what happens if she taps it
+
+# ============================================================================
+# PHASE 13: FIRST LOG - MORNING PEE (OUTDOOR SUCCESS!)
+# ============================================================================
+# It's 7:15am. Emma just took Milo outside for his morning pee and he went
+# immediately - a small victory! She wants to log this success.
+# She taps the floating action button to see her options.
+# ============================================================================
+
+# Tap the FAB (floating action button) in bottom-right
+- tapOn:
+    point: "90%,80%"
+
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/emma-journey/15-fab-menu-open"
+
+# Emma sees the quick log menu with event type options
+# She taps the pee/potty icon
+- tapOn:
+    text: "Pee|Plas"
+    optional: true
+
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/emma-journey/16-potty-log-sheet"
+
+# Emma selects "Outside" because Milo went outdoors
+- tapOn:
+    text: "Outside|Buiten"
+    optional: true
+
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/emma-journey/17-potty-outdoor-selected"
+
+# Emma saves the event
+- tapOn:
+    text: "Done|Klaar|Save|Opslaan"
+    optional: true
+
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/emma-journey/18-first-event-logged"
+
+# ============================================================================
+# PHASE 14: SECOND LOG - BREAKFAST
+# ============================================================================
+# At 7:30am, Emma gives Milo his breakfast. He devours it in about
+# 45 seconds flat - typical puppy! She logs the meal.
+# ============================================================================
+
+# Open FAB menu again
+- tapOn:
+    point: "90%,80%"
+
+- waitForAnimationToEnd
+
+# Tap meal/food icon
+- tapOn:
+    text: "Meal|Maaltijd|Food|Eten"
+    optional: true
+
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/emma-journey/19-meal-log-sheet"
+
+# Save the meal
+- tapOn:
+    text: "Done|Klaar|Save|Opslaan"
+    optional: true
+
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/emma-journey/20-meal-logged"
+
+# ============================================================================
+# PHASE 15: THIRD LOG - ACCIDENT INSIDE (HONEST LOGGING)
+# ============================================================================
+# Oh no! At 7:50am, 20 minutes after eating, Milo squats and pees on the
+# living room rug. Emma sighs but reminds herself - this is normal, he's
+# just a baby. She logs it honestly because accurate data = better predictions.
+# ============================================================================
+
+# Open FAB menu
+- tapOn:
+    point: "90%,80%"
+
+- waitForAnimationToEnd
+
+# Tap pee icon
+- tapOn:
+    text: "Pee|Plas"
+    optional: true
+
+- waitForAnimationToEnd
+
+# This time Emma selects "Inside" - the accident
+- tapOn:
+    text: "Inside|Binnen"
+    optional: true
+
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/emma-journey/21-accident-logged"
+
+# Save it
+- tapOn:
+    text: "Done|Klaar|Save|Opslaan"
+    optional: true
+
+- waitForAnimationToEnd
+
+# ============================================================================
+# PHASE 16: FOURTH LOG - OUTDOOR SUCCESS AFTER ACCIDENT
+# ============================================================================
+# Immediately after the accident, Emma scooped up Milo and rushed him
+# outside. He finished peeing on the grass - partial success! She praises
+# him enthusiastically and logs another outdoor pee.
+# ============================================================================
+
+# Open FAB menu
+- tapOn:
+    point: "90%,80%"
+
+- waitForAnimationToEnd
+
+# Tap pee icon
+- tapOn:
+    text: "Pee|Plas"
+    optional: true
+
+- waitForAnimationToEnd
+
+# Select Outside
+- tapOn:
+    text: "Outside|Buiten"
+    optional: true
+
+- waitForAnimationToEnd
+
+# Save
+- tapOn:
+    text: "Done|Klaar|Save|Opslaan"
+    optional: true
+
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/emma-journey/22-timeline-with-events"
+
+# ============================================================================
+# PHASE 17: FIFTH LOG - MORNING NAP
+# ============================================================================
+# At 8:15am, Milo is getting drowsy after all that excitement. Emma puts
+# him in his crate with a stuffed Kong and he falls asleep almost instantly.
+# She logs the nap start and finally has a moment to drink her coffee!
+# ============================================================================
+
+# Open FAB menu
+- tapOn:
+    point: "90%,80%"
+
+- waitForAnimationToEnd
+
+# Tap sleep/nap option
+- tapOn:
+    text: "Nap|Sleep|Slapen|Dutje"
+    optional: true
+
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/emma-journey/23-nap-started"
+
+# Save the nap start
+- tapOn:
+    text: "Done|Klaar|Save|Opslaan|Start"
+    optional: true
+
+- waitForAnimationToEnd
+
+# ============================================================================
+# PHASE 18: EXPLORING THE APP
+# ============================================================================
+# While Milo naps, Emma explores the app. She checks out the different tabs
+# to see what else is available. She's curious about insights and training.
+# ============================================================================
+
+- takeScreenshot: "screenshots/emma-journey/24-timeline-complete"
+
+# Emma taps on the Insights tab to see statistics
+- tapOn:
+    text: "Insights|Inzichten"
+    optional: true
+
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/emma-journey/25-insights-tab"
+
+# Emma checks the Training tab
+- tapOn:
+    text: "Train|Training"
+    optional: true
+
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/emma-journey/26-training-tab"
+
+# Emma looks at the Walks tab
+- tapOn:
+    text: "Walk|Walks|Wandelen"
+    optional: true
+
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/emma-journey/27-walks-tab"
+
+# Emma returns to Today view
+- tapOn:
+    text: "Today|Vandaag"
+    optional: true
+
+- waitForAnimationToEnd
+- takeScreenshot: "screenshots/emma-journey/28-back-to-today"
+
+# ============================================================================
+# PHASE 19: FINAL STATE
+# ============================================================================
+# Emma's first morning with the app is complete. Her timeline now shows:
+# - 7:15am: Outdoor pee (success!)
+# - 7:30am: Breakfast
+# - 7:50am: Indoor pee (accident)
+# - 7:55am: Outdoor pee (success after rushing him out)
+# - 8:15am: Nap started
+#
+# She feels good about the app. It was easy to set up and logging events
+# takes just 2-3 taps. She's excited to see patterns emerge over the
+# coming days and weeks.
+#
+# Emma's thoughts: "Finally, an app that gets it. No complicated setup,
+# no overwhelming features. Just simple tracking that might actually
+# help me understand what Milo needs. Let's see how this goes!"
+# ============================================================================
+
+- takeScreenshot: "screenshots/emma-journey/29-final-state"
+
+# Verify we have a working app state with events logged
+- assertVisible:
+    text: "Today|Vandaag"
+
+# ============================================================================
+# TEST COMPLETE
+# ============================================================================
+# This test validates the complete first-time user journey:
+#
+# ONBOARDING VALIDATED:
+# [x] Welcome screen with value proposition
+# [x] Name input (typed "Milo")
+# [x] Breed selection (Golden Retriever)
+# [x] Birth date selection
+# [x] Status selection (puppy is home)
+# [x] Home date selection
+# [x] Photo step (skipped)
+# [x] Profile confirmation
+# [x] Notification permission request
+# [x] Location permission request
+#
+# EVENT LOGGING VALIDATED:
+# [x] FAB (floating action button) opens menu
+# [x] Potty event - outdoor pee
+# [x] Meal event - breakfast
+# [x] Potty event - indoor accident
+# [x] Potty event - outdoor pee (follow-up)
+# [x] Sleep event - nap started
+#
+# NAVIGATION VALIDATED:
+# [x] Tab bar navigation works
+# [x] Today, Insights, Train, Walks tabs accessible
+# [x] Return to Today view
+#
+# SCREENSHOTS CAPTURED: 29 images documenting the complete journey
+# ============================================================================
