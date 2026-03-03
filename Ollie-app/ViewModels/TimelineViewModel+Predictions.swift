@@ -5,6 +5,7 @@
 //  Prediction-related functionality for TimelineViewModel
 //
 
+import Combine
 import Foundation
 import OtisShared
 
@@ -222,6 +223,91 @@ extension TimelineViewModel {
             forecasts: forecasts,
             date: currentDate,
             isWalkInProgress: isWalkInProgress
+        )
+    }
+
+    // MARK: - First Week Card
+
+    /// Whether the first week card should be shown
+    /// Shows during days 1-7, dismissable for the day
+    var shouldShowFirstWeekCard: Bool {
+        guard let profile = profileStore.profile else { return false }
+        guard isShowingToday else { return false }
+
+        // Only show during first week (days 1-7)
+        guard profile.daysHome >= 1 && profile.daysHome <= 7 else { return false }
+
+        // Check if already collapsed today
+        if isFirstWeekCardCollapsedToday {
+            return true // Show collapsed
+        }
+
+        return true
+    }
+
+    /// Whether the first week card is currently collapsed
+    var isFirstWeekCardCollapsed: Bool {
+        isFirstWeekCardCollapsedToday
+    }
+
+    /// Check if card was collapsed today
+    private var isFirstWeekCardCollapsedToday: Bool {
+        guard let collapsedDateString = UserDefaults.standard.string(
+            forKey: UserPreferences.Key.firstWeekCardCollapsedDate.rawValue
+        ) else {
+            return false
+        }
+
+        // Parse the stored date
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withFullDate]
+        guard let collapsedDate = formatter.date(from: collapsedDateString) else {
+            return false
+        }
+
+        // Check if it was collapsed today
+        return Calendar.current.isDateInToday(collapsedDate)
+    }
+
+    /// Toggle the first week card collapsed state
+    func toggleFirstWeekCard() {
+        if isFirstWeekCardCollapsedToday {
+            // Expand: clear the date
+            UserDefaults.standard.removeObject(
+                forKey: UserPreferences.Key.firstWeekCardCollapsedDate.rawValue
+            )
+        } else {
+            // Collapse: store today's date
+            let formatter = ISO8601DateFormatter()
+            formatter.formatOptions = [.withFullDate]
+            let todayString = formatter.string(from: Date())
+            UserDefaults.standard.set(
+                todayString,
+                forKey: UserPreferences.Key.firstWeekCardCollapsedDate.rawValue
+            )
+        }
+        objectWillChange.send()
+    }
+
+    /// Calculate first week stats for the card
+    var firstWeekStats: FirstWeekStats? {
+        guard let profile = profileStore.profile else { return nil }
+
+        // Get yesterday's events
+        let calendar = Calendar.current
+        let yesterday = calendar.date(byAdding: .day, value: -1, to: Date()) ?? Date()
+        let startOfYesterday = calendar.startOfDay(for: yesterday)
+        let endOfYesterday = calendar.startOfDay(for: Date())
+        let yesterdayEvents = eventStore.getEvents(from: startOfYesterday, to: endOfYesterday)
+
+        // Get historical events (last 7 days for suppression logic)
+        let historicalEvents = getHistoricalEvents(days: 7)
+
+        return FirstWeekCalculations.calculateStats(
+            profile: profile,
+            todayEvents: events,
+            yesterdayEvents: yesterdayEvents,
+            historicalEvents: historicalEvents
         )
     }
 }

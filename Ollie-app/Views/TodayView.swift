@@ -215,6 +215,34 @@ struct TodayView: View {
             let separated = viewModel.separatedUpcomingItems(forecasts: weatherService.forecasts)
             let pendingActionable = isSleeping ? separated.actionable.first : nil
 
+            // First run welcome card (highest priority for new users)
+            if case .firstRun(let puppyName) = combinedState {
+                FirstRunWelcomeCard(
+                    puppyName: puppyName,
+                    onSleeping: { viewModel.firstRunPuppyIsSleeping() },
+                    onAwake: { viewModel.firstRunPuppyIsAwake() }
+                )
+            }
+
+            // First week summary card (days 1-7)
+            if viewModel.shouldShowFirstWeekCard,
+               !combinedState.shouldShowFirstRunCard,
+               let stats = viewModel.firstWeekStats {
+                FirstWeekCard(
+                    stats: stats,
+                    isCollapsed: viewModel.isFirstWeekCardCollapsed,
+                    onToggle: { viewModel.toggleFirstWeekCard() }
+                )
+                .animatedAppear(delay: 0.03)
+            }
+
+            // Stale logging banner (replaces misleading status cards)
+            if case .staleLogging = combinedState {
+                StaleLoggingBanner(
+                    onStartFresh: { viewModel.startFreshAfterLoggingGap() }
+                )
+            }
+
             // Post-wake potty prompt (highest priority - shows at top)
             if case .justWokeNeedsPotty(let wokeAt, let minutesSinceWake, let overdueBy) = combinedState {
                 PostWakePottyCard(
@@ -283,27 +311,30 @@ struct TodayView: View {
                 )
             }
 
-            // Medication reminders
-            ForEach(viewModel.pendingMedications) { pending in
-                MedicationReminderCard(
-                    medication: pending.medication,
-                    time: pending.time,
-                    scheduledDate: pending.scheduledDate,
-                    isOverdue: pending.isOverdue,
-                    onComplete: { medicationName in
-                        viewModel.completeMedication(pending, medicationName: medicationName)
-                    }
+            // Hide scheduled events and medications during first run to avoid confusing "missed" reminders
+            if !combinedState.shouldShowFirstRunCard {
+                // Medication reminders
+                ForEach(viewModel.pendingMedications) { pending in
+                    MedicationReminderCard(
+                        medication: pending.medication,
+                        time: pending.time,
+                        scheduledDate: pending.scheduledDate,
+                        isOverdue: pending.isOverdue,
+                        onComplete: { medicationName in
+                            viewModel.completeMedication(pending, medicationName: medicationName)
+                        }
+                    )
+                }
+
+                // Actionable & Upcoming events (pass precomputed values)
+                ScheduledEventsSection(
+                    viewModel: viewModel,
+                    weatherService: weatherService,
+                    precomputedSeparated: separated,
+                    isSleeping: isSleeping,
+                    onNavigateToSocialization: onNavigateToTrain
                 )
             }
-
-            // Actionable & Upcoming events (pass precomputed values)
-            ScheduledEventsSection(
-                viewModel: viewModel,
-                weatherService: weatherService,
-                precomputedSeparated: separated,
-                isSleeping: isSleeping,
-                onNavigateToSocialization: onNavigateToTrain
-            )
         }
     }
 

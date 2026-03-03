@@ -195,6 +195,9 @@ enum UserPreferences {
 
         // Training settings
         case showFloatingClicker = "showFloatingClicker"
+
+        // First week card
+        case firstWeekCardCollapsedDate = "firstWeekCardCollapsedDate"
     }
 
     // MARK: - Defaults
