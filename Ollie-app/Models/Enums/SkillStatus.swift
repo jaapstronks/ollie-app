@@ -69,25 +69,6 @@ enum SkillStatusCalculations {
         }
     }
 
-    /// Check if a skill is locked (requirements not met)
-    static func isLocked(
-        skill: Skill,
-        startedSkillIds: Set<String>,
-        trainingPlan: TrainingPlan
-    ) -> Bool {
-        // A skill with no requirements is never locked
-        if skill.requires.isEmpty {
-            return false
-        }
-
-        // A skill is locked if any of its requirements have not been started
-        return !trainingPlan.requirementsMet(
-            for: skill.id,
-            masteredSkillIds: [],  // We use started as the minimum requirement
-            startedSkillIds: startedSkillIds
-        )
-    }
-
     /// Get progress stats for a category
     static func categoryProgress(
         category: TrainingCategory,

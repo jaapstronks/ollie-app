@@ -112,89 +112,9 @@ struct TrainTabView: View {
 
     // MARK: - Socialization Section
 
-    /// Categories that need attention (incomplete, sorted by least progress)
-    private var priorityCategories: [SocializationCategory] {
-        socializationStore.categories
-            .filter { category in
-                let progress = socializationStore.categoryProgress(for: category.id)
-                return progress.completed < progress.total
-            }
-            .sorted { cat1, cat2 in
-                let p1 = socializationStore.categoryProgress(for: cat1.id)
-                let p2 = socializationStore.categoryProgress(for: cat2.id)
-                let ratio1 = p1.total > 0 ? Double(p1.completed) / Double(p1.total) : 0
-                let ratio2 = p2.total > 0 ? Double(p2.completed) / Double(p2.total) : 0
-                return ratio1 < ratio2
-            }
-            .prefix(3)
-            .map { $0 }
-    }
-
     @ViewBuilder
     private var socializationSection: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            // Compact progress card with inline "See all" link
-            NavigationLink {
-                SocializationFullListView()
-            } label: {
-                SocializationProgressCard()
-            }
-            .buttonStyle(.plain)
-
-            // Show only top 3 priority categories (least complete)
-            if !priorityCategories.isEmpty {
-                VStack(spacing: 0) {
-                    ForEach(priorityCategories) { category in
-                        NavigationLink {
-                            SocializationCategoryDetailView(category: category)
-                        } label: {
-                            SocializationCategoryRow(category: category)
-                        }
-                        .buttonStyle(.plain)
-
-                        if category.id != priorityCategories.last?.id {
-                            Divider()
-                                .padding(.leading, 52)
-                        }
-                    }
-
-                    // "See all categories" row
-                    Divider()
-                        .padding(.leading, 52)
-
-                    NavigationLink {
-                        SocializationFullListView()
-                    } label: {
-                        HStack(spacing: 12) {
-                            Image(systemName: "list.bullet")
-                                .font(.title3)
-                                .foregroundStyle(.secondary)
-                                .frame(width: 40, height: 40)
-                                .background(
-                                    Circle()
-                                        .fill(Color.secondary.opacity(colorScheme == .dark ? 0.2 : 0.1))
-                                )
-
-                            Text(Strings.Train.allCategories)
-                                .font(.subheadline)
-                                .fontWeight(.medium)
-                                .foregroundStyle(Color.otisAccent)
-
-                            Spacer()
-
-                            Image(systemName: "chevron.right")
-                                .font(.system(size: 12, weight: .semibold))
-                                .foregroundStyle(.secondary)
-                        }
-                        .padding(.vertical, 8)
-                    }
-                    .buttonStyle(.plain)
-                }
-                .padding(.horizontal)
-                .padding(.vertical, 8)
-                .glassCard(tint: .accent)
-            }
-        }
+        SocializationJourneyCard()
     }
 
     // MARK: - Skills Section
@@ -228,25 +148,38 @@ private struct SkillsPreviewCard: View {
                 Spacer()
             }
 
-            if let weekPlan = trainingStore.currentWeekPlan {
-                // Week info
+            if trainingStore.trainingPlan != nil {
+                // Mastery progress
                 HStack {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text(Strings.Training.weekNumber(trainingStore.currentWeek))
-                            .font(.subheadline)
-                            .fontWeight(.semibold)
+                        if let nextSkill = trainingStore.nextSkill {
+                            Text(Strings.Training.Progression.nextUp)
+                                .font(.caption)
+                                .fontWeight(.medium)
+                                .foregroundStyle(.tertiary)
+                                .textCase(.uppercase)
 
-                        Text(weekPlan.title)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
+                            HStack(spacing: 6) {
+                                Image(systemName: nextSkill.icon)
+                                    .font(.subheadline)
+                                    .foregroundStyle(Color.otisAccent)
+                                Text(nextSkill.name)
+                                    .font(.subheadline)
+                                    .fontWeight(.semibold)
+                            }
+                        } else {
+                            Text(Strings.Training.Progression.allSkillsMastered)
+                                .font(.subheadline)
+                                .fontWeight(.semibold)
+                        }
                     }
 
                     Spacer()
 
                     // Progress ring
                     ZStack {
-                        let progress = trainingStore.weekProgress
-                        let progressFraction = progress.total > 0 ? CGFloat(progress.started) / CGFloat(progress.total) : 0
+                        let progress = trainingStore.masteryProgress
+                        let progressFraction = progress.total > 0 ? CGFloat(progress.mastered) / CGFloat(progress.total) : 0
 
                         Circle()
                             .stroke(Color.secondary.opacity(0.2), lineWidth: 4)
@@ -255,23 +188,24 @@ private struct SkillsPreviewCard: View {
                             .stroke(Color.otisAccent, style: StrokeStyle(lineWidth: 4, lineCap: .round))
                             .rotationEffect(.degrees(-90))
 
-                        Text("\(Int(progressFraction * 100))%")
-                            .font(.system(size: 10, weight: .bold))
+                        Text("\(progress.mastered)/\(progress.total)")
+                            .font(.system(size: 9, weight: .bold))
                             .foregroundStyle(.secondary)
                     }
                     .frame(width: 44, height: 44)
                     .accessibilityElement(children: .ignore)
                     .accessibilityLabel(Strings.Train.progressRingAccessibility)
-                    .accessibilityValue(Strings.Train.progressValue(started: trainingStore.weekProgress.started, total: trainingStore.weekProgress.total))
+                    .accessibilityValue(Strings.Train.progressValue(started: trainingStore.masteryProgress.mastered, total: trainingStore.masteryProgress.total))
                 }
 
-                // Focus skills chips
-                if !trainingStore.currentFocusSkills.isEmpty {
+                // Unlocked skills chips
+                let unlockedSkills = trainingStore.unlockedSkills
+                if !unlockedSkills.isEmpty {
                     Divider()
 
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 8) {
-                            ForEach(trainingStore.currentFocusSkills) { skill in
+                            ForEach(unlockedSkills.prefix(5)) { skill in
                                 skillChip(skill)
                             }
                         }

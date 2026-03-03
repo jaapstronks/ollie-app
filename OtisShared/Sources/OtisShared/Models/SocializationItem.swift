@@ -200,6 +200,125 @@ public enum SocializationReaction: String, Codable, CaseIterable, Identifiable, 
     }
 }
 
+// MARK: - Socialization Phase
+
+/// The current phase of socialization based on days home and age
+public enum SocializationPhase: String, Codable, CaseIterable, Identifiable, Sendable {
+    case settlingIn = "settling_in"
+    case firstSteps = "first_steps"
+    case buildingConfidence = "building_confidence"
+    case peakWindow = "peak_window"
+    case maintenance = "maintenance"
+
+    public var id: String { rawValue }
+
+    /// Determines the current phase based on days home and age in weeks
+    public static func current(daysHome: Int, ageInWeeks: Int) -> SocializationPhase {
+        // Maintenance if past socialization window
+        if ageInWeeks >= 16 {
+            return .maintenance
+        }
+
+        // Phase based on days home
+        if daysHome <= 3 {
+            return .settlingIn
+        } else if daysHome <= 14 {
+            return .firstSteps
+        } else if daysHome <= 42 {  // ~6 weeks
+            return .buildingConfidence
+        } else {
+            return .peakWindow
+        }
+    }
+
+    public var icon: String {
+        switch self {
+        case .settlingIn: return "house.fill"
+        case .firstSteps: return "pawprint.fill"
+        case .buildingConfidence: return "figure.walk"
+        case .peakWindow: return "star.fill"
+        case .maintenance: return "checkmark.seal.fill"
+        }
+    }
+
+    public var sortOrder: Int {
+        switch self {
+        case .settlingIn: return 0
+        case .firstSteps: return 1
+        case .buildingConfidence: return 2
+        case .peakWindow: return 3
+        case .maintenance: return 4
+        }
+    }
+}
+
+// MARK: - Comfortable Item
+
+/// Represents explicit comfort with a socialization item
+public struct ComfortableItem: Identifiable, Codable, Equatable, Sendable {
+    public let id: UUID
+    public let itemId: String
+    public let comfortableAt: Date
+    public let method: ComfortMethod
+    public var modifiedAt: Date
+
+    public init(
+        id: UUID = UUID(),
+        itemId: String,
+        comfortableAt: Date = Date(),
+        method: ComfortMethod = .logged,
+        modifiedAt: Date? = nil
+    ) {
+        self.id = id
+        self.itemId = itemId
+        self.comfortableAt = comfortableAt
+        self.method = method
+        self.modifiedAt = modifiedAt ?? Date()
+    }
+
+    public enum ComfortMethod: String, Codable, Sendable {
+        case logged = "logged"          // Reached via exposure logging
+        case quickCheck = "quick-check" // Quick inventory check-off
+    }
+}
+
+// MARK: - Early Milestone
+
+/// Represents an early-days milestone achievement
+public struct EarlyMilestoneRecord: Identifiable, Codable, Equatable, Sendable {
+    public let id: UUID
+    public let milestoneId: String
+    public let achievedAt: Date
+    public var modifiedAt: Date
+
+    public init(
+        id: UUID = UUID(),
+        milestoneId: String,
+        achievedAt: Date = Date(),
+        modifiedAt: Date? = nil
+    ) {
+        self.id = id
+        self.milestoneId = milestoneId
+        self.achievedAt = achievedAt
+        self.modifiedAt = modifiedAt ?? Date()
+    }
+}
+
+/// Definition of an early milestone from JSON
+public struct EarlyMilestoneDefinition: Identifiable, Codable, Sendable {
+    public let id: String
+    public let name: String
+    public let icon: String
+    public let autoTrigger: String?
+
+    public init(id: String, name: String, icon: String, autoTrigger: String? = nil) {
+        self.id = id
+        self.name = name
+        self.icon = icon
+        self.autoTrigger = autoTrigger
+    }
+}
+
 // MARK: - Socialization Window Status
 
 /// Status of the socialization window based on puppy age

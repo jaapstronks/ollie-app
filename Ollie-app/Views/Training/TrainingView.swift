@@ -2,66 +2,58 @@
 //  TrainingView.swift
 //  Otis-app
 //
-//  Main training view showing skills by category with progress tracking
+//  Main training view with linear skill progression and preparation gate
 //
 
 import SwiftUI
 import OtisShared
 
-/// Main training view with skill tracker
+/// Main training view with preparation gate and linear skill progression
 struct TrainingView: View {
     @ObservedObject var eventStore: EventStore
 
     @StateObject private var trainingStore = TrainingPlanStore()
+    @StateObject private var progressStore = TrainingProgressStore()
     @EnvironmentObject var subscriptionManager: SubscriptionManager
 
     @State private var selectedSkill: Skill?
     @State private var activeTrainingSkill: Skill?
-    @State private var skillForInfoSheet: Skill?
+    @State private var skillForDetailSheet: Skill?
     @State private var skillForQuickLog: Skill?
     @State private var completedSessionData: TrainingSessionData?
-    @State private var scrollToSkillId: String?
+    @State private var showRulesReference = false
+    @State private var ruleToAcknowledge: TrainingRule?
+    @State private var skillPendingRuleAcknowledgement: Skill?
     @State private var showOtisPlusSheet = false
 
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
+    private var isPreparationComplete: Bool {
+        guard let plan = trainingStore.trainingPlan else { return false }
+        return progressStore.isPreparationComplete(requiredItems: plan.preparationItems)
+    }
+
     var body: some View {
-        ScrollViewReader { proxy in
-            ScrollView {
-                VStack(spacing: 20) {
-                    // Week hero card
-                    if let weekPlan = trainingStore.currentWeekPlan {
-                        WeekHeroCard(
-                            currentWeek: trainingStore.currentWeek,
-                            weekTitle: weekPlan.title,
-                            focusSkills: trainingStore.currentFocusSkills,
-                            progress: trainingStore.weekProgress,
-                            onSkillTap: { skill in
-                                scrollToSkillId = skill.id
-                            }
+        ScrollView {
+            VStack(spacing: 20) {
+                // 1. Preparation Section (gated)
+                if !isPreparationComplete {
+                    if let plan = trainingStore.trainingPlan {
+                        PreparationSection(
+                            progressStore: progressStore,
+                            preparationItems: plan.preparationItems
                         )
                     }
 
-                    // Skills by category
-                    ForEach(TrainingCategory.allCases) { category in
-                        categorySection(for: category)
-                    }
-                }
-                .padding()
-            }
-            .onChange(of: scrollToSkillId) { _, skillId in
-                if let skillId = skillId {
-                    if reduceMotion {
-                        proxy.scrollTo(skillId, anchor: .center)
-                    } else {
-                        withAnimation {
-                            proxy.scrollTo(skillId, anchor: .center)
-                        }
-                    }
-                    scrollToSkillId = nil
+                    // Show locked message for training content
+                    preparationLockedMessage
+                } else {
+                    // 2. Training content (only if preparation complete)
+                    trainingContent
                 }
             }
+            .padding()
         }
         .navigationTitle(Strings.Training.title)
         .navigationBarTitleDisplayMode(.large)
@@ -69,7 +61,6 @@ struct TrainingView: View {
             trainingStore.setEventStore(eventStore)
         }
         .task {
-            // Initial CloudKit sync for mastered skills
             await trainingStore.initialSync()
         }
         // Full-screen training session
@@ -79,7 +70,6 @@ struct TrainingView: View {
                 onComplete: { data in
                     activeTrainingSkill = nil
                     completedSessionData = data
-                    // Small delay to allow cover to dismiss, then show log sheet
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                         selectedSkill = skill
                     }
@@ -89,23 +79,28 @@ struct TrainingView: View {
                 }
             )
         }
-        // Skill info sheet
-        .sheet(item: $skillForInfoSheet) { skill in
+        // Skill detail sheet (replaces SkillInfoSheet)
+        .sheet(item: $skillForDetailSheet) { skill in
             let status = trainingStore.status(for: skill.id)
             let sessionCount = trainingStore.sessionCount(for: skill.id)
             let recentSessions = trainingStore.recentSessions(for: skill.id)
 
-            SkillInfoSheet(
+            SkillDetailSheet(
                 skill: skill,
                 status: status,
                 sessionCount: sessionCount,
                 recentSessions: recentSessions,
                 onStartTraining: {
-                    // Start training after info sheet dismisses
                     activeTrainingSkill = skill
                 },
+                onLogSession: {
+                    skillForQuickLog = skill
+                },
+                onToggleMastered: {
+                    trainingStore.toggleMastered(skill.id)
+                },
                 onDismiss: {
-                    skillForInfoSheet = nil
+                    skillForDetailSheet = nil
                 }
             )
             .presentationDetents([.large])
@@ -127,7 +122,7 @@ struct TrainingView: View {
             )
             .presentationDetents([.height(500)])
         }
-        // Quick log sheet (for logging without in-app training)
+        // Quick log sheet
         .sheet(item: $skillForQuickLog) { skill in
             TrainingLogSheet(
                 skill: skill,
@@ -142,6 +137,34 @@ struct TrainingView: View {
             )
             .presentationDetents([.height(500)])
         }
+        // Rules reference sheet
+        .sheet(isPresented: $showRulesReference) {
+            if let plan = trainingStore.trainingPlan {
+                TrainingRulesReference(
+                    progressStore: progressStore,
+                    allRules: plan.rules
+                )
+            }
+        }
+        // Rule acknowledgment modal
+        .sheet(item: $ruleToAcknowledge) { rule in
+            RuleAcknowledgeSheet(
+                rule: rule,
+                onAcknowledge: {
+                    progressStore.markRuleAsSeen(rule.id)
+                    ruleToAcknowledge = nil
+                    // Auto-start training after rule acknowledgement
+                    if let skill = skillPendingRuleAcknowledgement {
+                        skillPendingRuleAcknowledgement = nil
+                        // Small delay to allow sheet dismissal animation
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                            activeTrainingSkill = skill
+                        }
+                    }
+                }
+            )
+            .presentationDetents([.medium])
+        }
         // Otis+ upsell sheet
         .sheet(isPresented: $showOtisPlusSheet) {
             OtisPlusSheet(
@@ -151,105 +174,194 @@ struct TrainingView: View {
         }
     }
 
-    // MARK: - Category Section
+    // MARK: - Preparation Locked Message
 
-    /// Calculate the global skill index for subscription gating
-    private func globalSkillIndex(for skill: Skill, in category: TrainingCategory) -> Int {
-        guard let plan = trainingStore.trainingPlan else { return 0 }
+    private var preparationLockedMessage: some View {
+        HStack(spacing: 12) {
+            Image(systemName: "lock.fill")
+                .font(.title3)
+                .foregroundStyle(.tertiary)
 
-        var index = 0
-        for cat in TrainingCategory.allCases {
-            let skills = plan.skills(for: cat)
-            if cat == category {
-                // Find index within this category
-                if let skillIndex = skills.firstIndex(where: { $0.id == skill.id }) {
-                    return index + skillIndex
-                }
-            }
-            index += skills.count
-            if cat == category { break }
+            Text(Strings.Training.Progression.preparationRequired)
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+
+            Spacer()
         }
-        return index
+        .padding()
+        .background(
+            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                .fill(colorScheme == .dark ? Color.white.opacity(0.05) : Color.black.opacity(0.03))
+        )
     }
 
+    // MARK: - Training Content
+
     @ViewBuilder
-    private func categorySection(for category: TrainingCategory) -> some View {
-        let skills = trainingStore.trainingPlan?.skills(for: category) ?? []
-        let progress = trainingStore.categoryProgress(for: category)
+    private var trainingContent: some View {
+        // Next Up card (prominent)
+        if let nextSkill = trainingStore.nextSkill {
+            let status = trainingStore.status(for: nextSkill.id)
+            let sessionCount = trainingStore.sessionCount(for: nextSkill.id)
 
-        if !skills.isEmpty {
-            VStack(alignment: .leading, spacing: 12) {
-                // Section header
-                HStack(spacing: 8) {
-                    Image(systemName: category.icon)
-                        .font(.body)
-                        .foregroundStyle(category.color)
-
-                    Text(category.label)
-                        .font(.subheadline)
-                        .fontWeight(.semibold)
-                        .foregroundStyle(.secondary)
-
-                    Spacer()
-
-                    // Progress badge
-                    Text("\(progress.started)/\(progress.total)")
-                        .font(.caption)
-                        .fontWeight(.medium)
-                        .foregroundStyle(.secondary)
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 4)
-                        .background(
-                            Capsule()
-                                .fill(colorScheme == .dark ? Color.white.opacity(0.1) : Color.black.opacity(0.05))
-                        )
+            NextUpCard(
+                skill: nextSkill,
+                status: status,
+                sessionCount: sessionCount,
+                onStartTraining: {
+                    checkForRulesAndStartTraining(nextSkill)
+                },
+                onViewInfo: {
+                    skillForDetailSheet = nextSkill
                 }
-                .padding(.horizontal, 4)
+            )
+        } else if trainingStore.masteryProgress.mastered == trainingStore.masteryProgress.total {
+            // All skills mastered celebration
+            allMasteredCard
+        }
 
-                // Skill cards
+        // In Progress skills (unlocked but not the next one)
+        let inProgressSkills = trainingStore.unlockedSkills.filter { skill in
+            skill.id != trainingStore.nextSkill?.id
+        }
+        if !inProgressSkills.isEmpty {
+            inProgressSection(skills: inProgressSkills)
+        }
+
+        // Mastered skills (compact list)
+        let masteredSkills = trainingStore.masteredSkillsList
+        if !masteredSkills.isEmpty {
+            masteredSection(skills: masteredSkills)
+        }
+
+        // Locked skills (subtle, shows what's coming)
+        let lockedSkills = trainingStore.lockedSkills
+        if !lockedSkills.isEmpty {
+            lockedSection(skills: lockedSkills)
+        }
+
+        // Rules Reference link
+        if let plan = trainingStore.trainingPlan {
+            let seenCount = progressStore.getSeenRules(from: plan.rules).count
+            if seenCount > 0 {
+                TrainingRulesLink(
+                    seenRulesCount: seenCount,
+                    onTap: { showRulesReference = true }
+                )
+            }
+        }
+    }
+
+    // MARK: - All Mastered Card
+
+    private var allMasteredCard: some View {
+        VStack(spacing: 16) {
+            Image(systemName: "trophy.fill")
+                .font(.system(size: 48))
+                .foregroundStyle(.yellow)
+
+            Text(Strings.Training.Progression.allSkillsMastered)
+                .font(.headline)
+                .foregroundStyle(.primary)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 32)
+        .glassStatusCard(tintColor: .yellow.opacity(0.3))
+    }
+
+    // MARK: - In Progress Section
+
+    @ViewBuilder
+    private func inProgressSection(skills: [Skill]) -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            sectionHeader(Strings.Training.Progression.inProgressSection)
+
+            ForEach(skills) { skill in
+                let status = trainingStore.status(for: skill.id)
+                let sessionCount = trainingStore.sessionCount(for: skill.id)
+                let missingReqs = trainingStore.missingRequirements(for: skill)
+
+                CompactSkillCard(
+                    skill: skill,
+                    status: status,
+                    sessionCount: sessionCount,
+                    isLocked: false,
+                    missingRequirements: missingReqs,
+                    onTap: {
+                        skillForDetailSheet = skill
+                    }
+                )
+            }
+        }
+    }
+
+    // MARK: - Mastered Section
+
+    @ViewBuilder
+    private func masteredSection(skills: [Skill]) -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            sectionHeader(Strings.Training.Progression.masteredSection)
+
+            VStack(spacing: 8) {
                 ForEach(skills) { skill in
-                    let globalIndex = globalSkillIndex(for: skill, in: category)
-                    let canAccess = subscriptionManager.canAccessSkill(at: globalIndex)
-
-                    if canAccess {
-                        let isLocked = trainingStore.isLocked(skill)
-                        let status = trainingStore.status(for: skill.id)
-                        let sessionCount = trainingStore.sessionCount(for: skill.id)
-                        let missingReqs = trainingStore.missingRequirements(for: skill)
-                        let recentSessions = trainingStore.recentSessions(for: skill.id)
-
-                        SkillCard(
-                            skill: skill,
-                            status: status,
-                            sessionCount: sessionCount,
-                            isLocked: isLocked,
-                            missingRequirements: missingReqs,
-                            recentSessions: recentSessions,
-                            onStartTraining: {
-                                activeTrainingSkill = skill
-                            },
-                            onQuickLog: {
-                                skillForQuickLog = skill
-                            },
-                            onViewInfo: {
-                                skillForInfoSheet = skill
-                            },
-                            onToggleMastered: {
-                                trainingStore.toggleMastered(skill.id)
-                            }
-                        )
-                        .id(skill.id)
-                    } else {
-                        // Locked skill card for Otis+ upsell
-                        PremiumLockedSkillCard(
-                            skillName: skill.name,
-                            category: category.label,
-                            onUnlock: { showOtisPlusSheet = true }
-                        )
-                        .id(skill.id)
+                    MasteredSkillCard(skill: skill) {
+                        skillForDetailSheet = skill
                     }
                 }
             }
+        }
+    }
+
+    // MARK: - Locked Section
+
+    @ViewBuilder
+    private func lockedSection(skills: [Skill]) -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            sectionHeader(Strings.Training.Progression.lockedSection)
+
+            VStack(spacing: 4) {
+                ForEach(skills) { skill in
+                    let missingReqs = trainingStore.missingRequirements(for: skill)
+                    LockedSkillRow(skill: skill, missingRequirements: missingReqs)
+                }
+            }
+            .padding(.vertical, 8)
+            .background(
+                RoundedRectangle(cornerRadius: 12, style: .continuous)
+                    .fill(colorScheme == .dark ? Color.white.opacity(0.03) : Color.black.opacity(0.02))
+            )
+        }
+    }
+
+    // MARK: - Helpers
+
+    private func sectionHeader(_ title: String) -> some View {
+        Text(title)
+            .font(.caption)
+            .fontWeight(.semibold)
+            .foregroundStyle(.tertiary)
+            .textCase(.uppercase)
+            .padding(.horizontal, 4)
+    }
+
+    private func checkForRulesAndStartTraining(_ skill: Skill) {
+        // Check if there are any unseen rules for this skill's first step
+        guard let plan = trainingStore.trainingPlan else {
+            activeTrainingSkill = skill
+            return
+        }
+
+        // For skills with steps, check the first step for prerequisite rules
+        if let steps = skill.steps, let firstStep = steps.first,
+           let ruleId = firstStep.prerequisiteRuleId,
+           !progressStore.hasSeenRule(ruleId),
+           let rule = plan.rule(withId: ruleId) {
+            // Store the skill so we can auto-start after rule acknowledgement
+            skillPendingRuleAcknowledgement = skill
+            // Show rule acknowledgment first
+            ruleToAcknowledge = rule
+        } else {
+            activeTrainingSkill = skill
         }
     }
 }

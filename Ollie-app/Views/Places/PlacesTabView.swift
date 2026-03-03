@@ -87,7 +87,8 @@ struct PlacesTabView: View {
                 SpotDetailView(
                     spotStore: spotStore,
                     spot: spot,
-                    momentsViewModel: momentsViewModel
+                    momentsViewModel: momentsViewModel,
+                    hideMapPreview: true  // Hide map when presented as sheet over map view
                 )
             }
             .sheet(item: $selectedDiscoveredSpot) { spot in

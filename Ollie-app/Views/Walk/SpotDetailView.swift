@@ -14,6 +14,9 @@ struct SpotDetailView: View {
     var momentsViewModel: MomentsViewModel?
     let spot: WalkSpot
 
+    /// When true, hides the map preview to avoid duplicate display (e.g., when presented as sheet over a map)
+    var hideMapPreview: Bool = false
+
     @Environment(\.dismiss) private var dismiss
 
     @State private var editedName: String
@@ -28,19 +31,21 @@ struct SpotDetailView: View {
     @State private var spotPhotoImage: UIImage?
 
     /// Full initializer with photo support
-    init(spotStore: SpotStore, spot: WalkSpot, momentsViewModel: MomentsViewModel) {
+    init(spotStore: SpotStore, spot: WalkSpot, momentsViewModel: MomentsViewModel, hideMapPreview: Bool = false) {
         self.spotStore = spotStore
         self.spot = spot
         self.momentsViewModel = momentsViewModel
+        self.hideMapPreview = hideMapPreview
         _editedName = State(initialValue: spot.name)
         _editedNotes = State(initialValue: spot.notes ?? "")
     }
 
     /// Convenience initializer without photo support (for legacy usage)
-    init(spotStore: SpotStore, spot: WalkSpot) {
+    init(spotStore: SpotStore, spot: WalkSpot, hideMapPreview: Bool = false) {
         self.spotStore = spotStore
         self.spot = spot
         self.momentsViewModel = nil
+        self.hideMapPreview = hideMapPreview
         _editedName = State(initialValue: spot.name)
         _editedNotes = State(initialValue: spot.notes ?? "")
     }
@@ -88,8 +93,8 @@ struct SpotDetailView: View {
                         }
                     }
                     .padding(.horizontal)
-                } else {
-                    // Map preview when no photo
+                } else if !hideMapPreview {
+                    // Map preview when no photo (hidden when presented as sheet over map)
                     ZStack(alignment: .bottomTrailing) {
                         SpotMapView(
                             latitude: currentSpot.latitude,

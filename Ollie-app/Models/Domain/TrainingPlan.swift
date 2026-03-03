@@ -9,6 +9,35 @@ import Foundation
 import OtisShared
 import SwiftUI
 
+// MARK: - Training Method
+
+/// The conditioning approach used to teach a skill
+enum TrainingMethod: String, Codable, CaseIterable {
+    case operant    // Passive - dog self-discovers behavior (deeper learning)
+    case classical  // Active - trainer guides with lure (faster initial learning)
+
+    var label: String {
+        switch self {
+        case .operant: return Strings.Training.methodOperant
+        case .classical: return Strings.Training.methodClassical
+        }
+    }
+
+    var shortDescription: String {
+        switch self {
+        case .operant: return Strings.Training.methodOperantShort
+        case .classical: return Strings.Training.methodClassicalShort
+        }
+    }
+
+    var icon: String {
+        switch self {
+        case .operant: return "brain.head.profile"
+        case .classical: return "hand.draw"
+        }
+    }
+}
+
 // MARK: - Training Category
 
 /// Categories for grouping training skills
@@ -65,9 +94,12 @@ struct Skill: Codable, Identifiable, Hashable {
     let id: String
     let icon: String
     let category: TrainingCategory
-    let week: Int
-    let priority: Int
-    let requires: [String]
+    let sortOrder: Int           // Linear order for progression (replaces week/priority)
+    let requires: [String]       // Skill IDs that must be mastered first
+    let method: TrainingMethod?
+    let durationMinutes: Int?
+    let sessionsPerDay: Int?
+    let steps: [SkillStep]?      // Ordered steps with rule gates
 
     // Localized content - looked up by skill ID
     var name: String { SkillContent.name(for: id) }
@@ -75,6 +107,13 @@ struct Skill: Codable, Identifiable, Hashable {
     var howTo: [String] { SkillContent.howTo(for: id) }
     var doneWhen: String { SkillContent.doneWhen(for: id) }
     var tips: [String] { SkillContent.tips(for: id) }
+    var mistakes: [String] { SkillContent.mistakes(for: id) }
+
+    /// Formatted session recommendation string (e.g., "2-3 min, 3x daily")
+    var sessionRecommendation: String? {
+        guard let duration = durationMinutes, let sessions = sessionsPerDay else { return nil }
+        return Strings.Training.sessionRecommendation(minutes: duration, timesPerDay: sessions)
+    }
 
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
@@ -86,7 +125,7 @@ struct Skill: Codable, Identifiable, Hashable {
 
     // Custom coding keys - exclude computed properties
     enum CodingKeys: String, CodingKey {
-        case id, icon, category, week, priority, requires
+        case id, icon, category, sortOrder, requires, method, durationMinutes, sessionsPerDay, steps
     }
 }
 
@@ -203,7 +242,8 @@ enum SkillContent {
             Strings.Training.Skills.watchMeHowTo2,
             Strings.Training.Skills.watchMeHowTo3,
             Strings.Training.Skills.watchMeHowTo4,
-            Strings.Training.Skills.watchMeHowTo5
+            Strings.Training.Skills.watchMeHowTo5,
+            Strings.Training.Skills.watchMeHowTo6
         ]
         case "touch": return [
             Strings.Training.Skills.touchHowTo1,
@@ -347,34 +387,54 @@ enum SkillContent {
         default: return []
         }
     }
-}
 
-// MARK: - Week Plan
-
-/// A weekly focus plan for training
-struct WeekPlan: Codable, Identifiable {
-    let week: Int
-    let focusSkillIds: [String]
-
-    var id: Int { week }
-
-    /// Localized title for the week
-    var title: String {
-        Strings.Training.WeekTitles.title(for: week)
-    }
-
-    // Custom coding keys - exclude computed properties
-    enum CodingKeys: String, CodingKey {
-        case week, focusSkillIds
+    static func mistakes(for skillId: String) -> [String] {
+        switch skillId {
+        case "clicker": return [
+            Strings.Training.Skills.clickerMistake1,
+            Strings.Training.Skills.clickerMistake2,
+            Strings.Training.Skills.clickerMistake3
+        ]
+        case "sit": return [
+            Strings.Training.Skills.sitMistake1,
+            Strings.Training.Skills.sitMistake2,
+            Strings.Training.Skills.sitMistake3
+        ]
+        case "watchMe": return [
+            Strings.Training.Skills.watchMeMistake1,
+            Strings.Training.Skills.watchMeMistake2,
+            Strings.Training.Skills.watchMeMistake3
+        ]
+        case "down": return [
+            Strings.Training.Skills.downMistake1,
+            Strings.Training.Skills.downMistake2,
+            Strings.Training.Skills.downMistake3
+        ]
+        case "luring": return [
+            Strings.Training.Skills.luringMistake1,
+            Strings.Training.Skills.luringMistake2
+        ]
+        case "come": return [
+            Strings.Training.Skills.comeMistake1,
+            Strings.Training.Skills.comeMistake2,
+            Strings.Training.Skills.comeMistake3
+        ]
+        case "looseLeash": return [
+            Strings.Training.Skills.looseLeashMistake1,
+            Strings.Training.Skills.looseLeashMistake2
+        ]
+        default: return []
+        }
     }
 }
 
 // MARK: - Training Plan
 
-/// The complete training plan with all skills and weekly schedules
+/// The complete training plan with all skills, preparation items, and rules
 struct TrainingPlan: Codable {
     let skills: [Skill]
-    let weekPlans: [WeekPlan]
+    let preparationItems: [PreparationItem]
+    let rules: [TrainingRule]
 
     /// Get a skill by its ID
     func skill(withId id: String) -> Skill? {
@@ -386,35 +446,47 @@ struct TrainingPlan: Codable {
         skills.filter { $0.category == category }
     }
 
-    /// Get the week plan for a specific week
-    func weekPlan(for week: Int) -> WeekPlan? {
-        weekPlans.first { $0.week == week }
+    /// Get all skills sorted by their linear order
+    var allSkillsOrdered: [Skill] {
+        skills.sorted { $0.sortOrder < $1.sortOrder }
     }
 
-    /// Get all focus skills for a specific week
-    func focusSkills(for week: Int) -> [Skill] {
-        guard let plan = weekPlan(for: week) else { return [] }
-        return plan.focusSkillIds.compactMap { skill(withId: $0) }
+    /// Get a rule by its ID
+    func rule(withId id: String) -> TrainingRule? {
+        rules.first { $0.id == id }
     }
 
-    /// Check if all requirements are met for a skill
-    func requirementsMet(for skillId: String, masteredSkillIds: Set<String>, startedSkillIds: Set<String>) -> Bool {
+    /// Get a preparation item by its ID
+    func preparationItem(withId id: String) -> PreparationItem? {
+        preparationItems.first { $0.id == id }
+    }
+
+    /// Get all equipment items
+    var equipmentItems: [PreparationItem] {
+        preparationItems.filter { $0.type == .equipment }
+    }
+
+    /// Get all concept items
+    var conceptItems: [PreparationItem] {
+        preparationItems.filter { $0.type == .concept }
+    }
+
+    /// Get rules triggered by a specific step
+    func rules(triggeredByStep stepId: String) -> [TrainingRule] {
+        rules.filter { $0.triggeredByStep == stepId }
+    }
+
+    /// Check if all requirements are met for a skill (based on mastery)
+    func requirementsMet(for skillId: String, masteredSkillIds: Set<String>) -> Bool {
         guard let skill = skill(withId: skillId) else { return false }
-
-        // A skill is unlocked if all its requirements are either mastered or at least started
-        for requiredId in skill.requires {
-            if !masteredSkillIds.contains(requiredId) && !startedSkillIds.contains(requiredId) {
-                return false
-            }
-        }
-        return true
+        return skill.requires.allSatisfy { masteredSkillIds.contains($0) }
     }
 
-    /// Get the skill IDs that are missing (requirements not met)
-    func missingRequirements(for skillId: String, startedSkillIds: Set<String>) -> [Skill] {
+    /// Get the skill IDs that are missing (requirements not mastered)
+    func missingRequirements(for skillId: String, masteredSkillIds: Set<String>) -> [Skill] {
         guard let skill = skill(withId: skillId) else { return [] }
         return skill.requires
-            .filter { !startedSkillIds.contains($0) }
+            .filter { !masteredSkillIds.contains($0) }
             .compactMap { self.skill(withId: $0) }
     }
 }

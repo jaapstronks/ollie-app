@@ -26,6 +26,8 @@
         <relationship name="medicationCompletions" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDMedicationCompletion" inverseName="profile" inverseEntity="CDMedicationCompletion"/>
         <relationship name="milestones" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDMilestone" inverseName="profile" inverseEntity="CDMilestone"/>
         <relationship name="weightMeasurements" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDWeightMeasurement" inverseName="profile" inverseEntity="CDWeightMeasurement"/>
+        <relationship name="comfortableItems" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDComfortableItem" inverseName="profile" inverseEntity="CDComfortableItem"/>
+        <relationship name="earlyMilestones" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDEarlyMilestone" inverseName="profile" inverseEntity="CDEarlyMilestone"/>
     </entity>
     <entity name="CDPuppyEvent" representedClassName="CDPuppyEvent" syncable="YES" codeGenerationType="class">
         <attribute name="cloudPhotoSynced" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
@@ -56,6 +58,16 @@
         <relationship name="profile" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDPuppyProfile" inverseName="events" inverseEntity="CDPuppyProfile"/>
         <fetchIndex name="byTimeIndex">
             <fetchIndexElement property="time" type="Binary" order="descending"/>
+        </fetchIndex>
+        <fetchIndex name="byTypeIndex">
+            <fetchIndexElement property="type" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byModifiedAtIndex">
+            <fetchIndexElement property="modifiedAt" type="Binary" order="descending"/>
+        </fetchIndex>
+        <fetchIndex name="byTimeAndTypeIndex">
+            <fetchIndexElement property="time" type="Binary" order="descending"/>
+            <fetchIndexElement property="type" type="Binary" order="ascending"/>
         </fetchIndex>
     </entity>
     <entity name="CDWalkSpot" representedClassName="CDWalkSpot" syncable="YES" codeGenerationType="class">
@@ -206,6 +218,27 @@
         <relationship name="profile" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDPuppyProfile" inverseName="weightMeasurements" inverseEntity="CDPuppyProfile"/>
         <fetchIndex name="byDateIndex">
             <fetchIndexElement property="date" type="Binary" order="descending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="CDComfortableItem" representedClassName="CDComfortableItem" syncable="YES" codeGenerationType="class">
+        <attribute name="comfortableAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="itemId" attributeType="String" defaultValueString=""/>
+        <attribute name="method" attributeType="String" defaultValueString="logged"/>
+        <attribute name="modifiedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="profile" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDPuppyProfile" inverseName="comfortableItems" inverseEntity="CDPuppyProfile"/>
+        <fetchIndex name="byItemIdIndex">
+            <fetchIndexElement property="itemId" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="CDEarlyMilestone" representedClassName="CDEarlyMilestone" syncable="YES" codeGenerationType="class">
+        <attribute name="achievedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="milestoneId" attributeType="String" defaultValueString=""/>
+        <attribute name="modifiedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="profile" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDPuppyProfile" inverseName="earlyMilestones" inverseEntity="CDPuppyProfile"/>
+        <fetchIndex name="byMilestoneIdIndex">
+            <fetchIndexElement property="milestoneId" type="Binary" order="ascending"/>
         </fetchIndex>
     </entity>
 </model>
