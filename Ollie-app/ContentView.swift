@@ -24,6 +24,7 @@ struct ContentView: View {
     @EnvironmentObject var foodRecallService: FoodRecallService
 
     @State private var showOnboarding = false
+    @State private var showAddProfileOnboarding = false
     @AppStorage(UserPreferences.Key.lastSelectedTab.rawValue) private var selectedTab = 0
     @AppStorage(UserPreferences.Key.appearanceMode.rawValue) private var appearanceMode = AppearanceMode.system.rawValue
     @State private var showLaunchScreen = true
@@ -80,7 +81,10 @@ struct ContentView: View {
                         milestoneStore: milestoneStore,
                         documentStore: documentStore,
                         contactStore: contactStore,
-                        appointmentStore: appointmentStore
+                        appointmentStore: appointmentStore,
+                        onAddDog: {
+                            showAddProfileOnboarding = true
+                        }
                     )
                 }
             }
@@ -105,6 +109,12 @@ struct ContentView: View {
             // Force dismiss onboarding if it was showing
             showOnboarding = false
         }
+        // Sheet for adding a new profile (multi-puppy)
+        .fullScreenCover(isPresented: $showAddProfileOnboarding) {
+            OnboardingView(profileStore: profileStore, isAddingProfile: true) {
+                showAddProfileOnboarding = false
+            }
+        }
         .preferredColorScheme(colorScheme)
     }
 }
@@ -125,6 +135,7 @@ struct MainTabView: View {
     @ObservedObject var documentStore: DocumentStore
     @ObservedObject var contactStore: ContactStore
     @ObservedObject var appointmentStore: AppointmentStore
+    var onAddDog: (() -> Void)?
     @EnvironmentObject var locationManager: LocationManager
     @EnvironmentObject var foodRecallService: FoodRecallService
 
@@ -152,7 +163,8 @@ struct MainTabView: View {
         milestoneStore: MilestoneStore,
         documentStore: DocumentStore,
         contactStore: ContactStore,
-        appointmentStore: AppointmentStore
+        appointmentStore: AppointmentStore,
+        onAddDog: (() -> Void)? = nil
     ) {
         self._selectedTab = selectedTab
         self.eventStore = eventStore
@@ -167,6 +179,7 @@ struct MainTabView: View {
         self.documentStore = documentStore
         self.contactStore = contactStore
         self.appointmentStore = appointmentStore
+        self.onAddDog = onAddDog
         // StateObject init with autoclosure ensures single creation
         self._viewModel = StateObject(wrappedValue: TimelineViewModel(
             eventStore: eventStore,
@@ -207,7 +220,8 @@ struct MainTabView: View {
                     weatherService: weatherService,
                     onSettingsTap: { showingSettings = true },
                     onNavigateToAppointments: { selectedTab = 3 },
-                    onNavigateToTrain: { selectedTab = 1 }
+                    onNavigateToTrain: { selectedTab = 1 },
+                    onAddDog: onAddDog
                 )
                 .tabItem {
                     Label(Strings.Tabs.today, systemImage: "pawprint.fill")
@@ -266,8 +280,8 @@ struct MainTabView: View {
                 .tag(4)
             }
 
-            // Floating Action Button (hidden on Places and Schedule tabs)
-            if selectedTab != 2 && selectedTab != 3 {
+            // Floating Action Button (only on Today tab)
+            if selectedTab == 0 {
                 HStack {
                     Spacer()
 

@@ -18,14 +18,30 @@ struct TrainTabView: View {
 
     @Environment(\.colorScheme) private var colorScheme
 
+    // Sheet state for training guides
+    @State private var showPottyGuide = false
+    @State private var showCrateGuide = false
+
+    /// Calculate crate nap percentage for guide entry card
+    private var crateNapPercentage: Int {
+        let recentNaps = eventStore.events
+            .sleeps()
+            .lastDays(14)
+
+        guard !recentNaps.isEmpty else { return 0 }
+
+        let crateNaps = recentNaps.filter { $0.napLocation == .crate }
+        return Int((Double(crateNaps.count) / Double(recentNaps.count)) * 100)
+    }
+
     // MARK: - Body
 
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 20) {
-                    // Section 1: Potty Progress
-                    pottyProgressSection
+                    // Section 1: Training Guides (Potty + Crate)
+                    guidesSection
                         .animatedAppear(delay: 0)
 
                     // Section 2: Skills
@@ -37,24 +53,51 @@ struct TrainTabView: View {
                         .animatedAppear(delay: 0.10)
                 }
                 .padding()
-                .padding(.bottom, 84) // Space for FAB
             }
             .navigationTitle(Strings.Tabs.train)
             .navigationBarTitleDisplayMode(.inline)
             .profileToolbar(profile: profileStore.profile, action: onSettingsTap)
+            // Training guide sheets
+            .sheet(isPresented: $showPottyGuide) {
+                PottyTrainingGuideSheet(
+                    streakInfo: viewModel.streakInfo,
+                    patternAnalysis: viewModel.patternAnalysis,
+                    outdoorPercentage: viewModel.outdoorPercentage,
+                    ageInWeeks: profileStore.profile?.ageInWeeks ?? 12
+                )
+            }
+            .sheet(isPresented: $showCrateGuide) {
+                CrateTrainingGuideSheet(eventStore: eventStore)
+            }
         }
     }
 
-    // MARK: - Potty Progress Section
+    // MARK: - Training Guides Section
 
     @ViewBuilder
-    private var pottyProgressSection: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            PottyProgressCard(
-                streakInfo: viewModel.streakInfo,
-                patternAnalysis: viewModel.patternAnalysis,
-                outdoorPercentage: viewModel.outdoorPercentage
-            )
+    private var guidesSection: some View {
+        VStack(spacing: 10) {
+            // Potty Training Guide
+            TrainingGuideEntryCard(
+                icon: "target",
+                title: Strings.Training.Guides.pottyTitle,
+                subtitle: Strings.Training.Guides.pottySubtitle,
+                statValue: viewModel.outdoorPercentage > 0 ? "\(viewModel.outdoorPercentage)%" : nil,
+                tintColor: .otisSuccess
+            ) {
+                showPottyGuide = true
+            }
+
+            // Crate Training Guide
+            TrainingGuideEntryCard(
+                icon: "house.fill",
+                title: Strings.Training.Guides.crateTitle,
+                subtitle: Strings.Training.Guides.crateSubtitle,
+                statValue: crateNapPercentage > 0 ? "\(crateNapPercentage)%" : nil,
+                tintColor: .indigo
+            ) {
+                showCrateGuide = true
+            }
         }
     }
 

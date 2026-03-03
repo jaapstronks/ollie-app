@@ -100,7 +100,6 @@ struct HealthTabView: View {
                     .animatedAppear(delay: 0.35)
                 }
                 .padding()
-                .padding(.bottom, 84) // Space for FAB
             }
             .navigationTitle(Strings.Tabs.health)
             .navigationBarTitleDisplayMode(.inline)
