@@ -101,7 +101,6 @@ struct DevelopmentPhaseCard: View {
     @ViewBuilder
     private func activePeriodRow(for milestone: Milestone) -> some View {
         let isSocialization = milestone.labelKey.contains("socialization")
-        let isFearPeriod = milestone.labelKey.contains("fearPeriod")
 
         HStack(spacing: 10) {
             // Icon

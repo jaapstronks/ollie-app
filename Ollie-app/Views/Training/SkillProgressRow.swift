@@ -22,6 +22,7 @@ struct SkillProgressInfo {
 struct SkillProgressRow: View {
     let info: SkillProgressInfo
     let onTap: () -> Void
+    var onQuickDone: (() -> Void)?
 
     @Environment(\.colorScheme) private var colorScheme
 
@@ -75,6 +76,11 @@ struct SkillProgressRow: View {
                             Capsule()
                                 .fill(colorScheme == .dark ? Color.white.opacity(0.1) : Color.black.opacity(0.05))
                         )
+                }
+
+                // Quick done button (only for unlocked skills)
+                if !info.isLocked, let onQuickDone = onQuickDone {
+                    QuickDoneButton(action: onQuickDone)
                 }
 
                 // Chevron
@@ -196,6 +202,49 @@ struct SkillProgressRow: View {
     }
 }
 
+// MARK: - Quick Done Button
+
+/// Compact button for instantly logging a training session
+private struct QuickDoneButton: View {
+    let action: () -> Void
+
+    @State private var showCheckmark = false
+    @Environment(\.colorScheme) private var colorScheme
+
+    var body: some View {
+        Button {
+            // Trigger the action
+            action()
+
+            // Show checkmark animation
+            withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
+                showCheckmark = true
+            }
+
+            // Reset after animation
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                withAnimation(.easeOut(duration: 0.2)) {
+                    showCheckmark = false
+                }
+            }
+        } label: {
+            ZStack {
+                Circle()
+                    .fill(showCheckmark ? Color.otisSuccess : (colorScheme == .dark ? Color.white.opacity(0.1) : Color.black.opacity(0.06)))
+                    .frame(width: 32, height: 32)
+
+                Image(systemName: showCheckmark ? "checkmark" : "plus")
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundStyle(showCheckmark ? .white : .otisAccent)
+            }
+            .scaleEffect(showCheckmark ? 1.1 : 1.0)
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(Strings.Training.quickDone)
+        .accessibilityHint(Strings.Training.quickDoneHint)
+    }
+}
+
 // MARK: - Preview
 
 #Preview {
@@ -208,10 +257,11 @@ struct SkillProgressRow: View {
         method: .classical,
         durationMinutes: 3,
         sessionsPerDay: 3,
-        steps: nil
+        steps: nil,
+        phases: nil
     )
 
-    return ScrollView {
+    ScrollView {
         VStack(spacing: 8) {
             SkillProgressRow(
                 info: SkillProgressInfo(
@@ -222,7 +272,8 @@ struct SkillProgressRow: View {
                     isNextUp: true,
                     missingRequirements: []
                 ),
-                onTap: {}
+                onTap: {},
+                onQuickDone: { print("Quick done!") }
             )
 
             SkillProgressRow(
@@ -234,7 +285,8 @@ struct SkillProgressRow: View {
                     isNextUp: false,
                     missingRequirements: []
                 ),
-                onTap: {}
+                onTap: {},
+                onQuickDone: { print("Quick done!") }
             )
 
             SkillProgressRow(

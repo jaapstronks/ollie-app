@@ -152,7 +152,8 @@ private let previewSkill = Skill(
     method: nil,
     durationMinutes: 3,
     sessionsPerDay: 3,
-    steps: nil
+    steps: nil,
+    phases: nil
 )
 
 #Preview {

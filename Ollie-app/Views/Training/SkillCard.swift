@@ -22,6 +22,7 @@ struct SkillCard: View {
     let onToggleMastered: () -> Void
 
     @State private var isExpanded: Bool = false
+    @State private var showMistakes: Bool = false
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
@@ -59,6 +60,13 @@ struct SkillCard: View {
                             HStack(spacing: 6) {
                                 // Status badge
                                 statusBadge
+
+                                // Method badge (if available)
+                                if let method = skill.method {
+                                    Text("•")
+                                        .foregroundStyle(.tertiary)
+                                    methodBadge(method)
+                                }
 
                                 // Session count
                                 if sessionCount > 0 {
@@ -143,6 +151,19 @@ struct SkillCard: View {
         .foregroundStyle(status.color)
     }
 
+    // MARK: - Method Badge
+
+    @ViewBuilder
+    private func methodBadge(_ method: TrainingMethod) -> some View {
+        HStack(spacing: 3) {
+            Image(systemName: method.icon)
+                .font(.system(size: 9))
+            Text(method.label)
+                .font(.caption2)
+        }
+        .foregroundStyle(method == .operant ? Color.purple : Color.blue)
+    }
+
     // MARK: - Expanded Actions
 
     @ViewBuilder
@@ -179,6 +200,82 @@ struct SkillCard: View {
                             .foregroundStyle(status == .mastered ? Color.otisSuccess : .secondary)
                         }
                         .buttonStyle(ScaleButtonStyle())
+                    }
+                }
+                .padding(.horizontal)
+                .padding(.vertical, 8)
+
+                Divider()
+                    .padding(.horizontal)
+            }
+
+            // Session recommendation (if available)
+            if let recommendation = skill.sessionRecommendation {
+                HStack(spacing: 6) {
+                    Image(systemName: "timer")
+                        .font(.caption2)
+                        .foregroundStyle(.teal)
+
+                    Text(recommendation)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+
+                    Spacer()
+                }
+                .padding(.horizontal)
+                .padding(.vertical, 6)
+
+                Divider()
+                    .padding(.horizontal)
+            }
+
+            // Common mistakes section (if available)
+            if !skill.mistakes.isEmpty {
+                VStack(alignment: .leading, spacing: 6) {
+                    Button {
+                        withAnimation(reduceMotion ? nil : .spring(response: 0.25, dampingFraction: 0.8)) {
+                            showMistakes.toggle()
+                        }
+                        HapticFeedback.light()
+                    } label: {
+                        HStack(spacing: 6) {
+                            Image(systemName: "exclamationmark.triangle.fill")
+                                .font(.caption2)
+                                .foregroundStyle(.orange)
+
+                            Text(Strings.Training.commonMistakes)
+                                .font(.caption)
+                                .fontWeight(.medium)
+                                .foregroundStyle(.orange)
+
+                            Spacer()
+
+                            Image(systemName: "chevron.down")
+                                .font(.system(size: 10))
+                                .fontWeight(.semibold)
+                                .foregroundStyle(.tertiary)
+                                .rotationEffect(.degrees(showMistakes ? 180 : 0))
+                        }
+                        .contentShape(Rectangle())
+                    }
+                    .buttonStyle(.plain)
+
+                    if showMistakes {
+                        VStack(alignment: .leading, spacing: 4) {
+                            ForEach(skill.mistakes, id: \.self) { mistake in
+                                HStack(alignment: .top, spacing: 6) {
+                                    Text("•")
+                                        .font(.caption)
+                                        .foregroundStyle(.orange.opacity(0.7))
+
+                                    Text(mistake)
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                        .fixedSize(horizontal: false, vertical: true)
+                                }
+                            }
+                        }
+                        .transition(reduceMotion ? .opacity : .opacity.combined(with: .move(edge: .top)))
                     }
                 }
                 .padding(.horizontal)
@@ -361,9 +458,13 @@ private let previewSkill = Skill(
     id: "sit",
     icon: "arrow.down.to.line",
     category: .basicCommands,
-    week: 2,
-    priority: 1,
-    requires: ["luring"]
+    sortOrder: 7,
+    requires: ["luring"],
+    method: .classical,
+    durationMinutes: 3,
+    sessionsPerDay: 3,
+    steps: nil,
+    phases: nil
 )
 
 #Preview {

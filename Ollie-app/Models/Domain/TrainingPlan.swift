@@ -100,6 +100,7 @@ struct Skill: Codable, Identifiable, Hashable {
     let durationMinutes: Int?
     let sessionsPerDay: Int?
     let steps: [SkillStep]?      // Ordered steps with rule gates
+    let phases: [SkillPhase]?    // Learning phases for progressive disclosure
 
     // Localized content - looked up by skill ID
     var name: String { SkillContent.name(for: id) }
@@ -115,6 +116,19 @@ struct Skill: Codable, Identifiable, Hashable {
         return Strings.Training.sessionRecommendation(minutes: duration, timesPerDay: sessions)
     }
 
+    /// Get effective phases - returns defined phases or a single fallback phase with all steps
+    var effectivePhases: [SkillPhase] {
+        if let phases = phases, !phases.isEmpty { return phases }
+        // Fallback: single phase with all steps
+        return [SkillPhase(id: "all", howToStepIndices: Array(0..<howTo.count), tipIndices: nil)]
+    }
+
+    /// Whether this skill has multiple learning phases defined
+    var hasMultiplePhases: Bool {
+        guard let phases = phases else { return false }
+        return phases.count > 1
+    }
+
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
@@ -125,7 +139,7 @@ struct Skill: Codable, Identifiable, Hashable {
 
     // Custom coding keys - exclude computed properties
     enum CodingKeys: String, CodingKey {
-        case id, icon, category, sortOrder, requires, method, durationMinutes, sessionsPerDay, steps
+        case id, icon, category, sortOrder, requires, method, durationMinutes, sessionsPerDay, steps, phases
     }
 }
 
@@ -235,7 +249,13 @@ enum SkillContent {
             Strings.Training.Skills.sitHowTo2,
             Strings.Training.Skills.sitHowTo3,
             Strings.Training.Skills.sitHowTo4,
-            Strings.Training.Skills.sitHowTo5
+            Strings.Training.Skills.sitHowTo5,
+            Strings.Training.Skills.sitHowTo6,
+            Strings.Training.Skills.sitHowTo7,
+            Strings.Training.Skills.sitHowTo8,
+            Strings.Training.Skills.sitHowTo9,
+            Strings.Training.Skills.sitHowTo10,
+            Strings.Training.Skills.sitHowTo11
         ]
         case "watchMe": return [
             Strings.Training.Skills.watchMeHowTo1,
@@ -243,7 +263,11 @@ enum SkillContent {
             Strings.Training.Skills.watchMeHowTo3,
             Strings.Training.Skills.watchMeHowTo4,
             Strings.Training.Skills.watchMeHowTo5,
-            Strings.Training.Skills.watchMeHowTo6
+            Strings.Training.Skills.watchMeHowTo6,
+            Strings.Training.Skills.watchMeHowTo7,
+            Strings.Training.Skills.watchMeHowTo8,
+            Strings.Training.Skills.watchMeHowTo9,
+            Strings.Training.Skills.watchMeHowTo10
         ]
         case "touch": return [
             Strings.Training.Skills.touchHowTo1,
@@ -257,7 +281,12 @@ enum SkillContent {
             Strings.Training.Skills.looseLeashHowTo2,
             Strings.Training.Skills.looseLeashHowTo3,
             Strings.Training.Skills.looseLeashHowTo4,
-            Strings.Training.Skills.looseLeashHowTo5
+            Strings.Training.Skills.looseLeashHowTo5,
+            Strings.Training.Skills.looseLeashHowTo6,
+            Strings.Training.Skills.looseLeashHowTo7,
+            Strings.Training.Skills.looseLeashHowTo8,
+            Strings.Training.Skills.looseLeashHowTo9,
+            Strings.Training.Skills.looseLeashHowTo10
         ]
         case "down": return [
             Strings.Training.Skills.downHowTo1,
@@ -271,7 +300,14 @@ enum SkillContent {
             Strings.Training.Skills.comeHowTo2,
             Strings.Training.Skills.comeHowTo3,
             Strings.Training.Skills.comeHowTo4,
-            Strings.Training.Skills.comeHowTo5
+            Strings.Training.Skills.comeHowTo5,
+            Strings.Training.Skills.comeHowTo6,
+            Strings.Training.Skills.comeHowTo7,
+            Strings.Training.Skills.comeHowTo8,
+            Strings.Training.Skills.comeHowTo9,
+            Strings.Training.Skills.comeHowTo10,
+            Strings.Training.Skills.comeHowTo11,
+            Strings.Training.Skills.comeHowTo12
         ]
         case "wait": return [
             Strings.Training.Skills.waitHowTo1,
@@ -334,7 +370,9 @@ enum SkillContent {
             Strings.Training.Skills.sitTip1,
             Strings.Training.Skills.sitTip2,
             Strings.Training.Skills.sitTip3,
-            Strings.Training.Skills.sitTip4
+            Strings.Training.Skills.sitTip4,
+            Strings.Training.Skills.sitTip5,
+            Strings.Training.Skills.sitTip6
         ]
         case "watchMe": return [
             Strings.Training.Skills.watchMeTip1,
@@ -364,7 +402,9 @@ enum SkillContent {
             Strings.Training.Skills.comeTip1,
             Strings.Training.Skills.comeTip2,
             Strings.Training.Skills.comeTip3,
-            Strings.Training.Skills.comeTip4
+            Strings.Training.Skills.comeTip4,
+            Strings.Training.Skills.comeTip5,
+            Strings.Training.Skills.comeTip6
         ]
         case "wait": return [
             Strings.Training.Skills.waitTip1,
@@ -398,7 +438,8 @@ enum SkillContent {
         case "sit": return [
             Strings.Training.Skills.sitMistake1,
             Strings.Training.Skills.sitMistake2,
-            Strings.Training.Skills.sitMistake3
+            Strings.Training.Skills.sitMistake3,
+            Strings.Training.Skills.sitMistake4
         ]
         case "watchMe": return [
             Strings.Training.Skills.watchMeMistake1,
@@ -417,7 +458,8 @@ enum SkillContent {
         case "come": return [
             Strings.Training.Skills.comeMistake1,
             Strings.Training.Skills.comeMistake2,
-            Strings.Training.Skills.comeMistake3
+            Strings.Training.Skills.comeMistake3,
+            Strings.Training.Skills.comeMistake4
         ]
         case "looseLeash": return [
             Strings.Training.Skills.looseLeashMistake1,

@@ -226,7 +226,8 @@ private let previewSkill = Skill(
     method: .classical,
     durationMinutes: 3,
     sessionsPerDay: 3,
-    steps: nil
+    steps: nil,
+    phases: nil
 )
 
 #Preview {

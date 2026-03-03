@@ -113,19 +113,19 @@ struct PreparationSection: View {
             switch conceptType {
             case .operant:
                 OperantConditioningSheet(
-                    onAcknowledge: handleConceptAcknowledge,
+                    onAcknowledge: { handleConceptAcknowledge() },
                     onDismiss: { sheetToShow = nil }
                 )
                 .presentationDetents([.large])
             case .classical:
                 ClassicalConditioningSheet(
-                    onAcknowledge: handleConceptAcknowledge,
+                    onAcknowledge: { handleConceptAcknowledge() },
                     onDismiss: { sheetToShow = nil }
                 )
                 .presentationDetents([.large])
             case .timing:
                 ClickTimingSheet(
-                    onAcknowledge: handleConceptAcknowledge,
+                    onAcknowledge: { handleConceptAcknowledge() },
                     onDismiss: { sheetToShow = nil }
                 )
                 .presentationDetents([.large])
