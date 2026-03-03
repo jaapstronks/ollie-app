@@ -33,11 +33,17 @@ struct ContentView: View {
     }
 
     /// Determine if we should show onboarding
+    /// - Skip if running in UI testing mode
     /// - Skip if user is a participant (accepted a share invitation)
     /// - Skip if user already has a profile
     private var shouldShowOnboarding: Bool {
         // Never show onboarding while loading
         guard !profileStore.isLoading else { return false }
+
+        // Skip onboarding in UI testing mode (for automated screenshots)
+        if SeedData.isUITesting {
+            return false
+        }
 
         // Don't show onboarding if user is a participant with shared data
         if cloudKit.isParticipant {
@@ -130,6 +136,7 @@ struct MainTabView: View {
     @State private var selectedPhotoEvent: PuppyEvent?
     @State private var showingArrivalPhotoPrompt = false
     @AppStorage("hasShownArrivalPhotoPrompt") private var hasShownArrivalPhotoPrompt = false
+    @AppStorage(UserPreferences.Key.showFloatingClicker.rawValue) private var showFloatingClicker = false
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     init(
@@ -287,6 +294,19 @@ struct MainTabView: View {
                     .padding(.bottom, 60) // Above tab bar
                 }
             }
+
+            // Floating Clicker Button (enabled via settings)
+            if showFloatingClicker {
+                VStack {
+                    Spacer()
+                    HStack {
+                        FloatingClickerButton()
+                            .padding(.leading, 16)
+                            .padding(.bottom, 100) // Above tab bar
+                        Spacer()
+                    }
+                }
+            }
         }  // Close ZStack
         }  // Close VStack
         // Settings sheet (accessed via gear icon in Today view)
@@ -347,6 +367,9 @@ struct MainTabView: View {
     /// Check if we should show the arrival photo prompt
     /// Conditions: no profile photo, home date has passed, hasn't been shown before
     private func checkForArrivalPhotoPrompt() {
+        // Skip in UI testing mode (for screenshots)
+        guard !SeedData.isUITesting else { return }
+
         guard !hasShownArrivalPhotoPrompt,
               let profile = profileStore.profile,
               profile.profilePhotoFilename == nil else {

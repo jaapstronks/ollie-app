@@ -1,0 +1,266 @@
+//
+//  SkillProgressRow.swift
+//  Otis-app
+//
+//  Unified row component showing skill status in the all-skills list
+//
+
+import SwiftUI
+import OtisShared
+
+/// Data structure for displaying a skill with its status
+struct SkillProgressInfo {
+    let skill: Skill
+    let status: SkillStatus
+    let sessionCount: Int
+    let isLocked: Bool
+    let isNextUp: Bool
+    let missingRequirements: [Skill]
+}
+
+/// Unified row for displaying any skill with its current status
+struct SkillProgressRow: View {
+    let info: SkillProgressInfo
+    let onTap: () -> Void
+
+    @Environment(\.colorScheme) private var colorScheme
+
+    var body: some View {
+        Button(action: onTap) {
+            HStack(spacing: 12) {
+                // Status indicator
+                statusIndicator
+
+                // Icon
+                Image(systemName: info.skill.icon)
+                    .font(.system(size: 20))
+                    .foregroundStyle(info.isLocked ? .secondary : iconColor)
+                    .frame(width: 28)
+
+                // Name and details
+                VStack(alignment: .leading, spacing: 2) {
+                    HStack(spacing: 6) {
+                        Text(info.skill.name)
+                            .font(.body)
+                            .fontWeight(info.isNextUp ? .semibold : .regular)
+                            .foregroundStyle(info.isLocked ? .secondary : .primary)
+
+                        if info.isNextUp {
+                            Text(Strings.Training.Progression.nextUp)
+                                .font(.caption2)
+                                .fontWeight(.semibold)
+                                .foregroundStyle(.white)
+                                .padding(.horizontal, 6)
+                                .padding(.vertical, 2)
+                                .background(Color.otisAccent)
+                                .clipShape(Capsule())
+                        }
+                    }
+
+                    // Subtitle based on status
+                    subtitleView
+                }
+
+                Spacer()
+
+                // Session count badge (if any sessions)
+                if info.sessionCount > 0 && !info.isLocked {
+                    Text("\(info.sessionCount)")
+                        .font(.caption)
+                        .fontWeight(.medium)
+                        .foregroundStyle(.secondary)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 4)
+                        .background(
+                            Capsule()
+                                .fill(colorScheme == .dark ? Color.white.opacity(0.1) : Color.black.opacity(0.05))
+                        )
+                }
+
+                // Chevron
+                if !info.isLocked {
+                    Image(systemName: "chevron.right")
+                        .font(.caption)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(.tertiary)
+                }
+            }
+            .padding(.vertical, 10)
+            .padding(.horizontal, 12)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .disabled(info.isLocked)
+        .opacity(info.isLocked ? 0.6 : 1.0)
+        .background(
+            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                .fill(rowBackground)
+        )
+    }
+
+    // MARK: - Status Indicator
+
+    @ViewBuilder
+    private var statusIndicator: some View {
+        ZStack {
+            Circle()
+                .fill(statusColor.opacity(0.2))
+                .frame(width: 24, height: 24)
+
+            Image(systemName: statusIcon)
+                .font(.system(size: 10, weight: .bold))
+                .foregroundStyle(statusColor)
+        }
+    }
+
+    private var statusIcon: String {
+        if info.isLocked {
+            return "lock.fill"
+        }
+        switch info.status {
+        case .notStarted: return "circle"
+        case .started: return "play.fill"
+        case .practicing: return "arrow.clockwise"
+        case .mastered: return "checkmark"
+        }
+    }
+
+    private var statusColor: Color {
+        if info.isLocked {
+            return .secondary
+        }
+        switch info.status {
+        case .notStarted: return .secondary
+        case .started: return .otisInfo
+        case .practicing: return .otisWarning
+        case .mastered: return .otisSuccess
+        }
+    }
+
+    private var iconColor: Color {
+        switch info.status {
+        case .mastered: return .otisSuccess
+        default: return .otisAccent
+        }
+    }
+
+    // MARK: - Subtitle View
+
+    @ViewBuilder
+    private var subtitleView: some View {
+        if info.isLocked {
+            if !info.missingRequirements.isEmpty {
+                HStack(spacing: 4) {
+                    Image(systemName: "lock.fill")
+                        .font(.system(size: 9))
+                    Text(Strings.Training.Progression.masteredSkillsRequired(info.missingRequirements.map { $0.name }.joined(separator: ", ")))
+                        .font(.caption)
+                }
+                .foregroundStyle(.tertiary)
+            }
+        } else {
+            HStack(spacing: 6) {
+                Text(info.status.label)
+                    .font(.caption)
+                    .foregroundStyle(statusColor)
+
+                if let method = info.skill.method {
+                    Text("•")
+                        .foregroundStyle(.tertiary)
+                    HStack(spacing: 3) {
+                        Image(systemName: method.icon)
+                            .font(.system(size: 9))
+                        Text(method.label)
+                            .font(.caption2)
+                    }
+                    .foregroundStyle(method == .operant ? Color.purple : Color.blue)
+                }
+            }
+        }
+    }
+
+    // MARK: - Background
+
+    private var rowBackground: Color {
+        if info.isNextUp {
+            return colorScheme == .dark
+                ? Color.otisAccent.opacity(0.15)
+                : Color.otisAccent.opacity(0.08)
+        }
+        if info.status == .mastered {
+            return colorScheme == .dark
+                ? Color.otisSuccess.opacity(0.1)
+                : Color.otisSuccess.opacity(0.05)
+        }
+        return .clear
+    }
+}
+
+// MARK: - Preview
+
+#Preview {
+    let skill = Skill(
+        id: "sit",
+        icon: "arrow.down.to.line",
+        category: .basicCommands,
+        sortOrder: 7,
+        requires: ["luring"],
+        method: .classical,
+        durationMinutes: 3,
+        sessionsPerDay: 3,
+        steps: nil
+    )
+
+    return ScrollView {
+        VStack(spacing: 8) {
+            SkillProgressRow(
+                info: SkillProgressInfo(
+                    skill: skill,
+                    status: .notStarted,
+                    sessionCount: 0,
+                    isLocked: false,
+                    isNextUp: true,
+                    missingRequirements: []
+                ),
+                onTap: {}
+            )
+
+            SkillProgressRow(
+                info: SkillProgressInfo(
+                    skill: skill,
+                    status: .practicing,
+                    sessionCount: 5,
+                    isLocked: false,
+                    isNextUp: false,
+                    missingRequirements: []
+                ),
+                onTap: {}
+            )
+
+            SkillProgressRow(
+                info: SkillProgressInfo(
+                    skill: skill,
+                    status: .mastered,
+                    sessionCount: 12,
+                    isLocked: false,
+                    isNextUp: false,
+                    missingRequirements: []
+                ),
+                onTap: {}
+            )
+
+            SkillProgressRow(
+                info: SkillProgressInfo(
+                    skill: skill,
+                    status: .notStarted,
+                    sessionCount: 0,
+                    isLocked: true,
+                    isNextUp: false,
+                    missingRequirements: [skill]
+                ),
+                onTap: {}
+            )
+        }
+        .padding()
+    }
+}

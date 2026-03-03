@@ -44,6 +44,7 @@ struct TrainingView: View {
                             progressStore: progressStore,
                             preparationItems: plan.preparationItems
                         )
+                        .withConceptSheets()
                     }
 
                     // Show locked message for training content
@@ -199,46 +200,13 @@ struct TrainingView: View {
 
     @ViewBuilder
     private var trainingContent: some View {
-        // Next Up card (prominent)
-        if let nextSkill = trainingStore.nextSkill {
-            let status = trainingStore.status(for: nextSkill.id)
-            let sessionCount = trainingStore.sessionCount(for: nextSkill.id)
-
-            NextUpCard(
-                skill: nextSkill,
-                status: status,
-                sessionCount: sessionCount,
-                onStartTraining: {
-                    checkForRulesAndStartTraining(nextSkill)
-                },
-                onViewInfo: {
-                    skillForDetailSheet = nextSkill
-                }
-            )
-        } else if trainingStore.masteryProgress.mastered == trainingStore.masteryProgress.total {
-            // All skills mastered celebration
+        // All skills mastered celebration (if applicable)
+        if trainingStore.masteryProgress.mastered == trainingStore.masteryProgress.total {
             allMasteredCard
         }
 
-        // In Progress skills (unlocked but not the next one)
-        let inProgressSkills = trainingStore.unlockedSkills.filter { skill in
-            skill.id != trainingStore.nextSkill?.id
-        }
-        if !inProgressSkills.isEmpty {
-            inProgressSection(skills: inProgressSkills)
-        }
-
-        // Mastered skills (compact list)
-        let masteredSkills = trainingStore.masteredSkillsList
-        if !masteredSkills.isEmpty {
-            masteredSection(skills: masteredSkills)
-        }
-
-        // Locked skills (subtle, shows what's coming)
-        let lockedSkills = trainingStore.lockedSkills
-        if !lockedSkills.isEmpty {
-            lockedSection(skills: lockedSkills)
-        }
+        // Unified skill list
+        allSkillsSection
 
         // Rules Reference link
         if let plan = trainingStore.trainingPlan {
@@ -248,6 +216,50 @@ struct TrainingView: View {
                     seenRulesCount: seenCount,
                     onTap: { showRulesReference = true }
                 )
+            }
+        }
+    }
+
+    // MARK: - All Skills Section
+
+    @ViewBuilder
+    private var allSkillsSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            // Section header
+            HStack {
+                Text(Strings.Training.skillTracker)
+                    .font(.headline)
+                    .fontWeight(.semibold)
+
+                Spacer()
+
+                // Progress indicator
+                let progress = trainingStore.masteryProgress
+                Text("\(progress.mastered)/\(progress.total)")
+                    .font(.caption)
+                    .fontWeight(.medium)
+                    .foregroundStyle(.secondary)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 4)
+                    .background(
+                        Capsule()
+                            .fill(colorScheme == .dark ? Color.white.opacity(0.1) : Color.black.opacity(0.05))
+                    )
+            }
+
+            // Skill rows
+            VStack(spacing: 6) {
+                ForEach(trainingStore.allSkillsWithStatus, id: \.skill.id) { info in
+                    SkillProgressRow(info: info) {
+                        if info.isNextUp {
+                            // For next up skill, start training (with rule check)
+                            checkForRulesAndStartTraining(info.skill)
+                        } else if !info.isLocked {
+                            // For other unlocked skills, show detail sheet
+                            skillForDetailSheet = info.skill
+                        }
+                    }
+                }
             }
         }
     }
@@ -269,80 +281,7 @@ struct TrainingView: View {
         .glassStatusCard(tintColor: .yellow.opacity(0.3))
     }
 
-    // MARK: - In Progress Section
-
-    @ViewBuilder
-    private func inProgressSection(skills: [Skill]) -> some View {
-        VStack(alignment: .leading, spacing: 12) {
-            sectionHeader(Strings.Training.Progression.inProgressSection)
-
-            ForEach(skills) { skill in
-                let status = trainingStore.status(for: skill.id)
-                let sessionCount = trainingStore.sessionCount(for: skill.id)
-                let missingReqs = trainingStore.missingRequirements(for: skill)
-
-                CompactSkillCard(
-                    skill: skill,
-                    status: status,
-                    sessionCount: sessionCount,
-                    isLocked: false,
-                    missingRequirements: missingReqs,
-                    onTap: {
-                        skillForDetailSheet = skill
-                    }
-                )
-            }
-        }
-    }
-
-    // MARK: - Mastered Section
-
-    @ViewBuilder
-    private func masteredSection(skills: [Skill]) -> some View {
-        VStack(alignment: .leading, spacing: 12) {
-            sectionHeader(Strings.Training.Progression.masteredSection)
-
-            VStack(spacing: 8) {
-                ForEach(skills) { skill in
-                    MasteredSkillCard(skill: skill) {
-                        skillForDetailSheet = skill
-                    }
-                }
-            }
-        }
-    }
-
-    // MARK: - Locked Section
-
-    @ViewBuilder
-    private func lockedSection(skills: [Skill]) -> some View {
-        VStack(alignment: .leading, spacing: 12) {
-            sectionHeader(Strings.Training.Progression.lockedSection)
-
-            VStack(spacing: 4) {
-                ForEach(skills) { skill in
-                    let missingReqs = trainingStore.missingRequirements(for: skill)
-                    LockedSkillRow(skill: skill, missingRequirements: missingReqs)
-                }
-            }
-            .padding(.vertical, 8)
-            .background(
-                RoundedRectangle(cornerRadius: 12, style: .continuous)
-                    .fill(colorScheme == .dark ? Color.white.opacity(0.03) : Color.black.opacity(0.02))
-            )
-        }
-    }
-
     // MARK: - Helpers
-
-    private func sectionHeader(_ title: String) -> some View {
-        Text(title)
-            .font(.caption)
-            .fontWeight(.semibold)
-            .foregroundStyle(.tertiary)
-            .textCase(.uppercase)
-            .padding(.horizontal, 4)
-    }
 
     private func checkForRulesAndStartTraining(_ skill: Skill) {
         // Check if there are any unseen rules for this skill's first step

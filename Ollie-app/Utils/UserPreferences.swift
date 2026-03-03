@@ -160,7 +160,7 @@ enum PreferredMapsApp: String, CaseIterable, Identifiable {
     }
 
     /// Check if the app is available on this device
-    var isAvailable: Bool {
+    @MainActor var isAvailable: Bool {
         switch self {
         case .appleMaps:
             return true // Always available on iOS
@@ -192,11 +192,14 @@ enum UserPreferences {
         case atmosphereWeather = "atmosphereWeather"
         case atmosphereState = "atmosphereState"
         case atmosphereSeasonal = "atmosphereSeasonal"
+
+        // Training settings
+        case showFloatingClicker = "showFloatingClicker"
     }
 
     // MARK: - Defaults
 
-    static let defaults: [String: Any] = [
+    nonisolated(unsafe) static let defaults: [String: Any] = [
         Key.lastSelectedTab.rawValue: 0,
         Key.hasCompletedOnboarding.rawValue: false,
         Key.showTimeSinceLastPlas.rawValue: true,
@@ -211,7 +214,10 @@ enum UserPreferences {
         Key.atmosphereTimeOfDay.rawValue: true,
         Key.atmosphereWeather.rawValue: true,
         Key.atmosphereState.rawValue: true,
-        Key.atmosphereSeasonal.rawValue: false
+        Key.atmosphereSeasonal.rawValue: false,
+
+        // Training defaults
+        Key.showFloatingClicker.rawValue: false
     ]
 
     /// Register default values on app launch

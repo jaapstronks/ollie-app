@@ -21,9 +21,6 @@ final class TrainingPlanStore: BaseStore {
     @Published private(set) var masteredSkills: [MasteredSkill] = []
     @Published private(set) var isLoading: Bool = true
 
-    /// The start date for the 6-week training program
-    static let startDate = Date.fromDateString("2026-02-14") ?? Date()
-
     private var eventStore: EventStore?
 
     private let decoder: JSONDecoder = {
@@ -66,24 +63,42 @@ final class TrainingPlanStore: BaseStore {
         self.eventStore = eventStore
     }
 
-    // MARK: - Week Calculation
+    // MARK: - Linear Progression
 
-    /// Calculate the current week number (1-6+)
-    var currentWeek: Int {
-        let calendar = Calendar.current
-        let days = calendar.dateComponents([.day], from: Self.startDate, to: Date()).day ?? 0
-        let week = (days / 7) + 1
-        return max(1, week)
+    /// All skills in linear order
+    var allSkillsOrdered: [Skill] {
+        trainingPlan?.allSkillsOrdered ?? []
     }
 
-    /// Get the week plan for the current week
-    var currentWeekPlan: WeekPlan? {
-        trainingPlan?.weekPlan(for: min(currentWeek, 6))
+    /// Next skill to learn (first non-mastered skill whose requirements are met)
+    var nextSkill: Skill? {
+        allSkillsOrdered.first { skill in
+            !masteredSkillIds.contains(skill.id) && isUnlocked(skill)
+        }
     }
 
-    /// Get focus skills for the current week
-    var currentFocusSkills: [Skill] {
-        trainingPlan?.focusSkills(for: min(currentWeek, 6)) ?? []
+    /// Skills that are unlocked (requirements met, not yet mastered)
+    var unlockedSkills: [Skill] {
+        allSkillsOrdered.filter { skill in
+            !masteredSkillIds.contains(skill.id) && isUnlocked(skill)
+        }
+    }
+
+    /// Skills that have been mastered
+    var masteredSkillsList: [Skill] {
+        allSkillsOrdered.filter { masteredSkillIds.contains($0.id) }
+    }
+
+    /// Skills that are locked (requirements not met)
+    var lockedSkills: [Skill] {
+        allSkillsOrdered.filter { skill in
+            !masteredSkillIds.contains(skill.id) && !isUnlocked(skill)
+        }
+    }
+
+    /// Check if a skill is unlocked (all requirements mastered)
+    func isUnlocked(_ skill: Skill) -> Bool {
+        skill.requires.allSatisfy { masteredSkillIds.contains($0) }
     }
 
     // MARK: - Session Counts
@@ -92,8 +107,10 @@ final class TrainingPlanStore: BaseStore {
     func sessionCount(for skillId: String) -> Int {
         guard let eventStore = eventStore else { return 0 }
 
+        // Look back one year for training sessions
+        let oneYearAgo = Calendar.current.date(byAdding: .year, value: -1, to: Date()) ?? Date()
         let allEvents = eventStore.getEvents(
-            from: Self.startDate,
+            from: oneYearAgo,
             to: Date()
         )
 
@@ -128,20 +145,15 @@ final class TrainingPlanStore: BaseStore {
         return SkillStatusCalculations.calculateStatus(sessionCount: count, isMastered: isMastered)
     }
 
-    /// Check if a skill is locked
+    /// Check if a skill is locked (requirements not met)
     func isLocked(_ skill: Skill) -> Bool {
-        guard let trainingPlan = trainingPlan else { return false }
-        return SkillStatusCalculations.isLocked(
-            skill: skill,
-            startedSkillIds: startedSkillIds,
-            trainingPlan: trainingPlan
-        )
+        !isUnlocked(skill)
     }
 
     /// Get missing requirements for a locked skill
     func missingRequirements(for skill: Skill) -> [Skill] {
         guard let trainingPlan = trainingPlan else { return [] }
-        return trainingPlan.missingRequirements(for: skill.id, startedSkillIds: startedSkillIds)
+        return trainingPlan.missingRequirements(for: skill.id, masteredSkillIds: masteredSkillIds)
     }
 
     // MARK: - Progress Calculation
@@ -167,11 +179,36 @@ final class TrainingPlanStore: BaseStore {
         )
     }
 
-    /// Count of skills started this week
-    var weekProgress: (started: Int, total: Int) {
-        let focusSkillIds = Set(currentFocusSkills.map { $0.id })
-        let startedCount = focusSkillIds.intersection(startedSkillIds).count
-        return (startedCount, focusSkillIds.count)
+    /// Count of mastered skills vs total
+    var masteryProgress: (mastered: Int, total: Int) {
+        guard let trainingPlan = trainingPlan else { return (0, 0) }
+        return (masteredSkillIds.count, trainingPlan.skills.count)
+    }
+
+    // MARK: - All Skills With Status
+
+    /// Get all skills with their full status information for the unified list view
+    var allSkillsWithStatus: [SkillProgressInfo] {
+        guard trainingPlan != nil else { return [] }
+
+        let nextSkillId = nextSkill?.id
+
+        return allSkillsOrdered.map { skill in
+            let skillStatus = status(for: skill.id)
+            let sessions = sessionCount(for: skill.id)
+            let locked = isLocked(skill)
+            let isNext = skill.id == nextSkillId
+            let missing = missingRequirements(for: skill)
+
+            return SkillProgressInfo(
+                skill: skill,
+                status: skillStatus,
+                sessionCount: sessions,
+                isLocked: locked,
+                isNextUp: isNext,
+                missingRequirements: missing
+            )
+        }
     }
 
     // MARK: - Recent Sessions

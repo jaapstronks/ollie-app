@@ -7,12 +7,27 @@
 
 import SwiftUI
 
+/// Concept type for identifying which sheet to show
+enum ConceptType: Identifiable {
+    case operant
+    case classical
+    case timing
+
+    var id: String {
+        switch self {
+        case .operant: return "operant"
+        case .classical: return "classical"
+        case .timing: return "timing"
+        }
+    }
+}
+
 /// Section showing preparation items that must be completed before training
 struct PreparationSection: View {
     @ObservedObject var progressStore: TrainingProgressStore
     let preparationItems: [PreparationItem]
 
-    @State private var expandedConceptId: String?
+    @State private var sheetToShow: ConceptType?
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
@@ -125,69 +140,114 @@ struct PreparationSection: View {
         .accessibilityLabel(Strings.Training.Preparation.itemToggleAccessibility(name: item.name, isCompleted: isCompleted))
     }
 
-    // MARK: - Concept Row (with expandable explanation)
+    // MARK: - Concept Row (with sheet presentation)
 
     @ViewBuilder
     private func conceptRow(for item: PreparationItem) -> some View {
         let isCompleted = progressStore.isPreparationItemCompleted(item.id)
-        let isExpanded = expandedConceptId == item.id
 
-        VStack(alignment: .leading, spacing: 8) {
-            HStack(spacing: 12) {
-                // Checkbox
-                Button {
-                    withAnimation(reduceMotion ? nil : .spring(response: 0.3, dampingFraction: 0.7)) {
-                        progressStore.togglePreparationItem(item.id)
-                    }
-                    HapticFeedback.light()
-                } label: {
-                    Image(systemName: isCompleted ? "checkmark.circle.fill" : "circle")
-                        .font(.title3)
-                        .foregroundStyle(isCompleted ? Color.otisSuccess : .secondary)
+        HStack(spacing: 12) {
+            // Checkbox
+            Button {
+                withAnimation(reduceMotion ? nil : .spring(response: 0.3, dampingFraction: 0.7)) {
+                    progressStore.togglePreparationItem(item.id)
                 }
-                .buttonStyle(.plain)
-                .accessibilityLabel(Strings.Training.Preparation.itemToggleAccessibility(name: item.name, isCompleted: isCompleted))
-
-                // Label (tappable for info)
-                Button {
-                    withAnimation(reduceMotion ? nil : .spring(response: 0.25, dampingFraction: 0.8)) {
-                        if expandedConceptId == item.id {
-                            expandedConceptId = nil
-                        } else {
-                            expandedConceptId = item.id
-                        }
-                    }
-                } label: {
-                    HStack {
-                        Text(item.name)
-                            .font(.subheadline)
-                            .foregroundStyle(isCompleted ? .secondary : .primary)
-                            .strikethrough(isCompleted)
-
-                        Spacer()
-
-                        if item.explanation != nil {
-                            Image(systemName: "info.circle")
-                                .font(.caption)
-                                .foregroundStyle(.tertiary)
-                                .rotationEffect(.degrees(isExpanded ? 180 : 0))
-                        }
-                    }
-                    .contentShape(Rectangle())
-                }
-                .buttonStyle(.plain)
-                .accessibilityLabel(Strings.Training.Preparation.conceptExpandAccessibility(name: item.name, isExpanded: isExpanded))
+                HapticFeedback.light()
+            } label: {
+                Image(systemName: isCompleted ? "checkmark.circle.fill" : "circle")
+                    .font(.title3)
+                    .foregroundStyle(isCompleted ? Color.otisSuccess : .secondary)
             }
+            .buttonStyle(.plain)
+            .accessibilityLabel(Strings.Training.Preparation.itemToggleAccessibility(name: item.name, isCompleted: isCompleted))
 
-            // Expanded explanation
-            if isExpanded, let explanation = item.explanation {
-                Text(explanation)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                    .padding(.leading, 36)
-                    .transition(reduceMotion ? .opacity : .opacity.combined(with: .move(edge: .top)))
+            // Label
+            Text(item.name)
+                .font(.subheadline)
+                .foregroundStyle(isCompleted ? .secondary : .primary)
+                .strikethrough(isCompleted)
+
+            Spacer()
+
+            // Learn more button (opens sheet)
+            if item.explanation != nil {
+                Button {
+                    HapticFeedback.light()
+                    sheetToShow = conceptType(for: item.id)
+                } label: {
+                    HStack(spacing: 4) {
+                        Text(Strings.Training.Preparation.learnMore)
+                            .font(.caption)
+                        Image(systemName: "info.circle.fill")
+                            .font(.caption)
+                    }
+                    .foregroundStyle(Color.otisAccent)
+                }
+                .buttonStyle(.plain)
             }
         }
+    }
+
+    // MARK: - Helpers
+
+    private func conceptType(for itemId: String) -> ConceptType? {
+        switch itemId {
+        case "understandOperant": return .operant
+        case "understandClassical": return .classical
+        case "understandTiming": return .timing
+        default: return nil
+        }
+    }
+
+    private func handleConceptAcknowledge() {
+        // Mark the concept as completed when user acknowledges
+        if let concept = sheetToShow {
+            switch concept {
+            case .operant:
+                if !progressStore.isPreparationItemCompleted("understandOperant") {
+                    progressStore.togglePreparationItem("understandOperant")
+                }
+            case .classical:
+                if !progressStore.isPreparationItemCompleted("understandClassical") {
+                    progressStore.togglePreparationItem("understandClassical")
+                }
+            case .timing:
+                if !progressStore.isPreparationItemCompleted("understandTiming") {
+                    progressStore.togglePreparationItem("understandTiming")
+                }
+            }
+        }
+    }
+}
+
+// MARK: - Sheet Extension
+
+extension PreparationSection {
+    @ViewBuilder
+    func withConceptSheets() -> some View {
+        self
+            .sheet(item: $sheetToShow) { conceptType in
+                switch conceptType {
+                case .operant:
+                    OperantConditioningSheet(
+                        onAcknowledge: handleConceptAcknowledge,
+                        onDismiss: { sheetToShow = nil }
+                    )
+                    .presentationDetents([.large])
+                case .classical:
+                    ClassicalConditioningSheet(
+                        onAcknowledge: handleConceptAcknowledge,
+                        onDismiss: { sheetToShow = nil }
+                    )
+                    .presentationDetents([.large])
+                case .timing:
+                    ClickTimingSheet(
+                        onAcknowledge: handleConceptAcknowledge,
+                        onDismiss: { sheetToShow = nil }
+                    )
+                    .presentationDetents([.large])
+                }
+            }
     }
 }
 

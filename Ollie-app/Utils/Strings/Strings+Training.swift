@@ -116,8 +116,8 @@ extension Strings {
             static let conceptsTitle = String(localized: "Understanding", table: table)
 
             // Equipment items
-            static let clicker = String(localized: "Clicker (or use tongue click)", table: table)
-            static let treats = String(localized: "Small, soft treats", table: table)
+            static let clicker = String(localized: "Clicker (or use in-app clicker)", table: table)
+            static let treats = String(localized: "Kibble (your puppy's regular food)", table: table)
             static let quietSpace = String(localized: "Quiet training space", table: table)
 
             // Concept items
@@ -147,6 +147,55 @@ extension Strings {
                     return String(localized: "\(name), expanded. Double tap to collapse.", table: table)
                 }
                 return String(localized: "\(name). Double tap to learn more.", table: table)
+            }
+
+            // Learn more link
+            static let learnMore = String(localized: "Learn more", table: table)
+        }
+
+        // MARK: - Concept Sheets
+        enum Concepts {
+            static let iUnderstand = String(localized: "I understand this", table: table)
+            static let keyPoints = String(localized: "Key Points", table: table)
+            static let example = String(localized: "Example", table: table)
+
+            // Operant Conditioning
+            enum Operant {
+                static let title = String(localized: "Operant Conditioning", table: table)
+                static let subtitle = String(localized: "Learning through self-discovery", table: table)
+                static let explanation = String(localized: "In operant conditioning, you stay passive while your puppy self-discovers the desired behavior. When they do something right, you mark it with a click and reward. This creates deep, lasting learning because the puppy figured it out themselves.", table: table)
+                static let point1 = String(localized: "You stay quiet and still — no luring, no gestures", table: table)
+                static let point2 = String(localized: "Wait patiently for the behavior to happen naturally", table: table)
+                static let point3 = String(localized: "Click the exact moment you see the correct behavior", table: table)
+                static let point4 = String(localized: "Creates stronger, more reliable learning than luring", table: table)
+                static let exampleTitle = String(localized: "Teaching \"Watch Me\"", table: table)
+                static let exampleText = String(localized: "Sit quietly with your hands behind your back. Don't call your puppy or make any sounds. Just wait. Eventually, they'll look at your face out of curiosity. The instant they make eye contact — click and treat! After several repetitions, they'll start offering eye contact more and more.", table: table)
+            }
+
+            // Classical Conditioning
+            enum Classical {
+                static let title = String(localized: "Classical Conditioning", table: table)
+                static let subtitle = String(localized: "Learning through guidance", table: table)
+                static let explanation = String(localized: "In classical conditioning, you actively guide your puppy into position using a food lure. This produces faster initial learning, making it great for physical positions like sit and down. The puppy follows the treat, and you reward when they reach the correct position.", table: table)
+                static let point1 = String(localized: "Hold a treat close to your puppy's nose", table: table)
+                static let point2 = String(localized: "Move the treat slowly to guide them into position", table: table)
+                static let point3 = String(localized: "Click when they reach the desired position", table: table)
+                static let point4 = String(localized: "Gradually fade the lure into a hand signal", table: table)
+                static let exampleTitle = String(localized: "Teaching \"Sit\"", table: table)
+                static let exampleText = String(localized: "Hold a treat at your puppy's nose level. Slowly move it toward their EARS (not over their head). Their nose follows up, and their bottom goes down naturally. Click the moment their bottom touches the floor, then give the treat.", table: table)
+            }
+
+            // Click Timing
+            enum Timing {
+                static let title = String(localized: "Click Timing", table: table)
+                static let subtitle = String(localized: "The moment that matters most", table: table)
+                static let explanation = String(localized: "The click is a marker signal that tells your puppy exactly when they did something right. It bridges the gap between the behavior and the reward. Timing is everything — you must click at the precise moment the correct behavior happens, not a second before or after.", table: table)
+                static let point1 = String(localized: "Click at the EXACT moment of correct behavior", table: table)
+                static let point2 = String(localized: "Always follow a click with a treat within 1-2 seconds", table: table)
+                static let point3 = String(localized: "Never click without treating — this breaks the association", table: table)
+                static let point4 = String(localized: "If you click by accident, still give a treat", table: table)
+                static let exampleTitle = String(localized: "Marking \"Sit\"", table: table)
+                static let exampleText = String(localized: "As your puppy's bottom touches the floor, you click THAT instant — not when they're halfway down, not when they've been sitting for a second. The click captures the exact moment. Then you have 1-2 seconds to deliver the treat. The click buys you that time.", table: table)
             }
         }
 
