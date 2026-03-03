@@ -156,9 +156,32 @@ struct ImageCropView: View {
         }
     }
 
+    /// Normalize image orientation by rendering it with orientation applied
+    /// This ensures CGImage coordinates match the logical UIImage coordinates
+    private func normalizedImage() -> UIImage {
+        if image.imageOrientation == .up {
+            return image
+        }
+
+        let format = UIGraphicsImageRendererFormat()
+        format.scale = image.scale
+
+        let renderer = UIGraphicsImageRenderer(size: image.size, format: format)
+        return renderer.image { _ in
+            image.draw(at: .zero)
+        }
+    }
+
     /// Crop the image based on current scale and offset
     private func cropImage(in geometry: GeometryProxy) -> UIImage {
-        let imageSize = image.size
+        // Normalize orientation first so CGImage coordinates match logical coordinates
+        let workingImage = normalizedImage()
+
+        guard let cgImage = workingImage.cgImage else {
+            return image
+        }
+
+        let imageSize = workingImage.size
         let displaySize = imageDisplaySize
 
         // Calculate the scale factor from display to actual image
@@ -191,11 +214,11 @@ struct ImageCropView: View {
         )
 
         // Perform the crop
-        guard let cgImage = image.cgImage?.cropping(to: cropRectInImage) else {
+        guard let croppedCGImage = cgImage.cropping(to: cropRectInImage) else {
             return image
         }
 
-        return UIImage(cgImage: cgImage, scale: image.scale, orientation: image.imageOrientation)
+        return UIImage(cgImage: croppedCGImage, scale: workingImage.scale, orientation: .up)
     }
 }
 
