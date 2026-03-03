@@ -44,7 +44,6 @@ struct TrainingView: View {
                             progressStore: progressStore,
                             preparationItems: plan.preparationItems
                         )
-                        .withConceptSheets()
                     }
 
                     // Show locked message for training content
@@ -250,15 +249,21 @@ struct TrainingView: View {
             // Skill rows
             VStack(spacing: 6) {
                 ForEach(trainingStore.allSkillsWithStatus, id: \.skill.id) { info in
-                    SkillProgressRow(info: info) {
-                        if info.isNextUp {
-                            // For next up skill, start training (with rule check)
-                            checkForRulesAndStartTraining(info.skill)
-                        } else if !info.isLocked {
-                            // For other unlocked skills, show detail sheet
-                            skillForDetailSheet = info.skill
+                    SkillProgressRow(
+                        info: info,
+                        onTap: {
+                            if info.isNextUp {
+                                // For next up skill, start training (with rule check)
+                                checkForRulesAndStartTraining(info.skill)
+                            } else if !info.isLocked {
+                                // For other unlocked skills, show detail sheet
+                                skillForDetailSheet = info.skill
+                            }
+                        },
+                        onQuickDone: {
+                            quickLogSession(for: info.skill)
                         }
-                    }
+                    )
                 }
             }
         }
@@ -282,6 +287,24 @@ struct TrainingView: View {
     }
 
     // MARK: - Helpers
+
+    /// Instantly logs a minimal training session for quick "done" marking
+    private func quickLogSession(for skill: Skill) {
+        // Use the skill's recommended duration or default to 3 minutes
+        let duration = skill.durationMinutes ?? 3
+
+        let event = PuppyEvent(
+            time: Date(),
+            type: .training,
+            note: nil,
+            exercise: skill.id,
+            result: nil,
+            durationMin: duration
+        )
+
+        eventStore.addEvent(event)
+        HapticFeedback.success()
+    }
 
     private func checkForRulesAndStartTraining(_ skill: Skill) {
         // Check if there are any unseen rules for this skill's first step

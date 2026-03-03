@@ -108,6 +108,29 @@ struct PreparationSection: View {
         }
         .padding()
         .glassStatusCard(tintColor: .orange.opacity(0.3))
+        // Concept explanation sheets - moved here from extension for proper state binding
+        .sheet(item: $sheetToShow) { conceptType in
+            switch conceptType {
+            case .operant:
+                OperantConditioningSheet(
+                    onAcknowledge: handleConceptAcknowledge,
+                    onDismiss: { sheetToShow = nil }
+                )
+                .presentationDetents([.large])
+            case .classical:
+                ClassicalConditioningSheet(
+                    onAcknowledge: handleConceptAcknowledge,
+                    onDismiss: { sheetToShow = nil }
+                )
+                .presentationDetents([.large])
+            case .timing:
+                ClickTimingSheet(
+                    onAcknowledge: handleConceptAcknowledge,
+                    onDismiss: { sheetToShow = nil }
+                )
+                .presentationDetents([.large])
+            }
+        }
     }
 
     // MARK: - Checkable Row
@@ -124,8 +147,9 @@ struct PreparationSection: View {
         } label: {
             HStack(spacing: 12) {
                 Image(systemName: isCompleted ? "checkmark.circle.fill" : "circle")
-                    .font(.title3)
+                    .font(.title2)
                     .foregroundStyle(isCompleted ? Color.otisSuccess : .secondary)
+                    .frame(width: 28, height: 28)
 
                 Text(item.name)
                     .font(.subheadline)
@@ -155,8 +179,9 @@ struct PreparationSection: View {
                 HapticFeedback.light()
             } label: {
                 Image(systemName: isCompleted ? "checkmark.circle.fill" : "circle")
-                    .font(.title3)
+                    .font(.title2)
                     .foregroundStyle(isCompleted ? Color.otisSuccess : .secondary)
+                    .frame(width: 28, height: 28)
             }
             .buttonStyle(.plain)
             .accessibilityLabel(Strings.Training.Preparation.itemToggleAccessibility(name: item.name, isCompleted: isCompleted))
@@ -179,9 +204,11 @@ struct PreparationSection: View {
                         Text(Strings.Training.Preparation.learnMore)
                             .font(.caption)
                         Image(systemName: "info.circle.fill")
-                            .font(.caption)
+                            .font(.subheadline)
                     }
                     .foregroundStyle(Color.otisAccent)
+                    .padding(.vertical, 6)
+                    .padding(.horizontal, 8)
                 }
                 .buttonStyle(.plain)
             }
@@ -220,36 +247,6 @@ struct PreparationSection: View {
     }
 }
 
-// MARK: - Sheet Extension
-
-extension PreparationSection {
-    @ViewBuilder
-    func withConceptSheets() -> some View {
-        self
-            .sheet(item: $sheetToShow) { conceptType in
-                switch conceptType {
-                case .operant:
-                    OperantConditioningSheet(
-                        onAcknowledge: handleConceptAcknowledge,
-                        onDismiss: { sheetToShow = nil }
-                    )
-                    .presentationDetents([.large])
-                case .classical:
-                    ClassicalConditioningSheet(
-                        onAcknowledge: handleConceptAcknowledge,
-                        onDismiss: { sheetToShow = nil }
-                    )
-                    .presentationDetents([.large])
-                case .timing:
-                    ClickTimingSheet(
-                        onAcknowledge: handleConceptAcknowledge,
-                        onDismiss: { sheetToShow = nil }
-                    )
-                    .presentationDetents([.large])
-                }
-            }
-    }
-}
 
 // MARK: - Preview
 
