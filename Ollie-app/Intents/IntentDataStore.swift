@@ -11,7 +11,7 @@ import os
 
 /// Lightweight data store for App Intents
 /// Uses App Group container for shared access with main app
-final class IntentDataStore {
+final class IntentDataStore: @unchecked Sendable {
     static let shared = IntentDataStore()
 
     static let suiteName = Constants.appGroupIdentifier
@@ -235,6 +235,12 @@ final class IntentDataStore {
     /// Add an event via Siri/Shortcuts
     /// Events are saved to the App Group container for the main app to pick up
     func addEvent(_ event: PuppyEvent) throws {
+        // Inject loggedBy from shared profile if available
+        var eventToSave = event
+        if eventToSave.loggedBy == nil, let profile = loadProfile() {
+            eventToSave.loggedBy = profile.currentUserMemberId
+        }
+
         guard let dataDir = dataDirectoryURL else {
             throw IntentDataStoreError.containerNotAvailable
         }
@@ -245,7 +251,7 @@ final class IntentDataStore {
         }
 
         // Get file URL for event's date
-        let eventDate = event.time.startOfDay
+        let eventDate = eventToSave.time.startOfDay
         guard let fileURL = self.fileURL(for: eventDate) else {
             throw IntentDataStoreError.containerNotAvailable
         }
@@ -254,28 +260,28 @@ final class IntentDataStore {
         var existingEvents = readEvents(for: eventDate)
 
         // Check for duplicate ID
-        if existingEvents.contains(where: { $0.id == event.id }) {
-            var newEvent = event
+        if existingEvents.contains(where: { $0.id == eventToSave.id }) {
+            var newEvent = eventToSave
             newEvent.id = UUID()
             existingEvents.append(newEvent)
         } else {
-            existingEvents.append(event)
+            existingEvents.append(eventToSave)
         }
 
         // Sort and write
         existingEvents.sort { $0.time > $1.time }
-        let lines = existingEvents.compactMap { event -> String? in
-            guard let data = try? encoder.encode(event) else { return nil }
+        let lines = existingEvents.compactMap { evt -> String? in
+            guard let data = try? encoder.encode(evt) else { return nil }
             return String(data: data, encoding: .utf8)
         }
 
         let content = lines.joined(separator: "\n")
         try content.write(to: fileURL, atomically: true, encoding: .utf8)
 
-        logger.info("Intent logged event: \(event.type.rawValue)")
+        logger.info("Intent logged event: \(eventToSave.type.rawValue)")
 
         // Update widget data so status intents immediately reflect the new event
-        updateWidgetData(with: event)
+        updateWidgetData(with: eventToSave)
 
         // Notify widgets to refresh
         WidgetCenter.shared.reloadAllTimelines()
@@ -358,7 +364,7 @@ enum IntentDataStoreError: Error, LocalizedError {
     case profileNotFound
     case loggingDisabled
 
-    var errorDescription: String? {
+    nonisolated var errorDescription: String? {
         switch self {
         case .containerNotAvailable:
             return "App Group container not available"

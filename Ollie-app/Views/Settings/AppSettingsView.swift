@@ -55,6 +55,24 @@ struct AppSettingsView: View {
             // CloudKit sharing
             SharingSection(cloudKit: cloudKit)
 
+            // Household members
+            Section {
+                NavigationLink {
+                    HouseholdSettingsView(profileStore: profileStore)
+                } label: {
+                    HStack {
+                        Label(Strings.Household.title, systemImage: "person.2.fill")
+                        Spacer()
+                        if let memberCount = profileStore.profile?.householdMembers.members.count, memberCount > 0 {
+                            Text("\(memberCount)")
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                }
+            } footer: {
+                Text(Strings.Household.settingsFooter)
+            }
+
             // Siri & Shortcuts
             SiriSection()
 

@@ -11,7 +11,7 @@ import os
 
 /// Watch-specific data store for event logging
 /// Writes to App Group container for main app to pick up
-final class WatchIntentDataStore {
+final class WatchIntentDataStore: @unchecked Sendable {
     static let shared = WatchIntentDataStore()
 
     static let suiteName = Constants.appGroupIdentifier
@@ -54,10 +54,19 @@ final class WatchIntentDataStore {
         dataDirectoryURL?.appendingPathComponent("\(date.dateString).jsonl")
     }
 
+    /// Current user's household member ID (synced from iPhone via WatchDataProvider)
+    var currentUserMemberId: UUID?
+
     // MARK: - Events
 
     /// Add an event to the App Group container
     func addEvent(_ event: PuppyEvent) throws {
+        // Inject loggedBy from current user member ID if available
+        var eventToSave = event
+        if eventToSave.loggedBy == nil, let memberId = currentUserMemberId {
+            eventToSave.loggedBy = memberId
+        }
+
         guard let dataDir = dataDirectoryURL else {
             throw WatchDataStoreError.containerNotAvailable
         }
@@ -68,7 +77,7 @@ final class WatchIntentDataStore {
         }
 
         // Get file URL for event's date
-        let eventDate = event.time.startOfDay
+        let eventDate = eventToSave.time.startOfDay
         guard let fileURL = self.fileURL(for: eventDate) else {
             throw WatchDataStoreError.containerNotAvailable
         }
@@ -77,25 +86,25 @@ final class WatchIntentDataStore {
         var existingEvents = readEvents(for: eventDate)
 
         // Check for duplicate ID
-        if existingEvents.contains(where: { $0.id == event.id }) {
-            var newEvent = event
+        if existingEvents.contains(where: { $0.id == eventToSave.id }) {
+            var newEvent = eventToSave
             newEvent.id = UUID()
             existingEvents.append(newEvent)
         } else {
-            existingEvents.append(event)
+            existingEvents.append(eventToSave)
         }
 
         // Sort and write
         existingEvents.sort { $0.time > $1.time }
-        let lines = existingEvents.compactMap { event -> String? in
-            guard let data = try? encoder.encode(event) else { return nil }
+        let lines = existingEvents.compactMap { evt -> String? in
+            guard let data = try? encoder.encode(evt) else { return nil }
             return String(data: data, encoding: .utf8)
         }
 
         let content = lines.joined(separator: "\n")
         try content.write(to: fileURL, atomically: true, encoding: .utf8)
 
-        logger.info("Watch logged event: \(event.type.rawValue)")
+        logger.info("Watch logged event: \(eventToSave.type.rawValue)")
 
         // Note: No WidgetCenter refresh here - widgets are iOS only
     }
@@ -147,7 +156,7 @@ final class WatchIntentDataStore {
 enum WatchDataStoreError: Error, LocalizedError {
     case containerNotAvailable
 
-    var errorDescription: String? {
+    nonisolated var errorDescription: String? {
         switch self {
         case .containerNotAvailable:
             return "App Group container not available"

@@ -18,6 +18,7 @@
         <attribute name="profilePhotoFilename" optional="YES" attributeType="String"/>
         <attribute name="sizeCategory" attributeType="String" defaultValueString="medium"/>
         <attribute name="walkScheduleData" optional="YES" attributeType="Binary"/>
+        <attribute name="householdMembersData" optional="YES" attributeType="Binary"/>
         <relationship name="appointments" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDDogAppointment" inverseName="profile" inverseEntity="CDDogAppointment"/>
         <relationship name="documents" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDDocument" inverseName="profile" inverseEntity="CDDocument"/>
         <relationship name="events" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDPuppyEvent" inverseName="profile" inverseEntity="CDPuppyEvent"/>
@@ -55,6 +56,8 @@
         <attribute name="video" optional="YES" attributeType="String"/>
         <attribute name="weightKg" optional="YES" attributeType="Double" usesScalarValueType="YES"/>
         <attribute name="who" optional="YES" attributeType="String"/>
+        <attribute name="loggedBy" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="napLocation" optional="YES" attributeType="String"/>
         <relationship name="profile" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDPuppyProfile" inverseName="events" inverseEntity="CDPuppyProfile"/>
         <fetchIndex name="byTimeIndex">
             <fetchIndexElement property="time" type="Binary" order="descending"/>

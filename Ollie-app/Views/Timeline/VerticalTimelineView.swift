@@ -20,6 +20,11 @@ struct VerticalTimelineView: View {
     /// Optional WeatherService for sunrise/sunset data
     var weatherService: WeatherService?
 
+    /// Household members for event attribution display
+    private var householdMembers: HouseholdMembers? {
+        viewModel.profileStore.profile?.householdMembers
+    }
+
     @Environment(\.colorScheme) private var colorScheme
 
     /// Height per hour in points
@@ -173,6 +178,7 @@ struct VerticalTimelineView: View {
                     stemAnchorX: stemAnchorX,
                     timeColumnWidth: timeColumnWidth,
                     contentWidth: contentWidth,
+                    householdMembers: householdMembers,
                     onTap: { handleItemTap(layoutItem.item) }
                 )
             }
@@ -367,6 +373,7 @@ private struct PointEventWithStem: View {
     let stemAnchorX: CGFloat  // Not used anymore, kept for API compatibility
     let timeColumnWidth: CGFloat
     let contentWidth: CGFloat
+    var householdMembers: HouseholdMembers?
     let onTap: () -> Void
 
     @Environment(\.colorScheme) private var colorScheme
@@ -421,7 +428,7 @@ private struct PointEventWithStem: View {
                 .offset(x: anchorX - 3, y: anchorY - 3)
 
             // Event card (right-aligned, pill-shaped)
-            PointEventCard(item: item, iconColor: iconColor, onTap: onTap)
+            PointEventCard(item: item, iconColor: iconColor, householdMembers: householdMembers, onTap: onTap)
                 .frame(width: cardWidth, height: iconSize)
                 .offset(x: cardLeftX, y: cardY)
         }
@@ -493,12 +500,21 @@ private struct StemLine: View {
 private struct PointEventCard: View {
     let item: VerticalTimelineItem
     let iconColor: Color
+    var householdMembers: HouseholdMembers?
     let onTap: () -> Void
 
     @Environment(\.colorScheme) private var colorScheme
 
     /// Icon size matches card height for perfect circle overlap
     private let iconSize: CGFloat = 28
+
+    /// Look up the member who logged this event
+    private var loggedByMember: HouseholdMember? {
+        guard case .pointEvent(let event) = item.type,
+              let loggedBy = event.loggedBy,
+              let members = householdMembers else { return nil }
+        return members.member(byId: loggedBy)
+    }
 
     var body: some View {
         Button(action: onTap) {
@@ -526,6 +542,13 @@ private struct PointEventCard: View {
                         .fontWeight(.medium)
                         .foregroundStyle(.primary)
                         .lineLimit(1)
+
+                    // Attribution avatar (only shown when loggedBy is set and there are multiple members)
+                    if let member = loggedByMember,
+                       let members = householdMembers,
+                       members.members.count > 1 {
+                        HouseholdMemberAvatar(member: member, size: 14)
+                    }
                 }
                 .padding(.leading, 6)
                 .padding(.trailing, 12)

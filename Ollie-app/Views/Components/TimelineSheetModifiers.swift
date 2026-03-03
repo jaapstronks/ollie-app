@@ -276,7 +276,8 @@ struct TimelineSheetModifiers: ViewModifier {
                 onDelete: {
                     viewModel.deleteEvent(event)
                     viewModel.sheetCoordinator.dismissSheet()
-                }
+                },
+                householdMembers: viewModel.profileStore.profile?.householdMembers
             )
             .presentationDetents([.medium, .large])
 
@@ -293,10 +294,11 @@ struct TimelineSheetModifiers: ViewModifier {
             )
             .presentationDetents([.height(420)])
 
-        case .startActivity(let activityType):
+        case .startActivity(let activityType, let preselectedLocation):
             StartActivitySheet(
                 activityType: activityType,
                 puppyName: viewModel.puppyName,
+                preselectedLocation: preselectedLocation,
                 onStartNow: { startTime, napLocation in
                     viewModel.startActivity(type: activityType, startTime: startTime, napLocation: napLocation)
                     viewModel.sheetCoordinator.dismissSheet()
@@ -316,7 +318,7 @@ struct TimelineSheetModifiers: ViewModifier {
                     viewModel.sheetCoordinator.dismissSheet()
                 }
             )
-            .presentationDetents([.height(350), .medium, .large])
+            .presentationDetents([.medium, .large])
 
         case .endActivity:
             if let activity = viewModel.currentActivity {
@@ -381,7 +383,7 @@ struct TimelineSheetModifiers: ViewModifier {
                     viewModel.sheetCoordinator.dismissSheet()
                 }
             )
-            .presentationDetents([.height(580), .large])
+            .presentationDetents([.large])
 
         case .endCoverageGap(let gap):
             EndCoverageGapSheet(

@@ -5,6 +5,14 @@
 
 import Foundation
 
+/// Ownership type for multi-puppy support
+/// - owned: Profile created by this user, stored in private CloudKit store
+/// - shared: Profile received via share invitation, stored in shared CloudKit store
+public enum ProfileOwnership: String, Codable, Sendable {
+    case owned
+    case shared
+}
+
 /// Profile for a puppy, configurable by the user
 public struct PuppyProfile: Codable, Identifiable, Sendable {
     public let id: UUID
@@ -21,6 +29,7 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
     public var notificationSettings: NotificationSettings
     public var medicationSchedule: MedicationSchedule
     public var webhookConfig: WebhookConfig
+    public var householdMembers: HouseholdMembers
     public var modifiedAt: Date
 
     /// Profile photo filename (stored in ProfilePhotos directory)
@@ -28,6 +37,10 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
 
     /// Date when the puppy passed away (nil if still alive)
     public var passedDate: Date?
+
+    /// Ownership type: owned by this user or shared from another user
+    /// This is a transient property not persisted in Core Data (determined by which store the profile came from)
+    public var ownership: ProfileOwnership = .owned
 
     // MARK: - Legacy Migration
     /// Legacy one-time purchasers are grandfathered into Otis+
@@ -107,6 +120,7 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
             notificationSettings: NotificationSettings.defaultSettings(),
             medicationSchedule: MedicationSchedule.empty(),
             webhookConfig: WebhookConfig.defaultConfig(),
+            householdMembers: HouseholdMembers.empty(),
             modifiedAt: Date(),
             legacyPremiumUnlocked: false
         )
@@ -129,9 +143,11 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
         notificationSettings: NotificationSettings,
         medicationSchedule: MedicationSchedule = MedicationSchedule.empty(),
         webhookConfig: WebhookConfig = WebhookConfig.defaultConfig(),
+        householdMembers: HouseholdMembers = HouseholdMembers.empty(),
         modifiedAt: Date? = nil,
         profilePhotoFilename: String? = nil,
         passedDate: Date? = nil,
+        ownership: ProfileOwnership = .owned,
         legacyPremiumUnlocked: Bool = false
     ) {
         self.id = id
@@ -148,9 +164,11 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
         self.notificationSettings = notificationSettings
         self.medicationSchedule = medicationSchedule
         self.webhookConfig = webhookConfig
+        self.householdMembers = householdMembers
         self.modifiedAt = modifiedAt ?? Date()
         self.profilePhotoFilename = profilePhotoFilename
         self.passedDate = passedDate
+        self.ownership = ownership
         self.legacyPremiumUnlocked = legacyPremiumUnlocked
     }
 
@@ -161,6 +179,7 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
         case name, breed, breedId, birthDate, homeDate, sizeCategory
         case mealSchedule, exerciseConfig, predictionConfig
         case walkSchedule, notificationSettings, medicationSchedule, webhookConfig
+        case householdMembers
         case modifiedAt
         case profilePhotoFilename
         case passedDate
@@ -186,6 +205,7 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
         notificationSettings = try container.decodeIfPresent(NotificationSettings.self, forKey: .notificationSettings) ?? NotificationSettings.defaultSettings()
         medicationSchedule = try container.decodeIfPresent(MedicationSchedule.self, forKey: .medicationSchedule) ?? MedicationSchedule.empty()
         webhookConfig = try container.decodeIfPresent(WebhookConfig.self, forKey: .webhookConfig) ?? WebhookConfig.defaultConfig()
+        householdMembers = try container.decodeIfPresent(HouseholdMembers.self, forKey: .householdMembers) ?? HouseholdMembers.empty()
         modifiedAt = try container.decodeIfPresent(Date.self, forKey: .modifiedAt) ?? Date()
         profilePhotoFilename = try container.decodeIfPresent(String.self, forKey: .profilePhotoFilename)
         passedDate = try container.decodeIfPresent(Date.self, forKey: .passedDate)
@@ -217,6 +237,7 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
         try container.encode(notificationSettings, forKey: .notificationSettings)
         try container.encode(medicationSchedule, forKey: .medicationSchedule)
         try container.encode(webhookConfig, forKey: .webhookConfig)
+        try container.encode(householdMembers, forKey: .householdMembers)
         try container.encode(modifiedAt, forKey: .modifiedAt)
         try container.encodeIfPresent(profilePhotoFilename, forKey: .profilePhotoFilename)
         try container.encodeIfPresent(passedDate, forKey: .passedDate)

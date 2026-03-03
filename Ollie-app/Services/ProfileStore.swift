@@ -2,7 +2,8 @@
 //  ProfileStore.swift
 //  Otis-app
 //
-//  Manages reading and writing the puppy profile with Core Data and automatic CloudKit sync
+//  Manages reading and writing puppy profiles with Core Data and automatic CloudKit sync
+//  Supports multiple profiles (multi-puppy feature) with one active profile at a time
 //
 
 import Foundation
@@ -11,11 +12,48 @@ import OtisShared
 import Combine
 import os
 
-/// Manages reading and writing the puppy profile
+/// Manages reading and writing puppy profiles
 /// Architecture: Core Data with NSPersistentCloudKitContainer for automatic CloudKit sync
 @MainActor
 class ProfileStore: ObservableObject {
-    @Published private(set) var profile: PuppyProfile?
+    // MARK: - Multi-Profile Support
+
+    /// All loaded profiles (owned + shared)
+    @Published private(set) var profiles: [PuppyProfile] = []
+
+    /// ID of the currently active profile
+    @Published private(set) var activeProfileId: UUID? {
+        didSet {
+            if let id = activeProfileId {
+                UserDefaults.standard.set(id.uuidString, forKey: "activeProfileId")
+            }
+            // Post notification when active profile changes
+            NotificationCenter.default.post(name: .activeProfileChanged, object: nil)
+        }
+    }
+
+    /// The currently active profile (convenience accessor)
+    var activeProfile: PuppyProfile? {
+        profiles.first { $0.id == activeProfileId }
+    }
+
+    /// Backward compatibility: profile property maps to activeProfile
+    var profile: PuppyProfile? {
+        activeProfile
+    }
+
+    /// Number of owned profiles (counts against subscription limit)
+    var ownedProfileCount: Int {
+        profiles.filter { $0.ownership == .owned }.count
+    }
+
+    /// Number of shared profiles (unlimited, free)
+    var sharedProfileCount: Int {
+        profiles.filter { $0.ownership == .shared }.count
+    }
+
+    // MARK: - Existing Properties
+
     @Published private(set) var isLoading: Bool = true
     @Published private(set) var isSyncing: Bool = false
 
@@ -33,7 +71,13 @@ class ProfileStore: ObservableObject {
     init(persistenceController: PersistenceController = .shared) {
         self.persistenceController = persistenceController
 
-        loadProfile()
+        // Restore last active profile ID
+        if let storedId = UserDefaults.standard.string(forKey: "activeProfileId"),
+           let uuid = UUID(uuidString: storedId) {
+            activeProfileId = uuid
+        }
+
+        loadAllProfiles()
         setupRemoteChangeObserver()
     }
 
@@ -48,30 +92,57 @@ class ProfileStore: ObservableObject {
             }
             .store(in: &cancellables)
 
-        // Listen for share acceptance to reload profile
+        // Listen for share acceptance to reload profiles
         NotificationCenter.default.publisher(for: .cloudKitShareAccepted)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 self?.handleShareAccepted()
             }
             .store(in: &cancellables)
+
+        // Listen for seed data profile creation (UI testing mode)
+        NotificationCenter.default.publisher(for: NSNotification.Name("ProfileStoreReload"))
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.logger.info("Received ProfileStoreReload notification - reloading profiles")
+                self?.loadAllProfiles()
+            }
+            .store(in: &cancellables)
     }
 
     private func handleRemoteChange() {
-        logger.debug("Detected CloudKit remote change for profile")
-        loadProfile()
+        logger.debug("Detected CloudKit remote change for profiles")
+        loadAllProfiles()
     }
 
     private func handleShareAccepted() {
-        logger.info("Share accepted - reloading profile from shared store")
-        loadProfile()
+        logger.info("Share accepted - reloading all profiles")
+        loadAllProfiles()
     }
 
     // MARK: - Public Methods
 
-    /// Check if a profile exists
+    /// Check if any profile exists
     var hasProfile: Bool {
-        profile != nil
+        !profiles.isEmpty
+    }
+
+    /// Switch to a different profile
+    func switchToProfile(_ profileId: UUID) {
+        guard profiles.contains(where: { $0.id == profileId }) else {
+            logger.warning("Attempted to switch to non-existent profile: \(profileId)")
+            return
+        }
+
+        activeProfileId = profileId
+        syncToAppGroup()
+
+        if let profile = activeProfile {
+            WidgetDataProvider.shared.updateProfileName(profile.name)
+            WatchSyncService.shared.syncToWatch()
+        }
+
+        logger.info("Switched to profile: \(self.activeProfile?.name ?? "unknown")")
     }
 
     /// Save a new or updated profile
@@ -87,13 +158,85 @@ class ProfileStore: ObservableObject {
 
         do {
             try persistenceController.save()
-            profile = updatedProfile
-            syncToAppGroup()
-            WidgetDataProvider.shared.updateProfileName(updatedProfile.name)
-            WatchSyncService.shared.syncToWatch()
+
+            // Update local cache
+            if let index = profiles.firstIndex(where: { $0.id == updatedProfile.id }) {
+                profiles[index] = updatedProfile
+            } else {
+                profiles.append(updatedProfile)
+            }
+
+            // If this is the first profile or matches active, update widgets/watch
+            if activeProfileId == nil {
+                activeProfileId = updatedProfile.id
+            }
+
+            if updatedProfile.id == activeProfileId {
+                syncToAppGroup()
+                WidgetDataProvider.shared.updateProfileName(updatedProfile.name)
+                WatchSyncService.shared.syncToWatch()
+            }
         } catch {
             logger.error("Failed to save profile: \(error.localizedDescription)")
         }
+    }
+
+    /// Create a new profile (checks subscription limits)
+    /// Returns nil if at owned profile limit
+    func createProfile(_ newProfile: PuppyProfile) -> Bool {
+        // Check if user can add more owned profiles
+        let maxOwnedProfiles = SubscriptionManager.shared.effectiveStatus.hasOtisPlus ? maxOtisProfiles : maxFreeProfiles
+
+        if ownedProfileCount >= maxOwnedProfiles {
+            logger.warning("Cannot create profile - at limit (\(self.ownedProfileCount)/\(maxOwnedProfiles))")
+            return false
+        }
+
+        saveProfile(newProfile)
+        return true
+    }
+
+    /// Delete a profile
+    func deleteProfile(_ profileId: UUID) {
+        guard let cdProfile = CDPuppyProfile.fetch(byId: profileId, in: viewContext) else {
+            return
+        }
+
+        viewContext.delete(cdProfile)
+
+        do {
+            try persistenceController.save()
+
+            // Remove from local cache
+            profiles.removeAll { $0.id == profileId }
+
+            // If deleted profile was active, switch to another
+            if activeProfileId == profileId {
+                activeProfileId = profiles.first?.id
+                if let profile = activeProfile {
+                    syncToAppGroup()
+                    WidgetDataProvider.shared.updateProfileName(profile.name)
+                }
+            }
+
+            WatchSyncService.shared.syncToWatch()
+            logger.info("Deleted profile: \(profileId)")
+        } catch {
+            logger.error("Failed to delete profile: \(error.localizedDescription)")
+        }
+    }
+
+    /// Leave a shared profile (stop participating)
+    func leaveSharedProfile(_ profileId: UUID) {
+        guard let profile = profiles.first(where: { $0.id == profileId }),
+              profile.ownership == .shared else {
+            logger.warning("Cannot leave profile - not a shared profile")
+            return
+        }
+
+        // For shared profiles, just remove from our list
+        // The data remains in the shared store but we no longer track it
+        deleteProfile(profileId)
     }
 
     // MARK: - Initial Sync
@@ -103,15 +246,39 @@ class ProfileStore: ObservableObject {
         // With NSPersistentCloudKitContainer, sync is automatic
         // Just refresh the view context
         viewContext.refreshAllObjects()
-        loadProfile()
+        loadAllProfiles()
 
-        // Run breed migration if needed
+        // Run breed migration if needed for active profile
         await migrateBreedNameToId()
+
+        // Link any orphaned events to the first profile
+        migrateOrphanedEventsIfNeeded()
+
+        // Ensure current user exists in household members
+        ensureCurrentUserExists()
+    }
+
+    /// Link orphaned events (without profile relationship) to the first profile
+    private func migrateOrphanedEventsIfNeeded() {
+        guard let firstProfile = profiles.first,
+              let cdProfile = CDPuppyProfile.fetch(byId: firstProfile.id, in: viewContext) else {
+            return
+        }
+
+        let linkedCount = CDPuppyEvent.linkOrphanedEvents(to: cdProfile, in: viewContext)
+        if linkedCount > 0 {
+            do {
+                try persistenceController.save()
+                logger.info("Linked \(linkedCount) orphaned events to profile '\(firstProfile.name)'")
+            } catch {
+                logger.error("Failed to save after linking orphaned events: \(error.localizedDescription)")
+            }
+        }
     }
 
     /// Migrate breed name to breedId if profile has breed but no breedId
     private func migrateBreedNameToId() async {
-        guard let profile = profile,
+        guard let profile = activeProfile,
               let breedName = profile.breed,
               !breedName.isEmpty,
               profile.breedId == nil else {
@@ -138,70 +305,70 @@ class ProfileStore: ObservableObject {
 
     /// Update the meal schedule
     func updateMealSchedule(_ schedule: MealSchedule) {
-        guard var currentProfile = profile else { return }
+        guard var currentProfile = activeProfile else { return }
         currentProfile.mealSchedule = schedule
         saveProfile(currentProfile)
     }
 
     /// Update the exercise config
     func updateExerciseConfig(_ config: ExerciseConfig) {
-        guard var currentProfile = profile else { return }
+        guard var currentProfile = activeProfile else { return }
         currentProfile.exerciseConfig = config
         saveProfile(currentProfile)
     }
 
     /// Update the prediction config
     func updatePredictionConfig(_ config: PredictionConfig) {
-        guard var currentProfile = profile else { return }
+        guard var currentProfile = activeProfile else { return }
         currentProfile.predictionConfig = config
         saveProfile(currentProfile)
     }
 
     /// Update the notification settings
     func updateNotificationSettings(_ settings: NotificationSettings) {
-        guard var currentProfile = profile else { return }
+        guard var currentProfile = activeProfile else { return }
         currentProfile.notificationSettings = settings
         saveProfile(currentProfile)
     }
 
     /// Update the walk schedule
     func updateWalkSchedule(_ schedule: WalkSchedule) {
-        guard var currentProfile = profile else { return }
+        guard var currentProfile = activeProfile else { return }
         currentProfile.walkSchedule = schedule
         saveProfile(currentProfile)
     }
 
     /// Update the profile photo filename
     func updateProfilePhoto(_ filename: String?) {
-        guard var currentProfile = profile else { return }
+        guard var currentProfile = activeProfile else { return }
         currentProfile.profilePhotoFilename = filename
         saveProfile(currentProfile)
     }
 
     /// Update the webhook configuration
     func updateWebhookConfig(_ config: WebhookConfig) {
-        guard var currentProfile = profile else { return }
+        guard var currentProfile = activeProfile else { return }
         currentProfile.webhookConfig = config
         saveProfile(currentProfile)
     }
 
     /// Update the dog's name
     func updateName(_ name: String) {
-        guard var currentProfile = profile else { return }
+        guard var currentProfile = activeProfile else { return }
         currentProfile.name = name
         saveProfile(currentProfile)
     }
 
     /// Update the passed date (when the dog passed away)
     func updatePassedDate(_ date: Date?) {
-        guard var currentProfile = profile else { return }
+        guard var currentProfile = activeProfile else { return }
         currentProfile.passedDate = date
         saveProfile(currentProfile)
     }
 
     /// Update the breed selection
     func updateBreed(name: String?, breedId: Int?, sizeCategory: PuppyProfile.SizeCategory?) {
-        guard var currentProfile = profile else { return }
+        guard var currentProfile = activeProfile else { return }
         currentProfile.breed = name
         currentProfile.breedId = breedId
         if let size = sizeCategory {
@@ -212,15 +379,16 @@ class ProfileStore: ObservableObject {
 
     /// Update just the breedId (for migration from breed name)
     func updateBreedId(_ breedId: Int) {
-        guard var currentProfile = profile else { return }
+        guard var currentProfile = activeProfile else { return }
         currentProfile.breedId = breedId
         saveProfile(currentProfile)
     }
 
     /// Reset profile (for testing or re-onboarding)
     func resetProfile() {
-        // Delete from Core Data
-        if let existing = CDPuppyProfile.fetchProfile(in: viewContext) {
+        // Delete active profile from Core Data
+        if let id = activeProfileId,
+           let existing = CDPuppyProfile.fetch(byId: id, in: viewContext) {
             viewContext.delete(existing)
             do {
                 try persistenceController.save()
@@ -228,28 +396,115 @@ class ProfileStore: ObservableObject {
                 logger.error("Failed to save after profile reset: \(error.localizedDescription)")
             }
         }
-        profile = nil
+
+        // Remove from local cache and switch to another
+        if let id = activeProfileId {
+            profiles.removeAll { $0.id == id }
+        }
+        activeProfileId = profiles.first?.id
+    }
+
+    /// Reset all profiles (for testing or full re-onboarding)
+    func resetAllProfiles() {
+        let allProfiles = CDPuppyProfile.fetchAllProfiles(in: viewContext)
+        for profile in allProfiles {
+            viewContext.delete(profile)
+        }
+
+        do {
+            try persistenceController.save()
+            profiles = []
+            activeProfileId = nil
+        } catch {
+            logger.error("Failed to reset all profiles: \(error.localizedDescription)")
+        }
+    }
+
+    // MARK: - Household Members
+
+    /// Get all household members for the active profile
+    func householdMembers() -> [HouseholdMember] {
+        activeProfile?.householdMembers.members ?? []
+    }
+
+    /// Get the current user's household member
+    func currentUserMember() -> HouseholdMember? {
+        activeProfile?.householdMembers.currentUser()
+    }
+
+    /// Add a new household member
+    func addHouseholdMember(_ member: HouseholdMember) {
+        guard var currentProfile = activeProfile else { return }
+        currentProfile.householdMembers.add(member)
+        saveProfile(currentProfile)
+    }
+
+    /// Update an existing household member
+    func updateHouseholdMember(_ member: HouseholdMember) {
+        guard var currentProfile = activeProfile else { return }
+        currentProfile.householdMembers.update(member)
+        saveProfile(currentProfile)
+    }
+
+    /// Delete a household member by ID
+    func deleteHouseholdMember(id: UUID) {
+        guard var currentProfile = activeProfile else { return }
+        currentProfile.householdMembers.delete(id: id)
+        saveProfile(currentProfile)
+    }
+
+    /// Set which member is the current user
+    func setCurrentUserMember(id: UUID) {
+        guard var currentProfile = activeProfile else { return }
+        currentProfile.householdMembers.setCurrentUser(id: id)
+        saveProfile(currentProfile)
+    }
+
+    /// Ensure a "Me" member exists for the current user
+    /// Called on first launch or when household is empty
+    func ensureCurrentUserExists() {
+        guard var currentProfile = activeProfile else { return }
+
+        // Check if we already have a current user
+        if currentProfile.householdMembers.currentUser() != nil {
+            return
+        }
+
+        // Create a default "Me" member
+        let meMember = HouseholdMember(
+            name: Strings.Household.me,
+            isCurrentUser: true
+        )
+        currentProfile.householdMembers.add(meMember)
+        saveProfile(currentProfile)
+
+        logger.info("Created default 'Me' household member")
+    }
+
+    /// Find household member by ID
+    func householdMember(byId id: UUID) -> HouseholdMember? {
+        activeProfile?.householdMembers.member(byId: id)
     }
 
     // MARK: - Medication Schedule
 
     /// Update the medication schedule
     func updateMedicationSchedule(_ schedule: MedicationSchedule) {
-        guard var currentProfile = profile else { return }
+        guard var currentProfile = activeProfile else { return }
         currentProfile.medicationSchedule = schedule
         saveProfile(currentProfile)
     }
 
     /// Add a new medication
     func addMedication(_ medication: Medication) {
-        guard var currentProfile = profile else { return }
+        guard var currentProfile = activeProfile else { return }
         currentProfile.medicationSchedule.medications.append(medication)
         saveProfile(currentProfile)
     }
 
     /// Update an existing medication
     func updateMedication(_ medication: Medication) {
-        guard var currentProfile = profile else { return }
+        guard var currentProfile = activeProfile else { return }
         if let index = currentProfile.medicationSchedule.medications.firstIndex(where: { $0.id == medication.id }) {
             currentProfile.medicationSchedule.medications[index] = medication
             saveProfile(currentProfile)
@@ -258,14 +513,14 @@ class ProfileStore: ObservableObject {
 
     /// Delete a medication by ID
     func deleteMedication(id: UUID) {
-        guard var currentProfile = profile else { return }
+        guard var currentProfile = activeProfile else { return }
         currentProfile.medicationSchedule.medications.removeAll { $0.id == id }
         saveProfile(currentProfile)
     }
 
     /// Toggle medication active state
     func toggleMedicationActive(id: UUID) {
-        guard var currentProfile = profile else { return }
+        guard var currentProfile = activeProfile else { return }
         if let index = currentProfile.medicationSchedule.medications.firstIndex(where: { $0.id == id }) {
             currentProfile.medicationSchedule.medications[index].isActive.toggle()
             saveProfile(currentProfile)
@@ -274,55 +529,96 @@ class ProfileStore: ObservableObject {
 
     // MARK: - Private Methods
 
-    private func loadProfile() {
+    /// Create a test profile for UI testing if none exists
+    private func createTestProfileIfNeeded() {
+        // Check if profile already exists
+        if CDPuppyProfile.fetchProfile(in: viewContext) != nil {
+            return
+        }
+
+        logger.info("Creating test profile for UI testing")
+
+        // Create test profile: "Oliver", 16 weeks old, Golden Retriever
+        let calendar = Calendar.current
+        let birthDate = calendar.date(byAdding: .weekOfYear, value: -16, to: Date()) ?? Date()
+        let homeDate = calendar.date(byAdding: .weekOfYear, value: -8, to: Date()) ?? Date()
+
+        var testProfile = PuppyProfile.defaultProfile(
+            name: "Oliver",
+            birthDate: birthDate,
+            homeDate: homeDate,
+            size: .medium
+        )
+        testProfile.breed = "Golden Retriever"
+
+        _ = CDPuppyProfile.create(from: testProfile, in: viewContext)
+        try? persistenceController.save()
+    }
+
+    /// Load all profiles from both private and shared stores
+    private func loadAllProfiles() {
         isLoading = true
         defer { isLoading = false }
 
-        // Check if user is a participant (has shared data) - prioritize shared profile
-        if let sharedStore = persistenceController.getSharedStore(),
-           let cdProfile = CDPuppyProfile.fetchProfile(in: viewContext, from: sharedStore),
-           let loadedProfile = cdProfile.toPuppyProfile() {
-            logger.info("Loaded profile from shared store (participant mode)")
-            profile = loadedProfile
+        // In UI testing mode, create a test profile if none exists
+        if SeedData.isUITesting {
+            createTestProfileIfNeeded()
+        }
+
+        var allProfiles: [PuppyProfile] = []
+
+        // Load owned profiles from private store
+        if let privateStore = persistenceController.getPrivateStore() {
+            let ownedCDProfiles = CDPuppyProfile.fetchAllProfiles(in: viewContext, from: privateStore)
+            let owned = ownedCDProfiles.compactMap { $0.toPuppyProfile(ownership: .owned) }
+            allProfiles.append(contentsOf: owned)
+            logger.info("Loaded \(owned.count) owned profile(s) from private store")
+        }
+
+        // Load shared profiles from shared store
+        if let sharedStore = persistenceController.getSharedStore() {
+            let sharedCDProfiles = CDPuppyProfile.fetchAllProfiles(in: viewContext, from: sharedStore)
+            let shared = sharedCDProfiles.compactMap { $0.toPuppyProfile(ownership: .shared) }
+            allProfiles.append(contentsOf: shared)
+            logger.info("Loaded \(shared.count) shared profile(s) from shared store")
+        }
+
+        // Fallback: if stores not available, try generic fetch
+        if allProfiles.isEmpty {
+            let fallbackCDProfiles = CDPuppyProfile.fetchAllProfiles(in: viewContext)
+            let fallback = fallbackCDProfiles.compactMap { $0.toPuppyProfile(ownership: .owned) }
+            allProfiles.append(contentsOf: fallback)
+            if !fallback.isEmpty {
+                logger.info("Loaded \(fallback.count) profile(s) from fallback fetch")
+            }
+        }
+
+        profiles = allProfiles
+
+        // Ensure we have an active profile
+        if activeProfileId == nil || !profiles.contains(where: { $0.id == activeProfileId }) {
+            activeProfileId = profiles.first?.id
+        }
+
+        // Sync active profile to widgets/watch
+        if let profile = activeProfile {
             syncToAppGroup()
-            WidgetDataProvider.shared.updateProfileName(loadedProfile.name)
-            return
+            WidgetDataProvider.shared.updateProfileName(profile.name)
         }
-
-        // Fall back to private store (owner mode)
-        if let privateStore = persistenceController.getPrivateStore(),
-           let cdProfile = CDPuppyProfile.fetchProfile(in: viewContext, from: privateStore),
-           let loadedProfile = cdProfile.toPuppyProfile() {
-            logger.info("Loaded profile from private store (owner mode)")
-            profile = loadedProfile
-            syncToAppGroup()
-            WidgetDataProvider.shared.updateProfileName(loadedProfile.name)
-            return
-        }
-
-        // No profile found in either store - try generic fetch as fallback
-        guard let cdProfile = CDPuppyProfile.fetchProfile(in: viewContext),
-              let loadedProfile = cdProfile.toPuppyProfile() else {
-            profile = nil
-            return
-        }
-
-        profile = loadedProfile
-        syncToAppGroup()
-        WidgetDataProvider.shared.updateProfileName(loadedProfile.name)
     }
 
     // MARK: - Share Acceptance Support
 
     /// Check if user has an existing profile in their private store
-    /// Used to warn before accepting a share invitation
+    /// Used to inform user when accepting a share invitation (no longer destructive)
     func hasExistingPrivateProfile() -> Bool {
         guard let privateStore = persistenceController.getPrivateStore() else { return false }
         return CDPuppyProfile.hasProfile(in: viewContext, store: privateStore)
     }
 
-    /// Delete existing profile from private store (called when accepting a share)
-    /// Since multi-dog is not supported yet, we need to clear the private profile
+    /// Delete existing profile from private store
+    /// Only called for specific user action, not automatically on share acceptance
+    @available(*, deprecated, message: "Multi-puppy support means we no longer need to delete profiles on share acceptance")
     func deletePrivateProfile() {
         guard let privateStore = persistenceController.getPrivateStore() else { return }
 
@@ -330,7 +626,8 @@ class ProfileStore: ObservableObject {
 
         do {
             try persistenceController.save()
-            logger.info("Deleted existing private profile to make room for shared profile")
+            loadAllProfiles()
+            logger.info("Deleted all profiles from private store")
         } catch {
             logger.error("Failed to delete private profile: \(error.localizedDescription)")
         }
@@ -338,10 +635,10 @@ class ProfileStore: ObservableObject {
 
     // MARK: - App Group Sync
 
-    /// Syncs a minimal profile to App Group for use by App Intents and Widgets
-    /// Called automatically after any profile save
+    /// Syncs the active profile to App Group for use by App Intents and Widgets
+    /// Called automatically after any profile save or switch
     private func syncToAppGroup() {
-        guard let profile = profile else { return }
+        guard let profile = activeProfile else { return }
 
         let sharedProfile = SharedProfile(from: profile)
         guard let sharedDefaults = UserDefaults(suiteName: Self.appGroupSuiteName) else {
@@ -352,6 +649,9 @@ class ProfileStore: ObservableObject {
         do {
             let data = try JSONEncoder().encode(sharedProfile)
             sharedDefaults.set(data, forKey: IntentDataStore.profileKey)
+
+            // Also sync the active profile ID for widgets
+            sharedDefaults.set(profile.id.uuidString, forKey: "activeProfileId")
         } catch {
             logger.error("Failed to encode profile for App Group sync: \(error.localizedDescription)")
         }
@@ -362,4 +662,33 @@ class ProfileStore: ObservableObject {
     func forceAppGroupSync() {
         syncToAppGroup()
     }
+
+    // MARK: - Subscription Limits
+
+    /// Check if user can add more owned profiles based on subscription
+    func canAddOwnedProfile() -> Bool {
+        let maxProfiles = SubscriptionManager.shared.effectiveStatus.hasOtisPlus ? maxOtisProfiles : maxFreeProfiles
+        return ownedProfileCount < maxProfiles
+    }
+
+    /// Get the CDPuppyProfile for the active profile (used for profile-scoped event queries)
+    func getActiveCDProfile() -> CDPuppyProfile? {
+        guard let id = activeProfileId else { return nil }
+        return CDPuppyProfile.fetch(byId: id, in: viewContext)
+    }
 }
+
+// MARK: - Notification Names
+
+extension Notification.Name {
+    /// Posted when the active profile changes
+    static let activeProfileChanged = Notification.Name("activeProfileChanged")
+}
+
+// MARK: - Profile Limits
+
+/// Maximum owned profiles for free users
+let maxFreeProfiles = 1
+
+/// Maximum owned profiles for Otis+ subscribers
+let maxOtisProfiles = 5

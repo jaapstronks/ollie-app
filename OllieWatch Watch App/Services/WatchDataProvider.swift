@@ -11,6 +11,31 @@ import WidgetKit
 import OtisShared
 import os
 
+/// Sendable wrapper for sync data from iPhone
+private struct SyncData: Sendable {
+    let puppyName: String?
+    let lastPeeTime: TimeInterval?
+    let lastPoopTime: TimeInterval?
+    let streak: Int?
+    let isSleeping: Bool?
+    let sleepStartTime: TimeInterval?
+    let timestamp: TimeInterval?
+    let action: String?
+    let currentUserMemberId: String?
+
+    nonisolated init(from dict: [String: Any]) {
+        puppyName = dict["puppyName"] as? String
+        lastPeeTime = dict["lastPeeTime"] as? TimeInterval
+        lastPoopTime = dict["lastPoopTime"] as? TimeInterval
+        streak = dict["streak"] as? Int
+        isSleeping = dict["isSleeping"] as? Bool
+        sleepStartTime = dict["sleepStartTime"] as? TimeInterval
+        timestamp = dict["timestamp"] as? TimeInterval
+        action = dict["action"] as? String
+        currentUserMemberId = dict["currentUserMemberId"] as? String
+    }
+}
+
 /// Provides data received from iPhone via WatchConnectivity
 /// Also reads local events logged directly on Watch
 @MainActor
@@ -26,6 +51,7 @@ final class WatchDataProvider: NSObject, ObservableObject {
     @Published var canLogEvents: Bool = true
     @Published var isConnected: Bool = false
     @Published var lastSyncTime: Date?
+    @Published var currentUserMemberId: UUID?
 
     private var session: WCSession?
     private let logger = Logger.otisWatch(category: "WatchDataProvider")
@@ -157,33 +183,44 @@ final class WatchDataProvider: NSObject, ObservableObject {
     // MARK: - Private Methods
 
     private func processReceivedData(_ data: [String: Any]) {
-        if let name = data["puppyName"] as? String {
+        processSyncData(SyncData(from: data))
+    }
+
+    /// Process sync data from a Sendable struct (safe for cross-actor use)
+    private func processSyncData(_ data: SyncData) {
+        if let name = data.puppyName {
             puppyName = name
         }
 
-        if let lastPeeTimestamp = data["lastPeeTime"] as? TimeInterval {
+        if let lastPeeTimestamp = data.lastPeeTime {
             lastPeeTime = Date(timeIntervalSince1970: lastPeeTimestamp)
         }
 
-        if let lastPoopTimestamp = data["lastPoopTime"] as? TimeInterval {
+        if let lastPoopTimestamp = data.lastPoopTime {
             lastPoopTime = Date(timeIntervalSince1970: lastPoopTimestamp)
         }
 
-        if let streak = data["streak"] as? Int {
+        if let streak = data.streak {
             currentStreak = streak
         }
 
-        if let sleeping = data["isSleeping"] as? Bool {
+        if let sleeping = data.isSleeping {
             isSleeping = sleeping
-            if sleeping, let sleepTimestamp = data["sleepStartTime"] as? TimeInterval {
+            if sleeping, let sleepTimestamp = data.sleepStartTime {
                 sleepStartTime = Date(timeIntervalSince1970: sleepTimestamp)
             } else {
                 sleepStartTime = nil
             }
         }
 
-        if let timestamp = data["timestamp"] as? TimeInterval {
+        if let timestamp = data.timestamp {
             lastSyncTime = Date(timeIntervalSince1970: timestamp)
+        }
+
+        if let memberIdString = data.currentUserMemberId {
+            currentUserMemberId = UUID(uuidString: memberIdString)
+            // Sync to WatchIntentDataStore for event attribution
+            localDataStore.currentUserMemberId = currentUserMemberId
         }
 
         logger.debug("Processed sync data from iPhone")
@@ -366,8 +403,9 @@ extension WatchDataProvider: WCSessionDelegate {
     }
 
     nonisolated func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String: Any]) {
+        let syncData = SyncData(from: applicationContext)
         Task { @MainActor in
-            processReceivedData(applicationContext)
+            processSyncData(syncData)
             // Always merge local events after receiving iPhone data
             // to ensure locally logged watch events take precedence
             mergeLocalEvents()
@@ -375,9 +413,10 @@ extension WatchDataProvider: WCSessionDelegate {
     }
 
     nonisolated func sessionReachabilityDidChange(_ session: WCSession) {
+        let isReachable = session.isReachable
         Task { @MainActor in
-            isConnected = session.isReachable
-            if session.isReachable {
+            isConnected = isReachable
+            if isReachable {
                 requestSync()
             }
         }
@@ -385,10 +424,11 @@ extension WatchDataProvider: WCSessionDelegate {
 
     // Handle real-time sync updates from iPhone
     nonisolated func session(_ session: WCSession, didReceiveMessage message: [String: Any]) {
+        let syncData = SyncData(from: message)
         Task { @MainActor in
-            if message["action"] as? String == "syncUpdate" {
+            if syncData.action == "syncUpdate" {
                 logger.debug("Received real-time sync update from iPhone")
-                processReceivedData(message)
+                processSyncData(syncData)
                 mergeLocalEvents()
             }
         }
@@ -396,15 +436,17 @@ extension WatchDataProvider: WCSessionDelegate {
 
     // Handle real-time sync with reply handler
     nonisolated func session(_ session: WCSession, didReceiveMessage message: [String: Any], replyHandler: @escaping ([String: Any]) -> Void) {
-        Task { @MainActor in
-            if message["action"] as? String == "syncUpdate" {
+        let syncData = SyncData(from: message)
+        // Check action before the task to avoid sending replyHandler across actors
+        if syncData.action == "syncUpdate" {
+            Task { @MainActor in
                 logger.debug("Received real-time sync update from iPhone (with reply)")
-                processReceivedData(message)
+                processSyncData(syncData)
                 mergeLocalEvents()
-                replyHandler(["status": "received"])
-            } else {
-                replyHandler(["status": "unknown"])
             }
+            replyHandler(["status": "received"])
+        } else {
+            replyHandler(["status": "unknown"])
         }
     }
 }
