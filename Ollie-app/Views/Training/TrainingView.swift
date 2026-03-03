@@ -79,13 +79,13 @@ struct TrainingView: View {
                 }
             )
         }
-        // Skill detail sheet (replaces SkillInfoSheet)
+        // Skill learning flow sheet (stepped learning with phases)
         .sheet(item: $skillForDetailSheet) { skill in
             let status = trainingStore.status(for: skill.id)
             let sessionCount = trainingStore.sessionCount(for: skill.id)
             let recentSessions = trainingStore.recentSessions(for: skill.id)
 
-            SkillDetailSheet(
+            SkillLearningFlowSheet(
                 skill: skill,
                 status: status,
                 sessionCount: sessionCount,
@@ -101,7 +101,8 @@ struct TrainingView: View {
                 },
                 onDismiss: {
                     skillForDetailSheet = nil
-                }
+                },
+                progressStore: progressStore
             )
             .presentationDetents([.large])
         }
