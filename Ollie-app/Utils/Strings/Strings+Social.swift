@@ -146,6 +146,9 @@ extension Strings {
 
         // Journey card
         static let seeYourJourney = String(localized: "See your journey", table: table)
+        static func seePuppyJourney(name: String) -> String {
+            String(localized: "\(name)'s journey", table: table)
+        }
         static let nextUp = String(localized: "Next up", table: table)
         static let quickCheckMode = String(localized: "Quick Check", table: table)
         static let quickCheckModeDesc = String(localized: "Tap items to mark comfortable", table: table)
@@ -157,6 +160,9 @@ extension Strings {
         }
         static func weekNumber(_ week: Int) -> String {
             String(localized: "Week \(week)", table: table)
+        }
+        static func windowWeekIndicator(week: Int, total: Int) -> String {
+            String(localized: "Week \(week) of \(total)", table: table)
         }
 
         // First visit

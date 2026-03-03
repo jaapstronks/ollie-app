@@ -103,6 +103,12 @@ class TimelineViewModel: ObservableObject {
     /// Date when user dismissed the assumed overnight sleep card (reset daily)
     @Published internal var dismissedAssumedSleepDate: Date?
 
+    /// Date when user dismissed the stale logging banner (reset daily)
+    @Published internal var dismissedStaleLoggingDate: Date?
+
+    /// Whether user has dismissed the first run welcome card (persisted)
+    @Published internal var dismissedFirstRunWelcome: Bool = UserDefaults.standard.bool(forKey: "dismissedFirstRunWelcome")
+
     /// Background notification task (stored for cancellation)
     private var notificationTask: Task<Void, Never>?
 
@@ -433,9 +439,20 @@ class TimelineViewModel: ObservableObject {
     }
 
     /// Get all events (up to 30 days back for streak history)
+    /// Uses in-memory events for today (fresh) + Core Data for historical (stable)
     func getAllEvents() -> [PuppyEvent] {
-        let thirtyDaysAgo = Date().addingDays(-30)
-        return eventStore.getEvents(from: thirtyDaysAgo, to: Date())
+        let calendar = Calendar.current
+        let today = Date()
+        let thirtyDaysAgo = today.addingDays(-30)
+        let startOfToday = calendar.startOfDay(for: today)
+
+        // Get historical events (before today) from Core Data
+        let historicalEvents = eventStore.getEvents(from: thirtyDaysAgo, to: startOfToday)
+
+        // Use in-memory events for today (always fresh)
+        let todayEvents = events.filter { calendar.isDateInToday($0.time) }
+
+        return (historicalEvents + todayEvents).sorted { $0.time > $1.time }
     }
 
     /// Get events from today and yesterday (for cross-midnight tracking)

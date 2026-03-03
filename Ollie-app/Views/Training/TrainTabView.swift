@@ -7,7 +7,7 @@
 import OtisShared
 import SwiftUI
 
-/// Train tab - unified view with potty progress, socialization checklist, skills tracker, and developmental milestones
+/// Train tab - unified view with potty progress, socialization checklist, and skills tracker
 struct TrainTabView: View {
     @ObservedObject var viewModel: TimelineViewModel
     let onSettingsTap: () -> Void
@@ -15,24 +15,8 @@ struct TrainTabView: View {
     @EnvironmentObject var eventStore: EventStore
     @EnvironmentObject var socializationStore: SocializationStore
     @EnvironmentObject var profileStore: ProfileStore
-    @EnvironmentObject var milestoneStore: MilestoneStore
 
     @Environment(\.colorScheme) private var colorScheme
-
-    // MARK: - Computed Properties
-
-    /// Calculate outdoor percentage for the past 7 days
-    private var outdoorPercentage: Int {
-        let sevenDaysAgo = Calendar.current.date(byAdding: .day, value: -7, to: Date()) ?? Date()
-        let recentEvents = eventStore.getEvents(from: sevenDaysAgo, to: Date())
-        let peeEvents = recentEvents.pee()
-
-        let outdoorCount = peeEvents.filter { $0.location == .buiten }.count
-        let totalCount = peeEvents.count
-
-        guard totalCount > 0 else { return 0 }
-        return (outdoorCount * 100) / totalCount
-    }
 
     // MARK: - Body
 
@@ -40,23 +24,17 @@ struct TrainTabView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 20) {
-                    // Section 0: Developmental Milestones (fear periods, socialization window)
-                    if let profile = profileStore.profile {
-                        developmentalMilestonesSection(for: profile)
-                            .animatedAppear(delay: 0)
-                    }
-
                     // Section 1: Potty Progress
                     pottyProgressSection
-                        .animatedAppear(delay: 0.05)
+                        .animatedAppear(delay: 0)
 
                     // Section 2: Skills
                     skillsSection
-                        .animatedAppear(delay: 0.10)
+                        .animatedAppear(delay: 0.05)
 
                     // Section 3: Socialization
                     socializationSection
-                        .animatedAppear(delay: 0.15)
+                        .animatedAppear(delay: 0.10)
                 }
                 .padding()
                 .padding(.bottom, 84) // Space for FAB
@@ -64,36 +42,6 @@ struct TrainTabView: View {
             .navigationTitle(Strings.Tabs.train)
             .navigationBarTitleDisplayMode(.inline)
             .profileToolbar(profile: profileStore.profile, action: onSettingsTap)
-        }
-    }
-
-    // MARK: - Developmental Milestones Section
-
-    /// Section showing active developmental periods (fear periods, socialization window)
-    @ViewBuilder
-    private func developmentalMilestonesSection(for profile: PuppyProfile) -> some View {
-        let activePeriods = milestoneStore.activeDevelopmentalPeriods(birthDate: profile.birthDate)
-
-        // Only show if there are active developmental periods
-        if !activePeriods.isEmpty {
-            VStack(alignment: .leading, spacing: 10) {
-                HStack {
-                    Image(systemName: "brain.head.profile")
-                        .foregroundStyle(Color.otisPurple)
-                        .accessibilityHidden(true)
-                    Text(Strings.Development.title)
-                        .font(.headline)
-                        .fontWeight(.semibold)
-                        .accessibilityAddTraits(.isHeader)
-                    Spacer()
-                }
-
-                DevelopmentalPeriodBanners(
-                    milestones: activePeriods,
-                    birthDate: profile.birthDate,
-                    puppyName: profile.name
-                )
-            }
         }
     }
 
@@ -105,7 +53,7 @@ struct TrainTabView: View {
             PottyProgressCard(
                 streakInfo: viewModel.streakInfo,
                 patternAnalysis: viewModel.patternAnalysis,
-                outdoorPercentage: outdoorPercentage
+                outdoorPercentage: viewModel.outdoorPercentage
             )
         }
     }
@@ -316,5 +264,4 @@ private struct SkillsPreviewCard: View {
     .environmentObject(eventStore)
     .environmentObject(SocializationStore())
     .environmentObject(profileStore)
-    .environmentObject(MilestoneStore())
 }

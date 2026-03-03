@@ -26,6 +26,22 @@ struct SocializationJourneyCard: View {
         profile?.daysHome ?? 0
     }
 
+    private var puppyName: String {
+        profile?.name ?? "Puppy"
+    }
+
+    /// Current week of the socialization window (3-16 weeks)
+    private var socializationWindowWeek: Int? {
+        guard let birthDate = profile?.birthDate else { return nil }
+        let ageInWeeks = Calendar.current.dateComponents([.weekOfYear], from: birthDate, to: Date()).weekOfYear ?? 0
+        // Socialization window is weeks 3-16
+        guard ageInWeeks >= 3 && ageInWeeks <= 16 else { return nil }
+        return ageInWeeks
+    }
+
+    /// Total weeks in socialization window
+    private let socializationWindowEnd = 16
+
     var body: some View {
         NavigationLink {
             SocializationJourneyView()
@@ -68,7 +84,7 @@ struct SocializationJourneyCard: View {
                 Divider()
 
                 HStack {
-                    Text(Strings.Socialization.seeYourJourney)
+                    Text(Strings.Socialization.seePuppyJourney(name: puppyName))
                         .font(.subheadline)
                         .fontWeight(.medium)
                         .foregroundStyle(Color.otisAccent)
@@ -113,8 +129,28 @@ struct SocializationJourneyCard: View {
 
             Spacer()
 
-            // Progress ring (not for settling in)
-            if currentPhase != .settlingIn {
+            // Socialization window progress indicator
+            if let week = socializationWindowWeek {
+                VStack(alignment: .trailing, spacing: 2) {
+                    Text(Strings.Socialization.windowWeekIndicator(week: week, total: socializationWindowEnd))
+                        .font(.caption)
+                        .fontWeight(.medium)
+                        .foregroundStyle(Color.otisAccent)
+
+                    // Mini progress bar
+                    GeometryReader { geo in
+                        ZStack(alignment: .leading) {
+                            Capsule()
+                                .fill(Color.secondary.opacity(0.2))
+                            Capsule()
+                                .fill(Color.otisAccent)
+                                .frame(width: geo.size.width * CGFloat(week - 3) / CGFloat(socializationWindowEnd - 3))
+                        }
+                    }
+                    .frame(width: 60, height: 4)
+                }
+            } else if currentPhase != .settlingIn {
+                // Progress ring (fallback for outside socialization window)
                 progressRing
             }
         }
