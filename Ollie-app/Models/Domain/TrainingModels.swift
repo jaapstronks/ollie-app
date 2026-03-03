@@ -66,52 +66,76 @@ struct SkillStep: Identifiable, Codable, Hashable {
 
 // MARK: - Content Lookups
 
-/// Static lookup for preparation item content
+/// Metadata for preparation items (name + optional explanation)
+private struct PreparationMetadata {
+    let name: String
+    let explanation: String?
+}
+
+/// Static lookup for preparation item content using dictionary
 enum PreparationItemContent {
-    static func name(for itemId: String) -> String {
-        switch itemId {
+    private static let metadata: [String: PreparationMetadata] = [
         // Equipment
-        case "clicker": return Strings.Training.Preparation.clicker
-        case "treats": return Strings.Training.Preparation.treats
-        case "quietSpace": return Strings.Training.Preparation.quietSpace
+        "clicker": PreparationMetadata(name: Strings.Training.Preparation.clicker, explanation: nil),
+        "treats": PreparationMetadata(name: Strings.Training.Preparation.treats, explanation: nil),
+        "quietSpace": PreparationMetadata(name: Strings.Training.Preparation.quietSpace, explanation: nil),
         // Concepts
-        case "understandOperant": return Strings.Training.Preparation.understandOperant
-        case "understandClassical": return Strings.Training.Preparation.understandClassical
-        case "understandTiming": return Strings.Training.Preparation.understandTiming
-        default: return itemId
-        }
+        "understandOperant": PreparationMetadata(
+            name: Strings.Training.Preparation.understandOperant,
+            explanation: Strings.Training.Preparation.operantExplanation
+        ),
+        "understandClassical": PreparationMetadata(
+            name: Strings.Training.Preparation.understandClassical,
+            explanation: Strings.Training.Preparation.classicalExplanation
+        ),
+        "understandTiming": PreparationMetadata(
+            name: Strings.Training.Preparation.understandTiming,
+            explanation: Strings.Training.Preparation.timingExplanation
+        )
+    ]
+
+    static func name(for itemId: String) -> String {
+        metadata[itemId]?.name ?? itemId
     }
 
     static func explanation(for itemId: String) -> String? {
-        switch itemId {
-        case "understandOperant": return Strings.Training.Preparation.operantExplanation
-        case "understandClassical": return Strings.Training.Preparation.classicalExplanation
-        case "understandTiming": return Strings.Training.Preparation.timingExplanation
-        default: return nil
-        }
+        metadata[itemId]?.explanation
     }
 }
 
-/// Static lookup for training rule content
+/// Metadata for training rules (title + description)
+private struct RuleMetadata {
+    let title: String
+    let description: String
+}
+
+/// Static lookup for training rule content using dictionary
 enum TrainingRuleContent {
+    private static let metadata: [String: RuleMetadata] = [
+        "neverClickWithoutReward": RuleMetadata(
+            title: Strings.Training.Rules.neverClickWithoutRewardTitle,
+            description: Strings.Training.Rules.neverClickWithoutRewardDescription
+        ),
+        "wordMustMatchMoment": RuleMetadata(
+            title: Strings.Training.Rules.wordMustMatchMomentTitle,
+            description: Strings.Training.Rules.wordMustMatchMomentDescription
+        ),
+        "clickEndsExercise": RuleMetadata(
+            title: Strings.Training.Rules.clickEndsExerciseTitle,
+            description: Strings.Training.Rules.clickEndsExerciseDescription
+        ),
+        "stepBackIfStruggling": RuleMetadata(
+            title: Strings.Training.Rules.stepBackIfStrugglingTitle,
+            description: Strings.Training.Rules.stepBackIfStrugglingDescription
+        )
+    ]
+
     static func title(for ruleId: String) -> String {
-        switch ruleId {
-        case "neverClickWithoutReward": return Strings.Training.Rules.neverClickWithoutRewardTitle
-        case "wordMustMatchMoment": return Strings.Training.Rules.wordMustMatchMomentTitle
-        case "clickEndsExercise": return Strings.Training.Rules.clickEndsExerciseTitle
-        case "stepBackIfStruggling": return Strings.Training.Rules.stepBackIfStrugglingTitle
-        default: return ruleId
-        }
+        metadata[ruleId]?.title ?? ruleId
     }
 
     static func description(for ruleId: String) -> String {
-        switch ruleId {
-        case "neverClickWithoutReward": return Strings.Training.Rules.neverClickWithoutRewardDescription
-        case "wordMustMatchMoment": return Strings.Training.Rules.wordMustMatchMomentDescription
-        case "clickEndsExercise": return Strings.Training.Rules.clickEndsExerciseDescription
-        case "stepBackIfStruggling": return Strings.Training.Rules.stepBackIfStrugglingDescription
-        default: return ""
-        }
+        metadata[ruleId]?.description ?? ""
     }
 }
 
@@ -134,69 +158,107 @@ struct SkillPhase: Codable, Identifiable, Hashable {
     }
 }
 
-/// Static lookup for skill phase content
+/// Metadata for skill phases (name + subtitle)
+private struct PhaseMetadata {
+    let name: String
+    let subtitle: String
+}
+
+/// Static lookup for skill phase content using dictionary
 enum SkillPhaseContent {
-    static func name(skillId: String, phaseId: String) -> String {
-        let key = "\(skillId).\(phaseId)"
-        switch key {
+    private static let metadata: [String: PhaseMetadata] = [
         // Collar & Leash phases
-        case "collarLeash.introduction": return Strings.Training.Phases.collarLeashIntroductionName
-        case "collarLeash.buildDuration": return Strings.Training.Phases.collarLeashBuildDurationName
-        case "collarLeash.leashWork": return Strings.Training.Phases.collarLeashLeashWorkName
+        "collarLeash.introduction": PhaseMetadata(
+            name: Strings.Training.Phases.collarLeashIntroductionName,
+            subtitle: Strings.Training.Phases.collarLeashIntroductionSubtitle
+        ),
+        "collarLeash.buildDuration": PhaseMetadata(
+            name: Strings.Training.Phases.collarLeashBuildDurationName,
+            subtitle: Strings.Training.Phases.collarLeashBuildDurationSubtitle
+        ),
+        "collarLeash.leashWork": PhaseMetadata(
+            name: Strings.Training.Phases.collarLeashLeashWorkName,
+            subtitle: Strings.Training.Phases.collarLeashLeashWorkSubtitle
+        ),
         // Watch Me phases
-        case "watchMe.captureAttention": return Strings.Training.Phases.watchMeCaptureAttentionName
-        case "watchMe.positionProgression": return Strings.Training.Phases.watchMePositionProgressionName
-        case "watchMe.addCue": return Strings.Training.Phases.watchMeAddCueName
-        case "watchMe.proof": return Strings.Training.Phases.watchMeProofName
+        "watchMe.captureAttention": PhaseMetadata(
+            name: Strings.Training.Phases.watchMeCaptureAttentionName,
+            subtitle: Strings.Training.Phases.watchMeCaptureAttentionSubtitle
+        ),
+        "watchMe.positionProgression": PhaseMetadata(
+            name: Strings.Training.Phases.watchMePositionProgressionName,
+            subtitle: Strings.Training.Phases.watchMePositionProgressionSubtitle
+        ),
+        "watchMe.addCue": PhaseMetadata(
+            name: Strings.Training.Phases.watchMeAddCueName,
+            subtitle: Strings.Training.Phases.watchMeAddCueSubtitle
+        ),
+        "watchMe.proof": PhaseMetadata(
+            name: Strings.Training.Phases.watchMeProofName,
+            subtitle: Strings.Training.Phases.watchMeProofSubtitle
+        ),
         // Loose Leash Walking phases
-        case "looseLeash.capturePosition": return Strings.Training.Phases.looseLeashCapturePositionName
-        case "looseLeash.buildDuration": return Strings.Training.Phases.looseLeashBuildDurationName
-        case "looseLeash.addCue": return Strings.Training.Phases.looseLeashAddCueName
-        case "looseLeash.proofEnvironments": return Strings.Training.Phases.looseLeashProofEnvironmentsName
+        "looseLeash.capturePosition": PhaseMetadata(
+            name: Strings.Training.Phases.looseLeashCapturePositionName,
+            subtitle: Strings.Training.Phases.looseLeashCapturePositionSubtitle
+        ),
+        "looseLeash.buildDuration": PhaseMetadata(
+            name: Strings.Training.Phases.looseLeashBuildDurationName,
+            subtitle: Strings.Training.Phases.looseLeashBuildDurationSubtitle
+        ),
+        "looseLeash.addCue": PhaseMetadata(
+            name: Strings.Training.Phases.looseLeashAddCueName,
+            subtitle: Strings.Training.Phases.looseLeashAddCueSubtitle
+        ),
+        "looseLeash.proofEnvironments": PhaseMetadata(
+            name: Strings.Training.Phases.looseLeashProofEnvironmentsName,
+            subtitle: Strings.Training.Phases.looseLeashProofEnvironmentsSubtitle
+        ),
         // Come (Recall) phases
-        case "come.foundation": return Strings.Training.Phases.comeFoundationName
-        case "come.frontPosition": return Strings.Training.Phases.comeFrontPositionName
-        case "come.buildDistance": return Strings.Training.Phases.comeBuildDistanceName
-        case "come.proofDistractions": return Strings.Training.Phases.comeProofDistractionsName
+        "come.foundation": PhaseMetadata(
+            name: Strings.Training.Phases.comeFoundationName,
+            subtitle: Strings.Training.Phases.comeFoundationSubtitle
+        ),
+        "come.frontPosition": PhaseMetadata(
+            name: Strings.Training.Phases.comeFrontPositionName,
+            subtitle: Strings.Training.Phases.comeFrontPositionSubtitle
+        ),
+        "come.buildDistance": PhaseMetadata(
+            name: Strings.Training.Phases.comeBuildDistanceName,
+            subtitle: Strings.Training.Phases.comeBuildDistanceSubtitle
+        ),
+        "come.proofDistractions": PhaseMetadata(
+            name: Strings.Training.Phases.comeProofDistractionsName,
+            subtitle: Strings.Training.Phases.comeProofDistractionsSubtitle
+        ),
         // Sit phases
-        case "sit.lureToPosition": return Strings.Training.Phases.sitLureToPositionName
-        case "sit.captureAndStrengthen": return Strings.Training.Phases.sitCaptureAndStrengthenName
-        case "sit.addVerbalCue": return Strings.Training.Phases.sitAddVerbalCueName
-        case "sit.proofThreeDs": return Strings.Training.Phases.sitProofThreeDsName
+        "sit.lureToPosition": PhaseMetadata(
+            name: Strings.Training.Phases.sitLureToPositionName,
+            subtitle: Strings.Training.Phases.sitLureToPositionSubtitle
+        ),
+        "sit.captureAndStrengthen": PhaseMetadata(
+            name: Strings.Training.Phases.sitCaptureAndStrengthenName,
+            subtitle: Strings.Training.Phases.sitCaptureAndStrengthenSubtitle
+        ),
+        "sit.addVerbalCue": PhaseMetadata(
+            name: Strings.Training.Phases.sitAddVerbalCueName,
+            subtitle: Strings.Training.Phases.sitAddVerbalCueSubtitle
+        ),
+        "sit.proofThreeDs": PhaseMetadata(
+            name: Strings.Training.Phases.sitProofThreeDsName,
+            subtitle: Strings.Training.Phases.sitProofThreeDsSubtitle
+        )
+    ]
+
+    static func name(skillId: String, phaseId: String) -> String {
         // Fallback for single-phase skills
-        case _ where phaseId == "all": return Strings.Training.Phases.allSteps
-        default: return phaseId.capitalized
-        }
+        if phaseId == "all" { return Strings.Training.Phases.allSteps }
+        let key = "\(skillId).\(phaseId)"
+        return metadata[key]?.name ?? phaseId.capitalized
     }
 
     static func subtitle(skillId: String, phaseId: String) -> String {
         let key = "\(skillId).\(phaseId)"
-        switch key {
-        // Collar & Leash phases
-        case "collarLeash.introduction": return Strings.Training.Phases.collarLeashIntroductionSubtitle
-        case "collarLeash.buildDuration": return Strings.Training.Phases.collarLeashBuildDurationSubtitle
-        case "collarLeash.leashWork": return Strings.Training.Phases.collarLeashLeashWorkSubtitle
-        // Watch Me phases
-        case "watchMe.captureAttention": return Strings.Training.Phases.watchMeCaptureAttentionSubtitle
-        case "watchMe.positionProgression": return Strings.Training.Phases.watchMePositionProgressionSubtitle
-        case "watchMe.addCue": return Strings.Training.Phases.watchMeAddCueSubtitle
-        case "watchMe.proof": return Strings.Training.Phases.watchMeProofSubtitle
-        // Loose Leash Walking phases
-        case "looseLeash.capturePosition": return Strings.Training.Phases.looseLeashCapturePositionSubtitle
-        case "looseLeash.buildDuration": return Strings.Training.Phases.looseLeashBuildDurationSubtitle
-        case "looseLeash.addCue": return Strings.Training.Phases.looseLeashAddCueSubtitle
-        case "looseLeash.proofEnvironments": return Strings.Training.Phases.looseLeashProofEnvironmentsSubtitle
-        // Come (Recall) phases
-        case "come.foundation": return Strings.Training.Phases.comeFoundationSubtitle
-        case "come.frontPosition": return Strings.Training.Phases.comeFrontPositionSubtitle
-        case "come.buildDistance": return Strings.Training.Phases.comeBuildDistanceSubtitle
-        case "come.proofDistractions": return Strings.Training.Phases.comeProofDistractionsSubtitle
-        // Sit phases
-        case "sit.lureToPosition": return Strings.Training.Phases.sitLureToPositionSubtitle
-        case "sit.captureAndStrengthen": return Strings.Training.Phases.sitCaptureAndStrengthenSubtitle
-        case "sit.addVerbalCue": return Strings.Training.Phases.sitAddVerbalCueSubtitle
-        case "sit.proofThreeDs": return Strings.Training.Phases.sitProofThreeDsSubtitle
-        default: return ""
-        }
+        return metadata[key]?.subtitle ?? ""
     }
 }

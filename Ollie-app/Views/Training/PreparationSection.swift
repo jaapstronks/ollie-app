@@ -13,11 +13,24 @@ enum ConceptType: Identifiable {
     case classical
     case timing
 
-    var id: String {
+    var id: String { itemId }
+
+    /// Mapping between concept types and preparation item IDs
+    var itemId: String {
         switch self {
-        case .operant: return "operant"
-        case .classical: return "classical"
-        case .timing: return "timing"
+        case .operant: return "understandOperant"
+        case .classical: return "understandClassical"
+        case .timing: return "understandTiming"
+        }
+    }
+
+    /// Create from preparation item ID
+    init?(itemId: String) {
+        switch itemId {
+        case "understandOperant": self = .operant
+        case "understandClassical": self = .classical
+        case "understandTiming": self = .timing
+        default: return nil
         }
     }
 }
@@ -140,7 +153,7 @@ struct PreparationSection: View {
         let isCompleted = progressStore.isPreparationItemCompleted(item.id)
 
         Button {
-            withAnimation(reduceMotion ? nil : .spring(response: 0.3, dampingFraction: 0.7)) {
+            withAnimation(reduceMotion ? nil : TrainingAnimations.checkboxToggle) {
                 progressStore.togglePreparationItem(item.id)
             }
             HapticFeedback.light()
@@ -173,7 +186,7 @@ struct PreparationSection: View {
         HStack(spacing: 12) {
             // Checkbox
             Button {
-                withAnimation(reduceMotion ? nil : .spring(response: 0.3, dampingFraction: 0.7)) {
+                withAnimation(reduceMotion ? nil : TrainingAnimations.checkboxToggle) {
                     progressStore.togglePreparationItem(item.id)
                 }
                 HapticFeedback.light()
@@ -198,7 +211,7 @@ struct PreparationSection: View {
             if item.explanation != nil {
                 Button {
                     HapticFeedback.light()
-                    sheetToShow = conceptType(for: item.id)
+                    sheetToShow = ConceptType(itemId: item.id)
                 } label: {
                     HStack(spacing: 4) {
                         Text(Strings.Training.Preparation.learnMore)
@@ -217,32 +230,12 @@ struct PreparationSection: View {
 
     // MARK: - Helpers
 
-    private func conceptType(for itemId: String) -> ConceptType? {
-        switch itemId {
-        case "understandOperant": return .operant
-        case "understandClassical": return .classical
-        case "understandTiming": return .timing
-        default: return nil
-        }
-    }
-
     private func handleConceptAcknowledge() {
         // Mark the concept as completed when user acknowledges
-        if let concept = sheetToShow {
-            switch concept {
-            case .operant:
-                if !progressStore.isPreparationItemCompleted("understandOperant") {
-                    progressStore.togglePreparationItem("understandOperant")
-                }
-            case .classical:
-                if !progressStore.isPreparationItemCompleted("understandClassical") {
-                    progressStore.togglePreparationItem("understandClassical")
-                }
-            case .timing:
-                if !progressStore.isPreparationItemCompleted("understandTiming") {
-                    progressStore.togglePreparationItem("understandTiming")
-                }
-            }
+        guard let concept = sheetToShow else { return }
+        let itemId = concept.itemId
+        if !progressStore.isPreparationItemCompleted(itemId) {
+            progressStore.togglePreparationItem(itemId)
         }
     }
 }

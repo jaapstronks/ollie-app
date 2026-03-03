@@ -48,15 +48,7 @@ struct NextUpCard: View {
             // Skill info
             HStack(spacing: 16) {
                 // Icon
-                ZStack {
-                    Circle()
-                        .fill(Color.otisAccent.opacity(colorScheme == .dark ? 0.2 : 0.15))
-                        .frame(width: 56, height: 56)
-
-                    Image(systemName: skill.icon)
-                        .font(.system(size: 24))
-                        .foregroundStyle(Color.otisAccent)
-                }
+                IconCircle(systemName: skill.icon)
 
                 VStack(alignment: .leading, spacing: 4) {
                     Text(skill.name)
@@ -66,13 +58,7 @@ struct NextUpCard: View {
                     // Method and recommendation
                     HStack(spacing: 8) {
                         if let method = skill.method {
-                            HStack(spacing: 4) {
-                                Image(systemName: method.icon)
-                                    .font(.caption2)
-                                Text(method.label)
-                                    .font(.caption)
-                            }
-                            .foregroundStyle(method == .operant ? Color.purple : Color.blue)
+                            MethodBadge(method: method)
                         }
 
                         if let recommendation = skill.sessionRecommendation {

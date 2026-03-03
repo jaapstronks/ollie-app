@@ -49,7 +49,7 @@ struct CompactSkillCard: View {
                     } else {
                         // Status and session count
                         HStack(spacing: 6) {
-                            statusBadge
+                            StatusBadge(status: status)
 
                             if sessionCount > 0 {
                                 Text("•")
@@ -94,20 +94,6 @@ struct CompactSkillCard: View {
             return Strings.Training.Progression.skillLockedAccessibility(name: skill.name, requires: requiresNames)
         }
         return Strings.Training.Progression.skillStatusAccessibility(name: skill.name, status: status.label, sessions: sessionCount)
-    }
-
-    // MARK: - Status Badge
-
-    @ViewBuilder
-    private var statusBadge: some View {
-        HStack(spacing: 4) {
-            Image(systemName: status.icon)
-                .font(.caption2)
-            Text(status.label)
-                .font(.caption)
-                .fontWeight(.medium)
-        }
-        .foregroundStyle(status.color)
     }
 
     // MARK: - Computed Properties
