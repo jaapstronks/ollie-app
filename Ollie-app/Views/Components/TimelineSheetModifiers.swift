@@ -318,7 +318,7 @@ struct TimelineSheetModifiers: ViewModifier {
                     viewModel.sheetCoordinator.dismissSheet()
                 }
             )
-            .presentationDetents([.medium, .large])
+            .presentationDetents([.large])
 
         case .endActivity:
             if let activity = viewModel.currentActivity {
