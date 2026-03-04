@@ -61,6 +61,11 @@ extension Strings {
         static let notePlaceholder = String(localized: "What happened?", table: table)
         static let calmIsGoal = String(localized: "Calm, neutral behavior is the goal — not interaction!", table: table)
 
+        // Quick mark as comfortable
+        static let alreadyComfortable = String(localized: "Already comfortable with this?", table: table)
+        static let markAsDone = String(localized: "Mark as done", table: table)
+        static let markedComfortable = String(localized: "Marked as comfortable", table: table)
+
         // Fear protocol
         static let fearProtocolTitle = String(localized: "Building Confidence Together", table: table)
         static let fearProtocolTip1 = String(localized: "Give more space — distance is your friend", table: table)
@@ -100,6 +105,9 @@ extension Strings {
         static func exposureCount(_ count: Int) -> String {
             String(localized: "\(count) exposures", table: table)
         }
+
+        // Categories header
+        static let categories = String(localized: "Categories", table: table)
 
         // Categories (for fallback if not localized in seed data)
         static let categoryPeople = String(localized: "People", table: table)
@@ -150,6 +158,18 @@ extension Strings {
             String(localized: "\(name)'s journey", table: table)
         }
         static let nextUp = String(localized: "Next up", table: table)
+
+        // Action-focused card (Train tab)
+        static let todaysFocus = String(localized: "Today's focus", table: table)
+        static let seeAllItems = String(localized: "See All Items", table: table)
+        static let gettingSettled = String(localized: "Getting settled", table: table)
+        static let aboutSocializationWindow = String(localized: "About the Socialization Window", table: table)
+        static let viewHistory = String(localized: "View History", table: table)
+        static func greatWorkExposures(_ count: Int) -> String {
+            String(localized: "Great work! \(count) exposures logged.", table: table)
+        }
+        static let keepBuildingPositive = String(localized: "Keep building positive experiences.", table: table)
+        static let viewFullProgress = String(localized: "View full progress", table: table)
         static let quickCheckMode = String(localized: "Quick Check", table: table)
         static let quickCheckModeDesc = String(localized: "Tap items to mark comfortable", table: table)
         static func phaseProgress(comfortable: Int, total: Int) -> String {
@@ -199,6 +219,9 @@ extension Strings {
         static let infoPracticeTitle = String(localized: "In practice", table: table)
         static let infoPracticeBody = String(localized: "Sit near a playground at comfortable distance, reward calm watching. Parallel walks with calm adult dogs. Brief, controlled interactions only occasionally.", table: table)
         static let infoSummary = String(localized: "The goal: walk past a playground without breaking stride.", table: table)
+
+        // Later phases
+        static let laterPhases = String(localized: "Later Phases", table: table)
 
         // Accessibility
         static let journeyTimelineLabel = String(localized: "Socialization journey timeline", table: table)
