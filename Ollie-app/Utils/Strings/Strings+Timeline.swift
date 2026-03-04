@@ -320,6 +320,10 @@ extension Strings {
         static func needsToPeeNowOverdue(name: String, minutes: Int) -> String {
             String(localized: "\(name) needs to pee now! (\(minutes) min overdue)", table: table)
         }
+        /// Rounded overdue display (15+, 30+, 45+, 1h+)
+        static func needsToPeeNowOverdueRounded(name: String, bucket: String) -> String {
+            String(localized: "\(name) needs to pee now! (\(bucket) overdue)", table: table)
+        }
         static let afterAccidentGoOutside = String(localized: "After accident — go outside now!", table: table)
     }
 
@@ -433,6 +437,12 @@ extension Strings {
         static func pottyOverdueWhileSleeping(minutes: Int) -> String {
             String(localized: "Potty is \(minutes) min overdue", table: table)
         }
+        /// Rounded overdue display for sleeping (15+, 30+, 45+, 1h+)
+        static func pottyOverdueWhileSleepingRounded(bucket: String) -> String {
+            String(localized: "Potty is \(bucket) overdue", table: table)
+        }
+        /// Morning overnight sleep - puppy hasn't peed since last night
+        static let pottyFirstThingMorning = String(localized: "Hasn't peed since last night", table: table)
         static let pottyUrgentWhileSleeping = String(localized: "Potty needed soon", table: table)
         static let whenWakesTakeOutside = String(localized: "When she wakes, take her outside", table: table)
         static let wakeUp = String(localized: "Woke up", table: table)
@@ -447,6 +457,12 @@ extension Strings {
         static func pottyWasOverdue(minutes: Int) -> String {
             String(localized: "Potty was \(minutes) min overdue", table: table)
         }
+        /// Rounded version for past overdue (15+, 30+, 45+, 1h+)
+        static func pottyWasOverdueRounded(bucket: String) -> String {
+            String(localized: "Potty was \(bucket) overdue", table: table)
+        }
+        /// Morning-specific message for first potty of the day
+        static let pottyFirstThingAfterWaking = String(localized: "Puppies need to go first thing in the morning", table: table)
         static let postNapPottyRecommended = String(localized: "Post-nap potty break recommended", table: table)
         static let logPotty = String(localized: "Log Potty", table: table)
         static let postWakeLabel = String(localized: "Just woke", table: table)

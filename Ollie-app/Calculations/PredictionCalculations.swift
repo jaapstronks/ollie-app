@@ -81,6 +81,30 @@ struct PredictionCalculations {
     /// Minimum number of gaps required to use historical median
     static let minGapsForMedian = 5
 
+    /// Minimum overdue threshold before showing rounded bucket (< 15 min shows "now" without minutes)
+    static let overdueRoundingThresholdMinutes = 15
+
+    // MARK: - Overdue Rounding
+
+    /// Round overdue minutes to friendly buckets: "15+", "30+", "45+", "1h+", "2h+", etc.
+    /// Returns nil if overdue is below threshold (should just say "now" without specific time)
+    static func roundedOverdueBucket(_ minutes: Int) -> String? {
+        if minutes < overdueRoundingThresholdMinutes {
+            return nil // Below threshold, don't show specific time
+        } else if minutes < 30 {
+            return "15+ min"
+        } else if minutes < 45 {
+            return "30+ min"
+        } else if minutes < 60 {
+            return "45+ min"
+        } else if minutes < 120 {
+            return "1h+"
+        } else {
+            let hours = minutes / 60
+            return "\(hours)h+"
+        }
+    }
+
     // MARK: - Public Methods
 
     /// Calculate potty prediction with urgency level
@@ -221,10 +245,12 @@ struct PredictionCalculations {
             }
             return Strings.TimeFormat.stillMinutes(remaining)
         case .overdue(let overdue):
-            if overdue < 5 {
-                return Strings.Prediction.needsToPeeNow(name: puppyName)
+            // Use rounded bucket for overdue display (15+, 30+, 45+, 1h+)
+            // Below threshold just says "needs to pee now" without specific time
+            if let bucket = roundedOverdueBucket(overdue) {
+                return Strings.Prediction.needsToPeeNowOverdueRounded(name: puppyName, bucket: bucket)
             }
-            return Strings.Prediction.needsToPeeNowOverdue(name: puppyName, minutes: overdue)
+            return Strings.Prediction.needsToPeeNow(name: puppyName)
         case .postAccident:
             return Strings.Prediction.afterAccidentGoOutside
         case .coverageGap:

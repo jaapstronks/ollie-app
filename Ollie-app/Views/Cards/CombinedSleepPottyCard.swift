@@ -150,9 +150,37 @@ struct CombinedSleepPottyCard: View {
 
     // MARK: - Computed Properties
 
+    /// Whether this is overnight sleep (morning time + sleep started before morning)
+    /// In the morning, puppies need to go potty first thing - don't show overdue minutes
+    private var isOvernightSleep: Bool {
+        let calendar = Calendar.current
+        let currentHour = calendar.component(.hour, from: Date())
+
+        // Morning window: 5 AM - 11 AM
+        guard currentHour >= 5 && currentHour < 11 else { return false }
+
+        // Sleep started before this morning (last night)
+        let sleepStartHour = calendar.component(.hour, from: sleepingSince)
+        let sleepStartedToday = calendar.isDateInToday(sleepingSince)
+
+        // Overnight if: started yesterday, OR started today before 5 AM (late night)
+        return !sleepStartedToday || sleepStartHour < 5
+    }
+
     private var pottySubtitle: String {
+        // For overnight sleep in the morning, don't show specific overdue time
+        // Puppies need to go first thing after waking - that's the rule
+        if isOvernightSleep {
+            return Strings.CombinedStatus.pottyFirstThingMorning
+        }
+
+        // For daytime naps, show rounded overdue bucket
         if let overdue = minutesOverdue, overdue > 0 {
-            return Strings.CombinedStatus.pottyOverdueWhileSleeping(minutes: overdue)
+            if let bucket = PredictionCalculations.roundedOverdueBucket(overdue) {
+                return Strings.CombinedStatus.pottyOverdueWhileSleepingRounded(bucket: bucket)
+            }
+            // Below threshold, just say "potty needed soon"
+            return Strings.CombinedStatus.pottyUrgentWhileSleeping
         }
         return Strings.CombinedStatus.pottyUrgentWhileSleeping
     }

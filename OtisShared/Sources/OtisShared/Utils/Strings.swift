@@ -563,6 +563,10 @@ public enum Strings {
         public static func needsToPeeNowOverdue(name: String, minutes: Int) -> String {
             String(localized: "\(name) needs to pee! (\(minutes) min overdue)", bundle: Strings.bundle)
         }
+        /// Rounded overdue display for widgets (15+, 30+, 45+, 1h+)
+        public static func needsToPeeNowOverdueRounded(name: String, bucket: String) -> String {
+            String(localized: "\(name) needs to pee! (\(bucket) overdue)", bundle: Strings.bundle)
+        }
     }
 
     // MARK: - Time Format
