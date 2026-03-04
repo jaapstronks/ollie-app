@@ -49,6 +49,12 @@ final class SheetCoordinator: ObservableObject {
         // Celebration sheets
         case tier2Celebration(Achievement, milestone: Milestone?)
         case tier3Celebration(Achievement, milestone: Milestone?)
+        // Canonical sheets (single sources of truth)
+        case developmentJourney
+        case socializationWindow
+        case medicalCare
+        // Full timeline sheet (from Today tab)
+        case fullTimeline
 
         var id: String {
             switch self {
@@ -80,6 +86,10 @@ final class SheetCoordinator: ObservableObject {
             case .catchUp: return "catchUp"
             case .tier2Celebration(let achievement, _): return "tier2Celebration-\(achievement.id)"
             case .tier3Celebration(let achievement, _): return "tier3Celebration-\(achievement.id)"
+            case .developmentJourney: return "developmentJourney"
+            case .socializationWindow: return "socializationWindow"
+            case .medicalCare: return "medicalCare"
+            case .fullTimeline: return "fullTimeline"
             }
         }
     }

@@ -435,6 +435,56 @@ struct TimelineSheetModifiers: ViewModifier {
         // Celebration sheets are handled via separate sheet/fullScreenCover modifiers in CalendarTabView
         case .tier2Celebration, .tier3Celebration:
             EmptyView()
+
+        // Canonical sheets (single sources of truth)
+        case .developmentJourney:
+            DevelopmentJourneySheet(
+                onNavigateToSocialization: {
+                    viewModel.sheetCoordinator.presentSheet(.socializationWindow)
+                },
+                onNavigateToMedical: {
+                    viewModel.sheetCoordinator.presentSheet(.medicalCare)
+                }
+            )
+            .presentationDetents([.large])
+
+        case .socializationWindow:
+            SocializationWindowSheet(
+                onNavigateToDevelopment: {
+                    viewModel.sheetCoordinator.presentSheet(.developmentJourney)
+                },
+                onLogExposure: {
+                    viewModel.sheetCoordinator.presentSheet(.socializationLog)
+                }
+            )
+            .presentationDetents([.large])
+
+        case .medicalCare:
+            MedicalCareSheet(
+                onNavigateToDevelopment: {
+                    viewModel.sheetCoordinator.presentSheet(.developmentJourney)
+                },
+                onSelectMilestone: { milestone in
+                    // The milestone completion sheet is handled separately in HealthTabView
+                    // For now, just dismiss - the parent view will handle the selection
+                }
+            )
+            .presentationDetents([.large])
+
+        case .fullTimeline:
+            FullTimelineSheet(
+                viewModel: viewModel,
+                onEditEvent: { event in
+                    viewModel.editEvent(event)
+                },
+                onDeleteEvent: { event in
+                    viewModel.deleteEvent(event)
+                },
+                onPhotoTap: { event in
+                    selectedPhotoEvent = event
+                }
+            )
+            .presentationDetents([.large])
         }
     }
 }

@@ -67,6 +67,16 @@ struct TodayView: View {
                     .padding(.horizontal)
             }
 
+            // Partner activity summary (handoff card)
+            if viewModel.isShowingToday, let partnerSummary = viewModel.partnerActivitySummary {
+                PartnerActivitySummaryCard(
+                    summary: partnerSummary,
+                    householdMembers: viewModel.householdMembersContainer,
+                    onDismiss: { viewModel.dismissPartnerActivitySummary() }
+                )
+                .padding(.horizontal)
+            }
+
             ScrollView {
                 VStack(spacing: 16) {
                     // First-visit tip (only show on today, not past dates)
@@ -129,12 +139,6 @@ struct TodayView: View {
             }
         }
         .atmosphereBackground()
-        // Swipe gestures for day navigation
-        .dayNavigation(
-            canGoForward: viewModel.canGoForward,
-            onPreviousDay: viewModel.goToPreviousDay,
-            onNextDay: viewModel.goToNextDay
-        )
         .task {
             await weatherService.fetchForecasts()
         }
@@ -155,46 +159,13 @@ struct TodayView: View {
     @ViewBuilder
     private var todayNavBar: some View {
         HStack(spacing: 12) {
-            // Compact day navigation group
-            HStack(spacing: 0) {
-                // Previous day button
-                Button {
-                    HapticFeedback.selection()
-                    viewModel.goToPreviousDay()
-                } label: {
-                    Image(systemName: "chevron.left")
-                        .font(.system(size: 18, weight: .semibold))
-                        .frame(width: 44, height: 44)
-                        .contentShape(Rectangle())
-                }
-                .accessibilityLabel(Strings.Timeline.previousDay)
-
-                // Next day button
-                Button {
-                    HapticFeedback.selection()
-                    viewModel.goToNextDay()
-                } label: {
-                    Image(systemName: "chevron.right")
-                        .font(.system(size: 18, weight: .semibold))
-                        .frame(width: 44, height: 44)
-                        .contentShape(Rectangle())
-                }
-                .opacity(viewModel.canGoForward ? 1 : 0.3)
-                .disabled(!viewModel.canGoForward)
-                .accessibilityLabel(Strings.Timeline.nextDay)
-            }
-            .background(
-                Capsule()
-                    .fill(Color(.tertiarySystemFill))
-            )
-
             // Date title with subtle day counter
-            VStack(spacing: 2) {
+            VStack(alignment: .leading, spacing: 2) {
                 Text(viewModel.dateTitle)
                     .font(.headline)
 
-                // Subtle day counter - only show when viewing today
-                if viewModel.isShowingToday, let dayNumber = viewModel.dailyDigest.dayNumber {
+                // Subtle day counter
+                if let dayNumber = viewModel.dailyDigest.dayNumber {
                     Text(Strings.Timeline.dayWithPuppyName(day: dayNumber, name: viewModel.puppyName))
                         .font(.caption)
                         .foregroundStyle(.secondary)
@@ -205,26 +176,6 @@ struct TodayView: View {
             .accessibilityAddTraits(.isHeader)
 
             Spacer()
-
-            // "Today" pill button - only show when viewing past days
-            if !viewModel.isShowingToday {
-                Button {
-                    HapticFeedback.selection()
-                    viewModel.goToToday()
-                } label: {
-                    Text(Strings.Common.today)
-                        .font(.subheadline.weight(.medium))
-                        .foregroundStyle(.white)
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 6)
-                        .background(
-                            Capsule()
-                                .fill(Color.accentColor)
-                        )
-                }
-                .accessibilityLabel(Strings.Common.today)
-                .accessibilityHint(Strings.Timeline.goToTodayHint)
-            }
 
             // Profile photo button
             // - Tap: Opens profile picker if multiple profiles exist, otherwise settings
@@ -430,16 +381,10 @@ struct TodayView: View {
 
     @ViewBuilder
     private var timelineSection: some View {
-        VerticalTimelineView(
-            viewModel: viewModel,
-            onEditEvent: { event in
-                viewModel.editEvent(event)
-            },
-            onDeleteEvent: { event in
-                viewModel.deleteEvent(event)
-            },
-            onPhotoTap: { event in
-                selectedPhotoEvent = event
+        RecentActivityPreview(
+            events: viewModel.events,
+            onViewFullTimeline: {
+                viewModel.sheetCoordinator.presentSheet(.fullTimeline)
             }
         )
     }
