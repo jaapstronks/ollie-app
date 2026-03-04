@@ -22,9 +22,14 @@ struct CalendarTabView: View {
     // View mode state with persistence
     @AppStorage("calendarViewMode") private var viewMode: CalendarViewMode = .development
 
+    // First-visit tip tracking
+    @AppStorage("hasSeenDevelopmentTip") private var hasSeenDevelopmentTip = false
+    @AppStorage("hasSeenCalendarTip") private var hasSeenCalendarTip = false
+
     @State private var showAppointmentsView = false
     @State private var showAddAppointment = false
     @State private var showAddContact = false
+    @State private var showImportContact = false
     @State private var showRoadmap = false
     @State private var selectedMilestone: Milestone?
     @State private var selectedAppointment: DogAppointment?
@@ -204,33 +209,40 @@ struct CalendarTabView: View {
         .sheet(isPresented: $showAddContact) {
             AddEditContactSheet(contactStore: contactStore)
         }
+        .sheet(isPresented: $showImportContact) {
+            ContactImportSheet(contactStore: contactStore)
+        }
     }
 
     // MARK: - Floating Action Button
 
     @ViewBuilder
     private var scheduleFAB: some View {
-        Button {
-            if viewMode == .contacts {
-                showAddContact = true
-            } else {
+        if viewMode == .contacts {
+            // Menu FAB for contacts - shows add and import options
+            SimpleFAB(accessibilityLabel: Strings.Contacts.addContact) {
+                Menu {
+                    Button {
+                        showAddContact = true
+                    } label: {
+                        Label(Strings.Contacts.addContact, systemImage: "plus")
+                    }
+
+                    Button {
+                        showImportContact = true
+                    } label: {
+                        Label(Strings.Contacts.importFromContacts, systemImage: "person.crop.circle.badge.plus")
+                    }
+                } label: {
+                    FABLabel()
+                }
+            }
+        } else {
+            // Simple FAB for appointments
+            SimpleFAB(accessibilityLabel: Strings.Calendar.addAppointment) {
                 showAddAppointment = true
             }
-        } label: {
-            ZStack {
-                Circle()
-                    .fill(Color.otisAccent)
-                    .frame(width: 56, height: 56)
-                    .shadow(color: Color.otisAccent.opacity(0.4), radius: 8, y: 4)
-
-                Image(systemName: "plus")
-                    .font(.system(size: 24, weight: .semibold))
-                    .foregroundStyle(.white)
-            }
         }
-        .padding(.trailing, 16)
-        .padding(.bottom, 60) // Above tab bar
-        .accessibilityLabel(viewMode == .contacts ? Strings.Contacts.addContact : Strings.Calendar.addAppointment)
     }
 
     // MARK: - Development View
@@ -239,6 +251,18 @@ struct CalendarTabView: View {
     private var developmentView: some View {
         ScrollView(.vertical) {
             VStack(spacing: 20) {
+                // First-visit tip
+                if !hasSeenDevelopmentTip {
+                    FeatureTipCard(
+                        tip: .scheduleDevelopment,
+                        onDismiss: {
+                            withAnimation(.easeOut(duration: 0.2)) {
+                                hasSeenDevelopmentTip = true
+                            }
+                        }
+                    )
+                }
+
                 // Age header
                 if let profile = profileStore.profile {
                     CalendarAgeHeader(profile: profile)

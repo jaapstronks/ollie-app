@@ -25,6 +25,9 @@ struct PlacesTabView: View {
     @AppStorage("exploreViewMode") private var viewMode: ExploreViewMode = .map
     @AppStorage("momentsViewMode") private var momentsViewMode: MomentsViewMode = .gallery
 
+    // First-visit tip tracking
+    @AppStorage("hasSeenPlacesTip") private var hasSeenPlacesTip = false
+
     @State private var showingAddSpot = false
     @State private var showingAddContact = false
     @State private var selectedSpot: WalkSpot?
@@ -145,7 +148,7 @@ struct PlacesTabView: View {
     // MARK: - Map Content
 
     private var mapContent: some View {
-        ZStack(alignment: .bottom) {
+        ZStack(alignment: .bottomTrailing) {
             // Full-screen map with filter bar
             ZStack(alignment: .top) {
                 mapView
@@ -161,13 +164,27 @@ struct PlacesTabView: View {
                     )
                     Spacer()
                 }
+
+                // First-visit tip overlay
+                if !hasSeenPlacesTip {
+                    VStack {
+                        Spacer()
+                        FeatureTipCard(
+                            tip: .placesIntro,
+                            onDismiss: {
+                                withAnimation(.easeOut(duration: 0.2)) {
+                                    hasSeenPlacesTip = true
+                                }
+                            }
+                        )
+                        .padding()
+                        .padding(.bottom, FABLayout.bottomPadding + FABLayout.size + 16) // Space for FAB
+                    }
+                }
             }
 
             // Floating Add Button
-            HStack {
-                Spacer()
-                addSpotFAB
-            }
+            addSpotFAB
         }
     }
 
@@ -346,64 +363,36 @@ struct PlacesTabView: View {
     // MARK: - Add FAB with Menu
 
     private var addSpotFAB: some View {
-        Menu {
-            Button {
-                showingAddSpot = true
-            } label: {
-                Label(Strings.Places.addSpot, systemImage: "mappin.circle.fill")
-            }
+        SimpleFAB(accessibilityLabel: Strings.Common.add) {
+            Menu {
+                Button {
+                    showingAddSpot = true
+                } label: {
+                    Label(Strings.Places.addSpot, systemImage: "mappin.circle.fill")
+                }
 
-            Button {
-                showingAddContact = true
+                Button {
+                    showingAddContact = true
+                } label: {
+                    Label(Strings.Places.addContact, systemImage: "person.crop.circle.badge.plus")
+                }
             } label: {
-                Label(Strings.Places.addContact, systemImage: "person.crop.circle.badge.plus")
+                FABLabel()
             }
-        } label: {
-            Image(systemName: "plus")
-                .font(.system(size: 20, weight: .semibold))
-                .foregroundStyle(.white)
-                .frame(width: 56, height: 56)
-                .background(
-                    Circle()
-                        .fill(Color.otisAccent)
-                        .shadow(
-                            color: Color.otisAccent.opacity(0.4),
-                            radius: 8,
-                            x: 0,
-                            y: 4
-                        )
-                )
         }
-        .padding(.trailing, 16)
-        .padding(.bottom, 100) // Above tab bar
-        .accessibilityLabel(Strings.Common.add)
     }
 
     // MARK: - Add Moment FAB
 
     private func addMomentFAB(action: @escaping () -> Void) -> some View {
-        Button {
-            HapticFeedback.medium()
-            action()
-        } label: {
-            Image(systemName: "camera.fill")
-                .font(.system(size: 20, weight: .semibold))
-                .foregroundStyle(.white)
-                .frame(width: 56, height: 56)
-                .background(
-                    Circle()
-                        .fill(Color.otisAccent)
-                        .shadow(
-                            color: Color.otisAccent.opacity(0.4),
-                            radius: 8,
-                            x: 0,
-                            y: 4
-                        )
-                )
+        SimpleFAB(accessibilityLabel: Strings.LogMoment.title) {
+            Button {
+                HapticFeedback.medium()
+                action()
+            } label: {
+                FABLabel(icon: "camera.fill")
+            }
         }
-        .padding(.trailing, 16)
-        .padding(.bottom, 100) // Above tab bar
-        .accessibilityLabel(Strings.LogMoment.title)
     }
 }
 
