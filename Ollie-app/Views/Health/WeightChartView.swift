@@ -28,9 +28,14 @@ struct WeightChartView: View {
         return max(measurementMax + 4, min(referenceMax, 52))
     }
 
+    /// Pre-filtered reference curve (computed once, used multiple times)
+    private var filteredReferenceCurve: [GrowthReference] {
+        referenceCurve.filter { $0.weeks <= maxWeeks }
+    }
+
     private var maxWeight: Double {
         let measurementMaxKg = measurements.map(\.weightKg).max() ?? 0
-        let referenceMaxKg = referenceCurve.filter { $0.weeks <= maxWeeks }.map(\.kg).max() ?? 30
+        let referenceMaxKg = filteredReferenceCurve.map(\.kg).max() ?? 30
         let upperBandKg = referenceMaxKg * (1 + GrowthCurves.tolerancePercent)
         let maxKg = max(measurementMaxKg * 1.1, upperBandKg * 1.1)
         return weightUnit.convert(fromKg: maxKg)
@@ -53,8 +58,8 @@ struct WeightChartView: View {
 
             // Chart
             Chart {
-                // Reference band (±15%)
-                ForEach(referenceCurve.filter { $0.weeks <= maxWeeks }) { point in
+                // Reference band (±15%) - use pre-filtered curve
+                ForEach(filteredReferenceCurve) { point in
                     let band = WeightCalculations.referenceBand(at: point.weeks, curve: referenceCurve)
                     AreaMark(
                         x: .value(Strings.Health.weeks, point.weeks),
@@ -65,8 +70,8 @@ struct WeightChartView: View {
                     .interpolationMethod(.catmullRom)
                 }
 
-                // Reference center line (dashed)
-                ForEach(referenceCurve.filter { $0.weeks <= maxWeeks }) { point in
+                // Reference center line (dashed) - use pre-filtered curve
+                ForEach(filteredReferenceCurve) { point in
                     LineMark(
                         x: .value(Strings.Health.weeks, point.weeks),
                         y: .value(weightUnit.symbol, displayWeight(point.kg))

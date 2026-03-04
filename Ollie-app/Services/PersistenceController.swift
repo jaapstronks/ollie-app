@@ -9,7 +9,7 @@
 //  to protect against data loss when iCloud becomes unavailable (iOS 18+ issue).
 //
 
-import CoreData
+@preconcurrency import CoreData
 import CloudKit
 
 /// Manages Core Data persistence with automatic CloudKit synchronization
@@ -31,8 +31,8 @@ final class PersistenceController: @unchecked Sendable {
 
     // MARK: - CloudKit Container Identifier
 
-    private static let cloudKitContainerIdentifier = "iCloud.nl.jaapstronks.Otis"
-    private static let appGroupIdentifier = "group.jaapstronks.Otis"
+    nonisolated private static let cloudKitContainerIdentifier = "iCloud.nl.jaapstronks.Otis"
+    nonisolated private static let appGroupIdentifier = "group.jaapstronks.Otis"
 
     // MARK: - iCloud Availability
 
@@ -42,6 +42,10 @@ final class PersistenceController: @unchecked Sendable {
     /// Whether we're running in local-only mode (fallback when iCloud unavailable)
     private(set) var isLocalOnlyMode: Bool = false
 
+    /// Whether we're running with in-memory storage only (fallback when app group unavailable)
+    /// Data will NOT persist between app launches in this mode
+    private(set) var isInMemoryFallbackMode: Bool = false
+
     // MARK: - Contexts
 
     /// Main view context for UI operations
@@ -50,7 +54,7 @@ final class PersistenceController: @unchecked Sendable {
     }
 
     /// Background context for data operations
-    func newBackgroundContext() -> NSManagedObjectContext {
+    nonisolated func newBackgroundContext() -> NSManagedObjectContext {
         let context = container.newBackgroundContext()
         context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
         context.automaticallyMergesChangesFromParent = true
@@ -59,8 +63,8 @@ final class PersistenceController: @unchecked Sendable {
 
     // MARK: - Initialization
 
-    init(inMemory: Bool = false) {
-        container = NSPersistentCloudKitContainer(name: "Max")
+    nonisolated init(inMemory: Bool = false) {
+        container = NSPersistentCloudKitContainer(name: "Ollie")
 
         // Use fast synchronous check only (ubiquityIdentityToken) to avoid blocking main thread.
         // The async CKContainer.accountStatus() check is deferred to background.
@@ -104,7 +108,7 @@ final class PersistenceController: @unchecked Sendable {
 
     /// Fast synchronous check using ubiquityIdentityToken only.
     /// Does NOT call CKContainer.accountStatus() — that is deferred to background.
-    private static func checkiCloudAccountStatusSync() -> Bool {
+    nonisolated private static func checkiCloudAccountStatusSync() -> Bool {
         guard FileManager.default.ubiquityIdentityToken != nil else {
             print("iCloud ubiquity token not available - user may not be signed in")
             return false
@@ -138,7 +142,7 @@ final class PersistenceController: @unchecked Sendable {
 
     // MARK: - Account Change Notifications
 
-    private func setupAccountChangeNotifications() {
+    nonisolated private func setupAccountChangeNotifications() {
         // Listen for iCloud account changes to handle sign-out gracefully
         NotificationCenter.default.addObserver(
             self,
@@ -181,7 +185,7 @@ final class PersistenceController: @unchecked Sendable {
 
     // MARK: - Store Configuration
 
-    private func configureInMemoryStore() {
+    nonisolated private func configureInMemoryStore() {
         let description = NSPersistentStoreDescription()
         description.type = NSInMemoryStoreType
         container.persistentStoreDescriptions = [description]
@@ -189,9 +193,14 @@ final class PersistenceController: @unchecked Sendable {
 
     /// Configure local-only SQLite store without CloudKit sync
     /// Used as fallback when iCloud is unavailable to prevent data loss
-    private func configureLocalOnlyStore() {
+    nonisolated private func configureLocalOnlyStore() {
         guard let storeURL = Self.storeURL(for: "Otis-local.sqlite") else {
-            fatalError("Unable to resolve app group container URL for local store")
+            // Fallback to in-memory store if app group container is unavailable
+            // This prevents crashes while still allowing the app to function
+            print("ERROR: Unable to resolve app group container URL for local store - falling back to in-memory storage")
+            isInMemoryFallbackMode = true
+            configureInMemoryStore()
+            return
         }
 
         let description = NSPersistentStoreDescription(url: storeURL)
@@ -208,10 +217,15 @@ final class PersistenceController: @unchecked Sendable {
         print("  Note: CloudKit sync disabled - data stored locally only")
     }
 
-    private func configurePersistentStores() {
+    nonisolated private func configurePersistentStores() {
         guard let storeURL = Self.storeURL(for: "Otis.sqlite"),
               let sharedStoreURL = Self.storeURL(for: "Otis-shared.sqlite") else {
-            fatalError("Unable to resolve app group container URL")
+            // Fallback to in-memory store if app group container is unavailable
+            // This prevents crashes while still allowing the app to function
+            print("ERROR: Unable to resolve app group container URL - falling back to in-memory storage")
+            isInMemoryFallbackMode = true
+            configureInMemoryStore()
+            return
         }
 
         // Private store description (owner's data)
@@ -241,7 +255,7 @@ final class PersistenceController: @unchecked Sendable {
         print("  Shared: \(sharedStoreURL)")
     }
 
-    private func loadStores() {
+    nonisolated private func loadStores() {
         let expectedStoreCount = container.persistentStoreDescriptions.count
         var loadedStoreCount = 0
 
@@ -279,7 +293,7 @@ final class PersistenceController: @unchecked Sendable {
 
     // MARK: - Store URL Helper
 
-    private static func storeURL(for filename: String) -> URL? {
+    nonisolated private static func storeURL(for filename: String) -> URL? {
         guard let containerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroupIdentifier) else {
             return nil
         }
@@ -288,7 +302,7 @@ final class PersistenceController: @unchecked Sendable {
 
     // MARK: - Remote Change Tracking
 
-    private func setupRemoteChangeTracking() {
+    nonisolated private func setupRemoteChangeTracking() {
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(processRemoteStoreChange),
@@ -457,7 +471,7 @@ final class PersistenceController: @unchecked Sendable {
 
     // MARK: - Preview Support
 
-    static var preview: PersistenceController = {
+    nonisolated(unsafe) static var preview: PersistenceController = {
         let controller = PersistenceController(inMemory: true)
         // Add sample data for previews if needed
         return controller
@@ -471,6 +485,7 @@ enum PersistenceError: LocalizedError {
     case privateStoreUnavailable
     case saveFailure(Error)
     case iCloudUnavailable
+    case appGroupUnavailable
 
     var errorDescription: String? {
         switch self {
@@ -482,6 +497,8 @@ enum PersistenceError: LocalizedError {
             return "Failed to save: \(error.localizedDescription)"
         case .iCloudUnavailable:
             return "iCloud is not available. Data is being stored locally only."
+        case .appGroupUnavailable:
+            return "App group container is not available. Data will not persist between app launches."
         }
     }
 }

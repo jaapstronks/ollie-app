@@ -25,15 +25,42 @@ struct HealthTabView: View {
     @State private var showOtisPlusSheet = false
     @State private var selectedMilestone: Milestone?
     @State private var showAllMilestones = false
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    // First-visit tip tracking
+    @AppStorage("hasSeenHealthTip") private var hasSeenHealthTip = false
 
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 20) {
-                    // Medical milestones section (top priority)
+                    // First-visit tip
+                    if !hasSeenHealthTip {
+                        FeatureTipCard(
+                            tip: .healthIntro,
+                            onDismiss: {
+                                withAnimation(.easeOut(duration: 0.2)) {
+                                    hasSeenHealthTip = true
+                                }
+                            }
+                        )
+                    }
+
+                    // Development phase card (developmental stage + active periods)
+                    if let profile = profileStore.profile {
+                        let activePeriods = milestoneStore.activeDevelopmentalPeriods(birthDate: profile.birthDate)
+                        DevelopmentPhaseCard(
+                            birthDate: profile.birthDate,
+                            puppyName: profile.name,
+                            activePeriods: activePeriods
+                        )
+                        .animatedAppear(delay: 0)
+                    }
+
+                    // Medical milestones section
                     if let birthDate = profileStore.profile?.birthDate {
                         medicalMilestonesSection(birthDate: birthDate)
-                            .animatedAppear(delay: 0)
+                            .animatedAppear(delay: 0.05)
                     }
 
                     // Health section (growth story)
@@ -48,27 +75,27 @@ struct HealthTabView: View {
                         onShowChart: { showGrowthChart = true },
                         showWeightSheet: $showWeightSheet
                     )
-                    .animatedAppear(delay: 0.05)
+                    .animatedAppear(delay: 0.10)
 
                     // Combined potty training section (streak + gaps)
                     pottyTrainingSection
-                        .animatedAppear(delay: 0.10)
+                        .animatedAppear(delay: 0.15)
 
                     // Week Overview section (grid + trend chart)
                     InsightsWeekOverviewSection(weekStats: weekStats)
-                        .animatedAppear(delay: 0.15)
+                        .animatedAppear(delay: 0.20)
 
                     // Today's summary
                     statsSection(title: Strings.Stats.today, icon: "calendar", tint: .otisSuccess) {
                         TodayStatsCard(events: todayEvents)
                     }
-                    .animatedAppear(delay: 0.20)
+                    .animatedAppear(delay: 0.25)
 
                     // Sleep summary
                     statsSection(title: Strings.Stats.sleepToday, icon: "moon.fill", tint: .otisSleep) {
                         SleepStatsCard(events: todayEvents)
                     }
-                    .animatedAppear(delay: 0.25)
+                    .animatedAppear(delay: 0.30)
 
                     // Pattern analysis (Otis+ feature)
                     Group {
@@ -85,10 +112,9 @@ struct HealthTabView: View {
                             )
                         }
                     }
-                    .animatedAppear(delay: 0.30)
+                    .animatedAppear(delay: 0.35)
                 }
                 .padding()
-                .padding(.bottom, 84) // Space for FAB
             }
             .navigationTitle(Strings.Tabs.health)
             .navigationBarTitleDisplayMode(.inline)
@@ -335,7 +361,7 @@ struct HealthTabView: View {
                 // Show more/less button
                 if hasMoreToShow {
                     Button {
-                        withAnimation(.easeInOut(duration: 0.2)) {
+                        withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.2)) {
                             showAllMilestones.toggle()
                         }
                     } label: {

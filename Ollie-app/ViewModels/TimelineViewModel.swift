@@ -2,13 +2,15 @@
 //  TimelineViewModel.swift
 //  Otis-app
 //
-//  Core timeline view model - manages event display and state
+//  Core timeline view model - acts as a coordinator delegating to focused services.
 //  Functionality is split across extensions:
 //  - TimelineViewModel+Navigation.swift - Date navigation
-//  - TimelineViewModel+Events.swift - Event CRUD operations
-//  - TimelineViewModel+Predictions.swift - Potty/sleep predictions and stats
-//  - TimelineViewModel+CoverageGaps.swift - Coverage gap tracking
+//  - TimelineViewModel+Events.swift - Event CRUD operations (delegates to EventLoggingService)
+//  - TimelineViewModel+Predictions.swift - Potty/sleep predictions (delegates to PredictionService)
+//  - TimelineViewModel+CoverageGaps.swift - Coverage gap tracking (delegates to CoverageGapService)
 //  - TimelineViewModel+Activities.swift - Walk/nap activity tracking
+//  - TimelineViewModel+Stats.swift - Stats (delegates to TodayStatsProvider)
+//  - TimelineViewModel+VerticalTimeline.swift - Timeline items (delegates to TimelineItemBuilder)
 //
 
 import Foundation
@@ -92,9 +94,21 @@ class TimelineViewModel: ObservableObject {
     var cachedRecentWalks: [PuppyEvent] { statsCache.recentWalks }
     var cachedWeekWalkStats: (count: Int, totalMinutes: Int) { statsCache.weekWalkStats }
 
-    // MARK: - Combined Sleep + Potty State
+    // MARK: - Extracted Services
+
+    /// Event logging service (handles CRUD and undo)
+    let eventLoggingService: EventLoggingService
+
+    /// Coverage gap service (handles gap detection and catch-up)
+    let coverageGapService: CoverageGapService
+
+    /// Prediction service (handles potty/sleep predictions, streaks)
+    let predictionService: PredictionService
+
+    // MARK: - Combined Sleep + Potty State (delegates to PredictionService)
 
     /// Captured potty state at wake time (for post-wake tracking)
+    /// Delegates to PredictionService
     @Published private(set) var wakeTimePottyState: WakeTimePottyState?
 
     /// Time of last potty event (for clearing post-wake state)
@@ -102,6 +116,12 @@ class TimelineViewModel: ObservableObject {
 
     /// Date when user dismissed the assumed overnight sleep card (reset daily)
     @Published internal var dismissedAssumedSleepDate: Date?
+
+    /// Date when user dismissed the stale logging banner (reset daily)
+    @Published internal var dismissedStaleLoggingDate: Date?
+
+    /// Whether user has dismissed the first run welcome card (persisted)
+    @Published internal var dismissedFirstRunWelcome: Bool = UserDefaults.standard.bool(forKey: "dismissedFirstRunWelcome")
 
     /// Background notification task (stored for cancellation)
     private var notificationTask: Task<Void, Never>?
@@ -117,6 +137,12 @@ class TimelineViewModel: ObservableObject {
 
     /// Subscription to forward TimelineStatsCache changes
     private var statsCacheCancellable: AnyCancellable?
+
+    /// Subscription to forward EventLoggingService changes
+    private var eventLoggingServiceCancellable: AnyCancellable?
+
+    /// Subscription to forward PredictionService changes
+    private var predictionServiceCancellable: AnyCancellable?
 
     let eventStore: EventStore
     let profileStore: ProfileStore
@@ -146,6 +172,11 @@ class TimelineViewModel: ObservableObject {
         // Create stats cache (extracted service)
         self.statsCache = TimelineStatsCache(eventStore: eventStore, profileStore: profileStore)
 
+        // Create extracted services
+        self.eventLoggingService = EventLoggingService(eventStore: eventStore, profileStore: profileStore)
+        self.coverageGapService = CoverageGapService(eventStore: eventStore, profileStore: profileStore)
+        self.predictionService = PredictionService(profileStore: profileStore)
+
         // Forward SheetCoordinator's objectWillChange to this ViewModel
         // This ensures views are notified when sheet state changes
         sheetCoordinatorCancellable = sheetCoordinator.objectWillChange
@@ -165,6 +196,23 @@ class TimelineViewModel: ObservableObject {
                 self?.objectWillChange.send()
             }
 
+        // Forward EventLoggingService's objectWillChange to this ViewModel
+        eventLoggingServiceCancellable = eventLoggingService.objectWillChange
+            .sink { [weak self] _ in
+                self?.objectWillChange.send()
+            }
+
+        // Note: CoverageGapService uses callbacks, not ObservableObject
+
+        // Forward PredictionService's objectWillChange to this ViewModel
+        predictionServiceCancellable = predictionService.objectWillChange
+            .sink { [weak self] _ in
+                self?.objectWillChange.send()
+            }
+
+        // Set up service callbacks
+        setupServiceCallbacks()
+
         // Set up activity manager callbacks
         setupActivityManagerCallbacks()
 
@@ -178,6 +226,8 @@ class TimelineViewModel: ObservableObject {
                 // Rebuild timeline items and refresh stats since events changed
                 self.rebuildTimelineItems()
                 self.statsCache.refresh(force: true)
+                // Also refresh predictions
+                self.refreshPredictions()
             }
 
         loadEvents()
@@ -247,48 +297,9 @@ class TimelineViewModel: ObservableObject {
 
     /// Rebuild the pre-computed timeline items from current events
     /// This avoids O(n²) session building on every view render
+    /// Delegates to TimelineItemBuilder for pure function logic
     internal func rebuildTimelineItems() {
-        // Build sleep sessions (O(n) with optimized lookup)
-        let sessions = SleepSession.buildSessions(from: events)
-
-        // Create a lookup dictionary for event IDs -> notes (O(1) lookup instead of O(n))
-        let eventNotes: [UUID: String] = Dictionary(
-            uniqueKeysWithValues: events.compactMap { event in
-                guard let note = event.note else { return nil }
-                return (event.id, note)
-            }
-        )
-
-        // Get IDs of events that are part of sessions
-        var sessionEventIds: Set<UUID> = []
-        var sessionNotes: [UUID: String] = [:]
-
-        for session in sessions {
-            sessionEventIds.insert(session.startEventId)
-            if let endId = session.endEventId {
-                sessionEventIds.insert(endId)
-            }
-            // Get note from the sleep event using O(1) dictionary lookup
-            if let note = eventNotes[session.startEventId] {
-                sessionNotes[session.id] = note
-            }
-        }
-
-        // Build timeline items
-        var items: [TimelineItem] = []
-
-        // Add non-sleep events (excluding weight events which belong on Health tab only)
-        for event in events where !sessionEventIds.contains(event.id) && event.type != .gewicht {
-            items.append(.event(event))
-        }
-
-        // Add sleep sessions
-        for session in sessions {
-            items.append(.sleepSession(session, note: sessionNotes[session.id]))
-        }
-
-        // Sort by time (oldest first for timeline display)
-        timelineItems = items.sorted { $0.sortTime < $1.sortTime }
+        timelineItems = TimelineItemBuilder.buildTimelineItems(from: events)
     }
 
 
@@ -340,6 +351,51 @@ class TimelineViewModel: ObservableObject {
             for: pending.scheduledDate
         )
         HapticFeedback.success()
+    }
+
+    // MARK: - Service Callbacks Setup
+
+    /// Configure callbacks for all extracted services
+    private func setupServiceCallbacks() {
+        // EventLoggingService callbacks
+        eventLoggingService.onEventsChanged = { [weak self] in
+            self?.syncEventsFromStore()
+            self?.statsCache.refresh(force: true)
+            self?.refreshPredictions()
+        }
+
+        eventLoggingService.onCelebration = { [weak self] style, message in
+            self?.triggerCelebration(style)
+            if let msg = message {
+                self?.sheetCoordinator.showCelebration(message: msg)
+            }
+        }
+
+        eventLoggingService.onRefreshNotifications = { [weak self] in
+            self?.refreshNotifications()
+        }
+
+        eventLoggingService.onRecordPottyLogTime = { [weak self] in
+            self?.recordPottyLogTime()
+        }
+
+        // CoverageGapService callbacks
+        coverageGapService.onShowSheet = { [weak self] sheet in
+            self?.sheetCoordinator.presentSheet(sheet)
+        }
+
+        coverageGapService.onEventsChanged = { [weak self] in
+            self?.syncEventsFromStore()
+            self?.statsCache.refresh(force: true)
+        }
+
+        coverageGapService.onUpdateEvent = { [weak self] event in
+            self?.updateEvent(event)
+        }
+
+        coverageGapService.onLogEvent = { [weak self] type, time, location, note in
+            self?.logEvent(type: type, time: time, location: location, note: note)
+        }
     }
 
     // MARK: - Activity Tracking Setup
@@ -396,6 +452,19 @@ class TimelineViewModel: ObservableObject {
         statsCache.refresh(force: true)
     }
 
+    /// Refresh prediction service state
+    func refreshPredictions() {
+        predictionService.refresh(
+            todayEvents: events,
+            recentEvents: getRecentEvents(),
+            historicalEvents: getHistoricalEvents(days: 7),
+            allEvents: getAllEvents(),
+            currentDate: currentDate,
+            isShowingToday: isShowingToday,
+            hasActiveCoverageGap: activeCoverageGap != nil
+        )
+    }
+
     /// Record potty log time for post-wake state tracking
     func recordPottyLogTime() {
         lastPottyLogTime = Date()
@@ -433,9 +502,20 @@ class TimelineViewModel: ObservableObject {
     }
 
     /// Get all events (up to 30 days back for streak history)
+    /// Uses in-memory events for today (fresh) + Core Data for historical (stable)
     func getAllEvents() -> [PuppyEvent] {
-        let thirtyDaysAgo = Date().addingDays(-30)
-        return eventStore.getEvents(from: thirtyDaysAgo, to: Date())
+        let calendar = Calendar.current
+        let today = Date()
+        let thirtyDaysAgo = today.addingDays(-30)
+        let startOfToday = calendar.startOfDay(for: today)
+
+        // Get historical events (before today) from Core Data
+        let historicalEvents = eventStore.getEvents(from: thirtyDaysAgo, to: startOfToday)
+
+        // Use in-memory events for today (always fresh)
+        let todayEvents = events.filter { calendar.isDateInToday($0.time) }
+
+        return (historicalEvents + todayEvents).sorted { $0.time > $1.time }
     }
 
     /// Get events from today and yesterday (for cross-midnight tracking)

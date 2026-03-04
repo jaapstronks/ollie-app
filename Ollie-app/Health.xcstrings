@@ -4,6 +4,30 @@
     "%@ since %@" : {
       "extractionState" : "stale",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ seit %2$@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ desde %2$@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ depuis %2$@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ da %2$@"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15,6 +39,30 @@
     "%@ since last" : {
       "extractionState" : "stale",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ seit letztem"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ desde el anterior"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ depuis la dernière"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ dall'ultimo"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -26,6 +74,30 @@
     "%lld months" : {
       "extractionState" : "stale",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld Monate"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld meses"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld mois"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld mesi"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -34,24 +106,37 @@
         }
       }
     },
-    "%lldd ago" : {
+    "%lld year(s)" : {
       "extractionState" : "stale",
       "localizations" : {
-        "nl" : {
+        "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%lldd geleden"
+            "value" : "%lld Jahr(e)"
           }
-        }
-      }
-    },
-    "%lldd overdue" : {
-      "extractionState" : "stale",
-      "localizations" : {
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld año(s)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld an(s)"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld anno/i"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%lldd te laat"
+            "value" : "%lld jaar"
           }
         }
       }
@@ -59,6 +144,30 @@
     "Above reference" : {
       "extractionState" : "stale",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Über Referenz"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Por encima de la referencia"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Au-dessus de la référence"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sopra il riferimento"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -67,130 +176,33 @@
         }
       }
     },
-    "Active" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Actief"
-          }
-        }
-      }
-    },
-    "Add medication" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Medicatie toevoegen"
-          }
-        }
-      }
-    },
-    "Add Milestone" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mijlpaal toevoegen"
-          }
-        }
-      }
-    },
-    "Add notes" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Notities toevoegen"
-          }
-        }
-      }
-    },
-    "Add photo" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Foto toevoegen"
-          }
-        }
-      }
-    },
-    "Add Photo" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Foto toevoegen"
-          }
-        }
-      }
-    },
-    "Add reminder for next occurrence" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Herinnering toevoegen voor volgende keer"
-          }
-        }
-      }
-    },
-    "Add this milestone to your default calendar with a reminder" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Voeg deze mijlpaal toe aan je standaard agenda met een herinnering"
-          }
-        }
-      }
-    },
-    "Add time" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tijd toevoegen"
-          }
-        }
-      }
-    },
-    "Add to Calendar" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Toevoegen aan agenda"
-          }
-        }
-      }
-    },
-    "Be extra gentle with new experiences" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Wees extra voorzichtig met nieuwe ervaringen"
-          }
-        }
-      }
-    },
     "Below reference" : {
       "extractionState" : "stale",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unter Referenz"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Por debajo de la referencia"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En dessous de la référence"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sotto il riferimento"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -199,13 +211,37 @@
         }
       }
     },
-    "Booster vaccination at 12 weeks" : {
+    "Birth" : {
       "extractionState" : "stale",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geburt"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nacimiento"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Naissance"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nascita"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Herhalingsvaccinatie bij 12 weken"
+            "value" : "Geboorte"
           }
         }
       }
@@ -213,6 +249,30 @@
     "categories" : {
       "extractionState" : "stale",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kategorien"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "categorías"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "catégories"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "categorie"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -221,119 +281,33 @@
         }
       }
     },
-    "Category" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Categorie"
-          }
-        }
-      }
-    },
-    "Clinic name (optional)" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Naam kliniek (optioneel)"
-          }
-        }
-      }
-    },
-    "Coming up" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Binnenkort"
-          }
-        }
-      }
-    },
-    "Coming Up" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Binnenkort"
-          }
-        }
-      }
-    },
-    "Complete Milestone" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mijlpaal voltooien"
-          }
-        }
-      }
-    },
-    "Completed" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Voltooid"
-          }
-        }
-      }
-    },
-    "Completion date" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Datum voltooid"
-          }
-        }
-      }
-    },
-    "Consider health insurance coverage" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Overweeg een ziektekostenverzekering"
-          }
-        }
-      }
-    },
-    "Core vaccination at 8 weeks" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Basisvaccinatie bij 8 weken"
-          }
-        }
-      }
-    },
-    "Critical period for positive experiences starts now" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kritieke periode voor positieve ervaringen begint nu"
-          }
-        }
-      }
-    },
     "Current weight" : {
       "extractionState" : "stale",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktuelles Gewicht"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Peso actual"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Poids actuel"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Peso attuale"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -342,20 +316,104 @@
         }
       }
     },
-    "Daily" : {
+    "Current weight: %@" : {
       "extractionState" : "stale",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktuelles Gewicht: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Peso actual: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Poids actuel : %@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Peso attuale: %@"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dagelijks"
+            "value" : "Huidig gewicht: %@"
+          }
+        }
+      }
+    },
+    "Currently %lld weeks old" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktuell %lld Wochen alt"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actualmente %lld semanas"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actuellement âgé de %lld semaines"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Attualmente %lld settimane"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Momenteel %lld weken oud"
           }
         }
       }
     },
     "Date" : {
+      "comment" : "Label for weight measurement date picker",
       "extractionState" : "stale",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Datum"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fecha"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Date"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Data"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -364,53 +422,33 @@
         }
       }
     },
-    "days before" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "dagen van tevoren"
-          }
-        }
-      }
-    },
-    "Days of week" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dagen van de week"
-          }
-        }
-      }
-    },
-    "Delete medication?" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Medicatie verwijderen?"
-          }
-        }
-      }
-    },
-    "Dog license" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Hondenbelasting"
-          }
-        }
-      }
-    },
     "Done" : {
       "extractionState" : "stale",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fertig"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hecho"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terminé"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fatto"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -419,31 +457,33 @@
         }
       }
     },
-    "Dosage, notes..." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dosering, notities..."
-          }
-        }
-      }
-    },
-    "Duration" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Duur"
-          }
-        }
-      }
-    },
     "e.g. 8.5" : {
       "extractionState" : "stale",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "z.B. 8,5"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ej. 8,5"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ex. 8,5"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "es. 8,5"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -452,24 +492,37 @@
         }
       }
     },
-    "Edit medication" : {
+    "e.g. 18.7" : {
       "extractionState" : "stale",
       "localizations" : {
-        "nl" : {
+        "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Medicatie bewerken"
+            "value" : "z.B. 18,7"
           }
-        }
-      }
-    },
-    "End date" : {
-      "extractionState" : "stale",
-      "localizations" : {
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ej. 18,7"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ex. 18,7"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "es. 18,7"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Einddatum"
+            "value" : "bijv. 18,7"
           }
         }
       }
@@ -477,6 +530,30 @@
     "Enter weight" : {
       "extractionState" : "stale",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gewicht eingeben"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Introducir peso"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entrer le poids"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inserisci peso"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -488,6 +565,30 @@
     "exposures" : {
       "extractionState" : "stale",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erfahrungen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "experiencias"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "expositions"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "esperienze"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -496,75 +597,33 @@
         }
       }
     },
-    "Final puppy vaccination at 16 weeks" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Laatste puppyvaccinatie bij 16 weken"
-          }
-        }
-      }
-    },
-    "First deworming (breeder)" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Eerste ontworming (fokker)"
-          }
-        }
-      }
-    },
-    "First deworming (home)" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Eerste ontworming (thuis)"
-          }
-        }
-      }
-    },
-    "First fear period" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Eerste angstperiode"
-          }
-        }
-      }
-    },
-    "First vaccination (DHP + Lepto)" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Eerste vaccinatie (DHP + Lepto)"
-          }
-        }
-      }
-    },
-    "First vet visit" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Eerste bezoek dierenarts"
-          }
-        }
-      }
-    },
     "Focus on:" : {
       "extractionState" : "stale",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fokus auf:"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enfócate en:"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Concentrez-vous sur :"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Concentrati su:"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -573,13 +632,37 @@
         }
       }
     },
-    "Fri" : {
+    "Gained %@" : {
       "extractionState" : "stale",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ zugenommen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ganó %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pris %@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Guadagnato %@"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Vr"
+            "value" : "%@ aangekomen"
           }
         }
       }
@@ -587,6 +670,30 @@
     "Growth curve" : {
       "extractionState" : "stale",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wachstumskurve"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Curva de crecimiento"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Courbe de croissance"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Curva di crescita"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -598,6 +705,30 @@
     "Health" : {
       "extractionState" : "stale",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gesundheit"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Salud"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Santé"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Salute"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -606,46 +737,37 @@
         }
       }
     },
-    "Icon" : {
+    "Health milestones and vet appointments will appear here" : {
       "extractionState" : "stale",
       "localizations" : {
-        "nl" : {
+        "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Icoon"
+            "value" : "Gesundheits-Meilensteine und Tierarzttermine erscheinen hier"
           }
-        }
-      }
-    },
-    "in %lldd" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
+        },
+        "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "over %lldd"
+            "value" : "Los hitos de salud y las citas veterinarias aparecerán aquí"
           }
-        }
-      }
-    },
-    "Indefinitely" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
+        },
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Doorlopend"
+            "value" : "Les étapes de santé et les rendez-vous vétérinaires apparaîtront ici"
           }
-        }
-      }
-    },
-    "Instructions" : {
-      "extractionState" : "stale",
-      "localizations" : {
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I traguardi di salute e gli appuntamenti veterinari appariranno qui"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Instructies"
+            "value" : "Gezondheidsmijlpalen en dierenarts afspraken verschijnen hier"
           }
         }
       }
@@ -653,6 +775,30 @@
     "kg" : {
       "extractionState" : "stale",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "kg"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "kg"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "kg"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "kg"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -661,13 +807,37 @@
         }
       }
     },
-    "Link to meal" : {
+    "lbs" : {
       "extractionState" : "stale",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "lbs"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "lbs"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "lb"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "lbs"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Koppelen aan maaltijd"
+            "value" : "lbs"
           }
         }
       }
@@ -675,6 +845,30 @@
     "Log weight" : {
       "extractionState" : "stale",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gewicht erfassen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Registrar peso"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistrer le poids"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Registra peso"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -686,6 +880,30 @@
     "Log your first weight measurement" : {
       "extractionState" : "stale",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erste Gewichtsmessung erfassen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Registra tu primera medición de peso"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistrez votre première mesure de poids"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Registra la tua prima misurazione del peso"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -694,134 +912,107 @@
         }
       }
     },
-    "Mark Complete" : {
+    "Lost %@" : {
       "extractionState" : "stale",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ abgenommen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Perdió %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Perdu %@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Perso %@"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Markeer als voltooid"
+            "value" : "%@ afgevallen"
           }
         }
       }
     },
-    "Mark Incomplete" : {
+    "Medical Timeline" : {
       "extractionState" : "stale",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Medizinische Zeitleiste"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Historial médico"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Historique médical"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cronologia medica"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Markeer als niet voltooid"
+            "value" : "Medische tijdlijn"
           }
         }
       }
     },
-    "Medical Milestones" : {
+    "No medical history yet" : {
       "extractionState" : "stale",
       "localizations" : {
-        "nl" : {
+        "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Medische mijlpalen"
+            "value" : "Noch keine Krankengeschichte"
           }
-        }
-      }
-    },
-    "Medications" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
+        },
+        "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Medicatie"
+            "value" : "Sin historial médico aún"
           }
-        }
-      }
-    },
-    "Microchip registration" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
+        },
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Chipregistratie"
+            "value" : "Pas encore d'historique médical"
           }
-        }
-      }
-    },
-    "Milestones" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
+        },
+        "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mijlpalen"
+            "value" : "Nessuna storia medica ancora"
           }
-        }
-      }
-    },
-    "Mon" : {
-      "extractionState" : "stale",
-      "localizations" : {
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ma"
-          }
-        }
-      }
-    },
-    "Most receptive time for new experiences" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Meest ontvankelijke tijd voor nieuwe ervaringen"
-          }
-        }
-      }
-    },
-    "Name" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Naam"
-          }
-        }
-      }
-    },
-    "Next up" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Volgende"
-          }
-        }
-      }
-    },
-    "No medical milestones yet" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nog geen medische mijlpalen"
-          }
-        }
-      }
-    },
-    "No medications" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Geen medicatie"
+            "value" : "Nog geen medische geschiedenis"
           }
         }
       }
@@ -829,6 +1020,30 @@
     "No weight data yet" : {
       "extractionState" : "stale",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Noch keine Gewichtsdaten"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aún no hay datos de peso"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pas encore de données de poids"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nessun dato sul peso ancora"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -840,6 +1055,30 @@
     "On track" : {
       "extractionState" : "stale",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auf Kurs"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En buen camino"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En bonne voie"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In linea"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -848,86 +1087,33 @@
         }
       }
     },
-    "Optional notes about this milestone" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Optionele notities over deze mijlpaal"
-          }
-        }
-      }
-    },
-    "Optional notes about this milestone..." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Optionele notities over deze mijlpaal..."
-          }
-        }
-      }
-    },
-    "Overdue" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Te laat"
-          }
-        }
-      }
-    },
-    "Paused" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Gepauzeerd"
-          }
-        }
-      }
-    },
-    "Peak socialization period" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Piek socialisatieperiode"
-          }
-        }
-      }
-    },
-    "Pet insurance setup" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Huisdierenverzekering regelen"
-          }
-        }
-      }
-    },
-    "Photo added" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Foto toegevoegd"
-          }
-        }
-      }
-    },
     "Reference" : {
       "extractionState" : "stale",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Referenz"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Referencia"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Référence"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Riferimento"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -939,6 +1125,30 @@
     "Reference range" : {
       "extractionState" : "stale",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Referenzbereich"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rango de referencia"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plage de référence"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Intervallo di riferimento"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -947,108 +1157,33 @@
         }
       }
     },
-    "Register with your municipality if required" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Registreer bij je gemeente indien vereist"
-          }
-        }
-      }
-    },
-    "Reminder" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Herinnering"
-          }
-        }
-      }
-    },
-    "Remove from Calendar" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verwijderen uit agenda"
-          }
-        }
-      }
-    },
-    "Sat" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Za"
-          }
-        }
-      }
-    },
-    "Schedule" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Schema"
-          }
-        }
-      }
-    },
-    "scheduled" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ingepland"
-          }
-        }
-      }
-    },
-    "Second fear period" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tweede angstperiode"
-          }
-        }
-      }
-    },
-    "Second vaccination (DHP + Lepto + Rabies)" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tweede vaccinatie (DHP + Lepto + Rabiës)"
-          }
-        }
-      }
-    },
-    "Slide to complete" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Veeg om te voltooien"
-          }
-        }
-      }
-    },
     "Socialization active" : {
       "extractionState" : "stale",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sozialisierung aktiv"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Socialización activa"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Socialisation active"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Socializzazione attiva"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1057,97 +1192,33 @@
         }
       }
     },
-    "Socialization window begins" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Socialisatieperiode begint"
-          }
-        }
-      }
-    },
-    "Socialization window closing" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Socialisatieperiode sluit"
-          }
-        }
-      }
-    },
-    "Spay/neuter discussion with vet" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bespreking castratie/sterilisatie met dierenarts"
-          }
-        }
-      }
-    },
-    "Start date" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Startdatum"
-          }
-        }
-      }
-    },
-    "Sun" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zo"
-          }
-        }
-      }
-    },
-    "Tap to add your puppy's medications" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tik om medicatie van je puppy toe te voegen"
-          }
-        }
-      }
-    },
-    "Temporary increase in fearfulness - stay patient" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tijdelijke toename van angst - blijf geduldig"
-          }
-        }
-      }
-    },
-    "Third vaccination (cocktail)" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Derde vaccinatie (cocktail)"
-          }
-        }
-      }
-    },
     "This Week" : {
       "extractionState" : "stale",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diese Woche"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esta semana"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cette semaine"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Questa settimana"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1156,53 +1227,33 @@
         }
       }
     },
-    "This will remove the medication from your schedule." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dit verwijdert de medicatie uit je schema."
-          }
-        }
-      }
-    },
-    "Thu" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Do"
-          }
-        }
-      }
-    },
-    "Times" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tijden"
-          }
-        }
-      }
-    },
-    "Title" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Titel"
-          }
-        }
-      }
-    },
     "Today" : {
       "extractionState" : "stale",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Heute"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoy"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aujourd'hui"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oggi"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1211,31 +1262,33 @@
         }
       }
     },
-    "Tue" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Di"
-          }
-        }
-      }
-    },
-    "Until date" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tot datum"
-          }
-        }
-      }
-    },
     "Upcoming" : {
       "extractionState" : "stale",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anstehend"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Próximos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "À venir"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In arrivo"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1244,31 +1297,33 @@
         }
       }
     },
-    "Vet clinic" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dierenkliniek"
-          }
-        }
-      }
-    },
-    "Wed" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Wo"
-          }
-        }
-      }
-    },
     "Week %lld" : {
       "extractionState" : "stale",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Woche %lld"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Semana %lld"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Semaine %lld"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Settimana %lld"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1277,20 +1332,33 @@
         }
       }
     },
-    "Weekly" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Wekelijks"
-          }
-        }
-      }
-    },
     "Weeks" : {
       "extractionState" : "stale",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wochen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Semanas"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Semaines"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Settimane"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1302,6 +1370,30 @@
     "Weight" : {
       "extractionState" : "stale",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gewicht"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Peso"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Poids"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Peso"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1313,6 +1405,30 @@
     "Weight (kg)" : {
       "extractionState" : "stale",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gewicht (kg)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Peso (kg)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Poids (kg)"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Peso (kg)"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1321,9 +1437,68 @@
         }
       }
     },
+    "Weight (lbs)" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gewicht (lbs)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Peso (lbs)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Poids (lb)"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Peso (lbs)"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gewicht (lbs)"
+          }
+        }
+      }
+    },
     "Window ended" : {
       "extractionState" : "stale",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Phase beendet"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Período terminado"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Période terminée"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Periodo terminato"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1332,31 +1507,33 @@
         }
       }
     },
-    "Window is narrowing - focus on remaining exposures" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Periode wordt korter - focus op resterende ervaringen"
-          }
-        }
-      }
-    },
-    "Yearly vaccination" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Jaarlijkse vaccinatie"
-          }
-        }
-      }
-    },
     "Your puppy" : {
       "extractionState" : "stale",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dein Welpe"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu cachorro"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Votre chiot"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il tuo cucciolo"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",

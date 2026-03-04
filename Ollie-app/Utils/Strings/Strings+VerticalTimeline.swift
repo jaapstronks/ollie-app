@@ -80,6 +80,17 @@ extension Strings {
             String(localized: "\(name) practiced \(exercise)", table: table)
         }
 
+        // MARK: - Training Session (Grouped)
+        static func trainingSessionGeneric(name: String, count: Int) -> String {
+            String(localized: "\(name) did \(count) training exercises", table: table)
+        }
+        static func trainingSessionWithSkills(name: String, count: Int, skills: String) -> String {
+            String(localized: "\(name) practiced \(count) skills: \(skills)", table: table)
+        }
+        static func trainingSessionCount(count: Int) -> String {
+            String(localized: "Training (\(count))", table: table)
+        }
+
         // MARK: - Social Descriptions
         static func socializing(name: String) -> String {
             String(localized: "\(name) socialized", table: table)

@@ -75,15 +75,15 @@ class MemoriesViewModel: ObservableObject {
     // MARK: - Setup
 
     private func setupObservers() {
-        // Watch for event changes
+        // Watch for event changes with debounce to prevent rapid refreshes during active logging
         eventStore.$events
-            .receive(on: DispatchQueue.main)
+            .debounce(for: .milliseconds(500), scheduler: DispatchQueue.main)
             .sink { [weak self] _ in
                 self?.refresh()
             }
             .store(in: &cancellables)
 
-        // Watch for current date changes
+        // Watch for current date changes (no debounce needed - date changes are intentional)
         eventStore.$currentDate
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in

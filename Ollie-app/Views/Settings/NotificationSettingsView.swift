@@ -12,11 +12,20 @@ import OtisShared
 struct NotificationSettingsView: View {
     let profileStore: ProfileStore
     @ObservedObject var notificationService: NotificationService
+    var profileId: UUID? = nil
     @Environment(\.dismiss) private var dismiss
 
     // Local state for editing
     @State private var settings: NotificationSettings = NotificationSettings.defaultSettings()
     @State private var showingPermissionAlert = false
+
+    /// The profile being edited (looked up by ID or falls back to active)
+    private var targetProfile: PuppyProfile? {
+        if let id = profileId {
+            return profileStore.profile(for: id)
+        }
+        return profileStore.profile
+    }
 
     var body: some View {
         NavigationStack {
@@ -235,17 +244,17 @@ struct NotificationSettingsView: View {
     // MARK: - Helpers
 
     private var puppyName: String {
-        profileStore.profile?.name ?? "Puppy"
+        targetProfile?.name ?? "Puppy"
     }
 
     private func loadCurrentSettings() {
-        if let profile = profileStore.profile {
+        if let profile = targetProfile {
             settings = profile.notificationSettings
         }
     }
 
     private func saveSettings() {
-        profileStore.updateNotificationSettings(settings)
+        profileStore.updateNotificationSettings(settings, for: profileId)
         dismiss()
     }
 

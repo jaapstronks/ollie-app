@@ -52,16 +52,17 @@ struct ProfilePhotoView: View {
                     )
             }
         }
-        .onAppear { loadImage() }
-        .onChange(of: profile?.profilePhotoFilename) { _, _ in loadImage() }
+        .task(id: profile?.profilePhotoFilename) {
+            await loadImageAsync()
+        }
     }
 
-    private func loadImage() {
+    private func loadImageAsync() async {
         guard let filename = profile?.profilePhotoFilename else {
             loadedImage = nil
             return
         }
-        loadedImage = ProfilePhotoStore.shared.load(filename: filename)
+        loadedImage = await ProfilePhotoStore.shared.loadAsync(filename: filename)
     }
 }
 

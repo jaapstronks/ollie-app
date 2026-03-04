@@ -12,10 +12,17 @@ struct CelebrationSettingsView: View {
     @AppStorage(UserPreferences.Key.celebrationStyle.rawValue)
     private var celebrationStyleRaw: String = CelebrationStyle.full.rawValue
 
-    @State private var showingTier2Preview = false
-    @State private var showingTier3Preview = false
+    @State private var previewingTier: PreviewTier? = nil
+    @State private var showTier1Celebration = false
 
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    private enum PreviewTier: Identifiable {
+        case tier2
+        case tier3
+        var id: Self { self }
+    }
 
     private var celebrationStyle: CelebrationStyle {
         get { CelebrationStyle(rawValue: celebrationStyleRaw) ?? .full }
@@ -23,18 +30,38 @@ struct CelebrationSettingsView: View {
     }
 
     var body: some View {
-        Form {
-            // Style picker
-            styleSection
+        ZStack {
+            Form {
+                // Style picker
+                styleSection
 
-            // Preview section
-            previewSection
+                // Preview section
+                previewSection
 
-            // Info section
-            infoSection
+                // Info section
+                infoSection
+            }
+
+            // Tier 1 celebration overlay - outside Form to avoid clipping
+            CelebrationView(style: .quickLog, isActive: $showTier1Celebration)
         }
         .navigationTitle(Strings.Celebrations.celebrationStyle)
         .navigationBarTitleDisplayMode(.inline)
+        // Single presentation modifier using item: to avoid conflicts
+        .fullScreenCover(item: $previewingTier) { tier in
+            switch tier {
+            case .tier2:
+                CelebrationTier2PreviewWrapper(isPresented: .init(
+                    get: { previewingTier == .tier2 },
+                    set: { if !$0 { previewingTier = nil } }
+                ))
+            case .tier3:
+                CelebrationTier3PreviewWrapper(isPresented: .init(
+                    get: { previewingTier == .tier3 },
+                    set: { if !$0 { previewingTier = nil } }
+                ))
+            }
+        }
     }
 
     // MARK: - Style Section
@@ -44,7 +71,7 @@ struct CelebrationSettingsView: View {
         Section {
             ForEach(CelebrationStyle.allCases) { style in
                 Button {
-                    withAnimation(.spring(response: 0.3)) {
+                    withAnimation(reduceMotion ? nil : .spring(response: 0.3)) {
                         celebrationStyleRaw = style.rawValue
                     }
                     HapticFeedback.light()
@@ -99,11 +126,32 @@ struct CelebrationSettingsView: View {
         Section {
             VStack(spacing: 16) {
                 // Tier 1: Subtle - inline shimmer preview
-                CelebrationTier1PreviewButton()
+                Button {
+                    showTier1Celebration = true
+                    HapticFeedback.light()
+                } label: {
+                    HStack {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Tier 1: Subtle")
+                                .font(.subheadline.weight(.medium))
+                            Text("Inline shimmer effect")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                        Spacer()
+                        Image(systemName: "play.circle.fill")
+                            .font(.title3)
+                            .foregroundStyle(Color.otisAccent)
+                    }
+                    .padding()
+                    .background(Color.otisAccent.opacity(0.08))
+                    .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                }
+                .buttonStyle(.plain)
 
                 // Tier 2: Notable - card preview
                 Button {
-                    showingTier2Preview = true
+                    previewingTier = .tier2
                 } label: {
                     HStack {
                         VStack(alignment: .leading, spacing: 2) {
@@ -126,7 +174,7 @@ struct CelebrationSettingsView: View {
 
                 // Tier 3: Major - full screen preview
                 Button {
-                    showingTier3Preview = true
+                    previewingTier = .tier3
                 } label: {
                     HStack {
                         VStack(alignment: .leading, spacing: 2) {
@@ -152,14 +200,6 @@ struct CelebrationSettingsView: View {
             Text("Preview")
         } footer: {
             Text("Tap to preview each celebration tier")
-        }
-        // Tier 2 full screen (using fullScreenCover for better presentation)
-        .fullScreenCover(isPresented: $showingTier2Preview) {
-            CelebrationTier2PreviewWrapper(isPresented: $showingTier2Preview)
-        }
-        // Tier 3 full screen
-        .fullScreenCover(isPresented: $showingTier3Preview) {
-            CelebrationTier3PreviewWrapper(isPresented: $showingTier3Preview)
         }
     }
 

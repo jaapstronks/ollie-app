@@ -19,6 +19,7 @@ class MomentsViewModel: ObservableObject {
 
     private let eventStore: EventStore
     private let mediaStore: MediaStore
+    private var cancellables = Set<AnyCancellable>()
 
     /// Number of events to load per batch
     private let batchSize: Int = 50
@@ -35,6 +36,38 @@ class MomentsViewModel: ObservableObject {
     init(eventStore: EventStore, mediaStore: MediaStore? = nil) {
         self.eventStore = eventStore
         self.mediaStore = mediaStore ?? MediaStore()
+
+        // Subscribe to EventStore changes to auto-refresh when new events are added
+        subscribeToEventStoreChanges()
+    }
+
+    /// Subscribe to EventStore changes to detect newly added photo events
+    private func subscribeToEventStoreChanges() {
+        eventStore.objectWillChange
+            .debounce(for: .milliseconds(100), scheduler: RunLoop.main)
+            .sink { [weak self] _ in
+                self?.checkForNewPhotoEvents()
+            }
+            .store(in: &cancellables)
+    }
+
+    /// Check if there are new photo events that should be added to our list
+    private func checkForNewPhotoEvents() {
+        // Get today's events with photos that we don't already have
+        let todayEvents = eventStore.events.filter { event in
+            event.photo != nil && !loadedEventIds.contains(event.id)
+        }
+
+        guard !todayEvents.isEmpty else { return }
+
+        // Add new events to our list
+        for event in todayEvents {
+            events.insert(event, at: 0)
+            loadedEventIds.insert(event.id)
+        }
+
+        // Re-sort by time (newest first)
+        events.sort { $0.time > $1.time }
     }
 
     /// Load initial batch of events with photos (paginated)

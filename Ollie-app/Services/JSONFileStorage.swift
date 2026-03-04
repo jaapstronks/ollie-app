@@ -33,8 +33,13 @@ enum JSONFileStorage {
     // MARK: - File URLs
 
     /// Documents directory URL
+    /// Falls back to temporary directory if documents directory is unavailable (should never happen in practice)
     static var documentsURL: URL {
-        FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        guard let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            // This should never happen on iOS, but provide a fallback to prevent crashes
+            return FileManager.default.temporaryDirectory
+        }
+        return url
     }
 
     /// Data directory URL (for JSONL event files)
@@ -55,10 +60,16 @@ enum JSONFileStorage {
     // MARK: - Directory Operations
 
     /// Ensure data directory exists
+    /// Logs error if directory creation fails but does not throw (best-effort operation)
     static func ensureDataDirectoryExists() {
         let url = dataDirectoryURL
         if !FileManager.default.fileExists(atPath: url.path) {
-            try? FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
+            do {
+                try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
+            } catch {
+                // Log error but don't throw - caller will fail on subsequent file operations
+                print("ERROR: Failed to create data directory at \(url.path): \(error.localizedDescription)")
+            }
         }
     }
 
@@ -99,8 +110,15 @@ enum JSONFileStorage {
     static func loadJSONL<T: Codable>(from fileName: String, inDataDirectory: Bool = true, logger: Logger? = nil) -> [T] {
         let url = inDataDirectory ? dataFileURL(for: fileName) : fileURL(for: fileName)
 
-        guard FileManager.default.fileExists(atPath: url.path),
-              let content = try? String(contentsOf: url, encoding: .utf8) else {
+        guard FileManager.default.fileExists(atPath: url.path) else {
+            return []
+        }
+
+        let content: String
+        do {
+            content = try String(contentsOf: url, encoding: .utf8)
+        } catch {
+            logger?.error("Failed to read JSONL file \(fileName): \(error.localizedDescription)")
             return []
         }
 
@@ -108,7 +126,12 @@ enum JSONFileStorage {
 
         return lines.compactMap { line in
             guard let data = line.data(using: .utf8) else { return nil }
-            return try? decoder.decode(T.self, from: data)
+            do {
+                return try decoder.decode(T.self, from: data)
+            } catch {
+                logger?.warning("Failed to decode line in \(fileName): \(error.localizedDescription)")
+                return nil
+            }
         }
     }
 
@@ -124,9 +147,20 @@ enum JSONFileStorage {
         let compactEncoder = JSONEncoder()
         compactEncoder.dateEncodingStrategy = .iso8601
 
+        var failedCount = 0
         let lines = items.compactMap { item -> String? in
-            guard let data = try? compactEncoder.encode(item) else { return nil }
-            return String(data: data, encoding: .utf8)
+            do {
+                let data = try compactEncoder.encode(item)
+                return String(data: data, encoding: .utf8)
+            } catch {
+                failedCount += 1
+                logger?.warning("Failed to encode item for \(fileName): \(error.localizedDescription)")
+                return nil
+            }
+        }
+
+        if failedCount > 0 {
+            logger?.warning("Skipped \(failedCount) items that failed to encode in \(fileName)")
         }
 
         let content = lines.joined(separator: "\n")

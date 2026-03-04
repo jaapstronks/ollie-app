@@ -28,6 +28,9 @@ class EventStore: ObservableObject {
     /// Media store for photo operations
     private let mediaStore = MediaStore()
 
+    /// Reference to profile store for profile-scoped queries
+    private weak var profileStoreRef: ProfileStore?
+
     private var cancellables = Set<AnyCancellable>()
 
     /// NSFetchedResultsController for reactive updates
@@ -38,7 +41,19 @@ class EventStore: ObservableObject {
 
         setupRemoteChangeObserver()
         setupWatchEventObserver()
+        setupProfileChangeObserver()
         loadEvents(for: currentDate)
+    }
+
+    /// Set the profile store reference for profile-scoped queries
+    func setProfileStore(_ profileStore: ProfileStore) {
+        self.profileStoreRef = profileStore
+        updateActiveProfile()
+    }
+
+    /// Update the active profile on the Core Data store
+    private func updateActiveProfile() {
+        coreDataStore.activeProfile = profileStoreRef?.getActiveCDProfile()
     }
 
     // MARK: - Setup
@@ -75,6 +90,23 @@ class EventStore: ObservableObject {
                 self.loadEvents(for: self.currentDate)
             }
         }
+    }
+
+    private func setupProfileChangeObserver() {
+        // Listen for active profile changes to reload events
+        NotificationCenter.default.publisher(for: .activeProfileChanged)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.handleProfileChange()
+            }
+            .store(in: &cancellables)
+    }
+
+    private func handleProfileChange() {
+        logger.info("Active profile changed - updating event store")
+        updateActiveProfile()
+        coreDataStore.invalidateAllCaches()
+        loadEvents(for: currentDate)
     }
 
     private func handleRemoteChange() {
@@ -240,22 +272,18 @@ class EventStore: ObservableObject {
 
     /// Get the most recent event of a specific type
     func lastEvent(ofType type: EventType) -> PuppyEvent? {
-        // Check today first
-        if let event = events.filter({ $0.type == type }).first {
+        // Check today's in-memory events first (most common case, O(n) where n is small)
+        if let event = events.first(where: { $0.type == type }) {
             return event
         }
 
-        // Check previous days (up to 7 days back)
-        var date = Calendar.current.date(byAdding: .day, value: -1, to: currentDate) ?? currentDate
-        for _ in 0..<7 {
-            let dayEvents = coreDataStore.readEvents(for: date)
-            if let event = dayEvents.filter({ $0.type == type }).first {
-                return event
-            }
-            date = Calendar.current.date(byAdding: .day, value: -1, to: date) ?? date
-        }
+        // Single query for 8-day range instead of 7 separate day queries
+        // Events are sorted by time descending, so first match is most recent
+        let eightDaysAgo = Calendar.current.date(byAdding: .day, value: -8, to: currentDate) ?? currentDate
+        let startOfToday = Calendar.current.startOfDay(for: currentDate)
+        let historicalEvents = coreDataStore.readEvents(from: eightDaysAgo, to: startOfToday)
 
-        return nil
+        return historicalEvents.first(where: { $0.type == type })
     }
 
     /// Check if Core Data has any events
@@ -325,7 +353,11 @@ class EventStore: ObservableObject {
                 importedCount += importedEvents
 
                 // Delete the file after successful import
-                try? fileManager.removeItem(at: fileURL)
+                do {
+                    try fileManager.removeItem(at: fileURL)
+                } catch {
+                    logger.warning("Could not delete imported intent file \(fileURL.lastPathComponent): \(error.localizedDescription)")
+                }
             }
 
             if importedCount > 0 {

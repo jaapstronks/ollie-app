@@ -10,8 +10,8 @@ import Foundation
 
 @available(iOS 17.0, *)
 struct WakeUpIntent: LiveActivityIntent {
-    static var title: LocalizedStringResource = "Wake Up"
-    static var description = IntentDescription("End the current nap and log wake-up")
+    static let title: LocalizedStringResource = "Wake Up"
+    static let description = IntentDescription("End the current nap and log wake-up")
 
     /// The activity ID to end
     @Parameter(title: "Activity ID")

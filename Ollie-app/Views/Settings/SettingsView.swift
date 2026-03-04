@@ -2,12 +2,12 @@
 //  SettingsView.swift
 //  Otis-app
 //
-//  Settings hub with navigation to 4 sections
+//  Settings hub with app settings at top, dog cards below, and add dog button
 
 import SwiftUI
 import OtisShared
 
-/// Settings hub screen with four main navigation options
+/// Settings hub screen with app settings and dog-specific settings cards
 struct SettingsView: View {
     @ObservedObject var profileStore: ProfileStore
     @ObservedObject var dataImporter: DataImporter
@@ -17,76 +17,85 @@ struct SettingsView: View {
     @ObservedObject var contactStore: ContactStore
     @ObservedObject var foodRecallService: FoodRecallService
 
+    var onAddDog: (() -> Void)?
+
     var body: some View {
-        List {
-            // 1. Dog Profile Section
-            Section {
-                NavigationLink {
-                    DogProfileSettingsView(profileStore: profileStore)
-                } label: {
-                    SettingsHubRow(
-                        icon: "pawprint.fill",
-                        iconColor: .otisAccent,
-                        title: profileStore.profile?.name ?? Strings.Settings.dogProfile,
-                        subtitle: Strings.Settings.dogProfileSubtitle
-                    )
-                }
-            }
+        ScrollView {
+            VStack(spacing: 16) {
+                // App Settings at the top
+                appSettingsSection
 
-            // 2. Schedule & Preferences Section
-            Section {
-                NavigationLink {
-                    SchedulePreferencesView(
+                // Dog cards - one per profile
+                ForEach(profileStore.profiles, id: \.id) { profile in
+                    DogSettingsCard(
+                        profile: profile,
+                        isActive: profile.id == profileStore.activeProfileId,
                         profileStore: profileStore,
-                        notificationService: notificationService
-                    )
-                } label: {
-                    SettingsHubRow(
-                        icon: "calendar.badge.clock",
-                        iconColor: .blue,
-                        title: Strings.Settings.schedulePreferences,
-                        subtitle: Strings.Settings.schedulePreferencesSubtitle
-                    )
-                }
-            }
-
-            // 3. Health & Documents Section
-            Section {
-                NavigationLink {
-                    HealthDocumentsView(
-                        profileStore: profileStore,
+                        notificationService: notificationService,
                         documentStore: documentStore,
                         foodRecallService: foodRecallService
                     )
-                } label: {
-                    SettingsHubRow(
-                        icon: "heart.text.square.fill",
-                        iconColor: .red,
-                        title: Strings.Settings.healthDocuments,
-                        subtitle: Strings.Settings.healthDocumentsSubtitle
-                    )
                 }
-            }
 
-            // 4. App Settings Section
-            Section {
-                NavigationLink {
-                    AppSettingsView(
-                        profileStore: profileStore,
-                        dataImporter: dataImporter,
-                        eventStore: eventStore
-                    )
-                } label: {
-                    SettingsHubRow(
-                        icon: "gearshape.fill",
-                        iconColor: .secondary,
-                        title: Strings.Settings.appSettings,
-                        subtitle: Strings.Settings.appSettingsSubtitle
-                    )
-                }
+                // Add dog button
+                AddDogButton(
+                    canAdd: profileStore.canAddOwnedProfile(),
+                    action: {
+                        if profileStore.canAddOwnedProfile() {
+                            onAddDog?()
+                        }
+                    }
+                )
             }
+            .padding()
         }
+        .background(Color(.systemGroupedBackground))
         .navigationTitle(Strings.Settings.title)
+    }
+
+    // MARK: - App Settings Section
+
+    private var appSettingsSection: some View {
+        NavigationLink {
+            AppSettingsView(
+                profileStore: profileStore,
+                dataImporter: dataImporter,
+                eventStore: eventStore
+            )
+        } label: {
+            HStack(spacing: 16) {
+                ZStack {
+                    Circle()
+                        .fill(Color(.tertiarySystemFill))
+                        .frame(width: 50, height: 50)
+
+                    Image(systemName: "gearshape.fill")
+                        .font(.system(size: 22))
+                        .foregroundStyle(.secondary)
+                }
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(Strings.Settings.appSettings)
+                        .font(.headline)
+                        .foregroundStyle(.primary)
+                    Text(Strings.Settings.appSettingsSubtitle)
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+
+                Spacer()
+
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundStyle(.tertiary)
+            }
+            .padding()
+            .background(
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(Color(.secondarySystemGroupedBackground))
+            )
+        }
+        .buttonStyle(.plain)
     }
 }
 
@@ -125,7 +134,8 @@ private struct SettingsHubRow: View {
             notificationService: NotificationService(),
             documentStore: DocumentStore(),
             contactStore: ContactStore(),
-            foodRecallService: FoodRecallService()
+            foodRecallService: FoodRecallService(),
+            onAddDog: { print("Add dog") }
         )
     }
 }

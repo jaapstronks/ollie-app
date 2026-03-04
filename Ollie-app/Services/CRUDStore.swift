@@ -202,11 +202,11 @@ class CRUDStore<Model: StorableModel, Entity: CDEntityConvertible>: BaseStore wh
 /// Base class for CRUD stores that are scoped to a profile.
 /// Items are filtered by the current profile.
 @MainActor
-class ProfileScopedCRUDStore<Model: StorableModel, Entity: CDEntityConvertible>: CRUDStore<Model, Entity> where Entity.Model == Model {
+class ProfileScopedCRUDStore<Model: StorableModel, Entity: CDEntityConvertible>: CRUDStore<Model, Entity>, ProfileAccessible where Entity.Model == Model {
 
-    // MARK: - Dependencies
+    // MARK: - ProfileAccessible
 
-    private(set) weak var profileStore: ProfileStore?
+    weak var profileStore: ProfileStore?
 
     // MARK: - Init
 
@@ -221,24 +221,7 @@ class ProfileScopedCRUDStore<Model: StorableModel, Entity: CDEntityConvertible>:
 
     /// Set the profile store (for when it's not available at init time)
     func setProfileStore(_ profileStore: ProfileStore) {
-        self.profileStore = profileStore
-        performInitialLoad()
-    }
-
-    // MARK: - Profile Access
-
-    /// Get the current profile ID
-    var currentProfileId: UUID? {
-        profileStore?.profile?.id
-    }
-
-    /// Get the current CDPuppyProfile from Core Data
-    func getCurrentProfile() -> CDPuppyProfile? {
-        guard let profileId = currentProfileId else {
-            logger.warning("No profile available for operations")
-            return nil
-        }
-        return CDPuppyProfile.fetch(byId: profileId, in: viewContext)
+        configureProfileStore(profileStore)
     }
 }
 

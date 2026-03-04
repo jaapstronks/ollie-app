@@ -1,0 +1,63 @@
+# Snapfile - fastlane snapshot configuration
+# Run with: fastlane snapshot
+
+# Devices to capture screenshots on
+# Available: iPhone 17 Pro, iPhone 17 Pro Max, iPhone Air, iPhone 17, iPhone 16e
+devices([
+  "iPhone 17 Pro Max",
+  "iPhone 17 Pro"
+])
+
+# Languages to capture (all 7 supported languages)
+languages([
+  "en-US",
+  "nl-NL",
+  "de-DE",
+  "es-ES",
+  "fr-FR",
+  "it-IT",
+  "sv-SE"
+])
+
+# Xcode scheme
+scheme("Ollie-app")
+
+# Output directory
+output_directory("./fastlane/screenshots")
+
+# Clear previous screenshots
+clear_previous_screenshots(true)
+
+# UI Test target
+launch_arguments(["--uitesting", "-FASTLANE_SNAPSHOT"])
+
+# Stop on first error
+stop_after_first_error(false)
+
+# Number of retries
+number_of_retries(1)
+
+# Screenshot file type
+output_simulator_logs(true)
+
+# Test target bundle identifier
+test_target_name("Ollie-appUITests")
+
+# Only run the screenshot tests (not other UI tests)
+only_testing(["Ollie-appUITests/ScreenshotTests"])
+
+# Override status bar (iOS 13+)
+override_status_bar(true)
+
+# Don't erase simulator (causes issues with clones)
+erase_simulator(false)
+
+# Don't reinstall app (avoids interactive prompt)
+reinstall_app(false)
+
+# Disable concurrent simulators (more reliable)
+concurrent_simulators(false)
+
+# Disable cloning for more reliable execution
+disable_slide_to_type(false)
+headless(false)

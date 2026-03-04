@@ -16,6 +16,9 @@ struct MomentsGalleryView: View {
     @Namespace private var heroNamespace
     @AppStorage("momentsViewMode") private var viewMode: MomentsViewMode = .gallery
 
+    // First-visit tip tracking
+    @AppStorage("hasSeenMomentsGalleryTip") private var hasSeenMomentsGalleryTip = false
+
     private let columns = [
         GridItem(.flexible(), spacing: 2),
         GridItem(.flexible(), spacing: 2),
@@ -89,6 +92,19 @@ struct MomentsGalleryView: View {
     private var galleryContent: some View {
         ScrollView {
             LazyVStack(alignment: .leading, spacing: 16) {
+                // First-visit tip (only when there are photos)
+                if !hasSeenMomentsGalleryTip {
+                    FeatureTipCard(
+                        tip: .momentsGallery,
+                        onDismiss: {
+                            withAnimation(.easeOut(duration: 0.2)) {
+                                hasSeenMomentsGalleryTip = true
+                            }
+                        }
+                    )
+                    .padding(.horizontal)
+                }
+
                 ForEach(Array(viewModel.eventsByMonth.enumerated()), id: \.element.month) { sectionIndex, section in
                     VStack(alignment: .leading, spacing: 8) {
                         Text(section.month)

@@ -64,7 +64,7 @@ extension Strings {
             String(localized: "\(count) recalls match your brands", table: table)
         }
 
-        // Errors
-        static let parseError = String(localized: "Could not process recall data", table: table)
+        // Errors (nonisolated for use in LocalizedError conformance - hardcoded table name)
+        nonisolated static let parseError = String(localized: "Could not process recall data", table: "FoodRecall")
     }
 }

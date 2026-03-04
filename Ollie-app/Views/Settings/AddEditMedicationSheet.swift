@@ -11,9 +11,18 @@ import OtisShared
 /// Sheet for adding or editing a medication
 struct AddEditMedicationSheet: View {
     let profileStore: ProfileStore
+    var profileId: UUID? = nil
     let medication: Medication?
 
     @Environment(\.dismiss) private var dismiss
+
+    /// The profile being edited (looked up by ID or falls back to active)
+    private var targetProfile: PuppyProfile? {
+        if let id = profileId {
+            return profileStore.profile(for: id)
+        }
+        return profileStore.profile
+    }
 
     // Form state
     @State private var name: String = ""
@@ -217,7 +226,7 @@ struct AddEditMedicationSheet: View {
             Spacer()
 
             // Optional meal linking
-            if let mealSchedule = profileStore.profile?.mealSchedule {
+            if let mealSchedule = targetProfile?.mealSchedule {
                 Menu {
                     Button(Strings.Medications.linkToMeal) {
                         // Clear link
@@ -302,9 +311,9 @@ struct AddEditMedicationSheet: View {
         )
 
         if isEditing {
-            profileStore.updateMedication(newMedication)
+            profileStore.updateMedication(newMedication, for: profileId)
         } else {
-            profileStore.addMedication(newMedication)
+            profileStore.addMedication(newMedication, for: profileId)
         }
 
         HapticFeedback.success()

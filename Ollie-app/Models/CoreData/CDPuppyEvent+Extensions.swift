@@ -39,6 +39,8 @@ extension CDPuppyEvent {
         self.gapType = event.gapType?.rawValue
         self.endTime = event.endTime
         self.gapLocation = event.gapLocation
+        self.loggedBy = event.loggedBy
+        self.napLocation = event.napLocation?.rawValue
     }
 
     /// Create a new CDPuppyEvent from a PuppyEvent struct
@@ -51,7 +53,7 @@ extension CDPuppyEvent {
     // MARK: - Convert to Swift Struct
 
     /// Convert to PuppyEvent struct
-    func toPuppyEvent() -> PuppyEvent? {
+    nonisolated func toPuppyEvent() -> PuppyEvent? {
         guard let id = self.id,
               let time = self.time,
               let typeString = self.type,
@@ -73,6 +75,13 @@ extension CDPuppyEvent {
             gapType = CoverageGapType(rawValue: gapTypeString)
         } else {
             gapType = nil
+        }
+
+        let napLocation: NapLocation?
+        if let napLocationString = self.napLocation {
+            napLocation = NapLocation(rawValue: napLocationString)
+        } else {
+            napLocation = nil
         }
 
         return PuppyEvent(
@@ -98,19 +107,22 @@ extension CDPuppyEvent {
             spotName: self.spotName,
             parentWalkId: self.parentWalkId,
             sleepSessionId: self.sleepSessionId,
+            napLocation: napLocation,
             gapType: gapType,
             endTime: self.endTime,
-            gapLocation: self.gapLocation
+            gapLocation: self.gapLocation,
+            loggedBy: self.loggedBy
         )
     }
 }
 
 // MARK: - Fetch Request Helpers
+// All fetch methods are nonisolated because they take a context and work within that context's queue
 
 extension CDPuppyEvent {
 
     /// Fetch all events for a specific date
-    static func fetchEvents(for date: Date, in context: NSManagedObjectContext) -> [CDPuppyEvent] {
+    nonisolated static func fetchEvents(for date: Date, in context: NSManagedObjectContext) -> [CDPuppyEvent] {
         let calendar = Calendar.current
         let startOfDay = calendar.startOfDay(for: date)
         guard let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay) else {
@@ -119,22 +131,22 @@ extension CDPuppyEvent {
 
         let request = NSFetchRequest<CDPuppyEvent>(entityName: "CDPuppyEvent")
         request.predicate = NSPredicate(format: "time >= %@ AND time < %@", startOfDay as CVarArg, endOfDay as CVarArg)
-        request.sortDescriptors = [NSSortDescriptor(keyPath: \CDPuppyEvent.time, ascending: true)]
+        request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: true)]
 
         return (try? context.fetch(request)) ?? []
     }
 
     /// Fetch events in a date range
-    static func fetchEvents(from startDate: Date, to endDate: Date, in context: NSManagedObjectContext) -> [CDPuppyEvent] {
+    nonisolated static func fetchEvents(from startDate: Date, to endDate: Date, in context: NSManagedObjectContext) -> [CDPuppyEvent] {
         let request = NSFetchRequest<CDPuppyEvent>(entityName: "CDPuppyEvent")
         request.predicate = NSPredicate(format: "time >= %@ AND time <= %@", startDate as CVarArg, endDate as CVarArg)
-        request.sortDescriptors = [NSSortDescriptor(keyPath: \CDPuppyEvent.time, ascending: true)]
+        request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: true)]
 
         return (try? context.fetch(request)) ?? []
     }
 
     /// Fetch event by ID
-    static func fetch(byId id: UUID, in context: NSManagedObjectContext) -> CDPuppyEvent? {
+    nonisolated static func fetch(byId id: UUID, in context: NSManagedObjectContext) -> CDPuppyEvent? {
         let request = NSFetchRequest<CDPuppyEvent>(entityName: "CDPuppyEvent")
         request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
         request.fetchLimit = 1
@@ -142,46 +154,145 @@ extension CDPuppyEvent {
     }
 
     /// Fetch events by type
-    static func fetchEvents(ofType type: EventType, in context: NSManagedObjectContext) -> [CDPuppyEvent] {
+    nonisolated static func fetchEvents(ofType type: EventType, in context: NSManagedObjectContext) -> [CDPuppyEvent] {
         let request = NSFetchRequest<CDPuppyEvent>(entityName: "CDPuppyEvent")
         request.predicate = NSPredicate(format: "type == %@", type.rawValue)
-        request.sortDescriptors = [NSSortDescriptor(keyPath: \CDPuppyEvent.time, ascending: false)]
+        request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: false)]
 
         return (try? context.fetch(request)) ?? []
     }
 
     /// Fetch recent events (last N events)
-    static func fetchRecentEvents(limit: Int, in context: NSManagedObjectContext) -> [CDPuppyEvent] {
+    nonisolated static func fetchRecentEvents(limit: Int, in context: NSManagedObjectContext) -> [CDPuppyEvent] {
         let request = NSFetchRequest<CDPuppyEvent>(entityName: "CDPuppyEvent")
-        request.sortDescriptors = [NSSortDescriptor(keyPath: \CDPuppyEvent.time, ascending: false)]
+        request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: false)]
         request.fetchLimit = limit
 
         return (try? context.fetch(request)) ?? []
     }
 
     /// Fetch all events
-    static func fetchAllEvents(in context: NSManagedObjectContext) -> [CDPuppyEvent] {
+    nonisolated static func fetchAllEvents(in context: NSManagedObjectContext) -> [CDPuppyEvent] {
         let request = NSFetchRequest<CDPuppyEvent>(entityName: "CDPuppyEvent")
-        request.sortDescriptors = [NSSortDescriptor(keyPath: \CDPuppyEvent.time, ascending: true)]
+        request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: true)]
 
         return (try? context.fetch(request)) ?? []
     }
 
     /// Fetch events modified after a given date
-    static func fetchEventsModified(after date: Date, in context: NSManagedObjectContext) -> [CDPuppyEvent] {
+    nonisolated static func fetchEventsModified(after date: Date, in context: NSManagedObjectContext) -> [CDPuppyEvent] {
         let request = NSFetchRequest<CDPuppyEvent>(entityName: "CDPuppyEvent")
         request.predicate = NSPredicate(format: "modifiedAt > %@", date as CVarArg)
-        request.sortDescriptors = [NSSortDescriptor(keyPath: \CDPuppyEvent.modifiedAt, ascending: true)]
+        request.sortDescriptors = [NSSortDescriptor(key: "modifiedAt", ascending: true)]
 
         return (try? context.fetch(request)) ?? []
     }
 
     /// Fetch the earliest event by time
-    static func fetchEarliestEvent(in context: NSManagedObjectContext) -> CDPuppyEvent? {
+    nonisolated static func fetchEarliestEvent(in context: NSManagedObjectContext) -> CDPuppyEvent? {
         let request = NSFetchRequest<CDPuppyEvent>(entityName: "CDPuppyEvent")
-        request.sortDescriptors = [NSSortDescriptor(keyPath: \CDPuppyEvent.time, ascending: true)]
+        request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: true)]
         request.fetchLimit = 1
 
         return try? context.fetch(request).first
+    }
+
+    // MARK: - Profile-Scoped Fetch Methods (Multi-Puppy Support)
+
+    /// Fetch all events for a specific date, scoped to a profile
+    nonisolated static func fetchEvents(for date: Date, profile: CDPuppyProfile, in context: NSManagedObjectContext) -> [CDPuppyEvent] {
+        let calendar = Calendar.current
+        let startOfDay = calendar.startOfDay(for: date)
+        guard let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay) else {
+            return []
+        }
+
+        let request = NSFetchRequest<CDPuppyEvent>(entityName: "CDPuppyEvent")
+        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
+            NSPredicate(format: "profile == %@", profile),
+            NSPredicate(format: "time >= %@ AND time < %@", startOfDay as CVarArg, endOfDay as CVarArg)
+        ])
+        request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: true)]
+
+        return (try? context.fetch(request)) ?? []
+    }
+
+    /// Fetch events in a date range, scoped to a profile
+    nonisolated static func fetchEvents(from startDate: Date, to endDate: Date, profile: CDPuppyProfile, in context: NSManagedObjectContext) -> [CDPuppyEvent] {
+        let request = NSFetchRequest<CDPuppyEvent>(entityName: "CDPuppyEvent")
+        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
+            NSPredicate(format: "profile == %@", profile),
+            NSPredicate(format: "time >= %@ AND time <= %@", startDate as CVarArg, endDate as CVarArg)
+        ])
+        request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: true)]
+
+        return (try? context.fetch(request)) ?? []
+    }
+
+    /// Fetch events by type, scoped to a profile
+    nonisolated static func fetchEvents(ofType type: EventType, profile: CDPuppyProfile, in context: NSManagedObjectContext) -> [CDPuppyEvent] {
+        let request = NSFetchRequest<CDPuppyEvent>(entityName: "CDPuppyEvent")
+        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
+            NSPredicate(format: "profile == %@", profile),
+            NSPredicate(format: "type == %@", type.rawValue)
+        ])
+        request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: false)]
+
+        return (try? context.fetch(request)) ?? []
+    }
+
+    /// Fetch recent events, scoped to a profile
+    nonisolated static func fetchRecentEvents(limit: Int, profile: CDPuppyProfile, in context: NSManagedObjectContext) -> [CDPuppyEvent] {
+        let request = NSFetchRequest<CDPuppyEvent>(entityName: "CDPuppyEvent")
+        request.predicate = NSPredicate(format: "profile == %@", profile)
+        request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: false)]
+        request.fetchLimit = limit
+
+        return (try? context.fetch(request)) ?? []
+    }
+
+    /// Fetch all events for a profile
+    nonisolated static func fetchAllEvents(for profile: CDPuppyProfile, in context: NSManagedObjectContext) -> [CDPuppyEvent] {
+        let request = NSFetchRequest<CDPuppyEvent>(entityName: "CDPuppyEvent")
+        request.predicate = NSPredicate(format: "profile == %@", profile)
+        request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: true)]
+
+        return (try? context.fetch(request)) ?? []
+    }
+
+    /// Fetch events modified after a given date, scoped to a profile
+    nonisolated static func fetchEventsModified(after date: Date, profile: CDPuppyProfile, in context: NSManagedObjectContext) -> [CDPuppyEvent] {
+        let request = NSFetchRequest<CDPuppyEvent>(entityName: "CDPuppyEvent")
+        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
+            NSPredicate(format: "profile == %@", profile),
+            NSPredicate(format: "modifiedAt > %@", date as CVarArg)
+        ])
+        request.sortDescriptors = [NSSortDescriptor(key: "modifiedAt", ascending: true)]
+
+        return (try? context.fetch(request)) ?? []
+    }
+
+    /// Fetch the earliest event for a profile
+    nonisolated static func fetchEarliestEvent(for profile: CDPuppyProfile, in context: NSManagedObjectContext) -> CDPuppyEvent? {
+        let request = NSFetchRequest<CDPuppyEvent>(entityName: "CDPuppyEvent")
+        request.predicate = NSPredicate(format: "profile == %@", profile)
+        request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: true)]
+        request.fetchLimit = 1
+
+        return try? context.fetch(request).first
+    }
+
+    /// Link orphaned events to a profile (for migration)
+    nonisolated static func linkOrphanedEvents(to profile: CDPuppyProfile, in context: NSManagedObjectContext) -> Int {
+        let request = NSFetchRequest<CDPuppyEvent>(entityName: "CDPuppyEvent")
+        request.predicate = NSPredicate(format: "profile == nil")
+
+        guard let orphanedEvents = try? context.fetch(request) else { return 0 }
+
+        for event in orphanedEvents {
+            event.profile = profile
+        }
+
+        return orphanedEvents.count
     }
 }

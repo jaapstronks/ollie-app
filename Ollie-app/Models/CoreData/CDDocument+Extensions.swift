@@ -164,8 +164,8 @@ extension CDDocument {
         self.pdfData = data
         self.attachmentType = AttachmentType.pdf.rawValue
 
-        // Generate thumbnail from first page
-        if let thumbnail = Self.generatePDFThumbnail(from: data, size: Self.thumbnailSize) {
+        // Generate thumbnail from first page using shared helper
+        if let thumbnail = PDFHelpers.generateThumbnail(from: data, size: Self.thumbnailSize) {
             self.thumbnailData = thumbnail.jpegData(compressionQuality: Self.thumbnailCompressionQuality)
         }
     }
@@ -173,35 +173,6 @@ extension CDDocument {
     /// Get PDF data
     func getPDFData() -> Data? {
         return self.pdfData
-    }
-
-    /// Generate a thumbnail from a PDF's first page
-    private static func generatePDFThumbnail(from data: Data, size: CGFloat) -> UIImage? {
-        guard let pdfDocument = PDFDocument(data: data),
-              let page = pdfDocument.page(at: 0) else {
-            return nil
-        }
-
-        let pageRect = page.bounds(for: .mediaBox)
-        let scale = size / max(pageRect.width, pageRect.height)
-        let scaledSize = CGSize(
-            width: pageRect.width * scale,
-            height: pageRect.height * scale
-        )
-
-        let renderer = UIGraphicsImageRenderer(size: scaledSize)
-        let thumbnail = renderer.image { context in
-            // Fill with white background
-            UIColor.white.setFill()
-            context.fill(CGRect(origin: .zero, size: scaledSize))
-
-            // Draw PDF page
-            context.cgContext.translateBy(x: 0, y: scaledSize.height)
-            context.cgContext.scaleBy(x: scale, y: -scale)
-            page.draw(with: .mediaBox, to: context.cgContext)
-        }
-
-        return thumbnail
     }
 
     /// Clear all attachment data (image and PDF)

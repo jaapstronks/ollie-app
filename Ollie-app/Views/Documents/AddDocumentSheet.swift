@@ -6,8 +6,8 @@
 
 import SwiftUI
 import OtisShared
-import UniformTypeIdentifiers
 import PDFKit
+import UniformTypeIdentifiers
 
 /// Sheet for adding or editing a document
 struct AddDocumentSheet: View {
@@ -307,31 +307,7 @@ private struct PDFThumbnailPreview: View {
             }
         }
         .task {
-            thumbnail = generateThumbnail()
-        }
-    }
-
-    private func generateThumbnail() -> UIImage? {
-        guard let pdfDocument = PDFDocument(data: pdfData),
-              let page = pdfDocument.page(at: 0) else {
-            return nil
-        }
-
-        let pageRect = page.bounds(for: .mediaBox)
-        let scale: CGFloat = 200 / max(pageRect.width, pageRect.height)
-        let scaledSize = CGSize(
-            width: pageRect.width * scale,
-            height: pageRect.height * scale
-        )
-
-        let renderer = UIGraphicsImageRenderer(size: scaledSize)
-        return renderer.image { context in
-            UIColor.white.setFill()
-            context.fill(CGRect(origin: .zero, size: scaledSize))
-
-            context.cgContext.translateBy(x: 0, y: scaledSize.height)
-            context.cgContext.scaleBy(x: scale, y: -scale)
-            page.draw(with: .mediaBox, to: context.cgContext)
+            thumbnail = PDFHelpers.generateThumbnail(from: pdfData)
         }
     }
 }

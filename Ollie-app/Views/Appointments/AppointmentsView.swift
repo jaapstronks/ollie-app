@@ -16,6 +16,9 @@ struct AppointmentsView: View {
     @State private var showingDeleteConfirmation = false
     @State private var selectedSegment: AppointmentSegment = .upcoming
 
+    // First-visit tip tracking
+    @AppStorage("hasSeenAppointmentsTip") private var hasSeenAppointmentsTip = false
+
     enum AppointmentSegment: String, CaseIterable {
         case upcoming
         case past
@@ -30,6 +33,23 @@ struct AppointmentsView: View {
 
     var body: some View {
         VStack(spacing: 0) {
+            // First-visit tip
+            if !hasSeenAppointmentsTip {
+                FeatureTipCard(
+                    tip: .appointmentsIntro,
+                    onAction: {
+                        showingAddSheet = true
+                        hasSeenAppointmentsTip = true
+                    },
+                    onDismiss: {
+                        withAnimation(.easeOut(duration: 0.2)) {
+                            hasSeenAppointmentsTip = true
+                        }
+                    }
+                )
+                .padding()
+            }
+
             // Segment picker
             Picker("", selection: $selectedSegment) {
                 ForEach(AppointmentSegment.allCases, id: \.self) { segment in

@@ -12,6 +12,7 @@ import OtisShared
 struct MemorialSection: View {
     let profile: PuppyProfile
     @ObservedObject var profileStore: ProfileStore
+    var profileId: UUID? = nil
 
     @State private var showingConfirmation = false
     @State private var showingDatePicker = false
@@ -109,7 +110,7 @@ struct MemorialSection: View {
 
         // Undo option (discrete)
         Button(role: .destructive) {
-            profileStore.updatePassedDate(nil)
+            profileStore.updatePassedDate(nil, for: profileId)
         } label: {
             Text(Strings.Memorial.undoPassedStatus)
                 .font(.footnote)
@@ -148,7 +149,7 @@ struct MemorialSection: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button(Strings.Memorial.continue_) {
-                        profileStore.updatePassedDate(selectedDate)
+                        profileStore.updatePassedDate(selectedDate, for: profileId)
                         showingDatePicker = false
                         // Show memory book generator after a brief moment
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {

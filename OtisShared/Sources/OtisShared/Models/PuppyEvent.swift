@@ -259,6 +259,11 @@ public struct PuppyEvent: Codable, Identifiable, Equatable, Sendable {
     public var endTime: Date?          // nil = ongoing gap
     public var gapLocation: String?    // optional location (e.g., "Grandma's house")
 
+    // MARK: - Attribution Fields
+
+    /// ID of the household member who logged this event (nil for legacy events)
+    public var loggedBy: UUID?
+
     // MARK: - Media Fields
 
     public var photo: String?
@@ -336,7 +341,8 @@ public struct PuppyEvent: Codable, Identifiable, Equatable, Sendable {
         napLocation: NapLocation? = nil,
         gapType: CoverageGapType? = nil,
         endTime: Date? = nil,
-        gapLocation: String? = nil
+        gapLocation: String? = nil,
+        loggedBy: UUID? = nil
     ) {
         self.id = id
         self.time = time
@@ -366,6 +372,7 @@ public struct PuppyEvent: Codable, Identifiable, Equatable, Sendable {
         self.gapType = gapType
         self.endTime = endTime
         self.gapLocation = gapLocation
+        self.loggedBy = loggedBy
 
         if type == .slapen {
             self.sleepSessionId = sleepSessionId ?? UUID()
@@ -409,6 +416,7 @@ public struct PuppyEvent: Codable, Identifiable, Equatable, Sendable {
         case gapType = "gap_type"
         case endTime = "end_time"
         case gapLocation = "gap_location"
+        case loggedBy = "logged_by"
     }
 
     // MARK: - Custom Decoding
@@ -452,6 +460,9 @@ public struct PuppyEvent: Codable, Identifiable, Equatable, Sendable {
         gapType = try container.decodeIfPresent(CoverageGapType.self, forKey: .gapType)
         endTime = try container.decodeIfPresent(Date.self, forKey: .endTime)
         gapLocation = try container.decodeIfPresent(String.self, forKey: .gapLocation)
+
+        // Attribution fields
+        loggedBy = try container.decodeIfPresent(UUID.self, forKey: .loggedBy)
     }
 }
 

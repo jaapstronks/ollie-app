@@ -4,139 +4,210 @@
       "id": "clicker",
       "icon": "bell.fill",
       "category": "foundations",
-      "week": 1,
-      "priority": 1,
-      "requires": []
+      "sortOrder": 1,
+      "requires": [],
+      "method": null,
+      "durationMinutes": 3,
+      "sessionsPerDay": 3,
+      "steps": [
+        { "id": "understand", "prerequisiteRuleId": "neverClickWithoutReward" },
+        { "id": "practice", "prerequisiteRuleId": null }
+      ]
     },
     {
       "id": "nameRecognition",
       "icon": "person.text.rectangle",
       "category": "foundations",
-      "week": 1,
-      "priority": 2,
-      "requires": []
+      "sortOrder": 7,
+      "requires": ["clicker"],
+      "method": "operant",
+      "durationMinutes": 2,
+      "sessionsPerDay": 3,
+      "steps": null
     },
     {
       "id": "luring",
       "icon": "hand.draw.fill",
       "category": "foundations",
-      "week": 1,
-      "priority": 3,
-      "requires": []
+      "sortOrder": 5,
+      "requires": ["clicker"],
+      "method": "classical",
+      "durationMinutes": 3,
+      "sessionsPerDay": 3,
+      "steps": null
     },
     {
       "id": "handling",
       "icon": "hands.sparkles.fill",
       "category": "care",
-      "week": 1,
-      "priority": 4,
-      "requires": []
+      "sortOrder": 2,
+      "requires": [],
+      "method": null,
+      "durationMinutes": 2,
+      "sessionsPerDay": 2,
+      "steps": null
     },
     {
       "id": "collarLeash",
       "icon": "dog.fill",
       "category": "safety",
-      "week": 1,
-      "priority": 5,
-      "requires": []
-    },
-    {
-      "id": "sit",
-      "icon": "arrow.down.to.line",
-      "category": "basicCommands",
-      "week": 2,
-      "priority": 1,
-      "requires": ["luring"]
+      "sortOrder": 3,
+      "requires": [],
+      "method": null,
+      "durationMinutes": 5,
+      "sessionsPerDay": 2,
+      "steps": null,
+      "phases": [
+        { "id": "introduction", "howToStepIndices": [0, 1], "tipIndices": [0] },
+        { "id": "buildDuration", "howToStepIndices": [2], "tipIndices": [1] },
+        { "id": "leashWork", "howToStepIndices": [3, 4], "tipIndices": [2, 3] }
+      ]
     },
     {
       "id": "watchMe",
       "icon": "eye.fill",
       "category": "basicCommands",
-      "week": 2,
-      "priority": 2,
-      "requires": []
+      "sortOrder": 4,
+      "requires": ["clicker"],
+      "method": "operant",
+      "durationMinutes": 2,
+      "sessionsPerDay": 3,
+      "steps": null,
+      "phases": [
+        { "id": "captureAttention", "howToStepIndices": [0, 1, 2], "tipIndices": [0, 1] },
+        { "id": "positionProgression", "howToStepIndices": [3, 4], "tipIndices": [2] },
+        { "id": "addCue", "howToStepIndices": [5, 6], "tipIndices": null },
+        { "id": "proof", "howToStepIndices": [7, 8, 9], "tipIndices": [3] }
+      ]
+    },
+    {
+      "id": "sit",
+      "icon": "arrow.down.to.line",
+      "category": "basicCommands",
+      "sortOrder": 6,
+      "requires": ["luring"],
+      "method": "classical",
+      "durationMinutes": 3,
+      "sessionsPerDay": 5,
+      "steps": [
+        { "id": "lure", "prerequisiteRuleId": null },
+        { "id": "addCue", "prerequisiteRuleId": "wordMustMatchMoment" }
+      ],
+      "phases": [
+        { "id": "lureToPosition", "howToStepIndices": [0, 1, 2], "tipIndices": [0, 1] },
+        { "id": "captureAndStrengthen", "howToStepIndices": [3, 4], "tipIndices": [2] },
+        { "id": "addVerbalCue", "howToStepIndices": [5, 6, 7], "tipIndices": [3] },
+        { "id": "proofThreeDs", "howToStepIndices": [8, 9, 10], "tipIndices": [4, 5] }
+      ]
     },
     {
       "id": "touch",
       "icon": "hand.point.up.fill",
       "category": "basicCommands",
-      "week": 2,
-      "priority": 3,
-      "requires": []
-    },
-    {
-      "id": "looseLeash",
-      "icon": "figure.walk",
-      "category": "safety",
-      "week": 3,
-      "priority": 1,
-      "requires": ["collarLeash"]
+      "sortOrder": 8,
+      "requires": ["clicker"],
+      "method": "operant",
+      "durationMinutes": 2,
+      "sessionsPerDay": 3,
+      "steps": null
     },
     {
       "id": "down",
       "icon": "arrow.down.circle.fill",
       "category": "basicCommands",
-      "week": 3,
-      "priority": 2,
-      "requires": ["sit"]
+      "sortOrder": 9,
+      "requires": ["sit"],
+      "method": "classical",
+      "durationMinutes": 3,
+      "sessionsPerDay": 3,
+      "steps": [
+        { "id": "lure", "prerequisiteRuleId": null },
+        { "id": "buildDuration", "prerequisiteRuleId": "clickEndsExercise" }
+      ]
+    },
+    {
+      "id": "looseLeash",
+      "icon": "figure.walk",
+      "category": "safety",
+      "sortOrder": 10,
+      "requires": ["collarLeash"],
+      "method": "classical",
+      "durationMinutes": 5,
+      "sessionsPerDay": 2,
+      "steps": null,
+      "phases": [
+        { "id": "capturePosition", "howToStepIndices": [0, 1, 2, 3], "tipIndices": [0, 1] },
+        { "id": "buildDuration", "howToStepIndices": [4, 5], "tipIndices": null },
+        { "id": "addCue", "howToStepIndices": [6, 7], "tipIndices": null },
+        { "id": "proofEnvironments", "howToStepIndices": [8, 9], "tipIndices": [2, 3] }
+      ]
     },
     {
       "id": "come",
       "icon": "figure.walk.arrival",
       "category": "safety",
-      "week": 3,
-      "priority": 3,
-      "requires": ["nameRecognition", "watchMe"]
+      "sortOrder": 11,
+      "requires": ["nameRecognition", "watchMe"],
+      "method": "classical",
+      "durationMinutes": 5,
+      "sessionsPerDay": 3,
+      "steps": null,
+      "phases": [
+        { "id": "foundation", "howToStepIndices": [0, 1, 2], "tipIndices": [0, 1] },
+        { "id": "frontPosition", "howToStepIndices": [3, 4, 5], "tipIndices": [2] },
+        { "id": "buildDistance", "howToStepIndices": [6, 7, 8], "tipIndices": [3] },
+        { "id": "proofDistractions", "howToStepIndices": [9, 10, 11], "tipIndices": [4, 5] }
+      ]
     },
     {
       "id": "wait",
       "icon": "hand.raised.fill",
       "category": "impulseControl",
-      "week": 4,
-      "priority": 1,
-      "requires": ["sit"]
+      "sortOrder": 12,
+      "requires": ["sit"],
+      "method": "operant",
+      "durationMinutes": 2,
+      "sessionsPerDay": 3,
+      "steps": null
     },
     {
       "id": "place",
       "icon": "bed.double.fill",
       "category": "impulseControl",
-      "week": 4,
-      "priority": 2,
-      "requires": ["down"]
+      "sortOrder": 13,
+      "requires": ["down"],
+      "method": "classical",
+      "durationMinutes": 3,
+      "sessionsPerDay": 2,
+      "steps": null
     },
     {
       "id": "stay",
       "icon": "figure.stand",
       "category": "impulseControl",
-      "week": 5,
-      "priority": 1,
-      "requires": ["sit", "wait"]
+      "sortOrder": 14,
+      "requires": ["sit", "wait"],
+      "method": "operant",
+      "durationMinutes": 3,
+      "sessionsPerDay": 3,
+      "steps": [
+        { "id": "duration", "prerequisiteRuleId": null },
+        { "id": "distance", "prerequisiteRuleId": "stepBackIfStruggling" }
+      ]
     }
   ],
-  "weekPlans": [
-    {
-      "week": 1,
-      "focusSkillIds": ["clicker", "nameRecognition", "luring", "handling", "collarLeash"]
-    },
-    {
-      "week": 2,
-      "focusSkillIds": ["sit", "watchMe", "touch"]
-    },
-    {
-      "week": 3,
-      "focusSkillIds": ["looseLeash", "down", "come"]
-    },
-    {
-      "week": 4,
-      "focusSkillIds": ["wait", "place"]
-    },
-    {
-      "week": 5,
-      "focusSkillIds": ["stay"]
-    },
-    {
-      "week": 6,
-      "focusSkillIds": ["come", "stay", "looseLeash"]
-    }
+  "preparationItems": [
+    { "id": "clicker", "type": "equipment" },
+    { "id": "treats", "type": "equipment" },
+    { "id": "quietSpace", "type": "equipment" },
+    { "id": "understandOperant", "type": "concept" },
+    { "id": "understandClassical", "type": "concept" },
+    { "id": "understandTiming", "type": "concept" }
+  ],
+  "rules": [
+    { "id": "neverClickWithoutReward", "triggeredByStep": "clicker.understand" },
+    { "id": "wordMustMatchMoment", "triggeredByStep": "sit.addCue" },
+    { "id": "clickEndsExercise", "triggeredByStep": "down.buildDuration" },
+    { "id": "stepBackIfStruggling", "triggeredByStep": "stay.distance" }
   ]
 }

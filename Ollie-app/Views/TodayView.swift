@@ -20,10 +20,33 @@ struct TodayView: View {
     let onSettingsTap: () -> Void
     var onNavigateToAppointments: (() -> Void)?
     var onNavigateToTrain: (() -> Void)?
+    var onAddDog: (() -> Void)?
 
     @State private var selectedPhotoEvent: PuppyEvent?
+    @State private var showProfilePicker = false
+    @State private var dismissedCrateNudgeDate: Date?
+
+    // First-visit tip tracking
+    @AppStorage("hasSeenTodayTip") private var hasSeenTodayTip = false
+
     @EnvironmentObject private var atmosphereProvider: AtmosphereProvider
     @EnvironmentObject private var foodRecallService: FoodRecallService
+    @EnvironmentObject private var eventStore: EventStore
+
+    /// Whether to show the crate nudge card
+    private var shouldShowCrateNudge: Bool {
+        // Check if dismissed today
+        if let dismissedDate = dismissedCrateNudgeDate,
+           Calendar.current.isDateInToday(dismissedDate) {
+            return false
+        }
+
+        return CombinedStatusCalculations.shouldShowCrateNudge(
+            sleepState: viewModel.currentSleepState,
+            todayEvents: viewModel.events,
+            allEvents: eventStore.events
+        )
+    }
 
     var body: some View {
         VStack(spacing: 0) {
@@ -46,6 +69,18 @@ struct TodayView: View {
 
             ScrollView {
                 VStack(spacing: 16) {
+                    // First-visit tip (only show on today, not past dates)
+                    if viewModel.isShowingToday && !hasSeenTodayTip {
+                        FeatureTipCard(
+                            tip: .todayIntro,
+                            onDismiss: {
+                                withAnimation(.easeOut(duration: 0.2)) {
+                                    hasSeenTodayTip = true
+                                }
+                            }
+                        )
+                    }
+
                     // Status cards section (only for today)
                     if viewModel.isShowingToday {
                         statusCardsSection
@@ -128,8 +163,8 @@ struct TodayView: View {
                     viewModel.goToPreviousDay()
                 } label: {
                     Image(systemName: "chevron.left")
-                        .font(.system(size: 14, weight: .semibold))
-                        .frame(width: 32, height: 32)
+                        .font(.system(size: 18, weight: .semibold))
+                        .frame(width: 44, height: 44)
                         .contentShape(Rectangle())
                 }
                 .accessibilityLabel(Strings.Timeline.previousDay)
@@ -140,8 +175,8 @@ struct TodayView: View {
                     viewModel.goToNextDay()
                 } label: {
                     Image(systemName: "chevron.right")
-                        .font(.system(size: 14, weight: .semibold))
-                        .frame(width: 32, height: 32)
+                        .font(.system(size: 18, weight: .semibold))
+                        .frame(width: 44, height: 44)
                         .contentShape(Rectangle())
                 }
                 .opacity(viewModel.canGoForward ? 1 : 0.3)
@@ -191,14 +226,51 @@ struct TodayView: View {
                 .accessibilityHint(Strings.Timeline.goToTodayHint)
             }
 
-            // Profile photo button (opens settings)
+            // Profile photo button
+            // - Tap: Opens profile picker if multiple profiles exist, otherwise settings
+            // - Long press: Always opens settings
             ProfilePhotoButton(
                 profile: viewModel.profileStore.profile,
-                action: onSettingsTap
+                action: {
+                    if viewModel.profileStore.profiles.count > 1 {
+                        showProfilePicker = true
+                    } else {
+                        onSettingsTap()
+                    }
+                }
             )
+            .contextMenu {
+                Button {
+                    onSettingsTap()
+                } label: {
+                    Label(Strings.Tabs.settings, systemImage: "gearshape")
+                }
+
+                if viewModel.profileStore.profiles.count > 1 {
+                    Button {
+                        showProfilePicker = true
+                    } label: {
+                        Label(Strings.Profile.switchProfile, systemImage: "arrow.left.arrow.right")
+                    }
+                }
+            }
         }
         .padding()
         .atmosphereNavBar()
+        .sheet(isPresented: $showProfilePicker) {
+            ProfilePickerSheet(
+                profileStore: viewModel.profileStore,
+                isPresented: $showProfilePicker,
+                onAddDog: {
+                    // Dismiss profile picker first, then trigger onboarding
+                    showProfilePicker = false
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        onAddDog?()
+                    }
+                },
+                onManageProfiles: onSettingsTap
+            )
+        }
     }
 
     // MARK: - Status Cards Section
@@ -214,6 +286,34 @@ struct TodayView: View {
             // This avoids redundant calculation when puppy is sleeping
             let separated = viewModel.separatedUpcomingItems(forecasts: weatherService.forecasts)
             let pendingActionable = isSleeping ? separated.actionable.first : nil
+
+            // First run welcome card (highest priority for new users)
+            if case .firstRun(let puppyName) = combinedState {
+                FirstRunWelcomeCard(
+                    puppyName: puppyName,
+                    onSleeping: { viewModel.firstRunPuppyIsSleeping() },
+                    onAwake: { viewModel.firstRunPuppyIsAwake() }
+                )
+            }
+
+            // First week summary card (days 1-7)
+            if viewModel.shouldShowFirstWeekCard,
+               !combinedState.shouldShowFirstRunCard,
+               let stats = viewModel.firstWeekStats {
+                FirstWeekCard(
+                    stats: stats,
+                    isCollapsed: viewModel.isFirstWeekCardCollapsed,
+                    onToggle: { viewModel.toggleFirstWeekCard() }
+                )
+                .animatedAppear(delay: 0.03)
+            }
+
+            // Stale logging banner (replaces misleading status cards)
+            if case .staleLogging = combinedState {
+                StaleLoggingBanner(
+                    onStartFresh: { viewModel.startFreshAfterLoggingGap() }
+                )
+            }
 
             // Post-wake potty prompt (highest priority - shows at top)
             if case .justWokeNeedsPotty(let wokeAt, let minutesSinceWake, let overdueBy) = combinedState {
@@ -283,27 +383,46 @@ struct TodayView: View {
                 )
             }
 
-            // Medication reminders
-            ForEach(viewModel.pendingMedications) { pending in
-                MedicationReminderCard(
-                    medication: pending.medication,
-                    time: pending.time,
-                    scheduledDate: pending.scheduledDate,
-                    isOverdue: pending.isOverdue,
-                    onComplete: { medicationName in
-                        viewModel.completeMedication(pending, medicationName: medicationName)
+            // Crate nudge card (contextual suggestion for crate naps)
+            if shouldShowCrateNudge && !combinedState.shouldShowFirstRunCard {
+                CrateNudgeCard(
+                    puppyName: viewModel.puppyName,
+                    onStartCrateNap: {
+                        // Start a crate nap via the sheet with crate preselected
+                        viewModel.sheetCoordinator.presentSheet(.startActivity(.nap, preselectedLocation: .crate))
+                    },
+                    onDismiss: {
+                        // Dismiss for the rest of today
+                        dismissedCrateNudgeDate = Date()
                     }
                 )
+                .animatedAppear(delay: 0.02)
             }
 
-            // Actionable & Upcoming events (pass precomputed values)
-            ScheduledEventsSection(
-                viewModel: viewModel,
-                weatherService: weatherService,
-                precomputedSeparated: separated,
-                isSleeping: isSleeping,
-                onNavigateToSocialization: onNavigateToTrain
-            )
+            // Hide scheduled events and medications during first run to avoid confusing "missed" reminders
+            if !combinedState.shouldShowFirstRunCard {
+                // Medication reminders
+                ForEach(viewModel.pendingMedications) { pending in
+                    MedicationReminderCard(
+                        medication: pending.medication,
+                        time: pending.time,
+                        scheduledDate: pending.scheduledDate,
+                        isOverdue: pending.isOverdue,
+                        onComplete: { medicationName in
+                            viewModel.completeMedication(pending, medicationName: medicationName)
+                        }
+                    )
+                }
+
+                // Actionable & Upcoming events (pass precomputed values)
+                ScheduledEventsSection(
+                    viewModel: viewModel,
+                    weatherService: weatherService,
+                    precomputedSeparated: separated,
+                    isSleeping: isSleeping,
+                    onNavigateToSocialization: onNavigateToTrain
+                )
+            }
         }
     }
 
@@ -379,7 +498,8 @@ struct EmptyTimelineCard: View {
         weatherService: weatherService,
         onSettingsTap: { print("Settings tapped") },
         onNavigateToAppointments: { print("Navigate to Appointments") },
-        onNavigateToTrain: { print("Navigate to Train") }
+        onNavigateToTrain: { print("Navigate to Train") },
+        onAddDog: { print("Add dog") }
     )
     .environmentObject(atmosphereProvider)
     .environmentObject(foodRecallService)

@@ -76,21 +76,22 @@ private func showExistingProfileWarning(
     profileStore: ProfileStore,
     logger: Logger
 ) {
+    // With multi-puppy support, we no longer need to replace the existing profile
+    // The shared profile will be ADDED to the user's profile list
     let message = existingName.isEmpty
-        ? Strings.CloudSharing.existingProfileMessageGeneric
-        : Strings.CloudSharing.existingProfileMessage(existingName: existingName, sharedOwner: ownerName)
+        ? Strings.CloudSharing.addSharedProfileMessageGeneric(ownerName: ownerName)
+        : Strings.CloudSharing.addSharedProfileMessage(existingName: existingName, sharedOwner: ownerName)
 
     let alert = UIAlertController(
-        title: Strings.CloudSharing.existingProfileTitle,
+        title: Strings.CloudSharing.addSharedProfileTitle,
         message: message,
         preferredStyle: .alert
     )
 
     alert.addAction(UIAlertAction(title: Strings.Common.cancel, style: .cancel))
-    alert.addAction(UIAlertAction(title: Strings.CloudSharing.acceptAndReplace, style: .destructive) { _ in
+    alert.addAction(UIAlertAction(title: Strings.CloudSharing.acceptShare, style: .default) { _ in
         Task { @MainActor in
-            // Delete existing private profile before accepting share
-            profileStore.deletePrivateProfile()
+            // No longer deleting private profile - multi-puppy support allows both
             await acceptShareInvitation(metadata: metadata, profileStore: profileStore, logger: logger)
         }
     })
@@ -199,9 +200,15 @@ struct OtisApp: App {
         // Configure TipKit for contextual tips
         configureTips()
 
-        // Install seed data for development
+        // Install seed data for UI testing (screenshot automation) - always runs regardless of build config
+        if SeedData.isUITesting {
+            SeedData.installSeedDataIfNeeded()
+        }
         #if DEBUG
-        SeedData.installSeedDataIfNeeded()
+        // Install seed data for development (when not UI testing)
+        if !SeedData.isUITesting {
+            SeedData.installSeedDataIfNeeded()
+        }
         #endif
     }
 
@@ -236,6 +243,9 @@ struct OtisApp: App {
                     } catch {
                         Logger.otis(category: "App").error("Migration failed: \(error.localizedDescription)")
                     }
+
+                    // Wire up event store with profile store for profile-scoped queries
+                    eventStore.setProfileStore(profileStore)
 
                     // Wire up location manager to weather service
                     weatherService.setLocationManager(locationManager)

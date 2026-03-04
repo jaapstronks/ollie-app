@@ -228,9 +228,13 @@ private let previewSkillForTrainingLog = Skill(
     id: "sit",
     icon: "arrow.down.to.line",
     category: .basicCommands,
-    week: 2,
-    priority: 1,
-    requires: ["luring"]
+    sortOrder: 7,
+    requires: ["luring"],
+    method: .classical,
+    durationMinutes: 3,
+    sessionsPerDay: 3,
+    steps: nil,
+    phases: nil
 )
 
 #Preview("Without Prefill") {

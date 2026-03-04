@@ -11,11 +11,13 @@ struct EditEventSheet: View {
     let event: PuppyEvent
     let onSave: (PuppyEvent) -> Void
     var onDelete: (() -> Void)?
+    var householdMembers: HouseholdMembers?
 
     @Environment(\.dismiss) private var dismiss
 
     @State private var time: Date
     @State private var location: EventLocation?
+    @State private var napLocation: NapLocation?
     @State private var note: String
     @State private var who: String
     @State private var exercise: String
@@ -24,14 +26,23 @@ struct EditEventSheet: View {
     @State private var weightKg: String
     @State private var showingDeleteConfirmation = false
 
-    init(event: PuppyEvent, onSave: @escaping (PuppyEvent) -> Void, onDelete: (() -> Void)? = nil) {
+    /// Look up the member who logged this event
+    private var loggedByMember: HouseholdMember? {
+        guard let loggedBy = event.loggedBy,
+              let members = householdMembers else { return nil }
+        return members.member(byId: loggedBy)
+    }
+
+    init(event: PuppyEvent, onSave: @escaping (PuppyEvent) -> Void, onDelete: (() -> Void)? = nil, householdMembers: HouseholdMembers? = nil) {
         self.event = event
         self.onSave = onSave
         self.onDelete = onDelete
+        self.householdMembers = householdMembers
 
         // Initialize state with existing values
         _time = State(initialValue: event.time)
         _location = State(initialValue: event.location)
+        _napLocation = State(initialValue: event.napLocation)
         _note = State(initialValue: event.note ?? "")
         _who = State(initialValue: event.who ?? "")
         _exercise = State(initialValue: event.exercise ?? "")
@@ -47,9 +58,21 @@ struct EditEventSheet: View {
                 Section {
                     HStack(spacing: 12) {
                         EventIconLarge(type: event.type, size: 40)
-                        Text(event.type.label)
-                            .font(.title2)
-                            .fontWeight(.semibold)
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(event.type.label)
+                                .font(.title2)
+                                .fontWeight(.semibold)
+
+                            // Show who logged this event (only if loggedBy is set)
+                            if let member = loggedByMember {
+                                HStack(spacing: 4) {
+                                    HouseholdMemberAvatar(member: member, size: 14)
+                                    Text(member.name)
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                }
+                            }
+                        }
                     }
                 }
 
@@ -72,6 +95,19 @@ struct EditEventSheet: View {
                             Text(Strings.EventLocation.inside).tag(EventLocation?.some(.binnen))
                         }
                         .pickerStyle(.segmented)
+                    }
+                }
+
+                // Nap location picker (for sleep events)
+                if event.type == .slapen {
+                    Section(Strings.NapLocation.wherePrompt) {
+                        Picker(Strings.NapLocation.wherePrompt, selection: $napLocation) {
+                            Text(Strings.Common.notSet).tag(NapLocation?.none)
+                            ForEach(NapLocation.allCases, id: \.self) { loc in
+                                Label(loc.label, systemImage: loc.icon).tag(NapLocation?.some(loc))
+                            }
+                        }
+                        .pickerStyle(.menu)
                     }
                 }
 
@@ -160,6 +196,7 @@ struct EditEventSheet: View {
         var updatedEvent = event
         updatedEvent.time = time
         updatedEvent.location = location
+        updatedEvent.napLocation = napLocation
         updatedEvent.note = note.isEmpty ? nil : note
         updatedEvent.who = who.isEmpty ? nil : who
         updatedEvent.exercise = exercise.isEmpty ? nil : exercise

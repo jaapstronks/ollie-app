@@ -86,7 +86,7 @@ enum ExportError: LocalizedError {
     case fileCreationFailed
     case encodingFailed(String)
 
-    var errorDescription: String? {
+    nonisolated var errorDescription: String? {
         switch self {
         case .noProfile:
             return Strings.Export.errorNoProfile
@@ -117,7 +117,7 @@ enum ExportStep: String {
     case exportingProfilePhoto = "profilePhoto"
     case finalizing = "finalizing"
 
-    var localizedDescription: String {
+    nonisolated var localizedDescription: String {
         switch self {
         case .preparing:
             return Strings.Export.stepPreparing

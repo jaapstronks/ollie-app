@@ -9,6 +9,7 @@ import MapKit
 import UIKit
 
 /// Service for opening locations in external maps applications
+@MainActor
 enum MapsService {
 
     // MARK: - Public API

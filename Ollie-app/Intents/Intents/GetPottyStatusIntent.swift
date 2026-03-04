@@ -9,9 +9,9 @@ import OtisShared
 
 /// Query when the puppy last peed and pooped (combined)
 struct GetPottyStatusIntent: AppIntent {
-    static var title: LocalizedStringResource = "Potty Status"
-    static var description = IntentDescription("Find out when your puppy last peed and pooped")
-    static var openAppWhenRun: Bool = false
+    static let title: LocalizedStringResource = "Potty Status"
+    static let description = IntentDescription("Find out when your puppy last peed and pooped")
+    static let openAppWhenRun: Bool = false
 
     @MainActor
     func perform() async throws -> some IntentResult & ProvidesDialog {
@@ -58,9 +58,9 @@ struct GetPottyStatusIntent: AppIntent {
 
 /// Comprehensive puppy status: sleep, potty, and daily activity
 struct GetPuppyStatusIntent: AppIntent {
-    static var title: LocalizedStringResource = "Puppy Status"
-    static var description = IntentDescription("Get a complete status update on your puppy")
-    static var openAppWhenRun: Bool = false
+    static let title: LocalizedStringResource = "Puppy Status"
+    static let description = IntentDescription("Get a complete status update on your puppy")
+    static let openAppWhenRun: Bool = false
 
     @MainActor
     func perform() async throws -> some IntentResult & ProvidesDialog {

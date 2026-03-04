@@ -342,7 +342,7 @@ enum WeatherError: LocalizedError {
     case networkError
     case parseError
 
-    var errorDescription: String? {
+    nonisolated var errorDescription: String? {
         switch self {
         case .invalidURL: return Strings.Errors.invalidURL
         case .networkError: return Strings.Errors.networkError

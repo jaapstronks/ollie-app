@@ -57,6 +57,9 @@ class DataImporter: ObservableObject {
     /// Maximum allowed line length in JSONL files (prevents memory attacks)
     private static let maxLineLength = 50_000
 
+    /// Network request timeout in seconds
+    private static let networkTimeoutSeconds: TimeInterval = 30
+
     /// Validates that a URL is from an allowed GitHub domain
     private func isURLAllowed(_ url: URL) -> Bool {
         guard let host = url.host?.lowercased() else { return false }
@@ -204,8 +207,13 @@ class DataImporter: ObservableObject {
 
     // MARK: - Private Methods
 
+    /// Documents directory URL
+    /// Falls back to temporary directory if documents directory is unavailable (should never happen in practice)
     private var documentsURL: URL {
-        fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        guard let url = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            return fileManager.temporaryDirectory
+        }
+        return url
     }
 
     private var dataDirectoryURL: URL {
@@ -230,6 +238,7 @@ class DataImporter: ObservableObject {
 
         var request = URLRequest(url: apiURL)
         request.setValue("application/vnd.github.v3+json", forHTTPHeaderField: "Accept")
+        request.timeoutInterval = Self.networkTimeoutSeconds
 
         let (data, response) = try await URLSession.shared.data(for: request)
 
@@ -270,7 +279,10 @@ class DataImporter: ObservableObject {
             throw ImportError.untrustedURL
         }
 
-        let (data, response) = try await URLSession.shared.data(from: url)
+        var request = URLRequest(url: url)
+        request.timeoutInterval = Self.networkTimeoutSeconds
+
+        let (data, response) = try await URLSession.shared.data(for: request)
 
         guard let httpResponse = response as? HTTPURLResponse,
               httpResponse.statusCode == 200 else {

@@ -77,6 +77,23 @@ class PlacesMapViewModel: ObservableObject {
         self.contactStore = contactStore
         self.momentsViewModel = momentsViewModel
         self.discoveryService = DogParkDiscoveryService()
+
+        // Observe changes to discovered spots and propagate to this view model
+        // This ensures the view re-renders when discovered spots are loaded
+        discoveryService.$discoveredSpots
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.objectWillChange.send()
+            }
+            .store(in: &cancellables)
+
+        // Also observe isLoading state changes
+        discoveryService.$isLoading
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.objectWillChange.send()
+            }
+            .store(in: &cancellables)
     }
 
     // MARK: - Computed Markers
@@ -214,6 +231,37 @@ class PlacesMapViewModel: ObservableObject {
 
     func clearSelection() {
         selectedMarker = nil
+    }
+
+    // MARK: - Camera Positioning for Sheet Presentation
+
+    /// Pan the map so the given coordinate appears in the upper portion of the screen,
+    /// leaving room for a sheet to appear below without obscuring the location.
+    /// - Parameter coordinate: The location to keep visible above the sheet
+    func panForSheetPresentation(coordinate: CLLocationCoordinate2D) {
+        // Get current span from camera position, or use a reasonable default
+        let currentSpan = currentMapSpan
+
+        // Offset the center southward so the pin appears in the upper third.
+        // A medium sheet covers ~50% of the screen, so we shift down by ~30% of the visible span.
+        let latitudeOffset = currentSpan.latitudeDelta * 0.3
+        let adjustedCenter = CLLocationCoordinate2D(
+            latitude: coordinate.latitude - latitudeOffset,
+            longitude: coordinate.longitude
+        )
+
+        withAnimation(.easeInOut(duration: 0.3)) {
+            cameraPosition = .region(MKCoordinateRegion(
+                center: adjustedCenter,
+                span: currentSpan
+            ))
+        }
+    }
+
+    /// Extract the current map span from the camera position
+    private var currentMapSpan: MKCoordinateSpan {
+        // Try to get region from the current position using region property
+        cameraPosition.region?.span ?? MKCoordinateSpan(latitudeDelta: 0.02, longitudeDelta: 0.02)
     }
 
     // MARK: - Place Discovery

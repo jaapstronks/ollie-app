@@ -25,6 +25,7 @@ class NotificationService: ObservableObject {
     private let pottyScheduler = PottyNotificationScheduler()
     private let mealScheduler = MealNotificationScheduler()
     private let napScheduler = NapNotificationScheduler()
+    private let wakeUpSoonScheduler = WakeUpSoonNotificationScheduler()
     private let walkScheduler = WalkNotificationScheduler()
     private let appointmentScheduler = AppointmentNotificationScheduler()
 
@@ -72,6 +73,10 @@ class NotificationService: ObservableObject {
         appointments: [DogAppointment] = [],
         isWalkInProgress: Bool = false
     ) async {
+        // Record app usage - user is viewing the app, so they already see status cards
+        // This helps suppress redundant notifications that would fire right after closing the app
+        NotificationSuppressionManager.shared.recordAppUsage()
+
         guard profile.notificationSettings.isEnabled && isAuthorized else {
             await cancelAllNotifications()
             return
@@ -86,27 +91,50 @@ class NotificationService: ObservableObject {
 
         let settings = profile.notificationSettings
 
+        // Check sleep state - suppress walk/meal/nap notifications while sleeping
+        // (follows same logic as status cards which show combined sleep card instead)
+        let sleepState = SleepCalculations.currentSleepState(events: events)
+        let isSleeping = sleepState.isSleeping
+
         // Delegate to individual schedulers
+        // Potty notifications are still scheduled while sleeping (urgent potty shows in combined card)
         if settings.pottyReminders.isEnabled {
             await pottyScheduler.schedule(events: events, profile: profile)
         } else {
             await pottyScheduler.cancel()
         }
 
-        if settings.mealReminders.isEnabled {
+        // Don't send meal notifications while sleeping - meal can wait until wake up
+        if settings.mealReminders.isEnabled && !isSleeping {
             await mealScheduler.schedule(events: events, profile: profile)
         } else {
             await mealScheduler.cancel()
         }
 
+        // Nap reminders only make sense when awake (they remind to put puppy to sleep)
+        // Wake-up-soon notifications only make sense when sleeping (predict wake time)
         if settings.napReminders.isEnabled {
-            await napScheduler.schedule(events: events, profile: profile)
+            if isSleeping {
+                // Cancel "time to nap" reminders while sleeping
+                await napScheduler.cancel()
+                // Schedule "waking up soon" notification if enabled
+                if settings.napReminders.wakeUpSoonEnabled {
+                    await wakeUpSoonScheduler.schedule(events: events, profile: profile)
+                } else {
+                    await wakeUpSoonScheduler.cancel()
+                }
+            } else {
+                // Awake: schedule nap reminders, cancel wake-up notifications
+                await napScheduler.schedule(events: events, profile: profile)
+                await wakeUpSoonScheduler.cancel()
+            }
         } else {
             await napScheduler.cancel()
+            await wakeUpSoonScheduler.cancel()
         }
 
-        // Don't schedule walk notifications if a walk is already in progress
-        if settings.walkReminders.isEnabled && !isWalkInProgress {
+        // Don't schedule walk notifications if sleeping or walk already in progress
+        if settings.walkReminders.isEnabled && !isWalkInProgress && !isSleeping {
             await walkScheduler.schedule(events: events, profile: profile)
         } else {
             await walkScheduler.cancel()

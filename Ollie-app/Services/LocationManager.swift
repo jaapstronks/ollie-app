@@ -110,8 +110,9 @@ extension LocationManager: CLLocationManagerDelegate {
     }
 
     nonisolated func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        let status = manager.authorizationStatus
         Task { @MainActor in
-            authorizationStatus = manager.authorizationStatus
+            authorizationStatus = status
         }
     }
 }
@@ -123,7 +124,7 @@ enum LocationError: LocalizedError {
     case locationUnavailable
     case timeout
 
-    var errorDescription: String? {
+    nonisolated var errorDescription: String? {
         switch self {
         case .notAuthorized:
             return Strings.WalkLocations.locationNotAuthorized

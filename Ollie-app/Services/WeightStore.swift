@@ -15,21 +15,15 @@ import os
 
 /// Manages weight measurements with Core Data and automatic CloudKit sync
 @MainActor
-final class WeightStore: ObservableObject {
+final class WeightStore: BaseStore, ProfileAccessible {
 
     // MARK: - Published State
 
     @Published private(set) var measurements: [WeightMeasurement] = []
 
-    // MARK: - Dependencies
+    // MARK: - ProfileAccessible
 
-    private let persistenceController: PersistenceController
-    private weak var profileStore: ProfileStore?
-    private let logger: Logger
-
-    // MARK: - CloudKit Sync
-
-    private var cancellables = Set<AnyCancellable>()
+    weak var profileStore: ProfileStore?
 
     // MARK: - Cached Computed Properties
 
@@ -43,12 +37,6 @@ final class WeightStore: ObservableObject {
         _cachedWeightDelta = nil
         _cachedFirstWeight = nil
         _cachedGrowthStory = nil
-    }
-
-    // MARK: - Convenience Accessors
-
-    var viewContext: NSManagedObjectContext {
-        persistenceController.viewContext
     }
 
     // MARK: - Computed Properties
@@ -108,38 +96,18 @@ final class WeightStore: ObservableObject {
         persistenceController: PersistenceController = .shared,
         profileStore: ProfileStore? = nil
     ) {
-        self.persistenceController = persistenceController
         self.profileStore = profileStore
-        self.logger = Logger.otis(category: "WeightStore")
-        setupRemoteChangeObserver()
+        super.init(persistenceController: persistenceController, logCategory: "WeightStore")
     }
 
     /// Set the profile store (for when it's not available at init time)
     func setProfileStore(_ profileStore: ProfileStore) {
-        self.profileStore = profileStore
-        performInitialLoad()
-    }
-
-    // MARK: - Remote Change Observer
-
-    private func setupRemoteChangeObserver() {
-        NotificationCenter.default
-            .publisher(for: .NSPersistentStoreRemoteChange)
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.handleRemoteChange()
-            }
-            .store(in: &cancellables)
-    }
-
-    private func handleRemoteChange() {
-        logger.debug("Detected CloudKit remote change")
-        performInitialLoad()
+        configureProfileStore(profileStore)
     }
 
     // MARK: - Data Loading
 
-    func performInitialLoad() {
+    override func performInitialLoad() {
         invalidateCaches()
 
         guard let profile = getCurrentProfile() else {
@@ -150,17 +118,6 @@ final class WeightStore: ObservableObject {
         let cdMeasurements = CDWeightMeasurement.fetchMeasurementsChronological(for: profile, in: viewContext)
         measurements = cdMeasurements.compactMap { $0.toWeightMeasurement() }
         logger.info("Loaded \(self.measurements.count) weight measurements for profile")
-    }
-
-    // MARK: - Profile Access
-
-    /// Get the current CDPuppyProfile from Core Data
-    private func getCurrentProfile() -> CDPuppyProfile? {
-        guard let profileId = profileStore?.profile?.id else {
-            logger.warning("No profile available for weight operations")
-            return nil
-        }
-        return CDPuppyProfile.fetch(byId: profileId, in: viewContext)
     }
 
     // MARK: - CRUD Operations
@@ -237,36 +194,6 @@ final class WeightStore: ObservableObject {
         measurements.filter { measurement in
             measurement.date >= startDate && measurement.date <= endDate
         }
-    }
-
-    // MARK: - Save Operations
-
-    /// Perform a save operation with error handling
-    @discardableResult
-    private func performSave(operation: String, onSuccess: () -> Void) -> Bool {
-        do {
-            try persistenceController.save()
-            onSuccess()
-            logger.info("\(operation)")
-            return true
-        } catch {
-            viewContext.rollback()
-            logger.error("Failed to \(operation): \(error.localizedDescription)")
-            return false
-        }
-    }
-
-    // MARK: - CloudKit Sync
-
-    /// Sync data from CloudKit (refreshes context and reloads)
-    func syncFromCloud() async {
-        viewContext.refreshAllObjects()
-        performInitialLoad()
-    }
-
-    /// Force sync with CloudKit
-    func forceSync() async {
-        await syncFromCloud()
     }
 
     // MARK: - Migration Support

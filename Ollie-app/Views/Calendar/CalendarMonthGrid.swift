@@ -16,6 +16,7 @@ struct CalendarMonthGrid: View {
     let birthDate: Date?
 
     @Environment(\.calendar) private var calendar
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     // Grid layout: 7 columns for days of week
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 4), count: 7)
@@ -106,7 +107,7 @@ struct CalendarMonthGrid: View {
         LazyVGrid(columns: columns, spacing: 4) {
             ForEach(daysInMonth, id: \.self) { date in
                 Button {
-                    withAnimation(.easeInOut(duration: 0.15)) {
+                    withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.15)) {
                         selectedDate = date
                     }
                 } label: {
@@ -167,7 +168,7 @@ struct CalendarMonthGrid: View {
     }
 
     private func navigateMonth(by value: Int) {
-        withAnimation(.easeInOut(duration: 0.2)) {
+        withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.2)) {
             if let newMonth = calendar.date(byAdding: .month, value: value, to: displayedMonth) {
                 displayedMonth = newMonth
             }
@@ -175,7 +176,7 @@ struct CalendarMonthGrid: View {
     }
 
     private func goToToday() {
-        withAnimation(.easeInOut(duration: 0.2)) {
+        withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.2)) {
             let today = Date()
             displayedMonth = today
             selectedDate = today

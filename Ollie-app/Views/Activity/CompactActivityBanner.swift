@@ -13,6 +13,7 @@ struct CompactActivityBanner: View {
     let onTap: () -> Void
 
     @State private var isPulsing = false
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         Button {
@@ -56,6 +57,7 @@ struct CompactActivityBanner: View {
         }
         .buttonStyle(.plain)
         .onAppear {
+            guard !reduceMotion else { return }
             withAnimation(.easeInOut(duration: 1.0).repeatForever(autoreverses: true)) {
                 isPulsing = true
             }

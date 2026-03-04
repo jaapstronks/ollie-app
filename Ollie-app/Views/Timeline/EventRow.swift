@@ -10,9 +10,23 @@ import UIKit
 /// Single event row in the timeline
 struct EventRow: View {
     let event: PuppyEvent
+    var householdMembers: HouseholdMembers?
+
+    /// Look up the member who logged this event
+    private var loggedByMember: HouseholdMember? {
+        guard let loggedBy = event.loggedBy,
+              let members = householdMembers else { return nil }
+        return members.member(byId: loggedBy)
+    }
 
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
+            // Attribution avatar (only shown when loggedBy is set)
+            if loggedByMember != nil {
+                HouseholdMemberAvatar(member: loggedByMember, size: 18)
+                    .padding(.top, 2)
+            }
+
             // Time
             Text(event.time.timeString)
                 .font(.caption)

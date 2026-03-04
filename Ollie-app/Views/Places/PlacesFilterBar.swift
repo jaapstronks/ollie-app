@@ -56,6 +56,7 @@ struct PlacesFilterBar: View {
     @State private var showingContactTypeSheet = false
     @State private var showingSpotCategorySheet = false
     @State private var showingDiscoveryTypeSheet = false
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
@@ -95,7 +96,7 @@ struct PlacesFilterBar: View {
     }
 
     private func toggleFilter(_ category: PlacesFilterCategory) {
-        withAnimation(.easeInOut(duration: 0.2)) {
+        withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.2)) {
             if activeFilters.contains(category) {
                 activeFilters.remove(category)
             } else {

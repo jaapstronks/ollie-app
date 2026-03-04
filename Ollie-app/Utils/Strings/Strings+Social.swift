@@ -127,5 +127,85 @@ extension Strings {
         static func thisWeekProgress(_ count: Int) -> String {
             String(localized: "\(count) exposures this week", table: table)
         }
+
+        // MARK: - Journey & Phases
+
+        // Phase names
+        static let phaseSettlingIn = String(localized: "Settling In", table: table)
+        static let phaseFirstSteps = String(localized: "First Steps", table: table)
+        static let phaseBuildingConfidence = String(localized: "Building Confidence", table: table)
+        static let phasePeakWindow = String(localized: "Peak Window", table: table)
+        static let phaseMaintenance = String(localized: "Maintenance", table: table)
+
+        // Phase descriptions
+        static let phaseSettlingInDesc = String(localized: "Focus on comfort and basic routine", table: table)
+        static let phaseFirstStepsDesc = String(localized: "Home sounds, handling, household members", table: table)
+        static let phaseBuildingConfidenceDesc = String(localized: "Neighborhood, common encounters", table: table)
+        static let phasePeakWindowDesc = String(localized: "Expand variety, new experiences", table: table)
+        static let phaseMaintenanceDesc = String(localized: "Fill gaps, reinforce positives", table: table)
+
+        // Journey card
+        static let seeYourJourney = String(localized: "See your journey", table: table)
+        static func seePuppyJourney(name: String) -> String {
+            String(localized: "\(name)'s journey", table: table)
+        }
+        static let nextUp = String(localized: "Next up", table: table)
+        static let quickCheckMode = String(localized: "Quick Check", table: table)
+        static let quickCheckModeDesc = String(localized: "Tap items to mark comfortable", table: table)
+        static func phaseProgress(comfortable: Int, total: Int) -> String {
+            String(localized: "\(comfortable) of \(total) comfortable", table: table)
+        }
+        static func dayNumber(_ day: Int) -> String {
+            String(localized: "Day \(day)", table: table)
+        }
+        static func weekNumber(_ week: Int) -> String {
+            String(localized: "Week \(week)", table: table)
+        }
+        static func windowWeekIndicator(week: Int, total: Int) -> String {
+            String(localized: "Week \(week) of \(total)", table: table)
+        }
+        static func ageWeeksRemaining(remaining: Int) -> String {
+            String(localized: "\(remaining) weeks left", table: table)
+        }
+        static let startSocialization = String(localized: "Start socialization", table: table)
+        static let continueSocialization = String(localized: "Continue socialization", table: table)
+        static let socializationDescription = String(localized: "Build confidence with new experiences", table: table)
+
+        // First visit
+        static let firstVisitTitle = String(localized: "Let's see where you're starting", table: table)
+        static let firstVisitSubtitle = String(localized: "Your puppy has likely already experienced some things. Let's quickly mark what's familiar.", table: table)
+        static let quickCheckButton = String(localized: "Quick check what's familiar", table: table)
+        static let startFresh = String(localized: "Start from scratch", table: table)
+
+        // Early milestones
+        static let earlyMilestonesTitle = String(localized: "First Days Checklist", table: table)
+        static let milestoneFirstNight = String(localized: "First night home", table: table)
+        static let milestoneCrateIntro = String(localized: "Crate introduction", table: table)
+        static let milestoneFirstOutdoorPotty = String(localized: "First outdoor potty", table: table)
+        static let milestoneEatingRoutine = String(localized: "Eating routine", table: table)
+        static let milestoneNameResponse = String(localized: "Responds to name", table: table)
+        static let milestoneSettledIn = String(localized: "Settled in", table: table)
+
+        // What is socialization info sheet
+        static let infoTitle = String(localized: "What is Socialization?", table: table)
+        static let infoGoalTitle = String(localized: "The Goal: Calm Neutrality", table: table)
+        static let infoGoalBody = String(localized: "Socialization isn't about making your puppy love everything. It's about building calm neutrality — a dog that notices the world and thinks \"yeah, that's normal.\"", table: table)
+        static let infoPositiveTitle = String(localized: "What \"positive\" actually means", table: table)
+        static let infoPositiveBody = String(localized: "The puppy is exposed to something and nothing bad happens. She observes from a comfortable distance, maybe gets a treat for being calm, and you move on. That's the positive experience — the absence of stress.", table: table)
+        static let infoTrapTitle = String(localized: "The over-socialization trap", table: table)
+        static let infoTrapBody = String(localized: "Dog parks and \"go meet everyone\" creates excitement, not calm. At 8 months she's lunging at every dog she sees — which started as over-socialization.", table: table)
+        static let infoDistanceTitle = String(localized: "Distance is your best tool", table: table)
+        static let infoDistanceBody = String(localized: "Most socialization should be observation from a distance. Reward disengagement and looking back at you, not excitement.", table: table)
+        static let infoPracticeTitle = String(localized: "In practice", table: table)
+        static let infoPracticeBody = String(localized: "Sit near a playground at comfortable distance, reward calm watching. Parallel walks with calm adult dogs. Brief, controlled interactions only occasionally.", table: table)
+        static let infoSummary = String(localized: "The goal: walk past a playground without breaking stride.", table: table)
+
+        // Accessibility
+        static let journeyTimelineLabel = String(localized: "Socialization journey timeline", table: table)
+        static func phaseAccessibility(name: String, isCurrent: Bool) -> String {
+            isCurrent
+                ? String(localized: "\(name), current phase", table: table)
+                : String(localized: "\(name)", table: table)
+        }
     }
 }

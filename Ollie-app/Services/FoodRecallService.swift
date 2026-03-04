@@ -114,16 +114,26 @@ class FoodRecallService: ObservableObject {
     private static let settingsKey = "FoodAlertSettings"
 
     private static func loadSettings() -> FoodAlertSettings {
-        guard let data = UserDefaults.standard.data(forKey: settingsKey),
-              let settings = try? JSONDecoder().decode(FoodAlertSettings.self, from: data) else {
+        guard let data = UserDefaults.standard.data(forKey: settingsKey) else {
             return .defaultSettings()
         }
-        return settings
+
+        do {
+            return try JSONDecoder().decode(FoodAlertSettings.self, from: data)
+        } catch {
+            // Log error but return defaults - settings may have changed schema
+            print("WARNING: Failed to decode FoodAlertSettings: \(error.localizedDescription). Using defaults.")
+            return .defaultSettings()
+        }
     }
 
     private func saveSettings() {
-        guard let data = try? JSONEncoder().encode(settings) else { return }
-        UserDefaults.standard.set(data, forKey: Self.settingsKey)
+        do {
+            let data = try JSONEncoder().encode(settings)
+            UserDefaults.standard.set(data, forKey: Self.settingsKey)
+        } catch {
+            logger.error("Failed to encode FoodAlertSettings: \(error.localizedDescription)")
+        }
     }
 
     // MARK: - Private Methods
@@ -148,6 +158,9 @@ class FoodRecallService: ObservableObject {
         isLoading = false
     }
 
+    /// Network request timeout in seconds
+    private static let networkTimeoutSeconds: TimeInterval = 30
+
     private func performFetch() async throws -> [FoodRecall] {
         // FDA API endpoint for animal adverse events (includes recalls)
         // Query for dog food recalls in the last 90 days
@@ -157,7 +170,10 @@ class FoodRecallService: ObservableObject {
             throw FoodRecallError.invalidURL
         }
 
-        let (data, response) = try await URLSession.shared.data(from: url)
+        var request = URLRequest(url: url)
+        request.timeoutInterval = Self.networkTimeoutSeconds
+
+        let (data, response) = try await URLSession.shared.data(for: request)
 
         guard let httpResponse = response as? HTTPURLResponse,
               httpResponse.statusCode == 200 else {
@@ -282,7 +298,7 @@ enum FoodRecallError: LocalizedError {
     case networkError
     case parseError
 
-    var errorDescription: String? {
+    nonisolated var errorDescription: String? {
         switch self {
         case .invalidURL: return Strings.Errors.invalidURL
         case .networkError: return Strings.Errors.networkError

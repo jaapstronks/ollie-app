@@ -17,6 +17,7 @@ struct LocationPickerMapView: View {
     var onConfirm: () -> Void
 
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var geocoder = GeocoderService()
 
     @State private var cameraPosition: MapCameraPosition = .automatic
@@ -80,7 +81,7 @@ struct LocationPickerMapView: View {
             }
             .onTapGesture { position in
                 if let coordinate = proxy.convert(position, from: .local) {
-                    withAnimation(.spring(response: 0.3)) {
+                    withAnimation(reduceMotion ? nil : .spring(response: 0.3)) {
                         pinCoordinate = coordinate
                     }
                 }
@@ -193,7 +194,7 @@ struct LocationPickerMapView: View {
     }
 
     private func centerOnUserLocation() {
-        withAnimation(.easeInOut) {
+        withAnimation(reduceMotion ? nil : .easeInOut) {
             cameraPosition = .userLocation(fallback: .automatic)
         }
     }
@@ -204,7 +205,7 @@ struct LocationPickerMapView: View {
             isGeocoding = false
             switch result {
             case .success(let coordinate):
-                withAnimation(.spring(response: 0.3)) {
+                withAnimation(reduceMotion ? nil : .spring(response: 0.3)) {
                     pinCoordinate = coordinate
                     cameraPosition = .region(MKCoordinateRegion(
                         center: coordinate,

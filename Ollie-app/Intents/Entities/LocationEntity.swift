@@ -13,7 +13,7 @@ struct LocationEntity: AppEntity {
         TypeDisplayRepresentation(name: "Location")
     }
 
-    static var defaultQuery = LocationEntityQuery()
+    static let defaultQuery = LocationEntityQuery()
 
     var id: String
     var eventLocation: EventLocation

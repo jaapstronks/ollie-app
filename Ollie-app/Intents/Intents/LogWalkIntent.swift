@@ -9,9 +9,9 @@ import OtisShared
 
 /// Log a walk with optional duration
 struct LogWalkIntent: AppIntent {
-    static var title: LocalizedStringResource = "Log Walk"
-    static var description = IntentDescription("Log a walk with your puppy")
-    static var openAppWhenRun: Bool = false
+    static let title: LocalizedStringResource = "Log Walk"
+    static let description = IntentDescription("Log a walk with your puppy")
+    static let openAppWhenRun: Bool = false
 
     @Parameter(title: "Duration (minutes)", description: "How long was the walk in minutes")
     var durationMinutes: Int?

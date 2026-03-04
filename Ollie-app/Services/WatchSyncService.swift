@@ -15,7 +15,7 @@ import CoreData
 import os
 
 /// Service to sync puppy data to paired Apple Watch
-final class WatchSyncService: NSObject {
+final class WatchSyncService: NSObject, @unchecked Sendable {
     static let shared = WatchSyncService()
 
     private var session: WCSession?
@@ -233,6 +233,11 @@ final class WatchSyncService: NSObject {
             data["sleepStartTime"] = since.timeIntervalSince1970
         case .awake, .unknown:
             data["isSleeping"] = false
+        }
+
+        // Include current user member ID for event attribution
+        if let currentUserMemberId = profile?.householdMembers.currentUser()?.id {
+            data["currentUserMemberId"] = currentUserMemberId.uuidString
         }
 
         return data

@@ -8,6 +8,9 @@ import Foundation
 
 /// Features that require Otis+ subscription
 enum PremiumFeature: String, CaseIterable {
+    /// Multiple puppy profiles (up to 5)
+    case multiPuppy
+
     /// AI-powered potty predictions based on patterns
     case pottyPredictions
 
@@ -47,6 +50,8 @@ enum PremiumFeature: String, CaseIterable {
     /// Display name for the feature
     var displayName: String {
         switch self {
+        case .multiPuppy:
+            return Strings.OtisPlus.featureMultiPuppy
         case .pottyPredictions:
             return Strings.OtisPlus.featurePottyPredictions
         case .advancedAnalytics:
@@ -77,6 +82,8 @@ enum PremiumFeature: String, CaseIterable {
     /// Short description of the feature
     var description: String {
         switch self {
+        case .multiPuppy:
+            return Strings.OtisPlus.featureMultiPuppyDesc
         case .pottyPredictions:
             return Strings.OtisPlus.featurePottyPredictionsDesc
         case .advancedAnalytics:
@@ -107,6 +114,8 @@ enum PremiumFeature: String, CaseIterable {
     /// SF Symbol icon for the feature
     var icon: String {
         switch self {
+        case .multiPuppy:
+            return "pawprint.fill"
         case .pottyPredictions:
             return "wand.and.stars"
         case .advancedAnalytics:

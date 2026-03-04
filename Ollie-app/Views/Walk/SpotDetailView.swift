@@ -14,6 +14,9 @@ struct SpotDetailView: View {
     var momentsViewModel: MomentsViewModel?
     let spot: WalkSpot
 
+    /// When true, hides the map preview to avoid duplicate display (e.g., when presented as sheet over a map)
+    var hideMapPreview: Bool = false
+
     @Environment(\.dismiss) private var dismiss
 
     @State private var editedName: String
@@ -25,21 +28,27 @@ struct SpotDetailView: View {
     @State private var showingPhotoOptions = false
     @State private var showingMediaPicker = false
     @State private var selectedMediaSource: MediaPickerSource = .library
+    @State private var spotPhotoImage: UIImage?
+
+    // First-visit tip tracking
+    @AppStorage("hasSeenSpotDetailTip") private var hasSeenSpotDetailTip = false
 
     /// Full initializer with photo support
-    init(spotStore: SpotStore, spot: WalkSpot, momentsViewModel: MomentsViewModel) {
+    init(spotStore: SpotStore, spot: WalkSpot, momentsViewModel: MomentsViewModel, hideMapPreview: Bool = false) {
         self.spotStore = spotStore
         self.spot = spot
         self.momentsViewModel = momentsViewModel
+        self.hideMapPreview = hideMapPreview
         _editedName = State(initialValue: spot.name)
         _editedNotes = State(initialValue: spot.notes ?? "")
     }
 
     /// Convenience initializer without photo support (for legacy usage)
-    init(spotStore: SpotStore, spot: WalkSpot) {
+    init(spotStore: SpotStore, spot: WalkSpot, hideMapPreview: Bool = false) {
         self.spotStore = spotStore
         self.spot = spot
         self.momentsViewModel = nil
+        self.hideMapPreview = hideMapPreview
         _editedName = State(initialValue: spot.name)
         _editedNotes = State(initialValue: spot.notes ?? "")
     }
@@ -61,17 +70,23 @@ struct SpotDetailView: View {
         GridItem(.flexible(), spacing: 4)
     ]
 
-    /// Load spot photo from storage
-    private var spotPhoto: UIImage? {
-        guard let filename = currentSpot.photoFilename else { return nil }
-        return SpotPhotoStore.shared.load(filename: filename)
-    }
-
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
+                // First-visit tip
+                if !hasSeenSpotDetailTip {
+                    FeatureTipCard(
+                        tip: .spotDetail,
+                        onDismiss: {
+                            withAnimation(.easeOut(duration: 0.2)) {
+                                hasSeenSpotDetailTip = true
+                            }
+                        }
+                    )
+                }
+
                 // Spot photo (if available) or map preview
-                if let photo = spotPhoto {
+                if let photo = spotPhotoImage {
                     ZStack(alignment: .bottomTrailing) {
                         Image(uiImage: photo)
                             .resizable()
@@ -93,8 +108,8 @@ struct SpotDetailView: View {
                         }
                     }
                     .padding(.horizontal)
-                } else {
-                    // Map preview when no photo
+                } else if !hideMapPreview {
+                    // Map preview when no photo (hidden when presented as sheet over map)
                     ZStack(alignment: .bottomTrailing) {
                         SpotMapView(
                             latitude: currentSpot.latitude,
@@ -270,6 +285,14 @@ struct SpotDetailView: View {
                 }
             )
         }
+        .task(id: currentSpot.photoFilename) {
+            // Load spot photo asynchronously
+            if let filename = currentSpot.photoFilename {
+                spotPhotoImage = await SpotPhotoStore.shared.loadAsync(filename: filename)
+            } else {
+                spotPhotoImage = nil
+            }
+        }
         .task {
             // Load place stats asynchronously
             if let viewModel = momentsViewModel {
@@ -331,6 +354,7 @@ struct SpotDetailView: View {
         if let newFilename = try? SpotPhotoStore.shared.save(image: image) {
             updated.photoFilename = newFilename
             spotStore.updateSpot(updated)
+            spotPhotoImage = image  // Update local state immediately
             HapticFeedback.success()
         }
     }
@@ -345,6 +369,7 @@ struct SpotDetailView: View {
 
         updated.photoFilename = nil
         spotStore.updateSpot(updated)
+        spotPhotoImage = nil  // Clear local state immediately
         HapticFeedback.light()
     }
 

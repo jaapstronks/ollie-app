@@ -36,6 +36,7 @@ extension CDPuppyProfile {
         self.walkScheduleData = try? encoder.encode(profile.walkSchedule)
         self.notificationSettingsData = try? encoder.encode(profile.notificationSettings)
         self.medicationScheduleData = try? encoder.encode(profile.medicationSchedule)
+        self.householdMembersData = try? encoder.encode(profile.householdMembers)
     }
 
     /// Create a new CDPuppyProfile from a PuppyProfile struct
@@ -47,8 +48,8 @@ extension CDPuppyProfile {
 
     // MARK: - Convert to Swift Struct
 
-    /// Convert to PuppyProfile struct
-    func toPuppyProfile() -> PuppyProfile? {
+    /// Convert to PuppyProfile struct with specified ownership
+    func toPuppyProfile(ownership: ProfileOwnership = .owned) -> PuppyProfile? {
         guard let id = self.id,
               let name = self.name,
               let birthDate = self.birthDate,
@@ -112,6 +113,14 @@ extension CDPuppyProfile {
             medicationSchedule = MedicationSchedule.empty()
         }
 
+        let householdMembers: HouseholdMembers
+        if let data = self.householdMembersData,
+           let decoded = try? decoder.decode(HouseholdMembers.self, from: data) {
+            householdMembers = decoded
+        } else {
+            householdMembers = HouseholdMembers.empty()
+        }
+
         return PuppyProfile(
             id: id,
             name: name,
@@ -126,9 +135,11 @@ extension CDPuppyProfile {
             walkSchedule: walkSchedule,
             notificationSettings: notificationSettings,
             medicationSchedule: medicationSchedule,
+            householdMembers: householdMembers,
             modifiedAt: modifiedAt,
             profilePhotoFilename: self.profilePhotoFilename,
             passedDate: self.passedDate,
+            ownership: ownership,
             legacyPremiumUnlocked: self.legacyPremiumUnlocked
         )
     }
@@ -179,5 +190,27 @@ extension CDPuppyProfile {
         for profile in profiles {
             context.delete(profile)
         }
+    }
+
+    /// Fetch all profiles from a specific store
+    static func fetchAllProfiles(in context: NSManagedObjectContext, from store: NSPersistentStore) -> [CDPuppyProfile] {
+        let request = NSFetchRequest<CDPuppyProfile>(entityName: "CDPuppyProfile")
+        request.affectedStores = [store]
+        request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
+        return (try? context.fetch(request)) ?? []
+    }
+
+    /// Fetch all profiles from all stores
+    static func fetchAllProfiles(in context: NSManagedObjectContext) -> [CDPuppyProfile] {
+        let request = NSFetchRequest<CDPuppyProfile>(entityName: "CDPuppyProfile")
+        request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
+        return (try? context.fetch(request)) ?? []
+    }
+
+    /// Count profiles in a specific store
+    static func countProfiles(in context: NSManagedObjectContext, from store: NSPersistentStore) -> Int {
+        let request = NSFetchRequest<CDPuppyProfile>(entityName: "CDPuppyProfile")
+        request.affectedStores = [store]
+        return (try? context.count(for: request)) ?? 0
     }
 }

@@ -5,7 +5,7 @@
 
 import SwiftUI
 import OtisShared
-import PhotosUI
+@preconcurrency import PhotosUI
 import UIKit
 import UniformTypeIdentifiers
 
@@ -122,20 +122,49 @@ struct MediaPicker: UIViewControllerRepresentable {
                 return
             }
 
-            // Try to get original data for EXIF extraction
-            result.itemProvider.loadDataRepresentation(forTypeIdentifier: UTType.image.identifier) { [weak self] data, error in
-                DispatchQueue.main.async {
-                    if let data = data, let image = UIImage(data: data) {
-                        self?.onImageSelected(image, data)
+            let itemProvider = result.itemProvider
+
+            Task { @MainActor [weak self] in
+                guard let self = self else { return }
+
+                // Try to get original data for EXIF extraction
+                if let data = try? await self.loadData(from: itemProvider),
+                   let image = UIImage(data: data) {
+                    self.onImageSelected(image, data)
+                    return
+                }
+
+                // Fallback: load as UIImage without data
+                if let image = try? await self.loadImage(from: itemProvider) {
+                    self.onImageSelected(image, nil)
+                }
+            }
+        }
+
+        // Bridge completion handler APIs to async/await
+        private nonisolated func loadData(from itemProvider: NSItemProvider) async throws -> Data {
+            try await withCheckedThrowingContinuation { continuation in
+                itemProvider.loadDataRepresentation(forTypeIdentifier: UTType.image.identifier) { data, error in
+                    if let error = error {
+                        continuation.resume(throwing: error)
+                    } else if let data = data {
+                        continuation.resume(returning: data)
                     } else {
-                        // Fallback: load as UIImage without data
-                        result.itemProvider.loadObject(ofClass: UIImage.self) { object, error in
-                            DispatchQueue.main.async {
-                                if let image = object as? UIImage {
-                                    self?.onImageSelected(image, nil)
-                                }
-                            }
-                        }
+                        continuation.resume(throwing: NSError(domain: "MediaPicker", code: -1))
+                    }
+                }
+            }
+        }
+
+        private nonisolated func loadImage(from itemProvider: NSItemProvider) async throws -> UIImage {
+            try await withCheckedThrowingContinuation { continuation in
+                itemProvider.loadObject(ofClass: UIImage.self) { object, error in
+                    if let error = error {
+                        continuation.resume(throwing: error)
+                    } else if let image = object as? UIImage {
+                        continuation.resume(returning: image)
+                    } else {
+                        continuation.resume(throwing: NSError(domain: "MediaPicker", code: -1))
                     }
                 }
             }

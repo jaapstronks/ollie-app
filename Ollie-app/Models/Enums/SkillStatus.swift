@@ -44,6 +44,24 @@ enum SkillStatus: String, Codable {
         case .mastered: return "checkmark.circle.fill"
         }
     }
+
+    /// Compact status indicator icon for use in lists
+    var statusIndicatorIcon: String {
+        switch self {
+        case .notStarted: return "circle"
+        case .started: return "play.fill"
+        case .practicing: return "arrow.clockwise"
+        case .mastered: return "checkmark"
+        }
+    }
+
+    /// Icon color for skill icons based on status
+    var skillIconColor: Color {
+        switch self {
+        case .mastered: return .otisSuccess
+        default: return .otisAccent
+        }
+    }
 }
 
 // MARK: - Skill Status Calculations
@@ -67,25 +85,6 @@ enum SkillStatusCalculations {
         } else {
             return .notStarted
         }
-    }
-
-    /// Check if a skill is locked (requirements not met)
-    static func isLocked(
-        skill: Skill,
-        startedSkillIds: Set<String>,
-        trainingPlan: TrainingPlan
-    ) -> Bool {
-        // A skill with no requirements is never locked
-        if skill.requires.isEmpty {
-            return false
-        }
-
-        // A skill is locked if any of its requirements have not been started
-        return !trainingPlan.requirementsMet(
-            for: skill.id,
-            masteredSkillIds: [],  // We use started as the minimum requirement
-            startedSkillIds: startedSkillIds
-        )
     }
 
     /// Get progress stats for a category

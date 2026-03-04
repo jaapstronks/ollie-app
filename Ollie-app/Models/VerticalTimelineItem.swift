@@ -8,20 +8,45 @@ import Foundation
 import OtisShared
 
 /// An item prepared for vertical day-planner timeline display
-struct VerticalTimelineItem: Identifiable {
+struct VerticalTimelineItem: Identifiable, Equatable {
     enum ItemType {
         case sleepSession(SleepSession)
         case walkEvent(PuppyEvent)
         case pointEvent(PuppyEvent)
         case appointmentItem(DogAppointment)
+        case trainingSession(TrainingSession)
+
+        /// Extract the underlying item's ID for comparison
+        var itemId: UUID {
+            switch self {
+            case .sleepSession(let session): return session.id
+            case .walkEvent(let event): return event.id
+            case .pointEvent(let event): return event.id
+            case .appointmentItem(let appointment): return appointment.id
+            case .trainingSession(let session): return session.id
+            }
+        }
     }
 
     /// Which track the item should render in
-    enum TrackType {
+    enum TrackType: Equatable {
         case main       // Full width - appointments
         case activity   // Left side - sleep sessions, walks (duration blocks)
         case potty      // Right side - pee, poo events
         case walk       // Legacy: same as activity (for backwards compatibility)
+    }
+
+    // MARK: - Equatable (identity-based for efficient SwiftUI diffing)
+
+    static func == (lhs: VerticalTimelineItem, rhs: VerticalTimelineItem) -> Bool {
+        // Compare by id and key display properties only
+        // This is more efficient than deep equality for SwiftUI diffing
+        lhs.id == rhs.id &&
+        lhs.startTime == rhs.startTime &&
+        lhs.endTime == rhs.endTime &&
+        lhs.track == rhs.track &&
+        lhs.note == rhs.note &&
+        lhs.photoThumbnail == rhs.photoThumbnail
     }
 
     let id: UUID
@@ -67,7 +92,7 @@ struct VerticalTimelineItem: Identifiable {
             switch type {
             case .sleepSession, .walkEvent:
                 return Int(Date().timeIntervalSince(startTime) / 60)
-            case .pointEvent, .appointmentItem:
+            case .pointEvent, .appointmentItem, .trainingSession:
                 return nil
             }
         }
@@ -79,7 +104,7 @@ struct VerticalTimelineItem: Identifiable {
         switch type {
         case .sleepSession(let session):
             return session.isOngoing
-        case .walkEvent, .pointEvent, .appointmentItem:
+        case .walkEvent, .pointEvent, .appointmentItem, .trainingSession:
             return false
         }
     }
@@ -89,7 +114,7 @@ struct VerticalTimelineItem: Identifiable {
         switch type {
         case .sleepSession, .walkEvent, .appointmentItem:
             return true
-        case .pointEvent:
+        case .pointEvent, .trainingSession:
             return false
         }
     }
@@ -144,6 +169,14 @@ struct VerticalTimelineItem: Identifiable {
             return event.type.icon
         case .appointmentItem(let appointment):
             return appointment.appointmentType.icon
+        case .trainingSession:
+            return "graduationcap.fill"
         }
+    }
+
+    /// Whether this is a training session
+    var isTrainingSession: Bool {
+        if case .trainingSession = type { return true }
+        return false
     }
 }

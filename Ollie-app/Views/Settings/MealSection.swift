@@ -11,6 +11,7 @@ import OtisShared
 struct MealSection: View {
     let profile: PuppyProfile
     let profileStore: ProfileStore
+    var profileId: UUID? = nil
     @Binding var showingMealEdit: Bool
 
     var body: some View {

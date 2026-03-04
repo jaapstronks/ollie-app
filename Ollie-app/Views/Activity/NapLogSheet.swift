@@ -28,6 +28,7 @@ struct NapLogSheet: View {
     @State private var showEndPicker = false
 
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     private let now = Date()
 
@@ -74,7 +75,7 @@ struct NapLogSheet: View {
                 // Start date+time section
                 Section {
                     Button {
-                        withAnimation(.easeInOut(duration: 0.2)) {
+                        withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.2)) {
                             showStartPicker.toggle()
                             if showStartPicker { showEndPicker = false }
                         }
@@ -120,7 +121,7 @@ struct NapLogSheet: View {
                 // End date+time section
                 Section {
                     Button {
-                        withAnimation(.easeInOut(duration: 0.2)) {
+                        withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.2)) {
                             showEndPicker.toggle()
                             if showEndPicker { showStartPicker = false }
                         }

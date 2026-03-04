@@ -12,11 +12,13 @@ import OtisShared
 /// Onboarding flow for new users
 struct OnboardingView: View {
     @ObservedObject var profileStore: ProfileStore
+    /// When true, this is adding a second profile (skip welcome/permissions)
+    var isAddingProfile: Bool = false
     @EnvironmentObject var notificationService: NotificationService
     @EnvironmentObject var locationManager: LocationManager
     let onComplete: () -> Void
 
-    // Step state
+    // Step state - start at step 1 (Name) when adding a profile to skip welcome
     @State private var currentStep: Int = 0
 
     // Profile data
@@ -90,10 +92,30 @@ struct OnboardingView: View {
         currentStep > 0 && currentStep < 9
     }
 
+    /// Whether to skip permission steps (skip when adding profile, already granted)
+    private var shouldSkipPermissions: Bool {
+        isAddingProfile
+    }
+
     // MARK: - Body
 
     var body: some View {
         VStack {
+            // Cancel button when adding a profile (user already has dogs)
+            if isAddingProfile {
+                HStack {
+                    Button {
+                        onComplete()
+                    } label: {
+                        Text(Strings.Common.cancel)
+                            .foregroundStyle(.secondary)
+                    }
+                    .padding(.leading)
+                    Spacer()
+                }
+                .padding(.top, 8)
+            }
+
             // Progress indicator (hidden on welcome step)
             if showProgress {
                 progressIndicator
@@ -205,6 +227,19 @@ struct OnboardingView: View {
             // Disable swiping to prevent navigating to skipped steps
             .highPriorityGesture(DragGesture())
         }
+        .onAppear {
+            // When adding a profile, skip the welcome step
+            if isAddingProfile && currentStep == 0 {
+                currentStep = 1
+            }
+        }
+        .alert(Strings.Profile.atProfileLimit, isPresented: $showProfileLimitAlert) {
+            Button(Strings.Common.ok) {
+                onComplete()
+            }
+        } message: {
+            Text(Strings.Profile.upgradeForMoreDogs)
+        }
     }
 
     // MARK: - Progress Indicator
@@ -244,6 +279,8 @@ struct OnboardingView: View {
 
     // MARK: - Save Profile
 
+    @State private var showProfileLimitAlert = false
+
     private func saveProfile() {
         HapticFeedback.success()
 
@@ -269,11 +306,29 @@ struct OnboardingView: View {
             }
         }
 
-        profileStore.saveProfile(profile)
+        if isAddingProfile {
+            // Use createProfile for multi-puppy (checks subscription limits)
+            let success = profileStore.createProfile(profile)
+            if success {
+                // Switch to the new profile
+                profileStore.switchToProfile(profile.id)
+                // Skip permission screens when adding a profile (already granted)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    completeOnboarding()
+                }
+            } else {
+                // At profile limit - show error
+                HapticFeedback.error()
+                showProfileLimitAlert = true
+            }
+        } else {
+            // First profile - use saveProfile
+            profileStore.saveProfile(profile)
 
-        // Navigate to permission screens after saving profile
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            navigateToStep(9)
+            // Navigate to permission screens after saving profile
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                navigateToStep(9)
+            }
         }
     }
 

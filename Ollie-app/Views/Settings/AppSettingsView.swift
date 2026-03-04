@@ -35,6 +35,9 @@ struct AppSettingsView: View {
     @AppStorage(UserPreferences.Key.atmosphereState.rawValue) private var atmosphereState = true
     @AppStorage(UserPreferences.Key.atmosphereSeasonal.rawValue) private var atmosphereSeasonal = false
 
+    // Training settings
+    @AppStorage(UserPreferences.Key.showFloatingClicker.rawValue) private var showFloatingClicker = false
+
     var body: some View {
         Form {
             if let profile = profileStore.profile {
@@ -51,6 +54,24 @@ struct AppSettingsView: View {
 
             // CloudKit sharing
             SharingSection(cloudKit: cloudKit)
+
+            // Household members
+            Section {
+                NavigationLink {
+                    HouseholdSettingsView(profileStore: profileStore)
+                } label: {
+                    HStack {
+                        Label(Strings.Household.title, systemImage: "person.2.fill")
+                        Spacer()
+                        if let memberCount = profileStore.profile?.householdMembers.members.count, memberCount > 0 {
+                            Text("\(memberCount)")
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                }
+            } footer: {
+                Text(Strings.Household.settingsFooter)
+            }
 
             // Siri & Shortcuts
             SiriSection()
@@ -69,6 +90,9 @@ struct AppSettingsView: View {
 
             // Atmosphere
             atmosphereSection
+
+            // Training
+            trainingSection
 
             // Celebrations
             celebrationsSection
@@ -223,6 +247,23 @@ struct AppSettingsView: View {
             }
         } footer: {
             Text(Strings.Settings.mapsAppDescription)
+        }
+    }
+
+    // MARK: - Training Section
+
+    private var trainingSection: some View {
+        Section {
+            Toggle(isOn: $showFloatingClicker) {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(Strings.TrainingSettings.floatingClicker)
+                    Text(Strings.TrainingSettings.floatingClickerDescription)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            }
+        } header: {
+            Text(Strings.TrainingSettings.title)
         }
     }
 

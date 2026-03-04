@@ -5,23 +5,39 @@
 //  Prediction-related functionality for TimelineViewModel
 //
 
+import Combine
 import Foundation
 import OtisShared
 
 extension TimelineViewModel {
     // MARK: - Potty Predictions
 
+    /// Historical gap statistics for pattern-based predictions (last 7 days)
+    private var historicalGapStats: GapStats {
+        let historicalEvents = getHistoricalEvents(days: 7)
+        let gaps = GapCalculations.recentGaps(events: historicalEvents, days: 7)
+        return GapCalculations.calculateGapStats(gaps: gaps)
+    }
+
+    /// Expected gap based on historical patterns or default
+    private var expectedGapMinutes: Int {
+        guard let profile = profileStore.profile else { return 90 }
+        let stats = historicalGapStats
+        // Use median if we have enough data (5+ gaps), otherwise use default
+        if stats.count >= 5 && stats.medianMinutes > 0 {
+            return stats.medianMinutes
+        }
+        return profile.predictionConfig.defaultGapMinutes
+    }
+
     /// Predicted minutes until next potty break
     var predictedNextPlasMinutes: Int? {
-        guard let profile = profileStore.profile else { return nil }
-        let config = profile.predictionConfig
-
-        // Simple prediction: default gap minus time since last
+        // Use pattern-based expected gap
         guard let minutesSince = minutesSinceLastPlas else {
-            return config.defaultGapMinutes
+            return expectedGapMinutes
         }
 
-        let remaining = config.defaultGapMinutes - minutesSince
+        let remaining = expectedGapMinutes - minutesSince
         return max(0, remaining)
     }
 
@@ -32,6 +48,7 @@ extension TimelineViewModel {
     }
 
     /// Current potty prediction with urgency level and triggers
+    /// Uses cachedRecentEvents to avoid redundant database queries
     var pottyPrediction: PottyPrediction {
         guard let profile = profileStore.profile else {
             return PottyPrediction(
@@ -43,18 +60,22 @@ extension TimelineViewModel {
             )
         }
 
-        let recentEvents = getRecentEvents()
+        // Use cached recent events instead of querying each time
+        let recentEvents = cachedRecentEvents.isEmpty ? getRecentEvents() : cachedRecentEvents
         return PredictionCalculations.calculatePrediction(
             events: recentEvents,
-            config: profile.predictionConfig
+            config: profile.predictionConfig,
+            gapStats: historicalGapStats
         )
     }
 
     // MARK: - Sleep Status
 
     /// Current sleep state (sleeping, awake, or unknown)
+    /// Uses cachedRecentEvents to avoid redundant database queries
     var currentSleepState: SleepState {
-        let recentEvents = getRecentEvents()
+        // Use cached recent events instead of querying each time
+        let recentEvents = cachedRecentEvents.isEmpty ? getRecentEvents() : cachedRecentEvents
         return SleepCalculations.currentSleepState(events: recentEvents)
     }
 
@@ -62,7 +83,19 @@ extension TimelineViewModel {
 
     /// Combined state for sleep + potty status display
     /// Determines which card(s) to show based on current conditions
+    /// Uses cachedRecentEvents to avoid redundant database queries
     var combinedSleepPottyState: CombinedSleepPottyState {
+        // Use cached recent events instead of querying each time
+        let recentEvents = cachedRecentEvents.isEmpty ? getRecentEvents() : cachedRecentEvents
+
+        // Check for first run state FIRST (highest priority)
+        // Only show for users who just completed onboarding with puppy already home
+        if let profile = profileStore.profile,
+           !dismissedFirstRunWelcome,
+           isFirstRunState(recentEvents: recentEvents, profile: profile) {
+            return .firstRun(puppyName: profile.name)
+        }
+
         // Check if wake state should be cleared
         if CombinedStatusCalculations.shouldClearWakeState(
             wakeState: wakeTimePottyState,
@@ -74,14 +107,31 @@ extension TimelineViewModel {
             }
         }
 
-        let recentEvents = getRecentEvents()
         return CombinedStatusCalculations.calculateCombinedState(
             sleepState: currentSleepState,
             pottyPrediction: pottyPrediction,
             wakeTimePottyState: wakeTimePottyState,
             recentEvents: recentEvents,
-            dismissedAssumedSleepDate: dismissedAssumedSleepDate
+            dismissedAssumedSleepDate: dismissedAssumedSleepDate,
+            hasActiveCoverageGap: activeCoverageGap != nil,
+            dismissedStaleLoggingDate: dismissedStaleLoggingDate
         )
+    }
+
+    /// Check if this is a first run state (just completed onboarding, no events yet)
+    private func isFirstRunState(recentEvents: [PuppyEvent], profile: PuppyProfile) -> Bool {
+        // Must be viewing today
+        guard isShowingToday else { return false }
+
+        // Puppy must already be home (homeDate <= today)
+        guard profile.daysHome >= 0 else { return false }
+
+        // Must be within first 2 days of having the puppy
+        guard profile.daysHome <= 1 else { return false }
+
+        // No events logged yet (excluding system events like coverage gaps)
+        let userEvents = recentEvents.filter { $0.type != .coverageGap }
+        return userEvents.isEmpty
     }
 
     // MARK: - Poop Status
@@ -119,6 +169,19 @@ extension TimelineViewModel {
         // Get all events for accurate streak calculation
         let allEvents = getAllEvents()
         return StreakCalculations.getStreakInfo(events: allEvents)
+    }
+
+    /// Outdoor potty percentage for the past 7 days
+    /// Uses the same data source as streakInfo for consistency
+    var outdoorPercentage: Int {
+        let recentEvents = getHistoricalEvents(days: 7)
+        let peeEvents = recentEvents.pee()
+
+        let outdoorCount = peeEvents.filter { $0.location == .buiten }.count
+        let totalCount = peeEvents.count
+
+        guard totalCount > 0 else { return 0 }
+        return (outdoorCount * 100) / totalCount
     }
 
     // MARK: - Daily Digest
@@ -160,6 +223,91 @@ extension TimelineViewModel {
             forecasts: forecasts,
             date: currentDate,
             isWalkInProgress: isWalkInProgress
+        )
+    }
+
+    // MARK: - First Week Card
+
+    /// Whether the first week card should be shown
+    /// Shows during days 1-7, dismissable for the day
+    var shouldShowFirstWeekCard: Bool {
+        guard let profile = profileStore.profile else { return false }
+        guard isShowingToday else { return false }
+
+        // Only show during first week (days 1-7)
+        guard profile.daysHome >= 1 && profile.daysHome <= 7 else { return false }
+
+        // Check if already collapsed today
+        if isFirstWeekCardCollapsedToday {
+            return true // Show collapsed
+        }
+
+        return true
+    }
+
+    /// Whether the first week card is currently collapsed
+    var isFirstWeekCardCollapsed: Bool {
+        isFirstWeekCardCollapsedToday
+    }
+
+    /// Check if card was collapsed today
+    private var isFirstWeekCardCollapsedToday: Bool {
+        guard let collapsedDateString = UserDefaults.standard.string(
+            forKey: UserPreferences.Key.firstWeekCardCollapsedDate.rawValue
+        ) else {
+            return false
+        }
+
+        // Parse the stored date
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withFullDate]
+        guard let collapsedDate = formatter.date(from: collapsedDateString) else {
+            return false
+        }
+
+        // Check if it was collapsed today
+        return Calendar.current.isDateInToday(collapsedDate)
+    }
+
+    /// Toggle the first week card collapsed state
+    func toggleFirstWeekCard() {
+        if isFirstWeekCardCollapsedToday {
+            // Expand: clear the date
+            UserDefaults.standard.removeObject(
+                forKey: UserPreferences.Key.firstWeekCardCollapsedDate.rawValue
+            )
+        } else {
+            // Collapse: store today's date
+            let formatter = ISO8601DateFormatter()
+            formatter.formatOptions = [.withFullDate]
+            let todayString = formatter.string(from: Date())
+            UserDefaults.standard.set(
+                todayString,
+                forKey: UserPreferences.Key.firstWeekCardCollapsedDate.rawValue
+            )
+        }
+        objectWillChange.send()
+    }
+
+    /// Calculate first week stats for the card
+    var firstWeekStats: FirstWeekStats? {
+        guard let profile = profileStore.profile else { return nil }
+
+        // Get yesterday's events
+        let calendar = Calendar.current
+        let yesterday = calendar.date(byAdding: .day, value: -1, to: Date()) ?? Date()
+        let startOfYesterday = calendar.startOfDay(for: yesterday)
+        let endOfYesterday = calendar.startOfDay(for: Date())
+        let yesterdayEvents = eventStore.getEvents(from: startOfYesterday, to: endOfYesterday)
+
+        // Get historical events (last 7 days for suppression logic)
+        let historicalEvents = getHistoricalEvents(days: 7)
+
+        return FirstWeekCalculations.calculateStats(
+            profile: profile,
+            todayEvents: events,
+            yesterdayEvents: yesterdayEvents,
+            historicalEvents: historicalEvents
         )
     }
 }

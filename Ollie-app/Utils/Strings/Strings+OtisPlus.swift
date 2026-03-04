@@ -25,6 +25,7 @@ extension Strings {
         static let whatsIncluded = String(localized: "What's included", table: table)
 
         // Feature names
+        static let featureMultiPuppy = String(localized: "Multiple Dogs", table: table)
         static let featurePottyPredictions = String(localized: "Potty Predictions", table: table)
         static let featureAdvancedAnalytics = String(localized: "Advanced Analytics", table: table)
         static let featureSleepInsights = String(localized: "Sleep Insights", table: table)
@@ -39,6 +40,7 @@ extension Strings {
         static let featureMilestoneNotes = String(localized: "Milestone Notes & Photos", table: table)
 
         // Feature descriptions
+        static let featureMultiPuppyDesc = String(localized: "Track up to 5 dogs with separate profiles and data", table: table)
         static let featurePottyPredictionsDesc = String(localized: "AI predicts when your puppy needs to go based on patterns", table: table)
         static let featureAdvancedAnalyticsDesc = String(localized: "Deep insights into behavior, health, and routines", table: table)
         static let featureSleepInsightsDesc = String(localized: "Track sleep quality and optimize rest schedules", table: table)
@@ -96,13 +98,13 @@ extension Strings {
         static let welcomeTitle = String(localized: "Welcome to Otis+!", table: table)
         static let welcomeMessage = String(localized: "You now have access to all premium features. Let's make the most of your puppy's journey together.", table: table)
 
-        // Errors
+        // Errors (nonisolated for use in LocalizedError conformance - hardcoded table name)
         static let purchaseErrorTitle = String(localized: "Purchase Failed", table: table)
-        static let errorProductNotFound = String(localized: "Products not available", table: table)
-        static let errorCancelled = String(localized: "Purchase was cancelled", table: table)
-        static let errorPending = String(localized: "Purchase is pending approval", table: table)
-        static let errorVerification = String(localized: "Could not verify purchase", table: table)
-        static let errorUnknown = String(localized: "An error occurred", table: table)
+        nonisolated static let errorProductNotFound = String(localized: "Products not available", table: "OtisPlus")
+        nonisolated static let errorCancelled = String(localized: "Purchase was cancelled", table: "OtisPlus")
+        nonisolated static let errorPending = String(localized: "Purchase is pending approval", table: "OtisPlus")
+        nonisolated static let errorVerification = String(localized: "Could not verify purchase", table: "OtisPlus")
+        nonisolated static let errorUnknown = String(localized: "An error occurred", table: "OtisPlus")
 
         // Locked feature cards
         static let lockedPatterns = String(localized: "Pattern Analysis", table: table)

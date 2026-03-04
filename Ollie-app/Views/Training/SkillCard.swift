@@ -22,242 +22,130 @@ struct SkillCard: View {
     let onToggleMastered: () -> Void
 
     @State private var isExpanded: Bool = false
-    @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         VStack(spacing: 0) {
             // Main card header (tappable to expand)
             Button {
                 guard !isLocked else { return }
-                withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
+                withAnimation(reduceMotion ? nil : TrainingAnimations.cardToggle) {
                     isExpanded.toggle()
                 }
                 HapticFeedback.light()
             } label: {
-                HStack(spacing: 12) {
-                    // Icon with optional recency badge
-                    skillIcon
-
-                    // Name and status
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(skill.name)
-                            .font(.body)
-                            .fontWeight(.semibold)
-                            .foregroundStyle(isLocked ? .secondary : .primary)
-
-                        // Status or locked indicator
-                        if isLocked {
-                            HStack(spacing: 4) {
-                                Image(systemName: "lock.fill")
-                                    .font(.caption2)
-                                Text(Strings.Training.locked)
-                                    .font(.caption)
-                            }
-                            .foregroundStyle(.secondary)
-                        } else {
-                            HStack(spacing: 6) {
-                                // Status badge
-                                statusBadge
-
-                                // Session count
-                                if sessionCount > 0 {
-                                    Text("•")
-                                        .foregroundStyle(.tertiary)
-                                    Text(Strings.Training.sessionCount(sessionCount))
-                                        .font(.caption)
-                                        .foregroundStyle(.secondary)
-                                }
-                            }
-                        }
-                    }
-
-                    Spacer()
-
-                    // Chevron (only if not locked)
-                    if !isLocked {
-                        Image(systemName: "chevron.down")
-                            .font(.caption)
-                            .fontWeight(.semibold)
-                            .foregroundStyle(.tertiary)
-                            .rotationEffect(.degrees(isExpanded ? 180 : 0))
-                    } else {
-                        // Lock icon for locked skills
-                        Image(systemName: "lock.fill")
-                            .font(.body)
-                            .foregroundStyle(.tertiary)
-                    }
-                }
-                .padding()
-                .contentShape(Rectangle())
+                cardHeader
             }
             .buttonStyle(.plain)
             .disabled(isLocked)
 
             // Expanded actions section
             if isExpanded && !isLocked {
-                expandedActions
+                ExpandedSkillActions(
+                    skill: skill,
+                    status: status,
+                    recentSessions: recentSessions,
+                    onStartTraining: onStartTraining,
+                    onQuickLog: onQuickLog,
+                    onViewInfo: onViewInfo,
+                    onToggleMastered: onToggleMastered
+                )
             }
         }
         .glassStatusCard(tintColor: cardTintColor)
         .opacity(isLocked ? 0.6 : 1.0)
     }
 
-    // MARK: - Skill Icon
+    // MARK: - Card Header
 
-    @ViewBuilder
-    private var skillIcon: some View {
-        ZStack(alignment: .topTrailing) {
-            Image(systemName: skill.icon)
-                .font(.system(size: 24))
-                .foregroundStyle(isLocked ? .secondary : Color.otisAccent)
-                .frame(width: 36)
+    private var cardHeader: some View {
+        HStack(spacing: 12) {
+            // Icon with optional recency badge
+            SkillIconWithBadge(
+                icon: skill.icon,
+                isLocked: isLocked,
+                recentSessions: recentSessions
+            )
 
-            // Recency indicator badge (if has sessions and been a while)
-            if let lastSession = recentSessions.first, !isLocked {
-                let daysSince = Calendar.current.dateComponents([.day], from: lastSession.time, to: Date()).day ?? 0
-                if daysSince >= 3 {
-                    Image(systemName: "clock.fill")
-                        .font(.system(size: 10))
-                        .foregroundStyle(.white)
-                        .padding(3)
-                        .background(Color.otisWarning)
-                        .clipShape(Circle())
-                        .offset(x: 6, y: -4)
+            // Name and status
+            VStack(alignment: .leading, spacing: 2) {
+                Text(skill.name)
+                    .font(.body)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(isLocked ? .secondary : .primary)
+
+                // Status or locked indicator
+                if isLocked {
+                    lockedIndicator
+                } else {
+                    statusRow
                 }
+            }
+
+            Spacer()
+
+            // Chevron or lock icon
+            trailingIcon
+        }
+        .padding()
+        .contentShape(Rectangle())
+    }
+
+    // MARK: - Status Row
+
+    private var statusRow: some View {
+        HStack(spacing: 6) {
+            StatusBadge(status: status)
+
+            if let method = skill.method {
+                Text("•")
+                    .foregroundStyle(.tertiary)
+                MethodBadge(method: method, fontSize: .caption2)
+            }
+
+            if sessionCount > 0 {
+                Text("•")
+                    .foregroundStyle(.tertiary)
+                Text(Strings.Training.sessionCount(sessionCount))
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
             }
         }
     }
 
-    // MARK: - Status Badge
+    // MARK: - Locked Indicator
 
-    @ViewBuilder
-    private var statusBadge: some View {
+    private var lockedIndicator: some View {
         HStack(spacing: 4) {
-            Image(systemName: status.icon)
+            Image(systemName: "lock.fill")
                 .font(.caption2)
-            Text(status.label)
+            Text(Strings.Training.locked)
                 .font(.caption)
-                .fontWeight(.medium)
         }
-        .foregroundStyle(status.color)
+        .foregroundStyle(.secondary)
     }
 
-    // MARK: - Expanded Actions
+    // MARK: - Trailing Icon
 
     @ViewBuilder
-    private var expandedActions: some View {
-        VStack(spacing: 0) {
-            Divider()
-                .padding(.horizontal)
-
-            // Last session info
-            if let lastSession = recentSessions.first {
-                HStack(spacing: 6) {
-                    Image(systemName: "clock")
-                        .font(.caption2)
-                        .foregroundStyle(.tertiary)
-
-                    Text(Strings.TrainingSession.lastSession(date: lastSession.time.formatted(date: .abbreviated, time: .omitted)))
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-
-                    Spacer()
-
-                    // Mark mastered button (if practicing or mastered)
-                    if status == .practicing || status == .mastered {
-                        Button {
-                            HapticFeedback.medium()
-                            onToggleMastered()
-                        } label: {
-                            HStack(spacing: 4) {
-                                Image(systemName: status == .mastered ? "checkmark.circle.fill" : "checkmark.circle")
-                                    .font(.caption2)
-                                Text(status == .mastered ? Strings.Training.unmarkMastered : Strings.Training.markMastered)
-                                    .font(.caption2)
-                            }
-                            .foregroundStyle(status == .mastered ? Color.otisSuccess : .secondary)
-                        }
-                        .buttonStyle(ScaleButtonStyle())
-                    }
-                }
-                .padding(.horizontal)
-                .padding(.vertical, 8)
-
-                Divider()
-                    .padding(.horizontal)
-            }
-
-            // Action buttons row
-            HStack(spacing: 12) {
-                // Info button
-                Button {
-                    HapticFeedback.light()
-                    onViewInfo()
-                } label: {
-                    Image(systemName: "info.circle")
-                        .font(.body)
-                        .foregroundStyle(.secondary)
-                        .frame(width: 40, height: 40)
-                        .background(
-                            Circle()
-                                .fill(colorScheme == .dark ? Color.white.opacity(0.08) : Color.black.opacity(0.04))
-                        )
-                }
-                .buttonStyle(ScaleButtonStyle())
-
-                // Log session button
-                Button {
-                    HapticFeedback.medium()
-                    onQuickLog()
-                } label: {
-                    HStack(spacing: 6) {
-                        Image(systemName: "plus.circle.fill")
-                            .font(.subheadline)
-                        Text(Strings.Training.logSession)
-                            .font(.subheadline)
-                            .fontWeight(.medium)
-                    }
-                    .foregroundStyle(.white)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 40)
-                    .background(Color.otisAccent)
-                    .clipShape(Capsule())
-                }
-                .buttonStyle(ScaleButtonStyle())
-
-                // Train in-app button
-                Button {
-                    HapticFeedback.medium()
-                    onStartTraining()
-                } label: {
-                    HStack(spacing: 6) {
-                        Image(systemName: "play.fill")
-                            .font(.caption)
-                        Text(Strings.Training.trainInApp)
-                            .font(.subheadline)
-                            .fontWeight(.medium)
-                    }
-                    .foregroundStyle(Color.otisAccent)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 40)
-                    .background(
-                        Capsule()
-                            .strokeBorder(Color.otisAccent, lineWidth: 1.5)
-                    )
-                }
-                .buttonStyle(ScaleButtonStyle())
-            }
-            .padding()
+    private var trailingIcon: some View {
+        if !isLocked {
+            Image(systemName: "chevron.down")
+                .font(.caption)
+                .fontWeight(.semibold)
+                .foregroundStyle(.tertiary)
+                .rotationEffect(.degrees(isExpanded ? 180 : 0))
+        } else {
+            Image(systemName: "lock.fill")
+                .font(.body)
+                .foregroundStyle(.tertiary)
         }
-        .transition(.opacity.combined(with: .move(edge: .top)))
     }
 
     // MARK: - Computed Properties
 
     private var cardTintColor: Color? {
-        if isLocked {
-            return nil
-        }
+        if isLocked { return nil }
         switch status {
         case .notStarted: return nil
         case .started: return Color.otisInfo
@@ -267,100 +155,19 @@ struct SkillCard: View {
     }
 }
 
-// MARK: - Locked Skill Card
-
-/// Simpler card for locked skills showing requirements
-struct LockedSkillCard: View {
-    let skill: Skill
-    let missingRequirements: [Skill]
-
-    @Environment(\.colorScheme) private var colorScheme
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            // Header
-            HStack(spacing: 12) {
-                Image(systemName: skill.icon)
-                    .font(.system(size: 24))
-                    .foregroundStyle(.secondary)
-                    .frame(width: 36)
-
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(skill.name)
-                        .font(.body)
-                        .fontWeight(.semibold)
-                        .foregroundStyle(.secondary)
-
-                    HStack(spacing: 4) {
-                        Image(systemName: "lock.fill")
-                            .font(.caption2)
-                        Text(Strings.Training.locked)
-                            .font(.caption)
-                    }
-                    .foregroundStyle(.tertiary)
-                }
-
-                Spacer()
-
-                Image(systemName: "lock.fill")
-                    .font(.body)
-                    .foregroundStyle(.tertiary)
-            }
-
-            // Requirements
-            if !missingRequirements.isEmpty {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(Strings.Training.requires)
-                        .font(.caption)
-                        .fontWeight(.medium)
-                        .foregroundStyle(.tertiary)
-                        .textCase(.uppercase)
-
-                    HStack(spacing: 8) {
-                        ForEach(missingRequirements) { req in
-                            HStack(spacing: 4) {
-                                Image(systemName: req.icon)
-                                    .font(.caption)
-                                Text(req.name)
-                                    .font(.caption)
-                                    .fontWeight(.medium)
-                            }
-                            .padding(.horizontal, 8)
-                            .padding(.vertical, 4)
-                            .background(Color.secondary.opacity(0.1))
-                            .clipShape(Capsule())
-                        }
-                    }
-                }
-            }
-        }
-        .padding()
-        .glassStatusCard()
-        .opacity(0.6)
-    }
-}
-
-// MARK: - Scale Button Style
-
-/// A button style that provides scale feedback without blocking scroll gestures
-private struct ScaleButtonStyle: ButtonStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .scaleEffect(configuration.isPressed ? 0.92 : 1.0)
-            .opacity(configuration.isPressed ? 0.85 : 1.0)
-            .animation(.easeOut(duration: 0.1), value: configuration.isPressed)
-    }
-}
-
 // MARK: - Preview
 
 private let previewSkill = Skill(
     id: "sit",
     icon: "arrow.down.to.line",
     category: .basicCommands,
-    week: 2,
-    priority: 1,
-    requires: ["luring"]
+    sortOrder: 7,
+    requires: ["luring"],
+    method: .classical,
+    durationMinutes: 3,
+    sessionsPerDay: 3,
+    steps: nil,
+    phases: nil
 )
 
 #Preview {
@@ -381,7 +188,6 @@ private let previewSkill = Skill(
                 onToggleMastered: {}
             )
 
-            // Card with overdue badge (last session > 3 days ago)
             SkillCard(
                 skill: previewSkill,
                 status: .started,
@@ -391,19 +197,6 @@ private let previewSkill = Skill(
                 recentSessions: [
                     PuppyEvent(time: Date().addingTimeInterval(-86400 * 5), type: .training, exercise: "sit", durationMin: 3)
                 ],
-                onStartTraining: {},
-                onQuickLog: {},
-                onViewInfo: {},
-                onToggleMastered: {}
-            )
-
-            SkillCard(
-                skill: previewSkill,
-                status: .notStarted,
-                sessionCount: 0,
-                isLocked: false,
-                missingRequirements: [],
-                recentSessions: [],
                 onStartTraining: {},
                 onQuickLog: {},
                 onViewInfo: {},

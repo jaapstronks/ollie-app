@@ -13,15 +13,15 @@ import os
 
 /// Manages appointments with Core Data and automatic CloudKit sync
 @MainActor
-final class AppointmentStore: BaseStore {
+final class AppointmentStore: BaseStore, ProfileAccessible {
 
     // MARK: - Published State
 
     @Published private(set) var appointments: [DogAppointment] = []
 
-    // MARK: - Dependencies
+    // MARK: - ProfileAccessible
 
-    private weak var profileStore: ProfileStore?
+    weak var profileStore: ProfileStore?
 
     // MARK: - Cached Computed Properties
 
@@ -130,8 +130,7 @@ final class AppointmentStore: BaseStore {
 
     /// Set the profile store (for when it's not available at init time)
     func setProfileStore(_ profileStore: ProfileStore) {
-        self.profileStore = profileStore
-        performInitialLoad()
+        configureProfileStore(profileStore)
     }
 
     // MARK: - Data Loading
@@ -147,17 +146,6 @@ final class AppointmentStore: BaseStore {
         let cdAppointments = CDDogAppointment.fetchAppointments(for: profile, in: viewContext)
         appointments = cdAppointments.compactMap { $0.toAppointment() }
         logger.info("Loaded \(self.appointments.count) appointments for profile")
-    }
-
-    // MARK: - Profile Access
-
-    /// Get the current CDPuppyProfile from Core Data
-    private func getCurrentProfile() -> CDPuppyProfile? {
-        guard let profileId = profileStore?.profile?.id else {
-            logger.warning("No profile available for appointment operations")
-            return nil
-        }
-        return CDPuppyProfile.fetch(byId: profileId, in: viewContext)
     }
 
     // MARK: - CRUD Operations

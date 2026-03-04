@@ -300,13 +300,24 @@ extension Strings {
         static let shareError = String(localized: "Share Error", table: table)
         static let couldNotFetchShareInfo = String(localized: "Could not fetch share information", table: table)
 
-        // Existing profile conflict warning
+        // Existing profile conflict warning (legacy - kept for backwards compatibility)
         static let existingProfileTitle = String(localized: "Replace Existing Profile?", table: table)
         static func existingProfileMessage(existingName: String, sharedOwner: String) -> String {
             String(localized: "You already have a profile for \(existingName). Accepting this share will replace it with the shared puppy from \(sharedOwner). Your current profile data will be deleted.", table: table)
         }
         static let existingProfileMessageGeneric = String(localized: "You already have a puppy profile. Accepting this share will replace it with the shared puppy. Your current profile data will be deleted.", table: table)
         static let acceptAndReplace = String(localized: "Accept & Replace", table: table)
+
+        // Non-destructive share acceptance (multi-puppy support)
+        static let addSharedProfileTitle = String(localized: "Add Shared Dog?", table: table)
+        static func addSharedProfileMessage(existingName: String, sharedOwner: String) -> String {
+            String(localized: "\(sharedOwner) wants to share their puppy with you. This will add their dog to your profile list alongside \(existingName).", table: table)
+        }
+        static func addSharedProfileMessageGeneric(ownerName: String) -> String {
+            String(localized: "\(ownerName) wants to share their puppy with you. This will add their dog to your profile list.", table: table)
+        }
+        static let acceptShare = String(localized: "Accept", table: table)
+
         static func lastSynced(time: String) -> String {
             String(localized: "Synced \(time)", table: table)
         }
@@ -444,6 +455,13 @@ extension Strings {
         static let remembered = String(localized: "Remembered", table: table)
     }
 
+    // MARK: - Training Settings
+    enum TrainingSettings {
+        static let title = String(localized: "Training", table: table)
+        static let floatingClicker = String(localized: "Floating clicker", table: table)
+        static let floatingClickerDescription = String(localized: "Show a clicker button on all screens for quick access during training.", table: table)
+    }
+
     // MARK: - Atmosphere Settings
     enum Atmosphere {
         static let title = String(localized: "Atmosphere", table: table)
@@ -485,19 +503,19 @@ extension Strings {
         static let includeMedia = String(localized: "Photos", table: table)
         static let includeMediaDescription = String(localized: "Include all event photos (may be large)", table: table)
 
-        // Progress steps
-        static let stepPreparing = String(localized: "Preparing export...", table: table)
-        static let stepProfile = String(localized: "Exporting profile...", table: table)
-        static let stepEvents = String(localized: "Exporting events...", table: table)
-        static let stepDocuments = String(localized: "Exporting documents...", table: table)
-        static let stepContacts = String(localized: "Exporting contacts...", table: table)
-        static let stepAppointments = String(localized: "Exporting appointments...", table: table)
-        static let stepMilestones = String(localized: "Exporting milestones...", table: table)
-        static let stepExposures = String(localized: "Exporting socialization...", table: table)
-        static let stepWalkSpots = String(localized: "Exporting places...", table: table)
-        static let stepMedia = String(localized: "Exporting photos...", table: table)
-        static let stepProfilePhoto = String(localized: "Exporting profile photo...", table: table)
-        static let stepFinalizing = String(localized: "Finalizing export...", table: table)
+        // Progress steps (nonisolated for use in ExportStep enum - hardcoded table name)
+        nonisolated static let stepPreparing = String(localized: "Preparing export...", table: "Settings")
+        nonisolated static let stepProfile = String(localized: "Exporting profile...", table: "Settings")
+        nonisolated static let stepEvents = String(localized: "Exporting events...", table: "Settings")
+        nonisolated static let stepDocuments = String(localized: "Exporting documents...", table: "Settings")
+        nonisolated static let stepContacts = String(localized: "Exporting contacts...", table: "Settings")
+        nonisolated static let stepAppointments = String(localized: "Exporting appointments...", table: "Settings")
+        nonisolated static let stepMilestones = String(localized: "Exporting milestones...", table: "Settings")
+        nonisolated static let stepExposures = String(localized: "Exporting socialization...", table: "Settings")
+        nonisolated static let stepWalkSpots = String(localized: "Exporting places...", table: "Settings")
+        nonisolated static let stepMedia = String(localized: "Exporting photos...", table: "Settings")
+        nonisolated static let stepProfilePhoto = String(localized: "Exporting profile photo...", table: "Settings")
+        nonisolated static let stepFinalizing = String(localized: "Finalizing export...", table: "Settings")
 
         // Results
         static let exportComplete = String(localized: "Export Complete", table: table)
@@ -506,14 +524,14 @@ extension Strings {
         }
         static let readyToShare = String(localized: "Your export is ready to share.", table: table)
 
-        // Errors
-        static let errorNoProfile = String(localized: "No puppy profile found. Please create a profile first.", table: table)
-        static func errorExportFailed(_ message: String) -> String {
-            String(localized: "Export failed: \(message)", table: table)
+        // Errors (nonisolated for use in ExportError enum - hardcoded table name)
+        nonisolated static let errorNoProfile = String(localized: "No puppy profile found. Please create a profile first.", table: "Settings")
+        nonisolated static func errorExportFailed(_ message: String) -> String {
+            String(localized: "Export failed: \(message)", table: "Settings")
         }
-        static let errorFileCreation = String(localized: "Could not create export files.", table: table)
-        static func errorEncoding(_ type: String) -> String {
-            String(localized: "Could not encode \(type) data.", table: table)
+        nonisolated static let errorFileCreation = String(localized: "Could not create export files.", table: "Settings")
+        nonisolated static func errorEncoding(_ type: String) -> String {
+            String(localized: "Could not encode \(type) data.", table: "Settings")
         }
     }
 }

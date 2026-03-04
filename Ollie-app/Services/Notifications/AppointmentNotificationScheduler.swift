@@ -15,8 +15,11 @@ import os
 final class AppointmentNotificationScheduler {
     let notificationPrefix = "appointment_"
 
-    private let notificationCenter = UNUserNotificationCenter.current()
     private let logger = Logger.otis(category: "AppointmentNotificationScheduler")
+
+    private var notificationCenter: UNUserNotificationCenter {
+        NotificationSchedulerHelpers.notificationCenter
+    }
 
     /// Schedule notifications for upcoming appointments
     /// - Parameters:
@@ -76,11 +79,7 @@ final class AppointmentNotificationScheduler {
 
     /// Cancel all appointment notifications
     func cancel() async {
-        let requests = await notificationCenter.pendingNotificationRequests()
-        let appointmentIds = requests
-            .filter { $0.identifier.hasPrefix(notificationPrefix) }
-            .map { $0.identifier }
-        notificationCenter.removePendingNotificationRequests(withIdentifiers: appointmentIds)
+        await NotificationSchedulerHelpers.cancelNotifications(withPrefix: notificationPrefix)
     }
 
     private func formatTime(_ date: Date) -> String {

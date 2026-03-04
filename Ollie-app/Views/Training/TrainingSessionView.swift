@@ -23,6 +23,7 @@ struct TrainingSessionData {
 /// Full-screen training session view
 struct TrainingSessionView: View {
     let skill: Skill
+    let phase: SkillPhase?  // Optional phase for focused step display
     let onComplete: (TrainingSessionData) -> Void
     let onCancel: () -> Void
 
@@ -37,8 +38,35 @@ struct TrainingSessionView: View {
     @AppStorage("trainingSession.instructionsExpanded") private var instructionsExpanded = true
 
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+
+    /// Steps to display - either phase-specific or all steps
+    private var displaySteps: [(index: Int, text: String)] {
+        if let phase = phase {
+            // Show only steps for this phase
+            return phase.howToStepIndices.compactMap { idx in
+                guard idx < skill.howTo.count else { return nil }
+                return (idx, skill.howTo[idx])
+            }
+        } else {
+            // Show all steps
+            return skill.howTo.enumerated().map { ($0.offset, $0.element) }
+        }
+    }
+
+    /// Tips to display - either phase-specific or all tips
+    private var displayTips: [String] {
+        if let phase = phase, let tipIndices = phase.tipIndices {
+            return tipIndices.compactMap { idx in
+                guard idx < skill.tips.count else { return nil }
+                return skill.tips[idx]
+            }
+        } else {
+            return skill.tips
+        }
+    }
 
     var body: some View {
         VStack(spacing: 0) {
@@ -124,15 +152,21 @@ struct TrainingSessionView: View {
 
             Spacer()
 
-            // Skill name
+            // Skill name and phase
             VStack(spacing: 2) {
                 Text(skill.name)
                     .font(.headline)
                     .fontWeight(.semibold)
 
-                Text(Strings.TrainingSession.clicker)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                if let phase = phase {
+                    Text(phase.name(for: skill.id))
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                } else {
+                    Text(Strings.TrainingSession.clicker)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
             }
 
             Spacer()
@@ -159,16 +193,23 @@ struct TrainingSessionView: View {
         VStack(alignment: .leading, spacing: 12) {
             // Header with toggle
             Button {
-                withAnimation(.easeInOut(duration: 0.2)) {
+                withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.2)) {
                     instructionsExpanded.toggle()
                 }
             } label: {
                 HStack {
                     Image(systemName: "lightbulb.fill")
                         .foregroundStyle(Color.otisWarning)
-                    Text(Strings.Training.howTo)
-                        .font(.subheadline)
-                        .fontWeight(.medium)
+                    // Show phase name if available, otherwise generic "How to train"
+                    if let phase = phase {
+                        Text(phase.name(for: skill.id))
+                            .font(.subheadline)
+                            .fontWeight(.medium)
+                    } else {
+                        Text(Strings.Training.howTo)
+                            .font(.subheadline)
+                            .fontWeight(.medium)
+                    }
                     Spacer()
                     Image(systemName: instructionsExpanded ? "chevron.up" : "chevron.down")
                         .font(.caption)
@@ -181,20 +222,20 @@ struct TrainingSessionView: View {
             // Expandable content
             if instructionsExpanded {
                 VStack(alignment: .leading, spacing: 8) {
-                    ForEach(Array(skill.howTo.enumerated()), id: \.offset) { index, step in
+                    ForEach(displaySteps, id: \.index) { step in
                         HStack(alignment: .top, spacing: 10) {
-                            Text("\(index + 1).")
+                            Text("\(step.index + 1).")
                                 .font(.caption)
                                 .fontWeight(.semibold)
-                                .foregroundStyle(.secondary)
-                                .frame(width: 20, alignment: .leading)
-                            Text(step)
+                                .foregroundStyle(Color.otisAccent)
+                                .frame(width: 24, alignment: .leading)
+                            Text(step.text)
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                         }
                     }
                 }
-                .transition(.opacity.combined(with: .move(edge: .top)))
+                .transition(reduceMotion ? .opacity : .opacity.combined(with: .move(edge: .top)))
             }
         }
         .padding()
@@ -212,7 +253,7 @@ struct TrainingSessionView: View {
                 .font(.system(size: 72, weight: .bold, design: .rounded))
                 .foregroundStyle(.primary)
                 .contentTransition(.numericText())
-                .animation(.spring(duration: 0.3), value: clickCount)
+                .animation(reduceMotion ? nil : .spring(duration: 0.3), value: clickCount)
 
             Text(Strings.TrainingSession.clicks)
                 .font(.title3)
@@ -291,14 +332,28 @@ private let previewSkillForSession = Skill(
     id: "sit",
     icon: "arrow.down.to.line",
     category: .basicCommands,
-    week: 2,
-    priority: 1,
-    requires: ["luring"]
+    sortOrder: 7,
+    requires: ["luring"],
+    method: .classical,
+    durationMinutes: 3,
+    sessionsPerDay: 3,
+    steps: nil,
+    phases: nil
 )
 
-#Preview {
+#Preview("Without Phase") {
     TrainingSessionView(
         skill: previewSkillForSession,
+        phase: nil,
+        onComplete: { _ in },
+        onCancel: {}
+    )
+}
+
+#Preview("With Phase") {
+    TrainingSessionView(
+        skill: previewSkillForSession,
+        phase: SkillPhase(id: "lureToPosition", howToStepIndices: [0, 1, 2], tipIndices: [0, 1]),
         onComplete: { _ in },
         onCancel: {}
     )

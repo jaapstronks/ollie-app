@@ -123,7 +123,7 @@ struct WidgetData: Codable {
 }
 
 /// Provides data to widgets via shared App Group UserDefaults
-class WidgetDataProvider {
+final class WidgetDataProvider: @unchecked Sendable {
     static let shared = WidgetDataProvider()
     static let suiteName = Constants.appGroupIdentifier
     static let dataKey = "widgetData"

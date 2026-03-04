@@ -13,7 +13,7 @@ struct PottyTypeEntity: AppEntity {
         TypeDisplayRepresentation(name: "Potty Type")
     }
 
-    static var defaultQuery = PottyTypeQuery()
+    static let defaultQuery = PottyTypeQuery()
 
     var id: String
     var eventType: EventType
@@ -67,7 +67,7 @@ struct QuickEventTypeEntity: AppEntity {
         TypeDisplayRepresentation(name: "Event Type")
     }
 
-    static var defaultQuery = QuickEventTypeQuery()
+    static let defaultQuery = QuickEventTypeQuery()
 
     var id: String
     var eventType: EventType

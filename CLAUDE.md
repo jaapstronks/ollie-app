@@ -63,7 +63,7 @@ App-wide constants (non-profile-specific) are in `Utils/Constants.swift`:
 User-specific values (birth date, bedtime hour, etc.) come from `PuppyProfile`.
 
 ## Localization (i18n)
-English is the development language. Dutch translations included, more languages can be added.
+English is the development language. Dutch, German, Spanish, and French translations are included.
 
 ### Infrastructure
 - **`Utils/Strings.swift`** — All user-facing strings as namespaced constants
@@ -91,6 +91,11 @@ eventType.label  // Returns localized string
 ### Supported Languages
 - `en` — English (development language)
 - `nl` — Dutch (translations included)
+- `de` — German (translations included)
+- `es` — Spanish (translations included)
+- `fr` — French (translations included)
+- `it` — Italian (translations included)
+- `sv` — Swedish (translations included)
 
 ## Design Principles
 - **Mobile-first UX** — Big tap targets, quick event logging (2 taps max for common events)

@@ -23,6 +23,8 @@ struct GrowthDetailSheet: View {
 
     @State private var measurementToDelete: WeightMeasurement?
     @State private var showDeleteConfirmation = false
+    @State private var measurementToEdit: WeightMeasurement?
+    @State private var showEditSheet = false
 
     private var weightUnit: WeightUnit {
         WeightUnit(rawValue: weightUnitRaw) ?? .kg
@@ -109,6 +111,14 @@ struct GrowthDetailSheet: View {
                     Text(Strings.Growth.deleteMeasurementMessage(weightUnit.format(measurement.weightKg)))
                 }
             }
+            .sheet(isPresented: $showEditSheet) {
+                if let measurement = measurementToEdit {
+                    WeightLogSheet(
+                        isPresented: $showEditSheet,
+                        measurementToEdit: measurement
+                    )
+                }
+            }
         }
     }
 
@@ -118,6 +128,11 @@ struct GrowthDetailSheet: View {
         HapticFeedback.warning()
         weightStore.deleteMeasurement(measurement)
         measurementToDelete = nil
+    }
+
+    private func editMeasurement(_ measurement: WeightMeasurement) {
+        measurementToEdit = measurement
+        showEditSheet = true
     }
 
     // MARK: - Current Weight Section
@@ -294,6 +309,21 @@ struct GrowthDetailSheet: View {
                 .font(.body)
                 .fontWeight(.semibold)
                 .monospacedDigit()
+        }
+        .contentShape(Rectangle())
+        .contextMenu {
+            Button {
+                editMeasurement(measurement)
+            } label: {
+                Label(Strings.Common.edit, systemImage: "pencil")
+            }
+
+            Button(role: .destructive) {
+                measurementToDelete = measurement
+                showDeleteConfirmation = true
+            } label: {
+                Label(Strings.Common.delete, systemImage: "trash")
+            }
         }
     }
 

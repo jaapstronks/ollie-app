@@ -97,12 +97,25 @@ struct UpcomingCalculations {
         // Sort by target time
         allItems.sort { $0.targetTime < $1.targetTime }
 
+        // Filter out stale overdue walks: once a new walk is due, don't show previous overdue walks
+        // Keep only the most recent overdue walk (if any), discard older ones
+        let overdueWalks = allItems.filter { $0.itemType == .walk && $0.minutesUntil < 0 }
+        let mostRecentOverdueWalk = overdueWalks.max(by: { $0.targetTime < $1.targetTime })
+        let staleOverdueWalkTimes = Set(overdueWalks
+            .filter { $0.targetTime != mostRecentOverdueWalk?.targetTime }
+            .map { $0.targetTime })
+
         // Separate into actionable and upcoming
         var actionable: [ActionableItem] = []
         var upcoming: [UpcomingItem] = []
 
         for item in allItems {
             let minutesUntil = item.minutesUntil
+
+            // Skip stale overdue walks (older walks when a newer walk is due)
+            if item.itemType == .walk && staleOverdueWalkTimes.contains(item.targetTime) {
+                continue
+            }
 
             if minutesUntil < 0 {
                 // Overdue - but skip walk items if a walk is already in progress

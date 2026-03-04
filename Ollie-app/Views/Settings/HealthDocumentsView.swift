@@ -12,19 +12,25 @@ struct HealthDocumentsView: View {
     @ObservedObject var profileStore: ProfileStore
     @ObservedObject var documentStore: DocumentStore
     @ObservedObject var foodRecallService: FoodRecallService
+    let profileId: UUID
+
+    /// The profile being edited (looked up by ID)
+    private var targetProfile: PuppyProfile? {
+        profileStore.profile(for: profileId)
+    }
 
     var body: some View {
         List {
-            if profileStore.profile != nil {
+            if let profile = targetProfile {
                 // Medications
                 NavigationLink {
-                    MedicationSettingsView(profileStore: profileStore)
+                    MedicationSettingsView(profileStore: profileStore, profileId: profileId)
                 } label: {
                     SettingsItemRow(
                         icon: "pills.fill",
                         iconColor: .purple,
                         title: Strings.Medications.title,
-                        count: profileStore.profile?.medicationSchedule.medications.count ?? 0
+                        count: profile.medicationSchedule.medications.count
                     )
                 }
 
@@ -86,7 +92,8 @@ private struct SettingsItemRow: View {
         HealthDocumentsView(
             profileStore: ProfileStore(),
             documentStore: DocumentStore(),
-            foodRecallService: FoodRecallService()
+            foodRecallService: FoodRecallService(),
+            profileId: UUID()
         )
     }
 }

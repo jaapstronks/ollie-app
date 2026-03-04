@@ -124,53 +124,28 @@ struct PottyQuickLogSheet: View {
                     }
 
                     // Note field
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(Strings.PottyQuickLog.noteOptional)
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-
-                        TextField(Strings.PottyQuickLog.notePlaceholder, text: $note)
-                            .textFieldStyle(.roundedBorder)
-                            .accessibilityLabel(Strings.PottyQuickLog.noteOptional)
-                            .accessibilityHint(Strings.QuickLogSheet.noteAccessibilityHint)
-                            .accessibilityIdentifier("POTTY_NOTE_FIELD")
-                    }
-                    .padding(.horizontal, 4)
+                    LogSheetNoteField(
+                        note: $note,
+                        label: Strings.PottyQuickLog.noteOptional,
+                        placeholder: Strings.PottyQuickLog.notePlaceholder,
+                        accessibilityIdentifier: "POTTY_NOTE_FIELD"
+                    )
                 }
                 .padding([.horizontal, .top])
                 .padding(.bottom, 8)
             }
 
             // Action buttons - pinned at bottom
-            HStack(spacing: 16) {
-                Button(Strings.Common.cancel) {
-                    onCancel()
-                }
-                .foregroundColor(.secondary)
-                .accessibilityIdentifier("POTTY_CANCEL_BUTTON")
-
-                Button {
-                    HapticFeedback.success()
+            LogSheetActionButtons(
+                canSave: canSave,
+                onCancel: onCancel,
+                onSave: {
                     guard let potty = selectedPotty, let location = selectedLocation else { return }
-                    onSave(potty, selectedTime, location, note.isEmpty ? nil : note)
-                } label: {
-                    HStack {
-                        Image(systemName: "checkmark")
-                            .accessibilityHidden(true)
-                        Text(Strings.Common.log)
-                    }
-                    .font(.headline)
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 14)
-                    .background(canSave ? Color.accentColor : Color.gray)
-                    .cornerRadius(LayoutConstants.cornerRadiusM)
-                }
-                .disabled(!canSave)
-                .accessibilityLabel(Strings.PottyQuickLog.logAccessibility)
-                .accessibilityHint(canSave ? Strings.PottyQuickLog.logAccessibilityHint : Strings.PottyQuickLog.selectRequiredFields)
-                .accessibilityIdentifier("POTTY_LOG_BUTTON")
-            }
+                    onSave(potty, selectedTime, location, note.nilIfBlank)
+                },
+                cancelAccessibilityIdentifier: "POTTY_CANCEL_BUTTON",
+                saveAccessibilityIdentifier: "POTTY_LOG_BUTTON"
+            )
             .padding()
         }
         .modifier(ReduceMotionAnimation(value: showingTimePicker))

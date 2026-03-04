@@ -126,7 +126,8 @@ extension Strings {
             String(localized: "Last measured \(date)", table: table)
         }
 
-        // Delete measurement
+        // Edit/Delete measurement
+        static let editMeasurement = String(localized: "Edit Measurement", table: table)
         static let deleteMeasurement = String(localized: "Delete Measurement", table: table)
         static func deleteMeasurementMessage(_ weight: String) -> String {
             String(localized: "Are you sure you want to delete the measurement of \(weight)?", table: table)

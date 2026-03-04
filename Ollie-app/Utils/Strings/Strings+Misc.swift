@@ -99,59 +99,63 @@ extension Strings {
         static let percentOfGoal = String(localized: "percent of goal", table: table)
     }
 
-    // MARK: - Tips
+    // MARK: - Tips (nonisolated for TipKit protocol conformance - hardcoded table name)
     enum Tips {
-        static let swipeToDeleteTitle = String(localized: "Swipe to delete", table: table)
-        static let swipeToDeleteMessage = String(localized: "Swipe an event left to delete it.", table: table)
+        nonisolated static let swipeToDeleteTitle = String(localized: "Swipe to delete", table: "Localizable")
+        nonisolated static let swipeToDeleteMessage = String(localized: "Swipe an event left to delete it.", table: "Localizable")
 
-        static let longPressTitle = String(localized: "Hold for options", table: table)
-        static let longPressMessage = String(localized: "Hold an event for extra options like edit.", table: table)
+        nonisolated static let longPressTitle = String(localized: "Hold for options", table: "Localizable")
+        nonisolated static let longPressMessage = String(localized: "Hold an event for extra options like edit.", table: "Localizable")
 
-        static let mealRemindersTitle = String(localized: "Set up meal reminders", table: table)
-        static let mealRemindersMessage = String(localized: "Get notified when it's time for the next meal.", table: table)
+        nonisolated static let mealRemindersTitle = String(localized: "Set up meal reminders", table: "Localizable")
+        nonisolated static let mealRemindersMessage = String(localized: "Get notified when it's time for the next meal.", table: "Localizable")
 
-        static let quickLogTitle = String(localized: "Quick log", table: table)
-        static let quickLogMessage = String(localized: "Use the bar at the bottom to quickly log events with one tap.", table: table)
+        nonisolated static let quickLogTitle = String(localized: "Quick log", table: "Localizable")
+        nonisolated static let quickLogMessage = String(localized: "Use the bar at the bottom to quickly log events with one tap.", table: "Localizable")
 
-        static let patternsTitle = String(localized: "Discover patterns", table: table)
-        static let patternsMessage = String(localized: "Check statistics to discover patterns in your puppy's behavior.", table: table)
+        nonisolated static let patternsTitle = String(localized: "Discover patterns", table: "Localizable")
+        nonisolated static let patternsMessage = String(localized: "Check statistics to discover patterns in your puppy's behavior.", table: "Localizable")
 
-        static let predictionTitle = String(localized: "Prediction", table: table)
-        static let predictionMessage = String(localized: "The app learns from patterns and predicts when your puppy needs to pee.", table: table)
+        nonisolated static let predictionTitle = String(localized: "Prediction", table: "Localizable")
+        nonisolated static let predictionMessage = String(localized: "The app learns from patterns and predicts when your puppy needs to pee.", table: "Localizable")
     }
 
     // MARK: - Errors
     enum Errors {
         static let title = String(localized: "Error", table: table)
-        static let networkError = String(localized: "Network error", table: table)
-        static let fileError = String(localized: "File error", table: table)
-        static let dataCorrupted = String(localized: "Data corrupted", table: table)
-        static let unknownError = String(localized: "Unknown error", table: table)
+        // nonisolated for use in LocalizedError conformance - hardcoded table name
+        nonisolated static let networkError = String(localized: "Network error", table: "Localizable")
+        nonisolated static let fileError = String(localized: "File error", table: "Localizable")
+        nonisolated static let dataCorrupted = String(localized: "Data corrupted", table: "Localizable")
+        nonisolated static let unknownError = String(localized: "Unknown error", table: "Localizable")
 
-        static let networkRecovery = String(localized: "Check your internet connection and try again.", table: table)
-        static let fileRecovery = String(localized: "Something went wrong while saving. Please try again.", table: table)
-        static let dataRecovery = String(localized: "The data could not be read. Try restarting the app.", table: table)
-        static let unknownRecovery = String(localized: "Please try again later.", table: table)
+        nonisolated static let networkRecovery = String(localized: "Check your internet connection and try again.", table: "Localizable")
+        nonisolated static let fileRecovery = String(localized: "Something went wrong while saving. Please try again.", table: "Localizable")
+        nonisolated static let dataRecovery = String(localized: "The data could not be read. Try restarting the app.", table: "Localizable")
+        nonisolated static let unknownRecovery = String(localized: "Please try again later.", table: "Localizable")
 
         static let cloudKitNotConfigured = String(localized: "CloudKit not configured", table: table)
         static let cloudKitNotAvailable = String(localized: "CloudKit not available", table: table)
         static let cloudKitSimulator = String(localized: "CloudKit not available on simulator", table: table)
         static let couldNotShare = String(localized: "Could not share", table: table)
         static let couldNotStopSharing = String(localized: "Could not stop sharing", table: table)
-        static let couldNotProcessWeather = String(localized: "Could not process weather data", table: table)
-        static let couldNotProcessData = String(localized: "Could not process data", table: table)
+        nonisolated static let couldNotProcessWeather = String(localized: "Could not process weather data", table: "Localizable")
 
-        // Weather errors
-        static let invalidURL = String(localized: "Invalid URL", table: table)
+        // Weather errors (nonisolated for use in LocalizedError conformance - hardcoded table name)
+        nonisolated static let invalidURL = String(localized: "Invalid URL", table: "Localizable")
 
-        // Import errors
-        static let apiError = String(localized: "Could not reach GitHub API", table: table)
-        static let invalidResponse = String(localized: "Invalid response from GitHub", table: table)
-        static let downloadFailed = String(localized: "Download failed", table: table)
-        static let invalidContent = String(localized: "Invalid file content", table: table)
-        static let untrustedURL = String(localized: "Untrusted download URL", table: table)
-        static let contentTooLarge = String(localized: "File too large", table: table)
-        static let maliciousContent = String(localized: "Suspicious content detected", table: table)
+        // Import errors (nonisolated for use in LocalizedError conformance - hardcoded table name)
+        nonisolated static let apiError = String(localized: "Could not reach GitHub API", table: "Localizable")
+        nonisolated static let invalidResponse = String(localized: "Invalid response from GitHub", table: "Localizable")
+        nonisolated static let downloadFailed = String(localized: "Download failed", table: "Localizable")
+        nonisolated static let invalidContent = String(localized: "Invalid file content", table: "Localizable")
+        nonisolated static let untrustedURL = String(localized: "Untrusted download URL", table: "Localizable")
+        nonisolated static let contentTooLarge = String(localized: "File too large", table: "Localizable")
+        nonisolated static let maliciousContent = String(localized: "Suspicious content detected", table: "Localizable")
+
+        // Other errors
+        nonisolated static let couldNotProcessData = String(localized: "Could not process data", table: "Localizable")
+        nonisolated static let parseError = String(localized: "Could not parse data", table: "Localizable")
     }
 
     // MARK: - Streaks

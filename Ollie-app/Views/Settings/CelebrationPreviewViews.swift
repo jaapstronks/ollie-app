@@ -9,39 +9,6 @@
 import SwiftUI
 import OtisShared
 
-// MARK: - Tier 1 Preview Button
-
-/// Tier 1 preview button with inline celebration
-struct CelebrationTier1PreviewButton: View {
-    @State private var celebrationTrigger = false
-
-    var body: some View {
-        Button {
-            celebrationTrigger = true
-            HapticFeedback.light()
-        } label: {
-            HStack {
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("Tier 1: Subtle")
-                        .font(.subheadline.weight(.medium))
-                    Text("Inline shimmer effect")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-                Spacer()
-                Image(systemName: "play.circle.fill")
-                    .font(.title3)
-                    .foregroundStyle(Color.otisAccent)
-            }
-            .padding()
-            .background(Color.otisAccent.opacity(0.08))
-            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-        }
-        .buttonStyle(.plain)
-        .celebration(style: .quickLog, trigger: $celebrationTrigger)
-    }
-}
-
 // MARK: - Tier 2 Preview Wrapper
 
 /// Wrapper for Tier 2 preview that manages its own state

@@ -12,6 +12,7 @@ import OtisShared
 struct StartActivitySheet: View {
     let activityType: ActivityType
     let puppyName: String
+    let preselectedLocation: NapLocation?
     let onStartNow: (Date, NapLocation?) -> Void
     let onLogCompleted: () -> Void
     let onCancel: () -> Void
@@ -24,6 +25,24 @@ struct StartActivitySheet: View {
     @State private var selectedDate = Date()
     @State private var showingDatePicker = false
     @State private var selectedNapLocation: NapLocation?
+
+    init(
+        activityType: ActivityType,
+        puppyName: String,
+        preselectedLocation: NapLocation? = nil,
+        onStartNow: @escaping (Date, NapLocation?) -> Void,
+        onLogCompleted: @escaping () -> Void,
+        onCancel: @escaping () -> Void
+    ) {
+        self.activityType = activityType
+        self.puppyName = puppyName
+        self.preselectedLocation = preselectedLocation
+        self.onStartNow = onStartNow
+        self.onLogCompleted = onLogCompleted
+        self.onCancel = onCancel
+        // Initialize selectedNapLocation with preselected value
+        self._selectedNapLocation = State(initialValue: preselectedLocation)
+    }
 
     var body: some View {
         NavigationStack {

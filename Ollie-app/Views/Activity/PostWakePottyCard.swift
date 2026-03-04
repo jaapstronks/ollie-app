@@ -43,9 +43,28 @@ struct PostWakePottyCard: View {
 
     // MARK: - Computed Properties
 
+    /// Whether this was overnight sleep (morning time)
+    /// In the morning, show "puppies need to go first thing" rather than specific overdue time
+    private var isMorningFirstPotty: Bool {
+        let calendar = Calendar.current
+        let currentHour = calendar.component(.hour, from: Date())
+        // Morning window: 5 AM - 11 AM
+        return currentHour >= 5 && currentHour < 11
+    }
+
     private var subtitleText: String {
+        // For morning first potty, don't show specific overdue time
+        if isMorningFirstPotty {
+            return Strings.CombinedStatus.pottyFirstThingAfterWaking
+        }
+
+        // For daytime naps, show rounded overdue bucket
         if let overdue = pottyWasOverdueBy, overdue > 0 {
-            return Strings.CombinedStatus.pottyWasOverdue(minutes: overdue)
+            if let bucket = PredictionCalculations.roundedOverdueBucket(overdue) {
+                return Strings.CombinedStatus.pottyWasOverdueRounded(bucket: bucket)
+            }
+            // Below threshold, just say post-nap potty recommended
+            return Strings.CombinedStatus.postNapPottyRecommended
         }
         return Strings.CombinedStatus.postNapPottyRecommended
     }
