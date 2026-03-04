@@ -12,6 +12,8 @@ import OtisShared
 struct RecentActivityPreview: View {
     let events: [PuppyEvent]
     let onViewFullTimeline: () -> Void
+    var onEditEvent: ((PuppyEvent) -> Void)?
+    var onDeleteEvent: ((PuppyEvent) -> Void)?
 
     @Environment(\.colorScheme) private var colorScheme
 
@@ -52,7 +54,11 @@ struct RecentActivityPreview: View {
                 } else {
                     // Event rows
                     ForEach(recentEvents) { event in
-                        RecentActivityRow(event: event)
+                        RecentActivityRow(
+                            event: event,
+                            onTap: { onEditEvent?(event) },
+                            onDelete: onDeleteEvent != nil ? { onDeleteEvent?(event) } : nil
+                        )
 
                         if event.id != recentEvents.last?.id {
                             Divider()
@@ -138,6 +144,11 @@ struct RecentActivityPreview: View {
 /// Single row in the recent activity preview
 private struct RecentActivityRow: View {
     let event: PuppyEvent
+    var onTap: (() -> Void)?
+    var onDelete: (() -> Void)?
+
+    @State private var offset: CGFloat = 0
+    @State private var showingDeleteConfirmation = false
 
     @Environment(\.colorScheme) private var colorScheme
 
@@ -197,35 +208,78 @@ private struct RecentActivityRow: View {
     }
 
     var body: some View {
-        HStack(spacing: 10) {
-            // Icon
-            ZStack {
-                Circle()
-                    .fill(iconColor.opacity(0.15))
-                    .frame(width: 28, height: 28)
+        Button {
+            HapticFeedback.light()
+            onTap?()
+        } label: {
+            HStack(spacing: 10) {
+                // Icon
+                ZStack {
+                    Circle()
+                        .fill(iconColor.opacity(0.15))
+                        .frame(width: 28, height: 28)
 
-                Image(systemName: event.type.icon)
-                    .font(.system(size: 11, weight: .semibold))
-                    .foregroundStyle(iconColor)
+                    Image(systemName: event.type.icon)
+                        .font(.system(size: 11, weight: .semibold))
+                        .foregroundStyle(iconColor)
+                }
+
+                // Time
+                Text(event.time.formatted(date: .omitted, time: .shortened))
+                    .font(.caption)
+                    .fontWeight(.medium)
+                    .foregroundStyle(.secondary)
+                    .frame(width: 50, alignment: .leading)
+
+                // Label
+                Text(eventLabel)
+                    .font(.subheadline)
+                    .foregroundStyle(.primary)
+                    .lineLimit(1)
+
+                Spacer()
+
+                // Edit indicator chevron
+                if onTap != nil {
+                    Image(systemName: "chevron.right")
+                        .font(.caption2)
+                        .foregroundStyle(.quaternary)
+                }
+            }
+            .padding(.horizontal, 12)
+            .padding(.vertical, 10)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .contextMenu {
+            if onTap != nil {
+                Button {
+                    onTap?()
+                } label: {
+                    Label(Strings.Common.edit, systemImage: "pencil")
+                }
             }
 
-            // Time
-            Text(event.time.formatted(date: .omitted, time: .shortened))
-                .font(.caption)
-                .fontWeight(.medium)
-                .foregroundStyle(.secondary)
-                .frame(width: 50, alignment: .leading)
-
-            // Label
-            Text(eventLabel)
-                .font(.subheadline)
-                .foregroundStyle(.primary)
-                .lineLimit(1)
-
-            Spacer()
+            if onDelete != nil {
+                Button(role: .destructive) {
+                    showingDeleteConfirmation = true
+                } label: {
+                    Label(Strings.Common.delete, systemImage: "trash")
+                }
+            }
         }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 10)
+        .confirmationDialog(
+            Strings.Timeline.deleteConfirmTitle,
+            isPresented: $showingDeleteConfirmation,
+            titleVisibility: .visible
+        ) {
+            Button(Strings.Common.delete, role: .destructive) {
+                onDelete?()
+            }
+            Button(Strings.Common.cancel, role: .cancel) {}
+        } message: {
+            Text(Strings.Timeline.deleteConfirmMessage(event: event.type.label, time: event.time.timeString))
+        }
     }
 }
 
@@ -241,7 +295,9 @@ private struct RecentActivityRow: View {
     VStack {
         RecentActivityPreview(
             events: sampleEvents,
-            onViewFullTimeline: { print("View full timeline") }
+            onViewFullTimeline: { print("View full timeline") },
+            onEditEvent: { event in print("Edit event: \(event.type.label)") },
+            onDeleteEvent: { event in print("Delete event: \(event.type.label)") }
         )
         .padding()
 

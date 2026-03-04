@@ -25,6 +25,7 @@ struct TodayView: View {
     @State private var selectedPhotoEvent: PuppyEvent?
     @State private var showProfilePicker = false
     @State private var dismissedCrateNudgeDate: Date?
+    @State private var dismissedWalkTargetNudgeDate: Date?
 
     // First-visit tip tracking
     @AppStorage("hasSeenTodayTip") private var hasSeenTodayTip = false
@@ -45,6 +46,14 @@ struct TodayView: View {
             sleepState: viewModel.currentSleepState,
             todayEvents: viewModel.events,
             allEvents: eventStore.events
+        )
+    }
+
+    /// Whether to show the walk target nudge card
+    private var shouldShowWalkTargetNudge: Bool {
+        CombinedStatusCalculations.shouldShowWalkTargetNudge(
+            walkStats: viewModel.walkStats,
+            dismissedDate: dismissedWalkTargetNudgeDate
         )
     }
 
@@ -350,6 +359,23 @@ struct TodayView: View {
                 .animatedAppear(delay: 0.02)
             }
 
+            // Walk target nudge card (contextual suggestion to adjust walk schedule)
+            if shouldShowWalkTargetNudge && !combinedState.shouldShowFirstRunCard,
+               let stats = viewModel.walkStats {
+                WalkTargetNudgeCard(
+                    actualAverage: stats.averageWalksPerDay,
+                    scheduledTarget: stats.scheduledWalksPerDay,
+                    onAdjust: {
+                        viewModel.sheetCoordinator.presentSheet(.walkScheduleEditor)
+                    },
+                    onDismiss: {
+                        // Dismiss for 7 days
+                        dismissedWalkTargetNudgeDate = Date()
+                    }
+                )
+                .animatedAppear(delay: 0.025)
+            }
+
             // Hide scheduled events and medications during first run to avoid confusing "missed" reminders
             if !combinedState.shouldShowFirstRunCard {
                 // Medication reminders
@@ -385,6 +411,12 @@ struct TodayView: View {
             events: viewModel.events,
             onViewFullTimeline: {
                 viewModel.sheetCoordinator.presentSheet(.fullTimeline)
+            },
+            onEditEvent: { event in
+                viewModel.editEvent(event)
+            },
+            onDeleteEvent: { event in
+                viewModel.deleteEvent(event)
             }
         )
     }
