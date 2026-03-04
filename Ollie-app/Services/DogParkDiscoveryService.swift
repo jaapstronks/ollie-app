@@ -49,19 +49,30 @@ class DogParkDiscoveryService: ObservableObject {
     @Published var lastError: Error?
 
     /// Active place type filters (which types are currently being shown)
-    @Published var activePlaceTypes: Set<DiscoverablePlaceType> = [.dogParks]
+    @Published var activePlaceTypes: Set<DiscoverablePlaceType> = Set(DiscoverablePlaceType.allCases)
 
     // MARK: - Private Properties
 
     private let logger = Logger.otis(category: "DogParkDiscovery")
 
-    // Cache: keyed by grid cell (rounded lat/lon)
+    // Cache: keyed by grid cell (rounded lat/lon) + place type
     private var cache: [String: CacheEntry] = [:]
     private let cacheValidityHours: Double = 24
+    private let cacheFileName = "discovered-spots-cache.json"
 
-    private struct CacheEntry {
+    private struct CacheEntry: Codable {
         let spots: [DiscoveredSpot]
         let fetchedAt: Date
+
+        var isExpired: Bool {
+            Date().timeIntervalSince(fetchedAt) > 24 * 3600
+        }
+    }
+
+    // MARK: - Initialization
+
+    init() {
+        loadCacheFromDisk()
     }
 
     // Overpass API endpoint
@@ -182,9 +193,27 @@ class DogParkDiscoveryService: ObservableObject {
 
     /// Clear cache and refetch
     func refresh(latitude: Double, longitude: Double, radiusKm: Double = 5.0) async {
-        let cacheKey = gridCacheKey(lat: latitude, lon: longitude)
-        cache.removeValue(forKey: cacheKey)
+        clearCacheForLocation(latitude: latitude, longitude: longitude)
         await discoverNearby(latitude: latitude, longitude: longitude, radiusKm: radiusKm)
+    }
+
+    /// Clear cache for all place types at a location
+    func clearCacheForLocation(latitude: Double, longitude: Double) {
+        let gridKey = gridCacheKey(lat: latitude, lon: longitude)
+        // Remove all cache entries for this grid cell (all place types)
+        let keysToRemove = cache.keys.filter { $0.hasPrefix(gridKey) }
+        for key in keysToRemove {
+            cache.removeValue(forKey: key)
+        }
+        // Also remove the old-style cache key (for backwards compatibility)
+        cache.removeValue(forKey: gridKey)
+        logger.debug("Cleared cache for grid \(gridKey)")
+    }
+
+    /// Clear all cached data
+    func clearAllCache() {
+        cache.removeAll()
+        logger.debug("Cleared all cache")
     }
 
     /// Get spots within a certain distance
@@ -202,20 +231,57 @@ class DogParkDiscoveryService: ObservableObject {
 
     /// Discover all active place types near a location
     func discoverAllActiveTypes(latitude: Double, longitude: Double) async {
+        let gridKey = gridCacheKey(lat: latitude, lon: longitude)
+
+        // Check if all active types are cached and valid
+        var allCached = true
+        var cachedSpots: [DiscoveredSpot] = []
+
+        for placeType in activePlaceTypes {
+            let typeKey = "\(gridKey):\(placeType)"
+            if let cached = cache[typeKey], !cached.isExpired {
+                cachedSpots.append(contentsOf: cached.spots)
+            } else {
+                allCached = false
+                break
+            }
+        }
+
+        // If all types are cached, use cached data
+        if allCached {
+            discoveredSpots = deduplicateSpots(cachedSpots)
+            logger.debug("Using cached data for \(self.activePlaceTypes.count) place types at grid \(gridKey): \(self.discoveredSpots.count) spots")
+            return
+        }
+
+        // Otherwise, fetch missing types
         isLoading = true
         lastError = nil
 
         var allSpots: [DiscoveredSpot] = []
 
-        // Fetch each active place type
+        // Fetch each active place type (use cache if available)
         for placeType in activePlaceTypes {
-            let spots = await discoverPlaceType(
-                placeType,
-                latitude: latitude,
-                longitude: longitude,
-                radiusKm: placeType.defaultRadius
-            )
-            allSpots.append(contentsOf: spots)
+            let typeKey = "\(gridKey):\(placeType)"
+
+            if let cached = cache[typeKey], !cached.isExpired {
+                // Use cached data for this type
+                allSpots.append(contentsOf: cached.spots)
+                logger.debug("Using cached \(String(describing: placeType)) at grid \(gridKey)")
+            } else {
+                // Fetch fresh data for this type
+                let spots = await discoverPlaceType(
+                    placeType,
+                    latitude: latitude,
+                    longitude: longitude,
+                    radiusKm: placeType.defaultRadius
+                )
+                allSpots.append(contentsOf: spots)
+
+                // Cache the results for this type
+                cache[typeKey] = CacheEntry(spots: spots, fetchedAt: Date())
+                logger.debug("Fetched and cached \(spots.count) \(String(describing: placeType)) at grid \(gridKey)")
+            }
         }
 
         // Deduplicate by proximity
@@ -1074,6 +1140,69 @@ class DogParkDiscoveryService: ObservableObject {
         return "\(roundedLat),\(roundedLon)"
     }
 
+    // MARK: - Cache Persistence
+
+    /// Get the cache file URL
+    private var cacheFileURL: URL? {
+        FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?
+            .appendingPathComponent(cacheFileName)
+    }
+
+    /// Load cache from disk on initialization
+    private func loadCacheFromDisk() {
+        guard let url = cacheFileURL else {
+            logger.warning("Could not determine cache file URL")
+            return
+        }
+
+        guard FileManager.default.fileExists(atPath: url.path) else {
+            logger.debug("No cache file found at \(url.path)")
+            return
+        }
+
+        do {
+            let data = try Data(contentsOf: url)
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .iso8601
+            let loadedCache = try decoder.decode([String: CacheEntry].self, from: data)
+
+            // Filter out expired entries while loading
+            var validEntries = 0
+            var expiredEntries = 0
+            for (key, entry) in loadedCache {
+                if !entry.isExpired {
+                    cache[key] = entry
+                    validEntries += 1
+                } else {
+                    expiredEntries += 1
+                }
+            }
+
+            logger.info("Loaded \(validEntries) valid cache entries from disk (skipped \(expiredEntries) expired)")
+        } catch {
+            logger.error("Failed to load cache from disk: \(error.localizedDescription)")
+        }
+    }
+
+    /// Save cache to disk
+    private func saveCacheToDisk() {
+        guard let url = cacheFileURL else {
+            logger.warning("Could not determine cache file URL for saving")
+            return
+        }
+
+        do {
+            let encoder = JSONEncoder()
+            encoder.dateEncodingStrategy = .iso8601
+            encoder.outputFormatting = .prettyPrinted
+            let data = try encoder.encode(cache)
+            try data.write(to: url, options: .atomic)
+            logger.debug("Saved \(self.cache.count) cache entries to disk")
+        } catch {
+            logger.error("Failed to save cache to disk: \(error.localizedDescription)")
+        }
+    }
+
     // MARK: - Distance Calculation
 
     private func haversineDistance(lat1: Double, lon1: Double, lat2: Double, lon2: Double) -> Double {
@@ -1089,259 +1218,6 @@ class DogParkDiscoveryService: ObservableObject {
         let c = 2 * atan2(sqrt(a), sqrt(1 - a))
 
         return earthRadius * c
-    }
-}
-
-// MARK: - Overpass Response Models
-
-private struct OverpassResponse: Codable {
-    let elements: [OverpassElement]
-}
-
-private struct OverpassElement: Codable {
-    let type: String
-    let id: Int64
-    let lat: Double?
-    let lon: Double?
-    let center: OverpassCenter?
-    let tags: [String: String]?
-}
-
-private struct OverpassCenter: Codable {
-    let lat: Double
-    let lon: Double
-}
-
-// MARK: - Eindhoven Response Models
-
-private struct EindhovenResponse: Codable {
-    let results: [EindhovenRecord]
-}
-
-private struct EindhovenRecord: Codable {
-    let id: String?
-    let straat: String?
-    let buurt: String?
-    let stadsdeel: String?
-    let hoofd_categorie: String?
-    let geo_point_2d: EindhovenGeoPoint?
-}
-
-private struct EindhovenGeoPoint: Codable {
-    let lat: Double
-    let lon: Double
-}
-
-// MARK: - Amsterdam Response Models
-
-private struct AmsterdamGeoJSON: Codable {
-    let type: String
-    let features: [AmsterdamFeature]
-}
-
-private struct AmsterdamFeature: Codable {
-    let type: String
-    let properties: AmsterdamProperties
-    let geometry: AmsterdamGeometry
-}
-
-private struct AmsterdamProperties: Codable {
-    let Locatienummer: String?
-    let Soort: String?
-    let Speciale_regels: String?
-}
-
-private struct AmsterdamGeometry: Codable {
-    let type: String
-    var polygonCoordinates: [[[Double]]]?
-    var multiPolygonCoordinates: [[[[Double]]]]?
-
-    private enum CodingKeys: String, CodingKey {
-        case type
-        case coordinates
-    }
-
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        type = try container.decode(String.self, forKey: .type)
-
-        if type == "MultiPolygon" {
-            multiPolygonCoordinates = try container.decode([[[[Double]]]].self, forKey: .coordinates)
-            polygonCoordinates = nil
-        } else {
-            polygonCoordinates = try container.decode([[[Double]]].self, forKey: .coordinates)
-            multiPolygonCoordinates = nil
-        }
-    }
-
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(type, forKey: .type)
-        if let coords = multiPolygonCoordinates {
-            try container.encode(coords, forKey: .coordinates)
-        } else if let coords = polygonCoordinates {
-            try container.encode(coords, forKey: .coordinates)
-        }
-    }
-}
-
-// MARK: - Generic GeoJSON Geometry
-
-private struct GeoJSONGeometry: Codable {
-    let type: String
-    var pointCoordinates: [Double]?
-    var polygonCoordinates: [[[Double]]]?
-    var multiPolygonCoordinates: [[[[Double]]]]?
-
-    private enum CodingKeys: String, CodingKey {
-        case type
-        case coordinates
-    }
-
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        type = try container.decode(String.self, forKey: .type)
-
-        switch type {
-        case "Point":
-            pointCoordinates = try container.decode([Double].self, forKey: .coordinates)
-        case "MultiPolygon":
-            multiPolygonCoordinates = try container.decode([[[[Double]]]].self, forKey: .coordinates)
-        case "Polygon":
-            polygonCoordinates = try container.decode([[[Double]]].self, forKey: .coordinates)
-        default:
-            // Try polygon as fallback
-            polygonCoordinates = try? container.decode([[[Double]]].self, forKey: .coordinates)
-        }
-    }
-
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(type, forKey: .type)
-        if let coords = pointCoordinates {
-            try container.encode(coords, forKey: .coordinates)
-        } else if let coords = multiPolygonCoordinates {
-            try container.encode(coords, forKey: .coordinates)
-        } else if let coords = polygonCoordinates {
-            try container.encode(coords, forKey: .coordinates)
-        }
-    }
-}
-
-// MARK: - Berlin WFS Response Models
-
-private struct BerlinWFSResponse: Codable {
-    let type: String
-    let features: [BerlinFeature]
-}
-
-private struct BerlinFeature: Codable {
-    let type: String
-    let properties: BerlinProperties
-    let geometry: GeoJSONGeometry
-}
-
-private struct BerlinProperties: Codable {
-    let gisid: Int?
-    let uid: String?
-    let bezirk: String?
-    let typ: String?
-    let info: String?
-    let adresse: String?
-    let bezeich: String?
-    let zustaendig: String?
-}
-
-// MARK: - Hamburg OGC Response Models
-
-private struct HamburgOGCResponse: Codable {
-    let type: String
-    let features: [HamburgFeature]
-}
-
-private struct HamburgFeature: Codable {
-    let type: String
-    let id: String?
-    let properties: HamburgProperties
-    let geometry: GeoJSONGeometry
-}
-
-private struct HamburgProperties: Codable {
-    let bezeichnung: String?
-    let ortsteilnummer: Int?
-    let flaeche_in_qm: String?
-}
-
-// MARK: - NYC Socrata Response Models
-
-private struct NYCDogRun: Codable {
-    let prop_id: String?
-    let name: String?
-    let park_name: String?
-    let dogruns_type: String?
-    let address: String?
-    let latitude: Double?
-    let longitude: Double?
-    let the_geom: NYCGeometry?
-
-    private enum CodingKeys: String, CodingKey {
-        case prop_id
-        case name
-        case park_name = "park_name"
-        case dogruns_type
-        case address
-        case latitude
-        case longitude
-        case the_geom
-    }
-}
-
-private struct NYCGeometry: Codable {
-    let type: String?
-    let coordinates: [Double]?
-}
-
-// MARK: - Seattle ArcGIS Response Models
-
-private struct SeattleArcGISResponse: Codable {
-    let features: [SeattleFeature]
-}
-
-private struct SeattleFeature: Codable {
-    let attributes: SeattleAttributes
-    let geometry: SeattleGeometry?
-}
-
-private struct SeattleAttributes: Codable {
-    let OBJECTID: Int?
-    let ID: Int?
-    let NAME: String?
-    let LATITUDE: Double?
-    let LONGITUDE: Double?
-    let PMAID: String?
-    let LOCID: String?
-}
-
-private struct SeattleGeometry: Codable {
-    let x: Double?
-    let y: Double?
-}
-
-// MARK: - San Francisco Socrata Response Models
-
-private struct SFDogPlayArea: Codable {
-    let objectid: Int?
-    let park_name: String?
-    let dpa_name: String?
-    let latitude: Double?
-    let longitude: Double?
-
-    private enum CodingKeys: String, CodingKey {
-        case objectid
-        case park_name
-        case dpa_name
-        case latitude
-        case longitude
     }
 }
 
