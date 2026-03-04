@@ -14,7 +14,7 @@ struct SkillLearningFlowSheet: View {
     let status: SkillStatus
     let sessionCount: Int
     let recentSessions: [PuppyEvent]
-    let onStartTraining: () -> Void
+    let onStartTraining: (SkillPhase?) -> Void  // Now passes the current phase
     let onLogSession: () -> Void
     let onToggleMastered: () -> Void
     let onDismiss: () -> Void
@@ -71,7 +71,7 @@ struct SkillLearningFlowSheet: View {
                         onStartTraining: {
                             onDismiss()
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                                onStartTraining()
+                                onStartTraining(phase)  // Pass the current phase
                             }
                         }
                     )
@@ -192,7 +192,7 @@ private let previewSkill = Skill(
         status: .started,
         sessionCount: 3,
         recentSessions: [],
-        onStartTraining: {},
+        onStartTraining: { _ in },
         onLogSession: {},
         onToggleMastered: {},
         onDismiss: {},

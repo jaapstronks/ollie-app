@@ -1,27 +1,16 @@
 //
-//  TrainingSessionView.swift
+//  SimpleTrainingSessionView.swift
 //  Otis-app
 //
-//  Full-screen training session with clicker, timer, and instructions
+//  Full-screen training session without clicker - for skills like handling
 //
 
-import Combine
 import SwiftUI
+import Combine
+import OtisShared
 
-/// Data captured during a training session
-struct TrainingSessionData {
-    let skill: Skill
-    let startTime: Date
-    let endTime: Date
-    let clickCount: Int
-
-    var durationMinutes: Int {
-        Int(endTime.timeIntervalSince(startTime) / 60)
-    }
-}
-
-/// Full-screen training session view
-struct TrainingSessionView: View {
+/// Full-screen training session view for non-clicker skills (like handling)
+struct SimpleTrainingSessionView: View {
     let skill: Skill
     let phase: SkillPhase?  // Optional phase for focused step display
     let onComplete: (TrainingSessionData) -> Void
@@ -29,13 +18,8 @@ struct TrainingSessionView: View {
 
     @State private var startTime = Date()
     @State private var elapsedSeconds: Int = 0
-    @State private var clickCount: Int = 0
     @State private var showExitConfirmation = false
-    @State private var showInstructions = true
-
-    @AppStorage("trainingSession.soundEnabled") private var soundEnabled = true
-    @AppStorage("trainingSession.vibrationEnabled") private var vibrationEnabled = true
-    @AppStorage("trainingSession.instructionsExpanded") private var instructionsExpanded = true
+    @State private var instructionsExpanded = true
 
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -45,13 +29,11 @@ struct TrainingSessionView: View {
     /// Steps to display - either phase-specific or all steps
     private var displaySteps: [(index: Int, text: String)] {
         if let phase = phase {
-            // Show only steps for this phase
             return phase.howToStepIndices.compactMap { idx in
                 guard idx < skill.howTo.count else { return nil }
                 return (idx, skill.howTo[idx])
             }
         } else {
-            // Show all steps
             return skill.howTo.enumerated().map { ($0.offset, $0.element) }
         }
     }
@@ -81,20 +63,16 @@ struct TrainingSessionView: View {
                     // Collapsible instructions
                     instructionsSection
 
-                    // Counter display
-                    counterDisplay
-                        .padding(.top, 8)
+                    // Timer display (prominent)
+                    timerDisplay
+                        .padding(.top, 24)
 
-                    // Clicker button
-                    ClickerButton(
-                        clickCount: $clickCount,
-                        soundEnabled: soundEnabled,
-                        vibrationEnabled: vibrationEnabled
-                    )
-                    .padding(.vertical, 16)
+                    // Progress indicator
+                    progressRing
+                        .padding(.vertical, 24)
 
-                    // Toggles
-                    togglesSection
+                    // Tips reminder
+                    tipsSection
                 }
                 .padding()
             }
@@ -105,7 +83,6 @@ struct TrainingSessionView: View {
         .background(Color(.systemBackground))
         .onAppear {
             startTime = Date()
-            AudioService.shared.prepareClickSound()
         }
         .onReceive(timer) { _ in
             elapsedSeconds = Int(Date().timeIntervalSince(startTime))
@@ -133,7 +110,7 @@ struct TrainingSessionView: View {
         HStack {
             // Exit button
             Button {
-                if clickCount > 0 || elapsedSeconds > 10 {
+                if elapsedSeconds > 10 {
                     showExitConfirmation = true
                 } else {
                     onCancel()
@@ -163,7 +140,7 @@ struct TrainingSessionView: View {
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 } else {
-                    Text(Strings.TrainingSession.clicker)
+                    Text(Strings.TrainingSession.practice)
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
@@ -171,7 +148,7 @@ struct TrainingSessionView: View {
 
             Spacer()
 
-            // Timer
+            // Timer badge
             HStack(spacing: 4) {
                 Image(systemName: "timer")
                     .font(.caption)
@@ -245,41 +222,99 @@ struct TrainingSessionView: View {
         )
     }
 
-    // MARK: - Counter Display
+    // MARK: - Timer Display
 
-    private var counterDisplay: some View {
-        VStack(spacing: 4) {
-            Text("\(clickCount)")
-                .font(.system(size: 72, weight: .bold, design: .rounded))
+    private var timerDisplay: some View {
+        VStack(spacing: 8) {
+            Text(formattedTime)
+                .font(.system(size: 64, weight: .bold, design: .rounded))
                 .foregroundStyle(.primary)
+                .monospacedDigit()
                 .contentTransition(.numericText())
-                .animation(reduceMotion ? nil : .spring(duration: 0.3), value: clickCount)
+                .animation(reduceMotion ? nil : .spring(duration: 0.3), value: elapsedSeconds)
 
-            Text(Strings.TrainingSession.clicks)
+            Text(Strings.TrainingSession.elapsed)
                 .font(.title3)
                 .foregroundStyle(.secondary)
         }
     }
 
-    // MARK: - Toggles Section
+    // MARK: - Progress Ring
 
-    private var togglesSection: some View {
-        HStack(spacing: 24) {
-            // Sound toggle
-            Toggle(isOn: $soundEnabled) {
-                Label(Strings.TrainingSession.sound, systemImage: "speaker.wave.2.fill")
-                    .font(.subheadline)
-            }
-            .toggleStyle(.button)
-            .tint(soundEnabled ? .otisAccent : .secondary)
+    private var progressRing: some View {
+        let recommendedSeconds = (skill.durationMinutes ?? 2) * 60
+        let progress = min(Double(elapsedSeconds) / Double(recommendedSeconds), 1.0)
 
-            // Vibration toggle
-            Toggle(isOn: $vibrationEnabled) {
-                Label(Strings.TrainingSession.vibration, systemImage: "iphone.radiowaves.left.and.right")
-                    .font(.subheadline)
+        return ZStack {
+            // Background ring
+            Circle()
+                .stroke(colorScheme == .dark ? Color.white.opacity(0.1) : Color.black.opacity(0.05), lineWidth: 12)
+                .frame(width: 160, height: 160)
+
+            // Progress ring
+            Circle()
+                .trim(from: 0, to: progress)
+                .stroke(
+                    progress >= 1.0 ? Color.otisSuccess : Color.otisAccent,
+                    style: StrokeStyle(lineWidth: 12, lineCap: .round)
+                )
+                .frame(width: 160, height: 160)
+                .rotationEffect(.degrees(-90))
+                .animation(reduceMotion ? nil : .easeOut(duration: 0.5), value: progress)
+
+            // Center content
+            VStack(spacing: 4) {
+                if progress >= 1.0 {
+                    Image(systemName: "checkmark.circle.fill")
+                        .font(.system(size: 32))
+                        .foregroundStyle(Color.otisSuccess)
+                } else {
+                    Text("\(Int(progress * 100))%")
+                        .font(.title2)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(.primary)
+                }
+
+                Text("\(skill.durationMinutes ?? 2) min")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
             }
-            .toggleStyle(.button)
-            .tint(vibrationEnabled ? .otisAccent : .secondary)
+        }
+    }
+
+    // MARK: - Tips Section
+
+    @ViewBuilder
+    private var tipsSection: some View {
+        if !displayTips.isEmpty {
+            VStack(alignment: .leading, spacing: 8) {
+                HStack {
+                    Image(systemName: "hand.thumbsup.fill")
+                        .foregroundStyle(Color.otisSuccess)
+                    Text(Strings.Training.tips)
+                        .font(.subheadline)
+                        .fontWeight(.medium)
+                }
+
+                VStack(alignment: .leading, spacing: 6) {
+                    ForEach(displayTips, id: \.self) { tip in
+                        HStack(alignment: .top, spacing: 8) {
+                            Image(systemName: "lightbulb.fill")
+                                .font(.caption2)
+                                .foregroundStyle(Color.otisWarning)
+                            Text(tip)
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                }
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding()
+            .background(
+                RoundedRectangle(cornerRadius: 12, style: .continuous)
+                    .fill(colorScheme == .dark ? Color.otisSuccess.opacity(0.1) : Color.otisSuccess.opacity(0.05))
+            )
         }
     }
 
@@ -319,7 +354,7 @@ struct TrainingSessionView: View {
             skill: skill,
             startTime: startTime,
             endTime: Date(),
-            clickCount: clickCount
+            clickCount: 0
         )
         HapticFeedback.success()
         onComplete(sessionData)
@@ -328,22 +363,22 @@ struct TrainingSessionView: View {
 
 // MARK: - Preview
 
-private let previewSkillForSession = Skill(
-    id: "sit",
-    icon: "arrow.down.to.line",
-    category: .basicCommands,
-    sortOrder: 7,
-    requires: ["luring"],
-    method: .classical,
-    durationMinutes: 3,
-    sessionsPerDay: 3,
-    steps: nil,
-    phases: nil
-)
-
 #Preview("Without Phase") {
-    TrainingSessionView(
-        skill: previewSkillForSession,
+    let handlingSkill = Skill(
+        id: "handling",
+        icon: "hands.sparkles.fill",
+        category: .care,
+        sortOrder: 2,
+        requires: [],
+        method: nil,
+        durationMinutes: 2,
+        sessionsPerDay: 2,
+        steps: nil,
+        phases: nil
+    )
+
+    SimpleTrainingSessionView(
+        skill: handlingSkill,
         phase: nil,
         onComplete: { _ in },
         onCancel: {}
@@ -351,9 +386,26 @@ private let previewSkillForSession = Skill(
 }
 
 #Preview("With Phase") {
-    TrainingSessionView(
-        skill: previewSkillForSession,
-        phase: SkillPhase(id: "lureToPosition", howToStepIndices: [0, 1, 2], tipIndices: [0, 1]),
+    let collarLeashSkill = Skill(
+        id: "collarLeash",
+        icon: "dog.fill",
+        category: .safety,
+        sortOrder: 3,
+        requires: [],
+        method: nil,
+        durationMinutes: 5,
+        sessionsPerDay: 2,
+        steps: nil,
+        phases: [
+            SkillPhase(id: "introduction", howToStepIndices: [0, 1], tipIndices: [0]),
+            SkillPhase(id: "buildDuration", howToStepIndices: [2], tipIndices: [1]),
+            SkillPhase(id: "leashWork", howToStepIndices: [3, 4], tipIndices: [2, 3])
+        ]
+    )
+
+    SimpleTrainingSessionView(
+        skill: collarLeashSkill,
+        phase: SkillPhase(id: "introduction", howToStepIndices: [0, 1], tipIndices: [0]),
         onComplete: { _ in },
         onCancel: {}
     )

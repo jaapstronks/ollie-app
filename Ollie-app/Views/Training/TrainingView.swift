@@ -18,6 +18,7 @@ struct TrainingView: View {
 
     @State private var selectedSkill: Skill?
     @State private var activeTrainingSkill: Skill?
+    @State private var activeTrainingPhase: SkillPhase?  // Phase for focused training session
     @State private var skillForDetailSheet: Skill?
     @State private var skillForQuickLog: Skill?
     @State private var completedSessionData: TrainingSessionData?
@@ -29,6 +30,9 @@ struct TrainingView: View {
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
+    // First-visit tip tracking
+    @AppStorage("hasSeenTrainingSkillsTip") private var hasSeenTrainingSkillsTip = false
+
     private var isPreparationComplete: Bool {
         guard let plan = trainingStore.trainingPlan else { return false }
         return progressStore.isPreparationComplete(requiredItems: plan.preparationItems)
@@ -37,6 +41,18 @@ struct TrainingView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
+                // First-visit tip
+                if !hasSeenTrainingSkillsTip {
+                    FeatureTipCard(
+                        tip: .trainingSkillsIntro,
+                        onDismiss: {
+                            withAnimation(.easeOut(duration: 0.2)) {
+                                hasSeenTrainingSkillsTip = true
+                            }
+                        }
+                    )
+                }
+
                 // 1. Preparation Section (gated)
                 if !isPreparationComplete {
                     if let plan = trainingStore.trainingPlan {
@@ -63,21 +79,43 @@ struct TrainingView: View {
         .task {
             await trainingStore.initialSync()
         }
-        // Full-screen training session
+        // Full-screen training session (clicker or simple based on skill type)
         .fullScreenCover(item: $activeTrainingSkill) { skill in
-            TrainingSessionView(
-                skill: skill,
-                onComplete: { data in
-                    activeTrainingSkill = nil
-                    completedSessionData = data
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                        selectedSkill = skill
+            if skill.usesClicker {
+                TrainingSessionView(
+                    skill: skill,
+                    phase: activeTrainingPhase,  // Pass the phase for focused steps
+                    onComplete: { data in
+                        activeTrainingSkill = nil
+                        activeTrainingPhase = nil
+                        completedSessionData = data
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                            selectedSkill = skill
+                        }
+                    },
+                    onCancel: {
+                        activeTrainingSkill = nil
+                        activeTrainingPhase = nil
                     }
-                },
-                onCancel: {
-                    activeTrainingSkill = nil
-                }
-            )
+                )
+            } else {
+                SimpleTrainingSessionView(
+                    skill: skill,
+                    phase: activeTrainingPhase,  // Pass the phase for focused steps
+                    onComplete: { data in
+                        activeTrainingSkill = nil
+                        activeTrainingPhase = nil
+                        completedSessionData = data
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                            selectedSkill = skill
+                        }
+                    },
+                    onCancel: {
+                        activeTrainingSkill = nil
+                        activeTrainingPhase = nil
+                    }
+                )
+            }
         }
         // Skill learning flow sheet (stepped learning with phases)
         .sheet(item: $skillForDetailSheet) { skill in
@@ -90,7 +128,8 @@ struct TrainingView: View {
                 status: status,
                 sessionCount: sessionCount,
                 recentSessions: recentSessions,
-                onStartTraining: {
+                onStartTraining: { phase in
+                    activeTrainingPhase = phase  // Store the phase
                     activeTrainingSkill = skill
                 },
                 onLogSession: {
@@ -263,6 +302,10 @@ struct TrainingView: View {
                         },
                         onQuickDone: {
                             quickLogSession(for: info.skill)
+                        },
+                        onToggleMastered: {
+                            trainingStore.markAsMastered(info.skill.id)
+                            HapticFeedback.success()
                         }
                     )
                 }

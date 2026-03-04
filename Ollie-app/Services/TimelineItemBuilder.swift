@@ -92,7 +92,29 @@ struct TimelineItemBuilder {
             ))
         }
 
-        // 3. Process remaining point events
+        // 3. Build training sessions (groups of training events within 15 min)
+        let trainingSessions = TrainingSession.buildSessions(from: events)
+        for session in trainingSessions {
+            // Mark all events in this session as processed
+            for eventId in session.eventIds {
+                processedEventIds.insert(eventId)
+            }
+
+            let description = trainingSessionDescription(for: session, puppyName: puppyName)
+
+            items.append(VerticalTimelineItem(
+                id: session.id,
+                type: .trainingSession(session),
+                startTime: session.startTime,
+                endTime: nil,
+                photoThumbnail: nil,
+                note: nil,
+                description: description,
+                track: .main
+            ))
+        }
+
+        // 4. Process remaining point events
         // Skip wake events (ontwaken) - they're legacy data from the old two-event sleep model
         for event in events where !processedEventIds.contains(event.id) && event.type != .ontwaken {
             let description = eventDescription(for: event, puppyName: puppyName)
@@ -112,7 +134,7 @@ struct TimelineItemBuilder {
             ))
         }
 
-        // 4. Add appointments
+        // 5. Add appointments
         for appointment in appointments {
             let description = appointmentDescription(for: appointment)
 
@@ -368,5 +390,14 @@ struct TimelineItemBuilder {
         let timeString = timeFormatter.string(from: appointment.startDate)
 
         return Strings.VerticalTimeline.scheduledFor(time: timeString)
+    }
+
+    static func trainingSessionDescription(for session: TrainingSession, puppyName: String) -> String {
+        let skills = session.skillNames
+        if skills.isEmpty {
+            return Strings.VerticalTimeline.trainingSessionGeneric(name: puppyName, count: session.count)
+        }
+        let skillList = skills.joined(separator: ", ")
+        return Strings.VerticalTimeline.trainingSessionWithSkills(name: puppyName, count: session.count, skills: skillList)
     }
 }

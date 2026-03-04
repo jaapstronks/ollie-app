@@ -14,6 +14,7 @@ struct VerticalTimelineItem: Identifiable, Equatable {
         case walkEvent(PuppyEvent)
         case pointEvent(PuppyEvent)
         case appointmentItem(DogAppointment)
+        case trainingSession(TrainingSession)
 
         /// Extract the underlying item's ID for comparison
         var itemId: UUID {
@@ -22,6 +23,7 @@ struct VerticalTimelineItem: Identifiable, Equatable {
             case .walkEvent(let event): return event.id
             case .pointEvent(let event): return event.id
             case .appointmentItem(let appointment): return appointment.id
+            case .trainingSession(let session): return session.id
             }
         }
     }
@@ -90,7 +92,7 @@ struct VerticalTimelineItem: Identifiable, Equatable {
             switch type {
             case .sleepSession, .walkEvent:
                 return Int(Date().timeIntervalSince(startTime) / 60)
-            case .pointEvent, .appointmentItem:
+            case .pointEvent, .appointmentItem, .trainingSession:
                 return nil
             }
         }
@@ -102,7 +104,7 @@ struct VerticalTimelineItem: Identifiable, Equatable {
         switch type {
         case .sleepSession(let session):
             return session.isOngoing
-        case .walkEvent, .pointEvent, .appointmentItem:
+        case .walkEvent, .pointEvent, .appointmentItem, .trainingSession:
             return false
         }
     }
@@ -112,7 +114,7 @@ struct VerticalTimelineItem: Identifiable, Equatable {
         switch type {
         case .sleepSession, .walkEvent, .appointmentItem:
             return true
-        case .pointEvent:
+        case .pointEvent, .trainingSession:
             return false
         }
     }
@@ -167,6 +169,14 @@ struct VerticalTimelineItem: Identifiable, Equatable {
             return event.type.icon
         case .appointmentItem(let appointment):
             return appointment.appointmentType.icon
+        case .trainingSession:
+            return "graduationcap.fill"
         }
+    }
+
+    /// Whether this is a training session
+    var isTrainingSession: Bool {
+        if case .trainingSession = type { return true }
+        return false
     }
 }

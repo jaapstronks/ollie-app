@@ -27,6 +27,8 @@ struct TimelineBlock: View {
             return .secondary
         case .appointmentItem:
             return .otisAccent
+        case .trainingSession:
+            return .otisPurple
         }
     }
 
@@ -88,6 +90,8 @@ struct TimelineBlock: View {
             return Strings.VerticalTimeline.sleep  // Localized as "Nap"
         case .walkEvent:
             return Strings.VerticalTimeline.walk
+        case .trainingSession:
+            return Strings.VerticalTimeline.training
         case .pointEvent, .appointmentItem:
             return ""
         }
