@@ -1,7 +1,49 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "Add family members who help care for your puppy." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fugen Sie Familienmitglieder hinzu, die bei der Pflege Ihres Welpen helfen."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Agrega miembros de la familia que ayudan a cuidar a tu cachorro."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajoutez les membres de la famille qui aident a prendre soin de votre chiot."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aggiungi i familiari che aiutano a prendersi cura del tuo cucciolo."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voeg familieleden toe die helpen zorgen voor je puppy."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lagg till familjemedlemmar som hjalper till att ta hand om din valp."
+          }
+        }
+      }
+    },
     "Add member" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -42,6 +84,7 @@
       }
     },
     "Add photo" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -82,6 +125,7 @@
       }
     },
     "Avatar color" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -122,6 +166,7 @@
       }
     },
     "Change photo" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -162,6 +207,7 @@
       }
     },
     "Delete member?" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -202,6 +248,7 @@
       }
     },
     "Edit member" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -242,6 +289,7 @@
       }
     },
     "Events you log will be attributed to this member." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -282,6 +330,7 @@
       }
     },
     "Household" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -322,6 +371,7 @@
       }
     },
     "Me" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -362,6 +412,7 @@
       }
     },
     "Name" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -402,6 +453,7 @@
       }
     },
     "No household members" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -441,47 +493,8 @@
         }
       }
     },
-    "Add family members who help care for your puppy." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Fugen Sie Familienmitglieder hinzu, die bei der Pflege Ihres Welpen helfen."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Agrega miembros de la familia que ayudan a cuidar a tu cachorro."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ajoutez les membres de la famille qui aident a prendre soin de votre chiot."
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aggiungi i familiari che aiutano a prendersi cura del tuo cucciolo."
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Voeg familieleden toe die helpen zorgen voor je puppy."
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Lagg till familjemedlemmar som hjalper till att ta hand om din valp."
-          }
-        }
-      }
-    },
     "Remove photo" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -522,6 +535,7 @@
       }
     },
     "Swipe left on a member to edit or delete." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -562,6 +576,7 @@
       }
     },
     "This is me" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -602,6 +617,7 @@
       }
     },
     "This member will be removed. Events they logged will keep their attribution." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -642,6 +658,7 @@
       }
     },
     "Track who logs each event when sharing with family." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -682,6 +699,7 @@
       }
     },
     "Used when no photo is set." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {

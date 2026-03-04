@@ -44,6 +44,24 @@ enum SkillStatus: String, Codable {
         case .mastered: return "checkmark.circle.fill"
         }
     }
+
+    /// Compact status indicator icon for use in lists
+    var statusIndicatorIcon: String {
+        switch self {
+        case .notStarted: return "circle"
+        case .started: return "play.fill"
+        case .practicing: return "arrow.clockwise"
+        case .mastered: return "checkmark"
+        }
+    }
+
+    /// Icon color for skill icons based on status
+    var skillIconColor: Color {
+        switch self {
+        case .mastered: return .otisSuccess
+        default: return .otisAccent
+        }
+    }
 }
 
 // MARK: - Skill Status Calculations

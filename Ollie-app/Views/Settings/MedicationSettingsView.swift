@@ -11,13 +11,22 @@ import OtisShared
 /// Settings view for managing medications
 struct MedicationSettingsView: View {
     @ObservedObject var profileStore: ProfileStore
+    var profileId: UUID? = nil
     @State private var showingAddSheet = false
     @State private var medicationToEdit: Medication?
     @State private var showingDeleteConfirmation = false
     @State private var medicationToDelete: Medication?
 
+    /// The profile being edited (looked up by ID or falls back to active)
+    private var targetProfile: PuppyProfile? {
+        if let id = profileId {
+            return profileStore.profile(for: id)
+        }
+        return profileStore.profile
+    }
+
     private var medications: [Medication] {
-        profileStore.profile?.medicationSchedule.medications ?? []
+        targetProfile?.medicationSchedule.medications ?? []
     }
 
     var body: some View {
@@ -42,12 +51,14 @@ struct MedicationSettingsView: View {
         .sheet(isPresented: $showingAddSheet) {
             AddEditMedicationSheet(
                 profileStore: profileStore,
+                profileId: profileId,
                 medication: nil
             )
         }
         .sheet(item: $medicationToEdit) { medication in
             AddEditMedicationSheet(
                 profileStore: profileStore,
+                profileId: profileId,
                 medication: medication
             )
         }
@@ -55,7 +66,7 @@ struct MedicationSettingsView: View {
             Button(Strings.Common.cancel, role: .cancel) {}
             Button(Strings.Common.delete, role: .destructive) {
                 if let medication = medicationToDelete {
-                    profileStore.deleteMedication(id: medication.id)
+                    profileStore.deleteMedication(id: medication.id, for: profileId)
                 }
             }
         } message: {
@@ -104,7 +115,7 @@ struct MedicationSettingsView: View {
                 MedicationRow(
                     medication: medication,
                     onToggleActive: {
-                        profileStore.toggleMedicationActive(id: medication.id)
+                        profileStore.toggleMedicationActive(id: medication.id, for: profileId)
                     },
                     onEdit: {
                         medicationToEdit = medication

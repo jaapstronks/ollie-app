@@ -41,7 +41,7 @@
       "icon": "hands.sparkles.fill",
       "category": "care",
       "sortOrder": 2,
-      "requires": ["clicker"],
+      "requires": [],
       "method": null,
       "durationMinutes": 2,
       "sessionsPerDay": 2,

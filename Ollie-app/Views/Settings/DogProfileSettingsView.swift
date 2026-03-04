@@ -10,29 +10,37 @@ import OtisShared
 /// Settings screen for dog profile identity information
 struct DogProfileSettingsView: View {
     @ObservedObject var profileStore: ProfileStore
+    let profileId: UUID
 
     @State private var showingPhotoPicker = false
 
+    /// The profile being edited (looked up by ID)
+    private var targetProfile: PuppyProfile? {
+        profileStore.profile(for: profileId)
+    }
+
     var body: some View {
         Form {
-            if let profile = profileStore.profile {
+            if let profile = targetProfile {
                 // Profile basics only
                 ProfileSection(
                     profile: profile,
                     profileStore: profileStore,
+                    profileId: profileId,
                     showingPhotoPicker: $showingPhotoPicker
                 )
 
                 // Memorial section (subtle, at the bottom)
                 MemorialSection(
                     profile: profile,
-                    profileStore: profileStore
+                    profileStore: profileStore,
+                    profileId: profileId
                 )
             }
         }
-        .navigationTitle(profileStore.profile?.name ?? Strings.Settings.profile)
+        .navigationTitle(targetProfile?.name ?? Strings.Settings.profile)
         .sheet(isPresented: $showingPhotoPicker) {
-            if let profile = profileStore.profile {
+            if let profile = targetProfile {
                 ProfilePhotoPicker(
                     currentImage: loadCurrentProfileImage(for: profile),
                     onSave: { image in
@@ -54,7 +62,7 @@ struct DogProfileSettingsView: View {
     }
 
     private func saveProfilePhoto(_ image: UIImage) {
-        guard let profile = profileStore.profile else { return }
+        guard let profile = targetProfile else { return }
         do {
             // Delete old photo if exists
             if let oldFilename = profile.profilePhotoFilename {
@@ -62,22 +70,22 @@ struct DogProfileSettingsView: View {
             }
 
             let filename = try ProfilePhotoStore.shared.save(image: image)
-            profileStore.updateProfilePhoto(filename)
+            profileStore.updateProfilePhoto(filename, for: profileId)
         } catch {
             print("Failed to save profile photo: \(error)")
         }
     }
 
     private func removeProfilePhoto() {
-        if let filename = profileStore.profile?.profilePhotoFilename {
+        if let filename = targetProfile?.profilePhotoFilename {
             ProfilePhotoStore.shared.delete(filename: filename)
         }
-        profileStore.updateProfilePhoto(nil)
+        profileStore.updateProfilePhoto(nil, for: profileId)
     }
 }
 
 #Preview {
     NavigationStack {
-        DogProfileSettingsView(profileStore: ProfileStore())
+        DogProfileSettingsView(profileStore: ProfileStore(), profileId: UUID())
     }
 }

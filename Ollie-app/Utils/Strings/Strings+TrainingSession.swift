@@ -15,6 +15,8 @@ extension Strings {
     enum TrainingSession {
         // Session header
         static let clicker = String(localized: "Clicker", table: table)
+        static let practice = String(localized: "Practice", table: table)
+        static let elapsed = String(localized: "elapsed", table: table)
 
         // Counter
         static let click = String(localized: "Click", table: table)

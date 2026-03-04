@@ -13,6 +13,7 @@ import MapKit
 struct DiscoveredSpotDetailSheet: View {
     let spot: DiscoveredSpot
     @ObservedObject var spotStore: SpotStore
+    var hideMapPreview: Bool = false
 
     @Environment(\.dismiss) private var dismiss
     @State private var showingSaveConfirmation = false
@@ -27,8 +28,10 @@ struct DiscoveredSpotDetailSheet: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
-                    // Map preview
-                    mapPreview
+                    // Map preview (hidden when presented over map)
+                    if !hideMapPreview {
+                        mapPreview
+                    }
 
                     // Quick info row
                     quickInfoRow

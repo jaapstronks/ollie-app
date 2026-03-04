@@ -333,7 +333,11 @@ struct MainTabView: View {
                     notificationService: notificationService,
                     documentStore: documentStore,
                     contactStore: contactStore,
-                    foodRecallService: foodRecallService
+                    foodRecallService: foodRecallService,
+                    onAddDog: {
+                        showingSettings = false
+                        onAddDog?()
+                    }
                 )
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {

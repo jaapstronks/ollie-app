@@ -129,6 +129,14 @@ struct Skill: Codable, Identifiable, Hashable {
         return phases.count > 1
     }
 
+    /// Whether this skill uses the clicker during training sessions
+    /// - Clicker skill itself: yes (practicing the clicker)
+    /// - Operant/classical method skills: yes (marking behavior)
+    /// - No-method skills (handling, collarLeash): no
+    var usesClicker: Bool {
+        id == "clicker" || method != nil
+    }
+
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }

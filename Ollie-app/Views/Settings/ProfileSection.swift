@@ -11,6 +11,7 @@ import OtisShared
 struct ProfileSection: View {
     let profile: PuppyProfile
     @ObservedObject var profileStore: ProfileStore
+    var profileId: UUID? = nil
     @Binding var showingPhotoPicker: Bool
 
     @State private var showingNameEditor = false
@@ -65,7 +66,7 @@ struct ProfileSection: View {
             Button(Strings.Common.save) {
                 let trimmed = editedName.trimmingCharacters(in: .whitespacesAndNewlines)
                 if !trimmed.isEmpty {
-                    profileStore.updateName(trimmed)
+                    profileStore.updateName(trimmed, for: profileId)
                 }
             }
         }

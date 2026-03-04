@@ -79,7 +79,7 @@ struct AddEditHouseholdMemberSheet: View {
                     // Colored circle with initial
                     ZStack {
                         Circle()
-                            .fill(Color(hex: colorHex) ?? .gray)
+                            .fill(Color(hex: colorHex))
                             .frame(width: 80, height: 80)
 
                         Text(name.isEmpty ? "?" : String(name.prefix(1)).uppercased())
@@ -89,9 +89,10 @@ struct AddEditHouseholdMemberSheet: View {
                 }
 
                 // Photo picker
+                let hasAvatar = avatarData != nil
                 PhotosPicker(selection: $selectedPhoto, matching: .images) {
                     Label(
-                        avatarData == nil ? Strings.Household.addPhoto : Strings.Household.changePhoto,
+                        hasAvatar ? Strings.Household.changePhoto : Strings.Household.addPhoto,
                         systemImage: "camera"
                     )
                 }
@@ -142,7 +143,7 @@ struct AddEditHouseholdMemberSheet: View {
                         } label: {
                             ZStack {
                                 Circle()
-                                    .fill(Color(hex: color) ?? .gray)
+                                    .fill(Color(hex: color))
                                     .frame(width: 36, height: 36)
 
                                 if colorHex == color {

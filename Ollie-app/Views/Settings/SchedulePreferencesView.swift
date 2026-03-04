@@ -12,6 +12,7 @@ import OtisShared
 struct SchedulePreferencesView: View {
     @ObservedObject var profileStore: ProfileStore
     @ObservedObject var notificationService: NotificationService
+    let profileId: UUID
 
     @State private var showingMealEdit = false
     @State private var showingWalkScheduleEdit = false
@@ -19,13 +20,19 @@ struct SchedulePreferencesView: View {
 
     private let mealRemindersTip = MealRemindersTip()
 
+    /// The profile being edited (looked up by ID)
+    private var targetProfile: PuppyProfile? {
+        profileStore.profile(for: profileId)
+    }
+
     var body: some View {
         Form {
-            if let profile = profileStore.profile {
+            if let profile = targetProfile {
                 // Walk schedule
                 WalkSection(
                     profile: profile,
                     profileStore: profileStore,
+                    profileId: profileId,
                     showingWalkScheduleEdit: $showingWalkScheduleEdit
                 )
 
@@ -33,6 +40,7 @@ struct SchedulePreferencesView: View {
                 MealSection(
                     profile: profile,
                     profileStore: profileStore,
+                    profileId: profileId,
                     showingMealEdit: $showingMealEdit
                 )
 
@@ -42,22 +50,22 @@ struct SchedulePreferencesView: View {
         }
         .navigationTitle(Strings.Settings.schedulePreferences)
         .sheet(isPresented: $showingMealEdit) {
-            if let profile = profileStore.profile {
+            if let profile = targetProfile {
                 MealScheduleEditorWrapper(
                     initialSchedule: profile.mealSchedule,
                     onSave: { updatedSchedule in
-                        profileStore.updateMealSchedule(updatedSchedule)
+                        profileStore.updateMealSchedule(updatedSchedule, for: profileId)
                     }
                 )
             }
         }
         .sheet(isPresented: $showingWalkScheduleEdit) {
-            if let profile = profileStore.profile {
+            if let profile = targetProfile {
                 WalkScheduleEditorWrapper(
                     initialSchedule: profile.walkSchedule,
                     ageInMonths: profile.ageInMonths,
                     onSave: { updatedSchedule in
-                        profileStore.updateWalkSchedule(updatedSchedule)
+                        profileStore.updateWalkSchedule(updatedSchedule, for: profileId)
                     }
                 )
             }
@@ -65,7 +73,8 @@ struct SchedulePreferencesView: View {
         .sheet(isPresented: $showingNotificationSettings) {
             NotificationSettingsView(
                 profileStore: profileStore,
-                notificationService: notificationService
+                notificationService: notificationService,
+                profileId: profileId
             )
         }
     }
@@ -104,7 +113,8 @@ struct SchedulePreferencesView: View {
     NavigationStack {
         SchedulePreferencesView(
             profileStore: ProfileStore(),
-            notificationService: NotificationService()
+            notificationService: NotificationService(),
+            profileId: UUID()
         )
     }
 }

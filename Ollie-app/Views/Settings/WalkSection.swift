@@ -11,6 +11,7 @@ import OtisShared
 struct WalkSection: View {
     let profile: PuppyProfile
     let profileStore: ProfileStore
+    var profileId: UUID? = nil
     @Binding var showingWalkScheduleEdit: Bool
 
     var body: some View {

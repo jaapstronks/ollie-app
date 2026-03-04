@@ -488,6 +488,11 @@ class ProfileStore: ObservableObject {
         guard let id = activeProfileId else { return nil }
         return CDPuppyProfile.fetch(byId: id, in: viewContext)
     }
+
+    /// Get a profile by ID
+    func profile(for id: UUID) -> PuppyProfile? {
+        profiles.first { $0.id == id }
+    }
 }
 
 // MARK: - Notification Names

@@ -101,6 +101,21 @@ struct OnboardingView: View {
 
     var body: some View {
         VStack {
+            // Cancel button when adding a profile (user already has dogs)
+            if isAddingProfile {
+                HStack {
+                    Button {
+                        onComplete()
+                    } label: {
+                        Text(Strings.Common.cancel)
+                            .foregroundStyle(.secondary)
+                    }
+                    .padding(.leading)
+                    Spacer()
+                }
+                .padding(.top, 8)
+            }
+
             // Progress indicator (hidden on welcome step)
             if showProgress {
                 progressIndicator

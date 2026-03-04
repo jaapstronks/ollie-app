@@ -164,6 +164,12 @@ extension Strings {
         static func windowWeekIndicator(week: Int, total: Int) -> String {
             String(localized: "Week \(week) of \(total)", table: table)
         }
+        static func ageWeeksRemaining(remaining: Int) -> String {
+            String(localized: "\(remaining) weeks left", table: table)
+        }
+        static let startSocialization = String(localized: "Start socialization", table: table)
+        static let continueSocialization = String(localized: "Continue socialization", table: table)
+        static let socializationDescription = String(localized: "Build confidence with new experiences", table: table)
 
         // First visit
         static let firstVisitTitle = String(localized: "Let's see where you're starting", table: table)

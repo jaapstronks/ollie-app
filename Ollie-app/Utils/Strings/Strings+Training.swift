@@ -15,10 +15,13 @@ extension Strings {
         static let pottyProgress = String(localized: "Potty Progress", table: table)
         static let socialization = String(localized: "Socialization", table: table)
         static let skills = String(localized: "Skills", table: table)
+        static let skillsDescription = String(localized: "Teach essential commands", table: table)
         static let outdoorThisWeek = String(localized: "outdoor this week", table: table)
         static let dayStreak = String(localized: "day streak", table: table)
         static let topTriggers = String(localized: "Top triggers", table: table)
         static let allCategories = String(localized: "All categories", table: table)
+        static let startTraining = String(localized: "Start training", table: table)
+        static let continueTraining = String(localized: "Continue training", table: table)
 
         // Accessibility
         static let progressRingAccessibility = String(localized: "Training progress", table: table)
@@ -92,6 +95,7 @@ extension Strings {
         static let logSession = String(localized: "Log session", table: table)
         static let trainInApp = String(localized: "Train in-app", table: table)
         static let markMastered = String(localized: "Mark as mastered", table: table)
+        static let markMasteredHint = String(localized: "Mark this skill as mastered to unlock dependent skills", table: table)
         static let unmarkMastered = String(localized: "Unmark mastered", table: table)
         static let quickDone = String(localized: "Quick log", table: table)
         static let quickDoneHint = String(localized: "Instantly log a completed training session", table: table)

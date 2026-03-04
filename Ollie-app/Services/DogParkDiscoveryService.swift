@@ -142,6 +142,7 @@ class DogParkDiscoveryService: ObservableObject {
 
             discoveredSpots = uniqueSpots
             cache[cacheKey] = CacheEntry(spots: uniqueSpots, fetchedAt: Date())
+            saveCacheToDisk()
             logger.info("Discovered \(uniqueSpots.count) dog parks near (\(latitude), \(longitude)) (OSM: \(allSpots.count - govSpots.count), gov: \(govSpots.count))")
         } catch {
             lastError = error
@@ -182,6 +183,7 @@ class DogParkDiscoveryService: ObservableObject {
             )
             discoveredSpots = spots
             cache[cacheKey] = CacheEntry(spots: spots, fetchedAt: Date())
+            saveCacheToDisk()
             logger.info("Discovered \(spots.count) dog parks in bbox")
         } catch {
             lastError = error
@@ -207,12 +209,14 @@ class DogParkDiscoveryService: ObservableObject {
         }
         // Also remove the old-style cache key (for backwards compatibility)
         cache.removeValue(forKey: gridKey)
+        saveCacheToDisk()
         logger.debug("Cleared cache for grid \(gridKey)")
     }
 
     /// Clear all cached data
     func clearAllCache() {
         cache.removeAll()
+        saveCacheToDisk()
         logger.debug("Cleared all cache")
     }
 
@@ -287,6 +291,9 @@ class DogParkDiscoveryService: ObservableObject {
         // Deduplicate by proximity
         discoveredSpots = deduplicateSpots(allSpots)
         isLoading = false
+
+        // Persist cache to disk
+        saveCacheToDisk()
 
         logger.info("Discovered \(self.discoveredSpots.count) total spots across \(self.activePlaceTypes.count) place types")
     }
