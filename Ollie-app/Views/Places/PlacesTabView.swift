@@ -97,7 +97,8 @@ struct PlacesTabView: View {
             .sheet(item: $selectedDiscoveredSpot) { spot in
                 DiscoveredSpotDetailSheet(
                     spot: spot,
-                    spotStore: spotStore
+                    spotStore: spotStore,
+                    hideMapPreview: true  // Hide map when presented over map view
                 )
             }
             .sheet(item: $selectedContact) { contact in
@@ -323,6 +324,7 @@ struct PlacesTabView: View {
                     Annotation("", coordinate: marker.coordinate) {
                         SpotMapMarker(spot: spot)
                             .onTapGesture {
+                                mapViewModel.panForSheetPresentation(coordinate: marker.coordinate)
                                 selectedSpot = spot
                             }
                     }
@@ -331,6 +333,7 @@ struct PlacesTabView: View {
                     Annotation("", coordinate: marker.coordinate) {
                         ContactMapMarker(contact: contact)
                             .onTapGesture {
+                                mapViewModel.panForSheetPresentation(coordinate: marker.coordinate)
                                 selectedContact = contact
                             }
                     }
@@ -339,6 +342,7 @@ struct PlacesTabView: View {
                     Annotation("", coordinate: marker.coordinate) {
                         DiscoveredSpotMapMarker(spot: spot)
                             .onTapGesture {
+                                mapViewModel.panForSheetPresentation(coordinate: marker.coordinate)
                                 selectedDiscoveredSpot = spot
                             }
                     }
@@ -347,6 +351,7 @@ struct PlacesTabView: View {
                     Annotation("", coordinate: marker.coordinate) {
                         PhotoClusterMapMarker(cluster: cluster)
                             .onTapGesture {
+                                mapViewModel.panForSheetPresentation(coordinate: marker.coordinate)
                                 selectedCluster = cluster
                             }
                     }

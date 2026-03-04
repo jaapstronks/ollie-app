@@ -22,6 +22,9 @@ struct TrainTabView: View {
     @State private var showPottyGuide = false
     @State private var showCrateGuide = false
 
+    // First-visit tip tracking
+    @AppStorage("hasSeenTrainTip") private var hasSeenTrainTip = false
+
     /// Calculate crate nap percentage for guide entry card
     private var crateNapPercentage: Int {
         let recentNaps = eventStore.events
@@ -40,6 +43,18 @@ struct TrainTabView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 20) {
+                    // First-visit tip
+                    if !hasSeenTrainTip {
+                        FeatureTipCard(
+                            tip: .trainIntro,
+                            onDismiss: {
+                                withAnimation(.easeOut(duration: 0.2)) {
+                                    hasSeenTrainTip = true
+                                }
+                            }
+                        )
+                    }
+
                     // Section 1: Training Guides (Potty + Crate)
                     guidesSection
                         .animatedAppear(delay: 0)
@@ -125,18 +140,30 @@ private struct SkillsPreviewCard: View {
 
     @Environment(\.colorScheme) private var colorScheme
 
+    /// Determine if user has any training progress
+    private var hasStartedTraining: Bool {
+        trainingStore.masteryProgress.mastered > 0 ||
+        trainingStore.allSkillsWithStatus.contains { $0.sessionCount > 0 }
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            // Header (matching Potty Progress and Socialization style)
-            HStack {
-                Image(systemName: "graduationcap.fill")
-                    .foregroundStyle(Color.otisAccent)
-                    .accessibilityHidden(true)
-                Text(Strings.Train.skills)
-                    .font(.headline)
-                    .fontWeight(.semibold)
-                    .accessibilityAddTraits(.isHeader)
-                Spacer()
+            // Header with description
+            VStack(alignment: .leading, spacing: 4) {
+                HStack {
+                    Image(systemName: "graduationcap.fill")
+                        .foregroundStyle(Color.otisAccent)
+                        .accessibilityHidden(true)
+                    Text(Strings.Train.skills)
+                        .font(.headline)
+                        .fontWeight(.semibold)
+                        .accessibilityAddTraits(.isHeader)
+                    Spacer()
+                }
+
+                Text(Strings.Train.skillsDescription)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
             }
 
             if trainingStore.trainingPlan != nil {
@@ -168,58 +195,33 @@ private struct SkillsPreviewCard: View {
                     Spacer()
 
                     // Progress ring
-                    ZStack {
-                        let progress = trainingStore.masteryProgress
-                        let progressFraction = progress.total > 0 ? CGFloat(progress.mastered) / CGFloat(progress.total) : 0
-
-                        Circle()
-                            .stroke(Color.secondary.opacity(0.2), lineWidth: 4)
-                        Circle()
-                            .trim(from: 0, to: progressFraction)
-                            .stroke(Color.otisAccent, style: StrokeStyle(lineWidth: 4, lineCap: .round))
-                            .rotationEffect(.degrees(-90))
-
-                        Text("\(progress.mastered)/\(progress.total)")
-                            .font(.system(size: 9, weight: .bold))
-                            .foregroundStyle(.secondary)
-                    }
-                    .frame(width: 44, height: 44)
+                    ProgressRing(
+                        completed: trainingStore.masteryProgress.mastered,
+                        total: trainingStore.masteryProgress.total,
+                        size: .compact
+                    )
                     .accessibilityElement(children: .ignore)
                     .accessibilityLabel(Strings.Train.progressRingAccessibility)
                     .accessibilityValue(Strings.Train.progressValue(started: trainingStore.masteryProgress.mastered, total: trainingStore.masteryProgress.total))
                 }
 
-                // Unlocked skills chips
-                let unlockedSkills = trainingStore.unlockedSkills
-                if !unlockedSkills.isEmpty {
-                    Divider()
-
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: 8) {
-                            ForEach(unlockedSkills.prefix(5)) { skill in
-                                skillChip(skill)
-                            }
-                        }
-                    }
-                }
-
-                // "See all" link at the bottom (matching "All Categories" style)
+                // Actionable link at the bottom
                 Divider()
 
                 NavigationLink {
                     TrainingView(eventStore: eventStore)
                 } label: {
                     HStack(spacing: 12) {
-                        Image(systemName: "list.bullet")
+                        Image(systemName: hasStartedTraining ? "arrow.right.circle.fill" : "play.circle.fill")
                             .font(.title3)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(Color.otisAccent)
                             .frame(width: 40, height: 40)
                             .background(
                                 Circle()
-                                    .fill(Color.secondary.opacity(colorScheme == .dark ? 0.2 : 0.1))
+                                    .fill(Color.otisAccent.opacity(colorScheme == .dark ? 0.2 : 0.1))
                             )
 
-                        Text(Strings.Common.seeAll)
+                        Text(hasStartedTraining ? Strings.Train.continueTraining : Strings.Train.startTraining)
                             .font(.subheadline)
                             .fontWeight(.medium)
                             .foregroundStyle(Color.otisAccent)
@@ -249,48 +251,6 @@ private struct SkillsPreviewCard: View {
         }
     }
 
-    @ViewBuilder
-    private func skillChip(_ skill: Skill) -> some View {
-        let status = trainingStore.status(for: skill.id)
-
-        HStack(spacing: 4) {
-            Circle()
-                .fill(statusColor(for: status))
-                .frame(width: 6, height: 6)
-                .accessibilityHidden(true)
-
-            Text(skill.name)
-                .font(.caption)
-                .fontWeight(.medium)
-                .lineLimit(1)
-        }
-        .padding(.horizontal, 10)
-        .padding(.vertical, 6)
-        .background(
-            Capsule()
-                .fill(statusColor(for: status).opacity(colorScheme == .dark ? 0.2 : 0.1))
-        )
-        .accessibilityElement(children: .combine)
-        .accessibilityLabel(Strings.Train.skillAccessibility(name: skill.name, status: statusAccessibilityLabel(for: status)))
-    }
-
-    private func statusAccessibilityLabel(for status: SkillStatus) -> String {
-        switch status {
-        case .notStarted: return Strings.Train.skillNotStarted
-        case .started: return Strings.Train.skillStarted
-        case .practicing: return Strings.Train.skillPracticing
-        case .mastered: return Strings.Train.skillMastered
-        }
-    }
-
-    private func statusColor(for status: SkillStatus) -> Color {
-        switch status {
-        case .notStarted: return .secondary
-        case .started: return .otisAccent
-        case .practicing: return .otisWarning
-        case .mastered: return .otisSuccess
-        }
-    }
 }
 
 // MARK: - Preview

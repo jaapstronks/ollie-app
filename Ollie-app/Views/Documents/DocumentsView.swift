@@ -15,12 +15,15 @@ struct DocumentsView: View {
     @State private var documentToDelete: Document?
     @State private var showingDeleteConfirmation = false
 
+    // First-visit tip tracking
+    @AppStorage("hasSeenDocumentsTip") private var hasSeenDocumentsTip = false
+
     var body: some View {
         Group {
             if documentStore.documents.isEmpty {
-                emptyState
+                emptyStateWithTip
             } else {
-                documentList
+                documentListWithTip
             }
         }
         .navigationTitle(Strings.Documents.title)
@@ -53,30 +56,70 @@ struct DocumentsView: View {
         }
     }
 
-    // MARK: - Empty State
+    // MARK: - Empty State with Tip
 
     @ViewBuilder
-    private var emptyState: some View {
-        ContentUnavailableView {
-            Label(Strings.Documents.noDocuments, systemImage: "doc.text")
-        } description: {
-            Text(Strings.Documents.noDocumentsHint)
-        } actions: {
-            Button {
-                showingAddSheet = true
-            } label: {
-                Text(Strings.Documents.addDocument)
+    private var emptyStateWithTip: some View {
+        ScrollView {
+            VStack(spacing: 20) {
+                // First-visit tip
+                if !hasSeenDocumentsTip {
+                    FeatureTipCard(
+                        tip: .documentsIntro,
+                        onAction: {
+                            showingAddSheet = true
+                            hasSeenDocumentsTip = true
+                        },
+                        onDismiss: {
+                            withAnimation(.easeOut(duration: 0.2)) {
+                                hasSeenDocumentsTip = true
+                            }
+                        }
+                    )
+                    .padding(.horizontal)
+                    .padding(.top)
+                }
+
+                // Empty state
+                ContentUnavailableView {
+                    Label(Strings.Documents.noDocuments, systemImage: "doc.text")
+                } description: {
+                    Text(Strings.Documents.noDocumentsHint)
+                } actions: {
+                    Button {
+                        showingAddSheet = true
+                    } label: {
+                        Text(Strings.Documents.addDocument)
+                    }
+                    .buttonStyle(.borderedProminent)
+                }
+                .padding(.top, hasSeenDocumentsTip ? 60 : 0)
             }
-            .buttonStyle(.borderedProminent)
         }
     }
 
-    // MARK: - Document List
+    // MARK: - Document List with Tip
 
     @ViewBuilder
-    private var documentList: some View {
+    private var documentListWithTip: some View {
         List {
-            // Group by document type
+            // First-visit tip at top of list
+            if !hasSeenDocumentsTip {
+                Section {
+                    FeatureTipCard(
+                        tip: .documentsIntro,
+                        onDismiss: {
+                            withAnimation(.easeOut(duration: 0.2)) {
+                                hasSeenDocumentsTip = true
+                            }
+                        }
+                    )
+                    .listRowInsets(EdgeInsets())
+                    .listRowBackground(Color.clear)
+                }
+            }
+
+            // Document groups
             ForEach(groupedDocumentTypes, id: \.self) { type in
                 Section(type.displayName) {
                     ForEach(documentsForType(type)) { document in

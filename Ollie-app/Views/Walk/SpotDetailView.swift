@@ -30,6 +30,9 @@ struct SpotDetailView: View {
     @State private var selectedMediaSource: MediaPickerSource = .library
     @State private var spotPhotoImage: UIImage?
 
+    // First-visit tip tracking
+    @AppStorage("hasSeenSpotDetailTip") private var hasSeenSpotDetailTip = false
+
     /// Full initializer with photo support
     init(spotStore: SpotStore, spot: WalkSpot, momentsViewModel: MomentsViewModel, hideMapPreview: Bool = false) {
         self.spotStore = spotStore
@@ -70,6 +73,18 @@ struct SpotDetailView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
+                // First-visit tip
+                if !hasSeenSpotDetailTip {
+                    FeatureTipCard(
+                        tip: .spotDetail,
+                        onDismiss: {
+                            withAnimation(.easeOut(duration: 0.2)) {
+                                hasSeenSpotDetailTip = true
+                            }
+                        }
+                    )
+                }
+
                 // Spot photo (if available) or map preview
                 if let photo = spotPhotoImage {
                     ZStack(alignment: .bottomTrailing) {

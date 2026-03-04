@@ -21,6 +21,9 @@ struct CalendarGridView: View {
     @State private var selectedDate: Date = Date()
     @AppStorage("calendarGridMode") private var gridMode: CalendarGridMode = .list
 
+    // First-visit tip tracking
+    @AppStorage("hasSeenCalendarTip") private var hasSeenCalendarTip = false
+
     private let calendar = Calendar.current
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
@@ -30,6 +33,18 @@ struct CalendarGridView: View {
         ZStack(alignment: .bottom) {
             ScrollView {
                 VStack(spacing: 16) {
+                    // First-visit tip
+                    if !hasSeenCalendarTip {
+                        FeatureTipCard(
+                            tip: .scheduleCalendar,
+                            onDismiss: {
+                                withAnimation(.easeOut(duration: 0.2)) {
+                                    hasSeenCalendarTip = true
+                                }
+                            }
+                        )
+                    }
+
                     // Context header (age + socialization) - reactive to selected date in month view
                     if let profile = profile {
                         calendarContextHeader(profile: profile, forDate: gridMode == .month ? selectedDate : Date())

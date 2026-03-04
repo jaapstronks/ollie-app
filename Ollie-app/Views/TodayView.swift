@@ -25,6 +25,10 @@ struct TodayView: View {
     @State private var selectedPhotoEvent: PuppyEvent?
     @State private var showProfilePicker = false
     @State private var dismissedCrateNudgeDate: Date?
+
+    // First-visit tip tracking
+    @AppStorage("hasSeenTodayTip") private var hasSeenTodayTip = false
+
     @EnvironmentObject private var atmosphereProvider: AtmosphereProvider
     @EnvironmentObject private var foodRecallService: FoodRecallService
     @EnvironmentObject private var eventStore: EventStore
@@ -65,6 +69,18 @@ struct TodayView: View {
 
             ScrollView {
                 VStack(spacing: 16) {
+                    // First-visit tip (only show on today, not past dates)
+                    if viewModel.isShowingToday && !hasSeenTodayTip {
+                        FeatureTipCard(
+                            tip: .todayIntro,
+                            onDismiss: {
+                                withAnimation(.easeOut(duration: 0.2)) {
+                                    hasSeenTodayTip = true
+                                }
+                            }
+                        )
+                    }
+
                     // Status cards section (only for today)
                     if viewModel.isShowingToday {
                         statusCardsSection

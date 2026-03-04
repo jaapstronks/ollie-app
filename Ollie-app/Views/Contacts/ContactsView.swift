@@ -13,43 +13,23 @@ struct ContactsView: View {
     var appointmentStore: AppointmentStore?
 
     @State private var showingAddSheet = false
-    @State private var showingImportSheet = false
     @State private var contactToDelete: DogContact?
     @State private var showingDeleteConfirmation = false
+
+    // First-visit tip tracking
+    @AppStorage("hasSeenContactsTip") private var hasSeenContactsTip = false
 
     var body: some View {
         Group {
             if contactStore.contacts.isEmpty {
-                emptyState
+                emptyStateWithTip
             } else {
-                contactList
+                contactListWithTip
             }
         }
         .navigationTitle(Strings.Contacts.title)
-        .toolbar {
-            ToolbarItem(placement: .primaryAction) {
-                Menu {
-                    Button {
-                        showingAddSheet = true
-                    } label: {
-                        Label(Strings.Contacts.addContact, systemImage: "plus")
-                    }
-
-                    Button {
-                        showingImportSheet = true
-                    } label: {
-                        Label(Strings.Contacts.importFromContacts, systemImage: "person.crop.circle.badge.plus")
-                    }
-                } label: {
-                    Image(systemName: "plus")
-                }
-            }
-        }
         .sheet(isPresented: $showingAddSheet) {
             AddEditContactSheet(contactStore: contactStore)
-        }
-        .sheet(isPresented: $showingImportSheet) {
-            ContactImportSheet(contactStore: contactStore)
         }
         .alert(
             Strings.Contacts.deleteConfirmTitle,
@@ -68,30 +48,70 @@ struct ContactsView: View {
         }
     }
 
-    // MARK: - Empty State
+    // MARK: - Empty State with Tip
 
     @ViewBuilder
-    private var emptyState: some View {
-        ContentUnavailableView {
-            Label(Strings.Contacts.noContacts, systemImage: "person.crop.circle")
-        } description: {
-            Text(Strings.Contacts.noContactsHint)
-        } actions: {
-            Button {
-                showingAddSheet = true
-            } label: {
-                Text(Strings.Contacts.addContact)
+    private var emptyStateWithTip: some View {
+        ScrollView {
+            VStack(spacing: 20) {
+                // First-visit tip (shows once, then dismissed)
+                if !hasSeenContactsTip {
+                    FeatureTipCard(
+                        tip: .scheduleContacts,
+                        onAction: {
+                            showingAddSheet = true
+                            hasSeenContactsTip = true
+                        },
+                        onDismiss: {
+                            withAnimation(.easeOut(duration: 0.2)) {
+                                hasSeenContactsTip = true
+                            }
+                        }
+                    )
+                    .padding(.horizontal)
+                    .padding(.top)
+                }
+
+                // Empty state (always shows when empty)
+                ContentUnavailableView {
+                    Label(Strings.Contacts.noContacts, systemImage: "person.crop.circle")
+                } description: {
+                    Text(Strings.Contacts.noContactsHint)
+                } actions: {
+                    Button {
+                        showingAddSheet = true
+                    } label: {
+                        Text(Strings.Contacts.addContact)
+                    }
+                    .buttonStyle(.borderedProminent)
+                }
+                .padding(.top, hasSeenContactsTip ? 60 : 0)
             }
-            .buttonStyle(.borderedProminent)
         }
     }
 
-    // MARK: - Contact List
+    // MARK: - Contact List with Tip
 
     @ViewBuilder
-    private var contactList: some View {
+    private var contactListWithTip: some View {
         List {
-            // Group by contact type
+            // First-visit tip at top of list
+            if !hasSeenContactsTip {
+                Section {
+                    FeatureTipCard(
+                        tip: .scheduleContacts,
+                        onDismiss: {
+                            withAnimation(.easeOut(duration: 0.2)) {
+                                hasSeenContactsTip = true
+                            }
+                        }
+                    )
+                    .listRowInsets(EdgeInsets())
+                    .listRowBackground(Color.clear)
+                }
+            }
+
+            // Contact groups
             ForEach(groupedContactTypes, id: \.self) { type in
                 Section(type.displayName) {
                     ForEach(contactsForType(type)) { contact in

@@ -23,8 +23,14 @@ struct SkillProgressRow: View {
     let info: SkillProgressInfo
     let onTap: () -> Void
     var onQuickDone: (() -> Void)?
+    var onToggleMastered: (() -> Void)?
 
     @Environment(\.colorScheme) private var colorScheme
+
+    // Track if "Next up" badge should display (hide immediately when mastered)
+    private var showNextUpBadge: Bool {
+        info.isNextUp && info.status != .mastered
+    }
 
     var body: some View {
         Button(action: onTap) {
@@ -43,10 +49,12 @@ struct SkillProgressRow: View {
                     HStack(spacing: 6) {
                         Text(info.skill.name)
                             .font(.body)
-                            .fontWeight(info.isNextUp ? .semibold : .regular)
+                            .fontWeight(showNextUpBadge ? .semibold : .regular)
                             .foregroundStyle(info.isLocked ? .secondary : .primary)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.9)
 
-                        if info.isNextUp {
+                        if showNextUpBadge {
                             Text(Strings.Training.Progression.nextUp)
                                 .font(.caption2)
                                 .fontWeight(.semibold)
@@ -55,6 +63,7 @@ struct SkillProgressRow: View {
                                 .padding(.vertical, 2)
                                 .background(Color.otisAccent)
                                 .clipShape(Capsule())
+                                .fixedSize()
                         }
                     }
 
@@ -62,10 +71,10 @@ struct SkillProgressRow: View {
                     subtitleView
                 }
 
-                Spacer()
+                Spacer(minLength: 8)
 
-                // Session count badge (if any sessions)
-                if info.sessionCount > 0 && !info.isLocked {
+                // Session count badge (if any sessions and not mastered)
+                if info.sessionCount > 0 && !info.isLocked && info.status != .mastered {
                     Text("\(info.sessionCount)")
                         .font(.caption)
                         .fontWeight(.medium)
@@ -78,13 +87,15 @@ struct SkillProgressRow: View {
                         )
                 }
 
-                // Quick done button (only for unlocked skills)
-                if !info.isLocked, let onQuickDone = onQuickDone {
-                    QuickDoneButton(action: onQuickDone)
+                // Mastered checkmark (only for mastered skills)
+                if info.status == .mastered {
+                    Image(systemName: "checkmark.circle.fill")
+                        .font(.system(size: 22))
+                        .foregroundStyle(Color.otisSuccess)
                 }
 
-                // Chevron
-                if !info.isLocked {
+                // Chevron (only for non-mastered, unlocked skills)
+                if !info.isLocked && info.status != .mastered {
                     Image(systemName: "chevron.right")
                         .font(.caption)
                         .fontWeight(.semibold)
@@ -102,6 +113,27 @@ struct SkillProgressRow: View {
             RoundedRectangle(cornerRadius: 12, style: .continuous)
                 .fill(rowBackground)
         )
+        // Swipe actions for unlocked skills
+        .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+            if !info.isLocked, let onQuickDone = onQuickDone {
+                Button {
+                    onQuickDone()
+                } label: {
+                    Label(Strings.Training.quickDone, systemImage: "checkmark")
+                }
+                .tint(.otisAccent)
+            }
+        }
+        .swipeActions(edge: .leading, allowsFullSwipe: true) {
+            if !info.isLocked, info.status != .mastered, let onToggleMastered = onToggleMastered {
+                Button {
+                    onToggleMastered()
+                } label: {
+                    Label(Strings.Training.markMastered, systemImage: "star.fill")
+                }
+                .tint(Color.otisSuccess)
+            }
+        }
     }
 
     // MARK: - Status Indicator
@@ -120,34 +152,15 @@ struct SkillProgressRow: View {
     }
 
     private var statusIcon: String {
-        if info.isLocked {
-            return "lock.fill"
-        }
-        switch info.status {
-        case .notStarted: return "circle"
-        case .started: return "play.fill"
-        case .practicing: return "arrow.clockwise"
-        case .mastered: return "checkmark"
-        }
+        info.isLocked ? "lock.fill" : info.status.statusIndicatorIcon
     }
 
     private var statusColor: Color {
-        if info.isLocked {
-            return .secondary
-        }
-        switch info.status {
-        case .notStarted: return .secondary
-        case .started: return .otisInfo
-        case .practicing: return .otisWarning
-        case .mastered: return .otisSuccess
-        }
+        info.isLocked ? .secondary : info.status.color
     }
 
     private var iconColor: Color {
-        switch info.status {
-        case .mastered: return .otisSuccess
-        default: return .otisAccent
-        }
+        info.status.skillIconColor
     }
 
     // MARK: - Subtitle View
@@ -202,48 +215,6 @@ struct SkillProgressRow: View {
     }
 }
 
-// MARK: - Quick Done Button
-
-/// Compact button for instantly logging a training session
-private struct QuickDoneButton: View {
-    let action: () -> Void
-
-    @State private var showCheckmark = false
-    @Environment(\.colorScheme) private var colorScheme
-
-    var body: some View {
-        Button {
-            // Trigger the action
-            action()
-
-            // Show checkmark animation
-            withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
-                showCheckmark = true
-            }
-
-            // Reset after animation
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                withAnimation(.easeOut(duration: 0.2)) {
-                    showCheckmark = false
-                }
-            }
-        } label: {
-            ZStack {
-                Circle()
-                    .fill(showCheckmark ? Color.otisSuccess : (colorScheme == .dark ? Color.white.opacity(0.1) : Color.black.opacity(0.06)))
-                    .frame(width: 32, height: 32)
-
-                Image(systemName: showCheckmark ? "checkmark" : "plus")
-                    .font(.system(size: 14, weight: .semibold))
-                    .foregroundStyle(showCheckmark ? .white : .otisAccent)
-            }
-            .scaleEffect(showCheckmark ? 1.1 : 1.0)
-        }
-        .buttonStyle(.plain)
-        .accessibilityLabel(Strings.Training.quickDone)
-        .accessibilityHint(Strings.Training.quickDoneHint)
-    }
-}
 
 // MARK: - Preview
 
@@ -286,7 +257,8 @@ private struct QuickDoneButton: View {
                     missingRequirements: []
                 ),
                 onTap: {},
-                onQuickDone: { print("Quick done!") }
+                onQuickDone: { print("Quick done!") },
+                onToggleMastered: { print("Marked as mastered!") }
             )
 
             SkillProgressRow(

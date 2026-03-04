@@ -27,10 +27,25 @@ struct HealthTabView: View {
     @State private var showAllMilestones = false
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
+    // First-visit tip tracking
+    @AppStorage("hasSeenHealthTip") private var hasSeenHealthTip = false
+
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 20) {
+                    // First-visit tip
+                    if !hasSeenHealthTip {
+                        FeatureTipCard(
+                            tip: .healthIntro,
+                            onDismiss: {
+                                withAnimation(.easeOut(duration: 0.2)) {
+                                    hasSeenHealthTip = true
+                                }
+                            }
+                        )
+                    }
+
                     // Development phase card (developmental stage + active periods)
                     if let profile = profileStore.profile {
                         let activePeriods = milestoneStore.activeDevelopmentalPeriods(birthDate: profile.birthDate)
