@@ -36,6 +36,9 @@ struct PlacesTabView: View {
     @State private var selectedContact: DogContact?
     @State private var selectedCluster: PhotoCluster?
     @State private var selectedPhotoEvent: PuppyEvent?
+    @State private var hasBootstrappedExplore = false
+    @State private var hasDiscoveredNearbyPlaces = false
+    @State private var discoveryRefreshTask: Task<Void, Never>?
     @Namespace private var heroNamespace
 
     init(
@@ -152,18 +155,18 @@ struct PlacesTabView: View {
                 )
             }
         }
-        .onAppear {
-            momentsViewModel.loadEventsWithMedia()
-            mapViewModel.fitMapToMarkers()
-        }
-        .task {
-            // Discover places near user's location or default location
-            let coords = locationManager.currentCoordinates ?? (51.9225, 4.4792) // Rotterdam fallback
-            await mapViewModel.discoverPlacesNearby(latitude: coords.0, longitude: coords.1)
+        .task(id: viewMode) {
+            await bootstrapExploreIfNeeded()
+            if viewMode == .map {
+                await discoverNearbyPlacesIfNeeded()
+            }
         }
         .onChange(of: mapViewModel.selectedDiscoveryTypes) { _, _ in
-            // Refresh discovery when selected types change
-            Task {
+            // Refresh discovery when selected types change, debounced to avoid churn.
+            discoveryRefreshTask?.cancel()
+            discoveryRefreshTask = Task {
+                try? await Task.sleep(nanoseconds: 250_000_000)
+                guard !Task.isCancelled else { return }
                 let coords = locationManager.currentCoordinates ?? (51.9225, 4.4792)
                 await mapViewModel.refreshDiscovery(latitude: coords.0, longitude: coords.1)
             }
@@ -433,6 +436,33 @@ struct PlacesTabView: View {
                 FABLabel(icon: "camera.fill")
             }
         }
+    }
+
+    // MARK: - Deferred Startup Work
+
+    private func bootstrapExploreIfNeeded() async {
+        guard !hasBootstrappedExplore else { return }
+        hasBootstrappedExplore = true
+
+        // Let tab transition finish before starting heavier setup work.
+        await Task.yield()
+        try? await Task.sleep(nanoseconds: 180_000_000)
+
+        guard !Task.isCancelled else { return }
+        momentsViewModel.loadEventsWithMedia()
+        mapViewModel.fitMapToMarkers()
+    }
+
+    private func discoverNearbyPlacesIfNeeded() async {
+        guard !hasDiscoveredNearbyPlaces else { return }
+        hasDiscoveredNearbyPlaces = true
+
+        // Keep network-bound discovery off the first animation frames.
+        try? await Task.sleep(nanoseconds: 150_000_000)
+        guard !Task.isCancelled else { return }
+
+        let coords = locationManager.currentCoordinates ?? (51.9225, 4.4792)
+        await mapViewModel.discoverPlacesNearby(latitude: coords.0, longitude: coords.1)
     }
 }
 
