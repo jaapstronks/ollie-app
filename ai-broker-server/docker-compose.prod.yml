@@ -1,0 +1,33 @@
+services:
+  ai-broker:
+    build: .
+    container_name: ollie-ai-broker
+    restart: unless-stopped
+    env_file:
+      - .env
+    expose:
+      - "8787"
+    volumes:
+      - ./logs:/var/log/ollie-ai-broker
+
+  caddy:
+    image: caddy:2
+    container_name: ollie-ai-broker-caddy
+    restart: unless-stopped
+    depends_on:
+      - ai-broker
+    environment:
+      - BROKER_DOMAIN=${BROKER_DOMAIN}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+
+volumes:
+  # TLS certificates + ACME account
+  caddy_data:
+  # Caddy runtime config/cache
+  caddy_config:

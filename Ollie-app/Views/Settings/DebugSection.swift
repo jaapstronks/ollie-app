@@ -19,6 +19,15 @@ struct DebugSection: View {
     @State private var isResetting = false
     @State private var isImporting = false
     @State private var importResult: String?
+    @State private var isTestingBroker = false
+    @State private var brokerTestResult: String?
+
+    // AI broker debug config (stored in UserDefaults via AINudgeRollout keys)
+    @AppStorage("ai.nudges.brokerBaseURL") private var aiBrokerBaseURL = ""
+    @AppStorage("ai.nudges.brokerApiKey") private var aiBrokerApiKey = ""
+    @AppStorage("ai.nudges.rolloutPercentage") private var aiRolloutPercentage = 100
+    @AppStorage("ai.nudges.shadowMode") private var aiShadowMode = true
+    @AppStorage("ai.nudges.enabled") private var aiEnabled = true
 
     /// Available debug subscription states
     private enum DebugSubscriptionState: String, CaseIterable, Identifiable {
@@ -92,6 +101,69 @@ struct DebugSection: View {
             Label("Debug", systemImage: "hammer.fill")
         } footer: {
             Text("Debug overrides are only available in development builds and persist across app launches.")
+        }
+
+        // AI Broker Section
+        Section {
+            Toggle("AI Nudges Enabled", isOn: $aiEnabled)
+            Toggle("AI Shadow Mode", isOn: $aiShadowMode)
+
+            HStack {
+                Text("Rollout %")
+                Spacer()
+                Stepper(
+                    value: $aiRolloutPercentage,
+                    in: 0...100,
+                    step: 5
+                ) {
+                    Text("\(aiRolloutPercentage)%")
+                        .foregroundStyle(.secondary)
+                }
+            }
+
+            VStack(alignment: .leading, spacing: 6) {
+                Text("Broker Base URL")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                TextField("https://ai.otis.pet", text: $aiBrokerBaseURL)
+                    .textInputAutocapitalization(.never)
+                    .autocorrectionDisabled()
+                    .keyboardType(.URL)
+                    .textFieldStyle(.roundedBorder)
+            }
+
+            VStack(alignment: .leading, spacing: 6) {
+                Text("Broker API Key")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                SecureField("Broker key", text: $aiBrokerApiKey)
+                    .textInputAutocapitalization(.never)
+                    .autocorrectionDisabled()
+                    .textFieldStyle(.roundedBorder)
+            }
+
+            Button {
+                Task { await testBrokerHealth() }
+            } label: {
+                HStack {
+                    Label("Test Broker /health", systemImage: "network")
+                    if isTestingBroker {
+                        Spacer()
+                        ProgressView()
+                    }
+                }
+            }
+            .disabled(isTestingBroker || aiBrokerBaseURL.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+
+            if let brokerTestResult {
+                Text(brokerTestResult)
+                    .font(.caption)
+                    .foregroundStyle(brokerTestResult.hasPrefix("✓") ? .green : .red)
+            }
+        } header: {
+            Label("AI Broker", systemImage: "cpu")
+        } footer: {
+            Text("Configure broker URL/key and rollout locally for debug testing. Production should use remote config and HTTPS.")
         }
 
         // Data Management Section
@@ -247,6 +319,39 @@ struct DebugSection: View {
         }
 
         isImporting = false
+    }
+
+    // MARK: - AI Broker Test
+
+    private func testBrokerHealth() async {
+        isTestingBroker = true
+        brokerTestResult = nil
+        defer { isTestingBroker = false }
+
+        let raw = aiBrokerBaseURL.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard var url = URL(string: raw) else {
+            brokerTestResult = "X Invalid broker URL"
+            return
+        }
+
+        url.append(path: "health")
+
+        do {
+            let (data, response) = try await URLSession.shared.data(from: url)
+            guard let http = response as? HTTPURLResponse else {
+                brokerTestResult = "X Invalid response"
+                return
+            }
+
+            if (200...299).contains(http.statusCode) {
+                let body = String(data: data, encoding: .utf8) ?? ""
+                brokerTestResult = "✓ Broker reachable: \(body)"
+            } else {
+                brokerTestResult = "X Broker returned \(http.statusCode)"
+            }
+        } catch {
+            brokerTestResult = "X \(error.localizedDescription)"
+        }
     }
 }
 

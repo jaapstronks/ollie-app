@@ -28,7 +28,7 @@ npm install
 npm run dev
 ```
 
-## Docker (recommended on Scaleway VPS)
+## Docker (recommended on Hetzner VPS)
 
 ```bash
 cd ai-broker-server
@@ -59,10 +59,33 @@ In the iOS app runtime config (`UserDefaults` or remote config), set:
 
 The app already sends this key in `X-API-Key`.
 
-## Reverse proxy and TLS
+## Production HTTPS (Caddy + Let's Encrypt)
 
-You should put Nginx/Caddy in front of this container and terminate TLS there.
-Then expose only `443` publicly.
+This repo includes:
+
+- `docker-compose.prod.yml` (adds Caddy)
+- `Caddyfile` (reverse proxy + automatic TLS)
+
+Use it like this on your VPS:
+
+```bash
+cd ai-broker-server
+cp .env.example .env
+# Fill .env values, including BROKER_DOMAIN and API keys
+docker compose -f docker-compose.prod.yml up -d --build
+```
+
+Then verify:
+
+```bash
+curl https://$BROKER_DOMAIN/health
+```
+
+Notes:
+
+- DNS A record for `BROKER_DOMAIN` must point to your VPS public IP.
+- Open ports `80` and `443` in your Hetzner firewall/security group.
+- Keep `BROKER_API_KEY` secret and rotate it periodically.
 
 ## Logs and cost estimation
 
