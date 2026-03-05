@@ -321,33 +321,101 @@ public struct EarlyMilestoneDefinition: Identifiable, Codable, Sendable {
 
 // MARK: - Socialization Window Status
 
-/// Status of the socialization window based on puppy age
+/// Status of the socialization window based on puppy age.
+/// This is the SINGLE SOURCE OF TRUTH for all window-related calculations.
+///
+/// The socialization window has distinct phases based on developmental science:
+///
+/// - **Secondary socialization (weeks 3-12)**: Peak receptivity period
+///   - Brain and learning capacity mature around 8 weeks
+///   - Maximum openness to new experiences
+///   - Puppies most willing to approach strangers
+///
+/// - **Fear window closing (weeks 12-16)**: Transition period
+///   - Natural survival mechanism: "If I haven't seen it before, I should be afraid"
+///   - Puppies become increasingly hesitant with new experiences
+///   - Socialization still possible but requires more patience
+///
+/// - **Window closed (16+ weeks)**: Post-window period
+///   - Adaptation to new experiences becomes significantly harder
+///   - Continued exposure still valuable but different approach needed
+///
+/// Note: There are two related tracking concepts:
+/// - **Developmental window** (weeks 3-16): Full critical period
+/// - **Active tracking window** (weeks 8-16): When puppy is typically home
+///   (See `SocializationWindow` in WeeklyProgress.swift for the tracking window)
 public enum SocializationWindowStatus: Sendable {
+    /// Secondary socialization: Maximum receptivity (weeks 3-12)
     case peak
-    case open
+    /// Fear window closing: Still possible but increasingly hesitant (weeks 12-16)
     case closing
+    /// Recently closed: Encourage continued exposure (weeks 16-20)
     case justClosed
+    /// Well past window: Different approach needed (20+ weeks)
     case closed
+
+    // MARK: - Constants
+
+    /// First week of the critical socialization window (developmental perspective)
+    public static let windowStartWeek = 3
+
+    /// Last week of the critical socialization window
+    public static let windowEndWeek = 16
+
+    /// End of peak receptivity / start of fear window closing
+    public static let peakEndWeek = 12
+
+    // MARK: - Initialization
 
     public init(ageInWeeks: Int) {
         switch ageInWeeks {
-        case ..<10:
+        case ..<Self.peakEndWeek:
             self = .peak
-        case 10..<14:
-            self = .open
-        case 14..<16:
+        case Self.peakEndWeek..<Self.windowEndWeek:
             self = .closing
-        case 16..<20:
+        case Self.windowEndWeek..<20:
             self = .justClosed
         default:
             self = .closed
         }
     }
 
+    // MARK: - Window State Properties
+
+    /// Whether the socialization window is currently open (peak or closing)
+    public var isOpen: Bool {
+        switch self {
+        case .peak, .closing: return true
+        case .justClosed, .closed: return false
+        }
+    }
+
+    /// Whether we're in the peak receptivity period (before week 12)
+    public var isPeak: Bool {
+        self == .peak
+    }
+
+    /// Weeks remaining in the window for a given age
+    public static func weeksRemaining(ageInWeeks: Int) -> Int? {
+        guard ageInWeeks >= windowStartWeek && ageInWeeks <= windowEndWeek else {
+            return nil
+        }
+        return windowEndWeek - ageInWeeks
+    }
+
+    /// Progress through the window (0.0 = start, 1.0 = end) for a given age
+    public static func progressPercentage(ageInWeeks: Int) -> Double {
+        if ageInWeeks < windowStartWeek { return 0.0 }
+        if ageInWeeks > windowEndWeek { return 1.0 }
+        let windowDuration = windowEndWeek - windowStartWeek
+        return Double(ageInWeeks - windowStartWeek) / Double(windowDuration)
+    }
+
+    // MARK: - Display Properties
+
     public var color: String {
         switch self {
         case .peak: return "green"
-        case .open: return "blue"
         case .closing: return "orange"
         case .justClosed: return "yellow"
         case .closed: return "gray"
@@ -358,8 +426,6 @@ public enum SocializationWindowStatus: Sendable {
         switch self {
         case .peak:
             return Strings.Socialization.windowPeak
-        case .open:
-            return Strings.Socialization.windowOpen
         case .closing:
             return Strings.Socialization.windowClosing
         case .justClosed:

@@ -38,6 +38,7 @@ extension Strings {
         static let featureCalendarIntegration = String(localized: "Calendar Integration", table: table)
         static let featureCustomMilestones = String(localized: "Custom Milestones", table: table)
         static let featureMilestoneNotes = String(localized: "Milestone Notes & Photos", table: table)
+        static let featureAINudges = String(localized: "Smart AI Nudges", table: table)
 
         // Feature descriptions
         static let featureMultiPuppyDesc = String(localized: "Track up to 5 dogs with separate profiles and data", table: table)
@@ -53,6 +54,7 @@ extension Strings {
         static let featureCalendarIntegrationDesc = String(localized: "Add milestones to your calendar with reminders", table: table)
         static let featureCustomMilestonesDesc = String(localized: "Create your own custom milestones and events", table: table)
         static let featureMilestoneNotesDesc = String(localized: "Add notes and photos when completing milestones", table: table)
+        static let featureAINudgesDesc = String(localized: "Subtle AI tuning for daily status text, walk suggestion order, and reminder timing", table: table)
 
         // Pricing
         static let yearly = String(localized: "Yearly", table: table)

@@ -68,8 +68,8 @@ struct DebugSection: View {
     var body: some View {
         Section {
             Picker(selection: Binding(
-                get: { DebugSubscriptionState.from(subscriptionManager.debugOverrideStatus) },
-                set: { subscriptionManager.debugOverrideStatus = $0.toOtisPlusStatus() }
+                get: { DebugSubscriptionState.from(subscriptionManager.betaOverrideStatus) },
+                set: { subscriptionManager.betaOverrideStatus = $0.toOtisPlusStatus() }
             )) {
                 ForEach(DebugSubscriptionState.allCases) { state in
                     Label(state.rawValue, systemImage: state.icon)

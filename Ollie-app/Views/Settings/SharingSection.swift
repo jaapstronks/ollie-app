@@ -13,13 +13,19 @@ import SwiftUI
 /// CloudKit sharing section for settings
 struct SharingSection: View {
     @ObservedObject var cloudKit: CloudKitService
+    @ObservedObject private var shareManager: CloudKitShareManager
     @EnvironmentObject var subscriptionManager: SubscriptionManager
 
-    @State private var activeShare: CKShare?
+    @State private var activeShareSheet: ShareSheetItem?
     @State private var isPreparingShare = false
     @State private var shareError: String?
     @State private var showStopSharingConfirm = false
     @State private var showOtisPlusSheet = false
+
+    init(cloudKit: CloudKitService) {
+        self.cloudKit = cloudKit
+        _shareManager = ObservedObject(wrappedValue: cloudKit.shareManager)
+    }
 
     var body: some View {
         Section {
@@ -31,20 +37,17 @@ struct SharingSection: View {
                 Text(Strings.CloudSharing.sharingDescription)
             }
         }
-        .sheet(isPresented: Binding(
-            get: { activeShare != nil },
-            set: { if !$0 { activeShare = nil } }
-        )) {
-            if let share = activeShare {
-                CloudSharingView(
-                    share: share,
-                    container: CKContainer(identifier: "iCloud.nl.jaapstronks.Otis"),
-                    onDismiss: {
-                        activeShare = nil
-                        Task { await cloudKit.updateShareState() }
-                    }
-                )
-            }
+        .navigationDestination(item: $activeShareSheet) { item in
+            CloudSharingView(
+                share: item.share,
+                container: CKContainer(identifier: "iCloud.nl.jaapstronks.Otis"),
+                onDismiss: {
+                    activeShareSheet = nil
+                    Task { await cloudKit.updateShareState() }
+                }
+            )
+            .navigationTitle(Strings.CloudSharing.manageSharing)
+            .navigationBarTitleDisplayMode(.inline)
         }
         .alert(Strings.CloudSharing.stopSharing, isPresented: $showStopSharingConfirm) {
             Button(Strings.Common.cancel, role: .cancel) {}
@@ -79,8 +82,18 @@ struct SharingSection: View {
             iCloudUnavailableRow
         } else if cloudKit.isParticipant {
             participantRow
-        } else if cloudKit.isShared {
-            sharedContentRows
+        } else if shareManager.isShared {
+            sharedStatusRow
+            manageShareButton
+
+            // Show invite button or upsell based on partner limit
+            if subscriptionManager.canAddMorePartners(currentPartnerCount: currentPartnerCount) {
+                inviteAnotherButton
+            } else {
+                partnerLimitUpsell
+            }
+
+            stopSharingButton
         } else {
             // Gate sharing for free users - Otis+ required to share
             if subscriptionManager.hasAccess(to: .unlimitedPartnerSharing) {
@@ -122,8 +135,7 @@ struct SharingSection: View {
         }
     }
 
-    @ViewBuilder
-    private var sharedContentRows: some View {
+    private var sharedStatusRow: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
                 Image(systemName: "checkmark.circle.fill")
@@ -132,12 +144,12 @@ struct SharingSection: View {
                     .font(.subheadline.weight(.medium))
             }
 
-            if cloudKit.shareParticipants.isEmpty {
+            if shareManager.shareParticipants.isEmpty {
                 Text(Strings.CloudSharing.noParticipants)
                     .font(.caption)
                     .foregroundStyle(.secondary)
             } else {
-                ForEach(cloudKit.shareParticipants) { participant in
+                ForEach(shareManager.shareParticipants) { participant in
                     HStack {
                         Image(systemName: "person.fill")
                             .font(.caption)
@@ -152,27 +164,17 @@ struct SharingSection: View {
                 }
             }
         }
-
-        manageShareButton
-
-        // Show invite button or upsell based on partner limit
-        if subscriptionManager.canAddMorePartners(currentPartnerCount: currentPartnerCount) {
-            inviteAnotherButton
-        } else {
-            partnerLimitUpsell
-        }
-
-        stopSharingButton
     }
 
     /// Count of current non-owner participants (accepted + pending)
     private var currentPartnerCount: Int {
-        cloudKit.shareParticipants.count
+        shareManager.shareParticipants.count
     }
 
     /// Upsell row shown when free user tries to share (sharing is Otis+ only)
     private var sharingLockedUpsell: some View {
         Button {
+            Analytics.trackFeatureGated(feature: "partner_sharing", action: "upsell_tapped")
             showOtisPlusSheet = true
         } label: {
             HStack(spacing: 12) {
@@ -210,6 +212,7 @@ struct SharingSection: View {
     /// Upsell row shown when free user wants to add more partners
     private var partnerLimitUpsell: some View {
         Button {
+            Analytics.trackFeatureGated(feature: "unlimited_partners", action: "upsell_tapped")
             showOtisPlusSheet = true
         } label: {
             HStack(spacing: 12) {
@@ -318,7 +321,7 @@ struct SharingSection: View {
                 using: PersistenceController.shared.container
             )
 
-            activeShare = share
+            activeShareSheet = ShareSheetItem(share: share)
         } catch {
             shareError = error.localizedDescription
         }
@@ -339,8 +342,8 @@ struct SharingSection: View {
             )
         }
 
-        if let share = cloudKit.currentShare {
-            activeShare = share
+        if let share = shareManager.currentShare {
+            activeShareSheet = ShareSheetItem(share: share)
         } else {
             shareError = Strings.CloudSharing.couldNotLoadShare
         }
@@ -352,10 +355,32 @@ struct SharingSection: View {
         shareError = nil
 
         do {
+            if shareManager.currentShare == nil {
+                let context = PersistenceController.shared.viewContext
+                if let cdProfile = CDPuppyProfile.fetchProfile(in: context) {
+                    await cloudKit.refreshShareState(
+                        for: cdProfile,
+                        using: PersistenceController.shared.container
+                    )
+                }
+            }
             try await cloudKit.stopSharing()
             await cloudKit.updateShareState()
         } catch {
             shareError = error.localizedDescription
         }
+    }
+}
+
+private struct ShareSheetItem: Identifiable, Hashable {
+    let id = UUID()
+    let share: CKShare
+
+    static func == (lhs: ShareSheetItem, rhs: ShareSheetItem) -> Bool {
+        lhs.id == rhs.id
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
     }
 }

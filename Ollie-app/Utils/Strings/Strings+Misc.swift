@@ -145,13 +145,11 @@ extension Strings {
         nonisolated static let invalidURL = String(localized: "Invalid URL", table: "Localizable")
 
         // Import errors (nonisolated for use in LocalizedError conformance - hardcoded table name)
-        nonisolated static let apiError = String(localized: "Could not reach GitHub API", table: "Localizable")
-        nonisolated static let invalidResponse = String(localized: "Invalid response from GitHub", table: "Localizable")
-        nonisolated static let downloadFailed = String(localized: "Download failed", table: "Localizable")
+        nonisolated static let invalidFile = String(localized: "Invalid file format", table: "Localizable")
         nonisolated static let invalidContent = String(localized: "Invalid file content", table: "Localizable")
-        nonisolated static let untrustedURL = String(localized: "Untrusted download URL", table: "Localizable")
         nonisolated static let contentTooLarge = String(localized: "File too large", table: "Localizable")
         nonisolated static let maliciousContent = String(localized: "Suspicious content detected", table: "Localizable")
+        nonisolated static let noProfileFound = String(localized: "No profile found. Please create a profile first.", table: "Localizable")
 
         // Other errors
         nonisolated static let couldNotProcessData = String(localized: "Could not process data", table: "Localizable")
@@ -213,5 +211,24 @@ extension Strings {
                 return String(localized: "\(count) poops today", table: table)
             }
         }
+    }
+
+    // MARK: - AI Nudges
+    enum AINudges {
+        static let recommendationTitle = String(localized: "Quick tweak suggestion", table: table)
+        static let reduceReminders = String(localized: "Reduce reminders", table: table)
+        static let keepCurrent = String(localized: "Keep current", table: table)
+        static let settingsUpdated = String(localized: "Reminder settings updated", table: table)
+        static let recommendationDismissed = String(localized: "Got it, we'll keep current reminders", table: table)
+
+        static func recommendationBody(category: String) -> String {
+            String(localized: "You've logged fewer \(category) entries lately. Want us to reduce those reminders for now?", table: table)
+        }
+
+        static let categoryPotty = String(localized: "potty", table: table)
+        static let categoryWalk = String(localized: "walk", table: table)
+        static let categoryMeal = String(localized: "meal", table: table)
+        static let categoryTraining = String(localized: "training", table: table)
+        static let categorySocialization = String(localized: "socialization", table: table)
     }
 }

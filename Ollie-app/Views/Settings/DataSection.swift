@@ -11,8 +11,7 @@ import OtisShared
 struct DataSection: View {
     @ObservedObject var dataImporter: DataImporter
     @ObservedObject var eventStore: EventStore
-    @Binding var showingImportConfirm: Bool
-    @Binding var overwriteExisting: Bool
+    @Binding var showingImportSheet: Bool
 
     var body: some View {
         Section(Strings.Settings.data) {
@@ -24,27 +23,23 @@ struct DataSection: View {
                 }
             } else {
                 Button {
-                    showingImportConfirm = true
+                    showingImportSheet = true
                 } label: {
-                    Label(Strings.Settings.importFromGitHub, systemImage: "arrow.down.circle")
+                    Label(Strings.Settings.importData, systemImage: "square.and.arrow.down")
                 }
 
                 if let result = dataImporter.lastResult {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text(Strings.Settings.lastImport(date: ""))
+                        Text(Strings.DataImport.lastImportResult)
                             .font(.caption)
                             .foregroundColor(.secondary)
-                        Text(Strings.Settings.importStats(days: result.filesImported, events: result.eventsImported))
+                        Text(Strings.DataImport.importSummary(
+                            components: result.componentsImported,
+                            items: result.itemsImported
+                        ))
                             .font(.caption)
-                        if result.skipped > 0 {
-                            Text(Strings.Settings.skippedExisting(result.skipped))
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                        }
                     }
                 }
-
-                Toggle(Strings.Settings.overwriteExisting, isOn: $overwriteExisting)
             }
         }
     }

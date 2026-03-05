@@ -186,6 +186,18 @@ struct MilestoneCompletionSheet: View {
             }
         }
         .presentationDetents([.large])
+        .onAppear {
+            // Track feature gating if premium features are locked
+            if !subscriptionManager.hasAccess(to: .milestoneNotes) {
+                Analytics.trackFeatureGated(feature: "milestone_notes", action: "shown_locked")
+            }
+            if !subscriptionManager.hasAccess(to: .photoVideoAttachments) {
+                Analytics.trackFeatureGated(feature: "photo_attachments", action: "shown_locked")
+            }
+            if !subscriptionManager.hasAccess(to: .calendarIntegration) {
+                Analytics.trackFeatureGated(feature: "calendar_integration", action: "shown_locked")
+            }
+        }
         // Photo source picker (camera vs library)
         .confirmationDialog(Strings.Health.addPhoto, isPresented: $showPhotoSourcePicker) {
             Button {

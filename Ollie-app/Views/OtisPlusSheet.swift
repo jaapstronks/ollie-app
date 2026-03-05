@@ -55,6 +55,9 @@ struct OtisPlusSheet: View {
         .task {
             await subscriptionManager.loadProducts()
         }
+        .onAppear {
+            Analytics.track(.premiumUpsellShown)
+        }
         .alert(
             Strings.OtisPlus.purchaseErrorTitle,
             isPresented: .init(
@@ -163,6 +166,10 @@ struct OtisPlusSheet: View {
                     isTrialEligible: subscriptionManager.isTrialEligible,
                     isPurchasing: subscriptionManager.isPurchasing,
                     onPurchase: {
+                        Analytics.track(.premiumUpsellTapped, properties: [
+                            "product": "yearly",
+                            "trial_eligible": subscriptionManager.isTrialEligible
+                        ])
                         Task {
                             do {
                                 try await subscriptionManager.purchase(yearly)
@@ -186,6 +193,10 @@ struct OtisPlusSheet: View {
                     isTrialEligible: subscriptionManager.isTrialEligible,
                     isPurchasing: subscriptionManager.isPurchasing,
                     onPurchase: {
+                        Analytics.track(.premiumUpsellTapped, properties: [
+                            "product": "monthly",
+                            "trial_eligible": subscriptionManager.isTrialEligible
+                        ])
                         Task {
                             do {
                                 try await subscriptionManager.purchase(monthly)

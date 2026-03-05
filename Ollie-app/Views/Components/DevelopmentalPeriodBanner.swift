@@ -130,18 +130,13 @@ struct DevelopmentalPeriodBanner: View {
         // Only show weeks remaining for socialization window
         guard milestone.labelKey.contains("socialization") else { return nil }
 
+        // Use SocializationWindowStatus as single source of truth
         let calendar = Calendar.current
         let ageInWeeks = calendar.dateComponents([.weekOfYear], from: birthDate, to: Date()).weekOfYear ?? 0
+        let status = SocializationWindowStatus(ageInWeeks: ageInWeeks)
 
-        // Socialization window ends at 16 weeks
-        let socializationEndWeek = 16
-        let remaining = socializationEndWeek - ageInWeeks
-
-        // Only show if positive and reasonable
-        if remaining > 0 && remaining <= 12 {
-            return remaining
-        }
-        return nil
+        guard status.isOpen else { return nil }
+        return SocializationWindowStatus.weeksRemaining(ageInWeeks: ageInWeeks)
     }
 }
 

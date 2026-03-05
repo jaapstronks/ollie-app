@@ -40,11 +40,6 @@ public enum Constants {
         .uitlaten
     ]
 
-    /// GitHub repo for data import
-    public static let gitHubOwner = "jaapstronks"
-    public static let gitHubRepo = "Otis"
-    public static let gitHubDataPath = "data"
-
     /// Media storage
     public static let mediaDirectoryName = "media"
     public static let thumbnailDirectoryName = "thumbnails"

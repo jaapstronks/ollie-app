@@ -2,33 +2,39 @@
 //  ImportSheet.swift
 //  Otis-app
 //
-//  Multi-stage import sheet with preview, progress, and completion states
+//  Multi-stage import sheet with file picker, preview, progress, and completion states
 
 import SwiftUI
+import UniformTypeIdentifiers
 import OtisShared
 
 /// Import stages
 enum ImportStage {
+    case selectFile
     case preview
     case importing
     case done
     case error
 }
 
-/// Sheet for importing data from GitHub with preview and progress
+/// Sheet for importing data from exported JSON folder
 struct ImportSheet: View {
     @ObservedObject var dataImporter: DataImporter
     let onDismiss: () -> Void
     let onComplete: () -> Void
 
-    @State private var stage: ImportStage = .preview
+    @State private var stage: ImportStage = .selectFile
     @State private var overwriteExisting: Bool = false
     @State private var errorMessage: String?
+    @State private var showingFilePicker: Bool = false
+    @State private var selectedFolderURL: URL?
 
     var body: some View {
         NavigationStack {
             Group {
                 switch stage {
+                case .selectFile:
+                    selectFileStage
                 case .preview:
                     previewStage
                 case .importing:
@@ -39,21 +45,69 @@ struct ImportSheet: View {
                     errorStage
                 }
             }
-            .navigationTitle("Importeren")
+            .navigationTitle(Strings.DataImport.title)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     if stage != .importing {
-                        Button("Annuleren") {
+                        Button(Strings.Common.cancel) {
                             onDismiss()
                         }
                     }
                 }
             }
         }
-        .task {
-            await loadPreview()
+        .fileImporter(
+            isPresented: $showingFilePicker,
+            allowedContentTypes: [.folder, .json],
+            allowsMultipleSelection: false
+        ) { result in
+            handleFileSelection(result)
         }
+    }
+
+    // MARK: - Select File Stage
+
+    private var selectFileStage: some View {
+        VStack(spacing: 24) {
+            Spacer()
+
+            // Icon
+            Image(systemName: "folder.badge.plus")
+                .font(.system(size: 60))
+                .foregroundColor(.otisInfo)
+
+            VStack(spacing: 8) {
+                Text(Strings.DataImport.selectFolder)
+                    .font(.headline)
+
+                Text(Strings.DataImport.selectFolderDescription)
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal)
+            }
+
+            Spacer()
+
+            // Select folder button
+            Button {
+                showingFilePicker = true
+            } label: {
+                HStack {
+                    Image(systemName: "folder")
+                    Text(Strings.DataImport.chooseFolder)
+                }
+                .font(.headline)
+                .foregroundColor(.white)
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(Color.otisInfo)
+                .cornerRadius(LayoutConstants.cornerRadiusM)
+            }
+            .padding(.bottom, 20)
+        }
+        .padding()
     }
 
     // MARK: - Preview Stage
@@ -66,12 +120,10 @@ struct ImportSheet: View {
                 .foregroundColor(.otisInfo)
                 .padding(.top, 20)
 
-            if dataImporter.isFetchingPreview {
-                ProgressView("Gegevens ophalen...")
-            } else if let preview = dataImporter.lastPreview {
+            if let preview = dataImporter.lastPreview {
                 previewContent(preview)
             } else {
-                Text("Kon preview niet laden")
+                Text(Strings.DataImport.couldNotLoadPreview)
                     .foregroundColor(.secondary)
             }
 
@@ -83,13 +135,15 @@ struct ImportSheet: View {
     @ViewBuilder
     private func previewContent(_ preview: ImportPreview) -> some View {
         VStack(spacing: 16) {
-            // Summary stats
+            // Summary
             VStack(spacing: 8) {
-                Text("Gevonden: \(preview.totalDays) dagen")
-                    .font(.headline)
+                if let name = preview.puppyName {
+                    Text(Strings.DataImport.dataFor(name: name))
+                        .font(.headline)
+                }
 
-                if let range = preview.dateRange {
-                    Text("\(formatDate(range.start)) tot \(formatDate(range.end))")
+                if let date = preview.exportDate {
+                    Text(Strings.DataImport.exportedOn(date: formatDate(date)))
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                 }
@@ -97,32 +151,35 @@ struct ImportSheet: View {
 
             Divider()
 
-            // Breakdown
-            VStack(spacing: 8) {
-                HStack {
-                    Text("Lokaal aanwezig:")
-                    Spacer()
-                    Text("\(preview.localDays) dagen")
-                        .foregroundColor(.secondary)
-                }
+            // Components breakdown
+            VStack(alignment: .leading, spacing: 8) {
+                Text(Strings.DataImport.componentsToImport)
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
 
-                HStack {
-                    Text("Nieuw te importeren:")
-                    Spacer()
-                    Text("\(preview.newDays) dagen")
-                        .fontWeight(.semibold)
-                        .foregroundColor(preview.newDays > 0 ? .green : .secondary)
+                ForEach(preview.components, id: \.self) { component in
+                    HStack {
+                        Image(systemName: iconForComponent(component))
+                            .frame(width: 24)
+                            .foregroundColor(.otisInfo)
+                        Text(localizedComponentName(component))
+                        Spacer()
+                        if let count = preview.itemCounts[component], count > 0 {
+                            Text("\(count)")
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                    .font(.subheadline)
                 }
             }
-            .font(.subheadline)
 
             Divider()
 
             // Overwrite toggle
             Toggle(isOn: $overwriteExisting) {
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("Overschrijf bestaande data")
-                    Text("Vervangt lokale bestanden met GitHub versie")
+                    Text(Strings.Settings.overwriteExisting)
+                    Text(Strings.DataImport.overwriteDescription)
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
@@ -135,7 +192,7 @@ struct ImportSheet: View {
                 startImport()
             } label: {
                 HStack {
-                    Text("Importeren")
+                    Text(Strings.Settings.importAction)
                     Image(systemName: "arrow.right")
                 }
                 .font(.headline)
@@ -145,7 +202,7 @@ struct ImportSheet: View {
                 .background(Color.otisInfo)
                 .cornerRadius(LayoutConstants.cornerRadiusM)
             }
-            .disabled(preview.newDays == 0 && !overwriteExisting)
+            .disabled(preview.components.isEmpty)
         }
     }
 
@@ -161,27 +218,27 @@ struct ImportSheet: View {
                 .foregroundColor(.otisInfo)
                 .symbolEffect(.pulse.wholeSymbol, options: .repeating)
 
-            Text("Importeren...")
+            Text(Strings.DataImport.importing)
                 .font(.headline)
 
             if let progress = dataImporter.importProgress {
                 VStack(spacing: 12) {
                     // Progress bar
-                    ProgressView(value: Double(progress.currentFile), total: Double(progress.totalFiles))
+                    ProgressView(value: Double(progress.currentIndex), total: Double(progress.totalComponents))
                         .progressViewStyle(LinearProgressViewStyle())
                         .scaleEffect(x: 1, y: 2, anchor: .center)
 
                     // Progress text
-                    Text("\(progress.currentFile)/\(progress.totalFiles)")
+                    Text("\(progress.currentIndex)/\(progress.totalComponents)")
                         .font(.title2)
                         .fontWeight(.bold)
 
-                    Text(progress.currentFileName)
+                    Text(localizedComponentName(progress.currentComponent))
                         .font(.caption)
                         .foregroundColor(.secondary)
 
-                    if progress.eventsImportedSoFar > 0 {
-                        Text("\(progress.eventsImportedSoFar) events geimporteerd")
+                    if progress.itemsImportedSoFar > 0 {
+                        Text(Strings.DataImport.itemsImported(progress.itemsImportedSoFar))
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                     }
@@ -208,25 +265,19 @@ struct ImportSheet: View {
                 .font(.system(size: 60))
                 .foregroundColor(.otisSuccess)
 
-            Text("Import voltooid!")
+            Text(Strings.DataImport.importComplete)
                 .font(.headline)
 
             if let result = dataImporter.lastResult {
                 VStack(spacing: 8) {
-                    Text("\(result.filesImported) dagen geimporteerd")
+                    Text(Strings.DataImport.componentsImported(result.componentsImported))
                         .font(.title3)
 
-                    Text("\(result.eventsImported) events totaal")
+                    Text(Strings.DataImport.totalItems(result.itemsImported))
                         .foregroundColor(.secondary)
 
-                    if result.skipped > 0 {
-                        Text("\(result.skipped) overgeslagen (bestonden al)")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
-
                     if !result.errors.isEmpty {
-                        Text("\(result.errors.count) fouten")
+                        Text(Strings.DataImport.errors(result.errors.count))
                             .font(.caption)
                             .foregroundColor(.otisWarning)
                     }
@@ -239,7 +290,7 @@ struct ImportSheet: View {
             Button {
                 onComplete()
             } label: {
-                Text("Klaar")
+                Text(Strings.Common.done)
                     .font(.headline)
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
@@ -263,7 +314,7 @@ struct ImportSheet: View {
                 .font(.system(size: 60))
                 .foregroundColor(.otisWarning)
 
-            Text("Import mislukt")
+            Text(Strings.DataImport.importFailed)
                 .font(.headline)
 
             if let error = errorMessage {
@@ -278,11 +329,10 @@ struct ImportSheet: View {
             // Retry button
             VStack(spacing: 12) {
                 Button {
-                    Task {
-                        await loadPreview()
-                    }
+                    stage = .selectFile
+                    dataImporter.reset()
                 } label: {
-                    Text("Opnieuw proberen")
+                    Text(Strings.Common.tryAgain)
                         .font(.headline)
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
@@ -294,7 +344,7 @@ struct ImportSheet: View {
                 Button {
                     onDismiss()
                 } label: {
-                    Text("Annuleren")
+                    Text(Strings.Common.cancel)
                         .foregroundColor(.secondary)
                 }
             }
@@ -305,26 +355,52 @@ struct ImportSheet: View {
 
     // MARK: - Actions
 
-    private func loadPreview() async {
-        stage = .preview
-        do {
-            _ = try await dataImporter.fetchPreview()
-        } catch {
+    private func handleFileSelection(_ result: Result<[URL], Error>) {
+        switch result {
+        case .success(let urls):
+            guard let folderURL = urls.first else { return }
+
+            // Start security-scoped access
+            guard folderURL.startAccessingSecurityScopedResource() else {
+                errorMessage = Strings.DataImport.accessDenied
+                stage = .error
+                return
+            }
+
+            selectedFolderURL = folderURL
+
+            Task {
+                do {
+                    _ = try await dataImporter.previewImport(from: folderURL)
+                    stage = .preview
+                } catch {
+                    errorMessage = error.localizedDescription
+                    stage = .error
+                    folderURL.stopAccessingSecurityScopedResource()
+                }
+            }
+
+        case .failure(let error):
             errorMessage = error.localizedDescription
             stage = .error
         }
     }
 
     private func startImport() {
+        guard let folderURL = selectedFolderURL else { return }
+
         stage = .importing
         Task {
             do {
-                _ = try await dataImporter.importFromGitHub(overwriteExisting: overwriteExisting)
+                _ = try await dataImporter.importFromFolder(folderURL, overwriteExisting: overwriteExisting)
                 stage = .done
             } catch {
                 errorMessage = error.localizedDescription
                 stage = .error
             }
+
+            // Stop security-scoped access when done
+            folderURL.stopAccessingSecurityScopedResource()
         }
     }
 
@@ -332,9 +408,41 @@ struct ImportSheet: View {
 
     private func formatDate(_ date: Date) -> String {
         let formatter = DateFormatter()
-        formatter.dateFormat = "d MMM"
-        formatter.locale = Locale(identifier: "nl_NL")
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .none
         return formatter.string(from: date)
+    }
+
+    private func iconForComponent(_ component: String) -> String {
+        switch component {
+        case "profile": return "person.circle"
+        case "events": return "list.bullet"
+        case "documents": return "doc"
+        case "contacts": return "person.2"
+        case "appointments": return "calendar"
+        case "milestones": return "flag"
+        case "exposures": return "sparkles"
+        case "walkSpots": return "mappin"
+        case "media": return "photo"
+        case "profilePhoto": return "camera"
+        default: return "doc"
+        }
+    }
+
+    private func localizedComponentName(_ component: String) -> String {
+        switch component {
+        case "profile": return Strings.Export.includeProfile
+        case "events": return Strings.Export.includeEvents
+        case "documents": return Strings.Export.includeDocuments
+        case "contacts": return Strings.Export.includeContacts
+        case "appointments": return Strings.Export.includeAppointments
+        case "milestones": return Strings.Export.includeMilestones
+        case "exposures": return Strings.Export.includeSocialization
+        case "walkSpots": return Strings.Export.includeWalkSpots
+        case "media": return Strings.Export.includeMedia
+        case "profilePhoto": return Strings.Export.includeProfilePhoto
+        default: return component
+        }
     }
 }
 

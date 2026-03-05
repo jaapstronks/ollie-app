@@ -50,7 +50,7 @@ struct ArrivalPhotoPromptSheet: View {
                 Button(action: onTakePhoto) {
                     HStack {
                         Image(systemName: "camera")
-                        Text(Strings.Onboarding.arrivalPhotoSubtitle)
+                        Text(Strings.Onboarding.arrivalPhotoButton)
                     }
                     .font(.headline)
                     .foregroundStyle(.white)
@@ -63,7 +63,7 @@ struct ArrivalPhotoPromptSheet: View {
                 Button(action: onDismiss) {
                     Text(Strings.Onboarding.arrivalPhotoLater)
                         .font(.subheadline)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(.primary.opacity(0.6))
                 }
                 .padding(.top, 8)
             }

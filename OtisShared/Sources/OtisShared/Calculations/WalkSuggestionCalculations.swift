@@ -211,6 +211,11 @@ public struct WalkSuggestionCalculations {
 
             suggestions.append(suggestion)
 
+            // Stop if the suggested time is on a different day (prevents cross-midnight walks)
+            if !Calendar.current.isDate(suggestion.suggestedTime, inSameDayAs: date) {
+                break
+            }
+
             // Simulate this walk being completed
             let simulatedWalk = PuppyEvent(time: suggestion.suggestedTime, type: .uitlaten)
             simulatedEvents.append(simulatedWalk)
@@ -357,7 +362,12 @@ public struct WalkSuggestionCalculations {
 
     /// Cap a suggested time at the day end hour, returning nil if past
     private static func capAtDayEnd(_ suggestedTime: Date, walkSchedule: WalkSchedule, date: Date, now: Date) -> Date? {
-        // If day end is midnight (24), don't cap
+        // If suggested time is on a different day, it's past the end
+        if !Calendar.current.isDate(suggestedTime, inSameDayAs: date) {
+            return nil
+        }
+
+        // If day end is midnight (24), don't cap further (cross-day check above handles it)
         if walkSchedule.dayEndHour >= 24 {
             return suggestedTime
         }

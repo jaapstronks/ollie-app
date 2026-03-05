@@ -36,6 +36,7 @@ extension Strings {
         static let share = String(localized: "Share", table: table)
         static let addPhoto = String(localized: "Add Photo", table: table)
         static let notSet = String(localized: "Not set", table: table)
+        static let tryAgain = String(localized: "Try Again", table: table)
 
         // Error messages
         static let saveFailed = String(localized: "Failed to save. Please try again.", table: table)
@@ -66,6 +67,7 @@ extension Strings {
 
         // Navigation
         static let seeAll = String(localized: "See all", table: table)
+        static let seeAlso = String(localized: "See also", table: table)
 
         // Accessibility hints
         static let tapToExpand = String(localized: "Tap to read more", table: table)

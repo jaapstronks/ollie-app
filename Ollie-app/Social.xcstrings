@@ -1,2351 +1,4417 @@
 {
-  "sourceLanguage": "en",
-  "strings": {
-    "%lld / %lld comfortable": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$lld / %2$lld vertraut"
+  "sourceLanguage" : "en",
+  "strings" : {
+    "%@, current phase" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, aktuelle Phase"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$lld / %2$lld cómodos"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, fase actual"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$lld / %2$lld a proprio agio"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, phase actuelle"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$lld / %2$lld comfortabel"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, fase attuale"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld / %lld à l'aise"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, huidige fase"
           }
         }
       }
     },
-    "%lld exposures": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld Erfahrungen"
+    "%@'s journey" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@s Reise"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld exposiciones"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El viaje de %@"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld esposizioni"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le parcours de %@"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld ervaringen"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il percorso di %@"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld expositions"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De reis van %@"
           }
         }
       }
     },
-    "%lld exposures this week": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld Erfahrungen diese Woche"
+    "%lld / %lld comfortable" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld / %2$lld vertraut"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld exposiciones esta semana"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld / %2$lld cómodos"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld esposizioni questa settimana"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld / %lld à l'aise"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld ervaringen deze week"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld / %2$lld a proprio agio"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld expositions cette semaine"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld / %2$lld comfortabel"
           }
         }
       }
     },
-    "%lld weeks left": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Noch %lld Wochen"
+    "%lld exposures" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld Erfahrungen"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld semanas restantes"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld exposiciones"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld settimane rimaste"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld expositions"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nog %lld weken"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld esposizioni"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld semaines restantes"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld ervaringen"
           }
         }
       }
     },
-    "%lld weeks remaining": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Noch %lld Wochen"
+    "%lld exposures this week" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld Erfahrungen diese Woche"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld semanas restantes"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld exposiciones esta semana"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld settimane rimanenti"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld expositions cette semaine"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nog %lld weken"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld esposizioni questa settimana"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld semaines restantes"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld ervaringen deze week"
           }
         }
       }
     },
-    "%lld/%lld": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$lld/%2$lld"
+    "%lld of %lld comfortable" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld von %lld vertraut"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$lld/%2$lld"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld de %lld cómodos"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$lld/%2$lld"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld sur %lld à l'aise"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$lld/%2$lld"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld di %lld a proprio agio"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld/%lld"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld van %lld comfortabel"
           }
         }
       }
     },
-    "A professional trainer can help if this continues": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ein professioneller Trainer kann helfen, wenn dies anhalt"
+    "%lld weeks left" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Noch %lld Wochen"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Un entrenador profesional puede ayudar si esto continúa"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld semanas restantes"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Un addestratore professionista può aiutare se questo continua"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld semaines restantes"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Een professionele trainer kan helpen als dit aanhoudt"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld settimane rimaste"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Un éducateur professionnel peut aider si cela continue"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nog %lld weken"
           }
         }
       }
     },
-    "Almost there": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fast geschafft"
+    "%lld weeks remaining" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Noch %lld Wochen"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Casi listo"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld semanas restantes"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ci siamo quasi"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld semaines restantes"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bijna klaar"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld settimane rimanenti"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Presque terminé"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nog %lld weken"
           }
         }
       }
     },
-    "Animals": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tiere"
+    "%lld/%lld" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld/%2$lld"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Animales"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld/%2$lld"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Animali"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld/%lld"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dieren"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld/%2$lld"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Animaux"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld/%2$lld"
           }
         }
       }
     },
-    "Building Confidence Together": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gemeinsam Selbstvertrauen aufbauen"
+    "A professional trainer can help if this continues" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ein professioneller Trainer kann helfen, wenn dies anhalt"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Construyendo confianza juntos"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un entrenador profesional puede ayudar si esto continúa"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Costruire sicurezza insieme"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un éducateur professionnel peut aider si cela continue"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Samen zelfvertrouwen opbouwen"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un addestratore professionista può aiutare se questo continua"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Construire la confiance ensemble"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Een professionele trainer kan helpen als dit aanhoudt"
           }
         }
       }
     },
-    "Calm, neutral behavior is the goal — not interaction!": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ruhiges, neutrales Verhalten ist das Ziel — nicht Interaktion!"
+    "About the Socialization Window" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Über das Sozialisierungsfenster"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "El comportamiento tranquilo y neutral es el objetivo, ¡no la interacción!"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sobre el período de socialización"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Il comportamento calmo e neutro è l'obiettivo, non l'interazione!"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "À propos de la fenêtre de socialisation"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kalm, neutraal gedrag is het doel — niet interactie!"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Informazioni sul periodo di socializzazione"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Un comportement calme et neutre est l'objectif — pas l'interaction !"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Over het socialisatievenster"
           }
         }
       }
     },
-    "Calm, no reaction — this is the goal!": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ruhig, keine Reaktion — das ist das Ziel!"
+    "Almost there" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fast geschafft"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tranquilo, sin reacción, ¡este es el objetivo!"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Casi listo"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Calmo, nessuna reazione — questo è l'obiettivo!"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Presque terminé"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kalm, geen reactie — dit is het doel!"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ci siamo quasi"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Calme, pas de réaction — c'est l'objectif !"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bijna klaar"
           }
         }
       }
     },
-    "Close but no contact": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nah aber kein Kontakt"
+    "Animals" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tiere"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cerca pero sin contacto"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Animales"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vicino ma senza contatto"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Animaux"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dichtbij maar geen contact"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Animali"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Proche mais sans contact"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dieren"
           }
         }
       }
     },
-    "comfortable": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "vertraut"
+    "Build confidence with new experiences" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Baue Selbstvertrauen mit neuen Erfahrungen auf"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "cómodo"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Construye confianza con nuevas experiencias"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "a proprio agio"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Construisez la confiance avec de nouvelles expériences"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "comfortabel"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Costruisci sicurezza con nuove esperienze"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "à l'aise"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bouw zelfvertrouwen op met nieuwe ervaringen"
           }
         }
       }
     },
-    "Comfortable": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vertraut"
+    "Building Confidence" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Selbstvertrauen Aufbauen"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cómodo"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Construyendo Confianza"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "A proprio agio"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Renforcer la Confiance"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Comfortabel"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Costruire Sicurezza"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "À l'aise"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zelfvertrouwen Opbouwen"
           }
         }
       }
     },
-    "Complete": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Abgeschlossen"
+    "Building Confidence Together" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gemeinsam Selbstvertrauen aufbauen"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Completado"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Construyendo confianza juntos"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Compléter"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Construire la confiance ensemble"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Completato"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Costruire sicurezza insieme"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Voltooid"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Samen zelfvertrouwen opbouwen"
           }
         }
       }
     },
-    "Critical socialization period": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kritische Sozialisierungsphase"
+    "Calm, neutral behavior is the goal — not interaction!" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ruhiges, neutrales Verhalten ist das Ziel — nicht Interaktion!"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Período crítico de socialización"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El comportamiento tranquilo y neutral es el objetivo, ¡no la interacción!"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Periodo critico di socializzazione"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un comportement calme et neutre est l'objectif — pas l'interaction !"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kritieke socialisatieperiode"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il comportamento calmo e neutro è l'obiettivo, non l'interazione!"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Période critique de socialisation"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kalm, neutraal gedrag is het doel — niet interactie!"
           }
         }
       }
     },
-    "Curious, relaxed, playful": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Neugierig, entspannt, verspielt"
+    "Calm, no reaction — this is the goal!" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ruhig, keine Reaktion — das ist das Ziel!"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Curioso, relajado, juguetón"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tranquilo, sin reacción, ¡este es el objetivo!"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Curioso, rilassato, giocherellone"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Calme, pas de réaction — c'est l'objectif !"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nieuwsgierig, ontspannen, speels"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Calmo, nessuna reazione — questo è l'obiettivo!"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Curieux, détendu, joueur"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kalm, geen reactie — dit is het doel!"
           }
         }
       }
     },
-    "Current": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aktuell"
+    "Categories" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kategorien"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Actual"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Categorías"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Attuale"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Catégories"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Huidig"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Categorie"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Actuel"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Categorieën"
           }
         }
       }
     },
-    "Direct": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Direkt"
+    "Close but no contact" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nah aber kein Kontakt"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Directo"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cerca pero sin contacto"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Diretto"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Proche mais sans contact"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Direct"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vicino ma senza contatto"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Direct"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dichtbij maar geen contact"
           }
         }
       }
     },
-    "Direct interaction": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Direkte Interaktion"
+    "comfortable" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "vertraut"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Interacción directa"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "cómodo"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Interazione diretta"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "à l'aise"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Directe interactie"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "a proprio agio"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Interaction directe"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "comfortabel"
           }
         }
       }
     },
-    "Distance": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Abstand"
+    "Comfortable" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vertraut"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Distancia"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cómodo"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Distanza"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "À l'aise"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Afstand"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A proprio agio"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Distance"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comfortabel"
           }
         }
       }
     },
-    "End on a positive note — even a small one counts": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Positiv abschliessen — auch ein kleiner Erfolg zahlt"
+    "Complete" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abgeschlossen"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Termina con una nota positiva, incluso una pequeña cuenta"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Completado"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Termina in modo positivo — anche un piccolo successo conta"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compléter"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Eindig positief — ook een klein succesje telt"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Completato"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Terminez sur une note positive — même une petite compte"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voltooid"
           }
         }
       }
     },
-    "Environments": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Umgebungen"
+    "Continue socialization" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sozialisierung fortsetzen"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Entornos"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continuar socialización"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ambienti"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continuer la socialisation"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Omgevingen"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continua socializzazione"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Environnements"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ga verder met socialisatie"
           }
         }
       }
     },
-    "Far": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Weit"
+    "Crate introduction" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Einführung in die Box"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Lejos"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Introducción a la jaula"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Lontano"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Introduction à la cage"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ver"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Introduzione al trasportino"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Loin"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kennismaking met de bench"
           }
         }
       }
     },
-    "Fearful": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Angstlich"
+    "Critical socialization period" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kritische Sozialisierungsphase"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Temeroso"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Período crítico de socialización"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Impaurito"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Période critique de socialisation"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Angstig"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Periodo critico di socializzazione"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Craintif"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kritieke socialisatieperiode"
           }
         }
       }
     },
-    "Give more space — distance is your friend": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mehr Platz geben — Abstand ist dein Freund"
+    "Curious, relaxed, playful" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neugierig, entspannt, verspielt"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dale más espacio, la distancia es tu amiga"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Curioso, relajado, juguetón"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dai più spazio — la distanza è tua amica"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Curieux, détendu, joueur"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Geef meer ruimte — afstand is je vriend"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Curioso, rilassato, giocherellone"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Donnez plus d'espace — la distance est votre alliée"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nieuwsgierig, ontspannen, speels"
           }
         }
       }
     },
-    "Got it": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Verstanden"
+    "Current" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktuell"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Entendido"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actual"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Capito"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actuel"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Begrepen"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Attuale"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Compris"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Huidig"
           }
         }
       }
     },
-    "Handling": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Anfassen"
+    "Day %lld" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tag %lld"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Manipulación"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Día %lld"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Manipolazione"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jour %lld"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aanraken"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Giorno %lld"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Manipulation"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dag %lld"
           }
         }
       }
     },
-    "Hesitant, ears back, tail low": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Zogernd, Ohren nach hinten, Schwanz tief"
+    "Direct" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Direkt"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vacilante, orejas hacia atrás, cola baja"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Directo"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Esitante, orecchie indietro, coda bassa"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Direct"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aarzelend, oren naar achteren, staart laag"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diretto"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hésitant, oreilles en arrière, queue basse"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Direct"
           }
         }
       }
     },
-    "Hiding, trembling, trying to escape": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Versteckt sich, zittert, versucht zu fliehen"
+    "Direct interaction" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Direkte Interaktion"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Escondido, temblando, intentando escapar"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Interacción directa"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Si nasconde, trema, cerca di scappare"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Interaction directe"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Verstopt, trillend, probeert te vluchten"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Interazione diretta"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Se cache, tremble, essaie de s'enfuir"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Directe interactie"
           }
         }
       }
     },
-    "In progress": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "In Bearbeitung"
+    "Distance" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abstand"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "En progreso"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Distancia"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "In corso"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Distance"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bezig"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Distanza"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "En cours"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afstand"
           }
         }
       }
     },
-    "In the socialization window": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Im Sozialisierungsfenster"
+    "Distance is your best tool" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abstand ist dein bestes Werkzeug"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "En el período de socialización"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La distancia es tu mejor herramienta"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nel periodo di socializzazione"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La distance est votre meilleur outil"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "In het socialisatievenster"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La distanza è il tuo miglior strumento"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dans la fenêtre de socialisation"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afstand is je beste hulpmiddel"
           }
         }
       }
     },
-    "Last: %@": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Zuletzt: %@"
+    "Dog parks and \"go meet everyone\" creates excitement, not calm. At 8 months she's lunging at every dog she sees — which started as over-socialization." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hundeparks und \"geh jeden begrüßen\" erzeugt Aufregung, keine Ruhe. Mit 8 Monaten springt sie jeden Hund an — was als Über-Sozialisierung begann."
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Último: %@"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Los parques para perros y \"ve a conocer a todos\" crea excitación, no calma. A los 8 meses se abalanza sobre cada perro que ve — lo que comenzó como sobre-socialización."
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ultima: %@"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les parcs à chiens et \"va rencontrer tout le monde\" crée de l'excitation, pas du calme. À 8 mois, elle se jette sur chaque chien qu'elle voit — ce qui a commencé par une sur-socialisation."
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Laatst: %@"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I parchi per cani e \"vai a conoscere tutti\" crea eccitazione, non calma. A 8 mesi si lancia verso ogni cane che vede — il che è iniziato come eccessiva socializzazione."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dernière : %@"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hondenparken en \"ga iedereen begroeten\" creëert opwinding, geen rust. Op 8 maanden springt ze naar elke hond die ze ziet — wat begon als over-socialisatie."
           }
         }
       }
     },
-    "Log Exposure": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Erfahrung eintragen"
+    "Eating routine" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Essensroutine"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Registrar exposición"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rutina de alimentación"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Registra esposizione"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Routine alimentaire"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ervaring Loggen"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Routine alimentare"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Enregistrer une exposition"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eetroutine"
           }
         }
       }
     },
-    "Near": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nah"
+    "End on a positive note — even a small one counts" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Positiv abschliessen — auch ein kleiner Erfolg zahlt"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cerca"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Termina con una nota positiva, incluso una pequeña cuenta"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vicino"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terminez sur une note positive — même une petite compte"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dichtbij"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Termina in modo positivo — anche un piccolo successo conta"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Proche"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eindig positief — ook een klein succesje telt"
           }
         }
       }
     },
-    "Needs practice": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ubung notig"
+    "Environments" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Umgebungen"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Necesita práctica"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entornos"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Serve pratica"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Environnements"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Oefening nodig"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ambienti"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nécessite de la pratique"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Omgevingen"
           }
         }
       }
     },
-    "Neutral": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Neutral"
+    "Expand variety, new experiences" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vielfalt erweitern, neue Erfahrungen"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Neutral"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Amplía la variedad, nuevas experiencias"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Neutro"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Élargir la variété, nouvelles expériences"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Neutraal"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Amplia la varietà, nuove esperienze"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Neutre"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Breid variatie uit, nieuwe ervaringen"
           }
         }
       }
     },
-    "No exposures logged yet": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Noch keine Erfahrungen eingetragen"
+    "Far" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weit"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aún no hay exposiciones registradas"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lejos"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nessuna esposizione registrata"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loin"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nog geen ervaringen gelogd"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lontano"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aucune exposition enregistrée"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ver"
           }
         }
       }
     },
-    "Not started": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nicht begonnen"
+    "Fearful" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Angstlich"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No iniciado"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Temeroso"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Non iniziato"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Craintif"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Niet gestart"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impaurito"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Non commencé"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Angstig"
           }
         }
       }
     },
-    "Note (optional)": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Notiz (optional)"
+    "Fill gaps, reinforce positives" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lücken füllen, Positives verstärken"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nota (opcional)"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Llena vacíos, refuerza lo positivo"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nota (opzionale)"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Combler les lacunes, renforcer le positif"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Notitie (optioneel)"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Colma le lacune, rinforza il positivo"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Note (facultatif)"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vul hiaten, versterk positieve ervaringen"
           }
         }
       }
     },
-    "Objects": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gegenstande"
+    "First Days Checklist" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Checkliste erste Tage"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Objetos"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lista de primeros días"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Oggetti"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Liste des premiers jours"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Voorwerpen"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Checklist primi giorni"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Objets"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Checklist eerste dagen"
           }
         }
       }
     },
-    "Observed from a distance": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aus der Ferne beobachtet"
+    "First night home" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erste Nacht zu Hause"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Observado desde la distancia"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Primera noche en casa"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Osservato da lontano"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Première nuit à la maison"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Van een afstand geobserveerd"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prima notte a casa"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Observé de loin"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eerste nacht thuis"
           }
         }
       }
     },
-    "Pair the stimulus with treats (look, treat, look away)": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Den Reiz mit Leckerlis verbinden (schauen, Leckerli, wegschauen)"
+    "First outdoor potty" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erstes Mal draußen"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Asocia el estímulo con premios (mira, premio, mira hacia otro lado)"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Primer baño afuera"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Associa lo stimolo ai premietti (guarda, premio, distogliere lo sguardo)"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Premiers besoins dehors"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Koppel de prikkel aan snoepjes (kijk, snoepje, wegkijken)"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Primi bisogni fuori"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Associez le stimulus avec des friandises (regarder, friandise, détourner le regard)"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eerste plasje buiten"
           }
         }
       }
     },
-    "Past socialization window": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sozialisierungsfenster vorbei"
+    "First Steps" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erste Schritte"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Período de socialización terminado"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Primeros Pasos"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Periodo di socializzazione terminato"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Premiers Pas"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Socialisatievenster voorbij"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Primi Passi"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fenêtre de socialisation passée"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eerste Stappen"
           }
         }
       }
     },
-    "People": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Menschen"
+    "Focus on comfort and basic routine" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fokus auf Komfort und Grundroutine"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Personas"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enfócate en comodidad y rutina básica"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Personnes"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Concentrez-vous sur le confort et la routine de base"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Persone"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Concentrati sul comfort e la routine di base"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mensen"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Focus op comfort en basisroutine"
           }
         }
       }
     },
-    "Positive": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Positiv"
+    "Getting settled" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eingewöhnung"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Positivo"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adaptándose"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Positivo"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Installation"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Positief"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ambientamento"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Positif"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wennen"
           }
         }
       }
     },
-    "Reaction": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Reaktion"
+    "Give more space — distance is your friend" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mehr Platz geben — Abstand ist dein Freund"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Reacción"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dale más espacio, la distancia es tu amiga"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Reazione"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Donnez plus d'espace — la distance est votre alliée"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Reactie"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dai più spazio — la distanza è tua amica"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Réaction"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geef meer ruimte — afstand is je vriend"
           }
         }
       }
     },
-    "See all": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Alle anzeigen"
+    "Got it" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verstanden"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ver todo"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entendido"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tout voir"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compris"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vedi tutto"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Capito"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bekijk alles"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Begrepen"
           }
         }
       }
     },
-    "Short sessions = big wins": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kurze Einheiten = grosse Erfolge"
+    "Great work! %lld exposures logged." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gut gemacht! %lld Erfahrungen eingetragen."
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sesiones cortas = grandes logros"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡Buen trabajo! %lld exposiciones registradas."
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sessioni brevi = grandi risultati"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bravo ! %lld expositions enregistrées."
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Korte sessies = grote winst"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ottimo lavoro! %lld esposizioni registrate."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Séances courtes = grandes victoires"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Goed gedaan! %lld ervaringen gelogd."
           }
         }
       }
     },
-    "Show %lld more": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld mehr anzeigen"
+    "Handling" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anfassen"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mostrar %lld más"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Manipulación"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mostra altri %lld"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Manipulation"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Toon %lld meer"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Manipolazione"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Afficher %lld de plus"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aanraken"
           }
         }
       }
     },
-    "Show less": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Weniger anzeigen"
+    "Hesitant, ears back, tail low" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zogernd, Ohren nach hinten, Schwanz tief"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mostrar menos"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vacilante, orejas hacia atrás, cola baja"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Afficher moins"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hésitant, oreilles en arrière, queue basse"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mostra meno"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esitante, orecchie indietro, coda bassa"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Toon minder"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aarzelend, oren naar achteren, staart laag"
           }
         }
       }
     },
-    "Socialization": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sozialisierung"
+    "Hiding, trembling, trying to escape" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Versteckt sich, zittert, versucht zu fliehen"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Socialización"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Escondido, temblando, intentando escapar"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Socialisation"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se cache, tremble, essaie de s'enfuir"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Socializzazione"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Si nasconde, trema, cerca di scappare"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Socialisatie"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verstopt, trillend, probeert te vluchten"
           }
         }
       }
     },
-    "Socialization Checklist": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sozialisierungs-Checkliste"
+    "Home sounds, handling, household members" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hausgeräusche, Anfassen, Haushaltsmitglieder"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Lista de socialización"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sonidos del hogar, manipulación, miembros de la familia"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Checklist di socializzazione"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sons de la maison, manipulation, membres du foyer"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Socialisatie Checklist"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suoni di casa, manipolazione, membri della famiglia"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Liste de socialisation"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Huisgeluiden, aanraken, huisgenoten"
           }
         }
       }
     },
-    "Socialization Window": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sozialisierungsfenster"
+    "In practice" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In der Praxis"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Período de socialización"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En la práctica"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Periodo di socializzazione"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En pratique"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Socialisatievenster"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In pratica"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fenêtre de socialisation"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In de praktijk"
           }
         }
       }
     },
-    "Sounds": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gerausche"
+    "In progress" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In Bearbeitung"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sonidos"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En progreso"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Suoni"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En cours"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Geluiden"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In corso"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sons"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bezig"
           }
         }
       }
     },
-    "Surfaces": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Untergrunde"
+    "In the socialization window" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Im Sozialisierungsfenster"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Superficies"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En el período de socialización"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Superfici"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dans la fenêtre de socialisation"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ondergronden"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nel periodo di socializzazione"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Surfaces"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In het socialisatievenster"
           }
         }
       }
     },
-    "Tap to log exposure": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tippen, um Erfahrung einzutragen"
+    "Keep building positive experiences." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bau weiter positive Erfahrungen auf."
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Toca para registrar exposición"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sigue construyendo experiencias positivas."
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tocca per registrare l'esposizione"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continuez à créer des expériences positives."
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tik om ervaring te loggen"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continua a creare esperienze positive."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Appuyez pour enregistrer une exposition"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Blijf positieve ervaringen opbouwen."
           }
         }
       }
     },
-    "Tap to log your first exposure": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tippen, um deine erste Erfahrung einzutragen"
+    "Last: %@" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zuletzt: %@"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Toca para registrar tu primera exposición"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Último: %@"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tocca per registrare la prima esposizione"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dernière : %@"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tik om je eerste ervaring te loggen"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ultima: %@"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Appuyez pour enregistrer votre première exposition"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laatst: %@"
           }
         }
       }
     },
-    "Unsure": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Unsicher"
+    "Later Phases" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spätere Phasen"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Inseguro"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fases posteriores"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Incerto"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Phases ultérieures"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Onzeker"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fasi successive"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Incertain"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Latere fases"
           }
         }
       }
     },
-    "Upcoming": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bevorstehend"
+    "Let's see where you're starting" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lass uns sehen, wo du startest"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Próximo"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Veamos dónde empiezas"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "À venir"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voyons où vous en êtes"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "In arrivo"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vediamo da dove parti"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aankomend"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laten we zien waar je begint"
           }
         }
       }
     },
-    "Vehicles": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fahrzeuge"
+    "Log Exposure" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erfahrung eintragen"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vehículos"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Registrar exposición"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Veicoli"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistrer une exposition"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Voertuigen"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Registra esposizione"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Véhicules"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ervaring Loggen"
           }
         }
       }
     },
-    "Watch for during walk": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wahrend des Spaziergangs beachten"
+    "Maintenance" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pflege"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Observar durante el paseo"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mantenimiento"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Da osservare durante la passeggiata"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entretien"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Let op tijdens wandeling"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mantenimento"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "À observer pendant la promenade"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Onderhoud"
           }
         }
       }
     },
-    "Weather": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wetter"
+    "Met %@" : {
+      "comment" : "Summary for social event, e.g. 'Met Luna the Labrador'",
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ getroffen"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Clima"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conoció a %@"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Météo"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A rencontré %@"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Meteo"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ha incontrato %@"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Weer"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ ontmoet"
           }
         }
       }
     },
-    "What happened?": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Was ist passiert?"
+    "Most socialization should be observation from a distance. Reward disengagement and looking back at you, not excitement." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die meiste Sozialisierung sollte Beobachtung aus der Ferne sein. Belohne das Abwenden und Zurückschauen zu dir, nicht Aufregung."
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "¿Qué pasó?"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La mayor parte de la socialización debe ser observación a distancia. Premia el desapego y mirarte, no la excitación."
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cosa è successo?"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La plupart de la socialisation devrait être de l'observation à distance. Récompensez le désengagement et le regard vers vous, pas l'excitation."
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wat gebeurde er?"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La maggior parte della socializzazione dovrebbe essere osservazione a distanza. Premia il disimpegno e il guardarti, non l'eccitazione."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Que s'est-il passé ?"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De meeste socialisatie moet observatie van een afstand zijn. Beloon loslaten en naar jou terugkijken, niet opwinding."
           }
         }
       }
     },
-    "Window closing soon": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fenster schliesst bald"
+    "Near" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nah"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "El período termina pronto"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cerca"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Il periodo si chiude presto"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Proche"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Venster sluit binnenkort"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vicino"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fenêtre se ferme bientôt"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dichtbij"
           }
         }
       }
     },
-    "Window just closed": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fenster gerade geschlossen"
+    "Needs practice" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ubung notig"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "El período acaba de terminar"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Necesita práctica"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Il periodo è appena terminato"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nécessite de la pratique"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Venster net gesloten"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Serve pratica"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fenêtre vient de se fermer"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oefening nodig"
+          }
+        }
+      }
+    },
+    "Neighborhood, common encounters" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nachbarschaft, häufige Begegnungen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vecindario, encuentros comunes"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quartier, rencontres courantes"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quartiere, incontri comuni"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buurt, veel voorkomende ontmoetingen"
+          }
+        }
+      }
+    },
+    "Neutral" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neutral"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neutral"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neutre"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neutro"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neutraal"
+          }
+        }
+      }
+    },
+    "Next up" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Als Nächstes"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A continuación"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "À suivre"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prossimo"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hierna"
+          }
+        }
+      }
+    },
+    "No exposures logged yet" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Noch keine Erfahrungen eingetragen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aún no hay exposiciones registradas"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucune exposition enregistrée"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nessuna esposizione registrata"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nog geen ervaringen gelogd"
+          }
+        }
+      }
+    },
+    "Not started" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nicht begonnen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No iniciado"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Non commencé"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Non iniziato"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Niet gestart"
+          }
+        }
+      }
+    },
+    "Note (optional)" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notiz (optional)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nota (opcional)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Note (facultatif)"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nota (opzionale)"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notitie (optioneel)"
+          }
+        }
+      }
+    },
+    "Objects" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gegenstande"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Objetos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Objets"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oggetti"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voorwerpen"
+          }
+        }
+      }
+    },
+    "Observed from a distance" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aus der Ferne beobachtet"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Observado desde la distancia"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Observé de loin"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Osservato da lontano"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Van een afstand geobserveerd"
+          }
+        }
+      }
+    },
+    "Pair the stimulus with treats (look, treat, look away)" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Den Reiz mit Leckerlis verbinden (schauen, Leckerli, wegschauen)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Asocia el estímulo con premios (mira, premio, mira hacia otro lado)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Associez le stimulus avec des friandises (regarder, friandise, détourner le regard)"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Associa lo stimolo ai premietti (guarda, premio, distogliere lo sguardo)"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Koppel de prikkel aan snoepjes (kijk, snoepje, wegkijken)"
+          }
+        }
+      }
+    },
+    "Past socialization window" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sozialisierungsfenster vorbei"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Período de socialización terminado"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fenêtre de socialisation passée"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Periodo di socializzazione terminato"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Socialisatievenster voorbij"
+          }
+        }
+      }
+    },
+    "Peak Window" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Höhepunkt"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Período Pico"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Période Critique"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Periodo di Picco"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Piekperiode"
+          }
+        }
+      }
+    },
+    "People" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Menschen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Personas"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Personnes"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Persone"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mensen"
+          }
+        }
+      }
+    },
+    "Positive" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Positiv"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Positivo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Positif"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Positivo"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Positief"
+          }
+        }
+      }
+    },
+    "Quick Check" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schnelle Prüfung"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Control rápido"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vérification rapide"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Controllo rapido"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Snelle controle"
+          }
+        }
+      }
+    },
+    "Quick check what's familiar" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schnell prüfen was bekannt ist"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Revisar rápidamente lo familiar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vérifier rapidement ce qui est familier"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verifica rapida cosa è familiare"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Snel controleren wat bekend is"
+          }
+        }
+      }
+    },
+    "Reaction" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reaktion"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reacción"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Réaction"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reazione"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reactie"
+          }
+        }
+      }
+    },
+    "Responds to name" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reagiert auf Namen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Responde al nombre"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Répond à son nom"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Risponde al nome"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reageert op naam"
+          }
+        }
+      }
+    },
+    "See all" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle anzeigen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ver todo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tout voir"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vedi tutto"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bekijk alles"
+          }
+        }
+      }
+    },
+    "See All Items" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle Elemente anzeigen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ver todos los elementos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voir tous les éléments"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vedi tutti gli elementi"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bekijk alle items"
+          }
+        }
+      }
+    },
+    "See your journey" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sieh deine Reise"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ve tu viaje"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voir votre parcours"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vedi il tuo percorso"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bekijk je reis"
+          }
+        }
+      }
+    },
+    "Settled in" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eingewöhnt"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adaptado"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Installé"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ambientato"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gewend"
+          }
+        }
+      }
+    },
+    "Settling In" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eingewöhnung"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adaptándose"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Installation"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ambientamento"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wennen"
+          }
+        }
+      }
+    },
+    "Short sessions = big wins" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kurze Einheiten = grosse Erfolge"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sesiones cortas = grandes logros"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Séances courtes = grandes victoires"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sessioni brevi = grandi risultati"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Korte sessies = grote winst"
+          }
+        }
+      }
+    },
+    "Show %lld more" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld mehr anzeigen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mostrar %lld más"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afficher %lld de plus"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mostra altri %lld"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toon %lld meer"
+          }
+        }
+      }
+    },
+    "Show less" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weniger anzeigen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mostrar menos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afficher moins"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mostra meno"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toon minder"
+          }
+        }
+      }
+    },
+    "Sit near a playground at comfortable distance, reward calm watching. Parallel walks with calm adult dogs. Brief, controlled interactions only occasionally." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Setz dich in angenehmer Entfernung bei einem Spielplatz, belohne ruhiges Beobachten. Parallele Spaziergänge mit ruhigen erwachsenen Hunden. Kurze, kontrollierte Interaktionen nur gelegentlich."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Siéntate cerca de un parque a distancia cómoda, premia la observación tranquila. Paseos paralelos con perros adultos tranquilos. Interacciones breves y controladas solo ocasionalmente."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Asseyez-vous près d'une aire de jeux à distance confortable, récompensez l'observation calme. Promenades parallèles avec des chiens adultes calmes. Interactions brèves et contrôlées seulement occasionnellement."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Siediti vicino a un parco giochi a distanza confortevole, premia l'osservazione calma. Passeggiate parallele con cani adulti calmi. Interazioni brevi e controllate solo occasionalmente."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ga op comfortabele afstand bij een speeltuin zitten, beloon rustig kijken. Parallelle wandelingen met rustige volwassen honden. Korte, gecontroleerde interacties alleen af en toe."
+          }
+        }
+      }
+    },
+    "Socialization" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sozialisierung"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Socialización"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Socialisation"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Socializzazione"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Socialisatie"
+          }
+        }
+      }
+    },
+    "Socialization Checklist" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sozialisierungs-Checkliste"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lista de socialización"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Liste de socialisation"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Checklist di socializzazione"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Socialisatie Checklist"
+          }
+        }
+      }
+    },
+    "Socialization isn't about making your puppy love everything. It's about building calm neutrality — a dog that notices the world and thinks \"yeah, that's normal.\"" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sozialisierung bedeutet nicht, dass dein Welpe alles lieben soll. Es geht darum, ruhige Neutralität aufzubauen — ein Hund, der die Welt wahrnimmt und denkt \"ja, das ist normal.\""
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La socialización no se trata de que tu cachorro ame todo. Se trata de construir neutralidad tranquila — un perro que nota el mundo y piensa \"sí, eso es normal.\""
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La socialisation ne consiste pas à faire aimer tout à votre chiot. Il s'agit de construire une neutralité calme — un chien qui observe le monde et pense \"oui, c'est normal.\""
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La socializzazione non significa far amare tutto al tuo cucciolo. Si tratta di costruire una neutralità calma — un cane che nota il mondo e pensa \"sì, è normale.\""
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Socialisatie gaat er niet om dat je pup alles leuk vindt. Het gaat om het opbouwen van kalme neutraliteit — een hond die de wereld opmerkt en denkt \"ja, dat is normaal.\""
+          }
+        }
+      }
+    },
+    "Socialization journey timeline" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sozialisierungsreise Zeitachse"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cronología del viaje de socialización"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chronologie du parcours de socialisation"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cronologia del percorso di socializzazione"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Socialisatiereis tijdlijn"
+          }
+        }
+      }
+    },
+    "Socialization Window" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sozialisierungsfenster"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Período de socialización"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fenêtre de socialisation"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Periodo di socializzazione"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Socialisatievenster"
+          }
+        }
+      }
+    },
+    "Sounds" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gerausche"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sonidos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sons"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suoni"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geluiden"
+          }
+        }
+      }
+    },
+    "Start from scratch" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Von vorne beginnen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Empezar de cero"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Commencer à zéro"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inizia da zero"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Begin opnieuw"
+          }
+        }
+      }
+    },
+    "Start socialization" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sozialisierung starten"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Iniciar socialización"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Commencer la socialisation"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inizia socializzazione"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start socialisatie"
+          }
+        }
+      }
+    },
+    "Surfaces" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Untergrunde"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Superficies"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Surfaces"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Superfici"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ondergronden"
+          }
+        }
+      }
+    },
+    "Tap items to mark comfortable" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tippe auf Elemente um als vertraut zu markieren"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toca elementos para marcar como cómodo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Touchez les éléments pour marquer comme à l'aise"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tocca gli elementi per segnare come a proprio agio"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tik op items om aan te geven als comfortabel"
+          }
+        }
+      }
+    },
+    "Tap to log exposure" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tippen, um Erfahrung einzutragen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toca para registrar exposición"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Appuyez pour enregistrer une exposition"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tocca per registrare l'esposizione"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tik om ervaring te loggen"
+          }
+        }
+      }
+    },
+    "Tap to log your first exposure" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tippen, um deine erste Erfahrung einzutragen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toca para registrar tu primera exposición"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Appuyez pour enregistrer votre première exposition"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tocca per registrare la prima esposizione"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tik om je eerste ervaring te loggen"
+          }
+        }
+      }
+    },
+    "The Goal: Calm Neutrality" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das Ziel: Ruhige Neutralität"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El objetivo: Neutralidad tranquila"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L'objectif : La neutralité calme"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L'obiettivo: Neutralità calma"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Het doel: Kalme neutraliteit"
+          }
+        }
+      }
+    },
+    "The goal: walk past a playground without breaking stride." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das Ziel: An einem Spielplatz vorbeigehen, ohne den Schritt zu verlangsamen."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El objetivo: pasar junto a un parque sin romper el paso."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L'objectif : passer devant une aire de jeux sans ralentir."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L'obiettivo: passare davanti a un parco giochi senza rallentare il passo."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Het doel: langs een speeltuin lopen zonder te vertragen."
+          }
+        }
+      }
+    },
+    "The over-socialization trap" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Über-Sozialisierungsfalle"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La trampa de la sobre-socialización"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le piège de la sur-socialisation"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La trappola dell'eccessiva socializzazione"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De over-socialisatie valkuil"
+          }
+        }
+      }
+    },
+    "The puppy is exposed to something and nothing bad happens. She observes from a comfortable distance, maybe gets a treat for being calm, and you move on. That's the positive experience — the absence of stress." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Welpe wird etwas ausgesetzt und nichts Schlimmes passiert. Sie beobachtet aus einer angenehmen Entfernung, bekommt vielleicht ein Leckerli fürs Ruhigsein, und ihr geht weiter. Das ist die positive Erfahrung — die Abwesenheit von Stress."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El cachorro se expone a algo y no pasa nada malo. Observa desde una distancia cómoda, quizás recibe un premio por estar tranquilo, y sigues adelante. Esa es la experiencia positiva — la ausencia de estrés."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le chiot est exposé à quelque chose et rien de mal n'arrive. Il observe à distance confortable, reçoit peut-être une friandise pour être calme, et vous continuez. C'est l'expérience positive — l'absence de stress."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il cucciolo viene esposto a qualcosa e non succede niente di male. Osserva da una distanza confortevole, magari riceve un premietto per essere calmo, e si va avanti. Questa è l'esperienza positiva — l'assenza di stress."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De pup wordt aan iets blootgesteld en er gebeurt niets ergs. Ze observeert van een comfortabele afstand, krijgt misschien een snoepje voor rustig zijn, en je gaat verder. Dat is de positieve ervaring — de afwezigheid van stress."
+          }
+        }
+      }
+    },
+    "Things to watch for" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Worauf du achten solltest"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cosas a observar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Points à surveiller"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cose da osservare"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Waar je op moet letten"
+          }
+        }
+      }
+    },
+    "Today's focus" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fokus heute"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enfoque de hoy"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Objectif du jour"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Focus di oggi"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Focus van vandaag"
+          }
+        }
+      }
+    },
+    "Unsure" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unsicher"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inseguro"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Incertain"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Incerto"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Onzeker"
+          }
+        }
+      }
+    },
+    "Upcoming" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bevorstehend"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Próximo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "À venir"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In arrivo"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aankomend"
+          }
+        }
+      }
+    },
+    "Vehicles" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fahrzeuge"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vehículos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Véhicules"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Veicoli"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voertuigen"
+          }
+        }
+      }
+    },
+    "View full progress" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vollständigen Fortschritt anzeigen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ver progreso completo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voir la progression complète"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vedi progressi completi"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bekijk volledige voortgang"
+          }
+        }
+      }
+    },
+    "View History" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verlauf anzeigen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ver historial"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voir l'historique"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vedi cronologia"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bekijk geschiedenis"
+          }
+        }
+      }
+    },
+    "Watch for during walk" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wahrend des Spaziergangs beachten"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Observar durante el paseo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "À observer pendant la promenade"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Da osservare durante la passeggiata"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Let op tijdens wandeling"
+          }
+        }
+      }
+    },
+    "Weather" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wetter"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clima"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Météo"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meteo"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weer"
+          }
+        }
+      }
+    },
+    "Week %lld" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Woche %lld"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Semana %lld"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Semaine %lld"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Settimana %lld"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Week %lld"
+          }
+        }
+      }
+    },
+    "Week %lld of %lld" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Woche %lld von %lld"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Semana %lld de %lld"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Semaine %lld sur %lld"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Settimana %lld di %lld"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Week %lld van %lld"
+          }
+        }
+      }
+    },
+    "What \"positive\" actually means" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Was \"positiv\" wirklich bedeutet"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lo que \"positivo\" realmente significa"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ce que \"positif\" signifie vraiment"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cosa significa veramente \"positivo\""
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wat \"positief\" eigenlijk betekent"
+          }
+        }
+      }
+    },
+    "What happened?" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Was ist passiert?"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Qué pasó?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Que s'est-il passé ?"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cosa è successo?"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wat gebeurde er?"
+          }
+        }
+      }
+    },
+    "What is Socialization?" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Was ist Sozialisierung?"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Qué es la socialización?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Qu'est-ce que la socialisation ?"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cos'è la socializzazione?"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wat is socialisatie?"
+          }
+        }
+      }
+    },
+    "Window closing soon" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fenster schliesst bald"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El período termina pronto"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fenêtre se ferme bientôt"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il periodo si chiude presto"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Venster sluit binnenkort"
+          }
+        }
+      }
+    },
+    "Window just closed" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fenster gerade geschlossen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El período acaba de terminar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fenêtre vient de se fermer"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il periodo è appena terminato"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Venster net gesloten"
+          }
+        }
+      }
+    },
+    "Your puppy has likely already experienced some things. Let's quickly mark what's familiar." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dein Welpe hat wahrscheinlich schon einiges erlebt. Lass uns schnell markieren, was bekannt ist."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu cachorro probablemente ya ha experimentado algunas cosas. Marquemos rápidamente lo que es familiar."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Votre chiot a probablement déjà vécu certaines choses. Marquons rapidement ce qui est familier."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il tuo cucciolo probabilmente ha già sperimentato alcune cose. Segniamo rapidamente cosa è familiare."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je pup heeft waarschijnlijk al wat dingen meegemaakt. Laten we snel aangeven wat bekend is."
           }
         }
       }
     }
   },
-  "version": "1.0"
+  "version" : "1.0"
 }

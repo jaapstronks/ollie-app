@@ -36,6 +36,9 @@ final class TimelineStatsCache: ObservableObject {
     /// Cached walk stats for the week
     @Published private(set) var weekWalkStats: (count: Int, totalMinutes: Int) = (0, 0)
 
+    /// Cached rolling walk stats (14 days) for adaptive walk target nudges
+    @Published private(set) var walkStats: WalkStats?
+
     // MARK: - Internal State
 
     /// Last time stats were computed (for debouncing)
@@ -85,5 +88,18 @@ final class TimelineStatsCache: ObservableObject {
         // Update cached walk stats
         let totalWalkMinutes = recentWalks.compactMap { $0.durationMin }.reduce(0, +)
         weekWalkStats = (recentWalks.count, totalWalkMinutes)
+
+        // Update rolling walk stats (14 days) for adaptive walk target nudges
+        let fifteenDaysAgo = Date().addingDays(-15)  // 14 days + buffer
+        let extendedEvents = eventStore.getEvents(from: fifteenDaysAgo, to: Date())
+        if let profile = profileStore.profile {
+            walkStats = WalkStatsCalculations.calculateRollingStats(
+                from: extendedEvents,
+                periodDays: 14,
+                scheduledWalksPerDay: profile.walkSchedule.walksPerDay
+            )
+        } else {
+            walkStats = nil
+        }
     }
 }

@@ -18,12 +18,22 @@ struct MomentsGalleryView: View {
 
     // First-visit tip tracking
     @AppStorage("hasSeenMomentsGalleryTip") private var hasSeenMomentsGalleryTip = false
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
-    private let columns = [
-        GridItem(.flexible(), spacing: 2),
-        GridItem(.flexible(), spacing: 2),
-        GridItem(.flexible(), spacing: 2)
-    ]
+    /// Adaptive grid columns - 3 fixed on iPhone, adaptive on iPad
+    private var columns: [GridItem] {
+        if horizontalSizeClass == .regular {
+            // iPad: adaptive columns based on available width
+            return [GridItem(.adaptive(minimum: iPadLayout.adaptiveGridMinWidth), spacing: 2)]
+        } else {
+            // iPhone: fixed 3 columns
+            return [
+                GridItem(.flexible(), spacing: 2),
+                GridItem(.flexible(), spacing: 2),
+                GridItem(.flexible(), spacing: 2)
+            ]
+        }
+    }
 
     var body: some View {
         NavigationStack {

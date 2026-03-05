@@ -19,7 +19,6 @@ extension Strings {
         static let upcomingMilestones = String(localized: "Coming Up", table: table)
         static let thisWeek = String(localized: "This Week", table: table)
         static let comingUp = String(localized: "Coming Up", table: table)
-        static let rightNow = String(localized: "Right Now", table: table)
 
         // Empty states
         static let noAppointments = String(localized: "No upcoming appointments", table: table)
@@ -33,16 +32,12 @@ extension Strings {
         static let addAppointment = String(localized: "Add Appointment", table: table)
         static let viewAllMilestones = String(localized: "View All Milestones", table: table)
         static let viewAllAppointments = String(localized: "View All Appointments", table: table)
-        static let seeRoadmap = String(localized: "See development roadmap", table: table)
 
         // Age header
         static let weeksOld = String(localized: "weeks old", table: table)
         static let daysHome = String(localized: "days home", table: table)
 
         // MARK: - View Mode Toggle
-
-        /// Development view mode label
-        static let developmentMode = String(localized: "Development", table: table)
 
         /// Calendar view mode label
         static let calendarMode = String(localized: "Calendar", table: table)
@@ -100,5 +95,13 @@ extension Strings {
                 return String(localized: "\(dateString), \(appointmentCount) appointments", table: table)
             }
         }
+
+        // MARK: - Sheet Link Labels
+
+        /// Development journey sheet link label
+        static let viewDevelopmentJourney = String(localized: "View Development Journey", table: table)
+
+        /// Socialization window sheet link label
+        static let viewSocializationWindow = String(localized: "View Socialization Window", table: table)
     }
 }

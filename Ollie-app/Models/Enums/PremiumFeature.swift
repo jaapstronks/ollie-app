@@ -47,6 +47,9 @@ enum PremiumFeature: String, CaseIterable {
     /// Notes and photos on milestone completions
     case milestoneNotes
 
+    /// Subtle AI-powered status nudges and recommendation tuning
+    case aiNudges
+
     /// Display name for the feature
     var displayName: String {
         switch self {
@@ -76,6 +79,8 @@ enum PremiumFeature: String, CaseIterable {
             return Strings.OtisPlus.featureCustomMilestones
         case .milestoneNotes:
             return Strings.OtisPlus.featureMilestoneNotes
+        case .aiNudges:
+            return Strings.OtisPlus.featureAINudges
         }
     }
 
@@ -108,6 +113,8 @@ enum PremiumFeature: String, CaseIterable {
             return Strings.OtisPlus.featureCustomMilestonesDesc
         case .milestoneNotes:
             return Strings.OtisPlus.featureMilestoneNotesDesc
+        case .aiNudges:
+            return Strings.OtisPlus.featureAINudgesDesc
         }
     }
 
@@ -140,6 +147,8 @@ enum PremiumFeature: String, CaseIterable {
             return "plus.circle.fill"
         case .milestoneNotes:
             return "note.text"
+        case .aiNudges:
+            return "sparkles"
         }
     }
 }

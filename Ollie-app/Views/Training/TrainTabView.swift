@@ -17,6 +17,7 @@ struct TrainTabView: View {
     @EnvironmentObject var profileStore: ProfileStore
 
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
     // Sheet state for training guides
     @State private var showPottyGuide = false
@@ -68,6 +69,7 @@ struct TrainTabView: View {
                         .animatedAppear(delay: 0.10)
                 }
                 .padding()
+                .adaptiveContainer()
             }
             .navigationTitle(Strings.Tabs.train)
             .navigationBarTitleDisplayMode(.inline)

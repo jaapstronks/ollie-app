@@ -60,6 +60,7 @@ class ProfileStore: ObservableObject {
     private let persistenceController: PersistenceController
     let logger = Logger.otis(category: "ProfileStore")
     private var cancellables = Set<AnyCancellable>()
+    private var knownSharedProfileIDs = Set<UUID>()
 
     /// App Group suite name for sharing with Intents/Widgets
     private static let appGroupSuiteName = Constants.appGroupIdentifier
@@ -117,7 +118,53 @@ class ProfileStore: ObservableObject {
 
     private func handleShareAccepted() {
         logger.info("Share accepted - reloading all profiles")
-        loadAllProfiles()
+        let previousSharedProfileIDs = knownSharedProfileIDs
+
+        Task { @MainActor in
+            _ = await awaitNewlySharedProfile(
+                previousSharedProfileIDs: previousSharedProfileIDs,
+                timeoutSeconds: 30
+            )
+        }
+    }
+
+    /// Snapshot shared profile IDs before accepting an invitation.
+    /// Used to detect which shared profile is newly imported afterwards.
+    func currentSharedProfileIDs() -> Set<UUID> {
+        Set(profiles.filter { $0.ownership == .shared }.map(\.id))
+    }
+
+    /// Waits for a newly shared profile to arrive after invitation acceptance.
+    /// Returns the imported profile once visible, or nil on timeout.
+    func awaitNewlySharedProfile(
+        previousSharedProfileIDs: Set<UUID>,
+        timeoutSeconds: TimeInterval = 30
+    ) async -> PuppyProfile? {
+        let deadline = Date().addingTimeInterval(timeoutSeconds)
+
+        // Shared records can take a while to appear in the shared store after acceptance.
+        while Date() <= deadline {
+            loadAllProfiles()
+
+            let sharedProfiles = profiles.filter { $0.ownership == .shared }
+            let newlyAddedSharedProfiles = sharedProfiles.filter { !previousSharedProfileIDs.contains($0.id) }
+
+            if let profileToActivate = newlyAddedSharedProfiles.max(by: { $0.modifiedAt < $1.modifiedAt }) {
+                switchToProfile(profileToActivate.id)
+                NotificationCenter.default.post(
+                    name: .sharedProfileAutoActivated,
+                    object: nil,
+                    userInfo: ["profileName": profileToActivate.name]
+                )
+                logger.info("Auto-activated newly shared profile: \(profileToActivate.name)")
+                return profileToActivate
+            }
+
+            try? await Task.sleep(for: .seconds(1))
+        }
+
+        logger.info("Timed out waiting for newly shared profile import")
+        return nil
     }
 
     // MARK: - Public Methods
@@ -369,8 +416,18 @@ class ProfileStore: ObservableObject {
 
     /// Load all profiles from both private and shared stores
     private func loadAllProfiles() {
-        isLoading = true
-        defer { isLoading = false }
+        // Only expose a loading state during first bootstrapping.
+        // Remote CloudKit updates can happen while modals/sheets are open; toggling
+        // root loading there rebuilds the view tree and dismisses active presentations.
+        let shouldToggleLoading = isLoading && profiles.isEmpty
+        if shouldToggleLoading {
+            isLoading = true
+        }
+        defer {
+            if shouldToggleLoading {
+                isLoading = false
+            }
+        }
 
         // In UI testing mode, create a test profile if none exists
         if SeedData.isUITesting {
@@ -417,6 +474,8 @@ class ProfileStore: ObservableObject {
             syncToAppGroup()
             WidgetDataProvider.shared.updateProfileName(profile.name)
         }
+
+        knownSharedProfileIDs = Set(profiles.filter { $0.ownership == .shared }.map(\.id))
     }
 
     // MARK: - Share Acceptance Support
@@ -493,6 +552,10 @@ class ProfileStore: ObservableObject {
     func profile(for id: UUID) -> PuppyProfile? {
         profiles.first { $0.id == id }
     }
+}
+
+extension Notification.Name {
+    static let sharedProfileAutoActivated = Notification.Name("sharedProfileAutoActivated")
 }
 
 // MARK: - Notification Names

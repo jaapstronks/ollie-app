@@ -74,15 +74,28 @@ final class WalkNotificationScheduler: NotificationScheduler {
         guard timeInterval > 0 else { return }
 
         let minutesUntilFire = Int(timeInterval / 60)
+        let aiAdjusted = AINudgeOrchestrator.shared.notificationPolicyAdjustment(
+            kind: .walkReminder,
+            baselineMinutesUntilFire: minutesUntilFire,
+            profile: profile,
+            recentEvents: events,
+            isUrgent: false,
+            allowSkip: true
+        )
+        if aiAdjusted.skip {
+            logger.debug("Skipping walk notification based on AI timing decision")
+            return
+        }
 
         // Smart suppression: If user just used app and notification would fire soon, skip it
-        if suppression.shouldSuppressForAppUsage(minutesUntilFire: minutesUntilFire) {
+        if suppression.shouldSuppressForAppUsage(minutesUntilFire: aiAdjusted.minutesUntilFire) {
             logger.debug("Suppressing walk notification: app recently used")
             return
         }
 
         // Smart suppression: Check quiet hours (walks aren't urgent enough to override)
-        if suppression.shouldSuppressForQuietHours(fireTime: notificationDate, settings: profile.notificationSettings) {
+        let adjustedFireTime = now.addingTimeInterval(TimeInterval(aiAdjusted.minutesUntilFire * 60))
+        if suppression.shouldSuppressForQuietHours(fireTime: adjustedFireTime, settings: profile.notificationSettings) {
             logger.debug("Suppressing walk notification: quiet hours")
             return
         }
@@ -93,7 +106,7 @@ final class WalkNotificationScheduler: NotificationScheduler {
         content.sound = .default
 
         let trigger = UNTimeIntervalNotificationTrigger(
-            timeInterval: timeInterval,
+            timeInterval: Double(aiAdjusted.minutesUntilFire * 60),
             repeats: false
         )
 
@@ -105,7 +118,7 @@ final class WalkNotificationScheduler: NotificationScheduler {
 
         do {
             try await notificationCenter.add(request)
-            logger.debug("Scheduled walk notification for \(minutesUntilFire) minutes from now")
+            logger.debug("Scheduled walk notification for \(aiAdjusted.minutesUntilFire) minutes from now")
         } catch {
             logger.error("Failed to schedule smart walk reminder: \(error.localizedDescription)")
         }

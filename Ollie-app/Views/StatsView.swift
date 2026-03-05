@@ -15,7 +15,7 @@ struct StatsView: View {
     @ObservedObject var viewModel: TimelineViewModel
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             ScrollView {
                 VStack(spacing: 20) {
                     // Streak section
