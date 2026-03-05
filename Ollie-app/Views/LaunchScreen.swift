@@ -35,8 +35,8 @@ struct LaunchScreen: View {
 
                 // Tagline at bottom
                 Text(Strings.App.tagline)
-                    .font(.subheadline)
-                    .fontWeight(.medium)
+                    .font(.title3)
+                    .fontWeight(.semibold)
                     .multilineTextAlignment(.center)
                     .foregroundColor(.white.opacity(0.9))
                     .padding(.horizontal, 32)
