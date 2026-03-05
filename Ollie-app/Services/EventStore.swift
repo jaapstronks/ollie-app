@@ -164,6 +164,13 @@ class EventStore: ObservableObject {
                 hasNote: newEvent.note != nil,
                 hasPhoto: newEvent.photo != nil
             )
+            Analytics.trackFirstEventLogged(
+                profileId: profileStoreRef?.profile?.id,
+                eventType: newEvent.type.rawValue,
+                hasLocation: newEvent.location != nil,
+                hasNote: newEvent.note != nil,
+                hasPhoto: newEvent.photo != nil
+            )
 
             // Update widgets
             updateWidgetData(profile: profile)

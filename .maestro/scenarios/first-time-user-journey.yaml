@@ -341,7 +341,7 @@ name: First-Time User Journey - Emma & Milo
 
 # Tap the FAB (floating action button) in bottom-right
 - tapOn:
-    point: "90%,80%"
+    id: "FAB_BUTTON"
 
 - waitForAnimationToEnd
 - takeScreenshot: "screenshots/emma-journey/15-fab-menu-open"
@@ -380,7 +380,7 @@ name: First-Time User Journey - Emma & Milo
 
 # Open FAB menu again
 - tapOn:
-    point: "90%,80%"
+    id: "FAB_BUTTON"
 
 - waitForAnimationToEnd
 
@@ -410,7 +410,7 @@ name: First-Time User Journey - Emma & Milo
 
 # Open FAB menu
 - tapOn:
-    point: "90%,80%"
+    id: "FAB_BUTTON"
 
 - waitForAnimationToEnd
 
@@ -446,7 +446,7 @@ name: First-Time User Journey - Emma & Milo
 
 # Open FAB menu
 - tapOn:
-    point: "90%,80%"
+    id: "FAB_BUTTON"
 
 - waitForAnimationToEnd
 
@@ -482,7 +482,7 @@ name: First-Time User Journey - Emma & Milo
 
 # Open FAB menu
 - tapOn:
-    point: "90%,80%"
+    id: "FAB_BUTTON"
 
 - waitForAnimationToEnd
 
@@ -510,13 +510,13 @@ name: First-Time User Journey - Emma & Milo
 
 - takeScreenshot: "screenshots/emma-journey/24-timeline-complete"
 
-# Emma taps on the Insights tab to see statistics
+# Emma taps on the Health tab to see statistics
 - tapOn:
-    text: "Insights|Inzichten"
+    text: "Health|Gezondheid"
     optional: true
 
 - waitForAnimationToEnd
-- takeScreenshot: "screenshots/emma-journey/25-insights-tab"
+- takeScreenshot: "screenshots/emma-journey/25-health-tab"
 
 # Emma checks the Training tab
 - tapOn:
@@ -526,13 +526,13 @@ name: First-Time User Journey - Emma & Milo
 - waitForAnimationToEnd
 - takeScreenshot: "screenshots/emma-journey/26-training-tab"
 
-# Emma looks at the Walks tab
+# Emma looks at the Explore tab
 - tapOn:
-    text: "Walk|Walks|Wandelen"
+    text: "Explore|Ontdekken"
     optional: true
 
 - waitForAnimationToEnd
-- takeScreenshot: "screenshots/emma-journey/27-walks-tab"
+- takeScreenshot: "screenshots/emma-journey/27-explore-tab"
 
 # Emma returns to Today view
 - tapOn:
@@ -594,7 +594,7 @@ name: First-Time User Journey - Emma & Milo
 #
 # NAVIGATION VALIDATED:
 # [x] Tab bar navigation works
-# [x] Today, Insights, Train, Walks tabs accessible
+# [x] Today, Health, Train, Explore tabs accessible
 # [x] Return to Today view
 #
 # SCREENSHOTS CAPTURED: 29 images documenting the complete journey

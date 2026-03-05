@@ -1,986 +1,1091 @@
 {
-  "sourceLanguage": "en",
-  "strings": {
-    "%@, %lld appointments": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@, %lld Termine"
+  "sourceLanguage" : "en",
+  "strings" : {
+    "%@, %lld appointments" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, %lld Termine"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@, %lld citas"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, %lld citas"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@, %lld rendez-vous"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, %lld rendez-vous"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@, %lld appuntamenti"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, %lld appuntamenti"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@, %lld afspraken"
-          }
-        }
-      }
-    },
-    "%@, 1 appointment": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@, 1 Termin"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@, 1 cita"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@, 1 rendez-vous"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@, 1 appuntamento"
-          }
-        },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@, 1 afspraak"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, %lld afspraken"
           }
         }
       }
     },
-    "Add Appointment": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Termin hinzufugen"
+    "%@, 1 appointment" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, 1 Termin"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Agregar cita"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, 1 cita"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ajouter un rendez-vous"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, 1 rendez-vous"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aggiungi appuntamento"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, 1 appuntamento"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Voeg afspraak toe"
-          }
-        }
-      }
-    },
-    "All milestones completed!": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Alle Meilensteine abgeschlossen!"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Todos los hitos completados!"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Toutes les étapes accomplies !"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tutte le tappe completate!"
-          }
-        },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Alle mijlpalen voltooid!"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, 1 afspraak"
           }
         }
       }
     },
-    "Calendar": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kalender"
+    "Add Appointment" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Termin hinzufugen"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Calendario"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Agregar cita"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Calendrier"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajouter un rendez-vous"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Calendario"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aggiungi appuntamento"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kalender"
-          }
-        }
-      }
-    },
-    "Coming Up": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Demnachst"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Proximamente"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "À venir"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "In arrivo"
-          }
-        },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Binnenkort"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voeg afspraak toe"
           }
         }
       }
     },
-    "days home": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tage zu Hause"
+    "All milestones completed!" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle Meilensteine abgeschlossen!"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "dias en casa"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Todos los hitos completados!"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "jours à la maison"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toutes les étapes accomplies !"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "giorni a casa"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tutte le tappe completate!"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "dagen thuis"
-          }
-        }
-      }
-    },
-    "Development": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Entwicklung"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Desarrollo"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Développement"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sviluppo"
-          }
-        },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ontwikkeling"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle mijlpalen voltooid!"
           }
         }
       }
     },
-    "Due this week": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Diese Woche fallig"
+    "Calendar" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kalender"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pendiente esta semana"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Calendario"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Prévu cette semaine"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Calendrier"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "In scadenza questa settimana"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Calendario"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gepland deze week"
-          }
-        }
-      }
-    },
-    "Milestone Timeline": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Meilenstein-Zeitachse"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cronologia de hitos"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Chronologie des étapes"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cronologia tappe"
-          }
-        },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mijlpalen tijdlijn"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kalender"
           }
         }
       }
     },
-    "Month": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Monat"
+    "Coming Up" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Demnachst"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mes"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Proximamente"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mois"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "À venir"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mese"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In arrivo"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Maand"
-          }
-        }
-      }
-    },
-    "No appointments": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Keine Termine"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sin citas"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aucun rendez-vous"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nessun appuntamento"
-          }
-        },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Geen afspraken"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Binnenkort"
           }
         }
       }
     },
-    "No upcoming appointments": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Keine bevorstehenden Termine"
+    "days home" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tage zu Hause"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No hay citas proximas"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "dias en casa"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aucun rendez-vous à venir"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "jours à la maison"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nessun appuntamento in programma"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "giorni a casa"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Geen komende afspraken"
-          }
-        }
-      }
-    },
-    "No upcoming milestones": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Keine bevorstehenden Meilensteine"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No hay hitos proximos"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aucune étape à venir"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nessuna tappa in arrivo"
-          }
-        },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Geen komende mijlpalen"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "dagen thuis"
           }
         }
       }
     },
-    "Nothing coming up in the next few weeks": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nichts in den nachsten Wochen geplant"
+    "Development" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entwicklung"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nada programado en las proximas semanas"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Desarrollo"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Rien de prévu dans les prochaines semaines"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Développement"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Niente in programma nelle prossime settimane"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sviluppo"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Niets op komst de komende weken"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ontwikkeling"
           }
         }
       }
     },
-    "Nothing scheduled this week": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Diese Woche nichts geplant"
+    "Due this week" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diese Woche fallig"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nada programado esta semana"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pendiente esta semana"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Rien de prévu cette semaine"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prévu cette semaine"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Niente in programma questa settimana"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In scadenza questa settimana"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Niets gepland deze week"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gepland deze week"
           }
         }
       }
     },
-    "Overdue": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Uberfällig"
+    "List" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Liste"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vencido"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lista"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "En retard"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Liste"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "In ritardo"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lista"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Te laat"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lijst"
           }
         }
       }
     },
-    "Right Now": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gerade jetzt"
+    "Milestone Timeline" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meilenstein-Zeitachse"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ahora mismo"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cronologia de hitos"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "En ce moment"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chronologie des étapes"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "In questo momento"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cronologia tappe"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Op dit moment"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mijlpalen tijdlijn"
           }
         }
       }
     },
-    "Schedule vet visits, grooming, and training classes.": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Plane Tierarztbesuche, Pflege und Trainingskurse."
+    "Month" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Monat"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Programa visitas al veterinario, peluqueria y clases de adiestramiento."
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mes"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Planifiez les visites chez le vétérinaire, le toilettage et les cours d'éducation."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mois"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Programma visite dal veterinario, toelettatura e lezioni di addestramento."
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mese"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Plan dierenarts bezoeken, verzorging en trainingslessen."
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maand"
           }
         }
       }
     },
-    "See development roadmap": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Entwicklungs-Roadmap ansehen"
+    "No appointments" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine Termine"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ver hoja de ruta de desarrollo"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sin citas"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Voir la feuille de route du développement"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucun rendez-vous"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vedi tabella di sviluppo"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nessun appuntamento"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bekijk ontwikkelingsroadmap"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geen afspraken"
           }
         }
       }
     },
-    "This Week": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Diese Woche"
+    "No upcoming appointments" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine bevorstehenden Termine"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Esta semana"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No hay citas proximas"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cette semaine"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucun rendez-vous à venir"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Questa settimana"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nessun appuntamento in programma"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Deze week"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geen komende afspraken"
           }
         }
       }
     },
-    "Today": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Heute"
+    "No upcoming milestones" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine bevorstehenden Meilensteine"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hoy"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No hay hitos proximos"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aujourd'hui"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucune étape à venir"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Oggi"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nessuna tappa in arrivo"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vandaag"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geen komende mijlpalen"
           }
         }
       }
     },
-    "Upcoming Appointments": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bevorstehende Termine"
+    "Nothing coming up in the next few weeks" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nichts in den nachsten Wochen geplant"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Citas proximas"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nada programado en las proximas semanas"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Rendez-vous à venir"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rien de prévu dans les prochaines semaines"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Prossimi appuntamenti"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Niente in programma nelle prossime settimane"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Komende afspraken"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Niets op komst de komende weken"
           }
         }
       }
     },
-    "View All Appointments": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Alle Termine anzeigen"
+    "Nothing scheduled this week" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diese Woche nichts geplant"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ver todas las citas"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nada programado esta semana"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Voir tous les rendez-vous"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rien de prévu cette semaine"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vedi tutti gli appuntamenti"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Niente in programma questa settimana"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bekijk alle afspraken"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Niets gepland deze week"
           }
         }
       }
     },
-    "View All Milestones": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Alle Meilensteine anzeigen"
+    "Overdue" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uberfällig"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ver todos los hitos"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vencido"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Voir toutes les étapes"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En retard"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vedi tutte le tappe"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In ritardo"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bekijk alle mijlpalen"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Te laat"
           }
         }
       }
     },
-    "Week": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Woche"
+    "Right Now" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gerade jetzt"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Semana"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ahora mismo"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Semaine"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En ce moment"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Settimana"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In questo momento"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Week"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Op dit moment"
           }
         }
       }
     },
-    "Week %lld of %lld socialization": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Woche %lld von %lld Sozialisierung"
+    "Schedule vet visits, grooming, and training classes." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plane Tierarztbesuche, Pflege und Trainingskurse."
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Semana %lld de %lld de socializacion"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Programa visitas al veterinario, peluqueria y clases de adiestramiento."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Semaine %lld sur %lld de socialisation"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Planifiez les visites chez le vétérinaire, le toilettage et les cours d'éducation."
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Settimana %lld di %lld socializzazione"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Programma visite dal veterinario, toelettatura e lezioni di addestramento."
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Week %lld van %lld socialisatie"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plan dierenarts bezoeken, verzorging en trainingslessen."
           }
         }
       }
     },
-    "weeks old": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wochen alt"
+    "See development roadmap" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entwicklungs-Roadmap ansehen"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "semanas de edad"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ver hoja de ruta de desarrollo"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "semaines"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voir la feuille de route du développement"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "settimane"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vedi tabella di sviluppo"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "weken oud"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bekijk ontwikkelingsroadmap"
+          }
+        }
+      }
+    },
+    "This Week" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diese Woche"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esta semana"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cette semaine"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Questa settimana"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deze week"
+          }
+        }
+      }
+    },
+    "Today" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Heute"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoy"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aujourd'hui"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oggi"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vandaag"
+          }
+        }
+      }
+    },
+    "Upcoming Appointments" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bevorstehende Termine"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Citas proximas"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rendez-vous à venir"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prossimi appuntamenti"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Komende afspraken"
+          }
+        }
+      }
+    },
+    "View All Appointments" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle Termine anzeigen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ver todas las citas"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voir tous les rendez-vous"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vedi tutti gli appuntamenti"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bekijk alle afspraken"
+          }
+        }
+      }
+    },
+    "View All Milestones" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle Meilensteine anzeigen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ver todos los hitos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voir toutes les étapes"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vedi tutte le tappe"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bekijk alle mijlpalen"
+          }
+        }
+      }
+    },
+    "View Development Journey" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entwicklungsreise ansehen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ver viaje de desarrollo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voir le parcours de développement"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vedi percorso di sviluppo"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bekijk ontwikkelingsreis"
+          }
+        }
+      }
+    },
+    "View Socialization Window" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sozialisierungsfenster ansehen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ver período de socialización"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voir la fenêtre de socialisation"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vedi periodo di socializzazione"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bekijk socialisatievenster"
+          }
+        }
+      }
+    },
+    "Week" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Woche"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Semana"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Semaine"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Settimana"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Week"
+          }
+        }
+      }
+    },
+    "Week %lld of %lld socialization" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Woche %lld von %lld Sozialisierung"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Semana %lld de %lld de socializacion"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Semaine %lld sur %lld de socialisation"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Settimana %lld di %lld socializzazione"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Week %lld van %lld socialisatie"
+          }
+        }
+      }
+    },
+    "weeks old" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wochen alt"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "semanas de edad"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "semaines"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "settimane"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "weken oud"
           }
         }
       }
     }
   },
-  "version": "1.0"
+  "version" : "1.0"
 }

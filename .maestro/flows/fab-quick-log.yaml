@@ -10,15 +10,14 @@ appId: jaapstronks.Otis-app
     timeout: 5000
 
 # Long press on FAB to open quick menu
-# FAB is positioned in bottom-right corner, above tab bar
 - longPressOn:
-    point: "90%,80%"
+    id: "FAB_BUTTON"
 
 - waitForAnimationToEnd
 - takeScreenshot: "screenshots/05-fab-menu-open"
 
 # Tap outside to close menu
 - tapOn:
-    point: "50%,30%"
+    id: "FAB_BUTTON"
 
 - waitForAnimationToEnd

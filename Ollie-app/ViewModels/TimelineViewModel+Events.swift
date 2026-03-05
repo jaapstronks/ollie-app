@@ -180,6 +180,11 @@ extension TimelineViewModel {
         // Provide audio + haptic feedback for successful log
         FeedbackManager.logEvent()
 
+        // Debug override: force a visible celebration for every event log.
+        if triggerForcedCelebrationIfEnabled() {
+            return
+        }
+
         // Trigger celebration for first-ever event
         if isFirstEvent {
             triggerCelebration(.milestone)
@@ -213,12 +218,6 @@ extension TimelineViewModel {
             // Other events don't trigger celebrations
             break
         }
-    }
-
-    /// Trigger a celebration animation
-    func triggerCelebration(_ style: CelebrationPreset) {
-        celebrationStyle = style
-        showCelebration = true
     }
 
     /// Log a walk event with optional spot information and potty events
@@ -278,8 +277,10 @@ extension TimelineViewModel {
         // Provide audio + haptic feedback for successful log
         FeedbackManager.logEvent()
 
-        // Celebrate completed walk
-        triggerCelebration(.training)
+        if !triggerForcedCelebrationIfEnabled() {
+            // Celebrate completed walk
+            triggerCelebration(.training)
+        }
     }
 
     /// Log a completed nap with start and end time (single-event model with durationMin)
@@ -311,8 +312,10 @@ extension TimelineViewModel {
         // Provide audio + haptic feedback for successful log
         FeedbackManager.logEvent()
 
-        // Celebrate completed nap
-        triggerCelebration(.quickLog)
+        if !triggerForcedCelebrationIfEnabled() {
+            // Celebrate completed nap
+            triggerCelebration(.quickLog)
+        }
     }
 
     /// Add a pre-built event (used for photo moments)
@@ -323,6 +326,8 @@ extension TimelineViewModel {
         syncEventsFromStore()
 
         notifyRefreshNotifications()
+
+        _ = triggerForcedCelebrationIfEnabled()
     }
 
     /// Update an existing event
@@ -459,6 +464,8 @@ extension TimelineViewModel {
         notifyRefreshNotifications()
 
         HapticFeedback.success()
+
+        _ = triggerForcedCelebrationIfEnabled()
     }
 
     /// Log wake-up for the assumed overnight sleep
@@ -498,6 +505,8 @@ extension TimelineViewModel {
         captureWakeTimePottyState()
 
         HapticFeedback.success()
+
+        _ = triggerForcedCelebrationIfEnabled()
     }
 
     // MARK: - Stale Logging
@@ -532,6 +541,8 @@ extension TimelineViewModel {
         notifyRefreshNotifications()
 
         HapticFeedback.success()
+
+        _ = triggerForcedCelebrationIfEnabled()
     }
 
     // MARK: - First Run Welcome
@@ -560,6 +571,8 @@ extension TimelineViewModel {
         notifyRefreshNotifications()
 
         HapticFeedback.success()
+
+        _ = triggerForcedCelebrationIfEnabled()
     }
 
     /// Handle "puppy is awake" response from first run welcome
@@ -586,6 +599,19 @@ extension TimelineViewModel {
         notifyRefreshNotifications()
 
         HapticFeedback.success()
+
+        _ = triggerForcedCelebrationIfEnabled()
+    }
+
+    /// Force a full celebration for every event log when the setting is enabled.
+    @discardableResult
+    private func triggerForcedCelebrationIfEnabled() -> Bool {
+        let shouldForceCelebrate = UserDefaults.standard.bool(
+            forKey: UserPreferences.Key.forceCelebrateEveryLog.rawValue
+        )
+        guard shouldForceCelebrate else { return false }
+        triggerCelebration(.milestone)
+        return true
     }
 
     /// Dismiss the first run welcome permanently

@@ -1,5 +1,55 @@
 # Otis Launch & Marketing Plan
 
+## 2026-03 Strategic Reset (Current Plan of Record)
+
+This section supersedes conflicting details below.
+Detailed execution plan lives in `ROADMAP-2026-H1.md`.
+
+### Why this reset
+
+- We are winning on utility, not on content volume.
+- The strongest user pain is chaos/anxiety in the first puppy months.
+- We should optimize for long-term retention across the full dog life cycle.
+- As a solo founder, focus and sequencing matter more than channel breadth.
+
+### Updated positioning
+
+**Category:** Dog life utility app (not a training content store)  
+**Promise:** Your dog's day, memory, plans, and care in one timeline you control.  
+**Tone:** Calm, practical, privacy-first, Apple-native.
+
+### Scope reduction (immediate)
+
+- Launch/optimize in **EN, NL, DE only** for now.
+- Defer broad localization until funnel metrics validate repeatable growth.
+- Keep existing translated assets in git history and/or a dedicated archive branch for later reuse.
+
+### Updated go-to-market priorities
+
+1. **Onboarding + activation first** (first 3 sessions, not traffic volume).
+2. **Founder-led organic** (short-form video + Reddit/Facebook value posts).
+3. **Apple Search Ads first paid channel** after organic proof.
+4. **Meta ads only after CAC and conversion are validated.**
+5. **Do not scale spend** until retention and conversion are healthy.
+
+### Product priorities that support marketing
+
+1. Adaptive experience by phase (new puppy -> routine -> long-term life).
+2. Puppy-blues / owner-anxiety support (lightweight, practical).
+3. Planning and household coordination loop.
+4. AI daily summary + next-best actions from real dog data.
+5. Knowledge bookmarks (link out to trusted external training content).
+
+### Validation gates before scaling
+
+- App Store rating >= 4.4
+- D7 retention >= 30%
+- D30 retention >= 20%
+- Trial-to-paid >= 4%
+- CAC < EUR 25 on small paid test
+
+If these are not met, fix product/onboarding before increasing acquisition spend.
+
 ## Executive Summary
 
 **Goal:** Launch Otis as the go-to free puppy tracking app globally, then convert engaged users to Otis+ subscribers — using LLM automation to minimize costs and maximize organic reach.

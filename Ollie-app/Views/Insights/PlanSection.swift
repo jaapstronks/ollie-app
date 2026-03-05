@@ -193,33 +193,13 @@ struct PlanSection: View {
     }
 
     private func ageStageLabel(for profile: PuppyProfile) -> String {
-        let weeks = profile.ageInWeeks
-        if weeks < 8 {
-            return Strings.PlanTab.ageStageNewborn
-        } else if weeks <= 16 {
-            return Strings.PlanTab.ageStageSocialization
-        } else if weeks <= 26 {
-            return Strings.PlanTab.ageStageJuvenile
-        } else if weeks <= 52 {
-            return Strings.PlanTab.ageStageAdolescent
-        } else {
-            return Strings.PlanTab.ageStageAdult
-        }
+        // Use canonical DevelopmentStage for consistent labeling
+        profile.currentDevelopmentStage.title
     }
 
     private func ageStageColor(for profile: PuppyProfile) -> Color {
-        let weeks = profile.ageInWeeks
-        if weeks < 8 {
-            return .otisSleep
-        } else if weeks <= 16 {
-            return .otisAccent
-        } else if weeks <= 26 {
-            return .otisInfo
-        } else if weeks <= 52 {
-            return .otisSuccess
-        } else {
-            return .secondary
-        }
+        // Use canonical DevelopmentStage for consistent coloring
+        profile.currentDevelopmentStage.color
     }
 
     // MARK: - Socialization Section

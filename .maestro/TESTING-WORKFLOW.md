@@ -81,6 +81,13 @@ Options:
 
 # Verbose mode (see output in real-time)
 ./scripts/run-ui-tests.sh -a -v
+
+# iPad smoke lanes
+./scripts/run-ipad-smoke.sh
+./scripts/run-ipad-landscape-smoke.sh
+
+# Explicit device targeting
+./scripts/run-ui-tests.sh -f complete-user-journey -d "iPad Pro 11-inch (M4)"
 ```
 
 ## For Claude: Analyzing Test Results

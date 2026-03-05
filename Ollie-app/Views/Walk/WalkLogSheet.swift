@@ -54,7 +54,7 @@ struct WalkLogSheet: View {
     }
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             Form {
                 // Time section with linked start/end/duration
                 Section {

@@ -70,6 +70,10 @@ crashlytics-build.properties
 *.xcconfig.local
 Secrets.xcconfig
 
+# JavaScript/TypeScript dependencies and broker logs
+**/node_modules/
+ai-broker-server/logs/
+
 # Editor directories
 .idea/
 .vscode/

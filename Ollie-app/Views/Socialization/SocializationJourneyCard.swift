@@ -2,12 +2,12 @@
 //  SocializationJourneyCard.swift
 //  Otis-app
 //
-//  Journey-focused card for Train tab showing current phase and next focus
+//  Action-focused card for Train tab - "What's next? Log it."
 
 import SwiftUI
 import OtisShared
 
-/// Card showing current socialization phase and next focus item for Train tab
+/// Action-focused card for logging socialization exposures from Train tab
 struct SocializationJourneyCard: View {
     @EnvironmentObject var socializationStore: SocializationStore
     @EnvironmentObject var profileStore: ProfileStore
@@ -15,6 +15,7 @@ struct SocializationJourneyCard: View {
     @Environment(\.colorScheme) private var colorScheme
 
     @State private var showInfoSheet = false
+    @State private var showLogSheet = false
 
     private var profile: PuppyProfile? {
         profileStore.profile
@@ -24,158 +25,74 @@ struct SocializationJourneyCard: View {
         socializationStore.currentPhase
     }
 
-    private var daysHome: Int {
-        profile?.daysHome ?? 0
+    /// Total exposures logged
+    private var totalExposures: Int {
+        socializationStore.allExposures.count
     }
 
-    private var puppyName: String {
-        profile?.name ?? "Puppy"
-    }
-
-    /// Current age in weeks (uses PuppyProfile's computed property)
-    private var ageInWeeks: Int {
-        profile?.ageInWeeks ?? 0
-    }
-
-    /// Weeks remaining in socialization window (ends at 16 weeks)
-    private var weeksRemaining: Int {
-        max(0, 16 - ageInWeeks)
-    }
-
-    /// Whether puppy is in the socialization window (3-16 weeks)
-    private var isInSocializationWindow: Bool {
-        ageInWeeks >= 3 && ageInWeeks <= 16
-    }
-
-    /// Total weeks in socialization window
-    private let socializationWindowEnd = 16
-
-    /// Determine if user has started socialization
-    private var hasStartedSocialization: Bool {
-        socializationStore.totalComfortable > 0
+    /// Whether puppy is past the critical window
+    private var isWindowClosed: Bool {
+        let ageInWeeks = profile?.ageInWeeks ?? 0
+        return ageInWeeks > SocializationWindowStatus.windowEndWeek
     }
 
     var body: some View {
-        NavigationLink {
-            SocializationJourneyView()
-        } label: {
-            VStack(alignment: .leading, spacing: 12) {
-                // Header with description
-                VStack(alignment: .leading, spacing: 4) {
-                    HStack {
-                        Image(systemName: "heart.circle.fill")
-                            .foregroundStyle(Color.otisAccent)
-                            .accessibilityHidden(true)
-                        Text(Strings.Socialization.title)
-                            .font(.headline)
-                            .fontWeight(.semibold)
-                            .accessibilityAddTraits(.isHeader)
-                        Spacer()
-
-                        // Info button (opens What is Socialization sheet)
-                        Button {
-                            showInfoSheet = true
-                        } label: {
-                            Image(systemName: "questionmark.circle")
-                                .font(.subheadline)
-                                .foregroundStyle(.secondary)
-                        }
-                        .buttonStyle(.plain)
-                        .accessibilityLabel(Strings.Socialization.infoTitle)
-                    }
-
-                    Text(Strings.Socialization.socializationDescription)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-
-                // Phase header with clearer progress indicator
-                phaseHeader
-
-                // Content based on phase
-                if currentPhase == .settlingIn {
-                    earlyMilestonesContent
-                } else {
-                    progressContent
-                }
-
-                // Actionable link at the bottom
-                Divider()
-
-                HStack(spacing: 12) {
-                    Image(systemName: hasStartedSocialization ? "arrow.right.circle.fill" : "play.circle.fill")
-                        .font(.title3)
-                        .foregroundStyle(Color.otisAccent)
-                        .frame(width: 40, height: 40)
-                        .background(
-                            Circle()
-                                .fill(Color.otisAccent.opacity(colorScheme == .dark ? 0.2 : 0.1))
-                        )
-
-                    Text(hasStartedSocialization ? Strings.Socialization.continueSocialization : Strings.Socialization.startSocialization)
-                        .font(.subheadline)
-                        .fontWeight(.medium)
-                        .foregroundStyle(Color.otisAccent)
-
-                    Spacer()
-
-                    Image(systemName: "chevron.right")
-                        .font(.system(size: 12, weight: .semibold))
-                        .foregroundStyle(.secondary)
-                }
-                .padding(.vertical, 4)
-            }
-            .padding()
-            .glassCard(tint: .accent)
-        }
-        .buttonStyle(.plain)
-        .sheet(isPresented: $showInfoSheet) {
-            WhatIsSocializationSheet()
-        }
-    }
-
-    // MARK: - Phase Header
-
-    @ViewBuilder
-    private var phaseHeader: some View {
-        HStack {
-            // Phase name only (no confusing week counting)
-            VStack(alignment: .leading, spacing: 2) {
-                Text(currentPhase.localizedName)
-                    .font(.title3)
+        VStack(alignment: .leading, spacing: 12) {
+            // Header
+            HStack {
+                Image(systemName: "heart.circle.fill")
+                    .foregroundStyle(.pink)
+                    .accessibilityHidden(true)
+                Text(Strings.Socialization.title)
+                    .font(.headline)
                     .fontWeight(.semibold)
-
-                Text(currentPhase.localizedDescription)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .accessibilityAddTraits(.isHeader)
+                Spacer()
             }
 
-            Spacer()
+            // Content based on phase
+            if currentPhase == .settlingIn {
+                earlyMilestonesContent
+            } else if isWindowClosed {
+                windowClosedContent
+            } else {
+                actionContent
+            }
 
-            // Socialization window progress - show weeks remaining
-            if isInSocializationWindow && weeksRemaining > 0 {
-                VStack(alignment: .trailing, spacing: 2) {
-                    Text(Strings.Socialization.ageWeeksRemaining(remaining: weeksRemaining))
+            // Exposure count + link to sheet
+            Divider()
+
+            HStack {
+                if totalExposures > 0 {
+                    Text(Strings.Socialization.exposureCount(totalExposures))
                         .font(.caption)
-                        .fontWeight(.medium)
-                        .foregroundStyle(weeksRemaining <= 4 ? Color.otisWarning : Color.otisAccent)
-
-                    // Mini progress bar showing how much of window is used
-                    let windowProgress = CGFloat(ageInWeeks - 3) / CGFloat(socializationWindowEnd - 3)
-                    GeometryReader { geo in
-                        ZStack(alignment: .leading) {
-                            Capsule()
-                                .fill(Color.secondary.opacity(0.2))
-                            Capsule()
-                                .fill(weeksRemaining <= 4 ? Color.otisWarning : Color.otisAccent)
-                                .frame(width: geo.size.width * windowProgress)
-                        }
-                    }
-                    .frame(width: 60, height: 4)
+                        .foregroundStyle(.secondary)
                 }
-            } else if !isInSocializationWindow && ageInWeeks > 16 {
-                // Past the window - show progress ring instead
-                progressRing
+
+                Spacer()
+
+                Button {
+                    showInfoSheet = true
+                } label: {
+                    HStack(spacing: 4) {
+                        Text(Strings.Socialization.aboutSocializationWindow)
+                            .font(.caption)
+                        Image(systemName: "arrow.up.right")
+                            .font(.caption2)
+                    }
+                    .foregroundStyle(.pink)
+                }
+                .buttonStyle(.plain)
+            }
+        }
+        .padding()
+        .glassCard(tint: .custom(.pink))
+        .sheet(isPresented: $showInfoSheet) {
+            SocializationWindowSheet()
+        }
+        .sheet(isPresented: $showLogSheet) {
+            if let nextItem = socializationStore.nextFocusItems.first {
+                LogExposureSheet(item: nextItem)
             }
         }
     }
@@ -185,6 +102,12 @@ struct SocializationJourneyCard: View {
     @ViewBuilder
     private var earlyMilestonesContent: some View {
         VStack(alignment: .leading, spacing: 8) {
+            Text(Strings.Socialization.gettingSettled)
+                .font(.caption)
+                .fontWeight(.medium)
+                .foregroundStyle(.tertiary)
+                .textCase(.uppercase)
+
             ForEach(socializationStore.milestoneDefinitions.prefix(3), id: \.id) { milestone in
                 let isAchieved = socializationStore.isMilestoneAchieved(milestone.id)
 
@@ -212,61 +135,114 @@ struct SocializationJourneyCard: View {
         .padding(.vertical, 4)
     }
 
-    // MARK: - Progress Content (After settling in)
+    // MARK: - Action Content (During socialization window)
 
     @ViewBuilder
-    private var progressContent: some View {
-        let progress = socializationStore.currentPhaseProgress
+    private var actionContent: some View {
         let nextItems = socializationStore.nextFocusItems
 
-        VStack(alignment: .leading, spacing: 8) {
-            // Phase progress
-            HStack {
-                Text(Strings.Socialization.phaseProgress(comfortable: progress.comfortable, total: progress.total))
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-
-                Spacer()
-
-                // Progress ring for phase
-                ProgressRing(
-                    completed: progress.comfortable,
-                    total: progress.total,
-                    size: .compact
-                )
-            }
-
-            // Next focus item (non-tappable preview)
+        VStack(alignment: .leading, spacing: 12) {
+            // Today's focus
             if let nextItem = nextItems.first {
-                HStack(spacing: 8) {
-                    Text(Strings.Socialization.nextUp)
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(Strings.Socialization.todaysFocus)
                         .font(.caption)
                         .fontWeight(.medium)
                         .foregroundStyle(.tertiary)
                         .textCase(.uppercase)
 
                     Text(nextItem.localizedDisplayName)
-                        .font(.caption)
-                        .fontWeight(.medium)
-                        .foregroundStyle(.secondary)
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
                 }
+            }
+
+            // Action buttons
+            HStack(spacing: 12) {
+                // Log Exposure - primary action
+                Button {
+                    showLogSheet = true
+                } label: {
+                    HStack(spacing: 6) {
+                        Image(systemName: "plus.circle.fill")
+                            .font(.subheadline)
+                        Text(Strings.Socialization.logExposure)
+                            .font(.subheadline)
+                            .fontWeight(.medium)
+                    }
+                    .padding(.horizontal, 14)
+                    .padding(.vertical, 8)
+                    .background(.pink)
+                    .foregroundStyle(.white)
+                    .clipShape(Capsule())
+                }
+                .buttonStyle(.plain)
+
+                // See All Items - secondary action
+                NavigationLink {
+                    SocializationJourneyView()
+                } label: {
+                    HStack(spacing: 6) {
+                        Text(Strings.Socialization.seeAllItems)
+                            .font(.subheadline)
+                            .fontWeight(.medium)
+                        Image(systemName: "chevron.right")
+                            .font(.caption)
+                    }
+                    .foregroundStyle(.pink)
+                }
+                .buttonStyle(.plain)
+
+                Spacer()
             }
         }
     }
 
-    // MARK: - Progress Ring
+    // MARK: - Window Closed Content
 
     @ViewBuilder
-    private var progressRing: some View {
-        let progress = socializationStore.currentPhaseProgress
+    private var windowClosedContent: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text(Strings.Socialization.greatWorkExposures(totalExposures))
+                .font(.subheadline)
 
-        ProgressRing(
-            completed: progress.comfortable,
-            total: progress.total,
-            size: .standard
-        )
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel(Strings.Socialization.phaseProgress(comfortable: progress.comfortable, total: progress.total))
+            Text(Strings.Socialization.keepBuildingPositive)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+
+            // Action buttons
+            HStack(spacing: 12) {
+                Button {
+                    showLogSheet = true
+                } label: {
+                    HStack(spacing: 6) {
+                        Image(systemName: "plus.circle.fill")
+                            .font(.subheadline)
+                        Text(Strings.Socialization.logExposure)
+                            .font(.subheadline)
+                            .fontWeight(.medium)
+                    }
+                    .padding(.horizontal, 14)
+                    .padding(.vertical, 8)
+                    .background(.pink)
+                    .foregroundStyle(.white)
+                    .clipShape(Capsule())
+                }
+                .buttonStyle(.plain)
+
+                NavigationLink {
+                    SocializationJourneyView()
+                } label: {
+                    Text(Strings.Socialization.viewHistory)
+                        .font(.subheadline)
+                        .fontWeight(.medium)
+                        .foregroundStyle(.pink)
+                }
+                .buttonStyle(.plain)
+
+                Spacer()
+            }
+        }
     }
 
     // MARK: - Helpers

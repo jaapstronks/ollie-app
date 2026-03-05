@@ -26,32 +26,30 @@ class SubscriptionManager: ObservableObject {
 
     private static let cachedStatusKey = "otis.subscription.cachedStatus"
 
-    // MARK: - Debug Override (DEBUG builds only)
+    // MARK: - Beta Override (DEBUG and TestFlight builds)
 
-    #if DEBUG
     /// When set, overrides the actual subscription status for testing
+    /// Only available in beta builds (debug and TestFlight)
     /// Set to nil to use actual StoreKit status
-    @Published var debugOverrideStatus: OtisPlusStatus? = nil {
+    @Published var betaOverrideStatus: OtisPlusStatus? = nil {
         didSet {
-            // Persist debug override across app launches
-            if let status = debugOverrideStatus {
-                UserDefaults.standard.set(try? JSONEncoder().encode(status), forKey: "debug.subscriptionOverride")
+            guard AppEnvironment.current.isBeta else { return }
+            // Persist beta override across app launches
+            if let status = betaOverrideStatus {
+                UserDefaults.standard.set(try? JSONEncoder().encode(status), forKey: "beta.subscriptionOverride")
             } else {
-                UserDefaults.standard.removeObject(forKey: "debug.subscriptionOverride")
+                UserDefaults.standard.removeObject(forKey: "beta.subscriptionOverride")
             }
         }
     }
 
-    /// The effective subscription status (respects debug override)
+    /// The effective subscription status (respects beta override in non-production builds)
     var effectiveStatus: OtisPlusStatus {
-        debugOverrideStatus ?? subscriptionStatus
+        if AppEnvironment.current.isBeta, let override = betaOverrideStatus {
+            return override
+        }
+        return subscriptionStatus
     }
-    #else
-    /// In release builds, just return the real status
-    var effectiveStatus: OtisPlusStatus {
-        subscriptionStatus
-    }
-    #endif
 
     // MARK: - Published State
 
@@ -59,6 +57,7 @@ class SubscriptionManager: ObservableObject {
     @Published var subscriptionStatus: OtisPlusStatus = .free {
         didSet {
             cacheSubscriptionStatus()
+            handleAnalyticsTransition(from: oldValue, to: subscriptionStatus)
         }
     }
     @Published var isPurchasing = false
@@ -78,13 +77,12 @@ class SubscriptionManager: ObservableObject {
         loadCachedSubscriptionStatus()
         updateListenerTask = listenForTransactions()
 
-        #if DEBUG
-        // Load persisted debug override
-        if let data = UserDefaults.standard.data(forKey: "debug.subscriptionOverride"),
+        // Load persisted beta override (only in beta builds)
+        if AppEnvironment.current.isBeta,
+           let data = UserDefaults.standard.data(forKey: "beta.subscriptionOverride"),
            let status = try? JSONDecoder().decode(OtisPlusStatus.self, from: data) {
-            debugOverrideStatus = status
+            betaOverrideStatus = status
         }
-        #endif
     }
 
     deinit {
@@ -185,6 +183,11 @@ class SubscriptionManager: ObservableObject {
                 if let expirationDate = transaction.expirationDate {
                     if transaction.offer?.type == .introductory {
                         subscriptionStatus = .trial(until: expirationDate)
+                        Analytics.trackTrialStarted(
+                            transactionId: transaction.id,
+                            productId: transaction.productID,
+                            trialEndAt: expirationDate
+                        )
                     } else {
                         subscriptionStatus = .active(until: expirationDate)
                     }
@@ -222,7 +225,23 @@ class SubscriptionManager: ObservableObject {
 
     /// Check if user has access to a specific feature
     func hasAccess(to feature: PremiumFeature) -> Bool {
-        effectiveStatus.hasOtisPlus
+        switch feature {
+        case .multiPuppy,
+             .pottyPredictions,
+             .advancedAnalytics,
+             .sleepInsights,
+             .weekInReview,
+             .fullTrainingLibrary,
+             .socializationProgress,
+             .photoVideoAttachments,
+             .unlimitedPartnerSharing,
+             .exportPDF,
+             .calendarIntegration,
+             .customMilestones,
+             .milestoneNotes,
+             .aiNudges:
+            return effectiveStatus.hasOtisPlus
+        }
     }
 
     /// Check if user can access a training skill at the given index
@@ -281,6 +300,13 @@ class SubscriptionManager: ObservableObject {
                     subscriptionStatus = .expired
                 }
             }
+        }
+    }
+
+    private func handleAnalyticsTransition(from oldValue: OtisPlusStatus, to newValue: OtisPlusStatus) {
+        guard oldValue != newValue else { return }
+        if oldValue.isInTrial, case .active(let activeUntil) = newValue {
+            Analytics.trackTrialConverted(activeUntil: activeUntil)
         }
     }
 

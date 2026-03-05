@@ -123,7 +123,6 @@ struct SocializationProgressCard: View {
     private var windowStatusIcon: String {
         switch windowStatus {
         case .peak: return "star.fill"
-        case .open: return "clock.fill"
         case .closing: return "exclamationmark.triangle.fill"
         case .justClosed: return "clock.arrow.circlepath"
         case .closed: return "checkmark.circle.fill"
@@ -133,7 +132,6 @@ struct SocializationProgressCard: View {
     private var windowStatusForeground: Color {
         switch windowStatus {
         case .peak: return .white
-        case .open: return .white
         case .closing: return .black
         case .justClosed: return .black
         case .closed: return .secondary
@@ -143,7 +141,6 @@ struct SocializationProgressCard: View {
     private var windowStatusBackground: Color {
         switch windowStatus {
         case .peak: return .green
-        case .open: return .blue
         case .closing: return .orange
         case .justClosed: return .yellow
         case .closed: return .secondary.opacity(0.2)
@@ -152,9 +149,8 @@ struct SocializationProgressCard: View {
 
     private var weeksRemaining: Int? {
         guard let profile = profile else { return nil }
-        let targetWeek = 16
-        let remaining = targetWeek - profile.ageInWeeks
-        return remaining > 0 ? remaining : nil
+        // Use canonical constant for consistency
+        return SocializationWindowStatus.weeksRemaining(ageInWeeks: profile.ageInWeeks)
     }
 }
 

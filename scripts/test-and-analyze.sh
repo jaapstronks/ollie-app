@@ -20,13 +20,31 @@ echo -e "${BLUE}║         Otis App - Test & Prepare for Analysis            �
 echo -e "${BLUE}╚════════════════════════════════════════════════════════════╝${NC}"
 echo ""
 
+# Parse optional target device from args
+TARGET_DEVICE=""
+for ((i=1; i<=$#; i++)); do
+    if [ "${!i}" = "-d" ] || [ "${!i}" = "--device" ]; then
+        next_index=$((i + 1))
+        TARGET_DEVICE="${!next_index}"
+        break
+    fi
+done
+
 # Check for booted simulator
-BOOTED_SIM=$(xcrun simctl list devices booted 2>/dev/null | grep -E "iPhone|iPad" | head -1)
+if [ -n "$TARGET_DEVICE" ]; then
+    BOOTED_SIM=$(xcrun simctl list devices booted 2>/dev/null | grep "$TARGET_DEVICE" | head -1 || true)
+else
+    BOOTED_SIM=$(xcrun simctl list devices booted 2>/dev/null | grep -E "iPhone|iPad" | head -1 || true)
+fi
 if [ -z "$BOOTED_SIM" ]; then
-    echo -e "${YELLOW}No simulator is currently booted.${NC}"
+    if [ -n "$TARGET_DEVICE" ]; then
+        echo -e "${YELLOW}Target simulator is not booted:${NC} $TARGET_DEVICE"
+    else
+        echo -e "${YELLOW}No simulator is currently booted.${NC}"
+    fi
     echo ""
     echo "To boot a simulator, run:"
-    echo "  xcrun simctl boot 'iPhone 17 Pro'"
+    echo "  xcrun simctl boot '${TARGET_DEVICE:-iPhone 17 Pro}'"
     echo "  open -a Simulator"
     echo ""
     echo "Or open Xcode and run the app (Cmd+R), which will boot a simulator."

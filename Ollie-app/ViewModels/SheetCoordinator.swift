@@ -46,9 +46,14 @@ final class SheetCoordinator: ObservableObject {
         case gapDetection(hours: Int, puppyName: String, suggestedStartTime: Date)
         // Catch-up sheet (for 3-16 hour gaps)
         case catchUp(hours: Int, puppyName: String, context: CatchUpContext)
-        // Celebration sheets
-        case tier2Celebration(Achievement, milestone: Milestone?)
-        case tier3Celebration(Achievement, milestone: Milestone?)
+        // Canonical sheets (single sources of truth)
+        case developmentJourney
+        case socializationWindow
+        case medicalCare
+        // Full timeline sheet (from Today tab)
+        case fullTimeline
+        // Walk schedule editor (from adaptive walk nudge)
+        case walkScheduleEditor
 
         var id: String {
             switch self {
@@ -78,8 +83,11 @@ final class SheetCoordinator: ObservableObject {
             case .endCoverageGap(let gap): return "endCoverageGap-\(gap.id.uuidString)"
             case .gapDetection: return "gapDetection"
             case .catchUp: return "catchUp"
-            case .tier2Celebration(let achievement, _): return "tier2Celebration-\(achievement.id)"
-            case .tier3Celebration(let achievement, _): return "tier3Celebration-\(achievement.id)"
+            case .developmentJourney: return "developmentJourney"
+            case .socializationWindow: return "socializationWindow"
+            case .medicalCare: return "medicalCare"
+            case .fullTimeline: return "fullTimeline"
+            case .walkScheduleEditor: return "walkScheduleEditor"
             }
         }
     }

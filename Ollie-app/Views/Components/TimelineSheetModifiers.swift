@@ -20,6 +20,8 @@ struct TimelineSheetModifiers: ViewModifier {
     /// Direct observation of SheetCoordinator to ensure sheet state changes trigger view updates
     @ObservedObject private var sheetCoordinator: SheetCoordinator
 
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+
     init(
         viewModel: TimelineViewModel,
         mediaCaptureViewModel: MediaCaptureViewModel,
@@ -139,7 +141,10 @@ struct TimelineSheetModifiers: ViewModifier {
                 onCancel: viewModel.cancelPottySheet,
                 preselected: preselected
             )
-            .presentationDetents([.height(580)])
+            .adaptivePresentationDetents(
+                compact: [.height(580)],
+                regular: [.medium, .large]
+            )
 
         case .allEvents:
             AllEventsSheet(
@@ -176,7 +181,10 @@ struct TimelineSheetModifiers: ViewModifier {
                     viewModel.sheetCoordinator.dismissSheet()
                 }
             )
-            .presentationDetents([.fraction(0.75), .large])
+            .adaptivePresentationDetents(
+                compact: [.fraction(0.75), .large],
+                regular: [.medium, .large]
+            )
 
         case .quickLog(let type, let suggestedTime):
             QuickLogSheet(
@@ -191,7 +199,10 @@ struct TimelineSheetModifiers: ViewModifier {
                     viewModel.sheetCoordinator.dismissSheet()
                 } : nil
             )
-            .presentationDetents([type == .uitlaten ? .height(550) : (type.requiresLocation ? .height(480) : .height(380))])
+            .adaptivePresentationDetents(
+                compact: [type == .uitlaten ? .height(550) : (type.requiresLocation ? .height(480) : .height(380))],
+                regular: [.medium, .large]
+            )
 
         case .logEvent(let type):
             LogEventSheet(eventType: type) { note, who, exercise, result, durationMin in
@@ -212,7 +223,10 @@ struct TimelineSheetModifiers: ViewModifier {
                 onSelect: viewModel.logWithLocation,
                 onCancel: viewModel.cancelLocationPicker
             )
-            .presentationDetents([.height(200)])
+            .adaptivePresentationDetents(
+                compact: [.height(200)],
+                regular: [.medium]
+            )
 
         case .mediaPicker:
             // Handled by fullScreenCover above, this case shouldn't be reached
@@ -230,7 +244,10 @@ struct TimelineSheetModifiers: ViewModifier {
                     viewModel.sheetCoordinator.dismissSheet()
                 }
             )
-            .presentationDetents([.height(200)])
+            .adaptivePresentationDetents(
+                compact: [.height(200)],
+                regular: [.medium]
+            )
 
         case .logMoment:
             LogMomentSheet(
@@ -256,7 +273,10 @@ struct TimelineSheetModifiers: ViewModifier {
                     viewModel.sheetCoordinator.transitionToSheet(.subscriptionSuccess)
                 }
             )
-            .presentationDetents([.large])
+            .adaptivePresentationDetents(
+                compact: [.large],
+                regular: [.medium, .large]
+            )
 
         case .subscriptionSuccess:
             SubscriptionSuccessView(
@@ -264,7 +284,10 @@ struct TimelineSheetModifiers: ViewModifier {
                     viewModel.sheetCoordinator.dismissSheet()
                 }
             )
-            .presentationDetents([.medium])
+            .adaptivePresentationDetents(
+                compact: [.medium],
+                regular: [.medium]
+            )
 
         case .editEvent(let event):
             EditEventSheet(
@@ -279,7 +302,10 @@ struct TimelineSheetModifiers: ViewModifier {
                 },
                 householdMembers: viewModel.profileStore.profile?.householdMembers
             )
-            .presentationDetents([.medium, .large])
+            .adaptivePresentationDetents(
+                compact: [.medium, .large],
+                regular: [.medium, .large]
+            )
 
         case .endSleep(let startTime):
             EndSleepSheet(
@@ -292,7 +318,10 @@ struct TimelineSheetModifiers: ViewModifier {
                     viewModel.sheetCoordinator.dismissSheet()
                 }
             )
-            .presentationDetents([.height(420)])
+            .adaptivePresentationDetents(
+                compact: [.height(420)],
+                regular: [.medium]
+            )
 
         case .startActivity(let activityType, let preselectedLocation):
             StartActivitySheet(
@@ -318,7 +347,10 @@ struct TimelineSheetModifiers: ViewModifier {
                     viewModel.sheetCoordinator.dismissSheet()
                 }
             )
-            .presentationDetents([.large])
+            .adaptivePresentationDetents(
+                compact: [.large],
+                regular: [.medium, .large]
+            )
 
         case .endActivity:
             if let activity = viewModel.currentActivity {
@@ -334,7 +366,10 @@ struct TimelineSheetModifiers: ViewModifier {
                         viewModel.cancelActivity()
                     }
                 )
-                .presentationDetents([.height(480)])
+                .adaptivePresentationDetents(
+                    compact: [.height(480)],
+                    regular: [.medium]
+                )
             } else {
                 EmptyView()
             }
@@ -358,7 +393,10 @@ struct TimelineSheetModifiers: ViewModifier {
                 spotStore: spotStore,
                 locationManager: locationManager
             )
-            .presentationDetents([.height(520), .large])
+            .adaptivePresentationDetents(
+                compact: [.height(520), .large],
+                regular: [.medium, .large]
+            )
 
         case .napLog(let defaultDuration):
             NapLogSheet(
@@ -371,7 +409,10 @@ struct TimelineSheetModifiers: ViewModifier {
                 },
                 defaultDurationMinutes: defaultDuration
             )
-            .presentationDetents([.height(520), .medium])
+            .adaptivePresentationDetents(
+                compact: [.height(520), .medium],
+                regular: [.medium, .large]
+            )
 
         case .startCoverageGap:
             StartCoverageGapSheet(
@@ -383,7 +424,10 @@ struct TimelineSheetModifiers: ViewModifier {
                     viewModel.sheetCoordinator.dismissSheet()
                 }
             )
-            .presentationDetents([.large])
+            .adaptivePresentationDetents(
+                compact: [.large],
+                regular: [.medium, .large]
+            )
 
         case .endCoverageGap(let gap):
             EndCoverageGapSheet(
@@ -396,7 +440,10 @@ struct TimelineSheetModifiers: ViewModifier {
                     viewModel.sheetCoordinator.dismissSheet()
                 }
             )
-            .presentationDetents([.height(450)])
+            .adaptivePresentationDetents(
+                compact: [.height(450)],
+                regular: [.medium]
+            )
 
         case .gapDetection(let hours, let puppyName, let suggestedStartTime):
             GapDetectionSheet(
@@ -411,7 +458,10 @@ struct TimelineSheetModifiers: ViewModifier {
                     viewModel.sheetCoordinator.dismissSheet()
                 }
             )
-            .presentationDetents([.medium])
+            .adaptivePresentationDetents(
+                compact: [.medium],
+                regular: [.medium]
+            )
 
         case .catchUp(let hours, let puppyName, let context):
             CatchUpSheet(
@@ -426,15 +476,95 @@ struct TimelineSheetModifiers: ViewModifier {
                     viewModel.sheetCoordinator.dismissSheet()
                 }
             )
-            .presentationDetents([.large])
+            .adaptivePresentationDetents(
+                compact: [.large],
+                regular: [.medium, .large]
+            )
 
         // Placeholder cases for future sheets (handled elsewhere or not yet implemented)
         case .weightLog, .trainingLog, .socializationLog, .settings, .profileEdit, .notificationSettings:
             EmptyView()
 
-        // Celebration sheets are handled via separate sheet/fullScreenCover modifiers in CalendarTabView
-        case .tier2Celebration, .tier3Celebration:
-            EmptyView()
+        // Canonical sheets (single sources of truth)
+        case .developmentJourney:
+            DevelopmentJourneySheet(
+                onNavigateToSocialization: {
+                    viewModel.sheetCoordinator.presentSheet(.socializationWindow)
+                },
+                onNavigateToMedical: {
+                    viewModel.sheetCoordinator.presentSheet(.medicalCare)
+                }
+            )
+            .adaptivePresentationDetents(
+                compact: [.large],
+                regular: [.medium, .large]
+            )
+
+        case .socializationWindow:
+            SocializationWindowSheet(
+                onNavigateToDevelopment: {
+                    viewModel.sheetCoordinator.presentSheet(.developmentJourney)
+                },
+                onLogExposure: {
+                    viewModel.sheetCoordinator.presentSheet(.socializationLog)
+                }
+            )
+            .adaptivePresentationDetents(
+                compact: [.large],
+                regular: [.medium, .large]
+            )
+
+        case .medicalCare:
+            MedicalCareSheet(
+                onNavigateToDevelopment: {
+                    viewModel.sheetCoordinator.presentSheet(.developmentJourney)
+                },
+                onSelectMilestone: { milestone in
+                    // The milestone completion sheet is handled separately in HealthTabView
+                    // For now, just dismiss - the parent view will handle the selection
+                }
+            )
+            .adaptivePresentationDetents(
+                compact: [.large],
+                regular: [.medium, .large]
+            )
+
+        case .fullTimeline:
+            FullTimelineSheet(
+                viewModel: viewModel,
+                onEditEvent: { event in
+                    viewModel.editEvent(event)
+                },
+                onDeleteEvent: { event in
+                    viewModel.deleteEvent(event)
+                },
+                onPhotoTap: { event in
+                    selectedPhotoEvent = event
+                }
+            )
+            .adaptivePresentationDetents(
+                compact: [.large],
+                regular: [.medium, .large]
+            )
+
+        case .walkScheduleEditor:
+            if let profile = viewModel.profileStore.profile {
+                WalkScheduleEditor(
+                    initialSchedule: profile.walkSchedule,
+                    ageInMonths: profile.ageInMonths,
+                    onSave: { newSchedule in
+                        viewModel.profileStore.updateWalkSchedule(newSchedule)
+                        viewModel.sheetCoordinator.dismissSheet()
+                    }
+                )
+                .adaptivePresentationDetents(
+                    compact: [.large],
+                    regular: [.medium, .large]
+                )
+            } else {
+                // Fallback if no profile (shouldn't happen in practice)
+                Text("Profile not available")
+            }
         }
     }
 }

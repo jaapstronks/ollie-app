@@ -1,0 +1,15 @@
+name = "ollie-ai-broker"
+main = "src/index.ts"
+compatibility_date = "2026-03-05"
+
+# Bindings to configure:
+# - BROKER_API_KEY (required)
+# - ANTHROPIC_API_KEY (optional but recommended)
+# - MISTRAL_API_KEY (optional but recommended)
+# - ANTHROPIC_MODEL (optional, default in code)
+# - MISTRAL_MODEL (optional, default in code)
+
+[[d1_databases]]
+binding = "DB"
+database_name = "ollie-ai-broker"
+database_id = "REPLACE_WITH_REAL_D1_DATABASE_ID"

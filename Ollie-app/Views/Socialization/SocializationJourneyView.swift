@@ -2,12 +2,12 @@
 //  SocializationJourneyView.swift
 //  Otis-app
 //
-//  Full detail view showing socialization journey with phase timeline
+//  Action-focused view for logging socialization exposures
 
 import SwiftUI
 import OtisShared
 
-/// Full journey view with phase timeline and phase-based content
+/// Pure action view: a checklist to work through, with logging
 struct SocializationJourneyView: View {
     @EnvironmentObject var socializationStore: SocializationStore
     @EnvironmentObject var profileStore: ProfileStore
@@ -30,17 +30,26 @@ struct SocializationJourneyView: View {
         !socializationStore.hasAnyExposures && !socializationStore.hasAnyComfortableItems
     }
 
+    private var totalExposures: Int {
+        socializationStore.allExposures.count
+    }
+
+    private var weeksRemaining: Int? {
+        guard let ageInWeeks = profile?.ageInWeeks else { return nil }
+        return SocializationWindowStatus.weeksRemaining(ageInWeeks: ageInWeeks)
+    }
+
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
+                // Compact status header with link to sheet
+                statusHeader
+                    .padding(.horizontal)
+
                 // First visit prompt
                 if isFirstVisit && currentPhase != .settlingIn {
                     firstVisitCard
                 }
-
-                // Phase timeline
-                PhaseTimelineView(currentPhase: currentPhase)
-                    .padding(.horizontal)
 
                 // Current phase content
                 currentPhaseSection
@@ -55,13 +64,6 @@ struct SocializationJourneyView: View {
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 HStack(spacing: 12) {
-                    // Info button
-                    Button {
-                        showingInfoSheet = true
-                    } label: {
-                        Image(systemName: "questionmark.circle")
-                    }
-
                     // Quick check toggle
                     if currentPhase != .settlingIn {
                         Button {
@@ -78,11 +80,52 @@ struct SocializationJourneyView: View {
             }
         }
         .sheet(isPresented: $showingInfoSheet) {
-            WhatIsSocializationSheet()
+            SocializationWindowSheet()
         }
         .sheet(isPresented: $showingQuickInventory) {
             QuickInventorySheet()
         }
+    }
+
+    // MARK: - Status Header
+
+    @ViewBuilder
+    private var statusHeader: some View {
+        HStack {
+            // Compact progress summary
+            HStack(spacing: 8) {
+                Text(Strings.Socialization.exposureCount(totalExposures))
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+
+                if let weeks = weeksRemaining, weeks > 0 {
+                    Text("•")
+                        .foregroundStyle(.tertiary)
+                    Text(Strings.Socialization.weeksRemaining(weeks))
+                        .font(.subheadline)
+                        .foregroundStyle(weeks <= 4 ? Color.otisWarning : .secondary)
+                }
+            }
+
+            Spacer()
+
+            // Link to full progress sheet
+            Button {
+                showingInfoSheet = true
+            } label: {
+                HStack(spacing: 4) {
+                    Text(Strings.Socialization.viewFullProgress)
+                        .font(.subheadline)
+                    Image(systemName: "arrow.up.right")
+                        .font(.caption)
+                }
+                .foregroundStyle(Color.otisAccent)
+            }
+            .buttonStyle(.plain)
+        }
+        .padding()
+        .background(Color(.secondarySystemGroupedBackground))
+        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
     }
 
     // MARK: - First Visit Card
@@ -135,7 +178,7 @@ struct SocializationJourneyView: View {
     @ViewBuilder
     private var currentPhaseSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            // Section header
+            // Section header - simplified, no phase description
             HStack {
                 Image(systemName: currentPhase.icon)
                     .foregroundStyle(Color.otisAccent)
@@ -152,10 +195,6 @@ struct SocializationJourneyView: View {
                         .foregroundStyle(.secondary)
                 }
             }
-
-            Text(phaseDescription(for: currentPhase))
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
 
             // Quick check mode indicator
             if isQuickCheckMode {
@@ -274,7 +313,7 @@ struct SocializationJourneyView: View {
 
         if !laterPhases.isEmpty {
             VStack(alignment: .leading, spacing: 12) {
-                Text("Later Phases")
+                Text(Strings.Socialization.laterPhases)
                     .font(.headline)
                     .fontWeight(.semibold)
                     .padding(.horizontal)

@@ -30,10 +30,14 @@ struct SettingsView: View {
                     DogSettingsCard(
                         profile: profile,
                         isActive: profile.id == profileStore.activeProfileId,
+                        onActivate: {
+                            profileStore.switchToProfile(profile.id)
+                        },
                         profileStore: profileStore,
                         notificationService: notificationService,
                         documentStore: documentStore,
-                        foodRecallService: foodRecallService
+                        foodRecallService: foodRecallService,
+                        cloudKit: CloudKitService.shared
                     )
                 }
 
@@ -48,6 +52,7 @@ struct SettingsView: View {
                 )
             }
             .padding()
+            .adaptiveContainer()
         }
         .background(Color(.systemGroupedBackground))
         .navigationTitle(Strings.Settings.title)

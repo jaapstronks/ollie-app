@@ -4,6 +4,7 @@
 //
 
 import SwiftUI
+import Combine
 import OtisShared
 
 /// Appearance mode options
@@ -185,6 +186,7 @@ enum UserPreferences {
         case temperatureUnit = "temperatureUnit"
         case weightUnit = "weightUnit"
         case celebrationStyle = "celebrationStyle"
+        case forceCelebrateEveryLog = "forceCelebrateEveryLog"
         case preferredMapsApp = "preferredMapsApp"
 
         // Atmosphere settings
@@ -198,6 +200,7 @@ enum UserPreferences {
 
         // First week card
         case firstWeekCardCollapsedDate = "firstWeekCardCollapsedDate"
+        case needsFirstSessionHandoff = "needsFirstSessionHandoff"
     }
 
     // MARK: - Defaults
@@ -211,6 +214,7 @@ enum UserPreferences {
         Key.temperatureUnit.rawValue: TemperatureUnit.celsius.rawValue,
         Key.weightUnit.rawValue: WeightUnit.kg.rawValue,
         Key.celebrationStyle.rawValue: CelebrationStyle.full.rawValue,
+        Key.forceCelebrateEveryLog.rawValue: false,
         Key.preferredMapsApp.rawValue: PreferredMapsApp.appleMaps.rawValue,
 
         // Atmosphere defaults (time/weather/state on by default, seasonal opt-in)
@@ -220,7 +224,10 @@ enum UserPreferences {
         Key.atmosphereSeasonal.rawValue: false,
 
         // Training defaults
-        Key.showFloatingClicker.rawValue: false
+        Key.showFloatingClicker.rawValue: false,
+
+        // Onboarding follow-up defaults
+        Key.needsFirstSessionHandoff.rawValue: false
     ]
 
     /// Register default values on app launch

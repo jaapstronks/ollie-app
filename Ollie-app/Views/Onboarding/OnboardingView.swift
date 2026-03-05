@@ -18,8 +18,8 @@ struct OnboardingView: View {
     @EnvironmentObject var locationManager: LocationManager
     let onComplete: () -> Void
 
-    // Step state - start at step 1 (Name) when adding a profile to skip welcome
-    @State private var currentStep: Int = 0
+    // Step state - default to Name step for faster time-to-value
+    @State private var currentStep: Int = 1
 
     // Profile data
     @State private var name: String = ""
@@ -228,8 +228,8 @@ struct OnboardingView: View {
             .highPriorityGesture(DragGesture())
         }
         .onAppear {
-            // When adding a profile, skip the welcome step
-            if isAddingProfile && currentStep == 0 {
+            // Keep add-profile flow aligned with first profile flow: jump directly to Name.
+            if currentStep == 0 {
                 currentStep = 1
             }
         }
@@ -324,6 +324,13 @@ struct OnboardingView: View {
         } else {
             // First profile - use saveProfile
             profileStore.saveProfile(profile)
+            Analytics.trackProfileCreated(
+                profileId: profile.id,
+                hasBreed: !breedToSave.isEmpty,
+                hasPhoto: profilePhoto != nil,
+                isExpecting: isExpecting,
+                usedCustomBreed: isCustomBreed
+            )
 
             // Navigate to permission screens after saving profile
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {

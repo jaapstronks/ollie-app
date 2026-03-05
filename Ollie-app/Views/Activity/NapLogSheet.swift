@@ -70,7 +70,7 @@ struct NapLogSheet: View {
     }
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             Form {
                 // Start date+time section
                 Section {

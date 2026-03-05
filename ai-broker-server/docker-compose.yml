@@ -1,0 +1,11 @@
+services:
+  ai-broker:
+    build: .
+    container_name: ollie-ai-broker
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "8787:8787"
+    volumes:
+      - ./logs:/var/log/ollie-ai-broker

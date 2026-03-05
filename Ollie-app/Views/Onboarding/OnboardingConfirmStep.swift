@@ -59,6 +59,14 @@ struct OnboardingConfirmStep: View {
                 .fontWeight(.bold)
                 .opacity(hasAppeared ? 1.0 : 0.0)
 
+            Text(Strings.Onboarding.confirmSubtitle)
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal, 24)
+                .padding(.top, 8)
+                .opacity(hasAppeared ? 1.0 : 0.0)
+
             Spacer()
                 .frame(height: 24)
 

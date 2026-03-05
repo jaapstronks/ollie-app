@@ -50,13 +50,22 @@ class PlacesMapViewModel: ObservableObject {
 
     // MARK: - Published State
 
-    @Published var activeFilters: Set<PlacesFilterCategory> = [.spots, .discovered, .contacts, .photos]
-    @Published var selectedContactTypes: Set<ContactType> = Set(ContactType.allCases)
-    @Published var selectedSpotCategories: Set<SpotCategory> = Set(SpotCategory.allCases)
-    @Published var selectedDiscoveryTypes: Set<DiscoverablePlaceType> = Set(DiscoverablePlaceType.allCases)
+    @Published var activeFilters: Set<PlacesFilterCategory> = [.spots, .discovered, .contacts, .photos] {
+        didSet { rebuildVisibleMarkers() }
+    }
+    @Published var selectedContactTypes: Set<ContactType> = Set(ContactType.allCases) {
+        didSet { rebuildVisibleMarkers() }
+    }
+    @Published var selectedSpotCategories: Set<SpotCategory> = Set(SpotCategory.allCases) {
+        didSet { rebuildVisibleMarkers() }
+    }
+    @Published var selectedDiscoveryTypes: Set<DiscoverablePlaceType> = Set(DiscoverablePlaceType.allCases) {
+        didSet { rebuildVisibleMarkers() }
+    }
 
     @Published var selectedMarker: PlaceMarker?
     @Published var cameraPosition: MapCameraPosition = .automatic
+    @Published private(set) var visibleMarkers: [PlaceMarker] = []
 
     // MARK: - Dependencies
 
@@ -94,12 +103,43 @@ class PlacesMapViewModel: ObservableObject {
                 self?.objectWillChange.send()
             }
             .store(in: &cancellables)
+
+        // Rebuild markers when underlying sources change.
+        spotStore.$items
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.rebuildVisibleMarkers()
+            }
+            .store(in: &cancellables)
+
+        contactStore.$items
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.rebuildVisibleMarkers()
+            }
+            .store(in: &cancellables)
+
+        discoveryService.$discoveredSpots
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.rebuildVisibleMarkers()
+            }
+            .store(in: &cancellables)
+
+        momentsViewModel.$cachedPhotoClusters
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.rebuildVisibleMarkers()
+            }
+            .store(in: &cancellables)
+
+        rebuildVisibleMarkers()
     }
 
-    // MARK: - Computed Markers
+    // MARK: - Markers
 
-    /// All visible markers based on current filters
-    var visibleMarkers: [PlaceMarker] {
+    /// Rebuild markers based on current filters and source data.
+    private func rebuildVisibleMarkers() {
         var markers: [PlaceMarker] = []
 
         // Add spot markers
@@ -159,11 +199,11 @@ class PlacesMapViewModel: ObservableObject {
 
         // Add photo cluster markers
         if activeFilters.contains(.photos) {
-            let clusters = momentsViewModel.clusterPhotos()
+            let clusters = momentsViewModel.cachedPhotoClusters
             markers.append(contentsOf: clusters.map { .photoCluster($0) })
         }
 
-        return markers
+        visibleMarkers = markers
     }
 
     /// Contacts with locations for the map

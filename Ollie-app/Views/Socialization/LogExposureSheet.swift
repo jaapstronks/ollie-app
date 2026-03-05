@@ -25,6 +25,10 @@ struct LogExposureSheet: View {
         selectedDistance != nil && selectedReaction != nil
     }
 
+    private var isAlreadyComfortable: Bool {
+        socializationStore.isComfortable(itemId: item.id)
+    }
+
     var body: some View {
         NavigationStack {
             ScrollView {
@@ -43,6 +47,11 @@ struct LogExposureSheet: View {
 
                     // Note field
                     noteSection
+
+                    // Quick mark as done (only show if not already comfortable)
+                    if !isAlreadyComfortable {
+                        markAsDoneSection
+                    }
                 }
                 .padding()
             }
@@ -248,6 +257,41 @@ struct LogExposureSheet: View {
         }
     }
 
+    // MARK: - Mark as Done Section
+
+    @ViewBuilder
+    private var markAsDoneSection: some View {
+        VStack(spacing: 12) {
+            Divider()
+                .padding(.vertical, 8)
+
+            VStack(spacing: 8) {
+                Text(Strings.Socialization.alreadyComfortable)
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+
+                Button {
+                    markAsDone()
+                } label: {
+                    HStack(spacing: 8) {
+                        Image(systemName: "checkmark.circle.fill")
+                        Text(Strings.Socialization.markAsDone)
+                    }
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+                    .foregroundStyle(Color.otisAccent)
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 10)
+                    .background(
+                        RoundedRectangle(cornerRadius: 20)
+                            .fill(Color.otisAccent.opacity(0.15))
+                    )
+                }
+                .buttonStyle(.plain)
+            }
+        }
+    }
+
     // MARK: - Actions
 
     private func saveExposure() {
@@ -272,6 +316,23 @@ struct LogExposureSheet: View {
 
         HapticFeedback.success()
         onLogged?(reaction)
+        dismiss()
+    }
+
+    private func markAsDone() {
+        // Track analytics
+        if let category = socializationStore.category(forItemId: item.id) {
+            Analytics.trackExposureLogged(
+                category: category.id,
+                reaction: "marked_comfortable",
+                weekNumber: profileStore.profile?.ageInWeeks ?? 0
+            )
+        }
+
+        socializationStore.markComfortable(item.id, method: .quickCheck)
+
+        HapticFeedback.success()
+        onLogged?(.positief) // Treat as positive for callback purposes
         dismiss()
     }
 }

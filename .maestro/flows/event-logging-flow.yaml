@@ -1,5 +1,5 @@
 # Test event logging functionality
-appId: nl.jaapstronks.Otis
+appId: jaapstronks.Otis-app
 ---
 - launchApp
 - waitForAnimationToEnd
@@ -22,7 +22,8 @@ appId: nl.jaapstronks.Otis
 
 # Dismiss by tapping Cancel button (top-left corner of sheet)
 - tapOn:
-    point: "15%,38%"
+    text: "Cancel|Annuleren|Done|Klaar"
+    optional: true
 - waitForAnimationToEnd
 
 # Wait for sheet to fully dismiss
@@ -32,7 +33,7 @@ appId: nl.jaapstronks.Otis
 
 # Test 2: Open quick log menu via long press on FAB
 - longPressOn:
-    point: "90%,85%"
+    id: "FAB_BUTTON"
 - waitForAnimationToEnd
 
 # Wait for quick menu to appear (look for menu items)
@@ -43,5 +44,5 @@ appId: nl.jaapstronks.Otis
 
 # Dismiss menu by tapping backdrop
 - tapOn:
-    point: "20%,30%"
+    id: "FAB_BUTTON"
 - waitForAnimationToEnd

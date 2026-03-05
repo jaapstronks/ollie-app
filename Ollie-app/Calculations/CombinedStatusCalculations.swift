@@ -542,6 +542,37 @@ struct CombinedStatusCalculations {
         )
     }
 
+    // MARK: - Walk Target Nudge Detection
+
+    /// Check if conditions are right to show the walk target nudge card
+    /// Shows when: 7+ days of walk data AND 30%+ below target AND not dismissed in past 7 days
+    /// - Parameters:
+    ///   - walkStats: Rolling walk statistics (14-day window)
+    ///   - dismissedDate: Date when user last dismissed this nudge (if any)
+    /// - Returns: true if nudge should be shown
+    static func shouldShowWalkTargetNudge(
+        walkStats: WalkStats?,
+        dismissedDate: Date?
+    ) -> Bool {
+        guard let stats = walkStats else { return false }
+
+        // Require sufficient data (7+ days with walks logged)
+        guard stats.daysWithData >= 7 else { return false }
+
+        // Require significant difference from target (30%+ below)
+        guard stats.differenceFromTarget <= -0.30 else { return false }
+
+        // Don't show if dismissed within past 7 days
+        if let dismissed = dismissedDate {
+            let daysSinceDismissed = Calendar.current.dateComponents([.day], from: dismissed, to: Date()).day ?? 0
+            if daysSinceDismissed < 7 {
+                return false
+            }
+        }
+
+        return true
+    }
+
     // MARK: - Crate Nudge Detection
 
     /// Check if conditions are right to show a crate nap nudge

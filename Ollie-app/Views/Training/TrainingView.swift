@@ -292,10 +292,15 @@ struct TrainingView: View {
                     SkillProgressRow(
                         info: info,
                         onTap: {
-                            if info.isNextUp {
-                                // For next up skill, start training (with rule check)
+                            if info.isLocked { return }
+
+                            // Skills with phases should show the learning flow first
+                            if info.skill.phases != nil && !info.skill.phases!.isEmpty {
+                                skillForDetailSheet = info.skill
+                            } else if info.isNextUp {
+                                // For next up skill without phases, start training directly
                                 checkForRulesAndStartTraining(info.skill)
-                            } else if !info.isLocked {
+                            } else {
                                 // For other unlocked skills, show detail sheet
                                 skillForDetailSheet = info.skill
                             }

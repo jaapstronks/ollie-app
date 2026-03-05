@@ -2,42 +2,45 @@
 //  DataImporter.swift
 //  Otis-app
 //
+//  Service for importing data from exported JSON files
 
 import Foundation
 import OtisShared
 import Combine
+import CoreData
+import UIKit
+import os
 
-/// Preview of what will be imported
+/// Preview of what will be imported from a file
 struct ImportPreview {
-    let totalDays: Int
-    let dateRange: (start: Date, end: Date)?
-    let localDays: Int
-    let newDays: Int
-    let availableFiles: [String]
-    let localFiles: [String]
+    let manifest: ExportManifest?
+    let components: [String]
+    let itemCounts: [String: Int]
+    let puppyName: String?
+    let exportDate: Date?
+    let folderURL: URL
 }
 
 /// Progress update during import
 struct ImportProgress {
-    let currentFile: Int
-    let totalFiles: Int
-    let currentFileName: String
-    let eventsImportedSoFar: Int
+    let currentComponent: String
+    let currentIndex: Int
+    let totalComponents: Int
+    let itemsImportedSoFar: Int
 }
 
 /// Result of a data import operation
 struct ImportResult {
-    var filesImported: Int
-    var eventsImported: Int
+    var componentsImported: Int
+    var itemsImported: Int
     var skipped: Int
     var errors: [String]
 }
 
-/// Service for importing data from the Otis web app GitHub repo
+/// Service for importing data from exported JSON files
 @MainActor
 class DataImporter: ObservableObject {
     @Published private(set) var isImporting: Bool = false
-    @Published private(set) var isFetchingPreview: Bool = false
     @Published private(set) var progress: String = ""
     @Published private(set) var importProgress: ImportProgress?
     @Published private(set) var lastResult: ImportResult?
@@ -45,289 +48,453 @@ class DataImporter: ObservableObject {
     @Published private(set) var lastError: String?
 
     private let fileManager = FileManager.default
+    private let persistenceController: PersistenceController
+    private let logger = Logger.otis(category: "DataImporter")
+    private let decoder: JSONDecoder
 
     // MARK: - Security
 
-    /// Allowed domains for downloading files
-    private static let allowedDownloadHosts = ["raw.githubusercontent.com", "github.com", "objects.githubusercontent.com"]
+    /// Maximum allowed file size for imports (50MB for folders with media)
+    private static let maxFileSize = 50 * 1024 * 1024
 
-    /// Maximum allowed file size for imports (5MB)
-    private static let maxFileSize = 5 * 1024 * 1024
+    /// Maximum allowed line length in files (prevents memory attacks)
+    private static let maxLineLength = 100_000
 
-    /// Maximum allowed line length in JSONL files (prevents memory attacks)
-    private static let maxLineLength = 50_000
-
-    /// Network request timeout in seconds
-    private static let networkTimeoutSeconds: TimeInterval = 30
-
-    /// Validates that a URL is from an allowed GitHub domain
-    private func isURLAllowed(_ url: URL) -> Bool {
-        guard let host = url.host?.lowercased() else { return false }
-        return Self.allowedDownloadHosts.contains(host)
+    init(persistenceController: PersistenceController = .shared) {
+        self.persistenceController = persistenceController
+        self.decoder = JSONDecoder()
+        self.decoder.dateDecodingStrategy = .iso8601
     }
 
-    /// Validates and sanitizes JSONL content
-    /// Returns nil if content appears malicious
-    private func sanitizeJSONLContent(_ content: String) throws -> String {
-        var sanitizedLines: [String] = []
-
-        for line in content.components(separatedBy: .newlines) {
-            // Skip empty lines
-            guard !line.trimmingCharacters(in: .whitespaces).isEmpty else {
-                continue
-            }
-
-            // Check line length
-            guard line.count <= Self.maxLineLength else {
-                throw ImportError.contentTooLarge
-            }
-
-            // Validate that each line is valid JSON
-            guard let data = line.data(using: .utf8),
-                  let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
-                // Skip invalid JSON lines rather than failing entirely
-                continue
-            }
-
-            // Validate required fields and sanitize paths
-            if let photoPath = json["photo"] as? String {
-                // Block path traversal attempts in photo paths
-                if photoPath.contains("..") || photoPath.hasPrefix("/") {
-                    throw ImportError.maliciousContent
-                }
-            }
-
-            if let videoPath = json["video"] as? String {
-                if videoPath.contains("..") || videoPath.hasPrefix("/") {
-                    throw ImportError.maliciousContent
-                }
-            }
-
-            sanitizedLines.append(line)
-        }
-
-        return sanitizedLines.joined(separator: "\n")
+    private var viewContext: NSManagedObjectContext {
+        persistenceController.viewContext
     }
 
     // MARK: - Public Methods
 
-    /// Fetch preview of what will be imported (without actually importing)
-    func fetchPreview() async throws -> ImportPreview {
-        isFetchingPreview = true
+    /// Preview what will be imported from a file or folder
+    func previewImport(from url: URL) async throws -> ImportPreview {
         lastError = nil
 
-        defer {
-            isFetchingPreview = false
+        // Check if this is a file or folder
+        var isDirectory: ObjCBool = false
+        guard fileManager.fileExists(atPath: url.path, isDirectory: &isDirectory) else {
+            throw ImportError.invalidFile
         }
 
-        // Get list of files from GitHub
-        let files = try await fetchFileList()
-        let jsonlFiles = files.filter { $0.name.hasSuffix(".jsonl") }
-        let availableFileNames = jsonlFiles.map { $0.name }.sorted()
+        if isDirectory.boolValue {
+            return try await previewFolder(url)
+        } else {
+            return try await previewSingleFile(url)
+        }
+    }
 
-        // Get list of local files
-        let localFileNames = getLocalFileNames()
+    /// Preview import from a folder (export folder structure)
+    private func previewFolder(_ folderURL: URL) async throws -> ImportPreview {
+        // Check if this is a valid export folder by looking for manifest.json
+        let manifestURL = folderURL.appendingPathComponent("manifest.json")
 
-        // Calculate which files are new
-        let localSet = Set(localFileNames)
-        let newFiles = availableFileNames.filter { !localSet.contains($0) }
+        var manifest: ExportManifest?
+        var components: [String] = []
+        var itemCounts: [String: Int] = [:]
+        var puppyName: String?
+        var exportDate: Date?
 
-        // Parse date range from file names
-        let dateRange = parseDateRange(from: availableFileNames)
+        if fileManager.fileExists(atPath: manifestURL.path) {
+            // Has manifest - read it
+            let data = try Data(contentsOf: manifestURL)
+            manifest = try decoder.decode(ExportManifest.self, from: data)
+            components = manifest?.components ?? []
+            itemCounts = manifest?.itemCounts ?? [:]
+            puppyName = manifest?.puppyName
+            exportDate = manifest?.exportDate
+        } else {
+            // No manifest - scan for available files
+            let knownFiles: [(String, String)] = [
+                ("profile.json", "profile"),
+                ("events.json", "events"),
+                ("documents.json", "documents"),
+                ("contacts.json", "contacts"),
+                ("appointments.json", "appointments"),
+                ("milestones.json", "milestones"),
+                ("exposures.json", "exposures"),
+                ("walkSpots.json", "walkSpots")
+            ]
+
+            for (filename, component) in knownFiles {
+                let fileURL = folderURL.appendingPathComponent(filename)
+                if fileManager.fileExists(atPath: fileURL.path) {
+                    components.append(component)
+
+                    // Count items if it's an array file
+                    if component != "profile" {
+                        if let data = try? Data(contentsOf: fileURL),
+                           let array = try? JSONSerialization.jsonObject(with: data) as? [[String: Any]] {
+                            itemCounts[component] = array.count
+                        }
+                    }
+                }
+            }
+
+            // Try to get puppy name from profile.json
+            let profileURL = folderURL.appendingPathComponent("profile.json")
+            if fileManager.fileExists(atPath: profileURL.path),
+               let data = try? Data(contentsOf: profileURL),
+               let profile = try? decoder.decode(PuppyProfile.self, from: data) {
+                puppyName = profile.name
+            }
+        }
 
         let preview = ImportPreview(
-            totalDays: availableFileNames.count,
-            dateRange: dateRange,
-            localDays: localFileNames.count,
-            newDays: newFiles.count,
-            availableFiles: availableFileNames,
-            localFiles: localFileNames
+            manifest: manifest,
+            components: components,
+            itemCounts: itemCounts,
+            puppyName: puppyName,
+            exportDate: exportDate,
+            folderURL: folderURL
         )
 
         lastPreview = preview
         return preview
     }
 
-    /// Import all available JSONL files from GitHub
-    func importFromGitHub(overwriteExisting: Bool = false) async throws -> ImportResult {
+    /// Preview import from a single JSON file (events.json)
+    private func previewSingleFile(_ fileURL: URL) async throws -> ImportPreview {
+        let data = try Data(contentsOf: fileURL)
+
+        // Try to detect what kind of JSON file this is
+        var components: [String] = []
+        var itemCounts: [String: Int] = [:]
+
+        // Try parsing as array of events
+        if let events = try? decoder.decode([PuppyEvent].self, from: data) {
+            components.append("events")
+            itemCounts["events"] = events.count
+        }
+        // Could add more detection for other types if needed
+
+        if components.isEmpty {
+            throw ImportError.invalidContent
+        }
+
+        let preview = ImportPreview(
+            manifest: nil,
+            components: components,
+            itemCounts: itemCounts,
+            puppyName: nil,
+            exportDate: nil,
+            folderURL: fileURL  // Store the file URL, we'll handle it specially during import
+        )
+
+        lastPreview = preview
+        return preview
+    }
+
+    /// Import data from a file or folder
+    func importFrom(_ url: URL, overwriteExisting: Bool = false) async throws -> ImportResult {
         isImporting = true
         lastError = nil
-        progress = "Bestanden ophalen..."
+        progress = Strings.DataImport.importing
         importProgress = nil
 
         defer {
             isImporting = false
         }
 
-        // Step 1: Get list of files from GitHub API
-        let files = try await fetchFileList()
-        let jsonlFiles = files.filter { $0.name.hasSuffix(".jsonl") }.sorted { $0.name < $1.name }
+        var result = ImportResult(componentsImported: 0, itemsImported: 0, skipped: 0, errors: [])
 
-        progress = "Gevonden: \(jsonlFiles.count) dagen"
+        // Check if this is a file or folder
+        var isDirectory: ObjCBool = false
+        guard fileManager.fileExists(atPath: url.path, isDirectory: &isDirectory) else {
+            throw ImportError.invalidFile
+        }
 
-        // Step 2: Download each file
-        var result = ImportResult(filesImported: 0, eventsImported: 0, skipped: 0, errors: [])
+        // Get preview to know what's available
+        let preview = try await previewImport(from: url)
+        let components = preview.components
 
-        for (index, file) in jsonlFiles.enumerated() {
-            progress = "Importeren: \(index + 1)/\(jsonlFiles.count)"
+        for (index, component) in components.enumerated() {
+            progress = Strings.DataImport.importingComponent(component)
             importProgress = ImportProgress(
-                currentFile: index + 1,
-                totalFiles: jsonlFiles.count,
-                currentFileName: file.name,
-                eventsImportedSoFar: result.eventsImported
+                currentComponent: component,
+                currentIndex: index + 1,
+                totalComponents: components.count,
+                itemsImportedSoFar: result.itemsImported
             )
 
-            let localURL = dataDirectoryURL.appendingPathComponent(file.name)
-
-            // Skip if exists and not overwriting
-            if !overwriteExisting && fileManager.fileExists(atPath: localURL.path) {
-                result.skipped += 1
-                continue
-            }
-
             do {
-                let content = try await downloadFile(url: file.downloadURL)
-                try ensureDataDirectoryExists()
-                try content.write(to: localURL, atomically: true, encoding: .utf8)
-
-                let eventCount = content.components(separatedBy: .newlines).filter { !$0.isEmpty }.count
-                result.filesImported += 1
-                result.eventsImported += eventCount
+                let count: Int
+                if isDirectory.boolValue {
+                    count = try await importComponent(component, from: url, overwrite: overwriteExisting)
+                } else {
+                    // Single file - import directly as events
+                    count = try await importEventsFromFile(url, overwrite: overwriteExisting)
+                }
+                result.componentsImported += 1
+                result.itemsImported += count
+                logger.info("Imported \(count) items for component: \(component)")
             } catch {
-                result.errors.append("\(file.name): \(error.localizedDescription)")
+                result.errors.append("\(component): \(error.localizedDescription)")
+                logger.error("Failed to import \(component): \(error.localizedDescription)")
             }
         }
 
-        progress = "Klaar!"
+        progress = Strings.DataImport.done
         importProgress = nil
         lastResult = result
+
+        // Save context
+        try viewContext.save()
 
         return result
     }
 
-    // MARK: - Private Methods
-
-    /// Documents directory URL
-    /// Falls back to temporary directory if documents directory is unavailable (should never happen in practice)
-    private var documentsURL: URL {
-        guard let url = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else {
-            return fileManager.temporaryDirectory
-        }
-        return url
+    /// Legacy method name for compatibility
+    func importFromFolder(_ folderURL: URL, overwriteExisting: Bool = false) async throws -> ImportResult {
+        try await importFrom(folderURL, overwriteExisting: overwriteExisting)
     }
 
-    private var dataDirectoryURL: URL {
-        documentsURL.appendingPathComponent(Constants.dataDirectoryName, isDirectory: true)
-    }
+    // MARK: - Component Importers
 
-    private func ensureDataDirectoryExists() throws {
-        if !fileManager.fileExists(atPath: dataDirectoryURL.path) {
-            try fileManager.createDirectory(at: dataDirectoryURL, withIntermediateDirectories: true)
-        }
-    }
+    /// Import events directly from a single JSON file
+    private func importEventsFromFile(_ fileURL: URL, overwrite: Bool) async throws -> Int {
+        let data = try Data(contentsOf: fileURL)
+        let events = try decoder.decode([PuppyEvent].self, from: data)
 
-    private struct GitHubFile {
-        let name: String
-        let downloadURL: URL
-    }
-
-    private func fetchFileList() async throws -> [GitHubFile] {
-        guard let apiURL = URL(string: "https://api.github.com/repos/\(Constants.gitHubOwner)/\(Constants.gitHubRepo)/contents/\(Constants.gitHubDataPath)") else {
-            throw ImportError.invalidResponse
-        }
-
-        var request = URLRequest(url: apiURL)
-        request.setValue("application/vnd.github.v3+json", forHTTPHeaderField: "Accept")
-        request.timeoutInterval = Self.networkTimeoutSeconds
-
-        let (data, response) = try await URLSession.shared.data(for: request)
-
-        guard let httpResponse = response as? HTTPURLResponse,
-              httpResponse.statusCode == 200 else {
-            throw ImportError.apiError
-        }
-
-        guard let json = try JSONSerialization.jsonObject(with: data) as? [[String: Any]] else {
-            throw ImportError.invalidResponse
-        }
-
-        return json.compactMap { item -> GitHubFile? in
-            guard let name = item["name"] as? String,
-                  let downloadURLString = item["download_url"] as? String,
-                  let downloadURL = URL(string: downloadURLString) else {
-                return nil
+        var importedCount = 0
+        for event in events {
+            // Check if event already exists
+            let existingEvent = CDPuppyEvent.fetch(byId: event.id, in: viewContext)
+            if existingEvent != nil && !overwrite {
+                continue
             }
 
-            // Security: Validate the download URL is from an allowed domain
-            guard isURLAllowed(downloadURL) else {
-                return nil
+            // Delete existing if overwriting
+            if let existing = existingEvent {
+                viewContext.delete(existing)
             }
 
-            // Security: Validate filename format (YYYY-MM-DD.jsonl)
-            let filenamePattern = #"^\d{4}-\d{2}-\d{2}\.jsonl$"#
-            guard name.range(of: filenamePattern, options: .regularExpression) != nil else {
-                return nil
+            // Create new event using the helper method
+            _ = CDPuppyEvent.create(from: event, in: viewContext)
+            importedCount += 1
+        }
+
+        return importedCount
+    }
+
+    private func importComponent(_ component: String, from folderURL: URL, overwrite: Bool) async throws -> Int {
+        switch component {
+        case "events":
+            return try await importEvents(from: folderURL, overwrite: overwrite)
+        case "documents":
+            return try await importDocuments(from: folderURL, overwrite: overwrite)
+        case "contacts":
+            return try await importContacts(from: folderURL, overwrite: overwrite)
+        case "appointments":
+            return try await importAppointments(from: folderURL, overwrite: overwrite)
+        case "milestones":
+            return try await importMilestones(from: folderURL, overwrite: overwrite)
+        case "exposures":
+            return try await importExposures(from: folderURL, overwrite: overwrite)
+        case "walkSpots":
+            return try await importWalkSpots(from: folderURL, overwrite: overwrite)
+        case "profile":
+            // Profile import is handled separately as it affects the app's active profile
+            return 0
+        default:
+            return 0
+        }
+    }
+
+    private func importEvents(from folderURL: URL, overwrite: Bool) async throws -> Int {
+        let fileURL = folderURL.appendingPathComponent("events.json")
+        guard fileManager.fileExists(atPath: fileURL.path) else { return 0 }
+
+        return try await importEventsFromFile(fileURL, overwrite: overwrite)
+    }
+
+    private func importDocuments(from folderURL: URL, overwrite: Bool) async throws -> Int {
+        let fileURL = folderURL.appendingPathComponent("documents.json")
+        guard fileManager.fileExists(atPath: fileURL.path) else { return 0 }
+
+        guard let profileId = CDPuppyProfile.fetchProfile(in: viewContext)?.id,
+              let cdProfile = CDPuppyProfile.fetch(byId: profileId, in: viewContext) else {
+            throw ImportError.noProfileFound
+        }
+
+        let data = try Data(contentsOf: fileURL)
+        let documents = try decoder.decode([Document].self, from: data)
+
+        var importedCount = 0
+        for document in documents {
+            let existingDoc = CDDocument.fetch(byId: document.id, in: viewContext)
+            if existingDoc != nil && !overwrite {
+                continue
             }
 
-            return GitHubFile(name: name, downloadURL: downloadURL)
+            if let existing = existingDoc {
+                viewContext.delete(existing)
+            }
+
+            // Use the helper method to create document
+            let cdDoc = CDDocument.create(from: document, profile: cdProfile, in: viewContext)
+
+            // Try to import attachment files
+            let documentsFolder = folderURL.appendingPathComponent("Documents", isDirectory: true)
+            if document.attachmentType == .pdf {
+                let attachmentURL = documentsFolder.appendingPathComponent("\(document.id.uuidString).pdf")
+                if fileManager.fileExists(atPath: attachmentURL.path) {
+                    let attachmentData = try Data(contentsOf: attachmentURL)
+                    cdDoc.setPDF(attachmentData)
+                }
+            } else if document.attachmentType == .image {
+                let attachmentURL = documentsFolder.appendingPathComponent("\(document.id.uuidString).jpg")
+                if fileManager.fileExists(atPath: attachmentURL.path),
+                   let attachmentData = try? Data(contentsOf: attachmentURL),
+                   let image = UIImage(data: attachmentData) {
+                    cdDoc.setImage(image)
+                }
+            }
+
+            importedCount += 1
         }
+
+        return importedCount
     }
 
-    private func downloadFile(url: URL) async throws -> String {
-        // Security: Validate URL before downloading
-        guard isURLAllowed(url) else {
-            throw ImportError.untrustedURL
+    private func importContacts(from folderURL: URL, overwrite: Bool) async throws -> Int {
+        let fileURL = folderURL.appendingPathComponent("contacts.json")
+        guard fileManager.fileExists(atPath: fileURL.path) else { return 0 }
+
+        let data = try Data(contentsOf: fileURL)
+        let contacts = try decoder.decode([DogContact].self, from: data)
+
+        var importedCount = 0
+        for contact in contacts {
+            let existingContact = CDDogContact.fetch(byId: contact.id, in: viewContext) as? CDDogContact
+            if existingContact != nil && !overwrite {
+                continue
+            }
+
+            if let existing = existingContact {
+                viewContext.delete(existing)
+            }
+
+            // Use the helper method to create contact
+            _ = CDDogContact.create(from: contact, in: viewContext)
+            importedCount += 1
         }
 
-        var request = URLRequest(url: url)
-        request.timeoutInterval = Self.networkTimeoutSeconds
-
-        let (data, response) = try await URLSession.shared.data(for: request)
-
-        guard let httpResponse = response as? HTTPURLResponse,
-              httpResponse.statusCode == 200 else {
-            throw ImportError.downloadFailed
-        }
-
-        // Security: Check file size
-        guard data.count <= Self.maxFileSize else {
-            throw ImportError.contentTooLarge
-        }
-
-        guard let content = String(data: data, encoding: .utf8) else {
-            throw ImportError.invalidContent
-        }
-
-        // Security: Sanitize and validate JSONL content
-        return try sanitizeJSONLContent(content)
+        return importedCount
     }
 
-    /// Get list of local JSONL file names
-    private func getLocalFileNames() -> [String] {
-        guard fileManager.fileExists(atPath: dataDirectoryURL.path) else {
-            return []
+    private func importAppointments(from folderURL: URL, overwrite: Bool) async throws -> Int {
+        let fileURL = folderURL.appendingPathComponent("appointments.json")
+        guard fileManager.fileExists(atPath: fileURL.path) else { return 0 }
+
+        guard let profileId = CDPuppyProfile.fetchProfile(in: viewContext)?.id,
+              let cdProfile = CDPuppyProfile.fetch(byId: profileId, in: viewContext) else {
+            throw ImportError.noProfileFound
         }
 
-        do {
-            let contents = try fileManager.contentsOfDirectory(atPath: dataDirectoryURL.path)
-            return contents.filter { $0.hasSuffix(".jsonl") }.sorted()
-        } catch {
-            return []
+        let data = try Data(contentsOf: fileURL)
+        let appointments = try decoder.decode([DogAppointment].self, from: data)
+
+        var importedCount = 0
+        for appointment in appointments {
+            let existingAppt = CDDogAppointment.fetch(byId: appointment.id, in: viewContext)
+            if existingAppt != nil && !overwrite {
+                continue
+            }
+
+            if let existing = existingAppt {
+                viewContext.delete(existing)
+            }
+
+            // Use the helper method to create appointment
+            _ = CDDogAppointment.create(from: appointment, profile: cdProfile, in: viewContext)
+            importedCount += 1
         }
+
+        return importedCount
     }
 
-    /// Parse date range from JSONL file names (format: YYYY-MM-DD.jsonl)
-    private func parseDateRange(from fileNames: [String]) -> (start: Date, end: Date)? {
-        let dates = fileNames.compactMap { fileName -> Date? in
-            let datePart = fileName.replacingOccurrences(of: ".jsonl", with: "")
-            return DateFormatters.dateOnly.date(from: datePart)
-        }.sorted()
+    private func importMilestones(from folderURL: URL, overwrite: Bool) async throws -> Int {
+        let fileURL = folderURL.appendingPathComponent("milestones.json")
+        guard fileManager.fileExists(atPath: fileURL.path) else { return 0 }
 
-        guard let first = dates.first, let last = dates.last else {
-            return nil
+        let data = try Data(contentsOf: fileURL)
+        let milestones = try decoder.decode([Milestone].self, from: data)
+
+        var importedCount = 0
+        for milestone in milestones {
+            let existingMilestone = CDMilestone.fetch(byId: milestone.id, in: viewContext) as? CDMilestone
+            if existingMilestone != nil && !overwrite {
+                continue
+            }
+
+            if let existing = existingMilestone {
+                viewContext.delete(existing)
+            }
+
+            // Use the helper method to create milestone
+            _ = CDMilestone.create(from: milestone, in: viewContext)
+            importedCount += 1
         }
 
-        return (start: first, end: last)
+        return importedCount
+    }
+
+    private func importExposures(from folderURL: URL, overwrite: Bool) async throws -> Int {
+        let fileURL = folderURL.appendingPathComponent("exposures.json")
+        guard fileManager.fileExists(atPath: fileURL.path) else { return 0 }
+
+        let data = try Data(contentsOf: fileURL)
+        let exposures = try decoder.decode([Exposure].self, from: data)
+
+        var importedCount = 0
+        for exposure in exposures {
+            let existingExposure = CDExposure.fetch(byId: exposure.id, in: viewContext)
+            if existingExposure != nil && !overwrite {
+                continue
+            }
+
+            if let existing = existingExposure {
+                viewContext.delete(existing)
+            }
+
+            // Use the helper method to create exposure
+            _ = CDExposure.create(from: exposure, in: viewContext)
+            importedCount += 1
+        }
+
+        return importedCount
+    }
+
+    private func importWalkSpots(from folderURL: URL, overwrite: Bool) async throws -> Int {
+        let fileURL = folderURL.appendingPathComponent("walkSpots.json")
+        guard fileManager.fileExists(atPath: fileURL.path) else { return 0 }
+
+        let data = try Data(contentsOf: fileURL)
+        let spots = try decoder.decode([WalkSpot].self, from: data)
+
+        var importedCount = 0
+        for spot in spots {
+            let existingSpot = CDWalkSpot.fetch(byId: spot.id, in: viewContext)
+            if existingSpot != nil && !overwrite {
+                continue
+            }
+
+            if let existing = existingSpot {
+                viewContext.delete(existing)
+            }
+
+            // Use the helper method to create walk spot
+            _ = CDWalkSpot.create(from: spot, in: viewContext)
+            importedCount += 1
+        }
+
+        return importedCount
     }
 
     /// Reset state for new import attempt
@@ -340,23 +507,19 @@ class DataImporter: ObservableObject {
 }
 
 enum ImportError: LocalizedError {
-    case apiError
-    case invalidResponse
-    case downloadFailed
+    case invalidFile
     case invalidContent
-    case untrustedURL
     case contentTooLarge
     case maliciousContent
+    case noProfileFound
 
     var errorDescription: String? {
         switch self {
-        case .apiError: return Strings.Errors.apiError
-        case .invalidResponse: return Strings.Errors.invalidResponse
-        case .downloadFailed: return Strings.Errors.downloadFailed
+        case .invalidFile: return Strings.Errors.invalidFile
         case .invalidContent: return Strings.Errors.invalidContent
-        case .untrustedURL: return Strings.Errors.untrustedURL
         case .contentTooLarge: return Strings.Errors.contentTooLarge
         case .maliciousContent: return Strings.Errors.maliciousContent
+        case .noProfileFound: return Strings.Errors.noProfileFound
         }
     }
 }

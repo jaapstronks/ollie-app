@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		672ED4502F4CF0400024A12B /* OllieWatch Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 672ED4462F4CF03F0024A12B /* OllieWatch Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		672ED45C2F4CF0A30024A12B /* OtisShared in Frameworks */ = {isa = PBXBuildFile; productRef = 672ED45B2F4CF0A30024A12B /* OtisShared */; };
-		672ED5002F4D9DA10024A12B /* Secrets.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 672ED4FF2F4D9DA10024A12B /* Secrets.xcconfig */; };
 		673C41F42F49B3DA004333E6 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = 673C41F32F49B3DA004333E6 /* Sentry */; };
 		6768FD482F476789000E6A79 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6768FD472F476789000E6A79 /* WidgetKit.framework */; };
 		6768FD4A2F476789000E6A79 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6768FD492F476789000E6A79 /* SwiftUI.framework */; };
@@ -367,7 +366,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 2620;
-				LastUpgradeCheck = 2620;
+				LastUpgradeCheck = 2630;
 				TargetAttributes = {
 					672ED4452F4CF03F0024A12B = {
 						CreatedOnToolsVersion = 26.2;
@@ -446,7 +445,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				672ED5002F4D9DA10024A12B /* Secrets.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -696,6 +694,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -750,6 +749,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -760,6 +760,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -807,6 +808,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				VALIDATE_PRODUCT = YES;
 			};

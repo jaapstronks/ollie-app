@@ -8,6 +8,7 @@
 import SwiftUI
 import OtisShared
 import CloudKit
+import UIKit
 import os
 
 private let logger = Logger.otis(category: "CloudSharingView")
@@ -19,25 +20,48 @@ struct CloudSharingView: UIViewControllerRepresentable {
     let container: CKContainer
     let onDismiss: () -> Void
 
-    func makeUIViewController(context: Context) -> UICloudSharingController {
-        let controller = UICloudSharingController(share: share, container: container)
-        controller.availablePermissions = [.allowReadWrite, .allowPrivate]
-        controller.delegate = context.coordinator
-        controller.modalPresentationStyle = .formSheet
-        return controller
+    func makeUIViewController(context: Context) -> SharingHostViewController {
+        let host = SharingHostViewController()
+        host.onDidAppear = { [coordinator = context.coordinator] in
+            coordinator.presentIfNeeded(share: share, container: container, from: host)
+        }
+        return host
     }
 
-    func updateUIViewController(_ uiViewController: UICloudSharingController, context: Context) {}
+    func updateUIViewController(_ uiViewController: SharingHostViewController, context: Context) {}
 
     func makeCoordinator() -> Coordinator {
         Coordinator(onDismiss: onDismiss)
     }
 
-    class Coordinator: NSObject, UICloudSharingControllerDelegate {
+    class Coordinator: NSObject, UICloudSharingControllerDelegate, UIAdaptivePresentationControllerDelegate {
         let onDismiss: () -> Void
+        private var didPresentController = false
+        private var didCallDismiss = false
 
         init(onDismiss: @escaping () -> Void) {
             self.onDismiss = onDismiss
+        }
+
+        func presentIfNeeded(share: CKShare, container: CKContainer, from host: UIViewController) {
+            guard !didPresentController else { return }
+            didPresentController = true
+
+            let controller = UICloudSharingController(share: share, container: container)
+            controller.availablePermissions = [.allowReadWrite, .allowPrivate]
+            controller.delegate = self
+            controller.presentationController?.delegate = self
+            host.present(controller, animated: true)
+        }
+
+        private func notifyDismissIfNeeded() {
+            guard !didCallDismiss else { return }
+            didCallDismiss = true
+            onDismiss()
+        }
+
+        func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+            notifyDismissIfNeeded()
         }
 
         func cloudSharingController(_ csc: UICloudSharingController, failedToSaveShareWithError error: Error) {
@@ -68,15 +92,22 @@ struct CloudSharingView: UIViewControllerRepresentable {
 
         func cloudSharingControllerDidSaveShare(_ csc: UICloudSharingController) {
             logger.info("Share saved successfully")
-            // Share state is managed automatically by NSPersistentCloudKitContainer
-            NotificationCenter.default.post(name: .cloudKitShareAccepted, object: nil)
+            // Do not broadcast share-accepted here; that notification is only for invitation acceptance.
         }
 
         func cloudSharingControllerDidStopSharing(_ csc: UICloudSharingController) {
             logger.info("Sharing stopped")
-            // Share state is managed automatically by NSPersistentCloudKitContainer
-            NotificationCenter.default.post(name: .cloudKitShareAccepted, object: nil)
+            // State updates are handled by the presenting SwiftUI view on dismiss.
         }
+    }
+}
+
+final class SharingHostViewController: UIViewController {
+    var onDidAppear: (() -> Void)?
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        onDidAppear?()
     }
 }
 

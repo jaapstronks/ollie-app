@@ -25,7 +25,12 @@ struct ContentView: View {
 
     @State private var showOnboarding = false
     @State private var showAddProfileOnboarding = false
-    @AppStorage(UserPreferences.Key.lastSelectedTab.rawValue) private var selectedTab = 0
+    @State private var sharedProfileWelcomeName: String?
+    @State private var showSharedProfileWelcome = false
+    @AppStorage(UserPreferences.Key.lastSelectedTab.rawValue) private var selectedTabRawValue = MainTab.today.rawValue
+    @AppStorage(UserPreferences.Key.needsFirstSessionHandoff.rawValue) private var needsFirstSessionHandoff = false
+    @AppStorage(UserPreferences.Key.hasCompletedOnboarding.rawValue) private var hasCompletedOnboarding = false
+    @StateObject private var navigationState = AppNavigationState()
     @AppStorage(UserPreferences.Key.appearanceMode.rawValue) private var appearanceMode = AppearanceMode.system.rawValue
     @State private var showLaunchScreen = true
 
@@ -64,12 +69,14 @@ struct ContentView: View {
                 } else if shouldShowOnboarding {
                     // Onboarding for new users (not for participants)
                     OnboardingView(profileStore: profileStore) {
+                        hasCompletedOnboarding = true
+                        needsFirstSessionHandoff = true
                         showOnboarding = false
                     }
                 } else {
                     // Main app with tabs
                     MainTabView(
-                        selectedTab: $selectedTab,
+                        selectedTab: $navigationState.selectedTab,
                         eventStore: eventStore,
                         profileStore: profileStore,
                         dataImporter: dataImporter,
@@ -97,6 +104,9 @@ struct ContentView: View {
             }
         }
         .onAppear {
+            // Restore last selected tab from persisted raw value.
+            navigationState.selectedTab = MainTab(rawValue: selectedTabRawValue) ?? .today
+
             // Dismiss launch screen after brief delay
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
                 withAnimation(.easeOut(duration: 0.3)) {
@@ -104,10 +114,24 @@ struct ContentView: View {
                 }
             }
         }
+        .onChange(of: navigationState.selectedTab) { _, newTab in
+            selectedTabRawValue = newTab.rawValue
+        }
         // Listen for share acceptance to skip onboarding and reload profile
         .onReceive(NotificationCenter.default.publisher(for: .cloudKitShareAccepted)) { _ in
             // Force dismiss onboarding if it was showing
             showOnboarding = false
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .sharedProfileAutoActivated)) { notification in
+            if let name = notification.userInfo?["profileName"] as? String, !name.isEmpty {
+                sharedProfileWelcomeName = name
+                showSharedProfileWelcome = true
+            }
+        }
+        .alert(Strings.CloudSharing.sharedDogReadyTitle, isPresented: $showSharedProfileWelcome) {
+            Button(Strings.Common.ok, role: .cancel) {}
+        } message: {
+            Text(Strings.CloudSharing.sharedDogReadyMessage(name: sharedProfileWelcomeName ?? Strings.CloudSharing.sharedData))
         }
         // Sheet for adding a new profile (multi-puppy)
         .fullScreenCover(isPresented: $showAddProfileOnboarding) {
@@ -122,7 +146,7 @@ struct ContentView: View {
 /// Wrapper view that owns the TimelineViewModel as a @StateObject
 /// New structure: 5 tabs (Today, Train, Places, Schedule, Health) + FAB for logging
 struct MainTabView: View {
-    @Binding var selectedTab: Int
+    @Binding var selectedTab: MainTab
     let eventStore: EventStore
     let profileStore: ProfileStore
     let dataImporter: DataImporter
@@ -144,14 +168,16 @@ struct MainTabView: View {
     @StateObject private var mediaCaptureViewModel = MediaCaptureViewModel(mediaStore: MediaStore())
     @StateObject private var memoriesViewModel: MemoriesViewModel
     @State private var showingSettings = false
+    @State private var showingFirstSessionHandoff = false
     @State private var selectedPhotoEvent: PuppyEvent?
     @State private var showingArrivalPhotoPrompt = false
     @AppStorage("hasShownArrivalPhotoPrompt") private var hasShownArrivalPhotoPrompt = false
     @AppStorage(UserPreferences.Key.showFloatingClicker.rawValue) private var showFloatingClicker = false
+    @AppStorage(UserPreferences.Key.needsFirstSessionHandoff.rawValue) private var needsFirstSessionHandoff = false
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     init(
-        selectedTab: Binding<Int>,
+        selectedTab: Binding<MainTab>,
         eventStore: EventStore,
         profileStore: ProfileStore,
         dataImporter: DataImporter,
@@ -203,14 +229,17 @@ struct MainTabView: View {
                 CompactActivityBanner(
                     activity: activity,
                     onTap: {
-                        selectedTab = 0  // Switch to Today tab
+                        selectedTab = .today
                         viewModel.sheetCoordinator.presentSheet(.endActivity)
                     }
                 )
             }
 
-            ZStack(alignment: .bottom) {
-                // Main tab content
+            GeometryReader { proxy in
+                let safeAreaBottom = proxy.safeAreaInsets.bottom
+
+                ZStack(alignment: .bottom) {
+                    // Main tab content
                 TabView(selection: $selectedTab) {
                 // Tab 0: Today
                 TodayView(
@@ -219,14 +248,14 @@ struct MainTabView: View {
                     appointmentStore: appointmentStore,
                     weatherService: weatherService,
                     onSettingsTap: { showingSettings = true },
-                    onNavigateToAppointments: { selectedTab = 3 },
-                    onNavigateToTrain: { selectedTab = 1 },
+                    onNavigateToAppointments: { selectedTab = .schedule },
+                    onNavigateToTrain: { selectedTab = .train },
                     onAddDog: onAddDog
                 )
                 .tabItem {
                     Label(Strings.Tabs.today, systemImage: "pawprint.fill")
                 }
-                .tag(0)
+                .tag(MainTab.today)
 
                 // Tab 1: Train (expanded with Potty + Socialization + Skills)
                 TrainTabView(
@@ -236,7 +265,7 @@ struct MainTabView: View {
                 .tabItem {
                     Label(Strings.Tabs.train, systemImage: "graduationcap.fill")
                 }
-                .tag(1)
+                .tag(MainTab.train)
 
                 // Tab 2: Explore (spots + photo moments on map)
                 PlacesTabView(
@@ -252,7 +281,7 @@ struct MainTabView: View {
                 .tabItem {
                     Label(Strings.Tabs.explore, systemImage: "map.fill")
                 }
-                .tag(2)
+                .tag(MainTab.explore)
 
                 // Tab 3: Schedule (appointments, contacts, calendar)
                 CalendarTabView(
@@ -261,12 +290,12 @@ struct MainTabView: View {
                     socializationStore: socializationStore,
                     contactStore: contactStore,
                     onSettingsTap: { showingSettings = true },
-                    onNavigateToSocialization: { selectedTab = 1 }
+                    onNavigateToSocialization: { selectedTab = .train }
                 )
                 .tabItem {
                     Label(Strings.Tabs.schedule, systemImage: "calendar.badge.clock")
                 }
-                .tag(3)
+                .tag(MainTab.schedule)
 
                 // Tab 4: Health (stats, weight, patterns, walks)
                 HealthTabView(
@@ -277,51 +306,58 @@ struct MainTabView: View {
                 .tabItem {
                     Label(Strings.Tabs.health, systemImage: "heart.text.square.fill")
                 }
-                .tag(4)
+                .tag(MainTab.health)
             }
 
-            // Floating Action Button (only on Today tab)
-            if selectedTab == 0 {
-                HStack {
-                    Spacer()
+                    // Floating Action Button (only on Today tab)
+                    if selectedTab == .today {
+                        HStack {
+                            Spacer()
 
-                    FABButton(
-                        sleepState: viewModel.currentSleepState,
-                        currentActivity: viewModel.currentActivity,
-                        onTap: {
-                            // Open full log sheet
-                            viewModel.showAllEvents()
-                        },
-                        onQuickAction: { eventType, location in
-                            // Quick log with default values
-                            if let location = location {
-                                viewModel.quickLogWithLocation(type: eventType, location: location)
-                            } else {
-                                viewModel.quickLog(type: eventType)
-                            }
-                        },
-                        onEndActivity: {
-                            viewModel.sheetCoordinator.presentSheet(.endActivity)
+                            FABButton(
+                                sleepState: viewModel.currentSleepState,
+                                currentActivity: viewModel.currentActivity,
+                                onTap: {
+                                    // Open full log sheet
+                                    viewModel.showAllEvents()
+                                },
+                                onQuickAction: { eventType, location in
+                                    // Quick log with default values
+                                    if let location = location {
+                                        viewModel.quickLogWithLocation(type: eventType, location: location)
+                                    } else {
+                                        viewModel.quickLog(type: eventType)
+                                    }
+                                },
+                                onEndActivity: {
+                                    viewModel.sheetCoordinator.presentSheet(.endActivity)
+                                }
+                            )
+                            .padding(.trailing, 16)
+                            .padding(.bottom, 60 + safeAreaBottom) // Above tab bar and safe area
                         }
-                    )
-                    .padding(.trailing, 16)
-                    .padding(.bottom, 60) // Above tab bar
-                }
-            }
-
-            // Floating Clicker Button (enabled via settings)
-            if showFloatingClicker {
-                VStack {
-                    Spacer()
-                    HStack {
-                        FloatingClickerButton()
-                            .padding(.leading, 16)
-                            .padding(.bottom, 100) // Above tab bar
-                        Spacer()
                     }
-                }
+
+                    // Floating Clicker Button (enabled via settings)
+                    if showFloatingClicker {
+                        VStack {
+                            Spacer()
+                            HStack {
+                                FloatingClickerButton()
+                                    .padding(.leading, 16)
+                                    .padding(.bottom, 100 + safeAreaBottom) // Above tab bar and safe area
+                                Spacer()
+                            }
+                        }
+                    }
+
+                    // Keep celebration rendering at the top-most layer of the main tab stack.
+                    CelebrationView(style: viewModel.celebrationStyle, isActive: $viewModel.showCelebration)
+                        .ignoresSafeArea()
+                        .zIndex(10_000)
+                }  // Close ZStack
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
-        }  // Close ZStack
         }  // Close VStack
         // Settings sheet (accessed via gear icon in Today view)
         .sheet(isPresented: $showingSettings) {
@@ -348,6 +384,29 @@ struct MainTabView: View {
                     }
                 }
             }
+        }
+        .sheet(isPresented: $showingFirstSessionHandoff) {
+            FirstSessionHandoffSheet(
+                onLogFirstEvent: {
+                    showingFirstSessionHandoff = false
+                    needsFirstSessionHandoff = false
+                    selectedTab = .today
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                        viewModel.showAllEvents()
+                    }
+                },
+                onViewTimeline: {
+                    showingFirstSessionHandoff = false
+                    needsFirstSessionHandoff = false
+                    selectedTab = .today
+                },
+                onDismiss: {
+                    showingFirstSessionHandoff = false
+                    needsFirstSessionHandoff = false
+                }
+            )
+            .presentationDetents([.medium, .large])
+            .presentationDragIndicator(.visible)
         }
         // All sheets from shared modifier - at MainTabView level for global access
         .timelineSheetHandling(
@@ -379,6 +438,25 @@ struct MainTabView: View {
         }
         .onAppear {
             checkForArrivalPhotoPrompt()
+            if needsFirstSessionHandoff {
+                showingFirstSessionHandoff = true
+            }
+        }
+        .onChange(of: selectedTab) { _, newTab in
+            Analytics.track(.tabSelected, properties: [
+                "tab_index": newTab.rawValue,
+                "tab_name": newTab.analyticsName
+            ])
+        }
+        .onChange(of: viewModel.sheetCoordinator.activeSheet) { _, newSheet in
+            if newSheet == nil {
+                viewModel.flushPendingCelebrationIfNeeded()
+            }
+        }
+        .onChange(of: showingSettings) { _, isShowing in
+            if isShowing {
+                Analytics.track(.settingsOpened)
+            }
         }
     }
 

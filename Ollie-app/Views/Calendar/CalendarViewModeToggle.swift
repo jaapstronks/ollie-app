@@ -2,21 +2,18 @@
 //  CalendarViewModeToggle.swift
 //  Otis-app
 //
-//  Segmented control for switching between Development and Calendar view modes
+//  Segmented control for switching between Calendar and Contacts view modes
 
 import SwiftUI
 
-/// View mode for the Schedule tab (formerly Calendar tab)
+/// View mode for the Schedule tab
 enum CalendarViewMode: String, CaseIterable, RawRepresentable {
-    case development  // List-based view focused on milestones
-    case calendar     // Traditional month grid view
+    case calendar     // Calendar view with list/week/month modes
     case contacts     // Contacts list view
 
     /// Localized label for the view mode
     var label: String {
         switch self {
-        case .development:
-            return Strings.Calendar.developmentMode
         case .calendar:
             return Strings.Calendar.calendarMode
         case .contacts:
@@ -27,8 +24,6 @@ enum CalendarViewMode: String, CaseIterable, RawRepresentable {
     /// SF Symbol icon for the view mode
     var icon: String {
         switch self {
-        case .development:
-            return "chart.bar.fill"
         case .calendar:
             return "calendar"
         case .contacts:
@@ -85,7 +80,7 @@ struct CalendarViewModeToggle: View {
 }
 
 #Preview {
-    @Previewable @State var mode: CalendarViewMode = .development
+    @Previewable @State var mode: CalendarViewMode = .calendar
 
     VStack(spacing: 20) {
         CalendarViewModeToggle(mode: $mode)

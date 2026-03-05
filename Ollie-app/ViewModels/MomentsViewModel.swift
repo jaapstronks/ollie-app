@@ -13,6 +13,7 @@ class MomentsViewModel: ObservableObject {
     @Published var events: [PuppyEvent] = []
     @Published var isLoading: Bool = false
     @Published var isLoadingMore: Bool = false
+    @Published private(set) var cachedPhotoClusters: [PhotoCluster] = []
 
     /// Whether there are more events to load
     @Published private(set) var hasMoreEvents: Bool = true
@@ -68,6 +69,7 @@ class MomentsViewModel: ObservableObject {
 
         // Re-sort by time (newest first)
         events.sort { $0.time > $1.time }
+        refreshPhotoClusters()
     }
 
     /// Load initial batch of events with photos (paginated)
@@ -77,6 +79,7 @@ class MomentsViewModel: ObservableObject {
         isLoading = true
         events = []
         loadedEventIds = []
+        cachedPhotoClusters = []
         currentDaysOffset = 0
         hasMoreEvents = true
 
@@ -160,6 +163,7 @@ class MomentsViewModel: ObservableObject {
             // Append new events and sort
             self.events.append(contentsOf: newEvents)
             self.events.sort { $0.time > $1.time }
+            self.refreshPhotoClusters()
 
             // Check if we've reached the end
             if localOffset >= self.maxDaysBack || newEvents.isEmpty {
@@ -183,6 +187,7 @@ class MomentsViewModel: ObservableObject {
 
         // Remove from local list
         events.removeAll { $0.id == event.id }
+        refreshPhotoClusters()
     }
 
     /// Static DateFormatter to avoid recreation per event (performance optimization)
@@ -251,47 +256,11 @@ class MomentsViewModel: ObservableObject {
     /// Cluster nearby photos for map display
     /// Returns clusters with a representative location and count
     func clusterPhotos(radiusMeters: Double = 50) -> [PhotoCluster] {
-        let locatedEvents = eventsWithLocation
-        var clustered: [PhotoCluster] = []
-        var assigned = Set<UUID>()
-
-        for event in locatedEvents {
-            guard !assigned.contains(event.id),
-                  let lat = event.latitude,
-                  let lon = event.longitude else { continue }
-
-            // Find all nearby unclustered photos
-            var clusterEvents = [event]
-            for other in locatedEvents {
-                guard !assigned.contains(other.id),
-                      other.id != event.id,
-                      let otherLat = other.latitude,
-                      let otherLon = other.longitude else { continue }
-
-                let distance = haversineDistance(lat1: lat, lon1: lon, lat2: otherLat, lon2: otherLon)
-                if distance <= radiusMeters {
-                    clusterEvents.append(other)
-                }
-            }
-
-            // Mark all as assigned
-            for e in clusterEvents {
-                assigned.insert(e.id)
-            }
-
-            // Calculate cluster center (centroid)
-            let centerLat = clusterEvents.compactMap { $0.latitude }.reduce(0, +) / Double(clusterEvents.count)
-            let centerLon = clusterEvents.compactMap { $0.longitude }.reduce(0, +) / Double(clusterEvents.count)
-
-            clustered.append(PhotoCluster(
-                id: event.id,
-                latitude: centerLat,
-                longitude: centerLon,
-                events: clusterEvents.sorted { $0.time > $1.time }
-            ))
+        // Explore map uses the default radius most of the time; keep it cached.
+        if abs(radiusMeters - 50) < 0.001 {
+            return cachedPhotoClusters
         }
-
-        return clustered
+        return buildPhotoClusters(radiusMeters: radiusMeters)
     }
 
     // MARK: - Place Stats
@@ -358,6 +327,107 @@ class MomentsViewModel: ObservableObject {
         let c = 2 * atan2(sqrt(a), sqrt(1 - a))
 
         return earthRadius * c
+    }
+
+    // MARK: - Cluster Cache
+
+    private func refreshPhotoClusters() {
+        cachedPhotoClusters = buildPhotoClusters(radiusMeters: 50)
+    }
+
+    /// Spatial-hash clustering to avoid O(n²) scan on each render.
+    private func buildPhotoClusters(radiusMeters: Double) -> [PhotoCluster] {
+        let locatedEvents = eventsWithLocation
+        guard !locatedEvents.isEmpty else { return [] }
+
+        struct ClusterAccumulator {
+            var id: UUID
+            var latitude: Double
+            var longitude: Double
+            var count: Int
+            var events: [PuppyEvent]
+        }
+
+        let radius = max(1, radiusMeters)
+        let averageLatitude = locatedEvents.compactMap(\.latitude).reduce(0, +) / Double(locatedEvents.count)
+        let latScale: Double = 111_132
+        let lonScale: Double = max(1, 111_320 * cos(averageLatitude * .pi / 180))
+
+        func bucketKey(lat: Double, lon: Double) -> String {
+            let x = Int(floor((lon * lonScale) / radius))
+            let y = Int(floor((lat * latScale) / radius))
+            return "\(x):\(y)"
+        }
+
+        func neighboringKeys(for key: String) -> [String] {
+            let parts = key.split(separator: ":")
+            guard parts.count == 2,
+                  let x = Int(parts[0]),
+                  let y = Int(parts[1]) else {
+                return [key]
+            }
+
+            var keys: [String] = []
+            keys.reserveCapacity(9)
+            for dx in -1...1 {
+                for dy in -1...1 {
+                    keys.append("\(x + dx):\(y + dy)")
+                }
+            }
+            return keys
+        }
+
+        var clusters: [ClusterAccumulator] = []
+        var bucketToClusterIndices: [String: [Int]] = [:]
+
+        for event in locatedEvents {
+            guard let eventLat = event.latitude, let eventLon = event.longitude else { continue }
+
+            let key = bucketKey(lat: eventLat, lon: eventLon)
+            let candidateIndices = neighboringKeys(for: key).flatMap { bucketToClusterIndices[$0] ?? [] }
+
+            var targetClusterIndex: Int?
+            for candidateIndex in candidateIndices {
+                let cluster = clusters[candidateIndex]
+                let distance = haversineDistance(
+                    lat1: eventLat, lon1: eventLon,
+                    lat2: cluster.latitude, lon2: cluster.longitude
+                )
+                if distance <= radius {
+                    targetClusterIndex = candidateIndex
+                    break
+                }
+            }
+
+            if let clusterIndex = targetClusterIndex {
+                var cluster = clusters[clusterIndex]
+                let nextCount = cluster.count + 1
+                cluster.latitude = (cluster.latitude * Double(cluster.count) + eventLat) / Double(nextCount)
+                cluster.longitude = (cluster.longitude * Double(cluster.count) + eventLon) / Double(nextCount)
+                cluster.count = nextCount
+                cluster.events.append(event)
+                clusters[clusterIndex] = cluster
+            } else {
+                let cluster = ClusterAccumulator(
+                    id: event.id,
+                    latitude: eventLat,
+                    longitude: eventLon,
+                    count: 1,
+                    events: [event]
+                )
+                clusters.append(cluster)
+                bucketToClusterIndices[key, default: []].append(clusters.count - 1)
+            }
+        }
+
+        return clusters.map { cluster in
+            PhotoCluster(
+                id: cluster.id,
+                latitude: cluster.latitude,
+                longitude: cluster.longitude,
+                events: cluster.events.sorted { $0.time > $1.time }
+            )
+        }
     }
 }
 

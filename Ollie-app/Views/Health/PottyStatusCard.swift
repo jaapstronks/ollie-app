@@ -13,11 +13,21 @@ import OtisShared
 struct PottyStatusCard: View {
     let prediction: PottyPrediction
     let puppyName: String
+    let titleOverride: String?
+    let subtitleOverride: String?
     let onLogPotty: (() -> Void)?
 
-    init(prediction: PottyPrediction, puppyName: String, onLogPotty: (() -> Void)? = nil) {
+    init(
+        prediction: PottyPrediction,
+        puppyName: String,
+        titleOverride: String? = nil,
+        subtitleOverride: String? = nil,
+        onLogPotty: (() -> Void)? = nil
+    ) {
         self.prediction = prediction
         self.puppyName = puppyName
+        self.titleOverride = titleOverride
+        self.subtitleOverride = subtitleOverride
         self.onLogPotty = onLogPotty
     }
 
@@ -28,7 +38,7 @@ struct PottyStatusCard: View {
             tintColor: indicatorColor,
             title: displayText,
             titleColor: prediction.urgency.textColor,
-            subtitle: PredictionCalculations.subtitleText(for: prediction)
+            subtitle: subtitleText
         ) {
             if let onLogPotty, shouldShowAction {
                 Button(action: onLogPotty) {
@@ -53,7 +63,11 @@ struct PottyStatusCard: View {
     // MARK: - Computed Properties
 
     private var displayText: String {
-        PredictionCalculations.displayText(for: prediction, puppyName: puppyName)
+        titleOverride ?? PredictionCalculations.displayText(for: prediction, puppyName: puppyName)
+    }
+
+    private var subtitleText: String? {
+        subtitleOverride ?? PredictionCalculations.subtitleText(for: prediction)
     }
 
     private var shouldShowAction: Bool {

@@ -45,6 +45,12 @@ struct VerticalTimelineView: View {
     /// Vertical spacing between stacked point event cards
     private let pointEventSpacing: CGFloat = 4
 
+    /// Horizontal inset between time column and timeline content
+    private let timelineHorizontalInset: CGFloat = 8
+
+    /// Prevent cards from collapsing in split-view widths
+    private let minimumTimelineContentWidth: CGFloat = 220
+
     /// Hours to display (0 to max hour, reverse order)
     /// For today: shows up to current hour + 1
     /// For past days: shows full day (0-23)
@@ -149,7 +155,7 @@ struct VerticalTimelineView: View {
 
     private var durationBlocksLayer: some View {
         GeometryReader { geometry in
-            let contentWidth = geometry.size.width - timeColumnWidth - 16  // 16 for padding
+            let contentWidth = timelineContentWidth(for: geometry.size.width)
 
             ForEach(durationItems) { item in
                 let position = calculateBlockPosition(for: item)
@@ -161,7 +167,7 @@ struct VerticalTimelineView: View {
                     }
                 )
                 .frame(width: contentWidth, height: position.height)
-                .offset(x: timeColumnWidth + 8, y: position.yOffset)
+                .offset(x: timeColumnWidth + timelineHorizontalInset, y: position.yOffset)
             }
         }
     }
@@ -170,8 +176,8 @@ struct VerticalTimelineView: View {
 
     private var trainingSessionsLayer: some View {
         GeometryReader { geometry in
-            let contentWidth = geometry.size.width - timeColumnWidth - 16
-            let cardWidth = contentWidth * 0.7  // 70% width for training session cards
+            let contentWidth = timelineContentWidth(for: geometry.size.width)
+            let cardWidth = max(contentWidth * 0.7, 180)  // Keep cards usable on narrow split widths
 
             ForEach(trainingSessionItems) { item in
                 if case .trainingSession(let session) = item.type {
@@ -207,8 +213,8 @@ struct VerticalTimelineView: View {
 
     private var pointEventsLayer: some View {
         GeometryReader { geometry in
-            let contentWidth = geometry.size.width - timeColumnWidth - 16
-            let cardWidth = contentWidth * 0.6  // 60% width for cards
+            let contentWidth = timelineContentWidth(for: geometry.size.width)
+            let cardWidth = max(contentWidth * 0.6, 170)  // Keep cards readable on narrow split widths
             let stemAnchorX = contentWidth * 0.5  // Middle of timeline for stem anchor
 
             // Calculate positions with collision detection
@@ -232,6 +238,10 @@ struct VerticalTimelineView: View {
                 )
             }
         }
+    }
+
+    private func timelineContentWidth(for totalWidth: CGFloat) -> CGFloat {
+        max(totalWidth - timeColumnWidth - (timelineHorizontalInset * 2), minimumTimelineContentWidth)
     }
 
     // MARK: - Point Event Layout Calculation
@@ -416,251 +426,6 @@ struct VerticalTimelineView: View {
     }
 }
 
-// MARK: - Point Event with Stem
-
-private struct PointEventWithStem: View {
-    let item: VerticalTimelineItem
-    let anchorY: CGFloat
-    let cardY: CGFloat
-    let cardWidth: CGFloat
-    let stemAnchorX: CGFloat  // Not used anymore, kept for API compatibility
-    let timeColumnWidth: CGFloat
-    let contentWidth: CGFloat
-    var householdMembers: HouseholdMembers?
-    let onTap: () -> Void
-
-    @Environment(\.colorScheme) private var colorScheme
-
-    /// Icon size (must match PointEventCard)
-    private let iconSize: CGFloat = 28
-
-    /// X position for card's left edge
-    private var cardLeftX: CGFloat {
-        timeColumnWidth + contentWidth - cardWidth + 8
-    }
-
-    /// X position for icon center (where stem should connect)
-    private var iconCenterX: CGFloat {
-        cardLeftX + iconSize / 2
-    }
-
-    /// X position for anchor dot (just to the left of the icon)
-    private var anchorX: CGFloat {
-        cardLeftX - 12
-    }
-
-    /// Card vertical center
-    private var cardCenterY: CGFloat {
-        cardY + iconSize / 2
-    }
-
-    private var iconColor: Color {
-        switch item.type {
-        case .pointEvent(let event):
-            return colorForEvent(event)
-        default:
-            return .otisAccent
-        }
-    }
-
-    var body: some View {
-        ZStack(alignment: .topLeading) {
-            // Stem line (horizontal from anchor to icon center)
-            StemLine(
-                anchorX: anchorX,
-                anchorY: anchorY,
-                cardLeftX: iconCenterX,  // Connect to icon center, not card edge
-                cardCenterY: cardCenterY,
-                color: iconColor.opacity(0.3)
-            )
-
-            // Anchor dot at true timestamp position
-            Circle()
-                .fill(iconColor)
-                .frame(width: 6, height: 6)
-                .offset(x: anchorX - 3, y: anchorY - 3)
-
-            // Event card (right-aligned, pill-shaped)
-            PointEventCard(item: item, iconColor: iconColor, householdMembers: householdMembers, onTap: onTap)
-                .frame(width: cardWidth, height: iconSize)
-                .offset(x: cardLeftX, y: cardY)
-        }
-    }
-
-    private func colorForEvent(_ event: PuppyEvent) -> Color {
-        switch event.type {
-        case .plassen, .poepen:
-            return event.location == .buiten ? .otisSuccess : .otisDanger
-        case .eten, .drinken:
-            return .otisAccent
-        case .training:
-            return .otisPurple
-        case .sociaal:
-            return .otisSuccess
-        case .tuin:
-            return .otisSuccess
-        case .milestone:
-            return .otisRose
-        case .gewicht:
-            return .otisHealth
-        case .medicatie:
-            return .otisHealth
-        case .coverageGap:
-            return .secondary
-        default:
-            return .secondary
-        }
-    }
-}
-
-// MARK: - Stem Line
-
-/// L-shaped stem connecting anchor point to card
-private struct StemLine: View {
-    let anchorX: CGFloat
-    let anchorY: CGFloat
-    let cardLeftX: CGFloat
-    let cardCenterY: CGFloat
-    let color: Color
-
-    var body: some View {
-        Path { path in
-            // Start at anchor point
-            path.move(to: CGPoint(x: anchorX, y: anchorY))
-
-            // If anchor and card are at different Y positions, draw L-shape
-            // First go horizontally part way, then vertically, then horizontally to card
-            let midX = anchorX + 8  // Small horizontal segment from anchor
-
-            if abs(anchorY - cardCenterY) > 2 {
-                // Draw to mid point at anchor height
-                path.addLine(to: CGPoint(x: midX, y: anchorY))
-                // Draw vertically to card height
-                path.addLine(to: CGPoint(x: midX, y: cardCenterY))
-            }
-
-            // Draw horizontally to card
-            path.addLine(to: CGPoint(x: cardLeftX, y: cardCenterY))
-        }
-        .stroke(color, style: StrokeStyle(lineWidth: 1.5, lineCap: .round, lineJoin: .round))
-    }
-}
-
-// MARK: - Point Event Card
-
-/// Pill-shaped card with icon overlapping left edge
-/// Height matches icon size (28pt) for compact stacking
-private struct PointEventCard: View {
-    let item: VerticalTimelineItem
-    let iconColor: Color
-    var householdMembers: HouseholdMembers?
-    let onTap: () -> Void
-
-    @Environment(\.colorScheme) private var colorScheme
-
-    /// Icon size matches card height for perfect circle overlap
-    private let iconSize: CGFloat = 28
-
-    /// Look up the member who logged this event
-    private var loggedByMember: HouseholdMember? {
-        guard case .pointEvent(let event) = item.type,
-              let loggedBy = event.loggedBy,
-              let members = householdMembers else { return nil }
-        return members.member(byId: loggedBy)
-    }
-
-    var body: some View {
-        Button(action: onTap) {
-            HStack(spacing: 0) {
-                // Icon circle (overlaps the left edge of the pill)
-                ZStack {
-                    Circle()
-                        .fill(iconColor.opacity(0.15))
-                        .frame(width: iconSize, height: iconSize)
-
-                    Image(systemName: item.icon)
-                        .font(.system(size: 11, weight: .semibold))
-                        .foregroundStyle(iconColor)
-                }
-
-                // Time and label on same line
-                HStack(spacing: 4) {
-                    Text(item.startTime.formatted(date: .omitted, time: .shortened))
-                        .font(.caption2)
-                        .fontWeight(.medium)
-                        .foregroundStyle(.secondary)
-
-                    Text(shortDescription)
-                        .font(.caption)
-                        .fontWeight(.medium)
-                        .foregroundStyle(.primary)
-                        .lineLimit(1)
-
-                    // Attribution avatar (only shown when loggedBy is set and there are multiple members)
-                    if let member = loggedByMember,
-                       let members = householdMembers,
-                       members.members.count > 1 {
-                        HouseholdMemberAvatar(member: member, size: 14)
-                    }
-                }
-                .padding(.leading, 6)
-                .padding(.trailing, 12)
-            }
-            .frame(height: iconSize)
-            .background(
-                // Pill background that starts where icon ends
-                Capsule()
-                    .fill(cardBackground)
-                    .padding(.leading, iconSize / 2)  // Start pill from icon center
-            )
-            .overlay(
-                // Subtle border on pill portion
-                Capsule()
-                    .strokeBorder(iconColor.opacity(0.15), lineWidth: 0.5)
-                    .padding(.leading, iconSize / 2)
-            )
-        }
-        .buttonStyle(.plain)
-    }
-
-    private var shortDescription: String {
-        switch item.type {
-        case .pointEvent(let event):
-            switch event.type {
-            case .plassen:
-                return event.location == .buiten ? Strings.VerticalTimeline.pee : Strings.VerticalTimeline.accident
-            case .poepen:
-                return event.location == .buiten ? Strings.VerticalTimeline.poop : Strings.VerticalTimeline.accident
-            case .eten:
-                return Strings.VerticalTimeline.meal
-            case .drinken:
-                return Strings.VerticalTimeline.water
-            case .training:
-                return event.exercise ?? Strings.VerticalTimeline.training
-            case .sociaal:
-                return event.who ?? Strings.VerticalTimeline.social
-            case .gewicht:
-                if let kg = event.weightKg {
-                    return String(format: "%.1f kg", kg)
-                }
-                return Strings.VerticalTimeline.weighed
-            case .medicatie:
-                return Strings.VerticalTimeline.medication
-            default:
-                return event.type.label
-            }
-        default:
-            return item.description
-        }
-    }
-
-    private var cardBackground: Color {
-        colorScheme == .dark
-            ? Color.white.opacity(0.1)
-            : Color.white.opacity(0.95)
-    }
-}
-
 // MARK: - Hour Row
 
 private struct HourRow: View {
@@ -707,297 +472,6 @@ private struct HourRow: View {
         colorScheme == .dark
             ? Color.white.opacity(0.08)
             : Color.black.opacity(0.06)
-    }
-}
-
-// MARK: - Duration Block View
-
-/// Compact block view for naps and walks using iOS 26 liquid glass design
-/// Label positioned at bottom left with time next to title
-private struct DurationBlockView: View {
-    let item: VerticalTimelineItem
-    let onTap: () -> Void
-
-    @Environment(\.colorScheme) private var colorScheme
-
-    private var blockColor: Color {
-        switch item.type {
-        case .sleepSession:
-            return .otisSleep
-        case .walkEvent:
-            return .otisSuccess
-        default:
-            return .secondary
-        }
-    }
-
-    private var glassTint: GlassTint {
-        switch item.type {
-        case .sleepSession:
-            return .sleep
-        case .walkEvent:
-            return .success
-        default:
-            return .none
-        }
-    }
-
-    private var blockLabel: String {
-        switch item.type {
-        case .sleepSession:
-            return Strings.VerticalTimeline.sleep
-        case .walkEvent:
-            return Strings.VerticalTimeline.walk
-        default:
-            return ""
-        }
-    }
-
-    var body: some View {
-        Button(action: onTap) {
-            // Label at top left with duration next to it
-            HStack(spacing: 6) {
-                Text(blockLabel)
-                    .font(.caption)
-                    .fontWeight(.medium)
-                    .foregroundStyle(blockColor)
-
-                // Duration next to label (if available)
-                if let duration = item.durationString {
-                    Text(duration)
-                        .font(.caption2)
-                        .foregroundStyle(.secondary)
-                } else if item.isOngoing {
-                    // Live duration for ongoing activities
-                    LiveDurationText(startTime: item.startTime, color: blockColor)
-                }
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-            .padding(.horizontal, 10)
-            .padding(.vertical, 8)
-            .liquidGlass(style: .card, tint: glassTint, cornerRadius: 8)
-        }
-        .buttonStyle(.plain)
-    }
-}
-
-// MARK: - Live Duration Text
-
-/// Shows live-updating duration for ongoing activities
-private struct LiveDurationText: View {
-    let startTime: Date
-    let color: Color
-
-    @State private var now = Date()
-
-    private let timer = Timer.publish(every: 60, on: .main, in: .common).autoconnect()
-
-    private var durationString: String {
-        let minutes = Int(now.timeIntervalSince(startTime) / 60)
-        if minutes < 60 {
-            return "\(minutes)m"
-        } else {
-            let hours = minutes / 60
-            let mins = minutes % 60
-            if mins == 0 {
-                return "\(hours)h"
-            }
-            return "\(hours)h \(mins)m"
-        }
-    }
-
-    var body: some View {
-        Text(durationString)
-            .font(.caption2)
-            .foregroundStyle(color)
-            .onReceive(timer) { _ in
-                now = Date()
-            }
-    }
-}
-
-// MARK: - Training Session Card with Stem
-
-/// Card for grouped training sessions with expand/collapse
-private struct TrainingSessionCardWithStem: View {
-    let session: TrainingSession
-    let anchorY: CGFloat
-    let cardWidth: CGFloat
-    let timeColumnWidth: CGFloat
-    let contentWidth: CGFloat
-    let isExpanded: Bool
-    let onTap: () -> Void
-    let onEventTap: (PuppyEvent) -> Void
-
-    @Environment(\.colorScheme) private var colorScheme
-
-    /// Icon size
-    private let iconSize: CGFloat = 28
-
-    /// Height of collapsed card
-    private let collapsedHeight: CGFloat = 28
-
-    /// Height of each expanded event row
-    private let expandedRowHeight: CGFloat = 24
-
-    /// X position for card's left edge
-    private var cardLeftX: CGFloat {
-        timeColumnWidth + contentWidth - cardWidth + 8
-    }
-
-    /// X position for icon center (where stem should connect)
-    private var iconCenterX: CGFloat {
-        cardLeftX + iconSize / 2
-    }
-
-    /// X position for anchor dot (just to the left of the icon)
-    private var anchorX: CGFloat {
-        cardLeftX - 12
-    }
-
-    /// Card Y position (centered on anchor when collapsed)
-    private var cardY: CGFloat {
-        max(anchorY - (collapsedHeight / 2), 0)
-    }
-
-    /// Total card height
-    private var totalHeight: CGFloat {
-        if isExpanded {
-            return collapsedHeight + CGFloat(session.events.count) * expandedRowHeight + 8
-        }
-        return collapsedHeight
-    }
-
-    /// Card vertical center (for stem connection)
-    private var cardCenterY: CGFloat {
-        cardY + iconSize / 2
-    }
-
-    private let iconColor: Color = .otisPurple
-
-    var body: some View {
-        ZStack(alignment: .topLeading) {
-            // Stem line (horizontal from anchor to icon center)
-            StemLine(
-                anchorX: anchorX,
-                anchorY: anchorY,
-                cardLeftX: iconCenterX,
-                cardCenterY: cardCenterY,
-                color: iconColor.opacity(0.3)
-            )
-
-            // Anchor dot at true timestamp position
-            Circle()
-                .fill(iconColor)
-                .frame(width: 6, height: 6)
-                .offset(x: anchorX - 3, y: anchorY - 3)
-
-            // Training session card
-            VStack(alignment: .leading, spacing: 0) {
-                // Collapsed header (always visible)
-                Button(action: onTap) {
-                    HStack(spacing: 0) {
-                        // Icon circle
-                        ZStack {
-                            Circle()
-                                .fill(iconColor.opacity(0.15))
-                                .frame(width: iconSize, height: iconSize)
-
-                            Image(systemName: "graduationcap.fill")
-                                .font(.system(size: 11, weight: .semibold))
-                                .foregroundStyle(iconColor)
-                        }
-
-                        // Time and label
-                        HStack(spacing: 4) {
-                            Text(session.startTime.formatted(date: .omitted, time: .shortened))
-                                .font(.caption2)
-                                .fontWeight(.medium)
-                                .foregroundStyle(.secondary)
-
-                            Text(Strings.VerticalTimeline.trainingSessionCount(count: session.count))
-                                .font(.caption)
-                                .fontWeight(.medium)
-                                .foregroundStyle(.primary)
-
-                            // Skill names preview (when collapsed)
-                            if !isExpanded && !session.skillNames.isEmpty {
-                                Text("· " + session.skillNames.prefix(3).joined(separator: ", "))
-                                    .font(.caption2)
-                                    .foregroundStyle(.secondary)
-                                    .lineLimit(1)
-                            }
-
-                            Spacer()
-
-                            // Expand/collapse chevron
-                            Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
-                                .font(.caption2)
-                                .foregroundStyle(.secondary)
-                        }
-                        .padding(.leading, 6)
-                        .padding(.trailing, 12)
-                    }
-                    .frame(height: collapsedHeight)
-                    .background(
-                        Capsule()
-                            .fill(cardBackground)
-                            .padding(.leading, iconSize / 2)
-                    )
-                    .overlay(
-                        Capsule()
-                            .strokeBorder(iconColor.opacity(0.15), lineWidth: 0.5)
-                            .padding(.leading, iconSize / 2)
-                    )
-                }
-                .buttonStyle(.plain)
-
-                // Expanded event list
-                if isExpanded {
-                    VStack(alignment: .leading, spacing: 2) {
-                        ForEach(session.events) { event in
-                            Button {
-                                onEventTap(event)
-                            } label: {
-                                HStack(spacing: 8) {
-                                    // Skill name or "Training"
-                                    Text(event.exercise ?? Strings.VerticalTimeline.training)
-                                        .font(.caption)
-                                        .foregroundStyle(.primary)
-
-                                    Spacer()
-
-                                    // Time
-                                    Text(event.time.formatted(date: .omitted, time: .shortened))
-                                        .font(.caption2)
-                                        .foregroundStyle(.secondary)
-                                }
-                                .padding(.horizontal, 12)
-                                .padding(.vertical, 4)
-                                .frame(height: expandedRowHeight)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 6)
-                                        .fill(iconColor.opacity(0.05))
-                                )
-                            }
-                            .buttonStyle(.plain)
-                        }
-                    }
-                    .padding(.leading, iconSize + 6)
-                    .padding(.trailing, 8)
-                    .padding(.top, 4)
-                    .padding(.bottom, 4)
-                }
-            }
-            .frame(width: cardWidth)
-            .offset(x: cardLeftX, y: cardY)
-        }
-    }
-
-    private var cardBackground: Color {
-        colorScheme == .dark
-            ? Color.white.opacity(0.1)
-            : Color.white.opacity(0.95)
     }
 }
 

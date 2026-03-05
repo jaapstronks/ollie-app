@@ -8,6 +8,7 @@
 import Combine
 import Foundation
 import OtisShared
+import UIKit
 
 extension TimelineViewModel {
     // MARK: - Potty Predictions
@@ -216,7 +217,7 @@ extension TimelineViewModel {
     /// - Upcoming: items more than 10 min away (shown in compact list)
     func separatedUpcomingItems(forecasts: [HourForecast] = []) -> (actionable: [ActionableItem], upcoming: [UpcomingItem]) {
         guard let profile = profileStore.profile else { return ([], []) }
-        return UpcomingCalculations.calculateUpcoming(
+        let separated: (actionable: [ActionableItem], upcoming: [UpcomingItem]) = UpcomingCalculations.calculateUpcoming(
             events: events,
             mealSchedule: profile.mealSchedule,
             walkSchedule: profile.walkSchedule,
@@ -224,6 +225,66 @@ extension TimelineViewModel {
             date: currentDate,
             isWalkInProgress: isWalkInProgress
         )
+        let recentEvents = cachedRecentEvents.isEmpty ? getRecentEvents() : cachedRecentEvents
+        return AINudgeOrchestrator.shared.reorderUpcomingItems(
+            profile: profile,
+            actionable: separated.actionable,
+            upcoming: separated.upcoming,
+            recentEvents: recentEvents
+        )
+    }
+
+    /// Optional AI-enhanced status copy for the daily potty card.
+    /// Falls back to deterministic prediction strings when AI is unavailable.
+    var aiEnhancedPottyStatusCopy: (title: String, subtitle: String?) {
+        let baselineTitle = PredictionCalculations.displayText(for: pottyPrediction, puppyName: puppyName)
+        let baselineSubtitle = PredictionCalculations.subtitleText(for: pottyPrediction)
+        guard let profile = profileStore.profile else {
+            return (baselineTitle, baselineSubtitle)
+        }
+        let recentEvents = cachedRecentEvents.isEmpty ? getRecentEvents() : cachedRecentEvents
+        return AINudgeOrchestrator.shared.dailyStatusCopy(
+            profile: profile,
+            baselineTitle: baselineTitle,
+            baselineSubtitle: baselineSubtitle,
+            prediction: pottyPrediction,
+            sleepState: currentSleepState,
+            recentEvents: recentEvents
+        )
+    }
+
+    var aiLoggingRecommendations: [AILoggingCategoryRecommendation] {
+        guard let profile = profileStore.profile else { return [] }
+        return AINudgeOrchestrator.shared.pendingLoggingRecommendations(for: profile.id)
+    }
+
+    func applyAILoggingRecommendation(_ recommendation: AILoggingCategoryRecommendation) {
+        guard var profile = profileStore.profile else { return }
+
+        var settings = profile.notificationSettings
+        switch recommendation.category {
+        case .potty:
+            settings.pottyReminders.isEnabled = false
+        case .walk:
+            settings.walkReminders.isEnabled = false
+        case .meal:
+            settings.mealReminders.isEnabled = false
+        case .training, .socialization:
+            // No category-specific reminder toggles yet; acknowledge only.
+            break
+        }
+
+        profile.notificationSettings = settings
+        profileStore.updateNotificationSettings(settings, for: profile.id)
+        notifyRefreshNotifications()
+        AINudgeOrchestrator.shared.markRecommendationApplied(profileID: profile.id, category: recommendation.category)
+        HapticFeedback.success()
+    }
+
+    func dismissAILoggingRecommendation(_ recommendation: AILoggingCategoryRecommendation) {
+        guard let profile = profileStore.profile else { return }
+        AINudgeOrchestrator.shared.markRecommendationDismissed(profileID: profile.id, category: recommendation.category)
+        HapticFeedback.selection()
     }
 
     // MARK: - First Week Card

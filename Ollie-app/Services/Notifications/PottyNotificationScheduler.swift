@@ -77,14 +77,23 @@ final class PottyNotificationScheduler: NotificationScheduler {
             return
         }
 
+        let aiAdjusted = AINudgeOrchestrator.shared.notificationPolicyAdjustment(
+            kind: .pottyReminder,
+            baselineMinutesUntilFire: minutesUntilNotification,
+            profile: profile,
+            recentEvents: events,
+            isUrgent: prediction.urgency.isUrgent,
+            allowSkip: false
+        )
+
         // Smart suppression: If user just used app and notification would fire soon, skip it
-        if suppression.shouldSuppressForAppUsage(minutesUntilFire: minutesUntilNotification) {
+        if suppression.shouldSuppressForAppUsage(minutesUntilFire: aiAdjusted.minutesUntilFire) {
             logger.debug("Suppressing potty notification: app recently used")
             return
         }
 
         // Smart suppression: Check quiet hours (but allow urgent/overdue notifications)
-        let fireTime = Date().addingTimeInterval(TimeInterval(minutesUntilNotification * 60))
+        let fireTime = Date().addingTimeInterval(TimeInterval(aiAdjusted.minutesUntilFire * 60))
         let isUrgent = prediction.urgency.isUrgent
         if !isUrgent && suppression.shouldSuppressForQuietHours(fireTime: fireTime, settings: profile.notificationSettings) {
             logger.debug("Suppressing potty notification: quiet hours")
@@ -107,7 +116,7 @@ final class PottyNotificationScheduler: NotificationScheduler {
         }
 
         let trigger = UNTimeIntervalNotificationTrigger(
-            timeInterval: Double(minutesUntilNotification * 60),
+            timeInterval: Double(aiAdjusted.minutesUntilFire * 60),
             repeats: false
         )
 
@@ -119,7 +128,7 @@ final class PottyNotificationScheduler: NotificationScheduler {
 
         do {
             try await notificationCenter.add(request)
-            logger.debug("Scheduled potty notification for \(minutesUntilNotification) minutes from now")
+            logger.debug("Scheduled potty notification for \(aiAdjusted.minutesUntilFire) minutes from now")
         } catch {
             logger.error("Failed to schedule potty reminder: \(error.localizedDescription)")
         }

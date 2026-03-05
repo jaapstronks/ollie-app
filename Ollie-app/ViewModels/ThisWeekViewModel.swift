@@ -37,8 +37,8 @@ class ThisWeekViewModel: ObservableObject {
         guard let profile = profile else { return false }
         let ageWeeks = profile.ageInWeeks
 
-        // Always show during socialization window (8-16 weeks)
-        if ageWeeks >= 8 && ageWeeks <= 16 {
+        // Always show during active tracking window (8-16 weeks, when puppy is home)
+        if SocializationWindow.isInWindow(ageWeeks: ageWeeks) {
             return true
         }
 

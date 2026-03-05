@@ -25,6 +25,7 @@ struct TodayView: View {
     @State private var selectedPhotoEvent: PuppyEvent?
     @State private var showProfilePicker = false
     @State private var dismissedCrateNudgeDate: Date?
+    @State private var dismissedWalkTargetNudgeDate: Date?
 
     // First-visit tip tracking
     @AppStorage("hasSeenTodayTip") private var hasSeenTodayTip = false
@@ -48,6 +49,14 @@ struct TodayView: View {
         )
     }
 
+    /// Whether to show the walk target nudge card
+    private var shouldShowWalkTargetNudge: Bool {
+        CombinedStatusCalculations.shouldShowWalkTargetNudge(
+            walkStats: viewModel.walkStats,
+            dismissedDate: dismissedWalkTargetNudgeDate
+        )
+    }
+
     var body: some View {
         VStack(spacing: 0) {
             // Nav bar with date and settings gear
@@ -65,6 +74,16 @@ struct TodayView: View {
             if viewModel.isShowingToday && !foodRecallService.unacknowledgedRecalls.isEmpty {
                 RecallAlertCard(foodRecallService: foodRecallService)
                     .padding(.horizontal)
+            }
+
+            // Partner activity summary (handoff card)
+            if viewModel.isShowingToday, let partnerSummary = viewModel.partnerActivitySummary {
+                PartnerActivitySummaryCard(
+                    summary: partnerSummary,
+                    householdMembers: viewModel.householdMembersContainer,
+                    onDismiss: { viewModel.dismissPartnerActivitySummary() }
+                )
+                .padding(.horizontal)
             }
 
             ScrollView {
@@ -123,23 +142,16 @@ struct TodayView: View {
                 }
                 .padding()
                 .padding(.bottom, 84) // Space for FAB
+                .adaptiveContainer()
             }
             .refreshable {
                 viewModel.loadEvents()
             }
         }
         .atmosphereBackground()
-        // Swipe gestures for day navigation
-        .dayNavigation(
-            canGoForward: viewModel.canGoForward,
-            onPreviousDay: viewModel.goToPreviousDay,
-            onNextDay: viewModel.goToNextDay
-        )
         .task {
             await weatherService.fetchForecasts()
         }
-        // Celebration overlay for milestone moments
-        .celebration(style: viewModel.celebrationStyle, trigger: $viewModel.showCelebration)
         // Sync puppy sleep state to atmosphere provider
         .onChange(of: viewModel.currentSleepState.isSleeping) { _, isSleeping in
             atmosphereProvider.updatePuppyState(isSleeping: isSleeping)
@@ -155,46 +167,13 @@ struct TodayView: View {
     @ViewBuilder
     private var todayNavBar: some View {
         HStack(spacing: 12) {
-            // Compact day navigation group
-            HStack(spacing: 0) {
-                // Previous day button
-                Button {
-                    HapticFeedback.selection()
-                    viewModel.goToPreviousDay()
-                } label: {
-                    Image(systemName: "chevron.left")
-                        .font(.system(size: 18, weight: .semibold))
-                        .frame(width: 44, height: 44)
-                        .contentShape(Rectangle())
-                }
-                .accessibilityLabel(Strings.Timeline.previousDay)
-
-                // Next day button
-                Button {
-                    HapticFeedback.selection()
-                    viewModel.goToNextDay()
-                } label: {
-                    Image(systemName: "chevron.right")
-                        .font(.system(size: 18, weight: .semibold))
-                        .frame(width: 44, height: 44)
-                        .contentShape(Rectangle())
-                }
-                .opacity(viewModel.canGoForward ? 1 : 0.3)
-                .disabled(!viewModel.canGoForward)
-                .accessibilityLabel(Strings.Timeline.nextDay)
-            }
-            .background(
-                Capsule()
-                    .fill(Color(.tertiarySystemFill))
-            )
-
             // Date title with subtle day counter
-            VStack(spacing: 2) {
+            VStack(alignment: .leading, spacing: 2) {
                 Text(viewModel.dateTitle)
                     .font(.headline)
 
-                // Subtle day counter - only show when viewing today
-                if viewModel.isShowingToday, let dayNumber = viewModel.dailyDigest.dayNumber {
+                // Subtle day counter
+                if let dayNumber = viewModel.dailyDigest.dayNumber {
                     Text(Strings.Timeline.dayWithPuppyName(day: dayNumber, name: viewModel.puppyName))
                         .font(.caption)
                         .foregroundStyle(.secondary)
@@ -206,37 +185,13 @@ struct TodayView: View {
 
             Spacer()
 
-            // "Today" pill button - only show when viewing past days
-            if !viewModel.isShowingToday {
-                Button {
-                    HapticFeedback.selection()
-                    viewModel.goToToday()
-                } label: {
-                    Text(Strings.Common.today)
-                        .font(.subheadline.weight(.medium))
-                        .foregroundStyle(.white)
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 6)
-                        .background(
-                            Capsule()
-                                .fill(Color.accentColor)
-                        )
-                }
-                .accessibilityLabel(Strings.Common.today)
-                .accessibilityHint(Strings.Timeline.goToTodayHint)
-            }
-
             // Profile photo button
-            // - Tap: Opens profile picker if multiple profiles exist, otherwise settings
-            // - Long press: Always opens settings
+            // - Tap: Opens full settings hub (consistent with other tabs)
+            // - Long press/context menu: Quick actions like profile switching
             ProfilePhotoButton(
                 profile: viewModel.profileStore.profile,
                 action: {
-                    if viewModel.profileStore.profiles.count > 1 {
-                        showProfilePicker = true
-                    } else {
-                        onSettingsTap()
-                    }
+                    onSettingsTap()
                 }
             )
             .contextMenu {
@@ -286,6 +241,7 @@ struct TodayView: View {
             // This avoids redundant calculation when puppy is sleeping
             let separated = viewModel.separatedUpcomingItems(forecasts: weatherService.forecasts)
             let pendingActionable = isSleeping ? separated.actionable.first : nil
+            let aiRecommendation = viewModel.aiLoggingRecommendations.first
 
             // First run welcome card (highest priority for new users)
             if case .firstRun(let puppyName) = combinedState {
@@ -359,9 +315,12 @@ struct TodayView: View {
 
             // Normal potty card (hide when combined card is showing or just woke)
             if !combinedState.shouldHidePottyCard {
+                let aiStatusCopy = viewModel.aiEnhancedPottyStatusCopy
                 PottyStatusCard(
                     prediction: viewModel.pottyPrediction,
                     puppyName: viewModel.puppyName,
+                    titleOverride: aiStatusCopy.title,
+                    subtitleOverride: aiStatusCopy.subtitle,
                     onLogPotty: { viewModel.sheetCoordinator.presentSheet(.potty(preselected: .plassen)) }
                 )
             }
@@ -399,6 +358,29 @@ struct TodayView: View {
                 .animatedAppear(delay: 0.02)
             }
 
+            // Walk target nudge card (contextual suggestion to adjust walk schedule)
+            if shouldShowWalkTargetNudge && !combinedState.shouldShowFirstRunCard,
+               let stats = viewModel.walkStats {
+                WalkTargetNudgeCard(
+                    actualAverage: stats.averageWalksPerDay,
+                    scheduledTarget: stats.scheduledWalksPerDay,
+                    onAdjust: {
+                        viewModel.sheetCoordinator.presentSheet(.walkScheduleEditor)
+                    },
+                    onDismiss: {
+                        // Dismiss for 7 days
+                        dismissedWalkTargetNudgeDate = Date()
+                    }
+                )
+                .animatedAppear(delay: 0.025)
+            }
+
+            // Subtle AI recommendation card (confirm before applying reminder changes)
+            if let recommendation = aiRecommendation, !combinedState.shouldShowFirstRunCard {
+                aiRecommendationCard(recommendation)
+                    .animatedAppear(delay: 0.03)
+            }
+
             // Hide scheduled events and medications during first run to avoid confusing "missed" reminders
             if !combinedState.shouldShowFirstRunCard {
                 // Medication reminders
@@ -430,18 +412,62 @@ struct TodayView: View {
 
     @ViewBuilder
     private var timelineSection: some View {
-        VerticalTimelineView(
-            viewModel: viewModel,
+        RecentActivityPreview(
+            events: viewModel.events,
+            onViewFullTimeline: {
+                viewModel.sheetCoordinator.presentSheet(.fullTimeline)
+            },
             onEditEvent: { event in
                 viewModel.editEvent(event)
             },
             onDeleteEvent: { event in
                 viewModel.deleteEvent(event)
-            },
-            onPhotoTap: { event in
-                selectedPhotoEvent = event
             }
         )
+    }
+
+    @ViewBuilder
+    private func aiRecommendationCard(_ recommendation: AILoggingCategoryRecommendation) -> some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text(Strings.AINudges.recommendationTitle)
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(.secondary)
+
+            Text(Strings.AINudges.recommendationBody(category: localizedCategoryName(recommendation.category)))
+                .font(.subheadline)
+                .foregroundStyle(.primary)
+
+            HStack(spacing: 10) {
+                Button(Strings.AINudges.keepCurrent) {
+                    viewModel.dismissAILoggingRecommendation(recommendation)
+                }
+                .buttonStyle(.glassPillCompact(tint: .custom(.otisMuted)))
+
+                Button(Strings.AINudges.reduceReminders) {
+                    viewModel.applyAILoggingRecommendation(recommendation)
+                }
+                .buttonStyle(.glassPillCompact(tint: .custom(.otisAccent)))
+            }
+        }
+        .padding(.horizontal, 14)
+        .padding(.vertical, 12)
+        .background(Color(.secondarySystemBackground).opacity(0.6))
+        .cornerRadius(LayoutConstants.cornerRadiusM)
+    }
+
+    private func localizedCategoryName(_ category: AILoggingCategory) -> String {
+        switch category {
+        case .potty:
+            return Strings.AINudges.categoryPotty
+        case .walk:
+            return Strings.AINudges.categoryWalk
+        case .meal:
+            return Strings.AINudges.categoryMeal
+        case .training:
+            return Strings.AINudges.categoryTraining
+        case .socialization:
+            return Strings.AINudges.categorySocialization
+        }
     }
 
 }

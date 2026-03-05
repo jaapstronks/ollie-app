@@ -13,6 +13,62 @@ import os
 
 // MARK: - CloudKit Share URL Handler
 
+@MainActor
+private final class ShareAcceptanceRegistry {
+    static let shared = ShareAcceptanceRegistry()
+    private var inFlightKeys = Set<String>()
+
+    func beginIfNeeded(for metadata: CKShare.Metadata) -> Bool {
+        let key = keyForMetadata(metadata)
+        guard !inFlightKeys.contains(key) else { return false }
+        inFlightKeys.insert(key)
+        return true
+    }
+
+    func end(for metadata: CKShare.Metadata) {
+        inFlightKeys.remove(keyForMetadata(metadata))
+    }
+
+    private func keyForMetadata(_ metadata: CKShare.Metadata) -> String {
+        let recordID = metadata.share.recordID
+        return "\(recordID.zoneID.ownerName)|\(recordID.zoneID.zoneName)|\(recordID.recordName)"
+    }
+}
+
+@MainActor
+private func sharedProfileIDSnapshot() -> Set<UUID> {
+    guard let sharedStore = PersistenceController.shared.getSharedStore() else { return [] }
+    let profiles = CDPuppyProfile.fetchAllProfiles(in: PersistenceController.shared.viewContext, from: sharedStore)
+    return Set(profiles.compactMap(\.id))
+}
+
+@MainActor
+private func waitForSharedProfileName(
+    previousSharedProfileIDs: Set<UUID>,
+    timeoutSeconds: TimeInterval = 30
+) async -> String? {
+    guard let sharedStore = PersistenceController.shared.getSharedStore() else { return nil }
+    let deadline = Date().addingTimeInterval(timeoutSeconds)
+
+    while Date() <= deadline {
+        let profiles = CDPuppyProfile.fetchAllProfiles(in: PersistenceController.shared.viewContext, from: sharedStore)
+        let newlyAdded = profiles.filter { profile in
+            guard let id = profile.id else { return false }
+            return !previousSharedProfileIDs.contains(id)
+        }
+
+        if let newest = newlyAdded.max(by: { ($0.modifiedAt ?? .distantPast) < ($1.modifiedAt ?? .distantPast) }),
+           let name = newest.name,
+           !name.isEmpty {
+            return name
+        }
+
+        try? await Task.sleep(for: .seconds(1))
+    }
+
+    return nil
+}
+
 /// Handle CloudKit share URL by fetching metadata and accepting
 @MainActor
 func handleCloudKitShareURL(_ url: URL, profileStore: ProfileStore) async {
@@ -103,9 +159,15 @@ private func showExistingProfileWarning(
 @MainActor
 private func acceptShareInvitation(
     metadata: CKShare.Metadata,
-    profileStore: ProfileStore,
+    profileStore: ProfileStore?,
     logger: Logger
 ) async {
+    guard ShareAcceptanceRegistry.shared.beginIfNeeded(for: metadata) else {
+        logger.info("Share acceptance already in progress for this invitation")
+        return
+    }
+    defer { ShareAcceptanceRegistry.shared.end(for: metadata) }
+
     // Show accepting alert
     let acceptingAlert = UIAlertController(
         title: Strings.CloudSharing.acceptingShare,
@@ -115,6 +177,8 @@ private func acceptShareInvitation(
     presentAlert(acceptingAlert)
 
     do {
+        let previousSharedProfileIDs = profileStore?.currentSharedProfileIDs() ?? sharedProfileIDSnapshot()
+
         // Accept via PersistenceController so the shared data is routed into the shared store
         // This is required for NSPersistentCloudKitContainer's two-store architecture
         try await PersistenceController.shared.acceptShareInvitation(from: metadata)
@@ -125,18 +189,32 @@ private func acceptShareInvitation(
         // Notify stores to refresh their data and skip onboarding
         NotificationCenter.default.post(name: .cloudKitShareAccepted, object: nil)
 
-        // Dismiss and show success
+        // Wait for shared profile import before showing "dog added" confirmation.
+        // Acceptance and data import are separate phases in CloudKit sharing.
+        let importedSharedDogName: String?
+        if let profileStore {
+            importedSharedDogName = await profileStore.awaitNewlySharedProfile(
+                previousSharedProfileIDs: previousSharedProfileIDs,
+                timeoutSeconds: 30
+            )?.name
+        } else {
+            importedSharedDogName = await waitForSharedProfileName(
+                previousSharedProfileIDs: previousSharedProfileIDs,
+                timeoutSeconds: 30
+            )
+        }
+
         acceptingAlert.dismiss(animated: true) {
             let successAlert = UIAlertController(
-                title: Strings.CloudSharing.shareAccepted,
-                message: Strings.CloudSharing.shareAcceptedMessage,
+                title: importedSharedDogName == nil ? Strings.CloudSharing.shareAccepted : Strings.CloudSharing.sharedDogReadyTitle,
+                message: importedSharedDogName.map { Strings.CloudSharing.sharedDogReadyMessage(name: $0) } ?? Strings.CloudSharing.shareAcceptedSyncingMessage,
                 preferredStyle: .alert
             )
             successAlert.addAction(UIAlertAction(title: Strings.Common.ok, style: .default))
             presentAlert(successAlert)
         }
 
-        logger.info("✅ Share accepted successfully!")
+        logger.info("✅ Share accepted successfully")
     } catch {
         logger.error("❌ Failed to accept share: \(error.localizedDescription)")
 
@@ -325,6 +403,7 @@ struct OtisApp: App {
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
                     // Track app usage for review prompt timing
                     ReviewService.shared.recordAppActive()
+                    Analytics.trackDay2ReturnIfEligible(profileId: profileStore.profile?.id)
                 }
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.didReceiveMemoryWarningNotification)) { _ in
                     // Clear image cache on memory warning
@@ -424,45 +503,11 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         logger.info("🔗 Owner: \(cloudKitShareMetadata.share.recordID.zoneID.ownerName)")
 
         Task { @MainActor in
-            do {
-                logger.info("🔗 Accepting share via PersistenceController...")
-                // Accept via PersistenceController so the shared data is routed into the shared store
-                try await PersistenceController.shared.acceptShareInvitation(from: cloudKitShareMetadata)
-
-                // Update CloudKit service state
-                CloudKitService.shared.markAsParticipant()
-
-                // Notify stores to refresh their local data
-                NotificationCenter.default.post(name: .cloudKitShareAccepted, object: nil)
-                logger.info("✅ Share accepted, automatic sync will update data")
-
-                // Show success alert
-                let successAlert = UIAlertController(
-                    title: Strings.CloudSharing.shareAccepted,
-                    message: Strings.CloudSharing.shareAcceptedMessage,
-                    preferredStyle: .alert
-                )
-                successAlert.addAction(UIAlertAction(title: Strings.Common.ok, style: .default))
-                UIApplication.shared.connectedScenes
-                    .compactMap { $0 as? UIWindowScene }
-                    .first?.windows.first?.rootViewController?
-                    .present(successAlert, animated: true)
-
-            } catch {
-                logger.error("❌ Failed to accept share: \(error.localizedDescription)")
-                logger.error("❌ Error details: \(error)")
-
-                let errorAlert = UIAlertController(
-                    title: Strings.CloudSharing.shareFailed,
-                    message: error.localizedDescription,
-                    preferredStyle: .alert
-                )
-                errorAlert.addAction(UIAlertAction(title: Strings.Common.ok, style: .default))
-                UIApplication.shared.connectedScenes
-                    .compactMap { $0 as? UIWindowScene }
-                    .first?.windows.first?.rootViewController?
-                    .present(errorAlert, animated: true)
-            }
+            await acceptShareInvitation(
+                metadata: cloudKitShareMetadata,
+                profileStore: nil,
+                logger: logger
+            )
         }
     }
 }

@@ -122,6 +122,16 @@ extension Strings {
         static let changeSpot = String(localized: "Change", table: table)
     }
 
+    // MARK: - Walk Target Nudge
+    enum WalkNudge {
+        static let title = String(localized: "Walk schedule review", table: table)
+        static func subtitle(actual: String, target: Int) -> String {
+            String(localized: "You're averaging \(actual) walks/day, but your target is \(target). Adjust?", table: table)
+        }
+        static let keepTarget = String(localized: "Keep target", table: table)
+        static let adjustSchedule = String(localized: "Adjust schedule", table: table)
+    }
+
     // MARK: - Walks Tab
     enum WalksTab {
         static let title = String(localized: "Walks", table: table)

@@ -12,8 +12,8 @@ import OtisShared
 enum FABLayout {
     /// Right padding from screen edge
     static let trailingPadding: CGFloat = 16
-    /// Bottom padding above tab bar (matches Today FAB)
-    static let bottomPadding: CGFloat = 60
+    /// Base bottom padding above bottom safe area
+    static let bottomPadding: CGFloat = 16
     /// FAB button size
     static let size: CGFloat = 56
     /// Icon font size
@@ -44,6 +44,7 @@ struct SimpleFAB<Content: View>: View {
         content()
             .modifier(FABPositionModifier())
             .accessibilityLabel(accessibilityLabel)
+            .accessibilityIdentifier("FAB_BUTTON")
     }
 }
 
@@ -76,9 +77,12 @@ struct FABLabel: View {
 /// Modifier that positions content as a FAB in the bottom-right corner
 struct FABPositionModifier: ViewModifier {
     func body(content: Content) -> some View {
-        content
-            .padding(.trailing, FABLayout.trailingPadding)
-            .padding(.bottom, FABLayout.bottomPadding)
+        GeometryReader { proxy in
+            content
+                .padding(.trailing, FABLayout.trailingPadding)
+                .padding(.bottom, FABLayout.bottomPadding + proxy.safeAreaInsets.bottom)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
+        }
     }
 }
 
