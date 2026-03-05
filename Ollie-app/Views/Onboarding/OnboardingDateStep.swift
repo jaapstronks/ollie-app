@@ -32,6 +32,13 @@ struct OnboardingBirthStep: View {
                     .fontWeight(.bold)
                     .multilineTextAlignment(.center)
                     .opacity(hasAppeared ? 1.0 : 0.0)
+
+                Text(Strings.Onboarding.birthDateSubtitle)
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 12)
+                    .opacity(hasAppeared ? 1.0 : 0.0)
             }
             .padding(.top, 16)
             .padding(.bottom, 8)
@@ -109,6 +116,14 @@ struct OnboardingHomeStep: View {
         }
     }
 
+    private var subtitleText: String {
+        if isExpecting {
+            return Strings.Onboarding.homeDateSubtitleFuture
+        } else {
+            return Strings.Onboarding.homeDateSubtitlePast
+        }
+    }
+
     var body: some View {
         VStack(spacing: 0) {
             // Header
@@ -123,6 +138,13 @@ struct OnboardingHomeStep: View {
                     .font(.title2)
                     .fontWeight(.bold)
                     .multilineTextAlignment(.center)
+                    .opacity(hasAppeared ? 1.0 : 0.0)
+
+                Text(subtitleText)
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 12)
                     .opacity(hasAppeared ? 1.0 : 0.0)
             }
             .padding(.top, 16)

@@ -54,6 +54,13 @@ struct OnboardingBreedStep: View {
                     .fontWeight(.bold)
                     .multilineTextAlignment(.center)
                     .opacity(hasAppeared ? 1.0 : 0.0)
+
+                Text(Strings.Onboarding.breedSubtitle)
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 8)
+                    .opacity(hasAppeared ? 1.0 : 0.0)
             }
             .padding(.top, 8)
             .padding(.bottom, 16)
@@ -166,6 +173,21 @@ struct OnboardingBreedStep: View {
                 OnboardingNextButton(enabled: selectedBreed != nil || isCustomBreed, action: onNext)
             }
             .padding(.horizontal, 24)
+            .padding(.bottom, 8)
+            .opacity(hasAppeared ? 1.0 : 0.0)
+
+            Button {
+                selectedBreed = nil
+                isCustomBreed = false
+                customBreed = ""
+                isSearchFocused = false
+                isCustomBreedFieldFocused = false
+                onNext()
+            } label: {
+                Text(Strings.Onboarding.skipForNow)
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(.secondary)
+            }
             .padding(.bottom, 16)
             .opacity(hasAppeared ? 1.0 : 0.0)
         }

@@ -2,7 +2,7 @@
 //  DogSettingsCard.swift
 //  Otis-app
 //
-//  Card component showing a dog profile with navigation links to dog-specific settings
+//  Card component showing a dog profile with per-dog settings links
 //
 
 import SwiftUI
@@ -12,10 +12,12 @@ import OtisShared
 struct DogSettingsCard: View {
     let profile: PuppyProfile
     let isActive: Bool
+    let onActivate: () -> Void
     let profileStore: ProfileStore
     let notificationService: NotificationService
     let documentStore: DocumentStore
     let foodRecallService: FoodRecallService
+    let cloudKit: CloudKitService
 
     @State private var loadedImage: UIImage?
     @Environment(\.colorScheme) private var colorScheme
@@ -78,8 +80,37 @@ struct DogSettingsCard: View {
 
             Spacer()
 
-            // Ownership badge
-            ownershipBadge
+            VStack(alignment: .trailing, spacing: 8) {
+                ownershipBadge
+
+                if !isActive {
+                    Button {
+                        HapticFeedback.selection()
+                        onActivate()
+                    } label: {
+                        HStack(spacing: 6) {
+                            Image(systemName: "arrow.left.arrow.right")
+                                .font(.system(size: 11, weight: .bold))
+                            Text(Strings.Profile.switchProfile)
+                                .font(.caption.weight(.semibold))
+                        }
+                        .foregroundStyle(.white)
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 6)
+                        .background(
+                            Capsule()
+                                .fill(Color.otisAccent)
+                        )
+                        .overlay {
+                            Capsule()
+                                .stroke(Color.otisAccent.opacity(0.35), lineWidth: 1)
+                        }
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel(Strings.Profile.switchProfile)
+                    .accessibilityHint(Strings.Profile.switchingTo(profile.name))
+                }
+            }
         }
         .padding()
     }
@@ -190,6 +221,57 @@ struct DogSettingsCard: View {
                     iconColor: .red,
                     title: Strings.Settings.healthDocuments
                 )
+            }
+
+            // Household Members link (only for active profile)
+            if isActive {
+                Divider()
+                    .padding(.leading, 52)
+
+                NavigationLink {
+                    HouseholdSettingsView(profileStore: profileStore)
+                } label: {
+                    HStack(spacing: 12) {
+                        Image(systemName: "person.2.fill")
+                            .font(.system(size: 18))
+                            .foregroundColor(.purple)
+                            .frame(width: 28)
+
+                        Text(Strings.Household.title)
+                            .font(.subheadline)
+
+                        Spacer()
+
+                        if let memberCount = profileStore.profile?.householdMembers.members.count, memberCount > 0 {
+                            Text("\(memberCount)")
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                        }
+
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 12, weight: .semibold))
+                            .foregroundStyle(.tertiary)
+                    }
+                    .padding(.horizontal)
+                    .padding(.vertical, 12)
+                    .contentShape(Rectangle())
+                }
+            }
+
+            // Sharing link (only for active + owned profiles)
+            if isActive && profile.ownership == .owned {
+                Divider()
+                    .padding(.leading, 52)
+
+                NavigationLink {
+                    DogSharingSettingsView(cloudKit: cloudKit)
+                } label: {
+                    settingsRow(
+                        icon: "person.badge.plus",
+                        iconColor: .blue,
+                        title: Strings.CloudSharing.sharing
+                    )
+                }
             }
         }
     }
@@ -304,10 +386,12 @@ struct AddDogButton: View {
                         size: .medium
                     ),
                     isActive: true,
+                    onActivate: {},
                     profileStore: ProfileStore(),
                     notificationService: NotificationService(),
                     documentStore: DocumentStore(),
-                    foodRecallService: FoodRecallService()
+                    foodRecallService: FoodRecallService(),
+                    cloudKit: CloudKitService.shared
                 )
 
                 AddDogButton(canAdd: true, action: {})
@@ -316,6 +400,7 @@ struct AddDogButton: View {
         }
         .background(Color(.systemGroupedBackground))
     }
+    .environmentObject(SubscriptionManager.shared)
 }
 
 #Preview("Multiple Dogs") {
@@ -330,10 +415,12 @@ struct AddDogButton: View {
                         size: .medium
                     ),
                     isActive: true,
+                    onActivate: {},
                     profileStore: ProfileStore(),
                     notificationService: NotificationService(),
                     documentStore: DocumentStore(),
-                    foodRecallService: FoodRecallService()
+                    foodRecallService: FoodRecallService(),
+                    cloudKit: CloudKitService.shared
                 )
 
                 DogSettingsCard(
@@ -348,10 +435,12 @@ struct AddDogButton: View {
                         return p
                     }(),
                     isActive: false,
+                    onActivate: {},
                     profileStore: ProfileStore(),
                     notificationService: NotificationService(),
                     documentStore: DocumentStore(),
-                    foodRecallService: FoodRecallService()
+                    foodRecallService: FoodRecallService(),
+                    cloudKit: CloudKitService.shared
                 )
 
                 AddDogButton(canAdd: false, action: {})
@@ -360,4 +449,5 @@ struct AddDogButton: View {
         }
         .background(Color(.systemGroupedBackground))
     }
+    .environmentObject(SubscriptionManager.shared)
 }

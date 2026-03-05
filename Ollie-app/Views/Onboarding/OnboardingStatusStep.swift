@@ -32,6 +32,13 @@ struct OnboardingStatusStep: View {
                     .fontWeight(.bold)
                     .multilineTextAlignment(.center)
                     .opacity(hasAppeared ? 1.0 : 0.0)
+
+                Text(Strings.Onboarding.statusSubtitle)
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 12)
+                    .opacity(hasAppeared ? 1.0 : 0.0)
             }
             .padding(.top, 40)
             .padding(.bottom, 32)

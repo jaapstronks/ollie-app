@@ -34,7 +34,7 @@ extension Strings {
         static let getStarted = String(localized: "Get Started", table: table)
 
         static let nameQuestion = String(localized: "What's your puppy's name?", table: table)
-        static let nameSubtitle = String(localized: "We'll use this throughout the app", table: table)
+        static let nameSubtitle = String(localized: "We'll use this in logs and reminders. You can edit it any time.", table: table)
         static let namePlaceholder = String(localized: "Name", table: table)
         static let nameAccessibility = String(localized: "Enter your puppy's name", table: table)
 
@@ -44,15 +44,18 @@ extension Strings {
         static let otherBreed = String(localized: "Other / Unknown", table: table)
         static let enterCustom = String(localized: "Enter custom", table: table)
         static let searchBreeds = String(localized: "Search breeds...", table: table)
+        static let breedSubtitle = String(localized: "Pick the closest match, or skip for now. You can update this later.", table: table)
         static let noBreedResults = String(localized: "No breeds found. Try a different search.", table: table)
         static func searchForMore(count: Int) -> String {
             String(localized: "Search to find more breeds (\(count) total)", table: table)
         }
+        static let skipForNow = String(localized: "Skip for now", table: table)
 
         static func birthDateQuestion(name: String) -> String {
             String(localized: "When was \(name) born?", table: table)
         }
         static let birthDate = String(localized: "Birth date", table: table)
+        static let birthDateSubtitle = String(localized: "An estimate is fine. This helps tailor age-based guidance.", table: table)
         static func birthDateAccessibility(name: String) -> String {
             String(localized: "\(name)'s birth date", table: table)
         }
@@ -61,6 +64,7 @@ extension Strings {
         static func statusQuestion(name: String) -> String {
             String(localized: "Is \(name) already home?", table: table)
         }
+        static let statusSubtitle = String(localized: "This helps us set the right starting view for your first days.", table: table)
         static func statusAlreadyHome(name: String) -> String {
             String(localized: "Yes, \(name) is home", table: table)
         }
@@ -76,6 +80,8 @@ extension Strings {
             String(localized: "When will \(name) come home?", table: table)
         }
         static let homeDate = String(localized: "Home date", table: table)
+        static let homeDateSubtitlePast = String(localized: "We'll use this to personalize routines and check-ins.", table: table)
+        static let homeDateSubtitleFuture = String(localized: "We'll prepare your first-week routine before arrival.", table: table)
         static func homeDateAccessibilityPast(name: String) -> String {
             String(localized: "Date \(name) came home", table: table)
         }
@@ -88,6 +94,7 @@ extension Strings {
         }
 
         static let readyToStart = String(localized: "Ready to begin!", table: table)
+        static let confirmSubtitle = String(localized: "Great start. You can edit these details later in Settings.", table: table)
 
         // Photo step
         static func photoQuestion(name: String) -> String {
@@ -100,7 +107,8 @@ extension Strings {
         static func arrivalPhotoQuestion(name: String) -> String {
             String(localized: "What does \(name) look like?", table: table)
         }
-        static let arrivalPhotoSubtitle = String(localized: "Take a picture!", table: table)
+        static let arrivalPhotoSubtitle = String(localized: "Capture this special moment", table: table)
+        static let arrivalPhotoButton = String(localized: "Take a photo", table: table)
         static let arrivalPhotoLater = String(localized: "Maybe later", table: table)
 
         // Confirmation step
