@@ -28,6 +28,8 @@ struct ContentView: View {
     @State private var sharedProfileWelcomeName: String?
     @State private var showSharedProfileWelcome = false
     @AppStorage(UserPreferences.Key.lastSelectedTab.rawValue) private var selectedTabRawValue = MainTab.today.rawValue
+    @AppStorage(UserPreferences.Key.needsFirstSessionHandoff.rawValue) private var needsFirstSessionHandoff = false
+    @AppStorage(UserPreferences.Key.hasCompletedOnboarding.rawValue) private var hasCompletedOnboarding = false
     @StateObject private var navigationState = AppNavigationState()
     @AppStorage(UserPreferences.Key.appearanceMode.rawValue) private var appearanceMode = AppearanceMode.system.rawValue
     @State private var showLaunchScreen = true
@@ -67,6 +69,8 @@ struct ContentView: View {
                 } else if shouldShowOnboarding {
                     // Onboarding for new users (not for participants)
                     OnboardingView(profileStore: profileStore) {
+                        hasCompletedOnboarding = true
+                        needsFirstSessionHandoff = true
                         showOnboarding = false
                     }
                 } else {
@@ -164,10 +168,12 @@ struct MainTabView: View {
     @StateObject private var mediaCaptureViewModel = MediaCaptureViewModel(mediaStore: MediaStore())
     @StateObject private var memoriesViewModel: MemoriesViewModel
     @State private var showingSettings = false
+    @State private var showingFirstSessionHandoff = false
     @State private var selectedPhotoEvent: PuppyEvent?
     @State private var showingArrivalPhotoPrompt = false
     @AppStorage("hasShownArrivalPhotoPrompt") private var hasShownArrivalPhotoPrompt = false
     @AppStorage(UserPreferences.Key.showFloatingClicker.rawValue) private var showFloatingClicker = false
+    @AppStorage(UserPreferences.Key.needsFirstSessionHandoff.rawValue) private var needsFirstSessionHandoff = false
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     init(
@@ -344,6 +350,11 @@ struct MainTabView: View {
                             }
                         }
                     }
+
+                    // Keep celebration rendering at the top-most layer of the main tab stack.
+                    CelebrationView(style: viewModel.celebrationStyle, isActive: $viewModel.showCelebration)
+                        .ignoresSafeArea()
+                        .zIndex(10_000)
                 }  // Close ZStack
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
@@ -373,6 +384,29 @@ struct MainTabView: View {
                     }
                 }
             }
+        }
+        .sheet(isPresented: $showingFirstSessionHandoff) {
+            FirstSessionHandoffSheet(
+                onLogFirstEvent: {
+                    showingFirstSessionHandoff = false
+                    needsFirstSessionHandoff = false
+                    selectedTab = .today
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                        viewModel.showAllEvents()
+                    }
+                },
+                onViewTimeline: {
+                    showingFirstSessionHandoff = false
+                    needsFirstSessionHandoff = false
+                    selectedTab = .today
+                },
+                onDismiss: {
+                    showingFirstSessionHandoff = false
+                    needsFirstSessionHandoff = false
+                }
+            )
+            .presentationDetents([.medium, .large])
+            .presentationDragIndicator(.visible)
         }
         // All sheets from shared modifier - at MainTabView level for global access
         .timelineSheetHandling(
@@ -404,12 +438,20 @@ struct MainTabView: View {
         }
         .onAppear {
             checkForArrivalPhotoPrompt()
+            if needsFirstSessionHandoff {
+                showingFirstSessionHandoff = true
+            }
         }
         .onChange(of: selectedTab) { _, newTab in
             Analytics.track(.tabSelected, properties: [
                 "tab_index": newTab.rawValue,
                 "tab_name": newTab.analyticsName
             ])
+        }
+        .onChange(of: viewModel.sheetCoordinator.activeSheet) { _, newSheet in
+            if newSheet == nil {
+                viewModel.flushPendingCelebrationIfNeeded()
+            }
         }
         .onChange(of: showingSettings) { _, isShowing in
             if isShowing {

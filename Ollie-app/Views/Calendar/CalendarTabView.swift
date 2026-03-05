@@ -33,10 +33,8 @@ struct CalendarTabView: View {
     @State private var showSocializationWindow = false
     @State private var selectedMilestone: Milestone?
     @State private var selectedAppointment: DogAppointment?
-    @State private var celebrationAchievement: Achievement?
-    @State private var celebrationMilestone: Milestone?
-    @State private var showTier2Celebration = false
-    @State private var showTier3Celebration = false
+    @State private var showCelebration = false
+    @State private var celebrationStyle: CelebrationPreset = .milestone
     @State private var showWeekDetail = false
     @State private var selectedWeek: WeeklyProgress?
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
@@ -163,8 +161,6 @@ struct CalendarTabView: View {
                         // Check for achievement
                         if let achievement = achievementService.checkMilestoneCompletion(milestone: milestone) {
                             selectedMilestone = nil
-                            celebrationMilestone = milestone
-                            celebrationAchievement = achievement
                             // Delay celebration to allow sheet dismissal
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
                                 triggerCelebration(for: achievement)
@@ -208,51 +204,6 @@ struct CalendarTabView: View {
                     )
                 }
             }
-            // Tier 2 celebration sheet
-            .sheet(isPresented: $showTier2Celebration) {
-                if let achievement = celebrationAchievement {
-                    Tier2CelebrationCard(
-                        achievement: achievement,
-                        puppyName: profileStore.profile?.name ?? "Puppy",
-                        onAddPhoto: {
-                            // TODO: Open photo picker
-                            showTier2Celebration = false
-                        },
-                        onShare: {
-                            // TODO: Share functionality
-                            showTier2Celebration = false
-                        },
-                        onDismiss: {
-                            showTier2Celebration = false
-                            celebrationAchievement = nil
-                            celebrationMilestone = nil
-                        }
-                    )
-                    .presentationBackground(.clear)
-                }
-            }
-            // Tier 3 celebration full screen
-            .fullScreenCover(isPresented: $showTier3Celebration) {
-                if let achievement = celebrationAchievement {
-                    Tier3CelebrationView(
-                        achievement: achievement,
-                        puppyName: profileStore.profile?.name ?? "Puppy",
-                        onTakePhoto: {
-                            // TODO: Open camera
-                            showTier3Celebration = false
-                        },
-                        onAddFromLibrary: {
-                            // TODO: Open photo library
-                            showTier3Celebration = false
-                        },
-                        onSkip: {
-                            showTier3Celebration = false
-                            celebrationAchievement = nil
-                            celebrationMilestone = nil
-                        }
-                    )
-                }
-            }
             }
 
             // Floating Action Button
@@ -271,6 +222,11 @@ struct CalendarTabView: View {
                     compact: [.large],
                     regular: [.medium, .large]
                 )
+        }
+        .overlay {
+            CelebrationView(style: celebrationStyle, isActive: $showCelebration)
+                .ignoresSafeArea()
+                .zIndex(10_000)
         }
     }
 
@@ -315,13 +271,14 @@ struct CalendarTabView: View {
 
         switch effectiveTier {
         case .major:
-            showTier3Celebration = true
+            celebrationStyle = .milestone
+            showCelebration = true
         case .notable:
-            showTier2Celebration = true
+            celebrationStyle = .training
+            showCelebration = true
         case .subtle:
-            // Subtle celebrations are inline, no sheet needed
-            // Could trigger a banner or shimmer effect here
-            break
+            celebrationStyle = .quickLog
+            showCelebration = true
         }
     }
 

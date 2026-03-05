@@ -19,10 +19,7 @@ struct AppSettingsView: View {
 
     @State private var showingOtisPlusSheet = false
     @State private var showingSubscriptionSuccess = false
-    @State private var showingImportConfirm = false
-    @State private var overwriteExisting = false
-    @State private var importError: String?
-    @State private var showingError = false
+    @State private var showingImportSheet = false
     @State private var showingExportSheet = false
     @AppStorage(UserPreferences.Key.appearanceMode.rawValue) private var appearanceMode = AppearanceMode.system.rawValue
     @AppStorage(UserPreferences.Key.temperatureUnit.rawValue) private var temperatureUnit = TemperatureUnit.celsius.rawValue
@@ -38,6 +35,9 @@ struct AppSettingsView: View {
     // Training settings
     @AppStorage(UserPreferences.Key.showFloatingClicker.rawValue) private var showFloatingClicker = false
 
+    // Celebration debug settings
+    @AppStorage(UserPreferences.Key.forceCelebrateEveryLog.rawValue) private var forceCelebrateEveryLog = false
+
     var body: some View {
         Form {
             if let profile = profileStore.profile {
@@ -51,27 +51,6 @@ struct AppSettingsView: View {
 
             // iCloud Sync
             SyncSection(eventStore: eventStore, cloudKit: cloudKit)
-
-            // CloudKit sharing
-            SharingSection(cloudKit: cloudKit)
-
-            // Household members
-            Section {
-                NavigationLink {
-                    HouseholdSettingsView(profileStore: profileStore)
-                } label: {
-                    HStack {
-                        Label(Strings.Household.title, systemImage: "person.2.fill")
-                        Spacer()
-                        if let memberCount = profileStore.profile?.householdMembers.members.count, memberCount > 0 {
-                            Text("\(memberCount)")
-                                .foregroundStyle(.secondary)
-                        }
-                    }
-                }
-            } footer: {
-                Text(Strings.Household.settingsFooter)
-            }
 
             // Siri & Shortcuts
             SiriSection()
@@ -100,42 +79,30 @@ struct AppSettingsView: View {
             // Advanced section
             Section(Strings.Settings.advanced) {
                 // Data import
-                if dataImporter.isImporting {
-                    HStack {
-                        ProgressView()
-                        Text(dataImporter.progress)
+                Button {
+                    showingImportSheet = true
+                } label: {
+                    Label(Strings.Settings.importData, systemImage: "square.and.arrow.down")
+                }
+
+                if let result = dataImporter.lastResult {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(Strings.DataImport.lastImportResult)
+                            .font(.caption)
                             .foregroundColor(.secondary)
+                        Text(Strings.DataImport.importSummary(
+                            components: result.componentsImported,
+                            items: result.itemsImported
+                        ))
+                            .font(.caption)
                     }
-                } else {
-                    Button {
-                        showingImportConfirm = true
-                    } label: {
-                        Label(Strings.Settings.importFromGitHub, systemImage: "arrow.down.circle")
-                    }
-
-                    if let result = dataImporter.lastResult {
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text(Strings.Settings.lastImport(date: ""))
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                            Text(Strings.Settings.importStats(days: result.filesImported, events: result.eventsImported))
-                                .font(.caption)
-                            if result.skipped > 0 {
-                                Text(Strings.Settings.skippedExisting(result.skipped))
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                            }
-                        }
-                    }
-
-                    Toggle(Strings.Settings.overwriteExisting, isOn: $overwriteExisting)
                 }
 
                 // Data export
                 Button {
                     showingExportSheet = true
                 } label: {
-                    Label(Strings.Export.exportData, systemImage: "arrow.up.circle")
+                    Label(Strings.Export.exportData, systemImage: "square.and.arrow.up")
                 }
 
                 // Reset profile
@@ -147,23 +114,44 @@ struct AppSettingsView: View {
                 }
             }
 
+            // Beta feedback section (visible in debug and TestFlight)
+            if AppEnvironment.current.isBeta {
+                BetaFeedbackSection()
+                    .environmentObject(profileStore)
+            }
+
             #if DEBUG
             DebugSection()
             #endif
         }
         .navigationTitle(Strings.Settings.appSettings)
-        .alert(Strings.Settings.importAction, isPresented: $showingImportConfirm) {
-            Button(Strings.Settings.importAction) {
-                startImport()
+        .toolbar {
+            if AppEnvironment.current.isBeta {
+                ToolbarItem(placement: .principal) {
+                    HStack(spacing: 8) {
+                        Text(Strings.Settings.appSettings)
+                            .font(.headline)
+                        Text(Strings.Beta.betaIndicator)
+                            .font(.caption2)
+                            .fontWeight(.medium)
+                            .padding(.horizontal, 6)
+                            .padding(.vertical, 2)
+                            .background(Color.otisAccent.opacity(0.2))
+                            .foregroundStyle(Color.otisAccent)
+                            .cornerRadius(4)
+                    }
+                }
             }
-            Button(Strings.Common.cancel, role: .cancel) {}
-        } message: {
-            Text(Strings.Settings.importConfirmMessage)
         }
-        .alert(Strings.Common.error, isPresented: $showingError) {
-            Button(Strings.Common.ok) {}
-        } message: {
-            Text(importError ?? Strings.PottyStatus.unknown)
+        .sheet(isPresented: $showingImportSheet) {
+            ImportSheet(
+                dataImporter: dataImporter,
+                onDismiss: { showingImportSheet = false },
+                onComplete: {
+                    showingImportSheet = false
+                    eventStore.loadEvents(for: Date())
+                }
+            )
         }
         .sheet(isPresented: $showingExportSheet) {
             ExportDataView(profileStore: profileStore)
@@ -327,6 +315,15 @@ struct AppSettingsView: View {
                         .foregroundStyle(.secondary)
                 }
             }
+
+            Toggle(isOn: $forceCelebrateEveryLog) {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(Strings.Settings.celebrateEveryLog)
+                    Text(Strings.Settings.celebrateEveryLogDescription)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            }
         } header: {
             Text(Strings.Celebrations.celebrationStyle)
         }
@@ -335,20 +332,6 @@ struct AppSettingsView: View {
     private var currentCelebrationStyle: CelebrationStyle {
         let rawValue = UserDefaults.standard.string(forKey: UserPreferences.Key.celebrationStyle.rawValue)
         return CelebrationStyle(rawValue: rawValue ?? "") ?? .full
-    }
-
-    // MARK: - Import Actions
-
-    private func startImport() {
-        Task {
-            do {
-                _ = try await dataImporter.importFromGitHub(overwriteExisting: overwriteExisting)
-                eventStore.loadEvents(for: Date())
-            } catch {
-                importError = error.localizedDescription
-                showingError = true
-            }
-        }
     }
 }
 

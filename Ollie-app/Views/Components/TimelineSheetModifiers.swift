@@ -485,10 +485,6 @@ struct TimelineSheetModifiers: ViewModifier {
         case .weightLog, .trainingLog, .socializationLog, .settings, .profileEdit, .notificationSettings:
             EmptyView()
 
-        // Celebration sheets are handled via separate sheet/fullScreenCover modifiers in CalendarTabView
-        case .tier2Celebration, .tier3Celebration:
-            EmptyView()
-
         // Canonical sheets (single sources of truth)
         case .developmentJourney:
             DevelopmentJourneySheet(

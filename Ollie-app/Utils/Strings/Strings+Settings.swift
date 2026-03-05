@@ -22,7 +22,7 @@ extension Strings {
         static let healthDocuments = String(localized: "Health & Documents", table: table)
         static let healthDocumentsSubtitle = String(localized: "Medications, documents, contacts", table: table)
         static let appSettings = String(localized: "App Settings", table: table)
-        static let appSettingsSubtitle = String(localized: "Sharing, appearance, sync", table: table)
+        static let appSettingsSubtitle = String(localized: "Appearance, sync, integrations", table: table)
 
         // Profile section
         static let profile = String(localized: "Profile", table: table)
@@ -84,23 +84,15 @@ extension Strings {
 
         // Data section
         static let data = String(localized: "Data", table: table)
-        static let importFromGitHub = String(localized: "Import from GitHub", table: table)
-        static func lastImport(date: String) -> String {
-            String(localized: "Last import: \(date)", table: table)
-        }
-        static func importStats(days: Int, events: Int) -> String {
-            String(localized: "\(days) days, \(events) events", table: table)
-        }
-        static func skippedExisting(_ count: Int) -> String {
-            String(localized: "\(count) skipped (already existed)", table: table)
-        }
+        static let importData = String(localized: "Import data", table: table)
         static let overwriteExisting = String(localized: "Overwrite existing data", table: table)
         static let importAction = String(localized: "Import", table: table)
-        static let importConfirmMessage = String(localized: "Do you want to import data from GitHub? This will fetch all available days.", table: table)
 
         static let resetProfile = String(localized: "Reset profile", table: table)
         static let advanced = String(localized: "Advanced", table: table)
         static let integrations = String(localized: "Integrations", table: table)
+        static let celebrateEveryLog = String(localized: "Celebrate every log", table: table)
+        static let celebrateEveryLogDescription = String(localized: "Debug mode: trigger a full celebration each time an event is logged.", table: table)
     }
 
     // MARK: - Exercise Edit View
@@ -296,6 +288,11 @@ extension Strings {
         static let connectingToSharedData = String(localized: "Connecting to shared data", table: table)
         static let shareAccepted = String(localized: "Share Accepted!", table: table)
         static let shareAcceptedMessage = String(localized: "You now have access to shared puppy data.", table: table)
+        static let shareAcceptedSyncingMessage = String(localized: "Share accepted. The shared dog may take a moment to appear while iCloud sync completes.", table: table)
+        static let sharedDogReadyTitle = String(localized: "Shared dog added", table: table)
+        static func sharedDogReadyMessage(name: String) -> String {
+            String(localized: "You're now viewing \(name). You can switch dogs anytime in Settings.", table: table)
+        }
         static let shareFailed = String(localized: "Share Failed", table: table)
         static let shareError = String(localized: "Share Error", table: table)
         static let couldNotFetchShareInfo = String(localized: "Could not fetch share information", table: table)
@@ -357,18 +354,54 @@ extension Strings {
 
     // MARK: - Data Import
     enum DataImport {
+        // Title and navigation
+        static let title = String(localized: "Import Data", table: table)
+
+        // File selection
+        static let selectFolder = String(localized: "Select file or folder", table: table)
+        static let selectFolderDescription = String(localized: "Choose an exported JSON file or folder to import.", table: table)
+        static let chooseFolder = String(localized: "Choose File", table: table)
+
+        // Preview
+        static let couldNotLoadPreview = String(localized: "Could not load preview", table: table)
+        static func dataFor(name: String) -> String {
+            String(localized: "Data for \(name)", table: table)
+        }
+        static func exportedOn(date: String) -> String {
+            String(localized: "Exported on \(date)", table: table)
+        }
+        static let componentsToImport = String(localized: "Components to import:", table: table)
+        static let overwriteDescription = String(localized: "Replace existing items with imported data", table: table)
+
+        // Progress
+        static let importing = String(localized: "Importing...", table: table)
+        static func importingComponent(_ component: String) -> String {
+            String(localized: "Importing \(component)...", table: table)
+        }
+        static func itemsImported(_ count: Int) -> String {
+            String(localized: "\(count) items imported", table: table)
+        }
+
+        // Results
         static let done = String(localized: "Done!", table: table)
-        static let fetchingFiles = String(localized: "Fetching files...", table: table)
-        static func foundDays(_ count: Int) -> String {
-            String(localized: "Found: \(count) days", table: table)
+        static let importComplete = String(localized: "Import complete!", table: table)
+        static func componentsImported(_ count: Int) -> String {
+            String(localized: "\(count) components imported", table: table)
         }
-        static func downloading(current: Int, total: Int) -> String {
-            String(localized: "Downloading: \(current)/\(total)", table: table)
+        static func totalItems(_ count: Int) -> String {
+            String(localized: "\(count) items total", table: table)
         }
-        static let apiError = String(localized: "Could not reach GitHub API", table: table)
-        static let invalidResponse = String(localized: "Invalid response from GitHub", table: table)
-        static let downloadFailed = String(localized: "Download failed", table: table)
-        static let invalidContent = String(localized: "File content invalid", table: table)
+        static func errors(_ count: Int) -> String {
+            String(localized: "\(count) errors", table: table)
+        }
+        static let lastImportResult = String(localized: "Last import", table: table)
+        static func importSummary(components: Int, items: Int) -> String {
+            String(localized: "\(components) components, \(items) items", table: table)
+        }
+
+        // Errors
+        static let importFailed = String(localized: "Import failed", table: table)
+        static let accessDenied = String(localized: "Could not access the selected folder", table: table)
     }
 
     // MARK: - CloudKit Setup
@@ -478,6 +511,17 @@ extension Strings {
 
         static let seasonal = String(localized: "Seasonal touches", table: table)
         static let seasonalDescription = String(localized: "Light color adjustments for the current season.", table: table)
+    }
+
+    // MARK: - Beta Feedback
+    enum Beta {
+        static let sectionTitle = String(localized: "Beta Feedback", table: table)
+        static let sendFeedback = String(localized: "Send Feedback", table: table)
+        static let feedbackDescription = String(localized: "Help us improve by sharing your thoughts.", table: table)
+        static let subscriptionOverride = String(localized: "Test Subscription", table: table)
+        static let deviceId = String(localized: "Device ID", table: table)
+        static let copiedToClipboard = String(localized: "Copied!", table: table)
+        static let betaIndicator = String(localized: "Beta", table: table)
     }
 
     // MARK: - Data Export

@@ -152,8 +152,6 @@ struct TodayView: View {
         .task {
             await weatherService.fetchForecasts()
         }
-        // Celebration overlay for milestone moments
-        .celebration(style: viewModel.celebrationStyle, trigger: $viewModel.showCelebration)
         // Sync puppy sleep state to atmosphere provider
         .onChange(of: viewModel.currentSleepState.isSleeping) { _, isSleeping in
             atmosphereProvider.updatePuppyState(isSleeping: isSleeping)
@@ -188,16 +186,12 @@ struct TodayView: View {
             Spacer()
 
             // Profile photo button
-            // - Tap: Opens profile picker if multiple profiles exist, otherwise settings
-            // - Long press: Always opens settings
+            // - Tap: Opens full settings hub (consistent with other tabs)
+            // - Long press/context menu: Quick actions like profile switching
             ProfilePhotoButton(
                 profile: viewModel.profileStore.profile,
                 action: {
-                    if viewModel.profileStore.profiles.count > 1 {
-                        showProfilePicker = true
-                    } else {
-                        onSettingsTap()
-                    }
+                    onSettingsTap()
                 }
             )
             .contextMenu {
@@ -247,6 +241,7 @@ struct TodayView: View {
             // This avoids redundant calculation when puppy is sleeping
             let separated = viewModel.separatedUpcomingItems(forecasts: weatherService.forecasts)
             let pendingActionable = isSleeping ? separated.actionable.first : nil
+            let aiRecommendation = viewModel.aiLoggingRecommendations.first
 
             // First run welcome card (highest priority for new users)
             if case .firstRun(let puppyName) = combinedState {
@@ -320,9 +315,12 @@ struct TodayView: View {
 
             // Normal potty card (hide when combined card is showing or just woke)
             if !combinedState.shouldHidePottyCard {
+                let aiStatusCopy = viewModel.aiEnhancedPottyStatusCopy
                 PottyStatusCard(
                     prediction: viewModel.pottyPrediction,
                     puppyName: viewModel.puppyName,
+                    titleOverride: aiStatusCopy.title,
+                    subtitleOverride: aiStatusCopy.subtitle,
                     onLogPotty: { viewModel.sheetCoordinator.presentSheet(.potty(preselected: .plassen)) }
                 )
             }
@@ -377,6 +375,12 @@ struct TodayView: View {
                 .animatedAppear(delay: 0.025)
             }
 
+            // Subtle AI recommendation card (confirm before applying reminder changes)
+            if let recommendation = aiRecommendation, !combinedState.shouldShowFirstRunCard {
+                aiRecommendationCard(recommendation)
+                    .animatedAppear(delay: 0.03)
+            }
+
             // Hide scheduled events and medications during first run to avoid confusing "missed" reminders
             if !combinedState.shouldShowFirstRunCard {
                 // Medication reminders
@@ -420,6 +424,50 @@ struct TodayView: View {
                 viewModel.deleteEvent(event)
             }
         )
+    }
+
+    @ViewBuilder
+    private func aiRecommendationCard(_ recommendation: AILoggingCategoryRecommendation) -> some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text(Strings.AINudges.recommendationTitle)
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(.secondary)
+
+            Text(Strings.AINudges.recommendationBody(category: localizedCategoryName(recommendation.category)))
+                .font(.subheadline)
+                .foregroundStyle(.primary)
+
+            HStack(spacing: 10) {
+                Button(Strings.AINudges.keepCurrent) {
+                    viewModel.dismissAILoggingRecommendation(recommendation)
+                }
+                .buttonStyle(.glassPillCompact(tint: .custom(.otisMuted)))
+
+                Button(Strings.AINudges.reduceReminders) {
+                    viewModel.applyAILoggingRecommendation(recommendation)
+                }
+                .buttonStyle(.glassPillCompact(tint: .custom(.otisAccent)))
+            }
+        }
+        .padding(.horizontal, 14)
+        .padding(.vertical, 12)
+        .background(Color(.secondarySystemBackground).opacity(0.6))
+        .cornerRadius(LayoutConstants.cornerRadiusM)
+    }
+
+    private func localizedCategoryName(_ category: AILoggingCategory) -> String {
+        switch category {
+        case .potty:
+            return Strings.AINudges.categoryPotty
+        case .walk:
+            return Strings.AINudges.categoryWalk
+        case .meal:
+            return Strings.AINudges.categoryMeal
+        case .training:
+            return Strings.AINudges.categoryTraining
+        case .socialization:
+            return Strings.AINudges.categorySocialization
+        }
     }
 
 }

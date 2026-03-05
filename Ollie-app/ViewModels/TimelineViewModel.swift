@@ -57,6 +57,7 @@ class TimelineViewModel: ObservableObject {
     /// Celebration trigger for milestone moments
     @Published var showCelebration = false
     @Published var celebrationStyle: CelebrationPreset = .milestone
+    private var pendingCelebrationStyle: CelebrationPreset?
 
     /// Sheet coordinator for all sheet presentations
     @Published var sheetCoordinator = SheetCoordinator()
@@ -93,6 +94,7 @@ class TimelineViewModel: ObservableObject {
     var cachedWeekStats: [DayStats] { statsCache.weekStats }
     var cachedRecentWalks: [PuppyEvent] { statsCache.recentWalks }
     var cachedWeekWalkStats: (count: Int, totalMinutes: Int) { statsCache.weekWalkStats }
+    var walkStats: WalkStats? { statsCache.walkStats }
 
     // MARK: - Extracted Services
 
@@ -128,6 +130,7 @@ class TimelineViewModel: ObservableObject {
 
     /// Subscription to forward SheetCoordinator changes
     private var sheetCoordinatorCancellable: AnyCancellable?
+    private var activeSheetCancellable: AnyCancellable?
 
     /// Subscription to forward ActivityTrackingManager changes
     private var activityManagerCancellable: AnyCancellable?
@@ -182,6 +185,13 @@ class TimelineViewModel: ObservableObject {
         sheetCoordinatorCancellable = sheetCoordinator.objectWillChange
             .sink { [weak self] _ in
                 self?.objectWillChange.send()
+            }
+
+        // Flush deferred celebrations as soon as sheets are dismissed.
+        activeSheetCancellable = sheetCoordinator.$activeSheet
+            .sink { [weak self] activeSheet in
+                guard activeSheet == nil else { return }
+                self?.flushPendingCelebrationIfNeeded()
             }
 
         // Forward ActivityTrackingManager's objectWillChange to this ViewModel
@@ -435,6 +445,32 @@ class TimelineViewModel: ObservableObject {
     }
 
     // MARK: - Internal Helper Methods (for extensions)
+
+    /// Trigger celebration immediately, pulsing the boolean to retrigger reliably.
+    private func presentCelebration(_ style: CelebrationPreset) {
+        celebrationStyle = style
+        showCelebration = false
+        DispatchQueue.main.async { [weak self] in
+            self?.showCelebration = true
+        }
+    }
+
+    /// Trigger celebration, deferring if a sheet is currently covering the UI.
+    func triggerCelebration(_ style: CelebrationPreset) {
+        guard sheetCoordinator.activeSheet == nil else {
+            pendingCelebrationStyle = style
+            return
+        }
+        presentCelebration(style)
+    }
+
+    /// Flush any deferred celebration when sheets are dismissed.
+    func flushPendingCelebrationIfNeeded() {
+        guard sheetCoordinator.activeSheet == nil,
+              let pendingStyle = pendingCelebrationStyle else { return }
+        pendingCelebrationStyle = nil
+        presentCelebration(pendingStyle)
+    }
 
     /// Sync events from EventStore to local array
     func syncEventsFromStore() {
