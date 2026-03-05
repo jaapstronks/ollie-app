@@ -45,6 +45,12 @@ struct VerticalTimelineView: View {
     /// Vertical spacing between stacked point event cards
     private let pointEventSpacing: CGFloat = 4
 
+    /// Horizontal inset between time column and timeline content
+    private let timelineHorizontalInset: CGFloat = 8
+
+    /// Prevent cards from collapsing in split-view widths
+    private let minimumTimelineContentWidth: CGFloat = 220
+
     /// Hours to display (0 to max hour, reverse order)
     /// For today: shows up to current hour + 1
     /// For past days: shows full day (0-23)
@@ -149,7 +155,7 @@ struct VerticalTimelineView: View {
 
     private var durationBlocksLayer: some View {
         GeometryReader { geometry in
-            let contentWidth = geometry.size.width - timeColumnWidth - 16  // 16 for padding
+            let contentWidth = timelineContentWidth(for: geometry.size.width)
 
             ForEach(durationItems) { item in
                 let position = calculateBlockPosition(for: item)
@@ -161,7 +167,7 @@ struct VerticalTimelineView: View {
                     }
                 )
                 .frame(width: contentWidth, height: position.height)
-                .offset(x: timeColumnWidth + 8, y: position.yOffset)
+                .offset(x: timeColumnWidth + timelineHorizontalInset, y: position.yOffset)
             }
         }
     }
@@ -170,8 +176,8 @@ struct VerticalTimelineView: View {
 
     private var trainingSessionsLayer: some View {
         GeometryReader { geometry in
-            let contentWidth = geometry.size.width - timeColumnWidth - 16
-            let cardWidth = contentWidth * 0.7  // 70% width for training session cards
+            let contentWidth = timelineContentWidth(for: geometry.size.width)
+            let cardWidth = max(contentWidth * 0.7, 180)  // Keep cards usable on narrow split widths
 
             ForEach(trainingSessionItems) { item in
                 if case .trainingSession(let session) = item.type {
@@ -207,8 +213,8 @@ struct VerticalTimelineView: View {
 
     private var pointEventsLayer: some View {
         GeometryReader { geometry in
-            let contentWidth = geometry.size.width - timeColumnWidth - 16
-            let cardWidth = contentWidth * 0.6  // 60% width for cards
+            let contentWidth = timelineContentWidth(for: geometry.size.width)
+            let cardWidth = max(contentWidth * 0.6, 170)  // Keep cards readable on narrow split widths
             let stemAnchorX = contentWidth * 0.5  // Middle of timeline for stem anchor
 
             // Calculate positions with collision detection
@@ -232,6 +238,10 @@ struct VerticalTimelineView: View {
                 )
             }
         }
+    }
+
+    private func timelineContentWidth(for totalWidth: CGFloat) -> CGFloat {
+        max(totalWidth - timeColumnWidth - (timelineHorizontalInset * 2), minimumTimelineContentWidth)
     }
 
     // MARK: - Point Event Layout Calculation

@@ -142,6 +142,7 @@ struct TodayView: View {
                 }
                 .padding()
                 .padding(.bottom, 84) // Space for FAB
+                .adaptiveContainer()
             }
             .refreshable {
                 viewModel.loadEvents()

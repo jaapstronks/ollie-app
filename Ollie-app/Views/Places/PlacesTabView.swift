@@ -27,6 +27,7 @@ struct PlacesTabView: View {
 
     // First-visit tip tracking
     @AppStorage("hasSeenPlacesTip") private var hasSeenPlacesTip = false
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
     @State private var showingAddSpot = false
     @State private var showingAddContact = false
@@ -74,7 +75,7 @@ struct PlacesTabView: View {
                 // View mode toggle (leading)
                 ToolbarItem(placement: .topBarLeading) {
                     ExploreViewModeToggle(mode: $viewMode)
-                        .frame(width: 140)
+                        .frame(minWidth: 120, idealWidth: 160, maxWidth: 220)
                 }
             }
             .profileToolbar(profile: profileStore.profile) {
@@ -82,9 +83,17 @@ struct PlacesTabView: View {
             }
             .sheet(isPresented: $showingAddSpot) {
                 AddSpotSheet(spotStore: spotStore, locationManager: locationManager)
+                    .adaptivePresentationDetents(
+                        compact: [.large],
+                        regular: [.medium, .large]
+                    )
             }
             .sheet(isPresented: $showingAddContact) {
                 AddEditContactSheet(contactStore: contactStore)
+                    .adaptivePresentationDetents(
+                        compact: [.large],
+                        regular: [.medium, .large]
+                    )
             }
             .sheet(item: $selectedSpot) { spot in
                 SpotDetailView(
@@ -93,6 +102,10 @@ struct PlacesTabView: View {
                     momentsViewModel: momentsViewModel,
                     hideMapPreview: true  // Hide map when presented as sheet over map view
                 )
+                .adaptivePresentationDetents(
+                    compact: [.large],
+                    regular: [.medium, .large]
+                )
             }
             .sheet(item: $selectedDiscoveredSpot) { spot in
                 DiscoveredSpotDetailSheet(
@@ -100,9 +113,17 @@ struct PlacesTabView: View {
                     spotStore: spotStore,
                     hideMapPreview: true  // Hide map when presented over map view
                 )
+                .adaptivePresentationDetents(
+                    compact: [.large],
+                    regular: [.medium, .large]
+                )
             }
             .sheet(item: $selectedContact) { contact in
                 ContactDetailView(contact: contact, contactStore: contactStore)
+                    .adaptivePresentationDetents(
+                        compact: [.large],
+                        regular: [.medium, .large]
+                    )
             }
             .sheet(item: $selectedCluster) { cluster in
                 PhotoPinDetailCard(
@@ -116,7 +137,10 @@ struct PlacesTabView: View {
                     },
                     onSaveSpot: nil
                 )
-                .presentationDetents([.medium, .large])
+                .adaptivePresentationDetents(
+                    compact: [.medium, .large],
+                    regular: [.medium, .large]
+                )
             }
             .fullScreenCover(item: $selectedPhotoEvent) { event in
                 MediaPreviewView(
@@ -205,6 +229,7 @@ struct PlacesTabView: View {
                             }
                         }
                         .padding(.top)
+                        .adaptiveContainer(maxWidth: iPadLayout.maxWideContentWidth)
                     }
                     .skeleton(isLoading: true)
                 } else if momentsViewModel.events.isEmpty {
@@ -223,6 +248,7 @@ struct PlacesTabView: View {
                             diaryListContent
                         }
                     }
+                    .adaptiveContainer(maxWidth: iPadLayout.maxWideContentWidth)
                 }
             }
             .refreshable {
@@ -236,11 +262,20 @@ struct PlacesTabView: View {
         }
     }
 
-    private let galleryColumns = [
-        GridItem(.flexible(), spacing: 2),
-        GridItem(.flexible(), spacing: 2),
-        GridItem(.flexible(), spacing: 2)
-    ]
+    /// Adaptive grid columns - 3 fixed on iPhone, adaptive on iPad
+    private var galleryColumns: [GridItem] {
+        if horizontalSizeClass == .regular {
+            // iPad: adaptive columns based on available width
+            return [GridItem(.adaptive(minimum: iPadLayout.adaptiveGridMinWidth), spacing: 2)]
+        } else {
+            // iPhone: fixed 3 columns
+            return [
+                GridItem(.flexible(), spacing: 2),
+                GridItem(.flexible(), spacing: 2),
+                GridItem(.flexible(), spacing: 2)
+            ]
+        }
+    }
 
     private var galleryGridContent: some View {
         ScrollView {

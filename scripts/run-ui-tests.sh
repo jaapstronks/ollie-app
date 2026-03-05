@@ -25,6 +25,7 @@ FLOW_NAME=""
 SCENARIO=""
 INSTRUCTIONS=""
 VERBOSE=false
+DEVICE=""
 
 print_usage() {
     echo "Usage: $0 [OPTIONS]"
@@ -34,6 +35,7 @@ print_usage() {
     echo "  -s, --scenario <file>   Run a scenario file from .maestro/scenarios/"
     echo "  -a, --all               Run the full test suite"
     echo "  -i, --instructions <text>  Custom instructions to include in report"
+    echo "  -d, --device <name>      Run on a specific simulator device name"
     echo "  -v, --verbose           Show Maestro output in real-time"
     echo "  -h, --help              Show this help message"
     echo ""
@@ -60,6 +62,10 @@ while [[ $# -gt 0 ]]; do
             ;;
         -i|--instructions)
             INSTRUCTIONS="$2"
+            shift 2
+            ;;
+        -d|--device)
+            DEVICE="$2"
             shift 2
             ;;
         -v|--verbose)
@@ -95,6 +101,9 @@ echo -e "${BLUE}╚════════════════════�
 echo ""
 echo -e "${YELLOW}Timestamp:${NC} $TIMESTAMP"
 echo -e "${YELLOW}Report directory:${NC} $REPORT_DIR"
+if [ -n "$DEVICE" ]; then
+    echo -e "${YELLOW}Target device:${NC} $DEVICE"
+fi
 echo ""
 
 # Determine what to run
@@ -133,12 +142,17 @@ START_TIME=$(date +%s)
 
 cd "$PROJECT_ROOT"
 
+MAESTRO_DEVICE_ARGS=()
+if [ -n "$DEVICE" ]; then
+    MAESTRO_DEVICE_ARGS=(--device "$DEVICE")
+fi
+
 if [ "$VERBOSE" = true ]; then
     # Show output in real-time and capture it
-    maestro test "$FLOW_FILE" --format junit --output "$REPORT_DIR/junit.xml" 2>&1 | tee "$MAESTRO_OUTPUT_FILE" || MAESTRO_EXIT_CODE=$?
+    maestro test "$FLOW_FILE" "${MAESTRO_DEVICE_ARGS[@]}" --format junit --output "$REPORT_DIR/junit.xml" 2>&1 | tee "$MAESTRO_OUTPUT_FILE" || MAESTRO_EXIT_CODE=$?
 else
     # Capture output silently
-    maestro test "$FLOW_FILE" --format junit --output "$REPORT_DIR/junit.xml" > "$MAESTRO_OUTPUT_FILE" 2>&1 || MAESTRO_EXIT_CODE=$?
+    maestro test "$FLOW_FILE" "${MAESTRO_DEVICE_ARGS[@]}" --format junit --output "$REPORT_DIR/junit.xml" > "$MAESTRO_OUTPUT_FILE" 2>&1 || MAESTRO_EXIT_CODE=$?
 fi
 
 END_TIME=$(date +%s)
@@ -178,6 +192,7 @@ cat > "$REPORT_FILE" << EOF
 ## Summary
 - **Timestamp:** $TIMESTAMP
 - **Flow/Scenario:** ${SCENARIO:-$FLOW_NAME}
+- **Device:** ${DEVICE:-default-booted}
 - **Status:** $TEST_STATUS
 - **Duration:** ${DURATION}s
 - **Report Directory:** $REPORT_DIR
@@ -203,7 +218,8 @@ EOF
 
 # List all screenshots
 SCREENSHOT_COUNT=0
-for screenshot in "$REPORT_DIR"/*.png "$REPORT_DIR"/**/*.png 2>/dev/null; do
+shopt -s nullglob globstar
+for screenshot in "$REPORT_DIR"/*.png "$REPORT_DIR"/**/*.png; do
     if [ -f "$screenshot" ]; then
         SCREENSHOT_NAME=$(basename "$screenshot")
         SCREENSHOT_REL_PATH="${screenshot#$PROJECT_ROOT/}"
@@ -211,6 +227,7 @@ for screenshot in "$REPORT_DIR"/*.png "$REPORT_DIR"/**/*.png 2>/dev/null; do
         SCREENSHOT_COUNT=$((SCREENSHOT_COUNT + 1))
     fi
 done
+shopt -u nullglob globstar
 
 if [ $SCREENSHOT_COUNT -eq 0 ]; then
     echo "_No screenshots captured_" >> "$REPORT_FILE"
@@ -254,11 +271,13 @@ cat >> "$REPORT_FILE" << EOF
 ### File paths for screenshot review:
 EOF
 
-for screenshot in "$REPORT_DIR"/*.png "$REPORT_DIR"/**/*.png 2>/dev/null; do
+shopt -s nullglob globstar
+for screenshot in "$REPORT_DIR"/*.png "$REPORT_DIR"/**/*.png; do
     if [ -f "$screenshot" ]; then
         echo "- $screenshot" >> "$REPORT_FILE"
     fi
 done
+shopt -u nullglob globstar
 
 # Create latest symlink
 rm -f "$REPORTS_DIR/latest"

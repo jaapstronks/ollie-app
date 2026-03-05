@@ -19,18 +19,18 @@ struct CalendarTabView: View {
     @EnvironmentObject var profileStore: ProfileStore
     @StateObject private var achievementService = AchievementService.shared
 
-    // View mode state with persistence
-    @AppStorage("calendarViewMode") private var viewMode: CalendarViewMode = .development
+    // View mode state with persistence - using new key to avoid migration issues
+    @AppStorage("scheduleViewMode") private var viewMode: CalendarViewMode = .calendar
 
     // First-visit tip tracking
-    @AppStorage("hasSeenDevelopmentTip") private var hasSeenDevelopmentTip = false
     @AppStorage("hasSeenCalendarTip") private var hasSeenCalendarTip = false
 
     @State private var showAppointmentsView = false
     @State private var showAddAppointment = false
     @State private var showAddContact = false
     @State private var showImportContact = false
-    @State private var showRoadmap = false
+    @State private var showDevelopmentJourney = false
+    @State private var showSocializationWindow = false
     @State private var selectedMilestone: Milestone?
     @State private var selectedAppointment: DogAppointment?
     @State private var celebrationAchievement: Achievement?
@@ -39,6 +39,7 @@ struct CalendarTabView: View {
     @State private var showTier3Celebration = false
     @State private var showWeekDetail = false
     @State private var selectedWeek: WeeklyProgress?
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
@@ -53,12 +54,11 @@ struct CalendarTabView: View {
 
                     // Content based on view mode
                     switch viewMode {
-                    case .development:
-                        developmentView
                     case .calendar:
                         CalendarGridView(
                             appointmentStore: appointmentStore,
                             milestoneStore: milestoneStore,
+                            socializationStore: socializationStore,
                             profile: profileStore.profile,
                             onAppointmentTap: { appointment in
                                 selectedAppointment = appointment
@@ -66,13 +66,21 @@ struct CalendarTabView: View {
                             onMilestoneTap: { milestone in
                                 selectedMilestone = milestone
                             },
-                            onSocializationTap: onNavigateToSocialization
+                            onSocializationTap: onNavigateToSocialization,
+                            onDevelopmentTap: {
+                                showDevelopmentJourney = true
+                            },
+                            onSocializationWindowTap: {
+                                showSocializationWindow = true
+                            }
                         )
+                        .adaptiveContainer(maxWidth: iPadLayout.maxWideContentWidth)
                     case .contacts:
                         ContactsView(
                             contactStore: contactStore,
                             appointmentStore: appointmentStore
                         )
+                        .adaptiveContainer()
                     }
                 }
                 .background(Color(.systemGroupedBackground))
@@ -82,13 +90,41 @@ struct CalendarTabView: View {
             .navigationDestination(isPresented: $showAppointmentsView) {
                 AppointmentsView(appointmentStore: appointmentStore)
             }
-            .navigationDestination(isPresented: $showRoadmap) {
-                if let profile = profileStore.profile {
-                    DevelopmentRoadmapView(
-                        profile: profile,
-                        milestoneStore: milestoneStore
-                    )
-                }
+            .sheet(isPresented: $showDevelopmentJourney) {
+                DevelopmentJourneySheet(
+                    onNavigateToSocialization: {
+                        showDevelopmentJourney = false
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                            showSocializationWindow = true
+                        }
+                    },
+                    onNavigateToMedical: nil
+                )
+                .adaptivePresentationDetents(
+                    compact: [.large],
+                    regular: [.medium, .large]
+                )
+            }
+            .sheet(isPresented: $showSocializationWindow) {
+                SocializationWindowSheet(
+                    onNavigateToDevelopment: {
+                        showSocializationWindow = false
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                            showDevelopmentJourney = true
+                        }
+                    },
+                    onLogExposure: {
+                        showSocializationWindow = false
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                            onNavigateToSocialization()
+                        }
+                    }
+                )
+                .environmentObject(socializationStore)
+                .adaptivePresentationDetents(
+                    compact: [.large],
+                    regular: [.medium, .large]
+                )
             }
             .sheet(item: $selectedAppointment) { appointment in
                 NavigationStack {
@@ -98,10 +134,18 @@ struct CalendarTabView: View {
                     )
                     .environmentObject(contactStore)
                 }
+                .adaptivePresentationDetents(
+                    compact: [.large],
+                    regular: [.medium, .large]
+                )
             }
             .sheet(isPresented: $showAddAppointment) {
                 AddEditAppointmentSheet(appointmentStore: appointmentStore)
                     .environmentObject(contactStore)
+                    .adaptivePresentationDetents(
+                        compact: [.large],
+                        regular: [.medium, .large]
+                    )
             }
             .sheet(item: $selectedMilestone) { milestone in
                 MilestoneCompletionSheet(
@@ -130,6 +174,10 @@ struct CalendarTabView: View {
                         }
                     }
                 )
+                .adaptivePresentationDetents(
+                    compact: [.large],
+                    regular: [.medium, .large]
+                )
             }
             // Week detail sheet for socialization timeline
             .sheet(isPresented: $showWeekDetail) {
@@ -153,6 +201,10 @@ struct CalendarTabView: View {
                             showWeekDetail = false
                             onNavigateToSocialization()
                         }
+                    )
+                    .adaptivePresentationDetents(
+                        compact: [.large],
+                        regular: [.medium, .large]
                     )
                 }
             }
@@ -208,9 +260,17 @@ struct CalendarTabView: View {
         }
         .sheet(isPresented: $showAddContact) {
             AddEditContactSheet(contactStore: contactStore)
+                .adaptivePresentationDetents(
+                    compact: [.large],
+                    regular: [.medium, .large]
+                )
         }
         .sheet(isPresented: $showImportContact) {
             ContactImportSheet(contactStore: contactStore)
+                .adaptivePresentationDetents(
+                    compact: [.large],
+                    regular: [.medium, .large]
+                )
         }
     }
 
@@ -245,52 +305,6 @@ struct CalendarTabView: View {
         }
     }
 
-    // MARK: - Development View
-
-    @ViewBuilder
-    private var developmentView: some View {
-        ScrollView(.vertical) {
-            VStack(spacing: 20) {
-                // First-visit tip
-                if !hasSeenDevelopmentTip {
-                    FeatureTipCard(
-                        tip: .scheduleDevelopment,
-                        onDismiss: {
-                            withAnimation(.easeOut(duration: 0.2)) {
-                                hasSeenDevelopmentTip = true
-                            }
-                        }
-                    )
-                }
-
-                // Age header
-                if let profile = profileStore.profile {
-                    CalendarAgeHeader(profile: profile)
-                        .animatedAppear(delay: 0)
-                }
-
-                // Right Now section - developmental periods and socialization
-                if let profile = profileStore.profile {
-                    rightNowSection(for: profile)
-                        .animatedAppear(delay: 0.05)
-                }
-
-                // This Week section
-                if let birthDate = profileStore.profile?.birthDate {
-                    thisWeekSection(birthDate: birthDate)
-                        .animatedAppear(delay: 0.10)
-                }
-
-                // Coming Up section (2-4 weeks) with roadmap link
-                if let birthDate = profileStore.profile?.birthDate {
-                    comingUpSection(birthDate: birthDate)
-                        .animatedAppear(delay: 0.15)
-                }
-            }
-            .padding()
-        }
-    }
-
     // MARK: - Celebration Handling
 
     private func triggerCelebration(for achievement: Achievement) {
@@ -311,265 +325,6 @@ struct CalendarTabView: View {
         }
     }
 
-    // MARK: - Right Now Section
-
-    @ViewBuilder
-    private func rightNowSection(for profile: PuppyProfile) -> some View {
-        let activePeriods = milestoneStore.activeDevelopmentalPeriods(birthDate: profile.birthDate)
-        let showSocialization = showSocializationTimeline(for: profile)
-
-        // Only show if there's content
-        if !activePeriods.isEmpty || showSocialization {
-            VStack(alignment: .leading, spacing: 10) {
-                SectionHeader(
-                    title: Strings.Calendar.rightNow,
-                    icon: "sparkles",
-                    tint: .otisPurple
-                )
-
-                VStack(spacing: 12) {
-                    // Developmental period banners
-                    if !activePeriods.isEmpty {
-                        DevelopmentalPeriodBanners(
-                            milestones: activePeriods,
-                            birthDate: profile.birthDate,
-                            puppyName: profile.name
-                        )
-                    }
-
-                    // Socialization week timeline
-                    if showSocialization {
-                        socializationContent(for: profile)
-                    }
-                }
-            }
-        }
-    }
-
-    @ViewBuilder
-    private func socializationContent(for profile: PuppyProfile) -> some View {
-        let weeklyProgress = socializationStore.allWeeklyProgress(profile: profile)
-
-        VStack(alignment: .leading, spacing: 8) {
-            SocializationWeekTimeline(
-                weeklyProgress: weeklyProgress,
-                currentWeek: profile.ageInWeeks,
-                onWeekTap: { weekNumber in
-                    if let week = weeklyProgress.first(where: { $0.weekNumber == weekNumber }) {
-                        selectedWeek = week
-                        showWeekDetail = true
-                    }
-                }
-            )
-
-            // Window status badge
-            if socializationStore.socializationWindowClosed(profile: profile) {
-                windowBadge(
-                    icon: "clock.badge.checkmark.fill",
-                    text: Strings.Socialization.windowClosed,
-                    color: .secondary
-                )
-            } else if SocializationWindow.weeksRemaining(ageWeeks: profile.ageInWeeks) <= 2 {
-                windowBadge(
-                    icon: "exclamationmark.triangle.fill",
-                    text: Strings.Socialization.windowClosing,
-                    color: .otisWarning
-                )
-            }
-        }
-    }
-
-    // MARK: - This Week Section
-
-    @ViewBuilder
-    private func thisWeekSection(birthDate: Date) -> some View {
-        let appointments = appointmentStore.appointmentsThisWeek
-        let milestones = milestoneStore.milestonesThisWeek(birthDate: birthDate)
-
-        if !appointments.isEmpty || !milestones.isEmpty {
-            VStack(alignment: .leading, spacing: 10) {
-                SectionHeader(
-                    title: Strings.Calendar.thisWeek,
-                    icon: "calendar",
-                    tint: .otisAccent
-                )
-
-                VStack(spacing: 8) {
-                    // Appointments this week
-                    ForEach(appointments.prefix(3)) { appointment in
-                        ThisWeekAppointmentRow(appointment: appointment) {
-                            selectedAppointment = appointment
-                        }
-                    }
-
-                    // Milestones this week
-                    ForEach(milestones.prefix(3)) { milestone in
-                        ThisWeekMilestoneRow(
-                            milestone: milestone,
-                            birthDate: birthDate
-                        ) {
-                            selectedMilestone = milestone
-                        }
-                    }
-
-                    // View all link if more items
-                    if appointments.count > 3 || milestones.count > 3 {
-                        Button {
-                            showAppointmentsView = true
-                        } label: {
-                            HStack {
-                                Text(Strings.Common.seeAll)
-                                Image(systemName: "chevron.right")
-                            }
-                            .font(.caption)
-                            .fontWeight(.medium)
-                            .foregroundStyle(Color.otisAccent)
-                        }
-                        .frame(maxWidth: .infinity, alignment: .trailing)
-                        .padding(.top, 4)
-                    }
-                }
-            }
-        } else {
-            // Empty state for this week
-            VStack(alignment: .leading, spacing: 10) {
-                SectionHeader(
-                    title: Strings.Calendar.thisWeek,
-                    icon: "calendar",
-                    tint: .otisAccent
-                )
-
-                emptyThisWeekState
-            }
-        }
-    }
-
-    @ViewBuilder
-    private var emptyThisWeekState: some View {
-        HStack(spacing: 12) {
-            Image(systemName: "checkmark.circle")
-                .font(.title2)
-                .foregroundStyle(.secondary)
-
-            VStack(alignment: .leading, spacing: 2) {
-                Text(Strings.Calendar.nothingThisWeek)
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-            }
-
-            Spacer()
-        }
-        .padding()
-        .background(Color(.secondarySystemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-    }
-
-    // MARK: - Coming Up Section
-
-    @ViewBuilder
-    private func comingUpSection(birthDate: Date) -> some View {
-        let appointments = appointmentStore.appointmentsComingUp
-        let milestones = milestoneStore.milestonesComingUp(birthDate: birthDate)
-
-        VStack(alignment: .leading, spacing: 10) {
-            SectionHeader(
-                title: Strings.Calendar.comingUp,
-                icon: "calendar.badge.clock",
-                tint: .otisInfo
-            )
-
-            VStack(spacing: 8) {
-                if !appointments.isEmpty || !milestones.isEmpty {
-                    // Appointments coming up
-                    ForEach(appointments.prefix(3)) { appointment in
-                        ComingUpAppointmentRow(appointment: appointment) {
-                            selectedAppointment = appointment
-                        }
-                    }
-
-                    // Milestones coming up
-                    ForEach(milestones.prefix(3)) { milestone in
-                        ComingUpMilestoneRow(
-                            milestone: milestone,
-                            birthDate: birthDate
-                        ) {
-                            selectedMilestone = milestone
-                        }
-                    }
-                } else {
-                    // Empty state
-                    HStack(spacing: 12) {
-                        Image(systemName: "checkmark.circle")
-                            .font(.title3)
-                            .foregroundStyle(.secondary)
-
-                        Text(Strings.Calendar.nothingComingUp)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-
-                        Spacer()
-                    }
-                    .padding()
-                    .background(Color(.tertiarySystemBackground))
-                    .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
-                }
-
-                // Roadmap link - always show
-                roadmapLink
-            }
-        }
-    }
-
-    // MARK: - Roadmap Link
-
-    @ViewBuilder
-    private var roadmapLink: some View {
-        Button {
-            showRoadmap = true
-        } label: {
-            HStack {
-                Image(systemName: "map.fill")
-                    .font(.body)
-
-                Text(Strings.Calendar.seeRoadmap)
-                    .font(.subheadline)
-                    .fontWeight(.medium)
-
-                Spacer()
-
-                Image(systemName: "chevron.right")
-                    .font(.caption)
-            }
-            .foregroundStyle(Color.otisAccent)
-            .padding()
-            .background(Color.otisAccent.opacity(0.08))
-            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-        }
-        .buttonStyle(.plain)
-    }
-
-    // MARK: - Helpers
-
-    private func showSocializationTimeline(for profile: PuppyProfile) -> Bool {
-        profile.ageInMonths < 6
-    }
-
-    @ViewBuilder
-    private func windowBadge(icon: String, text: String, color: Color) -> some View {
-        HStack {
-            Image(systemName: icon)
-                .accessibilityHidden(true)
-            Text(text)
-        }
-        .font(.caption)
-        .foregroundStyle(color)
-        .padding(.horizontal, 10)
-        .padding(.vertical, 6)
-        .background(color.opacity(0.1))
-        .clipShape(Capsule())
-        .accessibilityElement(children: .combine)
-        .accessibilityLabel(text)
-    }
 }
 
 // MARK: - Preview

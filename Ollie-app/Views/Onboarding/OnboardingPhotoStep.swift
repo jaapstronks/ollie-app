@@ -20,6 +20,15 @@ struct OnboardingPhotoStep: View {
     @State private var imageToCrop: UIImage?
     @State private var showingCropView = false
     @State private var hasAppeared = false
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+
+    private var photoPreviewSize: CGFloat {
+        horizontalSizeClass == .regular ? 200 : 160
+    }
+
+    private var contentHorizontalPadding: CGFloat {
+        horizontalSizeClass == .regular ? 40 : 24
+    }
 
     var body: some View {
         VStack(spacing: 0) {
@@ -32,17 +41,17 @@ struct OnboardingPhotoStep: View {
                     Image(uiImage: image)
                         .resizable()
                         .scaledToFill()
-                        .frame(width: 160, height: 160)
+                        .frame(width: photoPreviewSize, height: photoPreviewSize)
                         .clipShape(Circle())
                         .overlay(Circle().stroke(Color.otisAccent, lineWidth: 3))
                         .shadow(color: Color.otisAccent.opacity(0.2), radius: 12, x: 0, y: 4)
                 } else {
                     Circle()
                         .fill(Color(.secondarySystemBackground))
-                        .frame(width: 160, height: 160)
+                        .frame(width: photoPreviewSize, height: photoPreviewSize)
                         .overlay {
                             Image(systemName: "camera.fill")
-                                .font(.system(size: 48))
+                                .font(.system(size: horizontalSizeClass == .regular ? 56 : 48))
                                 .foregroundStyle(Color.otisAccent)
                         }
                 }
@@ -66,7 +75,7 @@ struct OnboardingPhotoStep: View {
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
-                .padding(.horizontal, 24)
+                .padding(.horizontal, contentHorizontalPadding)
                 .opacity(hasAppeared ? 1.0 : 0.0)
 
             Spacer()
@@ -107,7 +116,7 @@ struct OnboardingPhotoStep: View {
                     .transition(.opacity.combined(with: .scale(scale: 0.95)))
                 }
             }
-            .padding(.horizontal, 24)
+            .padding(.horizontal, contentHorizontalPadding)
             .opacity(hasAppeared ? 1.0 : 0.0)
 
             Spacer()
@@ -128,10 +137,11 @@ struct OnboardingPhotoStep: View {
                         .foregroundStyle(.white)
                 }
             }
-            .padding(.horizontal, 24)
+            .padding(.horizontal, contentHorizontalPadding)
             .padding(.bottom, 16)
             .opacity(hasAppeared ? 1.0 : 0.0)
         }
+        .adaptiveContainer(maxWidth: iPadLayout.maxContentWidth)
         .onAppear {
             withAnimation(.easeOut(duration: 0.5)) {
                 hasAppeared = true

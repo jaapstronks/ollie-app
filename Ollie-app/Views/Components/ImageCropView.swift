@@ -18,12 +18,14 @@ struct ImageCropView: View {
     @State private var offset: CGSize = .zero
     @State private var lastOffset: CGSize = .zero
 
-    private let cropSize: CGFloat = 280
     private let minScale: CGFloat = 1.0
     private let maxScale: CGFloat = 4.0
 
     var body: some View {
         GeometryReader { geometry in
+            let cropSize = adaptiveCropSize(in: geometry)
+            let cropContainerSize = min(geometry.size.width, geometry.size.height * 0.62)
+
             ZStack {
                 // Background
                 Color.black.ignoresSafeArea()
@@ -45,7 +47,7 @@ struct ImageCropView: View {
                         Spacer()
 
                         Button(Strings.Common.done) {
-                            let croppedImage = cropImage(in: geometry)
+                            let croppedImage = cropImage(in: geometry, cropSize: cropSize)
                             onConfirm(croppedImage)
                         }
                         .fontWeight(.semibold)
@@ -61,7 +63,10 @@ struct ImageCropView: View {
                         Image(uiImage: image)
                             .resizable()
                             .scaledToFill()
-                            .frame(width: imageDisplaySize.width, height: imageDisplaySize.height)
+                            .frame(
+                                width: imageDisplaySize(cropSize: cropSize).width,
+                                height: imageDisplaySize(cropSize: cropSize).height
+                            )
                             .scaleEffect(scale)
                             .offset(offset)
                             .gesture(
@@ -73,7 +78,7 @@ struct ImageCropView: View {
                                         }
                                         .onEnded { _ in
                                             lastScale = scale
-                                            constrainOffset()
+                                            constrainOffset(cropSize: cropSize)
                                         },
                                     DragGesture()
                                         .onChanged { value in
@@ -84,7 +89,7 @@ struct ImageCropView: View {
                                         }
                                         .onEnded { _ in
                                             lastOffset = offset
-                                            constrainOffset()
+                                            constrainOffset(cropSize: cropSize)
                                         }
                                 )
                             )
@@ -93,7 +98,7 @@ struct ImageCropView: View {
                         CropOverlay(cropSize: cropSize)
                             .allowsHitTesting(false)
                     }
-                    .frame(width: geometry.size.width, height: geometry.size.width)
+                    .frame(width: geometry.size.width, height: cropContainerSize)
                     .clipped()
 
                     Spacer()
@@ -113,7 +118,7 @@ struct ImageCropView: View {
     }
 
     /// The size to display the image at before any transformations
-    private var imageDisplaySize: CGSize {
+    private func imageDisplaySize(cropSize: CGFloat) -> CGSize {
         let imageAspect = image.size.width / image.size.height
 
         // Calculate size that will cover the crop area
@@ -142,9 +147,10 @@ struct ImageCropView: View {
     }
 
     /// Constrain offset to keep image covering the crop area
-    private func constrainOffset() {
-        let scaledWidth = imageDisplaySize.width * scale
-        let scaledHeight = imageDisplaySize.height * scale
+    private func constrainOffset(cropSize: CGFloat) {
+        let baseSize = imageDisplaySize(cropSize: cropSize)
+        let scaledWidth = baseSize.width * scale
+        let scaledHeight = baseSize.height * scale
 
         let maxOffsetX = max(0, (scaledWidth - cropSize) / 2)
         let maxOffsetY = max(0, (scaledHeight - cropSize) / 2)
@@ -173,7 +179,7 @@ struct ImageCropView: View {
     }
 
     /// Crop the image based on current scale and offset
-    private func cropImage(in geometry: GeometryProxy) -> UIImage {
+    private func cropImage(in geometry: GeometryProxy, cropSize: CGFloat) -> UIImage {
         // Normalize orientation first so CGImage coordinates match logical coordinates
         let workingImage = normalizedImage()
 
@@ -182,7 +188,7 @@ struct ImageCropView: View {
         }
 
         let imageSize = workingImage.size
-        let displaySize = imageDisplaySize
+        let displaySize = imageDisplaySize(cropSize: cropSize)
 
         // Calculate the scale factor from display to actual image
         let displayToImageScale = imageSize.width / displaySize.width
@@ -219,6 +225,12 @@ struct ImageCropView: View {
         }
 
         return UIImage(cgImage: croppedCGImage, scale: workingImage.scale, orientation: .up)
+    }
+
+    private func adaptiveCropSize(in geometry: GeometryProxy) -> CGFloat {
+        let shortestSide = min(geometry.size.width, geometry.size.height)
+        let targetSize = shortestSide * 0.6
+        return min(max(targetSize, 240), 420)
     }
 }
 

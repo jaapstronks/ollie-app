@@ -19,6 +19,7 @@ struct HealthTabView: View {
     @EnvironmentObject var milestoneStore: MilestoneStore
     @EnvironmentObject var appointmentStore: AppointmentStore
     @EnvironmentObject var weightStore: WeightStore
+    @EnvironmentObject var socializationStore: SocializationStore
 
     @State private var showWeightSheet = false
     @State private var showGrowthChart = false
@@ -26,44 +27,46 @@ struct HealthTabView: View {
     @State private var selectedMilestone: Milestone?
     @State private var showAllMilestones = false
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
-
-    // First-visit tip tracking
-    @AppStorage("hasSeenHealthTip") private var hasSeenHealthTip = false
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 20) {
-                    // First-visit tip
-                    if !hasSeenHealthTip {
-                        FeatureTipCard(
-                            tip: .healthIntro,
-                            onDismiss: {
-                                withAnimation(.easeOut(duration: 0.2)) {
-                                    hasSeenHealthTip = true
-                                }
-                            }
-                        )
-                    }
+                    // MARK: - Development & Growth Section
 
-                    // Development phase card (developmental stage + active periods)
+                    // Development phase card (tap → Development Journey Sheet)
                     if let profile = profileStore.profile {
                         let activePeriods = milestoneStore.activeDevelopmentalPeriods(birthDate: profile.birthDate)
-                        DevelopmentPhaseCard(
-                            birthDate: profile.birthDate,
-                            puppyName: profile.name,
-                            activePeriods: activePeriods
-                        )
+                        Button {
+                            viewModel.sheetCoordinator.presentSheet(.developmentJourney)
+                        } label: {
+                            DevelopmentPhaseCard(
+                                birthDate: profile.birthDate,
+                                puppyName: profile.name,
+                                activePeriods: activePeriods
+                            )
+                        }
+                        .buttonStyle(.plain)
                         .animatedAppear(delay: 0)
                     }
 
-                    // Medical milestones section
-                    if let birthDate = profileStore.profile?.birthDate {
-                        medicalMilestonesSection(birthDate: birthDate)
-                            .animatedAppear(delay: 0.05)
+                    // Socialization status card (tap → Socialization Window Sheet)
+                    if let profile = profileStore.profile {
+                        Button {
+                            viewModel.sheetCoordinator.presentSheet(.socializationWindow)
+                        } label: {
+                            SocializationStatusCard(
+                                ageInWeeks: profile.ageInWeeks,
+                                totalExposures: socializationStore.allExposures.count,
+                                totalComfortable: socializationStore.totalComfortable
+                            )
+                        }
+                        .buttonStyle(.plain)
+                        .animatedAppear(delay: 0.05)
                     }
 
-                    // Health section (growth story)
+                    // Growth story card
                     GrowthStoryCard(
                         growthStory: growthStory,
                         latestWeight: latestWeight,
@@ -77,25 +80,25 @@ struct HealthTabView: View {
                     )
                     .animatedAppear(delay: 0.10)
 
+                    // MARK: - Health Tracking Section
+
+                    // Medical milestones section (tap → Medical Care Sheet)
+                    if let birthDate = profileStore.profile?.birthDate {
+                        medicalMilestonesSection(birthDate: birthDate)
+                            .animatedAppear(delay: 0.15)
+                    }
+
                     // Combined potty training section (streak + gaps)
                     pottyTrainingSection
-                        .animatedAppear(delay: 0.15)
-
-                    // Week Overview section (grid + trend chart)
-                    InsightsWeekOverviewSection(weekStats: weekStats)
                         .animatedAppear(delay: 0.20)
-
-                    // Today's summary
-                    statsSection(title: Strings.Stats.today, icon: "calendar", tint: .otisSuccess) {
-                        TodayStatsCard(events: todayEvents)
-                    }
-                    .animatedAppear(delay: 0.25)
 
                     // Sleep summary
                     statsSection(title: Strings.Stats.sleepToday, icon: "moon.fill", tint: .otisSleep) {
                         SleepStatsCard(events: todayEvents)
                     }
-                    .animatedAppear(delay: 0.30)
+                    .animatedAppear(delay: 0.25)
+
+                    // MARK: - Insights Section (Premium)
 
                     // Pattern analysis (Otis+ feature)
                     Group {
@@ -112,15 +115,20 @@ struct HealthTabView: View {
                             )
                         }
                     }
-                    .animatedAppear(delay: 0.35)
+                    .animatedAppear(delay: 0.30)
                 }
                 .padding()
+                .adaptiveContainer()
             }
             .navigationTitle(Strings.Tabs.health)
             .navigationBarTitleDisplayMode(.inline)
             .profileToolbar(profile: profileStore.profile, action: onSettingsTap)
             .sheet(isPresented: $showWeightSheet) {
                 WeightLogSheet(isPresented: $showWeightSheet)
+                    .adaptivePresentationDetents(
+                        compact: [.medium, .large],
+                        regular: [.medium, .large]
+                    )
             }
             .sheet(isPresented: $showGrowthChart) {
                 GrowthDetailSheet(
@@ -128,11 +136,19 @@ struct HealthTabView: View {
                     puppyName: profileStore.profile?.name ?? "Puppy",
                     showWeightSheet: $showWeightSheet
                 )
+                .adaptivePresentationDetents(
+                    compact: [.large],
+                    regular: [.medium, .large]
+                )
             }
             .sheet(isPresented: $showOtisPlusSheet) {
                 OtisPlusSheet(
                     onDismiss: { showOtisPlusSheet = false },
                     onSubscribed: { showOtisPlusSheet = false }
+                )
+                .adaptivePresentationDetents(
+                    compact: [.large],
+                    regular: [.medium, .large]
                 )
             }
             .sheet(item: $selectedMilestone) { milestone in
@@ -149,6 +165,10 @@ struct HealthTabView: View {
                         )
                         selectedMilestone = nil
                     }
+                )
+                .adaptivePresentationDetents(
+                    compact: [.large],
+                    regular: [.medium, .large]
                 )
             }
         }
@@ -216,11 +236,6 @@ struct HealthTabView: View {
     /// Uses cached recent events from ViewModel (7 days)
     private var recentEvents: [PuppyEvent] {
         viewModel.cachedRecentEvents
-    }
-
-    /// Uses cached week stats from ViewModel (computed with batch method)
-    private var weekStats: [DayStats] {
-        viewModel.cachedWeekStats
     }
 
     // MARK: - Stats Section Builder
@@ -315,13 +330,8 @@ struct HealthTabView: View {
 
                 Spacer()
 
-                NavigationLink {
-                    MedicalTimelineView(
-                        milestoneStore: milestoneStore,
-                        appointmentStore: appointmentStore,
-                        birthDate: birthDate,
-                        puppyName: profileStore.profile?.name ?? "Puppy"
-                    )
+                Button {
+                    viewModel.sheetCoordinator.presentSheet(.medicalCare)
                 } label: {
                     Text(Strings.Common.seeAll)
                         .font(.subheadline)
@@ -491,4 +501,5 @@ private struct HealthMilestoneRow: View {
     .environmentObject(MilestoneStore())
     .environmentObject(AppointmentStore())
     .environmentObject(WeightStore())
+    .environmentObject(SocializationStore())
 }
