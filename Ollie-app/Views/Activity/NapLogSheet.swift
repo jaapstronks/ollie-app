@@ -235,7 +235,7 @@ struct NapLogSheet: View {
                         onSave(
                             startDateTime,
                             endDateTime,
-                            note.isEmpty ? nil : note,
+                            note.nilIfBlank,
                             selectedNapLocation
                         )
                     } label: {

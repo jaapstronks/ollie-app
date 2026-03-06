@@ -201,9 +201,7 @@ private struct MedicationRow: View {
                             .fill(medication.isActive ? Color.otisSuccess.opacity(0.15) : Color.secondary.opacity(0.1))
                     )
 
-                Image(systemName: "chevron.right")
-                    .font(.caption)
-                    .foregroundStyle(.tertiary)
+                ChevronIcon()
             }
             .contentShape(Rectangle())
         }

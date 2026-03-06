@@ -78,10 +78,10 @@ struct LogEventSheet: View {
                         HapticFeedback.success()
                         let duration = Int(durationMin)
                         onSave(
-                            note.isEmpty ? nil : note,
-                            who.isEmpty ? nil : who,
-                            exercise.isEmpty ? nil : exercise,
-                            result.isEmpty ? nil : result,
+                            note.nilIfBlank,
+                            who.nilIfBlank,
+                            exercise.nilIfBlank,
+                            result.nilIfBlank,
                             duration
                         )
                     }

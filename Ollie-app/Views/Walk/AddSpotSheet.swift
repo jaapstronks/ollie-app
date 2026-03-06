@@ -227,7 +227,7 @@ struct AddSpotSheet: View {
             name: trimmedName,
             latitude: location.latitude,
             longitude: location.longitude,
-            notes: trimmedNotes.isEmpty ? nil : trimmedNotes,
+            notes: trimmedNotes.nilIfBlank,
             photoFilename: photoFilename
         )
 

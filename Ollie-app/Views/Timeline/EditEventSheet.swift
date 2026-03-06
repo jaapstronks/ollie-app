@@ -197,10 +197,10 @@ struct EditEventSheet: View {
         updatedEvent.time = time
         updatedEvent.location = location
         updatedEvent.napLocation = napLocation
-        updatedEvent.note = note.isEmpty ? nil : note
-        updatedEvent.who = who.isEmpty ? nil : who
-        updatedEvent.exercise = exercise.isEmpty ? nil : exercise
-        updatedEvent.result = result.isEmpty ? nil : result
+        updatedEvent.note = note.nilIfBlank
+        updatedEvent.who = who.nilIfBlank
+        updatedEvent.exercise = exercise.nilIfBlank
+        updatedEvent.result = result.nilIfBlank
         updatedEvent.durationMin = Int(durationMin)
         updatedEvent.weightKg = Double(weightKg)
 

@@ -35,7 +35,7 @@ struct SleepStatusCard: View {
             tintColor: indicatorColor,
             title: mainText,
             titleColor: textColor,
-            subtitle: subtitleText.isEmpty ? nil : subtitleText,
+            subtitle: subtitleText.nilIfBlank,
             iconSize: 40
         ) {
             actionButton

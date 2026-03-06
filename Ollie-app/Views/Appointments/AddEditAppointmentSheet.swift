@@ -255,8 +255,8 @@ struct AddEditAppointmentSheet: View {
             startDate: actualStartDate,
             endDate: actualEndDate,
             isAllDay: isAllDay,
-            location: location.isEmpty ? nil : location,
-            notes: notes.isEmpty ? nil : notes,
+            location: location.nilIfBlank,
+            notes: notes.nilIfBlank,
             reminderMinutesBefore: reminderMinutesBefore,
             recurrence: nil, // TODO: Add recurrence editor for premium
             linkedMilestoneID: existingAppointment?.linkedMilestoneID,

@@ -39,18 +39,8 @@ struct AddEditHouseholdMemberSheet: View {
             }
             .navigationTitle(isEditing ? Strings.Household.editMember : Strings.Household.addMember)
             .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button(Strings.Common.cancel) {
-                        dismiss()
-                    }
-                }
-                ToolbarItem(placement: .confirmationAction) {
-                    Button(Strings.Common.save) {
-                        save()
-                    }
-                    .disabled(!isValid)
-                }
+            .sheetToolbar(canSave: isValid) {
+                save()
             }
             .onAppear {
                 loadExisting()

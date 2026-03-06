@@ -140,7 +140,7 @@ struct WalkLogSheet: View {
                             didPee,
                             didPoop,
                             selectedSpot,
-                            note.isEmpty ? nil : note
+                            note.nilIfBlank
                         )
                     } label: {
                         Text(Strings.WalkLog.logWalk)

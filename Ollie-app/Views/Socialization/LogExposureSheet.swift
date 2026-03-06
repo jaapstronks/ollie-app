@@ -311,7 +311,7 @@ struct LogExposureSheet: View {
             itemId: item.id,
             distance: distance,
             reaction: reaction,
-            note: note.isEmpty ? nil : note
+            note: note.nilIfBlank
         )
 
         HapticFeedback.success()

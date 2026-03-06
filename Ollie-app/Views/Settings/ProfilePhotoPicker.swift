@@ -85,19 +85,11 @@ struct ProfilePhotoPicker: View {
             }
             .navigationTitle(Strings.Profile.photoTitle)
             .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button(Strings.Common.cancel) { dismiss() }
+            .sheetToolbar(canSave: selectedImage != nil) {
+                if let image = selectedImage {
+                    onSave(image)
                 }
-                ToolbarItem(placement: .confirmationAction) {
-                    Button(Strings.Common.save) {
-                        if let image = selectedImage {
-                            onSave(image)
-                        }
-                        dismiss()
-                    }
-                    .disabled(selectedImage == nil)
-                }
+                dismiss()
             }
             .fullScreenCover(isPresented: $showingMediaPicker) {
                 MediaPicker(

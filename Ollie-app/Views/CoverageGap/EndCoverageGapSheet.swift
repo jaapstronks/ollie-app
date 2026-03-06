@@ -93,7 +93,7 @@ struct EndCoverageGapSheet: View {
                 // End button
                 Button {
                     HapticFeedback.medium()
-                    onEnd(endTime, note.isEmpty ? nil : note)
+                    onEnd(endTime, note.nilIfBlank)
                 } label: {
                     Text(Strings.CoverageGap.endButton)
                         .font(.headline)
@@ -101,7 +101,7 @@ struct EndCoverageGapSheet: View {
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 14)
                         .background(Color.otisWarning)
-                        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                        .clipShape(RoundedRectangle(cornerRadius: LayoutConstants.cornerRadiusM, style: .continuous))
                 }
                 .padding(.horizontal)
                 .padding(.bottom)

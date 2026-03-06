@@ -138,7 +138,7 @@ struct AddMilestoneSheet: View {
         let milestone = Milestone(
             category: selectedCategory,
             labelKey: title.trimmingCharacters(in: .whitespaces),
-            detailKey: notes.isEmpty ? nil : notes,
+            detailKey: notes.nilIfBlank,
             fixedDate: selectedDate,
             reminderDaysBefore: enableReminder ? reminderDays : 0,
             icon: selectedCategory.icon,

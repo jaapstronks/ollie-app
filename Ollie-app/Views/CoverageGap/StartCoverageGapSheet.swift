@@ -93,8 +93,8 @@ struct StartCoverageGapSheet: View {
                         onSave(
                             type,
                             startTime,
-                            location.isEmpty ? nil : location,
-                            note.isEmpty ? nil : note
+                            location.nilIfBlank,
+                            note.nilIfBlank
                         )
                     } label: {
                         Text(Strings.CoverageGap.startButton)

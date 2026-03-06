@@ -29,9 +29,9 @@ struct WalkSessionRow: View {
             }
         }
         .background(cardBackground)
-        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .clipShape(RoundedRectangle(cornerRadius: LayoutConstants.cornerRadiusM))
         .overlay(
-            RoundedRectangle(cornerRadius: 12)
+            RoundedRectangle(cornerRadius: LayoutConstants.cornerRadiusM)
                 .strokeBorder(Color.otisSuccess.opacity(0.3), lineWidth: 1)
         )
         .padding(.horizontal)

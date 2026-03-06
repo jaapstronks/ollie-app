@@ -201,7 +201,7 @@ struct WebhookSettingsView: View {
     private func saveConfig() {
         let config = WebhookConfig(
             isEnabled: isEnabled,
-            webhookURL: webhookURL.isEmpty ? nil : webhookURL,
+            webhookURL: webhookURL.nilIfBlank,
             enabledEventTypes: useAllEvents ? nil : (selectedEventTypes.isEmpty ? nil : selectedEventTypes),
             includeEventDetails: includeDetails,
             includePuppyName: includePuppyName

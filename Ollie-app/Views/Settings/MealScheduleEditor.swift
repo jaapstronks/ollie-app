@@ -38,20 +38,13 @@ struct MealScheduleEditor: View {
             }
             .navigationTitle(Strings.Meals.title)
             .navigationBarTitleDisplayMode(.inline)
+            .sheetToolbar {
+                // Update mealsPerDay count to match portions
+                mealSchedule.mealsPerDay = mealSchedule.portions.count
+                onSave()
+                dismiss()
+            }
             .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button(Strings.Common.cancel) {
-                        dismiss()
-                    }
-                }
-                ToolbarItem(placement: .confirmationAction) {
-                    Button(Strings.Common.save) {
-                        // Update mealsPerDay count to match portions
-                        mealSchedule.mealsPerDay = mealSchedule.portions.count
-                        onSave()
-                        dismiss()
-                    }
-                }
                 ToolbarItem(placement: .topBarTrailing) {
                     EditButton()
                 }

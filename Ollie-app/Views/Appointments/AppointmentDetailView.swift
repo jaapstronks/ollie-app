@@ -269,7 +269,7 @@ private struct CompletionSheet: View {
                     Button(Strings.Common.save) {
                         appointmentStore.completeAppointment(
                             appointment,
-                            notes: completionNotes.isEmpty ? nil : completionNotes
+                            notes: completionNotes.nilIfBlank
                         )
                         dismiss()
                     }

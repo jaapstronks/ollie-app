@@ -59,7 +59,7 @@ class MediaCaptureViewModel: ObservableObject {
         return PuppyEvent(
             time: eventTime,
             type: .moment,
-            note: note.isEmpty ? nil : note,
+            note: note.nilIfBlank,
             photo: paths.photoPath,
             latitude: extractedLatitude,
             longitude: extractedLongitude,

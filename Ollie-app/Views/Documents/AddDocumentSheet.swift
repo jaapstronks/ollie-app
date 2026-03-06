@@ -236,9 +236,9 @@ struct AddDocumentSheet: View {
         let document = Document(
             id: existingDocument?.id ?? UUID(),
             type: documentType,
-            title: customTitle.isEmpty ? nil : customTitle,
-            note: notes.isEmpty ? nil : notes,
-            insuranceAgency: insuranceAgency.isEmpty ? nil : insuranceAgency,
+            title: customTitle.nilIfBlank,
+            note: notes.nilIfBlank,
+            insuranceAgency: insuranceAgency.nilIfBlank,
             attachmentType: attachmentType,
             documentDate: hasDocumentDate ? documentDate : nil,
             expiryDate: hasExpiry ? expiryDate : nil,

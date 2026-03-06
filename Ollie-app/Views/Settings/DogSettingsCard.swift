@@ -248,9 +248,7 @@ struct DogSettingsCard: View {
                                 .foregroundStyle(.secondary)
                         }
 
-                        Image(systemName: "chevron.right")
-                            .font(.system(size: 12, weight: .semibold))
-                            .foregroundStyle(.tertiary)
+                        ChevronIcon(style: .small)
                     }
                     .padding(.horizontal)
                     .padding(.vertical, 12)
@@ -288,9 +286,7 @@ struct DogSettingsCard: View {
 
             Spacer()
 
-            Image(systemName: "chevron.right")
-                .font(.system(size: 12, weight: .semibold))
-                .foregroundStyle(.tertiary)
+            ChevronIcon(style: .small)
         }
         .padding(.horizontal)
         .padding(.vertical, 12)
