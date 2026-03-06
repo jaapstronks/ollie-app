@@ -280,10 +280,6 @@ struct AddWalkSheet: View {
                 }
             }
             .onAppear {
-                // Default label based on position
-                let count = schedule.walks.count + 1
-                label = Strings.Notifications.walkNumber(count)
-
                 // Default time: 2 hours after last walk, or 8am
                 if let lastWalk = schedule.walks.last,
                    let lastTime = DateFormatters.timeOnly.date(from: lastWalk.targetTime) {
@@ -293,6 +289,16 @@ struct AddWalkSheet: View {
                     components.hour = 8
                     components.minute = 0
                     targetTime = Calendar.current.date(from: components) ?? Date()
+                }
+                // Default label based on the time
+                label = WalkSchedule.labelForTime(targetTime.timeString)
+            }
+            .onChange(of: targetTime) { _, newTime in
+                // Update label when time changes (only if using a standard time-based label)
+                let currentSuggested = WalkSchedule.labelForTime(targetTime.timeString)
+                let newSuggested = WalkSchedule.labelForTime(newTime.timeString)
+                if label == currentSuggested || label.isEmpty {
+                    label = newSuggested
                 }
             }
         }
@@ -363,6 +369,14 @@ struct EditScheduledWalkSheet: View {
             .onAppear {
                 label = walk.label
                 targetTime = DateFormatters.timeOnly.date(from: walk.targetTime) ?? Date()
+            }
+            .onChange(of: targetTime) { oldTime, newTime in
+                // Update label when time changes (only if using a standard time-based label)
+                let oldSuggested = WalkSchedule.labelForTime(oldTime.timeString)
+                let newSuggested = WalkSchedule.labelForTime(newTime.timeString)
+                if label == oldSuggested {
+                    label = newSuggested
+                }
             }
         }
     }
