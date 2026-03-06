@@ -192,6 +192,31 @@ extension Strings {
         static let contextCarRide = String(localized: "Car ride", table: table)
         static let contextOther = String(localized: "Other", table: table)
 
+        // Regression alerts - friendly, non-alarming messaging
+        static let refresherTime = String(localized: "Time for a refresher!", table: table)
+        static func refresherNeededSingle(skillName: String) -> String {
+            String(localized: "\(skillName) needs a little love", table: table)
+        }
+        static func refresherNeededMultiple(count: Int) -> String {
+            String(localized: "\(count) skills could use some attention", table: table)
+        }
+        static let regressionNormalMessage = String(localized: "This is totally normal! Dogs often need refreshers, especially during adolescence. A few quick sessions will get things back on track.", table: table)
+        static let needsRefresher = String(localized: "Needs refresher", table: table)
+        static func skillRecovered(skillName: String) -> String {
+            String(localized: "\(skillName) is back to solid!", table: table)
+        }
+        static func recoveredInSessions(count: Int) -> String {
+            String(localized: "Recovered in \(count) sessions", table: table)
+        }
+        static let adolescenceTitle = String(localized: "Adolescence tip", table: table)
+        static let adolescenceMessage = String(localized: "Between 6-18 months, dogs commonly \"forget\" things they knew as puppies. This is biology, not failure! Stay patient and consistent.", table: table)
+
+        // MARK: - Multi-Member Attribution
+        static let teamContributions = String(localized: "Team Contributions", table: table)
+        static let sessions = String(localized: "sessions", table: table)
+        static let sessionsThisWeek = String(localized: "sessions this week", table: table)
+        static let weeklyLeaderboard = String(localized: "This Week's Trainers", table: table)
+
         // MARK: - Preparation Section
         enum Preparation {
             // Section

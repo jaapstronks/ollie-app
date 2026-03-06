@@ -9,7 +9,8 @@ import SwiftUI
 import OtisShared
 
 /// Data structure for displaying a skill with its status
-struct SkillProgressInfo {
+struct SkillProgressInfo: Identifiable {
+    var id: String { skill.id }
     let skill: Skill
     let status: SkillStatus
     let sessionCount: Int
@@ -35,6 +36,20 @@ struct SkillProgressInfo {
     var isInRegression: Bool {
         learningPhase == .needsWork
     }
+
+    // MARK: - Enhanced Progress Data (for visualization)
+
+    /// Current proofing levels (Duration, Distance, Distraction)
+    var proofingLevels: ProofingLevels?
+
+    /// Contexts where skill has been practiced
+    var practicedContexts: [TrainingContext] = []
+
+    /// Current maintenance tier (1-6+) for spaced repetition
+    var maintenanceTier: Int?
+
+    /// Next scheduled review date
+    var nextReviewDate: Date?
 
     /// Initialize with basic info only (for backwards compatibility)
     init(

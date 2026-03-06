@@ -37,6 +37,7 @@ extension Strings {
         static let addPhoto = String(localized: "Add Photo", table: table)
         static let notSet = String(localized: "Not set", table: table)
         static let tryAgain = String(localized: "Try Again", table: table)
+        static let great = String(localized: "Great!", table: table)
 
         // Error messages
         static let saveFailed = String(localized: "Failed to save. Please try again.", table: table)
@@ -64,6 +65,9 @@ extension Strings {
         static let today = String(localized: "Today", table: table)
         static let yesterday = String(localized: "Yesterday", table: table)
         static let tomorrow = String(localized: "Tomorrow", table: table)
+
+        // Misc
+        static let unknown = String(localized: "Unknown", table: table)
 
         // Navigation
         static let seeAll = String(localized: "See all", table: table)

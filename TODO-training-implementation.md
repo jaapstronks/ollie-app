@@ -268,11 +268,36 @@ Added strings for session feedback, priority labels, regression messages, traini
 - `encouragementType`: "celebration" | "motivational" | "supportive" | "reminder"
 - `recentAchievement`: Specific achievement to celebrate (skill mastered, streak, etc.)
 
-### Phase 4: Polish
-1. Regression alerts with friendly UX
-2. Location-aware training suggestions
-3. Progress visualization improvements
-4. Multi-household-member attribution display
+### Phase 4: Polish ✅ COMPLETE
+1. ✅ Regression alerts with friendly UX
+   - Created `RegressionAlertView.swift` with non-alarming UI components
+   - `RegressionAlertBanner`: Shows skills needing refresher with supportive messaging
+   - `RegressionRecoveryCard`: Celebrates when skills are back on track
+   - `RegressionBadge`: Inline indicator for skill rows
+   - `AdolescenceInfoCard`: Normalizes regression during 6-18 months
+   - Added FlowLayout helper for skill chip display
+
+2. Location-aware training suggestions - DEFERRED (future enhancement)
+
+3. ✅ Progress visualization improvements
+   - Created `ProgressVisualization.swift` with advanced components:
+   - `SkillPhaseTimeline`: Visual timeline showing 7 learning phases
+   - `Proofing3DIndicator`: Visual bars for Duration/Distance/Distraction (0-5)
+   - `ContextBadges`: Icons showing where skill has been practiced
+   - `MaintenanceScheduleIndicator`: Shows maintenance tier and next review date
+   - `SkillProgressCard`: Combined full progress visualization
+   - `InlineProgressSummary`: Compact inline version for skill rows
+   - Extended `SkillProgressInfo` with proofingLevels, practicedContexts, maintenanceTier, nextReviewDate
+
+4. ✅ Multi-household-member attribution display
+   - Created `MemberAttributionView.swift` with household member components:
+   - `MemberAvatar`: Displays member photo or colored initial
+   - `TrainingContributionCard`: Shows contributions by member with progress bars
+   - `SessionAttributionLabel`: Inline label showing who logged a session
+   - `RecentSessionsByMember`: Sessions grouped by household member
+   - `MemberStreakBadge`: Shows individual training streaks
+   - `TrainingLeaderboard`: Fun weekly ranking display
+   - Added strings: teamContributions, sessions, sessionsThisWeek, weeklyLeaderboard
 
 ---
 
@@ -294,6 +319,9 @@ Added strings for session feedback, priority labels, regression messages, traini
 | CD Regression Log | `Ollie-app/Models/CoreData/CDRegressionLog+Extensions.swift` |
 | AI Setup | `Ollie-app/Services/AI/AISetup.swift` |
 | AI Instructions | `Ollie-app/Services/AI/AIInstructions.swift` |
+| Regression Alerts | `Ollie-app/Views/Training/RegressionAlertView.swift` |
+| Progress Visualization | `Ollie-app/Views/Training/ProgressVisualization.swift` |
+| Member Attribution | `Ollie-app/Views/Training/MemberAttributionView.swift` |
 | Strings | `Ollie-app/Utils/Strings/Strings+Training.swift` |
 | Requirements doc | `training-logic-briefing.md` |
 
