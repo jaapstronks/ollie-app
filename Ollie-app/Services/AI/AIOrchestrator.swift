@@ -403,8 +403,15 @@ enum AIFallbackReason {
     }
 }
 
-enum AIError: Error {
+enum AIError: LocalizedError {
     case brokerError(String)
+
+    var errorDescription: String? {
+        switch self {
+        case .brokerError(let message):
+            return "Broker error: \(message)"
+        }
+    }
 }
 
 // MARK: - Helper Types
@@ -462,6 +469,22 @@ extension AIOrchestrator {
             }
             return "No response"
         }
+    }
+
+    /// Manually trigger an insight bundle request for testing.
+    func testInsightBundle(
+        profile: PuppyProfile,
+        recentEvents: [PuppyEvent]
+    ) async -> NewAITestResult {
+        await testSurface(.insightBundle, profile: profile, recentEvents: recentEvents)
+    }
+
+    /// Manually trigger a notification policy request for testing.
+    func testNotificationPolicy(
+        profile: PuppyProfile,
+        recentEvents: [PuppyEvent]
+    ) async -> NewAITestResult {
+        await testSurface(.notificationPolicy, profile: profile, recentEvents: recentEvents)
     }
 
     /// Manually trigger a training guidance request for testing.

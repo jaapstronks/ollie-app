@@ -23,18 +23,20 @@ struct DebugSection: View {
     @State private var importResult: String?
     @State private var isTestingBroker = false
     @State private var brokerTestResult: String?
+    // AI surface testing state
     @State private var isTestingInsight = false
     @State private var isTestingNotification = false
-    @State private var aiTestResult: AITestResult?
-    @State private var showTestResultSheet = false
-
-    // New surface testing state
     @State private var isTestingTraining = false
     @State private var isTestingPotty = false
     @State private var isTestingSocialization = false
     @State private var isTestingHealth = false
-    @State private var newAITestResult: AIOrchestrator.NewAITestResult?
-    @State private var showNewTestResultSheet = false
+    @State private var aiTestResult: AIOrchestrator.NewAITestResult?
+    @State private var showTestResultSheet = false
+
+    private var isAnyTestRunning: Bool {
+        isTestingInsight || isTestingNotification || isTestingTraining ||
+        isTestingPotty || isTestingSocialization || isTestingHealth
+    }
 
     // AI broker debug config (stored in UserDefaults via AINudgeRollout keys)
     @AppStorage("ai.nudges.brokerBaseURL") private var aiBrokerBaseURL = "https://ai.otis.pet"
@@ -180,13 +182,13 @@ struct DebugSection: View {
             Text("Configure broker URL/key and rollout locally for debug testing. Production should use remote config and HTTPS.")
         }
 
-        // AI Manual Testing Section (Legacy)
+        // AI Surface Testing Section
         Section {
             Button {
                 Task { await testInsightBundle() }
             } label: {
                 HStack {
-                    Label("Test Insight Bundle", systemImage: "sparkles")
+                    Label("Insight Bundle", systemImage: "sparkles")
                     Spacer()
                     if isTestingInsight {
                         ProgressView()
@@ -196,13 +198,13 @@ struct DebugSection: View {
                     }
                 }
             }
-            .disabled(isTestingInsight || isTestingNotification || aiBrokerApiKey.isEmpty)
+            .disabled(isAnyTestRunning || aiBrokerApiKey.isEmpty)
 
             Button {
                 Task { await testNotificationPolicy() }
             } label: {
                 HStack {
-                    Label("Test Notification Policy", systemImage: "bell.badge")
+                    Label("Notification Policy", systemImage: "bell.badge")
                     Spacer()
                     if isTestingNotification {
                         ProgressView()
@@ -212,48 +214,8 @@ struct DebugSection: View {
                     }
                 }
             }
-            .disabled(isTestingInsight || isTestingNotification || aiBrokerApiKey.isEmpty)
+            .disabled(isAnyTestRunning || aiBrokerApiKey.isEmpty)
 
-            Button {
-                AINudgeOrchestrator.shared.clearCache()
-                brokerTestResult = "✓ AI cache cleared"
-            } label: {
-                Label("Clear AI Cache", systemImage: "arrow.clockwise")
-            }
-
-            if let result = aiTestResult {
-                Button {
-                    showTestResultSheet = true
-                } label: {
-                    HStack {
-                        Image(systemName: result.isSuccess ? "checkmark.circle.fill" : "xmark.circle.fill")
-                            .foregroundStyle(result.isSuccess ? .green : .red)
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text(result.surface == .insightBundle ? "Insight Bundle" : "Notification Policy")
-                                .font(.subheadline)
-                            Text("\(result.latencyMs)ms • \(result.provider ?? "error")")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                        }
-                        Spacer()
-                        Image(systemName: "chevron.right")
-                            .foregroundStyle(.secondary)
-                    }
-                }
-            }
-        } header: {
-            Label("AI Legacy Surfaces", systemImage: "hammer")
-        } footer: {
-            Text("Test legacy AI surfaces (insight bundle, notification policy).")
-        }
-        .sheet(isPresented: $showTestResultSheet) {
-            if let result = aiTestResult {
-                AITestResultSheet(result: result)
-            }
-        }
-
-        // New AI Surfaces Testing Section
-        Section {
             Button {
                 Task { await testTrainingGuidance() }
             } label: {
@@ -268,7 +230,7 @@ struct DebugSection: View {
                     }
                 }
             }
-            .disabled(isTestingTraining || isTestingPotty || isTestingSocialization || isTestingHealth || aiBrokerApiKey.isEmpty)
+            .disabled(isAnyTestRunning || aiBrokerApiKey.isEmpty)
 
             Button {
                 Task { await testPottyAnalysis() }
@@ -284,7 +246,7 @@ struct DebugSection: View {
                     }
                 }
             }
-            .disabled(isTestingTraining || isTestingPotty || isTestingSocialization || isTestingHealth || aiBrokerApiKey.isEmpty)
+            .disabled(isAnyTestRunning || aiBrokerApiKey.isEmpty)
 
             Button {
                 Task { await testSocializationGuidance() }
@@ -300,7 +262,7 @@ struct DebugSection: View {
                     }
                 }
             }
-            .disabled(isTestingTraining || isTestingPotty || isTestingSocialization || isTestingHealth || aiBrokerApiKey.isEmpty)
+            .disabled(isAnyTestRunning || aiBrokerApiKey.isEmpty)
 
             Button {
                 Task { await testHealthInsights() }
@@ -316,11 +278,18 @@ struct DebugSection: View {
                     }
                 }
             }
-            .disabled(isTestingTraining || isTestingPotty || isTestingSocialization || isTestingHealth || aiBrokerApiKey.isEmpty)
+            .disabled(isAnyTestRunning || aiBrokerApiKey.isEmpty)
 
-            if let result = newAITestResult {
+            Button {
+                AINudgeOrchestrator.shared.clearCache()
+                brokerTestResult = "✓ AI cache cleared"
+            } label: {
+                Label("Clear AI Cache", systemImage: "arrow.clockwise")
+            }
+
+            if let result = aiTestResult {
                 Button {
-                    showNewTestResultSheet = true
+                    showTestResultSheet = true
                 } label: {
                     HStack {
                         Image(systemName: result.isSuccess ? "checkmark.circle.fill" : "xmark.circle.fill")
@@ -339,12 +308,12 @@ struct DebugSection: View {
                 }
             }
         } header: {
-            Label("AI New Surfaces", systemImage: "sparkles.rectangle.stack")
+            Label("AI Surface Testing", systemImage: "sparkles.rectangle.stack")
         } footer: {
-            Text("Test new modular AI surfaces. Requires updated broker server.")
+            Text("Test AI surfaces. All surfaces use the modular context system.")
         }
-        .sheet(isPresented: $showNewTestResultSheet) {
-            if let result = newAITestResult {
+        .sheet(isPresented: $showTestResultSheet) {
+            if let result = aiTestResult {
                 NewAITestResultSheet(result: result)
             }
         }
@@ -504,29 +473,23 @@ struct DebugSection: View {
         isImporting = false
     }
 
-    // MARK: - AI Manual Tests
+    // MARK: - AI Surface Tests
 
     private func testInsightBundle() async {
         isTestingInsight = true
         aiTestResult = nil
         defer { isTestingInsight = false }
 
-        // Get profile and recent events
         guard let profile = profileStore.profile else {
-            aiTestResult = AITestResult(
+            aiTestResult = AIOrchestrator.NewAITestResult(
                 surface: .insightBundle,
                 timestamp: Date(),
                 latencyMs: 0,
                 provider: nil,
                 model: nil,
                 reasoningTags: [],
-                rawResponse: AINudgeBrokerResponse(
-                    providerUsed: nil,
-                    modelUsed: nil,
-                    reasoningTags: nil,
-                    insightBundleDecision: nil,
-                    notificationPolicyDecision: nil
-                ),
+                response: nil,
+                rawResponse: nil,
                 error: "No profile found"
             )
             return
@@ -534,7 +497,7 @@ struct DebugSection: View {
 
         let sevenDaysAgo = Calendar.current.date(byAdding: .day, value: -7, to: Date()) ?? Date()
         let recentEvents = eventStore.getEvents(from: sevenDaysAgo, to: Date())
-        aiTestResult = await AINudgeOrchestrator.shared.testInsightBundle(
+        aiTestResult = await AIOrchestrator.shared.testInsightBundle(
             profile: profile,
             recentEvents: recentEvents
         )
@@ -547,20 +510,15 @@ struct DebugSection: View {
         defer { isTestingNotification = false }
 
         guard let profile = profileStore.profile else {
-            aiTestResult = AITestResult(
+            aiTestResult = AIOrchestrator.NewAITestResult(
                 surface: .notificationPolicy,
                 timestamp: Date(),
                 latencyMs: 0,
                 provider: nil,
                 model: nil,
                 reasoningTags: [],
-                rawResponse: AINudgeBrokerResponse(
-                    providerUsed: nil,
-                    modelUsed: nil,
-                    reasoningTags: nil,
-                    insightBundleDecision: nil,
-                    notificationPolicyDecision: nil
-                ),
+                response: nil,
+                rawResponse: nil,
                 error: "No profile found"
             )
             return
@@ -568,22 +526,20 @@ struct DebugSection: View {
 
         let sevenDaysAgo = Calendar.current.date(byAdding: .day, value: -7, to: Date()) ?? Date()
         let recentEvents = eventStore.getEvents(from: sevenDaysAgo, to: Date())
-        aiTestResult = await AINudgeOrchestrator.shared.testNotificationPolicy(
+        aiTestResult = await AIOrchestrator.shared.testNotificationPolicy(
             profile: profile,
             recentEvents: recentEvents
         )
         showTestResultSheet = true
     }
 
-    // MARK: - New AI Surface Tests
-
     private func testTrainingGuidance() async {
         isTestingTraining = true
-        newAITestResult = nil
+        aiTestResult = nil
         defer { isTestingTraining = false }
 
         guard let profile = profileStore.profile else {
-            newAITestResult = AIOrchestrator.NewAITestResult(
+            aiTestResult = AIOrchestrator.NewAITestResult(
                 surface: .trainingGuidance,
                 timestamp: Date(),
                 latencyMs: 0,
@@ -599,20 +555,20 @@ struct DebugSection: View {
 
         let sevenDaysAgo = Calendar.current.date(byAdding: .day, value: -7, to: Date()) ?? Date()
         let recentEvents = eventStore.getEvents(from: sevenDaysAgo, to: Date())
-        newAITestResult = await AIOrchestrator.shared.testTrainingGuidance(
+        aiTestResult = await AIOrchestrator.shared.testTrainingGuidance(
             profile: profile,
             recentEvents: recentEvents
         )
-        showNewTestResultSheet = true
+        showTestResultSheet = true
     }
 
     private func testPottyAnalysis() async {
         isTestingPotty = true
-        newAITestResult = nil
+        aiTestResult = nil
         defer { isTestingPotty = false }
 
         guard let profile = profileStore.profile else {
-            newAITestResult = AIOrchestrator.NewAITestResult(
+            aiTestResult = AIOrchestrator.NewAITestResult(
                 surface: .pottyAnalysis,
                 timestamp: Date(),
                 latencyMs: 0,
@@ -628,20 +584,20 @@ struct DebugSection: View {
 
         let sevenDaysAgo = Calendar.current.date(byAdding: .day, value: -7, to: Date()) ?? Date()
         let recentEvents = eventStore.getEvents(from: sevenDaysAgo, to: Date())
-        newAITestResult = await AIOrchestrator.shared.testPottyAnalysis(
+        aiTestResult = await AIOrchestrator.shared.testPottyAnalysis(
             profile: profile,
             recentEvents: recentEvents
         )
-        showNewTestResultSheet = true
+        showTestResultSheet = true
     }
 
     private func testSocializationGuidance() async {
         isTestingSocialization = true
-        newAITestResult = nil
+        aiTestResult = nil
         defer { isTestingSocialization = false }
 
         guard let profile = profileStore.profile else {
-            newAITestResult = AIOrchestrator.NewAITestResult(
+            aiTestResult = AIOrchestrator.NewAITestResult(
                 surface: .socializationGuidance,
                 timestamp: Date(),
                 latencyMs: 0,
@@ -657,20 +613,20 @@ struct DebugSection: View {
 
         let sevenDaysAgo = Calendar.current.date(byAdding: .day, value: -7, to: Date()) ?? Date()
         let recentEvents = eventStore.getEvents(from: sevenDaysAgo, to: Date())
-        newAITestResult = await AIOrchestrator.shared.testSocializationGuidance(
+        aiTestResult = await AIOrchestrator.shared.testSocializationGuidance(
             profile: profile,
             recentEvents: recentEvents
         )
-        showNewTestResultSheet = true
+        showTestResultSheet = true
     }
 
     private func testHealthInsights() async {
         isTestingHealth = true
-        newAITestResult = nil
+        aiTestResult = nil
         defer { isTestingHealth = false }
 
         guard let profile = profileStore.profile else {
-            newAITestResult = AIOrchestrator.NewAITestResult(
+            aiTestResult = AIOrchestrator.NewAITestResult(
                 surface: .healthInsights,
                 timestamp: Date(),
                 latencyMs: 0,
@@ -686,11 +642,11 @@ struct DebugSection: View {
 
         let sevenDaysAgo = Calendar.current.date(byAdding: .day, value: -7, to: Date()) ?? Date()
         let recentEvents = eventStore.getEvents(from: sevenDaysAgo, to: Date())
-        newAITestResult = await AIOrchestrator.shared.testHealthInsights(
+        aiTestResult = await AIOrchestrator.shared.testHealthInsights(
             profile: profile,
             recentEvents: recentEvents
         )
-        showNewTestResultSheet = true
+        showTestResultSheet = true
     }
 
     // MARK: - AI Broker Test
