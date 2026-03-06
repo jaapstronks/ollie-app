@@ -126,14 +126,17 @@ struct DebugAISurfaceTestingSection: View {
 
     @AppStorage("ai.nudges.brokerApiKey") private var aiBrokerApiKey = ""
 
+    // View state: loading indicators only
     @State private var isTestingInsight = false
     @State private var isTestingNotification = false
     @State private var isTestingTraining = false
     @State private var isTestingPotty = false
     @State private var isTestingSocialization = false
     @State private var isTestingHealth = false
-    @State private var aiTestResult: AIOrchestrator.NewAITestResult?
-    @State private var showTestResultSheet = false
+
+    // Last test result - use NavigationLink instead of sheet to avoid nested sheet issues
+    // (Settings itself is a sheet, so presenting another sheet from here causes auto-dismiss)
+    @State private var lastTestResult: AIOrchestrator.NewAITestResult?
 
     private var isAnyTestRunning: Bool {
         isTestingInsight || isTestingNotification || isTestingTraining ||
@@ -192,13 +195,16 @@ struct DebugAISurfaceTestingSection: View {
 
             Button {
                 AINudgeOrchestrator.shared.clearCache()
+                AIOrchestrator.shared.clearCache()
             } label: {
                 Label("Clear AI Cache", systemImage: "arrow.clockwise")
             }
 
-            if let result = aiTestResult {
-                Button {
-                    showTestResultSheet = true
+            // Last result - uses NavigationLink to avoid nested sheet issues
+            // (Settings is already a sheet, so presenting a sheet from here causes auto-dismiss)
+            if let result = lastTestResult {
+                NavigationLink {
+                    AITestResultView(result: result)
                 } label: {
                     HStack {
                         Image(systemName: result.isSuccess ? "checkmark.circle.fill" : "xmark.circle.fill")
@@ -219,11 +225,6 @@ struct DebugAISurfaceTestingSection: View {
             Label("AI Surface Testing", systemImage: "sparkles.rectangle.stack")
         } footer: {
             Text("Test AI surfaces. All surfaces use the modular context system.")
-        }
-        .sheet(isPresented: $showTestResultSheet) {
-            if let result = aiTestResult {
-                NewAITestResultSheet(result: result)
-            }
         }
     }
 
@@ -278,9 +279,8 @@ struct DebugAISurfaceTestingSection: View {
     private func testInsightBundle() async {
         isTestingInsight = true
         guard let profile = profileStore.profile else {
-            aiTestResult = makeErrorResult(surface: .insightBundle)
+            lastTestResult = makeErrorResult(surface: .insightBundle)
             isTestingInsight = false
-            showTestResultSheet = true
             return
         }
 
@@ -288,18 +288,16 @@ struct DebugAISurfaceTestingSection: View {
             profile: profile,
             recentEvents: getRecentEvents()
         )
-        aiTestResult = result
+        lastTestResult = result
         isTestingInsight = false
-        showTestResultSheet = true
     }
 
     @MainActor
     private func testNotificationPolicy() async {
         isTestingNotification = true
         guard let profile = profileStore.profile else {
-            aiTestResult = makeErrorResult(surface: .notificationPolicy)
+            lastTestResult = makeErrorResult(surface: .notificationPolicy)
             isTestingNotification = false
-            showTestResultSheet = true
             return
         }
 
@@ -307,18 +305,16 @@ struct DebugAISurfaceTestingSection: View {
             profile: profile,
             recentEvents: getRecentEvents()
         )
-        aiTestResult = result
+        lastTestResult = result
         isTestingNotification = false
-        showTestResultSheet = true
     }
 
     @MainActor
     private func testTrainingGuidance() async {
         isTestingTraining = true
         guard let profile = profileStore.profile else {
-            aiTestResult = makeErrorResult(surface: .trainingGuidance)
+            lastTestResult = makeErrorResult(surface: .trainingGuidance)
             isTestingTraining = false
-            showTestResultSheet = true
             return
         }
 
@@ -326,18 +322,16 @@ struct DebugAISurfaceTestingSection: View {
             profile: profile,
             recentEvents: getRecentEvents()
         )
-        aiTestResult = result
+        lastTestResult = result
         isTestingTraining = false
-        showTestResultSheet = true
     }
 
     @MainActor
     private func testPottyAnalysis() async {
         isTestingPotty = true
         guard let profile = profileStore.profile else {
-            aiTestResult = makeErrorResult(surface: .pottyAnalysis)
+            lastTestResult = makeErrorResult(surface: .pottyAnalysis)
             isTestingPotty = false
-            showTestResultSheet = true
             return
         }
 
@@ -345,18 +339,16 @@ struct DebugAISurfaceTestingSection: View {
             profile: profile,
             recentEvents: getRecentEvents()
         )
-        aiTestResult = result
+        lastTestResult = result
         isTestingPotty = false
-        showTestResultSheet = true
     }
 
     @MainActor
     private func testSocializationGuidance() async {
         isTestingSocialization = true
         guard let profile = profileStore.profile else {
-            aiTestResult = makeErrorResult(surface: .socializationGuidance)
+            lastTestResult = makeErrorResult(surface: .socializationGuidance)
             isTestingSocialization = false
-            showTestResultSheet = true
             return
         }
 
@@ -364,18 +356,16 @@ struct DebugAISurfaceTestingSection: View {
             profile: profile,
             recentEvents: getRecentEvents()
         )
-        aiTestResult = result
+        lastTestResult = result
         isTestingSocialization = false
-        showTestResultSheet = true
     }
 
     @MainActor
     private func testHealthInsights() async {
         isTestingHealth = true
         guard let profile = profileStore.profile else {
-            aiTestResult = makeErrorResult(surface: .healthInsights)
+            lastTestResult = makeErrorResult(surface: .healthInsights)
             isTestingHealth = false
-            showTestResultSheet = true
             return
         }
 
@@ -383,9 +373,8 @@ struct DebugAISurfaceTestingSection: View {
             profile: profile,
             recentEvents: getRecentEvents()
         )
-        aiTestResult = result
+        lastTestResult = result
         isTestingHealth = false
-        showTestResultSheet = true
     }
 }
 
