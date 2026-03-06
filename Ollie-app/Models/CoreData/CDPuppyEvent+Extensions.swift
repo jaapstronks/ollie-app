@@ -41,6 +41,20 @@ extension CDPuppyEvent {
         self.gapLocation = event.gapLocation
         self.loggedBy = event.loggedBy
         self.napLocation = event.napLocation?.rawValue
+
+        // Training session outcome fields
+        if let successReps = event.successReps {
+            self.successReps = NSNumber(value: successReps)
+        } else {
+            self.successReps = nil
+        }
+        if let failedReps = event.failedReps {
+            self.failedReps = NSNumber(value: failedReps)
+        } else {
+            self.failedReps = nil
+        }
+        self.trainingContext = event.trainingContext
+        self.skillPhase = event.skillPhase
     }
 
     /// Create a new CDPuppyEvent from a PuppyEvent struct
@@ -111,7 +125,11 @@ extension CDPuppyEvent {
             gapType: gapType,
             endTime: self.endTime,
             gapLocation: self.gapLocation,
-            loggedBy: self.loggedBy
+            loggedBy: self.loggedBy,
+            successReps: self.successReps?.intValue,
+            failedReps: self.failedReps?.intValue,
+            trainingContext: self.trainingContext,
+            skillPhase: self.skillPhase
         )
     }
 }

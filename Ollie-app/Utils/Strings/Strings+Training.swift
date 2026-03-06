@@ -69,6 +69,14 @@ extension Strings {
         static let statusPracticing = String(localized: "Practicing", table: table)
         static let statusMastered = String(localized: "Mastered", table: table)
 
+        // Learning Phases (from SkillLearningPhase)
+        static let phaseLuring = String(localized: "Luring", table: table)
+        static let phaseAddingCue = String(localized: "Adding cue", table: table)
+        static let phaseProofing = String(localized: "Proofing", table: table)
+        static let phaseGeneralizing = String(localized: "Generalizing", table: table)
+        static let phaseMaintaining = String(localized: "Maintaining", table: table)
+        static let phaseNeedsWork = String(localized: "Needs work", table: table)
+
         // Week hero card
         static func weekNumber(_ week: Int) -> String {
             String(localized: "Week \(week)", table: table)
@@ -112,6 +120,77 @@ extension Strings {
         // Empty state
         static let noSkillsStarted = String(localized: "No skills started yet", table: table)
         static let tapToBegin = String(localized: "Tap a skill to begin training", table: table)
+
+        // MARK: - Skill Progress & Spaced Repetition
+
+        // Session feedback (from TrainingEngine)
+        static let excellentSession = String(localized: "Excellent session!", table: table)
+        static let goodProgress = String(localized: "Good progress", table: table)
+        static let needsMoreWork = String(localized: "Needs more work", table: table)
+        static let stepBackRecommended = String(localized: "Consider stepping back", table: table)
+
+        // Priority labels
+        static let refresherNeeded = String(localized: "Refresher needed", table: table)
+        static let mainFocus = String(localized: "Main focus", table: table)
+        static let dueForReview = String(localized: "Due for review", table: table)
+        static let practiceInNewContext = String(localized: "Practice in new location", table: table)
+        static let warmUp = String(localized: "Warm-up", table: table)
+
+        // Regression messages
+        static let skillNeedsRefresher = String(localized: "This skill needs a refresher", table: table)
+        static let priorityShifted = String(localized: "Priority shifted to maintenance", table: table)
+        static let backOnTrack = String(localized: "Back on track!", table: table)
+
+        // Session plan
+        static let todaysTraining = String(localized: "Today's Training", table: table)
+        static let maintenanceReview = String(localized: "Maintenance review", table: table)
+        static let easyFinish = String(localized: "Easy finish", table: table)
+        static let easyWinToStart = String(localized: "Easy win to start", table: table)
+        static let primaryFocusSubtitle = String(localized: "New skills to learn", table: table)
+        static let regressionFocusSubtitle = String(localized: "These skills need attention", table: table)
+        static let maintenanceSubtitle = String(localized: "Quick refresher reps", table: table)
+        static let endOnSuccess = String(localized: "End on a success", table: table)
+        static let elapsed = String(localized: "Elapsed", table: table)
+        static let recommendedMinutes = String(localized: "min recommended", table: table)
+        static let startSession = String(localized: "Start Session", table: table)
+        static let sessionLong = String(localized: "Session getting long", table: table)
+        static let sessionComplete = String(localized: "Session Complete!", table: table)
+        static let greatWorkMessage = String(localized: "Great work! Regular short sessions are the key to success.", table: table)
+        static let noSkillsDue = String(localized: "All caught up!", table: table)
+        static let noSkillsDueMessage = String(localized: "No skills are due for training right now. Start a new skill or check back later.", table: table)
+        static let generatingPlan = String(localized: "Generating your session...", table: table)
+        static func progressLabel(completed: Int, total: Int) -> String {
+            String(localized: "\(completed) of \(total) skills", table: table)
+        }
+        static let smartSessionPlan = String(localized: "AI-generated session plan", table: table)
+        static let viewAllSkills = String(localized: "View all skills", table: table)
+
+        // Confidence score
+        static let confidenceScore = String(localized: "Confidence", table: table)
+        static func confidencePercent(_ percent: Int) -> String {
+            String(localized: "\(percent)% reliable", table: table)
+        }
+
+        // Context progress
+        static func contextsCompleted(_ count: Int, total: Int) -> String {
+            String(localized: "\(count)/\(total) contexts", table: table)
+        }
+
+        // Rep logging
+        static let howDidItGo = String(localized: "How did it go?", table: table)
+        static let successfulReps = String(localized: "Successful reps", table: table)
+        static let failedReps = String(localized: "Failed reps", table: table)
+        static let whereDidYouTrain = String(localized: "Where did you train?", table: table)
+
+        // Training contexts
+        static let contextHome = String(localized: "Home", table: table)
+        static let contextGarden = String(localized: "Garden", table: table)
+        static let contextQuietStreet = String(localized: "Quiet street", table: table)
+        static let contextBusyStreet = String(localized: "Busy street", table: table)
+        static let contextPark = String(localized: "Park", table: table)
+        static let contextIndoorPublic = String(localized: "Indoor public", table: table)
+        static let contextCarRide = String(localized: "Car ride", table: table)
+        static let contextOther = String(localized: "Other", table: table)
 
         // MARK: - Preparation Section
         enum Preparation {
