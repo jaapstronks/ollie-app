@@ -42,7 +42,7 @@ struct TodayView: View {
             return false
         }
 
-        return CombinedStatusCalculations.shouldShowCrateNudge(
+        return NudgeCalculations.shouldShowCrateNudge(
             sleepState: viewModel.currentSleepState,
             todayEvents: viewModel.events,
             allEvents: eventStore.events
@@ -51,7 +51,7 @@ struct TodayView: View {
 
     /// Whether to show the walk target nudge card
     private var shouldShowWalkTargetNudge: Bool {
-        CombinedStatusCalculations.shouldShowWalkTargetNudge(
+        NudgeCalculations.shouldShowWalkTargetNudge(
             walkStats: viewModel.walkStats,
             dismissedDate: dismissedWalkTargetNudgeDate
         )
