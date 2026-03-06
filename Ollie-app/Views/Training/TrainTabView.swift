@@ -95,15 +95,17 @@ struct TrainTabView: View {
     @ViewBuilder
     private var guidesSection: some View {
         VStack(spacing: 10) {
-            // Potty Training Guide
-            TrainingGuideEntryCard(
-                icon: "target",
-                title: Strings.Training.Guides.pottyTitle,
-                subtitle: Strings.Training.Guides.pottySubtitle,
-                statValue: viewModel.outdoorPercentage > 0 ? "\(viewModel.outdoorPercentage)%" : nil,
-                tintColor: .otisSuccess
-            ) {
-                showPottyGuide = true
+            // Potty Training Guide - hidden when at 100% for 4+ days
+            if viewModel.shouldShowPottyTrainingGuide {
+                TrainingGuideEntryCard(
+                    icon: "target",
+                    title: Strings.Training.Guides.pottyTitle,
+                    subtitle: Strings.Training.Guides.pottySubtitle,
+                    statValue: viewModel.outdoorPercentage > 0 ? "\(viewModel.outdoorPercentage)%" : nil,
+                    tintColor: .otisSuccess
+                ) {
+                    showPottyGuide = true
+                }
             }
 
             // Crate Training Guide

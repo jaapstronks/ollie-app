@@ -185,6 +185,51 @@ extension TimelineViewModel {
         return (outdoorCount * 100) / totalCount
     }
 
+    /// Whether potty training guide should be shown in Train tab
+    /// Hides when at 100% outdoor for 4+ consecutive days with activity
+    /// Re-shows when there's an indoor accident
+    var shouldShowPottyTrainingGuide: Bool {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+
+        // Check for recent indoor accident (within last 24 hours)
+        let last24Hours = Date().addingTimeInterval(-24 * 60 * 60)
+        let recentEvents = eventStore.getEvents(from: last24Hours, to: Date())
+        let hasRecentIndoorAccident = recentEvents.potty().contains { $0.location == .binnen }
+
+        // If there's a recent accident, always show the guide
+        if hasRecentIndoorAccident {
+            return true
+        }
+
+        // Check if we have 4+ consecutive days at 100%
+        var consecutivePerfectDays = 0
+        for dayOffset in 0..<7 {
+            guard let dayStart = calendar.date(byAdding: .day, value: -dayOffset, to: today),
+                  let dayEnd = calendar.date(byAdding: .day, value: 1, to: dayStart) else {
+                continue
+            }
+
+            let dayEvents = eventStore.getEvents(from: dayStart, to: dayEnd)
+            let pottyEvents = dayEvents.potty()
+
+            // Need at least 1 potty event to count the day
+            guard !pottyEvents.isEmpty else {
+                break // No data for this day, stop counting
+            }
+
+            let indoorCount = pottyEvents.filter { $0.location == .binnen }.count
+            if indoorCount > 0 {
+                break // Found an indoor event, streak broken
+            }
+
+            consecutivePerfectDays += 1
+        }
+
+        // Hide if 4+ consecutive perfect days
+        return consecutivePerfectDays < 4
+    }
+
     // MARK: - Daily Digest
 
     /// Daily digest summary for current date
