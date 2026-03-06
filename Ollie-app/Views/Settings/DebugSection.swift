@@ -13,6 +13,8 @@ import OtisShared
 
 /// Debug section for testing features like subscription states
 struct DebugSection: View {
+    @EnvironmentObject var profileStore: ProfileStore
+    @EnvironmentObject var eventStore: EventStore
     @ObservedObject private var subscriptionManager = SubscriptionManager.shared
     @State private var showResetConfirm = false
     @State private var showImportConfirm = false
@@ -21,9 +23,13 @@ struct DebugSection: View {
     @State private var importResult: String?
     @State private var isTestingBroker = false
     @State private var brokerTestResult: String?
+    @State private var isTestingInsight = false
+    @State private var isTestingNotification = false
+    @State private var aiTestResult: AITestResult?
+    @State private var showTestResultSheet = false
 
     // AI broker debug config (stored in UserDefaults via AINudgeRollout keys)
-    @AppStorage("ai.nudges.brokerBaseURL") private var aiBrokerBaseURL = ""
+    @AppStorage("ai.nudges.brokerBaseURL") private var aiBrokerBaseURL = "https://ai.otis.pet"
     @AppStorage("ai.nudges.brokerApiKey") private var aiBrokerApiKey = ""
     @AppStorage("ai.nudges.rolloutPercentage") private var aiRolloutPercentage = 100
     @AppStorage("ai.nudges.shadowMode") private var aiShadowMode = true
@@ -164,6 +170,78 @@ struct DebugSection: View {
             Label("AI Broker", systemImage: "cpu")
         } footer: {
             Text("Configure broker URL/key and rollout locally for debug testing. Production should use remote config and HTTPS.")
+        }
+
+        // AI Manual Testing Section
+        Section {
+            Button {
+                Task { await testInsightBundle() }
+            } label: {
+                HStack {
+                    Label("Test Insight Bundle", systemImage: "sparkles")
+                    Spacer()
+                    if isTestingInsight {
+                        ProgressView()
+                    } else {
+                        Image(systemName: "play.fill")
+                            .foregroundStyle(.secondary)
+                    }
+                }
+            }
+            .disabled(isTestingInsight || isTestingNotification || aiBrokerApiKey.isEmpty)
+
+            Button {
+                Task { await testNotificationPolicy() }
+            } label: {
+                HStack {
+                    Label("Test Notification Policy", systemImage: "bell.badge")
+                    Spacer()
+                    if isTestingNotification {
+                        ProgressView()
+                    } else {
+                        Image(systemName: "play.fill")
+                            .foregroundStyle(.secondary)
+                    }
+                }
+            }
+            .disabled(isTestingInsight || isTestingNotification || aiBrokerApiKey.isEmpty)
+
+            Button {
+                AINudgeOrchestrator.shared.clearCache()
+                brokerTestResult = "✓ AI cache cleared"
+            } label: {
+                Label("Clear AI Cache", systemImage: "arrow.clockwise")
+            }
+
+            if let result = aiTestResult {
+                Button {
+                    showTestResultSheet = true
+                } label: {
+                    HStack {
+                        Image(systemName: result.isSuccess ? "checkmark.circle.fill" : "xmark.circle.fill")
+                            .foregroundStyle(result.isSuccess ? .green : .red)
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(result.surface == .insightBundle ? "Insight Bundle" : "Notification Policy")
+                                .font(.subheadline)
+                            Text("\(result.latencyMs)ms • \(result.provider ?? "error")")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .foregroundStyle(.secondary)
+                    }
+                }
+            }
+        } header: {
+            Label("AI Manual Testing", systemImage: "hammer")
+        } footer: {
+            Text("Manually trigger AI requests to test prompts and inspect responses. Bypasses caching, budget limits, and rollout checks.")
+        }
+        .sheet(isPresented: $showTestResultSheet) {
+            if let result = aiTestResult {
+                AITestResultSheet(result: result)
+            }
         }
 
         // Data Management Section
@@ -321,6 +399,77 @@ struct DebugSection: View {
         isImporting = false
     }
 
+    // MARK: - AI Manual Tests
+
+    private func testInsightBundle() async {
+        isTestingInsight = true
+        aiTestResult = nil
+        defer { isTestingInsight = false }
+
+        // Get profile and recent events
+        guard let profile = profileStore.profile else {
+            aiTestResult = AITestResult(
+                surface: .insightBundle,
+                timestamp: Date(),
+                latencyMs: 0,
+                provider: nil,
+                model: nil,
+                reasoningTags: [],
+                rawResponse: AINudgeBrokerResponse(
+                    providerUsed: nil,
+                    modelUsed: nil,
+                    reasoningTags: nil,
+                    insightBundleDecision: nil,
+                    notificationPolicyDecision: nil
+                ),
+                error: "No profile found"
+            )
+            return
+        }
+
+        let sevenDaysAgo = Calendar.current.date(byAdding: .day, value: -7, to: Date()) ?? Date()
+        let recentEvents = eventStore.getEvents(from: sevenDaysAgo, to: Date())
+        aiTestResult = await AINudgeOrchestrator.shared.testInsightBundle(
+            profile: profile,
+            recentEvents: recentEvents
+        )
+        showTestResultSheet = true
+    }
+
+    private func testNotificationPolicy() async {
+        isTestingNotification = true
+        aiTestResult = nil
+        defer { isTestingNotification = false }
+
+        guard let profile = profileStore.profile else {
+            aiTestResult = AITestResult(
+                surface: .notificationPolicy,
+                timestamp: Date(),
+                latencyMs: 0,
+                provider: nil,
+                model: nil,
+                reasoningTags: [],
+                rawResponse: AINudgeBrokerResponse(
+                    providerUsed: nil,
+                    modelUsed: nil,
+                    reasoningTags: nil,
+                    insightBundleDecision: nil,
+                    notificationPolicyDecision: nil
+                ),
+                error: "No profile found"
+            )
+            return
+        }
+
+        let sevenDaysAgo = Calendar.current.date(byAdding: .day, value: -7, to: Date()) ?? Date()
+        let recentEvents = eventStore.getEvents(from: sevenDaysAgo, to: Date())
+        aiTestResult = await AINudgeOrchestrator.shared.testNotificationPolicy(
+            profile: profile,
+            recentEvents: recentEvents
+        )
+        showTestResultSheet = true
+    }
+
     // MARK: - AI Broker Test
 
     private func testBrokerHealth() async {
@@ -355,10 +504,138 @@ struct DebugSection: View {
     }
 }
 
+// MARK: - AI Test Result Sheet
+
+struct AITestResultSheet: View {
+    let result: AITestResult
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        NavigationStack {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 16) {
+                    // Header
+                    HStack {
+                        Image(systemName: result.isSuccess ? "checkmark.circle.fill" : "xmark.circle.fill")
+                            .font(.title)
+                            .foregroundStyle(result.isSuccess ? .green : .red)
+                        VStack(alignment: .leading) {
+                            Text(result.surface == .insightBundle ? "Insight Bundle" : "Notification Policy")
+                                .font(.headline)
+                            Text(result.timestamp.formatted(date: .abbreviated, time: .standard))
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                    .padding()
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(Color(.secondarySystemBackground))
+                    .cornerRadius(12)
+
+                    // Metadata
+                    if result.isSuccess {
+                        VStack(alignment: .leading, spacing: 8) {
+                            MetadataRow(label: "Provider", value: result.provider ?? "unknown")
+                            MetadataRow(label: "Model", value: result.model ?? "unknown")
+                            MetadataRow(label: "Latency", value: "\(result.latencyMs)ms")
+                            if !result.reasoningTags.isEmpty {
+                                MetadataRow(label: "Tags", value: result.reasoningTags.joined(separator: ", "))
+                            }
+                        }
+                        .padding()
+                        .background(Color(.secondarySystemBackground))
+                        .cornerRadius(12)
+                    }
+
+                    // Full Response
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Response")
+                            .font(.headline)
+
+                        Text(result.summaryText)
+                            .font(.system(.caption, design: .monospaced))
+                            .textSelection(.enabled)
+                            .padding()
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .background(Color(.tertiarySystemBackground))
+                            .cornerRadius(8)
+                    }
+
+                    // Copy button
+                    Button {
+                        UIPasteboard.general.string = result.summaryText
+                    } label: {
+                        Label("Copy to Clipboard", systemImage: "doc.on.doc")
+                            .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.bordered)
+                }
+                .padding()
+            }
+            .navigationTitle("AI Test Result")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Done") {
+                        dismiss()
+                    }
+                }
+            }
+        }
+    }
+}
+
+private struct MetadataRow: View {
+    let label: String
+    let value: String
+
+    var body: some View {
+        HStack {
+            Text(label)
+                .foregroundStyle(.secondary)
+            Spacer()
+            Text(value)
+                .font(.system(.body, design: .monospaced))
+        }
+    }
+}
+
 #Preview {
     Form {
         DebugSection()
     }
+    .environmentObject(ProfileStore())
+    .environmentObject(EventStore())
+}
+
+#Preview("Test Result Sheet") {
+    AITestResultSheet(result: AITestResult(
+        surface: .insightBundle,
+        timestamp: Date(),
+        latencyMs: 342,
+        provider: "anthropic",
+        model: "claude-haiku-4-5-20251001",
+        reasoningTags: ["insight_bundle", "schema_validated"],
+        rawResponse: AINudgeBrokerResponse(
+            providerUsed: "anthropic",
+            modelUsed: "claude-haiku-4-5-20251001",
+            reasoningTags: ["insight_bundle", "schema_validated"],
+            insightBundleDecision: AIInsightBundleDecision(
+                confidence: 0.85,
+                dailyStatusDecision: AIDailyStatusDecision(
+                    headline: "Great morning routine!",
+                    subtitle: "3 potty breaks logged before 10am",
+                    confidence: 0.9
+                ),
+                walkOrderingDecision: nil,
+                trainingProgressText: nil,
+                socializationProgressText: nil,
+                loggingRecommendations: []
+            ),
+            notificationPolicyDecision: nil
+        ),
+        error: nil
+    ))
 }
 
 #endif

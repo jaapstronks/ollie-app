@@ -154,6 +154,21 @@ enum AINudgeRollout {
     private static let maxInsightCallsPerDayKey = "ai.nudges.maxInsightCallsPerDay"
     private static let maxNotificationCallsPerDayKey = "ai.nudges.maxNotificationCallsPerDay"
     private static let maxTotalCallsPerDayKey = "ai.nudges.maxTotalCallsPerDay"
+    private static let testModeKey = "ai.nudges.testMode"
+    private static let defaultBrokerBaseURL = "https://ai.otis.pet"
+
+    static func registerDefaults() {
+        let isBeta = AppEnvironment.current.isBeta
+        UserDefaults.standard.register(defaults: [
+            enabledKey: true,
+            rolloutPercentageKey: isBeta ? 100 : 0,
+            shadowModeKey: isBeta,
+            brokerBaseURLKey: defaultBrokerBaseURL,
+            maxInsightCallsPerDayKey: 4,
+            maxNotificationCallsPerDayKey: 6,
+            maxTotalCallsPerDayKey: 10
+        ])
+    }
 
     static var isEnabled: Bool {
         UserDefaults.standard.object(forKey: enabledKey) as? Bool ?? true
@@ -201,5 +216,87 @@ enum AINudgeRollout {
         let fallback = 10
         let raw = UserDefaults.standard.object(forKey: maxTotalCallsPerDayKey) as? Int ?? fallback
         return max(0, raw)
+    }
+
+    /// Test mode bypasses caching, budget limits, rollout checks, and forces shadow mode off
+    /// for manual testing of AI decisions. Only available in DEBUG builds.
+    static var isTestMode: Bool {
+        #if DEBUG
+        return UserDefaults.standard.bool(forKey: testModeKey)
+        #else
+        return false
+        #endif
+    }
+}
+
+// MARK: - Test Results
+
+/// Result from a manual AI test request
+struct AITestResult: Identifiable {
+    let id = UUID()
+    let surface: AINudgeSurface
+    let timestamp: Date
+    let latencyMs: Int
+    let provider: String?
+    let model: String?
+    let reasoningTags: [String]
+    let rawResponse: AINudgeBrokerResponse
+    let error: String?
+
+    var isSuccess: Bool { error == nil }
+
+    var summaryText: String {
+        guard isSuccess else { return "Error: \(error ?? "Unknown")" }
+
+        var lines: [String] = []
+        lines.append("Provider: \(provider ?? "unknown") / \(model ?? "unknown")")
+        lines.append("Latency: \(latencyMs)ms")
+
+        if !reasoningTags.isEmpty {
+            lines.append("Tags: \(reasoningTags.joined(separator: ", "))")
+        }
+
+        if let insight = rawResponse.insightBundleDecision {
+            lines.append("")
+            lines.append("--- Insight Bundle ---")
+            lines.append("Confidence: \(String(format: "%.0f%%", insight.confidence * 100))")
+
+            if let daily = insight.dailyStatusDecision {
+                lines.append("")
+                lines.append("Daily Status:")
+                lines.append("  \"\(daily.headline)\"")
+                if let sub = daily.subtitle {
+                    lines.append("  \"\(sub)\"")
+                }
+                lines.append("  (conf: \(String(format: "%.0f%%", daily.confidence * 100)))")
+            }
+
+            if let walk = insight.walkOrderingDecision {
+                lines.append("")
+                lines.append("Walk Ordering: \(walk.orderedIds.count) items")
+                lines.append("  (conf: \(String(format: "%.0f%%", walk.confidence * 100)))")
+            }
+
+            if !insight.loggingRecommendations.isEmpty {
+                lines.append("")
+                lines.append("Recommendations:")
+                for rec in insight.loggingRecommendations {
+                    lines.append("  [\(rec.category.rawValue)] \(rec.recommendation)")
+                }
+            }
+        }
+
+        if let notif = rawResponse.notificationPolicyDecision {
+            lines.append("")
+            lines.append("--- Notification Policy ---")
+            lines.append("Confidence: \(String(format: "%.0f%%", notif.confidence * 100))")
+            lines.append("Valid for: \(notif.validForMinutes) min")
+            lines.append("Potty delta: \(notif.pottyMinutesDelta > 0 ? "+" : "")\(notif.pottyMinutesDelta) min")
+            lines.append("Walk delta: \(notif.walkMinutesDelta > 0 ? "+" : "")\(notif.walkMinutesDelta) min")
+            lines.append("Suppress potty: \(notif.suppressPotty)")
+            lines.append("Suppress walk: \(notif.suppressWalk)")
+        }
+
+        return lines.joined(separator: "\n")
     }
 }
