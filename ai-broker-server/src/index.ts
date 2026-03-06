@@ -168,9 +168,10 @@ app.post("/ai/nudges/decide", async (req, reply) => {
     const provider = order[i];
     try {
       const attempt = await callProvider(provider, prompt);
-      const jsonText = extractJSONObject(attempt.responseText);
-      const modelOutput = JSON.parse(jsonText) as unknown;
+      // Parse and normalize LLM output with tolerance for common malformations
+      const { output: modelOutput, wasNormalized } = parseAndNormalizeLLMOutput(attempt.responseText, payload.surface);
 
+      // Strict validation after normalization
       if (payload.surface === "insight_bundle") {
         insightDecisionSchema.parse(modelOutput);
       } else {
@@ -178,10 +179,13 @@ app.post("/ai/nudges/decide", async (req, reply) => {
       }
 
       const cost = estimateCost(provider, attempt.inputTokens, attempt.outputTokens);
+      const reasoningTags = buildReasoningTags(payload);
+      if (wasNormalized) reasoningTags.push("output_normalized");
+
       const response = {
         providerUsed: provider,
         modelUsed: attempt.model,
-        reasoningTags: buildReasoningTags(payload),
+        reasoningTags,
         ...(payload.surface === "insight_bundle"
           ? { insightBundleDecision: modelOutput }
           : { notificationPolicyDecision: modelOutput })
@@ -199,6 +203,7 @@ app.post("/ai/nudges/decide", async (req, reply) => {
         inputTokens: cost.inputTokens,
         outputTokens: cost.outputTokens,
         estimatedCostUsd: cost.estimatedCostUsd,
+        wasNormalized,
         latencyMs: Date.now() - startedAt
       });
 
@@ -360,6 +365,188 @@ function extractJSONObject(text: string): string {
   throw new Error("Provider output missing JSON object");
 }
 
+/**
+ * Normalize raw LLM JSON output to fix common malformations before parsing.
+ * Handles: trailing commas, single quotes, unquoted keys, JS comments,
+ * NaN/Infinity literals, and control characters.
+ */
+function normalizeJSONText(text: string): string {
+  let normalized = text;
+
+  // Remove JavaScript-style comments (// and /* */)
+  normalized = normalized.replace(/\/\/[^\n]*\n/g, "\n");
+  normalized = normalized.replace(/\/\*[\s\S]*?\*\//g, "");
+
+  // Replace single quotes with double quotes (for string values)
+  // Be careful: only replace quotes around values, not inside strings
+  normalized = normalized.replace(/'([^'\\]*(\\.[^'\\]*)*)'/g, '"$1"');
+
+  // Quote unquoted keys: { foo: "bar" } -> { "foo": "bar" }
+  normalized = normalized.replace(/([{,]\s*)([a-zA-Z_][a-zA-Z0-9_]*)(\s*:)/g, '$1"$2"$3');
+
+  // Remove trailing commas before } or ]
+  normalized = normalized.replace(/,(\s*[}\]])/g, "$1");
+
+  // Replace NaN/Infinity with null (these are not valid JSON)
+  normalized = normalized.replace(/:\s*NaN\b/g, ": null");
+  normalized = normalized.replace(/:\s*Infinity\b/g, ": null");
+  normalized = normalized.replace(/:\s*-Infinity\b/g, ": null");
+
+  // Remove control characters except \n, \r, \t
+  normalized = normalized.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, "");
+
+  return normalized;
+}
+
+/**
+ * Normalize parsed insight decision to match schema expectations.
+ * Converts string numbers to numbers, ensures arrays exist, etc.
+ */
+function normalizeInsightDecision(raw: unknown): unknown {
+  if (!raw || typeof raw !== "object") return raw;
+  const obj = raw as Record<string, unknown>;
+
+  // Ensure confidence is a number
+  if (typeof obj.confidence === "string") {
+    obj.confidence = parseFloat(obj.confidence) || 0;
+  }
+  if (obj.confidence === undefined || obj.confidence === null) {
+    obj.confidence = 0;
+  }
+
+  // Normalize dailyStatusDecision
+  if (obj.dailyStatusDecision && typeof obj.dailyStatusDecision === "object") {
+    const daily = obj.dailyStatusDecision as Record<string, unknown>;
+    if (typeof daily.confidence === "string") {
+      daily.confidence = parseFloat(daily.confidence) || 0;
+    }
+    if (daily.confidence === undefined || daily.confidence === null) {
+      daily.confidence = 0;
+    }
+    // Ensure headline and subtitle are strings
+    if (daily.headline !== undefined && daily.headline !== null && typeof daily.headline !== "string") {
+      daily.headline = String(daily.headline);
+    }
+    if (daily.subtitle !== undefined && daily.subtitle !== null && typeof daily.subtitle !== "string") {
+      daily.subtitle = String(daily.subtitle);
+    }
+  }
+
+  // Normalize walkOrderingDecision
+  if (obj.walkOrderingDecision && typeof obj.walkOrderingDecision === "object") {
+    const walk = obj.walkOrderingDecision as Record<string, unknown>;
+    if (typeof walk.confidence === "string") {
+      walk.confidence = parseFloat(walk.confidence) || 0;
+    }
+    if (walk.confidence === undefined || walk.confidence === null) {
+      walk.confidence = 0;
+    }
+    // Ensure orderedIds is an array of strings
+    if (!Array.isArray(walk.orderedIds)) {
+      walk.orderedIds = [];
+    } else {
+      walk.orderedIds = walk.orderedIds.map((id: unknown) => (id !== null && id !== undefined ? String(id) : ""));
+    }
+  }
+
+  // Normalize trainingProgressText and socializationProgressText
+  if (obj.trainingProgressText !== undefined && obj.trainingProgressText !== null && typeof obj.trainingProgressText !== "string") {
+    obj.trainingProgressText = String(obj.trainingProgressText);
+  }
+  if (obj.socializationProgressText !== undefined && obj.socializationProgressText !== null && typeof obj.socializationProgressText !== "string") {
+    obj.socializationProgressText = String(obj.socializationProgressText);
+  }
+
+  // Normalize loggingRecommendations array
+  if (!Array.isArray(obj.loggingRecommendations)) {
+    obj.loggingRecommendations = [];
+  } else {
+    obj.loggingRecommendations = obj.loggingRecommendations.map((rec: unknown) => {
+      if (!rec || typeof rec !== "object") return { category: "", recommendation: "", confidence: 0 };
+      const r = rec as Record<string, unknown>;
+      return {
+        category: r.category !== undefined && r.category !== null ? String(r.category) : "",
+        recommendation: r.recommendation !== undefined && r.recommendation !== null ? String(r.recommendation) : "",
+        confidence: typeof r.confidence === "string" ? parseFloat(r.confidence) || 0 : typeof r.confidence === "number" ? r.confidence : 0
+      };
+    });
+  }
+
+  return obj;
+}
+
+/**
+ * Normalize parsed notification decision to match schema expectations.
+ */
+function normalizeNotificationDecision(raw: unknown): unknown {
+  if (!raw || typeof raw !== "object") return raw;
+  const obj = raw as Record<string, unknown>;
+
+  // Ensure all number fields are actually numbers
+  const numberFields = ["confidence", "validForMinutes", "pottyMinutesDelta", "walkMinutesDelta"];
+  for (const field of numberFields) {
+    if (typeof obj[field] === "string") {
+      obj[field] = parseFloat(obj[field] as string) || 0;
+    }
+    if (obj[field] === undefined || obj[field] === null) {
+      // Provide sensible defaults
+      if (field === "confidence") obj[field] = 0;
+      else if (field === "validForMinutes") obj[field] = 60;
+      else obj[field] = 0;
+    }
+  }
+
+  // Ensure boolean fields are actually booleans
+  const boolFields = ["suppressPotty", "suppressWalk"];
+  for (const field of boolFields) {
+    if (typeof obj[field] === "string") {
+      obj[field] = obj[field] === "true" || obj[field] === "1";
+    }
+    if (obj[field] === undefined || obj[field] === null) {
+      obj[field] = false;
+    }
+  }
+
+  return obj;
+}
+
+/**
+ * Parse and normalize LLM output with tolerance for common malformations.
+ * Returns normalized object ready for strict schema validation.
+ */
+function parseAndNormalizeLLMOutput(
+  responseText: string,
+  surface: Surface
+): { output: unknown; wasNormalized: boolean } {
+  // Step 1: Extract JSON object from response (handles markdown wrapping)
+  const jsonText = extractJSONObject(responseText);
+
+  // Step 2: Normalize JSON text syntax issues
+  const normalizedText = normalizeJSONText(jsonText);
+  const textWasNormalized = normalizedText !== jsonText;
+
+  // Step 3: Parse JSON
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(normalizedText);
+  } catch (e) {
+    // If still failing, try original extracted text as fallback
+    parsed = JSON.parse(jsonText);
+  }
+
+  // Step 4: Snapshot before field normalization
+  const beforeNormalization = JSON.stringify(parsed);
+
+  // Step 5: Normalize field types based on surface
+  const output =
+    surface === "insight_bundle" ? normalizeInsightDecision(parsed) : normalizeNotificationDecision(parsed);
+
+  const fieldsWereNormalized = JSON.stringify(output) !== beforeNormalization;
+  const wasNormalized = textWasNormalized || fieldsWereNormalized;
+
+  return { output, wasNormalized };
+}
+
 function buildReasoningTags(payload: BrokerRequest): string[] {
   const tags = [payload.surface, "schema_validated"];
   if (payload.shadowMode) tags.push("shadow_mode");
@@ -394,6 +581,7 @@ async function appendLog(entry: {
   inputTokens?: number | null;
   outputTokens?: number | null;
   estimatedCostUsd?: number | null;
+  wasNormalized?: boolean | null;
   latencyMs: number;
 }) {
   const line = JSON.stringify({
