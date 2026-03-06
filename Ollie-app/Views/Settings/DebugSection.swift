@@ -475,10 +475,9 @@ struct DebugSection: View {
 
     // MARK: - AI Surface Tests
 
+    @MainActor
     private func testInsightBundle() async {
         isTestingInsight = true
-        aiTestResult = nil
-        defer { isTestingInsight = false }
 
         guard let profile = profileStore.profile else {
             aiTestResult = AIOrchestrator.NewAITestResult(
@@ -492,22 +491,25 @@ struct DebugSection: View {
                 rawResponse: nil,
                 error: "No profile found"
             )
+            isTestingInsight = false
+            showTestResultSheet = true
             return
         }
 
         let sevenDaysAgo = Calendar.current.date(byAdding: .day, value: -7, to: Date()) ?? Date()
         let recentEvents = eventStore.getEvents(from: sevenDaysAgo, to: Date())
-        aiTestResult = await AIOrchestrator.shared.testInsightBundle(
+        let result = await AIOrchestrator.shared.testInsightBundle(
             profile: profile,
             recentEvents: recentEvents
         )
+        aiTestResult = result
+        isTestingInsight = false
         showTestResultSheet = true
     }
 
+    @MainActor
     private func testNotificationPolicy() async {
         isTestingNotification = true
-        aiTestResult = nil
-        defer { isTestingNotification = false }
 
         guard let profile = profileStore.profile else {
             aiTestResult = AIOrchestrator.NewAITestResult(
@@ -521,22 +523,25 @@ struct DebugSection: View {
                 rawResponse: nil,
                 error: "No profile found"
             )
+            isTestingNotification = false
+            showTestResultSheet = true
             return
         }
 
         let sevenDaysAgo = Calendar.current.date(byAdding: .day, value: -7, to: Date()) ?? Date()
         let recentEvents = eventStore.getEvents(from: sevenDaysAgo, to: Date())
-        aiTestResult = await AIOrchestrator.shared.testNotificationPolicy(
+        let result = await AIOrchestrator.shared.testNotificationPolicy(
             profile: profile,
             recentEvents: recentEvents
         )
+        aiTestResult = result
+        isTestingNotification = false
         showTestResultSheet = true
     }
 
+    @MainActor
     private func testTrainingGuidance() async {
         isTestingTraining = true
-        aiTestResult = nil
-        defer { isTestingTraining = false }
 
         guard let profile = profileStore.profile else {
             aiTestResult = AIOrchestrator.NewAITestResult(
@@ -550,22 +555,25 @@ struct DebugSection: View {
                 rawResponse: nil,
                 error: "No profile found"
             )
+            isTestingTraining = false
+            showTestResultSheet = true
             return
         }
 
         let sevenDaysAgo = Calendar.current.date(byAdding: .day, value: -7, to: Date()) ?? Date()
         let recentEvents = eventStore.getEvents(from: sevenDaysAgo, to: Date())
-        aiTestResult = await AIOrchestrator.shared.testTrainingGuidance(
+        let result = await AIOrchestrator.shared.testTrainingGuidance(
             profile: profile,
             recentEvents: recentEvents
         )
+        aiTestResult = result
+        isTestingTraining = false
         showTestResultSheet = true
     }
 
+    @MainActor
     private func testPottyAnalysis() async {
         isTestingPotty = true
-        aiTestResult = nil
-        defer { isTestingPotty = false }
 
         guard let profile = profileStore.profile else {
             aiTestResult = AIOrchestrator.NewAITestResult(
@@ -579,22 +587,25 @@ struct DebugSection: View {
                 rawResponse: nil,
                 error: "No profile found"
             )
+            isTestingPotty = false
+            showTestResultSheet = true
             return
         }
 
         let sevenDaysAgo = Calendar.current.date(byAdding: .day, value: -7, to: Date()) ?? Date()
         let recentEvents = eventStore.getEvents(from: sevenDaysAgo, to: Date())
-        aiTestResult = await AIOrchestrator.shared.testPottyAnalysis(
+        let result = await AIOrchestrator.shared.testPottyAnalysis(
             profile: profile,
             recentEvents: recentEvents
         )
+        aiTestResult = result
+        isTestingPotty = false
         showTestResultSheet = true
     }
 
+    @MainActor
     private func testSocializationGuidance() async {
         isTestingSocialization = true
-        aiTestResult = nil
-        defer { isTestingSocialization = false }
 
         guard let profile = profileStore.profile else {
             aiTestResult = AIOrchestrator.NewAITestResult(
@@ -608,22 +619,25 @@ struct DebugSection: View {
                 rawResponse: nil,
                 error: "No profile found"
             )
+            isTestingSocialization = false
+            showTestResultSheet = true
             return
         }
 
         let sevenDaysAgo = Calendar.current.date(byAdding: .day, value: -7, to: Date()) ?? Date()
         let recentEvents = eventStore.getEvents(from: sevenDaysAgo, to: Date())
-        aiTestResult = await AIOrchestrator.shared.testSocializationGuidance(
+        let result = await AIOrchestrator.shared.testSocializationGuidance(
             profile: profile,
             recentEvents: recentEvents
         )
+        aiTestResult = result
+        isTestingSocialization = false
         showTestResultSheet = true
     }
 
+    @MainActor
     private func testHealthInsights() async {
         isTestingHealth = true
-        aiTestResult = nil
-        defer { isTestingHealth = false }
 
         guard let profile = profileStore.profile else {
             aiTestResult = AIOrchestrator.NewAITestResult(
@@ -637,15 +651,19 @@ struct DebugSection: View {
                 rawResponse: nil,
                 error: "No profile found"
             )
+            isTestingHealth = false
+            showTestResultSheet = true
             return
         }
 
         let sevenDaysAgo = Calendar.current.date(byAdding: .day, value: -7, to: Date()) ?? Date()
         let recentEvents = eventStore.getEvents(from: sevenDaysAgo, to: Date())
-        aiTestResult = await AIOrchestrator.shared.testHealthInsights(
+        let result = await AIOrchestrator.shared.testHealthInsights(
             profile: profile,
             recentEvents: recentEvents
         )
+        aiTestResult = result
+        isTestingHealth = false
         showTestResultSheet = true
     }
 
