@@ -51,6 +51,9 @@ struct PottyTrainingGuideSheet: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 20) {
+                    // AI Potty Analysis (personalized insights)
+                    AIPottyAnalysisCard()
+
                     // Stats section
                     if hasData {
                         statsSection
@@ -150,7 +153,7 @@ struct PottyTrainingGuideSheet: View {
         .padding(12)
         .background(
             RoundedRectangle(cornerRadius: 12, style: .continuous)
-                .fill(color.opacity(colorScheme == .dark ? 0.15 : 0.08))
+                .fill(color.backgroundOpacity(colorScheme: colorScheme))
         )
     }
 
@@ -169,7 +172,7 @@ struct PottyTrainingGuideSheet: View {
         .padding(.vertical, 4)
         .background(
             Capsule()
-                .fill(trigger.iconColor.opacity(colorScheme == .dark ? 0.2 : 0.1))
+                .fill(trigger.iconColor.badgeOpacity(colorScheme: colorScheme))
         )
     }
 
@@ -214,31 +217,14 @@ struct PottyTrainingGuideSheet: View {
                 .fontWeight(.semibold)
 
             VStack(spacing: 8) {
-                principleRow(text: Strings.Training.Guides.principleTiming, icon: "clock.fill")
-                principleRow(text: Strings.Training.Guides.principleReward, icon: "star.fill")
-                principleRow(text: Strings.Training.Guides.principleSupervise, icon: "eye.fill")
-                principleRow(text: Strings.Training.Guides.principlePatience, icon: "heart.fill")
+                InfoListRow.principle(Strings.Training.Guides.principleTiming, icon: "clock.fill")
+                InfoListRow.principle(Strings.Training.Guides.principleReward, icon: "star.fill")
+                InfoListRow.principle(Strings.Training.Guides.principleSupervise, icon: "eye.fill")
+                InfoListRow.principle(Strings.Training.Guides.principlePatience, icon: "heart.fill")
             }
         }
         .padding()
         .glassStatusCard(tintColor: nil)
-    }
-
-    @ViewBuilder
-    private func principleRow(text: String, icon: String) -> some View {
-        HStack(alignment: .top, spacing: 10) {
-            Image(systemName: icon)
-                .font(.caption)
-                .foregroundStyle(Color.otisAccent)
-                .frame(width: 16)
-
-            Text(text)
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-                .fixedSize(horizontal: false, vertical: true)
-
-            Spacer()
-        }
     }
 
     // MARK: - Age-Based Tips Section
@@ -259,7 +245,7 @@ struct PottyTrainingGuideSheet: View {
 
             VStack(spacing: 8) {
                 ForEach(phaseTips, id: \.self) { tip in
-                    tipRow(text: tip)
+                    InfoListRow.tip(tip)
                 }
             }
         }
@@ -301,23 +287,6 @@ struct PottyTrainingGuideSheet: View {
         }
     }
 
-    @ViewBuilder
-    private func tipRow(text: String) -> some View {
-        HStack(alignment: .top, spacing: 10) {
-            Image(systemName: "checkmark.circle.fill")
-                .font(.caption)
-                .foregroundStyle(Color.otisSuccess)
-                .frame(width: 16)
-
-            Text(text)
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-                .fixedSize(horizontal: false, vertical: true)
-
-            Spacer()
-        }
-    }
-
     // MARK: - Common Mistakes Section
 
     @ViewBuilder
@@ -328,31 +297,14 @@ struct PottyTrainingGuideSheet: View {
                 .fontWeight(.semibold)
 
             VStack(spacing: 8) {
-                mistakeRow(text: Strings.Training.Guides.pottyMistake1)
-                mistakeRow(text: Strings.Training.Guides.pottyMistake2)
-                mistakeRow(text: Strings.Training.Guides.pottyMistake3)
-                mistakeRow(text: Strings.Training.Guides.pottyMistake4)
+                InfoListRow.warning(Strings.Training.Guides.pottyMistake1)
+                InfoListRow.warning(Strings.Training.Guides.pottyMistake2)
+                InfoListRow.warning(Strings.Training.Guides.pottyMistake3)
+                InfoListRow.warning(Strings.Training.Guides.pottyMistake4)
             }
         }
         .padding()
         .glassStatusCard(tintColor: .otisWarning.opacity(0.1))
-    }
-
-    @ViewBuilder
-    private func mistakeRow(text: String) -> some View {
-        HStack(alignment: .top, spacing: 10) {
-            Image(systemName: "xmark.circle.fill")
-                .font(.caption)
-                .foregroundStyle(Color.otisWarning)
-                .frame(width: 16)
-
-            Text(text)
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-                .fixedSize(horizontal: false, vertical: true)
-
-            Spacer()
-        }
     }
 }
 

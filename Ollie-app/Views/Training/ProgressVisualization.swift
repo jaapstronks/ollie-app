@@ -55,7 +55,7 @@ struct SkillPhaseTimeline: View {
                         .font(.system(size: isCompact ? 9 : 12, weight: .bold))
                         .foregroundStyle(.white)
                 } else if isActive {
-                    Image(systemName: phaseIcon(phase))
+                    Image(systemName: phase.icon)
                         .font(.system(size: isCompact ? 9 : 12, weight: .semibold))
                         .foregroundStyle(.white)
                 } else {
@@ -66,7 +66,7 @@ struct SkillPhaseTimeline: View {
             }
 
             if !isCompact {
-                Text(phaseShortLabel(phase))
+                Text(phase.shortLabel)
                     .font(.system(size: 9))
                     .foregroundStyle(isActive ? .primary : .secondary)
                     .lineLimit(1)
@@ -109,27 +109,8 @@ struct SkillPhaseTimeline: View {
         return phaseIndex < currentIndex
     }
 
-    private func phaseIcon(_ phase: SkillLearningPhase) -> String {
-        switch phase {
-        case .luring: return "hand.point.right.fill"
-        case .addingCue: return "speaker.wave.2.fill"
-        case .proofing: return "chart.bar.fill"
-        case .generalizing: return "location.fill"
-        case .maintaining: return "checkmark.seal.fill"
-        default: return "circle"
-        }
-    }
-
-    private func phaseShortLabel(_ phase: SkillLearningPhase) -> String {
-        switch phase {
-        case .luring: return "Lure"
-        case .addingCue: return "Cue"
-        case .proofing: return "Proof"
-        case .generalizing: return "Gen."
-        case .maintaining: return "Done"
-        default: return ""
-        }
-    }
+    // phaseIcon is now available via SkillLearningPhase.icon
+    // phaseShortLabel is now available via SkillLearningPhase.shortLabel
 }
 
 // MARK: - 3D Proofing Indicator
@@ -458,12 +439,12 @@ struct InlineProgressSummary: View {
     private var phaseIndicator: some View {
         HStack(spacing: 3) {
             Circle()
-                .fill(phaseColor)
+                .fill(phase.color)
                 .frame(width: 6, height: 6)
 
-            Text(phaseLabel)
+            Text(phase.label)
                 .font(.caption2)
-                .foregroundStyle(phaseColor)
+                .foregroundStyle(phase.color)
         }
     }
 
@@ -488,27 +469,42 @@ struct InlineProgressSummary: View {
         .foregroundStyle(Color.otisSuccess)
     }
 
-    private var phaseColor: Color {
-        switch phase {
-        case .notStarted: return .secondary
-        case .luring: return Color.otisInfo
-        case .addingCue: return Color.otisPurple
-        case .proofing: return Color.otisAccent
-        case .generalizing: return Color.otisSuccess.opacity(0.8)
-        case .maintaining: return Color.otisSuccess
-        case .needsWork: return Color.otisDanger
+    // Phase color and label now come from SkillLearningPhase extension (OtisColors.swift)
+}
+
+// MARK: - Inline Proofing Indicator (for SkillProgressRow)
+
+/// Mini 3-bar indicator for inline display in skill rows
+struct InlineProofingIndicator: View {
+    let levels: ProofingLevels
+
+    private let barWidth: CGFloat = 3
+    private let barSpacing: CGFloat = 2
+    private let maxHeight: CGFloat = 12
+
+    var body: some View {
+        HStack(spacing: barSpacing) {
+            proofingBar(level: levels.distance)
+            proofingBar(level: levels.duration)
+            proofingBar(level: levels.distraction)
         }
     }
 
-    private var phaseLabel: String {
-        switch phase {
-        case .notStarted: return "Not started"
-        case .luring: return "Luring"
-        case .addingCue: return "Adding cue"
-        case .proofing: return "Proofing"
-        case .generalizing: return "Generalizing"
-        case .maintaining: return "Mastered"
-        case .needsWork: return "Needs work"
+    @ViewBuilder
+    private func proofingBar(level: Int) -> some View {
+        let normalizedLevel = min(max(level, 0), 5)
+        let fillHeight = CGFloat(normalizedLevel) / 5.0 * maxHeight
+
+        ZStack(alignment: .bottom) {
+            // Background
+            RoundedRectangle(cornerRadius: 1)
+                .fill(Color.otisAccent.opacity(0.15))
+                .frame(width: barWidth, height: maxHeight)
+
+            // Fill
+            RoundedRectangle(cornerRadius: 1)
+                .fill(Color.otisAccent)
+                .frame(width: barWidth, height: max(fillHeight, 0))
         }
     }
 }

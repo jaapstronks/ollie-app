@@ -92,6 +92,39 @@ struct SkillProgressInfo: Identifiable {
         self.isDueForReview = isDueForReview
         self.daysUntilReview = daysUntilReview
     }
+
+    /// Initialize with complete progress data including proofing and contexts
+    init(
+        skill: Skill,
+        status: SkillStatus,
+        sessionCount: Int,
+        isLocked: Bool,
+        isNextUp: Bool,
+        missingRequirements: [Skill],
+        learningPhase: SkillLearningPhase?,
+        confidenceScore: Double?,
+        isDueForReview: Bool,
+        daysUntilReview: Int?,
+        proofingLevels: ProofingLevels?,
+        practicedContexts: [TrainingContext],
+        maintenanceTier: Int?,
+        nextReviewDate: Date?
+    ) {
+        self.skill = skill
+        self.status = status
+        self.sessionCount = sessionCount
+        self.isLocked = isLocked
+        self.isNextUp = isNextUp
+        self.missingRequirements = missingRequirements
+        self.learningPhase = learningPhase
+        self.confidenceScore = confidenceScore
+        self.isDueForReview = isDueForReview
+        self.daysUntilReview = daysUntilReview
+        self.proofingLevels = proofingLevels
+        self.practicedContexts = practicedContexts
+        self.maintenanceTier = maintenanceTier
+        self.nextReviewDate = nextReviewDate
+    }
 }
 
 /// Unified row for displaying any skill with its current status
@@ -120,6 +153,18 @@ struct SkillProgressRow: View {
             return (Strings.Training.Progression.nextUp, .otisAccent)
         }
         return nil
+    }
+
+    // Whether confidence indicator is currently visible
+    // Confidence only shows for phases where reliability matters (proofing+)
+    private var isConfidenceVisible: Bool {
+        guard let confidence = info.confidenceScore,
+              let phase = info.learningPhase,
+              !info.isLocked,
+              info.status != .mastered else {
+            return false
+        }
+        return phase.shouldShowConfidence && confidence > 0
     }
 
     var body: some View {
@@ -164,13 +209,20 @@ struct SkillProgressRow: View {
 
                 Spacer(minLength: 8)
 
-                // Confidence score (if available and in progress)
-                if let confidence = info.confidenceScore, !info.isLocked, info.status != .mastered, info.status != .notStarted {
+                // Confidence score - only show for phases where reliability matters
+                // Early phases (luring, addingCue) are about learning the behavior, not reliability
+                // Showing 100% confidence with 1 rep is misleading
+                if let confidence = info.confidenceScore,
+                   let phase = info.learningPhase,
+                   !info.isLocked,
+                   info.status != .mastered,
+                   phase.shouldShowConfidence {
                     confidenceIndicator(confidence)
                 }
 
-                // Session count badge (if any sessions and not mastered, and no confidence shown)
-                if info.sessionCount > 0 && !info.isLocked && info.status != .mastered && info.confidenceScore == nil {
+                // Session count badge (if any sessions and not mastered, and confidence not visible)
+                // Show session count when: no confidence score OR phase doesn't show confidence
+                if info.sessionCount > 0 && !info.isLocked && info.status != .mastered && !isConfidenceVisible {
                     Text("\(info.sessionCount)")
                         .font(.caption)
                         .fontWeight(.medium)
@@ -288,22 +340,12 @@ struct SkillProgressRow: View {
         }
         // Use learning phase icon if available
         if let phase = info.learningPhase {
-            return phaseIcon(for: phase)
+            return phase.icon
         }
         return info.status.statusIndicatorIcon
     }
 
-    private func phaseIcon(for phase: SkillLearningPhase) -> String {
-        switch phase {
-        case .notStarted: return "circle"
-        case .luring: return "hand.point.right.fill"
-        case .addingCue: return "speaker.wave.2.fill"
-        case .proofing: return "chart.bar.fill"
-        case .generalizing: return "location.fill"
-        case .maintaining: return "checkmark.seal.fill"
-        case .needsWork: return "exclamationmark.triangle.fill"
-        }
-    }
+    // phaseIcon and phaseColor are now available via SkillLearningPhase.icon and .color
 
     private var statusColor: Color {
         if info.isLocked {
@@ -311,21 +353,9 @@ struct SkillProgressRow: View {
         }
         // Use learning phase color if available
         if let phase = info.learningPhase {
-            return phaseColor(for: phase)
+            return phase.color
         }
         return info.status.color
-    }
-
-    private func phaseColor(for phase: SkillLearningPhase) -> Color {
-        switch phase {
-        case .notStarted: return .secondary
-        case .luring: return .otisInfo
-        case .addingCue: return .otisPurple
-        case .proofing: return .otisAccent
-        case .generalizing: return .otisSuccess.opacity(0.8)
-        case .maintaining: return .otisSuccess
-        case .needsWork: return .otisDanger
-        }
     }
 
     private var iconColor: Color {
@@ -350,7 +380,7 @@ struct SkillProgressRow: View {
             HStack(spacing: 6) {
                 // Show learning phase if available, otherwise fall back to simple status
                 if let phase = info.learningPhase {
-                    Text(phaseLabel(for: phase))
+                    Text(phase.label)
                         .font(.caption)
                         .foregroundStyle(statusColor)
                 } else {
@@ -370,20 +400,24 @@ struct SkillProgressRow: View {
                     }
                     .foregroundStyle(method == .operant ? Color.purple : Color.blue)
                 }
-            }
-        }
-    }
 
-    /// Get localized label for learning phase
-    private func phaseLabel(for phase: SkillLearningPhase) -> String {
-        switch phase {
-        case .notStarted: return Strings.Training.statusNotStarted
-        case .luring: return Strings.Training.phaseLuring
-        case .addingCue: return Strings.Training.phaseAddingCue
-        case .proofing: return Strings.Training.phaseProofing
-        case .generalizing: return Strings.Training.phaseGeneralizing
-        case .maintaining: return Strings.Training.statusMastered
-        case .needsWork: return Strings.Training.refresherNeeded
+                // Inline proofing indicator (compact 3-bar)
+                if let levels = info.proofingLevels,
+                   info.learningPhase == .proofing || info.learningPhase == .generalizing {
+                    Text("•")
+                        .foregroundStyle(.tertiary)
+                    InlineProofingIndicator(levels: levels)
+                }
+
+                // Context count for generalizing
+                if !info.practicedContexts.isEmpty && info.learningPhase == .generalizing {
+                    Text("•")
+                        .foregroundStyle(.tertiary)
+                    Text("\(info.practicedContexts.count) contexts")
+                        .font(.caption2)
+                        .foregroundStyle(.tertiary)
+                }
+            }
         }
     }
 

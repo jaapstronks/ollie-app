@@ -122,7 +122,7 @@ struct RegressionAlertBanner: View {
 
     private var chipBackground: some View {
         Capsule()
-            .fill(Color.orange.opacity(colorScheme == .dark ? 0.2 : 0.1))
+            .fill(Color.orange.badgeOpacity(colorScheme: colorScheme))
     }
 
     private var chipBorder: some View {
@@ -132,7 +132,7 @@ struct RegressionAlertBanner: View {
 
     private var backgroundShape: some View {
         RoundedRectangle(cornerRadius: 16, style: .continuous)
-            .fill(Color.orange.opacity(colorScheme == .dark ? 0.08 : 0.05))
+            .fill(Color.orange.subtleBackgroundOpacity(colorScheme: colorScheme))
     }
 
     private var borderShape: some View {
