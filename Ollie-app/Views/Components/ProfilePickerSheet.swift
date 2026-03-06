@@ -22,13 +22,27 @@ struct ProfilePickerSheet: View {
     @State private var showDeleteConfirmation = false
     @State private var showLeaveConfirmation = false
 
+    /// Profiles sorted with the active profile at the top
+    private var sortedProfiles: [PuppyProfile] {
+        profileStore.profiles.sorted { lhs, rhs in
+            // Active profile comes first
+            let lhsIsActive = lhs.id == profileStore.activeProfileId
+            let rhsIsActive = rhs.id == profileStore.activeProfileId
+            if lhsIsActive != rhsIsActive {
+                return lhsIsActive
+            }
+            // Otherwise maintain original order (by name as fallback)
+            return lhs.name.localizedCompare(rhs.name) == .orderedAscending
+        }
+    }
+
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
                 // Profile list
                 ScrollView {
                     VStack(spacing: 12) {
-                        ForEach(profileStore.profiles, id: \.id) { profile in
+                        ForEach(sortedProfiles, id: \.id) { profile in
                             ProfilePickerRow(
                                 profile: profile,
                                 isActive: profile.id == profileStore.activeProfileId,
