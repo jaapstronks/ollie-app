@@ -555,6 +555,17 @@ extension Strings {
 
             // Encouragement
             static let encouragement = String(localized: "Most puppies love their crate within a week. It becomes their happy place.", table: table)
+
+            // Mastery
+            static let markMastered = String(localized: "Mark as Mastered", table: table)
+            static let markMasteredDescription = String(localized: "Your pup is comfortable sleeping in the crate whenever needed", table: table)
+            static let mastered = String(localized: "Mastered", table: table)
+            static let masteredCelebration = String(localized: "Crate training complete!", table: table)
+            static let masteredDescription = String(localized: "Your pup is crate trained. They can sleep comfortably in the crate whenever needed.", table: table)
+            static let reactivateTracking = String(localized: "Having issues? Reactivate tracking", table: table)
+            static func masteredOn(date: String) -> String {
+                String(localized: "Mastered on \(date)", table: table)
+            }
         }
 
         // Skill content - names, descriptions, done criteria, how-to steps, tips

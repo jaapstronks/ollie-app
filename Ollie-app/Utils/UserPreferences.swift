@@ -198,6 +198,10 @@ enum UserPreferences {
         // Training settings
         case showFloatingClicker = "showFloatingClicker"
 
+        // Training guide mastery
+        case crateTrainingMastered = "crateTrainingMastered"
+        case crateTrainingMasteredDate = "crateTrainingMasteredDate"
+
         // First week card
         case firstWeekCardCollapsedDate = "firstWeekCardCollapsedDate"
         case needsFirstSessionHandoff = "needsFirstSessionHandoff"
@@ -225,6 +229,7 @@ enum UserPreferences {
 
         // Training defaults
         Key.showFloatingClicker.rawValue: false,
+        Key.crateTrainingMastered.rawValue: false,
 
         // Onboarding follow-up defaults
         Key.needsFirstSessionHandoff.rawValue: false

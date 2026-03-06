@@ -27,6 +27,9 @@ struct TrainTabView: View {
     // First-visit tip tracking
     @AppStorage("hasSeenTrainTip") private var hasSeenTrainTip = false
 
+    // Crate training mastery
+    @AppStorage(UserPreferences.Key.crateTrainingMastered.rawValue) private var crateTrainingMastered = false
+
     /// Calculate crate nap percentage for guide entry card
     private var crateNapPercentage: Int {
         let recentNaps = eventStore.events
@@ -112,9 +115,12 @@ struct TrainTabView: View {
             TrainingGuideEntryCard(
                 icon: "house.fill",
                 title: Strings.Training.Guides.crateTitle,
-                subtitle: Strings.Training.Guides.crateSubtitle,
-                statValue: crateNapPercentage > 0 ? "\(crateNapPercentage)%" : nil,
-                tintColor: .indigo
+                subtitle: crateTrainingMastered
+                    ? Strings.Training.CrateTraining.masteredDescription
+                    : Strings.Training.Guides.crateSubtitle,
+                statValue: crateTrainingMastered ? nil : (crateNapPercentage > 0 ? "\(crateNapPercentage)%" : nil),
+                tintColor: .indigo,
+                isMastered: crateTrainingMastered
             ) {
                 showCrateGuide = true
             }
