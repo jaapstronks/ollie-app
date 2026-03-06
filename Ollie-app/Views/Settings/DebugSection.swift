@@ -28,6 +28,14 @@ struct DebugSection: View {
     @State private var aiTestResult: AITestResult?
     @State private var showTestResultSheet = false
 
+    // New surface testing state
+    @State private var isTestingTraining = false
+    @State private var isTestingPotty = false
+    @State private var isTestingSocialization = false
+    @State private var isTestingHealth = false
+    @State private var newAITestResult: AIOrchestrator.NewAITestResult?
+    @State private var showNewTestResultSheet = false
+
     // AI broker debug config (stored in UserDefaults via AINudgeRollout keys)
     @AppStorage("ai.nudges.brokerBaseURL") private var aiBrokerBaseURL = "https://ai.otis.pet"
     @AppStorage("ai.nudges.brokerApiKey") private var aiBrokerApiKey = ""
@@ -172,7 +180,7 @@ struct DebugSection: View {
             Text("Configure broker URL/key and rollout locally for debug testing. Production should use remote config and HTTPS.")
         }
 
-        // AI Manual Testing Section
+        // AI Manual Testing Section (Legacy)
         Section {
             Button {
                 Task { await testInsightBundle() }
@@ -234,13 +242,110 @@ struct DebugSection: View {
                 }
             }
         } header: {
-            Label("AI Manual Testing", systemImage: "hammer")
+            Label("AI Legacy Surfaces", systemImage: "hammer")
         } footer: {
-            Text("Manually trigger AI requests to test prompts and inspect responses. Bypasses caching, budget limits, and rollout checks.")
+            Text("Test legacy AI surfaces (insight bundle, notification policy).")
         }
         .sheet(isPresented: $showTestResultSheet) {
             if let result = aiTestResult {
                 AITestResultSheet(result: result)
+            }
+        }
+
+        // New AI Surfaces Testing Section
+        Section {
+            Button {
+                Task { await testTrainingGuidance() }
+            } label: {
+                HStack {
+                    Label("Training Guidance", systemImage: "figure.walk")
+                    Spacer()
+                    if isTestingTraining {
+                        ProgressView()
+                    } else {
+                        Image(systemName: "play.fill")
+                            .foregroundStyle(.secondary)
+                    }
+                }
+            }
+            .disabled(isTestingTraining || isTestingPotty || isTestingSocialization || isTestingHealth || aiBrokerApiKey.isEmpty)
+
+            Button {
+                Task { await testPottyAnalysis() }
+            } label: {
+                HStack {
+                    Label("Potty Analysis", systemImage: "leaf.fill")
+                    Spacer()
+                    if isTestingPotty {
+                        ProgressView()
+                    } else {
+                        Image(systemName: "play.fill")
+                            .foregroundStyle(.secondary)
+                    }
+                }
+            }
+            .disabled(isTestingTraining || isTestingPotty || isTestingSocialization || isTestingHealth || aiBrokerApiKey.isEmpty)
+
+            Button {
+                Task { await testSocializationGuidance() }
+            } label: {
+                HStack {
+                    Label("Socialization Guidance", systemImage: "person.3.fill")
+                    Spacer()
+                    if isTestingSocialization {
+                        ProgressView()
+                    } else {
+                        Image(systemName: "play.fill")
+                            .foregroundStyle(.secondary)
+                    }
+                }
+            }
+            .disabled(isTestingTraining || isTestingPotty || isTestingSocialization || isTestingHealth || aiBrokerApiKey.isEmpty)
+
+            Button {
+                Task { await testHealthInsights() }
+            } label: {
+                HStack {
+                    Label("Health Insights", systemImage: "heart.fill")
+                    Spacer()
+                    if isTestingHealth {
+                        ProgressView()
+                    } else {
+                        Image(systemName: "play.fill")
+                            .foregroundStyle(.secondary)
+                    }
+                }
+            }
+            .disabled(isTestingTraining || isTestingPotty || isTestingSocialization || isTestingHealth || aiBrokerApiKey.isEmpty)
+
+            if let result = newAITestResult {
+                Button {
+                    showNewTestResultSheet = true
+                } label: {
+                    HStack {
+                        Image(systemName: result.isSuccess ? "checkmark.circle.fill" : "xmark.circle.fill")
+                            .foregroundStyle(result.isSuccess ? .green : .red)
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(result.surface.rawValue.replacingOccurrences(of: "_", with: " ").capitalized)
+                                .font(.subheadline)
+                            Text("\(result.latencyMs)ms • \(result.provider ?? "error")")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .foregroundStyle(.secondary)
+                    }
+                }
+            }
+        } header: {
+            Label("AI New Surfaces", systemImage: "sparkles.rectangle.stack")
+        } footer: {
+            Text("Test new modular AI surfaces. Requires updated broker server.")
+        }
+        .sheet(isPresented: $showNewTestResultSheet) {
+            if let result = newAITestResult {
+                NewAITestResultSheet(result: result)
             }
         }
 
@@ -470,6 +575,124 @@ struct DebugSection: View {
         showTestResultSheet = true
     }
 
+    // MARK: - New AI Surface Tests
+
+    private func testTrainingGuidance() async {
+        isTestingTraining = true
+        newAITestResult = nil
+        defer { isTestingTraining = false }
+
+        guard let profile = profileStore.profile else {
+            newAITestResult = AIOrchestrator.NewAITestResult(
+                surface: .trainingGuidance,
+                timestamp: Date(),
+                latencyMs: 0,
+                provider: nil,
+                model: nil,
+                reasoningTags: [],
+                response: nil,
+                rawResponse: nil,
+                error: "No profile found"
+            )
+            return
+        }
+
+        let sevenDaysAgo = Calendar.current.date(byAdding: .day, value: -7, to: Date()) ?? Date()
+        let recentEvents = eventStore.getEvents(from: sevenDaysAgo, to: Date())
+        newAITestResult = await AIOrchestrator.shared.testTrainingGuidance(
+            profile: profile,
+            recentEvents: recentEvents
+        )
+        showNewTestResultSheet = true
+    }
+
+    private func testPottyAnalysis() async {
+        isTestingPotty = true
+        newAITestResult = nil
+        defer { isTestingPotty = false }
+
+        guard let profile = profileStore.profile else {
+            newAITestResult = AIOrchestrator.NewAITestResult(
+                surface: .pottyAnalysis,
+                timestamp: Date(),
+                latencyMs: 0,
+                provider: nil,
+                model: nil,
+                reasoningTags: [],
+                response: nil,
+                rawResponse: nil,
+                error: "No profile found"
+            )
+            return
+        }
+
+        let sevenDaysAgo = Calendar.current.date(byAdding: .day, value: -7, to: Date()) ?? Date()
+        let recentEvents = eventStore.getEvents(from: sevenDaysAgo, to: Date())
+        newAITestResult = await AIOrchestrator.shared.testPottyAnalysis(
+            profile: profile,
+            recentEvents: recentEvents
+        )
+        showNewTestResultSheet = true
+    }
+
+    private func testSocializationGuidance() async {
+        isTestingSocialization = true
+        newAITestResult = nil
+        defer { isTestingSocialization = false }
+
+        guard let profile = profileStore.profile else {
+            newAITestResult = AIOrchestrator.NewAITestResult(
+                surface: .socializationGuidance,
+                timestamp: Date(),
+                latencyMs: 0,
+                provider: nil,
+                model: nil,
+                reasoningTags: [],
+                response: nil,
+                rawResponse: nil,
+                error: "No profile found"
+            )
+            return
+        }
+
+        let sevenDaysAgo = Calendar.current.date(byAdding: .day, value: -7, to: Date()) ?? Date()
+        let recentEvents = eventStore.getEvents(from: sevenDaysAgo, to: Date())
+        newAITestResult = await AIOrchestrator.shared.testSocializationGuidance(
+            profile: profile,
+            recentEvents: recentEvents
+        )
+        showNewTestResultSheet = true
+    }
+
+    private func testHealthInsights() async {
+        isTestingHealth = true
+        newAITestResult = nil
+        defer { isTestingHealth = false }
+
+        guard let profile = profileStore.profile else {
+            newAITestResult = AIOrchestrator.NewAITestResult(
+                surface: .healthInsights,
+                timestamp: Date(),
+                latencyMs: 0,
+                provider: nil,
+                model: nil,
+                reasoningTags: [],
+                response: nil,
+                rawResponse: nil,
+                error: "No profile found"
+            )
+            return
+        }
+
+        let sevenDaysAgo = Calendar.current.date(byAdding: .day, value: -7, to: Date()) ?? Date()
+        let recentEvents = eventStore.getEvents(from: sevenDaysAgo, to: Date())
+        newAITestResult = await AIOrchestrator.shared.testHealthInsights(
+            profile: profile,
+            recentEvents: recentEvents
+        )
+        showNewTestResultSheet = true
+    }
+
     // MARK: - AI Broker Test
 
     private func testBrokerHealth() async {
@@ -596,6 +819,87 @@ private struct MetadataRow: View {
             Spacer()
             Text(value)
                 .font(.system(.body, design: .monospaced))
+        }
+    }
+}
+
+// MARK: - New AI Test Result Sheet
+
+struct NewAITestResultSheet: View {
+    let result: AIOrchestrator.NewAITestResult
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        NavigationStack {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 16) {
+                    // Header
+                    HStack {
+                        Image(systemName: result.isSuccess ? "checkmark.circle.fill" : "xmark.circle.fill")
+                            .font(.title)
+                            .foregroundStyle(result.isSuccess ? .green : .red)
+                        VStack(alignment: .leading) {
+                            Text(result.surface.rawValue.replacingOccurrences(of: "_", with: " ").capitalized)
+                                .font(.headline)
+                            Text(result.timestamp.formatted(date: .abbreviated, time: .standard))
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                    .padding()
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(Color(.secondarySystemBackground))
+                    .cornerRadius(12)
+
+                    // Metadata
+                    if result.isSuccess {
+                        VStack(alignment: .leading, spacing: 8) {
+                            MetadataRow(label: "Provider", value: result.provider ?? "unknown")
+                            MetadataRow(label: "Model", value: result.model ?? "unknown")
+                            MetadataRow(label: "Latency", value: "\(result.latencyMs)ms")
+                            if !result.reasoningTags.isEmpty {
+                                MetadataRow(label: "Tags", value: result.reasoningTags.joined(separator: ", "))
+                            }
+                        }
+                        .padding()
+                        .background(Color(.secondarySystemBackground))
+                        .cornerRadius(12)
+                    }
+
+                    // Full Response
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Response")
+                            .font(.headline)
+
+                        Text(result.summaryText)
+                            .font(.system(.caption, design: .monospaced))
+                            .textSelection(.enabled)
+                            .padding()
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .background(Color(.tertiarySystemBackground))
+                            .cornerRadius(8)
+                    }
+
+                    // Copy button
+                    Button {
+                        UIPasteboard.general.string = result.summaryText
+                    } label: {
+                        Label("Copy to Clipboard", systemImage: "doc.on.doc")
+                            .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.bordered)
+                }
+                .padding()
+            }
+            .navigationTitle("AI Test Result")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Done") {
+                        dismiss()
+                    }
+                }
+            }
         }
     }
 }

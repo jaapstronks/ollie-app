@@ -429,3 +429,150 @@ private extension Date {
         return "\(formatter.string(from: day))-\(window)"
     }
 }
+
+// MARK: - Manual Test Methods (DEBUG only)
+
+#if DEBUG
+extension AIOrchestrator {
+
+    /// Test result for new AI surfaces
+    struct NewAITestResult {
+        let surface: AISurface
+        let timestamp: Date
+        let latencyMs: Int
+        let provider: String?
+        let model: String?
+        let reasoningTags: [String]
+        let response: Any?
+        let rawResponse: String?
+        let error: String?
+
+        var isSuccess: Bool { error == nil && response != nil }
+
+        var summaryText: String {
+            if let error = error {
+                return "Error: \(error)"
+            }
+            if let response = response {
+                if let data = try? JSONSerialization.data(withJSONObject: response, options: .prettyPrinted),
+                   let string = String(data: data, encoding: .utf8) {
+                    return string
+                }
+                return String(describing: response)
+            }
+            return "No response"
+        }
+    }
+
+    /// Manually trigger a training guidance request for testing.
+    func testTrainingGuidance(
+        profile: PuppyProfile,
+        recentEvents: [PuppyEvent]
+    ) async -> NewAITestResult {
+        await testSurface(.trainingGuidance, profile: profile, recentEvents: recentEvents)
+    }
+
+    /// Manually trigger a potty analysis request for testing.
+    func testPottyAnalysis(
+        profile: PuppyProfile,
+        recentEvents: [PuppyEvent]
+    ) async -> NewAITestResult {
+        await testSurface(.pottyAnalysis, profile: profile, recentEvents: recentEvents)
+    }
+
+    /// Manually trigger a socialization guidance request for testing.
+    func testSocializationGuidance(
+        profile: PuppyProfile,
+        recentEvents: [PuppyEvent]
+    ) async -> NewAITestResult {
+        await testSurface(.socializationGuidance, profile: profile, recentEvents: recentEvents)
+    }
+
+    /// Manually trigger a health insights request for testing.
+    func testHealthInsights(
+        profile: PuppyProfile,
+        recentEvents: [PuppyEvent]
+    ) async -> NewAITestResult {
+        await testSurface(.healthInsights, profile: profile, recentEvents: recentEvents)
+    }
+
+    private func testSurface(
+        _ surface: AISurface,
+        profile: PuppyProfile,
+        recentEvents: [PuppyEvent]
+    ) async -> NewAITestResult {
+        let start = Date()
+
+        // Build context
+        let contextPayload = contextBuilder.buildContext(
+            for: surface,
+            profile: profile,
+            recentEvents: recentEvents
+        )
+
+        // Build request
+        let request = AIInstructions.buildBrokerRequest(
+            surface: surface,
+            context: contextPayload,
+            providerPolicy: AIVendorPolicy(preferredOrder: [.anthropic], allowFailover: true),
+            shadowMode: false
+        )
+
+        do {
+            // Encode and send request
+            let jsonData = try JSONEncoder().encode(request)
+
+            guard let baseURL = AINudgeRollout.brokerBaseURL else {
+                throw AIError.brokerError("Invalid broker URL")
+            }
+            let brokerURL = baseURL.appendingPathComponent("ai/nudges/decide")
+
+            var urlRequest = URLRequest(url: brokerURL)
+            urlRequest.httpMethod = "POST"
+            urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            urlRequest.setValue(AINudgeRollout.brokerApiKey, forHTTPHeaderField: "X-API-Key")
+            urlRequest.httpBody = jsonData
+            urlRequest.timeoutInterval = 30
+
+            let (data, response) = try await URLSession.shared.data(for: urlRequest)
+
+            guard let httpResponse = response as? HTTPURLResponse,
+                  (200...299).contains(httpResponse.statusCode) else {
+                let statusCode = (response as? HTTPURLResponse)?.statusCode ?? 0
+                let body = String(data: data, encoding: .utf8) ?? ""
+                throw AIError.brokerError("HTTP \(statusCode): \(body)")
+            }
+
+            let latency = Int(Date().timeIntervalSince(start) * 1000)
+
+            // Parse response
+            let brokerResponse = try JSONDecoder().decode(AIBrokerResponse.self, from: data)
+
+            return NewAITestResult(
+                surface: surface,
+                timestamp: Date(),
+                latencyMs: latency,
+                provider: brokerResponse.providerUsed,
+                model: brokerResponse.modelUsed,
+                reasoningTags: brokerResponse.reasoningTags ?? [],
+                response: brokerResponse.response.value,
+                rawResponse: brokerResponse.rawResponse,
+                error: brokerResponse.error
+            )
+        } catch {
+            let latency = Int(Date().timeIntervalSince(start) * 1000)
+            return NewAITestResult(
+                surface: surface,
+                timestamp: Date(),
+                latencyMs: latency,
+                provider: nil,
+                model: nil,
+                reasoningTags: [],
+                response: nil,
+                rawResponse: nil,
+                error: error.localizedDescription
+            )
+        }
+    }
+}
+#endif
