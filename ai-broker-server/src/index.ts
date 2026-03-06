@@ -5,12 +5,37 @@ import { dirname } from "node:path";
 import { z } from "zod";
 
 type Vendor = "anthropic" | "mistral";
-type Surface = "insight_bundle" | "notification_policy";
+type Surface = "insight_bundle" | "notification_policy" | "training_guidance" | "potty_analysis" | "socialization_guidance" | "health_insights";
 
 const vendorSchema = z.enum(["anthropic", "mistral"]);
 
+// New surfaces use a modern request format with client-provided instructions
+const allSurfaces = z.enum([
+  "insight_bundle",
+  "notification_policy",
+  "training_guidance",
+  "potty_analysis",
+  "socialization_guidance",
+  "health_insights"
+]);
+
+// Legacy context schema (for insight_bundle and notification_policy)
+const legacyContextSchema = z.object({
+  ageWeeks: z.number(),
+  daysHome: z.number(),
+  recentEventCount: z.number(),
+  recentWalkCount: z.number(),
+  recentMealCount: z.number(),
+  recentPottyCount: z.number()
+});
+
+// Modern context schema (for new surfaces) - accepts any object structure
+// The client sends modular components keyed by component type
+const modernContextSchema = z.record(z.string(), z.unknown());
+
+// Combined request schema that supports both legacy and modern formats
 const requestSchema = z.object({
-  surface: z.enum(["insight_bundle", "notification_policy"]),
+  surface: allSurfaces,
   profileId: z.string().min(1),
   locale: z.string().min(1),
   policyVersion: z.string().min(1),
@@ -20,55 +45,61 @@ const requestSchema = z.object({
     allowFailover: z.boolean()
   }),
   shadowMode: z.boolean(),
-  context: z.object({
-    ageWeeks: z.number(),
-    daysHome: z.number(),
-    recentEventCount: z.number(),
-    recentWalkCount: z.number(),
-    recentMealCount: z.number(),
-    recentPottyCount: z.number()
-  }),
-  payload: z.object({
-    insightBundle: z
-      .object({
-        dailyStatus: z.object({
-          baselineTitle: z.string(),
-          baselineSubtitle: z.string().nullable().optional(),
-          pottyUrgency: z.string(),
-          isSleeping: z.boolean()
-        }),
-        walkSorting: z.object({
-          actionable: z.array(
-            z.object({
-              id: z.string(),
-              itemType: z.string(),
-              label: z.string(),
-              minutesUntil: z.number(),
-              state: z.string().nullable().optional()
-            })
-          ),
-          upcoming: z.array(
-            z.object({
-              id: z.string(),
-              itemType: z.string(),
-              label: z.string(),
-              minutesUntil: z.number(),
-              state: z.string().nullable().optional()
-            })
-          )
-        }),
-        trainingProgressSummary: z.string().nullable().optional(),
-        socializationProgressSummary: z.string().nullable().optional()
-      })
-      .optional(),
-    notificationPolicy: z
-      .object({
-        baselinePottyMinutesDelta: z.number(),
-        baselineWalkMinutesDelta: z.number(),
-        staleCategories: z.array(z.string())
-      })
-      .optional()
-  })
+
+  // Modern format: client-provided instructions (for new surfaces)
+  systemInstruction: z.string().optional(),
+  outputFormat: z.string().optional(),
+
+  // Context can be either legacy format or modern component-based format
+  context: z.union([legacyContextSchema, modernContextSchema]),
+
+  // Surface-specific payload (modern format)
+  surfacePayload: z.unknown().optional(),
+
+  // Legacy payload format (for backwards compatibility)
+  payload: z
+    .object({
+      insightBundle: z
+        .object({
+          dailyStatus: z.object({
+            baselineTitle: z.string(),
+            baselineSubtitle: z.string().nullable().optional(),
+            pottyUrgency: z.string(),
+            isSleeping: z.boolean()
+          }),
+          walkSorting: z.object({
+            actionable: z.array(
+              z.object({
+                id: z.string(),
+                itemType: z.string(),
+                label: z.string(),
+                minutesUntil: z.number(),
+                state: z.string().nullable().optional()
+              })
+            ),
+            upcoming: z.array(
+              z.object({
+                id: z.string(),
+                itemType: z.string(),
+                label: z.string(),
+                minutesUntil: z.number(),
+                state: z.string().nullable().optional()
+              })
+            )
+          }),
+          trainingProgressSummary: z.string().nullable().optional(),
+          socializationProgressSummary: z.string().nullable().optional()
+        })
+        .optional(),
+      notificationPolicy: z
+        .object({
+          baselinePottyMinutesDelta: z.number(),
+          baselineWalkMinutesDelta: z.number(),
+          staleCategories: z.array(z.string())
+        })
+        .optional()
+    })
+    .optional()
 });
 
 type BrokerRequest = z.infer<typeof requestSchema>;
@@ -109,6 +140,67 @@ const notificationDecisionSchema = z.object({
   suppressPotty: z.boolean(),
   suppressWalk: z.boolean()
 });
+
+// New surface response schemas
+const trainingGuidanceSchema = z.object({
+  confidence: z.number(),
+  suggestedSkill: z.string().nullable().optional(),
+  skillRationale: z.string().nullable().optional(),
+  sessionAdvice: z.string().nullable().optional(),
+  paceGuidance: z.string().nullable().optional(),
+  warmupSkills: z.array(z.string()).nullable().optional(),
+  contextSuggestions: z.array(z.string()).nullable().optional(),
+  encouragementMessage: z.string().nullable().optional(),
+  encouragementType: z.string().nullable().optional(),
+  recentAchievement: z.string().nullable().optional()
+});
+
+const pottyAnalysisSchema = z.object({
+  confidence: z.number(),
+  progressAssessment: z.string(),
+  predictedReliability: z.number().nullable().optional(),
+  keyInsight: z.string().nullable().optional(),
+  suggestion: z.string().nullable().optional(),
+  riskFactors: z.array(z.string()).nullable().optional()
+});
+
+const socializationGuidanceSchema = z.object({
+  confidence: z.number(),
+  assessment: z.string(),
+  priorityCategory: z.string().nullable().optional(),
+  exposureSuggestion: z.string().nullable().optional(),
+  windowUrgency: z.string().nullable().optional()
+});
+
+const healthInsightsSchema = z.object({
+  confidence: z.number(),
+  wellnessAssessment: z.string(),
+  insights: z.array(z.string()),
+  recommendations: z.array(z.string()).nullable().optional()
+});
+
+// Map surface to schema
+function getSchemaForSurface(surface: Surface): z.ZodObject<z.ZodRawShape> {
+  switch (surface) {
+    case "insight_bundle":
+      return insightDecisionSchema;
+    case "notification_policy":
+      return notificationDecisionSchema;
+    case "training_guidance":
+      return trainingGuidanceSchema;
+    case "potty_analysis":
+      return pottyAnalysisSchema;
+    case "socialization_guidance":
+      return socializationGuidanceSchema;
+    case "health_insights":
+      return healthInsightsSchema;
+  }
+}
+
+// Check if surface uses modern format
+function isModernSurface(surface: Surface): boolean {
+  return ["training_guidance", "potty_analysis", "socialization_guidance", "health_insights"].includes(surface);
+}
 
 const app = Fastify({ logger: true });
 
@@ -152,11 +244,24 @@ app.post("/ai/nudges/decide", async (req, reply) => {
   }
 
   const payload = parsed.data;
-  if (payload.surface === "insight_bundle" && !payload.payload.insightBundle) {
-    return reply.code(400).send({ error: "payload.insightBundle is required" });
-  }
-  if (payload.surface === "notification_policy" && !payload.payload.notificationPolicy) {
-    return reply.code(400).send({ error: "payload.notificationPolicy is required" });
+  const surface = payload.surface as Surface;
+
+  // Validate payload requirements based on surface type
+  if (isModernSurface(surface)) {
+    // Modern surfaces require systemInstruction and outputFormat
+    if (!payload.systemInstruction || !payload.outputFormat) {
+      return reply.code(400).send({
+        error: "systemInstruction and outputFormat are required for this surface"
+      });
+    }
+  } else {
+    // Legacy surfaces require their specific payload
+    if (surface === "insight_bundle" && !payload.payload?.insightBundle) {
+      return reply.code(400).send({ error: "payload.insightBundle is required" });
+    }
+    if (surface === "notification_policy" && !payload.payload?.notificationPolicy) {
+      return reply.code(400).send({ error: "payload.notificationPolicy is required" });
+    }
   }
 
   const prompt = buildPrompt(payload);
@@ -169,27 +274,39 @@ app.post("/ai/nudges/decide", async (req, reply) => {
     try {
       const attempt = await callProvider(provider, prompt);
       // Parse and normalize LLM output with tolerance for common malformations
-      const { output: modelOutput, wasNormalized } = parseAndNormalizeLLMOutput(attempt.responseText, payload.surface);
+      const { output: modelOutput, wasNormalized } = parseAndNormalizeLLMOutput(attempt.responseText, surface);
 
-      // Strict validation after normalization
-      if (payload.surface === "insight_bundle") {
-        insightDecisionSchema.parse(modelOutput);
-      } else {
-        notificationDecisionSchema.parse(modelOutput);
-      }
+      // Strict validation after normalization using surface-specific schema
+      const schema = getSchemaForSurface(surface);
+      schema.parse(modelOutput);
 
       const cost = estimateCost(provider, attempt.inputTokens, attempt.outputTokens);
       const reasoningTags = buildReasoningTags(payload);
       if (wasNormalized) reasoningTags.push("output_normalized");
 
-      const response = {
-        providerUsed: provider,
-        modelUsed: attempt.model,
-        reasoningTags,
-        ...(payload.surface === "insight_bundle"
-          ? { insightBundleDecision: modelOutput }
-          : { notificationPolicyDecision: modelOutput })
-      };
+      // Build response based on surface type
+      let response: Record<string, unknown>;
+      if (isModernSurface(surface)) {
+        // Modern format: unified response structure
+        response = {
+          providerUsed: provider,
+          modelUsed: attempt.model,
+          reasoningTags,
+          response: modelOutput,
+          rawResponse: attempt.responseText,
+          error: null
+        };
+      } else {
+        // Legacy format: surface-specific decision keys
+        response = {
+          providerUsed: provider,
+          modelUsed: attempt.model,
+          reasoningTags,
+          ...(surface === "insight_bundle"
+            ? { insightBundleDecision: modelOutput }
+            : { notificationPolicyDecision: modelOutput })
+        };
+      }
 
       await appendLog({
         requestId,
@@ -251,8 +368,30 @@ function normalizeProviderOrder(preferred: Vendor[]): Vendor[] {
 }
 
 function buildPrompt(payload: BrokerRequest): string {
+  const surface = payload.surface as Surface;
+
+  // Modern surfaces use client-provided instructions
+  if (isModernSurface(surface) && payload.systemInstruction && payload.outputFormat) {
+    const contextJson = JSON.stringify(payload.context, null, 2);
+    const payloadJson = payload.surfacePayload ? JSON.stringify(payload.surfacePayload, null, 2) : "null";
+
+    return `${payload.systemInstruction}
+
+OUTPUT FORMAT:
+${payload.outputFormat}
+
+CONTEXT:
+${contextJson}
+
+SURFACE_PAYLOAD:
+${payloadJson}
+
+Respond with valid JSON only. No markdown wrapping.`;
+  }
+
+  // Legacy surfaces use hardcoded instructions
   const instruction =
-    payload.surface === "insight_bundle" ? insightInstructions() : notificationInstructions();
+    surface === "insight_bundle" ? insightInstructions() : notificationInstructions();
   return `${instruction}\n\nINPUT_JSON:\n${JSON.stringify(payload)}`;
 }
 
@@ -511,6 +650,59 @@ function normalizeNotificationDecision(raw: unknown): unknown {
 }
 
 /**
+ * Normalize parsed response for modern surfaces.
+ * Ensures confidence is a number and handles common type issues.
+ */
+function normalizeModernSurfaceResponse(raw: unknown, surface: Surface): unknown {
+  if (!raw || typeof raw !== "object") return raw;
+  const obj = raw as Record<string, unknown>;
+
+  // Ensure confidence is a number
+  if (typeof obj.confidence === "string") {
+    obj.confidence = parseFloat(obj.confidence) || 0;
+  }
+  if (obj.confidence === undefined || obj.confidence === null) {
+    obj.confidence = 0;
+  }
+
+  // Surface-specific normalizations
+  switch (surface) {
+    case "training_guidance":
+      // Ensure arrays are arrays
+      if (obj.warmupSkills && !Array.isArray(obj.warmupSkills)) {
+        obj.warmupSkills = [];
+      }
+      if (obj.contextSuggestions && !Array.isArray(obj.contextSuggestions)) {
+        obj.contextSuggestions = [];
+      }
+      break;
+
+    case "potty_analysis":
+      // Ensure predictedReliability is a number if present
+      if (typeof obj.predictedReliability === "string") {
+        obj.predictedReliability = parseFloat(obj.predictedReliability) || null;
+      }
+      // Ensure riskFactors is an array
+      if (obj.riskFactors && !Array.isArray(obj.riskFactors)) {
+        obj.riskFactors = [];
+      }
+      break;
+
+    case "health_insights":
+      // Ensure insights and recommendations are arrays
+      if (!Array.isArray(obj.insights)) {
+        obj.insights = obj.insights ? [String(obj.insights)] : [];
+      }
+      if (obj.recommendations && !Array.isArray(obj.recommendations)) {
+        obj.recommendations = obj.recommendations ? [String(obj.recommendations)] : [];
+      }
+      break;
+  }
+
+  return obj;
+}
+
+/**
  * Parse and normalize LLM output with tolerance for common malformations.
  * Returns normalized object ready for strict schema validation.
  */
@@ -538,8 +730,14 @@ function parseAndNormalizeLLMOutput(
   const beforeNormalization = JSON.stringify(parsed);
 
   // Step 5: Normalize field types based on surface
-  const output =
-    surface === "insight_bundle" ? normalizeInsightDecision(parsed) : normalizeNotificationDecision(parsed);
+  let output: unknown;
+  if (isModernSurface(surface)) {
+    output = normalizeModernSurfaceResponse(parsed, surface);
+  } else if (surface === "insight_bundle") {
+    output = normalizeInsightDecision(parsed);
+  } else {
+    output = normalizeNotificationDecision(parsed);
+  }
 
   const fieldsWereNormalized = JSON.stringify(output) !== beforeNormalization;
   const wasNormalized = textWasNormalized || fieldsWereNormalized;
@@ -550,7 +748,23 @@ function parseAndNormalizeLLMOutput(
 function buildReasoningTags(payload: BrokerRequest): string[] {
   const tags = [payload.surface, "schema_validated"];
   if (payload.shadowMode) tags.push("shadow_mode");
-  if (payload.context.recentEventCount < 5) tags.push("low_data");
+
+  // Check for low data - handle both legacy and modern context formats
+  const context = payload.context as Record<string, unknown>;
+  if (typeof context.recentEventCount === "number" && context.recentEventCount < 5) {
+    tags.push("low_data");
+  } else if (context.recent_events && typeof context.recent_events === "object") {
+    const recentEvents = context.recent_events as Record<string, unknown>;
+    if (typeof recentEvents.eventsLast24h === "number" && recentEvents.eventsLast24h < 5) {
+      tags.push("low_data");
+    }
+  }
+
+  // Tag modern surfaces
+  if (isModernSurface(payload.surface as Surface)) {
+    tags.push("modern_format");
+  }
+
   return tags;
 }
 

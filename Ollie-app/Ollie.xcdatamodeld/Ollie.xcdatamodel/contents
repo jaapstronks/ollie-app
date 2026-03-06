@@ -29,6 +29,7 @@
         <relationship name="weightMeasurements" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDWeightMeasurement" inverseName="profile" inverseEntity="CDWeightMeasurement"/>
         <relationship name="comfortableItems" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDComfortableItem" inverseName="profile" inverseEntity="CDComfortableItem"/>
         <relationship name="earlyMilestones" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDEarlyMilestone" inverseName="profile" inverseEntity="CDEarlyMilestone"/>
+        <relationship name="skillProgress" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDSkillProgress" inverseName="profile" inverseEntity="CDSkillProgress"/>
     </entity>
     <entity name="CDPuppyEvent" representedClassName="CDPuppyEvent" syncable="YES" codeGenerationType="class">
         <attribute name="cloudPhotoSynced" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
@@ -58,6 +59,10 @@
         <attribute name="who" optional="YES" attributeType="String"/>
         <attribute name="loggedBy" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="napLocation" optional="YES" attributeType="String"/>
+        <attribute name="successReps" optional="YES" attributeType="Integer 32" usesScalarValueType="NO"/>
+        <attribute name="failedReps" optional="YES" attributeType="Integer 32" usesScalarValueType="NO"/>
+        <attribute name="trainingContext" optional="YES" attributeType="String"/>
+        <attribute name="skillPhase" optional="YES" attributeType="String"/>
         <relationship name="profile" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDPuppyProfile" inverseName="events" inverseEntity="CDPuppyProfile"/>
         <fetchIndex name="byTimeIndex">
             <fetchIndexElement property="time" type="Binary" order="descending"/>
@@ -242,6 +247,48 @@
         <relationship name="profile" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDPuppyProfile" inverseName="earlyMilestones" inverseEntity="CDPuppyProfile"/>
         <fetchIndex name="byMilestoneIdIndex">
             <fetchIndexElement property="milestoneId" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="CDSkillProgress" representedClassName="CDSkillProgress" syncable="YES" codeGenerationType="class">
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="skillId" attributeType="String" defaultValueString=""/>
+        <attribute name="phase" attributeType="String" defaultValueString="notStarted"/>
+        <attribute name="durationLevel" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="distanceLevel" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="distractionLevel" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="confidenceScore" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="totalSuccessReps" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="totalFailedReps" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="recentSessionsData" optional="YES" attributeType="Binary"/>
+        <attribute name="maintenanceTier" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="nextReviewDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="lastPracticedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="practicedContextsData" optional="YES" attributeType="Binary"/>
+        <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="modifiedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="profile" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDPuppyProfile" inverseName="skillProgress" inverseEntity="CDPuppyProfile"/>
+        <fetchIndex name="bySkillIdIndex">
+            <fetchIndexElement property="skillId" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byNextReviewDateIndex">
+            <fetchIndexElement property="nextReviewDate" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="CDRegressionLog" representedClassName="CDRegressionLog" syncable="YES" codeGenerationType="class">
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="skillId" attributeType="String" defaultValueString=""/>
+        <attribute name="occurredAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="previousTier" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="successRateAtFailure" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="recoveredAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="sessionsToRecover" optional="YES" attributeType="Integer 16" usesScalarValueType="NO"/>
+        <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="modifiedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <fetchIndex name="bySkillIdIndex">
+            <fetchIndexElement property="skillId" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byOccurredAtIndex">
+            <fetchIndexElement property="occurredAt" type="Binary" order="descending"/>
         </fetchIndex>
     </entity>
 </model>

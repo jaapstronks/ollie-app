@@ -15,6 +15,7 @@ struct TrainTabView: View {
     @EnvironmentObject var eventStore: EventStore
     @EnvironmentObject var socializationStore: SocializationStore
     @EnvironmentObject var profileStore: ProfileStore
+    @EnvironmentObject var skillProgressStore: SkillProgressStore
 
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
@@ -129,7 +130,7 @@ struct TrainTabView: View {
 
     @ViewBuilder
     private var skillsSection: some View {
-        SkillsPreviewCard(eventStore: eventStore)
+        SkillsPreviewCard(eventStore: eventStore, skillProgressStore: skillProgressStore)
     }
 }
 
@@ -138,7 +139,11 @@ struct TrainTabView: View {
 /// Compact preview of current week's training focus
 private struct SkillsPreviewCard: View {
     @ObservedObject var eventStore: EventStore
+    @ObservedObject var skillProgressStore: SkillProgressStore
     @StateObject private var trainingStore = TrainingPlanStore()
+    @EnvironmentObject var profileStore: ProfileStore
+
+    @State private var showTodaysTraining = false
 
     @Environment(\.colorScheme) private var colorScheme
 
@@ -146,6 +151,13 @@ private struct SkillsPreviewCard: View {
     private var hasStartedTraining: Bool {
         trainingStore.masteryProgress.mastered > 0 ||
         trainingStore.allSkillsWithStatus.contains { $0.sessionCount > 0 }
+    }
+
+    /// Check if there are skills to train today
+    private var hasSkillsToTrain: Bool {
+        !skillProgressStore.skillsNeedingWork.isEmpty ||
+        !skillProgressStore.skillsDueForReview.isEmpty ||
+        !skillProgressStore.skillsInActiveLearning.isEmpty
     }
 
     var body: some View {
@@ -207,14 +219,53 @@ private struct SkillsPreviewCard: View {
                     .accessibilityValue(Strings.Train.progressValue(started: trainingStore.masteryProgress.mastered, total: trainingStore.masteryProgress.total))
                 }
 
-                // Actionable link at the bottom
+                // Actionable links at the bottom
                 Divider()
+
+                // Today's Training button (primary action when skills available)
+                if hasStartedTraining && hasSkillsToTrain {
+                    Button {
+                        showTodaysTraining = true
+                    } label: {
+                        HStack(spacing: 12) {
+                            Image(systemName: "sparkles")
+                                .font(.title3)
+                                .foregroundStyle(.white)
+                                .frame(width: 40, height: 40)
+                                .background(
+                                    Circle()
+                                        .fill(Color.otisAccent)
+                                )
+
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(Strings.Training.todaysTraining)
+                                    .font(.subheadline)
+                                    .fontWeight(.semibold)
+                                    .foregroundStyle(.primary)
+
+                                Text(Strings.Training.smartSessionPlan)
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+
+                            Spacer()
+
+                            Image(systemName: "chevron.right")
+                                .font(.system(size: 12, weight: .semibold))
+                                .foregroundStyle(.secondary)
+                        }
+                        .padding(.vertical, 6)
+                    }
+                    .buttonStyle(.plain)
+
+                    Divider()
+                }
 
                 NavigationLink {
                     TrainingView(eventStore: eventStore)
                 } label: {
                     HStack(spacing: 12) {
-                        Image(systemName: hasStartedTraining ? "arrow.right.circle.fill" : "play.circle.fill")
+                        Image(systemName: hasStartedTraining ? "list.bullet" : "play.circle.fill")
                             .font(.title3)
                             .foregroundStyle(Color.otisAccent)
                             .frame(width: 40, height: 40)
@@ -223,7 +274,7 @@ private struct SkillsPreviewCard: View {
                                     .fill(Color.otisAccent.opacity(colorScheme == .dark ? 0.2 : 0.1))
                             )
 
-                        Text(hasStartedTraining ? Strings.Train.continueTraining : Strings.Train.startTraining)
+                        Text(hasStartedTraining ? Strings.Training.viewAllSkills : Strings.Train.startTraining)
                             .font(.subheadline)
                             .fontWeight(.medium)
                             .foregroundStyle(Color.otisAccent)
@@ -250,6 +301,15 @@ private struct SkillsPreviewCard: View {
         .glassCard(tint: .accent)
         .onAppear {
             trainingStore.setEventStore(eventStore)
+        }
+        .sheet(isPresented: $showTodaysTraining) {
+            TodaysTrainingView(
+                skillProgressStore: skillProgressStore,
+                eventStore: eventStore,
+                trainingStore: trainingStore,
+                puppyAgeWeeks: profileStore.profile?.ageInWeeks ?? 12,
+                onDismiss: { showTodaysTraining = false }
+            )
         }
     }
 

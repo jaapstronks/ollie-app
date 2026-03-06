@@ -260,6 +260,8 @@ struct OtisApp: App {
     @StateObject private var contactStore = ContactStore()
     @StateObject private var appointmentStore = AppointmentStore()
     @StateObject private var weightStore = WeightStore()
+    @StateObject private var skillProgressStore = SkillProgressStore()
+    @StateObject private var regressionLogStore = RegressionLogStore()
     @StateObject private var subscriptionManager = SubscriptionManager.shared
     @StateObject private var atmosphereProvider = AtmosphereProvider()
     @StateObject private var foodRecallService = FoodRecallService()
@@ -310,6 +312,7 @@ struct OtisApp: App {
                 .environmentObject(appointmentStore)
                 .environmentObject(weightStore)
                 .environmentObject(subscriptionManager)
+                .environmentObject(skillProgressStore)
                 .environmentObject(cloudKit)
                 .environmentObject(atmosphereProvider)
                 .environmentObject(foodRecallService)
@@ -368,6 +371,13 @@ struct OtisApp: App {
 
                     // Check for food recalls if enabled
                     await foodRecallService.checkForRecalls()
+
+                    // Wire up AI services with data providers
+                    AI.setup(
+                        skillProgressStore: skillProgressStore,
+                        regressionLogStore: regressionLogStore,
+                        socializationStore: socializationStore
+                    )
                 }
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
                     // Import any events logged via Siri/Shortcuts while app was in background

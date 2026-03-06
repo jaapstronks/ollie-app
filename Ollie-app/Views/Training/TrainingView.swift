@@ -14,6 +14,7 @@ struct TrainingView: View {
 
     @StateObject private var trainingStore = TrainingPlanStore()
     @StateObject private var progressStore = TrainingProgressStore()
+    @EnvironmentObject var skillProgressStore: SkillProgressStore
     @EnvironmentObject var subscriptionManager: SubscriptionManager
 
     @State private var selectedSkill: Skill?
@@ -36,6 +37,37 @@ struct TrainingView: View {
     private var isPreparationComplete: Bool {
         guard let plan = trainingStore.trainingPlan else { return false }
         return progressStore.isPreparationComplete(requiredItems: plan.preparationItems)
+    }
+
+    /// Enhanced skill list with smart training data from SkillProgressStore
+    private var enhancedSkillsWithStatus: [SkillProgressInfo] {
+        trainingStore.allSkillsWithStatus.map { info in
+            // Look up enhanced data from SkillProgressStore
+            let progress = skillProgressStore.progress(for: info.skill.id)
+
+            // Calculate days until review
+            var daysUntilReview: Int?
+            if let nextReview = progress.nextReviewDate {
+                let days = Calendar.current.dateComponents([.day], from: Date(), to: nextReview).day ?? 0
+                daysUntilReview = max(0, days)
+            }
+
+            // Check if due for review
+            let isDue = progress.phase == .maintaining && skillProgressStore.skillsDueForReview.contains { $0.skillId == info.skill.id }
+
+            return SkillProgressInfo(
+                skill: info.skill,
+                status: info.status,
+                sessionCount: info.sessionCount,
+                isLocked: info.isLocked,
+                isNextUp: info.isNextUp,
+                missingRequirements: info.missingRequirements,
+                learningPhase: progress.phase == .notStarted ? nil : progress.phase,
+                confidenceScore: progress.confidenceScore > 0 ? progress.confidenceScore : nil,
+                isDueForReview: isDue,
+                daysUntilReview: daysUntilReview
+            )
+        }
     }
 
     var body: some View {
@@ -158,9 +190,17 @@ struct TrainingView: View {
                 onCancel: {
                     selectedSkill = nil
                     completedSessionData = nil
+                },
+                onRecordProgress: { skillId, successReps, failedReps, context in
+                    skillProgressStore.recordTrainingSession(
+                        skillId: skillId,
+                        successReps: successReps,
+                        failedReps: failedReps,
+                        context: context
+                    )
                 }
             )
-            .presentationDetents([.height(500)])
+            .presentationDetents([.height(580)])
         }
         // Quick log sheet
         .sheet(item: $skillForQuickLog) { skill in
@@ -173,9 +213,17 @@ struct TrainingView: View {
                 },
                 onCancel: {
                     skillForQuickLog = nil
+                },
+                onRecordProgress: { skillId, successReps, failedReps, context in
+                    skillProgressStore.recordTrainingSession(
+                        skillId: skillId,
+                        successReps: successReps,
+                        failedReps: failedReps,
+                        context: context
+                    )
                 }
             )
-            .presentationDetents([.height(500)])
+            .presentationDetents([.height(580)])
         }
         // Rules reference sheet
         .sheet(isPresented: $showRulesReference) {
@@ -286,9 +334,9 @@ struct TrainingView: View {
                     )
             }
 
-            // Skill rows
+            // Skill rows (enhanced with smart training data)
             VStack(spacing: 6) {
-                ForEach(trainingStore.allSkillsWithStatus, id: \.skill.id) { info in
+                ForEach(enhancedSkillsWithStatus, id: \.skill.id) { info in
                     SkillProgressRow(
                         info: info,
                         onTap: {

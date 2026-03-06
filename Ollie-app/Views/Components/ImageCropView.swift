@@ -13,6 +13,7 @@ struct ImageCropView: View {
     let onConfirm: (UIImage) -> Void
     let onCancel: () -> Void
 
+    @Environment(\.dismiss) private var dismiss
     @State private var scale: CGFloat = 1.0
     @State private var lastScale: CGFloat = 1.0
     @State private var offset: CGSize = .zero
@@ -31,12 +32,18 @@ struct ImageCropView: View {
                 Color.black.ignoresSafeArea()
 
                 VStack(spacing: 0) {
-                    // Header
+                    // Header - above gesture area
                     HStack {
-                        Button(Strings.Common.cancel) {
+                        Button {
                             onCancel()
+                            dismiss()
+                        } label: {
+                            Text(Strings.Common.cancel)
+                                .foregroundStyle(.white)
+                                .frame(minWidth: 44, minHeight: 44)
+                                .contentShape(Rectangle())
                         }
-                        .foregroundStyle(.white)
+                        .buttonStyle(.plain)
 
                         Spacer()
 
@@ -46,14 +53,22 @@ struct ImageCropView: View {
 
                         Spacer()
 
-                        Button(Strings.Common.done) {
+                        Button {
+                            HapticFeedback.success()
                             let croppedImage = cropImage(in: geometry, cropSize: cropSize)
                             onConfirm(croppedImage)
+                            dismiss()
+                        } label: {
+                            Text(Strings.Common.done)
+                                .fontWeight(.semibold)
+                                .foregroundStyle(.white)
+                                .frame(minWidth: 44, minHeight: 44)
+                                .contentShape(Rectangle())
                         }
-                        .fontWeight(.semibold)
-                        .foregroundStyle(.white)
+                        .buttonStyle(.plain)
                     }
                     .padding()
+                    .zIndex(1)
 
                     Spacer()
 

@@ -16,6 +16,67 @@ struct SkillProgressInfo {
     let isLocked: Bool
     let isNextUp: Bool
     let missingRequirements: [Skill]
+
+    // MARK: - Enhanced Training Progress (optional, from SkillProgress)
+
+    /// Current learning phase from smart training system (nil if not tracked yet)
+    var learningPhase: SkillLearningPhase?
+
+    /// Confidence score from recent sessions (0.0 - 1.0)
+    var confidenceScore: Double?
+
+    /// Whether this skill is due for a maintenance review
+    var isDueForReview: Bool = false
+
+    /// Days until next review (nil if not in maintenance)
+    var daysUntilReview: Int?
+
+    /// Whether this skill is in regression state (needs work)
+    var isInRegression: Bool {
+        learningPhase == .needsWork
+    }
+
+    /// Initialize with basic info only (for backwards compatibility)
+    init(
+        skill: Skill,
+        status: SkillStatus,
+        sessionCount: Int,
+        isLocked: Bool,
+        isNextUp: Bool,
+        missingRequirements: [Skill]
+    ) {
+        self.skill = skill
+        self.status = status
+        self.sessionCount = sessionCount
+        self.isLocked = isLocked
+        self.isNextUp = isNextUp
+        self.missingRequirements = missingRequirements
+    }
+
+    /// Initialize with full enhanced progress info
+    init(
+        skill: Skill,
+        status: SkillStatus,
+        sessionCount: Int,
+        isLocked: Bool,
+        isNextUp: Bool,
+        missingRequirements: [Skill],
+        learningPhase: SkillLearningPhase?,
+        confidenceScore: Double?,
+        isDueForReview: Bool,
+        daysUntilReview: Int?
+    ) {
+        self.skill = skill
+        self.status = status
+        self.sessionCount = sessionCount
+        self.isLocked = isLocked
+        self.isNextUp = isNextUp
+        self.missingRequirements = missingRequirements
+        self.learningPhase = learningPhase
+        self.confidenceScore = confidenceScore
+        self.isDueForReview = isDueForReview
+        self.daysUntilReview = daysUntilReview
+    }
 }
 
 /// Unified row for displaying any skill with its current status
@@ -30,6 +91,20 @@ struct SkillProgressRow: View {
     // Track if "Next up" badge should display (hide immediately when mastered)
     private var showNextUpBadge: Bool {
         info.isNextUp && info.status != .mastered
+    }
+
+    // Track which priority badge to show
+    private var priorityBadge: (label: String, color: Color)? {
+        if info.isInRegression {
+            return (Strings.Training.refresherNeeded, .otisDanger)
+        }
+        if info.isDueForReview {
+            return (Strings.Training.dueForReview, .otisWarning)
+        }
+        if showNextUpBadge {
+            return (Strings.Training.Progression.nextUp, .otisAccent)
+        }
+        return nil
     }
 
     var body: some View {
@@ -49,19 +124,20 @@ struct SkillProgressRow: View {
                     HStack(spacing: 6) {
                         Text(info.skill.name)
                             .font(.body)
-                            .fontWeight(showNextUpBadge ? .semibold : .regular)
+                            .fontWeight(priorityBadge != nil ? .semibold : .regular)
                             .foregroundStyle(info.isLocked ? .secondary : .primary)
                             .lineLimit(1)
                             .minimumScaleFactor(0.9)
 
-                        if showNextUpBadge {
-                            Text(Strings.Training.Progression.nextUp)
+                        // Priority badge (regression > due for review > next up)
+                        if let badge = priorityBadge {
+                            Text(badge.label)
                                 .font(.caption2)
                                 .fontWeight(.semibold)
                                 .foregroundStyle(.white)
                                 .padding(.horizontal, 6)
                                 .padding(.vertical, 2)
-                                .background(Color.otisAccent)
+                                .background(badge.color)
                                 .clipShape(Capsule())
                                 .fixedSize()
                         }
@@ -73,8 +149,13 @@ struct SkillProgressRow: View {
 
                 Spacer(minLength: 8)
 
-                // Session count badge (if any sessions and not mastered)
-                if info.sessionCount > 0 && !info.isLocked && info.status != .mastered {
+                // Confidence score (if available and in progress)
+                if let confidence = info.confidenceScore, !info.isLocked, info.status != .mastered, info.status != .notStarted {
+                    confidenceIndicator(confidence)
+                }
+
+                // Session count badge (if any sessions and not mastered, and no confidence shown)
+                if info.sessionCount > 0 && !info.isLocked && info.status != .mastered && info.confidenceScore == nil {
                     Text("\(info.sessionCount)")
                         .font(.caption)
                         .fontWeight(.medium)
@@ -136,6 +217,41 @@ struct SkillProgressRow: View {
         }
     }
 
+    // MARK: - Confidence Indicator
+
+    @ViewBuilder
+    private func confidenceIndicator(_ confidence: Double) -> some View {
+        let percentage = Int(confidence * 100)
+        let color: Color = confidence >= 0.8 ? .otisSuccess : (confidence >= 0.5 ? .otisWarning : .otisDanger)
+
+        HStack(spacing: 4) {
+            // Mini progress ring
+            ZStack {
+                Circle()
+                    .stroke(color.opacity(0.2), lineWidth: 3)
+                    .frame(width: 20, height: 20)
+
+                Circle()
+                    .trim(from: 0, to: confidence)
+                    .stroke(color, style: StrokeStyle(lineWidth: 3, lineCap: .round))
+                    .rotationEffect(.degrees(-90))
+                    .frame(width: 20, height: 20)
+            }
+
+            Text("\(percentage)%")
+                .font(.caption2)
+                .fontWeight(.medium)
+                .foregroundStyle(color)
+                .monospacedDigit()
+        }
+        .padding(.horizontal, 8)
+        .padding(.vertical, 4)
+        .background(
+            Capsule()
+                .fill(color.opacity(colorScheme == .dark ? 0.15 : 0.1))
+        )
+    }
+
     // MARK: - Status Indicator
 
     @ViewBuilder
@@ -152,11 +268,49 @@ struct SkillProgressRow: View {
     }
 
     private var statusIcon: String {
-        info.isLocked ? "lock.fill" : info.status.statusIndicatorIcon
+        if info.isLocked {
+            return "lock.fill"
+        }
+        // Use learning phase icon if available
+        if let phase = info.learningPhase {
+            return phaseIcon(for: phase)
+        }
+        return info.status.statusIndicatorIcon
+    }
+
+    private func phaseIcon(for phase: SkillLearningPhase) -> String {
+        switch phase {
+        case .notStarted: return "circle"
+        case .luring: return "hand.point.right.fill"
+        case .addingCue: return "speaker.wave.2.fill"
+        case .proofing: return "chart.bar.fill"
+        case .generalizing: return "location.fill"
+        case .maintaining: return "checkmark.seal.fill"
+        case .needsWork: return "exclamationmark.triangle.fill"
+        }
     }
 
     private var statusColor: Color {
-        info.isLocked ? .secondary : info.status.color
+        if info.isLocked {
+            return .secondary
+        }
+        // Use learning phase color if available
+        if let phase = info.learningPhase {
+            return phaseColor(for: phase)
+        }
+        return info.status.color
+    }
+
+    private func phaseColor(for phase: SkillLearningPhase) -> Color {
+        switch phase {
+        case .notStarted: return .secondary
+        case .luring: return .otisInfo
+        case .addingCue: return .otisPurple
+        case .proofing: return .otisAccent
+        case .generalizing: return .otisSuccess.opacity(0.8)
+        case .maintaining: return .otisSuccess
+        case .needsWork: return .otisDanger
+        }
     }
 
     private var iconColor: Color {
@@ -179,9 +333,16 @@ struct SkillProgressRow: View {
             }
         } else {
             HStack(spacing: 6) {
-                Text(info.status.label)
-                    .font(.caption)
-                    .foregroundStyle(statusColor)
+                // Show learning phase if available, otherwise fall back to simple status
+                if let phase = info.learningPhase {
+                    Text(phaseLabel(for: phase))
+                        .font(.caption)
+                        .foregroundStyle(statusColor)
+                } else {
+                    Text(info.status.label)
+                        .font(.caption)
+                        .foregroundStyle(statusColor)
+                }
 
                 if let method = info.skill.method {
                     Text("•")
@@ -198,15 +359,42 @@ struct SkillProgressRow: View {
         }
     }
 
+    /// Get localized label for learning phase
+    private func phaseLabel(for phase: SkillLearningPhase) -> String {
+        switch phase {
+        case .notStarted: return Strings.Training.statusNotStarted
+        case .luring: return Strings.Training.phaseLuring
+        case .addingCue: return Strings.Training.phaseAddingCue
+        case .proofing: return Strings.Training.phaseProofing
+        case .generalizing: return Strings.Training.phaseGeneralizing
+        case .maintaining: return Strings.Training.statusMastered
+        case .needsWork: return Strings.Training.refresherNeeded
+        }
+    }
+
     // MARK: - Background
 
     private var rowBackground: Color {
+        // Regression gets highest priority highlight
+        if info.isInRegression {
+            return colorScheme == .dark
+                ? Color.otisDanger.opacity(0.15)
+                : Color.otisDanger.opacity(0.08)
+        }
+        // Due for review gets warning highlight
+        if info.isDueForReview {
+            return colorScheme == .dark
+                ? Color.otisWarning.opacity(0.12)
+                : Color.otisWarning.opacity(0.06)
+        }
+        // Next up highlight
         if info.isNextUp {
             return colorScheme == .dark
                 ? Color.otisAccent.opacity(0.15)
                 : Color.otisAccent.opacity(0.08)
         }
-        if info.status == .mastered {
+        // Mastered highlight
+        if info.status == .mastered || info.learningPhase == .maintaining {
             return colorScheme == .dark
                 ? Color.otisSuccess.opacity(0.1)
                 : Color.otisSuccess.opacity(0.05)

@@ -248,6 +248,22 @@ public struct PuppyEvent: Codable, Identifiable, Equatable, Sendable {
     public var who: String?
     public var exercise: String?
     public var result: String?
+
+    // MARK: - Training Session Outcome Fields
+
+    /// Number of successful repetitions in this training session
+    public var successReps: Int?
+
+    /// Number of failed repetitions in this training session
+    public var failedReps: Int?
+
+    /// Training context (location/environment) where training occurred
+    /// Maps to StandardTrainingContext.rawValue (e.g., "home", "park")
+    public var trainingContext: String?
+
+    /// Which skill phase was being practiced
+    /// Maps to SkillLearningPhase.rawValue
+    public var skillPhase: String?
     public var weightKg: Double?
     public var parentWalkId: UUID?
     public var sleepSessionId: UUID?
@@ -342,7 +358,11 @@ public struct PuppyEvent: Codable, Identifiable, Equatable, Sendable {
         gapType: CoverageGapType? = nil,
         endTime: Date? = nil,
         gapLocation: String? = nil,
-        loggedBy: UUID? = nil
+        loggedBy: UUID? = nil,
+        successReps: Int? = nil,
+        failedReps: Int? = nil,
+        trainingContext: String? = nil,
+        skillPhase: String? = nil
     ) {
         self.id = id
         self.time = time
@@ -373,6 +393,10 @@ public struct PuppyEvent: Codable, Identifiable, Equatable, Sendable {
         self.endTime = endTime
         self.gapLocation = gapLocation
         self.loggedBy = loggedBy
+        self.successReps = successReps
+        self.failedReps = failedReps
+        self.trainingContext = trainingContext
+        self.skillPhase = skillPhase
 
         if type == .slapen {
             self.sleepSessionId = sleepSessionId ?? UUID()
@@ -417,6 +441,10 @@ public struct PuppyEvent: Codable, Identifiable, Equatable, Sendable {
         case endTime = "end_time"
         case gapLocation = "gap_location"
         case loggedBy = "logged_by"
+        case successReps = "success_reps"
+        case failedReps = "failed_reps"
+        case trainingContext = "training_context"
+        case skillPhase = "skill_phase"
     }
 
     // MARK: - Custom Decoding
@@ -463,6 +491,12 @@ public struct PuppyEvent: Codable, Identifiable, Equatable, Sendable {
 
         // Attribution fields
         loggedBy = try container.decodeIfPresent(UUID.self, forKey: .loggedBy)
+
+        // Training session outcome fields
+        successReps = try container.decodeIfPresent(Int.self, forKey: .successReps)
+        failedReps = try container.decodeIfPresent(Int.self, forKey: .failedReps)
+        trainingContext = try container.decodeIfPresent(String.self, forKey: .trainingContext)
+        skillPhase = try container.decodeIfPresent(String.self, forKey: .skillPhase)
     }
 }
 
@@ -510,5 +544,50 @@ extension PuppyEvent {
     public var gapDurationMinutes: Int? {
         guard type == .coverageGap, let endTime = endTime else { return nil }
         return Int(endTime.timeIntervalSince(time) / 60)
+    }
+
+    // MARK: - Training Session Helpers
+
+    /// Total reps in this training session
+    public var totalTrainingReps: Int {
+        (successReps ?? 0) + (failedReps ?? 0)
+    }
+
+    /// Success rate for this training session (0.0 - 1.0)
+    public var trainingSuccessRate: Double? {
+        guard type == .training, totalTrainingReps > 0 else { return nil }
+        return Double(successReps ?? 0) / Double(totalTrainingReps)
+    }
+
+    /// Whether this training session met the 80% threshold
+    public var trainingMetThreshold: Bool {
+        guard let rate = trainingSuccessRate else { return false }
+        return rate >= 0.8
+    }
+
+    /// Create a training event with session outcome tracking
+    public static func training(
+        id: UUID = UUID(),
+        time: Date = Date(),
+        skillId: String,
+        successReps: Int,
+        failedReps: Int,
+        context: String? = nil,
+        phase: String? = nil,
+        durationMin: Int? = nil,
+        note: String? = nil,
+        loggedBy: UUID? = nil
+    ) -> PuppyEvent {
+        PuppyEvent(
+            id: id,
+            time: time,
+            type: .training,
+            exercise: skillId,
+            durationMin: durationMin,
+            successReps: successReps,
+            failedReps: failedReps,
+            trainingContext: context,
+            skillPhase: phase
+        )
     }
 }
