@@ -35,7 +35,7 @@ final class AIModelBrokerClient: AIModelBrokerClientProtocol {
         let endpoint = baseURL.appendingPathComponent("/ai/nudges/decide")
         var urlRequest = URLRequest(url: endpoint)
         urlRequest.httpMethod = "POST"
-        urlRequest.timeoutInterval = 1.2
+        urlRequest.timeoutInterval = 30 // LLM API calls can take 10-20+ seconds
         urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
         urlRequest.setValue(brokerApiKey, forHTTPHeaderField: "X-API-Key")
         urlRequest.httpBody = try JSONEncoder().encode(request)

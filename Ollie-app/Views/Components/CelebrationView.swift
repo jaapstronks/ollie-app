@@ -85,11 +85,10 @@ struct CelebrationView: View {
                 }
 
                 Text(style.headline)
-                    .font(.system(size: 30, weight: .black, design: .rounded))
                     .foregroundStyle(.white)
                     .shadow(color: .black.opacity(0.35), radius: 8, x: 0, y: 2)
-                    .scaleEffect(0.86 + progress * 0.22)
-                    .opacity(1 - progress * 1.15)
+                    .scaleEffect(CGFloat(2.0) * (CGFloat(0.86) + progress * CGFloat(0.22)))
+                    .opacity(Double(CGFloat(1.0) - progress * CGFloat(1.15)))
             }
         }
         .allowsHitTesting(false)

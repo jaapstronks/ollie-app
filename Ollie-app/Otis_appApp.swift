@@ -274,6 +274,7 @@ struct OtisApp: App {
         OtisAnalytics.shared.trackAppLaunch()
 
         UserPreferences.registerDefaults()
+        AINudgeRollout.registerDefaults()
 
         // Configure TipKit for contextual tips
         configureTips()
