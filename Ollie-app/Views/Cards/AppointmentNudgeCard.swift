@@ -107,7 +107,7 @@ struct AppointmentNudgeCard: View {
                     Text(Strings.AppointmentNudge.remindLater)
                         .font(.subheadline)
                         .fontWeight(.medium)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(.primary)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 10)
                         .background(
