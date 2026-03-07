@@ -14,13 +14,22 @@ struct DogSharingSettingsView: View {
 
     var body: some View {
         Form {
-            SharingSection(cloudKit: cloudKit)
+            SharingSection(cloudKit: cloudKit, showHeader: false)
         }
         .navigationTitle(Strings.CloudSharing.sharing)
     }
 }
 
-#Preview {
+#Preview("With header") {
+    NavigationStack {
+        Form {
+            SharingSection(cloudKit: CloudKitService.shared, showHeader: true)
+        }
+        .environmentObject(SubscriptionManager.shared)
+    }
+}
+
+#Preview("Standalone") {
     NavigationStack {
         DogSharingSettingsView(cloudKit: CloudKitService.shared)
             .environmentObject(SubscriptionManager.shared)

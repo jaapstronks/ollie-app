@@ -16,14 +16,18 @@ struct SharingSection: View {
     @ObservedObject private var shareManager: CloudKitShareManager
     @EnvironmentObject var subscriptionManager: SubscriptionManager
 
+    /// Whether to show section header (false when used standalone with nav title)
+    let showHeader: Bool
+
     @State private var activeShareSheet: ShareSheetItem?
     @State private var isPreparingShare = false
     @State private var shareError: String?
     @State private var showStopSharingConfirm = false
     @State private var showOtisPlusSheet = false
 
-    init(cloudKit: CloudKitService) {
+    init(cloudKit: CloudKitService, showHeader: Bool = true) {
         self.cloudKit = cloudKit
+        self.showHeader = showHeader
         _shareManager = ObservedObject(wrappedValue: cloudKit.shareManager)
     }
 
@@ -31,7 +35,9 @@ struct SharingSection: View {
         Section {
             content
         } header: {
-            Text(Strings.CloudSharing.sharing)
+            if showHeader {
+                Text(Strings.CloudSharing.sharing)
+            }
         } footer: {
             if cloudKit.isCloudAvailable && !cloudKit.isParticipant {
                 Text(Strings.CloudSharing.sharingDescription)
@@ -84,7 +90,7 @@ struct SharingSection: View {
             participantRow
         } else if shareManager.isShared {
             sharedStatusRow
-            participantsRow
+            participantsRows
             manageShareButton
 
             // Show invite button or upsell based on partner limit
@@ -114,62 +120,63 @@ struct SharingSection: View {
     // MARK: - Row Views
 
     private var iCloudUnavailableRow: some View {
-        HStack {
+        Label {
+            Text(Strings.CloudSharing.iCloudUnavailable)
+        } icon: {
             Image(systemName: "exclamationmark.icloud")
                 .foregroundStyle(Color.otisWarning)
-            Text(Strings.CloudSharing.iCloudUnavailable)
-                .font(.subheadline)
         }
     }
 
     private var participantRow: some View {
-        HStack {
-            Image(systemName: "person.2.fill")
-                .foregroundStyle(Color.otisInfo)
+        Label {
             VStack(alignment: .leading, spacing: 2) {
                 Text(Strings.CloudSharing.sharedData)
-                    .font(.subheadline)
                 Text(Strings.CloudSharing.viewingOthersData)
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
+        } icon: {
+            Image(systemName: "person.2.fill")
+                .foregroundStyle(Color.otisInfo)
         }
     }
 
     private var sharedStatusRow: some View {
-        HStack {
+        Label {
+            Text(Strings.CloudSharing.shared)
+        } icon: {
             Image(systemName: "checkmark.circle.fill")
                 .foregroundStyle(Color.otisSuccess)
-            Text(Strings.CloudSharing.shared)
-                .font(.subheadline.weight(.medium))
-            Spacer()
         }
-        .contentShape(Rectangle())
     }
 
-    private var participantsRow: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            if shareManager.shareParticipants.isEmpty {
+    @ViewBuilder
+    private var participantsRows: some View {
+        if shareManager.shareParticipants.isEmpty {
+            Label {
                 Text(Strings.CloudSharing.noParticipants)
-                    .font(.caption)
                     .foregroundStyle(.secondary)
-            } else {
-                ForEach(shareManager.shareParticipants) { participant in
+            } icon: {
+                Image(systemName: "person.fill")
+                    .foregroundStyle(.secondary)
+            }
+        } else {
+            ForEach(shareManager.shareParticipants) { participant in
+                Label {
                     HStack {
-                        Image(systemName: "person.fill")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                        Text(participant.name)
-                            .font(.subheadline)
+                        Text(participant.name.isEmpty ? Strings.CloudSharing.partner : participant.name)
                         Spacer()
                         Text(participant.status.label)
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
+                } icon: {
+                    Image(systemName: "person.fill")
+                        .foregroundStyle(.secondary)
                 }
             }
         }
-        .contentShape(Rectangle())
     }
 
     /// Count of current non-owner participants (accepted + pending)
