@@ -586,6 +586,17 @@ extension Strings {
                     return String(localized: "\(days) days at 100%", table: table)
                 }
             }
+
+            // Incident messaging (gentle, not patronizing)
+            static let incidentHappened = String(localized: "It happens", table: table)
+            static let incidentMessage = String(localized: "One indoor moment doesn't undo all that progress. Tomorrow's a new day.", table: table)
+
+            // Reactivation prompt
+            static let reactivationTitle = String(localized: "Need some refresher tips?", table: table)
+            static let reactivationMessage = String(localized: "A few indoor moments lately. Would you like to reactivate potty training guidance?", table: table)
+            static let reactivateNow = String(localized: "Yes, reactivate", table: table)
+            static let notNow = String(localized: "Not now", table: table)
+            static let reactivateLink = String(localized: "Having accidents? Reactivate tracking", table: table)
         }
 
         // MARK: - Crate Training

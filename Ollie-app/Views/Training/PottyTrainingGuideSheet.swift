@@ -160,6 +160,16 @@ struct PottyTrainingGuideSheet: View {
             }
             .padding(.top, 20)
 
+            // Incident message (gentle, not patronizing)
+            if shouldShowIncidentMessage {
+                incidentMessageCard
+            }
+
+            // Reactivation prompt (3+ incidents)
+            if shouldShowReactivationPrompt {
+                reactivationPromptCard
+            }
+
             Divider()
 
             // Key principles reminder (collapsed)
@@ -167,14 +177,14 @@ struct PottyTrainingGuideSheet: View {
 
             Divider()
 
-            // Reactivate button
+            // Always-available reactivate link
             Button {
                 reactivateTracking()
             } label: {
                 HStack {
                     Image(systemName: "arrow.counterclockwise")
                         .font(.subheadline)
-                    Text(Strings.Training.PottyTraining.reactivateTracking)
+                    Text(Strings.Training.PottyTraining.reactivateLink)
                         .font(.subheadline)
                 }
                 .foregroundStyle(.secondary)
@@ -182,6 +192,89 @@ struct PottyTrainingGuideSheet: View {
             .buttonStyle(.plain)
             .padding(.top, 8)
         }
+    }
+
+    // MARK: - Incident Message Card (gentle tone)
+
+    @ViewBuilder
+    private var incidentMessageCard: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack(spacing: 8) {
+                Image(systemName: "leaf.fill")
+                    .foregroundStyle(.orange)
+                Text(Strings.Training.PottyTraining.incidentHappened)
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+            }
+
+            Text(Strings.Training.PottyTraining.incidentMessage)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+
+            Button {
+                acknowledgeIncident()
+            } label: {
+                Text(Strings.Common.gotIt)
+                    .font(.caption)
+                    .fontWeight(.medium)
+                    .foregroundStyle(.orange)
+            }
+            .buttonStyle(.plain)
+        }
+        .padding()
+        .background(
+            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                .fill(Color.orange.opacity(colorScheme == .dark ? 0.15 : 0.08))
+        )
+    }
+
+    // MARK: - Reactivation Prompt Card
+
+    @ViewBuilder
+    private var reactivationPromptCard: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(spacing: 8) {
+                Image(systemName: "arrow.counterclockwise.circle.fill")
+                    .foregroundStyle(.indigo)
+                Text(Strings.Training.PottyTraining.reactivationTitle)
+                    .font(.subheadline)
+                    .fontWeight(.semibold)
+            }
+
+            Text(Strings.Training.PottyTraining.reactivationMessage)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+
+            HStack(spacing: 12) {
+                Button {
+                    reactivateTracking()
+                } label: {
+                    Text(Strings.Training.PottyTraining.reactivateNow)
+                        .font(.caption)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(.white)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 8)
+                        .background(Capsule().fill(Color.indigo))
+                }
+                .buttonStyle(.plain)
+
+                Button {
+                    dismissReactivationPrompt()
+                } label: {
+                    Text(Strings.Training.PottyTraining.notNow)
+                        .font(.caption)
+                        .fontWeight(.medium)
+                        .foregroundStyle(.secondary)
+                }
+                .buttonStyle(.plain)
+            }
+        }
+        .padding()
+        .background(
+            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                .fill(Color.indigo.opacity(colorScheme == .dark ? 0.15 : 0.08))
+        )
     }
 
     // MARK: - Mark as Mastered Button
@@ -233,7 +326,20 @@ struct PottyTrainingGuideSheet: View {
             isMastered = false
             masteredTimestamp = 0
         }
+        // Clear dismissal states
+        UserDefaults.standard.removeObject(forKey: UserPreferences.Key.pottyReactivationPromptDismissedDate.rawValue)
+        UserDefaults.standard.removeObject(forKey: UserPreferences.Key.pottyLastIncidentAcknowledgedDate.rawValue)
         HapticFeedback.light()
+    }
+
+    private func acknowledgeIncident() {
+        UserDefaults.standard.set(Date().timeIntervalSince1970, forKey: UserPreferences.Key.pottyLastIncidentAcknowledgedDate.rawValue)
+        HapticFeedback.selection()
+    }
+
+    private func dismissReactivationPrompt() {
+        UserDefaults.standard.set(Date().timeIntervalSince1970, forKey: UserPreferences.Key.pottyReactivationPromptDismissedDate.rawValue)
+        HapticFeedback.selection()
     }
 
     // MARK: - Stats Section
@@ -478,7 +584,10 @@ struct PottyTrainingGuideSheet: View {
             periodDays: 7
         ),
         outdoorPercentage: 82,
-        ageInWeeks: 10
+        ageInWeeks: 10,
+        shouldShowIncidentMessage: false,
+        shouldShowReactivationPrompt: false,
+        incidentCount: 0
     )
 }
 
@@ -487,7 +596,10 @@ struct PottyTrainingGuideSheet: View {
         streakInfo: .empty,
         patternAnalysis: .empty,
         outdoorPercentage: 0,
-        ageInWeeks: 8
+        ageInWeeks: 8,
+        shouldShowIncidentMessage: false,
+        shouldShowReactivationPrompt: false,
+        incidentCount: 0
     )
 }
 
@@ -501,6 +613,33 @@ struct PottyTrainingGuideSheet: View {
         ),
         patternAnalysis: .empty,
         outdoorPercentage: 95,
-        ageInWeeks: 20
+        ageInWeeks: 20,
+        shouldShowIncidentMessage: false,
+        shouldShowReactivationPrompt: false,
+        incidentCount: 0
+    )
+}
+
+#Preview("Mastered with Incident") {
+    PottyTrainingGuideSheet(
+        streakInfo: .empty,
+        patternAnalysis: .empty,
+        outdoorPercentage: 100,
+        ageInWeeks: 24,
+        shouldShowIncidentMessage: true,
+        shouldShowReactivationPrompt: false,
+        incidentCount: 1
+    )
+}
+
+#Preview("Mastered with Reactivation Prompt") {
+    PottyTrainingGuideSheet(
+        streakInfo: .empty,
+        patternAnalysis: .empty,
+        outdoorPercentage: 100,
+        ageInWeeks: 24,
+        shouldShowIncidentMessage: false,
+        shouldShowReactivationPrompt: true,
+        incidentCount: 3
     )
 }

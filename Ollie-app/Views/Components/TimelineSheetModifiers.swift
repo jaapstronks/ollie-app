@@ -578,7 +578,10 @@ struct TimelineSheetModifiers: ViewModifier {
                 streakInfo: viewModel.streakInfo,
                 patternAnalysis: viewModel.patternAnalysis,
                 outdoorPercentage: viewModel.outdoorPercentage,
-                ageInWeeks: viewModel.profileStore.profile?.ageInWeeks ?? 12
+                ageInWeeks: viewModel.profileStore.profile?.ageInWeeks ?? 12,
+                shouldShowIncidentMessage: viewModel.shouldShowPottyIncidentMessage,
+                shouldShowReactivationPrompt: viewModel.shouldShowPottyReactivationPrompt,
+                incidentCount: viewModel.incidentsSincePottyMastery.count
             )
             .adaptivePresentationDetents(
                 compact: [.large],

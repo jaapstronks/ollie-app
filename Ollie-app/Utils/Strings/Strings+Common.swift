@@ -38,6 +38,7 @@ extension Strings {
         static let notSet = String(localized: "Not set", table: table)
         static let tryAgain = String(localized: "Try Again", table: table)
         static let great = String(localized: "Great!", table: table)
+        static let gotIt = String(localized: "Got it", table: table)
 
         // Error messages
         static let saveFailed = String(localized: "Failed to save. Please try again.", table: table)
