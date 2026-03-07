@@ -10,6 +10,7 @@ import OtisShared
 /// Settings screen for health documents: medications, documents, and food alerts
 struct HealthDocumentsView: View {
     @ObservedObject var profileStore: ProfileStore
+    @ObservedObject var medicationStore: MedicationStore
     @ObservedObject var documentStore: DocumentStore
     @ObservedObject var foodRecallService: FoodRecallService
     let profileId: UUID
@@ -24,7 +25,11 @@ struct HealthDocumentsView: View {
             if let profile = targetProfile {
                 // Medications
                 NavigationLink {
-                    MedicationSettingsView(profileStore: profileStore, profileId: profileId)
+                    MedicationSettingsView(
+                        profileStore: profileStore,
+                        medicationStore: medicationStore,
+                        profileId: profileId
+                    )
                 } label: {
                     SettingsItemRow(
                         icon: "pills.fill",
@@ -91,6 +96,7 @@ private struct SettingsItemRow: View {
     NavigationStack {
         HealthDocumentsView(
             profileStore: ProfileStore(),
+            medicationStore: MedicationStore(),
             documentStore: DocumentStore(),
             foodRecallService: FoodRecallService(),
             profileId: UUID()

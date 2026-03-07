@@ -80,6 +80,22 @@ extension SheetCoordinator.ActiveSheet {
                 householdMembers: context.profile?.householdMembers
             )
 
+        case .medicationLog:
+            if let medicationStore = context.viewModel.medicationStore {
+                MedicationLogSheet(
+                    profileStore: context.viewModel.profileStore,
+                    medicationStore: medicationStore,
+                    onComplete: { medication in
+                        context.sheetCoordinator.dismissSheet()
+                    },
+                    onCancel: {
+                        context.sheetCoordinator.dismissSheet()
+                    }
+                )
+            } else {
+                EmptyView()
+            }
+
         default:
             EmptyView()
         }
@@ -113,6 +129,9 @@ extension SheetCoordinator.ActiveSheet {
             } else {
                 context.sheetCoordinator.transitionToSheet(.startCoverageGap)
             }
+
+        case .medicatie:
+            context.sheetCoordinator.transitionToSheet(.medicationLog)
 
         default:
             context.sheetCoordinator.transitionToSheet(.quickLog(type))

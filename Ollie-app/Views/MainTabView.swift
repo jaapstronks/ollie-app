@@ -291,6 +291,7 @@ private extension MainTabView {
                 dataImporter: dataImporter,
                 eventStore: eventStore,
                 notificationService: notificationService,
+                medicationStore: medicationStore,
                 documentStore: documentStore,
                 contactStore: contactStore,
                 foodRecallService: foodRecallService,

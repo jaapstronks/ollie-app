@@ -14,6 +14,7 @@ struct DogSettingsCard: View {
     let isActive: Bool
     let onActivate: () -> Void
     let profileStore: ProfileStore
+    let medicationStore: MedicationStore
     let notificationService: NotificationService
     let documentStore: DocumentStore
     let foodRecallService: FoodRecallService
@@ -211,6 +212,7 @@ struct DogSettingsCard: View {
             NavigationLink {
                 HealthDocumentsView(
                     profileStore: profileStore,
+                    medicationStore: medicationStore,
                     documentStore: documentStore,
                     foodRecallService: foodRecallService,
                     profileId: profile.id
@@ -384,6 +386,7 @@ struct AddDogButton: View {
                     isActive: true,
                     onActivate: {},
                     profileStore: ProfileStore(),
+                    medicationStore: MedicationStore(),
                     notificationService: NotificationService(),
                     documentStore: DocumentStore(),
                     foodRecallService: FoodRecallService(),
@@ -413,6 +416,7 @@ struct AddDogButton: View {
                     isActive: true,
                     onActivate: {},
                     profileStore: ProfileStore(),
+                    medicationStore: MedicationStore(),
                     notificationService: NotificationService(),
                     documentStore: DocumentStore(),
                     foodRecallService: FoodRecallService(),
@@ -433,6 +437,7 @@ struct AddDogButton: View {
                     isActive: false,
                     onActivate: {},
                     profileStore: ProfileStore(),
+                    medicationStore: MedicationStore(),
                     notificationService: NotificationService(),
                     documentStore: DocumentStore(),
                     foodRecallService: FoodRecallService(),

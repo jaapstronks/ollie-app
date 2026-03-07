@@ -25,7 +25,7 @@ extension SheetCoordinator.ActiveSheet {
     private var category: SheetCategory {
         switch self {
         // Event sheets
-        case .potty, .allEvents, .quickLog, .logEvent, .locationPicker, .editEvent:
+        case .potty, .allEvents, .quickLog, .logEvent, .locationPicker, .editEvent, .medicationLog:
             return .event
 
         // Activity sheets

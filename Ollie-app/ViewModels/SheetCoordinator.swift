@@ -70,6 +70,8 @@ final class SheetCoordinator: ObservableObject {
         case pottyTrainingGuide
         // Appointment nudge pre-filled sheet
         case addAppointmentWithPrefill(AppointmentPrefill)
+        // Medication quick log sheet
+        case medicationLog
 
         var id: String {
             switch self {
@@ -107,6 +109,7 @@ final class SheetCoordinator: ObservableObject {
             case .crateTrainingGuide: return "crateTrainingGuide"
             case .pottyTrainingGuide: return "pottyTrainingGuide"
             case .addAppointmentWithPrefill(let prefill): return "addAppointmentWithPrefill-\(prefill.appointmentType.rawValue)"
+            case .medicationLog: return "medicationLog"
             }
         }
     }

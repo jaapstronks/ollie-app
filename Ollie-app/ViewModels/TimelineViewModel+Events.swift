@@ -14,6 +14,14 @@ extension TimelineViewModel {
 
     func quickLog(type: EventType, suggestedTime: Date? = nil) {
         // Core logging is always free - no paywall check needed
+
+        // Special handling for medications
+        if type == .medicatie {
+            // Show medication log sheet for selection
+            sheetCoordinator.presentSheet(.medicationLog)
+            return
+        }
+
         // V2: All events now go through QuickLogSheet for time adjustment
         // Pass suggested time for overdue items (e.g., scheduled meal time)
         sheetCoordinator.presentSheet(.quickLog(type, suggestedTime: suggestedTime))

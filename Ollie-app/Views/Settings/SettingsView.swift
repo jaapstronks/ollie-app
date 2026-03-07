@@ -13,11 +13,13 @@ struct SettingsView: View {
     @ObservedObject var dataImporter: DataImporter
     @ObservedObject var eventStore: EventStore
     @ObservedObject var notificationService: NotificationService
+    @ObservedObject var medicationStore: MedicationStore
     @ObservedObject var documentStore: DocumentStore
     @ObservedObject var contactStore: ContactStore
     @ObservedObject var foodRecallService: FoodRecallService
 
     var onAddDog: (() -> Void)?
+    var onTriggerTour: (() -> Void)?
 
     /// Profiles sorted with active profile first
     private var sortedProfiles: [PuppyProfile] {
@@ -50,6 +52,7 @@ struct SettingsView: View {
                             profileStore.switchToProfile(profile.id)
                         },
                         profileStore: profileStore,
+                        medicationStore: medicationStore,
                         notificationService: notificationService,
                         documentStore: documentStore,
                         foodRecallService: foodRecallService,
@@ -81,7 +84,8 @@ struct SettingsView: View {
             AppSettingsView(
                 profileStore: profileStore,
                 dataImporter: dataImporter,
-                eventStore: eventStore
+                eventStore: eventStore,
+                onTriggerTour: onTriggerTour
             )
         } label: {
             HStack(spacing: 16) {
@@ -198,6 +202,7 @@ private struct SettingsHubRow: View {
             dataImporter: DataImporter(),
             eventStore: EventStore(),
             notificationService: NotificationService(),
+            medicationStore: MedicationStore(),
             documentStore: DocumentStore(),
             contactStore: ContactStore(),
             foodRecallService: FoodRecallService(),
