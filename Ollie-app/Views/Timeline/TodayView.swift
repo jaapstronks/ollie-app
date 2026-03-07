@@ -26,6 +26,7 @@ struct TodayView: View {
     @State private var showProfilePicker = false
     @State private var dismissedCrateNudgeDate: Date?
     @State private var dismissedWalkTargetNudgeDate: Date?
+    @State private var showMonthRecapSheet = false
 
     // First-visit tip tracking
     @AppStorage("hasSeenTodayTip") private var hasSeenTodayTip = false
@@ -336,241 +337,37 @@ struct TodayView: View {
                 onManageProfiles: onSettingsTap
             )
         }
+        .sheet(isPresented: $showMonthRecapSheet) {
+            MonthRecapSheet(
+                viewModel: MonthRecapViewModel(
+                    eventStore: eventStore,
+                    profileStore: viewModel.profileStore
+                ),
+                onDismiss: { showMonthRecapSheet = false }
+            )
+        }
     }
 
     // MARK: - Status Cards Section
 
     @ViewBuilder
     private var statusCardsSection: some View {
-        VStack(spacing: 12) {
-            // Use combined state to determine which cards to show
-            let combinedState = viewModel.combinedSleepPottyState
-            let isSleeping = combinedState.isSleeping
-
-            // Compute upcoming items ONCE for both sleep card and scheduled events section
-            // This avoids redundant calculation when puppy is sleeping
-            let separated = viewModel.separatedUpcomingItems(forecasts: weatherService.forecasts)
-            let pendingActionable = isSleeping ? separated.actionable.first : nil
-            let aiRecommendation = viewModel.aiLoggingRecommendations.first
-
-            // First run welcome card (highest priority for new users)
-            if case .firstRun(let puppyName) = combinedState {
-                FirstRunWelcomeCard(
-                    puppyName: puppyName,
-                    onSleeping: { viewModel.firstRunPuppyIsSleeping() },
-                    onAwake: { viewModel.firstRunPuppyIsAwake() }
-                )
-            }
-
-            // First week summary card (days 1-7)
-            if viewModel.shouldShowFirstWeekCard,
-               !combinedState.shouldShowFirstRunCard,
-               let stats = viewModel.firstWeekStats {
-                FirstWeekCard(
-                    stats: stats,
-                    isCollapsed: viewModel.isFirstWeekCardCollapsed,
-                    onToggle: { viewModel.toggleFirstWeekCard() }
-                )
-                .animatedAppear(delay: 0.03)
-            }
-
-            // Trial touchpoint card (Day 1, 7, 12, or 14)
-            if let touchpoint = trialManager.currentTouchpoint(),
-               touchpoint.showsInAppCard,
-               !combinedState.shouldShowFirstRunCard {
-                TrialTouchpointCard(
-                    touchpoint: touchpoint,
-                    puppyName: viewModel.puppyName,
-                    onDismiss: {
-                        trialManager.markTouchpointShown(touchpoint)
-                    },
-                    onSubscribe: {
-                        trialManager.markTouchpointShown(touchpoint)
-                        viewModel.sheetCoordinator.presentSheet(.otisPlus)
-                    }
-                )
-                .animatedAppear(delay: 0.035)
-            }
-
-            // Weekly walk summary card (teenage+ dogs only)
-            // Shows walk stats when puppy phase is over to keep app relevant
-            if !combinedState.shouldShowFirstRunCard,
-               let profile = viewModel.profileStore.profile,
-               profile.lifecyclePhase != .puppy,
-               viewModel.cachedWeekWalkStats.count > 0 {
-                WeeklyWalkSummaryCard(
-                    weekStats: viewModel.cachedWeekStats,
-                    totalWalks: viewModel.cachedWeekWalkStats.count,
-                    totalMinutes: viewModel.cachedWeekWalkStats.totalMinutes
-                )
-                .animatedAppear(delay: 0.04)
-            }
-
-            // Stale logging banner (replaces misleading status cards)
-            if case .staleLogging = combinedState {
-                StaleLoggingBanner(
-                    onStartFresh: { viewModel.startFreshAfterLoggingGap() }
-                )
-            }
-
-            // Post-wake potty prompt (highest priority - shows at top)
-            if case .justWokeNeedsPotty(let wokeAt, let minutesSinceWake, let overdueBy) = combinedState {
-                PostWakePottyCard(
-                    wokeAt: wokeAt,
-                    minutesSinceWake: minutesSinceWake,
-                    pottyWasOverdueBy: overdueBy,
-                    subjectPronoun: viewModel.profileStore.profile?.subjectPronoun ?? "they",
-                    onLogPotty: { viewModel.sheetCoordinator.presentSheet(.potty(preselected: .plassen)) }
-                )
-            }
-
-            // Assumed overnight sleep card (when user likely forgot to log sleep)
-            if case .assumedOvernightSleep(let suggestedStart, let minutesSleeping, _) = combinedState {
-                AssumedOvernightSleepCard(
-                    suggestedSleepStart: suggestedStart,
-                    minutesSleeping: minutesSleeping,
-                    puppyName: viewModel.puppyName,
-                    onConfirmSleeping: { sleepStart in
-                        viewModel.confirmAssumedOvernightSleep(sleepStartTime: sleepStart)
-                    },
-                    onConfirmAwake: { sleepStart, wakeTime in
-                        viewModel.confirmAssumedOvernightSleepAndWakeUp(sleepStartTime: sleepStart, wakeTime: wakeTime)
-                    },
-                    onDismiss: {
-                        viewModel.dismissAssumedOvernightSleep()
-                    }
-                )
-            }
-
-            // Combined sleep + potty card (when sleeping and potty is urgent)
-            if case .sleepingPottyUrgent(let since, let duration, let urgency, let overdue) = combinedState {
-                CombinedSleepPottyCard(
-                    sleepingSince: since,
-                    sleepDurationMin: duration,
-                    pottyUrgency: urgency,
-                    minutesOverdue: overdue,
-                    pendingActionable: pendingActionable,
-                    subjectPronoun: viewModel.profileStore.profile?.subjectPronoun ?? "they",
-                    objectPronoun: viewModel.profileStore.profile?.objectPronoun ?? "them",
-                    onWakeUp: {
-                        viewModel.sheetCoordinator.presentSheet(.endSleep(since))
-                    }
-                )
-            }
-
-            // Normal potty card
-            // Hide when: combined card is showing, just woke, crate training mastered, or > 30 min remaining
-            if !combinedState.shouldHidePottyCard && shouldShowPottyStatusCard {
-                let aiStatusCopy = viewModel.aiEnhancedPottyStatusCopy
-                PottyStatusCard(
-                    prediction: viewModel.pottyPrediction,
-                    puppyName: viewModel.puppyName,
-                    titleOverride: aiStatusCopy.title,
-                    subtitleOverride: aiStatusCopy.subtitle,
-                    onLogPotty: { viewModel.sheetCoordinator.presentSheet(.potty(preselected: .plassen)) }
-                )
-            }
-
-            // Sleep status card (hide when combined card is showing)
-            if !combinedState.shouldHideSleepCard {
-                SleepStatusCard(
-                    sleepState: viewModel.currentSleepState,
-                    pendingActionable: pendingActionable,
-                    onWakeUp: {
-                        // Use EndSleepSheet for time-adjustable wake up
-                        if case .sleeping(let since, _) = viewModel.currentSleepState {
-                            viewModel.sheetCoordinator.presentSheet(.endSleep(since))
-                        } else {
-                            viewModel.quickLog(type: .ontwaken)
-                        }
-                    },
-                    onStartNap: { viewModel.sheetCoordinator.presentSheet(.startActivity(.nap)) }
-                )
-            }
-
-            // Crate nudge card (contextual suggestion for crate naps)
-            if shouldShowCrateNudge && !combinedState.shouldShowFirstRunCard {
-                CrateNudgeCard(
-                    puppyName: viewModel.puppyName,
-                    onStartCrateNap: {
-                        // Start a crate nap via the sheet with crate preselected
-                        viewModel.sheetCoordinator.presentSheet(.startActivity(.nap, preselectedLocation: .crate))
-                    },
-                    onDismiss: {
-                        // Dismiss for the rest of today
-                        dismissedCrateNudgeDate = Date()
-                    }
-                )
-                .animatedAppear(delay: 0.02)
-            }
-
-            // Walk target nudge card (contextual suggestion to adjust walk schedule)
-            if shouldShowWalkTargetNudge && !combinedState.shouldShowFirstRunCard,
-               let stats = viewModel.walkStats {
-                WalkTargetNudgeCard(
-                    actualAverage: stats.averageWalksPerDay,
-                    scheduledTarget: stats.scheduledWalksPerDay,
-                    onAdjust: {
-                        viewModel.sheetCoordinator.presentSheet(.walkScheduleEditor)
-                    },
-                    onDismiss: {
-                        // Dismiss for 7 days
-                        dismissedWalkTargetNudgeDate = Date()
-                    }
-                )
-                .animatedAppear(delay: 0.025)
-            }
-
-            // Appointment nudge card (prompt to schedule upcoming vaccinations/vet visits)
-            if let candidate = appointmentNudgeCandidate, !combinedState.shouldShowFirstRunCard {
-                AppointmentNudgeCard(
-                    candidate: candidate,
-                    puppyName: viewModel.puppyName,
-                    showNapContext: shouldShowAppointmentNudgeNapContext,
-                    onSchedule: {
-                        if let prefill = createAppointmentPrefill(for: candidate) {
-                            viewModel.sheetCoordinator.presentSheet(.addAppointmentWithPrefill(prefill))
-                        }
-                    },
-                    onDismiss: {
-                        // Dismiss with 7-day cooldown per milestone
-                        dismissAppointmentNudge(for: candidate.milestone.labelKey)
-                    }
-                )
-                .animatedAppear(delay: 0.027)
-            }
-
-            // Subtle AI recommendation card (confirm before applying reminder changes)
-            if let recommendation = aiRecommendation, !combinedState.shouldShowFirstRunCard {
-                aiRecommendationCard(recommendation)
-                    .animatedAppear(delay: 0.03)
-            }
-
-            // Hide scheduled events and medications during first run to avoid confusing "missed" reminders
-            if !combinedState.shouldShowFirstRunCard {
-                // Medication reminders
-                ForEach(viewModel.pendingMedications) { pending in
-                    MedicationReminderCard(
-                        medication: pending.medication,
-                        time: pending.time,
-                        scheduledDate: pending.scheduledDate,
-                        isOverdue: pending.isOverdue,
-                        onComplete: { medicationName in
-                            viewModel.completeMedication(pending, medicationName: medicationName)
-                        }
-                    )
-                }
-
-                // Actionable & Upcoming events (pass precomputed values)
-                ScheduledEventsSection(
-                    viewModel: viewModel,
-                    weatherService: weatherService,
-                    precomputedSeparated: separated,
-                    isSleeping: isSleeping,
-                    onNavigateToSocialization: onNavigateToTrain
-                )
-            }
-        }
+        TodayStatusCardsSection(
+            viewModel: viewModel,
+            weatherService: weatherService,
+            appointmentNudgeCandidate: appointmentNudgeCandidate,
+            crateTrainingMastered: crateTrainingMastered,
+            shouldShowPottyStatusCard: shouldShowPottyStatusCard,
+            shouldShowCrateNudge: shouldShowCrateNudge,
+            shouldShowWalkTargetNudge: shouldShowWalkTargetNudge,
+            shouldShowAppointmentNudgeNapContext: shouldShowAppointmentNudgeNapContext,
+            onNavigateToTrain: onNavigateToTrain,
+            onDismissCrateNudge: { dismissedCrateNudgeDate = Date() },
+            onDismissWalkTargetNudge: { dismissedWalkTargetNudgeDate = Date() },
+            onDismissAppointmentNudge: { dismissAppointmentNudge(for: $0) },
+            onCreateAppointmentPrefill: { createAppointmentPrefill(for: $0) },
+            onShowMonthRecap: { showMonthRecapSheet = true }
+        )
     }
 
     // MARK: - Timeline Section
@@ -589,50 +386,6 @@ struct TodayView: View {
                 viewModel.deleteEvent(event)
             }
         )
-    }
-
-    @ViewBuilder
-    private func aiRecommendationCard(_ recommendation: AILoggingCategoryRecommendation) -> some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Text(Strings.AINudges.recommendationTitle)
-                .font(.subheadline.weight(.semibold))
-                .foregroundStyle(.secondary)
-
-            Text(Strings.AINudges.recommendationBody(category: localizedCategoryName(recommendation.category)))
-                .font(.subheadline)
-                .foregroundStyle(.primary)
-
-            HStack(spacing: 10) {
-                Button(Strings.AINudges.keepCurrent) {
-                    viewModel.dismissAILoggingRecommendation(recommendation)
-                }
-                .buttonStyle(.glassPillCompact(tint: .custom(.otisMuted)))
-
-                Button(Strings.AINudges.reduceReminders) {
-                    viewModel.applyAILoggingRecommendation(recommendation)
-                }
-                .buttonStyle(.glassPillCompact(tint: .custom(.otisAccent)))
-            }
-        }
-        .padding(.horizontal, 14)
-        .padding(.vertical, 12)
-        .background(Color(.secondarySystemBackground).opacity(0.6))
-        .cornerRadius(LayoutConstants.cornerRadiusM)
-    }
-
-    private func localizedCategoryName(_ category: AILoggingCategory) -> String {
-        switch category {
-        case .potty:
-            return Strings.AINudges.categoryPotty
-        case .walk:
-            return Strings.AINudges.categoryWalk
-        case .meal:
-            return Strings.AINudges.categoryMeal
-        case .training:
-            return Strings.AINudges.categoryTraining
-        case .socialization:
-            return Strings.AINudges.categorySocialization
-        }
     }
 
 }
