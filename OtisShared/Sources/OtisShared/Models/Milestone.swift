@@ -440,6 +440,7 @@ public enum DefaultMilestones {
             detailKey: "milestone.dogLicense.detail",
             targetAgeWeeks: 12,
             icon: "doc.badge.plus",
+            isUserDismissable: true,
             sortOrder: sortOrder
         ))
         sortOrder += 1
