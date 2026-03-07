@@ -1598,4 +1598,149 @@ public enum Strings {
         public static var selectType: String { String(localized: "Allergy type", bundle: Strings.bundle) }
         public static var selectSeverity: String { String(localized: "Severity", bundle: Strings.bundle) }
     }
+
+    // MARK: - Senior Wellness
+    /// Strings for senior dog wellness features (Brief 05)
+    public enum SeniorWellness {
+        // MARK: - General
+        public static var title: String { String(localized: "Senior Wellness", bundle: Strings.bundle) }
+        public static var dashboard: String { String(localized: "Wellness Dashboard", bundle: Strings.bundle) }
+
+        // MARK: - Trends
+        public static var trendImproving: String { String(localized: "Improving", bundle: Strings.bundle) }
+        public static var trendStable: String { String(localized: "Stable", bundle: Strings.bundle) }
+        public static var trendDeclining: String { String(localized: "Declining", bundle: Strings.bundle) }
+
+        // MARK: - Mobility Observations
+        public static var observationStiffAfterRest: String { String(localized: "Stiff after rest", bundle: Strings.bundle) }
+        public static var observationDifficultyRising: String { String(localized: "Difficulty rising", bundle: Strings.bundle) }
+        public static var observationReluctantStairs: String { String(localized: "Reluctant to climb stairs", bundle: Strings.bundle) }
+        public static var observationBunnyHopping: String { String(localized: "Bunny hopping", bundle: Strings.bundle) }
+        public static var observationLimping: String { String(localized: "Limping", bundle: Strings.bundle) }
+        public static var observationSlowerWalks: String { String(localized: "Slower on walks", bundle: Strings.bundle) }
+        public static var observationTroubleSlipperyFloors: String { String(localized: "Trouble with slippery floors", bundle: Strings.bundle) }
+        public static var observationCollapsingRearLegs: String { String(localized: "Rear legs collapsing", bundle: Strings.bundle) }
+        public static var observationDraggingPaws: String { String(localized: "Dragging paws", bundle: Strings.bundle) }
+
+        // MARK: - Mobility Levels (1-5)
+        public static var mobilityLevel1: String { String(localized: "Cannot walk without help", bundle: Strings.bundle) }
+        public static var mobilityLevel2: String { String(localized: "Struggles significantly", bundle: Strings.bundle) }
+        public static var mobilityLevel3: String { String(localized: "Moderate difficulty", bundle: Strings.bundle) }
+        public static var mobilityLevel4: String { String(localized: "Mild stiffness/slowness", bundle: Strings.bundle) }
+        public static var mobilityLevel5: String { String(localized: "Moving well for age", bundle: Strings.bundle) }
+
+        public static var mobilityLevelShort1: String { String(localized: "Needs help", bundle: Strings.bundle) }
+        public static var mobilityLevelShort2: String { String(localized: "Struggling", bundle: Strings.bundle) }
+        public static var mobilityLevelShort3: String { String(localized: "Moderate", bundle: Strings.bundle) }
+        public static var mobilityLevelShort4: String { String(localized: "Mild issues", bundle: Strings.bundle) }
+        public static var mobilityLevelShort5: String { String(localized: "Good", bundle: Strings.bundle) }
+
+        // MARK: - CCD Categories
+        public static var ccdDisorientation: String { String(localized: "Disorientation", bundle: Strings.bundle) }
+        public static var ccdInteractions: String { String(localized: "Interactions", bundle: Strings.bundle) }
+        public static var ccdSleep: String { String(localized: "Sleep", bundle: Strings.bundle) }
+        public static var ccdHouseSoiling: String { String(localized: "House Soiling", bundle: Strings.bundle) }
+        public static var ccdActivity: String { String(localized: "Activity", bundle: Strings.bundle) }
+        public static var ccdAnxiety: String { String(localized: "Anxiety", bundle: Strings.bundle) }
+
+        // MARK: - CCD Symptoms - Disorientation
+        public static var symptomLostFamiliarPlaces: String { String(localized: "Gotten lost in familiar places", bundle: Strings.bundle) }
+        public static var symptomStaresAtWalls: String { String(localized: "Stared at walls or into space", bundle: Strings.bundle) }
+        public static var symptomWrongSideOfDoor: String { String(localized: "Gone to wrong side of door", bundle: Strings.bundle) }
+
+        // MARK: - CCD Symptoms - Interactions
+        public static var symptomLessInterested: String { String(localized: "Seemed less interested in you", bundle: Strings.bundle) }
+        public static var symptomNotGreeting: String { String(localized: "Not greeted you as usual", bundle: Strings.bundle) }
+        public static var symptomAvoidsPetting: String { String(localized: "Avoided petting/interaction", bundle: Strings.bundle) }
+
+        // MARK: - CCD Symptoms - Sleep
+        public static var symptomPacesAtNight: String { String(localized: "Paced at night", bundle: Strings.bundle) }
+        public static var symptomSleepsMoreDay: String { String(localized: "Slept more during day", bundle: Strings.bundle) }
+        public static var symptomWakesYouUp: String { String(localized: "Woken you up at night", bundle: Strings.bundle) }
+
+        // MARK: - CCD Symptoms - House Soiling
+        public static var symptomAccidents: String { String(localized: "Had accidents (was housetrained)", bundle: Strings.bundle) }
+        public static var symptomForgetsToSignal: String { String(localized: "Forgotten to signal to go out", bundle: Strings.bundle) }
+
+        // MARK: - CCD Symptoms - Activity
+        public static var symptomLessPlayInterest: String { String(localized: "Less interested in play", bundle: Strings.bundle) }
+        public static var symptomAimlessWandering: String { String(localized: "Aimless wandering", bundle: Strings.bundle) }
+        public static var symptomRepetitiveBehaviors: String { String(localized: "Repetitive behaviors", bundle: Strings.bundle) }
+
+        // MARK: - CCD Symptoms - Anxiety
+        public static var symptomMoreAnxious: String { String(localized: "Seemed more anxious", bundle: Strings.bundle) }
+        public static var symptomNewFears: String { String(localized: "New fears or phobias", bundle: Strings.bundle) }
+        public static var symptomIncreasedVocalization: String { String(localized: "Increased vocalization", bundle: Strings.bundle) }
+
+        // MARK: - CCD Severity
+        public static var severityNone: String { String(localized: "No signs", bundle: Strings.bundle) }
+        public static var severityMild: String { String(localized: "Mild signs", bundle: Strings.bundle) }
+        public static var severityModerate: String { String(localized: "Moderate signs", bundle: Strings.bundle) }
+        public static var severitySevere: String { String(localized: "Significant signs", bundle: Strings.bundle) }
+
+        // MARK: - CCD Guidance
+        public static var guidanceNone: String { String(localized: "No signs of cognitive decline detected.", bundle: Strings.bundle) }
+        public static var guidanceMild: String { String(localized: "Mild signs detected. Consider discussing with your vet at the next visit.", bundle: Strings.bundle) }
+        public static var guidanceModerate: String { String(localized: "Moderate signs detected. We recommend scheduling a vet appointment to discuss cognitive support options.", bundle: Strings.bundle) }
+        public static var guidanceSevere: String { String(localized: "Significant cognitive changes detected. Please consult your vet soon about management options.", bundle: Strings.bundle) }
+
+        // MARK: - Quality of Life Categories
+        public static var qolHurt: String { String(localized: "Hurt (Pain)", bundle: Strings.bundle) }
+        public static var qolHunger: String { String(localized: "Hunger", bundle: Strings.bundle) }
+        public static var qolHydration: String { String(localized: "Hydration", bundle: Strings.bundle) }
+        public static var qolHygiene: String { String(localized: "Hygiene", bundle: Strings.bundle) }
+        public static var qolHappiness: String { String(localized: "Happiness", bundle: Strings.bundle) }
+        public static var qolMobility: String { String(localized: "Mobility", bundle: Strings.bundle) }
+        public static var qolMoreDays: String { String(localized: "More Good Days Than Bad?", bundle: Strings.bundle) }
+
+        // MARK: - QoL Questions
+        public static var qolQuestionHurt: String { String(localized: "Is pain well managed?", bundle: Strings.bundle) }
+        public static var qolQuestionHunger: String { String(localized: "Is eating enough?", bundle: Strings.bundle) }
+        public static var qolQuestionHydration: String { String(localized: "Is drinking enough?", bundle: Strings.bundle) }
+        public static var qolQuestionHygiene: String { String(localized: "Can be kept clean/groomed?", bundle: Strings.bundle) }
+        public static var qolQuestionHappiness: String { String(localized: "Shows joy?", bundle: Strings.bundle) }
+        public static var qolQuestionMobility: String { String(localized: "Can get around?", bundle: Strings.bundle) }
+        public static var qolQuestionMoreDays: String { String(localized: "Overall quality of life", bundle: Strings.bundle) }
+
+        // MARK: - QoL Low/High Labels
+        public static var qolHurtLow: String { String(localized: "Severe pain", bundle: Strings.bundle) }
+        public static var qolHurtHigh: String { String(localized: "No pain", bundle: Strings.bundle) }
+        public static var qolHungerLow: String { String(localized: "Not eating", bundle: Strings.bundle) }
+        public static var qolHungerHigh: String { String(localized: "Eating well", bundle: Strings.bundle) }
+        public static var qolHydrationLow: String { String(localized: "Not drinking", bundle: Strings.bundle) }
+        public static var qolHydrationHigh: String { String(localized: "Drinking well", bundle: Strings.bundle) }
+        public static var qolHygieneLow: String { String(localized: "Cannot maintain", bundle: Strings.bundle) }
+        public static var qolHygieneHigh: String { String(localized: "Well maintained", bundle: Strings.bundle) }
+        public static var qolHappinessLow: String { String(localized: "No joy", bundle: Strings.bundle) }
+        public static var qolHappinessHigh: String { String(localized: "Full of joy", bundle: Strings.bundle) }
+        public static var qolMobilityLow: String { String(localized: "Cannot move", bundle: Strings.bundle) }
+        public static var qolMobilityHigh: String { String(localized: "Moving well", bundle: Strings.bundle) }
+        public static var qolMoreDaysLow: String { String(localized: "Mostly bad days", bundle: Strings.bundle) }
+        public static var qolMoreDaysHigh: String { String(localized: "Mostly good days", bundle: Strings.bundle) }
+
+        // MARK: - QoL Interpretation
+        public static var qolInterpretationGood: String { String(localized: "Good", bundle: Strings.bundle) }
+        public static var qolInterpretationAcceptable: String { String(localized: "Acceptable", bundle: Strings.bundle) }
+        public static var qolInterpretationCompromised: String { String(localized: "Compromised", bundle: Strings.bundle) }
+        public static var qolInterpretationPoor: String { String(localized: "Poor", bundle: Strings.bundle) }
+
+        public static var qolMessageGood: String { String(localized: "Quality of life is good. Continue current care.", bundle: Strings.bundle) }
+        public static var qolMessageAcceptable: String { String(localized: "Quality of life is acceptable. Monitor closely and discuss comfort measures with your vet.", bundle: Strings.bundle) }
+        public static var qolMessageCompromised: String { String(localized: "Quality of life may be compromised. Please discuss with your vet about management options.", bundle: Strings.bundle) }
+        public static var qolMessagePoor: String { String(localized: "Quality of life appears significantly impacted. We recommend an urgent conversation with your vet about your dog's comfort.", bundle: Strings.bundle) }
+
+        // MARK: - Respiratory Rate Status
+        public static var rrrStatusNormal: String { String(localized: "Normal", bundle: Strings.bundle) }
+        public static var rrrStatusElevated: String { String(localized: "Elevated", bundle: Strings.bundle) }
+        public static var rrrStatusEmergency: String { String(localized: "Very High", bundle: Strings.bundle) }
+
+        public static var rrrMessageNormal: String { String(localized: "Normal resting rate", bundle: Strings.bundle) }
+        public static var rrrMessageElevated: String { String(localized: "Elevated - monitor closely", bundle: Strings.bundle) }
+        public static var rrrMessageEmergency: String { String(localized: "Very high - contact vet immediately", bundle: Strings.bundle) }
+
+        // MARK: - Respiratory Rate Trend
+        public static var rrrTrendDecreasing: String { String(localized: "Decreasing", bundle: Strings.bundle) }
+        public static var rrrTrendStable: String { String(localized: "Stable", bundle: Strings.bundle) }
+        public static var rrrTrendIncreasing: String { String(localized: "Increasing", bundle: Strings.bundle) }
+    }
 }

@@ -59,7 +59,8 @@ extension SheetCoordinator.ActiveSheet {
         case .otisPlus, .startActivity, .startCoverageGap, .catchUp,
              .developmentJourney, .socializationWindow, .medicalCare,
              .fullTimeline, .walkScheduleEditor, .crateTrainingGuide,
-             .pottyTrainingGuide, .addAppointmentWithPrefill, .symptomLog:
+             .pottyTrainingGuide, .addAppointmentWithPrefill, .symptomLog,
+             .seniorMobility:
             return [.large]
 
         // Default for unspecified sheets

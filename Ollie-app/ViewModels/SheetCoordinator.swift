@@ -74,6 +74,8 @@ final class SheetCoordinator: ObservableObject {
         case medicationLog
         // Health symptom log sheet (Brief 04)
         case symptomLog(conditionId: UUID? = nil)
+        // Senior wellness sheets (Brief 05)
+        case seniorMobility
 
         var id: String {
             switch self {
@@ -113,6 +115,7 @@ final class SheetCoordinator: ObservableObject {
             case .addAppointmentWithPrefill(let prefill): return "addAppointmentWithPrefill-\(prefill.appointmentType.rawValue)"
             case .medicationLog: return "medicationLog"
             case .symptomLog(let conditionId): return "symptomLog-\(conditionId?.uuidString ?? "general")"
+            case .seniorMobility: return "seniorMobility"
             }
         }
     }

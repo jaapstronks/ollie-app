@@ -259,3 +259,77 @@ struct BehaviorChallengesContext: AIContextComponent {
         self.daysSinceLastIncident = nil
     }
 }
+
+// MARK: - Senior Wellness Context
+
+/// Senior dog wellness assessment data for AI context.
+struct SeniorWellnessContext: AIContextComponent {
+    static let componentKey = "senior_wellness"
+    static let estimatedTokens = 100
+
+    let isSenior: Bool
+    let latestMobilityScore: Int?
+    let mobilityTrend: String?
+    let latestCCDScore: Int?
+    let ccdSeverity: String?
+    let latestQoLScore: Int?
+    let qolInterpretation: String?
+    let activeConditions: [String]
+    let medicationCount: Int
+    let daysWithSymptoms: Int
+
+    init(profile: PuppyProfile) {
+        self.isSenior = profile.lifecyclePhase == .senior
+
+        let wellnessStore = SeniorWellnessStore.shared
+
+        // Mobility
+        if let mobility = wellnessStore.latestMobility, mobility.isFresh {
+            self.latestMobilityScore = mobility.score
+        } else {
+            self.latestMobilityScore = nil
+        }
+        self.mobilityTrend = wellnessStore.mobilityState.trend?.rawValue
+
+        // Cognitive
+        if let cognitive = wellnessStore.latestCognitive, cognitive.isCurrent {
+            self.latestCCDScore = cognitive.totalScore
+            self.ccdSeverity = cognitive.severity.rawValue
+        } else {
+            self.latestCCDScore = nil
+            self.ccdSeverity = nil
+        }
+
+        // Quality of Life
+        if let qol = wellnessStore.latestQoL, qol.isCurrent {
+            self.latestQoLScore = qol.totalScore
+            self.qolInterpretation = qol.interpretation.rawValue
+        } else {
+            self.latestQoLScore = nil
+            self.qolInterpretation = nil
+        }
+
+        // Conditions and medications
+        self.activeConditions = profile.healthConditions
+            .filter { $0.status == .active }
+            .map { $0.type.rawValue }
+
+        self.medicationCount = profile.medicationSchedule.medications.count
+
+        // Recent symptoms
+        self.daysWithSymptoms = HealthSymptomStore.shared.recentSymptoms().count
+    }
+
+    init() {
+        self.isSenior = false
+        self.latestMobilityScore = nil
+        self.mobilityTrend = nil
+        self.latestCCDScore = nil
+        self.ccdSeverity = nil
+        self.latestQoLScore = nil
+        self.qolInterpretation = nil
+        self.activeConditions = []
+        self.medicationCount = 0
+        self.daysWithSymptoms = 0
+    }
+}

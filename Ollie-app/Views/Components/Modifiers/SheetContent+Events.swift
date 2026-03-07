@@ -109,6 +109,22 @@ extension SheetCoordinator.ActiveSheet {
             )
             .environmentObject(context.viewModel.profileStore)
 
+        case .seniorMobility:
+            MobilityAssessmentSheet(
+                onSave: { assessment in
+                    SeniorWellnessStore.shared.recordMobility(
+                        score: assessment.score,
+                        observations: assessment.observations,
+                        note: assessment.note
+                    )
+                    context.sheetCoordinator.dismissSheet()
+                },
+                onCancel: {
+                    context.sheetCoordinator.dismissSheet()
+                }
+            )
+            .environmentObject(context.viewModel.profileStore)
+
         default:
             EmptyView()
         }

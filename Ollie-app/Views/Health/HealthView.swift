@@ -22,6 +22,12 @@ struct HealthView: View {
 
     @StateObject private var symptomStore = HealthSymptomStore.shared
     @StateObject private var checkInStore = HealthCheckInStore.shared
+    @StateObject private var seniorWellnessStore = SeniorWellnessStore.shared
+
+    @State private var showMobilitySheet = false
+    @State private var showCognitiveSheet = false
+    @State private var showQoLSheet = false
+    @State private var showRRRSheet = false
 
     @Environment(\.colorScheme) private var colorScheme
 
@@ -60,6 +66,11 @@ struct HealthView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
+                // Senior wellness section (for senior dogs)
+                if isSenior {
+                    seniorWellnessSection
+                }
+
                 // Symptoms section (for dogs with conditions)
                 if hasActiveConditions {
                     symptomsSection
@@ -93,12 +104,134 @@ struct HealthView: View {
             )
             .environmentObject(viewModel.profileStore)
         }
+        .sheet(isPresented: $showMobilitySheet) {
+            MobilityAssessmentSheet(onSave: { assessment in
+                seniorWellnessStore.recordMobility(
+                    score: assessment.score,
+                    observations: assessment.observations,
+                    note: assessment.note
+                )
+            })
+            .environmentObject(viewModel.profileStore)
+        }
+        .sheet(isPresented: $showCognitiveSheet) {
+            CognitiveAssessmentSheet(onSave: { assessment in
+                seniorWellnessStore.recordCognitive(
+                    symptoms: assessment.symptoms,
+                    note: assessment.note
+                )
+            })
+            .environmentObject(viewModel.profileStore)
+        }
+        .sheet(isPresented: $showQoLSheet) {
+            QualityOfLifeSheet(onSave: { assessment in
+                seniorWellnessStore.recordQoL(
+                    hurt: assessment.hurt,
+                    hunger: assessment.hunger,
+                    hydration: assessment.hydration,
+                    hygiene: assessment.hygiene,
+                    happiness: assessment.happiness,
+                    mobility: assessment.mobility,
+                    moreDays: assessment.moreDays,
+                    note: assessment.note
+                )
+            })
+            .environmentObject(viewModel.profileStore)
+        }
+        .sheet(isPresented: $showRRRSheet) {
+            RespiratoryRateSheet(onSave: { reading in
+                seniorWellnessStore.recordRRR(
+                    breathsPerMinute: reading.breathsPerMinute,
+                    wasResting: reading.wasResting,
+                    note: reading.note
+                )
+            })
+            .environmentObject(viewModel.profileStore)
+        }
     }
 
     private var hasActiveConditions: Bool {
         guard let profile = profile else { return false }
         return !profile.healthConditions.filter { $0.status == .active }.isEmpty ||
                profile.lifecyclePhase == .senior
+    }
+
+    private var isSenior: Bool {
+        profile?.lifecyclePhase == .senior || seniorWellnessStore.shouldShowSeniorFeatures
+    }
+
+    // MARK: - Senior Wellness Section
+
+    @ViewBuilder
+    private var seniorWellnessSection: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            // Section header
+            HStack(spacing: 8) {
+                Image(systemName: "heart.circle.fill")
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundStyle(Color.pink)
+
+                Text(Strings.SeniorWellness.title)
+                    .font(.subheadline)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(.secondary)
+
+                Spacer()
+
+                // View all button
+                NavigationLink(destination: SeniorWellnessView().environmentObject(viewModel.profileStore)) {
+                    Text(Strings.Common.seeAll)
+                        .font(.subheadline)
+                        .foregroundStyle(.blue)
+                }
+            }
+            .padding(.horizontal, 4)
+
+            // Senior wellness card
+            VStack(spacing: 16) {
+                // Quick mobility check
+                MobilityTrendCard(
+                    onLogTap: { showMobilitySheet = true },
+                    onViewHistoryTap: {
+                        // Navigate to history
+                    }
+                )
+                .environmentObject(viewModel.profileStore)
+
+                // Additional assessments reminder
+                if seniorWellnessStore.cognitiveAssessmentDue || seniorWellnessStore.qolAssessmentDue {
+                    VStack(spacing: 8) {
+                        if seniorWellnessStore.cognitiveAssessmentDue {
+                            AssessmentDueCard(
+                                title: Strings.SeniorWellness.cognitiveAssessment,
+                                icon: "brain.head.profile",
+                                iconColor: .purple,
+                                lastDate: seniorWellnessStore.latestCognitive?.createdAt,
+                                action: { showCognitiveSheet = true }
+                            )
+                        }
+
+                        if seniorWellnessStore.qolAssessmentDue {
+                            AssessmentDueCard(
+                                title: Strings.SeniorWellness.qualityOfLife,
+                                icon: "heart.circle.fill",
+                                iconColor: .pink,
+                                lastDate: seniorWellnessStore.latestQoL?.createdAt,
+                                action: { showQoLSheet = true }
+                            )
+                        }
+                    }
+                }
+
+                // RRR tracking (for heart conditions)
+                if seniorWellnessStore.shouldShowRRRTracking {
+                    RRRQuickCard(
+                        latestReading: seniorWellnessStore.latestRRR,
+                        onLogTap: { showRRRSheet = true }
+                    )
+                }
+            }
+        }
     }
 
     // MARK: - Symptoms Section
@@ -345,6 +478,105 @@ struct HealthView: View {
         formatter.dateStyle = .medium
         formatter.timeStyle = .none
         return formatter.string(from: date)
+    }
+}
+
+// MARK: - Senior Wellness Supporting Views
+
+private struct AssessmentDueCard: View {
+    let title: String
+    let icon: String
+    let iconColor: Color
+    let lastDate: Date?
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            HStack {
+                Image(systemName: icon)
+                    .foregroundStyle(iconColor)
+                    .frame(width: 24)
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(title)
+                        .font(.subheadline)
+                        .fontWeight(.medium)
+                        .foregroundStyle(.primary)
+
+                    if let date = lastDate {
+                        Text("Last: \(date, style: .relative)")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    } else {
+                        Text("Not yet completed")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+
+                Spacer()
+
+                Image(systemName: "circle.fill")
+                    .font(.system(size: 8))
+                    .foregroundStyle(.orange)
+
+                Image(systemName: "chevron.right")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            .padding()
+            .background(Color(.tertiarySystemBackground))
+            .clipShape(RoundedRectangle(cornerRadius: 12))
+        }
+        .buttonStyle(.plain)
+    }
+}
+
+private struct RRRQuickCard: View {
+    let latestReading: RespiratoryRateReading?
+    let onLogTap: () -> Void
+
+    var body: some View {
+        HStack {
+            Image(systemName: "lungs.fill")
+                .foregroundStyle(.blue)
+                .frame(width: 24)
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text(Strings.SeniorWellness.rrrTitle)
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+
+                if let reading = latestReading {
+                    HStack(spacing: 4) {
+                        Text(reading.formattedBPM)
+                            .font(.caption)
+                        Text("•")
+                            .foregroundStyle(.secondary)
+                        Text(reading.status.label)
+                            .font(.caption)
+                            .foregroundStyle(Color(reading.status.colorName))
+                    }
+                } else {
+                    Text("No readings yet")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            }
+
+            Spacer()
+
+            Button(action: onLogTap) {
+                Label("Log", systemImage: "plus.circle.fill")
+                    .font(.caption)
+                    .fontWeight(.medium)
+            }
+            .buttonStyle(.bordered)
+            .tint(.blue)
+        }
+        .padding()
+        .background(Color(.tertiarySystemBackground))
+        .clipShape(RoundedRectangle(cornerRadius: 12))
     }
 }
 

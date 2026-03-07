@@ -90,6 +90,9 @@ struct TodayStatusCardsSection: View {
             // Symptom trend card (for dogs with conditions)
             symptomTrendCard(combinedState)
 
+            // Senior wellness quick card (for senior dogs)
+            seniorWellnessQuickCard(combinedState)
+
             // Medications and scheduled events
             medicationsAndScheduledEvents(combinedState, separated: separated, isSleeping: isSleeping)
         }
@@ -390,6 +393,29 @@ private extension TodayStatusCardsSection {
     }
 
     @ViewBuilder
+    func seniorWellnessQuickCard(_ combinedState: CombinedSleepPottyState) -> some View {
+        if !combinedState.shouldShowFirstRunCard,
+           let profile = viewModel.profileStore.profile,
+           profile.lifecyclePhase == .senior {
+            let wellnessStore = SeniorWellnessStore.shared
+
+            // Show mobility quick check if not logged today
+            if wellnessStore.latestMobility?.daysAgo ?? 1 > 0 {
+                SeniorMobilityQuickCard(
+                    puppyName: profile.name,
+                    onRate: { score in
+                        wellnessStore.recordMobility(score: score)
+                    },
+                    onDetailedLog: {
+                        viewModel.sheetCoordinator.presentSheet(.seniorMobility)
+                    }
+                )
+                .animatedAppear(delay: 0.045)
+            }
+        }
+    }
+
+    @ViewBuilder
     func medicationsAndScheduledEvents(
         _ combinedState: CombinedSleepPottyState,
         separated: (actionable: [ActionableItem], upcoming: [UpcomingItem]),
@@ -459,6 +485,69 @@ private struct AIRecommendationCard: View {
         case .meal: return Strings.AINudges.categoryMeal
         case .training: return Strings.AINudges.categoryTraining
         case .socialization: return Strings.AINudges.categorySocialization
+        }
+    }
+}
+
+// MARK: - Senior Mobility Quick Card
+
+private struct SeniorMobilityQuickCard: View {
+    let puppyName: String
+    let onRate: (Int) -> Void
+    let onDetailedLog: () -> Void
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Image(systemName: "figure.walk")
+                    .foregroundStyle(.blue)
+                Text(Strings.SeniorWellness.howIsMobility(name: puppyName))
+                    .font(.subheadline)
+                    .fontWeight(.semibold)
+            }
+
+            // Quick 1-5 rating buttons
+            HStack(spacing: 8) {
+                ForEach(1...5, id: \.self) { score in
+                    Button {
+                        onRate(score)
+                    } label: {
+                        Text("\(score)")
+                            .font(.headline)
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 40)
+                            .background(colorForScore(score).opacity(0.2))
+                            .foregroundStyle(colorForScore(score))
+                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+
+            // Add details button
+            Button(action: onDetailedLog) {
+                HStack {
+                    Text("Add observations")
+                        .font(.caption)
+                    Image(systemName: "chevron.right")
+                        .font(.caption2)
+                }
+                .foregroundStyle(.secondary)
+            }
+        }
+        .padding()
+        .background(Color(.secondarySystemBackground))
+        .clipShape(RoundedRectangle(cornerRadius: LayoutConstants.cornerRadiusM))
+    }
+
+    private func colorForScore(_ score: Int) -> Color {
+        switch score {
+        case 1: return .red
+        case 2: return .orange
+        case 3: return .yellow
+        case 4: return .mint
+        case 5: return .green
+        default: return .gray
         }
     }
 }
