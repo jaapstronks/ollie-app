@@ -17,7 +17,11 @@ struct HealthView: View {
 
     @State private var showWeightSheet = false
     @State private var showAddMilestoneSheet = false
+    @State private var showSymptomLogSheet = false
     @AppStorage(UserPreferences.Key.weightUnit.rawValue) private var weightUnitRaw = WeightUnit.kg.rawValue
+
+    @StateObject private var symptomStore = HealthSymptomStore.shared
+    @StateObject private var checkInStore = HealthCheckInStore.shared
 
     @Environment(\.colorScheme) private var colorScheme
 
@@ -56,6 +60,11 @@ struct HealthView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
+                // Symptoms section (for dogs with conditions)
+                if hasActiveConditions {
+                    symptomsSection
+                }
+
                 // Weight section
                 weightSection
 
@@ -72,6 +81,125 @@ struct HealthView: View {
         .sheet(isPresented: $showWeightSheet) {
             WeightLogSheet(isPresented: $showWeightSheet)
         }
+        .sheet(isPresented: $showSymptomLogSheet) {
+            SymptomLogSheet(
+                onSave: { symptom in
+                    symptomStore.log(symptom)
+                    showSymptomLogSheet = false
+                },
+                onCancel: {
+                    showSymptomLogSheet = false
+                }
+            )
+            .environmentObject(viewModel.profileStore)
+        }
+    }
+
+    private var hasActiveConditions: Bool {
+        guard let profile = profile else { return false }
+        return !profile.healthConditions.filter { $0.status == .active }.isEmpty ||
+               profile.lifecyclePhase == .senior
+    }
+
+    // MARK: - Symptoms Section
+
+    @ViewBuilder
+    private var symptomsSection: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            // Section header
+            HStack(spacing: 8) {
+                Image(systemName: "stethoscope")
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundStyle(Color.teal)
+
+                Text(Strings.HealthLogging.symptomTrends)
+                    .font(.subheadline)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(.secondary)
+
+                Spacer()
+
+                // Log symptom button
+                Button {
+                    showSymptomLogSheet = true
+                } label: {
+                    Label(Strings.HealthLogging.logSymptom, systemImage: "plus.circle.fill")
+                        .font(.subheadline)
+                        .fontWeight(.medium)
+                }
+            }
+            .padding(.horizontal, 4)
+
+            // Symptoms content
+            VStack(spacing: 16) {
+                // Recent symptoms summary
+                let recentSymptoms = symptomStore.recentSymptoms()
+                if recentSymptoms.isEmpty {
+                    VStack(spacing: 8) {
+                        Image(systemName: "checkmark.circle.fill")
+                            .font(.system(size: 32))
+                            .foregroundStyle(.green)
+                        Text(Strings.HealthLogging.noRecentSymptoms)
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 20)
+                } else {
+                    // Show recent symptoms grouped by type
+                    ForEach(recentSymptomsSummary, id: \.type) { summary in
+                        HStack {
+                            Image(systemName: summary.type.icon)
+                                .foregroundStyle(.teal)
+                            Text(summary.type.label)
+                                .font(.subheadline)
+                            Spacer()
+                            Text(Strings.HealthLogging.episodes(summary.count))
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                        .padding(.vertical, 4)
+                    }
+                }
+
+                // Quick log cards for active conditions
+                if let profile = profile {
+                    let activeConditions = profile.healthConditions.filter { $0.status == .active }
+                    if !activeConditions.isEmpty {
+                        ForEach(activeConditions) { condition in
+                            ConditionQuickLogCard(
+                                condition: condition,
+                                onLogSymptom: { symptomType in
+                                    let log = HealthSymptomLog(
+                                        symptomType: symptomType,
+                                        relatedConditionId: condition.id
+                                    )
+                                    symptomStore.log(log)
+                                },
+                                onLogGoodDay: {
+                                    // Could track "good days" for trends
+                                },
+                                onViewDetails: {
+                                    // Could navigate to condition detail
+                                }
+                            )
+                        }
+                    }
+                }
+            }
+            .padding()
+            .glassCard(tint: .info)
+        }
+    }
+
+    private var recentSymptomsSummary: [(type: SymptomType, count: Int)] {
+        let symptoms = symptomStore.recentSymptoms()
+        let grouped = Dictionary(grouping: symptoms) { $0.symptomType }
+        return grouped
+            .map { (type: $0.key, count: $0.value.count) }
+            .sorted { $0.count > $1.count }
+            .prefix(3)
+            .map { $0 }
     }
 
     // MARK: - Weight Section

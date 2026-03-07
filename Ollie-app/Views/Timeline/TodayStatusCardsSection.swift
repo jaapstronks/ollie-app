@@ -84,6 +84,12 @@ struct TodayStatusCardsSection: View {
             // AI recommendation card
             aiRecommendationCard(aiRecommendation, combinedState: combinedState)
 
+            // Health check-in card (for dogs with conditions or seniors)
+            healthCheckInCard(combinedState)
+
+            // Symptom trend card (for dogs with conditions)
+            symptomTrendCard(combinedState)
+
             // Medications and scheduled events
             medicationsAndScheduledEvents(combinedState, separated: separated, isSleeping: isSleeping)
         }
@@ -196,6 +202,7 @@ private extension TodayStatusCardsSection {
                 minutesSinceWake: minutesSinceWake,
                 pottyWasOverdueBy: overdueBy,
                 subjectPronoun: viewModel.profileStore.profile?.subjectPronoun ?? "they",
+                usesPluralVerbForm: viewModel.profileStore.profile?.usesPluralVerbForm ?? true,
                 onLogPotty: { viewModel.sheetCoordinator.presentSheet(.potty(preselected: .plassen)) }
             )
         }
@@ -232,6 +239,7 @@ private extension TodayStatusCardsSection {
                 pendingActionable: pendingActionable,
                 subjectPronoun: viewModel.profileStore.profile?.subjectPronoun ?? "they",
                 objectPronoun: viewModel.profileStore.profile?.objectPronoun ?? "them",
+                usesPluralVerbForm: viewModel.profileStore.profile?.usesPluralVerbForm ?? true,
                 onWakeUp: {
                     viewModel.sheetCoordinator.presentSheet(.endSleep(since))
                 }
@@ -330,6 +338,54 @@ private extension TodayStatusCardsSection {
                 onReduceReminders: { viewModel.applyAILoggingRecommendation(recommendation) }
             )
             .animatedAppear(delay: 0.03)
+        }
+    }
+
+    @ViewBuilder
+    func healthCheckInCard(_ combinedState: CombinedSleepPottyState) -> some View {
+        if !combinedState.shouldShowFirstRunCard,
+           let profile = viewModel.profileStore.profile,
+           let nextCategory = HealthCheckInStore.shared.nextCategoryForCard() {
+            let contextSummary = HealthCheckInStore.shared.contextSummary(for: nextCategory, puppyName: profile.name)
+            HealthCheckInCard(
+                category: nextCategory,
+                puppyName: profile.name,
+                contextSummary: contextSummary,
+                onSubmit: { score in
+                    HealthCheckInStore.shared.recordCheckIn(
+                        category: nextCategory,
+                        score: score,
+                        contextSummary: contextSummary
+                    )
+                },
+                onDismiss: {
+                    // User dismissed, we'll ask again in a few days
+                }
+            )
+            .animatedAppear(delay: 0.035)
+        }
+    }
+
+    @ViewBuilder
+    func symptomTrendCard(_ combinedState: CombinedSleepPottyState) -> some View {
+        if !combinedState.shouldShowFirstRunCard,
+           let profile = viewModel.profileStore.profile {
+            let activeConditions = profile.healthConditions.filter { $0.status == .active }
+            // Show trend card for first active condition with recent symptoms
+            if let condition = activeConditions.first {
+                let trendSummary = HealthSymptomStore.shared.trend(for: condition.id)
+                if trendSummary.episodesThisWeek > 0 || trendSummary.episodesLastWeek > 0 {
+                    SymptomTrendCard(
+                        conditionName: condition.displayName,
+                        conditionId: condition.id,
+                        trendSummary: trendSummary,
+                        onViewDetails: {
+                            // Navigate to health detail view - could add navigation here
+                        }
+                    )
+                    .animatedAppear(delay: 0.04)
+                }
+            }
         }
     }
 

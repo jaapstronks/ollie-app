@@ -1367,6 +1367,175 @@ public enum Strings {
         public static var noSymptoms: String { String(localized: "No symptoms logged", bundle: Strings.bundle) }
     }
 
+    // MARK: - Health Logging
+
+    /// Strings for health logging features (Brief 04)
+    public enum HealthLogging {
+        // MARK: - Body Locations
+        public static var bodyFrontLeftLeg: String { String(localized: "Front left leg", bundle: Strings.bundle) }
+        public static var bodyFrontRightLeg: String { String(localized: "Front right leg", bundle: Strings.bundle) }
+        public static var bodyRearLeftLeg: String { String(localized: "Rear left leg", bundle: Strings.bundle) }
+        public static var bodyRearRightLeg: String { String(localized: "Rear right leg", bundle: Strings.bundle) }
+        public static var bodyHead: String { String(localized: "Head", bundle: Strings.bundle) }
+        public static var bodyNeck: String { String(localized: "Neck", bundle: Strings.bundle) }
+        public static var bodyChest: String { String(localized: "Chest", bundle: Strings.bundle) }
+        public static var bodyBack: String { String(localized: "Back", bundle: Strings.bundle) }
+        public static var bodyAbdomen: String { String(localized: "Abdomen/Belly", bundle: Strings.bundle) }
+        public static var bodyTail: String { String(localized: "Tail", bundle: Strings.bundle) }
+        public static var bodyLeftEar: String { String(localized: "Left ear", bundle: Strings.bundle) }
+        public static var bodyRightEar: String { String(localized: "Right ear", bundle: Strings.bundle) }
+        public static var bodyLeftEye: String { String(localized: "Left eye", bundle: Strings.bundle) }
+        public static var bodyRightEye: String { String(localized: "Right eye", bundle: Strings.bundle) }
+        public static var bodyFrontLeftPaw: String { String(localized: "Front left paw", bundle: Strings.bundle) }
+        public static var bodyFrontRightPaw: String { String(localized: "Front right paw", bundle: Strings.bundle) }
+        public static var bodyRearLeftPaw: String { String(localized: "Rear left paw", bundle: Strings.bundle) }
+        public static var bodyRearRightPaw: String { String(localized: "Rear right paw", bundle: Strings.bundle) }
+        public static var bodyWholeBody: String { String(localized: "Whole body", bundle: Strings.bundle) }
+        public static var bodyUnspecified: String { String(localized: "Not specified", bundle: Strings.bundle) }
+
+        // Body location groups
+        public static var groupLegs: String { String(localized: "Legs", bundle: Strings.bundle) }
+        public static var groupPaws: String { String(localized: "Paws", bundle: Strings.bundle) }
+        public static var groupEars: String { String(localized: "Ears", bundle: Strings.bundle) }
+        public static var groupEyes: String { String(localized: "Eyes", bundle: Strings.bundle) }
+        public static var groupBody: String { String(localized: "Body", bundle: Strings.bundle) }
+        public static var groupGeneral: String { String(localized: "General", bundle: Strings.bundle) }
+
+        // MARK: - Duration
+        public static var durationBrief: String { String(localized: "Brief (< 15 min)", bundle: Strings.bundle) }
+        public static var durationShortTerm: String { String(localized: "15 min - 2 hours", bundle: Strings.bundle) }
+        public static var durationHours: String { String(localized: "Several hours", bundle: Strings.bundle) }
+        public static var durationDays: String { String(localized: "Multiple days", bundle: Strings.bundle) }
+        public static var durationOngoing: String { String(localized: "Ongoing", bundle: Strings.bundle) }
+        public static var durationResolved: String { String(localized: "Resolved", bundle: Strings.bundle) }
+
+        // MARK: - Status
+        public static var statusActive: String { String(localized: "Active", bundle: Strings.bundle) }
+        public static var statusResolved: String { String(localized: "Resolved", bundle: Strings.bundle) }
+        public static var statusRecurring: String { String(localized: "Recurring", bundle: Strings.bundle) }
+
+        // MARK: - Start Time
+        public static var startJustNow: String { String(localized: "Just now", bundle: Strings.bundle) }
+        public static var startEarlierToday: String { String(localized: "Earlier today", bundle: Strings.bundle) }
+        public static var startYesterday: String { String(localized: "Yesterday", bundle: Strings.bundle) }
+        public static var startBeenOngoing: String { String(localized: "Been ongoing", bundle: Strings.bundle) }
+
+        // MARK: - Triggers
+        public static var triggerAfterWalk: String { String(localized: "After walk", bundle: Strings.bundle) }
+        public static var triggerAfterEating: String { String(localized: "After eating", bundle: Strings.bundle) }
+        public static var triggerAfterWaking: String { String(localized: "After waking", bundle: Strings.bundle) }
+        public static var triggerColdWeather: String { String(localized: "Cold weather", bundle: Strings.bundle) }
+        public static var triggerHotWeather: String { String(localized: "Hot weather", bundle: Strings.bundle) }
+        public static var triggerStress: String { String(localized: "Stress", bundle: Strings.bundle) }
+        public static var triggerExercise: String { String(localized: "Exercise", bundle: Strings.bundle) }
+        public static var triggerNewFood: String { String(localized: "New food", bundle: Strings.bundle) }
+        public static var triggerMedication: String { String(localized: "Medication", bundle: Strings.bundle) }
+
+        // MARK: - Trend
+        public static var trendImproving: String { String(localized: "Improving", bundle: Strings.bundle) }
+        public static var trendStable: String { String(localized: "Stable", bundle: Strings.bundle) }
+        public static var trendWorsening: String { String(localized: "Worsening", bundle: Strings.bundle) }
+
+        // MARK: - Severity
+        public static var severityMild: String { String(localized: "Mild", bundle: Strings.bundle) }
+        public static var severityMildModerate: String { String(localized: "Mild-Moderate", bundle: Strings.bundle) }
+        public static var severityModerate: String { String(localized: "Moderate", bundle: Strings.bundle) }
+        public static var severityModSevere: String { String(localized: "Moderate-Severe", bundle: Strings.bundle) }
+        public static var severitySevere: String { String(localized: "Severe", bundle: Strings.bundle) }
+
+        // MARK: - Health Check-In Categories
+        public static var checkInMobility: String { String(localized: "Mobility", bundle: Strings.bundle) }
+        public static var checkInEnergy: String { String(localized: "Energy Level", bundle: Strings.bundle) }
+        public static var checkInAppetite: String { String(localized: "Appetite", bundle: Strings.bundle) }
+        public static var checkInBreathing: String { String(localized: "Breathing", bundle: Strings.bundle) }
+        public static var checkInComfort: String { String(localized: "Comfort", bundle: Strings.bundle) }
+        public static var checkInCognition: String { String(localized: "Alertness", bundle: Strings.bundle) }
+        public static var checkInSkin: String { String(localized: "Skin/Coat", bundle: Strings.bundle) }
+        public static var checkInDigestion: String { String(localized: "Digestion", bundle: Strings.bundle) }
+        public static var checkInVision: String { String(localized: "Vision", bundle: Strings.bundle) }
+        public static var checkInHearing: String { String(localized: "Hearing", bundle: Strings.bundle) }
+        public static var checkInOverall: String { String(localized: "Overall", bundle: Strings.bundle) }
+
+        // MARK: - Check-In Questions
+        public static func questionMobility(name: String) -> String {
+            String(localized: "How is \(name)'s mobility today?", bundle: Strings.bundle)
+        }
+        public static func questionEnergy(name: String) -> String {
+            String(localized: "How is \(name)'s energy level?", bundle: Strings.bundle)
+        }
+        public static func questionAppetite(name: String) -> String {
+            String(localized: "How is \(name)'s appetite?", bundle: Strings.bundle)
+        }
+        public static func questionBreathing(name: String) -> String {
+            String(localized: "How is \(name)'s breathing?", bundle: Strings.bundle)
+        }
+        public static func questionComfort(name: String) -> String {
+            String(localized: "How comfortable does \(name) seem?", bundle: Strings.bundle)
+        }
+        public static func questionCognition(name: String) -> String {
+            String(localized: "How alert is \(name) today?", bundle: Strings.bundle)
+        }
+        public static func questionSkin(name: String) -> String {
+            String(localized: "How is \(name)'s skin/itching?", bundle: Strings.bundle)
+        }
+        public static func questionDigestion(name: String) -> String {
+            String(localized: "How is \(name)'s digestion?", bundle: Strings.bundle)
+        }
+        public static func questionVision(name: String) -> String {
+            String(localized: "How is \(name)'s vision?", bundle: Strings.bundle)
+        }
+        public static func questionHearing(name: String) -> String {
+            String(localized: "How does \(name) respond to sounds?", bundle: Strings.bundle)
+        }
+        public static func questionOverall(name: String) -> String {
+            String(localized: "How is \(name) doing overall?", bundle: Strings.bundle)
+        }
+
+        // MARK: - Rating Labels
+        public static var ratingPoor: String { String(localized: "Poor", bundle: Strings.bundle) }
+        public static var ratingNotGreat: String { String(localized: "Not great", bundle: Strings.bundle) }
+        public static var ratingOkay: String { String(localized: "Okay", bundle: Strings.bundle) }
+        public static var ratingGood: String { String(localized: "Good", bundle: Strings.bundle) }
+        public static var ratingGreat: String { String(localized: "Great", bundle: Strings.bundle) }
+
+        // MARK: - UI Labels
+        public static var logSymptom: String { String(localized: "Log Symptom", bundle: Strings.bundle) }
+        public static var whatDidYouNotice: String { String(localized: "What did you notice?", bundle: Strings.bundle) }
+        public static var severity: String { String(localized: "Severity", bundle: Strings.bundle) }
+        public static var bodyLocation: String { String(localized: "Body location", bundle: Strings.bundle) }
+        public static var whenDidItStart: String { String(localized: "When did it start?", bundle: Strings.bundle) }
+        public static var duration: String { String(localized: "Duration", bundle: Strings.bundle) }
+        public static var relatedTo: String { String(localized: "Related to", bundle: Strings.bundle) }
+        public static var addPhoto: String { String(localized: "Add photo", bundle: Strings.bundle) }
+        public static var notes: String { String(localized: "Notes", bundle: Strings.bundle) }
+        public static var notesPlaceholder: String { String(localized: "Additional details...", bundle: Strings.bundle) }
+
+        // MARK: - Trend Card
+        public static var thisWeek: String { String(localized: "This week", bundle: Strings.bundle) }
+        public static var lastWeek: String { String(localized: "Last week", bundle: Strings.bundle) }
+        public static func episodes(_ count: Int) -> String {
+            if count == 1 {
+                return String(localized: "1 episode", bundle: Strings.bundle)
+            } else {
+                return String(localized: "\(count) episodes", bundle: Strings.bundle)
+            }
+        }
+        public static var commonTriggers: String { String(localized: "Common triggers", bundle: Strings.bundle) }
+        public static var viewDetails: String { String(localized: "View Details", bundle: Strings.bundle) }
+        public static var symptomTrends: String { String(localized: "Symptom Trends", bundle: Strings.bundle) }
+        public static var noRecentSymptoms: String { String(localized: "No symptoms logged recently", bundle: Strings.bundle) }
+
+        // MARK: - Quick Log
+        public static var quickLog: String { String(localized: "Quick Log", bundle: Strings.bundle) }
+        public static var goodDay: String { String(localized: "Good Day", bundle: Strings.bundle) }
+        public static var stiffMorning: String { String(localized: "Stiff Morning", bundle: Strings.bundle) }
+        public static var flareUp: String { String(localized: "Flare-up", bundle: Strings.bundle) }
+
+        // MARK: - Check-In Card
+        public static var healthCheckIn: String { String(localized: "Health Check-In", bundle: Strings.bundle) }
+        public static var submit: String { String(localized: "Submit", bundle: Strings.bundle) }
+    }
+
     // MARK: - Allergies
 
     /// Strings for allergy tracking

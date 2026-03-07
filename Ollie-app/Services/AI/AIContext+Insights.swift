@@ -181,11 +181,10 @@ struct BehaviorChallengesContext: AIContextComponent {
         let now = Date()
         let sevenDaysAgo = Calendar.current.date(byAdding: .day, value: -7, to: now) ?? now
         let fourteenDaysAgo = Calendar.current.date(byAdding: .day, value: -14, to: now) ?? now
-        let thirtyDaysAgo = Calendar.current.date(byAdding: .day, value: -30, to: now) ?? now
 
-        let behaviorEvents = events.filter { $0.isBehaviorIncident && $0.time >= thirtyDaysAgo }
-        let thisWeekEvents = behaviorEvents.filter { $0.time >= sevenDaysAgo }
-        let lastWeekEvents = behaviorEvents.filter { $0.time >= fourteenDaysAgo && $0.time < sevenDaysAgo }
+        let behaviorEvents = events.filter { $0.isBehaviorIncident }.thisMonth()
+        let thisWeekEvents = behaviorEvents.filter { $0.time.isThisWeek }
+        let lastWeekEvents = behaviorEvents.filter { $0.time.isLastWeek }
 
         self.incidentsThisWeek = thisWeekEvents.count
         self.incidentsLastWeek = lastWeekEvents.count
@@ -206,8 +205,8 @@ struct BehaviorChallengesContext: AIContextComponent {
         for (category, categoryEvents) in grouped {
             guard let cat = category else { continue }
 
-            let thisWeek = categoryEvents.filter { $0.time >= sevenDaysAgo }.count
-            let lastWeek = categoryEvents.filter { $0.time >= fourteenDaysAgo && $0.time < sevenDaysAgo }.count
+            let thisWeek = categoryEvents.filter { $0.time.isThisWeek }.count
+            let lastWeek = categoryEvents.filter { $0.time.isLastWeek }.count
 
             let trend: String
             if lastWeek == 0 && thisWeek > 0 {
@@ -236,7 +235,7 @@ struct BehaviorChallengesContext: AIContextComponent {
         self.activeIssues = issues.sorted { $0.incidentsThisWeek > $1.incidentsThisWeek }
 
         if let lastIncident = behaviorEvents.max(by: { $0.time < $1.time }) {
-            self.daysSinceLastIncident = Calendar.current.dateComponents([.day], from: lastIncident.time, to: now).day
+            self.daysSinceLastIncident = Date().daysSince(lastIncident.time)
         } else {
             self.daysSinceLastIncident = nil
         }

@@ -96,6 +96,19 @@ extension SheetCoordinator.ActiveSheet {
                 EmptyView()
             }
 
+        case .symptomLog(let conditionId):
+            SymptomLogSheet(
+                preselectedConditionId: conditionId,
+                onSave: { symptomLog in
+                    HealthSymptomStore.shared.log(symptomLog)
+                    context.sheetCoordinator.dismissSheet()
+                },
+                onCancel: {
+                    context.sheetCoordinator.dismissSheet()
+                }
+            )
+            .environmentObject(context.viewModel.profileStore)
+
         default:
             EmptyView()
         }
