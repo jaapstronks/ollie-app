@@ -25,6 +25,11 @@ struct SettingsView: View {
                 // App Settings at the top
                 appSettingsSection
 
+                #if DEBUG
+                // Developer Tools - only in debug builds
+                devToolsSection
+                #endif
+
                 // Dog cards - one per profile
                 ForEach(profileStore.profiles, id: \.id) { profile in
                     DogSettingsCard(
@@ -102,6 +107,51 @@ struct SettingsView: View {
         }
         .buttonStyle(.plain)
     }
+
+    #if DEBUG
+    // MARK: - Developer Tools Section
+
+    private var devToolsSection: some View {
+        NavigationLink {
+            DevToolsView()
+                .environmentObject(profileStore)
+                .environmentObject(eventStore)
+        } label: {
+            HStack(spacing: 16) {
+                ZStack {
+                    Circle()
+                        .fill(Color.orange.opacity(0.15))
+                        .frame(width: 50, height: 50)
+
+                    Image(systemName: "hammer.fill")
+                        .font(.system(size: 22))
+                        .foregroundStyle(.orange)
+                }
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Developer Tools")
+                        .font(.headline)
+                        .foregroundStyle(.primary)
+                    Text("Debug, AI testing, data management")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+
+                Spacer()
+
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundStyle(.tertiary)
+            }
+            .padding()
+            .background(
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(Color(.secondarySystemGroupedBackground))
+            )
+        }
+        .buttonStyle(.plain)
+    }
+    #endif
 }
 
 /// Reusable row component for the settings hub

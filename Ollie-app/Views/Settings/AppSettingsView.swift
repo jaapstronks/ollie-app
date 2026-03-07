@@ -35,9 +35,6 @@ struct AppSettingsView: View {
     // Training settings
     @AppStorage(UserPreferences.Key.showFloatingClicker.rawValue) private var showFloatingClicker = false
 
-    // Celebration debug settings
-    @AppStorage(UserPreferences.Key.forceCelebrateEveryLog.rawValue) private var forceCelebrateEveryLog = false
-
     var body: some View {
         Form {
             if let profile = profileStore.profile {
@@ -119,10 +116,6 @@ struct AppSettingsView: View {
                 BetaFeedbackSection()
                     .environmentObject(profileStore)
             }
-
-            #if DEBUG
-            DebugSection()
-            #endif
         }
         .navigationTitle(Strings.Settings.appSettings)
         .toolbar {
@@ -312,15 +305,6 @@ struct AppSettingsView: View {
                     Label(Strings.Celebrations.celebrationStyle, systemImage: "sparkles")
                     Spacer()
                     Text(currentCelebrationStyle.displayName)
-                        .foregroundStyle(.secondary)
-                }
-            }
-
-            Toggle(isOn: $forceCelebrateEveryLog) {
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(Strings.Settings.celebrateEveryLog)
-                    Text(Strings.Settings.celebrateEveryLogDescription)
-                        .font(.caption)
                         .foregroundStyle(.secondary)
                 }
             }
