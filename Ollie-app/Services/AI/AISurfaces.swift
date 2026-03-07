@@ -60,22 +60,22 @@ enum AISurface: String, Codable, CaseIterable, Sendable {
     var optionalComponents: Set<AIContextComponentKey> {
         switch self {
         case .insightBundle:
-            return [.training, .socialization, .health, .household]
+            return [.training, .socialization, .health, .household, .sentiment]
 
         case .notificationPolicy:
-            return [.household]
+            return [.household, .sentiment]
 
         case .trainingGuidance:
-            return [.household]
+            return [.household, .sentiment]
 
         case .pottyAnalysis:
-            return [.household]
+            return [.household, .sentiment]
 
         case .socializationGuidance:
-            return [.household]
+            return [.household, .sentiment]
 
         case .healthInsights:
-            return [.household]
+            return [.household, .sentiment]
         }
     }
 
@@ -160,6 +160,7 @@ enum AIContextComponentKey: String, Codable, Hashable, Sendable {
     case socialization = "socialization"
     case recentEvents = "recent_events"
     case health = "health"
+    case sentiment = "sentiment"  // User sentiment ratings
 
     /// Estimated tokens for this component
     var estimatedTokens: Int {
@@ -175,6 +176,7 @@ enum AIContextComponentKey: String, Codable, Hashable, Sendable {
         case .socialization: return 100
         case .recentEvents: return 80
         case .health: return 70
+        case .sentiment: return 60
         }
     }
 }

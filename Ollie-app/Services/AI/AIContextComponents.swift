@@ -676,3 +676,112 @@ struct HealthContext: AIContextComponent {
         }.count
     }
 }
+
+// MARK: - User Sentiment Context
+
+/// User's self-reported sentiment on how various areas are going.
+/// This provides direct signals that complement event-based inference.
+struct UserSentimentContext: AIContextComponent {
+    static let componentKey = "sentiment"
+    static let estimatedTokens = 80
+
+    /// Primary focus area the user wants help with (if set)
+    let primaryFocus: String?
+
+    /// Detected priority focus based on root cause analysis
+    let detectedPriorityFocus: String?
+
+    /// Explanation for why this is the priority
+    let priorityReason: String?
+
+    /// Categories where user is struggling (score 1-3)
+    let strugglingAreas: [AreaRating]
+
+    /// Root cause dependencies detected (e.g., "nipping depends on sleeping")
+    let rootCauseDependencies: [String]
+
+    /// Categories going well (score 4-5) - tips should be minimal
+    let goingWellAreas: [String]
+
+    /// Categories where tips should be completely muted (score 5)
+    let mutedAreas: [String]
+
+    /// Days since last sentiment check-in
+    let daysSinceLastCheckIn: Int?
+
+    struct AreaRating: Codable, Sendable {
+        let area: String
+        let score: Int
+        let daysSinceRated: Int
+    }
+
+    /// Initialize with explicit state (for use from non-MainActor context)
+    init(state: SentimentState) {
+        self.primaryFocus = state.primaryFocus?.rawValue
+
+        // Build struggling areas with scores
+        var struggling: [AreaRating] = []
+        for category in state.strugglingCategories {
+            if let checkIn = state.checkIns[category], checkIn.isFresh {
+                struggling.append(AreaRating(
+                    area: category.rawValue,
+                    score: checkIn.score,
+                    daysSinceRated: checkIn.ageInDays
+                ))
+            }
+        }
+        self.strugglingAreas = struggling
+
+        // Detect root cause dependencies
+        var dependencies: [String] = []
+        for category in state.strugglingCategories {
+            for dep in category.rootCauseDependencies {
+                if let depCheckIn = state.checkIns[dep], depCheckIn.isStruggling {
+                    dependencies.append("\(category.rawValue) depends on \(dep.rawValue)")
+                }
+            }
+        }
+        self.rootCauseDependencies = dependencies
+
+        // Detect priority focus using tip provider logic
+        if let (priority, reason) = SentimentTipProvider.identifyPrimaryFocus(
+            strugglingCategories: state.strugglingCategories,
+            checkIns: state.checkIns
+        ) {
+            self.detectedPriorityFocus = priority.rawValue
+            self.priorityReason = reason
+        } else {
+            self.detectedPriorityFocus = nil
+            self.priorityReason = nil
+        }
+
+        // Going well (4-5) but not muted
+        self.goingWellAreas = state.checkIns.values
+            .filter { $0.isFresh && $0.isDoingWell && !$0.shouldMuteTips }
+            .map { $0.category.rawValue }
+
+        // Muted (score 5)
+        self.mutedAreas = state.mutedCategories.map { $0.rawValue }
+
+        // Days since last check-in
+        if let lastDate = state.lastCheckInDate {
+            self.daysSinceLastCheckIn = Calendar.current.dateComponents(
+                [.day], from: lastDate, to: Date()
+            ).day
+        } else {
+            self.daysSinceLastCheckIn = nil
+        }
+    }
+
+    /// Initialize with no sentiment data (fallback)
+    init() {
+        self.primaryFocus = nil
+        self.detectedPriorityFocus = nil
+        self.priorityReason = nil
+        self.strugglingAreas = []
+        self.rootCauseDependencies = []
+        self.goingWellAreas = []
+        self.mutedAreas = []
+        self.daysSinceLastCheckIn = nil
+    }
+}

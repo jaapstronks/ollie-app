@@ -565,6 +565,25 @@ struct TimelineSheetModifiers: ViewModifier {
                 // Fallback if no profile (shouldn't happen in practice)
                 Text("Profile not available")
             }
+
+        case .crateTrainingGuide:
+            CrateTrainingGuideSheet(eventStore: viewModel.eventStore)
+                .adaptivePresentationDetents(
+                    compact: [.large],
+                    regular: [.medium, .large]
+                )
+
+        case .pottyTrainingGuide:
+            PottyTrainingGuideSheet(
+                streakInfo: viewModel.streakInfo,
+                patternAnalysis: viewModel.patternAnalysis,
+                outdoorPercentage: viewModel.outdoorPercentage,
+                ageInWeeks: viewModel.profileStore.profile?.ageInWeeks ?? 12
+            )
+            .adaptivePresentationDetents(
+                compact: [.large],
+                regular: [.medium, .large]
+            )
         }
     }
 }

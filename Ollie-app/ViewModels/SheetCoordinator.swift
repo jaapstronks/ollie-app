@@ -54,6 +54,9 @@ final class SheetCoordinator: ObservableObject {
         case fullTimeline
         // Walk schedule editor (from adaptive walk nudge)
         case walkScheduleEditor
+        // Guide sheets (from sentiment tips)
+        case crateTrainingGuide
+        case pottyTrainingGuide
 
         var id: String {
             switch self {
@@ -88,6 +91,8 @@ final class SheetCoordinator: ObservableObject {
             case .medicalCare: return "medicalCare"
             case .fullTimeline: return "fullTimeline"
             case .walkScheduleEditor: return "walkScheduleEditor"
+            case .crateTrainingGuide: return "crateTrainingGuide"
+            case .pottyTrainingGuide: return "pottyTrainingGuide"
             }
         }
     }
