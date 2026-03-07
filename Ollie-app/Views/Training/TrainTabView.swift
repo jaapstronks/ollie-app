@@ -83,8 +83,8 @@ struct TrainTabView: View {
                     }
 
                     // Section 1: Training Guides (non-mastered only in normal position)
-                    if pottyTrainingMastered {
-                        // Only show crate guide in normal position when potty is mastered
+                    if pottyTrainingMastered || crateTrainingMastered {
+                        // Only show non-mastered guides in normal position
                         nonMasteredGuidesSection
                             .animatedAppear(delay: 0)
                     } else {
@@ -100,9 +100,9 @@ struct TrainTabView: View {
                     socializationSection
                         .animatedAppear(delay: 0.10)
 
-                    // Section 4: Mastered potty guide (below socialization)
-                    if pottyTrainingMastered {
-                        masteredPottySection
+                    // Section 4: Mastered guides (below socialization)
+                    if pottyTrainingMastered || crateTrainingMastered {
+                        masteredGuidesSection
                             .animatedAppear(delay: 0.15)
                     }
                 }
@@ -210,7 +210,7 @@ struct TrainTabView: View {
         }
     }
 
-    // MARK: - Non-Mastered Guides Section (Crate only when potty is mastered)
+    // MARK: - Non-Mastered Guides Section (only shows guides that are not mastered)
 
     @ViewBuilder
     private var nonMasteredGuidesSection: some View {
@@ -228,36 +228,67 @@ struct TrainTabView: View {
                 )
             }
 
-            // Only crate training when potty is mastered
-            TrainingGuideEntryCard(
-                icon: "house.fill",
-                title: Strings.Training.Guides.crateTitle,
-                subtitle: crateTrainingMastered
-                    ? Strings.Training.CrateTraining.masteredDescription
-                    : Strings.Training.Guides.crateSubtitle,
-                statValue: crateTrainingMastered ? nil : (crateNapPercentage > 0 ? "\(crateNapPercentage)%" : nil),
-                tintColor: .indigo,
-                isMastered: crateTrainingMastered
-            ) {
-                showCrateGuide = true
+            // Show potty guide in normal position only if not mastered
+            if !pottyTrainingMastered && viewModel.shouldShowPottyTrainingGuide {
+                TrainingGuideEntryCard(
+                    icon: "target",
+                    title: Strings.Training.Guides.pottyTitle,
+                    subtitle: Strings.Training.Guides.pottySubtitle,
+                    statValue: viewModel.outdoorPercentage > 0 ? "\(viewModel.outdoorPercentage)%" : nil,
+                    tintColor: .otisSuccess,
+                    isMastered: false
+                ) {
+                    showPottyGuide = true
+                }
+            }
+
+            // Show crate guide in normal position only if not mastered
+            if !crateTrainingMastered {
+                TrainingGuideEntryCard(
+                    icon: "house.fill",
+                    title: Strings.Training.Guides.crateTitle,
+                    subtitle: Strings.Training.Guides.crateSubtitle,
+                    statValue: crateNapPercentage > 0 ? "\(crateNapPercentage)%" : nil,
+                    tintColor: .indigo,
+                    isMastered: false
+                ) {
+                    showCrateGuide = true
+                }
             }
         }
     }
 
-    // MARK: - Mastered Potty Section (below socialization)
+    // MARK: - Mastered Guides Section (below socialization)
 
     @ViewBuilder
-    private var masteredPottySection: some View {
+    private var masteredGuidesSection: some View {
         VStack(spacing: 10) {
-            TrainingGuideEntryCard(
-                icon: "target",
-                title: Strings.Training.Guides.pottyTitle,
-                subtitle: Strings.Training.PottyTraining.masteredDescription,
-                statValue: nil,
-                tintColor: .otisSuccess,
-                isMastered: true
-            ) {
-                showPottyGuide = true
+            // Show mastered potty guide at bottom
+            if pottyTrainingMastered {
+                TrainingGuideEntryCard(
+                    icon: "target",
+                    title: Strings.Training.Guides.pottyTitle,
+                    subtitle: Strings.Training.PottyTraining.masteredDescription,
+                    statValue: nil,
+                    tintColor: .otisSuccess,
+                    isMastered: true
+                ) {
+                    showPottyGuide = true
+                }
+            }
+
+            // Show mastered crate guide at bottom
+            if crateTrainingMastered {
+                TrainingGuideEntryCard(
+                    icon: "house.fill",
+                    title: Strings.Training.Guides.crateTitle,
+                    subtitle: Strings.Training.CrateTraining.masteredDescription,
+                    statValue: nil,
+                    tintColor: .indigo,
+                    isMastered: true
+                ) {
+                    showCrateGuide = true
+                }
             }
         }
     }
