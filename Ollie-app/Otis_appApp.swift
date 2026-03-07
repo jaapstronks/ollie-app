@@ -69,6 +69,45 @@ private func waitForSharedProfileName(
     return nil
 }
 
+/// Process any pending CloudKit share that came through scene connection
+@MainActor
+func processPendingCloudKitShare(profileStore: ProfileStore) async {
+    let logger = Logger.otis(category: "ShareHandler")
+
+    // Check for pre-fetched metadata first (most reliable)
+    if let metadata = PendingShareMetadata.shared.metadata {
+        logger.info("🔗 Processing pending CloudKit share metadata")
+        PendingShareMetadata.shared.metadata = nil // Clear after processing
+
+        let ownerName = metadata.ownerIdentity.nameComponents?.formatted() ?? "someone"
+
+        if profileStore.hasExistingPrivateProfile() {
+            let existingName = profileStore.profile?.name ?? ""
+            showExistingProfileWarning(
+                existingName: existingName,
+                ownerName: ownerName,
+                metadata: metadata,
+                profileStore: profileStore,
+                logger: logger
+            )
+        } else {
+            await acceptShareInvitation(
+                metadata: metadata,
+                profileStore: profileStore,
+                logger: logger
+            )
+        }
+        return
+    }
+
+    // Fall back to pending URL if no metadata
+    if let url = PendingShareMetadata.shared.pendingURL {
+        logger.info("🔗 Processing pending CloudKit share URL: \(url.absoluteString)")
+        PendingShareMetadata.shared.pendingURL = nil // Clear after processing
+        await handleCloudKitShareURL(url, profileStore: profileStore)
+    }
+}
+
 /// Handle CloudKit share URL by fetching metadata and accepting
 @MainActor
 func handleCloudKitShareURL(_ url: URL, profileStore: ProfileStore) async {
@@ -185,6 +224,10 @@ private func acceptShareInvitation(
 
         // Update CloudKit service state
         CloudKitService.shared.markAsParticipant()
+
+        // Record share acceptance time for sentiment onboarding grace period
+        let dateFormatter = ISO8601DateFormatter()
+        UserDefaults.standard.set(dateFormatter.string(from: Date()), forKey: "shareAcceptedDate")
 
         // Notify stores to refresh their data and skip onboarding
         NotificationCenter.default.post(name: .cloudKitShareAccepted, object: nil)
@@ -319,6 +362,9 @@ struct OtisApp: App {
                 .toastContainer()
                 .environment(toastManager)
                 .task {
+                    // Make ProfileStore available to SceneDelegate for CloudKit share handling
+                    ProfileStoreProvider.shared.store = profileStore
+
                     // Run Core Data migration from JSONL files (one-time, on first launch after update)
                     do {
                         try await CoreDataMigrationCoordinator.shared.migrateIfNeeded(using: persistenceController)
@@ -352,6 +398,10 @@ struct OtisApp: App {
 
                     // Sync milestones from CloudKit before seeding to prevent duplicates
                     await milestoneStore.initialSync()
+
+                    // Process any pending CloudKit share from app launch
+                    // This handles shares that came through scene connection options
+                    await processPendingCloudKitShare(profileStore: profileStore)
 
                     // Seed default milestones if this is a fresh install
                     // Also removes duplicates that may have accumulated from CloudKit sync
@@ -389,6 +439,9 @@ struct OtisApp: App {
 
                     // Sync when app comes to foreground
                     Task {
+                        // Process any pending CloudKit share that arrived while app was suspended
+                        await processPendingCloudKitShare(profileStore: profileStore)
+
                         await eventStore.forceSync()
                         await profileStore.forceSync()
                         await spotStore.forceSync()
@@ -437,6 +490,26 @@ struct OtisApp: App {
                     if isCloudKitScheme || isICloudShareURL {
                         Logger.otis(category: "App").info("🔗 Detected CloudKit share URL, fetching metadata...")
 
+                        Task {
+                            await handleCloudKitShareURL(url, profileStore: profileStore)
+                        }
+                    }
+                }
+                // Handle CloudKit share via user activity (more reliable in SwiftUI than AppDelegate callback)
+                // NSUserActivityTypeBrowsingWeb captures icloud.com/share URLs as web activities
+                .onContinueUserActivity(NSUserActivityTypeBrowsingWeb) { userActivity in
+                    Logger.otis(category: "App").info("🔗 onContinueUserActivity for web browsing")
+
+                    guard let url = userActivity.webpageURL else {
+                        Logger.otis(category: "App").info("🔗 No webpage URL in activity")
+                        return
+                    }
+
+                    Logger.otis(category: "App").info("🔗 Web URL: \(url.absoluteString)")
+
+                    // Check if this is an iCloud share URL
+                    if url.absoluteString.contains("icloud.com/share") {
+                        Logger.otis(category: "App").info("🔗 Detected iCloud share URL from user activity")
                         Task {
                             await handleCloudKitShareURL(url, profileStore: profileStore)
                         }
@@ -503,6 +576,42 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         }
     }
 
+    // MARK: - Scene Configuration
+
+    /// Provide scene configuration with custom delegate for CloudKit share handling
+    func application(
+        _ application: UIApplication,
+        configurationForConnecting connectingSceneSession: UISceneSession,
+        options: UIScene.ConnectionOptions
+    ) -> UISceneConfiguration {
+        logger.info("🔗 Scene configuration requested")
+
+        // Check if this scene connection has CloudKit share context
+        if let cloudKitMetadata = options.cloudKitShareMetadata {
+            logger.info("🔗 Scene has CloudKit share metadata!")
+            logger.info("🔗 Container: \(cloudKitMetadata.containerIdentifier)")
+
+            // Store metadata for processing after scene connects
+            PendingShareMetadata.shared.metadata = cloudKitMetadata
+        }
+
+        // Check URL contexts for share URLs
+        for urlContext in options.urlContexts {
+            let url = urlContext.url
+            logger.info("🔗 Scene URL context: \(url.absoluteString)")
+
+            if url.scheme?.hasPrefix("cloudkit") == true || url.absoluteString.contains("icloud.com/share") {
+                logger.info("🔗 Scene has CloudKit share URL")
+                PendingShareMetadata.shared.pendingURL = url
+            }
+        }
+
+        let config = UISceneConfiguration(name: nil, sessionRole: connectingSceneSession.role)
+        // Use custom scene delegate to handle CloudKit shares when app is already running
+        config.delegateClass = CloudKitSceneDelegate.self
+        return config
+    }
+
     // MARK: - CloudKit Share Acceptance
 
     /// Handle CloudKit share acceptance when user taps share link
@@ -525,4 +634,80 @@ class AppDelegate: NSObject, UIApplicationDelegate {
             )
         }
     }
+}
+
+// MARK: - Pending Share Storage
+
+/// Stores pending CloudKit share metadata for processing after SwiftUI scene is ready
+@MainActor
+final class PendingShareMetadata {
+    static let shared = PendingShareMetadata()
+    var metadata: CKShare.Metadata?
+    var pendingURL: URL?
+    private init() {}
+}
+
+// MARK: - Scene Delegate for CloudKit Share Handling
+
+/// Custom scene delegate that handles CloudKit shares when app is already running
+/// This is needed because SwiftUI's onOpenURL doesn't reliably receive CloudKit share URLs
+class CloudKitSceneDelegate: UIResponder, UIWindowSceneDelegate {
+    private let logger = Logger.otis(category: "SceneDelegate")
+
+    /// Called when URLs are opened while the scene is already connected (app running)
+    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+        logger.info("🔗 SceneDelegate openURLContexts called")
+
+        for context in URLContexts {
+            let url = context.url
+            logger.info("🔗 Scene received URL: \(url.absoluteString)")
+
+            if url.scheme?.hasPrefix("cloudkit") == true || url.absoluteString.contains("icloud.com/share") {
+                logger.info("🔗 Processing CloudKit share URL from scene delegate")
+
+                Task { @MainActor in
+                    // Get profile store from the app's environment
+                    // We need to fetch metadata and process the share
+                    await handleCloudKitShareURL(url, profileStore: getProfileStore())
+                }
+            }
+        }
+    }
+
+    /// Called when a user activity is continued (e.g., from Handoff or Universal Links)
+    func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
+        logger.info("🔗 SceneDelegate continue userActivity called")
+        logger.info("🔗 Activity type: \(userActivity.activityType)")
+
+        // Check for web URL (iCloud share link)
+        if userActivity.activityType == NSUserActivityTypeBrowsingWeb,
+           let url = userActivity.webpageURL {
+            logger.info("🔗 Web URL from user activity: \(url.absoluteString)")
+
+            if url.absoluteString.contains("icloud.com/share") {
+                Task { @MainActor in
+                    await handleCloudKitShareURL(url, profileStore: getProfileStore())
+                }
+            }
+        }
+    }
+
+    /// Helper to get the ProfileStore from the running app
+    @MainActor
+    private func getProfileStore() -> ProfileStore {
+        // Access the shared ProfileStore - we need to find it from the app's state
+        // Since ProfileStore is a StateObject in OtisApp, we access it via a static reference
+        return ProfileStoreProvider.shared.store
+    }
+}
+
+// MARK: - Profile Store Provider
+
+/// Provides access to the ProfileStore for scene delegates
+/// This is necessary because scene delegates can't access SwiftUI's environment
+@MainActor
+final class ProfileStoreProvider {
+    static let shared = ProfileStoreProvider()
+    var store: ProfileStore = ProfileStore()
+    private init() {}
 }

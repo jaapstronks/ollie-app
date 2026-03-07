@@ -92,6 +92,11 @@ extension Strings {
         // MARK: - Onboarding
         static let onboardingTitle = String(localized: "How's it going?", table: table)
         static let onboardingSubtitle = String(localized: "A quick check-in helps us focus advice on what matters most.", table: table)
+        static let thankYouTitle = String(localized: "Thanks for sharing!", table: table)
+        static let thankYouSubtitle = String(localized: "We'll use this to give you more relevant tips and advice.", table: table)
+
+        // MARK: - Category Hints
+        static let skillsTrainingHint = String(localized: "Commands like sit, down, stay, come, and leave it.", table: table)
 
         // MARK: - Primary Focus
         static let primaryFocusTitle = String(localized: "Main focus", table: table)

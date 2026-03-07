@@ -1,1176 +1,1323 @@
 {
-  "sourceLanguage": "en",
-  "strings": {
-    "Potty training": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Zindelijkheidstraining"
+  "sourceLanguage" : "en",
+  "strings" : {
+    "%lld skills in progress, %lld sessions this week." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld vaardigheden bezig, %2$lld sessies deze week."
           }
         }
       }
     },
-    "Crate training": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Benchtraining"
+    "%lld walks this week, averaging %lld min." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld wandelingen deze week, gemiddeld %2$lld min."
           }
         }
       }
     },
-    "Sleeping": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Slapen"
+    "%lld%% of naps in the crate (%lld of %lld)." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld%% van de dutjes in de bench (%2$lld van %3$lld)."
           }
         }
       }
     },
-    "Walks": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wandelingen"
+    "%lld%% outdoor success this week, %lld accident(s) today." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld%% buiten succes deze week, %2$lld ongelukje(s) vandaag."
           }
         }
       }
     },
-    "Skills training": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vaardigheidstraining"
+    "%lld%% outdoor success this week." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld%% buiten succes deze week."
           }
         }
       }
     },
-    "Nipping & biting": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bijten & happen"
+    "5-10 minute sessions work best. End on a win and your pup will be eager for next time." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sessies van 5-10 minuten werken het beste. Eindig met een succes en je pup kijkt uit naar de volgende keer."
           }
         }
       }
     },
-    "Leash behavior": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Riemgedrag"
+    "18-20 hours daily" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "18-20 uur per dag"
           }
         }
       }
     },
-    "Jumping up": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Opspringen"
+    "A hungry puppy is a motivated puppy. Schedule training sessions before meal times." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Een hongerige pup is een gemotiveerde pup. Plan trainingssessies voor de maaltijden."
           }
         }
       }
     },
-    "Resource guarding": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bezitsdrang"
+    "A quick check-in helps us focus advice on what matters most." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Een snelle check-in helpt ons advies te focussen op wat het belangrijkst is."
           }
         }
       }
     },
-    "Chewing": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kauwen"
+    "Acknowledge, then redirect" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erken, dan omleiden"
           }
         }
       }
     },
-    "Barking": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Blaffen"
+    "All puppies go through a nippy phase. With consistent management, it peaks around 12-16 weeks then fades." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle puppy's gaan door een bijtfase. Met consistent management piekt het rond 12-16 weken en verdwijnt dan."
           }
         }
       }
     },
-    "Being alone": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Alleen zijn"
+    "Always have a toy nearby to redirect biting. Praise when they bite the toy instead of you." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Heb altijd speelgoed in de buurt om bijten om te leiden. Prijs als ze in het speelgoed bijten in plaats van jou."
           }
         }
       }
     },
-    "Car travel": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Autorijden"
+    "Averaging %@h night sleep, %lld nap(s) today." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gemiddeld %1$@u nachtslaap, %2$lld dutje(s) vandaag."
           }
         }
       }
     },
-    "Handling & grooming": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Verzorging"
+    "Barking" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Blaffen"
           }
         }
       }
     },
-    "How is potty training going?": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hoe gaat de zindelijkheidstraining?"
+    "Be interesting" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wees interessant"
           }
         }
       }
     },
-    "How is crate training going?": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hoe gaat de benchtraining?"
+    "Being alone" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alleen zijn"
           }
         }
       }
     },
-    "How is sleeping going?": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hoe gaat het slapen?"
+    "Biting, zoomies, not listening, and being generally 'difficult' often means your pup needs sleep." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bijten, zoomies, niet luisteren en algemeen 'moeilijk' zijn betekent vaak dat je pup slaap nodig heeft."
           }
         }
       }
     },
-    "How are walks going?": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hoe gaan de wandelingen?"
+    "Boredom causes chewing" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verveling veroorzaakt kauwen"
           }
         }
       }
     },
-    "How is skills training going?": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hoe gaat de vaardigheidstraining?"
+    "Car travel" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autorijden"
           }
         }
       }
     },
-    "How is nipping & biting?": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hoe gaat het bijten & happen?"
+    "Celebrate outside!" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vier het buiten!"
           }
         }
       }
     },
-    "How is leash behavior?": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hoe gaat het riemgedrag?"
+    "Check sleep first" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Check eerst slaap"
           }
         }
       }
     },
-    "How is jumping up?": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hoe gaat het opspringen?"
+    "Chewing" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kauwen"
           }
         }
       }
     },
-    "How is resource guarding?": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hoe gaat de bezitsdrang?"
+    "Clean up calmly without scolding. Punishment creates fear, not learning." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ruim rustig op zonder te schelden. Straffen creëert angst, geen leren."
           }
         }
       }
     },
-    "How is chewing behavior?": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hoe gaat het kauwen?"
+    "Clear main focus" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wis hoofdfocus"
           }
         }
       }
     },
-    "How is barking?": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hoe gaat het blaffen?"
+    "Cover the crate with a blanket to create a den-like feeling. Leave one side open for airflow." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bedek de bench met een deken voor een holgevoel. Laat één kant open voor ventilatie."
           }
         }
       }
     },
-    "How is being alone going?": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hoe gaat het alleen zijn?"
+    "Crate builds confidence" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bench bouwt zelfvertrouwen"
           }
         }
       }
     },
-    "How is car travel going?": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hoe gaat het autorijden?"
+    "Crate training" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Benchtraining"
           }
         }
       }
     },
-    "How is handling & grooming going?": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hoe gaat de verzorging?"
+    "Crate training builds comfort with alone time, which prevents separation anxiety." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Benchtraining bouwt comfort op met alleen zijn, wat verlatingsangst voorkomt."
           }
         }
       }
     },
-    "Struggling": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Moeilijk"
+    "Crate training helps with potty training - puppies naturally avoid soiling their den." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Benchtraining helpt bij zindelijkheidstraining - puppy's vermijden van nature hun hol te bevuilen."
           }
         }
       }
     },
-    "Difficult": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Lastig"
+    "Create a cozy den" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Creëer een gezellig hol"
           }
         }
       }
     },
-    "Okay": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Oké"
+    "Difficult" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lastig"
           }
         }
       }
     },
-    "Good": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Goed"
+    "Don't punish accidents" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Straf ongelukjes niet"
           }
         }
       }
     },
-    "Great!": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Super!"
+    "Enforce naps" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dwing dutjes af"
           }
         }
       }
     },
-    "Quick check-in": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Snelle check-in"
+    "Four on the floor" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vier poten op de grond"
           }
         }
       }
     },
-    "Help us give better advice": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Help ons beter advies te geven"
+    "Frozen washcloths and frozen Kongs help soothe teething gums and redirect chewing." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bevroren washandjes en bevroren Kongs verzachten tandvlees en leiden kauwen om."
           }
         }
       }
     },
-    "Skip for now": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sla over"
+    "Give treats and praise immediately when your puppy goes outside. Make it a party!" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geef direct snoepjes en lof als je pup buiten gaat. Maak er een feestje van!"
           }
         }
       }
     },
-    "Submit": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Verstuur"
+    "Good" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Goed"
           }
         }
       }
     },
-    "We don't have data on this yet.": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "We hebben hier nog geen data over."
+    "Great!" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Super!"
           }
         }
       }
     },
-    "%lld%% outdoor success this week, %lld accident(s) today.": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$lld%% buiten succes deze week, %2$lld ongelukje(s) vandaag."
+    "Handling & grooming" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verzorging"
           }
         }
       }
     },
-    "%lld%% outdoor success this week.": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld%% buiten succes deze week."
+    "Help us give better advice" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Help ons beter advies te geven"
           }
         }
       }
     },
-    "No naps logged recently.": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Geen dutjes recent gelogd."
+    "How are walks going?" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoe gaan de wandelingen?"
           }
         }
       }
     },
-    "%lld%% of naps in the crate (%lld of %lld).": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$lld%% van de dutjes in de bench (%2$lld van %3$lld)."
+    "How is barking?" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoe gaat het blaffen?"
           }
         }
       }
     },
-    "Averaging %@h night sleep, %lld nap(s) today.": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gemiddeld %1$@u nachtslaap, %2$lld dutje(s) vandaag."
+    "How is being alone going?" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoe gaat het alleen zijn?"
           }
         }
       }
     },
-    "%lld walks this week, averaging %lld min.": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$lld wandelingen deze week, gemiddeld %2$lld min."
+    "How is car travel going?" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoe gaat het autorijden?"
           }
         }
       }
     },
-    "%lld skills in progress, %lld sessions this week.": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$lld vaardigheden bezig, %2$lld sessies deze week."
+    "How is chewing behavior?" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoe gaat het kauwen?"
           }
         }
       }
     },
-    "How's it going?": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hoe gaat het?"
+    "How is crate training going?" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoe gaat de benchtraining?"
           }
         }
       }
     },
-    "A quick check-in helps us focus advice on what matters most.": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Een snelle check-in helpt ons advies te focussen op wat het belangrijkst is."
+    "How is handling & grooming going?" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoe gaat de verzorging?"
           }
         }
       }
     },
-    "Main focus": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hoofdfocus"
+    "How is jumping up?" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoe gaat het opspringen?"
           }
         }
       }
     },
-    "What do you most want help with?": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Waar wil je het meeste hulp bij?"
+    "How is leash behavior?" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoe gaat het riemgedrag?"
           }
         }
       }
     },
-    "Set as main focus": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Stel in als hoofdfocus"
+    "How is nipping & biting?" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoe gaat het bijten & happen?"
           }
         }
       }
     },
-    "Clear main focus": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wis hoofdfocus"
+    "How is potty training going?" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoe gaat de zindelijkheidstraining?"
           }
         }
       }
     },
-    "Crate training helps with potty training - puppies naturally avoid soiling their den.": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Benchtraining helpt bij zindelijkheidstraining - puppy's vermijden van nature hun hol te bevuilen."
+    "How is resource guarding?" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoe gaat de bezitsdrang?"
           }
         }
       }
     },
-    "Overtired puppies bite more. Getting enough sleep will reduce nipping.": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vermoeide puppy's bijten meer. Genoeg slaap vermindert het bijten."
+    "How is skills training going?" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoe gaat de vaardigheidstraining?"
           }
         }
       }
     },
-    "The crate gives you a timeout option and ensures your pup gets enough rest.": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "De bench geeft je een time-out optie en zorgt dat je pup genoeg rust krijgt."
+    "How is sleeping going?" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoe gaat het slapen?"
           }
         }
       }
     },
-    "Crate training builds comfort with alone time, which prevents separation anxiety.": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Benchtraining bouwt comfort op met alleen zijn, wat verlatingsangst voorkomt."
+    "How's it going?" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoe gaat het?"
           }
         }
       }
     },
-    "Tired or bored puppies chew more. Enforcing naps helps.": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vermoeide of verveelde puppy's kauwen meer. Dutjes afdwingen helpt."
+    "Thanks for sharing!" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bedankt voor het delen!"
           }
         }
       }
     },
-    "When you can't supervise, the crate prevents destructive chewing.": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Als je niet kunt toezien, voorkomt de bench destructief kauwen."
+    "We'll use this to give you more relevant tips and advice." : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "We gebruiken dit om je relevantere tips en advies te geven."
           }
         }
       }
     },
-    "Overtired puppies are more reactive. More sleep often means less barking.": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vermoeide puppy's zijn reactiever. Meer slaap betekent vaak minder blaffen."
+    "Commands like sit, down, stay, come, and leave it." : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Commando's zoals zit, lig, blijf, hier en laat."
           }
         }
       }
     },
-    "The 1-minute rule": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "De 1-minuut regel"
+    "If training isn't working, try switching to kibble as treats. Fresh food can make them picky." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Als training niet werkt, probeer brokjes als beloning. Vers eten kan ze kieskeurig maken."
           }
         }
       }
     },
-    "Puppies will settle if you can wait through about 1 minute of whining. Sit nearby so they know you're there.": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Puppy's kalmeren als je ongeveer 1 minuut janken kunt afwachten. Zit dichtbij zodat ze weten dat je er bent."
+    "If your pup pulls toward distractions, become more interesting! Use treats and engagement." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Als je pup naar afleidingen trekt, word interessanter! Gebruik snoepjes en betrokkenheid."
           }
         }
       }
     },
-    "Location matters": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Locatie is belangrijk"
+    "It helps with potty training, prevents destructive behavior, and gives your pup a safe space." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Het helpt bij zindelijkheidstraining, voorkomt destructief gedrag en geeft je pup een veilige plek."
           }
         }
       }
     },
-    "Put the crate in a quiet corner of a social room - not isolated, but not in the middle of activity.": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Zet de bench in een rustig hoekje van een sociale ruimte - niet geïsoleerd, maar ook niet midden in de drukte."
+    "It's normal (but temporary)" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Het is normaal (maar tijdelijk)"
           }
         }
       }
     },
-    "Create a cozy den": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Creëer een gezellig hol"
+    "Jumping up" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opspringen"
           }
         }
       }
     },
-    "Cover the crate with a blanket to create a den-like feeling. Leave one side open for airflow.": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bedek de bench met een deken voor een holgevoel. Laat één kant open voor ventilatie."
+    "Keep it short" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Houd het kort"
           }
         }
       }
     },
-    "Never punish": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nooit straffen"
+    "Learn more" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meer leren"
           }
         }
       }
     },
-    "The crate should always be positive. Never use it as punishment or your pup will resist going in.": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "De bench moet altijd positief zijn. Gebruik het nooit als straf, anders gaat je pup tegenstribbelen."
+    "Leash behavior" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Riemgedrag"
           }
         }
       }
     },
-    "Why crate training matters": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Waarom benchtraining belangrijk is"
+    "Leave the room for just seconds at first, then gradually increase. Build up to longer absences." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verlaat de kamer eerst voor seconden, verhoog dan geleidelijk. Bouw op naar langere afwezigheid."
           }
         }
       }
     },
-    "It helps with potty training, prevents destructive behavior, and gives your pup a safe space.": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Het helpt bij zindelijkheidstraining, voorkomt destructief gedrag en geeft je pup een veilige plek."
+    "Location matters" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Locatie is belangrijk"
           }
         }
       }
     },
-    "Timing is everything": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Timing is alles"
+    "Main focus" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoofdfocus"
           }
         }
       }
     },
-    "Take your puppy out immediately after waking, eating, playing, and every 1-2 hours while awake.": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Neem je pup direct naar buiten na het wakker worden, eten, spelen, en elke 1-2 uur als die wakker is."
+    "Most nipping happens when puppies are overtired. A well-rested pup bites much less." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De meeste bijtincidenten gebeuren als puppy's oververmoeid zijn. Een uitgeruste pup bijt veel minder."
           }
         }
       }
     },
-    "Use the crate": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gebruik de bench"
+    "Never punish" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nooit straffen"
           }
         }
       }
     },
-    "Puppies naturally avoid soiling where they sleep. The crate makes potty training much easier.": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Puppy's vermijden van nature hun slaapplaats te bevuilen. De bench maakt zindelijkheidstraining veel makkelijker."
+    "Nipping & biting" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bijten & happen"
           }
         }
       }
     },
-    "Don't punish accidents": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Straf ongelukjes niet"
+    "No naps logged recently." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geen dutjes recent gelogd."
           }
         }
       }
     },
-    "Clean up calmly without scolding. Punishment creates fear, not learning.": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ruim rustig op zonder te schelden. Straffen creëert angst, geen leren."
+    "Okay" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oké"
           }
         }
       }
     },
-    "Celebrate outside!": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vier het buiten!"
+    "Only give attention when all four paws are on the ground. Reward sitting automatically." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geef alleen aandacht als alle vier de poten op de grond staan. Beloon automatisch zitten."
           }
         }
       }
     },
-    "Give treats and praise immediately when your puppy goes outside. Make it a party!": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Geef direct snoepjes en lof als je pup buiten gaat. Maak er een feestje van!"
+    "Overtired puppies are more reactive and bark more. More naps often means less barking." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vermoeide puppy's zijn reactiever en blaffen meer. Meer dutjes betekent vaak minder blaffen."
           }
         }
       }
     },
-    "18-20 hours daily": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "18-20 uur per dag"
+    "Overtired puppies are more reactive. More sleep often means less barking." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vermoeide puppy's zijn reactiever. Meer slaap betekent vaak minder blaffen."
           }
         }
       }
     },
-    "Puppies need 18-20 hours of sleep per day. If yours isn't sleeping this much, enforce more naps.": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Puppy's hebben 18-20 uur slaap per dag nodig. Als die van jou niet zoveel slaapt, dwing meer dutjes af."
+    "Overtired puppies bite more. Getting enough sleep will reduce nipping." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vermoeide puppy's bijten meer. Genoeg slaap vermindert het bijten."
           }
         }
       }
     },
-    "Enforce naps": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dwing dutjes af"
+    "Potty training" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zindelijkheidstraining"
           }
         }
       }
     },
-    "Puppies don't know when they're tired. After 1-2 hours awake, put them in the crate for a nap.": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Puppy's weten niet wanneer ze moe zijn. Na 1-2 uur wakker zijn, doe ze in de bench voor een dutje."
+    "Puppies chew when bored or understimulated. Provide appropriate chew toys and puzzles." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Puppy's kauwen als ze zich vervelen. Zorg voor geschikt kauwspeelgoed en puzzels."
           }
         }
       }
     },
-    "Watch for overtired signs": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Let op signalen van oververmoeidheid"
+    "Puppies don't know when they're tired. After 1-2 hours awake, put them in the crate for a nap." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Puppy's weten niet wanneer ze moe zijn. Na 1-2 uur wakker zijn, doe ze in de bench voor een dutje."
           }
         }
       }
     },
-    "Biting, zoomies, not listening, and being generally 'difficult' often means your pup needs sleep.": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bijten, zoomies, niet luisteren en algemeen 'moeilijk' zijn betekent vaak dat je pup slaap nodig heeft."
+    "Puppies naturally avoid soiling where they sleep. The crate makes potty training much easier." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Puppy's vermijden van nature hun slaapplaats te bevuilen. De bench maakt zindelijkheidstraining veel makkelijker."
           }
         }
       }
     },
-    "Sleep prevents biting": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Slaap voorkomt bijten"
+    "Puppies need 18-20 hours of sleep per day. If yours isn't sleeping this much, enforce more naps." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Puppy's hebben 18-20 uur slaap per dag nodig. Als die van jou niet zoveel slaapt, dwing meer dutjes af."
           }
         }
       }
     },
-    "Most nipping happens when puppies are overtired. A well-rested pup bites much less.": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "De meeste bijtincidenten gebeuren als puppy's oververmoeid zijn. Een uitgeruste pup bijt veel minder."
+    "Puppies will settle if you can wait through about 1 minute of whining. Sit nearby so they know you're there." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Puppy's kalmeren als je ongeveer 1 minuut janken kunt afwachten. Zit dichtbij zodat ze weten dat je er bent."
           }
         }
       }
     },
-    "Use timeouts": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gebruik time-outs"
+    "Put the crate in a quiet corner of a social room - not isolated, but not in the middle of activity." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zet de bench in een rustig hoekje van een sociale ruimte - niet geïsoleerd, maar ook niet midden in de drukte."
           }
         }
       }
     },
-    "When biting gets intense, calmly put your pup in the crate for a few minutes to settle down.": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Als het bijten intens wordt, doe je pup rustig in de bench voor een paar minuten om te kalmeren."
+    "Quick check-in" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Snelle check-in"
           }
         }
       }
     },
-    "Redirect to toys": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Leid af naar speelgoed"
+    "Redirect to toys" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leid af naar speelgoed"
           }
         }
       }
     },
-    "Always have a toy nearby to redirect biting. Praise when they bite the toy instead of you.": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Heb altijd speelgoed in de buurt om bijten om te leiden. Prijs als ze in het speelgoed bijten in plaats van jou."
+    "Regular crate time teaches your pup that being alone is okay. Start with short periods." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Regelmatige benchtijd leert je pup dat alleen zijn oké is. Begin met korte periodes."
           }
         }
       }
     },
-    "It's normal (but temporary)": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Het is normaal (maar tijdelijk)"
+    "Resource guarding" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bezitsdrang"
           }
         }
       }
     },
-    "All puppies go through a nippy phase. With consistent management, it peaks around 12-16 weeks then fades.": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Alle puppy's gaan door een bijtfase. Met consistent management piekt het rond 12-16 weken en verdwijnt dan."
+    "Set as main focus" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stel in als hoofdfocus"
           }
         }
       }
     },
-    "Train before meals": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Train voor maaltijden"
+    "Skills training" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vaardigheidstraining"
           }
         }
       }
     },
-    "A hungry puppy is a motivated puppy. Schedule training sessions before meal times.": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Een hongerige pup is een gemotiveerde pup. Plan trainingssessies voor de maaltijden."
+    "Skip for now" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sla over"
           }
         }
       }
     },
-    "Keep it short": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Houd het kort"
+    "Sleep prevents biting" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Slaap voorkomt bijten"
           }
         }
       }
     },
-    "5-10 minute sessions work best. End on a win and your pup will be eager for next time.": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sessies van 5-10 minuten werken het beste. Eindig met een succes en je pup kijkt uit naar de volgende keer."
+    "Sleeping" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Slapen"
           }
         }
       }
     },
-    "Use kibble for training": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gebruik brokjes voor training"
+    "Start small" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Begin klein"
           }
         }
       }
     },
-    "If training isn't working, try switching to kibble as treats. Fresh food can make them picky.": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Als training niet werkt, probeer brokjes als beloning. Vers eten kan ze kieskeurig maken."
+    "Stop and wait" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stop en wacht"
           }
         }
       }
     },
-    "Boredom causes chewing": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Verveling veroorzaakt kauwen"
+    "Struggling" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Moeilijk"
           }
         }
       }
     },
-    "Puppies chew when bored or understimulated. Provide appropriate chew toys and puzzles.": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Puppy's kauwen als ze zich vervelen. Zorg voor geschikt kauwspeelgoed en puzzels."
+    "Submit" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verstuur"
           }
         }
       }
     },
-    "Teething relief": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Verlichting bij tanden wisselen"
+    "Take your puppy out immediately after waking, eating, playing, and every 1-2 hours while awake." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neem je pup direct naar buiten na het wakker worden, eten, spelen, en elke 1-2 uur als die wakker is."
           }
         }
       }
     },
-    "Frozen washcloths and frozen Kongs help soothe teething gums and redirect chewing.": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bevroren washandjes en bevroren Kongs verzachten tandvlees en leiden kauwen om."
+    "Teething relief" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verlichting bij tanden wisselen"
           }
         }
       }
     },
-    "Crate builds confidence": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bench bouwt zelfvertrouwen"
+    "Thank your pup for alerting you, then redirect with a 'quiet' cue or toy." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bedank je pup voor het waarschuwen, leid dan om met een 'stil' commando of speelgoed."
           }
         }
       }
     },
-    "Regular crate time teaches your pup that being alone is okay. Start with short periods.": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Regelmatige benchtijd leert je pup dat alleen zijn oké is. Begin met korte periodes."
+    "The 1-minute rule" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De 1-minuut regel"
           }
         }
       }
     },
-    "Start small": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Begin klein"
+    "The crate gives you a timeout option and ensures your pup gets enough rest." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De bench geeft je een time-out optie en zorgt dat je pup genoeg rust krijgt."
           }
         }
       }
     },
-    "Leave the room for just seconds at first, then gradually increase. Build up to longer absences.": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Verlaat de kamer eerst voor seconden, verhoog dan geleidelijk. Bouw op naar langere afwezigheid."
+    "The crate should always be positive. Never use it as punishment or your pup will resist going in." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De bench moet altijd positief zijn. Gebruik het nooit als straf, anders gaat je pup tegenstribbelen."
           }
         }
       }
     },
-    "Check sleep first": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Check eerst slaap"
+    "Timing is everything" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Timing is alles"
           }
         }
       }
     },
-    "Overtired puppies are more reactive and bark more. More naps often means less barking.": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vermoeide puppy's zijn reactiever en blaffen meer. Meer dutjes betekent vaak minder blaffen."
+    "Tired or bored puppies chew more. Enforcing naps helps." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vermoeide of verveelde puppy's kauwen meer. Dutjes afdwingen helpt."
           }
         }
       }
     },
-    "Acknowledge, then redirect": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Erken, dan omleiden"
+    "Train before meals" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Train voor maaltijden"
           }
         }
       }
     },
-    "Thank your pup for alerting you, then redirect with a 'quiet' cue or toy.": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bedank je pup voor het waarschuwen, leid dan om met een 'stil' commando of speelgoed."
+    "Turn away" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Draai je om"
           }
         }
       }
     },
-    "Four on the floor": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vier poten op de grond"
+    "Use kibble for training" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gebruik brokjes voor training"
           }
         }
       }
     },
-    "Only give attention when all four paws are on the ground. Reward sitting automatically.": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Geef alleen aandacht als alle vier de poten op de grond staan. Beloon automatisch zitten."
+    "Use the crate" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gebruik de bench"
           }
         }
       }
     },
-    "Turn away": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Draai je om"
+    "Use timeouts" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gebruik time-outs"
           }
         }
       }
     },
-    "When your pup jumps, turn away and ignore. Attention - even negative - rewards jumping.": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Als je pup springt, draai je om en negeer. Aandacht - zelfs negatief - beloont springen."
+    "Walks" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wandelingen"
           }
         }
       }
     },
-    "Be interesting": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wees interessant"
+    "Watch for overtired signs" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Let op signalen van oververmoeidheid"
           }
         }
       }
     },
-    "If your pup pulls toward distractions, become more interesting! Use treats and engagement.": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Als je pup naar afleidingen trekt, word interessanter! Gebruik snoepjes en betrokkenheid."
+    "We don't have data on this yet." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "We hebben hier nog geen data over."
           }
         }
       }
     },
-    "Stop and wait": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Stop en wacht"
+    "What do you most want help with?" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Waar wil je het meeste hulp bij?"
           }
         }
       }
     },
-    "When the leash goes tight, stop moving. Only walk again when there's slack. Consistency is key.": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Als de riem strak komt, stop met bewegen. Loop pas weer als er slack is. Consistentie is de sleutel."
+    "When biting gets intense, calmly put your pup in the crate for a few minutes to settle down." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Als het bijten intens wordt, doe je pup rustig in de bench voor een paar minuten om te kalmeren."
           }
         }
       }
     },
-    "Learn more": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Meer leren"
+    "When the leash goes tight, stop moving. Only walk again when there's slack. Consistency is key." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Als de riem strak komt, stop met bewegen. Loop pas weer als er slack is. Consistentie is de sleutel."
+          }
+        }
+      }
+    },
+    "When you can't supervise, the crate prevents destructive chewing." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Als je niet kunt toezien, voorkomt de bench destructief kauwen."
+          }
+        }
+      }
+    },
+    "When your pup jumps, turn away and ignore. Attention - even negative - rewards jumping." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Als je pup springt, draai je om en negeer. Aandacht - zelfs negatief - beloont springen."
+          }
+        }
+      }
+    },
+    "Why crate training matters" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Waarom benchtraining belangrijk is"
           }
         }
       }
     }
   },
-  "version": "1.0"
+  "version" : "1.0"
 }

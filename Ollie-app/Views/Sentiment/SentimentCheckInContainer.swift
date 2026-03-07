@@ -19,11 +19,16 @@ struct SentimentCheckInContainer: View {
     @State private var showOnboarding = false
     @State private var isDismissed = false
     @AppStorage("lastSentimentCheckInDate") private var lastCheckInDateString: String = ""
+    @AppStorage("shareAcceptedDate") private var shareAcceptedDateString: String = ""
+
+    /// Delay before showing sentiment onboarding to new share participants (24 hours)
+    private let shareGracePeriodHours: Double = 24
 
     /// Category to ask about today, if any
     private var categoryToAsk: SentimentCategory? {
         guard !isDismissed else { return nil }
         guard !isAlreadyAskedToday else { return nil }
+        guard !isRecentShareParticipant else { return nil }
         return sentimentStore.nextQuestionToAsk(profile: profile)
     }
 
@@ -36,10 +41,26 @@ struct SentimentCheckInContainer: View {
         return Calendar.current.isDateInToday(lastDate)
     }
 
+    /// Whether user joined via share invite recently (within grace period)
+    /// Give them time to explore the app before asking questions
+    private var isRecentShareParticipant: Bool {
+        guard !shareAcceptedDateString.isEmpty else { return false }
+        let dateFormatter = ISO8601DateFormatter()
+        guard let acceptedDate = dateFormatter.date(from: shareAcceptedDateString) else { return false }
+        let hoursSinceAccepted = Date().timeIntervalSince(acceptedDate) / 3600
+        return hoursSinceAccepted < shareGracePeriodHours
+    }
+
+    /// Whether to show onboarding (skip for recent share participants)
+    private var shouldShowOnboarding: Bool {
+        sentimentStore.needsOnboarding && !isRecentShareParticipant
+    }
+
     var body: some View {
         Group {
             // Show onboarding flow if needed (first time or many missing)
-            if sentimentStore.needsOnboarding {
+            // Skip for users who just joined via share invite
+            if shouldShowOnboarding {
                 onboardingPromptCard
             }
             // Otherwise show single check-in card if there's a question

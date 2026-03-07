@@ -18,93 +18,146 @@ struct SentimentOnboardingSheet: View {
 
     @State private var ratings: [SentimentCategory: Int] = [:]
     @State private var currentIndex = 0
+    @State private var showThankYou = false
 
     private let categories = SentimentCategory.coreCategories
 
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
-                // Progress indicator
-                ProgressView(value: Double(currentIndex + 1), total: Double(categories.count))
-                    .tint(.purple)
-                    .padding(.horizontal)
-
-                Spacer()
-
-                // Current question
-                if currentIndex < categories.count {
-                    let category = categories[currentIndex]
-                    let context = SentimentContextBuilder.buildContext(
-                        for: category,
-                        events: events,
-                        profile: profile
-                    )
-
-                    QuestionView(
-                        category: category,
-                        contextSummary: context,
-                        selectedRating: ratings[category],
-                        onSelect: { rating in
-                            ratings[category] = rating
-                        }
-                    )
-                    .padding()
-                    .transition(.asymmetric(
-                        insertion: .move(edge: .trailing).combined(with: .opacity),
-                        removal: .move(edge: .leading).combined(with: .opacity)
-                    ))
-                    .id(category)
+                if showThankYou {
+                    thankYouView
+                } else {
+                    questionFlow
                 }
-
-                Spacer()
-
-                // Navigation buttons
-                HStack(spacing: 16) {
-                    if currentIndex > 0 {
-                        Button {
-                            withAnimation {
-                                currentIndex -= 1
-                            }
-                        } label: {
-                            Text(Strings.Common.back)
-                                .frame(maxWidth: .infinity)
-                                .padding(.vertical, 14)
-                        }
-                        .buttonStyle(.bordered)
-                    }
-
-                    Button {
-                        if currentIndex < categories.count - 1 {
-                            withAnimation {
-                                currentIndex += 1
-                            }
-                        } else {
-                            submitAll()
-                        }
-                    } label: {
-                        Text(currentIndex < categories.count - 1 ? Strings.Common.next : Strings.Common.done)
-                            .fontWeight(.semibold)
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical, 14)
-                    }
-                    .buttonStyle(.borderedProminent)
-                    .tint(.purple)
-                    .disabled(ratings[categories[currentIndex]] == nil)
-                }
-                .padding()
             }
-            .navigationTitle(Strings.Sentiment.onboardingTitle)
+            .navigationTitle(showThankYou ? "" : Strings.Sentiment.onboardingTitle)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button(Strings.Sentiment.skipForNow) {
-                        dismiss()
+                    if !showThankYou {
+                        Button(Strings.Sentiment.skipForNow) {
+                            dismiss()
+                        }
+                        .foregroundStyle(.secondary)
                     }
-                    .foregroundStyle(.secondary)
                 }
             }
         }
     }
+
+    // MARK: - Question Flow
+
+    @ViewBuilder
+    private var questionFlow: some View {
+        // Progress indicator
+        ProgressView(value: Double(currentIndex + 1), total: Double(categories.count))
+            .tint(.purple)
+            .padding(.horizontal)
+
+        Spacer()
+
+        // Current question
+        if currentIndex < categories.count {
+            let category = categories[currentIndex]
+            let context = SentimentContextBuilder.buildContext(
+                for: category,
+                events: events,
+                profile: profile
+            )
+
+            QuestionView(
+                category: category,
+                contextSummary: context,
+                selectedRating: ratings[category],
+                onSelect: { rating in
+                    ratings[category] = rating
+                }
+            )
+            .padding()
+            .transition(.asymmetric(
+                insertion: .move(edge: .trailing).combined(with: .opacity),
+                removal: .move(edge: .leading).combined(with: .opacity)
+            ))
+            .id(category)
+        }
+
+        Spacer()
+
+        // Navigation buttons
+        HStack(spacing: 16) {
+            if currentIndex > 0 {
+                Button {
+                    withAnimation {
+                        currentIndex -= 1
+                    }
+                } label: {
+                    Text(Strings.Common.back)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 14)
+                }
+                .buttonStyle(.bordered)
+            }
+
+            Button {
+                if currentIndex < categories.count - 1 {
+                    withAnimation {
+                        currentIndex += 1
+                    }
+                } else {
+                    submitAll()
+                }
+            } label: {
+                Text(currentIndex < categories.count - 1 ? Strings.Common.next : Strings.Common.done)
+                    .fontWeight(.semibold)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 14)
+            }
+            .buttonStyle(.borderedProminent)
+            .tint(.purple)
+            .disabled(ratings[categories[currentIndex]] == nil)
+        }
+        .padding()
+    }
+
+    // MARK: - Thank You View
+
+    @ViewBuilder
+    private var thankYouView: some View {
+        Spacer()
+
+        VStack(spacing: 24) {
+            Image(systemName: "checkmark.circle.fill")
+                .font(.system(size: 64))
+                .foregroundStyle(.green)
+
+            Text(Strings.Sentiment.thankYouTitle)
+                .font(.title2)
+                .fontWeight(.semibold)
+
+            Text(Strings.Sentiment.thankYouSubtitle)
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal, 32)
+        }
+
+        Spacer()
+
+        Button {
+            dismiss()
+        } label: {
+            Text(Strings.Common.done)
+                .fontWeight(.semibold)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 14)
+        }
+        .buttonStyle(.borderedProminent)
+        .tint(.purple)
+        .padding()
+    }
+
+    // MARK: - Submit
 
     private func submitAll() {
         for (category, rating) in ratings {
@@ -119,7 +172,9 @@ struct SentimentOnboardingSheet: View {
                 contextSummary: context
             )
         }
-        dismiss()
+        withAnimation {
+            showThankYou = true
+        }
     }
 }
 
@@ -131,13 +186,26 @@ private struct QuestionView: View {
     let selectedRating: Int?
     let onSelect: (Int) -> Void
 
-    private let ratingOptions: [(Int, String, String)] = [
-        (1, "Struggling", "face.smiling.inverse"),
-        (2, "Difficult", "cloud"),
-        (3, "Okay", "equal.circle"),
-        (4, "Good", "sun.max"),
-        (5, "Great!", "star.fill")
-    ]
+    /// Localized rating options with score and label
+    private var ratingOptions: [(Int, String)] {
+        [
+            (1, Strings.Sentiment.ratingStruggling),
+            (2, Strings.Sentiment.ratingDifficult),
+            (3, Strings.Sentiment.ratingOkay),
+            (4, Strings.Sentiment.ratingGood),
+            (5, Strings.Sentiment.ratingGreat)
+        ]
+    }
+
+    /// Optional hint text for categories that need explanation
+    private var categoryHint: String? {
+        switch category {
+        case .skillsTraining:
+            return Strings.Sentiment.skillsTrainingHint
+        default:
+            return nil
+        }
+    }
 
     var body: some View {
         VStack(spacing: 24) {
@@ -146,7 +214,7 @@ private struct QuestionView: View {
                 .font(.system(size: 48))
                 .foregroundStyle(.purple)
 
-            // Context
+            // Context (from logged data)
             if !contextSummary.isEmpty && contextSummary != Strings.Sentiment.noDataYet {
                 Text(contextSummary)
                     .font(.subheadline)
@@ -155,14 +223,24 @@ private struct QuestionView: View {
             }
 
             // Question
-            Text(category.questionText)
-                .font(.title2)
-                .fontWeight(.semibold)
-                .multilineTextAlignment(.center)
+            VStack(spacing: 8) {
+                Text(category.questionText)
+                    .font(.title2)
+                    .fontWeight(.semibold)
+                    .multilineTextAlignment(.center)
+
+                // Category hint (e.g., explaining skills training)
+                if let hint = categoryHint {
+                    Text(hint)
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
+                }
+            }
 
             // Rating options
             HStack(spacing: 12) {
-                ForEach(ratingOptions, id: \.0) { rating, label, icon in
+                ForEach(ratingOptions, id: \.0) { rating, label in
                     RatingOptionButton(
                         rating: rating,
                         label: label,
