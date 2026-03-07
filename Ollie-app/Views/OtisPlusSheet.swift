@@ -13,7 +13,24 @@ struct OtisPlusSheet: View {
     let onSubscribed: () -> Void
 
     @ObservedObject var subscriptionManager = SubscriptionManager.shared
+    @ObservedObject private var trialManager = TrialManager.shared
     @Environment(\.colorScheme) private var colorScheme
+
+    /// Determines the context for showing the paywall
+    private enum PaywallContext {
+        case normal           // Standard upsell
+        case inTrial(daysLeft: Int)  // User is in local trial
+        case expired          // Trial has expired
+    }
+
+    private var paywallContext: PaywallContext {
+        if trialManager.isTrialExpired && !subscriptionManager.subscriptionStatus.hasOtisPlus {
+            return .expired
+        } else if trialManager.isTrialActive {
+            return .inTrial(daysLeft: trialManager.daysRemaining)
+        }
+        return .normal
+    }
 
     var body: some View {
         NavigationStack {
@@ -79,33 +96,77 @@ struct OtisPlusSheet: View {
 
     private var heroSection: some View {
         VStack(spacing: 16) {
-            // Plus badge
+            // Icon based on context
             ZStack {
                 Circle()
                     .fill(LinearGradient(
-                        colors: [.otisAccent, .otisAccent.opacity(0.7)],
+                        colors: heroGradientColors,
                         startPoint: .topLeading,
                         endPoint: .bottomTrailing
                     ))
                     .frame(width: 80, height: 80)
 
-                Image(systemName: "plus")
+                Image(systemName: heroIcon)
                     .font(.system(size: 36, weight: .bold))
                     .foregroundStyle(.white)
             }
 
-            Text(Strings.OtisPlus.heroTitle)
+            Text(heroTitle)
                 .font(.title2)
                 .fontWeight(.bold)
                 .multilineTextAlignment(.center)
 
-            Text(Strings.OtisPlus.heroSubtitle)
+            Text(heroSubtitle)
                 .font(.body)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal)
         }
         .padding(.top, 20)
+    }
+
+    private var heroIcon: String {
+        switch paywallContext {
+        case .expired:
+            return "clock.badge.exclamationmark"
+        case .inTrial:
+            return "sparkles"
+        case .normal:
+            return "plus"
+        }
+    }
+
+    private var heroGradientColors: [Color] {
+        switch paywallContext {
+        case .expired:
+            return [.otisWarning, .otisWarning.opacity(0.7)]
+        case .inTrial:
+            return [.otisAccent, .otisAccent.opacity(0.7)]
+        case .normal:
+            return [.otisAccent, .otisAccent.opacity(0.7)]
+        }
+    }
+
+    private var heroTitle: String {
+        switch paywallContext {
+        case .expired:
+            return Strings.OtisPlus.expiredHeroTitle
+        case .inTrial:
+            return Strings.OtisPlus.trialHeroTitle
+        case .normal:
+            return Strings.OtisPlus.heroTitle
+        }
+    }
+
+    private var heroSubtitle: String {
+        switch paywallContext {
+        case .expired:
+            return Strings.OtisPlus.expiredHeroSubtitle
+        case .inTrial(let daysLeft):
+            return Strings.OtisPlus.trialHeroSubtitle(daysLeft: daysLeft)
+        case .normal:
+            return Strings.OtisPlus.heroSubtitle
+        }
     }
 
     // MARK: - Feature Comparison

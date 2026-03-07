@@ -30,9 +30,15 @@ struct TodayView: View {
     // First-visit tip tracking
     @AppStorage("hasSeenTodayTip") private var hasSeenTodayTip = false
 
+    // Crate training mastery (hides potty reminders when mastered)
+    @AppStorage(UserPreferences.Key.crateTrainingMastered.rawValue) private var crateTrainingMastered = false
+
     @EnvironmentObject private var atmosphereProvider: AtmosphereProvider
     @EnvironmentObject private var foodRecallService: FoodRecallService
     @EnvironmentObject private var eventStore: EventStore
+
+    // Trial touchpoint state
+    @ObservedObject private var trialManager = TrialManager.shared
 
     /// Whether to show the crate nudge card
     private var shouldShowCrateNudge: Bool {
@@ -55,6 +61,32 @@ struct TodayView: View {
             walkStats: viewModel.walkStats,
             dismissedDate: dismissedWalkTargetNudgeDate
         )
+    }
+
+    /// Whether to show the potty status card based on crate training mastery and urgency
+    /// - If crate training is mastered, don't show (puppy can hold it)
+    /// - If not mastered, only show when < 30 minutes remaining or already urgent/overdue
+    private var shouldShowPottyStatusCard: Bool {
+        // Don't show if crate training is mastered
+        if crateTrainingMastered {
+            return false
+        }
+
+        // Check minutes remaining based on urgency level
+        switch viewModel.pottyPrediction.urgency {
+        case .soon, .overdue, .postAccident:
+            // Always show when urgent
+            return true
+        case .attention(let minutesRemaining):
+            // Attention is 10-20 min, always < 30
+            return minutesRemaining < 30
+        case .normal(let minutesRemaining):
+            // Only show if < 30 minutes remaining
+            return minutesRemaining < 30
+        case .justWent, .unknown, .coverageGap:
+            // Don't show for these states
+            return false
+        }
     }
 
     var body: some View {
@@ -106,6 +138,33 @@ struct TodayView: View {
                             .animatedAppear(delay: 0.05)
                     }
 
+                    // Sentiment check-in (daily question about how things are going)
+                    if viewModel.isShowingToday, let profile = viewModel.profileStore.profile {
+                        SentimentCheckInContainer(
+                            sentimentStore: SentimentStore.shared,
+                            profile: profile,
+                            events: eventStore.events
+                        )
+                        .animatedAppear(delay: 0.06)
+
+                        // Tips for struggling areas
+                        SentimentTipsContainer(
+                            sentimentStore: SentimentStore.shared,
+                            onInfoSheet: { sheetType in
+                                // Handle info sheet presentation
+                                switch sheetType {
+                                case .crateTraining:
+                                    viewModel.sheetCoordinator.presentSheet(.crateTrainingGuide)
+                                case .pottyTraining:
+                                    viewModel.sheetCoordinator.presentSheet(.pottyTrainingGuide)
+                                default:
+                                    break
+                                }
+                            }
+                        )
+                        .animatedAppear(delay: 0.07)
+                    }
+
                     // Memories card ("On This Day")
                     if viewModel.isShowingToday {
                         MemoriesCard(
@@ -127,13 +186,10 @@ struct TodayView: View {
                         .animatedAppear(delay: 0.10)
                     }
 
-                    // Combined potty progress card (streak + poop count)
+                    // AI Health Insights (personalized wellness observations)
                     if viewModel.isShowingToday {
-                        PottyProgressSummaryCard(
-                            streakInfo: viewModel.streakInfo,
-                            poopStatus: viewModel.poopStatus
-                        )
-                        .animatedAppear(delay: 0.12)
+                        AIHealthInsightsCard()
+                            .animatedAppear(delay: 0.14)
                     }
 
                     // Timeline section
@@ -264,6 +320,24 @@ struct TodayView: View {
                 .animatedAppear(delay: 0.03)
             }
 
+            // Trial touchpoint card (Day 1, 7, 12, or 14)
+            if let touchpoint = trialManager.currentTouchpoint(),
+               touchpoint.showsInAppCard,
+               !combinedState.shouldShowFirstRunCard {
+                TrialTouchpointCard(
+                    touchpoint: touchpoint,
+                    puppyName: viewModel.puppyName,
+                    onDismiss: {
+                        trialManager.markTouchpointShown(touchpoint)
+                    },
+                    onSubscribe: {
+                        trialManager.markTouchpointShown(touchpoint)
+                        viewModel.sheetCoordinator.presentSheet(.otisPlus)
+                    }
+                )
+                .animatedAppear(delay: 0.035)
+            }
+
             // Stale logging banner (replaces misleading status cards)
             if case .staleLogging = combinedState {
                 StaleLoggingBanner(
@@ -313,8 +387,9 @@ struct TodayView: View {
                 )
             }
 
-            // Normal potty card (hide when combined card is showing or just woke)
-            if !combinedState.shouldHidePottyCard {
+            // Normal potty card
+            // Hide when: combined card is showing, just woke, crate training mastered, or > 30 min remaining
+            if !combinedState.shouldHidePottyCard && shouldShowPottyStatusCard {
                 let aiStatusCopy = viewModel.aiEnhancedPottyStatusCopy
                 PottyStatusCard(
                     prediction: viewModel.pottyPrediction,

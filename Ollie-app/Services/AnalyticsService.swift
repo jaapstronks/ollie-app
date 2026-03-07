@@ -63,6 +63,14 @@ enum Analytics {
         case trialStarted = "trial_started"
         case trialConverted = "trial_converted"
 
+        // Trial Touchpoints & Conversion
+        case trialTouchpointShown = "trial_touchpoint_shown"
+        case trialTouchpointDismissed = "trial_touchpoint_dismissed"
+        case trialTouchpointSubscribeTapped = "trial_touchpoint_subscribe_tapped"
+        case trialExpiredShown = "trial_expired_shown"
+        case trialExpiredSubscribeTapped = "trial_expired_subscribe_tapped"
+        case trialExpiredDismissed = "trial_expired_dismissed"
+
         // AI Nudges
         case aiNudgeDecision = "ai_nudge_decision"
     }

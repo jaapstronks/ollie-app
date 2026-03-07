@@ -44,11 +44,32 @@ class SubscriptionManager: ObservableObject {
     }
 
     /// The effective subscription status (respects beta override in non-production builds)
+    /// Priority: beta override > StoreKit subscription > local trial > free
     var effectiveStatus: OtisPlusStatus {
         if AppEnvironment.current.isBeta, let override = betaOverrideStatus {
             return override
         }
+        // If StoreKit shows active/trial/legacy, use that
+        if subscriptionStatus.hasOtisPlus {
+            return subscriptionStatus
+        }
+        // Check local 14-day trial
+        if TrialManager.shared.isTrialActive, let endDate = TrialManager.shared.trialEndDate {
+            return .trial(until: endDate)
+        }
+        // Check if local trial expired (but StoreKit never subscribed)
+        if TrialManager.shared.isTrialExpired {
+            return .expired
+        }
         return subscriptionStatus
+    }
+
+    /// Whether the local trial has expired (for showing the expired sheet)
+    var isLocalTrialExpired: Bool {
+        // Only show expired sheet if:
+        // 1. Local trial has expired
+        // 2. User doesn't have an active StoreKit subscription
+        TrialManager.shared.isTrialExpired && !subscriptionStatus.hasOtisPlus
     }
 
     // MARK: - Published State

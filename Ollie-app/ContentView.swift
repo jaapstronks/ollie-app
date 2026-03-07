@@ -3,6 +3,7 @@
 //  Otis-app
 //
 
+import StoreKit
 import SwiftUI
 import OtisShared
 
@@ -27,6 +28,9 @@ struct ContentView: View {
     @State private var showAddProfileOnboarding = false
     @State private var sharedProfileWelcomeName: String?
     @State private var showSharedProfileWelcome = false
+    @State private var showExpiredTrialSheet = false
+    @State private var showOtisPlusSheet = false
+    @StateObject private var subscriptionManager = SubscriptionManager.shared
     @AppStorage(UserPreferences.Key.lastSelectedTab.rawValue) private var selectedTabRawValue = MainTab.today.rawValue
     @AppStorage(UserPreferences.Key.needsFirstSessionHandoff.rawValue) private var needsFirstSessionHandoff = false
     @AppStorage(UserPreferences.Key.hasCompletedOnboarding.rawValue) private var hasCompletedOnboarding = false
@@ -93,6 +97,13 @@ struct ContentView: View {
                             showAddProfileOnboarding = true
                         }
                     )
+                    .task {
+                        // Proactively request notification permissions if not determined
+                        // This handles cases where onboarding was skipped (e.g., reinstall with seed data)
+                        if notificationService.authorizationStatus == .notDetermined {
+                            _ = await notificationService.requestAuthorization()
+                        }
+                    }
                 }
             }
 
@@ -139,7 +150,59 @@ struct ContentView: View {
                 showAddProfileOnboarding = false
             }
         }
+        // Expired trial sheet
+        .fullScreenCover(isPresented: $showExpiredTrialSheet) {
+            ExpiredTrialSheet(
+                puppyName: profileStore.profile?.name ?? "",
+                eventCount: eventStore.events.count,
+                trainingSessionCount: eventStore.events.filter { $0.type == .training }.count,
+                daysTracking: calculateDaysTracking(),
+                monthlyPrice: subscriptionManager.monthlyProduct?.displayPrice,
+                onSubscribe: {
+                    showExpiredTrialSheet = false
+                    // Show paywall sheet after a brief delay for sheet transition
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        showOtisPlusSheet = true
+                    }
+                    Analytics.track(.trialExpiredSubscribeTapped)
+                },
+                onDismiss: {
+                    showExpiredTrialSheet = false
+                    Analytics.track(.trialExpiredDismissed)
+                }
+            )
+        }
+        // Otis+ paywall sheet (opened from expired trial or other upsells)
+        .sheet(isPresented: $showOtisPlusSheet) {
+            OtisPlusSheet(
+                onDismiss: {
+                    showOtisPlusSheet = false
+                },
+                onSubscribed: {
+                    showOtisPlusSheet = false
+                }
+            )
+        }
+        .task {
+            // Check for expired local trial on app launch
+            if subscriptionManager.isLocalTrialExpired && hasCompletedOnboarding {
+                showExpiredTrialSheet = true
+            }
+            // Check for migration trial for existing users
+            if !hasCompletedOnboarding {
+                // Will be handled after onboarding
+            } else if TrialManager.shared.hasNeverStartedTrial && !TrialManager.shared.hasDeclinedTrial {
+                TrialManager.shared.grantMigrationTrialIfEligible(eventCount: eventStore.events.count)
+            }
+        }
         .preferredColorScheme(colorScheme)
+    }
+
+    /// Calculate how many unique days the user has been tracking events
+    private func calculateDaysTracking() -> Int {
+        let calendar = Calendar.current
+        let uniqueDays = Set(eventStore.events.map { calendar.startOfDay(for: $0.time) })
+        return uniqueDays.count
     }
 }
 
@@ -352,7 +415,7 @@ struct MainTabView: View {
                     }
 
                     // Keep celebration rendering at the top-most layer of the main tab stack.
-                    CelebrationView(style: viewModel.celebrationStyle, isActive: $viewModel.showCelebration)
+                    CelebrationView(style: viewModel.celebrationStyle, streakCount: viewModel.celebrationStreakCount, isActive: $viewModel.showCelebration)
                         .ignoresSafeArea()
                         .zIndex(10_000)
                 }  // Close ZStack

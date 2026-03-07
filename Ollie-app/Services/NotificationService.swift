@@ -28,6 +28,7 @@ class NotificationService: ObservableObject {
     private let wakeUpSoonScheduler = WakeUpSoonNotificationScheduler()
     private let walkScheduler = WalkNotificationScheduler()
     private let appointmentScheduler = AppointmentNotificationScheduler()
+    private let trialScheduler = TrialNotificationScheduler()
 
     // MARK: - Initialization
 
@@ -146,6 +147,10 @@ class NotificationService: ObservableObject {
         } else {
             await appointmentScheduler.cancel()
         }
+
+        // Schedule trial touchpoint notifications (Day 3 and Day 12)
+        // These are always scheduled when trial is active - no user toggle
+        await trialScheduler.schedule()
     }
 
     // MARK: - Cancellation

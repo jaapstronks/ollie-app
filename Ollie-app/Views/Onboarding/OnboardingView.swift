@@ -122,7 +122,7 @@ struct OnboardingView: View {
             }
 
             // Content - always include all steps to keep TabView structure stable
-            // Steps: Welcome(0), Name(1), Breed(2), Birth(3), Status(4), Home(5), Size(6), Photo(7), Confirm(8), Notifications(9), Location(10)
+            // Steps: Welcome(0), Name(1), Breed(2), Birth(3), Status(4), Home(5), Size(6), Photo(7), Confirm(8), Notifications(9), Location(10), Trial(11)
             TabView(selection: $currentStep) {
                 OnboardingWelcomeStep(
                     onNext: { navigateToStep(1) }
@@ -219,8 +219,20 @@ struct OnboardingView: View {
                 ).tag(9)
 
                 OnboardingLocationStep(
-                    onComplete: completeOnboarding
+                    onComplete: { navigateToStep(11) }
                 ).tag(10)
+
+                OnboardingTrialStartStep(
+                    puppyName: name,
+                    onStartTrial: {
+                        TrialManager.shared.startTrial()
+                        completeOnboarding()
+                    },
+                    onSkip: {
+                        TrialManager.shared.declineTrial()
+                        completeOnboarding()
+                    }
+                ).tag(11)
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
             .animation(reduceMotion ? nil : .easeInOut, value: currentStep)
