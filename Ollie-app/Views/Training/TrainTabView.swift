@@ -30,6 +30,14 @@ struct TrainTabView: View {
     // Crate training mastery
     @AppStorage(UserPreferences.Key.crateTrainingMastered.rawValue) private var crateTrainingMastered = false
 
+    // Potty training mastery
+    @AppStorage(UserPreferences.Key.pottyTrainingMastered.rawValue) private var pottyTrainingMastered = false
+    @AppStorage(UserPreferences.Key.pottyTrainingMasteredDate.rawValue) private var pottyMasteredTimestamp: Double = 0
+    @AppStorage(UserPreferences.Key.pottyMasteryPromptDismissedDate.rawValue) private var pottyPromptDismissedTimestamp: Double = 0
+    @AppStorage(UserPreferences.Key.pottyMasteryPromptDismissCount.rawValue) private var pottyPromptDismissCount: Int = 0
+
+    @State private var showPottyMasteryConfirmation = false
+
     /// Calculate crate nap percentage for guide entry card
     private var crateNapPercentage: Int {
         let recentNaps = eventStore.events
@@ -58,6 +66,20 @@ struct TrainTabView: View {
                                 }
                             }
                         )
+                    }
+
+                    // AI Training Guidance (shows suggestions from AI)
+                    AITrainingGuidanceCard()
+                        .animatedAppear(delay: 0)
+
+                    // Regression alert (highest priority)
+                    if !skillProgressStore.skillsNeedingWork.isEmpty {
+                        regressionAlertSection
+                    }
+
+                    // Due for review card
+                    if !skillProgressStore.skillsDueForReview.isEmpty && skillProgressStore.skillsNeedingWork.isEmpty {
+                        dueForReviewSection
                     }
 
                     // Section 1: Training Guides (Potty + Crate)
@@ -90,7 +112,37 @@ struct TrainTabView: View {
             .sheet(isPresented: $showCrateGuide) {
                 CrateTrainingGuideSheet(eventStore: eventStore)
             }
+            .confirmationDialog(
+                Strings.Training.PottyTraining.markMastered,
+                isPresented: $showPottyMasteryConfirmation,
+                titleVisibility: .visible
+            ) {
+                Button(Strings.Training.PottyTraining.markMastered) {
+                    markPottyAsMastered()
+                }
+                Button(Strings.Common.cancel, role: .cancel) {}
+            } message: {
+                Text(Strings.Training.PottyTraining.markMasteredDescription)
+            }
         }
+    }
+
+    // MARK: - Potty Mastery Actions
+
+    private func markPottyAsMastered() {
+        withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+            pottyTrainingMastered = true
+            pottyMasteredTimestamp = Date().timeIntervalSince1970
+        }
+        HapticFeedback.success()
+    }
+
+    private func dismissPottyMasteryPrompt() {
+        withAnimation(.easeOut(duration: 0.2)) {
+            pottyPromptDismissedTimestamp = Date().timeIntervalSince1970
+            pottyPromptDismissCount += 1
+        }
+        HapticFeedback.light()
     }
 
     // MARK: - Training Guides Section
@@ -98,17 +150,33 @@ struct TrainTabView: View {
     @ViewBuilder
     private var guidesSection: some View {
         VStack(spacing: 10) {
-            // Potty Training Guide - hidden when at 100% for 4+ days
-            if viewModel.shouldShowPottyTrainingGuide {
+            // Potty Training Guide - shown with mastered badge if mastered, hidden when at 100% for 4+ days (unless mastered)
+            if pottyTrainingMastered || viewModel.shouldShowPottyTrainingGuide {
                 TrainingGuideEntryCard(
                     icon: "target",
                     title: Strings.Training.Guides.pottyTitle,
-                    subtitle: Strings.Training.Guides.pottySubtitle,
-                    statValue: viewModel.outdoorPercentage > 0 ? "\(viewModel.outdoorPercentage)%" : nil,
-                    tintColor: .otisSuccess
+                    subtitle: pottyTrainingMastered
+                        ? Strings.Training.PottyTraining.masteredDescription
+                        : Strings.Training.Guides.pottySubtitle,
+                    statValue: pottyTrainingMastered ? nil : (viewModel.outdoorPercentage > 0 ? "\(viewModel.outdoorPercentage)%" : nil),
+                    tintColor: .otisSuccess,
+                    isMastered: pottyTrainingMastered
                 ) {
                     showPottyGuide = true
                 }
+            }
+
+            // Potty Mastery Prompt - shows when at 100% for multiple days, dismissible
+            if viewModel.shouldShowPottyMasteryPrompt {
+                PottyMasteryPromptCard(
+                    consecutiveDays: viewModel.consecutivePerfectDays,
+                    onMarkMastered: {
+                        showPottyMasteryConfirmation = true
+                    },
+                    onDismiss: {
+                        dismissPottyMasteryPrompt()
+                    }
+                )
             }
 
             // Crate Training Guide
@@ -140,6 +208,77 @@ struct TrainTabView: View {
     private var skillsSection: some View {
         SkillsPreviewCard(eventStore: eventStore, skillProgressStore: skillProgressStore)
     }
+
+    // MARK: - Alert Sections
+
+    /// Convert SkillProgress to SkillProgressInfo for RegressionAlertBanner
+    private var skillsNeedingWorkInfo: [SkillProgressInfo] {
+        let trainingStore = TrainingPlanStore()
+        return skillProgressStore.skillsNeedingWork.compactMap { progress in
+            guard let skill = trainingStore.trainingPlan?.skills.first(where: { $0.id == progress.skillId }) else {
+                return nil
+            }
+            return SkillProgressInfo(
+                skill: skill,
+                status: .practicing,
+                sessionCount: 0,
+                isLocked: false,
+                isNextUp: false,
+                missingRequirements: [],
+                learningPhase: progress.phase,
+                confidenceScore: progress.confidenceScore,
+                isDueForReview: false,
+                daysUntilReview: nil
+            )
+        }
+    }
+
+    @ViewBuilder
+    private var regressionAlertSection: some View {
+        RegressionAlertBanner(
+            skillsNeedingWork: skillsNeedingWorkInfo,
+            onTapSkill: { _ in
+                // Navigate handled by sheet presentation in skillsSection
+            },
+            onDismiss: nil // Don't allow dismiss - this is important
+        )
+    }
+
+    @ViewBuilder
+    private var dueForReviewSection: some View {
+        let count = skillProgressStore.skillsDueForReview.count
+        HStack(spacing: 12) {
+            Image(systemName: "calendar.badge.clock")
+                .font(.title3)
+                .foregroundStyle(.indigo)
+                .frame(width: 40, height: 40)
+                .background(
+                    Circle()
+                        .fill(Color.indigo.opacity(colorScheme == .dark ? 0.2 : 0.1))
+                )
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text(Strings.Training.dueForReview)
+                    .font(.subheadline)
+                    .fontWeight(.semibold)
+
+                Text(Strings.Training.dueForReviewCount(count))
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+
+            Spacer()
+
+            Image(systemName: "chevron.right")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        }
+        .padding()
+        .background(
+            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                .fill(Color.indigo.opacity(colorScheme == .dark ? 0.08 : 0.05))
+        )
+    }
 }
 
 // MARK: - Skills Preview Card
@@ -161,62 +300,57 @@ private struct SkillsPreviewCard: View {
         trainingStore.allSkillsWithStatus.contains { $0.sessionCount > 0 }
     }
 
-    /// Check if there are skills to train today
-    private var hasSkillsToTrain: Bool {
-        !skillProgressStore.skillsNeedingWork.isEmpty ||
-        !skillProgressStore.skillsDueForReview.isEmpty ||
-        !skillProgressStore.skillsInActiveLearning.isEmpty
+    /// Count of urgent skills (regression + due for review)
+    private var urgentCount: Int {
+        skillProgressStore.skillsNeedingWork.count +
+        skillProgressStore.skillsDueForReview.count
+    }
+
+    /// Generate session summary text
+    private var sessionSummaryText: String {
+        let plan = skillProgressStore.generateSessionPlan()
+        let totalSkills = plan.allSkillsInOrder.count
+
+        if plan.isEmpty {
+            return Strings.Training.noSkillsDue
+        }
+
+        let focusCount = plan.primaryFocus.count
+        let reviewCount = plan.maintenance.count
+
+        if focusCount > 0 && reviewCount > 0 {
+            return "\(focusCount) focus, \(reviewCount) review"
+        } else if focusCount > 0 {
+            return "\(focusCount) skill\(focusCount == 1 ? "" : "s") to practice"
+        } else {
+            return "\(totalSkills) skill\(totalSkills == 1 ? "" : "s") to review"
+        }
     }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            // Header with description
-            VStack(alignment: .leading, spacing: 4) {
-                HStack {
-                    Image(systemName: "graduationcap.fill")
-                        .foregroundStyle(Color.otisAccent)
-                        .accessibilityHidden(true)
-                    Text(Strings.Train.skills)
-                        .font(.headline)
-                        .fontWeight(.semibold)
-                        .accessibilityAddTraits(.isHeader)
-                    Spacer()
-                }
-
-                Text(Strings.Train.skillsDescription)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-
-            if trainingStore.trainingPlan != nil {
-                // Mastery progress
-                HStack {
-                    VStack(alignment: .leading, spacing: 4) {
-                        if let nextSkill = trainingStore.nextSkill {
-                            Text(Strings.Training.Progression.nextUp)
-                                .font(.caption)
-                                .fontWeight(.medium)
-                                .foregroundStyle(.tertiary)
-                                .textCase(.uppercase)
-
-                            HStack(spacing: 6) {
-                                Image(systemName: nextSkill.icon)
-                                    .font(.subheadline)
-                                    .foregroundStyle(Color.otisAccent)
-                                Text(nextSkill.name)
-                                    .font(.subheadline)
-                                    .fontWeight(.semibold)
-                            }
-                        } else {
-                            Text(Strings.Training.Progression.allSkillsMastered)
-                                .font(.subheadline)
-                                .fontWeight(.semibold)
-                        }
+            // Header row with title and progress ring
+            HStack(alignment: .center, spacing: 12) {
+                VStack(alignment: .leading, spacing: 2) {
+                    HStack(spacing: 6) {
+                        Image(systemName: "graduationcap.fill")
+                            .foregroundStyle(Color.otisAccent)
+                            .accessibilityHidden(true)
+                        Text(Strings.Train.skills)
+                            .font(.headline)
+                            .fontWeight(.semibold)
+                            .accessibilityAddTraits(.isHeader)
                     }
 
-                    Spacer()
+                    Text(Strings.Train.skillsDescription)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .lineLimit(1)
+                }
 
-                    // Progress ring
+                Spacer()
+
+                if trainingStore.trainingPlan != nil {
                     ProgressRing(
                         completed: trainingStore.masteryProgress.mastered,
                         total: trainingStore.masteryProgress.total,
@@ -226,89 +360,85 @@ private struct SkillsPreviewCard: View {
                     .accessibilityLabel(Strings.Train.progressRingAccessibility)
                     .accessibilityValue(Strings.Train.progressValue(started: trainingStore.masteryProgress.mastered, total: trainingStore.masteryProgress.total))
                 }
+            }
 
-                // Actionable links at the bottom
-                Divider()
-
-                // Today's Training button (primary action when skills available)
-                if hasStartedTraining && hasSkillsToTrain {
-                    Button {
-                        showTodaysTraining = true
-                    } label: {
-                        HStack(spacing: 12) {
-                            Image(systemName: "sparkles")
-                                .font(.title3)
+            if trainingStore.trainingPlan != nil {
+                // Primary CTA: Start Training button
+                Button {
+                    showTodaysTraining = true
+                } label: {
+                    HStack(spacing: 10) {
+                        // Icon with optional badge
+                        ZStack(alignment: .topTrailing) {
+                            Image(systemName: "play.fill")
+                                .font(.subheadline)
                                 .foregroundStyle(.white)
-                                .frame(width: 40, height: 40)
-                                .background(
-                                    Circle()
-                                        .fill(Color.otisAccent)
-                                )
+                                .frame(width: 32, height: 32)
+                                .background(Circle().fill(Color.otisAccent))
 
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text(Strings.Training.todaysTraining)
-                                    .font(.subheadline)
-                                    .fontWeight(.semibold)
-                                    .foregroundStyle(.primary)
-
-                                Text(Strings.Training.smartSessionPlan)
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
+                            if urgentCount > 0 {
+                                Circle()
+                                    .fill(Color.otisDanger)
+                                    .frame(width: 10, height: 10)
+                                    .offset(x: 2, y: -2)
                             }
+                        }
 
-                            Spacer()
+                        VStack(alignment: .leading, spacing: 1) {
+                            Text(hasStartedTraining ? Strings.Train.continueTraining : Strings.Training.startSession)
+                                .font(.subheadline)
+                                .fontWeight(.semibold)
+                                .foregroundStyle(.primary)
 
-                            Image(systemName: "chevron.right")
-                                .font(.system(size: 12, weight: .semibold))
+                            Text(sessionSummaryText)
+                                .font(.caption)
                                 .foregroundStyle(.secondary)
                         }
-                        .padding(.vertical, 6)
-                    }
-                    .buttonStyle(.plain)
-
-                    Divider()
-                }
-
-                NavigationLink {
-                    TrainingView(eventStore: eventStore)
-                } label: {
-                    HStack(spacing: 12) {
-                        Image(systemName: hasStartedTraining ? "list.bullet" : "play.circle.fill")
-                            .font(.title3)
-                            .foregroundStyle(Color.otisAccent)
-                            .frame(width: 40, height: 40)
-                            .background(
-                                Circle()
-                                    .fill(Color.otisAccent.opacity(colorScheme == .dark ? 0.2 : 0.1))
-                            )
-
-                        Text(hasStartedTraining ? Strings.Training.viewAllSkills : Strings.Train.startTraining)
-                            .font(.subheadline)
-                            .fontWeight(.medium)
-                            .foregroundStyle(Color.otisAccent)
 
                         Spacer()
 
                         Image(systemName: "chevron.right")
-                            .font(.system(size: 12, weight: .semibold))
-                            .foregroundStyle(.secondary)
+                            .font(.system(size: 11, weight: .semibold))
+                            .foregroundStyle(.tertiary)
                     }
-                    .padding(.vertical, 4)
+                    .padding(10)
+                    .background(
+                        RoundedRectangle(cornerRadius: 10, style: .continuous)
+                            .fill(colorScheme == .dark ? Color.white.opacity(0.06) : Color.black.opacity(0.03))
+                    )
+                }
+                .buttonStyle(.plain)
+
+                // Secondary: View all skills link (inline, subtle)
+                NavigationLink {
+                    TrainingView(eventStore: eventStore)
+                } label: {
+                    HStack(spacing: 6) {
+                        Image(systemName: "list.bullet")
+                            .font(.caption)
+                        Text(Strings.Training.viewAllSkills)
+                            .font(.caption)
+                            .fontWeight(.medium)
+                    }
+                    .foregroundStyle(Color.otisAccent)
                 }
                 .buttonStyle(.plain)
             } else {
-                // Loading or no plan
-                Text(Strings.Common.loading)
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 20)
+                // Loading state
+                HStack {
+                    Spacer()
+                    ProgressView()
+                        .controlSize(.small)
+                    Spacer()
+                }
+                .padding(.vertical, 12)
             }
         }
         .padding()
         .glassCard(tint: .accent)
         .onAppear {
             trainingStore.setEventStore(eventStore)
+            trainingStore.setSkillProgressStore(skillProgressStore)
         }
         .sheet(isPresented: $showTodaysTraining) {
             TodaysTrainingView(
