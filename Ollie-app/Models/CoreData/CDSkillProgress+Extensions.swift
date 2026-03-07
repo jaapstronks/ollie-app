@@ -112,7 +112,11 @@ extension CDSkillProgress {
         request.sortDescriptors = [
             NSSortDescriptor(keyPath: \CDSkillProgress.modifiedAt, ascending: false)
         ]
-        return (try? context.fetch(request)) ?? []
+        var results: [CDSkillProgress] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 
     /// Fetch skill progress by ID
@@ -120,7 +124,11 @@ extension CDSkillProgress {
         let request = NSFetchRequest<CDSkillProgress>(entityName: "CDSkillProgress")
         request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
         request.fetchLimit = 1
-        return try? context.fetch(request).first
+        var result: CDSkillProgress?
+        context.performAndWait {
+            result = try? context.fetch(request).first
+        }
+        return result
     }
 
     /// Fetch skill progress by skillId
@@ -128,7 +136,11 @@ extension CDSkillProgress {
         let request = NSFetchRequest<CDSkillProgress>(entityName: "CDSkillProgress")
         request.predicate = NSPredicate(format: "skillId == %@", skillId)
         request.fetchLimit = 1
-        return try? context.fetch(request).first
+        var result: CDSkillProgress?
+        context.performAndWait {
+            result = try? context.fetch(request).first
+        }
+        return result
     }
 
     /// Fetch skills due for maintenance review
@@ -142,7 +154,11 @@ extension CDSkillProgress {
         request.sortDescriptors = [
             NSSortDescriptor(keyPath: \CDSkillProgress.nextReviewDate, ascending: true)
         ]
-        return (try? context.fetch(request)) ?? []
+        var results: [CDSkillProgress] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 
     /// Fetch skills in regression state (needs work)
@@ -152,7 +168,11 @@ extension CDSkillProgress {
         request.sortDescriptors = [
             NSSortDescriptor(keyPath: \CDSkillProgress.modifiedAt, ascending: false)
         ]
-        return (try? context.fetch(request)) ?? []
+        var results: [CDSkillProgress] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 
     /// Fetch skills in active learning phases
@@ -168,7 +188,11 @@ extension CDSkillProgress {
         request.sortDescriptors = [
             NSSortDescriptor(keyPath: \CDSkillProgress.modifiedAt, ascending: false)
         ]
-        return (try? context.fetch(request)) ?? []
+        var results: [CDSkillProgress] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 
     /// Check if progress exists for a skill
@@ -176,6 +200,10 @@ extension CDSkillProgress {
         let request = NSFetchRequest<CDSkillProgress>(entityName: "CDSkillProgress")
         request.predicate = NSPredicate(format: "skillId == %@", skillId)
         request.fetchLimit = 1
-        return ((try? context.count(for: request)) ?? 0) > 0
+        var count = 0
+        context.performAndWait {
+            count = (try? context.count(for: request)) ?? 0
+        }
+        return count > 0
     }
 }

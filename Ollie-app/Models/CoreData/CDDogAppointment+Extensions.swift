@@ -139,7 +139,11 @@ extension CDDogAppointment {
         request.sortDescriptors = [
             NSSortDescriptor(keyPath: \CDDogAppointment.startDate, ascending: true)
         ]
-        return (try? context.fetch(request)) ?? []
+        var results: [CDDogAppointment] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 
     /// Fetch upcoming appointments for a profile
@@ -156,7 +160,11 @@ extension CDDogAppointment {
         request.sortDescriptors = [
             NSSortDescriptor(keyPath: \CDDogAppointment.startDate, ascending: true)
         ]
-        return (try? context.fetch(request)) ?? []
+        var results: [CDDogAppointment] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 
     /// Fetch past appointments for a profile
@@ -173,7 +181,11 @@ extension CDDogAppointment {
         request.sortDescriptors = [
             NSSortDescriptor(keyPath: \CDDogAppointment.startDate, ascending: false)
         ]
-        return (try? context.fetch(request)) ?? []
+        var results: [CDDogAppointment] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 
     /// Fetch appointments for a specific date
@@ -198,7 +210,11 @@ extension CDDogAppointment {
         request.sortDescriptors = [
             NSSortDescriptor(keyPath: \CDDogAppointment.startDate, ascending: true)
         ]
-        return (try? context.fetch(request)) ?? []
+        var results: [CDDogAppointment] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 
     /// Fetch appointment by ID
@@ -206,7 +222,11 @@ extension CDDogAppointment {
         let request = NSFetchRequest<CDDogAppointment>(entityName: "CDDogAppointment")
         request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
         request.fetchLimit = 1
-        return try? context.fetch(request).first
+        var result: CDDogAppointment?
+        context.performAndWait {
+            result = try? context.fetch(request).first
+        }
+        return result
     }
 
     /// Fetch appointments linked to a specific milestone
@@ -216,7 +236,11 @@ extension CDDogAppointment {
     ) -> [CDDogAppointment] {
         let request = NSFetchRequest<CDDogAppointment>(entityName: "CDDogAppointment")
         request.predicate = NSPredicate(format: "linkedMilestoneID == %@", milestoneId as CVarArg)
-        return (try? context.fetch(request)) ?? []
+        var results: [CDDogAppointment] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 
     /// Fetch appointments linked to a specific contact
@@ -226,7 +250,11 @@ extension CDDogAppointment {
     ) -> [CDDogAppointment] {
         let request = NSFetchRequest<CDDogAppointment>(entityName: "CDDogAppointment")
         request.predicate = NSPredicate(format: "linkedContactID == %@", contactId as CVarArg)
-        return (try? context.fetch(request)) ?? []
+        var results: [CDDogAppointment] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 
     /// Count all appointments for a profile
@@ -236,7 +264,11 @@ extension CDDogAppointment {
     ) -> Int {
         let request = NSFetchRequest<CDDogAppointment>(entityName: "CDDogAppointment")
         request.predicate = NSPredicate(format: "profile == %@", profile)
-        return (try? context.count(for: request)) ?? 0
+        var count = 0
+        context.performAndWait {
+            count = (try? context.count(for: request)) ?? 0
+        }
+        return count
     }
 
     /// Count upcoming appointments for a profile
@@ -250,7 +282,11 @@ extension CDDogAppointment {
             profile,
             Date() as NSDate
         )
-        return (try? context.count(for: request)) ?? 0
+        var count = 0
+        context.performAndWait {
+            count = (try? context.count(for: request)) ?? 0
+        }
+        return count
     }
 
     /// Fetch all appointments for migration (no profile filter)
@@ -261,6 +297,10 @@ extension CDDogAppointment {
         request.sortDescriptors = [
             NSSortDescriptor(keyPath: \CDDogAppointment.startDate, ascending: true)
         ]
-        return (try? context.fetch(request)) ?? []
+        var results: [CDDogAppointment] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 }

@@ -151,7 +151,11 @@ extension CDPuppyEvent {
         request.predicate = NSPredicate(format: "time >= %@ AND time < %@", startOfDay as CVarArg, endOfDay as CVarArg)
         request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: true)]
 
-        return (try? context.fetch(request)) ?? []
+        var results: [CDPuppyEvent] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 
     /// Fetch events in a date range
@@ -160,7 +164,11 @@ extension CDPuppyEvent {
         request.predicate = NSPredicate(format: "time >= %@ AND time <= %@", startDate as CVarArg, endDate as CVarArg)
         request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: true)]
 
-        return (try? context.fetch(request)) ?? []
+        var results: [CDPuppyEvent] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 
     /// Fetch event by ID
@@ -168,7 +176,11 @@ extension CDPuppyEvent {
         let request = NSFetchRequest<CDPuppyEvent>(entityName: "CDPuppyEvent")
         request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
         request.fetchLimit = 1
-        return try? context.fetch(request).first
+        var result: CDPuppyEvent?
+        context.performAndWait {
+            result = try? context.fetch(request).first
+        }
+        return result
     }
 
     /// Fetch events by type
@@ -177,7 +189,11 @@ extension CDPuppyEvent {
         request.predicate = NSPredicate(format: "type == %@", type.rawValue)
         request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: false)]
 
-        return (try? context.fetch(request)) ?? []
+        var results: [CDPuppyEvent] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 
     /// Fetch recent events (last N events)
@@ -186,7 +202,11 @@ extension CDPuppyEvent {
         request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: false)]
         request.fetchLimit = limit
 
-        return (try? context.fetch(request)) ?? []
+        var results: [CDPuppyEvent] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 
     /// Fetch all events
@@ -194,7 +214,11 @@ extension CDPuppyEvent {
         let request = NSFetchRequest<CDPuppyEvent>(entityName: "CDPuppyEvent")
         request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: true)]
 
-        return (try? context.fetch(request)) ?? []
+        var results: [CDPuppyEvent] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 
     /// Fetch events modified after a given date
@@ -203,7 +227,11 @@ extension CDPuppyEvent {
         request.predicate = NSPredicate(format: "modifiedAt > %@", date as CVarArg)
         request.sortDescriptors = [NSSortDescriptor(key: "modifiedAt", ascending: true)]
 
-        return (try? context.fetch(request)) ?? []
+        var results: [CDPuppyEvent] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 
     /// Fetch the earliest event by time
@@ -212,7 +240,11 @@ extension CDPuppyEvent {
         request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: true)]
         request.fetchLimit = 1
 
-        return try? context.fetch(request).first
+        var result: CDPuppyEvent?
+        context.performAndWait {
+            result = try? context.fetch(request).first
+        }
+        return result
     }
 
     // MARK: - Profile-Scoped Fetch Methods (Multi-Puppy Support)
@@ -232,7 +264,11 @@ extension CDPuppyEvent {
         ])
         request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: true)]
 
-        return (try? context.fetch(request)) ?? []
+        var results: [CDPuppyEvent] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 
     /// Fetch events in a date range, scoped to a profile
@@ -244,7 +280,11 @@ extension CDPuppyEvent {
         ])
         request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: true)]
 
-        return (try? context.fetch(request)) ?? []
+        var results: [CDPuppyEvent] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 
     /// Fetch events by type, scoped to a profile
@@ -256,7 +296,11 @@ extension CDPuppyEvent {
         ])
         request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: false)]
 
-        return (try? context.fetch(request)) ?? []
+        var results: [CDPuppyEvent] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 
     /// Fetch recent events, scoped to a profile
@@ -266,7 +310,11 @@ extension CDPuppyEvent {
         request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: false)]
         request.fetchLimit = limit
 
-        return (try? context.fetch(request)) ?? []
+        var results: [CDPuppyEvent] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 
     /// Fetch all events for a profile
@@ -275,7 +323,11 @@ extension CDPuppyEvent {
         request.predicate = NSPredicate(format: "profile == %@", profile)
         request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: true)]
 
-        return (try? context.fetch(request)) ?? []
+        var results: [CDPuppyEvent] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 
     /// Fetch events modified after a given date, scoped to a profile
@@ -287,7 +339,11 @@ extension CDPuppyEvent {
         ])
         request.sortDescriptors = [NSSortDescriptor(key: "modifiedAt", ascending: true)]
 
-        return (try? context.fetch(request)) ?? []
+        var results: [CDPuppyEvent] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 
     /// Fetch the earliest event for a profile
@@ -297,7 +353,11 @@ extension CDPuppyEvent {
         request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: true)]
         request.fetchLimit = 1
 
-        return try? context.fetch(request).first
+        var result: CDPuppyEvent?
+        context.performAndWait {
+            result = try? context.fetch(request).first
+        }
+        return result
     }
 
     /// Link orphaned events to a profile (for migration)
@@ -305,12 +365,14 @@ extension CDPuppyEvent {
         let request = NSFetchRequest<CDPuppyEvent>(entityName: "CDPuppyEvent")
         request.predicate = NSPredicate(format: "profile == nil")
 
-        guard let orphanedEvents = try? context.fetch(request) else { return 0 }
-
-        for event in orphanedEvents {
-            event.profile = profile
+        var count = 0
+        context.performAndWait {
+            guard let orphanedEvents = try? context.fetch(request) else { return }
+            for event in orphanedEvents {
+                event.profile = profile
+            }
+            count = orphanedEvents.count
         }
-
-        return orphanedEvents.count
+        return count
     }
 }

@@ -193,7 +193,11 @@ extension CDDocument {
         let request = NSFetchRequest<CDDocument>(entityName: "CDDocument")
         request.predicate = NSPredicate(format: "profile == %@", profile)
         request.sortDescriptors = [NSSortDescriptor(keyPath: \CDDocument.createdAt, ascending: false)]
-        return (try? context.fetch(request)) ?? []
+        var results: [CDDocument] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 
     /// Fetch documents by type for a profile
@@ -201,7 +205,11 @@ extension CDDocument {
         let request = NSFetchRequest<CDDocument>(entityName: "CDDocument")
         request.predicate = NSPredicate(format: "profile == %@ AND type == %@", profile, type.rawValue)
         request.sortDescriptors = [NSSortDescriptor(keyPath: \CDDocument.createdAt, ascending: false)]
-        return (try? context.fetch(request)) ?? []
+        var results: [CDDocument] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 
     /// Fetch document by ID
@@ -209,14 +217,22 @@ extension CDDocument {
         let request = NSFetchRequest<CDDocument>(entityName: "CDDocument")
         request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
         request.fetchLimit = 1
-        return try? context.fetch(request).first
+        var result: CDDocument?
+        context.performAndWait {
+            result = try? context.fetch(request).first
+        }
+        return result
     }
 
     /// Count documents for a profile
     static func countDocuments(for profile: CDPuppyProfile, in context: NSManagedObjectContext) -> Int {
         let request = NSFetchRequest<CDDocument>(entityName: "CDDocument")
         request.predicate = NSPredicate(format: "profile == %@", profile)
-        return (try? context.count(for: request)) ?? 0
+        var count = 0
+        context.performAndWait {
+            count = (try? context.count(for: request)) ?? 0
+        }
+        return count
     }
 
     /// Fetch documents with expiry dates for a profile
@@ -224,7 +240,11 @@ extension CDDocument {
         let request = NSFetchRequest<CDDocument>(entityName: "CDDocument")
         request.predicate = NSPredicate(format: "profile == %@ AND expiryDate != nil", profile)
         request.sortDescriptors = [NSSortDescriptor(keyPath: \CDDocument.expiryDate, ascending: true)]
-        return (try? context.fetch(request)) ?? []
+        var results: [CDDocument] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 
     /// Fetch expired documents for a profile
@@ -232,7 +252,11 @@ extension CDDocument {
         let request = NSFetchRequest<CDDocument>(entityName: "CDDocument")
         request.predicate = NSPredicate(format: "profile == %@ AND expiryDate != nil AND expiryDate < %@", profile, Date() as NSDate)
         request.sortDescriptors = [NSSortDescriptor(keyPath: \CDDocument.expiryDate, ascending: true)]
-        return (try? context.fetch(request)) ?? []
+        var results: [CDDocument] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 
     /// Fetch documents expiring within a number of days for a profile
@@ -250,7 +274,11 @@ extension CDDocument {
             futureDate as NSDate
         )
         request.sortDescriptors = [NSSortDescriptor(keyPath: \CDDocument.expiryDate, ascending: true)]
-        return (try? context.fetch(request)) ?? []
+        var results: [CDDocument] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 
     // MARK: - Legacy/Migration Support
@@ -259,6 +287,10 @@ extension CDDocument {
     static func fetchAllDocumentsForMigration(in context: NSManagedObjectContext) -> [CDDocument] {
         let request = NSFetchRequest<CDDocument>(entityName: "CDDocument")
         request.sortDescriptors = [NSSortDescriptor(keyPath: \CDDocument.createdAt, ascending: false)]
-        return (try? context.fetch(request)) ?? []
+        var results: [CDDocument] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 }

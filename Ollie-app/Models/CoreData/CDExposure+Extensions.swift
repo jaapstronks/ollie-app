@@ -69,7 +69,11 @@ extension CDExposure {
         let request = NSFetchRequest<CDExposure>(entityName: "CDExposure")
         request.sortDescriptors = [NSSortDescriptor(keyPath: \CDExposure.date, ascending: false)]
 
-        return (try? context.fetch(request)) ?? []
+        var results: [CDExposure] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 
     /// Fetch exposures for a specific item
@@ -78,7 +82,11 @@ extension CDExposure {
         request.predicate = NSPredicate(format: "itemId == %@", itemId)
         request.sortDescriptors = [NSSortDescriptor(keyPath: \CDExposure.date, ascending: false)]
 
-        return (try? context.fetch(request)) ?? []
+        var results: [CDExposure] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 
     /// Fetch exposures for a specific date
@@ -93,7 +101,11 @@ extension CDExposure {
         request.predicate = NSPredicate(format: "date >= %@ AND date < %@", startOfDay as CVarArg, endOfDay as CVarArg)
         request.sortDescriptors = [NSSortDescriptor(keyPath: \CDExposure.date, ascending: true)]
 
-        return (try? context.fetch(request)) ?? []
+        var results: [CDExposure] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 
     /// Fetch exposure by ID
@@ -101,7 +113,11 @@ extension CDExposure {
         let request = NSFetchRequest<CDExposure>(entityName: "CDExposure")
         request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
         request.fetchLimit = 1
-        return try? context.fetch(request).first
+        var result: CDExposure?
+        context.performAndWait {
+            result = try? context.fetch(request).first
+        }
+        return result
     }
 
     /// Count exposures for a specific item
@@ -109,7 +125,11 @@ extension CDExposure {
         let request = NSFetchRequest<CDExposure>(entityName: "CDExposure")
         request.predicate = NSPredicate(format: "itemId == %@", itemId)
 
-        return (try? context.count(for: request)) ?? 0
+        var count = 0
+        context.performAndWait {
+            count = (try? context.count(for: request)) ?? 0
+        }
+        return count
     }
 
     /// Fetch recent exposures (last N)
@@ -118,6 +138,10 @@ extension CDExposure {
         request.sortDescriptors = [NSSortDescriptor(keyPath: \CDExposure.date, ascending: false)]
         request.fetchLimit = limit
 
-        return (try? context.fetch(request)) ?? []
+        var results: [CDExposure] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 }

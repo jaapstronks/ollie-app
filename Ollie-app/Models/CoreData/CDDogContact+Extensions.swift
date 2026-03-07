@@ -20,7 +20,11 @@ extension CDDogContact: CDEntityConvertible {
         let request = NSFetchRequest<CDDogContact>(entityName: "CDDogContact")
         request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
         request.fetchLimit = 1
-        return try? context.fetch(request).first
+        var result: CDDogContact?
+        context.performAndWait {
+            result = try? context.fetch(request).first
+        }
+        return result
     }
 
     @discardableResult
@@ -93,7 +97,11 @@ extension CDDogContact {
     static func fetchAllContacts(in context: NSManagedObjectContext) -> [CDDogContact] {
         let request = NSFetchRequest<CDDogContact>(entityName: "CDDogContact")
         request.sortDescriptors = [NSSortDescriptor(keyPath: \CDDogContact.createdAt, ascending: false)]
-        return (try? context.fetch(request)) ?? []
+        var results: [CDDogContact] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 
     /// Fetch contacts by type
@@ -101,12 +109,20 @@ extension CDDogContact {
         let request = NSFetchRequest<CDDogContact>(entityName: "CDDogContact")
         request.predicate = NSPredicate(format: "contactType == %@", type.rawValue)
         request.sortDescriptors = [NSSortDescriptor(keyPath: \CDDogContact.createdAt, ascending: false)]
-        return (try? context.fetch(request)) ?? []
+        var results: [CDDogContact] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 
     /// Count all contacts
     static func countContacts(in context: NSManagedObjectContext) -> Int {
         let request = NSFetchRequest<CDDogContact>(entityName: "CDDogContact")
-        return (try? context.count(for: request)) ?? 0
+        var count = 0
+        context.performAndWait {
+            count = (try? context.count(for: request)) ?? 0
+        }
+        return count
     }
 }

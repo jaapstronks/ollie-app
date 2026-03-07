@@ -25,7 +25,11 @@ extension CDWeightMeasurement: CDEntityConvertible {
         let request = NSFetchRequest<CDWeightMeasurement>(entityName: "CDWeightMeasurement")
         request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
         request.fetchLimit = 1
-        return try? context.fetch(request).first
+        var result: CDWeightMeasurement?
+        context.performAndWait {
+            result = try? context.fetch(request).first
+        }
+        return result
     }
 
     @discardableResult
@@ -94,7 +98,11 @@ extension CDWeightMeasurement {
     static func fetchAllMeasurements(in context: NSManagedObjectContext) -> [CDWeightMeasurement] {
         let request = NSFetchRequest<CDWeightMeasurement>(entityName: "CDWeightMeasurement")
         request.sortDescriptors = [NSSortDescriptor(keyPath: \CDWeightMeasurement.date, ascending: false)]
-        return (try? context.fetch(request)) ?? []
+        var results: [CDWeightMeasurement] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 
     /// Fetch measurements for a specific profile, sorted by date (newest first)
@@ -102,7 +110,11 @@ extension CDWeightMeasurement {
         let request = NSFetchRequest<CDWeightMeasurement>(entityName: "CDWeightMeasurement")
         request.predicate = NSPredicate(format: "profile == %@", profile)
         request.sortDescriptors = [NSSortDescriptor(keyPath: \CDWeightMeasurement.date, ascending: false)]
-        return (try? context.fetch(request)) ?? []
+        var results: [CDWeightMeasurement] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 
     /// Fetch measurements for a specific profile, sorted by date (oldest first - for chart display)
@@ -110,7 +122,11 @@ extension CDWeightMeasurement {
         let request = NSFetchRequest<CDWeightMeasurement>(entityName: "CDWeightMeasurement")
         request.predicate = NSPredicate(format: "profile == %@", profile)
         request.sortDescriptors = [NSSortDescriptor(keyPath: \CDWeightMeasurement.date, ascending: true)]
-        return (try? context.fetch(request)) ?? []
+        var results: [CDWeightMeasurement] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 
     /// Fetch by ID (convenience method with correct return type)
@@ -118,14 +134,22 @@ extension CDWeightMeasurement {
         let request = NSFetchRequest<CDWeightMeasurement>(entityName: "CDWeightMeasurement")
         request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
         request.fetchLimit = 1
-        return try? context.fetch(request).first
+        var result: CDWeightMeasurement?
+        context.performAndWait {
+            result = try? context.fetch(request).first
+        }
+        return result
     }
 
     /// Count all measurements for a profile
     static func countMeasurements(for profile: CDPuppyProfile, in context: NSManagedObjectContext) -> Int {
         let request = NSFetchRequest<CDWeightMeasurement>(entityName: "CDWeightMeasurement")
         request.predicate = NSPredicate(format: "profile == %@", profile)
-        return (try? context.count(for: request)) ?? 0
+        var count = 0
+        context.performAndWait {
+            count = (try? context.count(for: request)) ?? 0
+        }
+        return count
     }
 
     /// Fetch the latest measurement for a profile
@@ -134,13 +158,21 @@ extension CDWeightMeasurement {
         request.predicate = NSPredicate(format: "profile == %@", profile)
         request.sortDescriptors = [NSSortDescriptor(keyPath: \CDWeightMeasurement.date, ascending: false)]
         request.fetchLimit = 1
-        return try? context.fetch(request).first
+        var result: CDWeightMeasurement?
+        context.performAndWait {
+            result = try? context.fetch(request).first
+        }
+        return result
     }
 
     /// Fetch all measurements without a profile (for migration)
     static func fetchOrphanedMeasurements(in context: NSManagedObjectContext) -> [CDWeightMeasurement] {
         let request = NSFetchRequest<CDWeightMeasurement>(entityName: "CDWeightMeasurement")
         request.predicate = NSPredicate(format: "profile == nil")
-        return (try? context.fetch(request)) ?? []
+        var results: [CDWeightMeasurement] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 }

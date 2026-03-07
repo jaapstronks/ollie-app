@@ -21,7 +21,11 @@ extension CDWalkSpot: CDEntityConvertible {
         let request = NSFetchRequest<CDWalkSpot>(entityName: "CDWalkSpot")
         request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
         request.fetchLimit = 1
-        return try? context.fetch(request).first
+        var result: CDWalkSpot?
+        context.performAndWait {
+            result = try? context.fetch(request).first
+        }
+        return result
     }
 
     @discardableResult
@@ -97,7 +101,11 @@ extension CDWalkSpot {
             NSSortDescriptor(keyPath: \CDWalkSpot.visitCount, ascending: false)
         ]
 
-        return (try? context.fetch(request)) ?? []
+        var results: [CDWalkSpot] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 
     /// Fetch favorite spots
@@ -106,6 +114,10 @@ extension CDWalkSpot {
         request.predicate = NSPredicate(format: "isFavorite == YES")
         request.sortDescriptors = [NSSortDescriptor(keyPath: \CDWalkSpot.visitCount, ascending: false)]
 
-        return (try? context.fetch(request)) ?? []
+        var results: [CDWalkSpot] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 }

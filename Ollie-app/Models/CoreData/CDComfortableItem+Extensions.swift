@@ -60,7 +60,11 @@ extension CDComfortableItem {
         let request = NSFetchRequest<CDComfortableItem>(entityName: "CDComfortableItem")
         request.sortDescriptors = [NSSortDescriptor(keyPath: \CDComfortableItem.comfortableAt, ascending: false)]
 
-        return (try? context.fetch(request)) ?? []
+        var results: [CDComfortableItem] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 
     /// Fetch by item ID
@@ -68,7 +72,11 @@ extension CDComfortableItem {
         let request = NSFetchRequest<CDComfortableItem>(entityName: "CDComfortableItem")
         request.predicate = NSPredicate(format: "itemId == %@", itemId)
         request.fetchLimit = 1
-        return try? context.fetch(request).first
+        var result: CDComfortableItem?
+        context.performAndWait {
+            result = try? context.fetch(request).first
+        }
+        return result
     }
 
     /// Check if an item is marked comfortable
@@ -77,13 +85,19 @@ extension CDComfortableItem {
         request.predicate = NSPredicate(format: "itemId == %@", itemId)
         request.fetchLimit = 1
 
-        return ((try? context.count(for: request)) ?? 0) > 0
+        var count = 0
+        context.performAndWait {
+            count = (try? context.count(for: request)) ?? 0
+        }
+        return count > 0
     }
 
     /// Delete comfortable item by itemId
     static func delete(byItemId itemId: String, in context: NSManagedObjectContext) {
-        if let existing = fetch(byItemId: itemId, in: context) {
-            context.delete(existing)
+        context.performAndWait {
+            if let existing = fetch(byItemId: itemId, in: context) {
+                context.delete(existing)
+            }
         }
     }
 }

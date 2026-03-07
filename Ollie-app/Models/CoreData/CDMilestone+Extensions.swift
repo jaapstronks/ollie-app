@@ -20,7 +20,11 @@ extension CDMilestone: CDEntityConvertible {
         let request = NSFetchRequest<CDMilestone>(entityName: "CDMilestone")
         request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
         request.fetchLimit = 1
-        return try? context.fetch(request).first
+        var result: CDMilestone?
+        context.performAndWait {
+            result = try? context.fetch(request).first
+        }
+        return result
     }
 
     @discardableResult
@@ -121,7 +125,11 @@ extension CDMilestone {
     static func fetchAllMilestones(in context: NSManagedObjectContext) -> [CDMilestone] {
         let request = NSFetchRequest<CDMilestone>(entityName: "CDMilestone")
         request.sortDescriptors = [NSSortDescriptor(keyPath: \CDMilestone.sortOrder, ascending: true)]
-        return (try? context.fetch(request)) ?? []
+        var results: [CDMilestone] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 
     /// Fetch milestones by category
@@ -129,7 +137,11 @@ extension CDMilestone {
         let request = NSFetchRequest<CDMilestone>(entityName: "CDMilestone")
         request.predicate = NSPredicate(format: "category == %@", category.rawValue)
         request.sortDescriptors = [NSSortDescriptor(keyPath: \CDMilestone.sortOrder, ascending: true)]
-        return (try? context.fetch(request)) ?? []
+        var results: [CDMilestone] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 
     /// Fetch completed milestones
@@ -137,7 +149,11 @@ extension CDMilestone {
         let request = NSFetchRequest<CDMilestone>(entityName: "CDMilestone")
         request.predicate = NSPredicate(format: "isCompleted == YES")
         request.sortDescriptors = [NSSortDescriptor(keyPath: \CDMilestone.completedDate, ascending: false)]
-        return (try? context.fetch(request)) ?? []
+        var results: [CDMilestone] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 
     /// Fetch incomplete milestones
@@ -145,7 +161,11 @@ extension CDMilestone {
         let request = NSFetchRequest<CDMilestone>(entityName: "CDMilestone")
         request.predicate = NSPredicate(format: "isCompleted == NO")
         request.sortDescriptors = [NSSortDescriptor(keyPath: \CDMilestone.sortOrder, ascending: true)]
-        return (try? context.fetch(request)) ?? []
+        var results: [CDMilestone] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 
     /// Fetch custom milestones only
@@ -153,19 +173,31 @@ extension CDMilestone {
         let request = NSFetchRequest<CDMilestone>(entityName: "CDMilestone")
         request.predicate = NSPredicate(format: "isCustom == YES")
         request.sortDescriptors = [NSSortDescriptor(keyPath: \CDMilestone.sortOrder, ascending: true)]
-        return (try? context.fetch(request)) ?? []
+        var results: [CDMilestone] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 
     /// Count all milestones
     static func countMilestones(in context: NSManagedObjectContext) -> Int {
         let request = NSFetchRequest<CDMilestone>(entityName: "CDMilestone")
-        return (try? context.count(for: request)) ?? 0
+        var count = 0
+        context.performAndWait {
+            count = (try? context.count(for: request)) ?? 0
+        }
+        return count
     }
 
     /// Count completed milestones
     static func countCompletedMilestones(in context: NSManagedObjectContext) -> Int {
         let request = NSFetchRequest<CDMilestone>(entityName: "CDMilestone")
         request.predicate = NSPredicate(format: "isCompleted == YES")
-        return (try? context.count(for: request)) ?? 0
+        var count = 0
+        context.performAndWait {
+            count = (try? context.count(for: request)) ?? 0
+        }
+        return count
     }
 }

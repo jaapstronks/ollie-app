@@ -62,7 +62,11 @@ extension CDMedicationCompletion {
         let request = NSFetchRequest<CDMedicationCompletion>(entityName: "CDMedicationCompletion")
         request.sortDescriptors = [NSSortDescriptor(keyPath: \CDMedicationCompletion.completedAt, ascending: false)]
 
-        return (try? context.fetch(request)) ?? []
+        var results: [CDMedicationCompletion] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 
     /// Fetch completions for a specific date
@@ -77,7 +81,11 @@ extension CDMedicationCompletion {
         request.predicate = NSPredicate(format: "date >= %@ AND date < %@", startOfDay as CVarArg, endOfDay as CVarArg)
         request.sortDescriptors = [NSSortDescriptor(keyPath: \CDMedicationCompletion.completedAt, ascending: true)]
 
-        return (try? context.fetch(request)) ?? []
+        var results: [CDMedicationCompletion] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 
     /// Fetch completion by ID
@@ -85,7 +93,11 @@ extension CDMedicationCompletion {
         let request = NSFetchRequest<CDMedicationCompletion>(entityName: "CDMedicationCompletion")
         request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
         request.fetchLimit = 1
-        return try? context.fetch(request).first
+        var result: CDMedicationCompletion?
+        context.performAndWait {
+            result = try? context.fetch(request).first
+        }
+        return result
     }
 
     /// Fetch completions for a specific medication
@@ -94,7 +106,11 @@ extension CDMedicationCompletion {
         request.predicate = NSPredicate(format: "medicationId == %@", medicationId as CVarArg)
         request.sortDescriptors = [NSSortDescriptor(keyPath: \CDMedicationCompletion.completedAt, ascending: false)]
 
-        return (try? context.fetch(request)) ?? []
+        var results: [CDMedicationCompletion] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 
     /// Check if a specific dose was completed
@@ -115,6 +131,10 @@ extension CDMedicationCompletion {
         )
         request.fetchLimit = 1
 
-        return ((try? context.count(for: request)) ?? 0) > 0
+        var count = 0
+        context.performAndWait {
+            count = (try? context.count(for: request)) ?? 0
+        }
+        return count > 0
     }
 }

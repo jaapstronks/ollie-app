@@ -153,7 +153,11 @@ extension CDPuppyProfile {
     static func fetchProfile(in context: NSManagedObjectContext) -> CDPuppyProfile? {
         let request = NSFetchRequest<CDPuppyProfile>(entityName: "CDPuppyProfile")
         request.fetchLimit = 1
-        return try? context.fetch(request).first
+        var result: CDPuppyProfile?
+        context.performAndWait {
+            result = try? context.fetch(request).first
+        }
+        return result
     }
 
     /// Fetch profile from a specific store
@@ -161,7 +165,11 @@ extension CDPuppyProfile {
         let request = NSFetchRequest<CDPuppyProfile>(entityName: "CDPuppyProfile")
         request.affectedStores = [store]
         request.fetchLimit = 1
-        return try? context.fetch(request).first
+        var result: CDPuppyProfile?
+        context.performAndWait {
+            result = try? context.fetch(request).first
+        }
+        return result
     }
 
     /// Fetch profile by ID
@@ -169,7 +177,11 @@ extension CDPuppyProfile {
         let request = NSFetchRequest<CDPuppyProfile>(entityName: "CDPuppyProfile")
         request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
         request.fetchLimit = 1
-        return try? context.fetch(request).first
+        var result: CDPuppyProfile?
+        context.performAndWait {
+            result = try? context.fetch(request).first
+        }
+        return result
     }
 
     /// Check if a profile exists in a specific store
@@ -177,7 +189,10 @@ extension CDPuppyProfile {
         let request = NSFetchRequest<CDPuppyProfile>(entityName: "CDPuppyProfile")
         request.affectedStores = [store]
         request.fetchLimit = 1
-        let count = (try? context.count(for: request)) ?? 0
+        var count = 0
+        context.performAndWait {
+            count = (try? context.count(for: request)) ?? 0
+        }
         return count > 0
     }
 
@@ -186,9 +201,11 @@ extension CDPuppyProfile {
         let request = NSFetchRequest<CDPuppyProfile>(entityName: "CDPuppyProfile")
         request.affectedStores = [store]
 
-        guard let profiles = try? context.fetch(request) else { return }
-        for profile in profiles {
-            context.delete(profile)
+        context.performAndWait {
+            guard let profiles = try? context.fetch(request) else { return }
+            for profile in profiles {
+                context.delete(profile)
+            }
         }
     }
 
@@ -197,20 +214,32 @@ extension CDPuppyProfile {
         let request = NSFetchRequest<CDPuppyProfile>(entityName: "CDPuppyProfile")
         request.affectedStores = [store]
         request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
-        return (try? context.fetch(request)) ?? []
+        var results: [CDPuppyProfile] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 
     /// Fetch all profiles from all stores
     static func fetchAllProfiles(in context: NSManagedObjectContext) -> [CDPuppyProfile] {
         let request = NSFetchRequest<CDPuppyProfile>(entityName: "CDPuppyProfile")
         request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
-        return (try? context.fetch(request)) ?? []
+        var results: [CDPuppyProfile] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 
     /// Count profiles in a specific store
     static func countProfiles(in context: NSManagedObjectContext, from store: NSPersistentStore) -> Int {
         let request = NSFetchRequest<CDPuppyProfile>(entityName: "CDPuppyProfile")
         request.affectedStores = [store]
-        return (try? context.count(for: request)) ?? 0
+        var count = 0
+        context.performAndWait {
+            count = (try? context.count(for: request)) ?? 0
+        }
+        return count
     }
 }
