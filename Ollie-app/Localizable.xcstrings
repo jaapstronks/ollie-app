@@ -673,6 +673,12 @@
             "value" : "%1$@\n\n%2$@"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\n%2$@"
+          }
+        },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
@@ -710,6 +716,12 @@
           }
         },
         "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ %2$@"
+          }
+        },
+        "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$@ %2$@"
@@ -803,6 +815,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "%1$@ did %2$lld training exercises"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ deed %2$lld trainingsoefeningen"
           }
         }
       }
@@ -913,6 +931,12 @@
             "value" : "%1$@ e cresciuto del %2$lld%%!"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ is %2$lld%% gegroeid!"
+          }
+        },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
@@ -953,6 +977,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$@ ha avuto %2$@"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ had %2$@"
           }
         },
         "sv" : {
@@ -1105,6 +1135,12 @@
             "value" : "%1$@ ha '%2$@' alle %3$@"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ heeft '%2$@' om %3$@"
+          }
+        },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1145,6 +1181,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$@ e sveglio da %2$lld minuti"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ is al %2$lld minuten wakker"
           }
         },
         "sv" : {
@@ -1334,6 +1376,12 @@
             "value" : "%1$@ sta gia dormendo. Di '%2$@ si e svegliato' quando si sveglia."
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ slaapt al. Zeg '%2$@ werd wakker' wanneer die wakker wordt."
+          }
+        },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1486,6 +1534,12 @@
             "value" : "%1$@ ora e %2$@ piu grande!"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ is nu %2$@ groter!"
+          }
+        },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1562,6 +1616,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$@ sta dormendo - registrato. Di '%2$@ si e svegliato' quando si sveglia."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ slaapt - gelogd. Zeg '%2$@ werd wakker' wanneer die wakker wordt."
           }
         },
         "sv" : {
@@ -1642,6 +1702,12 @@
             "value" : "%1$@ ha appena fatto pipi %2$@."
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ heeft net %2$@ geplast."
+          }
+        },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1693,6 +1759,12 @@
             "state" : "new",
             "value" : "%1$@ logged %2$lld activities"
           }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ logde %2$lld activiteiten"
+          }
         }
       }
     },
@@ -1732,6 +1804,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$@ ha incontrato %2$@"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ ontmoette %2$@"
           }
         },
         "sv" : {
@@ -1778,6 +1856,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$@ deve fare pipi tra ~%2$lld min"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ moet over ~%2$lld min plassen"
           }
         },
         "sv" : {
@@ -1833,6 +1917,12 @@
             "state" : "new",
             "value" : "%1$@ needs to pee now! (%2$@ overdue)"
           }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ moet nu plassen! (%2$@ te laat)"
+          }
         }
       }
     },
@@ -1868,6 +1958,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$@ deve fare pipi ora! (%2$lld min in ritardo)"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ moet nu plassen! (%2$lld min te laat)"
           }
         },
         "sv" : {
@@ -1983,6 +2079,12 @@
             "value" : "%1$@ ha fatto pipi %2$@ %3$lld ore fa."
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ plaste %2$@ %3$lld uur geleden."
+          }
+        },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2025,6 +2127,12 @@
             "value" : "%1$@ ha fatto pipi %2$@ %3$lld ore e %4$lld minuti fa."
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ plaste %2$@ %3$lld uur en %4$lld minuten geleden."
+          }
+        },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2065,6 +2173,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$@ ha fatto pipi %2$@ %3$lld minuti fa."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ plaste %2$@ %3$lld minuten geleden."
           }
         },
         "sv" : {
@@ -2181,6 +2295,12 @@
             "value" : "%1$@ ha praticato %2$@"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ oefende %2$@"
+          }
+        },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2223,6 +2343,12 @@
             "value" : "%1$@ ha praticato %2$@ %3$lld volte."
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ oefende %2$@ %3$lld keer."
+          }
+        },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2239,6 +2365,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "%1$@ practiced %2$lld skills: %3$@"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ oefende %2$lld vaardigheden: %3$@"
           }
         }
       }
@@ -2295,6 +2427,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$@ da %2$@"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ sinds %2$@"
           }
         },
         "sv" : {
@@ -2592,6 +2730,12 @@
             "value" : "%1$@ a %2$@"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ tot %2$@"
+          }
+        },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2608,6 +2752,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "%1$@ wants to share their puppy with you. This will add their dog to your profile list alongside %2$@."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ wil hun pup met je delen. Dit voegt hun hond toe aan je profiellijst naast %2$@."
           }
         }
       }
@@ -2636,6 +2786,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$@ était clairement aimé. On le voit dans chaque promenade enregistrée, chaque étape célébrée.\n\nQuand vous serez prêt, nous pouvons vous aider à créer un livre de souvenirs pour vous rappeler de %2$@."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ was duidelijk geliefd. We zien het in elke wandeling, elke mijlpaal.\n\nWanneer je er klaar voor bent, kunnen we je helpen een herinneringenboek te maken voor %2$@."
           }
         },
         "sv" : {
@@ -2712,6 +2868,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$@ era con %2$@"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ was met %2$@"
           }
         },
         "sv" : {
@@ -2826,6 +2988,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$@ pesava %2$@ kg"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ woog %2$@ kg"
           }
         },
         "sv" : {
@@ -3122,6 +3290,12 @@
             "value" : "%1$@ si e svegliato dopo %2$lld minuti - registrato!"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ werd wakker na %2$lld minuten - gelogd!"
+          }
+        },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3164,6 +3338,12 @@
             "value" : "%1$@, %2$@"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@, %2$@"
+          }
+        },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3180,6 +3360,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "%1$@, %2$@, %3$lld sessions completed"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@, %2$@, %3$lld sessies voltooid"
           }
         }
       }
@@ -3216,6 +3402,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$@, %2$lld appuntamenti"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@, %2$lld afspraken"
           }
         },
         "sv" : {
@@ -3287,12 +3479,36 @@
             "state" : "new",
             "value" : "%1$@, locked. Requires: %2$@"
           }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@, vergrendeld. Vereist: %2$@"
+          }
         }
       }
     },
     "%@, selected" : {
       "comment" : "A string that announces which profile is currently selected. The argument is the name of the profile.",
       "isCommentAutoGenerated" : true
+    },
+    "%@: **%@**" : {
+      "comment" : "A text label that emphasizes the focus on a specific skill. The placeholder text is replaced with the actual skill name.",
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@: **%2$@**"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@: **%2$@**"
+          }
+        }
+      }
     },
     "%@: %@" : {
       "comment" : "An accessibility label that combines the trigger name with a description of its success rate. The argument is the success rate formatted as a percentage.",
@@ -3323,6 +3539,12 @@
           }
         },
         "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@: %2$@"
+          }
+        },
+        "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$@: %2$@"
@@ -3370,6 +3592,12 @@
             "value" : "%1$@: %2$@ %3$@"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@: %2$@ %3$@"
+          }
+        },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3412,6 +3640,12 @@
             "value" : "%1$@: %2$@."
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@: %2$@."
+          }
+        },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3449,6 +3683,12 @@
           }
         },
         "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@. %2$@"
+          }
+        },
+        "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$@. %2$@"
@@ -3549,6 +3789,10 @@
         }
       }
     },
+    "%@/month" : {
+      "comment" : "The price of the subscription, formatted as a string.",
+      "isCommentAutoGenerated" : true
+    },
     "%@%@" : {
       "comment" : "A label that combines the formatted date with any optional note. If there is no note, only the date is shown.",
       "isCommentAutoGenerated" : true,
@@ -3583,6 +3827,12 @@
             "value" : "%1$@%2$@"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@%2$@"
+          }
+        },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3598,6 +3848,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "%1$@%2$@ kg"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "%1$@%2$@ kg"
           }
         }
@@ -3673,6 +3929,12 @@
             "value" : "%1$lld / %2$lld a proprio agio"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld / %2$lld comfortabel"
+          }
+        },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3710,6 +3972,12 @@
           }
         },
         "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld %2$@"
+          }
+        },
+        "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$lld %2$@"
@@ -3772,8 +4040,18 @@
             "state" : "new",
             "value" : "%1$lld components, %2$lld items"
           }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld componenten, %2$lld items"
+          }
         }
       }
+    },
+    "%lld contexts" : {
+      "comment" : "A label indicating the number of contexts a user has practiced in a generalizing skill. The argument is the count of practiced contexts.",
+      "isCommentAutoGenerated" : true
     },
     "%lld crate naps yesterday" : {
       "comment" : "A count of naps in the crate, used in a sentence. The argument is the count of naps.",
@@ -4033,6 +4311,10 @@
         }
       }
     },
+    "%lld days tracking" : {
+      "comment" : "Pluralization rule for \"day\".",
+      "isCommentAutoGenerated" : true
+    },
     "%lld days, %lld events" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -4154,6 +4436,10 @@
           }
         }
       }
+    },
+    "%lld events logged" : {
+      "comment" : "A string describing how many events have been logged. The argument is the number of events.",
+      "isCommentAutoGenerated" : true
     },
     "%lld events totaal" : {
       "comment" : "A label displaying the total number of events imported from the data source.",
@@ -4373,6 +4659,10 @@
         }
       }
     },
+    "%lld in a row!" : {
+      "comment" : "Celebration headline showing streak count (e.g., \"5 in a row!\"). The argument is the streak count.",
+      "isCommentAutoGenerated" : true
+    },
     "%lld inside" : {
       "comment" : "A string that includes a count, suitable for displaying next to \"inside\".",
       "isCommentAutoGenerated" : true,
@@ -4408,6 +4698,10 @@
           }
         }
       }
+    },
+    "%lld insights generated" : {
+      "comment" : "Pluralization key for \"insights generated\".",
+      "isCommentAutoGenerated" : true
     },
     "%lld items" : {
       "comment" : "A text label showing the total number of items in a category. The argument is the total number of items in the category.",
@@ -4445,6 +4739,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld elementi esportati (%@)"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld items geëxporteerd (%2$@)"
           }
         },
         "sv" : {
@@ -4776,6 +5076,12 @@
             "state" : "new",
             "value" : "%1$lld min, %2$lldx daily"
           }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld min, %2$lldx dagelijks"
+          }
         }
       }
     },
@@ -4921,6 +5227,12 @@
             "value" : "%lld mesi · ~%@"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld maanden · ~%2$@"
+          }
+        },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4964,6 +5276,10 @@
           }
         }
       }
+    },
+    "%lld more poops expected today" : {
+      "comment" : "Pluralization key for \"poop\".",
+      "isCommentAutoGenerated" : true
     },
     "%lld naps observed" : {
       "comment" : "A count of naps observed, expressed as a string.",
@@ -5035,6 +5351,12 @@
             "value" : "%lld di %lld"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld van %2$lld"
+          }
+        },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5052,6 +5374,12 @@
             "state" : "new",
             "value" : "%1$lld of %2$lld comfortable"
           }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld van %2$lld comfortabel"
+          }
         }
       }
     },
@@ -5064,6 +5392,30 @@
             "state" : "new",
             "value" : "%1$lld of %2$lld completed"
           }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld van %2$lld voltooid"
+          }
+        }
+      }
+    },
+    "%lld of %lld phases completed" : {
+      "comment" : "A string that shows how many learning phases have been completed. The first argument is the number of phases that have been completed. The second argument is the total number of phases.",
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld of %2$lld phases completed"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld van %2$lld fases voltooid"
+          }
         }
       }
     },
@@ -5075,6 +5427,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "%1$lld of %2$lld skills"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld van %2$lld vaardigheden"
           }
         }
       }
@@ -5111,6 +5469,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld di %lld abilita iniziate"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld van %2$lld vaardigheden gestart"
           }
         },
         "sv" : {
@@ -5153,6 +5517,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld di %lld passeggiate"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld van %2$lld wandelingen"
           }
         },
         "sv" : {
@@ -5231,6 +5601,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld pipi fuori di fila oggi! %@ sta andando alla grande!"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld keer buiten geplast op rij vandaag! %2$@ doet het geweldig!"
           }
         },
         "sv" : {
@@ -5394,6 +5770,10 @@
         }
       }
     },
+    "%lld patterns learned" : {
+      "comment" : "Pluralization key for \"pattern\".",
+      "isCommentAutoGenerated" : true
+    },
     "%lld pees outside in a row" : {
       "comment" : "Pluralization key for \"pee\".",
       "isCommentAutoGenerated" : true,
@@ -5464,6 +5844,12 @@
             "value" : "%lld pipi fuori di fila. Record: %lld"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld keer buiten geplast op rij. Record: %2$lld"
+          }
+        },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5471,6 +5857,10 @@
           }
         }
       }
+    },
+    "%lld percent" : {
+      "comment" : "The value of the progress bar, expressed as a percentage.",
+      "isCommentAutoGenerated" : true
     },
     "%lld photos" : {
       "comment" : "A string describing the number of photos taken. The argument is the number of photos.",
@@ -5614,6 +6004,12 @@
             "value" : "%lld cacche (%lld previste)"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld poepjes (%2$lld verwacht)"
+          }
+        },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5654,6 +6050,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld cacche (%lld-%lld previste)"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld poepjes (%2$lld-%3$lld verwacht)"
           }
         },
         "sv" : {
@@ -5734,6 +6136,12 @@
             "value" : "%lld cacche oggi (previste ~%lld-%lld)"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld poepjes vandaag (verwacht ~%2$lld-%3$lld)"
+          }
+        },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5774,6 +6182,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld cacche oggi, %lld-%lld previste"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld poepjes vandaag, %2$lld tot %3$lld verwacht"
           }
         },
         "sv" : {
@@ -5819,6 +6233,10 @@
           }
         }
       }
+    },
+    "%lld predictions made" : {
+      "comment" : "Pluralization key for \"predictions made\".",
+      "isCommentAutoGenerated" : true
     },
     "%lld recalls affect your brands" : {
       "comment" : "The number of recalls is interpolated into this string.",
@@ -5932,6 +6350,28 @@
       "comment" : "A message to be displayed to the user when multiple skills need refresher practice. The argument is the number of skills.",
       "isCommentAutoGenerated" : true
     },
+    "%lld skills due for review" : {
+      "comment" : "Pluralization key for \"skills due for review\". The argument is the count of skills.",
+      "isCommentAutoGenerated" : true
+    },
+    "%lld skills in progress, %lld sessions this week." : {
+      "comment" : "Context text for the \"skills training\" question. The first argument is the number of skills that are currently being trained. The second argument is the number of training sessions that have occurred this week.",
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld skills in progress, %2$lld sessions this week."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld vaardigheden bezig, %2$lld sessies deze week."
+          }
+        }
+      }
+    },
     "%lld skipped (already existed)" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -6008,6 +6448,10 @@
           }
         }
       }
+    },
+    "%lld training sessions" : {
+      "comment" : "Pluralization rule for \"training session\".",
+      "isCommentAutoGenerated" : true
     },
     "%lld visits" : {
       "comment" : "Text that shows the number of times a particular walk location has been visited. The argument is the number of visits.",
@@ -6113,6 +6557,24 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld Promenader Delad"
+          }
+        }
+      }
+    },
+    "%lld walks this week, averaging %lld min." : {
+      "comment" : "Context text for the \"Walks\" question. The argument is the number of walks taken this week, and the second argument is the average duration of each walk in minutes.",
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld walks this week, averaging %2$lld min."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld wandelingen deze week, gemiddeld %2$lld min."
           }
         }
       }
@@ -6338,6 +6800,12 @@
             "state" : "new",
             "value" : "%1$lld-%2$lld"
           }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld-%2$lld"
+          }
         }
       }
     },
@@ -6411,6 +6879,12 @@
             "value" : "%lld/%lld"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld/%2$lld"
+          }
+        },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6428,6 +6902,12 @@
             "state" : "new",
             "value" : "%1$lld/%2$lld contexts"
           }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld/%2$lld contexten"
+          }
         }
       }
     },
@@ -6439,6 +6919,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "%1$lld/%2$lld dogs"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld/%2$lld honden"
           }
         }
       }
@@ -6477,6 +6963,12 @@
             "value" : "%lld/%lld bisognini"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld/%2$lld zindelijkheid"
+          }
+        },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6493,6 +6985,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "%1$lld/%2$lld reliable"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld/%2$lld betrouwbaar"
           }
         }
       }
@@ -6531,6 +7029,12 @@
             "value" : "%lld/%lld iniziati"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld/%2$lld gestart"
+          }
+        },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6545,6 +7049,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "%1$lld/%2$lld surfaces succeeded"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld/%2$lld oppervlakken geslaagd"
           }
         }
       }
@@ -6581,6 +7091,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld%@"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld%2$@"
           }
         },
         "sv" : {
@@ -6625,6 +7141,10 @@
         }
       }
     },
+    "%lld%% conf" : {
+      "comment" : "A label showing the confidence score of an AI interaction. The argument is a percentage value.",
+      "isCommentAutoGenerated" : true
+    },
     "%lld%% of adult weight" : {
       "comment" : "A string that shows the percentage of an individual's adult weight. The argument is the percentage.",
       "isCommentAutoGenerated" : true,
@@ -6661,8 +7181,48 @@
         }
       }
     },
+    "%lld%% of naps in the crate (%lld of %lld)." : {
+      "comment" : "A context summary for the crate training question. The first argument is the percentage of naps in the crate. The second argument is the number of naps in the crate. The third argument is the total number of naps logged.",
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld%% of naps in the crate (%2$lld of %3$lld)."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld%% van de dutjes in de bench (%2$lld van %3$lld)."
+          }
+        }
+      }
+    },
     "%lld%% of recent naps in crate" : {
       "comment" : "A string that shows the percentage of naps taken in the crate. The argument is a percentage.",
+      "isCommentAutoGenerated" : true
+    },
+    "%lld%% outdoor success this week, %lld accident(s) today." : {
+      "comment" : "Context summary for potty training, including the percentage of successful outdoor attempts and the number of accidents that occurred today.",
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld%% outdoor success this week, %2$lld accident(s) today."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld%% buiten succes deze week, %2$lld ongelukje(s) vandaag."
+          }
+        }
+      }
+    },
+    "%lld%% outdoor success this week." : {
+      "comment" : "A context summary for the \"potty training\" question, including the percentage of successful outdoor attempts and the number of accidents that occurred today.",
       "isCommentAutoGenerated" : true
     },
     "%lld%% reliable" : {
@@ -6889,6 +7449,12 @@
             "value" : "%lldh %lldm fa"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lldh %2$lldm geleden"
+          }
+        },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6967,6 +7533,12 @@
             "value" : "%lldh%lldm fa"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lldh%2$lldm geleden"
+          }
+        },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7019,6 +7591,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "%1$lldms • %2$@"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "%1$lldms • %2$@"
           }
         }
@@ -7361,6 +7939,17 @@
       "comment" : "Text describing the number of naps in the crate the previous day.",
       "isCommentAutoGenerated" : true
     },
+    "1 day left in trial" : {
+
+    },
+    "1 day tracking" : {
+      "comment" : "Description of the number of days of tracking available in the \"What you've built\" section of the Trial screen.",
+      "isCommentAutoGenerated" : true
+    },
+    "1 event logged" : {
+      "comment" : "Text describing the number of events logged in the \"What you've built\" section of the Trial.",
+      "isCommentAutoGenerated" : true
+    },
     "1 in a row" : {
       "localizations" : {
         "de" : {
@@ -7394,6 +7983,10 @@
           }
         }
       }
+    },
+    "1 insight generated" : {
+      "comment" : "Text describing the generation of one insight.",
+      "isCommentAutoGenerated" : true
     },
     "1 month ago" : {
       "comment" : "Memory time frame label for events from 1 month ago",
@@ -7466,6 +8059,10 @@
         }
       }
     },
+    "1 more poop expected today" : {
+      "comment" : "A string describing how many more poops are expected for the day.",
+      "isCommentAutoGenerated" : true
+    },
     "1 outdoor potty yesterday" : {
       "comment" : "Text describing the number of outdoor potty uses from the previous day.",
       "isCommentAutoGenerated" : true
@@ -7505,6 +8102,10 @@
           }
         }
       }
+    },
+    "1 pattern learned" : {
+      "comment" : "Description of a pattern learned in the \"One Week with Your AI Coach\" touchpoint card.",
+      "isCommentAutoGenerated" : true
     },
     "1 pee outside" : {
       "comment" : "Description of a streak of 1 outdoor pee.",
@@ -7720,6 +8321,12 @@
             "value" : "1 cacca oggi (previste ~%lld-%lld)"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 poepje vandaag (verwacht ~%1$lld-%2$lld)"
+          }
+        },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7727,6 +8334,10 @@
           }
         }
       }
+    },
+    "1 prediction made" : {
+      "comment" : "Description of the number of potty predictions made in the \"One Week with Your AI Coach\" section of the Trial.",
+      "isCommentAutoGenerated" : true
     },
     "1 session" : {
       "comment" : "Pluralization of \"session\".",
@@ -7763,6 +8374,14 @@
           }
         }
       }
+    },
+    "1 skill due for review" : {
+      "comment" : "Plural form of \"skill due for review\".",
+      "isCommentAutoGenerated" : true
+    },
+    "1 training session" : {
+      "comment" : "Description of a training session.",
+      "isCommentAutoGenerated" : true
     },
     "1 visit" : {
       "comment" : "Singular form of \"visits\" (e.g. \"1 visit\" instead of \"2 visits\").",
@@ -8052,6 +8671,10 @@
         }
       }
     },
+    "5-10 minute sessions work best. End on a win and your pup will be eager for next time." : {
+      "comment" : "Tip for keeping training sessions short, ideally 5-10 minutes, and ending on a positive note to encourage repetition.",
+      "isCommentAutoGenerated" : true
+    },
     "6-18 months" : {
       "localizations" : {
         "de" : {
@@ -8177,6 +8800,10 @@
       "comment" : "Header text in the \"Training Guide\" sheet for puppies that are 16 weeks or older.",
       "isCommentAutoGenerated" : true
     },
+    "18-20 hours daily" : {
+      "comment" : "Suggested number of hours of sleep for a puppy per day.",
+      "isCommentAutoGenerated" : true
+    },
     "18+ months" : {
       "localizations" : {
         "de" : {
@@ -8218,6 +8845,10 @@
       "comment" : "Subtitle for the \"Crate Training\" section in the Training module.",
       "isCommentAutoGenerated" : true
     },
+    "A hungry puppy is a motivated puppy. Schedule training sessions before meal times." : {
+      "comment" : "Tip to train a puppy before meals, as a hungry puppy is more motivated.",
+      "isCommentAutoGenerated" : true
+    },
     "A professional trainer can help if this continues" : {
       "comment" : "Tip for the Socialization section on how to get help if the user is struggling with socialization.",
       "isCommentAutoGenerated" : true,
@@ -8253,6 +8884,10 @@
           }
         }
       }
+    },
+    "A quick check-in helps us focus advice on what matters most." : {
+      "comment" : "Subtitle for the \"How's it going?\" onboarding screen.",
+      "isCommentAutoGenerated" : true
     },
     "A recall affects %@" : {
       "comment" : "A message that appears in an alert card when a single recall affects one of the user's brands. The argument is the name of the brand.",
@@ -8636,6 +9271,10 @@
           }
         }
       }
+    },
+    "Acknowledge, then redirect" : {
+      "comment" : "Tip to acknowledge a barking puppy and then redirect their attention to a toy or activity.",
+      "isCommentAutoGenerated" : true
     },
     "Active" : {
       "comment" : "Status of a participant who is currently using the app.",
@@ -10599,6 +11238,10 @@
         }
       }
     },
+    "Advanced analytics" : {
+      "comment" : "Description of a feature that provides advanced analytics for the user.",
+      "isCommentAutoGenerated" : true
+    },
     "Advanced Analytics" : {
       "localizations" : {
         "de" : {
@@ -10959,6 +11602,12 @@
             "value" : "Dopo il risveglio: %1$@ alle %2$@"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Na het wakker worden: %1$@ om %2$@"
+          }
+        },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11197,6 +11846,12 @@
             "value" : "Settimana di età %lld · ~%@"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Week %1$lld oud · ~%2$@"
+          }
+        },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11285,8 +11940,16 @@
       "comment" : "A section header for configuration related to the AI Broker.",
       "isCommentAutoGenerated" : true
     },
+    "AI Interaction Log" : {
+      "comment" : "The title of the view.",
+      "isCommentAutoGenerated" : true
+    },
     "AI Nudges Enabled" : {
       "comment" : "A toggle to enable or disable AI nudges.",
+      "isCommentAutoGenerated" : true
+    },
+    "AI potty predictions" : {
+      "comment" : "Description of a feature that provides predictions about a puppy's bathroom habits based on their past behavior.",
       "isCommentAutoGenerated" : true
     },
     "AI predicts when your puppy needs to go based on patterns" : {
@@ -11332,18 +11995,22 @@
       "comment" : "A toggle that enables or disables \"shadow mode\" in the AI system.",
       "isCommentAutoGenerated" : true
     },
+    "AI suggestions will appear here" : {
+      "comment" : "Placeholder text for an area where AI-generated suggestions would be displayed.",
+      "isCommentAutoGenerated" : true
+    },
     "AI Surface Testing" : {
 
     },
     "AI Test Result" : {
 
     },
-    "AI training suggestions will appear here" : {
-      "comment" : "A placeholder text displayed when there are no AI training suggestions available.",
-      "isCommentAutoGenerated" : true
-    },
     "AI-generated session plan" : {
       "comment" : "Label indicating that the session plan is generated by an AI model.",
+      "isCommentAutoGenerated" : true
+    },
+    "AI-powered potty predictions" : {
+      "comment" : "Description of a benefit of the trial that provides AI-powered potty predictions.",
       "isCommentAutoGenerated" : true
     },
     "Alarm/siren" : {
@@ -11678,6 +12345,10 @@
     },
     "All naps in crate yesterday!" : {
       "comment" : "Text to be displayed when all naps have occurred in the crate.",
+      "isCommentAutoGenerated" : true
+    },
+    "All puppies go through a nippy phase. With consistent management, it peaks around 12-16 weeks then fades." : {
+      "comment" : "Explanation of a common puppy behavior that peaks around 12-16 weeks and then fades.",
       "isCommentAutoGenerated" : true
     },
     "All skills mastered!" : {
@@ -12031,6 +12702,10 @@
     },
     "Always go out within 5 minutes of waking" : {
       "comment" : "Training guide sheet: Tip for taking the puppy out for a potty break within 5 minutes of waking up.",
+      "isCommentAutoGenerated" : true
+    },
+    "Always have a toy nearby to redirect biting. Praise when they bite the toy instead of you." : {
+      "comment" : "Tip to redirect a puppy's biting behavior to a toy, praising them when they do so.",
       "isCommentAutoGenerated" : true
     },
     "Always make coming to you worthwhile" : {
@@ -12783,6 +13458,10 @@
         }
       }
     },
+    "As a valued user, enjoy 14 days of Ollie+ free to explore our new AI features." : {
+      "comment" : "Subtitle for the \"Welcome Back!\" migration trial screen, offering 14 days of free trial with Ollie+.",
+      "isCommentAutoGenerated" : true
+    },
     "As puppy eats the treat, step off again. Click for following, stop and treat. High frequency initially: every 1-2 steps." : {
       "comment" : "How-to step for \"Loose Leash Walking\" training, focusing on the frequency of clicks during training.",
       "isCommentAutoGenerated" : true
@@ -13085,6 +13764,12 @@
             "value" : "A %1$lld mesi: max %2$lld min per passeggiata"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Op %1$lld maanden: max %2$lld min per wandeling"
+          }
+        },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13352,6 +14037,24 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Genomsnitt"
+          }
+        }
+      }
+    },
+    "Averaging %@h night sleep, %lld nap(s) today." : {
+      "comment" : "A summary of the user's average night sleep duration and the number of naps they had today. The argument is the string “%.1f”.",
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Averaging %1$@h night sleep, %2$lld nap(s) today."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gemiddeld %1$@h nachtslaap, %2$lld dutje(s) vandaag."
           }
         }
       }
@@ -13670,6 +14373,10 @@
         }
       }
     },
+    "Barking" : {
+      "comment" : "Description of a sentiment rating option for barking behavior.",
+      "isCommentAutoGenerated" : true
+    },
     "Basic Commands" : {
       "comment" : "Category name for a training skill type that involves basic commands.",
       "isCommentAutoGenerated" : true,
@@ -13781,6 +14488,10 @@
           }
         }
       }
+    },
+    "Be interesting" : {
+      "comment" : "Tip to engage a leash-trained puppy by interacting with it during training.",
+      "isCommentAutoGenerated" : true
     },
     "Beach" : {
       "comment" : "Name for a type of walk location that is a beach.",
@@ -14005,6 +14716,10 @@
           }
         }
       }
+    },
+    "Being alone" : {
+      "comment" : "Context summary for the \"Being alone\" sentiment question.",
+      "isCommentAutoGenerated" : true
     },
     "Being picked up" : {
       "localizations" : {
@@ -14423,6 +15138,10 @@
         }
       }
     },
+    "Biting, zoomies, not listening, and being generally 'difficult' often means your pup needs sleep." : {
+      "comment" : "Tip to watch for signs that your puppy is overtired.",
+      "isCommentAutoGenerated" : true
+    },
     "Boarding" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -14499,6 +15218,10 @@
           }
         }
       }
+    },
+    "Boredom causes chewing" : {
+      "comment" : "Explanation of why boredom can cause chewing.",
+      "isCommentAutoGenerated" : true
     },
     "Born" : {
       "comment" : "Label for the \"Born\" section in the onboarding flow.",
@@ -15786,6 +16509,10 @@
       "comment" : "Name of a training context during a car ride.",
       "isCommentAutoGenerated" : true
     },
+    "Car travel" : {
+      "comment" : "Title for a sentiment check-in question about car travel.",
+      "isCommentAutoGenerated" : true
+    },
     "Card with confetti" : {
       "comment" : "A caption displayed below the card in the Tier 2 preview section of the celebration settings view.",
       "extractionState" : "stale",
@@ -16047,6 +16774,10 @@
     },
     "Celebrate outdoor successes enthusiastically" : {
       "comment" : "Tip in the \"Potty Training Guide\" section on how to celebrate successful potty breaks outside.",
+      "isCommentAutoGenerated" : true
+    },
+    "Celebrate outside!" : {
+      "comment" : "Tip to celebrate a successful potty training session outside the crate.",
       "isCommentAutoGenerated" : true
     },
     "Celebration Style" : {
@@ -16383,6 +17114,10 @@
         }
       }
     },
+    "Check sleep first" : {
+      "comment" : "Question to ask when a puppy barks, to determine if it's due to tiredness or something else.",
+      "isCommentAutoGenerated" : true
+    },
     "Check statistics to discover patterns in your puppy's behavior." : {
       "comment" : "Text in the Tips section explaining how to discover patterns in your puppy's behavior using the statistics feature.",
       "isCommentAutoGenerated" : true,
@@ -16490,6 +17225,10 @@
           }
         }
       }
+    },
+    "Chewing" : {
+      "comment" : "Description of a sentiment rating option for chewing behavior.",
+      "isCommentAutoGenerated" : true
     },
     "Chihuahua, Maltese, Yorkshire Terrier" : {
       "localizations" : {
@@ -16911,8 +17650,20 @@
       "comment" : "Explanation of classical conditioning.",
       "isCommentAutoGenerated" : true
     },
+    "Clean up calmly without scolding. Punishment creates fear, not learning." : {
+      "comment" : "Tip on how to handle a puppy accident during potty training.",
+      "isCommentAutoGenerated" : true
+    },
     "Clear AI Cache" : {
 
+    },
+    "Clear All Logs" : {
+      "comment" : "A button that clears all logged AI interaction data.",
+      "isCommentAutoGenerated" : true
+    },
+    "Clear main focus" : {
+      "comment" : "Button text to clear the currently set primary focus.",
+      "isCommentAutoGenerated" : true
     },
     "Click" : {
       "comment" : "Single click action label.",
@@ -18714,11 +19465,19 @@
         }
       }
     },
+    "Continue Learning" : {
+      "comment" : "Text for a button that allows the user to continue learning.",
+      "isCommentAutoGenerated" : true
+    },
     "Continue socialization" : {
       "comment" : "Button text to continue a puppy's socialization journey.",
       "isCommentAutoGenerated" : true
     },
     "Continue training" : {
+      "comment" : "Button text to continue training.",
+      "isCommentAutoGenerated" : true
+    },
+    "Continue Training" : {
       "comment" : "Button text to continue training.",
       "isCommentAutoGenerated" : true
     },
@@ -18798,6 +19557,10 @@
         }
       }
     },
+    "Continue without trial" : {
+      "comment" : "Link that allows users to continue using the app without the 14-day trial.",
+      "isCommentAutoGenerated" : true
+    },
     "Copied to clipboard" : {
       "comment" : "Text displayed in a toast notification when a string is copied to the clipboard.",
       "isCommentAutoGenerated" : true,
@@ -18836,6 +19599,10 @@
     },
     "Copied!" : {
       "comment" : "Confirmation message when a string is copied to the clipboard.",
+      "isCommentAutoGenerated" : true
+    },
+    "Copy Summary to Clipboard" : {
+      "comment" : "A button that copies a summary of all logged AI interactions to the clipboard.",
       "isCommentAutoGenerated" : true
     },
     "Copy to Clipboard" : {
@@ -19288,6 +20055,10 @@
         }
       }
     },
+    "Cover the crate with a blanket to create a den-like feeling. Leave one side open for airflow." : {
+      "comment" : "Tip to create a cozy den in the crate.",
+      "isCommentAutoGenerated" : true
+    },
     "Cow/sheep" : {
       "localizations" : {
         "de" : {
@@ -19362,6 +20133,10 @@
         }
       }
     },
+    "Crate builds confidence" : {
+      "comment" : "Tip to use a crate to help a puppy build confidence.",
+      "isCommentAutoGenerated" : true
+    },
     "Crate introduction" : {
       "comment" : "Description of a milestone in the \"First Days Checklist\" for a puppy's socialization journey.",
       "isCommentAutoGenerated" : true
@@ -19378,8 +20153,16 @@
       "comment" : "Subtitle for a nudge card reminding a puppy to nap in the crate.",
       "isCommentAutoGenerated" : true
     },
+    "Crate training" : {
+      "comment" : "Name of a sentiment check-in category focused on crate training.",
+      "isCommentAutoGenerated" : true
+    },
     "Crate Training" : {
       "comment" : "Title of a section in the Training module focused on crate training.",
+      "isCommentAutoGenerated" : true
+    },
+    "Crate training builds comfort with alone time, which prevents separation anxiety." : {
+      "comment" : "Explanation of the root cause of separation anxiety, using the crate as an example.",
       "isCommentAutoGenerated" : true
     },
     "Crate training complete!" : {
@@ -19390,8 +20173,16 @@
       "comment" : "Title of a guide sheet focused on crate training.",
       "isCommentAutoGenerated" : true
     },
+    "Crate training helps with potty training - puppies naturally avoid soiling their den." : {
+      "comment" : "Explanation of the root cause of a behavior issue: crate training.",
+      "isCommentAutoGenerated" : true
+    },
     "Create a clear silhouette so the signal is visible even with a winter jacket" : {
       "comment" : "Tip for the \"Down\" skill, emphasizing the importance of creating a clear silhouette for the signal.",
+      "isCommentAutoGenerated" : true
+    },
+    "Create a cozy den" : {
+      "comment" : "Tip to create a cozy den in the crate.",
       "isCommentAutoGenerated" : true
     },
     "Create Memory Book" : {
@@ -19959,6 +20750,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Attualmente ha %1$lld anno/i e %2$lld settimane"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Momenteel %1$lld jaar en %2$lld weken oud"
           }
         },
         "sv" : {
@@ -20730,6 +21527,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Giorno %1$lld con %2$@"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dag %1$lld met %2$@"
           }
         },
         "sv" : {
@@ -21992,6 +22795,10 @@
         }
       }
     },
+    "Difficult" : {
+      "comment" : "Label for a rating that is considered \"difficult\".",
+      "isCommentAutoGenerated" : true
+    },
     "dinner" : {
       "comment" : "Name of a meal type.",
       "isCommentAutoGenerated" : true,
@@ -22968,6 +23775,10 @@
       "comment" : "Training tip to wait for a quiet moment before allowing a crying puppy out of the crate.",
       "isCommentAutoGenerated" : true
     },
+    "Don't punish accidents" : {
+      "comment" : "Advice on not punishing a puppy that soils its crate.",
+      "isCommentAutoGenerated" : true
+    },
     "Don't push puppy down" : {
       "comment" : "Tip for training a puppy to lie down on command.",
       "extractionState" : "stale",
@@ -23932,6 +24743,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Download: %1$lld/%2$lld"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Downloaden: %1$lld/%2$lld"
           }
         },
         "sv" : {
@@ -26312,6 +27129,10 @@
         }
       }
     },
+    "Enforce naps" : {
+      "comment" : "Tip to enforce naps in the context of sleep training.",
+      "isCommentAutoGenerated" : true
+    },
     "Enter an optional note" : {
       "localizations" : {
         "de" : {
@@ -26803,6 +27624,10 @@
           }
         }
       }
+    },
+    "Error: %@" : {
+      "comment" : "An error message displayed in the checkout view if there was an issue processing the user input.",
+      "isCommentAutoGenerated" : true
     },
     "Est. Adult" : {
       "comment" : "Label for the estimated adult weight in the growth detail sheet.",
@@ -28065,6 +28890,14 @@
           }
         }
       }
+    },
+    "Export Full Log (JSON)" : {
+      "comment" : "A button that exports all AI interaction logs to a JSON file.",
+      "isCommentAutoGenerated" : true
+    },
+    "Export includes: context sent, system prompts, responses, and any feedback you've added." : {
+      "comment" : "Explanation of what the \"Export Full Log\" feature includes.",
+      "isCommentAutoGenerated" : true
     },
     "Export logs and reports for your vet" : {
       "comment" : "Description of a feature that allows exporting logs and reports for a veterinarian.",
@@ -29875,6 +30708,12 @@
             "state" : "new",
             "value" : "First week summary. Day %1$lld with %2$@."
           }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eerste week samenvatting. Dag %1$lld met %2$@."
+          }
         }
       }
     },
@@ -29987,6 +30826,10 @@
     "Floating clicker" : {
 
     },
+    "Focus on" : {
+      "comment" : "Title for a section in the AI Cards that encourages the user to focus on a particular activity.",
+      "isCommentAutoGenerated" : true
+    },
     "Focus on bonding and feeling safe. The routines can wait." : {
       "comment" : "Message displayed in the main section of the first week summary card, encouraging the user to focus on bonding and feeling safe while allowing the routines to take precedence.",
       "isCommentAutoGenerated" : true
@@ -30066,10 +30909,6 @@
           }
         }
       }
-    },
-    "Focus on: **%@**" : {
-      "comment" : "A label indicating that the user should focus on a specific skill. The text inside the double asterisks is replaced with the name of the skill.",
-      "isCommentAutoGenerated" : true
     },
     "Focus skills" : {
       "comment" : "Title of a section in the Training app that focuses on training specific skills.",
@@ -30329,6 +31168,10 @@
         }
       }
     },
+    "Four on the floor" : {
+      "comment" : "Title for a tip related to training a puppy to sit by having them on the floor for four seconds.",
+      "isCommentAutoGenerated" : true
+    },
     "Free" : {
       "comment" : "Label for a free premium option.",
       "isCommentAutoGenerated" : true,
@@ -30554,6 +31397,10 @@
       "comment" : "Name of a training phase where the user is encouraged to come directly to the trainer and allow collar touch.",
       "isCommentAutoGenerated" : true
     },
+    "Frozen washcloths and frozen Kongs help soothe teething gums and redirect chewing." : {
+      "comment" : "Text for a tip on using frozen washcloths and frozen Kongs to help soothe teething gums and redirect chewing.",
+      "isCommentAutoGenerated" : true
+    },
     "Full celebrations" : {
       "comment" : "Name of the celebration style that shows all achievement tiers.",
       "isCommentAutoGenerated" : true,
@@ -30589,6 +31436,10 @@
           }
         }
       }
+    },
+    "Full training library" : {
+      "comment" : "Description of a feature that is not available in the free trial but is included in the premium plan.",
+      "isCommentAutoGenerated" : true
     },
     "Full Training Library" : {
       "comment" : "Description of a feature in the Otis+ subscription that allows users to access all training skills and exercises.",
@@ -31112,6 +31963,9 @@
         }
       }
     },
+    "Get personalized insights, smart predictions, and expert guidance tailored to your puppy." : {
+
+    },
     "Get Ready" : {
       "comment" : "Title of the \"Get Ready\" section in the Training module.",
       "isCommentAutoGenerated" : true
@@ -31387,6 +32241,10 @@
         }
       }
     },
+    "Give treats and praise immediately when your puppy goes outside. Make it a party!" : {
+      "comment" : "Text for a tip on rewarding a puppy for going outside after a potty break.",
+      "isCommentAutoGenerated" : true
+    },
     "Give treats while handling" : {
       "comment" : "Tip for training a puppy to stay relaxed while being handled.",
       "isCommentAutoGenerated" : true,
@@ -31541,6 +32399,10 @@
           }
         }
       }
+    },
+    "Good" : {
+      "comment" : "Label for a rating of \"Good\".",
+      "isCommentAutoGenerated" : true
     },
     "Good progress" : {
       "comment" : "Feedback to show when a user is making good progress in training.",
@@ -32535,6 +33397,10 @@
         }
       }
     },
+    "Handling & grooming" : {
+      "comment" : "Question about how is handling & grooming going?",
+      "isCommentAutoGenerated" : true
+    },
     "Has Expiry Date" : {
       "comment" : "Label for a toggle switch that allows the user to mark whether or not a document has an expiry date.",
       "isCommentAutoGenerated" : true,
@@ -32729,6 +33595,10 @@
         }
       }
     },
+    "Health insight" : {
+      "comment" : "A title for a section in the app where health insights are displayed.",
+      "isCommentAutoGenerated" : true
+    },
     "Health milestones and vet appointments will appear here" : {
       "comment" : "Hint text that appears when there is no medical history for a pet.",
       "isCommentAutoGenerated" : true,
@@ -32764,6 +33634,14 @@
           }
         }
       }
+    },
+    "Help improve AI responses by rating and commenting" : {
+      "comment" : "A text instruction under the feedback form, encouraging users to provide feedback.",
+      "isCommentAutoGenerated" : true
+    },
+    "Help us give better advice" : {
+      "comment" : "Title of a screen that appears when the user submits a sentiment check-in, encouraging them to provide more feedback.",
+      "isCommentAutoGenerated" : true
     },
     "Help us improve by sharing your thoughts." : {
       "comment" : "Description of the \"Send Feedback\" button in the Beta Feedback section.",
@@ -33390,6 +34268,10 @@
       "comment" : "Title of the household members screen.",
       "isCommentAutoGenerated" : true
     },
+    "How are walks going?" : {
+      "comment" : "Question about how the user is doing with walks.",
+      "isCommentAutoGenerated" : true
+    },
     "How big will %@ get?" : {
       "localizations" : {
         "de" : {
@@ -33470,6 +34352,38 @@
       "comment" : "Question prompt in the \"How did it go?\" section of the Training session plan.",
       "isCommentAutoGenerated" : true
     },
+    "How is barking?" : {
+      "comment" : "Question about a dog's barking behavior.",
+      "isCommentAutoGenerated" : true
+    },
+    "How is being alone going?" : {
+      "comment" : "Text displayed in a question for the \"Being alone\" sentiment check-in category.",
+      "isCommentAutoGenerated" : true
+    },
+    "How is car travel going?" : {
+      "comment" : "Question about how well the user's pet is handling car travel.",
+      "isCommentAutoGenerated" : true
+    },
+    "How is chewing behavior?" : {
+      "comment" : "Question about a pet's chewing behavior.",
+      "isCommentAutoGenerated" : true
+    },
+    "How is crate training going?" : {
+      "comment" : "Question about crate training.",
+      "isCommentAutoGenerated" : true
+    },
+    "How is handling & grooming going?" : {
+      "comment" : "Label for a rating option in the quick check-in UI that says \"How is handling & grooming going?\".",
+      "isCommentAutoGenerated" : true
+    },
+    "How is jumping up?" : {
+      "comment" : "Question about a sentiment check-in related to jumping up.",
+      "isCommentAutoGenerated" : true
+    },
+    "How is leash behavior?" : {
+      "comment" : "Question about leash behavior.",
+      "isCommentAutoGenerated" : true
+    },
     "How is my puppy in Otis" : {
       "comment" : "Title of a feature in the Premium section of the app that allows users to check on their puppy's status.",
       "isCommentAutoGenerated" : true,
@@ -33505,6 +34419,26 @@
           }
         }
       }
+    },
+    "How is nipping & biting?" : {
+      "comment" : "Question about nipping and biting behavior.",
+      "isCommentAutoGenerated" : true
+    },
+    "How is potty training going?" : {
+      "comment" : "Question about the user's potty training progress.",
+      "isCommentAutoGenerated" : true
+    },
+    "How is resource guarding?" : {
+      "comment" : "Question about how a dog is guarding resources.",
+      "isCommentAutoGenerated" : true
+    },
+    "How is skills training going?" : {
+      "comment" : "Question about how skills training is going.",
+      "isCommentAutoGenerated" : true
+    },
+    "How is sleeping going?" : {
+      "comment" : "Question about a pet's sleeping habits.",
+      "isCommentAutoGenerated" : true
     },
     "How long was the walk in minutes" : {
       "comment" : "Title of a parameter for logging a walk with an optional duration.",
@@ -33577,6 +34511,10 @@
           }
         }
       }
+    },
+    "How's it going?" : {
+      "comment" : "Title for the onboarding screen.",
+      "isCommentAutoGenerated" : true
     },
     "https://ai.otis.pet" : {
       "comment" : "A text field for entering the base URL of the AI broker.",
@@ -34211,6 +35149,10 @@
         }
       }
     },
+    "If training isn't working, try switching to kibble as treats. Fresh food can make them picky." : {
+      "comment" : "Tip to switch to kibble as treats if training isn't working.",
+      "isCommentAutoGenerated" : true
+    },
     "If you click by accident, still give a treat" : {
       "comment" : "Example text for the \"Marking \\\"Sit\\\"\" concept sheet, explaining that even if you accidentally click, you should still give a treat.",
       "isCommentAutoGenerated" : true
@@ -34260,6 +35202,10 @@
     },
     "If your dog struggles, go back to an easier step. Success builds confidence." : {
       "comment" : "Advice on what to do if a user's dog is struggling with a training step.",
+      "isCommentAutoGenerated" : true
+    },
+    "If your pup pulls toward distractions, become more interesting! Use treats and engagement." : {
+      "comment" : "Tip to make a leash training session more engaging for a pup that is pulling away.",
       "isCommentAutoGenerated" : true
     },
     "If your puppy backs up instead of sitting, practice with their back against a wall or in a corner - the only option becomes sitting down" : {
@@ -35944,6 +36890,10 @@
         }
       }
     },
+    "Interaction Details" : {
+      "comment" : "The title of the view that shows detailed information about a user interaction with the AI.",
+      "isCommentAutoGenerated" : true
+    },
     "Interval between walks" : {
       "comment" : "Label for the time interval between walks in the walk schedule editor.",
       "isCommentAutoGenerated" : true,
@@ -36353,6 +37303,14 @@
       "comment" : "A question to ask a user to determine if they are asleep or awake. The argument is a placeholder for the user's name.",
       "isCommentAutoGenerated" : true
     },
+    "It helps with potty training, prevents destructive behavior, and gives your pup a safe space." : {
+      "comment" : "Explanation of the benefits of crate training.",
+      "isCommentAutoGenerated" : true
+    },
+    "It's normal (but temporary)" : {
+      "comment" : "Explanation that puppy biting is normal but temporary.",
+      "isCommentAutoGenerated" : true
+    },
     "It's okay — this is a learning opportunity!" : {
       "comment" : "A description of the purpose of the fear protocol sheet.",
       "isCommentAutoGenerated" : true,
@@ -36466,6 +37424,10 @@
           }
         }
       }
+    },
+    "Jumping up" : {
+      "comment" : "Name of a sentiment check-in category.",
+      "isCommentAutoGenerated" : true
     },
     "Just fell asleep" : {
       "comment" : "Example: \"Sleeping for 1h 30min\"",
@@ -36686,6 +37648,14 @@
         }
       }
     },
+    "Keep %@'s journey on track with Ollie+" : {
+      "comment" : "Subtitle for the \"Your Trial Has Ended\" sheet, including the user's puppy's name.",
+      "isCommentAutoGenerated" : true
+    },
+    "Keep %@'s personalized AI coach working for you. Subscribe today to continue." : {
+      "comment" : "The subtitle for the last day of the trial. The argument is a user's name.",
+      "isCommentAutoGenerated" : true
+    },
     "Keep a consistent schedule, even on weekends" : {
       "comment" : "One of the tips for puppies 16 weeks or older, emphasizing the importance of maintaining a consistent schedule, even on weekends.",
       "isCommentAutoGenerated" : true
@@ -36704,6 +37674,10 @@
     },
     "Keep documents organized" : {
       "comment" : "Title for the Documents view tip.",
+      "isCommentAutoGenerated" : true
+    },
+    "Keep it short" : {
+      "comment" : "Tip to keep training sessions short.",
       "isCommentAutoGenerated" : true
     },
     "Keep it up!" : {
@@ -37279,6 +38253,10 @@
         }
       }
     },
+    "Last Day of Your Trial" : {
+      "comment" : "Title of the last day of the trial.",
+      "isCommentAutoGenerated" : true
+    },
     "Last import" : {
       "comment" : "Title for a section that shows the last time data was imported.",
       "isCommentAutoGenerated" : true
@@ -37850,6 +38828,10 @@
       "comment" : "Name of the leash used in the training module.",
       "isCommentAutoGenerated" : true
     },
+    "Leash behavior" : {
+      "comment" : "Name of a sentiment check-in category focused on leash behavior.",
+      "isCommentAutoGenerated" : true
+    },
     "Leash Introduction" : {
       "comment" : "Name of a skill within the Training module.",
       "isCommentAutoGenerated" : true
@@ -37896,6 +38878,10 @@
     },
     "Leave Shared Profile?" : {
       "comment" : "Confirmation title when leaving a shared puppy profile.",
+      "isCommentAutoGenerated" : true
+    },
+    "Leave the room for just seconds at first, then gradually increase. Build up to longer absences." : {
+      "comment" : "Tip for gradually increasing separation time when training a puppy to leave the house.",
       "isCommentAutoGenerated" : true
     },
     "Leaves/mulch" : {
@@ -38570,6 +39556,10 @@
           }
         }
       }
+    },
+    "Location matters" : {
+      "comment" : "Tip for using a crate that is in a quiet, safe place.",
+      "isCommentAutoGenerated" : true
     },
     "Location set" : {
       "comment" : "Indicates location is set",
@@ -40167,6 +41157,12 @@
             "value" : "Registrato %1$@ %2$@ per %3$@"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ %2$@ gelogd voor %3$@"
+          }
+        },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
@@ -40207,6 +41203,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Registrata passeggiata di %1$lld minuti con %2$@"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wandeling van %1$lld minuten gelogd met %2$@"
           }
         },
         "sv" : {
@@ -40615,6 +41617,10 @@
           }
         }
       }
+    },
+    "Look what we've discovered together" : {
+      "comment" : "Subtitle for the \"One Week with Your AI Coach\" touchpoint card.",
+      "isCommentAutoGenerated" : true
     },
     "Loose Leash Walking" : {
       "comment" : "Name of a training skill where the puppy walks around freely on a leash.",
@@ -43885,6 +44891,10 @@
         }
       }
     },
+    "Most nipping happens when puppies are overtired. A well-rested pup bites much less." : {
+      "comment" : "Tip to prevent puppies from nipping by ensuring they get enough sleep.",
+      "isCommentAutoGenerated" : true
+    },
     "Most puppies love their crate within a week. It becomes their happy place." : {
       "comment" : "Encouragement text for the Training.CrateTraining section.",
       "isCommentAutoGenerated" : true
@@ -45018,6 +46028,10 @@
         }
       }
     },
+    "Needs attention" : {
+      "comment" : "Label for a skill in the Training module that needs more focus or practice.",
+      "isCommentAutoGenerated" : true
+    },
     "Needs more work" : {
       "comment" : "Feedback to show when a training session is not yet mastered.",
       "isCommentAutoGenerated" : true
@@ -45485,6 +46499,10 @@
     },
     "Never practice recall off-leash until it's 100% reliable on the long line - one failed recall teaches your puppy that ignoring you is an option" : {
       "comment" : "Tip for the 'Come' skill, emphasizing the importance of practicing recall off-leash only when it is 100% reliable on a long line.",
+      "isCommentAutoGenerated" : true
+    },
+    "Never punish" : {
+      "comment" : "Tip to never punish a puppy in the crate training process.",
       "isCommentAutoGenerated" : true
     },
     "Never punish accidents - just clean and move on" : {
@@ -46011,6 +47029,10 @@
         }
       }
     },
+    "Nipping & biting" : {
+      "comment" : "Question about nipping and biting behavior.",
+      "isCommentAutoGenerated" : true
+    },
     "No" : {
       "comment" : "Button label for \"No\" option.",
       "isCommentAutoGenerated" : true,
@@ -46116,6 +47138,10 @@
           }
         }
       }
+    },
+    "No AI interactions logged yet" : {
+      "comment" : "A message displayed when there are no AI interaction logs to show.",
+      "isCommentAutoGenerated" : true
     },
     "No appointments" : {
       "comment" : "Accessibility label for a calendar day cell that has no appointments scheduled.",
@@ -46407,6 +47433,9 @@
     "No crate naps yet — that's okay." : {
       "comment" : "Text to be displayed when the user has not taken any naps in the crate yet.",
       "isCommentAutoGenerated" : true
+    },
+    "No credit card required" : {
+
     },
     "No data" : {
       "comment" : "Text to display when there is no data to show.",
@@ -46929,6 +47958,10 @@
           }
         }
       }
+    },
+    "No naps logged recently." : {
+      "comment" : "Context summary for crate training questions, indicating that the user has not logged any naps recently.",
+      "isCommentAutoGenerated" : true
     },
     "No naps logged yet" : {
       "comment" : "Text to display when a user has not logged any naps.",
@@ -48114,6 +49147,10 @@
         }
       }
     },
+    "Not Yet" : {
+      "comment" : "Label for a button that dismisses a view without performing an action.",
+      "isCommentAutoGenerated" : true
+    },
     "Not yet, I'm expecting %@" : {
       "comment" : "Question for a puppy owner who is expecting a puppy. The argument is the puppy's name.",
       "isCommentAutoGenerated" : true,
@@ -48939,6 +49976,10 @@
         }
       }
     },
+    "Okay" : {
+      "comment" : "Label for a rating that is considered \"okay\".",
+      "isCommentAutoGenerated" : true
+    },
     "On" : {
       "localizations" : {
         "de" : {
@@ -49011,6 +50052,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Il %1$@, %2$@ è arrivato a casa."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Op %1$@ kwam %2$@ thuis."
           }
         },
         "sv" : {
@@ -49210,6 +50257,10 @@
         }
       }
     },
+    "One Week with Your AI Coach" : {
+      "comment" : "Title for a view in the \"Trial\" category that appears after 7 days of using the app.",
+      "isCommentAutoGenerated" : true
+    },
     "One-time purchase, per puppy profile" : {
       "comment" : "Text on the upgrade prompt that explains that the purchase is one-time and per puppy profile.",
       "isCommentAutoGenerated" : true,
@@ -49281,6 +50332,14 @@
           }
         }
       }
+    },
+    "Only 2 Days Left" : {
+      "comment" : "Title for a notification displayed when a user has 2 days left on their trial.",
+      "isCommentAutoGenerated" : true
+    },
+    "Only give attention when all four paws are on the ground. Reward sitting automatically." : {
+      "comment" : "Tip for training a puppy to sit by focusing on when all four paws are on the ground.",
+      "isCommentAutoGenerated" : true
     },
     "Only say the name once - don't repeat it" : {
       "comment" : "Tip for the 'Name Recognition' skill, advising against repeating a puppy's name.",
@@ -49424,6 +50483,10 @@
           }
         }
       }
+    },
+    "Open Ollie to see what your AI coach is learning" : {
+      "comment" : "Notification body text for the \"Your puppy's patterns are forming\" notification on Day 3 of the 14-day trial.",
+      "isCommentAutoGenerated" : true
     },
     "Open Shortcuts App" : {
       "comment" : "Text for an action that opens the Shortcuts app.",
@@ -49616,6 +50679,10 @@
           }
         }
       }
+    },
+    "Optional comment (e.g., 'we trained with kibble, didn't log as meal')" : {
+      "comment" : "A label for an optional text field in the entry detail sheet, encouraging users to provide feedback.",
+      "isCommentAutoGenerated" : true
     },
     "Optional custom title" : {
       "comment" : "Placeholder text for a text field that allows a user to enter a custom title for a document.",
@@ -50886,6 +51953,18 @@
         }
       }
     },
+    "Overtired puppies are more reactive and bark more. More naps often means less barking." : {
+      "comment" : "Explanation of why barking is more common in overtired puppies.",
+      "isCommentAutoGenerated" : true
+    },
+    "Overtired puppies are more reactive. More sleep often means less barking." : {
+      "comment" : "Explanation of why barking might be reduced with more sleep.",
+      "isCommentAutoGenerated" : true
+    },
+    "Overtired puppies bite more. Getting enough sleep will reduce nipping." : {
+      "comment" : "Explanation of why puppies nip more when they're tired, and how getting enough sleep can help reduce this behavior.",
+      "isCommentAutoGenerated" : true
+    },
     "Overview" : {
       "localizations" : {
         "de" : {
@@ -50977,6 +52056,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Page %1$lld of %2$lld"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pagina %1$lld van %2$lld"
           }
         }
       }
@@ -52442,6 +53527,14 @@
         }
       }
     },
+    "Personalized insights" : {
+      "comment" : "Description of a feature that provides personalized insights based on a user's activity data.",
+      "isCommentAutoGenerated" : true
+    },
+    "Personalized training guidance" : {
+      "comment" : "Description of a benefit that comes with subscribing to Ollie+ for the first time.",
+      "isCommentAutoGenerated" : true
+    },
     "Pet insurance setup" : {
       "comment" : "Description of a milestone related to pet insurance setup.",
       "isCommentAutoGenerated" : true,
@@ -52526,6 +53619,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Phase %1$lld of %2$lld"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fase %1$lld van %2$lld"
           }
         }
       }
@@ -54447,6 +55546,10 @@
         }
       }
     },
+    "Potty insight" : {
+      "comment" : "Title of an AI card that provides insights into a user's potty habits.",
+      "isCommentAutoGenerated" : true
+    },
     "Potty is %@ overdue" : {
       "comment" : "A string describing that the puppy's potty is overdue, rounded to the nearest 15, 30, 45, or 1-hour mark. The argument is the rounded bucket label",
       "isCommentAutoGenerated" : true
@@ -54927,6 +56030,10 @@
           }
         }
       }
+    },
+    "Potty training" : {
+      "comment" : "Name of a sentiment check-in category related to potty training.",
+      "isCommentAutoGenerated" : true
     },
     "Potty Training" : {
       "comment" : "Title of a section in the Stats view that discusses the user's potty training progress.",
@@ -55905,6 +57012,10 @@
         }
       }
     },
+    "Previous feedback: %@" : {
+      "comment" : "A label indicating that the user has previously given feedback for a specific interaction. The argument is the string “Helpful”, the string “Not Helpful”, the string “Wrong”, the string “Too Wordy” or the string “Missing Context”.",
+      "isCommentAutoGenerated" : true
+    },
     "Previous month" : {
       "comment" : "A button that navigates to the previous month in the calendar.",
       "isCommentAutoGenerated" : true,
@@ -55976,6 +57087,10 @@
           }
         }
       }
+    },
+    "Priority" : {
+      "comment" : "Title for a section in the AI dashboard that lists the user's priority tasks.",
+      "isCommentAutoGenerated" : true
     },
     "Priority shifted to maintenance" : {
       "comment" : "Message indicating that the priority of a skill has been shifted from \"Due for review\" to \"Maintenance\".",
@@ -56169,7 +57284,6 @@
       }
     },
     "Progress" : {
-      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -56285,12 +57399,32 @@
       "comment" : "Benefit of crate training for potty training.",
       "isCommentAutoGenerated" : true
     },
+    "Puppies chew when bored or understimulated. Provide appropriate chew toys and puzzles." : {
+      "comment" : "Text explaining why chewing is common in puppies and how to address it.",
+      "isCommentAutoGenerated" : true
+    },
+    "Puppies don't know when they're tired. After 1-2 hours awake, put them in the crate for a nap." : {
+      "comment" : "Tip to enforce naps for puppies.",
+      "isCommentAutoGenerated" : true
+    },
+    "Puppies naturally avoid soiling where they sleep. The crate makes potty training much easier." : {
+      "comment" : "Tip for using the crate during potty training.",
+      "isCommentAutoGenerated" : true
+    },
     "Puppies naturally love running with their people - use this enthusiasm to build a powerful positive association with the recall command" : {
       "comment" : "Tip related to the \"Come\" skill, emphasizing the importance of using puppy enthusiasm to build a strong positive association with the recall command.",
       "isCommentAutoGenerated" : true
     },
+    "Puppies need 18-20 hours of sleep per day. If yours isn't sleeping this much, enforce more naps." : {
+      "comment" : "Tip to ensure your puppy gets enough sleep.",
+      "isCommentAutoGenerated" : true
+    },
     "Puppies need to go first thing in the morning" : {
       "comment" : "Message for the first potty of the day, specifically for morning-time users.",
+      "isCommentAutoGenerated" : true
+    },
+    "Puppies will settle if you can wait through about 1 minute of whining. Sit nearby so they know you're there." : {
+      "comment" : "Tip for crate training: waiting 1 minute for a whining puppy to settle.",
       "isCommentAutoGenerated" : true
     },
     "Puppy age" : {
@@ -56738,6 +57872,10 @@
         }
       }
     },
+    "Put the crate in a quiet corner of a social room - not isolated, but not in the middle of activity." : {
+      "comment" : "Tip for placing a puppy's crate in a quiet corner of a social room, rather than an isolated or busy area.",
+      "isCommentAutoGenerated" : true
+    },
     "Put them in when tired - after play or a walk works best" : {
       "comment" : "Training tip for putting a puppy in the crate when they are tired, suggesting that this is an appropriate time to do so.",
       "isCommentAutoGenerated" : true
@@ -56784,6 +57922,10 @@
     },
     "Quick check what's familiar" : {
       "comment" : "Button text that takes the user to a quick check mode where they can mark familiar items.",
+      "isCommentAutoGenerated" : true
+    },
+    "Quick check-in" : {
+      "comment" : "Title of the quick check-in screen.",
       "isCommentAutoGenerated" : true
     },
     "Quick events" : {
@@ -57508,6 +58650,10 @@
       "comment" : "Title of the section that lists recent activity.",
       "isCommentAutoGenerated" : true
     },
+    "Recent Interactions (%lld)" : {
+      "comment" : "A section header that indicates there are some recent AI interaction logs. The number in parentheses is replaced with the actual number of entries.",
+      "isCommentAutoGenerated" : true
+    },
     "Recent sessions" : {
       "comment" : "Title of a section in the training log sheet that lists the user's most recent training sessions.",
       "isCommentAutoGenerated" : true,
@@ -57543,6 +58689,10 @@
           }
         }
       }
+    },
+    "Recommendations" : {
+      "comment" : "Title for a section of the app that lists recommended activities.",
+      "isCommentAutoGenerated" : true
     },
     "record" : {
       "comment" : "Label for the longest streak recorded by the user.",
@@ -57694,6 +58844,10 @@
     },
     "Recovered in %lld sessions" : {
       "comment" : "A string that announces how many training sessions it took for a skill to recover. The argument is the number of sessions.",
+      "isCommentAutoGenerated" : true
+    },
+    "Redirect to toys" : {
+      "comment" : "Tip to redirect a nipping puppy's attention to toys when they start biting.",
       "isCommentAutoGenerated" : true
     },
     "Reduce reminders" : {
@@ -57852,6 +59006,10 @@
         }
       }
     },
+    "Regular crate time teaches your pup that being alone is okay. Start with short periods." : {
+      "comment" : "Tip on using a crate to help a puppy build confidence and reduce separation anxiety.",
+      "isCommentAutoGenerated" : true
+    },
     "Release with 'okay' or 'free'" : {
       "comment" : "Tip for training the 'wait' command.",
       "isCommentAutoGenerated" : true,
@@ -57932,6 +59090,10 @@
           }
         }
       }
+    },
+    "Remind Me Later" : {
+      "comment" : "Button label to remind the user to check in later.",
+      "isCommentAutoGenerated" : true
     },
     "Reminder" : {
       "comment" : "Label for a reminder field in the milestone completion sheet.",
@@ -58782,6 +59944,10 @@
           }
         }
       }
+    },
+    "Resource guarding" : {
+      "comment" : "Name of a sentiment check-in category focused on resource guarding behavior.",
+      "isCommentAutoGenerated" : true
     },
     "Responds to name" : {
       "comment" : "Description of a milestone where the user's puppy responds to their name.",
@@ -60701,6 +61867,10 @@
         }
       }
     },
+    "See Plans" : {
+      "comment" : "CTA button text that takes them to the subscription plans screen.",
+      "isCommentAutoGenerated" : true
+    },
     "See what developmental stage your puppy is in, upcoming milestones, and the critical socialization window timeline." : {
       "comment" : "Text displayed in a feature discovery tip for the Development tab, explaining its purpose.",
       "isCommentAutoGenerated" : true
@@ -61366,6 +62536,10 @@
     },
     "sessions this week" : {
       "comment" : "Label for the number of training sessions a team member has completed in the current week.",
+      "isCommentAutoGenerated" : true
+    },
+    "Set as main focus" : {
+      "comment" : "Button text to set a particular sentiment check-in as the user's primary focus.",
       "isCommentAutoGenerated" : true
     },
     "Set on map" : {
@@ -63171,6 +64345,10 @@
         }
       }
     },
+    "Skills training" : {
+      "comment" : "Category name for a sentiment check-in related to skills training.",
+      "isCommentAutoGenerated" : true
+    },
     "Skills unlock in order as your puppy progresses. Complete the preparation checklist first, then work through each skill at your own pace." : {
       "comment" : "Tip explaining that training skills unlock in order, with a reminder to complete the preparation checklist before diving into the actual skills.",
       "isCommentAutoGenerated" : true
@@ -63332,6 +64510,10 @@
           }
         }
       }
+    },
+    "Sleep prevents biting" : {
+      "comment" : "Tip to prevent puppies from biting by ensuring they get enough sleep.",
+      "isCommentAutoGenerated" : true
     },
     "Sleep progress" : {
       "localizations" : {
@@ -63800,6 +64982,10 @@
       "comment" : "Description of a feature that provides gentle reminders to the user based on their puppy's behavior.",
       "isCommentAutoGenerated" : true
     },
+    "Smart pattern recognition" : {
+      "comment" : "Description of a benefit that comes with the trial, specifically related to smart pattern recognition.",
+      "isCommentAutoGenerated" : true
+    },
     "Smart reminders help you stay ahead of your puppy's needs." : {
       "comment" : "Subtitle for the \"Notifications\" section of the onboarding flow.",
       "isCommentAutoGenerated" : true,
@@ -64099,6 +65285,10 @@
           }
         }
       }
+    },
+    "Socialization tip" : {
+      "comment" : "Title of an AI card that provides a tip related to socialization.",
+      "isCommentAutoGenerated" : true
     },
     "Socialization Window" : {
       "comment" : "Title of the view that shows a week-by-week progress timeline for the socialization window.",
@@ -65070,6 +66260,10 @@
         }
       }
     },
+    "Start 14-Day Free Trial" : {
+      "comment" : "Text for a button that allows a user to start a 14-day free trial of the app.",
+      "isCommentAutoGenerated" : true
+    },
     "Start a walk" : {
       "comment" : "Text for starting a walk.",
       "isCommentAutoGenerated" : true,
@@ -65430,6 +66624,10 @@
       "comment" : "Text to display when there are no recent activity events to show in the Recent Activity section of the app.",
       "isCommentAutoGenerated" : true
     },
+    "Start My Free Trial" : {
+      "comment" : "Call-to-action button text for starting a 14-day free trial.",
+      "isCommentAutoGenerated" : true
+    },
     "Start nap" : {
       "comment" : "Text for starting a nap.",
       "isCommentAutoGenerated" : true,
@@ -65535,6 +66733,10 @@
           }
         }
       }
+    },
+    "Start small" : {
+      "comment" : "Advice for starting with shorter separation periods when training a puppy to tolerate being alone.",
+      "isCommentAutoGenerated" : true
     },
     "Start socialization" : {
       "comment" : "Button text to start a puppy's socialization journey.",
@@ -66326,6 +67528,12 @@
             "value" : "Passo %lld di %lld"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stap %1$lld van %2$lld"
+          }
+        },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
@@ -66381,6 +67589,10 @@
           }
         }
       }
+    },
+    "Stop and wait" : {
+      "comment" : "Tip to use the \"stop and wait\" method when training a puppy to walk on a leash.",
+      "isCommentAutoGenerated" : true
     },
     "Stop if puppy shows stress signals" : {
       "comment" : "Tip for the \"Handling\" skill in the Training section, emphasizing the importance of stopping training if the puppy shows stress signals.",
@@ -66786,6 +67998,18 @@
         }
       }
     },
+    "Struggling" : {
+      "comment" : "Label for a rating option indicating the user is struggling with a particular skill.",
+      "isCommentAutoGenerated" : true
+    },
+    "Submit" : {
+      "comment" : "Text for the button that submits a sentiment check-in.",
+      "isCommentAutoGenerated" : true
+    },
+    "Submit Feedback" : {
+      "comment" : "A button that allows users to submit feedback about an AI interaction.",
+      "isCommentAutoGenerated" : true
+    },
     "Subscribe" : {
       "comment" : "Button text to subscribe to the Otis+ subscription.",
       "isCommentAutoGenerated" : true,
@@ -66827,6 +68051,14 @@
           }
         }
       }
+    },
+    "Subscribe Now" : {
+      "comment" : "Button text that allows users to subscribe to Ollie+ after the 14-day trial ends.",
+      "isCommentAutoGenerated" : true
+    },
+    "Subscribe now to restore your AI-powered insights and predictions." : {
+      "comment" : "Subtitle for the \"Subscribe now\" button in the \"Your Trial Has Ended\" hero view.",
+      "isCommentAutoGenerated" : true
     },
     "Subscription Override" : {
       "comment" : "A label describing the option to override the user's subscription status.",
@@ -68069,6 +69301,10 @@
       "comment" : "Text on the \"Take the next best action\" button in the First Session Handoff card.",
       "isCommentAutoGenerated" : true
     },
+    "Take your puppy out immediately after waking, eating, playing, and every 1-2 hours while awake." : {
+      "comment" : "Tip for potty training, emphasizing the importance of taking the puppy out at regular intervals.",
+      "isCommentAutoGenerated" : true
+    },
     "Tap a meal to edit. Swipe to delete." : {
       "comment" : "Accessibility hint for the meal schedule editor, instructing users on how to interact with it.",
       "isCommentAutoGenerated" : true,
@@ -68725,6 +69961,10 @@
         }
       }
     },
+    "Teething relief" : {
+      "comment" : "Title for a tip about providing teething relief to puppies.",
+      "isCommentAutoGenerated" : true
+    },
     "Temperature" : {
       "comment" : "Label for the temperature unit setting in the Settings view.",
       "isCommentAutoGenerated" : true,
@@ -68970,6 +70210,10 @@
       "comment" : "How-to step for training a puppy to lie down using a lure.",
       "isCommentAutoGenerated" : true
     },
+    "Thank your pup for alerting you, then redirect with a 'quiet' cue or toy." : {
+      "comment" : "Tip for handling barking when they're not alerting you.",
+      "isCommentAutoGenerated" : true
+    },
     "The '5-minute rule' — puppies can walk 5 minutes per month of age per session." : {
       "comment" : "Text explaining the '5-minute rule' for puppies.",
       "isCommentAutoGenerated" : true,
@@ -69005,6 +70249,10 @@
           }
         }
       }
+    },
+    "The 1-minute rule" : {
+      "comment" : "Title of a tip related to crate training, focusing on the \"1-minute rule\".",
+      "isCommentAutoGenerated" : true
     },
     "The 3 D's: Always reduce one D when increasing another (e.g., shorter duration when adding distance)" : {
       "comment" : "Training tip for the \"Watch Me\" skill: Always reduce one D when increasing another (e.g., shorter duration when adding distance).",
@@ -69181,6 +70429,14 @@
     },
     "The clicker is a marker signal that tells your puppy exactly when they did something right. It bridges the gap between the behavior and the reward." : {
 
+    },
+    "The crate gives you a timeout option and ensures your pup gets enough rest." : {
+      "comment" : "Explanation of why the crate is a root cause for nipping behavior.",
+      "isCommentAutoGenerated" : true
+    },
+    "The crate should always be positive. Never use it as punishment or your pup will resist going in." : {
+      "comment" : "Tip on how to use a crate positively with a puppy.",
+      "isCommentAutoGenerated" : true
     },
     "The data could not be read. Try restarting the app." : {
       "comment" : "Error message displayed when the app cannot read the user data.",
@@ -70724,6 +71980,12 @@
             "value" : "È ora di %2$@ di %1$@"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tijd voor %1$@'s %2$@"
+          }
+        },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
@@ -71328,6 +72590,10 @@
         }
       }
     },
+    "Timing is everything" : {
+      "comment" : "Tip for timing potty breaks.",
+      "isCommentAutoGenerated" : true
+    },
     "Tip: Log where naps happen to track crate comfort." : {
       "comment" : "Accessibility hint for the log nap location button.",
       "isCommentAutoGenerated" : true
@@ -71370,6 +72636,10 @@
     },
     "Tips for Your Puppy" : {
       "comment" : "Header for a section of a training guide sheet focused on tips for puppies.",
+      "isCommentAutoGenerated" : true
+    },
+    "Tired or bored puppies chew more. Enforcing naps helps." : {
+      "comment" : "Explanation of why chewing is more common in tired or bored puppies, and how enforcing naps can help.",
       "isCommentAutoGenerated" : true
     },
     "Tired puppies walk better - play first" : {
@@ -72478,6 +73748,10 @@
         }
       }
     },
+    "Train before meals" : {
+      "comment" : "Tip to train a puppy before a meal to help them focus and be more receptive to training.",
+      "isCommentAutoGenerated" : true
+    },
     "Train in-app" : {
       "comment" : "Button text that allows a user to log a training session in the app.",
       "isCommentAutoGenerated" : true,
@@ -72692,8 +73966,8 @@
       "comment" : "Title of the Training Rules section.",
       "isCommentAutoGenerated" : true
     },
-    "Training Suggestion" : {
-      "comment" : "The title of the card.",
+    "Training suggestion" : {
+      "comment" : "Title of a view that shows a training suggestion.",
       "isCommentAutoGenerated" : true
     },
     "Training: %@" : {
@@ -72843,6 +74117,14 @@
           }
         }
       }
+    },
+    "Trial Active" : {
+      "comment" : "Status of the trial when it is currently active.",
+      "isCommentAutoGenerated" : true
+    },
+    "Trial Ended" : {
+      "comment" : "Text displayed in a notification when a 14-day trial has expired.",
+      "isCommentAutoGenerated" : true
     },
     "Truck" : {
       "localizations" : {
@@ -73067,6 +74349,10 @@
           }
         }
       }
+    },
+    "Turn away" : {
+      "comment" : "Tip to ignore a jumping puppy and turn away from it.",
+      "isCommentAutoGenerated" : true
     },
     "Type" : {
       "comment" : "Title of the parameter for selecting the type of potty event (pee or poop).",
@@ -74186,6 +75472,10 @@
     "Use high-value, pea-sized treats" : {
 
     },
+    "Use kibble for training" : {
+      "comment" : "Suggestion to use kibble as a reward during training sessions.",
+      "isCommentAutoGenerated" : true
+    },
     "Use Siri to log events and check on your puppy hands-free. Say \"Hey Siri\" followed by a command." : {
       "comment" : "Description of Siri voice commands in the Premium section.",
       "isCommentAutoGenerated" : true,
@@ -74266,6 +75556,10 @@
         }
       }
     },
+    "Use the crate" : {
+      "comment" : "Tip for using the crate during potty training.",
+      "isCommentAutoGenerated" : true
+    },
     "Use the suggestion card to focus on one helpful thing right now." : {
       "comment" : "Text on the \"Take the next best action\" step of the First Session Handoff card, instructing the user to use the suggestion card to focus on one helpful thing right now.",
       "isCommentAutoGenerated" : true
@@ -74306,6 +75600,10 @@
           }
         }
       }
+    },
+    "Use timeouts" : {
+      "comment" : "Tip to use timeouts when training a puppy to stop nipping.",
+      "isCommentAutoGenerated" : true
     },
     "Used when no photo is set." : {
       "comment" : "Hint text for the avatar color field in the household member form.",
@@ -74887,6 +76185,9 @@
           }
         }
       }
+    },
+    "View Interaction Log" : {
+
     },
     "View Mode" : {
       "comment" : "A label for a segmented control that lets the user switch between different views.",
@@ -75998,8 +77299,8 @@
         }
       }
     },
-    "Warm up with:" : {
-      "comment" : "A label describing the warm-up skills suggested in the training guidance card.",
+    "Warm up with" : {
+      "comment" : "Suggestion to warm up with something.",
       "isCommentAutoGenerated" : true
     },
     "Warm-up" : {
@@ -76111,6 +77412,10 @@
         }
       }
     },
+    "Watch for" : {
+      "comment" : "Title for a section in the AI risk factors view, describing potential health risks.",
+      "isCommentAutoGenerated" : true
+    },
     "Watch for during walk" : {
       "comment" : "Tip to tap to log exposure during a walk.",
       "isCommentAutoGenerated" : true,
@@ -76134,6 +77439,10 @@
           }
         }
       }
+    },
+    "Watch for overtired signs" : {
+      "comment" : "Tip to watch for signs that your puppy is tired.",
+      "isCommentAutoGenerated" : true
     },
     "Watch for sniffing or circling - immediate potty signal" : {
       "comment" : "Training guide sheet - Middle weeks tips (12-16) - Tip 2: Watch for sniffing or circling - immediate potty signal.",
@@ -76209,6 +77518,10 @@
           }
         }
       }
+    },
+    "We don't have data on this yet." : {
+      "comment" : "Text shown in the context summary when there is no data available for a particular sentiment check-in category.",
+      "isCommentAutoGenerated" : true
     },
     "We'll help you track everything." : {
       "comment" : "Subtitle text for the welcome content in the first run feature.",
@@ -76654,6 +77967,12 @@
             "state" : "new",
             "value" : "Week %1$lld of %2$lld"
           }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Week %1$lld van %2$lld"
+          }
         }
       }
     },
@@ -76677,6 +77996,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Semaine %1$lld sur %2$lld de socialisation"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Week %1$lld van %2$lld socialisatie"
           }
         },
         "sv" : {
@@ -77202,6 +78527,10 @@
         }
       }
     },
+    "Welcome Back!" : {
+      "comment" : "Title of a view that welcomes a user back after a trial has expired.",
+      "isCommentAutoGenerated" : true
+    },
     "Welcome to Otis+!" : {
       "comment" : "Welcome message displayed after a user successfully subscribes to the Otis+ service.",
       "isCommentAutoGenerated" : true,
@@ -77228,6 +78557,10 @@
     },
     "Welcome! Tell us if %@ is currently sleeping or awake to get started." : {
       "comment" : "A label that can be read by VoiceOver to describe the welcome screen. The argument is the name of the person.",
+      "isCommentAutoGenerated" : true
+    },
+    "Wellness" : {
+      "comment" : "A category under the \"Recommendations\" section of the AI Cards.",
       "isCommentAutoGenerated" : true
     },
     "What \"positive\" actually means" : {
@@ -77267,6 +78600,10 @@
           }
         }
       }
+    },
+    "What do you most want help with?" : {
+      "comment" : "Subtitle for the screen where the user can select their primary focus for the sentiment check-in.",
+      "isCommentAutoGenerated" : true
     },
     "What does %@ look like?" : {
       "comment" : "Question that appears when the user is asked to take a photo of their puppy when they're expecting one. The argument is the puppy's name.",
@@ -77389,6 +78726,10 @@
       "comment" : "Title of a section that lists the key takeaways from a training session.",
       "isCommentAutoGenerated" : true
     },
+    "What you've built" : {
+      "comment" : "Title for a section that lists the features and data that have been built with the user's account.",
+      "isCommentAutoGenerated" : true
+    },
     "What?" : {
       "localizations" : {
         "es" : {
@@ -77492,6 +78833,10 @@
           }
         }
       }
+    },
+    "When biting gets intense, calmly put your pup in the crate for a few minutes to settle down." : {
+      "comment" : "Tip to use timeouts when a puppy is biting intensely.",
+      "isCommentAutoGenerated" : true
     },
     "When did %@ come home?" : {
       "localizations" : {
@@ -77649,6 +78994,10 @@
           }
         }
       }
+    },
+    "When the leash goes tight, stop moving. Only walk again when there's slack. Consistency is key." : {
+      "comment" : "Tip on using a leash to train a puppy, emphasizing the importance of consistency.",
+      "isCommentAutoGenerated" : true
     },
     "When the time comes, create a keepsake with all your memories together." : {
       "comment" : "Text displayed in a memory book when the user is not a member.",
@@ -77815,6 +79164,14 @@
         }
       }
     },
+    "When you can't supervise, the crate prevents destructive chewing." : {
+      "comment" : "Explanation of why training a puppy in a crate can prevent destructive chewing.",
+      "isCommentAutoGenerated" : true
+    },
+    "When your pup jumps, turn away and ignore. Attention - even negative - rewards jumping." : {
+      "comment" : "Tip to ignore a jumping puppy and focus on rewarding sitting.",
+      "isCommentAutoGenerated" : true
+    },
     "Where did you train?" : {
       "comment" : "Question prompt for logging where a user practiced a skill.",
       "isCommentAutoGenerated" : true
@@ -77900,6 +79257,10 @@
           }
         }
       }
+    },
+    "Why crate training matters" : {
+      "comment" : "Text for a tip on why crate training is important.",
+      "isCommentAutoGenerated" : true
     },
     "Why it helps" : {
       "comment" : "Section title under \"Getting started\" in the Training module, explaining the benefits of crate training.",
@@ -78013,6 +79374,10 @@
         }
       }
     },
+    "Window status" : {
+      "comment" : "Title of a section in the AI health insights card that discusses the user's window status.",
+      "isCommentAutoGenerated" : true
+    },
     "Windy" : {
       "comment" : "Weather condition description: \"Windy\".",
       "isCommentAutoGenerated" : true,
@@ -78094,6 +79459,10 @@
           }
         }
       }
+    },
+    "Without Ollie+, you'll lose access to:" : {
+      "comment" : "Title of a section in the \"What you'll lose\" part of the \"Trial\" screen, explaining what users will lose without subscribing to Ollie+.",
+      "isCommentAutoGenerated" : true
     },
     "Woke up" : {
       "localizations" : {
@@ -78400,6 +79769,12 @@
             "value" : "Vous avez déjà un profil pour %1$@. Accepter ce partage le remplacera par le chiot partagé de %2$@. Vos données de profil actuelles seront supprimées."
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je hebt al een profiel voor %1$@. Als je deze deeluitnodiging accepteert, wordt het vervangen door de gedeelde pup van %2$@. Je huidige profielgegevens worden verwijderd."
+          }
+        },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
@@ -78634,11 +80009,21 @@
             "state" : "new",
             "value" : "You're averaging %1$@ walks/day, but your target is %2$lld. Adjust?"
           }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je hebt gemiddeld %1$@ wandelingen/dag, maar je doel is %2$lld. Aanpassen?"
+          }
         }
       }
     },
     "You're doing great." : {
       "comment" : "Encouragement text displayed in the first week summary card.",
+      "isCommentAutoGenerated" : true
+    },
+    "You're Loving Ollie+" : {
+      "comment" : "Hero title text for the trial-aware paywall.",
       "isCommentAutoGenerated" : true
     },
     "You're now viewing %@. You can switch dogs anytime in Settings." : {
@@ -78685,6 +80070,14 @@
     },
     "You've reached your profile limit" : {
       "comment" : "Text displayed when a user has reached the maximum number of profiles they can have.",
+      "isCommentAutoGenerated" : true
+    },
+    "Your AI Coach is Learning" : {
+      "comment" : "Title for a touchpoint card that appears after a user logs in for the first time, introducing the concept of the AI Coach.",
+      "isCommentAutoGenerated" : true
+    },
+    "Your AI Puppy Coach is Ready" : {
+      "comment" : "Title for the onboarding trial step where the user is introduced to their AI Puppy Coach.",
       "isCommentAutoGenerated" : true
     },
     "Your Brands" : {
@@ -78850,6 +80243,10 @@
           }
         }
       }
+    },
+    "Your patterns with %@ are being analyzed. Keep logging to unlock personalized predictions!" : {
+      "comment" : "The subtitle for the first touchpoint card on Day 1 of the 14-day trial. The argument is the user's name.",
+      "isCommentAutoGenerated" : true
     },
     "Your pup is comfortable sleeping in the crate whenever needed" : {
       "comment" : "Description of the celebration when a user marks their dog as mastered in the crate training section.",
@@ -79333,6 +80730,10 @@
         }
       }
     },
+    "Your puppy's patterns are forming" : {
+      "comment" : "Title of a notification displayed on the phone when a trial is about to expire.",
+      "isCommentAutoGenerated" : true
+    },
     "Your puppy's photo album" : {
       "comment" : "Title for the moments gallery tip.",
       "isCommentAutoGenerated" : true
@@ -79367,6 +80768,22 @@
     },
     "Your training hub" : {
       "comment" : "Title for the Train tab introduction tip.",
+      "isCommentAutoGenerated" : true
+    },
+    "Your trial ends in %lld days. Subscribe to keep access to all features." : {
+      "comment" : "The subtitle text for the \"Try Otis+\" hero view, which appears when the user is on trial. The argument is the number of days remaining in the trial.",
+      "isCommentAutoGenerated" : true
+    },
+    "Your trial ends soon. Don't lose the insights you've built with %@." : {
+      "comment" : "The subtitle for the \"Only 2 Days Left\" touchpoint card. The argument is a user's name.",
+      "isCommentAutoGenerated" : true
+    },
+    "Your trial ends tomorrow. Subscribe now to keep your AI coach." : {
+      "comment" : "Subtitle for the \"Try Otis+\" hero screen, showing that the trial will end the next day and that subscribing will keep the user's AI coach.",
+      "isCommentAutoGenerated" : true
+    },
+    "Your Trial Has Ended" : {
+      "comment" : "Title for the view that appears when a user's Otis+ trial has expired.",
       "isCommentAutoGenerated" : true
     }
   },

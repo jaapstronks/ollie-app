@@ -1,0 +1,536 @@
+{
+  "sourceLanguage": "en",
+  "strings": {
+    "Your AI Puppy Coach is Ready": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je AI Puppycoach is Klaar"
+          }
+        }
+      }
+    },
+    "Get personalized insights, smart predictions, and expert guidance tailored to your puppy.": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Krijg persoonlijke inzichten, slimme voorspellingen en deskundig advies op maat voor jouw pup."
+          }
+        }
+      }
+    },
+    "Start 14-Day Free Trial": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start 14-Daagse Gratis Proefperiode"
+          }
+        }
+      }
+    },
+    "Continue without trial": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Doorgaan zonder proefperiode"
+          }
+        }
+      }
+    },
+    "AI-powered potty predictions": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AI-gestuurde plasvoorspellingen"
+          }
+        }
+      }
+    },
+    "Personalized training guidance": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Persoonlijk trainingsadvies"
+          }
+        }
+      }
+    },
+    "Smart pattern recognition": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slimme patroonherkenning"
+          }
+        }
+      }
+    },
+    "No credit card required": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geen creditcard nodig"
+          }
+        }
+      }
+    },
+    "1 day left in trial": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nog 1 dag in proefperiode"
+          }
+        }
+      }
+    },
+    "%lld days left in trial": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nog %lld dagen in proefperiode"
+          }
+        }
+      }
+    },
+    "Trial Active": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Proefperiode Actief"
+          }
+        }
+      }
+    },
+    "Trial Ended": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Proefperiode Afgelopen"
+          }
+        }
+      }
+    },
+    "Your Trial Has Ended": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je Proefperiode is Afgelopen"
+          }
+        }
+      }
+    },
+    "Keep %@'s journey on track with Ollie+": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Houd %@'s reis op koers met Ollie+"
+          }
+        }
+      }
+    },
+    "What you've built": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wat je hebt opgebouwd"
+          }
+        }
+      }
+    },
+    "1 event logged": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 gebeurtenis gelogd"
+          }
+        }
+      }
+    },
+    "%lld events logged": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld gebeurtenissen gelogd"
+          }
+        }
+      }
+    },
+    "1 training session": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 trainingssessie"
+          }
+        }
+      }
+    },
+    "%lld training sessions": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld trainingssessies"
+          }
+        }
+      }
+    },
+    "1 day tracking": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 dag bijgehouden"
+          }
+        }
+      }
+    },
+    "%lld days tracking": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld dagen bijgehouden"
+          }
+        }
+      }
+    },
+    "Without Ollie+, you'll lose access to:": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zonder Ollie+ verlies je toegang tot:"
+          }
+        }
+      }
+    },
+    "AI potty predictions": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AI plasvoorspellingen"
+          }
+        }
+      }
+    },
+    "Personalized insights": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Persoonlijke inzichten"
+          }
+        }
+      }
+    },
+    "Full training library": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Volledige trainingsbibliotheek"
+          }
+        }
+      }
+    },
+    "Advanced analytics": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geavanceerde analyses"
+          }
+        }
+      }
+    },
+    "Subscribe Now": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abonneer Nu"
+          }
+        }
+      }
+    },
+    "Not now": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Niet nu"
+          }
+        }
+      }
+    },
+    "%@/month": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@/maand"
+          }
+        }
+      }
+    },
+    "Welcome Back!": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Welkom Terug!"
+          }
+        }
+      }
+    },
+    "As a valued user, enjoy 14 days of Ollie+ free to explore our new AI features.": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Als gewaardeerde gebruiker, geniet van 14 dagen gratis Ollie+ om onze nieuwe AI-functies te ontdekken."
+          }
+        }
+      }
+    },
+    "Start My Free Trial": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start Mijn Gratis Proefperiode"
+          }
+        }
+      }
+    },
+    "Your AI Coach is Learning": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je AI Coach Leert"
+          }
+        }
+      }
+    },
+    "Your patterns with %@ are being analyzed. Keep logging to unlock personalized predictions!": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je patronen met %@ worden geanalyseerd. Blijf loggen om persoonlijke voorspellingen te ontgrendelen!"
+          }
+        }
+      }
+    },
+    "Got it": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Begrepen"
+          }
+        }
+      }
+    },
+    "One Week with Your AI Coach": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Een Week met Je AI Coach"
+          }
+        }
+      }
+    },
+    "Look what we've discovered together": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kijk wat we samen hebben ontdekt"
+          }
+        }
+      }
+    },
+    "1 prediction made": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 voorspelling gedaan"
+          }
+        }
+      }
+    },
+    "%lld predictions made": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld voorspellingen gedaan"
+          }
+        }
+      }
+    },
+    "1 insight generated": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 inzicht gegenereerd"
+          }
+        }
+      }
+    },
+    "%lld insights generated": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld inzichten gegenereerd"
+          }
+        }
+      }
+    },
+    "1 pattern learned": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 patroon geleerd"
+          }
+        }
+      }
+    },
+    "%lld patterns learned": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld patronen geleerd"
+          }
+        }
+      }
+    },
+    "Keep it up!": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ga zo door!"
+          }
+        }
+      }
+    },
+    "Only 2 Days Left": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nog Maar 2 Dagen"
+          }
+        }
+      }
+    },
+    "Your trial ends soon. Don't lose the insights you've built with %@.": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je proefperiode eindigt bijna. Verlies de inzichten die je hebt opgebouwd met %@ niet."
+          }
+        }
+      }
+    },
+    "See Plans": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bekijk Abonnementen"
+          }
+        }
+      }
+    },
+    "Remind Me Later": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Herinner Me Later"
+          }
+        }
+      }
+    },
+    "Last Day of Your Trial": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Laatste Dag van Je Proefperiode"
+          }
+        }
+      }
+    },
+    "Keep %@'s personalized AI coach working for you. Subscribe today to continue.": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Houd %@'s persoonlijke AI coach voor je werkend. Abonneer vandaag om door te gaan."
+          }
+        }
+      }
+    },
+    "Not Yet": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nog Niet"
+          }
+        }
+      }
+    },
+    "Your puppy's patterns are forming": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "De patronen van je pup vormen zich"
+          }
+        }
+      }
+    },
+    "Open Ollie to see what your AI coach is learning": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Ollie om te zien wat je AI coach leert"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}
