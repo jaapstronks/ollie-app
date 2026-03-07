@@ -6,7 +6,7 @@ The AI broker is live at `https://ai.otis.pet`.
 
 ## Strategic Context
 
-- **Pricing model:** Premium (€5.99/mo or €49.99/yr) with 14-day trial
+- **Pricing model:** Premium (€1.99/week, €6.99/mo, or €54.99/yr) with 14-day trial
 - **No free tier:** AI costs (~€1.50/user/month) make free unsustainable
 - **AI is required:** All users get AI features during trial and as subscribers
 - **The moat:** Competitors can copy features, but can't copy user data + AI integration
@@ -134,11 +134,20 @@ To control costs, each surface has per-profile daily budgets:
 3. **Batch optimization:** Multiple surfaces can share context when requested together
 4. **Model selection:** Using Haiku for cost efficiency while maintaining quality
 
-**Unit economics at €5.99/mo:**
-- Revenue per user: €5.99 gross → €4.19 net (after Apple)
-- AI cost per user: ~€1.50
-- Margin per user: ~€2.69
-- Margin %: ~45%
+**Unit economics by tier:**
+
+| Tier | Price | After Apple | AI Cost | Margin | Margin % |
+|------|-------|-------------|---------|--------|----------|
+| Weekly | €1.99/wk (€8.62/mo) | €6.03/mo | €1.50 | €4.53 | 75% |
+| Monthly | €6.99/mo | €4.89/mo | €1.50 | €3.39 | 49% |
+| Annual | €54.99/yr (€4.58/mo) | €3.21/mo | €1.50* | €1.71+ | 35%+ |
+
+*Annual users typically reduce AI usage after 3-6 months as puppy matures, lowering effective AI cost.
+
+**Pricing psychology:**
+- Weekly serves as anchor (makes monthly look smart)
+- Monthly is the default choice for most users
+- Annual offers best value and locks in retention (34% off monthly)
 
 ## Debug Controls
 
