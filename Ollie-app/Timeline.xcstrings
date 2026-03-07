@@ -1086,6 +1086,88 @@
         }
       }
     },
+    "After waking: %@ at %@": {
+      "comment": "Used for walks - shows walk name and scheduled time after waking",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nach dem Aufwachen: %1$@ um %2$@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Después de despertar: %1$@ a las %2$@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Après le réveil : %1$@ à %2$@"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dopo il risveglio: %1$@ alle %2$@"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Na het wakker worden: %1$@ om %2$@"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Efter uppvaknande: %1$@ kl %2$@"
+          }
+        }
+      }
+    },
+    "After waking: meal (%@) at %@": {
+      "comment": "Shows meal name and scheduled time after waking - clarifies that the label is a meal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nach dem Aufwachen: Mahlzeit (%1$@) um %2$@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Después de despertar: comida (%1$@) a las %2$@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Après le réveil : repas (%1$@) à %2$@"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dopo il risveglio: pasto (%1$@) alle %2$@"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Na het wakker worden: maaltijd (%1$@) om %2$@"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Efter uppvaknande: måltid (%1$@) kl %2$@"
+          }
+        }
+      }
+    },
     "All good": {
       "extractionState": "stale",
       "localizations": {

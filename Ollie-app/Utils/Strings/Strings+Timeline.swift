@@ -95,7 +95,7 @@ extension Strings {
             String(localized: "After waking: \(label) at \(time)", table: table)
         }
         static func afterWakeTimeForMealWithDetails(label: String, time: String) -> String {
-            String(localized: "After waking: \(label) at \(time)", table: table)
+            String(localized: "After waking: meal (\(label)) at \(time)", table: table)
         }
     }
 
