@@ -93,6 +93,12 @@ extension Strings {
             String(localized: "How big will \(name) get?", table: table)
         }
 
+        // Gender step
+        static func genderQuestion(name: String) -> String {
+            String(localized: "Is \(name) a boy or a girl?", table: table)
+        }
+        static let genderSubtitle = String(localized: "This helps personalize messages. You can skip if you prefer.", table: table)
+
         static let readyToStart = String(localized: "Ready to begin!", table: table)
         static let confirmSubtitle = String(localized: "Great start. You can edit these details later in Settings.", table: table)
 

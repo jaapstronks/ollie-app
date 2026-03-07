@@ -30,6 +30,7 @@ struct OnboardingView: View {
     @State private var isExpecting: Bool = false  // true = dog hasn't arrived yet
     @State private var homeDate: Date = Date()
     @State private var sizeCategory: PuppyProfile.SizeCategory = .large
+    @State private var gender: PuppyProfile.Gender = .unspecified
     @State private var profilePhoto: UIImage? = nil
 
     // Focus state for keyboard management
@@ -63,33 +64,33 @@ struct OnboardingView: View {
 
     /// Total steps shown in progress bar (excludes welcome, size step when not needed, photo step when expecting, and permission steps)
     /// Welcome step (0) doesn't show progress, permission steps don't show progress
-    /// Steps: Name(1), Breed(2), Birth(3), Status(4), Home(5), [Size(6)], [Photo(7)], Confirm(8)
-    /// Permission steps (9, 10) are not counted in progress bar
+    /// Steps: Name(1), Breed(2), Birth(3), Gender(4), Status(5), Home(6), [Size(7)], [Photo(8)], Confirm(9)
+    /// Permission steps (10, 11) are not counted in progress bar
     private var totalSteps: Int {
-        var count = 6  // Base: Name, Breed, Birth, Status, Home, Confirm
+        var count = 7  // Base: Name, Breed, Birth, Gender, Status, Home, Confirm
         if shouldShowSizeStep { count += 1 }
         if shouldShowPhotoStep { count += 1 }
         return count
     }
 
     /// Maps the visual step (for progress indicator) to actual step
-    /// Welcome step (0) and permission steps (9, 10) are not shown in progress bar
+    /// Welcome step (0) and permission steps (10, 11, 12) are not shown in progress bar
     private var visualStep: Int {
-        if currentStep == 0 || currentStep >= 9 {
+        if currentStep == 0 || currentStep >= 10 {
             return -1 // Not shown in progress bar
         }
         var adjustedStep = currentStep - 1
         // Adjust for skipped steps
         var skippedSteps = 0
-        if !shouldShowSizeStep && currentStep >= 6 { skippedSteps += 1 }
-        if !shouldShowPhotoStep && currentStep >= 7 { skippedSteps += 1 }
+        if !shouldShowSizeStep && currentStep >= 7 { skippedSteps += 1 }
+        if !shouldShowPhotoStep && currentStep >= 8 { skippedSteps += 1 }
         adjustedStep -= skippedSteps
         return adjustedStep
     }
 
     /// Whether to show progress indicator (hidden on welcome step and permission steps)
     private var showProgress: Bool {
-        currentStep > 0 && currentStep < 9
+        currentStep > 0 && currentStep < 10
     }
 
     /// Whether to skip permission steps (skip when adding profile, already granted)
@@ -122,7 +123,7 @@ struct OnboardingView: View {
             }
 
             // Content - always include all steps to keep TabView structure stable
-            // Steps: Welcome(0), Name(1), Breed(2), Birth(3), Status(4), Home(5), Size(6), Photo(7), Confirm(8), Notifications(9), Location(10), Trial(11)
+            // Steps: Welcome(0), Name(1), Breed(2), Birth(3), Gender(4), Status(5), Home(6), Size(7), Photo(8), Confirm(9), Notifications(10), Location(11), Trial(12)
             TabView(selection: $currentStep) {
                 OnboardingWelcomeStep(
                     onNext: { navigateToStep(1) }
@@ -152,12 +153,19 @@ struct OnboardingView: View {
                     onBack: { navigateToStep(2) }
                 ).tag(3)
 
-                OnboardingStatusStep(
+                OnboardingGenderStep(
                     puppyName: name,
-                    isExpecting: $isExpecting,
+                    gender: $gender,
                     onNext: { navigateToStep(5) },
                     onBack: { navigateToStep(3) }
                 ).tag(4)
+
+                OnboardingStatusStep(
+                    puppyName: name,
+                    isExpecting: $isExpecting,
+                    onNext: { navigateToStep(6) },
+                    onBack: { navigateToStep(4) }
+                ).tag(5)
 
                 OnboardingHomeStep(
                     puppyName: name,
@@ -165,34 +173,34 @@ struct OnboardingView: View {
                     minDate: birthDate,
                     isExpecting: isExpecting,
                     onNext: {
-                        // Navigate: Size(6) if custom breed, else Photo(7) if not expecting, else Confirm(8)
+                        // Navigate: Size(7) if custom breed, else Photo(8) if not expecting, else Confirm(9)
                         if shouldShowSizeStep {
-                            navigateToStep(6)
-                        } else if shouldShowPhotoStep {
                             navigateToStep(7)
-                        } else {
+                        } else if shouldShowPhotoStep {
                             navigateToStep(8)
+                        } else {
+                            navigateToStep(9)
                         }
                     },
-                    onBack: { navigateToStep(4) }
-                ).tag(5)
+                    onBack: { navigateToStep(5) }
+                ).tag(6)
 
                 OnboardingSizeStep(
                     puppyName: name,
                     sizeCategory: $sizeCategory,
                     onNext: {
-                        // Navigate: Photo(7) if not expecting, else Confirm(8)
-                        navigateToStep(shouldShowPhotoStep ? 7 : 8)
+                        // Navigate: Photo(8) if not expecting, else Confirm(9)
+                        navigateToStep(shouldShowPhotoStep ? 8 : 9)
                     },
-                    onBack: { navigateToStep(5) }
-                ).tag(6)
+                    onBack: { navigateToStep(6) }
+                ).tag(7)
 
                 OnboardingPhotoStep(
                     puppyName: name,
                     selectedImage: $profilePhoto,
-                    onNext: { navigateToStep(8) },
-                    onBack: { navigateToStep(shouldShowSizeStep ? 6 : 5) }
-                ).tag(7)
+                    onNext: { navigateToStep(9) },
+                    onBack: { navigateToStep(shouldShowSizeStep ? 7 : 6) }
+                ).tag(8)
 
                 OnboardingConfirmStep(
                     name: name,
@@ -200,27 +208,28 @@ struct OnboardingView: View {
                     birthDate: birthDate,
                     homeDate: homeDate,
                     sizeCategory: sizeCategory,
+                    gender: gender,
                     profilePhoto: profilePhoto,
                     onSave: saveProfile,
                     onBack: {
-                        // Navigate back: Photo(7) if shown, else Size(6) if shown, else Home(5)
+                        // Navigate back: Photo(8) if shown, else Size(7) if shown, else Home(6)
                         if shouldShowPhotoStep {
-                            navigateToStep(7)
+                            navigateToStep(8)
                         } else if shouldShowSizeStep {
-                            navigateToStep(6)
+                            navigateToStep(7)
                         } else {
-                            navigateToStep(5)
+                            navigateToStep(6)
                         }
                     }
-                ).tag(8)
-
-                OnboardingNotificationsStep(
-                    onNext: { navigateToStep(10) }
                 ).tag(9)
 
-                OnboardingLocationStep(
-                    onComplete: { navigateToStep(11) }
+                OnboardingNotificationsStep(
+                    onNext: { navigateToStep(11) }
                 ).tag(10)
+
+                OnboardingLocationStep(
+                    onComplete: { navigateToStep(12) }
+                ).tag(11)
 
                 OnboardingTrialStartStep(
                     puppyName: name,
@@ -232,7 +241,7 @@ struct OnboardingView: View {
                         TrialManager.shared.declineTrial()
                         completeOnboarding()
                     }
-                ).tag(11)
+                ).tag(12)
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
             .animation(reduceMotion ? nil : .easeInOut, value: currentStep)
@@ -300,7 +309,8 @@ struct OnboardingView: View {
             name: name,
             birthDate: birthDate,
             homeDate: homeDate,
-            size: sizeCategory
+            size: sizeCategory,
+            gender: gender
         )
 
         // Set breed info
@@ -346,7 +356,7 @@ struct OnboardingView: View {
 
             // Navigate to permission screens after saving profile
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                navigateToStep(9)
+                navigateToStep(10)
             }
         }
     }

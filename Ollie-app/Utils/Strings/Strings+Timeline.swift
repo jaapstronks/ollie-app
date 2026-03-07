@@ -453,7 +453,12 @@ extension Strings {
         /// Morning overnight sleep - puppy hasn't peed since last night
         static let pottyFirstThingMorning = String(localized: "Hasn't peed since last night", table: table)
         static let pottyUrgentWhileSleeping = String(localized: "Potty needed soon", table: table)
-        static let whenWakesTakeOutside = String(localized: "When she wakes, take her outside", table: table)
+        /// Dynamic version with pronouns: "When he/she/they wakes, take him/her/them outside"
+        static func whenWakesTakeOutside(subject: String, object: String) -> String {
+            String(localized: "When \(subject) wakes, take \(object) outside", table: table)
+        }
+        /// Legacy fallback using neutral pronouns
+        static let whenWakesTakeOutsideNeutral = String(localized: "When they wake, take them outside", table: table)
         static let wakeUp = String(localized: "Woke up", table: table)
         static let sleepingPottyLabel = String(localized: "Sleeping", table: table)
 
@@ -462,7 +467,16 @@ extension Strings {
         static let alsoTimeForMeal = String(localized: "Also time for a meal", table: table)
 
         // Post-wake card
-        static let awakeTimePotty = String(localized: "She's awake — time for potty!", table: table)
+        /// Dynamic version with pronouns: "He's/She's/They're awake — time for potty!"
+        static func awakeTimePotty(subject: String) -> String {
+            // Capitalize first letter of subject for start of sentence
+            let capitalizedSubject = subject.prefix(1).uppercased() + subject.dropFirst()
+            // Use appropriate verb form (they're vs he's/she's)
+            let verb = subject.lowercased() == "they" ? "'re" : "'s"
+            return String(localized: "\(capitalizedSubject)\(verb) awake — time for potty!", table: table)
+        }
+        /// Legacy fallback using neutral pronouns
+        static let awakeTimePottyNeutral = String(localized: "They're awake — time for potty!", table: table)
         static func pottyWasOverdue(minutes: Int) -> String {
             String(localized: "Potty was \(minutes) min overdue", table: table)
         }

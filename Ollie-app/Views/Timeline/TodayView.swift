@@ -392,6 +392,20 @@ struct TodayView: View {
                 .animatedAppear(delay: 0.035)
             }
 
+            // Weekly walk summary card (teenage+ dogs only)
+            // Shows walk stats when puppy phase is over to keep app relevant
+            if !combinedState.shouldShowFirstRunCard,
+               let profile = viewModel.profileStore.profile,
+               profile.lifecyclePhase != .puppy,
+               viewModel.cachedWeekWalkStats.count > 0 {
+                WeeklyWalkSummaryCard(
+                    weekStats: viewModel.cachedWeekStats,
+                    totalWalks: viewModel.cachedWeekWalkStats.count,
+                    totalMinutes: viewModel.cachedWeekWalkStats.totalMinutes
+                )
+                .animatedAppear(delay: 0.04)
+            }
+
             // Stale logging banner (replaces misleading status cards)
             if case .staleLogging = combinedState {
                 StaleLoggingBanner(
@@ -405,6 +419,7 @@ struct TodayView: View {
                     wokeAt: wokeAt,
                     minutesSinceWake: minutesSinceWake,
                     pottyWasOverdueBy: overdueBy,
+                    subjectPronoun: viewModel.profileStore.profile?.subjectPronoun ?? "they",
                     onLogPotty: { viewModel.sheetCoordinator.presentSheet(.potty(preselected: .plassen)) }
                 )
             }
@@ -435,6 +450,8 @@ struct TodayView: View {
                     pottyUrgency: urgency,
                     minutesOverdue: overdue,
                     pendingActionable: pendingActionable,
+                    subjectPronoun: viewModel.profileStore.profile?.subjectPronoun ?? "they",
+                    objectPronoun: viewModel.profileStore.profile?.objectPronoun ?? "them",
                     onWakeUp: {
                         viewModel.sheetCoordinator.presentSheet(.endSleep(since))
                     }

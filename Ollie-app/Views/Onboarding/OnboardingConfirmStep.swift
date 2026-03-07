@@ -16,6 +16,7 @@ struct OnboardingConfirmStep: View {
     let birthDate: Date
     let homeDate: Date
     let sizeCategory: PuppyProfile.SizeCategory
+    let gender: PuppyProfile.Gender
     let profilePhoto: UIImage?
     let onSave: () -> Void
     let onBack: () -> Void
@@ -76,6 +77,10 @@ struct OnboardingConfirmStep: View {
                 if !breedToSave.isEmpty {
                     Divider().padding(.leading, 16)
                     ConfirmProfileRow(label: Strings.Settings.breed, value: breedToSave)
+                }
+                if gender != .unspecified {
+                    Divider().padding(.leading, 16)
+                    ConfirmProfileRow(label: Strings.Settings.gender, value: gender.label)
                 }
                 Divider().padding(.leading, 16)
                 ConfirmProfileRow(label: Strings.Onboarding.born, value: formatOnboardingDate(birthDate))

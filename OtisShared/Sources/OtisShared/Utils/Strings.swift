@@ -58,6 +58,51 @@ public enum Strings {
         public static var tagline: String { String(localized: "Puppyhood is chaos. Otis brings the calm.", bundle: Strings.bundle) }
     }
 
+    // MARK: - Lifecycle
+    /// Strings for lifecycle-aware terminology
+    /// Use these to avoid hardcoding "puppy" throughout the app
+    public enum Lifecycle {
+        // Phase labels
+        public static var puppy: String { String(localized: "Puppy", bundle: Strings.bundle) }
+        public static var teenage: String { String(localized: "Adolescent", bundle: Strings.bundle) }
+        public static var adult: String { String(localized: "Adult", bundle: Strings.bundle) }
+        public static var senior: String { String(localized: "Senior", bundle: Strings.bundle) }
+
+        // Generic terms based on phase
+        public enum Terms {
+            /// "puppy" - for young dogs
+            public static var puppy: String { String(localized: "puppy", bundle: Strings.bundle) }
+            /// "dog" - for older dogs
+            public static var dog: String { String(localized: "dog", bundle: Strings.bundle) }
+            /// "puppy's" - possessive for young dogs
+            public static var puppyPossessive: String { String(localized: "puppy's", bundle: Strings.bundle) }
+            /// "dog's" - possessive for older dogs
+            public static var dogPossessive: String { String(localized: "dog's", bundle: Strings.bundle) }
+        }
+
+        // Common phrases that need lifecycle awareness
+        public enum Phrases {
+            /// "Your puppy" or "Your dog" based on lifecycle
+            public static func yourPet(isPuppy: Bool) -> String {
+                isPuppy
+                    ? String(localized: "Your puppy", bundle: Strings.bundle)
+                    : String(localized: "Your dog", bundle: Strings.bundle)
+            }
+
+            /// "your puppy's" or "your dog's" based on lifecycle
+            public static func yourPetPossessive(isPuppy: Bool) -> String {
+                isPuppy
+                    ? String(localized: "your puppy's", bundle: Strings.bundle)
+                    : String(localized: "your dog's", bundle: Strings.bundle)
+            }
+
+            /// "{Name}'s day" - always uses the dog's actual name
+            public static func petsDay(name: String) -> String {
+                String(localized: "\(name)'s day", bundle: Strings.bundle)
+            }
+        }
+    }
+
     // MARK: - Tabs
     public enum Tabs {
         public static var journal: String { String(localized: "Journal", bundle: Strings.bundle) }
@@ -118,6 +163,37 @@ public enum Strings {
         public static var extraLargeExamples: String { String(localized: "Bernese Mountain Dog, Great Dane, Saint Bernard", bundle: Strings.bundle) }
     }
 
+    // MARK: - Gender
+    public enum Gender {
+        public static var male: String { String(localized: "Male", bundle: Strings.bundle) }
+        public static var female: String { String(localized: "Female", bundle: Strings.bundle) }
+        public static var preferNotToSay: String { String(localized: "Prefer not to say", bundle: Strings.bundle) }
+    }
+
+    // MARK: - Pronouns
+    /// Pronouns for referring to dogs based on their gender setting
+    public enum Pronouns {
+        // Subject pronouns
+        public static var he: String { String(localized: "he", bundle: Strings.bundle) }
+        public static var she: String { String(localized: "she", bundle: Strings.bundle) }
+        public static var they: String { String(localized: "they", bundle: Strings.bundle) }
+
+        // Object pronouns
+        public static var him: String { String(localized: "him", bundle: Strings.bundle) }
+        public static var her: String { String(localized: "her", bundle: Strings.bundle) }
+        public static var them: String { String(localized: "them", bundle: Strings.bundle) }
+
+        // Possessive pronouns
+        public static var his: String { String(localized: "his", bundle: Strings.bundle) }
+        public static var hers: String { String(localized: "her", bundle: Strings.bundle, comment: "Possessive pronoun for female dogs") }
+        public static var their: String { String(localized: "their", bundle: Strings.bundle) }
+
+        // Reflexive pronouns
+        public static var himself: String { String(localized: "himself", bundle: Strings.bundle) }
+        public static var herself: String { String(localized: "herself", bundle: Strings.bundle) }
+        public static var themselves: String { String(localized: "themselves", bundle: Strings.bundle) }
+    }
+
     // MARK: - Meals
     public enum Meals {
         public static var title: String { String(localized: "Edit meals", bundle: Strings.bundle) }
@@ -172,7 +248,11 @@ public enum Strings {
         public static var shareWithPartner: String { String(localized: "Share with partner", bundle: Strings.bundle) }
         public static var inviteAnother: String { String(localized: "Invite another person", bundle: Strings.bundle) }
         public static var sharing: String { String(localized: "Sharing", bundle: Strings.bundle) }
-        public static var sharingDescription: String { String(localized: "Share your puppy's data with your partner so you can both track and log events.", bundle: Strings.bundle) }
+        public static func sharingDescription(name: String) -> String {
+            String(localized: "Share \(name)'s data with your partner so you can both track and log events.", bundle: Strings.bundle)
+        }
+        /// Legacy static version
+        public static var sharingDescription: String { String(localized: "Share data with your partner so you can both track and log events.", bundle: Strings.bundle) }
         public static var stopSharingConfirm: String { String(localized: "Are you sure you want to stop sharing? The other person will lose access.", bundle: Strings.bundle) }
         public static func lastSynced(time: String) -> String {
             String(localized: "Synced \(time)", bundle: Strings.bundle)
@@ -382,7 +462,11 @@ public enum Strings {
         public static var overdue: String { String(localized: "Overdue", bundle: Strings.bundle) }
         public static var scheduled: String { String(localized: "scheduled", bundle: Strings.bundle) }
         public static var noMedications: String { String(localized: "No medications", bundle: Strings.bundle) }
-        public static var noMedicationsHint: String { String(localized: "Tap to add your puppy's medications", bundle: Strings.bundle) }
+        public static func noMedicationsHint(name: String) -> String {
+            String(localized: "Tap to add \(name)'s medications", bundle: Strings.bundle)
+        }
+        /// Legacy static version
+        public static var noMedicationsHint: String { String(localized: "Tap to add medications", bundle: Strings.bundle) }
         public static var active: String { String(localized: "Active", bundle: Strings.bundle) }
         public static var paused: String { String(localized: "Paused", bundle: Strings.bundle) }
         public static var icon: String { String(localized: "Icon", bundle: Strings.bundle) }
@@ -461,6 +545,12 @@ public enum Strings {
         }
         public static var weeks: String { String(localized: "Weeks", bundle: Strings.bundle) }
         public static var kg: String { String(localized: "kg", bundle: Strings.bundle) }
+        public static func yourPet(isPuppy: Bool) -> String {
+            isPuppy
+                ? String(localized: "Your puppy", bundle: Strings.bundle)
+                : String(localized: "Your dog", bundle: Strings.bundle)
+        }
+        /// Legacy static version for backward compatibility
         public static var yourPuppy: String { String(localized: "Your puppy", bundle: Strings.bundle) }
         public static var reference: String { String(localized: "Reference", bundle: Strings.bundle) }
         public static var done: String { String(localized: "Done", bundle: Strings.bundle) }
@@ -734,6 +824,153 @@ public enum Strings {
         }
         public static func intervalSummary(_ minutes: Int) -> String {
             String(localized: "~\(minutes) min interval", bundle: Strings.bundle)
+        }
+    }
+
+    // MARK: - Walk Summary (Weekly)
+    public enum WalkSummary {
+        /// Card title
+        public static var title: String { String(localized: "This Week", bundle: Strings.bundle) }
+
+        /// Minutes duration (e.g., "45 min")
+        public static func minutes(_ count: Int) -> String {
+            String(localized: "\(count) min", bundle: Strings.bundle)
+        }
+
+        /// Hours duration (e.g., "3.2 hours")
+        public static func hours(_ count: Double) -> String {
+            let formatted = count.truncatingRemainder(dividingBy: 1) == 0
+                ? String(format: "%.0f", count)
+                : String(format: "%.1f", count)
+            return String(localized: "\(formatted) hours", bundle: Strings.bundle)
+        }
+
+        /// Days with walks indicator (e.g., "5/7 days")
+        public static func daysProgress(days: Int) -> String {
+            String(localized: "\(days)/7 days", bundle: Strings.bundle)
+        }
+
+        /// Accessibility label for the card
+        public static func accessibilityLabel(walks: Int, days: Int) -> String {
+            String(localized: "\(walks) walks this week over \(days) days", bundle: Strings.bundle)
+        }
+    }
+
+    // MARK: - Behavior Incidents
+    public enum Behavior {
+        // Sheet titles
+        public static var title: String { String(localized: "Log Behavior", bundle: Strings.bundle) }
+        public static var logIncident: String { String(localized: "Log Incident", bundle: Strings.bundle) }
+        public static var whatHappened: String { String(localized: "What happened?", bundle: Strings.bundle) }
+        public static var selectCategory: String { String(localized: "Select category", bundle: Strings.bundle) }
+        public static var trigger: String { String(localized: "Trigger", bundle: Strings.bundle) }
+        public static var triggerPlaceholder: String { String(localized: "What triggered this?", bundle: Strings.bundle) }
+        public static var intensity: String { String(localized: "Intensity", bundle: Strings.bundle) }
+        public static var howIntense: String { String(localized: "How intense was it?", bundle: Strings.bundle) }
+        public static var outcome: String { String(localized: "Outcome", bundle: Strings.bundle) }
+        public static var whatHappenedAfter: String { String(localized: "What happened after?", bundle: Strings.bundle) }
+        public static var context: String { String(localized: "Context", bundle: Strings.bundle) }
+        public static var whereDidItHappen: String { String(localized: "Where did it happen?", bundle: Strings.bundle) }
+        public static var notes: String { String(localized: "Notes", bundle: Strings.bundle) }
+        public static var notesPlaceholder: String { String(localized: "Any other details...", bundle: Strings.bundle) }
+
+        // Category labels
+        public static var categoryReactivity: String { String(localized: "Reactivity", bundle: Strings.bundle) }
+        public static var categoryAnxiety: String { String(localized: "Anxiety", bundle: Strings.bundle) }
+        public static var categoryDestructive: String { String(localized: "Destructive", bundle: Strings.bundle) }
+        public static var categoryBarking: String { String(localized: "Barking", bundle: Strings.bundle) }
+        public static var categoryGuarding: String { String(localized: "Guarding", bundle: Strings.bundle) }
+        public static var categoryJumping: String { String(localized: "Jumping", bundle: Strings.bundle) }
+        public static var categoryPulling: String { String(localized: "Pulling", bundle: Strings.bundle) }
+        public static var categoryRecall: String { String(localized: "Recall Issues", bundle: Strings.bundle) }
+        public static var categoryMouthing: String { String(localized: "Mouthing", bundle: Strings.bundle) }
+        public static var categoryFearful: String { String(localized: "Fearful", bundle: Strings.bundle) }
+
+        // Category descriptions
+        public static var descReactivity: String { String(localized: "Lunging, barking at triggers", bundle: Strings.bundle) }
+        public static var descAnxiety: String { String(localized: "Panting, pacing, whining", bundle: Strings.bundle) }
+        public static var descDestructive: String { String(localized: "Chewing, digging inappropriately", bundle: Strings.bundle) }
+        public static var descBarking: String { String(localized: "Excessive vocalization", bundle: Strings.bundle) }
+        public static var descGuarding: String { String(localized: "Protecting resources aggressively", bundle: Strings.bundle) }
+        public static var descJumping: String { String(localized: "Jumping on people", bundle: Strings.bundle) }
+        public static var descPulling: String { String(localized: "Pulling hard on leash", bundle: Strings.bundle) }
+        public static var descRecall: String { String(localized: "Not coming when called", bundle: Strings.bundle) }
+        public static var descMouthing: String { String(localized: "Inappropriate mouthing or nipping", bundle: Strings.bundle) }
+        public static var descFearful: String { String(localized: "Cowering, hiding, trembling", bundle: Strings.bundle) }
+
+        // Intensity levels
+        public static var intensityMild: String { String(localized: "Mild", bundle: Strings.bundle) }
+        public static var intensityLow: String { String(localized: "Low", bundle: Strings.bundle) }
+        public static var intensityModerate: String { String(localized: "Moderate", bundle: Strings.bundle) }
+        public static var intensityHigh: String { String(localized: "High", bundle: Strings.bundle) }
+        public static var intensitySevere: String { String(localized: "Severe", bundle: Strings.bundle) }
+
+        // Intensity descriptions
+        public static var intensityMildDesc: String { String(localized: "Brief, easily redirected", bundle: Strings.bundle) }
+        public static var intensityLowDesc: String { String(localized: "Noticeable but manageable", bundle: Strings.bundle) }
+        public static var intensityModerateDesc: String { String(localized: "Required intervention", bundle: Strings.bundle) }
+        public static var intensityHighDesc: String { String(localized: "Difficult to manage", bundle: Strings.bundle) }
+        public static var intensitySevereDesc: String { String(localized: "Extreme, concerning", bundle: Strings.bundle) }
+
+        // Outcome labels
+        public static var outcomeRedirected: String { String(localized: "Redirected successfully", bundle: Strings.bundle) }
+        public static var outcomeEscalated: String { String(localized: "Escalated", bundle: Strings.bundle) }
+        public static var outcomeSelfResolved: String { String(localized: "Calmed on their own", bundle: Strings.bundle) }
+        public static var outcomeRemoved: String { String(localized: "Had to remove from situation", bundle: Strings.bundle) }
+        public static var outcomeManaged: String { String(localized: "Managed but challenging", bundle: Strings.bundle) }
+
+        // Context labels
+        public static var contextHome: String { String(localized: "Home", bundle: Strings.bundle) }
+        public static var contextWalk: String { String(localized: "On a walk", bundle: Strings.bundle) }
+        public static var contextPark: String { String(localized: "At the park", bundle: Strings.bundle) }
+        public static var contextVet: String { String(localized: "Vet clinic", bundle: Strings.bundle) }
+        public static var contextCar: String { String(localized: "In the car", bundle: Strings.bundle) }
+        public static var contextPublic: String { String(localized: "Public place", bundle: Strings.bundle) }
+        public static var contextOther: String { String(localized: "Other", bundle: Strings.bundle) }
+
+        // Common triggers
+        public static var triggerOtherDogs: String { String(localized: "Other dogs", bundle: Strings.bundle) }
+        public static var triggerStrangers: String { String(localized: "Strangers", bundle: Strings.bundle) }
+        public static var triggerBicycles: String { String(localized: "Bicycles", bundle: Strings.bundle) }
+        public static var triggerVehicles: String { String(localized: "Vehicles", bundle: Strings.bundle) }
+        public static var triggerChildren: String { String(localized: "Children", bundle: Strings.bundle) }
+        public static var triggerAlone: String { String(localized: "Being alone", bundle: Strings.bundle) }
+        public static var triggerLoudNoises: String { String(localized: "Loud noises", bundle: Strings.bundle) }
+        public static var triggerNewEnvironment: String { String(localized: "New environment", bundle: Strings.bundle) }
+        public static var triggerCarRides: String { String(localized: "Car rides", bundle: Strings.bundle) }
+        public static var triggerVetVisit: String { String(localized: "Vet visit", bundle: Strings.bundle) }
+        public static var triggerBoredom: String { String(localized: "Boredom", bundle: Strings.bundle) }
+        public static var triggerTeething: String { String(localized: "Teething", bundle: Strings.bundle) }
+        public static var triggerExcess: String { String(localized: "Excess energy", bundle: Strings.bundle) }
+        public static var triggerDoorbell: String { String(localized: "Doorbell", bundle: Strings.bundle) }
+        public static var triggerPassersby: String { String(localized: "Passersby", bundle: Strings.bundle) }
+        public static var triggerAttentionSeeking: String { String(localized: "Attention seeking", bundle: Strings.bundle) }
+        public static var triggerFood: String { String(localized: "Food", bundle: Strings.bundle) }
+        public static var triggerToys: String { String(localized: "Toys", bundle: Strings.bundle) }
+        public static var triggerBed: String { String(localized: "Bed/resting spot", bundle: Strings.bundle) }
+        public static var triggerOwner: String { String(localized: "Owner", bundle: Strings.bundle) }
+        public static var triggerHighValueTreats: String { String(localized: "High-value treats", bundle: Strings.bundle) }
+        public static var triggerGreeting: String { String(localized: "Greeting people", bundle: Strings.bundle) }
+        public static var triggerExcitement: String { String(localized: "Excitement", bundle: Strings.bundle) }
+        public static var triggerScents: String { String(localized: "Interesting scents", bundle: Strings.bundle) }
+        public static var triggerSquirrels: String { String(localized: "Squirrels/wildlife", bundle: Strings.bundle) }
+        public static var triggerDistractions: String { String(localized: "Distractions", bundle: Strings.bundle) }
+        public static var triggerPlay: String { String(localized: "During play", bundle: Strings.bundle) }
+        public static var triggerOverstimulation: String { String(localized: "Overstimulation", bundle: Strings.bundle) }
+        public static var triggerObjects: String { String(localized: "Unfamiliar objects", bundle: Strings.bundle) }
+
+        // Trends view
+        public static var trends: String { String(localized: "Behavior Trends", bundle: Strings.bundle) }
+        public static var noIncidentsYet: String { String(localized: "No behavior incidents logged yet", bundle: Strings.bundle) }
+        public static var trackPatterns: String { String(localized: "Track incidents to identify patterns", bundle: Strings.bundle) }
+        public static var recentIncidents: String { String(localized: "Recent Incidents", bundle: Strings.bundle) }
+        public static var thisWeek: String { String(localized: "This week", bundle: Strings.bundle) }
+        public static var lastWeek: String { String(localized: "Last week", bundle: Strings.bundle) }
+        public static func incidentCount(_ count: Int) -> String {
+            if count == 1 {
+                return String(localized: "1 incident", bundle: Strings.bundle)
+            }
+            return String(localized: "\(count) incidents", bundle: Strings.bundle)
         }
     }
 }

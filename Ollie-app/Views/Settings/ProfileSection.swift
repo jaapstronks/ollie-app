@@ -17,6 +17,16 @@ struct ProfileSection: View {
     @State private var showingNameEditor = false
     @State private var editedName = ""
 
+    /// Binding for gender picker that updates the profile
+    private var genderBinding: Binding<PuppyProfile.Gender> {
+        Binding(
+            get: { profile.gender },
+            set: { newGender in
+                profileStore.updateGender(newGender, for: profileId)
+            }
+        )
+    }
+
     var body: some View {
         Section(Strings.Settings.profile) {
             // Profile photo row
@@ -58,6 +68,12 @@ struct ProfileSection: View {
                 Spacer()
                 Text(profile.sizeCategory.label)
                     .foregroundColor(.secondary)
+            }
+
+            Picker(Strings.Settings.gender, selection: genderBinding) {
+                ForEach(PuppyProfile.Gender.allCases) { gender in
+                    Text(gender.label).tag(gender)
+                }
             }
         }
         .alert(Strings.Settings.changeName, isPresented: $showingNameEditor) {

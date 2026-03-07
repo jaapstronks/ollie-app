@@ -28,7 +28,7 @@ protocol AIContextComponent: Codable, Sendable {
 /// Uses pseudonymized name for privacy.
 struct DogIdentityContext: AIContextComponent {
     static let componentKey = "dog_identity"
-    static let estimatedTokens = 50
+    static let estimatedTokens = 80
 
     /// Pseudonymized identifier (first letter + last letter of name)
     let pseudonym: String
@@ -48,8 +48,33 @@ struct DogIdentityContext: AIContextComponent {
     /// Breed group for breed-specific considerations (nil if unknown)
     let breedGroup: String?
 
-    /// Life stage for age-appropriate recommendations
+    /// Lifecycle phase for app personality/terminology (puppy, teenage, adult, senior)
+    /// Use this to determine overall approach and tone.
+    let lifecyclePhase: String
+
+    /// Whether to use "puppy" or "dog" in responses.
+    /// Only use "puppy" when this is true.
+    let usesPuppyTerminology: Bool
+
+    /// Life stage for fine-grained age-appropriate recommendations
+    /// (neonatal, early_puppy, puppy, adolescent, young_adult, adult, senior)
     let lifeStage: String
+
+    /// Pronouns to use when referring to this dog.
+    /// Use these instead of "it" for a more personal touch.
+    let pronouns: PronounSet
+
+    /// Pronoun set for referring to the dog
+    struct PronounSet: Codable, Sendable {
+        /// Subject pronoun: he/she/they
+        let subject: String
+        /// Object pronoun: him/her/them
+        let object: String
+        /// Possessive pronoun: his/her/their
+        let possessive: String
+        /// Reflexive pronoun: himself/herself/themselves
+        let reflexive: String
+    }
 
     init(profile: PuppyProfile) {
         // Pseudonymize: first + last letter (e.g., "Luna" -> "La")
@@ -64,7 +89,11 @@ struct DogIdentityContext: AIContextComponent {
         self.sizeCategory = profile.sizeCategory.rawValue
         self.breedGroup = profile.breed // TODO: Map to breed group
 
-        // Determine life stage
+        // Lifecycle phase from profile (breed-size adjusted)
+        self.lifecyclePhase = profile.lifecyclePhase.rawValue
+        self.usesPuppyTerminology = profile.lifecyclePhase.usesPuppyTerminology
+
+        // Determine fine-grained life stage for detailed recommendations
         if profile.ageInWeeks < 8 {
             self.lifeStage = "neonatal"
         } else if profile.ageInWeeks < 12 {
@@ -73,11 +102,21 @@ struct DogIdentityContext: AIContextComponent {
             self.lifeStage = "puppy"
         } else if profile.ageInMonths < 12 {
             self.lifeStage = "adolescent"
-        } else if profile.ageInMonths < 24 {
+        } else if profile.ageInMonths < 18 {
             self.lifeStage = "young_adult"
+        } else if profile.lifecyclePhase == .senior {
+            self.lifeStage = "senior"
         } else {
             self.lifeStage = "adult"
         }
+
+        // Set pronouns based on gender
+        self.pronouns = PronounSet(
+            subject: profile.gender.subjectPronoun,
+            object: profile.gender.objectPronoun,
+            possessive: profile.gender.possessivePronoun,
+            reflexive: profile.gender.reflexivePronoun
+        )
     }
 }
 

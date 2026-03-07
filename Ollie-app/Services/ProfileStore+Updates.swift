@@ -88,6 +88,13 @@ extension ProfileStore {
         saveProfile(currentProfile)
     }
 
+    /// Update the dog's gender
+    func updateGender(_ gender: PuppyProfile.Gender, for profileId: UUID? = nil) {
+        guard var currentProfile = profileToUpdate(for: profileId) else { return }
+        currentProfile.gender = gender
+        saveProfile(currentProfile)
+    }
+
     /// Update the breed selection
     func updateBreed(name: String?, breedId: Int?, sizeCategory: PuppyProfile.SizeCategory?, for profileId: UUID? = nil) {
         guard var currentProfile = profileToUpdate(for: profileId) else { return }

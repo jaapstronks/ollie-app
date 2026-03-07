@@ -16,6 +16,10 @@ struct CombinedSleepPottyCard: View {
     let pottyUrgency: PottyUrgency
     let minutesOverdue: Int?
     let pendingActionable: ActionableItem?
+    /// Subject pronoun for the dog (he/she/they)
+    let subjectPronoun: String
+    /// Object pronoun for the dog (him/her/them)
+    let objectPronoun: String
     let onWakeUp: () -> Void
 
     init(
@@ -24,6 +28,8 @@ struct CombinedSleepPottyCard: View {
         pottyUrgency: PottyUrgency,
         minutesOverdue: Int?,
         pendingActionable: ActionableItem? = nil,
+        subjectPronoun: String = "they",
+        objectPronoun: String = "them",
         onWakeUp: @escaping () -> Void
     ) {
         self.sleepingSince = sleepingSince
@@ -31,6 +37,8 @@ struct CombinedSleepPottyCard: View {
         self.pottyUrgency = pottyUrgency
         self.minutesOverdue = minutesOverdue
         self.pendingActionable = pendingActionable
+        self.subjectPronoun = subjectPronoun
+        self.objectPronoun = objectPronoun
         self.onWakeUp = onWakeUp
     }
 
@@ -97,7 +105,7 @@ struct CombinedSleepPottyCard: View {
                     .foregroundStyle(.orange)
 
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(Strings.CombinedStatus.whenWakesTakeOutside)
+                    Text(Strings.CombinedStatus.whenWakesTakeOutside(subject: subjectPronoun, object: objectPronoun))
                         .font(.subheadline)
                         .fontWeight(.medium)
                         .foregroundStyle(.primary)

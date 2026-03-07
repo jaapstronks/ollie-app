@@ -29,6 +29,7 @@ extension Strings {
         static let name = String(localized: "Name", table: table)
         static let changeName = String(localized: "Change name", table: table)
         static let breed = String(localized: "Breed", table: table)
+        static let gender = String(localized: "Gender", table: table)
         static let size = String(localized: "Size", table: table)
 
         // Stats section
@@ -99,7 +100,11 @@ extension Strings {
     enum ExerciseEdit {
         static let title = String(localized: "Exercise", table: table)
         static let minutesPerMonth = String(localized: "Minutes per month of age", table: table)
-        static let fiveMinuteRule = String(localized: "The well-known '5-minute rule' — adjust based on your puppy's energy level.", table: table)
+        static func fiveMinuteRule(isPuppy: Bool) -> String {
+            isPuppy
+                ? String(localized: "The well-known '5-minute rule' — adjust based on your puppy's energy level.", table: table)
+                : String(localized: "Adjust based on your dog's energy level and fitness.", table: table)
+        }
         static let minMonth = String(localized: "min/month", table: table)
         static let exerciseLimit = String(localized: "Exercise limit", table: table)
         static func maxAtAge(age: Int, minutes: Int) -> String {
@@ -112,7 +117,11 @@ extension Strings {
     enum Exercise {
         static let title = String(localized: "Exercise", table: table)
         static let minutesPerMonth = String(localized: "Minutes per month of age", table: table)
-        static let fiveMinuteRule = String(localized: "The well-known '5-minute rule' — puppies can walk for a maximum of 5 minutes per month of age per session. Adjust based on your puppy's energy level.", table: table)
+        static func fiveMinuteRule(isPuppy: Bool) -> String {
+            isPuppy
+                ? String(localized: "The well-known '5-minute rule' — puppies can walk for a maximum of 5 minutes per month of age per session. Adjust based on your puppy's energy level.", table: table)
+                : String(localized: "Adjust based on your dog's energy level and fitness. The 5-minute rule applies to growing puppies.", table: table)
+        }
         static let minMonth = String(localized: "min/month", table: table)
         static let exerciseLimit = String(localized: "Exercise limit", table: table)
         static func maxAtAge(age: Int, minutes: Int) -> String {
@@ -275,19 +284,24 @@ extension Strings {
         static let viewingOthersData = String(localized: "You're viewing someone else's data", table: table)
         static let shared = String(localized: "Shared", table: table)
         static let noParticipants = String(localized: "No participants yet", table: table)
+        static let partner = String(localized: "Partner", table: table)
         static let manageSharing = String(localized: "Manage sharing", table: table)
         static let stopSharing = String(localized: "Stop sharing", table: table)
         static let shareWithPartner = String(localized: "Share with partner", table: table)
         static let inviteAnother = String(localized: "Invite another person", table: table)
         static let sharing = String(localized: "Sharing", table: table)
-        static let sharingDescription = String(localized: "Share your puppy's data with your partner so you can both track and log events.", table: table)
+        static func sharingDescription(name: String) -> String {
+            String(localized: "Share \(name)'s data with your partner so you can both track and log events.", table: table)
+        }
+        /// Legacy static version
+        static let sharingDescription = String(localized: "Share data with your partner so you can both track and log events.", table: table)
         static let stopSharingConfirm = String(localized: "Are you sure you want to stop sharing? The other person will lose access.", table: table)
 
         // Share acceptance
         static let acceptingShare = String(localized: "Accepting Share...", table: table)
         static let connectingToSharedData = String(localized: "Connecting to shared data", table: table)
         static let shareAccepted = String(localized: "Share Accepted!", table: table)
-        static let shareAcceptedMessage = String(localized: "You now have access to shared puppy data.", table: table)
+        static let shareAcceptedMessage = String(localized: "You now have access to shared data.", table: table)
         static let shareAcceptedSyncingMessage = String(localized: "Share accepted. The shared dog may take a moment to appear while iCloud sync completes.", table: table)
         static let sharedDogReadyTitle = String(localized: "Shared dog added", table: table)
         static func sharedDogReadyMessage(name: String) -> String {
@@ -300,18 +314,18 @@ extension Strings {
         // Existing profile conflict warning (legacy - kept for backwards compatibility)
         static let existingProfileTitle = String(localized: "Replace Existing Profile?", table: table)
         static func existingProfileMessage(existingName: String, sharedOwner: String) -> String {
-            String(localized: "You already have a profile for \(existingName). Accepting this share will replace it with the shared puppy from \(sharedOwner). Your current profile data will be deleted.", table: table)
+            String(localized: "You already have a profile for \(existingName). Accepting this share will replace it with the shared dog from \(sharedOwner). Your current profile data will be deleted.", table: table)
         }
-        static let existingProfileMessageGeneric = String(localized: "You already have a puppy profile. Accepting this share will replace it with the shared puppy. Your current profile data will be deleted.", table: table)
+        static let existingProfileMessageGeneric = String(localized: "You already have a profile. Accepting this share will replace it with the shared dog. Your current profile data will be deleted.", table: table)
         static let acceptAndReplace = String(localized: "Accept & Replace", table: table)
 
         // Non-destructive share acceptance (multi-puppy support)
         static let addSharedProfileTitle = String(localized: "Add Shared Dog?", table: table)
         static func addSharedProfileMessage(existingName: String, sharedOwner: String) -> String {
-            String(localized: "\(sharedOwner) wants to share their puppy with you. This will add their dog to your profile list alongside \(existingName).", table: table)
+            String(localized: "\(sharedOwner) wants to share their dog with you. This will add their dog to your profile list alongside \(existingName).", table: table)
         }
         static func addSharedProfileMessageGeneric(ownerName: String) -> String {
-            String(localized: "\(ownerName) wants to share their puppy with you. This will add their dog to your profile list.", table: table)
+            String(localized: "\(ownerName) wants to share their dog with you. This will add their dog to your profile list.", table: table)
         }
         static let acceptShare = String(localized: "Accept", table: table)
 
@@ -498,7 +512,11 @@ extension Strings {
     // MARK: - Atmosphere Settings
     enum Atmosphere {
         static let title = String(localized: "Atmosphere", table: table)
-        static let description = String(localized: "Subtle visual changes based on time, weather, and your puppy's activity.", table: table)
+        static func description(name: String) -> String {
+            String(localized: "Subtle visual changes based on time, weather, and \(name)'s activity.", table: table)
+        }
+        /// Legacy static version
+        static let description = String(localized: "Subtle visual changes based on time, weather, and activity.", table: table)
 
         static let timeOfDay = String(localized: "Time of day", table: table)
         static let timeOfDayDescription = String(localized: "Background shifts from cool mornings to warm evenings.", table: table)
@@ -506,8 +524,8 @@ extension Strings {
         static let weather = String(localized: "Weather", table: table)
         static let weatherDescription = String(localized: "Colors reflect current weather conditions.", table: table)
 
-        static let puppyState = String(localized: "Puppy state", table: table)
-        static let puppyStateDescription = String(localized: "Calmer visuals when sleeping, brighter when awake.", table: table)
+        static let activityState = String(localized: "Activity state", table: table)
+        static let activityStateDescription = String(localized: "Calmer visuals when sleeping, brighter when awake.", table: table)
 
         static let seasonal = String(localized: "Seasonal touches", table: table)
         static let seasonalDescription = String(localized: "Light color adjustments for the current season.", table: table)
@@ -529,7 +547,11 @@ extension Strings {
         // Main UI
         static let title = String(localized: "Export Data", table: table)
         static let exportData = String(localized: "Export data", table: table)
-        static let exportDescription = String(localized: "Export all your puppy's data to share or back up.", table: table)
+        static func exportDescription(name: String) -> String {
+            String(localized: "Export all of \(name)'s data to share or back up.", table: table)
+        }
+        /// Legacy static version
+        static let exportDescription = String(localized: "Export your data to share or back up.", table: table)
         static let exportButton = String(localized: "Export", table: table)
         static let share = String(localized: "Share", table: table)
 
@@ -569,7 +591,7 @@ extension Strings {
         static let readyToShare = String(localized: "Your export is ready to share.", table: table)
 
         // Errors (nonisolated for use in ExportError enum - hardcoded table name)
-        nonisolated static let errorNoProfile = String(localized: "No puppy profile found. Please create a profile first.", table: "Settings")
+        nonisolated static let errorNoProfile = String(localized: "No profile found. Please create a profile first.", table: "Settings")
         nonisolated static func errorExportFailed(_ message: String) -> String {
             String(localized: "Export failed: \(message)", table: "Settings")
         }
