@@ -172,6 +172,7 @@ extension Strings {
         static let viewFullProgress = String(localized: "View full progress", table: table)
         static let quickCheckMode = String(localized: "Quick Check", table: table)
         static let quickCheckModeDesc = String(localized: "Tap items to mark comfortable", table: table)
+        static let editModeHint = String(localized: "Tap items to mark as comfortable", table: table)
         static func phaseProgress(comfortable: Int, total: Int) -> String {
             String(localized: "\(comfortable) of \(total) comfortable", table: table)
         }
