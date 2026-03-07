@@ -350,7 +350,11 @@ struct OtisApp: App {
                     await spotStore.initialSync()
                     await medicationStore.initialSync()
 
+                    // Sync milestones from CloudKit before seeding to prevent duplicates
+                    await milestoneStore.initialSync()
+
                     // Seed default milestones if this is a fresh install
+                    // Also removes duplicates that may have accumulated from CloudKit sync
                     milestoneStore.seedDefaultMilestonesIfNeeded()
 
                     // Wire up DocumentStore with ProfileStore and migrate any orphaned documents

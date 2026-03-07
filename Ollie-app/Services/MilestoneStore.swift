@@ -119,8 +119,11 @@ final class MilestoneStore: CRUDStore<Milestone, CDMilestone> {
 
     // MARK: - Seeding Default Milestones
 
-    /// Seed default milestones if none exist
+    /// Seed default milestones if none exist, and remove any duplicates
     func seedDefaultMilestonesIfNeeded() {
+        // First, remove any duplicate milestones (same labelKey)
+        removeDuplicateMilestones()
+
         let count = CDMilestone.countMilestones(in: viewContext)
 
         if count == 0 {
@@ -132,6 +135,71 @@ final class MilestoneStore: CRUDStore<Milestone, CDMilestone> {
             }
 
             performSave(operation: "Seeded \(defaults.count) default milestones") {
+                performInitialLoad()
+            }
+        } else {
+            // Check if any default milestones are missing and add them
+            seedMissingDefaultMilestones()
+        }
+    }
+
+    /// Remove duplicate milestones (same labelKey), keeping the one with the latest modifiedAt
+    private func removeDuplicateMilestones() {
+        let allMilestones = CDMilestone.fetchAllMilestones(in: viewContext)
+
+        // Group by labelKey
+        var milestonesByLabelKey: [String: [CDMilestone]] = [:]
+        for cdMilestone in allMilestones {
+            guard let labelKey = cdMilestone.labelKey else { continue }
+            milestonesByLabelKey[labelKey, default: []].append(cdMilestone)
+        }
+
+        // Find and remove duplicates
+        var removedCount = 0
+        for (labelKey, milestones) in milestonesByLabelKey {
+            guard milestones.count > 1 else { continue }
+
+            // Sort by modifiedAt descending (keep most recent) and by isCompleted (prefer completed)
+            let sorted = milestones.sorted { m1, m2 in
+                // Prefer completed milestones
+                if m1.isCompleted != m2.isCompleted {
+                    return m1.isCompleted
+                }
+                // Then by most recent modification
+                return (m1.modifiedAt ?? .distantPast) > (m2.modifiedAt ?? .distantPast)
+            }
+
+            // Keep the first one, delete the rest
+            for duplicateMilestone in sorted.dropFirst() {
+                logger.info("Removing duplicate milestone: \(labelKey) (id: \(duplicateMilestone.id?.uuidString ?? "nil"))")
+                viewContext.delete(duplicateMilestone)
+                removedCount += 1
+            }
+        }
+
+        if removedCount > 0 {
+            performSave(operation: "Removed \(removedCount) duplicate milestones") {
+                performInitialLoad()
+            }
+        }
+    }
+
+    /// Seed any missing default milestones (for cases where defaults were added in an update)
+    private func seedMissingDefaultMilestones() {
+        let existingLabelKeys = Set(items.map { $0.labelKey })
+        let defaults = DefaultMilestones.create()
+
+        var addedCount = 0
+        for defaultMilestone in defaults {
+            if !existingLabelKeys.contains(defaultMilestone.labelKey) {
+                logger.info("Adding missing default milestone: \(defaultMilestone.labelKey)")
+                _ = CDMilestone.create(from: defaultMilestone, in: viewContext)
+                addedCount += 1
+            }
+        }
+
+        if addedCount > 0 {
+            performSave(operation: "Added \(addedCount) missing default milestones") {
                 performInitialLoad()
             }
         }
