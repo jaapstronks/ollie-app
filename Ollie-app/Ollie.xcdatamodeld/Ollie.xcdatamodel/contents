@@ -19,6 +19,7 @@
         <attribute name="sizeCategory" attributeType="String" defaultValueString="medium"/>
         <attribute name="walkScheduleData" optional="YES" attributeType="Binary"/>
         <attribute name="householdMembersData" optional="YES" attributeType="Binary"/>
+        <attribute name="lastAcknowledgedPhase" optional="YES" attributeType="String"/>
         <relationship name="appointments" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDDogAppointment" inverseName="profile" inverseEntity="CDDogAppointment"/>
         <relationship name="documents" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDDocument" inverseName="profile" inverseEntity="CDDocument"/>
         <relationship name="events" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDPuppyEvent" inverseName="profile" inverseEntity="CDPuppyEvent"/>
@@ -263,6 +264,7 @@
         <attribute name="maintenanceTier" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="nextReviewDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="lastPracticedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="isInMaintenanceMode" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="practicedContextsData" optional="YES" attributeType="Binary"/>
         <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="modifiedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>

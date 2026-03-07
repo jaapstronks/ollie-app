@@ -73,6 +73,9 @@ enum Analytics {
 
         // AI Nudges
         case aiNudgeDecision = "ai_nudge_decision"
+
+        // Lifecycle
+        case phaseTransitionAcknowledged = "phase_transition_acknowledged"
     }
 
     // MARK: - Tracking

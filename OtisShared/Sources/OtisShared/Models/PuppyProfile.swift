@@ -58,7 +58,12 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
     public var medicationSchedule: MedicationSchedule
     public var webhookConfig: WebhookConfig
     public var householdMembers: HouseholdMembers
+    public var behaviorInterventions: [BehaviorIntervention]
     public var modifiedAt: Date
+
+    /// Last lifecycle phase the user acknowledged via transition sheet
+    /// Used to show celebration sheet when dog enters new phase
+    public var lastAcknowledgedPhase: LifecyclePhase?
 
     /// Profile photo filename (stored in ProfilePhotos directory)
     public var profilePhotoFilename: String?
@@ -154,6 +159,13 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
             case .unspecified: return Strings.Pronouns.themselves
             }
         }
+
+        /// Whether this gender's pronouns require plural verb forms
+        /// "they wake" (plural) vs "he/she wakes" (singular)
+        /// Note: "they" takes plural verb conjugation even when used as singular
+        public var usesPluralVerbForm: Bool {
+            self == .unspecified
+        }
     }
 
     // MARK: - Pronoun Convenience Accessors
@@ -169,6 +181,10 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
 
     /// Reflexive pronoun for this dog: himself/herself/themselves
     public var reflexivePronoun: String { gender.reflexivePronoun }
+
+    /// Whether this dog's pronouns require plural verb forms
+    /// "they wake" vs "he/she wakes"
+    public var usesPluralVerbForm: Bool { gender.usesPluralVerbForm }
 
     // MARK: - Age & Duration Computed Properties
 
@@ -290,7 +306,9 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
         medicationSchedule: MedicationSchedule = MedicationSchedule.empty(),
         webhookConfig: WebhookConfig = WebhookConfig.defaultConfig(),
         householdMembers: HouseholdMembers = HouseholdMembers.empty(),
+        behaviorInterventions: [BehaviorIntervention] = [],
         modifiedAt: Date? = nil,
+        lastAcknowledgedPhase: LifecyclePhase? = nil,
         profilePhotoFilename: String? = nil,
         passedDate: Date? = nil,
         ownership: ProfileOwnership = .owned,
@@ -312,7 +330,9 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
         self.medicationSchedule = medicationSchedule
         self.webhookConfig = webhookConfig
         self.householdMembers = householdMembers
+        self.behaviorInterventions = behaviorInterventions
         self.modifiedAt = modifiedAt ?? Date()
+        self.lastAcknowledgedPhase = lastAcknowledgedPhase
         self.profilePhotoFilename = profilePhotoFilename
         self.passedDate = passedDate
         self.ownership = ownership
@@ -326,8 +346,9 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
         case name, breed, breedId, birthDate, homeDate, sizeCategory, gender
         case mealSchedule, exerciseConfig, predictionConfig
         case walkSchedule, notificationSettings, medicationSchedule, webhookConfig
-        case householdMembers
+        case householdMembers, behaviorInterventions
         case modifiedAt
+        case lastAcknowledgedPhase
         case profilePhotoFilename
         case passedDate
         // Legacy fields for migration (read old values)
@@ -354,7 +375,9 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
         medicationSchedule = try container.decodeIfPresent(MedicationSchedule.self, forKey: .medicationSchedule) ?? MedicationSchedule.empty()
         webhookConfig = try container.decodeIfPresent(WebhookConfig.self, forKey: .webhookConfig) ?? WebhookConfig.defaultConfig()
         householdMembers = try container.decodeIfPresent(HouseholdMembers.self, forKey: .householdMembers) ?? HouseholdMembers.empty()
+        behaviorInterventions = try container.decodeIfPresent([BehaviorIntervention].self, forKey: .behaviorInterventions) ?? []
         modifiedAt = try container.decodeIfPresent(Date.self, forKey: .modifiedAt) ?? Date()
+        lastAcknowledgedPhase = try container.decodeIfPresent(LifecyclePhase.self, forKey: .lastAcknowledgedPhase)
         profilePhotoFilename = try container.decodeIfPresent(String.self, forKey: .profilePhotoFilename)
         passedDate = try container.decodeIfPresent(Date.self, forKey: .passedDate)
 
@@ -387,7 +410,9 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
         try container.encode(medicationSchedule, forKey: .medicationSchedule)
         try container.encode(webhookConfig, forKey: .webhookConfig)
         try container.encode(householdMembers, forKey: .householdMembers)
+        try container.encode(behaviorInterventions, forKey: .behaviorInterventions)
         try container.encode(modifiedAt, forKey: .modifiedAt)
+        try container.encodeIfPresent(lastAcknowledgedPhase, forKey: .lastAcknowledgedPhase)
         try container.encodeIfPresent(profilePhotoFilename, forKey: .profilePhotoFilename)
         try container.encodeIfPresent(passedDate, forKey: .passedDate)
         try container.encode(legacyPremiumUnlocked, forKey: .legacyPremiumUnlocked)

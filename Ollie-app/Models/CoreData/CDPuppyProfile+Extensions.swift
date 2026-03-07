@@ -22,6 +22,7 @@ extension CDPuppyProfile {
         self.homeDate = profile.homeDate
         self.sizeCategory = profile.sizeCategory.rawValue
         self.modifiedAt = profile.modifiedAt
+        self.lastAcknowledgedPhase = profile.lastAcknowledgedPhase?.rawValue
         self.profilePhotoFilename = profile.profilePhotoFilename
         self.passedDate = profile.passedDate
         self.legacyPremiumUnlocked = profile.legacyPremiumUnlocked
@@ -121,6 +122,14 @@ extension CDPuppyProfile {
             householdMembers = HouseholdMembers.empty()
         }
 
+        // Parse lastAcknowledgedPhase from stored string
+        let lastAcknowledgedPhase: LifecyclePhase?
+        if let phaseString = self.lastAcknowledgedPhase {
+            lastAcknowledgedPhase = LifecyclePhase(rawValue: phaseString)
+        } else {
+            lastAcknowledgedPhase = nil
+        }
+
         return PuppyProfile(
             id: id,
             name: name,
@@ -137,6 +146,7 @@ extension CDPuppyProfile {
             medicationSchedule: medicationSchedule,
             householdMembers: householdMembers,
             modifiedAt: modifiedAt,
+            lastAcknowledgedPhase: lastAcknowledgedPhase,
             profilePhotoFilename: self.profilePhotoFilename,
             passedDate: self.passedDate,
             ownership: ownership,

@@ -30,6 +30,7 @@ struct ContentView: View {
     @State private var showSharedProfileWelcome = false
     @State private var showExpiredTrialSheet = false
     @State private var showOtisPlusSheet = false
+    @State private var showPhaseTransitionSheet = false
     @StateObject private var subscriptionManager = SubscriptionManager.shared
     @AppStorage(UserPreferences.Key.lastSelectedTab.rawValue) private var selectedTabRawValue = MainTab.today.rawValue
     @AppStorage(UserPreferences.Key.needsFirstSessionHandoff.rawValue) private var needsFirstSessionHandoff = false
@@ -183,6 +184,14 @@ struct ContentView: View {
                 }
             )
         }
+        // Phase transition celebration sheet
+        .fullScreenCover(isPresented: $showPhaseTransitionSheet) {
+            if let profile = profileStore.profile {
+                PhaseTransitionSheet(profile: profile) { applyDefaults in
+                    acknowledgePhaseTransition(applyNotificationDefaults: applyDefaults)
+                }
+            }
+        }
         .task {
             // Check for expired local trial on app launch
             if subscriptionManager.isLocalTrialExpired && hasCompletedOnboarding {
@@ -194,6 +203,13 @@ struct ContentView: View {
             } else if TrialManager.shared.hasNeverStartedTrial && !TrialManager.shared.hasDeclinedTrial {
                 TrialManager.shared.grantMigrationTrialIfEligible(eventCount: eventStore.events.count)
             }
+
+            // Check for lifecycle phase transition
+            checkForPhaseTransition()
+        }
+        .onChange(of: profileStore.profile?.lifecyclePhase) { _, _ in
+            // Also check when profile changes (e.g., after sync)
+            checkForPhaseTransition()
         }
         .preferredColorScheme(colorScheme)
     }
@@ -203,6 +219,91 @@ struct ContentView: View {
         let calendar = Calendar.current
         let uniqueDays = Set(eventStore.events.map { calendar.startOfDay(for: $0.time) })
         return uniqueDays.count
+    }
+
+    // MARK: - Phase Transition
+
+    /// Check if dog has entered a new lifecycle phase that hasn't been acknowledged
+    private func checkForPhaseTransition() {
+        guard hasCompletedOnboarding,
+              let profile = profileStore.profile,
+              !profile.isDeceased else {
+            return
+        }
+
+        let currentPhase = profile.lifecyclePhase
+        let acknowledgedPhase = profile.lastAcknowledgedPhase
+
+        // Don't show sheet for puppy phase (initial state)
+        guard currentPhase != .puppy else { return }
+
+        // Show sheet if current phase differs from last acknowledged phase
+        if acknowledgedPhase != currentPhase {
+            showPhaseTransitionSheet = true
+        }
+    }
+
+    /// Acknowledge the phase transition and optionally apply notification defaults
+    private func acknowledgePhaseTransition(applyNotificationDefaults: Bool) {
+        guard var profile = profileStore.profile else { return }
+
+        // Update the acknowledged phase
+        profile.lastAcknowledgedPhase = profile.lifecyclePhase
+
+        // Optionally apply phase-specific notification defaults
+        if applyNotificationDefaults {
+            applyPhaseNotificationDefaults(for: &profile)
+        }
+
+        // Save the updated profile
+        profileStore.saveProfile(profile)
+
+        // Dismiss the sheet
+        showPhaseTransitionSheet = false
+
+        // Track the event
+        Analytics.track(.phaseTransitionAcknowledged, properties: [
+            "phase": profile.lifecyclePhase.rawValue,
+            "applied_defaults": applyNotificationDefaults
+        ])
+    }
+
+    /// Apply recommended notification settings for the current lifecycle phase
+    private func applyPhaseNotificationDefaults(for profile: inout PuppyProfile) {
+        var settings = profile.notificationSettings
+
+        switch profile.lifecyclePhase {
+        case .puppy:
+            // Intensive care settings (shouldn't reach here, but for completeness)
+            settings.pottyReminders.isEnabled = true
+            settings.napReminders.isEnabled = true
+            settings.walkReminders.isEnabled = true
+            settings.mealReminders.isEnabled = true
+
+        case .teenage:
+            // Less potty focus, more walk/training
+            settings.pottyReminders.isEnabled = false
+            settings.napReminders.isEnabled = false
+            settings.walkReminders.isEnabled = true
+            settings.mealReminders.isEnabled = true
+
+        case .adult:
+            // Maintenance mode - scheduled reminders only
+            settings.pottyReminders.isEnabled = false
+            settings.napReminders.isEnabled = false
+            settings.walkReminders.isEnabled = true
+            settings.mealReminders.isEnabled = true
+
+        case .senior:
+            // Health-focused - medication and wellness
+            settings.pottyReminders.isEnabled = false
+            settings.napReminders.isEnabled = false
+            settings.walkReminders.isEnabled = true
+            settings.mealReminders.isEnabled = true
+            settings.appointmentReminders.isEnabled = true
+        }
+
+        profile.notificationSettings = settings
     }
 }
 

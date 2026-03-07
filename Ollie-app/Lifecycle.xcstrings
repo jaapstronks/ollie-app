@@ -1,0 +1,196 @@
+{
+  "sourceLanguage": "en",
+  "strings": {
+    "Let's go!": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aan de slag!"
+          }
+        }
+      }
+    },
+    "%@ is growing up!": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ wordt groot!"
+          }
+        }
+      }
+    },
+    "%@ has entered the adolescent phase! Here's what changes:": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ is in de puberfase! Dit verandert er:"
+          }
+        }
+      }
+    },
+    "Track behavior challenges": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Houd gedragsuitdagingen bij"
+          }
+        }
+      }
+    },
+    "Training shifts to maintenance": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Training verschuift naar onderhoud"
+          }
+        }
+      }
+    },
+    "More focus on adventures": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meer focus op avonturen"
+          }
+        }
+      }
+    },
+    "%@ is all grown up!": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ is helemaal volwassen!"
+          }
+        }
+      }
+    },
+    "%@ is now an adult dog! Here's what changes:": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ is nu een volwassen hond! Dit verandert er:"
+          }
+        }
+      }
+    },
+    "Establish daily routines": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stel dagelijkse routines vast"
+          }
+        }
+      }
+    },
+    "Health monitoring begins": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gezondheidsmonitoring begint"
+          }
+        }
+      }
+    },
+    "Capture special moments": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Leg speciale momenten vast"
+          }
+        }
+      }
+    },
+    "%@'s golden years": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@'s gouden jaren"
+          }
+        }
+      }
+    },
+    "%@ is now a senior dog! Here's what changes:": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ is nu een senior hond! Dit verandert er:"
+          }
+        }
+      }
+    },
+    "Regular wellness check-ins": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Regelmatige welzijnscontroles"
+          }
+        }
+      }
+    },
+    "Medication tracking enabled": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Medicatie-tracking ingeschakeld"
+          }
+        }
+      }
+    },
+    "Comfort and care tips": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Comfort- en zorgtips"
+          }
+        }
+      }
+    },
+    "Keep current settings": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Huidige instellingen behouden"
+          }
+        }
+      }
+    },
+    "Use recommended settings": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aanbevolen instellingen gebruiken"
+          }
+        }
+      }
+    },
+    "Optimized for the %@ phase": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geoptimaliseerd voor de %@-fase"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}
