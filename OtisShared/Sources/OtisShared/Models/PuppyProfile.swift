@@ -59,6 +59,8 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
     public var webhookConfig: WebhookConfig
     public var householdMembers: HouseholdMembers
     public var behaviorInterventions: [BehaviorIntervention]
+    public var healthConditions: [HealthCondition]
+    public var allergies: [Allergy]
     public var modifiedAt: Date
 
     /// Last lifecycle phase the user acknowledged via transition sheet
@@ -282,6 +284,8 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
             medicationSchedule: MedicationSchedule.empty(),
             webhookConfig: WebhookConfig.defaultConfig(),
             householdMembers: HouseholdMembers.empty(),
+            healthConditions: [],
+            allergies: [],
             modifiedAt: Date(),
             legacyPremiumUnlocked: false
         )
@@ -307,6 +311,8 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
         webhookConfig: WebhookConfig = WebhookConfig.defaultConfig(),
         householdMembers: HouseholdMembers = HouseholdMembers.empty(),
         behaviorInterventions: [BehaviorIntervention] = [],
+        healthConditions: [HealthCondition] = [],
+        allergies: [Allergy] = [],
         modifiedAt: Date? = nil,
         lastAcknowledgedPhase: LifecyclePhase? = nil,
         profilePhotoFilename: String? = nil,
@@ -331,6 +337,8 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
         self.webhookConfig = webhookConfig
         self.householdMembers = householdMembers
         self.behaviorInterventions = behaviorInterventions
+        self.healthConditions = healthConditions
+        self.allergies = allergies
         self.modifiedAt = modifiedAt ?? Date()
         self.lastAcknowledgedPhase = lastAcknowledgedPhase
         self.profilePhotoFilename = profilePhotoFilename
@@ -346,7 +354,7 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
         case name, breed, breedId, birthDate, homeDate, sizeCategory, gender
         case mealSchedule, exerciseConfig, predictionConfig
         case walkSchedule, notificationSettings, medicationSchedule, webhookConfig
-        case householdMembers, behaviorInterventions
+        case householdMembers, behaviorInterventions, healthConditions, allergies
         case modifiedAt
         case lastAcknowledgedPhase
         case profilePhotoFilename
@@ -376,6 +384,8 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
         webhookConfig = try container.decodeIfPresent(WebhookConfig.self, forKey: .webhookConfig) ?? WebhookConfig.defaultConfig()
         householdMembers = try container.decodeIfPresent(HouseholdMembers.self, forKey: .householdMembers) ?? HouseholdMembers.empty()
         behaviorInterventions = try container.decodeIfPresent([BehaviorIntervention].self, forKey: .behaviorInterventions) ?? []
+        healthConditions = try container.decodeIfPresent([HealthCondition].self, forKey: .healthConditions) ?? []
+        allergies = try container.decodeIfPresent([Allergy].self, forKey: .allergies) ?? []
         modifiedAt = try container.decodeIfPresent(Date.self, forKey: .modifiedAt) ?? Date()
         lastAcknowledgedPhase = try container.decodeIfPresent(LifecyclePhase.self, forKey: .lastAcknowledgedPhase)
         profilePhotoFilename = try container.decodeIfPresent(String.self, forKey: .profilePhotoFilename)
@@ -411,6 +421,8 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
         try container.encode(webhookConfig, forKey: .webhookConfig)
         try container.encode(householdMembers, forKey: .householdMembers)
         try container.encode(behaviorInterventions, forKey: .behaviorInterventions)
+        try container.encode(healthConditions, forKey: .healthConditions)
+        try container.encode(allergies, forKey: .allergies)
         try container.encode(modifiedAt, forKey: .modifiedAt)
         try container.encodeIfPresent(lastAcknowledgedPhase, forKey: .lastAcknowledgedPhase)
         try container.encodeIfPresent(profilePhotoFilename, forKey: .profilePhotoFilename)
@@ -426,5 +438,66 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
         var copy = self
         copy.modifiedAt = Date()
         return copy
+    }
+
+    // MARK: - Health Summary Computed Properties
+
+    /// Active health conditions (not resolved)
+    public var activeHealthConditions: [HealthCondition] {
+        healthConditions.filter { $0.status == .active || $0.status == .monitoring }
+    }
+
+    /// Health conditions that need review based on monitoring frequency
+    public var conditionsNeedingReview: [HealthCondition] {
+        activeHealthConditions.filter { $0.needsReview }
+    }
+
+    /// Whether this dog has any known health conditions
+    public var hasHealthConditions: Bool {
+        !healthConditions.isEmpty
+    }
+
+    /// Whether this dog has any known allergies
+    public var hasAllergies: Bool {
+        !allergies.isEmpty
+    }
+
+    /// Life-threatening or severe allergies that need prominent display
+    public var criticalAllergies: [Allergy] {
+        allergies.filter { $0.severity == .lifeThreatening || $0.severity == .severe }
+    }
+
+    /// Get breed health risks for this dog
+    public var breedHealthRisks: BreedHealthRisk? {
+        BreedHealthRisk.risks(for: breed)
+    }
+
+    /// Get size-based health risks for this dog
+    public var sizeHealthRisks: [ConditionRisk] {
+        BreedHealthRisk.sizeBasedRisks(for: sizeCategory)
+    }
+
+    /// Conditions we haven't yet diagnosed but the breed is at risk for
+    public var undiagnosedRisks: [ConditionRisk] {
+        let diagnosedTypes = Set(healthConditions.map { $0.type })
+        var risks: [ConditionRisk] = []
+
+        if let breedRisks = breedHealthRisks {
+            risks.append(contentsOf: breedRisks.risks.filter { !diagnosedTypes.contains($0.conditionType) })
+        }
+
+        // Add size-based risks not already in breed risks
+        let breedRiskTypes = Set(risks.map { $0.conditionType })
+        let sizeRisks = sizeHealthRisks.filter {
+            !diagnosedTypes.contains($0.conditionType) && !breedRiskTypes.contains($0.conditionType)
+        }
+        risks.append(contentsOf: sizeRisks)
+
+        return risks
+    }
+
+    /// Screenings that are due based on age
+    public var dueScreenings: [ConditionRisk] {
+        BreedHealthRisk.screeningsDue(for: breed, sizeCategory: sizeCategory, ageMonths: ageInMonths)
     }
 }

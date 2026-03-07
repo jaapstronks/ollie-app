@@ -965,4 +965,468 @@ public enum Strings {
             return String(localized: "\(count) incidents", bundle: Strings.bundle)
         }
     }
+
+    // MARK: - Behavior Support Module
+
+    /// Strings for the Behavior Support module in the Train tab
+    public enum BehaviorSupport {
+        // Card & Navigation
+        public static var title: String { String(localized: "Behavior Support", bundle: Strings.bundle) }
+        public static var subtitle: String { String(localized: "Track and manage behavior challenges", bundle: Strings.bundle) }
+        public static var viewAll: String { String(localized: "View All", bundle: Strings.bundle) }
+        public static var logIncident: String { String(localized: "Log Incident", bundle: Strings.bundle) }
+
+        // Professional Disclaimer
+        public static var disclaimerTitle: String { String(localized: "Professional Guidance Recommended", bundle: Strings.bundle) }
+        public static var disclaimerBody: String { String(localized: "Behavior challenges can have medical or complex causes. We recommend working with a certified dog trainer or veterinary behaviorist for persistent issues. This guidance is educational only.", bundle: Strings.bundle) }
+        public static var learnMore: String { String(localized: "Learn More", bundle: Strings.bundle) }
+
+        // Active Issues
+        public static var activeIssues: String { String(localized: "Active Issues", bundle: Strings.bundle) }
+        public static var noActiveIssues: String { String(localized: "No behavior incidents logged recently", bundle: Strings.bundle) }
+        public static var noActiveIssuesDescription: String { String(localized: "Log incidents when they happen to identify patterns and track progress", bundle: Strings.bundle) }
+
+        // Trend indicators
+        public static var trendImproving: String { String(localized: "Improving", bundle: Strings.bundle) }
+        public static var trendStable: String { String(localized: "Stable", bundle: Strings.bundle) }
+        public static var trendWorsening: String { String(localized: "Needs attention", bundle: Strings.bundle) }
+        public static var trendNew: String { String(localized: "New this week", bundle: Strings.bundle) }
+
+        // Time periods
+        public static var last7Days: String { String(localized: "Last 7 days", bundle: Strings.bundle) }
+        public static var last30Days: String { String(localized: "Last 30 days", bundle: Strings.bundle) }
+        public static func incidentsThisWeek(_ count: Int) -> String {
+            if count == 1 {
+                return String(localized: "1 incident this week", bundle: Strings.bundle)
+            }
+            return String(localized: "\(count) incidents this week", bundle: Strings.bundle)
+        }
+
+        // Interventions (Phase 2)
+        public static var interventions: String { String(localized: "What You're Trying", bundle: Strings.bundle) }
+        public static var addIntervention: String { String(localized: "Add Intervention", bundle: Strings.bundle) }
+        public static var noInterventions: String { String(localized: "No interventions added yet", bundle: Strings.bundle) }
+        public static var noInterventionsDescription: String { String(localized: "Track what your trainer recommends or techniques you're trying", bundle: Strings.bundle) }
+        public static var interventionPlaceholder: String { String(localized: "e.g., Counter-conditioning with treats", bundle: Strings.bundle) }
+
+        // Progress
+        public static var progress: String { String(localized: "Progress", bundle: Strings.bundle) }
+        public static var progressNotes: String { String(localized: "Progress Notes", bundle: Strings.bundle) }
+        public static var addNote: String { String(localized: "Add Note", bundle: Strings.bundle) }
+        public static var progressSummary: String { String(localized: "Progress Summary", bundle: Strings.bundle) }
+        public static var thisWeek: String { String(localized: "This Week", bundle: Strings.bundle) }
+        public static var previousWeek: String { String(localized: "Previous Week", bundle: Strings.bundle) }
+        public static var activePractice: String { String(localized: "Actively Practicing", bundle: Strings.bundle) }
+        public static func fewerIncidents(_ count: Int) -> String {
+            if count == 1 {
+                return String(localized: "1 fewer incident than last week", bundle: Strings.bundle)
+            }
+            return String(localized: "\(count) fewer incidents than last week", bundle: Strings.bundle)
+        }
+        public static func moreIncidents(_ count: Int) -> String {
+            if count == 1 {
+                return String(localized: "1 more incident than last week", bundle: Strings.bundle)
+            }
+            return String(localized: "\(count) more incidents than last week", bundle: Strings.bundle)
+        }
+        public static var sameAsLastWeek: String { String(localized: "Same as last week", bundle: Strings.bundle) }
+
+        // Common triggers summary
+        public static var commonTriggers: String { String(localized: "Common Triggers", bundle: Strings.bundle) }
+
+        // Accessibility
+        public static var behaviorSupportAccessibilityLabel: String { String(localized: "Behavior support section showing active behavior issues and logging options", bundle: Strings.bundle) }
+
+        // MARK: - Intervention Templates
+
+        // Intervention names
+        public static var interventionCounterConditioning: String { String(localized: "Counter-conditioning", bundle: Strings.bundle) }
+        public static var interventionDesensitization: String { String(localized: "Desensitization", bundle: Strings.bundle) }
+        public static var interventionBAT: String { String(localized: "BAT Training", bundle: Strings.bundle) }
+        public static var interventionRelaxation: String { String(localized: "Relaxation Protocol", bundle: Strings.bundle) }
+        public static var interventionManagement: String { String(localized: "Management Only", bundle: Strings.bundle) }
+        public static var interventionAvoidTriggers: String { String(localized: "Avoid Triggers", bundle: Strings.bundle) }
+        public static var interventionShorterWalks: String { String(localized: "Shorter Walks", bundle: Strings.bundle) }
+        public static var interventionQuieterRoutes: String { String(localized: "Quieter Routes", bundle: Strings.bundle) }
+        public static var interventionMoreExercise: String { String(localized: "More Exercise", bundle: Strings.bundle) }
+        public static var interventionEnrichment: String { String(localized: "Mental Enrichment", bundle: Strings.bundle) }
+        public static var interventionTradeUp: String { String(localized: "Trade-Up Game", bundle: Strings.bundle) }
+        public static var interventionLeaveIt: String { String(localized: "Leave It Command", bundle: Strings.bundle) }
+        public static var interventionInterrupter: String { String(localized: "Positive Interrupter", bundle: Strings.bundle) }
+        public static var interventionCalming: String { String(localized: "Calming Signals", bundle: Strings.bundle) }
+        public static var interventionThundershirt: String { String(localized: "Thundershirt/Anxiety Wrap", bundle: Strings.bundle) }
+        public static var interventionMedication: String { String(localized: "Medication Support", bundle: Strings.bundle) }
+        public static var interventionTrainer: String { String(localized: "Trainer Sessions", bundle: Strings.bundle) }
+        public static var interventionCustom: String { String(localized: "Custom Intervention", bundle: Strings.bundle) }
+
+        // Intervention descriptions
+        public static var interventionCounterConditioningDesc: String { String(localized: "Pair the trigger with something positive (treats, play) to change emotional response", bundle: Strings.bundle) }
+        public static var interventionDesensitizationDesc: String { String(localized: "Gradually expose to trigger at low intensity, increasing slowly over time", bundle: Strings.bundle) }
+        public static var interventionBATDesc: String { String(localized: "Behavior Adjustment Training - give dog choice to disengage from trigger", bundle: Strings.bundle) }
+        public static var interventionRelaxationDesc: String { String(localized: "Teach calm, relaxed behavior through structured protocol exercises", bundle: Strings.bundle) }
+        public static var interventionManagementDesc: String { String(localized: "Prevent the behavior from occurring through environmental control", bundle: Strings.bundle) }
+        public static var interventionAvoidTriggersDesc: String { String(localized: "Temporarily avoid known triggers while working on other interventions", bundle: Strings.bundle) }
+        public static var interventionShorterWalksDesc: String { String(localized: "Reduce walk length to prevent over-threshold experiences", bundle: Strings.bundle) }
+        public static var interventionQuieterRoutesDesc: String { String(localized: "Choose calmer routes with fewer triggers", bundle: Strings.bundle) }
+        public static var interventionMoreExerciseDesc: String { String(localized: "Increase physical exercise to reduce excess energy", bundle: Strings.bundle) }
+        public static var interventionEnrichmentDesc: String { String(localized: "Puzzle toys, sniff walks, training games for mental stimulation", bundle: Strings.bundle) }
+        public static var interventionTradeUpDesc: String { String(localized: "Teach dropping items in exchange for higher-value rewards", bundle: Strings.bundle) }
+        public static var interventionLeaveItDesc: String { String(localized: "Teach to ignore items or triggers on cue", bundle: Strings.bundle) }
+        public static var interventionInterrupterDesc: String { String(localized: "A trained cue to redirect attention (e.g., emergency recall)", bundle: Strings.bundle) }
+        public static var interventionCalmingDesc: String { String(localized: "Learn and respond to dog's calming signals appropriately", bundle: Strings.bundle) }
+        public static var interventionThundershirtDesc: String { String(localized: "Pressure wrap to help with anxiety and fear responses", bundle: Strings.bundle) }
+        public static var interventionMedicationDesc: String { String(localized: "Veterinary-prescribed medication support (always consult vet)", bundle: Strings.bundle) }
+        public static var interventionTrainerDesc: String { String(localized: "Working with a certified professional dog trainer", bundle: Strings.bundle) }
+        public static var interventionCustomDesc: String { String(localized: "Your own intervention or technique", bundle: Strings.bundle) }
+
+        // Intervention logging
+        public static var markPracticed: String { String(localized: "Mark Practiced", bundle: Strings.bundle) }
+        public static var practicedToday: String { String(localized: "Practiced today", bundle: Strings.bundle) }
+        public static func practicedCount(_ count: Int) -> String {
+            if count == 1 {
+                return String(localized: "Practiced 1 time this week", bundle: Strings.bundle)
+            }
+            return String(localized: "Practiced \(count) times this week", bundle: Strings.bundle)
+        }
+        public static func lastPracticed(days: Int) -> String {
+            if days == 0 {
+                return String(localized: "Last practiced today", bundle: Strings.bundle)
+            } else if days == 1 {
+                return String(localized: "Last practiced yesterday", bundle: Strings.bundle)
+            }
+            return String(localized: "Last practiced \(days) days ago", bundle: Strings.bundle)
+        }
+        public static var selectIntervention: String { String(localized: "Select Intervention", bundle: Strings.bundle) }
+        public static var suggestedInterventions: String { String(localized: "Suggested for this issue", bundle: Strings.bundle) }
+        public static var allInterventions: String { String(localized: "All interventions", bundle: Strings.bundle) }
+        public static var notesOptional: String { String(localized: "Notes (optional)", bundle: Strings.bundle) }
+        public static var interventionNotes: String { String(localized: "What your trainer recommended or your plan", bundle: Strings.bundle) }
+    }
+
+    // MARK: - Health Conditions
+
+    /// Strings for health condition tracking (Brief 03)
+    public enum HealthConditions {
+        // Categories
+        public static var categoryAllergyImmune: String { String(localized: "Allergies & Immune", bundle: Strings.bundle) }
+        public static var categoryMusculoskeletal: String { String(localized: "Joints & Mobility", bundle: Strings.bundle) }
+        public static var categoryEndocrine: String { String(localized: "Hormonal", bundle: Strings.bundle) }
+        public static var categoryCardiac: String { String(localized: "Heart", bundle: Strings.bundle) }
+        public static var categoryNeurological: String { String(localized: "Neurological", bundle: Strings.bundle) }
+        public static var categoryDigestive: String { String(localized: "Digestive", bundle: Strings.bundle) }
+        public static var categoryUrinary: String { String(localized: "Kidney & Urinary", bundle: Strings.bundle) }
+        public static var categoryRespiratory: String { String(localized: "Respiratory", bundle: Strings.bundle) }
+        public static var categoryEye: String { String(localized: "Eyes", bundle: Strings.bundle) }
+        public static var categoryEar: String { String(localized: "Ears", bundle: Strings.bundle) }
+        public static var categorySkin: String { String(localized: "Skin", bundle: Strings.bundle) }
+        public static var categoryCognitive: String { String(localized: "Cognitive", bundle: Strings.bundle) }
+        public static var categoryCancer: String { String(localized: "Cancer", bundle: Strings.bundle) }
+        public static var categoryOther: String { String(localized: "Other", bundle: Strings.bundle) }
+
+        // Condition types - Allergies & Immune
+        public static var foodAllergy: String { String(localized: "Food Allergy", bundle: Strings.bundle) }
+        public static var environmentalAllergy: String { String(localized: "Environmental Allergy", bundle: Strings.bundle) }
+        public static var atopicDermatitis: String { String(localized: "Atopic Dermatitis", bundle: Strings.bundle) }
+        public static var autoimmune: String { String(localized: "Autoimmune Disease", bundle: Strings.bundle) }
+
+        // Condition types - Musculoskeletal
+        public static var hipDysplasia: String { String(localized: "Hip Dysplasia", bundle: Strings.bundle) }
+        public static var elbowDysplasia: String { String(localized: "Elbow Dysplasia", bundle: Strings.bundle) }
+        public static var arthritis: String { String(localized: "Arthritis", bundle: Strings.bundle) }
+        public static var luxatingPatella: String { String(localized: "Luxating Patella", bundle: Strings.bundle) }
+        public static var ivdd: String { String(localized: "IVDD (Disc Disease)", bundle: Strings.bundle) }
+
+        // Condition types - Endocrine
+        public static var diabetes: String { String(localized: "Diabetes", bundle: Strings.bundle) }
+        public static var hypothyroidism: String { String(localized: "Hypothyroidism", bundle: Strings.bundle) }
+        public static var hyperthyroidism: String { String(localized: "Hyperthyroidism", bundle: Strings.bundle) }
+        public static var cushings: String { String(localized: "Cushing's Disease", bundle: Strings.bundle) }
+        public static var addisons: String { String(localized: "Addison's Disease", bundle: Strings.bundle) }
+
+        // Condition types - Cardiac
+        public static var heartMurmur: String { String(localized: "Heart Murmur", bundle: Strings.bundle) }
+        public static var dilatedCardiomyopathy: String { String(localized: "Dilated Cardiomyopathy", bundle: Strings.bundle) }
+        public static var mitralValveDisease: String { String(localized: "Mitral Valve Disease", bundle: Strings.bundle) }
+        public static var congestiveHeartFailure: String { String(localized: "Congestive Heart Failure", bundle: Strings.bundle) }
+
+        // Condition types - Neurological
+        public static var epilepsy: String { String(localized: "Epilepsy", bundle: Strings.bundle) }
+        public static var vestibularDisease: String { String(localized: "Vestibular Disease", bundle: Strings.bundle) }
+        public static var degenerativeMyelopathy: String { String(localized: "Degenerative Myelopathy", bundle: Strings.bundle) }
+
+        // Condition types - Digestive
+        public static var ibd: String { String(localized: "Inflammatory Bowel Disease", bundle: Strings.bundle) }
+        public static var pancreatitis: String { String(localized: "Pancreatitis", bundle: Strings.bundle) }
+        public static var megaesophagus: String { String(localized: "Megaesophagus", bundle: Strings.bundle) }
+        public static var exocrinePancreaticInsufficiency: String { String(localized: "Exocrine Pancreatic Insufficiency", bundle: Strings.bundle) }
+
+        // Condition types - Urinary/Renal
+        public static var chronicKidneyDisease: String { String(localized: "Chronic Kidney Disease", bundle: Strings.bundle) }
+        public static var bladderStones: String { String(localized: "Bladder Stones", bundle: Strings.bundle) }
+        public static var incontinence: String { String(localized: "Incontinence", bundle: Strings.bundle) }
+
+        // Condition types - Respiratory
+        public static var collapsedTrachea: String { String(localized: "Collapsed Trachea", bundle: Strings.bundle) }
+        public static var laryngealParalysis: String { String(localized: "Laryngeal Paralysis", bundle: Strings.bundle) }
+        public static var brachycephalicSyndrome: String { String(localized: "Brachycephalic Syndrome", bundle: Strings.bundle) }
+
+        // Condition types - Eye
+        public static var cataracts: String { String(localized: "Cataracts", bundle: Strings.bundle) }
+        public static var glaucoma: String { String(localized: "Glaucoma", bundle: Strings.bundle) }
+        public static var progressiveRetinalAtrophy: String { String(localized: "Progressive Retinal Atrophy", bundle: Strings.bundle) }
+        public static var dryEye: String { String(localized: "Dry Eye (KCS)", bundle: Strings.bundle) }
+
+        // Condition types - Ear
+        public static var chronicOtitis: String { String(localized: "Chronic Ear Infections", bundle: Strings.bundle) }
+
+        // Condition types - Skin
+        public static var demodeticMange: String { String(localized: "Demodectic Mange", bundle: Strings.bundle) }
+        public static var sebaceousAdenitis: String { String(localized: "Sebaceous Adenitis", bundle: Strings.bundle) }
+
+        // Condition types - Cancer
+        public static var mastCellTumor: String { String(localized: "Mast Cell Tumor", bundle: Strings.bundle) }
+        public static var lymphoma: String { String(localized: "Lymphoma", bundle: Strings.bundle) }
+        public static var osteosarcoma: String { String(localized: "Osteosarcoma", bundle: Strings.bundle) }
+        public static var hemangiosarcoma: String { String(localized: "Hemangiosarcoma", bundle: Strings.bundle) }
+
+        // Condition types - Cognitive
+        public static var canineCognitiveDysfunction: String { String(localized: "Cognitive Dysfunction", bundle: Strings.bundle) }
+
+        // Other
+        public static var otherCondition: String { String(localized: "Other Condition", bundle: Strings.bundle) }
+
+        // Severity levels
+        public static var severityMild: String { String(localized: "Mild", bundle: Strings.bundle) }
+        public static var severityModerate: String { String(localized: "Moderate", bundle: Strings.bundle) }
+        public static var severitySevere: String { String(localized: "Severe", bundle: Strings.bundle) }
+        public static var severityManaged: String { String(localized: "Managed", bundle: Strings.bundle) }
+
+        // Status
+        public static var statusActive: String { String(localized: "Active", bundle: Strings.bundle) }
+        public static var statusMonitoring: String { String(localized: "Monitoring", bundle: Strings.bundle) }
+        public static var statusResolved: String { String(localized: "Resolved", bundle: Strings.bundle) }
+        public static var statusRemission: String { String(localized: "In Remission", bundle: Strings.bundle) }
+
+        // Monitoring frequency
+        public static var frequencyDaily: String { String(localized: "Daily", bundle: Strings.bundle) }
+        public static var frequencyWeekly: String { String(localized: "Weekly", bundle: Strings.bundle) }
+        public static var frequencyBiweekly: String { String(localized: "Every 2 weeks", bundle: Strings.bundle) }
+        public static var frequencyMonthly: String { String(localized: "Monthly", bundle: Strings.bundle) }
+        public static var frequencyQuarterly: String { String(localized: "Every 3 months", bundle: Strings.bundle) }
+
+        // Risk levels
+        public static var riskLow: String { String(localized: "Low Risk", bundle: Strings.bundle) }
+        public static var riskModerate: String { String(localized: "Moderate Risk", bundle: Strings.bundle) }
+        public static var riskHigh: String { String(localized: "High Risk", bundle: Strings.bundle) }
+        public static var riskVeryHigh: String { String(localized: "Very High Risk", bundle: Strings.bundle) }
+
+        // Warning signals
+        public static var warningBreathingRate: String { String(localized: "Resting respiratory rate >30 breaths/min", bundle: Strings.bundle) }
+        public static var warningNightCoughing: String { String(localized: "Coughing at night", bundle: Strings.bundle) }
+        public static var warningPaleGums: String { String(localized: "Blue or pale gums", bundle: Strings.bundle) }
+        public static var warningCollapse: String { String(localized: "Collapse or fainting", bundle: Strings.bundle) }
+        public static var warningSuddenLethargy: String { String(localized: "Sudden lethargy or weakness", bundle: Strings.bundle) }
+        public static var warningVomiting: String { String(localized: "Vomiting", bundle: Strings.bundle) }
+        public static var warningSweetBreath: String { String(localized: "Sweet or fruity breath", bundle: Strings.bundle) }
+        public static var warningDisorientation: String { String(localized: "Disorientation", bundle: Strings.bundle) }
+        public static var warningClusterSeizures: String { String(localized: "Cluster seizures (2+ in 24 hours)", bundle: Strings.bundle) }
+        public static var warningLongSeizure: String { String(localized: "Seizure lasting >5 minutes", bundle: Strings.bundle) }
+        public static var warningNoRecovery: String { String(localized: "Not recovering between seizures", bundle: Strings.bundle) }
+        public static var warningNotEating: String { String(localized: "Not eating for 24+ hours", bundle: Strings.bundle) }
+        public static var warningWeakness: String { String(localized: "Weakness or lethargy", bundle: Strings.bundle) }
+        public static var warningBadBreath: String { String(localized: "Ammonia-like breath", bundle: Strings.bundle) }
+
+        // UI Labels
+        public static var title: String { String(localized: "Health Conditions", bundle: Strings.bundle) }
+        public static var addCondition: String { String(localized: "Add Condition", bundle: Strings.bundle) }
+        public static var editCondition: String { String(localized: "Edit Condition", bundle: Strings.bundle) }
+        public static var noConditions: String { String(localized: "No health conditions", bundle: Strings.bundle) }
+        public static var noConditionsHint: String { String(localized: "Tap to add diagnosed conditions", bundle: Strings.bundle) }
+        public static var diagnosedDate: String { String(localized: "Diagnosed", bundle: Strings.bundle) }
+        public static var severity: String { String(localized: "Severity", bundle: Strings.bundle) }
+        public static var status: String { String(localized: "Status", bundle: Strings.bundle) }
+        public static var monitoringFrequency: String { String(localized: "Check-in frequency", bundle: Strings.bundle) }
+        public static var vetRecommendations: String { String(localized: "Vet recommendations", bundle: Strings.bundle) }
+        public static var linkedMedications: String { String(localized: "Linked medications", bundle: Strings.bundle) }
+        public static var breedRelated: String { String(localized: "Breed-related", bundle: Strings.bundle) }
+        public static var isGenetic: String { String(localized: "Genetic", bundle: Strings.bundle) }
+        public static var needsReview: String { String(localized: "Needs review", bundle: Strings.bundle) }
+        public static var lastReviewed: String { String(localized: "Last reviewed", bundle: Strings.bundle) }
+        public static var markReviewed: String { String(localized: "Mark as reviewed", bundle: Strings.bundle) }
+        public static var customName: String { String(localized: "Condition name", bundle: Strings.bundle) }
+        public static var customNamePlaceholder: String { String(localized: "Enter condition name", bundle: Strings.bundle) }
+    }
+
+    // MARK: - Symptoms
+
+    /// Strings for symptom tracking
+    public enum Symptoms {
+        // Categories
+        public static var categoryMobility: String { String(localized: "Mobility", bundle: Strings.bundle) }
+        public static var categoryNeurological: String { String(localized: "Neurological", bundle: Strings.bundle) }
+        public static var categoryRespiratory: String { String(localized: "Respiratory", bundle: Strings.bundle) }
+        public static var categoryDigestive: String { String(localized: "Digestive", bundle: Strings.bundle) }
+        public static var categoryUrinary: String { String(localized: "Urinary", bundle: Strings.bundle) }
+        public static var categorySkin: String { String(localized: "Skin & Coat", bundle: Strings.bundle) }
+        public static var categoryEyes: String { String(localized: "Eyes", bundle: Strings.bundle) }
+        public static var categoryEars: String { String(localized: "Ears", bundle: Strings.bundle) }
+        public static var categoryGeneral: String { String(localized: "General", bundle: Strings.bundle) }
+        public static var categoryBehavioral: String { String(localized: "Behavioral", bundle: Strings.bundle) }
+        public static var categoryOther: String { String(localized: "Other", bundle: Strings.bundle) }
+
+        // Urgency levels
+        public static var urgencyEmergency: String { String(localized: "Emergency - Vet NOW", bundle: Strings.bundle) }
+        public static var urgencySoon: String { String(localized: "See vet if persists", bundle: Strings.bundle) }
+        public static var urgencyMonitor: String { String(localized: "Monitor and track", bundle: Strings.bundle) }
+
+        // Mobility symptoms
+        public static var limping: String { String(localized: "Limping", bundle: Strings.bundle) }
+        public static var stiffness: String { String(localized: "Stiffness", bundle: Strings.bundle) }
+        public static var difficultyRising: String { String(localized: "Difficulty rising", bundle: Strings.bundle) }
+        public static var reluctanceToClimb: String { String(localized: "Reluctance to climb", bundle: Strings.bundle) }
+        public static var bunnyHopping: String { String(localized: "Bunny hopping", bundle: Strings.bundle) }
+        public static var lamenessRearLegs: String { String(localized: "Rear leg lameness", bundle: Strings.bundle) }
+        public static var lamenessFrontLegs: String { String(localized: "Front leg lameness", bundle: Strings.bundle) }
+
+        // Neurological symptoms
+        public static var seizure: String { String(localized: "Seizure", bundle: Strings.bundle) }
+        public static var trembling: String { String(localized: "Trembling", bundle: Strings.bundle) }
+        public static var headTilt: String { String(localized: "Head tilt", bundle: Strings.bundle) }
+        public static var circling: String { String(localized: "Circling", bundle: Strings.bundle) }
+        public static var confusion: String { String(localized: "Confusion", bundle: Strings.bundle) }
+        public static var disorientation: String { String(localized: "Disorientation", bundle: Strings.bundle) }
+        public static var lossOfBalance: String { String(localized: "Loss of balance", bundle: Strings.bundle) }
+
+        // Respiratory symptoms
+        public static var coughing: String { String(localized: "Coughing", bundle: Strings.bundle) }
+        public static var breathingDifficulty: String { String(localized: "Breathing difficulty", bundle: Strings.bundle) }
+        public static var rapidBreathing: String { String(localized: "Rapid breathing", bundle: Strings.bundle) }
+        public static var reverseSneezing: String { String(localized: "Reverse sneezing", bundle: Strings.bundle) }
+        public static var wheezing: String { String(localized: "Wheezing", bundle: Strings.bundle) }
+
+        // Digestive symptoms
+        public static var vomiting: String { String(localized: "Vomiting", bundle: Strings.bundle) }
+        public static var diarrhea: String { String(localized: "Diarrhea", bundle: Strings.bundle) }
+        public static var constipation: String { String(localized: "Constipation", bundle: Strings.bundle) }
+        public static var bloating: String { String(localized: "Bloating", bundle: Strings.bundle) }
+        public static var appetiteLoss: String { String(localized: "Loss of appetite", bundle: Strings.bundle) }
+        public static var excessiveGas: String { String(localized: "Excessive gas", bundle: Strings.bundle) }
+
+        // Urinary symptoms
+        public static var frequentUrination: String { String(localized: "Frequent urination", bundle: Strings.bundle) }
+        public static var difficultyUrinating: String { String(localized: "Difficulty urinating", bundle: Strings.bundle) }
+        public static var bloodInUrine: String { String(localized: "Blood in urine", bundle: Strings.bundle) }
+        public static var accidents: String { String(localized: "Accidents in house", bundle: Strings.bundle) }
+
+        // Skin symptoms
+        public static var itching: String { String(localized: "Itching/Scratching", bundle: Strings.bundle) }
+        public static var hotSpots: String { String(localized: "Hot spots", bundle: Strings.bundle) }
+        public static var hairLoss: String { String(localized: "Hair loss", bundle: Strings.bundle) }
+        public static var rash: String { String(localized: "Rash", bundle: Strings.bundle) }
+        public static var dryCoat: String { String(localized: "Dry coat", bundle: Strings.bundle) }
+        public static var excessiveShedding: String { String(localized: "Excessive shedding", bundle: Strings.bundle) }
+        public static var pawLicking: String { String(localized: "Paw licking", bundle: Strings.bundle) }
+        public static var faceRubbing: String { String(localized: "Face rubbing", bundle: Strings.bundle) }
+
+        // Eye symptoms
+        public static var eyeDischarge: String { String(localized: "Eye discharge", bundle: Strings.bundle) }
+        public static var eyeRedness: String { String(localized: "Eye redness", bundle: Strings.bundle) }
+        public static var cloudiness: String { String(localized: "Cloudiness in eye", bundle: Strings.bundle) }
+        public static var squinting: String { String(localized: "Squinting", bundle: Strings.bundle) }
+        public static var bumpingIntoThings: String { String(localized: "Bumping into things", bundle: Strings.bundle) }
+
+        // Ear symptoms
+        public static var earInfection: String { String(localized: "Ear infection signs", bundle: Strings.bundle) }
+        public static var headShaking: String { String(localized: "Head shaking", bundle: Strings.bundle) }
+        public static var earOdor: String { String(localized: "Ear odor", bundle: Strings.bundle) }
+        public static var scratching: String { String(localized: "Ear scratching", bundle: Strings.bundle) }
+
+        // General symptoms
+        public static var lethargy: String { String(localized: "Lethargy", bundle: Strings.bundle) }
+        public static var weakness: String { String(localized: "Weakness", bundle: Strings.bundle) }
+        public static var weightLoss: String { String(localized: "Weight loss", bundle: Strings.bundle) }
+        public static var weightGain: String { String(localized: "Weight gain", bundle: Strings.bundle) }
+        public static var excessiveThirst: String { String(localized: "Excessive thirst", bundle: Strings.bundle) }
+        public static var drooling: String { String(localized: "Drooling", bundle: Strings.bundle) }
+        public static var badBreath: String { String(localized: "Bad breath", bundle: Strings.bundle) }
+        public static var fainting: String { String(localized: "Fainting", bundle: Strings.bundle) }
+        public static var exerciseIntolerance: String { String(localized: "Exercise intolerance", bundle: Strings.bundle) }
+        public static var restlessness: String { String(localized: "Restlessness", bundle: Strings.bundle) }
+        public static var panting: String { String(localized: "Excessive panting", bundle: Strings.bundle) }
+
+        // Behavioral symptoms
+        public static var anxiety: String { String(localized: "Anxiety", bundle: Strings.bundle) }
+        public static var aggression: String { String(localized: "Aggression", bundle: Strings.bundle) }
+        public static var hiding: String { String(localized: "Hiding", bundle: Strings.bundle) }
+        public static var vocalization: String { String(localized: "Excessive vocalization", bundle: Strings.bundle) }
+
+        // UI Labels
+        public static var title: String { String(localized: "Log Symptom", bundle: Strings.bundle) }
+        public static var selectSymptom: String { String(localized: "Select symptom", bundle: Strings.bundle) }
+        public static var symptomHistory: String { String(localized: "Symptom History", bundle: Strings.bundle) }
+        public static var noSymptoms: String { String(localized: "No symptoms logged", bundle: Strings.bundle) }
+    }
+
+    // MARK: - Allergies
+
+    /// Strings for allergy tracking
+    public enum Allergies {
+        // Types
+        public static var typeFood: String { String(localized: "Food", bundle: Strings.bundle) }
+        public static var typeEnvironmental: String { String(localized: "Environmental", bundle: Strings.bundle) }
+        public static var typeMedication: String { String(localized: "Medication", bundle: Strings.bundle) }
+        public static var typeContact: String { String(localized: "Contact", bundle: Strings.bundle) }
+
+        // Severity
+        public static var severityMild: String { String(localized: "Mild", bundle: Strings.bundle) }
+        public static var severityModerate: String { String(localized: "Moderate", bundle: Strings.bundle) }
+        public static var severitySevere: String { String(localized: "Severe", bundle: Strings.bundle) }
+        public static var severityLifeThreatening: String { String(localized: "Life-threatening", bundle: Strings.bundle) }
+
+        // Severity descriptions
+        public static var severityMildDesc: String { String(localized: "Minor symptoms, easily managed", bundle: Strings.bundle) }
+        public static var severityModerateDesc: String { String(localized: "Noticeable symptoms, may need treatment", bundle: Strings.bundle) }
+        public static var severitySevereDesc: String { String(localized: "Significant reaction, requires vet care", bundle: Strings.bundle) }
+        public static var severityLifeThreateningDesc: String { String(localized: "Anaphylactic risk, immediate vet care", bundle: Strings.bundle) }
+
+        // Common allergens - Food
+        public static var allergenChicken: String { String(localized: "Chicken", bundle: Strings.bundle) }
+        public static var allergenBeef: String { String(localized: "Beef", bundle: Strings.bundle) }
+        public static var allergenPork: String { String(localized: "Pork", bundle: Strings.bundle) }
+        public static var allergenLamb: String { String(localized: "Lamb", bundle: Strings.bundle) }
+        public static var allergenFish: String { String(localized: "Fish", bundle: Strings.bundle) }
+        public static var allergenDairy: String { String(localized: "Dairy", bundle: Strings.bundle) }
+        public static var allergenEggs: String { String(localized: "Eggs", bundle: Strings.bundle) }
+        public static var allergenWheat: String { String(localized: "Wheat", bundle: Strings.bundle) }
+        public static var allergenCorn: String { String(localized: "Corn", bundle: Strings.bundle) }
+        public static var allergenSoy: String { String(localized: "Soy", bundle: Strings.bundle) }
+        public static var allergenRice: String { String(localized: "Rice", bundle: Strings.bundle) }
+
+        // Common allergens - Environmental
+        public static var allergenGrass: String { String(localized: "Grass", bundle: Strings.bundle) }
+        public static var allergenPollen: String { String(localized: "Pollen", bundle: Strings.bundle) }
+        public static var allergenDustMites: String { String(localized: "Dust mites", bundle: Strings.bundle) }
+        public static var allergenMold: String { String(localized: "Mold", bundle: Strings.bundle) }
+        public static var allergenFleas: String { String(localized: "Fleas", bundle: Strings.bundle) }
+
+        // Common allergens - Contact
+        public static var allergenLatex: String { String(localized: "Latex", bundle: Strings.bundle) }
+        public static var allergenPlastics: String { String(localized: "Certain plastics", bundle: Strings.bundle) }
+        public static var allergenFabrics: String { String(localized: "Certain fabrics", bundle: Strings.bundle) }
+
+        // UI Labels
+        public static var title: String { String(localized: "Allergies", bundle: Strings.bundle) }
+        public static var addAllergy: String { String(localized: "Add Allergy", bundle: Strings.bundle) }
+        public static var editAllergy: String { String(localized: "Edit Allergy", bundle: Strings.bundle) }
+        public static var noAllergies: String { String(localized: "No known allergies", bundle: Strings.bundle) }
+        public static var noAllergiesHint: String { String(localized: "Tap to add known allergies", bundle: Strings.bundle) }
+        public static var allergen: String { String(localized: "Allergen", bundle: Strings.bundle) }
+        public static var allergenPlaceholder: String { String(localized: "What causes the reaction?", bundle: Strings.bundle) }
+        public static var reaction: String { String(localized: "Reaction", bundle: Strings.bundle) }
+        public static var reactionPlaceholder: String { String(localized: "What happens? (itching, swelling, etc.)", bundle: Strings.bundle) }
+        public static var confirmedDate: String { String(localized: "Confirmed date", bundle: Strings.bundle) }
+        public static var commonAllergens: String { String(localized: "Common allergens", bundle: Strings.bundle) }
+        public static var selectType: String { String(localized: "Allergy type", bundle: Strings.bundle) }
+        public static var selectSeverity: String { String(localized: "Severity", bundle: Strings.bundle) }
+    }
 }
