@@ -130,9 +130,17 @@ extension Strings {
         static let stepBackRecommended = String(localized: "Consider stepping back", table: table)
 
         // Priority labels
+        static let needsAttention = String(localized: "Needs attention", table: table)
         static let refresherNeeded = String(localized: "Refresher needed", table: table)
         static let mainFocus = String(localized: "Main focus", table: table)
         static let dueForReview = String(localized: "Due for review", table: table)
+        static func dueForReviewCount(_ count: Int) -> String {
+            if count == 1 {
+                return String(localized: "1 skill due for review", table: table)
+            } else {
+                return String(localized: "\(count) skills due for review", table: table)
+            }
+        }
         static let practiceInNewContext = String(localized: "Practice in new location", table: table)
         static let warmUp = String(localized: "Warm-up", table: table)
 
@@ -317,9 +325,17 @@ extension Strings {
             static let phaseComplete = String(localized: "I've practiced this", table: table)
             static let continueButton = String(localized: "Continue", table: table)
             static let startLearning = String(localized: "Start Learning", table: table)
+            static let continueLearning = String(localized: "Continue Learning", table: table)
             static let startTraining = String(localized: "Start Training", table: table)
+            static let continueTraining = String(localized: "Continue Training", table: table)
             static let whatYouWillLearn = String(localized: "What you'll learn", table: table)
             static let goalTitle = String(localized: "Goal", table: table)
+
+            // Phase-based status descriptions
+            static func phasesCompleted(_ completed: Int, total: Int) -> String {
+                String(localized: "\(completed) of \(total) phases completed", table: table)
+            }
+            static let inProgress = String(localized: "In progress", table: table)
 
             static func phaseProgress(current: Int, total: Int) -> String {
                 String(localized: "Phase \(current) of \(total)", table: table)
@@ -548,6 +564,28 @@ extension Strings {
             static let crateNudgeSubtitle = String(localized: "Crate naps help with potty training and settling", table: table)
             static let startCrateNap = String(localized: "Start Crate Nap", table: table)
             static let notNow = String(localized: "Not now", table: table)
+        }
+
+        // MARK: - Potty Training Mastery
+        enum PottyTraining {
+            static let masteryPromptTitle = String(localized: "Ready to mark potty training as mastered?", table: table)
+            static let masteryPromptSubtitle = String(localized: "Your pup has been at 100% outdoor success for several days", table: table)
+            static let markMastered = String(localized: "Mark as Mastered", table: table)
+            static let markMasteredDescription = String(localized: "Your pup reliably goes potty outside and signals when they need to go", table: table)
+            static let mastered = String(localized: "Mastered", table: table)
+            static let masteredCelebration = String(localized: "Potty training complete!", table: table)
+            static let masteredDescription = String(localized: "Your pup is potty trained! They reliably go outside and signal when needed.", table: table)
+            static let reactivateTracking = String(localized: "Having accidents? Reactivate tracking", table: table)
+            static func masteredOn(date: String) -> String {
+                String(localized: "Mastered on \(date)", table: table)
+            }
+            static func daysAtPerfect(_ days: Int) -> String {
+                if days == 1 {
+                    return String(localized: "1 day at 100%", table: table)
+                } else {
+                    return String(localized: "\(days) days at 100%", table: table)
+                }
+            }
         }
 
         // MARK: - Crate Training

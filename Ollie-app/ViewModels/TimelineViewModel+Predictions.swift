@@ -185,26 +185,14 @@ extension TimelineViewModel {
         return (outdoorCount * 100) / totalCount
     }
 
-    /// Whether potty training guide should be shown in Train tab
-    /// Hides when at 100% outdoor for 4+ consecutive days with activity
-    /// Re-shows when there's an indoor accident
-    var shouldShowPottyTrainingGuide: Bool {
+    /// Number of consecutive days at 100% outdoor potty success
+    /// Returns 0 if any indoor accident occurred, or if no data
+    var consecutivePerfectDays: Int {
         let calendar = Calendar.current
         let today = calendar.startOfDay(for: Date())
 
-        // Check for recent indoor accident (within last 24 hours)
-        let last24Hours = Date().addingTimeInterval(-24 * 60 * 60)
-        let recentEvents = eventStore.getEvents(from: last24Hours, to: Date())
-        let hasRecentIndoorAccident = recentEvents.potty().contains { $0.location == .binnen }
-
-        // If there's a recent accident, always show the guide
-        if hasRecentIndoorAccident {
-            return true
-        }
-
-        // Check if we have 4+ consecutive days at 100%
-        var consecutivePerfectDays = 0
-        for dayOffset in 0..<7 {
+        var perfectDays = 0
+        for dayOffset in 0..<14 { // Check up to 14 days back
             guard let dayStart = calendar.date(byAdding: .day, value: -dayOffset, to: today),
                   let dayEnd = calendar.date(byAdding: .day, value: 1, to: dayStart) else {
                 continue
@@ -223,11 +211,112 @@ extension TimelineViewModel {
                 break // Found an indoor event, streak broken
             }
 
-            consecutivePerfectDays += 1
+            perfectDays += 1
+        }
+
+        return perfectDays
+    }
+
+    /// Whether potty training guide should be shown in Train tab
+    /// Hides when at 100% outdoor for 4+ consecutive days with activity
+    /// Re-shows when there's an indoor accident
+    var shouldShowPottyTrainingGuide: Bool {
+        // Check for recent indoor accident (within last 24 hours)
+        let last24Hours = Date().addingTimeInterval(-24 * 60 * 60)
+        let recentEvents = eventStore.getEvents(from: last24Hours, to: Date())
+        let hasRecentIndoorAccident = recentEvents.potty().contains { $0.location == .binnen }
+
+        // If there's a recent accident, always show the guide
+        if hasRecentIndoorAccident {
+            return true
         }
 
         // Hide if 4+ consecutive perfect days
         return consecutivePerfectDays < 4
+    }
+
+    /// Whether the potty mastery prompt card should be shown
+    /// Shows when at 100% for multiple consecutive days, respecting dismiss cooldown
+    var shouldShowPottyMasteryPrompt: Bool {
+        // Check if already mastered
+        let isMastered = UserDefaults.standard.bool(forKey: UserPreferences.Key.pottyTrainingMastered.rawValue)
+        if isMastered {
+            return false
+        }
+
+        // Get dismiss count and calculate required threshold
+        // First time: 3 days, after first dismiss: 5 days, after second: 7 days, etc.
+        let dismissCount = UserDefaults.standard.integer(forKey: UserPreferences.Key.pottyMasteryPromptDismissCount.rawValue)
+        let requiredDays = 3 + (dismissCount * 2)
+
+        // Check if we have enough consecutive perfect days
+        guard consecutivePerfectDays >= requiredDays else {
+            return false
+        }
+
+        // Check if we're within the 2-week cooldown after dismissal
+        let dismissedTimestamp = UserDefaults.standard.double(forKey: UserPreferences.Key.pottyMasteryPromptDismissedDate.rawValue)
+        if dismissedTimestamp > 0 {
+            let dismissedDate = Date(timeIntervalSince1970: dismissedTimestamp)
+            let twoWeeksLater = Calendar.current.date(byAdding: .day, value: 14, to: dismissedDate) ?? Date()
+            if Date() < twoWeeksLater {
+                return false // Still in cooldown
+            }
+        }
+
+        return true
+    }
+
+    // MARK: - Potty Mastery Incident Tracking
+
+    /// Indoor incidents since potty training was mastered
+    var incidentsSincePottyMastery: [PuppyEvent] {
+        let masteredTimestamp = UserDefaults.standard.double(forKey: UserPreferences.Key.pottyTrainingMasteredDate.rawValue)
+        guard masteredTimestamp > 0 else { return [] }
+        let masteredDate = Date(timeIntervalSince1970: masteredTimestamp)
+        let events = getHistoricalEvents(days: 30)
+        return events.indoorPotty().filter { $0.time > masteredDate }
+    }
+
+    /// Indoor incidents in the last 7 days
+    var indoorIncidentsLastWeek: [PuppyEvent] {
+        getHistoricalEvents(days: 7).indoorPotty()
+    }
+
+    /// Whether to show reactivation prompt (3+ incidents in a week after mastering)
+    var shouldShowPottyReactivationPrompt: Bool {
+        let isMastered = UserDefaults.standard.bool(forKey: UserPreferences.Key.pottyTrainingMastered.rawValue)
+        guard isMastered else { return false }
+
+        // Check 7-day dismissal cooldown
+        let dismissedTimestamp = UserDefaults.standard.double(forKey: UserPreferences.Key.pottyReactivationPromptDismissedDate.rawValue)
+        if dismissedTimestamp > 0 {
+            let dismissedDate = Date(timeIntervalSince1970: dismissedTimestamp)
+            let cooldownEnd = Calendar.current.date(byAdding: .day, value: 7, to: dismissedDate) ?? Date()
+            if Date() < cooldownEnd { return false }
+        }
+
+        return indoorIncidentsLastWeek.count >= 3
+    }
+
+    /// Whether to show gentle incident message (1-2 incidents, not yet reactivation)
+    var shouldShowPottyIncidentMessage: Bool {
+        let isMastered = UserDefaults.standard.bool(forKey: UserPreferences.Key.pottyTrainingMastered.rawValue)
+        guard isMastered else { return false }
+        guard !shouldShowPottyReactivationPrompt else { return false }
+
+        let incidents = incidentsSincePottyMastery
+        guard !incidents.isEmpty else { return false }
+
+        // Check if latest incident was acknowledged (incidents are newest-first from indoorPotty)
+        guard let lastIncidentTime = incidents.first?.time else { return false }
+        let acknowledgedTimestamp = UserDefaults.standard.double(forKey: UserPreferences.Key.pottyLastIncidentAcknowledgedDate.rawValue)
+        if acknowledgedTimestamp > 0 {
+            let acknowledgedDate = Date(timeIntervalSince1970: acknowledgedTimestamp)
+            if lastIncidentTime <= acknowledgedDate { return false }
+        }
+
+        return true
     }
 
     // MARK: - Daily Digest

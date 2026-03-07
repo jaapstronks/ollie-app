@@ -15,8 +15,19 @@ struct PottyTrainingGuideSheet: View {
     let outdoorPercentage: Int
     let ageInWeeks: Int
 
+    // Injected from parent (TimelineViewModel)
+    let shouldShowIncidentMessage: Bool
+    let shouldShowReactivationPrompt: Bool
+    let incidentCount: Int
+
     @Environment(\.dismiss) private var dismiss
     @Environment(\.colorScheme) private var colorScheme
+
+    // Mastery state
+    @AppStorage(UserPreferences.Key.pottyTrainingMastered.rawValue) private var isMastered = false
+    @AppStorage(UserPreferences.Key.pottyTrainingMasteredDate.rawValue) private var masteredTimestamp: Double = 0
+
+    @State private var showMasteryConfirmation = false
 
     /// Determine which age phase the puppy is in
     private var agePhase: AgePhase {
@@ -47,28 +58,46 @@ struct PottyTrainingGuideSheet: View {
         outdoorPercentage > 0 || streakInfo.currentStreak > 0 || !topTriggers.isEmpty
     }
 
+    /// Formatted mastered date
+    private var masteredDateFormatted: String {
+        guard masteredTimestamp > 0 else { return "" }
+        let date = Date(timeIntervalSince1970: masteredTimestamp)
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .none
+        return formatter.string(from: date)
+    }
+
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 20) {
-                    // AI Potty Analysis (personalized insights)
-                    AIPottyAnalysisCard()
-
-                    // Stats section
-                    if hasData {
-                        statsSection
+                    if isMastered {
+                        // Mastered state
+                        masteredSection
                     } else {
-                        getStartedSection
+                        // AI Potty Analysis (personalized insights)
+                        AIPottyAnalysisCard()
+
+                        // Stats section
+                        if hasData {
+                            statsSection
+                        } else {
+                            getStartedSection
+                        }
+
+                        // Key principles (always show)
+                        principlesSection
+
+                        // Age-based tips
+                        ageBasedTipsSection
+
+                        // Common mistakes
+                        commonMistakesSection
+
+                        // Mark as mastered button
+                        markAsMasteredButton
                     }
-
-                    // Key principles (always show)
-                    principlesSection
-
-                    // Age-based tips
-                    ageBasedTipsSection
-
-                    // Common mistakes
-                    commonMistakesSection
                 }
                 .padding()
                 .padding(.bottom, 20)
@@ -82,7 +111,129 @@ struct PottyTrainingGuideSheet: View {
                     }
                 }
             }
+            .confirmationDialog(
+                Strings.Training.PottyTraining.markMastered,
+                isPresented: $showMasteryConfirmation,
+                titleVisibility: .visible
+            ) {
+                Button(Strings.Training.PottyTraining.markMastered) {
+                    markAsMastered()
+                }
+                Button(Strings.Common.cancel, role: .cancel) {}
+            } message: {
+                Text(Strings.Training.PottyTraining.markMasteredDescription)
+            }
         }
+    }
+
+    // MARK: - Mastered Section
+
+    @ViewBuilder
+    private var masteredSection: some View {
+        VStack(spacing: 24) {
+            // Celebration header
+            VStack(spacing: 12) {
+                ZStack {
+                    Circle()
+                        .fill(Color.green.opacity(0.15))
+                        .frame(width: 80, height: 80)
+
+                    Image(systemName: "checkmark.circle.fill")
+                        .font(.system(size: 48))
+                        .foregroundStyle(.green)
+                }
+
+                Text(Strings.Training.PottyTraining.masteredCelebration)
+                    .font(.title2)
+                    .fontWeight(.bold)
+
+                Text(Strings.Training.PottyTraining.masteredDescription)
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
+
+                if !masteredDateFormatted.isEmpty {
+                    Text(Strings.Training.PottyTraining.masteredOn(date: masteredDateFormatted))
+                        .font(.caption)
+                        .foregroundStyle(.tertiary)
+                }
+            }
+            .padding(.top, 20)
+
+            Divider()
+
+            // Key principles reminder (collapsed)
+            principlesSection
+
+            Divider()
+
+            // Reactivate button
+            Button {
+                reactivateTracking()
+            } label: {
+                HStack {
+                    Image(systemName: "arrow.counterclockwise")
+                        .font(.subheadline)
+                    Text(Strings.Training.PottyTraining.reactivateTracking)
+                        .font(.subheadline)
+                }
+                .foregroundStyle(.secondary)
+            }
+            .buttonStyle(.plain)
+            .padding(.top, 8)
+        }
+    }
+
+    // MARK: - Mark as Mastered Button
+
+    @ViewBuilder
+    private var markAsMasteredButton: some View {
+        VStack(spacing: 8) {
+            Divider()
+                .padding(.top, 8)
+
+            Button {
+                showMasteryConfirmation = true
+            } label: {
+                HStack {
+                    Image(systemName: "checkmark.seal.fill")
+                    Text(Strings.Training.PottyTraining.markMastered)
+                }
+                .font(.subheadline)
+                .fontWeight(.medium)
+                .foregroundStyle(.green)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 12)
+                .background(
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(Color.green.opacity(colorScheme == .dark ? 0.15 : 0.1))
+                )
+            }
+            .buttonStyle(.plain)
+
+            Text(Strings.Training.PottyTraining.markMasteredDescription)
+                .font(.caption)
+                .foregroundStyle(.tertiary)
+                .multilineTextAlignment(.center)
+        }
+    }
+
+    // MARK: - Actions
+
+    private func markAsMastered() {
+        withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+            isMastered = true
+            masteredTimestamp = Date().timeIntervalSince1970
+        }
+        HapticFeedback.success()
+    }
+
+    private func reactivateTracking() {
+        withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+            isMastered = false
+            masteredTimestamp = 0
+        }
+        HapticFeedback.light()
     }
 
     // MARK: - Stats Section

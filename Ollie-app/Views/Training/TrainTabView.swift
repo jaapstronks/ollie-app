@@ -82,9 +82,15 @@ struct TrainTabView: View {
                         dueForReviewSection
                     }
 
-                    // Section 1: Training Guides (Potty + Crate)
-                    guidesSection
-                        .animatedAppear(delay: 0)
+                    // Section 1: Training Guides (non-mastered only in normal position)
+                    if pottyTrainingMastered {
+                        // Only show crate guide in normal position when potty is mastered
+                        nonMasteredGuidesSection
+                            .animatedAppear(delay: 0)
+                    } else {
+                        guidesSection
+                            .animatedAppear(delay: 0)
+                    }
 
                     // Section 2: Skills
                     skillsSection
@@ -93,6 +99,12 @@ struct TrainTabView: View {
                     // Section 3: Socialization
                     socializationSection
                         .animatedAppear(delay: 0.10)
+
+                    // Section 4: Mastered potty guide (below socialization)
+                    if pottyTrainingMastered {
+                        masteredPottySection
+                            .animatedAppear(delay: 0.15)
+                    }
                 }
                 .padding()
                 .adaptiveContainer()
@@ -106,7 +118,10 @@ struct TrainTabView: View {
                     streakInfo: viewModel.streakInfo,
                     patternAnalysis: viewModel.patternAnalysis,
                     outdoorPercentage: viewModel.outdoorPercentage,
-                    ageInWeeks: profileStore.profile?.ageInWeeks ?? 12
+                    ageInWeeks: profileStore.profile?.ageInWeeks ?? 12,
+                    shouldShowIncidentMessage: viewModel.shouldShowPottyIncidentMessage,
+                    shouldShowReactivationPrompt: viewModel.shouldShowPottyReactivationPrompt,
+                    incidentCount: viewModel.incidentsSincePottyMastery.count
                 )
             }
             .sheet(isPresented: $showCrateGuide) {
@@ -191,6 +206,58 @@ struct TrainTabView: View {
                 isMastered: crateTrainingMastered
             ) {
                 showCrateGuide = true
+            }
+        }
+    }
+
+    // MARK: - Non-Mastered Guides Section (Crate only when potty is mastered)
+
+    @ViewBuilder
+    private var nonMasteredGuidesSection: some View {
+        VStack(spacing: 10) {
+            // Potty Mastery Prompt - shows when at 100% for multiple days, dismissible
+            if viewModel.shouldShowPottyMasteryPrompt {
+                PottyMasteryPromptCard(
+                    consecutiveDays: viewModel.consecutivePerfectDays,
+                    onMarkMastered: {
+                        showPottyMasteryConfirmation = true
+                    },
+                    onDismiss: {
+                        dismissPottyMasteryPrompt()
+                    }
+                )
+            }
+
+            // Only crate training when potty is mastered
+            TrainingGuideEntryCard(
+                icon: "house.fill",
+                title: Strings.Training.Guides.crateTitle,
+                subtitle: crateTrainingMastered
+                    ? Strings.Training.CrateTraining.masteredDescription
+                    : Strings.Training.Guides.crateSubtitle,
+                statValue: crateTrainingMastered ? nil : (crateNapPercentage > 0 ? "\(crateNapPercentage)%" : nil),
+                tintColor: .indigo,
+                isMastered: crateTrainingMastered
+            ) {
+                showCrateGuide = true
+            }
+        }
+    }
+
+    // MARK: - Mastered Potty Section (below socialization)
+
+    @ViewBuilder
+    private var masteredPottySection: some View {
+        VStack(spacing: 10) {
+            TrainingGuideEntryCard(
+                icon: "target",
+                title: Strings.Training.Guides.pottyTitle,
+                subtitle: Strings.Training.PottyTraining.masteredDescription,
+                statValue: nil,
+                tintColor: .otisSuccess,
+                isMastered: true
+            ) {
+                showPottyGuide = true
             }
         }
     }

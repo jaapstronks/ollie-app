@@ -201,6 +201,14 @@ enum UserPreferences {
         // Training guide mastery
         case crateTrainingMastered = "crateTrainingMastered"
         case crateTrainingMasteredDate = "crateTrainingMasteredDate"
+        case pottyTrainingMastered = "pottyTrainingMastered"
+        case pottyTrainingMasteredDate = "pottyTrainingMasteredDate"
+        case pottyMasteryPromptDismissedDate = "pottyMasteryPromptDismissedDate"
+        case pottyMasteryPromptDismissCount = "pottyMasteryPromptDismissCount"
+
+        // Potty mastery incident tracking
+        case pottyReactivationPromptDismissedDate = "pottyReactivationPromptDismissedDate"
+        case pottyLastIncidentAcknowledgedDate = "pottyLastIncidentAcknowledgedDate"
 
         // First week card
         case firstWeekCardCollapsedDate = "firstWeekCardCollapsedDate"
@@ -230,6 +238,8 @@ enum UserPreferences {
         // Training defaults
         Key.showFloatingClicker.rawValue: false,
         Key.crateTrainingMastered.rawValue: false,
+        Key.pottyTrainingMastered.rawValue: false,
+        Key.pottyMasteryPromptDismissCount.rawValue: 0,
 
         // Onboarding follow-up defaults
         Key.needsFirstSessionHandoff.rawValue: false
