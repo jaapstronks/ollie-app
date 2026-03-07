@@ -13,6 +13,7 @@ struct SentimentTipCard: View {
     let tip: SentimentTip
     let rootCauseMessage: String?
     let onInfoSheet: ((InfoSheetType) -> Void)?
+    let onDismiss: (() -> Void)?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -55,21 +56,40 @@ struct SentimentTipCard: View {
                     .foregroundStyle(.secondary)
             }
 
-            // Action button if available
-            if let actionLabel = tip.actionLabel, let sheetType = tip.infoSheetType {
-                Button {
-                    onInfoSheet?(sheetType)
-                } label: {
-                    HStack {
-                        Text(actionLabel)
-                        Image(systemName: "arrow.right")
+            // Action buttons row
+            HStack(spacing: 12) {
+                // "Got it" dismiss button
+                if let onDismiss = onDismiss {
+                    Button {
+                        onDismiss()
+                    } label: {
+                        Text(Strings.Common.gotIt)
+                            .font(.subheadline)
+                            .fontWeight(.medium)
+                            .foregroundStyle(.white)
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 8)
+                            .background(categoryColor)
+                            .clipShape(Capsule())
                     }
-                    .font(.subheadline)
-                    .fontWeight(.medium)
-                    .foregroundStyle(categoryColor)
                 }
-                .padding(.top, 4)
+
+                // "Learn more" action button if available
+                if let actionLabel = tip.actionLabel, let sheetType = tip.infoSheetType {
+                    Button {
+                        onInfoSheet?(sheetType)
+                    } label: {
+                        HStack(spacing: 4) {
+                            Text(actionLabel)
+                            Image(systemName: "arrow.right")
+                        }
+                        .font(.subheadline)
+                        .fontWeight(.medium)
+                        .foregroundStyle(categoryColor)
+                    }
+                }
             }
+            .padding(.top, 4)
         }
         .padding()
         .background(Color(.secondarySystemBackground))
@@ -95,14 +115,26 @@ struct SentimentTipCard: View {
 // MARK: - Sentiment Tips Container
 
 /// Container that shows tips for all struggling areas.
+/// Tips can be dismissed for the rest of the day.
 struct SentimentTipsContainer: View {
     @ObservedObject var sentimentStore: SentimentStore
     let onInfoSheet: ((InfoSheetType) -> Void)?
 
+    // Track dismissed tip date - when dismissed today, hide until tomorrow
+    // Stored as TimeInterval since 1970 for AppStorage compatibility
+    @AppStorage("dismissedSentimentTipDate") private var dismissedTipTimestamp: Double = 0
+
+    /// Whether the tip is dismissed for today
+    private var isTipDismissedToday: Bool {
+        guard dismissedTipTimestamp > 0 else { return false }
+        let dismissedDate = Date(timeIntervalSince1970: dismissedTipTimestamp)
+        return Calendar.current.isDateInToday(dismissedDate)
+    }
+
     var body: some View {
         let strugglingCategories = sentimentStore.strugglingCategories
 
-        if !strugglingCategories.isEmpty {
+        if !strugglingCategories.isEmpty && !isTipDismissedToday {
             // Identify primary focus
             let (primaryCategory, rootCauseMessage) = SentimentTipProvider.identifyPrimaryFocus(
                 strugglingCategories: strugglingCategories,
@@ -115,7 +147,12 @@ struct SentimentTipsContainer: View {
                     category: primaryCategory,
                     tip: tip,
                     rootCauseMessage: rootCauseMessage,
-                    onInfoSheet: onInfoSheet
+                    onInfoSheet: onInfoSheet,
+                    onDismiss: {
+                        withAnimation(.easeOut(duration: 0.2)) {
+                            dismissedTipTimestamp = Date().timeIntervalSince1970
+                        }
+                    }
                 )
             }
         }
@@ -135,7 +172,8 @@ struct SentimentTipsContainer: View {
                 infoSheetType: .crateTraining
             ),
             rootCauseMessage: nil,
-            onInfoSheet: nil
+            onInfoSheet: nil,
+            onDismiss: { print("Dismissed") }
         )
 
         SentimentTipCard(
@@ -147,7 +185,8 @@ struct SentimentTipsContainer: View {
                 infoSheetType: nil
             ),
             rootCauseMessage: "Overtired puppies bite more. Getting enough sleep will reduce nipping.",
-            onInfoSheet: nil
+            onInfoSheet: nil,
+            onDismiss: { print("Dismissed") }
         )
     }
     .padding()
