@@ -1,5 +1,5 @@
 //
-//  SkillCardExpanded.swift
+//  ExpandedSkillActions.swift
 //  Otis-app
 //
 //  Expanded actions section for skill cards
