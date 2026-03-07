@@ -5,6 +5,7 @@
 //  Widgets and push notification strings
 
 import Foundation
+import OtisShared
 
 private let table = "Widgets"
 
@@ -36,7 +37,8 @@ extension Strings {
         }
         static let napNeededTitle = String(localized: "Nap needed?", table: table)
         static func napNeededBody(name: String, minutes: Int) -> String {
-            String(localized: "\(name) has been awake for \(minutes) minutes", table: table)
+            let duration = DurationFormatter.format(minutes, style: .naturalLanguage)
+            return String(localized: "\(name) has been awake for \(duration)", table: table)
         }
         static func appointmentReminder(name: String, title: String, time: String) -> String {
             String(localized: "\(name) has '\(title)' at \(time)", table: table)

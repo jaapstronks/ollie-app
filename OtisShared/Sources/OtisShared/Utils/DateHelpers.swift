@@ -215,9 +215,38 @@ extension Date {
         Int(timeIntervalSince(other) / 60)
     }
 
+    /// Milliseconds since another date
+    public func millisecondsSince(_ other: Date) -> Int {
+        Int(timeIntervalSince(other) * 1000)
+    }
+
     /// Hours since another date (fractional)
     public func hoursSince(_ other: Date) -> Double {
         timeIntervalSince(other) / 3600
+    }
+
+    // MARK: - Caching Stamps
+
+    /// Format as YYYY-MM-DD for cache keys and budget tracking
+    public func dayStamp() -> String {
+        dateString
+    }
+
+    /// Format as YYYY-MM-DD-HH for hourly cache keys
+    public func hourStamp() -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd-HH"
+        formatter.timeZone = TimeZone.current
+        return formatter.string(from: self)
+    }
+
+    /// Format as YYYY-MM-DD-W where W is the window bucket for cache keys
+    /// Groups hours into buckets (e.g., hours=6 creates 4 buckets per day: 0, 1, 2, 3)
+    public func windowStamp(hours: Int) -> String {
+        let hour = AppCalendar.current.component(.hour, from: self)
+        let bucket = max(1, hours)
+        let window = hour / bucket
+        return "\(dateString)-\(window)"
     }
 
     // MARK: - Display Formatting
@@ -263,6 +292,8 @@ public enum DurationFormatStyle {
     case compact
     /// Full format for app UI: "5 min", "1u 30m"
     case full
+    /// Natural language for notifications: "an hour", "45 minutes", "an hour and a half"
+    case naturalLanguage
 }
 
 /// Centralized duration formatting to avoid duplication
@@ -298,6 +329,42 @@ public enum DurationFormatter {
                 return "\(hours) \(Strings.Common.hours)"
             } else {
                 return "\(hours)u \(mins)m"
+            }
+
+        case .naturalLanguage:
+            return formatNaturalLanguage(minutes)
+        }
+    }
+
+    /// Format minutes as natural language (e.g., "an hour", "45 minutes", "an hour and a half")
+    private static func formatNaturalLanguage(_ minutes: Int) -> String {
+        switch minutes {
+        case 0..<2:
+            return Strings.Duration.aMoment
+        case 2..<5:
+            return Strings.Duration.aFewMinutes
+        case 25...35:
+            return Strings.Duration.halfAnHour
+        case 55...65:
+            return Strings.Duration.anHour
+        case 85...95:
+            return Strings.Duration.anHourAndAHalf
+        case 115...125:
+            return Strings.Duration.twoHours
+        default:
+            // For other values, use numeric format with "minutes" or "hours"
+            if minutes < 60 {
+                return Strings.Duration.minutesNatural(minutes)
+            } else {
+                let hours = minutes / 60
+                let remainingMins = minutes % 60
+                if remainingMins < 10 {
+                    return Strings.Duration.aboutHours(hours)
+                } else if remainingMins >= 25 && remainingMins <= 35 {
+                    return Strings.Duration.hoursAndAHalf(hours)
+                } else {
+                    return Strings.Duration.aboutHours(hours)
+                }
             }
         }
     }

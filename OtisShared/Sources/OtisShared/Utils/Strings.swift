@@ -51,6 +51,27 @@ public enum Strings {
         public static var seeAll: String { String(localized: "See all", bundle: Strings.bundle) }
     }
 
+    // MARK: - Duration (Natural Language)
+    /// Natural language duration strings for notifications and conversational UI
+    public enum Duration {
+        public static var aMoment: String { String(localized: "a moment", bundle: Strings.bundle) }
+        public static var aFewMinutes: String { String(localized: "a few minutes", bundle: Strings.bundle) }
+        public static var halfAnHour: String { String(localized: "half an hour", bundle: Strings.bundle) }
+        public static var anHour: String { String(localized: "an hour", bundle: Strings.bundle) }
+        public static var anHourAndAHalf: String { String(localized: "an hour and a half", bundle: Strings.bundle) }
+        public static var twoHours: String { String(localized: "two hours", bundle: Strings.bundle) }
+
+        public static func minutesNatural(_ minutes: Int) -> String {
+            String(localized: "\(minutes) minutes", bundle: Strings.bundle)
+        }
+        public static func aboutHours(_ hours: Int) -> String {
+            String(localized: "about \(hours) hours", bundle: Strings.bundle)
+        }
+        public static func hoursAndAHalf(_ hours: Int) -> String {
+            String(localized: "\(hours) and a half hours", bundle: Strings.bundle)
+        }
+    }
+
     // MARK: - App
     public enum App {
         public static var name: String { String(localized: "Otis", bundle: Strings.bundle) }
@@ -824,35 +845,6 @@ public enum Strings {
         }
         public static func intervalSummary(_ minutes: Int) -> String {
             String(localized: "~\(minutes) min interval", bundle: Strings.bundle)
-        }
-    }
-
-    // MARK: - Walk Summary (Weekly)
-    public enum WalkSummary {
-        /// Card title
-        public static var title: String { String(localized: "This Week", bundle: Strings.bundle) }
-
-        /// Minutes duration (e.g., "45 min")
-        public static func minutes(_ count: Int) -> String {
-            String(localized: "\(count) min", bundle: Strings.bundle)
-        }
-
-        /// Hours duration (e.g., "3.2 hours")
-        public static func hours(_ count: Double) -> String {
-            let formatted = count.truncatingRemainder(dividingBy: 1) == 0
-                ? String(format: "%.0f", count)
-                : String(format: "%.1f", count)
-            return String(localized: "\(formatted) hours", bundle: Strings.bundle)
-        }
-
-        /// Days with walks indicator (e.g., "5/7 days")
-        public static func daysProgress(days: Int) -> String {
-            String(localized: "\(days)/7 days", bundle: Strings.bundle)
-        }
-
-        /// Accessibility label for the card
-        public static func accessibilityLabel(walks: Int, days: Int) -> String {
-            String(localized: "\(walks) walks this week over \(days) days", bundle: Strings.bundle)
         }
     }
 
