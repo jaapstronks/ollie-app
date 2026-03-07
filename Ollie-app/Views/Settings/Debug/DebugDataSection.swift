@@ -19,6 +19,7 @@ struct DebugDataSection: View {
     @State private var isResetting = false
     @State private var isImporting = false
     @State private var importResult: String?
+    @State private var cacheCleared = false
 
     var body: some View {
         Section {
@@ -40,6 +41,20 @@ struct DebugDataSection: View {
                 Text(result)
                     .font(.caption)
                     .foregroundStyle(result.contains("Error") ? .red : .green)
+            }
+
+            // Clear discovery cache
+            Button {
+                clearDiscoveryCache()
+            } label: {
+                HStack {
+                    Label("Clear Discovery Cache", systemImage: "location.slash")
+                    if cacheCleared {
+                        Spacer()
+                        Image(systemName: "checkmark.circle.fill")
+                            .foregroundStyle(.green)
+                    }
+                }
             }
 
             // Nuclear reset option
@@ -173,6 +188,28 @@ struct DebugDataSection: View {
         }
 
         isImporting = false
+    }
+
+    // MARK: - Clear Discovery Cache
+
+    private func clearDiscoveryCache() {
+        // Delete the discovered spots cache file
+        let cacheFileName = "discovered-spots-cache.json"
+        if let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
+            let cacheFileURL = documentsURL.appendingPathComponent(cacheFileName)
+            try? FileManager.default.removeItem(at: cacheFileURL)
+        }
+
+        withAnimation {
+            cacheCleared = true
+        }
+
+        // Reset after 2 seconds
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            withAnimation {
+                cacheCleared = false
+            }
+        }
     }
 }
 

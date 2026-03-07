@@ -20,16 +20,25 @@ actor OverpassAPIClient {
     // MARK: - Dog Parks
 
     /// Fetch dog parks near a location
+    /// Queries multiple OSM tag patterns to capture various dog area tagging conventions
     func fetchDogParks(
         latitude: Double,
         longitude: Double,
         radiusKm: Double
     ) async throws -> [DiscoveredSpot] {
         let radiusMeters = Int(radiusKm * 1000)
+        // Query multiple tag patterns to capture regional variations:
+        // - leisure=dog_park (explicit dog parks)
+        // - dog=yes/unleashed/off_leash on leisure areas (multi-use parks allowing dogs)
+        // - animal=dog areas (alternative tagging)
         let query = """
         [out:json][timeout:25];
         (
           nwr["leisure"="dog_park"](around:\(radiusMeters),\(latitude),\(longitude));
+          nwr["dog"="yes"]["leisure"~"park|pitch|recreation_ground"](around:\(radiusMeters),\(latitude),\(longitude));
+          nwr["dog"="unleashed"]["leisure"](around:\(radiusMeters),\(latitude),\(longitude));
+          nwr["dog"="off_leash"]["leisure"](around:\(radiusMeters),\(latitude),\(longitude));
+          nwr["animal"="dog"]["leisure"](around:\(radiusMeters),\(latitude),\(longitude));
         );
         out center tags;
         """
@@ -49,6 +58,10 @@ actor OverpassAPIClient {
         [out:json][timeout:25];
         (
           nwr["leisure"="dog_park"](\(south),\(west),\(north),\(east));
+          nwr["dog"="yes"]["leisure"~"park|pitch|recreation_ground"](\(south),\(west),\(north),\(east));
+          nwr["dog"="unleashed"]["leisure"](\(south),\(west),\(north),\(east));
+          nwr["dog"="off_leash"]["leisure"](\(south),\(west),\(north),\(east));
+          nwr["animal"="dog"]["leisure"](\(south),\(west),\(north),\(east));
         );
         out center tags;
         """
