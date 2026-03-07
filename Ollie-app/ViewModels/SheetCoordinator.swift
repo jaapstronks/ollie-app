@@ -9,6 +9,17 @@ import Combine
 import OtisShared
 import SwiftUI
 
+// MARK: - Appointment Prefill
+
+/// Data for pre-filling appointment form from nudge cards
+struct AppointmentPrefill: Equatable {
+    var appointmentType: AppointmentType
+    var title: String
+    var notes: String?
+    var linkedMilestoneID: UUID?
+    var suggestedDate: Date?
+}
+
 /// Manages sheet presentation state for the timeline view
 @MainActor
 final class SheetCoordinator: ObservableObject {
@@ -57,6 +68,8 @@ final class SheetCoordinator: ObservableObject {
         // Guide sheets (from sentiment tips)
         case crateTrainingGuide
         case pottyTrainingGuide
+        // Appointment nudge pre-filled sheet
+        case addAppointmentWithPrefill(AppointmentPrefill)
 
         var id: String {
             switch self {
@@ -93,6 +106,7 @@ final class SheetCoordinator: ObservableObject {
             case .walkScheduleEditor: return "walkScheduleEditor"
             case .crateTrainingGuide: return "crateTrainingGuide"
             case .pottyTrainingGuide: return "pottyTrainingGuide"
+            case .addAppointmentWithPrefill(let prefill): return "addAppointmentWithPrefill-\(prefill.appointmentType.rawValue)"
             }
         }
     }

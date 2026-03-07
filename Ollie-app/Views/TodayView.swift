@@ -36,9 +36,13 @@ struct TodayView: View {
     @EnvironmentObject private var atmosphereProvider: AtmosphereProvider
     @EnvironmentObject private var foodRecallService: FoodRecallService
     @EnvironmentObject private var eventStore: EventStore
+    @EnvironmentObject private var milestoneStore: MilestoneStore
 
     // Trial touchpoint state
     @ObservedObject private var trialManager = TrialManager.shared
+
+    // Appointment nudge dismissals (per-milestone labelKey)
+    @AppStorage("appointmentNudgeDismissals") private var appointmentNudgeDismissalsData: Data = Data()
 
     /// Whether to show the crate nudge card
     private var shouldShowCrateNudge: Bool {
@@ -87,6 +91,56 @@ struct TodayView: View {
             // Don't show for these states
             return false
         }
+    }
+
+    // MARK: - Appointment Nudge
+
+    /// Decoded dismissals dictionary from AppStorage
+    private var appointmentNudgeDismissals: [String: Date] {
+        guard !appointmentNudgeDismissalsData.isEmpty else { return [:] }
+        return (try? JSONDecoder().decode([String: Date].self, from: appointmentNudgeDismissalsData)) ?? [:]
+    }
+
+    /// Top appointment nudge candidate (if any)
+    private var appointmentNudgeCandidate: AppointmentNudgeCandidate? {
+        guard let birthDate = viewModel.profileStore.profile?.birthDate else { return nil }
+
+        return AppointmentNudgeCalculations.topNudgeCandidate(
+            milestones: milestoneStore.milestones,
+            appointments: appointmentStore.appointments,
+            birthDate: birthDate,
+            dismissals: appointmentNudgeDismissals
+        )
+    }
+
+    /// Whether to show the nap context message for the appointment nudge
+    private var shouldShowAppointmentNudgeNapContext: Bool {
+        PuppyContextUtility.shouldShowNapContextMessage(
+            sleepState: viewModel.currentSleepState,
+            events: viewModel.events
+        )
+    }
+
+    /// Dismiss the appointment nudge for a milestone
+    private func dismissAppointmentNudge(for labelKey: String) {
+        var dismissals = appointmentNudgeDismissals
+        dismissals[labelKey] = Date()
+        if let encoded = try? JSONEncoder().encode(dismissals) {
+            appointmentNudgeDismissalsData = encoded
+        }
+    }
+
+    /// Create appointment prefill from nudge candidate
+    private func createAppointmentPrefill(for candidate: AppointmentNudgeCandidate) -> AppointmentPrefill? {
+        guard let birthDate = viewModel.profileStore.profile?.birthDate else { return nil }
+
+        return AppointmentPrefill(
+            appointmentType: candidate.appointmentType,
+            title: candidate.milestone.localizedLabel,
+            notes: nil,
+            linkedMilestoneID: candidate.milestone.id,
+            suggestedDate: AppointmentNudgeCalculations.suggestedAppointmentDate(for: candidate, birthDate: birthDate)
+        )
     }
 
     var body: some View {
@@ -450,6 +504,25 @@ struct TodayView: View {
                 .animatedAppear(delay: 0.025)
             }
 
+            // Appointment nudge card (prompt to schedule upcoming vaccinations/vet visits)
+            if let candidate = appointmentNudgeCandidate, !combinedState.shouldShowFirstRunCard {
+                AppointmentNudgeCard(
+                    candidate: candidate,
+                    puppyName: viewModel.puppyName,
+                    showNapContext: shouldShowAppointmentNudgeNapContext,
+                    onSchedule: {
+                        if let prefill = createAppointmentPrefill(for: candidate) {
+                            viewModel.sheetCoordinator.presentSheet(.addAppointmentWithPrefill(prefill))
+                        }
+                    },
+                    onDismiss: {
+                        // Dismiss with 7-day cooldown per milestone
+                        dismissAppointmentNudge(for: candidate.milestone.labelKey)
+                    }
+                )
+                .animatedAppear(delay: 0.027)
+            }
+
             // Subtle AI recommendation card (confirm before applying reminder changes)
             if let recommendation = aiRecommendation, !combinedState.shouldShowFirstRunCard {
                 aiRecommendationCard(recommendation)
@@ -586,6 +659,7 @@ struct EmptyTimelineCard: View {
     let eventStore = EventStore()
     let profileStore = ProfileStore()
     let appointmentStore = AppointmentStore()
+    let milestoneStore = MilestoneStore()
     let viewModel = TimelineViewModel(eventStore: eventStore, profileStore: profileStore)
     let memoriesViewModel = MemoriesViewModel(eventStore: eventStore)
     let weatherService = WeatherService()
@@ -605,4 +679,6 @@ struct EmptyTimelineCard: View {
     .environmentObject(atmosphereProvider)
     .environmentObject(foodRecallService)
     .environmentObject(SocializationStore())
+    .environmentObject(milestoneStore)
+    .environmentObject(eventStore)
 }

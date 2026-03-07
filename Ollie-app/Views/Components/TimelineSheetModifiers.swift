@@ -587,6 +587,21 @@ struct TimelineSheetModifiers: ViewModifier {
                 compact: [.large],
                 regular: [.medium, .large]
             )
+
+        case .addAppointmentWithPrefill(let prefill):
+            if let appointmentStore = viewModel.appointmentStore {
+                AddEditAppointmentSheet(
+                    appointmentStore: appointmentStore,
+                    prefill: prefill
+                )
+                .adaptivePresentationDetents(
+                    compact: [.large],
+                    regular: [.medium, .large]
+                )
+            } else {
+                // Fallback if no appointment store (shouldn't happen in practice)
+                Text("Appointment store not available")
+            }
         }
     }
 }

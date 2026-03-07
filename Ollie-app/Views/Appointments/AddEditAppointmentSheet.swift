@@ -12,6 +12,7 @@ struct AddEditAppointmentSheet: View {
     @ObservedObject var appointmentStore: AppointmentStore
     @EnvironmentObject var contactStore: ContactStore
     var existingAppointment: DogAppointment?
+    var prefill: AppointmentPrefill?
 
     @Environment(\.dismiss) private var dismiss
 
@@ -213,6 +214,23 @@ struct AddEditAppointmentSheet: View {
     // MARK: - Load Existing Appointment
 
     private func loadExistingAppointment() {
+        // Load prefill data first (for nudge-initiated appointments)
+        if let prefill = prefill {
+            appointmentType = prefill.appointmentType
+            title = prefill.title
+            notes = prefill.notes ?? ""
+
+            if let suggestedDate = prefill.suggestedDate {
+                startDate = suggestedDate
+                endDate = suggestedDate.addingTimeInterval(3600) // 1 hour later
+            }
+
+            // Suggest contact for the appointment type
+            suggestContact(for: prefill.appointmentType)
+            return
+        }
+
+        // Load existing appointment data (for editing)
         guard let appointment = existingAppointment else { return }
 
         appointmentType = appointment.appointmentType
@@ -248,6 +266,9 @@ struct AddEditAppointmentSheet: View {
             }
         }
 
+        // Determine linkedMilestoneID from prefill or existing appointment
+        let milestoneID = prefill?.linkedMilestoneID ?? existingAppointment?.linkedMilestoneID
+
         let appointment = DogAppointment(
             id: existingAppointment?.id ?? UUID(),
             title: trimmedTitle,
@@ -259,7 +280,7 @@ struct AddEditAppointmentSheet: View {
             notes: notes.nilIfBlank,
             reminderMinutesBefore: reminderMinutesBefore,
             recurrence: nil, // TODO: Add recurrence editor for premium
-            linkedMilestoneID: existingAppointment?.linkedMilestoneID,
+            linkedMilestoneID: milestoneID,
             linkedContactID: linkedContactID,
             calendarEventID: existingAppointment?.calendarEventID,
             isCompleted: existingAppointment?.isCompleted ?? false,
