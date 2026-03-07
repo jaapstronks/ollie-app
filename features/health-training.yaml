@@ -1,0 +1,292 @@
+# Health & Training Features
+# Part of Ollie Feature Registry - see ../FEATURES.yaml for meta
+
+# =============================================================================
+# HEALTH & INSIGHTS
+# =============================================================================
+health:
+
+  - id: potty-status
+    name: Potty Training Status
+    description: Track potty count, urgency indicators, and gap analysis
+    tier: free
+    status: shipped
+    platforms: [ios]
+    entry_points: [today-tab, health-tab]
+    key_files:
+      - Views/Cards/PottyStatusCard.swift
+      - Views/Cards/PoopStatusCard.swift
+      - Calculations/Poop/PoopCalculations.swift
+    tested: false
+    docs: false
+
+  - id: potty-predictions
+    name: Potty Predictions
+    description: AI-powered prediction of next potty need based on patterns
+    tier: premium
+    premium_feature: pottyPredictions
+    status: shipped
+    platforms: [ios]
+    entry_points: [today-tab]
+    key_files:
+      - Calculations/PredictionCalculations.swift
+      - ViewModels/TimelineViewModel+Predictions.swift
+    depends_on: [potty-status]
+    tested: false
+    docs: false
+
+  - id: sleep-status
+    name: Sleep Status
+    description: Basic sleep duration tracking and nap vs overnight distinction
+    tier: free
+    status: shipped
+    platforms: [ios]
+    entry_points: [today-tab]
+    key_files:
+      - Views/Cards/SleepStatusCard.swift
+    tested: false
+    docs: false
+
+  - id: sleep-insights
+    name: Sleep Insights
+    description: Advanced sleep pattern analysis and recommendations
+    tier: premium
+    premium_feature: sleepInsights
+    status: shipped
+    platforms: [ios]
+    entry_points: [health-tab]
+    key_files:
+      - Calculations/SleepCalculations.swift
+    depends_on: [sleep-status]
+    tested: false
+    docs: false
+
+  - id: streaks
+    name: Outdoor Potty Streaks
+    description: Track consecutive outdoor potty successes
+    tier: free
+    status: shipped
+    platforms: [ios]
+    entry_points: [today-tab]
+    key_files:
+      - Calculations/StreakCalculations+iOS.swift
+      - Views/Cards/StreakCard.swift
+    tested: false
+    docs: false
+
+  - id: growth-tracking
+    name: Growth & Weight Charts
+    description: Visualize weight trends and growth over time
+    tier: premium
+    premium_feature: advancedAnalytics
+    status: shipped
+    platforms: [ios]
+    entry_points: [health-tab]
+    key_files:
+      - Views/Health/WeightChartView.swift
+      - Views/Cards/GrowthStoryCard.swift
+    depends_on: [weight-logging]
+    tested: false
+    docs: false
+
+  - id: pattern-analysis
+    name: Pattern Analysis
+    description: Behavioral pattern detection and correlations
+    tier: premium
+    premium_feature: advancedAnalytics
+    status: shipped
+    platforms: [ios]
+    entry_points: [health-tab, insights-tab]
+    key_files:
+      - Calculations/PatternCalculations.swift
+      - Views/Cards/PatternAnalysisCard.swift
+    tested: false
+    docs: false
+
+  - id: development-phases
+    name: Development Phase Tracking
+    description: Age-based developmental stages and milestone progression
+    tier: premium
+    premium_feature: advancedAnalytics
+    status: shipped
+    platforms: [ios]
+    entry_points: [health-tab, today-tab]
+    key_files:
+      - Views/Health/DevelopmentPhaseCard.swift
+      - Views/Development/DevelopmentJourneySheet.swift
+      - OtisShared/Sources/OtisShared/Models/DevelopmentStage.swift
+    tested: false
+    docs: false
+
+  - id: medical-care
+    name: Medical Care Timeline
+    description: Track vet appointments, vaccinations, and medical events
+    tier: premium
+    status: shipped
+    platforms: [ios]
+    entry_points: [health-tab]
+    key_files:
+      - Views/Health/MedicalCareSheet.swift
+      - Views/Health/HealthTabView.swift
+    tested: false
+    docs: false
+
+# =============================================================================
+# TRAINING
+# =============================================================================
+training:
+
+  - id: training-library-free
+    name: Training Library (Free)
+    description: Access to first 10 training skills
+    tier: free
+    status: shipped
+    platforms: [ios]
+    entry_points: [training-tab]
+    key_files:
+      - Views/Training/TrainingView.swift
+      - Views/Training/SkillCard.swift
+      - Views/Training/SkillDetailSheet.swift
+    tested: false
+    docs: false
+
+  - id: training-library-full
+    name: Full Training Library
+    description: Access to complete training skill library
+    tier: premium
+    premium_feature: fullTrainingLibrary
+    status: shipped
+    platforms: [ios]
+    entry_points: [training-tab]
+    key_files:
+      - Views/Training/TrainingView.swift
+    depends_on: [training-library-free]
+    tested: false
+    docs: false
+
+  - id: skill-learning-flow
+    name: Skill Learning Flow
+    description: Linear phase-by-phase skill progression with guidance
+    tier: premium
+    premium_feature: fullTrainingLibrary
+    status: shipped
+    platforms: [ios]
+    entry_points: [training-tab]
+    key_files:
+      - Views/Training/SkillLearningFlowSheet.swift
+      - Views/Training/SkillPhasePage.swift
+    tested: false
+    docs: false
+
+  - id: training-sessions
+    name: Interactive Training Sessions
+    description: Clicker-based training with duration and click tracking
+    tier: premium
+    status: shipped
+    platforms: [ios]
+    entry_points: [training-tab]
+    key_files:
+      - Views/Training/TrainingSessionView.swift
+      - Views/Training/ClickerButton.swift
+      - Views/Training/FloatingClickerButton.swift
+    tested: false
+    docs: false
+
+  - id: training-guides
+    name: Training Concept Guides
+    description: Educational content on classical/operant conditioning
+    tier: premium
+    status: shipped
+    platforms: [ios]
+    entry_points: [training-tab]
+    key_files:
+      - Views/Training/ClassicalConditioningSheet.swift
+      - Views/Training/OperantConditioningSheet.swift
+      - Views/Training/ClickTimingSheet.swift
+    tested: false
+    docs: false
+
+  - id: crate-potty-guides
+    name: Crate & Potty Training Guides
+    description: Specialized guides for crate and potty training
+    tier: premium
+    status: shipped
+    platforms: [ios]
+    entry_points: [training-tab]
+    key_files:
+      - Views/Training/CrateTrainingGuideSheet.swift
+      - Views/Training/PottyTrainingGuideSheet.swift
+    tested: false
+    docs: false
+
+# =============================================================================
+# SOCIALIZATION
+# =============================================================================
+socialization:
+
+  - id: socialization-journey
+    name: Socialization Journey
+    description: Track exposure progress across categories
+    tier: premium
+    premium_feature: socializationProgress
+    status: shipped
+    platforms: [ios]
+    entry_points: [socialization-tab]
+    key_files:
+      - Views/Socialization/SocializationJourneyView.swift
+      - Views/Socialization/LogExposureSheet.swift
+    tested: false
+    docs: false
+
+  - id: socialization-window
+    name: Socialization Window Guidance
+    description: Age-appropriate socialization phases and guidance
+    tier: premium
+    premium_feature: socializationProgress
+    status: shipped
+    platforms: [ios]
+    entry_points: [socialization-tab, today-tab]
+    key_files:
+      - Views/Socialization/SocializationWindowSheet.swift
+      - Views/Health/SocializationStatusCard.swift
+    tested: false
+    docs: false
+
+  - id: exposure-categories
+    name: Exposure Categories
+    description: Detailed tracking for people, animals, and environments
+    tier: premium
+    premium_feature: socializationProgress
+    status: shipped
+    platforms: [ios]
+    entry_points: [socialization-tab]
+    key_files:
+      - Views/Socialization/SocializationCategoryDetailView.swift
+    tested: false
+    docs: false
+
+  - id: quick-inventory
+    name: Quick Inventory
+    description: Rapid exposure logging checklist
+    tier: premium
+    premium_feature: socializationProgress
+    status: shipped
+    platforms: [ios]
+    entry_points: [socialization-tab]
+    key_files:
+      - Views/Socialization/QuickInventorySheet.swift
+    tested: false
+    docs: false
+
+  - id: fear-protocol
+    name: Fear Protocol
+    description: Fear response assessment and desensitization guidance
+    tier: premium
+    premium_feature: socializationProgress
+    status: shipped
+    platforms: [ios]
+    entry_points: [socialization-tab]
+    key_files:
+      - Views/Socialization/FearProtocolSheet.swift
+    tested: false
+    docs: false

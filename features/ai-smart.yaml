@@ -1,0 +1,295 @@
+# AI & Smart Features
+# Part of Ollie Feature Registry - see ../FEATURES.yaml for meta
+
+# =============================================================================
+# AI-POWERED FEATURES
+# =============================================================================
+ai:
+
+  - id: ai-training-guidance
+    name: AI Training Guidance
+    description: Personalized training suggestions, session advice, and encouragement based on skill progress
+    tier: premium
+    premium_feature: aiFeatures
+    status: shipped
+    platforms: [ios]
+    entry_points: [training-tab]
+    key_files:
+      - Views/Training/AITrainingGuidanceCard.swift
+      - Services/AI/AI.swift
+      - Services/AI/AISurfaces.swift
+    daily_limit: 6
+    cache_hours: 4
+    tested: false
+    docs: true
+
+  - id: ai-potty-analysis
+    name: AI Potty Analysis
+    description: Personalized potty training insights based on logging patterns and timing
+    tier: premium
+    premium_feature: aiFeatures
+    status: shipped
+    platforms: [ios]
+    entry_points: [potty-training-guide]
+    key_files:
+      - Views/AI/AIPottyAnalysisCard.swift
+      - Services/AI/AI.swift
+    daily_limit: 4
+    cache_hours: 6
+    tested: false
+    docs: true
+
+  - id: ai-socialization-guidance
+    name: AI Socialization Guidance
+    description: Priority categories and exposure suggestions based on puppy's socialization progress
+    tier: premium
+    premium_feature: aiFeatures
+    status: shipped
+    platforms: [ios]
+    entry_points: [socialization-journey]
+    key_files:
+      - Views/AI/AISocializationGuidanceCard.swift
+      - Services/AI/AI.swift
+    daily_limit: 2
+    cache_hours: 12
+    tested: false
+    docs: true
+
+  - id: ai-health-insights
+    name: AI Health Insights
+    description: Wellness observations and recommendations based on puppy's daily patterns
+    tier: premium
+    premium_feature: aiFeatures
+    status: shipped
+    platforms: [ios]
+    entry_points: [today-tab]
+    key_files:
+      - Views/AI/AIHealthInsightsCard.swift
+      - Services/AI/AI.swift
+    daily_limit: 2
+    cache_hours: 12
+    tested: false
+    docs: true
+
+  - id: ai-daily-status
+    name: AI Daily Status
+    description: Generates personalized headline and subtitle based on puppy's day
+    tier: premium
+    premium_feature: aiFeatures
+    status: shipped
+    platforms: [ios]
+    entry_points: [today-tab]
+    key_files:
+      - Services/AI/AIOrchestrator.swift
+      - Services/AINudgeOrchestrator.swift
+    daily_limit: 4
+    cache_hours: 1
+    tested: false
+    docs: true
+
+  - id: ai-walk-ordering
+    name: AI Activity Prioritization
+    description: Reorders upcoming activities by AI-determined priority
+    tier: premium
+    premium_feature: aiFeatures
+    status: shipped
+    platforms: [ios]
+    entry_points: [today-tab]
+    key_files:
+      - Services/AINudgeOrchestrator.swift
+    daily_limit: 4
+    cache_hours: 1
+    tested: false
+    docs: true
+
+  - id: ai-notification-timing
+    name: AI Notification Timing
+    description: Adjusts potty and walk reminder timing based on learned patterns
+    tier: premium
+    premium_feature: aiFeatures
+    status: shipped
+    platforms: [ios]
+    entry_points: [notifications]
+    key_files:
+      - Services/AINudgeOrchestrator.swift
+    daily_limit: 6
+    cache_hours: 1
+    tested: false
+    docs: true
+
+  - id: ai-interaction-log
+    name: AI Interaction Log
+    description: Review and export AI interactions for prompt improvement
+    tier: premium
+    status: shipped
+    platforms: [ios]
+    entry_points: [settings-debug]
+    key_files:
+      - Views/Settings/AIInteractionLogView.swift
+      - Services/AI/AIInteractionLogger.swift
+    tested: false
+    docs: true
+
+# =============================================================================
+# SMART FEATURES
+# =============================================================================
+smart:
+
+  - id: catch-up
+    name: Catch-Up Service
+    description: Detect logging gaps and suggest entry recovery
+    tier: free
+    status: shipped
+    platforms: [ios]
+    entry_points: [today-tab]
+    key_files:
+      - Views/CatchUp/CatchUpSheet.swift
+      - Services/CatchUpService.swift
+    tested: false
+    docs: false
+
+  - id: gap-detection
+    name: Gap Detection
+    description: Automatic gap detection during active care
+    tier: free
+    status: shipped
+    platforms: [ios]
+    entry_points: [today-tab]
+    key_files:
+      - Views/CatchUp/GapDetectionSheet.swift
+      - Services/GapDetectionService.swift
+    tested: false
+    docs: false
+
+  - id: assumed-sleep
+    name: Assumed Sleep Detection
+    description: Overnight sleep assumption with post-sleep recommendations
+    tier: free
+    status: shipped
+    platforms: [ios]
+    entry_points: [today-tab]
+    key_files:
+      - Views/Cards/AssumedOvernightSleepCard.swift
+      - Views/Cards/PostWakePottyCard.swift
+    tested: false
+    docs: false
+
+# =============================================================================
+# INSIGHTS & ANALYTICS
+# =============================================================================
+insights:
+
+  - id: week-in-review
+    name: Week in Review
+    description: Weekly summary dashboard with key metrics
+    tier: premium
+    premium_feature: weekInReview
+    status: shipped
+    platforms: [ios]
+    entry_points: [insights-tab]
+    key_files:
+      - Views/Insights/InsightsWeekOverviewSection.swift
+    tested: false
+    docs: false
+
+  - id: health-insights
+    name: Health Insights
+    description: Trend analysis and health recommendations
+    tier: premium
+    premium_feature: advancedAnalytics
+    status: shipped
+    platforms: [ios]
+    entry_points: [insights-tab]
+    key_files:
+      - Views/Insights/InsightsHealthSection.swift
+    tested: false
+    docs: false
+
+  - id: walk-spots-insights
+    name: Walk Spots Insights
+    description: Frequent locations and favorite spots analysis
+    tier: premium
+    status: shipped
+    platforms: [ios]
+    entry_points: [insights-tab]
+    key_files:
+      - Views/Insights/InsightsSpotsSection.swift
+    depends_on: [spot-management]
+    tested: false
+    docs: false
+
+  - id: puppys-world
+    name: Puppy's World Summary
+    description: Location coverage map and environmental exposure summary
+    tier: premium
+    status: shipped
+    platforms: [ios]
+    entry_points: [insights-tab]
+    key_files:
+      - Views/Cards/PuppysWorldSummaryCard.swift
+    tested: false
+    docs: false
+
+# =============================================================================
+# CELEBRATIONS & ACHIEVEMENTS
+# =============================================================================
+celebrations:
+
+  - id: basic-celebrations
+    name: Basic Celebrations
+    description: Simple pop-up celebrations for achievements
+    tier: free
+    status: shipped
+    platforms: [ios]
+    entry_points: [throughout-app]
+    key_files:
+      - Views/Celebrations/CelebrationView.swift
+    tested: false
+    docs: false
+
+  - id: advanced-celebrations
+    name: Advanced Celebrations
+    description: Card and full-screen celebrations with sharing
+    tier: premium
+    status: shipped
+    platforms: [ios]
+    entry_points: [throughout-app]
+    key_files:
+      - Views/Celebrations/Tier2CelebrationCard.swift
+      - Views/Celebrations/Tier3CelebrationView.swift
+      - Views/Celebrations/ShareCardView.swift
+    depends_on: [basic-celebrations]
+    tested: false
+    docs: false
+
+  - id: memory-book
+    name: Memory Book Generation
+    description: Generate PDF memory books with photos and milestones
+    tier: premium
+    status: shipped
+    platforms: [ios]
+    entry_points: [moments-tab, settings]
+    key_files:
+      - Views/Media/MemoryBookGeneratorView.swift
+      - Services/MemoryBookService.swift
+    tested: false
+    docs: false
+
+# =============================================================================
+# DOCUMENTS
+# =============================================================================
+documents:
+
+  - id: document-storage
+    name: Document Storage
+    description: Upload and organize health documents
+    tier: free
+    status: shipped
+    platforms: [ios]
+    entry_points: [documents-tab]
+    key_files:
+      - Views/Documents/DocumentsView.swift
+      - Views/Documents/AddDocumentSheet.swift
+      - Views/Documents/DocumentDetailView.swift
+    tested: false
+    docs: false
