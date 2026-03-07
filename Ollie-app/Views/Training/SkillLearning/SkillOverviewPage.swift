@@ -15,15 +15,80 @@ struct SkillOverviewPage: View {
     let sessionCount: Int
     let phases: [SkillPhase]
     @ObservedObject var progressStore: TrainingProgressStore
+    let skillProgress: SkillProgress?
     let onStartLearning: () -> Void
 
     @Environment(\.colorScheme) private var colorScheme
+
+    // MARK: - Computed Properties
+
+    /// Number of phases completed for this skill
+    private var completedPhasesCount: Int {
+        progressStore.completedPhaseCount(for: skill)
+    }
+
+    /// Whether any phases have been completed (skill is in progress)
+    private var hasStartedPhases: Bool {
+        completedPhasesCount > 0
+    }
+
+    /// Whether all phases are completed
+    private var allPhasesCompleted: Bool {
+        progressStore.allPhasesCompleted(for: skill)
+    }
+
+    // MARK: - Phase-Based Status Display
+
+    /// Status icon based on phase completion, not session count
+    private var phaseBasedStatusIcon: String {
+        if status == .mastered {
+            return "checkmark.circle.fill"
+        } else if allPhasesCompleted {
+            return "checkmark.circle"
+        } else if hasStartedPhases {
+            return "circle.lefthalf.filled"
+        } else {
+            return "circle"
+        }
+    }
+
+    /// Status label based on phase completion
+    private var phaseBasedStatusLabel: String {
+        if status == .mastered {
+            return Strings.Training.statusMastered
+        } else if allPhasesCompleted {
+            return Strings.Training.statusPracticing
+        } else if hasStartedPhases {
+            // Show "X of Y phases completed" for in-progress skills
+            return Strings.Training.Phases.phasesCompleted(completedPhasesCount, total: phases.count)
+        } else {
+            return Strings.Training.statusNotStarted
+        }
+    }
+
+    /// Status color based on phase completion
+    private var phaseBasedStatusColor: Color {
+        if status == .mastered {
+            return .otisSuccess
+        } else if allPhasesCompleted {
+            return .otisSuccess.opacity(0.8)
+        } else if hasStartedPhases {
+            return .otisInfo
+        } else {
+            return .secondary
+        }
+    }
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 24) {
                 // Header card with icon and status
                 headerCard
+
+                // Smart training progress visualization
+                if let progress = skillProgress, progress.phase != .notStarted {
+                    smartTrainingSection(progress)
+                }
 
                 // Description
                 Text(skill.description)
@@ -68,15 +133,15 @@ struct SkillOverviewPage: View {
             }
 
             VStack(alignment: .leading, spacing: 4) {
-                // Status badge
+                // Status badge - shows phase progress when phases exist
                 HStack(spacing: 6) {
-                    Image(systemName: status.icon)
+                    Image(systemName: phaseBasedStatusIcon)
                         .font(.caption2)
-                    Text(status.label)
+                    Text(phaseBasedStatusLabel)
                         .font(.caption)
                         .fontWeight(.medium)
                 }
-                .foregroundStyle(status.color)
+                .foregroundStyle(phaseBasedStatusColor)
 
                 // Method and session count
                 HStack(spacing: 8) {
@@ -105,7 +170,7 @@ struct SkillOverviewPage: View {
             Spacer()
         }
         .padding()
-        .glassStatusCard(tintColor: status == .mastered ? .otisSuccess : nil)
+        .glassStatusCard(tintColor: (status == .mastered || allPhasesCompleted) ? .otisSuccess : nil)
     }
 
     // MARK: - Goal Section
@@ -113,16 +178,37 @@ struct SkillOverviewPage: View {
     @ViewBuilder
     private var goalSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            sectionHeader(Strings.Training.Phases.goalTitle, icon: "checkmark.circle")
+            // Use target icon for header - "Goal" is aspirational, not achieved
+            sectionHeader(Strings.Training.Phases.goalTitle, icon: "target")
 
             HStack(alignment: .top, spacing: 12) {
-                Image(systemName: "checkmark.circle.fill")
+                // Show checkmark only when goal is achieved (all phases completed or mastered)
+                // Otherwise show a target/flag icon to indicate this is the goal we're working toward
+                Image(systemName: goalIconName)
                     .font(.subheadline)
-                    .foregroundStyle(Color.otisSuccess)
+                    .foregroundStyle(goalIconColor)
                 Text(skill.doneWhen)
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
+        }
+    }
+
+    /// Icon for goal section - checkmark when achieved, target when not
+    private var goalIconName: String {
+        if status == .mastered || allPhasesCompleted {
+            return "checkmark.circle.fill"
+        } else {
+            return "flag.circle"
+        }
+    }
+
+    /// Color for goal icon - green when achieved, secondary when not
+    private var goalIconColor: Color {
+        if status == .mastered || allPhasesCompleted {
+            return .otisSuccess
+        } else {
+            return .secondary
         }
     }
 
@@ -208,7 +294,7 @@ struct SkillOverviewPage: View {
         )
     }
 
-    // MARK: - Start Learning Button
+    // MARK: - Start/Continue Learning Button
 
     @ViewBuilder
     private var startLearningButton: some View {
@@ -217,8 +303,8 @@ struct SkillOverviewPage: View {
             onStartLearning()
         } label: {
             HStack(spacing: 8) {
-                Image(systemName: "arrow.right.circle.fill")
-                Text(phases.count > 1 ? Strings.Training.Phases.startLearning : Strings.Training.Phases.startTraining)
+                Image(systemName: hasStartedPhases ? "arrow.right.circle.fill" : "play.circle.fill")
+                Text(buttonLabel)
             }
             .font(.headline)
             .fontWeight(.semibold)
@@ -228,6 +314,73 @@ struct SkillOverviewPage: View {
             .background(Color.otisAccent)
             .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
         }
+    }
+
+    /// Button label based on phase completion state
+    private var buttonLabel: String {
+        if hasStartedPhases {
+            // Already started - show "Continue"
+            return phases.count > 1
+                ? Strings.Training.Phases.continueLearning
+                : Strings.Training.Phases.continueTraining
+        } else {
+            // Not started - show "Start"
+            return phases.count > 1
+                ? Strings.Training.Phases.startLearning
+                : Strings.Training.Phases.startTraining
+        }
+    }
+
+    // MARK: - Smart Training Section
+
+    @ViewBuilder
+    private func smartTrainingSection(_ progress: SkillProgress) -> some View {
+        VStack(alignment: .leading, spacing: 16) {
+            // Phase timeline
+            SkillPhaseTimeline(currentPhase: progress.phase, isCompact: false)
+
+            // Regression alert
+            if progress.phase == .needsWork {
+                HStack(spacing: 8) {
+                    RegressionBadge(isCompact: false)
+                    Spacer()
+                }
+
+                Text(Strings.Training.regressionNormalMessage)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+
+            // Maintenance info for mastered skills
+            if progress.phase == .maintaining {
+                MaintenanceScheduleIndicator(
+                    tier: progress.maintenanceTier,
+                    nextReviewDate: progress.nextReviewDate,
+                    isCompact: false
+                )
+            }
+
+            // 3D progress for proofing phase
+            if progress.phase == .proofing || progress.phase == .generalizing {
+                VStack(alignment: .leading, spacing: 8) {
+                    sectionHeader("3Ds Progress", icon: "chart.bar.fill")
+                    Proofing3DIndicator(levels: progress.proofingLevels, isCompact: false)
+                }
+            }
+
+            // Context badges for generalizing
+            if progress.phase == .generalizing && !progress.practicedContexts.isEmpty {
+                VStack(alignment: .leading, spacing: 8) {
+                    sectionHeader("Practiced in", icon: "location.fill")
+                    ContextBadges(contexts: progress.practicedContexts)
+                }
+            }
+        }
+        .padding()
+        .background(
+            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                .fill(colorScheme == .dark ? Color.white.opacity(0.03) : Color.black.opacity(0.02))
+        )
     }
 
     // MARK: - Helpers
@@ -273,6 +426,7 @@ private let previewSkill = Skill(
             sessionCount: 3,
             phases: previewSkill.effectivePhases,
             progressStore: TrainingProgressStore(),
+            skillProgress: SkillProgress(skillId: previewSkill.id, phase: .proofing),
             onStartLearning: {}
         )
         .navigationTitle(previewSkill.name)

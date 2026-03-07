@@ -65,7 +65,11 @@ struct TrainingView: View {
                 learningPhase: progress.phase == .notStarted ? nil : progress.phase,
                 confidenceScore: progress.confidenceScore > 0 ? progress.confidenceScore : nil,
                 isDueForReview: isDue,
-                daysUntilReview: daysUntilReview
+                daysUntilReview: daysUntilReview,
+                proofingLevels: progress.proofingLevels,
+                practicedContexts: progress.practicedContexts,
+                maintenanceTier: progress.maintenanceTier > 0 ? progress.maintenanceTier : nil,
+                nextReviewDate: progress.nextReviewDate
             )
         }
     }
@@ -107,6 +111,7 @@ struct TrainingView: View {
         .navigationBarTitleDisplayMode(.large)
         .onAppear {
             trainingStore.setEventStore(eventStore)
+            trainingStore.setSkillProgressStore(skillProgressStore)
         }
         .task {
             await trainingStore.initialSync()
@@ -173,7 +178,8 @@ struct TrainingView: View {
                 onDismiss: {
                     skillForDetailSheet = nil
                 },
-                progressStore: progressStore
+                progressStore: progressStore,
+                skillProgressStore: skillProgressStore
             )
             .presentationDetents([.large])
         }
@@ -285,8 +291,43 @@ struct TrainingView: View {
 
     // MARK: - Training Content
 
+    /// Check if there are skills needing attention
+    private var hasSkillsNeedingAttention: Bool {
+        !skillProgressStore.skillsNeedingWork.isEmpty ||
+        !skillProgressStore.skillsDueForReview.isEmpty
+    }
+
+    /// Get SkillProgressInfo for regression skills
+    private var regressionSkillInfos: [SkillProgressInfo] {
+        skillProgressStore.skillsNeedingWork.compactMap { progress in
+            guard let skillInfo = enhancedSkillsWithStatus.first(where: { $0.skill.id == progress.skillId }) else {
+                return nil
+            }
+            return skillInfo
+        }
+    }
+
+    /// Get SkillProgressInfo for due for review skills
+    private var dueForReviewInfos: [SkillProgressInfo] {
+        skillProgressStore.skillsDueForReview.compactMap { progress in
+            // Skip if already in regression list
+            guard !skillProgressStore.skillsNeedingWork.contains(where: { $0.skillId == progress.skillId }) else {
+                return nil
+            }
+            guard let skillInfo = enhancedSkillsWithStatus.first(where: { $0.skill.id == progress.skillId }) else {
+                return nil
+            }
+            return skillInfo
+        }
+    }
+
     @ViewBuilder
     private var trainingContent: some View {
+        // Skills needing attention (NEW - at top)
+        if hasSkillsNeedingAttention {
+            needsAttentionSection
+        }
+
         // All skills mastered celebration (if applicable)
         if trainingStore.masteryProgress.mastered == trainingStore.masteryProgress.total {
             allMasteredCard
@@ -364,6 +405,52 @@ struct TrainingView: View {
                 }
             }
         }
+    }
+
+    // MARK: - Needs Attention Section
+
+    @ViewBuilder
+    private var needsAttentionSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Image(systemName: "exclamationmark.triangle.fill")
+                    .foregroundStyle(.orange)
+                Text(Strings.Training.needsAttention)
+                    .font(.headline)
+                Spacer()
+            }
+
+            // Regression skills first
+            ForEach(regressionSkillInfos, id: \.skill.id) { info in
+                SkillProgressRow(
+                    info: info,
+                    onTap: {
+                        skillForDetailSheet = info.skill
+                    },
+                    onQuickDone: {
+                        quickLogSession(for: info.skill)
+                    }
+                )
+            }
+
+            // Then due for review
+            ForEach(dueForReviewInfos, id: \.skill.id) { info in
+                SkillProgressRow(
+                    info: info,
+                    onTap: {
+                        skillForDetailSheet = info.skill
+                    },
+                    onQuickDone: {
+                        quickLogSession(for: info.skill)
+                    }
+                )
+            }
+        }
+        .padding()
+        .background(
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .fill(colorScheme == .dark ? Color.orange.opacity(0.08) : Color.orange.opacity(0.05))
+        )
     }
 
     // MARK: - All Mastered Card

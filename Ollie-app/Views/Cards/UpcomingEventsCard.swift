@@ -13,6 +13,7 @@ struct ActionableEventCard: View {
     let actionableItem: ActionableItem
     let onLogEvent: (EventType, Date?) -> Void
     var onNavigateToSocialization: (() -> Void)?
+    var poopStatus: PoopStatus?
 
     @EnvironmentObject private var socializationStore: SocializationStore
     @AppStorage(UserPreferences.Key.temperatureUnit.rawValue) private var temperatureUnitRaw = TemperatureUnit.celsius.rawValue
@@ -27,6 +28,14 @@ struct ActionableEventCard: View {
         socializationStore.suggestedWalkItems(limit: 2)
     }
 
+    /// Poop expectation subtitle for walk cards
+    private var poopSubtitle: String? {
+        guard actionableItem.item.itemType == .walk,
+              let status = poopStatus,
+              status.hasRemainingExpected else { return nil }
+        return Strings.Actionable.poopsExpectedToday(status.remainingExpected)
+    }
+
     var body: some View {
         VStack(spacing: 12) {
             StatusCardHeader(
@@ -38,6 +47,20 @@ struct ActionableEventCard: View {
                 subtitle: subtitleText,
                 iconSize: 40
             ) { EmptyView() }
+
+            // Poop expectation for walk cards
+            if let poopText = poopSubtitle {
+                HStack(spacing: 6) {
+                    Image(systemName: "leaf.fill")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    Text(poopText)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    Spacer()
+                }
+                .padding(.horizontal, 4)
+            }
 
             // Weather + Action row
             if actionableItem.item.itemType == .walk, let weatherIcon = actionableItem.item.weatherIcon {
@@ -286,7 +309,8 @@ struct ScheduledEventsSection: View {
                     onLogEvent: { eventType, suggestedTime in
                         viewModel.quickLog(type: eventType, suggestedTime: suggestedTime)
                     },
-                    onNavigateToSocialization: onNavigateToSocialization
+                    onNavigateToSocialization: onNavigateToSocialization,
+                    poopStatus: viewModel.poopStatus
                 )
             }
         }

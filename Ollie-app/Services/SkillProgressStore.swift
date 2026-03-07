@@ -175,6 +175,43 @@ final class SkillProgressStore: BaseStore {
 
     // MARK: - Phase Management
 
+    /// Transition a skill directly to maintaining phase (for manual mastery)
+    func transitionToMaintaining(skillId: String) {
+        var progress = getOrCreateProgress(for: skillId)
+        progress.phase = .maintaining
+        progress.maintenanceTier = 1
+        progress.nextReviewDate = Date().addingTimeInterval(24 * 60 * 60) // 1 day
+        progress.modifiedAt = Date()
+        saveProgress(progress)
+
+        logger.info("Transitioned \(skillId) to maintaining phase")
+    }
+
+    /// Transition a skill out of maintaining phase (for unmark mastered)
+    func transitionFromMaintaining(skillId: String) {
+        guard let existingProgress = progressBySkillId[skillId],
+              existingProgress.phase == .maintaining else {
+            return
+        }
+
+        var progress = existingProgress
+        // Go back to the most appropriate phase based on proofing progress
+        let overallProgress = progress.proofingLevels.overallProgress
+        if overallProgress >= 0.6 {  // ~3/5 average
+            progress.phase = .generalizing
+        } else if overallProgress >= 0.2 {  // ~1/5 average
+            progress.phase = .proofing
+        } else {
+            progress.phase = .addingCue
+        }
+        progress.maintenanceTier = 0
+        progress.nextReviewDate = nil
+        progress.modifiedAt = Date()
+        saveProgress(progress)
+
+        logger.info("Transitioned \(skillId) from maintaining to \(progress.phase.rawValue)")
+    }
+
     /// Manually advance a skill to the next phase
     func advancePhase(for skillId: String) {
         var progress = getOrCreateProgress(for: skillId)

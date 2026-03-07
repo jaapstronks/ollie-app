@@ -250,6 +250,15 @@ extension Strings {
         static let approaching = String(localized: "Soon", table: table)
         static let due = String(localized: "Now", table: table)
         static let overdueLabel = String(localized: "Overdue", table: table)
+
+        // Poop expectation for walk cards
+        static func poopsExpectedToday(_ count: Int) -> String {
+            if count == 1 {
+                return String(localized: "1 more poop expected today", table: table)
+            } else {
+                return String(localized: "\(count) more poops expected today", table: table)
+            }
+        }
     }
 
     // MARK: - Digest Card

@@ -171,6 +171,15 @@ extension Strings {
         }
         static let perfectDaySoFar = String(localized: "Perfect day so far!", table: table)
         static let keepItUp = String(localized: "Keep it up!", table: table)
+
+        /// Celebration headline showing streak count (e.g., "5 in a row!")
+        static func streakInARow(_ count: Int) -> String {
+            if count == 1 {
+                return String(localized: "Great job!", table: table)
+            } else {
+                return String(localized: "\(count) in a row!", table: table)
+            }
+        }
     }
 
     // MARK: - Potty Progress Summary Card
@@ -230,5 +239,21 @@ extension Strings {
         static let categoryMeal = String(localized: "meal", table: table)
         static let categoryTraining = String(localized: "training", table: table)
         static let categorySocialization = String(localized: "socialization", table: table)
+
+        // MARK: AI Cards
+        static let trainingSuggestion = String(localized: "Training suggestion", table: table)
+        static let pottySuggestion = String(localized: "Potty insight", table: table)
+        static let socializationSuggestion = String(localized: "Socialization tip", table: table)
+        static let healthInsight = String(localized: "Health insight", table: table)
+
+        static let focusOn = String(localized: "Focus on", table: table)
+        static let warmUpWith = String(localized: "Warm up with", table: table)
+        static let aiUnavailable = String(localized: "AI suggestions will appear here", table: table)
+
+        static let priorityCategory = String(localized: "Priority", table: table)
+        static let windowStatus = String(localized: "Window status", table: table)
+        static let wellness = String(localized: "Wellness", table: table)
+        static let recommendations = String(localized: "Recommendations", table: table)
+        static let riskFactors = String(localized: "Watch for", table: table)
     }
 }

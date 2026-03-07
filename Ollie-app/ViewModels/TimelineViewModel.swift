@@ -57,7 +57,9 @@ class TimelineViewModel: ObservableObject {
     /// Celebration trigger for milestone moments
     @Published var showCelebration = false
     @Published var celebrationStyle: CelebrationPreset = .milestone
+    @Published var celebrationStreakCount: Int?
     private var pendingCelebrationStyle: CelebrationPreset?
+    private var pendingCelebrationStreakCount: Int?
 
     /// Sheet coordinator for all sheet presentations
     @Published var sheetCoordinator = SheetCoordinator()
@@ -447,8 +449,9 @@ class TimelineViewModel: ObservableObject {
     // MARK: - Internal Helper Methods (for extensions)
 
     /// Trigger celebration immediately, pulsing the boolean to retrigger reliably.
-    private func presentCelebration(_ style: CelebrationPreset) {
+    private func presentCelebration(_ style: CelebrationPreset, streakCount: Int? = nil) {
         celebrationStyle = style
+        celebrationStreakCount = streakCount
         showCelebration = false
         DispatchQueue.main.async { [weak self] in
             self?.showCelebration = true
@@ -456,20 +459,23 @@ class TimelineViewModel: ObservableObject {
     }
 
     /// Trigger celebration, deferring if a sheet is currently covering the UI.
-    func triggerCelebration(_ style: CelebrationPreset) {
+    func triggerCelebration(_ style: CelebrationPreset, streakCount: Int? = nil) {
         guard sheetCoordinator.activeSheet == nil else {
             pendingCelebrationStyle = style
+            pendingCelebrationStreakCount = streakCount
             return
         }
-        presentCelebration(style)
+        presentCelebration(style, streakCount: streakCount)
     }
 
     /// Flush any deferred celebration when sheets are dismissed.
     func flushPendingCelebrationIfNeeded() {
         guard sheetCoordinator.activeSheet == nil,
               let pendingStyle = pendingCelebrationStyle else { return }
+        let streakCount = pendingCelebrationStreakCount
         pendingCelebrationStyle = nil
-        presentCelebration(pendingStyle)
+        pendingCelebrationStreakCount = nil
+        presentCelebration(pendingStyle, streakCount: streakCount)
     }
 
     /// Sync events from EventStore to local array

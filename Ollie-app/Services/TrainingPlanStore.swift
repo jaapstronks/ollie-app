@@ -22,6 +22,7 @@ final class TrainingPlanStore: BaseStore {
     @Published private(set) var isLoading: Bool = true
 
     private var eventStore: EventStore?
+    private weak var skillProgressStore: SkillProgressStore?
 
     private let decoder: JSONDecoder = {
         let decoder = JSONDecoder()
@@ -61,6 +62,11 @@ final class TrainingPlanStore: BaseStore {
     /// Set the event store for fetching training sessions
     func setEventStore(_ eventStore: EventStore) {
         self.eventStore = eventStore
+    }
+
+    /// Set the skill progress store for syncing mastery state
+    func setSkillProgressStore(_ store: SkillProgressStore) {
+        self.skillProgressStore = store
     }
 
     // MARK: - Linear Progression
@@ -239,6 +245,9 @@ final class TrainingPlanStore: BaseStore {
         performSave(operation: "Marked skill as mastered: \(skillId)") {
             masteredSkills.append(skill)
         }
+
+        // Sync to SkillProgressStore
+        skillProgressStore?.transitionToMaintaining(skillId: skillId)
     }
 
     /// Unmark a skill as mastered
@@ -252,6 +261,9 @@ final class TrainingPlanStore: BaseStore {
                 masteredSkills.removeAll { $0.skillId == skillId }
             }
         }
+
+        // Sync to SkillProgressStore
+        skillProgressStore?.transitionFromMaintaining(skillId: skillId)
     }
 
     /// Toggle mastered state for a skill

@@ -20,10 +20,16 @@ struct SkillLearningFlowSheet: View {
     let onDismiss: () -> Void
 
     @ObservedObject var progressStore: TrainingProgressStore
+    @ObservedObject var skillProgressStore: SkillProgressStore
 
     @State private var currentPage: Int = 0
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    /// Get progress for this skill from smart training system
+    private var progress: SkillProgress {
+        skillProgressStore.progress(for: skill.id)
+    }
 
     private var phases: [SkillPhase] {
         skill.effectivePhases
@@ -44,6 +50,7 @@ struct SkillLearningFlowSheet: View {
                     sessionCount: sessionCount,
                     phases: phases,
                     progressStore: progressStore,
+                    skillProgress: progress,
                     onStartLearning: {
                         withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.3)) {
                             currentPage = 1
@@ -196,6 +203,7 @@ private let previewSkill = Skill(
         onLogSession: {},
         onToggleMastered: {},
         onDismiss: {},
-        progressStore: TrainingProgressStore()
+        progressStore: TrainingProgressStore(),
+        skillProgressStore: SkillProgressStore()
     )
 }

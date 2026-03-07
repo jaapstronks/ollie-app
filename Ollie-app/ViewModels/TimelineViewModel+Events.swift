@@ -142,7 +142,7 @@ extension TimelineViewModel {
         napLocation: NapLocation? = nil
     ) {
         // Get current user's household member ID for attribution
-        let loggedBy = profileStore.currentUserMember()?.id
+        let loggedBy = profileStore.currentUserMemberId
 
         // Note: sleepSessionId is auto-generated for sleep events in PuppyEvent init
         let event = PuppyEvent(
@@ -198,9 +198,11 @@ extension TimelineViewModel {
     private func triggerCelebrationForEvent(type: EventType, location: EventLocation?) {
         switch type {
         case .plassen, .poepen:
-            // Outdoor potty gets a celebration
+            // Outdoor potty gets a celebration with streak count
             if location == .buiten {
-                triggerCelebration(.pottySuccess)
+                // Get current streak count for the celebration headline
+                let currentStreak = streakInfo.currentStreak
+                triggerCelebration(.pottySuccess, streakCount: currentStreak)
             }
         case .eten:
             // Meal logged - subtle celebration
@@ -232,7 +234,7 @@ extension TimelineViewModel {
         note: String? = nil
     ) {
         // Get current user's household member ID for attribution
-        let loggedBy = profileStore.currentUserMember()?.id
+        let loggedBy = profileStore.currentUserMemberId
 
         var walkEvent = PuppyEvent.walk(
             time: time,
@@ -285,48 +287,27 @@ extension TimelineViewModel {
 
     /// Log a completed nap with start and end time (single-event model with durationMin)
     func logCompletedNap(startTime: Date, endTime: Date, note: String?, napLocation: NapLocation? = nil) {
-        // Get current user's household member ID for attribution
-        let loggedBy = profileStore.currentUserMember()?.id
-        let sessionId = UUID()
-
-        // Calculate duration in minutes
-        let durationMin = max(1, Int(endTime.timeIntervalSince(startTime) / 60))
-
-        // Log single sleep event with duration
+        let durationMin = max(1, endTime.minutesSince(startTime))
         let sleepEvent = PuppyEvent(
             time: startTime,
             type: .slapen,
             note: note,
             durationMin: durationMin,
-            sleepSessionId: sessionId,
+            sleepSessionId: UUID(),
             napLocation: napLocation,
-            loggedBy: loggedBy
+            loggedBy: profileStore.currentUserMemberId
         )
-        eventStore.addEvent(sleepEvent)
-
-        // Immediately sync for instant UI updates
-        syncEventsFromStore()
-
-        notifyRefreshNotifications()
-
-        // Provide audio + haptic feedback for successful log
+        persistEvent(sleepEvent)
         FeedbackManager.logEvent()
 
         if !triggerForcedCelebrationIfEnabled() {
-            // Celebrate completed nap
             triggerCelebration(.quickLog)
         }
     }
 
     /// Add a pre-built event (used for photo moments)
     func addEvent(_ event: PuppyEvent) {
-        eventStore.addEvent(event)
-
-        // Immediately sync for instant UI updates
-        syncEventsFromStore()
-
-        notifyRefreshNotifications()
-
+        persistEvent(event)
         _ = triggerForcedCelebrationIfEnabled()
     }
 
@@ -416,14 +397,8 @@ extension TimelineViewModel {
     /// Undo the last deletion
     func undoDelete() {
         guard let event = sheetCoordinator.popLastDeletedEvent() else { return }
-        eventStore.addEvent(event)
-
-        // Immediately sync for instant UI updates
-        syncEventsFromStore()
-        // Force refresh stats to ensure week view updates immediately
+        persistEventWithFeedback(event)
         notifyForceRefreshStats()
-        notifyRefreshNotifications()
-        HapticFeedback.success()
     }
 
     /// Dismiss the undo banner
@@ -442,70 +417,45 @@ extension TimelineViewModel {
     /// Confirm the assumed overnight sleep with the given start time
     /// This logs a sleep event at the suggested/adjusted start time
     func confirmAssumedOvernightSleep(sleepStartTime: Date) {
-        // Get current user's household member ID for attribution
-        let loggedBy = profileStore.currentUserMember()?.id
-        let sessionId = UUID()
-
-        // Log sleep event at the provided start time
         let sleepEvent = PuppyEvent(
             time: sleepStartTime,
             type: .slapen,
-            sleepSessionId: sessionId,
-            loggedBy: loggedBy
+            sleepSessionId: UUID(),
+            loggedBy: profileStore.currentUserMemberId
         )
-        eventStore.addEvent(sleepEvent)
-
-        // Clear the dismissed date (no longer needed)
+        persistEventWithFeedback(sleepEvent)
         dismissedAssumedSleepDate = Date()
-
-        // Immediately sync for instant UI updates
-        syncEventsFromStore()
-
-        notifyRefreshNotifications()
-
-        HapticFeedback.success()
-
         _ = triggerForcedCelebrationIfEnabled()
     }
 
     /// Log wake-up for the assumed overnight sleep
     /// This confirms the sleep and logs the wake event at the current time (or specified time)
     func confirmAssumedOvernightSleepAndWakeUp(sleepStartTime: Date, wakeTime: Date = Date()) {
-        // Get current user's household member ID for attribution
-        let loggedBy = profileStore.currentUserMember()?.id
+        let loggedBy = profileStore.currentUserMemberId
         let sessionId = UUID()
 
-        // Log sleep event at the start time
         let sleepEvent = PuppyEvent(
             time: sleepStartTime,
             type: .slapen,
             sleepSessionId: sessionId,
             loggedBy: loggedBy
         )
-        eventStore.addEvent(sleepEvent)
-
-        // Log wake event at the wake time
         let wakeEvent = PuppyEvent(
             time: wakeTime,
             type: .ontwaken,
             sleepSessionId: sessionId,
             loggedBy: loggedBy
         )
+
+        // Persist both events (only sync once at the end)
+        eventStore.addEvent(sleepEvent)
         eventStore.addEvent(wakeEvent)
-
-        // Clear the dismissed date
-        dismissedAssumedSleepDate = Date()
-
-        // Immediately sync for instant UI updates
         syncEventsFromStore()
-
         notifyRefreshNotifications()
 
-        // Capture potty state at wake time for post-wake tracking
+        dismissedAssumedSleepDate = Date()
         captureWakeTimePottyState()
-
         HapticFeedback.success()
-
         _ = triggerForcedCelebrationIfEnabled()
     }
 
@@ -520,28 +470,14 @@ extension TimelineViewModel {
     /// Start fresh after a logging gap
     /// This dismisses the stale state and logs a wake event to establish a new baseline
     func startFreshAfterLoggingGap() {
-        // Get current user's household member ID for attribution
-        let loggedBy = profileStore.currentUserMember()?.id
         let now = Date()
-
-        // Log a wake event at the current time to establish a new baseline
         let wakeEvent = PuppyEvent(
             time: now,
             type: .ontwaken,
-            loggedBy: loggedBy
+            loggedBy: profileStore.currentUserMemberId
         )
-        eventStore.addEvent(wakeEvent)
-
-        // Dismiss the stale logging state
+        persistEventWithFeedback(wakeEvent)
         dismissedStaleLoggingDate = now
-
-        // Immediately sync for instant UI updates
-        syncEventsFromStore()
-
-        notifyRefreshNotifications()
-
-        HapticFeedback.success()
-
         _ = triggerForcedCelebrationIfEnabled()
     }
 
@@ -550,56 +486,26 @@ extension TimelineViewModel {
     /// Handle "puppy is sleeping" response from first run welcome
     /// Logs a sleep event to establish a baseline
     func firstRunPuppyIsSleeping() {
-        // Get current user's household member ID for attribution
-        let loggedBy = profileStore.currentUserMember()?.id
-        let now = Date()
-
-        // Log a sleep event at the current time
         let sleepEvent = PuppyEvent(
-            time: now,
+            time: Date(),
             type: .slapen,
-            loggedBy: loggedBy
+            loggedBy: profileStore.currentUserMemberId
         )
-        eventStore.addEvent(sleepEvent)
-
-        // Dismiss the first run welcome permanently
+        persistEventWithFeedback(sleepEvent)
         dismissFirstRunWelcome()
-
-        // Immediately sync for instant UI updates
-        syncEventsFromStore()
-
-        notifyRefreshNotifications()
-
-        HapticFeedback.success()
-
         _ = triggerForcedCelebrationIfEnabled()
     }
 
     /// Handle "puppy is awake" response from first run welcome
     /// Logs a wake event to establish a baseline
     func firstRunPuppyIsAwake() {
-        // Get current user's household member ID for attribution
-        let loggedBy = profileStore.currentUserMember()?.id
-        let now = Date()
-
-        // Log a wake event at the current time
         let wakeEvent = PuppyEvent(
-            time: now,
+            time: Date(),
             type: .ontwaken,
-            loggedBy: loggedBy
+            loggedBy: profileStore.currentUserMemberId
         )
-        eventStore.addEvent(wakeEvent)
-
-        // Dismiss the first run welcome permanently
+        persistEventWithFeedback(wakeEvent)
         dismissFirstRunWelcome()
-
-        // Immediately sync for instant UI updates
-        syncEventsFromStore()
-
-        notifyRefreshNotifications()
-
-        HapticFeedback.success()
-
         _ = triggerForcedCelebrationIfEnabled()
     }
 
@@ -618,5 +524,21 @@ extension TimelineViewModel {
     private func dismissFirstRunWelcome() {
         dismissedFirstRunWelcome = true
         UserDefaults.standard.set(true, forKey: "dismissedFirstRunWelcome")
+    }
+
+    // MARK: - Private Helpers
+
+    /// Common event persistence pattern: add event, sync UI, notify notifications
+    /// This consolidates the repeated pattern of adding events and updating state
+    private func persistEvent(_ event: PuppyEvent) {
+        eventStore.addEvent(event)
+        syncEventsFromStore()
+        notifyRefreshNotifications()
+    }
+
+    /// Persist event and provide success haptic feedback
+    private func persistEventWithFeedback(_ event: PuppyEvent) {
+        persistEvent(event)
+        HapticFeedback.success()
     }
 }
