@@ -68,18 +68,11 @@ struct SocializationItemRow: View {
 
             // Progress bar
             HStack(spacing: 8) {
-                GeometryReader { geometry in
-                    ZStack(alignment: .leading) {
-                        RoundedRectangle(cornerRadius: 3)
-                            .fill(Color.secondary.opacity(0.2))
-                            .frame(height: 6)
-
-                        RoundedRectangle(cornerRadius: 3)
-                            .fill(progressColor)
-                            .frame(width: geometry.size.width * progressFraction, height: 6)
-                    }
-                }
-                .frame(height: 6)
+                LinearProgressBar(
+                    progress: progressFraction,
+                    tint: progressColor,
+                    height: 6
+                )
 
                 // Count
                 Text("\(positiveCount)/\(item.targetExposures)")

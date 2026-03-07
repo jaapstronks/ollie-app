@@ -76,21 +76,11 @@ struct SocializationCategoryDetailView: View {
                 .font(.headline)
 
                 // Progress bar
-                GeometryReader { geometry in
-                    ZStack(alignment: .leading) {
-                        RoundedRectangle(cornerRadius: 4)
-                            .fill(Color.secondary.opacity(0.2))
-                            .frame(height: 6)
-
-                        RoundedRectangle(cornerRadius: 4)
-                            .fill(progressColor(for: progress))
-                            .frame(
-                                width: geometry.size.width * progressFraction(for: progress),
-                                height: 6
-                            )
-                    }
-                }
-                .frame(height: 6)
+                LinearProgressBar(
+                    progress: progressFraction(for: progress),
+                    tint: progressColor(for: progress),
+                    height: 6
+                )
             }
         }
         .padding(.vertical, 8)

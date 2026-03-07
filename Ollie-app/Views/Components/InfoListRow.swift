@@ -14,6 +14,7 @@ enum InfoListRowStyle {
     case principle // Accent color icon - key points
     case warning   // Orange/warning icon - mistakes to avoid
     case info      // Secondary icon - neutral information
+    case bullet    // Simple bullet point - for lists
 
     var defaultIcon: String {
         switch self {
@@ -21,6 +22,7 @@ enum InfoListRowStyle {
         case .principle: return "lightbulb.fill"
         case .warning: return "xmark.circle.fill"
         case .info: return "info.circle.fill"
+        case .bullet: return "circle.fill"
         }
     }
 
@@ -30,6 +32,23 @@ enum InfoListRowStyle {
         case .principle: return .otisAccent
         case .warning: return .otisWarning
         case .info: return .secondary
+        case .bullet: return .secondary
+        }
+    }
+
+    /// Font size for the icon (bullet points are smaller)
+    var iconFontSize: CGFloat {
+        switch self {
+        case .bullet: return 5
+        default: return 12
+        }
+    }
+
+    /// Whether icon needs top padding (for alignment with text)
+    var iconTopPadding: CGFloat {
+        switch self {
+        case .bullet: return 6
+        default: return 0
         }
     }
 }
@@ -52,9 +71,10 @@ struct InfoListRow: View {
     var body: some View {
         HStack(alignment: .top, spacing: 10) {
             Image(systemName: resolvedIcon)
-                .font(.caption)
+                .font(.system(size: style.iconFontSize))
                 .foregroundStyle(resolvedColor)
                 .frame(width: 16)
+                .padding(.top, style.iconTopPadding)
 
             Text(text)
                 .font(.subheadline)
@@ -87,32 +107,58 @@ extension InfoListRow {
     static func info(_ text: String, icon: String) -> InfoListRow {
         InfoListRow(text: text, icon: icon, style: .info)
     }
+
+    /// Creates a bullet point row
+    static func bullet(_ text: String, color: Color = .secondary) -> InfoListRow {
+        InfoListRow(text: text, style: .bullet, iconColor: color.opacity(0.6))
+    }
+
+    /// Creates a benefit row with custom icon (commonly used in training guides)
+    static func benefit(_ text: String, icon: String, color: Color = .indigo) -> InfoListRow {
+        InfoListRow(text: text, icon: icon, style: .principle, iconColor: color)
+    }
 }
 
 // MARK: - Preview
 
 #Preview("Info List Rows") {
-    VStack(spacing: 12) {
-        Text("Tips").font(.headline)
-        InfoListRow.tip("Take out after waking, eating, and playing")
-        InfoListRow.tip("Reward immediately when they go outside")
+    ScrollView {
+        VStack(spacing: 12) {
+            Text("Tips").font(.headline)
+            InfoListRow.tip("Take out after waking, eating, and playing")
+            InfoListRow.tip("Reward immediately when they go outside")
 
-        Divider()
+            Divider()
 
-        Text("Principles").font(.headline)
-        InfoListRow.principle("Supervise constantly indoors", icon: "eye.fill")
-        InfoListRow.principle("Never punish accidents", icon: "heart.fill")
+            Text("Principles").font(.headline)
+            InfoListRow.principle("Supervise constantly indoors", icon: "eye.fill")
+            InfoListRow.principle("Never punish accidents", icon: "heart.fill")
 
-        Divider()
+            Divider()
 
-        Text("Warnings").font(.headline)
-        InfoListRow.warning("Punishing accidents creates fear")
-        InfoListRow.warning("Waiting too long after triggers")
+            Text("Warnings").font(.headline)
+            InfoListRow.warning("Punishing accidents creates fear")
+            InfoListRow.warning("Waiting too long after triggers")
 
-        Divider()
+            Divider()
 
-        Text("Custom").font(.headline)
-        InfoListRow(text: "Custom icon and color", icon: "star.fill", iconColor: .purple)
+            Text("Bullets").font(.headline)
+            InfoListRow.bullet("Make crate cozy with a blanket")
+            InfoListRow.bullet("Feed meals inside the crate")
+            InfoListRow.bullet("Start with short durations", color: .indigo)
+
+            Divider()
+
+            Text("Benefits").font(.headline)
+            InfoListRow.benefit("Helps with potty training", icon: "drop.fill")
+            InfoListRow.benefit("Teaches self-soothing", icon: "moon.zzz.fill")
+            InfoListRow.benefit("Creates a safe space", icon: "shield.fill")
+
+            Divider()
+
+            Text("Custom").font(.headline)
+            InfoListRow(text: "Custom icon and color", icon: "star.fill", iconColor: .purple)
+        }
+        .padding()
     }
-    .padding()
 }

@@ -109,12 +109,13 @@ struct CrateTrainingSection: View {
                     .padding(.horizontal)
 
                 VStack(spacing: 8) {
-                    benefitRow(text: Strings.Training.CrateTraining.benefitPotty, icon: "drop.fill")
-                    benefitRow(text: Strings.Training.CrateTraining.benefitSelfSoothe, icon: "moon.zzz.fill")
-                    benefitRow(text: Strings.Training.CrateTraining.benefitSeparation, icon: "heart.fill")
-                    benefitRow(text: Strings.Training.CrateTraining.benefitSafeSpace, icon: "shield.fill")
-                    benefitRow(text: Strings.Training.CrateTraining.benefitLongerNaps, icon: "clock.fill")
+                    InfoListRow.benefit(Strings.Training.CrateTraining.benefitPotty, icon: "drop.fill")
+                    InfoListRow.benefit(Strings.Training.CrateTraining.benefitSelfSoothe, icon: "moon.zzz.fill")
+                    InfoListRow.benefit(Strings.Training.CrateTraining.benefitSeparation, icon: "heart.fill")
+                    InfoListRow.benefit(Strings.Training.CrateTraining.benefitSafeSpace, icon: "shield.fill")
+                    InfoListRow.benefit(Strings.Training.CrateTraining.benefitLongerNaps, icon: "clock.fill")
                 }
+                .padding(.horizontal)
             }
 
             Divider()
@@ -129,13 +130,14 @@ struct CrateTrainingSection: View {
                     .padding(.horizontal)
 
                 VStack(spacing: 8) {
-                    tipRow(text: Strings.Training.CrateTraining.tipCozy)
-                    tipRow(text: Strings.Training.CrateTraining.tipMeals)
-                    tipRow(text: Strings.Training.CrateTraining.tipTired)
-                    tipRow(text: Strings.Training.CrateTraining.tipStayClose)
-                    tipRow(text: Strings.Training.CrateTraining.tipNoCrying)
-                    tipRow(text: Strings.Training.CrateTraining.tipShortFirst)
+                    InfoListRow.bullet(Strings.Training.CrateTraining.tipCozy, color: .indigo)
+                    InfoListRow.bullet(Strings.Training.CrateTraining.tipMeals, color: .indigo)
+                    InfoListRow.bullet(Strings.Training.CrateTraining.tipTired, color: .indigo)
+                    InfoListRow.bullet(Strings.Training.CrateTraining.tipStayClose, color: .indigo)
+                    InfoListRow.bullet(Strings.Training.CrateTraining.tipNoCrying, color: .indigo)
+                    InfoListRow.bullet(Strings.Training.CrateTraining.tipShortFirst, color: .indigo)
                 }
+                .padding(.horizontal)
             }
 
             // Encouragement
@@ -197,43 +199,6 @@ struct CrateTrainingSection: View {
             RoundedRectangle(cornerRadius: 12)
                 .fill(colorScheme == .dark ? Color.white.opacity(0.05) : Color.black.opacity(0.03))
         )
-        .padding(.horizontal)
-    }
-
-    @ViewBuilder
-    private func benefitRow(text: String, icon: String) -> some View {
-        HStack(alignment: .top, spacing: 10) {
-            Image(systemName: icon)
-                .font(.caption)
-                .foregroundStyle(.indigo)
-                .frame(width: 16)
-
-            Text(text)
-                .font(.caption)
-                .foregroundStyle(.secondary)
-                .fixedSize(horizontal: false, vertical: true)
-
-            Spacer()
-        }
-        .padding(.horizontal)
-    }
-
-    @ViewBuilder
-    private func tipRow(text: String) -> some View {
-        HStack(alignment: .top, spacing: 10) {
-            Image(systemName: "circle.fill")
-                .font(.system(size: 5))
-                .foregroundStyle(.indigo.opacity(0.6))
-                .frame(width: 16)
-                .padding(.top, 5)
-
-            Text(text)
-                .font(.caption)
-                .foregroundStyle(.secondary)
-                .fixedSize(horizontal: false, vertical: true)
-
-            Spacer()
-        }
         .padding(.horizontal)
     }
 }

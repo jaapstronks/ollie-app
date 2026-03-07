@@ -2,8 +2,7 @@
 //  AITrainingGuidanceCard.swift
 //  Ollie-app
 //
-//  Example card showing AI-powered training guidance.
-//  Demonstrates usage of the new modular AI system.
+//  Card displaying AI-powered training suggestions.
 //
 
 import SwiftUI
@@ -14,29 +13,29 @@ struct AITrainingGuidanceCard: View {
     @EnvironmentObject var profileStore: ProfileStore
     @EnvironmentObject var eventStore: EventStore
     @EnvironmentObject var skillProgressStore: SkillProgressStore
-    @EnvironmentObject var subscriptionManager: SubscriptionManager
 
     @State private var guidance: TrainingGuidanceResponse?
     @State private var isLoading = false
     @State private var error: String?
 
-    var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            headerView
+    @Environment(\.colorScheme) private var colorScheme
 
-            if isLoading {
-                loadingView
-            } else if let guidance = guidance {
+    /// Whether the card should be visible
+    private var shouldShow: Bool {
+        isLoading || guidance != nil
+    }
+
+    var body: some View {
+        AIInsightCardContainer(
+            title: Strings.AINudges.trainingSuggestion,
+            tint: .purple,
+            isLoading: isLoading,
+            isVisible: shouldShow
+        ) {
+            if let guidance = guidance {
                 guidanceContent(guidance)
-            } else if let error = error {
-                errorView(error)
-            } else {
-                placeholderView
             }
         }
-        .padding()
-        .background(Color(.secondarySystemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 12))
         .task {
             await loadGuidance()
         }
@@ -44,99 +43,64 @@ struct AITrainingGuidanceCard: View {
 
     // MARK: - Subviews
 
-    private var headerView: some View {
-        HStack {
-            Image(systemName: "sparkles")
-                .foregroundStyle(.purple)
-            Text("Training Suggestion")
-                .font(.headline)
-            Spacer()
-            if isLoading {
-                ProgressView()
-                    .scaleEffect(0.8)
-            }
-        }
-    }
-
-    private var loadingView: some View {
-        HStack {
-            Spacer()
-            ProgressView()
-                .padding()
-            Spacer()
-        }
-    }
-
     @ViewBuilder
     private func guidanceContent(_ guidance: TrainingGuidanceResponse) -> some View {
-        VStack(alignment: .leading, spacing: 8) {
-            // Suggested skill
-            if let skillId = guidance.suggestedSkill {
-                HStack {
-                    Image(systemName: "target")
-                        .foregroundStyle(.blue)
-                    Text("Focus on: **\(skillDisplayName(skillId))**")
-                }
+        VStack(alignment: .leading, spacing: 10) {
+            // Encouragement message (celebration/motivational)
+            if let encouragement = guidance.encouragementMessage {
+                Text(encouragement)
+                    .font(.subheadline)
+                    .foregroundStyle(.primary)
             }
 
-            // Rationale
-            if let rationale = guidance.skillRationale {
-                Text(rationale)
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
+            // Suggested skill with rationale
+            if let skillId = guidance.suggestedSkill {
+                HStack(spacing: 6) {
+                    Image(systemName: "target")
+                        .font(.caption)
+                        .foregroundStyle(.purple)
+                    Text("\(Strings.AINudges.focusOn): **\(skillDisplayName(skillId))**")
+                        .font(.subheadline)
+                }
+
+                if let rationale = guidance.skillRationale {
+                    Text(rationale)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
             }
 
             // Session advice
             if let advice = guidance.sessionAdvice {
                 Text(advice)
-                    .font(.callout)
-                    .padding(.top, 4)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .padding(.top, 2)
             }
 
             // Pace warning
             if let paceWarning = guidance.paceGuidance {
-                HStack {
-                    Image(systemName: "exclamationmark.triangle.fill")
-                        .foregroundStyle(.orange)
-                    Text(paceWarning)
-                        .font(.caption)
-                }
-                .padding(.top, 4)
+                AIWarningRow(text: paceWarning)
+                    .padding(.top, 2)
             }
 
             // Warm-up suggestions
             if let warmup = guidance.warmupSkills, !warmup.isEmpty {
-                HStack {
-                    Text("Warm up with:")
+                HStack(spacing: 6) {
+                    Text(Strings.AINudges.warmUpWith + ":")
                         .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(.tertiary)
                     ForEach(warmup, id: \.self) { skillId in
                         Text(skillDisplayName(skillId))
                             .font(.caption)
-                            .padding(.horizontal, 6)
-                            .padding(.vertical, 2)
-                            .background(Color.blue.opacity(0.1))
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 3)
+                            .background(Color.purple.opacity(0.15))
                             .clipShape(Capsule())
                     }
                 }
             }
         }
-    }
-
-    private func errorView(_ error: String) -> some View {
-        HStack {
-            Image(systemName: "exclamationmark.circle")
-                .foregroundStyle(.red)
-            Text(error)
-                .font(.caption)
-                .foregroundStyle(.secondary)
-        }
-    }
-
-    private var placeholderView: some View {
-        Text("AI training suggestions will appear here")
-            .font(.subheadline)
-            .foregroundStyle(.secondary)
     }
 
     // MARK: - Data Loading
@@ -169,10 +133,8 @@ struct AITrainingGuidanceCard: View {
             self.error = nil
 
         case .shadow(let response):
-            // In shadow mode, we can still display for debugging
-            #if DEBUG
+            // In shadow mode, still display for the developer
             self.guidance = response
-            #endif
             self.error = nil
 
         case .fallback(let reason):
@@ -184,7 +146,6 @@ struct AITrainingGuidanceCard: View {
 
     private func skillDisplayName(_ skillId: String) -> String {
         // Convert skill ID to display name
-        // e.g., "sit" -> "Sit", "down_stay" -> "Down Stay"
         skillId
             .replacingOccurrences(of: "_", with: " ")
             .capitalized
@@ -200,7 +161,6 @@ struct AITrainingGuidanceCard_Previews: PreviewProvider {
             .environmentObject(ProfileStore())
             .environmentObject(EventStore())
             .environmentObject(SkillProgressStore())
-            .environmentObject(SubscriptionManager.shared)
             .padding()
     }
 }
