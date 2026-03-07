@@ -84,6 +84,7 @@ struct SharingSection: View {
             participantRow
         } else if shareManager.isShared {
             sharedStatusRow
+            participantsRow
             manageShareButton
 
             // Show invite button or upsell based on partner limit
@@ -136,14 +137,18 @@ struct SharingSection: View {
     }
 
     private var sharedStatusRow: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack {
-                Image(systemName: "checkmark.circle.fill")
-                    .foregroundStyle(Color.otisSuccess)
-                Text(Strings.CloudSharing.shared)
-                    .font(.subheadline.weight(.medium))
-            }
+        HStack {
+            Image(systemName: "checkmark.circle.fill")
+                .foregroundStyle(Color.otisSuccess)
+            Text(Strings.CloudSharing.shared)
+                .font(.subheadline.weight(.medium))
+            Spacer()
+        }
+        .contentShape(Rectangle())
+    }
 
+    private var participantsRow: some View {
+        VStack(alignment: .leading, spacing: 8) {
             if shareManager.shareParticipants.isEmpty {
                 Text(Strings.CloudSharing.noParticipants)
                     .font(.caption)
@@ -164,6 +169,7 @@ struct SharingSection: View {
                 }
             }
         }
+        .contentShape(Rectangle())
     }
 
     /// Count of current non-owner participants (accepted + pending)
@@ -253,12 +259,18 @@ struct SharingSection: View {
         } label: {
             HStack {
                 Label(Strings.CloudSharing.shareWithPartner, systemImage: "person.badge.plus")
+                Spacer()
                 if isPreparingShare {
-                    Spacer()
                     ProgressView()
+                } else {
+                    Image(systemName: "chevron.right")
+                        .font(.caption)
+                        .foregroundStyle(.tertiary)
                 }
             }
+            .contentShape(Rectangle())
         }
+        .buttonStyle(.plain)
         .disabled(isPreparingShare)
     }
 
@@ -268,12 +280,18 @@ struct SharingSection: View {
         } label: {
             HStack {
                 Label(Strings.CloudSharing.manageSharing, systemImage: "person.2.fill")
+                Spacer()
                 if isPreparingShare {
-                    Spacer()
                     ProgressView()
+                } else {
+                    Image(systemName: "chevron.right")
+                        .font(.caption)
+                        .foregroundStyle(.tertiary)
                 }
             }
+            .contentShape(Rectangle())
         }
+        .buttonStyle(.plain)
         .disabled(isPreparingShare)
     }
 
@@ -283,12 +301,18 @@ struct SharingSection: View {
         } label: {
             HStack {
                 Label(Strings.CloudSharing.inviteAnother, systemImage: "person.badge.plus")
+                Spacer()
                 if isPreparingShare {
-                    Spacer()
                     ProgressView()
+                } else {
+                    Image(systemName: "chevron.right")
+                        .font(.caption)
+                        .foregroundStyle(.tertiary)
                 }
             }
+            .contentShape(Rectangle())
         }
+        .buttonStyle(.plain)
         .disabled(isPreparingShare)
     }
 
@@ -297,8 +321,14 @@ struct SharingSection: View {
             HapticFeedback.warning()
             showStopSharingConfirm = true
         } label: {
-            Label(Strings.CloudSharing.stopSharing, systemImage: "xmark.circle")
+            HStack {
+                Label(Strings.CloudSharing.stopSharing, systemImage: "xmark.circle")
+                Spacer()
+            }
+            .contentShape(Rectangle())
         }
+        .buttonStyle(.plain)
+        .foregroundStyle(.red)
     }
 
     // MARK: - Actions
