@@ -19,6 +19,17 @@ struct SettingsView: View {
 
     var onAddDog: (() -> Void)?
 
+    /// Profiles sorted with active profile first
+    private var sortedProfiles: [PuppyProfile] {
+        profileStore.profiles.sorted { p1, p2 in
+            // Active profile comes first
+            if p1.id == profileStore.activeProfileId { return true }
+            if p2.id == profileStore.activeProfileId { return false }
+            // Otherwise maintain original order
+            return false
+        }
+    }
+
     var body: some View {
         ScrollView {
             VStack(spacing: 16) {
@@ -30,8 +41,8 @@ struct SettingsView: View {
                 devToolsSection
                 #endif
 
-                // Dog cards - one per profile
-                ForEach(profileStore.profiles, id: \.id) { profile in
+                // Dog cards - one per profile, active dog first
+                ForEach(sortedProfiles, id: \.id) { profile in
                     DogSettingsCard(
                         profile: profile,
                         isActive: profile.id == profileStore.activeProfileId,
