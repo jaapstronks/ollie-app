@@ -46,6 +46,19 @@ public enum SkillLearningPhase: String, Codable, CaseIterable, Sendable {
         rawValue
     }
 
+    /// SF Symbol icon name for the phase
+    public var icon: String {
+        switch self {
+        case .notStarted: return "circle"
+        case .luring: return "hand.point.right.fill"
+        case .addingCue: return "speaker.wave.2.fill"
+        case .proofing: return "chart.bar.fill"
+        case .generalizing: return "location.fill"
+        case .maintaining: return "checkmark.seal.fill"
+        case .needsWork: return "exclamationmark.triangle.fill"
+        }
+    }
+
     /// Whether this phase is considered "active learning"
     public var isActiveLearning: Bool {
         switch self {
@@ -76,6 +89,18 @@ public enum SkillLearningPhase: String, Codable, CaseIterable, Sendable {
         case .generalizing: return 5
         case .maintaining: return 6
         case .notStarted: return 7     // Lowest priority
+        }
+    }
+
+    /// Whether confidence score should be displayed for this phase
+    /// Early phases (luring, addingCue) focus on learning the behavior, not reliability
+    /// Showing 100% confidence with 1-2 reps is misleading
+    public var shouldShowConfidence: Bool {
+        switch self {
+        case .proofing, .generalizing, .maintaining, .needsWork:
+            return true
+        case .notStarted, .luring, .addingCue:
+            return false
         }
     }
 }
