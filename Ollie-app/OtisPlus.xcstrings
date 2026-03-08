@@ -979,6 +979,16 @@
         }
       }
     },
+    "Multiple Dogs": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meerdere honden"
+          }
+        }
+      }
+    },
     "Monthly": {
       "extractionState": "stale",
       "localizations": {
@@ -1080,6 +1090,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Otis+"
+          }
+        }
+      }
+    },
+    "Partner Sharing": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delen met partner"
           }
         }
       }
@@ -1532,6 +1552,36 @@
           "stringUnit": {
             "state": "translated",
             "value": "Analyses du sommeil"
+          }
+        }
+      }
+    },
+    "Smart AI Nudges": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slimme AI-suggesties"
+          }
+        }
+      }
+    },
+    "Subscribe now to restore %@'s AI-powered insights and predictions.": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abonneer nu om de AI-gestuurde inzichten en voorspellingen van %@ te herstellen."
+          }
+        }
+      }
+    },
+    "Subtle AI tuning for daily status text, walk suggestion order, and reminder timing": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Subtiele AI-afstemming voor dagelijkse status, wandelsuggesties en herinneringstiming"
           }
         }
       }
@@ -2232,6 +2282,46 @@
           "stringUnit": {
             "state": "translated",
             "value": "Vous avez maintenant accès à toutes les fonctionnalités premium. Profitons ensemble au maximum du parcours de votre chiot."
+          }
+        }
+      }
+    },
+    "You and %@ are loving Otis+": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jij en %@ zijn dol op Otis+"
+          }
+        }
+      }
+    },
+    "Your trial ends in %lld days. Subscribe to keep %@'s insights.": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je proefperiode eindigt over %lld dagen. Abonneer om de inzichten van %@ te behouden."
+          }
+        }
+      }
+    },
+    "Your trial ends tomorrow. Subscribe now to keep %@'s AI coach.": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je proefperiode eindigt morgen. Abonneer nu om de AI-coach van %@ te behouden."
+          }
+        }
+      }
+    },
+    "Your Trial Has Ended": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je proefperiode is afgelopen"
           }
         }
       }

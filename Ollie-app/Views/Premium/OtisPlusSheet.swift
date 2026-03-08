@@ -14,7 +14,12 @@ struct OtisPlusSheet: View {
 
     @ObservedObject var subscriptionManager = SubscriptionManager.shared
     @ObservedObject private var trialManager = TrialManager.shared
+    @ObservedObject private var profileStore = ProfileStore.shared
     @Environment(\.colorScheme) private var colorScheme
+
+    private var dogName: String {
+        profileStore.currentProfile?.name ?? Strings.Health.yourPuppy
+    }
 
     /// Determines the context for showing the paywall
     private enum PaywallContext {
@@ -152,7 +157,7 @@ struct OtisPlusSheet: View {
         case .expired:
             return Strings.OtisPlus.expiredHeroTitle
         case .inTrial:
-            return Strings.OtisPlus.trialHeroTitle
+            return Strings.OtisPlus.trialHeroTitle(dogName: dogName)
         case .normal:
             return Strings.OtisPlus.heroTitle
         }
@@ -161,9 +166,9 @@ struct OtisPlusSheet: View {
     private var heroSubtitle: String {
         switch paywallContext {
         case .expired:
-            return Strings.OtisPlus.expiredHeroSubtitle
+            return Strings.OtisPlus.expiredHeroSubtitle(dogName: dogName)
         case .inTrial(let daysLeft):
-            return Strings.OtisPlus.trialHeroSubtitle(daysLeft: daysLeft)
+            return Strings.OtisPlus.trialHeroSubtitle(dogName: dogName, daysLeft: daysLeft)
         case .normal:
             return Strings.OtisPlus.heroSubtitle
         }

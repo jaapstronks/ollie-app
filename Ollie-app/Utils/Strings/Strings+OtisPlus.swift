@@ -128,14 +128,18 @@ extension Strings {
         static let settingsStatus = String(localized: "Status", table: table)
 
         // Trial-aware paywall messaging
-        static let trialHeroTitle = String(localized: "You're Loving Ollie+", table: table)
-        static func trialHeroSubtitle(daysLeft: Int) -> String {
+        static func trialHeroTitle(dogName: String) -> String {
+            String(localized: "You and \(dogName) are loving Otis+", table: table)
+        }
+        static func trialHeroSubtitle(dogName: String, daysLeft: Int) -> String {
             if daysLeft == 1 {
-                return String(localized: "Your trial ends tomorrow. Subscribe now to keep your AI coach.", table: table)
+                return String(localized: "Your trial ends tomorrow. Subscribe now to keep \(dogName)'s AI coach.", table: table)
             }
-            return String(localized: "Your trial ends in \(daysLeft) days. Subscribe to keep access to all features.", table: table)
+            return String(localized: "Your trial ends in \(daysLeft) days. Subscribe to keep \(dogName)'s insights.", table: table)
         }
         static let expiredHeroTitle = String(localized: "Your Trial Has Ended", table: table)
-        static let expiredHeroSubtitle = String(localized: "Subscribe now to restore your AI-powered insights and predictions.", table: table)
+        static func expiredHeroSubtitle(dogName: String) -> String {
+            String(localized: "Subscribe now to restore \(dogName)'s AI-powered insights and predictions.", table: table)
+        }
     }
 }
