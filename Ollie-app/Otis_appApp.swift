@@ -143,6 +143,7 @@ private extension OtisApp {
 
         // Setup CloudKit and perform initial syncs
         await CloudKitService.shared.setup()
+        await UserIdentityStore.shared.setup()
         await profileStore.initialSync()
         await spotStore.initialSync()
         await medicationStore.initialSync()
@@ -153,6 +154,10 @@ private extension OtisApp {
 
         // Refresh participant info from CloudKit shares (for partner activity cards)
         await ParticipantResolver.shared.refreshFromCloudKit()
+
+        // Perform initial photo sync - upload any pending photos
+        let recentEvents = await eventStore.getEventsAsync(from: Date.daysAgo(30), to: Date())
+        PhotoSyncService.shared.performInitialSync(events: recentEvents)
 
         // Seed default milestones
         milestoneStore.seedDefaultMilestonesIfNeeded()
@@ -187,6 +192,9 @@ private extension OtisApp {
     func handleForegroundEntry() {
         // Import events logged via Siri/Shortcuts while app was in background
         eventStore.importPendingIntentEvents(profile: profileStore.profile)
+
+        // Retry failed photo uploads
+        PhotoSyncService.shared.retryFailedUploads()
 
         Task {
             await CloudKitShareHandler.processPendingShare(profileStore: profileStore)

@@ -16,11 +16,18 @@ struct AppSettingsView: View {
     @ObservedObject var dataImporter: DataImporter
     @ObservedObject var eventStore: EventStore
     @ObservedObject var cloudKit = CloudKitService.shared
+    @ObservedObject var userIdentityStore = UserIdentityStore.shared
+    var onTriggerTour: (() -> Void)? = nil
 
     @State private var showingOtisPlusSheet = false
     @State private var showingSubscriptionSuccess = false
     @State private var showingImportSheet = false
     @State private var showingExportSheet = false
+    @Environment(\.dismiss) private var dismiss
+
+    // Guided tour
+    @AppStorage(UserPreferences.Key.hasCompletedGuidedTour.rawValue) private var hasCompletedGuidedTour = false
+    @AppStorage(UserPreferences.Key.guidedTourStep.rawValue) private var guidedTourStep = 0
     @AppStorage(UserPreferences.Key.appearanceMode.rawValue) private var appearanceMode = AppearanceMode.system.rawValue
     @AppStorage(UserPreferences.Key.temperatureUnit.rawValue) private var temperatureUnit = TemperatureUnit.celsius.rawValue
     @AppStorage(UserPreferences.Key.weightUnit.rawValue) private var weightUnit = WeightUnit.kg.rawValue
@@ -45,6 +52,9 @@ struct AppSettingsView: View {
                     showingSubscriptionSuccess: $showingSubscriptionSuccess
                 )
             }
+
+            // User profile
+            userProfileSection
 
             // iCloud Sync
             SyncSection(eventStore: eventStore, cloudKit: cloudKit)
@@ -72,6 +82,9 @@ struct AppSettingsView: View {
 
             // Celebrations
             celebrationsSection
+
+            // Help section
+            helpSection
 
             // Advanced section
             Section(Strings.Settings.advanced) {
@@ -148,6 +161,58 @@ struct AppSettingsView: View {
         }
         .sheet(isPresented: $showingExportSheet) {
             ExportDataView(profileStore: profileStore)
+        }
+    }
+
+    // MARK: - User Profile Section
+
+    private var userProfileSection: some View {
+        Section {
+            NavigationLink {
+                UserProfileSettingsView(userIdentityStore: userIdentityStore)
+            } label: {
+                HStack(spacing: 12) {
+                    // Avatar
+                    if let identity = userIdentityStore.currentIdentity {
+                        if let avatarData = identity.avatarData,
+                           let uiImage = UIImage(data: avatarData) {
+                            Image(uiImage: uiImage)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 40, height: 40)
+                                .clipShape(Circle())
+                        } else {
+                            Circle()
+                                .fill(Color(hex: identity.colorHex))
+                                .frame(width: 40, height: 40)
+                                .overlay {
+                                    Text(identity.initial)
+                                        .font(.system(size: 18, weight: .medium, design: .rounded))
+                                        .foregroundStyle(.white)
+                                }
+                        }
+                    } else {
+                        Circle()
+                            .fill(Color.secondary.opacity(0.3))
+                            .frame(width: 40, height: 40)
+                            .overlay {
+                                Image(systemName: "person.fill")
+                                    .foregroundStyle(.secondary)
+                            }
+                    }
+
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(userIdentityStore.currentIdentity?.name ?? Strings.UserProfile.me)
+                            .font(.body)
+                        Text(Strings.UserProfile.settingsDescription)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                .padding(.vertical, 4)
+            }
+        } header: {
+            Text(Strings.UserProfile.title)
         }
     }
 
@@ -272,8 +337,8 @@ struct AppSettingsView: View {
 
             Toggle(isOn: $atmosphereState) {
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(Strings.Atmosphere.puppyState)
-                    Text(Strings.Atmosphere.puppyStateDescription)
+                    Text(Strings.Atmosphere.activityState)
+                    Text(Strings.Atmosphere.activityStateDescription)
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
@@ -291,6 +356,25 @@ struct AppSettingsView: View {
             Text(Strings.Atmosphere.title)
         } footer: {
             Text(Strings.Atmosphere.description)
+        }
+    }
+
+    // MARK: - Help Section
+
+    private var helpSection: some View {
+        Section(Strings.Settings.help) {
+            Button {
+                // Reset tour state and trigger replay
+                hasCompletedGuidedTour = false
+                guidedTourStep = 0
+                dismiss()
+                // Allow settings sheet to dismiss before starting tour
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    onTriggerTour?()
+                }
+            } label: {
+                Label(Strings.Settings.viewAppTour, systemImage: "questionmark.circle")
+            }
         }
     }
 
