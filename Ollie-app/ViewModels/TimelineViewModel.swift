@@ -148,6 +148,7 @@ class TimelineViewModel: ObservableObject {
 
     /// Subscription to forward PredictionService changes
     private var predictionServiceCancellable: AnyCancellable?
+    private var momentNotificationCancellable: AnyCancellable?
 
     let eventStore: EventStore
     let profileStore: ProfileStore
@@ -242,7 +243,36 @@ class TimelineViewModel: ObservableObject {
                 self.refreshPredictions()
             }
 
+        // Listen for moment notification taps to open lightbox
+        momentNotificationCancellable = NotificationCenter.default
+            .publisher(for: .openMomentFromNotification)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] notification in
+                guard let eventId = notification.userInfo?["eventId"] as? UUID else { return }
+                self?.openMomentFromNotification(eventId: eventId)
+            }
+
         loadEvents()
+    }
+
+    /// Open the moments lightbox for an event tapped from a notification
+    private func openMomentFromNotification(eventId: UUID) {
+        // Get recent moment events for the lightbox
+        let momentEvents = eventStore.getEventsWithMedia(
+            from: Date.daysAgo(30),
+            to: Date()
+        ).sorted { $0.time > $1.time }
+
+        // Find the index of the tapped event
+        guard let index = momentEvents.firstIndex(where: { $0.id == eventId }) else {
+            // Event not found - maybe too old. Just show the first moment.
+            if !momentEvents.isEmpty {
+                sheetCoordinator.presentMomentsLightbox(events: momentEvents, startIndex: 0)
+            }
+            return
+        }
+
+        sheetCoordinator.presentMomentsLightbox(events: momentEvents, startIndex: index)
     }
 
     // MARK: - Convenience Accessors for Sheet State
@@ -343,6 +373,29 @@ class TimelineViewModel: ObservableObject {
     /// Days remaining in trial period (0 if not in trial)
     var freeDaysRemaining: Int {
         subscriptionManager.effectiveStatus.trialDaysRemaining ?? 0
+    }
+
+    // MARK: - Recent Photos
+
+    /// Get events with photos from the last 7 days, sorted most recent first
+    /// Uses in-memory events for today (fresh) + Core Data for historical (stable)
+    var recentPhotoEvents: [PuppyEvent] {
+        let calendar = Calendar.current
+        let today = Date()
+        let sevenDaysAgo = calendar.date(byAdding: .day, value: -7, to: today) ?? today
+        let startOfToday = calendar.startOfDay(for: today)
+
+        // Get historical events (before today) from Core Data
+        let historicalPhotoEvents = eventStore.getEventsWithMedia(from: sevenDaysAgo, to: startOfToday)
+
+        // Use in-memory events for today (always fresh after logging)
+        let todayPhotoEvents = events.filter { event in
+            calendar.isDateInToday(event.time) && event.photo != nil
+        }
+
+        // Combine and sort most recent first
+        return (historicalPhotoEvents + todayPhotoEvents)
+            .sorted { $0.time > $1.time }
     }
 
     // MARK: - Medication Helpers

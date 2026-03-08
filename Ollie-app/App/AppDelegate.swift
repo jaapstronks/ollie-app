@@ -10,6 +10,7 @@ import CoreData
 import OtisShared
 import os
 import UIKit
+import UserNotifications
 
 class AppDelegate: NSObject, UIApplicationDelegate {
     private let logger = Logger.otis(category: "AppDelegate")
@@ -22,6 +23,14 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     ) -> Bool {
         // Initialize WatchConnectivity session as early as possible (Apple best practice)
         _ = WatchSyncService.shared
+
+        // Set up notification delegate for handling notification actions
+        UNUserNotificationCenter.current().delegate = self
+
+        // Register notification categories for moments (like actions)
+        Task { @MainActor in
+            MomentsNotificationHandler.shared.registerNotificationCategories()
+        }
 
         // Register for remote notifications (required for CloudKit silent push)
         application.registerForRemoteNotifications()
@@ -113,5 +122,38 @@ class AppDelegate: NSObject, UIApplicationDelegate {
                 profileStore: nil
             )
         }
+    }
+}
+
+// MARK: - UNUserNotificationCenterDelegate
+
+extension AppDelegate: UNUserNotificationCenterDelegate {
+    /// Handle notification responses (actions and taps)
+    func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        didReceive response: UNNotificationResponse,
+        withCompletionHandler completionHandler: @escaping () -> Void
+    ) {
+        Task { @MainActor in
+            // Try to handle moment notification actions
+            let handled = await MomentsNotificationHandler.shared.handleNotificationResponse(response)
+
+            if !handled {
+                logger.debug("Notification response not handled: \(response.notification.request.identifier)")
+            }
+
+            completionHandler()
+        }
+    }
+
+    /// Handle notifications while app is in foreground
+    func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        willPresent notification: UNNotification,
+        withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
+    ) {
+        // Show notification banner even when app is in foreground
+        // This is useful for moment notifications from other household members
+        completionHandler([.banner, .sound, .badge])
     }
 }

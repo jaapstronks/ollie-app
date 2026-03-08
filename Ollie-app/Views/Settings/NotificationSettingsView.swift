@@ -39,6 +39,7 @@ struct NotificationSettingsView: View {
                     napSection
                     walkSection
                     appointmentSection
+                    momentsSection
                 }
             }
             .navigationTitle(Strings.Notifications.title)
@@ -237,6 +238,27 @@ struct NotificationSettingsView: View {
         } footer: {
             if settings.appointmentReminders.isEnabled {
                 Text(Strings.Notifications.appointmentReminderDescription)
+            }
+        }
+    }
+
+    // MARK: - Moments Section
+
+    private var momentsSection: some View {
+        Section {
+            Toggle(isOn: $settings.momentsReminders.isEnabled) {
+                Label {
+                    Text(Strings.Notifications.momentsReminders)
+                } icon: {
+                    Image(systemName: "photo.fill")
+                        .foregroundColor(.pink)
+                }
+            }
+        } header: {
+            Text(Strings.Notifications.momentsSection)
+        } footer: {
+            if settings.momentsReminders.isEnabled {
+                Text(Strings.Notifications.momentsReminderDescription)
             }
         }
     }

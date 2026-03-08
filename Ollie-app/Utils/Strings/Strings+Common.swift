@@ -74,6 +74,7 @@ extension Strings {
 
         // Misc
         static let unknown = String(localized: "Unknown", table: table)
+        static let someone = String(localized: "Someone", table: table)
 
         // Navigation
         static let seeAll = String(localized: "See all", table: table)
@@ -89,6 +90,7 @@ extension Strings {
         static let name = String(localized: "Otis", table: table)
         static let subtitle = String(localized: "Puppy Tracker", table: table)
         static let tagline = String(localized: "Puppyhood is chaos. Otis brings the calm.", table: table)
+        static let websiteUrl = String(localized: "ollie.pet", table: table)
     }
 
     // MARK: - Tabs

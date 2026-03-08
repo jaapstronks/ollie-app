@@ -99,6 +99,17 @@ extension Strings {
         static let help = String(localized: "Help", table: table)
         static let viewAppTour = String(localized: "View App Tour", table: table)
         static let viewAppTourDescription = String(localized: "Take a guided tour of the app features.", table: table)
+
+        // Nudge preferences
+        static let nudgePreferences = String(localized: "What You See", table: table)
+        static let yourRole = String(localized: "Your role", table: table)
+        static let roleDescription = String(localized: "This sets sensible defaults for what you'll see. You can customize further below.", table: table)
+        static let whatToSee = String(localized: "Reminders & nudges", table: table)
+        static let nudgesFooter = String(localized: "These settings control which reminders and suggestions you see in the app and as notifications.", table: table)
+        static let resetToDefaults = String(localized: "Reset to defaults", table: table)
+        static func resetNudgesFooter(_ role: String) -> String {
+            String(localized: "Restore the default settings for your role (\(role)).", table: table)
+        }
     }
 
     // MARK: - Exercise Edit View
@@ -274,6 +285,11 @@ extension Strings {
         static let appointmentReminders = String(localized: "Appointment reminders", table: table)
         static let appointmentsSection = String(localized: "Appointments", table: table)
         static let appointmentReminderDescription = String(localized: "Reminder for upcoming vet visits, training, and other appointments.", table: table)
+
+        // Moments
+        static let momentsReminders = String(localized: "Photo notifications", table: table)
+        static let momentsSection = String(localized: "Photos", table: table)
+        static let momentsReminderDescription = String(localized: "Get notified when household members capture new photos.", table: table)
 
         // Timing options
         static let atScheduledTime = String(localized: "At scheduled time", table: table)

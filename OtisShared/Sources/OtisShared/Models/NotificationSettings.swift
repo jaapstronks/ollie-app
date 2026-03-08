@@ -13,6 +13,7 @@ public struct NotificationSettings: Codable, Sendable {
     public var napReminders: NapReminderSettings
     public var walkReminders: WalkReminderSettings
     public var appointmentReminders: AppointmentReminderSettings
+    public var momentsReminders: MomentsReminderSettings
 
     // MARK: - Smart Notification Settings
 
@@ -30,6 +31,7 @@ public struct NotificationSettings: Codable, Sendable {
         napReminders: NapReminderSettings,
         walkReminders: WalkReminderSettings,
         appointmentReminders: AppointmentReminderSettings = AppointmentReminderSettings(),
+        momentsReminders: MomentsReminderSettings = MomentsReminderSettings(),
         quietHoursStart: Int = 22,
         quietHoursEnd: Int = 7,
         quietHoursEnabled: Bool = true
@@ -40,6 +42,7 @@ public struct NotificationSettings: Codable, Sendable {
         self.napReminders = napReminders
         self.walkReminders = walkReminders
         self.appointmentReminders = appointmentReminders
+        self.momentsReminders = momentsReminders
         self.quietHoursStart = quietHoursStart
         self.quietHoursEnd = quietHoursEnd
         self.quietHoursEnabled = quietHoursEnabled
@@ -52,7 +55,8 @@ public struct NotificationSettings: Codable, Sendable {
             mealReminders: MealReminderSettings(),
             napReminders: NapReminderSettings(),
             walkReminders: WalkReminderSettings(),
-            appointmentReminders: AppointmentReminderSettings()
+            appointmentReminders: AppointmentReminderSettings(),
+            momentsReminders: MomentsReminderSettings()
         )
     }
 
@@ -176,6 +180,15 @@ public struct WalkReminderSettings: Codable, Sendable {
 
 /// Settings for appointment reminders
 public struct AppointmentReminderSettings: Codable, Sendable {
+    public var isEnabled: Bool
+
+    public init(isEnabled: Bool = true) {
+        self.isEnabled = isEnabled
+    }
+}
+
+/// Settings for moments notifications (photos logged by household members)
+public struct MomentsReminderSettings: Codable, Sendable {
     public var isEnabled: Bool
 
     public init(isEnabled: Bool = true) {

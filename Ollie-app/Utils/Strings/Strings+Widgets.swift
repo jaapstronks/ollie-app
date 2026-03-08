@@ -61,6 +61,17 @@ extension Strings {
         static func wakingUpSoonWithPotty(name: String) -> String {
             String(localized: "\(name) should wake up soon – potty break needed", table: table)
         }
+
+        // Moments notifications
+        static let newMomentTitle = String(localized: "New photo!", table: table)
+        static func newMomentBody(personName: String, puppyName: String) -> String {
+            String(localized: "\(personName) captured a moment with \(puppyName)", table: table)
+        }
+        static func newMomentWithNote(personName: String, note: String) -> String {
+            String(localized: "\(personName): \"\(note)\"", table: table)
+        }
+        static let likeActionTitle = String(localized: "Like", table: table)
+        static let viewActionTitle = String(localized: "View", table: table)
     }
 
     // MARK: - Widgets

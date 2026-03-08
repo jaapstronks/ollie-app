@@ -31,6 +31,7 @@ struct ContentView: View {
     @State private var showExpiredTrialSheet = false
     @State private var showOtisPlusSheet = false
     @State private var showPhaseTransitionSheet = false
+    @State private var showUserProfileSetupSheet = false
     @StateObject private var subscriptionManager = SubscriptionManager.shared
     @AppStorage(UserPreferences.Key.lastSelectedTab.rawValue) private var selectedTabRawValue = MainTab.today.rawValue
     @AppStorage(UserPreferences.Key.needsFirstSessionHandoff.rawValue) private var needsFirstSessionHandoff = false
@@ -38,6 +39,7 @@ struct ContentView: View {
     @StateObject private var navigationState = AppNavigationState()
     @AppStorage(UserPreferences.Key.appearanceMode.rawValue) private var appearanceMode = AppearanceMode.system.rawValue
     @State private var showLaunchScreen = true
+    @Environment(\.scenePhase) private var scenePhase
 
     private var colorScheme: ColorScheme? {
         AppearanceMode(rawValue: appearanceMode)?.colorScheme
@@ -120,7 +122,8 @@ struct ContentView: View {
             navigationState.selectedTab = MainTab(rawValue: selectedTabRawValue) ?? .today
 
             // Dismiss launch screen after brief delay
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+            Task { @MainActor in
+                try? await Task.sleep(for: .seconds(0.8))
                 withAnimation(.easeOut(duration: 0.3)) {
                     showLaunchScreen = false
                 }
@@ -129,10 +132,25 @@ struct ContentView: View {
         .onChange(of: navigationState.selectedTab) { _, newTab in
             selectedTabRawValue = newTab.rawValue
         }
+        // Refresh data when app returns to foreground to catch CloudKit syncs
+        .onChange(of: scenePhase) { _, newPhase in
+            if newPhase == .active {
+                eventStore.refreshOnForeground()
+            }
+        }
         // Listen for share acceptance to skip onboarding and reload profile
         .onReceive(NotificationCenter.default.publisher(for: .cloudKitShareAccepted)) { _ in
             // Force dismiss onboarding if it was showing
             showOnboarding = false
+
+            // Check if user profile needs setup after a short delay
+            // (to let the share acceptance alert dismiss first)
+            Task { @MainActor in
+                try? await Task.sleep(for: .seconds(1.5))
+                if UserIdentityStore.shared.needsProfileSetup {
+                    showUserProfileSetupSheet = true
+                }
+            }
         }
         .onReceive(NotificationCenter.default.publisher(for: .sharedProfileAutoActivated)) { notification in
             if let name = notification.userInfo?["profileName"] as? String, !name.isEmpty {
@@ -162,7 +180,8 @@ struct ContentView: View {
                 onSubscribe: {
                     showExpiredTrialSheet = false
                     // Show paywall sheet after a brief delay for sheet transition
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    Task { @MainActor in
+                        try? await Task.sleep(for: .seconds(0.3))
                         showOtisPlusSheet = true
                     }
                     Analytics.track(.trialExpiredSubscribeTapped)
@@ -189,6 +208,29 @@ struct ContentView: View {
             if let profile = profileStore.profile {
                 PhaseTransitionSheet(profile: profile) { applyDefaults in
                     acknowledgePhaseTransition(applyNotificationDefaults: applyDefaults)
+                }
+            }
+        }
+        // User profile setup sheet (shown after share acceptance if needed)
+        .sheet(isPresented: $showUserProfileSetupSheet) {
+            NavigationStack {
+                UserProfileSetupSheet(
+                    userIdentityStore: UserIdentityStore.shared,
+                    onComplete: {
+                        showUserProfileSetupSheet = false
+                    },
+                    onSkip: {
+                        showUserProfileSetupSheet = false
+                    }
+                )
+                .navigationTitle(Strings.UserProfile.title)
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .topBarLeading) {
+                        Button(Strings.Common.cancel) {
+                            showUserProfileSetupSheet = false
+                        }
+                    }
                 }
             }
         }

@@ -42,6 +42,8 @@ class EventStore: ObservableObject {
         setupRemoteChangeObserver()
         setupWatchEventObserver()
         setupProfileChangeObserver()
+        setupPhotoSyncObserver()
+        setupNotificationActionObserver()
         loadEvents(for: currentDate)
     }
 
@@ -102,6 +104,56 @@ class EventStore: ObservableObject {
             .store(in: &cancellables)
     }
 
+    private func setupPhotoSyncObserver() {
+        // Listen for photo upload completion to update event flags
+        NotificationCenter.default.publisher(for: .photoUploadCompleted)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] notification in
+                guard let eventId = notification.userInfo?["eventId"] as? UUID else { return }
+                self?.markPhotoAsSynced(eventId: eventId)
+            }
+            .store(in: &cancellables)
+
+        // Listen for photo upload retry requests
+        NotificationCenter.default.publisher(for: .photoUploadRetryRequested)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] notification in
+                guard let eventId = notification.userInfo?["eventId"] as? UUID,
+                      let self = self else { return }
+                // Fetch the event and retry upload
+                if let event = self.coreDataStore.fetchEvent(byId: eventId) {
+                    PhotoSyncService.shared.retryUpload(for: event)
+                }
+            }
+            .store(in: &cancellables)
+    }
+
+    private func setupNotificationActionObserver() {
+        // Handle like action from moment notification
+        NotificationCenter.default.publisher(for: .likeMomentFromNotification)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] notification in
+                guard let eventId = notification.userInfo?["eventId"] as? UUID,
+                      let self = self else { return }
+                self.handleLikeFromNotification(eventId: eventId)
+            }
+            .store(in: &cancellables)
+    }
+
+    /// Handle like action triggered from a notification
+    private func handleLikeFromNotification(eventId: UUID) {
+        // Fetch the event from Core Data
+        guard let event = coreDataStore.fetchEvent(byId: eventId) else {
+            logger.warning("Could not find event \(eventId) for notification like action")
+            return
+        }
+
+        // Toggle the like
+        if let updatedEvent = toggleLike(on: event) {
+            logger.info("Liked event \(eventId) from notification: liked=\(updatedEvent.isLikedBy(UserIdentityStore.shared.currentUserRecordID ?? ""))")
+        }
+    }
+
     private func handleProfileChange() {
         logger.info("Active profile changed - updating event store")
         updateActiveProfile()
@@ -111,8 +163,40 @@ class EventStore: ObservableObject {
 
     private func handleRemoteChange() {
         logger.debug("Detected CloudKit remote change")
-        coreDataStore.invalidateCache(for: currentDate)
+
+        // Get current events before cache invalidation for comparison
+        let previousEventIds = Set(events.map { $0.id })
+
+        // Invalidate ALL caches, not just current date
+        // Sleep state calculations need recent events from multiple days
+        coreDataStore.invalidateAllCaches()
         loadEvents(for: currentDate)
+
+        // Check for new moments from other users and send notifications
+        Task {
+            await checkForNewMomentsAndNotify(previousEventIds: previousEventIds)
+        }
+    }
+
+    /// Check for new moment events from CloudKit sync and send notifications
+    private func checkForNewMomentsAndNotify(previousEventIds: Set<UUID>) async {
+        guard let profile = profileStoreRef?.profile else { return }
+
+        // Get recent events (last 24 hours) to check for new moments
+        let recentEvents = getEvents(from: Date.daysAgo(1), to: Date())
+
+        // Find new events that weren't in our previous set
+        let newEvents = recentEvents.filter { !previousEventIds.contains($0.id) }
+
+        guard !newEvents.isEmpty else { return }
+
+        // Send notifications for new moments from other users
+        await MomentsNotificationHandler.shared.handleRemoteChanges(
+            newEvents: newEvents,
+            currentUserRecordID: UserIdentityStore.shared.currentUserRecordID,
+            puppyName: profile.name,
+            settings: profile.notificationSettings
+        )
     }
 
     private func handleShareAccepted() {
@@ -134,10 +218,18 @@ class EventStore: ObservableObject {
     }
 
     /// Refresh events (re-read from Core Data)
+    /// Call this when app returns to foreground to ensure fresh data
     func refreshFromCloud() async {
         // With NSPersistentCloudKitContainer, CloudKit sync is automatic
-        // Just invalidate cache and reload
-        coreDataStore.invalidateCache(for: currentDate)
+        // Invalidate ALL caches to ensure sleep state uses fresh data
+        coreDataStore.invalidateAllCaches()
+        loadEvents(for: currentDate)
+    }
+
+    /// Synchronously refresh all data - use when app comes to foreground
+    func refreshOnForeground() {
+        logger.debug("App returned to foreground - refreshing all data")
+        coreDataStore.invalidateAllCaches()
         loadEvents(for: currentDate)
     }
 
@@ -183,10 +275,14 @@ class EventStore: ObservableObject {
 
             // Check for streak milestone review (for outdoor potty events)
             if newEvent.type == .plassen && newEvent.location == .buiten {
-                let thirtyDaysAgo = Calendar.current.date(byAdding: .day, value: -30, to: Date()) ?? Date()
-                let allEvents = getEvents(from: thirtyDaysAgo, to: Date())
+                let allEvents = getEvents(from: Date.daysAgo(30), to: Date())
                 let currentStreak = StreakCalculations.calculateCurrentStreak(events: allEvents)
                 ReviewService.shared.checkForStreakMilestoneReview(currentStreak: currentStreak)
+            }
+
+            // Upload photo to CloudKit if present
+            if newEvent.photo != nil {
+                PhotoSyncService.shared.uploadPhoto(for: newEvent)
             }
 
             // Send webhook if configured
@@ -211,6 +307,13 @@ class EventStore: ObservableObject {
         // Delete associated media files
         coreDataStore.deleteMediaFiles(for: event)
 
+        // Delete cloud photo if synced
+        if event.cloudPhotoSynced == true {
+            Task {
+                await PhotoSyncService.shared.deletePhoto(for: event)
+            }
+        }
+
         do {
             try coreDataStore.deleteEvent(event)
 
@@ -225,6 +328,37 @@ class EventStore: ObservableObject {
         } catch {
             logger.error("Failed to delete event: \(error.localizedDescription)")
             syncError = error.localizedDescription
+        }
+    }
+
+    /// Mark a photo as synced to CloudKit
+    /// Called by PhotoSyncService after successful upload
+    func markPhotoAsSynced(eventId: UUID) {
+        guard var event = events.first(where: { $0.id == eventId }) else {
+            // Event might be on a different day, fetch from store
+            if let storedEvent = coreDataStore.fetchEvent(byId: eventId) {
+                var mutableEvent = storedEvent
+                mutableEvent.cloudPhotoSynced = true
+                do {
+                    try coreDataStore.saveEvent(mutableEvent)
+                    logger.info("Marked photo as synced for event \(eventId)")
+                } catch {
+                    logger.error("Failed to mark photo as synced: \(error.localizedDescription)")
+                }
+            }
+            return
+        }
+
+        event.cloudPhotoSynced = true
+        do {
+            try coreDataStore.saveEvent(event)
+            // Update in-memory list
+            if let index = events.firstIndex(where: { $0.id == eventId }) {
+                events[index] = event
+            }
+            logger.info("Marked photo as synced for event \(eventId)")
+        } catch {
+            logger.error("Failed to mark photo as synced: \(error.localizedDescription)")
         }
     }
 
@@ -248,6 +382,38 @@ class EventStore: ObservableObject {
         } catch {
             logger.error("Failed to update event: \(error.localizedDescription)")
             syncError = error.localizedDescription
+        }
+    }
+
+    /// Toggle like on an event from the current user
+    /// - Parameter event: The event to like/unlike
+    /// - Returns: The updated event, or nil if current user is not available
+    @discardableResult
+    func toggleLike(on event: PuppyEvent) -> PuppyEvent? {
+        guard let currentUserRecordID = UserIdentityStore.shared.currentUserRecordID else {
+            logger.warning("Cannot toggle like - no current user record ID")
+            return nil
+        }
+
+        let updatedEvent = event.withLikeToggled(by: currentUserRecordID)
+
+        do {
+            try coreDataStore.saveEvent(updatedEvent)
+
+            if let index = events.firstIndex(where: { $0.id == event.id }) {
+                events[index] = updatedEvent
+            }
+
+            // Track analytics
+            let isNowLiked = updatedEvent.isLikedBy(currentUserRecordID)
+            Analytics.track(isNowLiked ? .eventLiked : .eventUnliked)
+
+            logger.debug("Toggled like on event \(event.id.uuidString): now \(isNowLiked ? "liked" : "unliked")")
+            return updatedEvent
+        } catch {
+            logger.error("Failed to toggle like: \(error.localizedDescription)")
+            syncError = error.localizedDescription
+            return nil
         }
     }
 
@@ -286,8 +452,8 @@ class EventStore: ObservableObject {
 
         // Single query for 8-day range instead of 7 separate day queries
         // Events are sorted by time descending, so first match is most recent
-        let eightDaysAgo = Calendar.current.date(byAdding: .day, value: -8, to: currentDate) ?? currentDate
-        let startOfToday = Calendar.current.startOfDay(for: currentDate)
+        let eightDaysAgo = currentDate.addingDays(-8)
+        let startOfToday = currentDate.startOfDay
         let historicalEvents = coreDataStore.readEvents(from: eightDaysAgo, to: startOfToday)
 
         return historicalEvents.first(where: { $0.type == type })
@@ -427,8 +593,7 @@ class EventStore: ObservableObject {
     // MARK: - Widget Data
 
     private func updateWidgetData(profile: PuppyProfile?) {
-        let thirtyDaysAgo = Calendar.current.date(byAdding: .day, value: -30, to: Date()) ?? Date()
-        let allRecentEvents = getEvents(from: thirtyDaysAgo, to: Date())
+        let allRecentEvents = getEvents(from: Date.daysAgo(30), to: Date())
 
         WidgetDataProvider.shared.update(
             events: events,
