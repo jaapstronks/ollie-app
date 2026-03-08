@@ -109,16 +109,15 @@ struct SpotlightTooltip: View {
     let onSkip: () -> Void
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 10) {
             // Title
             Text(step.title)
-                .font(.subheadline)
-                .fontWeight(.semibold)
+                .font(.headline)
                 .foregroundStyle(.primary)
 
             // Body
             Text(step.body)
-                .font(.caption)
+                .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
 
@@ -126,7 +125,7 @@ struct SpotlightTooltip: View {
             HStack(spacing: 12) {
                 // Progress indicator
                 Text(Strings.GuidedTour.stepProgress(current: step.rawValue + 1, total: TourStep.totalSteps))
-                    .font(.caption2)
+                    .font(.caption)
                     .foregroundStyle(.tertiary)
 
                 Spacer()
@@ -136,7 +135,7 @@ struct SpotlightTooltip: View {
                     Button(Strings.Common.skip) {
                         onSkip()
                     }
-                    .font(.caption)
+                    .font(.subheadline)
                     .foregroundStyle(.secondary)
                 }
 
@@ -145,19 +144,19 @@ struct SpotlightTooltip: View {
                     onNext()
                 } label: {
                     Text(step.buttonText)
-                        .font(.caption)
+                        .font(.subheadline)
                         .fontWeight(.medium)
                         .foregroundStyle(.white)
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 6)
+                        .padding(.horizontal, 14)
+                        .padding(.vertical, 8)
                         .background(Color.otisAccent)
                         .clipShape(Capsule())
                 }
             }
-            .padding(.top, 4)
+            .padding(.top, 6)
         }
-        .padding(12)
-        .frame(maxWidth: 260)
+        .padding(16)
+        .frame(maxWidth: 280)
         .background(
             RoundedRectangle(cornerRadius: 12)
                 .fill(.regularMaterial)
@@ -295,8 +294,8 @@ struct SpotlightTourOverlay: View {
     }
 
     private func tooltipPosition(for targetRect: CGRect, position: TooltipPosition, screenSize: CGSize) -> CGPoint {
-        let tooltipWidth: CGFloat = 260
-        let tooltipHeight: CGFloat = 120
+        let tooltipWidth: CGFloat = 280
+        let tooltipHeight: CGFloat = 140
         let margin: CGFloat = 16
 
         var x = targetRect.midX
