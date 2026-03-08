@@ -7490,6 +7490,138 @@
           }
         }
       }
+    },
+    "Teach essential commands": {
+      "comment": "Description of the skills section in the training tab.",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Leer essentiële commando's"
+          }
+        }
+      }
+    },
+    "1 skill to practice": {
+      "comment": "Subtitle showing 1 skill needs practice.",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 vaardigheid om te oefenen"
+          }
+        }
+      }
+    },
+    "%lld skills to practice": {
+      "comment": "Subtitle showing multiple skills need practice.",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld vaardigheden om te oefenen"
+          }
+        }
+      }
+    },
+    "1 skill to review": {
+      "comment": "Subtitle showing 1 skill needs review.",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 vaardigheid om te herhalen"
+          }
+        }
+      }
+    },
+    "%lld skills to review": {
+      "comment": "Subtitle showing multiple skills need review.",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld vaardigheden om te herhalen"
+          }
+        }
+      }
+    },
+    "%lld focus, %lld review": {
+      "comment": "Training plan subtitle showing focus and review counts.",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld focus, %lld herhalen"
+          }
+        }
+      }
+    },
+    "Need some refresher tips?": {
+      "comment": "Prompt to encourage users to reactivate potty training guidance.",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Opfriscursus nodig?"
+          }
+        }
+      }
+    },
+    "Key Principles": {
+      "comment": "Title of a section in the Potty Training Guide that lists the key principles.",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Belangrijke principes"
+          }
+        }
+      }
+    },
+    "Potty training complete!": {
+      "comment": "Celebration text when potty training is mastered.",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zindelijkheidstraining voltooid!"
+          }
+        }
+      }
+    },
+    "Continue training": {
+      "comment": "Button text to continue training.",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ga verder met trainen"
+          }
+        }
+      }
+    },
+    "Practiced in": {
+      "comment": "Label for contexts where a skill has been practiced.",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geoefend in"
+          }
+        }
+      }
+    },
+    "%lld/%lld reliable": {
+      "comment": "Shows how many contexts are reliable out of total.",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld/%lld betrouwbaar"
+          }
+        }
+      }
     }
   },
   "version": "1.0"

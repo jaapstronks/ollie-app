@@ -35,6 +35,25 @@ extension Strings {
         static let skillStarted = String(localized: "started", table: table)
         static let skillPracticing = String(localized: "practicing", table: table)
         static let skillMastered = String(localized: "mastered", table: table)
+
+        // Training plan subtitle
+        static func focusAndReview(focus: Int, review: Int) -> String {
+            String(localized: "\(focus) focus, \(review) review", table: table)
+        }
+        static func skillsToPractice(_ count: Int) -> String {
+            if count == 1 {
+                return String(localized: "1 skill to practice", table: table)
+            } else {
+                return String(localized: "\(count) skills to practice", table: table)
+            }
+        }
+        static func skillsToReview(_ count: Int) -> String {
+            if count == 1 {
+                return String(localized: "1 skill to review", table: table)
+            } else {
+                return String(localized: "\(count) skills to review", table: table)
+            }
+        }
     }
 
     // MARK: - Training
@@ -76,6 +95,12 @@ extension Strings {
         static let phaseGeneralizing = String(localized: "Generalizing", table: table)
         static let phaseMaintaining = String(localized: "Maintaining", table: table)
         static let phaseNeedsWork = String(localized: "Needs work", table: table)
+
+        // Context practice
+        static let practicedIn = String(localized: "Practiced in", table: table)
+        static func contextsReliable(reliable: Int, total: Int) -> String {
+            String(localized: "\(reliable)/\(total) reliable", table: table)
+        }
 
         // Week hero card
         static func weekNumber(_ week: Int) -> String {
@@ -151,12 +176,37 @@ extension Strings {
 
         // Session plan
         static let todaysTraining = String(localized: "Today's Training", table: table)
+        static let quickRefresher = String(localized: "Quick Refresher", table: table)
+        static let startPractice = String(localized: "Start Practice", table: table)
         static let maintenanceReview = String(localized: "Maintenance review", table: table)
         static let easyFinish = String(localized: "Easy finish", table: table)
         static let easyWinToStart = String(localized: "Easy win to start", table: table)
         static let primaryFocusSubtitle = String(localized: "New skills to learn", table: table)
         static let regressionFocusSubtitle = String(localized: "These skills need attention", table: table)
         static let maintenanceSubtitle = String(localized: "Quick refresher reps", table: table)
+
+        // Maintenance Mode
+        static let maintenanceMode = String(localized: "Maintenance Mode", table: table)
+        static let maintenanceModeEnabled = String(localized: "Maintenance mode enabled", table: table)
+        static let enableMaintenanceMode = String(localized: "Enable maintenance mode", table: table)
+        static let disableMaintenanceMode = String(localized: "Disable maintenance mode", table: table)
+        static let maintenanceModeDescription = String(localized: "Get weekly reminders to practice this skill without tracking progress", table: table)
+        static let skillsInMaintenance = String(localized: "Skills in Maintenance", table: table)
+        static let refreshDue = String(localized: "Refresh due", table: table)
+        static let refreshOverdue = String(localized: "Overdue", table: table)
+        static let lastPracticed = String(localized: "Last practiced", table: table)
+        static let practicedToday = String(localized: "Practiced today", table: table)
+        static let neverPracticed = String(localized: "Never practiced", table: table)
+        static let refreshNow = String(localized: "Refresh Now", table: table)
+        static let markRefreshed = String(localized: "Mark Refreshed", table: table)
+        static func daysAgo(_ days: Int) -> String {
+            if days == 1 {
+                return String(localized: "1 day ago", table: table)
+            }
+            return String(localized: "\(days) days ago", table: table)
+        }
+        static let noMaintenanceSkills = String(localized: "No skills in maintenance", table: table)
+        static let noMaintenanceSkillsDescription = String(localized: "Mark skills as maintained when you've taught them and want weekly refresh reminders", table: table)
         static let endOnSuccess = String(localized: "End on a success", table: table)
         static let elapsed = String(localized: "Elapsed", table: table)
         static let recommendedMinutes = String(localized: "min recommended", table: table)

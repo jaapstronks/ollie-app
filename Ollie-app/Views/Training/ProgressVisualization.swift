@@ -359,14 +359,14 @@ struct SkillProgressCard: View {
             if !contexts.isEmpty && shouldShowContexts {
                 VStack(alignment: .leading, spacing: 6) {
                     HStack {
-                        Text("Practiced in")
+                        Text(Strings.Training.practicedIn)
                             .font(.caption)
                             .fontWeight(.semibold)
                             .foregroundStyle(.secondary)
 
                         Spacer()
 
-                        Text("\(contexts.filter { $0.successRate >= 0.8 }.count)/\(contexts.count) reliable")
+                        Text(Strings.Training.contextsReliable(reliable: contexts.filter { $0.successRate >= 0.8 }.count, total: contexts.count))
                             .font(.caption2)
                             .foregroundStyle(.tertiary)
                     }

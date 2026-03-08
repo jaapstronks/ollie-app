@@ -100,10 +100,14 @@ struct TrainTabView: View {
                     socializationSection
                         .animatedAppear(delay: 0.10)
 
-                    // Section 4: Mastered guides (below socialization)
+                    // Section 4: Behavior Support (shows for teenage+ or when incidents logged)
+                    behaviorSupportSection
+                        .animatedAppear(delay: 0.15)
+
+                    // Section 5: Mastered guides (at bottom)
                     if pottyTrainingMastered || crateTrainingMastered {
                         masteredGuidesSection
-                            .animatedAppear(delay: 0.15)
+                            .animatedAppear(delay: 0.20)
                     }
                 }
                 .padding()
@@ -300,6 +304,27 @@ struct TrainTabView: View {
         SocializationJourneyCard()
     }
 
+    // MARK: - Behavior Support Section
+
+    /// Whether to show behavior support card
+    /// Shows for teenage+ dogs OR if any behavior incidents exist in last 30 days
+    private var shouldShowBehaviorSupport: Bool {
+        guard let profile = profileStore.profile else { return false }
+        let isTeenageOrOlder = profile.lifecyclePhase != .puppy
+        let hasRecentIncidents = eventStore.events
+            .filter { $0.isBehaviorIncident }
+            .thisMonth()
+            .isEmpty == false
+        return isTeenageOrOlder || hasRecentIncidents
+    }
+
+    @ViewBuilder
+    private var behaviorSupportSection: some View {
+        if shouldShowBehaviorSupport {
+            BehaviorSupportCard()
+        }
+    }
+
     // MARK: - Skills Section
 
     @ViewBuilder
@@ -417,11 +442,11 @@ private struct SkillsPreviewCard: View {
         let reviewCount = plan.maintenance.count
 
         if focusCount > 0 && reviewCount > 0 {
-            return "\(focusCount) focus, \(reviewCount) review"
+            return Strings.Train.focusAndReview(focus: focusCount, review: reviewCount)
         } else if focusCount > 0 {
-            return "\(focusCount) skill\(focusCount == 1 ? "" : "s") to practice"
+            return Strings.Train.skillsToPractice(focusCount)
         } else {
-            return "\(totalSkills) skill\(totalSkills == 1 ? "" : "s") to review"
+            return Strings.Train.skillsToReview(totalSkills)
         }
     }
 
