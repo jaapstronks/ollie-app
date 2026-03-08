@@ -24,16 +24,16 @@ public enum GroomingType: String, Codable, Sendable, CaseIterable {
 
     public var label: String {
         switch self {
-        case .brushing: return "Brushing"
-        case .bathing: return "Bath"
-        case .nailTrim: return "Nail trim"
-        case .earCleaning: return "Ear cleaning"
-        case .teethBrushing: return "Teeth brushing"
-        case .haircut: return "Haircut"
-        case .deShedding: return "De-shedding"
-        case .pawCare: return "Paw care"
-        case .eyeCleaning: return "Eye cleaning"
-        case .analGlands: return "Anal glands"
+        case .brushing: return String(localized: "Brushing", table: "Routines", bundle: Strings.bundle)
+        case .bathing: return String(localized: "Bath", table: "Routines", bundle: Strings.bundle)
+        case .nailTrim: return String(localized: "Nail trim", table: "Routines", bundle: Strings.bundle)
+        case .earCleaning: return String(localized: "Ear cleaning", table: "Routines", bundle: Strings.bundle)
+        case .teethBrushing: return String(localized: "Teeth brushing", table: "Routines", bundle: Strings.bundle)
+        case .haircut: return String(localized: "Haircut", table: "Routines", bundle: Strings.bundle)
+        case .deShedding: return String(localized: "De-shedding", table: "Routines", bundle: Strings.bundle)
+        case .pawCare: return String(localized: "Paw care", table: "Routines", bundle: Strings.bundle)
+        case .eyeCleaning: return String(localized: "Eye cleaning", table: "Routines", bundle: Strings.bundle)
+        case .analGlands: return String(localized: "Anal glands", table: "Routines", bundle: Strings.bundle)
         }
     }
 
@@ -82,25 +82,25 @@ public enum GroomingType: String, Codable, Sendable, CaseIterable {
     public var description: String {
         switch self {
         case .brushing:
-            return "Remove loose fur and prevent matting"
+            return String(localized: "Remove loose fur and prevent matting", table: "Routines", bundle: Strings.bundle)
         case .bathing:
-            return "Full bath with dog shampoo"
+            return String(localized: "Full bath with dog shampoo", table: "Routines", bundle: Strings.bundle)
         case .nailTrim:
-            return "Trim nails to prevent overgrowth"
+            return String(localized: "Trim nails to prevent overgrowth", table: "Routines", bundle: Strings.bundle)
         case .earCleaning:
-            return "Clean ears to prevent infections"
+            return String(localized: "Clean ears to prevent infections", table: "Routines", bundle: Strings.bundle)
         case .teethBrushing:
-            return "Brush teeth for dental health"
+            return String(localized: "Brush teeth for dental health", table: "Routines", bundle: Strings.bundle)
         case .haircut:
-            return "Professional coat trimming"
+            return String(localized: "Professional coat trimming", table: "Routines", bundle: Strings.bundle)
         case .deShedding:
-            return "Remove undercoat and reduce shedding"
+            return String(localized: "Remove undercoat and reduce shedding", table: "Routines", bundle: Strings.bundle)
         case .pawCare:
-            return "Check pads and trim fur between toes"
+            return String(localized: "Check pads and trim fur between toes", table: "Routines", bundle: Strings.bundle)
         case .eyeCleaning:
-            return "Clean eye area and remove tear stains"
+            return String(localized: "Clean eye area and remove tear stains", table: "Routines", bundle: Strings.bundle)
         case .analGlands:
-            return "Express anal glands if needed"
+            return String(localized: "Express anal glands if needed", table: "Routines", bundle: Strings.bundle)
         }
     }
 }
@@ -181,19 +181,23 @@ public struct GroomingActivity: Identifiable, Codable, Sendable, Hashable {
     /// Status label for display
     public var statusLabel: String {
         guard let days = daysUntilDue else {
-            return "Not yet done"
+            return String(localized: "Not yet done", table: "Routines", bundle: Strings.bundle)
         }
 
         if days < 0 {
-            return "\(abs(days)) day\(abs(days) == 1 ? "" : "s") overdue"
+            let absDays = abs(days)
+            let suffix = absDays == 1 ? "" : "s"
+            return String(localized: "\(absDays) day\(suffix) overdue", table: "Routines", bundle: Strings.bundle)
         } else if days == 0 {
-            return "Due today"
+            return String(localized: "Due today", table: "Routines", bundle: Strings.bundle)
         } else if days == 1 {
-            return "Due tomorrow"
+            return String(localized: "Due tomorrow", table: "Routines", bundle: Strings.bundle)
         } else if days <= 7 {
-            return "Due in \(days) days"
+            return String(localized: "Due in \(days) days", table: "Routines", bundle: Strings.bundle)
         } else {
-            return "Due in \(days / 7) week\(days / 7 == 1 ? "" : "s")"
+            let weeks = days / 7
+            let suffix = weeks == 1 ? "" : "s"
+            return String(localized: "Due in \(weeks) week\(suffix)", table: "Routines", bundle: Strings.bundle)
         }
     }
 
