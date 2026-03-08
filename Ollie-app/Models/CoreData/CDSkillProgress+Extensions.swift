@@ -56,6 +56,15 @@ extension CDSkillProgress {
         return cdProgress
     }
 
+    /// Create a new CDSkillProgress linked to a profile (required for CloudKit sync)
+    @discardableResult
+    static func create(from progress: SkillProgress, profile: CDPuppyProfile, in context: NSManagedObjectContext) -> CDSkillProgress {
+        let cdProgress = CDSkillProgress(context: context)
+        cdProgress.update(from: progress)
+        cdProgress.profile = profile
+        return cdProgress
+    }
+
     // MARK: - Convert to Swift Struct
 
     /// Convert to SkillProgress struct
@@ -207,5 +216,34 @@ extension CDSkillProgress {
             count = (try? context.count(for: request)) ?? 0
         }
         return count > 0
+    }
+
+    /// Fetch all skill progress records for a specific profile
+    static func fetchAll(for profile: CDPuppyProfile, in context: NSManagedObjectContext) -> [CDSkillProgress] {
+        let request = NSFetchRequest<CDSkillProgress>(entityName: "CDSkillProgress")
+        request.predicate = NSPredicate(format: "profile == %@", profile)
+        request.sortDescriptors = [
+            NSSortDescriptor(keyPath: \CDSkillProgress.modifiedAt, ascending: false)
+        ]
+        nonisolated(unsafe) var results: [CDSkillProgress] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
+    }
+
+    /// Fetch all orphaned skill progress records (not linked to a profile)
+    /// Used for migration to link existing records to the profile
+    static func fetchOrphaned(in context: NSManagedObjectContext) -> [CDSkillProgress] {
+        let request = NSFetchRequest<CDSkillProgress>(entityName: "CDSkillProgress")
+        request.predicate = NSPredicate(format: "profile == nil")
+        request.sortDescriptors = [
+            NSSortDescriptor(keyPath: \CDSkillProgress.modifiedAt, ascending: false)
+        ]
+        nonisolated(unsafe) var results: [CDSkillProgress] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
     }
 }

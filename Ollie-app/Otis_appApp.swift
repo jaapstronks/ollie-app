@@ -172,6 +172,7 @@ private extension OtisApp {
         weightStore.migrateOrphanedMeasurements()
         routineStore.setProfileStore(profileStore)
         routineStore.migrateOrphanedItems()
+        skillProgressStore.configureProfileStore(profileStore)
 
         // Sync to Apple Watch
         WatchSyncService.shared.syncToWatch()

@@ -14,12 +14,16 @@ import os
 
 /// Manages skill progress tracking with Core Data persistence
 @MainActor
-final class SkillProgressStore: BaseStore {
+final class SkillProgressStore: BaseStore, ProfileAccessible {
 
     // MARK: - Published State
 
     @Published private(set) var skillProgress: [SkillProgress] = []
     @Published private(set) var isLoading: Bool = true
+
+    // MARK: - ProfileAccessible
+
+    weak var profileStore: ProfileStore?
 
     // MARK: - Computed Properties
 
@@ -71,9 +75,38 @@ final class SkillProgressStore: BaseStore {
     // MARK: - Data Loading
 
     override func performInitialLoad() {
-        let cdProgress = CDSkillProgress.fetchAll(in: viewContext)
-        skillProgress = cdProgress.compactMap { $0.toSkillProgress() }
-        logger.debug("Loaded \(self.skillProgress.count) skill progress records from Core Data")
+        // If we have a profile, load profile-scoped data and migrate orphans
+        if let profile = getCurrentProfile() {
+            // First, migrate any orphaned records to this profile
+            migrateOrphanedRecords(to: profile)
+
+            // Load profile-scoped progress
+            let cdProgress = CDSkillProgress.fetchAll(for: profile, in: viewContext)
+            skillProgress = cdProgress.compactMap { $0.toSkillProgress() }
+            logger.debug("Loaded \(self.skillProgress.count) skill progress records for profile")
+        } else {
+            // Fallback to loading all records (for backwards compatibility during init)
+            let cdProgress = CDSkillProgress.fetchAll(in: viewContext)
+            skillProgress = cdProgress.compactMap { $0.toSkillProgress() }
+            logger.debug("Loaded \(self.skillProgress.count) skill progress records (no profile)")
+        }
+    }
+
+    /// Migrate orphaned skill progress records to the current profile
+    /// This ensures existing local-only records get synced to CloudKit
+    private func migrateOrphanedRecords(to profile: CDPuppyProfile) {
+        let orphaned = CDSkillProgress.fetchOrphaned(in: viewContext)
+        guard !orphaned.isEmpty else { return }
+
+        logger.info("Migrating \(orphaned.count) orphaned skill progress records to profile")
+
+        for cdProgress in orphaned {
+            cdProgress.profile = profile
+        }
+
+        performSave(operation: "Migrate orphaned skill progress to profile") {
+            // No additional state update needed
+        }
     }
 
     // MARK: - CRUD Operations
@@ -95,8 +128,19 @@ final class SkillProgressStore: BaseStore {
         // Check if exists in Core Data
         if let cdProgress = CDSkillProgress.fetch(bySkillId: progress.skillId, in: viewContext) {
             cdProgress.update(from: progress)
+            // Ensure profile link exists (for migration of existing records)
+            if cdProgress.profile == nil, let profile = getCurrentProfile() {
+                cdProgress.profile = profile
+            }
         } else {
-            _ = CDSkillProgress.create(from: progress, in: viewContext)
+            // Create new record linked to profile for CloudKit sync
+            if let profile = getCurrentProfile() {
+                _ = CDSkillProgress.create(from: progress, profile: profile, in: viewContext)
+            } else {
+                // Fallback: create without profile (will be migrated later)
+                logger.warning("Creating skill progress without profile link - will need migration")
+                _ = CDSkillProgress.create(from: progress, in: viewContext)
+            }
         }
 
         performSave(operation: "Save skill progress: \(progress.skillId)") {
@@ -249,6 +293,57 @@ final class SkillProgressStore: BaseStore {
         logger.info("Triggered regression for \(skillId)")
     }
 
+    // MARK: - Maintenance Mode
+
+    /// All skill progress records (for maintenance mode filtering)
+    var allProgress: [SkillProgress] {
+        skillProgress
+    }
+
+    /// Skills in simplified maintenance mode
+    var skillsInMaintenanceMode: [SkillProgress] {
+        skillProgress.filter { $0.isInMaintenanceMode }
+    }
+
+    /// Skills needing a maintenance refresh (in maintenance mode, not practiced in 7+ days)
+    var skillsNeedingRefresh: [SkillProgress] {
+        skillProgress.filter { $0.needsMaintenanceRefresh }
+    }
+
+    /// Enable simplified maintenance mode for a skill
+    func enableMaintenanceMode(for skillId: String) {
+        var progress = getOrCreateProgress(for: skillId)
+        progress.enableMaintenanceMode()
+        saveProgress(progress)
+
+        logger.info("Enabled maintenance mode for \(skillId)")
+    }
+
+    /// Disable maintenance mode for a skill
+    func disableMaintenanceMode(for skillId: String) {
+        guard let existingProgress = progressBySkillId[skillId] else { return }
+        var progress = existingProgress
+        progress.disableMaintenanceMode()
+        saveProgress(progress)
+
+        logger.info("Disabled maintenance mode for \(skillId)")
+    }
+
+    /// Record a maintenance refresh for a skill
+    func recordMaintenanceRefresh(for skillId: String) {
+        guard let existingProgress = progressBySkillId[skillId] else { return }
+        var progress = existingProgress
+        progress.recordMaintenanceRefresh()
+        saveProgress(progress)
+
+        logger.info("Recorded maintenance refresh for \(skillId)")
+    }
+
+    /// Check if a skill is in maintenance mode
+    func isInMaintenanceMode(skillId: String) -> Bool {
+        progressBySkillId[skillId]?.isInMaintenanceMode ?? false
+    }
+
     // MARK: - Proofing (3Ds)
 
     /// Update proofing levels for a skill
@@ -301,6 +396,8 @@ final class SkillProgressStore: BaseStore {
     /// Migrate existing MasteredSkill records to SkillProgress
     /// Call this once during app update to preserve existing mastery data
     func migrateFromMasteredSkills(_ masteredSkills: [MasteredSkill]) {
+        let profile = getCurrentProfile()
+
         for mastered in masteredSkills {
             // Skip if already migrated
             guard !CDSkillProgress.exists(forSkillId: mastered.skillId, in: viewContext) else {
@@ -320,13 +417,23 @@ final class SkillProgressStore: BaseStore {
                 modifiedAt: mastered.modifiedAt
             )
 
-            _ = CDSkillProgress.create(from: progress, in: viewContext)
+            // Link to profile for CloudKit sync
+            if let profile = profile {
+                _ = CDSkillProgress.create(from: progress, profile: profile, in: viewContext)
+            } else {
+                _ = CDSkillProgress.create(from: progress, in: viewContext)
+            }
         }
 
         performSave(operation: "Migrate from MasteredSkill") {
-            // Reload progress
-            let cdProgress = CDSkillProgress.fetchAll(in: viewContext)
-            skillProgress = cdProgress.compactMap { $0.toSkillProgress() }
+            // Reload progress (profile-scoped if available)
+            if let profile = profile {
+                let cdProgress = CDSkillProgress.fetchAll(for: profile, in: viewContext)
+                skillProgress = cdProgress.compactMap { $0.toSkillProgress() }
+            } else {
+                let cdProgress = CDSkillProgress.fetchAll(in: viewContext)
+                skillProgress = cdProgress.compactMap { $0.toSkillProgress() }
+            }
         }
 
         logger.info("Migrated \(masteredSkills.count) mastered skills to progress tracking")
