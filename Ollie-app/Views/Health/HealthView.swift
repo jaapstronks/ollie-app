@@ -14,6 +14,7 @@ struct HealthView: View {
 
     @EnvironmentObject var subscriptionManager: SubscriptionManager
     @EnvironmentObject var weightStore: WeightStore
+    @EnvironmentObject var routineStore: RoutineStore
 
     @State private var showWeightSheet = false
     @State private var showAddMilestoneSheet = false
@@ -81,6 +82,11 @@ struct HealthView: View {
                 // Senior wellness section (for senior dogs)
                 if isSenior {
                     seniorWellnessSection
+                }
+
+                // Adult wellness section (for adult dogs)
+                if isAdult && !isSenior {
+                    adultWellnessSection
                 }
 
                 // Symptoms section (for dogs with conditions)
@@ -183,6 +189,76 @@ struct HealthView: View {
 
     private var isSenior: Bool {
         profile?.lifecyclePhase == .senior || seniorWellnessStore.shouldShowSeniorFeatures(for: profile)
+    }
+
+    private var isAdult: Bool {
+        guard let phase = profile?.lifecyclePhase else { return false }
+        return phase == .adult || phase == .youngAdult
+    }
+
+    // MARK: - Adult Wellness Section
+
+    @ViewBuilder
+    private var adultWellnessSection: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            // Section header
+            HStack(spacing: 8) {
+                Image(systemName: "figure.walk.motion")
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundStyle(Color.green)
+
+                Text(Strings.Routine.wellness)
+                    .font(.subheadline)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(.secondary)
+
+                Spacer()
+
+                // View all button
+                NavigationLink(destination: RoutineView().environmentObject(routineStore)) {
+                    Text(Strings.Common.seeAll)
+                        .font(.subheadline)
+                        .foregroundStyle(.blue)
+                }
+            }
+            .padding(.horizontal, 4)
+
+            // Adult wellness content
+            VStack(spacing: 12) {
+                // Grooming due card (if any due)
+                let dueGrooming = routineStore.dueGroomingActivities
+                if !dueGrooming.isEmpty {
+                    GroomingCard(
+                        activities: routineStore.groomingActivities,
+                        onMarkComplete: { activity in
+                            routineStore.markGroomingCompleted(activity)
+                        },
+                        onTap: {}
+                    )
+                }
+
+                // Enrichment suggestion
+                if let suggestion = routineStore.enrichmentSuggestion {
+                    EnrichmentCard(
+                        activities: routineStore.enrichmentActivities,
+                        suggestion: suggestion,
+                        onLogActivity: {
+                            routineStore.addEnrichment(type: suggestion)
+                        },
+                        onTap: {}
+                    )
+                }
+
+                // Weight goal progress (if active goal exists)
+                if let goal = routineStore.weightGoal {
+                    WeightGoalCard(
+                        goal: goal,
+                        currentWeight: weightStore.latestWeight?.weight,
+                        onTap: {}
+                    )
+                }
+            }
+        }
     }
 
     // MARK: - Senior Wellness Section
@@ -756,4 +832,5 @@ private struct RRRQuickCard: View {
     }
     .environmentObject(SubscriptionManager.shared)
     .environmentObject(WeightStore())
+    .environmentObject(RoutineStore())
 }

@@ -1,0 +1,1166 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "%@ days remaining" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nog %@ dagen"
+          }
+        }
+      }
+    },
+    "%@/week recommended" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@/week aanbevolen"
+          }
+        }
+      }
+    },
+    "%lld activities this week" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld activiteiten deze week"
+          }
+        }
+      }
+    },
+    "%lld day%@ overdue" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld dag%@ te laat"
+          }
+        }
+      }
+    },
+    "%lld min this week" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld min deze week"
+          }
+        }
+      }
+    },
+    "9-point scale" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "9-puntsschaal"
+          }
+        }
+      }
+    },
+    "Add Item" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Item toevoegen"
+          }
+        }
+      }
+    },
+    "Adult Wellness" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Volwassen welzijn"
+          }
+        }
+      }
+    },
+    "Afternoon" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Middag"
+          }
+        }
+      }
+    },
+    "Agility" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Behendigheid"
+          }
+        }
+      }
+    },
+    "All caught up!" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alles bijgewerkt!"
+          }
+        }
+      }
+    },
+    "All done for today!" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alles gedaan voor vandaag!"
+          }
+        }
+      }
+    },
+    "Anal glands" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anaalklieren"
+          }
+        }
+      }
+    },
+    "Anytime" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elk moment"
+          }
+        }
+      }
+    },
+    "Bath" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bad"
+          }
+        }
+      }
+    },
+    "Body Condition" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lichaamsconditie"
+          }
+        }
+      }
+    },
+    "Body Condition Score" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lichaamsconditie score"
+          }
+        }
+      }
+    },
+    "Breakfast" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ontbijt"
+          }
+        }
+      }
+    },
+    "Brushing" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Borstelen"
+          }
+        }
+      }
+    },
+    "Calming" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rustgevend"
+          }
+        }
+      }
+    },
+    "Calming activity" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rustgevende activiteit"
+          }
+        }
+      }
+    },
+    "Category" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Categorie"
+          }
+        }
+      }
+    },
+    "Chew session" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kauwsessie"
+          }
+        }
+      }
+    },
+    "Completed" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voltooid"
+          }
+        }
+      }
+    },
+    "Current weight" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Huidig gewicht"
+          }
+        }
+      }
+    },
+    "Daily Routine" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dagelijkse routine"
+          }
+        }
+      }
+    },
+    "De-shedding" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ontharen"
+          }
+        }
+      }
+    },
+    "Dinner" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avondeten"
+          }
+        }
+      }
+    },
+    "Due" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gepland"
+          }
+        }
+      }
+    },
+    "Due in %lld days" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Over %lld dagen"
+          }
+        }
+      }
+    },
+    "Due in %lld week%@" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Over %lld week%@"
+          }
+        }
+      }
+    },
+    "Due today" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vandaag"
+          }
+        }
+      }
+    },
+    "Due tomorrow" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Morgen"
+          }
+        }
+      }
+    },
+    "Duration" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Duur"
+          }
+        }
+      }
+    },
+    "Ear cleaning" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oren reinigen"
+          }
+        }
+      }
+    },
+    "Edit Goal" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Doel bewerken"
+          }
+        }
+      }
+    },
+    "Edit Routine" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Routine bewerken"
+          }
+        }
+      }
+    },
+    "Emaciated" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uitgemergeld"
+          }
+        }
+      }
+    },
+    "Enabled" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ingeschakeld"
+          }
+        }
+      }
+    },
+    "Enrichment" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verrijking"
+          }
+        }
+      }
+    },
+    "Enrichment Activities" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verrijkingsactiviteiten"
+          }
+        }
+      }
+    },
+    "Evening" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avond"
+          }
+        }
+      }
+    },
+    "Evening walk" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avondwandeling"
+          }
+        }
+      }
+    },
+    "Every %lld days" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elke %lld dagen"
+          }
+        }
+      }
+    },
+    "Fetch" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apporteren"
+          }
+        }
+      }
+    },
+    "Final potty break" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laatste plasje"
+          }
+        }
+      }
+    },
+    "Food dispenser" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voerdispenser"
+          }
+        }
+      }
+    },
+    "Gain weight" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aankomen"
+          }
+        }
+      }
+    },
+    "Goal achieved!" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Doel bereikt!"
+          }
+        }
+      }
+    },
+    "Grooming" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verzorging"
+          }
+        }
+      }
+    },
+    "Grooming Schedule" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verzorgingsschema"
+          }
+        }
+      }
+    },
+    "Haircut" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Knipbeurt"
+          }
+        }
+      }
+    },
+    "Hide and seek" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verstoppertje"
+          }
+        }
+      }
+    },
+    "History" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geschiedenis"
+          }
+        }
+      }
+    },
+    "Ideal" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ideaal"
+          }
+        }
+      }
+    },
+    "Interval" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Interval"
+          }
+        }
+      }
+    },
+    "Label" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Label"
+          }
+        }
+      }
+    },
+    "Last completed" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laatst voltooid"
+          }
+        }
+      }
+    },
+    "Latest score" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laatste score"
+          }
+        }
+      }
+    },
+    "Linked event type" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gekoppeld gebeurtenistype"
+          }
+        }
+      }
+    },
+    "Log Activity" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Activiteit loggen"
+          }
+        }
+      }
+    },
+    "Log BCS" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BCS loggen"
+          }
+        }
+      }
+    },
+    "Lose weight" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afvallen"
+          }
+        }
+      }
+    },
+    "Maintain weight" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gewicht behouden"
+          }
+        }
+      }
+    },
+    "Mark complete" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Markeer als klaar"
+          }
+        }
+      }
+    },
+    "Mental" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mentaal"
+          }
+        }
+      }
+    },
+    "Midday walk" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Middagwandeling"
+          }
+        }
+      }
+    },
+    "Morning" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ochtend"
+          }
+        }
+      }
+    },
+    "Morning walk" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ochtendwandeling"
+          }
+        }
+      }
+    },
+    "Nail trim" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nagels knippen"
+          }
+        }
+      }
+    },
+    "New environment" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nieuwe omgeving"
+          }
+        }
+      }
+    },
+    "Next up" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Volgende"
+          }
+        }
+      }
+    },
+    "No activities this week" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geen activiteiten deze week"
+          }
+        }
+      }
+    },
+    "No grooming due right now" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geen verzorging gepland"
+          }
+        }
+      }
+    },
+    "No routine items yet" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nog geen routine-items"
+          }
+        }
+      }
+    },
+    "No scores recorded yet" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nog geen scores geregistreerd"
+          }
+        }
+      }
+    },
+    "No target date" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geen streefdatum"
+          }
+        }
+      }
+    },
+    "Nose work" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neuswerk"
+          }
+        }
+      }
+    },
+    "Not yet done" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nog niet gedaan"
+          }
+        }
+      }
+    },
+    "Obese" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obees"
+          }
+        }
+      }
+    },
+    "On track" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Op schema"
+          }
+        }
+      }
+    },
+    "Overdue" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Te laat"
+          }
+        }
+      }
+    },
+    "Overweight" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Te zwaar"
+          }
+        }
+      }
+    },
+    "Paw care" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Potenverzorging"
+          }
+        }
+      }
+    },
+    "Physical" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fysiek"
+          }
+        }
+      }
+    },
+    "Play time" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Speeltijd"
+          }
+        }
+      }
+    },
+    "Progress" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voortgang"
+          }
+        }
+      }
+    },
+    "Puzzle toy" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Puzzelspeeltje"
+          }
+        }
+      }
+    },
+    "Recent activities" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recente activiteiten"
+          }
+        }
+      }
+    },
+    "remaining" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "te gaan"
+          }
+        }
+      }
+    },
+    "Routine and wellness tracking for adult dogs" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Routine en welzijn bijhouden voor volwassen honden"
+          }
+        }
+      }
+    },
+    "Set Weight Goal" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gewichtsdoel instellen"
+          }
+        }
+      }
+    },
+    "Severely obese" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ernstig obees"
+          }
+        }
+      }
+    },
+    "Slightly overweight" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Licht te zwaar"
+          }
+        }
+      }
+    },
+    "Snuffle mat" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Snuffelmat"
+          }
+        }
+      }
+    },
+    "Social" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sociaal"
+          }
+        }
+      }
+    },
+    "Social play" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sociaal spelen"
+          }
+        }
+      }
+    },
+    "Start weight" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Startgewicht"
+          }
+        }
+      }
+    },
+    "Swimming" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zwemmen"
+          }
+        }
+      }
+    },
+    "Target date" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Streefdatum"
+          }
+        }
+      }
+    },
+    "Target weight" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Streefgewicht"
+          }
+        }
+      }
+    },
+    "Teeth brushing" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tanden poetsen"
+          }
+        }
+      }
+    },
+    "Thin" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mager"
+          }
+        }
+      }
+    },
+    "Time" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tijd"
+          }
+        }
+      }
+    },
+    "Today's suggestion" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suggestie voor vandaag"
+          }
+        }
+      }
+    },
+    "Training" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Training"
+          }
+        }
+      }
+    },
+    "Trick training" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trucjes trainen"
+          }
+        }
+      }
+    },
+    "Try today" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Probeer vandaag"
+          }
+        }
+      }
+    },
+    "Tug play" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trekspel"
+          }
+        }
+      }
+    },
+    "Underweight" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ondergewicht"
+          }
+        }
+      }
+    },
+    "Upcoming" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Binnenkort"
+          }
+        }
+      }
+    },
+    "Very thin" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erg mager"
+          }
+        }
+      }
+    },
+    "Weekly Progress" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weekvoortgang"
+          }
+        }
+      }
+    },
+    "Weight Goal" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gewichtsdoel"
+          }
+        }
+      }
+    },
+    "Weight Management" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gewichtsbeheer"
+          }
+        }
+      }
+    },
+    "Eye cleaning" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ogen reinigen"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

@@ -36,6 +36,7 @@ struct OtisApp: App {
     @StateObject private var weightStore = WeightStore()
     @StateObject private var skillProgressStore = SkillProgressStore()
     @StateObject private var regressionLogStore = RegressionLogStore()
+    @StateObject private var routineStore = RoutineStore()
     @StateObject private var subscriptionManager = SubscriptionManager.shared
     @StateObject private var atmosphereProvider = AtmosphereProvider()
     @StateObject private var foodRecallService = FoodRecallService()
@@ -87,6 +88,7 @@ struct OtisApp: App {
                 .environmentObject(cloudKit)
                 .environmentObject(atmosphereProvider)
                 .environmentObject(foodRecallService)
+                .environmentObject(routineStore)
                 .toastContainer()
                 .environment(toastManager)
                 .task { await performInitialSetup() }
@@ -160,6 +162,8 @@ private extension OtisApp {
         weightStore.setProfileStore(profileStore)
         await CoreDataMigrationCoordinator.shared.migrateWeightEventsIfNeeded(using: persistenceController)
         weightStore.migrateOrphanedMeasurements()
+        routineStore.setProfileStore(profileStore)
+        routineStore.migrateOrphanedItems()
 
         // Sync to Apple Watch
         WatchSyncService.shared.syncToWatch()
@@ -167,11 +171,13 @@ private extension OtisApp {
         // Check for food recalls
         await foodRecallService.checkForRecalls()
 
-        // Wire up AI services
+        // Wire up AI services with all data providers
         AI.setup(
             skillProgressStore: skillProgressStore,
             regressionLogStore: regressionLogStore,
-            socializationStore: socializationStore
+            socializationStore: socializationStore,
+            sentimentStore: SentimentStore.shared,
+            profileStore: profileStore
         )
     }
 

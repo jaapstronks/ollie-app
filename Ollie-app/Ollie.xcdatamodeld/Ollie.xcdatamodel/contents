@@ -31,6 +31,11 @@
         <relationship name="comfortableItems" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDComfortableItem" inverseName="profile" inverseEntity="CDComfortableItem"/>
         <relationship name="earlyMilestones" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDEarlyMilestone" inverseName="profile" inverseEntity="CDEarlyMilestone"/>
         <relationship name="skillProgress" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDSkillProgress" inverseName="profile" inverseEntity="CDSkillProgress"/>
+        <relationship name="routineItems" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDRoutineItem" inverseName="profile" inverseEntity="CDRoutineItem"/>
+        <relationship name="weightGoals" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDWeightGoal" inverseName="profile" inverseEntity="CDWeightGoal"/>
+        <relationship name="bodyConditionScores" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDBodyConditionScore" inverseName="profile" inverseEntity="CDBodyConditionScore"/>
+        <relationship name="groomingActivities" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDGroomingActivity" inverseName="profile" inverseEntity="CDGroomingActivity"/>
+        <relationship name="enrichmentActivities" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDEnrichmentActivity" inverseName="profile" inverseEntity="CDEnrichmentActivity"/>
     </entity>
     <entity name="CDPuppyEvent" representedClassName="CDPuppyEvent" syncable="YES" codeGenerationType="class">
         <attribute name="cloudPhotoSynced" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
@@ -58,7 +63,7 @@
         <attribute name="video" optional="YES" attributeType="String"/>
         <attribute name="weightKg" optional="YES" attributeType="Double" usesScalarValueType="YES"/>
         <attribute name="who" optional="YES" attributeType="String"/>
-        <attribute name="loggedBy" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="loggedBy" optional="YES" attributeType="String"/>
         <attribute name="napLocation" optional="YES" attributeType="String"/>
         <attribute name="successReps" optional="YES" attributeType="Integer 32" usesScalarValueType="NO"/>
         <attribute name="failedReps" optional="YES" attributeType="Integer 32" usesScalarValueType="NO"/>
@@ -291,6 +296,74 @@
         </fetchIndex>
         <fetchIndex name="byOccurredAtIndex">
             <fetchIndexElement property="occurredAt" type="Binary" order="descending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="CDRoutineItem" representedClassName="CDRoutineItem" syncable="YES" codeGenerationType="class">
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="label" attributeType="String" defaultValueString=""/>
+        <attribute name="time" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="category" attributeType="String" defaultValueString="morning"/>
+        <attribute name="isEnabled" attributeType="Boolean" defaultValueString="YES" usesScalarValueType="YES"/>
+        <attribute name="linkedEventType" optional="YES" attributeType="String"/>
+        <attribute name="sortOrder" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="modifiedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="profile" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDPuppyProfile" inverseName="routineItems" inverseEntity="CDPuppyProfile"/>
+        <fetchIndex name="bySortOrderIndex">
+            <fetchIndexElement property="sortOrder" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="CDWeightGoal" representedClassName="CDWeightGoal" syncable="YES" codeGenerationType="class">
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="targetWeightKg" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="startWeightKg" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="startDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="targetDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="isActive" attributeType="Boolean" defaultValueString="YES" usesScalarValueType="YES"/>
+        <attribute name="note" optional="YES" attributeType="String"/>
+        <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="modifiedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="profile" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDPuppyProfile" inverseName="weightGoals" inverseEntity="CDPuppyProfile"/>
+        <fetchIndex name="byStartDateIndex">
+            <fetchIndexElement property="startDate" type="Binary" order="descending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="CDBodyConditionScore" representedClassName="CDBodyConditionScore" syncable="YES" codeGenerationType="class">
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="score" attributeType="Integer 16" defaultValueString="5" usesScalarValueType="YES"/>
+        <attribute name="note" optional="YES" attributeType="String"/>
+        <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="modifiedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="profile" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDPuppyProfile" inverseName="bodyConditionScores" inverseEntity="CDPuppyProfile"/>
+        <fetchIndex name="byCreatedAtIndex">
+            <fetchIndexElement property="createdAt" type="Binary" order="descending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="CDGroomingActivity" representedClassName="CDGroomingActivity" syncable="YES" codeGenerationType="class">
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="type" attributeType="String" defaultValueString="brushing"/>
+        <attribute name="intervalDays" attributeType="Integer 32" defaultValueString="7" usesScalarValueType="YES"/>
+        <attribute name="lastCompleted" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="isEnabled" attributeType="Boolean" defaultValueString="YES" usesScalarValueType="YES"/>
+        <attribute name="note" optional="YES" attributeType="String"/>
+        <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="modifiedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="profile" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDPuppyProfile" inverseName="groomingActivities" inverseEntity="CDPuppyProfile"/>
+        <fetchIndex name="byTypeIndex">
+            <fetchIndexElement property="type" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="CDEnrichmentActivity" representedClassName="CDEnrichmentActivity" syncable="YES" codeGenerationType="class">
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="type" attributeType="String" defaultValueString="puzzleToy"/>
+        <attribute name="completedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="durationMinutes" optional="YES" attributeType="Integer 32" usesScalarValueType="NO"/>
+        <attribute name="note" optional="YES" attributeType="String"/>
+        <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="modifiedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="profile" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDPuppyProfile" inverseName="enrichmentActivities" inverseEntity="CDPuppyProfile"/>
+        <fetchIndex name="byCompletedAtIndex">
+            <fetchIndexElement property="completedAt" type="Binary" order="descending"/>
         </fetchIndex>
     </entity>
 </model>
