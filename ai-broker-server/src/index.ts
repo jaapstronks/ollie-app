@@ -252,6 +252,15 @@ app.post("/ai/nudges/decide", async (req, reply) => {
   // Modern format: requires systemInstruction and outputFormat (already checked by usesModernFormat)
   // Legacy format: requires surface-specific payload (for backwards compatibility during migration)
   if (!isModern) {
+    // New surfaces require modern format
+    const newSurfaces: Surface[] = ["training_guidance", "potty_analysis", "socialization_guidance", "health_insights"];
+    if (newSurfaces.includes(surface)) {
+      return reply.code(400).send({
+        error: `Surface '${surface}' requires systemInstruction and outputFormat in request`
+      });
+    }
+
+    // Legacy surfaces require their specific payload
     if (surface === "insight_bundle" && !payload.payload?.insightBundle) {
       return reply.code(400).send({ error: "payload.insightBundle is required (or provide systemInstruction/outputFormat)" });
     }
@@ -260,7 +269,7 @@ app.post("/ai/nudges/decide", async (req, reply) => {
     }
   }
 
-  const prompt = buildPrompt(payload);
+  const { userPrompt, systemInstruction } = buildPrompt(payload);
   const order = normalizeProviderOrder(payload.providerPolicy.preferredOrder);
 
   let lastError: string | null = null;
@@ -268,7 +277,7 @@ app.post("/ai/nudges/decide", async (req, reply) => {
   for (let i = 0; i < order.length; i++) {
     const provider = order[i];
     try {
-      const attempt = await callProvider(provider, prompt);
+      const attempt = await callProvider(provider, userPrompt, systemInstruction);
       // Parse and normalize LLM output with tolerance for common malformations
       const { output: modelOutput, wasNormalized } = parseAndNormalizeLLMOutput(attempt.responseText, surface);
 
@@ -363,7 +372,12 @@ function normalizeProviderOrder(preferred: Vendor[]): Vendor[] {
   return order;
 }
 
-function buildPrompt(payload: BrokerRequest): string {
+interface PromptParts {
+  userPrompt: string;
+  systemInstruction?: string;
+}
+
+function buildPrompt(payload: BrokerRequest): PromptParts {
   const surface = payload.surface as Surface;
 
   // Modern format: use client-provided instructions
@@ -371,9 +385,8 @@ function buildPrompt(payload: BrokerRequest): string {
     const contextJson = JSON.stringify(payload.context, null, 2);
     const payloadJson = payload.surfacePayload ? JSON.stringify(payload.surfacePayload, null, 2) : "null";
 
-    return `${payload.systemInstruction}
-
-OUTPUT FORMAT:
+    // Separate system instruction from user prompt for proper API usage
+    const userPrompt = `OUTPUT FORMAT:
 ${payload.outputFormat}
 
 CONTEXT:
@@ -383,12 +396,19 @@ SURFACE_PAYLOAD:
 ${payloadJson}
 
 Respond with valid JSON only. No markdown wrapping.`;
+
+    return {
+      userPrompt,
+      systemInstruction: payload.systemInstruction
+    };
   }
 
   // Legacy format: use hardcoded instructions (for backwards compatibility)
   const instruction =
     surface === "insight_bundle" ? insightInstructions() : notificationInstructions();
-  return `${instruction}\n\nINPUT_JSON:\n${JSON.stringify(payload)}`;
+  return {
+    userPrompt: `${instruction}\n\nINPUT_JSON:\n${JSON.stringify(payload)}`
+  };
 }
 
 function insightInstructions(): string {
@@ -414,17 +434,32 @@ function notificationInstructions(): string {
 
 async function callProvider(
   provider: Vendor,
-  prompt: string
+  prompt: string,
+  systemInstruction?: string
 ): Promise<{ responseText: string; model: string; inputTokens: number; outputTokens: number }> {
   if (provider === "anthropic") {
     if (!anthropicKey) throw new Error("ANTHROPIC_API_KEY missing");
-    return callAnthropic(prompt);
+    return callAnthropic(prompt, systemInstruction);
   }
   if (!mistralKey) throw new Error("MISTRAL_API_KEY missing");
-  return callMistral(prompt);
+  // Mistral doesn't have a separate system parameter in the same way, so we include it in the prompt
+  const fullPrompt = systemInstruction ? `${systemInstruction}\n\n${prompt}` : prompt;
+  return callMistral(fullPrompt);
 }
 
-async function callAnthropic(prompt: string) {
+async function callAnthropic(prompt: string, systemInstruction?: string) {
+  const body: Record<string, unknown> = {
+    model: anthropicModel,
+    max_tokens: 800,
+    temperature: 0.2,
+    messages: [{ role: "user", content: prompt }]
+  };
+
+  // Use proper system parameter when a system instruction is provided
+  if (systemInstruction) {
+    body.system = systemInstruction;
+  }
+
   const response = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
     headers: {
@@ -432,12 +467,7 @@ async function callAnthropic(prompt: string) {
       "x-api-key": anthropicKey!,
       "anthropic-version": "2023-06-01"
     },
-    body: JSON.stringify({
-      model: anthropicModel,
-      max_tokens: 500,
-      temperature: 0.2,
-      messages: [{ role: "user", content: prompt }]
-    })
+    body: JSON.stringify(body)
   });
   if (!response.ok) {
     throw new Error(`Anthropic HTTP ${response.status}: ${await response.text()}`);

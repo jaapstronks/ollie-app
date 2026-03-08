@@ -315,52 +315,130 @@ struct AnyCodable: Codable, Sendable {
     func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
 
-        // Decode the stored JSON data and re-encode it
+        // Decode the stored JSON data and re-encode it properly
         if let jsonObject = try? JSONSerialization.jsonObject(with: encodedData) {
-            if let dict = jsonObject as? [String: Any] {
-                // Encode dictionary manually
-                let reEncoded = try JSONSerialization.data(withJSONObject: dict)
-                if let jsonString = String(data: reEncoded, encoding: .utf8) {
-                    // Write as raw JSON using JSONDecoder trick
-                    try container.encode(RawJSON(json: jsonString))
-                } else {
-                    try container.encodeNil()
-                }
-            } else if let array = jsonObject as? [Any] {
-                let reEncoded = try JSONSerialization.data(withJSONObject: array)
-                if let jsonString = String(data: reEncoded, encoding: .utf8) {
-                    try container.encode(RawJSON(json: jsonString))
-                } else {
-                    try container.encodeNil()
-                }
-            } else if let string = jsonObject as? String {
-                try container.encode(string)
-            } else if let number = jsonObject as? NSNumber {
-                // Check if it's a boolean
-                if CFGetTypeID(number) == CFBooleanGetTypeID() {
-                    try container.encode(number.boolValue)
-                } else if number.doubleValue == Double(number.intValue) {
-                    try container.encode(number.intValue)
-                } else {
-                    try container.encode(number.doubleValue)
-                }
+            // Use the recursive encoder to properly handle nested structures
+            try encodeJSONValue(jsonObject, to: &container)
+        } else {
+            try container.encodeNil()
+        }
+    }
+
+    /// Recursively encode a JSON value (from JSONSerialization) using proper Codable encoding
+    private func encodeJSONValue(_ value: Any, to container: inout SingleValueEncodingContainer) throws {
+        if let dict = value as? [String: Any] {
+            // Encode dictionary using keyed container approach
+            try container.encode(CodableDictionary(dict))
+        } else if let array = value as? [Any] {
+            try container.encode(CodableArray(array))
+        } else if let string = value as? String {
+            try container.encode(string)
+        } else if let number = value as? NSNumber {
+            // Check if it's a boolean
+            if CFGetTypeID(number) == CFBooleanGetTypeID() {
+                try container.encode(number.boolValue)
+            } else if number.doubleValue == Double(number.intValue) {
+                try container.encode(number.intValue)
             } else {
-                try container.encodeNil()
+                try container.encode(number.doubleValue)
             }
+        } else if value is NSNull {
+            try container.encodeNil()
         } else {
             try container.encodeNil()
         }
     }
 }
 
-/// Helper for encoding raw JSON strings
-private struct RawJSON: Encodable {
-    let json: String
+/// Helper for encoding dictionaries with Any values
+private struct CodableDictionary: Encodable {
+    private let dict: [String: Any]
+
+    init(_ dict: [String: Any]) {
+        self.dict = dict
+    }
 
     func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        // This is a workaround - ideally we'd write raw JSON
-        // For now, just encode the string representation
-        try container.encode(json)
+        var container = encoder.container(keyedBy: DynamicCodingKey.self)
+        for (key, value) in dict {
+            let codingKey = DynamicCodingKey(stringValue: key)!
+            try encodeValue(value, forKey: codingKey, in: &container)
+        }
+    }
+
+    private func encodeValue(_ value: Any, forKey key: DynamicCodingKey, in container: inout KeyedEncodingContainer<DynamicCodingKey>) throws {
+        if let dict = value as? [String: Any] {
+            try container.encode(CodableDictionary(dict), forKey: key)
+        } else if let array = value as? [Any] {
+            try container.encode(CodableArray(array), forKey: key)
+        } else if let string = value as? String {
+            try container.encode(string, forKey: key)
+        } else if let number = value as? NSNumber {
+            if CFGetTypeID(number) == CFBooleanGetTypeID() {
+                try container.encode(number.boolValue, forKey: key)
+            } else if number.doubleValue == Double(number.intValue) {
+                try container.encode(number.intValue, forKey: key)
+            } else {
+                try container.encode(number.doubleValue, forKey: key)
+            }
+        } else if value is NSNull {
+            try container.encodeNil(forKey: key)
+        } else {
+            try container.encodeNil(forKey: key)
+        }
+    }
+}
+
+/// Helper for encoding arrays with Any values
+private struct CodableArray: Encodable {
+    private let array: [Any]
+
+    init(_ array: [Any]) {
+        self.array = array
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.unkeyedContainer()
+        for value in array {
+            try encodeValue(value, in: &container)
+        }
+    }
+
+    private func encodeValue(_ value: Any, in container: inout UnkeyedEncodingContainer) throws {
+        if let dict = value as? [String: Any] {
+            try container.encode(CodableDictionary(dict))
+        } else if let array = value as? [Any] {
+            try container.encode(CodableArray(array))
+        } else if let string = value as? String {
+            try container.encode(string)
+        } else if let number = value as? NSNumber {
+            if CFGetTypeID(number) == CFBooleanGetTypeID() {
+                try container.encode(number.boolValue)
+            } else if number.doubleValue == Double(number.intValue) {
+                try container.encode(number.intValue)
+            } else {
+                try container.encode(number.doubleValue)
+            }
+        } else if value is NSNull {
+            try container.encodeNil()
+        } else {
+            try container.encodeNil()
+        }
+    }
+}
+
+/// Dynamic coding key for encoding dictionaries with arbitrary string keys
+private struct DynamicCodingKey: CodingKey {
+    var stringValue: String
+    var intValue: Int?
+
+    init?(stringValue: String) {
+        self.stringValue = stringValue
+        self.intValue = nil
+    }
+
+    init?(intValue: Int) {
+        self.stringValue = String(intValue)
+        self.intValue = intValue
     }
 }
