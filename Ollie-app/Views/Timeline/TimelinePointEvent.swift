@@ -145,6 +145,7 @@ struct StemLine: View {
 
 /// Pill-shaped card with icon overlapping left edge
 /// Height matches icon size (28pt) for compact stacking
+/// Shows thumbnail on the right when event has a photo
 struct PointEventCard: View {
     let item: VerticalTimelineItem
     let iconColor: Color
@@ -155,6 +156,11 @@ struct PointEventCard: View {
 
     /// Icon size matches card height for perfect circle overlap
     private let iconSize: CGFloat = 28
+
+    /// Whether this event has a photo to display
+    private var hasPhoto: Bool {
+        item.photoThumbnail != nil
+    }
 
     /// Look up the member who logged this event
     private var loggedByMember: HouseholdMember? {
@@ -199,7 +205,15 @@ struct PointEventCard: View {
                     }
                 }
                 .padding(.leading, 6)
-                .padding(.trailing, 12)
+                .padding(.trailing, hasPhoto ? 4 : 12)
+
+                // Photo thumbnail (if available)
+                if let thumbnailPath = item.photoThumbnail {
+                    AsyncThumbnailView(relativePath: thumbnailPath, showErrorPlaceholder: false)
+                        .frame(width: iconSize - 4, height: iconSize - 4)
+                        .clipShape(RoundedRectangle(cornerRadius: 4))
+                        .padding(.trailing, 4)
+                }
             }
             .frame(height: iconSize)
             .background(

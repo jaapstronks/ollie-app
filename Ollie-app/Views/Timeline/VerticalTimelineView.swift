@@ -376,9 +376,19 @@ struct VerticalTimelineView: View {
                 onEditEvent(sleepEvent)
             }
         case .walkEvent(let event):
-            onEditEvent(event)
+            // Walk events with photos: show photo viewer
+            if event.photo != nil, let onPhotoTap = onPhotoTap {
+                onPhotoTap(event)
+            } else {
+                onEditEvent(event)
+            }
         case .pointEvent(let event):
-            onEditEvent(event)
+            // Events with photos (especially moments): show photo viewer instead of edit
+            if event.photo != nil, let onPhotoTap = onPhotoTap {
+                onPhotoTap(event)
+            } else {
+                onEditEvent(event)
+            }
         case .appointmentItem(let appointment):
             onAppointmentTap?(appointment)
         case .trainingSession:
