@@ -4,7 +4,7 @@
 //
 //  Extensions for converting between DogAppointment and CDDogAppointment
 
-import CoreData
+@preconcurrency import CoreData
 import OtisShared
 import Foundation
 
@@ -139,7 +139,7 @@ extension CDDogAppointment {
         request.sortDescriptors = [
             NSSortDescriptor(keyPath: \CDDogAppointment.startDate, ascending: true)
         ]
-        var results: [CDDogAppointment] = []
+        nonisolated(unsafe) var results: [CDDogAppointment] = []
         context.performAndWait {
             results = (try? context.fetch(request)) ?? []
         }
@@ -160,7 +160,7 @@ extension CDDogAppointment {
         request.sortDescriptors = [
             NSSortDescriptor(keyPath: \CDDogAppointment.startDate, ascending: true)
         ]
-        var results: [CDDogAppointment] = []
+        nonisolated(unsafe) var results: [CDDogAppointment] = []
         context.performAndWait {
             results = (try? context.fetch(request)) ?? []
         }
@@ -181,7 +181,7 @@ extension CDDogAppointment {
         request.sortDescriptors = [
             NSSortDescriptor(keyPath: \CDDogAppointment.startDate, ascending: false)
         ]
-        var results: [CDDogAppointment] = []
+        nonisolated(unsafe) var results: [CDDogAppointment] = []
         context.performAndWait {
             results = (try? context.fetch(request)) ?? []
         }
@@ -210,7 +210,7 @@ extension CDDogAppointment {
         request.sortDescriptors = [
             NSSortDescriptor(keyPath: \CDDogAppointment.startDate, ascending: true)
         ]
-        var results: [CDDogAppointment] = []
+        nonisolated(unsafe) var results: [CDDogAppointment] = []
         context.performAndWait {
             results = (try? context.fetch(request)) ?? []
         }
@@ -222,7 +222,7 @@ extension CDDogAppointment {
         let request = NSFetchRequest<CDDogAppointment>(entityName: "CDDogAppointment")
         request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
         request.fetchLimit = 1
-        var result: CDDogAppointment?
+        nonisolated(unsafe) var result: CDDogAppointment?
         context.performAndWait {
             result = try? context.fetch(request).first
         }
@@ -236,7 +236,7 @@ extension CDDogAppointment {
     ) -> [CDDogAppointment] {
         let request = NSFetchRequest<CDDogAppointment>(entityName: "CDDogAppointment")
         request.predicate = NSPredicate(format: "linkedMilestoneID == %@", milestoneId as CVarArg)
-        var results: [CDDogAppointment] = []
+        nonisolated(unsafe) var results: [CDDogAppointment] = []
         context.performAndWait {
             results = (try? context.fetch(request)) ?? []
         }
@@ -250,7 +250,7 @@ extension CDDogAppointment {
     ) -> [CDDogAppointment] {
         let request = NSFetchRequest<CDDogAppointment>(entityName: "CDDogAppointment")
         request.predicate = NSPredicate(format: "linkedContactID == %@", contactId as CVarArg)
-        var results: [CDDogAppointment] = []
+        nonisolated(unsafe) var results: [CDDogAppointment] = []
         context.performAndWait {
             results = (try? context.fetch(request)) ?? []
         }
@@ -264,7 +264,7 @@ extension CDDogAppointment {
     ) -> Int {
         let request = NSFetchRequest<CDDogAppointment>(entityName: "CDDogAppointment")
         request.predicate = NSPredicate(format: "profile == %@", profile)
-        var count = 0
+        nonisolated(unsafe) var count = 0
         context.performAndWait {
             count = (try? context.count(for: request)) ?? 0
         }
@@ -282,7 +282,7 @@ extension CDDogAppointment {
             profile,
             Date() as NSDate
         )
-        var count = 0
+        nonisolated(unsafe) var count = 0
         context.performAndWait {
             count = (try? context.count(for: request)) ?? 0
         }
@@ -297,7 +297,7 @@ extension CDDogAppointment {
         request.sortDescriptors = [
             NSSortDescriptor(keyPath: \CDDogAppointment.startDate, ascending: true)
         ]
-        var results: [CDDogAppointment] = []
+        nonisolated(unsafe) var results: [CDDogAppointment] = []
         context.performAndWait {
             results = (try? context.fetch(request)) ?? []
         }

@@ -4,7 +4,7 @@
 //
 //  Extensions for converting between Document and CDDocument
 
-import CoreData
+@preconcurrency import CoreData
 import OtisShared
 import UIKit
 import PDFKit
@@ -193,7 +193,7 @@ extension CDDocument {
         let request = NSFetchRequest<CDDocument>(entityName: "CDDocument")
         request.predicate = NSPredicate(format: "profile == %@", profile)
         request.sortDescriptors = [NSSortDescriptor(keyPath: \CDDocument.createdAt, ascending: false)]
-        var results: [CDDocument] = []
+        nonisolated(unsafe) var results: [CDDocument] = []
         context.performAndWait {
             results = (try? context.fetch(request)) ?? []
         }
@@ -205,7 +205,7 @@ extension CDDocument {
         let request = NSFetchRequest<CDDocument>(entityName: "CDDocument")
         request.predicate = NSPredicate(format: "profile == %@ AND type == %@", profile, type.rawValue)
         request.sortDescriptors = [NSSortDescriptor(keyPath: \CDDocument.createdAt, ascending: false)]
-        var results: [CDDocument] = []
+        nonisolated(unsafe) var results: [CDDocument] = []
         context.performAndWait {
             results = (try? context.fetch(request)) ?? []
         }
@@ -217,7 +217,7 @@ extension CDDocument {
         let request = NSFetchRequest<CDDocument>(entityName: "CDDocument")
         request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
         request.fetchLimit = 1
-        var result: CDDocument?
+        nonisolated(unsafe) var result: CDDocument?
         context.performAndWait {
             result = try? context.fetch(request).first
         }
@@ -228,7 +228,7 @@ extension CDDocument {
     static func countDocuments(for profile: CDPuppyProfile, in context: NSManagedObjectContext) -> Int {
         let request = NSFetchRequest<CDDocument>(entityName: "CDDocument")
         request.predicate = NSPredicate(format: "profile == %@", profile)
-        var count = 0
+        nonisolated(unsafe) var count = 0
         context.performAndWait {
             count = (try? context.count(for: request)) ?? 0
         }
@@ -240,7 +240,7 @@ extension CDDocument {
         let request = NSFetchRequest<CDDocument>(entityName: "CDDocument")
         request.predicate = NSPredicate(format: "profile == %@ AND expiryDate != nil", profile)
         request.sortDescriptors = [NSSortDescriptor(keyPath: \CDDocument.expiryDate, ascending: true)]
-        var results: [CDDocument] = []
+        nonisolated(unsafe) var results: [CDDocument] = []
         context.performAndWait {
             results = (try? context.fetch(request)) ?? []
         }
@@ -252,7 +252,7 @@ extension CDDocument {
         let request = NSFetchRequest<CDDocument>(entityName: "CDDocument")
         request.predicate = NSPredicate(format: "profile == %@ AND expiryDate != nil AND expiryDate < %@", profile, Date() as NSDate)
         request.sortDescriptors = [NSSortDescriptor(keyPath: \CDDocument.expiryDate, ascending: true)]
-        var results: [CDDocument] = []
+        nonisolated(unsafe) var results: [CDDocument] = []
         context.performAndWait {
             results = (try? context.fetch(request)) ?? []
         }
@@ -274,7 +274,7 @@ extension CDDocument {
             futureDate as NSDate
         )
         request.sortDescriptors = [NSSortDescriptor(keyPath: \CDDocument.expiryDate, ascending: true)]
-        var results: [CDDocument] = []
+        nonisolated(unsafe) var results: [CDDocument] = []
         context.performAndWait {
             results = (try? context.fetch(request)) ?? []
         }
@@ -287,7 +287,7 @@ extension CDDocument {
     static func fetchAllDocumentsForMigration(in context: NSManagedObjectContext) -> [CDDocument] {
         let request = NSFetchRequest<CDDocument>(entityName: "CDDocument")
         request.sortDescriptors = [NSSortDescriptor(keyPath: \CDDocument.createdAt, ascending: false)]
-        var results: [CDDocument] = []
+        nonisolated(unsafe) var results: [CDDocument] = []
         context.performAndWait {
             results = (try? context.fetch(request)) ?? []
         }

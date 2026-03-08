@@ -5,7 +5,7 @@
 //  Extensions for converting between SkillProgress and CDSkillProgress
 //
 
-import CoreData
+@preconcurrency import CoreData
 import OtisShared
 
 extension CDSkillProgress {
@@ -40,6 +40,7 @@ extension CDSkillProgress {
         self.maintenanceTier = Int16(progress.maintenanceTier)
         self.nextReviewDate = progress.nextReviewDate
         self.lastPracticedAt = progress.lastPracticedAt
+        self.isInMaintenanceMode = progress.isInMaintenanceMode
         self.createdAt = progress.createdAt
         self.modifiedAt = progress.modifiedAt
 
@@ -95,6 +96,7 @@ extension CDSkillProgress {
             maintenanceTier: Int(self.maintenanceTier),
             nextReviewDate: self.nextReviewDate,
             lastPracticedAt: self.lastPracticedAt,
+            isInMaintenanceMode: self.isInMaintenanceMode,
             practicedContexts: practicedContexts,
             createdAt: createdAt,
             modifiedAt: modifiedAt
@@ -112,7 +114,7 @@ extension CDSkillProgress {
         request.sortDescriptors = [
             NSSortDescriptor(keyPath: \CDSkillProgress.modifiedAt, ascending: false)
         ]
-        var results: [CDSkillProgress] = []
+        nonisolated(unsafe) var results: [CDSkillProgress] = []
         context.performAndWait {
             results = (try? context.fetch(request)) ?? []
         }
@@ -124,7 +126,7 @@ extension CDSkillProgress {
         let request = NSFetchRequest<CDSkillProgress>(entityName: "CDSkillProgress")
         request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
         request.fetchLimit = 1
-        var result: CDSkillProgress?
+        nonisolated(unsafe) var result: CDSkillProgress?
         context.performAndWait {
             result = try? context.fetch(request).first
         }
@@ -136,7 +138,7 @@ extension CDSkillProgress {
         let request = NSFetchRequest<CDSkillProgress>(entityName: "CDSkillProgress")
         request.predicate = NSPredicate(format: "skillId == %@", skillId)
         request.fetchLimit = 1
-        var result: CDSkillProgress?
+        nonisolated(unsafe) var result: CDSkillProgress?
         context.performAndWait {
             result = try? context.fetch(request).first
         }
@@ -154,7 +156,7 @@ extension CDSkillProgress {
         request.sortDescriptors = [
             NSSortDescriptor(keyPath: \CDSkillProgress.nextReviewDate, ascending: true)
         ]
-        var results: [CDSkillProgress] = []
+        nonisolated(unsafe) var results: [CDSkillProgress] = []
         context.performAndWait {
             results = (try? context.fetch(request)) ?? []
         }
@@ -168,7 +170,7 @@ extension CDSkillProgress {
         request.sortDescriptors = [
             NSSortDescriptor(keyPath: \CDSkillProgress.modifiedAt, ascending: false)
         ]
-        var results: [CDSkillProgress] = []
+        nonisolated(unsafe) var results: [CDSkillProgress] = []
         context.performAndWait {
             results = (try? context.fetch(request)) ?? []
         }
@@ -188,7 +190,7 @@ extension CDSkillProgress {
         request.sortDescriptors = [
             NSSortDescriptor(keyPath: \CDSkillProgress.modifiedAt, ascending: false)
         ]
-        var results: [CDSkillProgress] = []
+        nonisolated(unsafe) var results: [CDSkillProgress] = []
         context.performAndWait {
             results = (try? context.fetch(request)) ?? []
         }
@@ -200,7 +202,7 @@ extension CDSkillProgress {
         let request = NSFetchRequest<CDSkillProgress>(entityName: "CDSkillProgress")
         request.predicate = NSPredicate(format: "skillId == %@", skillId)
         request.fetchLimit = 1
-        var count = 0
+        nonisolated(unsafe) var count = 0
         context.performAndWait {
             count = (try? context.count(for: request)) ?? 0
         }

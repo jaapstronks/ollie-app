@@ -5,7 +5,7 @@
 //  Extensions for converting between PuppyProfile and CDPuppyProfile
 //
 
-import CoreData
+@preconcurrency import CoreData
 import OtisShared
 
 extension CDPuppyProfile {
@@ -163,7 +163,7 @@ extension CDPuppyProfile {
     static func fetchProfile(in context: NSManagedObjectContext) -> CDPuppyProfile? {
         let request = NSFetchRequest<CDPuppyProfile>(entityName: "CDPuppyProfile")
         request.fetchLimit = 1
-        var result: CDPuppyProfile?
+        nonisolated(unsafe) var result: CDPuppyProfile?
         context.performAndWait {
             result = try? context.fetch(request).first
         }
@@ -175,7 +175,7 @@ extension CDPuppyProfile {
         let request = NSFetchRequest<CDPuppyProfile>(entityName: "CDPuppyProfile")
         request.affectedStores = [store]
         request.fetchLimit = 1
-        var result: CDPuppyProfile?
+        nonisolated(unsafe) var result: CDPuppyProfile?
         context.performAndWait {
             result = try? context.fetch(request).first
         }
@@ -187,7 +187,7 @@ extension CDPuppyProfile {
         let request = NSFetchRequest<CDPuppyProfile>(entityName: "CDPuppyProfile")
         request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
         request.fetchLimit = 1
-        var result: CDPuppyProfile?
+        nonisolated(unsafe) var result: CDPuppyProfile?
         context.performAndWait {
             result = try? context.fetch(request).first
         }
@@ -199,7 +199,7 @@ extension CDPuppyProfile {
         let request = NSFetchRequest<CDPuppyProfile>(entityName: "CDPuppyProfile")
         request.affectedStores = [store]
         request.fetchLimit = 1
-        var count = 0
+        nonisolated(unsafe) var count = 0
         context.performAndWait {
             count = (try? context.count(for: request)) ?? 0
         }
@@ -224,7 +224,7 @@ extension CDPuppyProfile {
         let request = NSFetchRequest<CDPuppyProfile>(entityName: "CDPuppyProfile")
         request.affectedStores = [store]
         request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
-        var results: [CDPuppyProfile] = []
+        nonisolated(unsafe) var results: [CDPuppyProfile] = []
         context.performAndWait {
             results = (try? context.fetch(request)) ?? []
         }
@@ -235,7 +235,7 @@ extension CDPuppyProfile {
     static func fetchAllProfiles(in context: NSManagedObjectContext) -> [CDPuppyProfile] {
         let request = NSFetchRequest<CDPuppyProfile>(entityName: "CDPuppyProfile")
         request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
-        var results: [CDPuppyProfile] = []
+        nonisolated(unsafe) var results: [CDPuppyProfile] = []
         context.performAndWait {
             results = (try? context.fetch(request)) ?? []
         }
@@ -246,7 +246,7 @@ extension CDPuppyProfile {
     static func countProfiles(in context: NSManagedObjectContext, from store: NSPersistentStore) -> Int {
         let request = NSFetchRequest<CDPuppyProfile>(entityName: "CDPuppyProfile")
         request.affectedStores = [store]
-        var count = 0
+        nonisolated(unsafe) var count = 0
         context.performAndWait {
             count = (try? context.count(for: request)) ?? 0
         }

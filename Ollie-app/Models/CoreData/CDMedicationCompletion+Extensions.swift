@@ -5,7 +5,7 @@
 //  Extensions for converting between MedicationCompletion and CDMedicationCompletion
 //
 
-import CoreData
+@preconcurrency import CoreData
 import OtisShared
 
 extension CDMedicationCompletion {
@@ -62,7 +62,7 @@ extension CDMedicationCompletion {
         let request = NSFetchRequest<CDMedicationCompletion>(entityName: "CDMedicationCompletion")
         request.sortDescriptors = [NSSortDescriptor(keyPath: \CDMedicationCompletion.completedAt, ascending: false)]
 
-        var results: [CDMedicationCompletion] = []
+        nonisolated(unsafe) var results: [CDMedicationCompletion] = []
         context.performAndWait {
             results = (try? context.fetch(request)) ?? []
         }
@@ -81,7 +81,7 @@ extension CDMedicationCompletion {
         request.predicate = NSPredicate(format: "date >= %@ AND date < %@", startOfDay as CVarArg, endOfDay as CVarArg)
         request.sortDescriptors = [NSSortDescriptor(keyPath: \CDMedicationCompletion.completedAt, ascending: true)]
 
-        var results: [CDMedicationCompletion] = []
+        nonisolated(unsafe) var results: [CDMedicationCompletion] = []
         context.performAndWait {
             results = (try? context.fetch(request)) ?? []
         }
@@ -93,7 +93,7 @@ extension CDMedicationCompletion {
         let request = NSFetchRequest<CDMedicationCompletion>(entityName: "CDMedicationCompletion")
         request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
         request.fetchLimit = 1
-        var result: CDMedicationCompletion?
+        nonisolated(unsafe) var result: CDMedicationCompletion?
         context.performAndWait {
             result = try? context.fetch(request).first
         }
@@ -106,7 +106,7 @@ extension CDMedicationCompletion {
         request.predicate = NSPredicate(format: "medicationId == %@", medicationId as CVarArg)
         request.sortDescriptors = [NSSortDescriptor(keyPath: \CDMedicationCompletion.completedAt, ascending: false)]
 
-        var results: [CDMedicationCompletion] = []
+        nonisolated(unsafe) var results: [CDMedicationCompletion] = []
         context.performAndWait {
             results = (try? context.fetch(request)) ?? []
         }
@@ -131,7 +131,7 @@ extension CDMedicationCompletion {
         )
         request.fetchLimit = 1
 
-        var count = 0
+        nonisolated(unsafe) var count = 0
         context.performAndWait {
             count = (try? context.count(for: request)) ?? 0
         }

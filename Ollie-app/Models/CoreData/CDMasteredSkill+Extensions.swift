@@ -5,7 +5,7 @@
 //  Extensions for converting between MasteredSkill and CDMasteredSkill
 //
 
-import CoreData
+@preconcurrency import CoreData
 import OtisShared
 
 extension CDMasteredSkill {
@@ -56,7 +56,7 @@ extension CDMasteredSkill {
         let request = NSFetchRequest<CDMasteredSkill>(entityName: "CDMasteredSkill")
         request.sortDescriptors = [NSSortDescriptor(keyPath: \CDMasteredSkill.masteredAt, ascending: false)]
 
-        var results: [CDMasteredSkill] = []
+        nonisolated(unsafe) var results: [CDMasteredSkill] = []
         context.performAndWait {
             results = (try? context.fetch(request)) ?? []
         }
@@ -68,7 +68,7 @@ extension CDMasteredSkill {
         let request = NSFetchRequest<CDMasteredSkill>(entityName: "CDMasteredSkill")
         request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
         request.fetchLimit = 1
-        var result: CDMasteredSkill?
+        nonisolated(unsafe) var result: CDMasteredSkill?
         context.performAndWait {
             result = try? context.fetch(request).first
         }
@@ -80,7 +80,7 @@ extension CDMasteredSkill {
         let request = NSFetchRequest<CDMasteredSkill>(entityName: "CDMasteredSkill")
         request.predicate = NSPredicate(format: "skillId == %@", skillId)
         request.fetchLimit = 1
-        var result: CDMasteredSkill?
+        nonisolated(unsafe) var result: CDMasteredSkill?
         context.performAndWait {
             result = try? context.fetch(request).first
         }
@@ -93,7 +93,7 @@ extension CDMasteredSkill {
         request.predicate = NSPredicate(format: "skillId == %@", skillId)
         request.fetchLimit = 1
 
-        var count = 0
+        nonisolated(unsafe) var count = 0
         context.performAndWait {
             count = (try? context.count(for: request)) ?? 0
         }

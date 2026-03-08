@@ -4,7 +4,7 @@
 //
 //  Extensions for converting between Milestone and CDMilestone
 
-import CoreData
+@preconcurrency import CoreData
 import OtisShared
 
 // MARK: - CDEntityConvertible Conformance
@@ -20,7 +20,7 @@ extension CDMilestone: CDEntityConvertible {
         let request = NSFetchRequest<CDMilestone>(entityName: "CDMilestone")
         request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
         request.fetchLimit = 1
-        var result: CDMilestone?
+        nonisolated(unsafe) var result: CDMilestone?
         context.performAndWait {
             result = try? context.fetch(request).first
         }
@@ -125,7 +125,7 @@ extension CDMilestone {
     static func fetchAllMilestones(in context: NSManagedObjectContext) -> [CDMilestone] {
         let request = NSFetchRequest<CDMilestone>(entityName: "CDMilestone")
         request.sortDescriptors = [NSSortDescriptor(keyPath: \CDMilestone.sortOrder, ascending: true)]
-        var results: [CDMilestone] = []
+        nonisolated(unsafe) var results: [CDMilestone] = []
         context.performAndWait {
             results = (try? context.fetch(request)) ?? []
         }
@@ -137,7 +137,7 @@ extension CDMilestone {
         let request = NSFetchRequest<CDMilestone>(entityName: "CDMilestone")
         request.predicate = NSPredicate(format: "category == %@", category.rawValue)
         request.sortDescriptors = [NSSortDescriptor(keyPath: \CDMilestone.sortOrder, ascending: true)]
-        var results: [CDMilestone] = []
+        nonisolated(unsafe) var results: [CDMilestone] = []
         context.performAndWait {
             results = (try? context.fetch(request)) ?? []
         }
@@ -149,7 +149,7 @@ extension CDMilestone {
         let request = NSFetchRequest<CDMilestone>(entityName: "CDMilestone")
         request.predicate = NSPredicate(format: "isCompleted == YES")
         request.sortDescriptors = [NSSortDescriptor(keyPath: \CDMilestone.completedDate, ascending: false)]
-        var results: [CDMilestone] = []
+        nonisolated(unsafe) var results: [CDMilestone] = []
         context.performAndWait {
             results = (try? context.fetch(request)) ?? []
         }
@@ -161,7 +161,7 @@ extension CDMilestone {
         let request = NSFetchRequest<CDMilestone>(entityName: "CDMilestone")
         request.predicate = NSPredicate(format: "isCompleted == NO")
         request.sortDescriptors = [NSSortDescriptor(keyPath: \CDMilestone.sortOrder, ascending: true)]
-        var results: [CDMilestone] = []
+        nonisolated(unsafe) var results: [CDMilestone] = []
         context.performAndWait {
             results = (try? context.fetch(request)) ?? []
         }
@@ -173,7 +173,7 @@ extension CDMilestone {
         let request = NSFetchRequest<CDMilestone>(entityName: "CDMilestone")
         request.predicate = NSPredicate(format: "isCustom == YES")
         request.sortDescriptors = [NSSortDescriptor(keyPath: \CDMilestone.sortOrder, ascending: true)]
-        var results: [CDMilestone] = []
+        nonisolated(unsafe) var results: [CDMilestone] = []
         context.performAndWait {
             results = (try? context.fetch(request)) ?? []
         }
@@ -183,7 +183,7 @@ extension CDMilestone {
     /// Count all milestones
     static func countMilestones(in context: NSManagedObjectContext) -> Int {
         let request = NSFetchRequest<CDMilestone>(entityName: "CDMilestone")
-        var count = 0
+        nonisolated(unsafe) var count = 0
         context.performAndWait {
             count = (try? context.count(for: request)) ?? 0
         }
@@ -194,7 +194,7 @@ extension CDMilestone {
     static func countCompletedMilestones(in context: NSManagedObjectContext) -> Int {
         let request = NSFetchRequest<CDMilestone>(entityName: "CDMilestone")
         request.predicate = NSPredicate(format: "isCompleted == YES")
-        var count = 0
+        nonisolated(unsafe) var count = 0
         context.performAndWait {
             count = (try? context.count(for: request)) ?? 0
         }

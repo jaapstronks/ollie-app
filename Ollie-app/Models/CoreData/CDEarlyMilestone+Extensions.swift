@@ -5,7 +5,7 @@
 //  Extensions for converting between EarlyMilestoneRecord and CDEarlyMilestone
 //
 
-import CoreData
+@preconcurrency import CoreData
 import OtisShared
 
 extension CDEarlyMilestone {
@@ -56,7 +56,7 @@ extension CDEarlyMilestone {
         let request = NSFetchRequest<CDEarlyMilestone>(entityName: "CDEarlyMilestone")
         request.sortDescriptors = [NSSortDescriptor(keyPath: \CDEarlyMilestone.achievedAt, ascending: true)]
 
-        var results: [CDEarlyMilestone] = []
+        nonisolated(unsafe) var results: [CDEarlyMilestone] = []
         context.performAndWait {
             results = (try? context.fetch(request)) ?? []
         }
@@ -68,7 +68,7 @@ extension CDEarlyMilestone {
         let request = NSFetchRequest<CDEarlyMilestone>(entityName: "CDEarlyMilestone")
         request.predicate = NSPredicate(format: "milestoneId == %@", milestoneId)
         request.fetchLimit = 1
-        var result: CDEarlyMilestone?
+        nonisolated(unsafe) var result: CDEarlyMilestone?
         context.performAndWait {
             result = try? context.fetch(request).first
         }
@@ -81,7 +81,7 @@ extension CDEarlyMilestone {
         request.predicate = NSPredicate(format: "milestoneId == %@", milestoneId)
         request.fetchLimit = 1
 
-        var count = 0
+        nonisolated(unsafe) var count = 0
         context.performAndWait {
             count = (try? context.count(for: request)) ?? 0
         }

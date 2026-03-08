@@ -5,7 +5,7 @@
 //  Extensions for converting between Exposure and CDExposure
 //
 
-import CoreData
+@preconcurrency import CoreData
 import OtisShared
 
 extension CDExposure {
@@ -69,7 +69,7 @@ extension CDExposure {
         let request = NSFetchRequest<CDExposure>(entityName: "CDExposure")
         request.sortDescriptors = [NSSortDescriptor(keyPath: \CDExposure.date, ascending: false)]
 
-        var results: [CDExposure] = []
+        nonisolated(unsafe) var results: [CDExposure] = []
         context.performAndWait {
             results = (try? context.fetch(request)) ?? []
         }
@@ -82,7 +82,7 @@ extension CDExposure {
         request.predicate = NSPredicate(format: "itemId == %@", itemId)
         request.sortDescriptors = [NSSortDescriptor(keyPath: \CDExposure.date, ascending: false)]
 
-        var results: [CDExposure] = []
+        nonisolated(unsafe) var results: [CDExposure] = []
         context.performAndWait {
             results = (try? context.fetch(request)) ?? []
         }
@@ -101,7 +101,7 @@ extension CDExposure {
         request.predicate = NSPredicate(format: "date >= %@ AND date < %@", startOfDay as CVarArg, endOfDay as CVarArg)
         request.sortDescriptors = [NSSortDescriptor(keyPath: \CDExposure.date, ascending: true)]
 
-        var results: [CDExposure] = []
+        nonisolated(unsafe) var results: [CDExposure] = []
         context.performAndWait {
             results = (try? context.fetch(request)) ?? []
         }
@@ -113,7 +113,7 @@ extension CDExposure {
         let request = NSFetchRequest<CDExposure>(entityName: "CDExposure")
         request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
         request.fetchLimit = 1
-        var result: CDExposure?
+        nonisolated(unsafe) var result: CDExposure?
         context.performAndWait {
             result = try? context.fetch(request).first
         }
@@ -125,7 +125,7 @@ extension CDExposure {
         let request = NSFetchRequest<CDExposure>(entityName: "CDExposure")
         request.predicate = NSPredicate(format: "itemId == %@", itemId)
 
-        var count = 0
+        nonisolated(unsafe) var count = 0
         context.performAndWait {
             count = (try? context.count(for: request)) ?? 0
         }
@@ -138,7 +138,7 @@ extension CDExposure {
         request.sortDescriptors = [NSSortDescriptor(keyPath: \CDExposure.date, ascending: false)]
         request.fetchLimit = limit
 
-        var results: [CDExposure] = []
+        nonisolated(unsafe) var results: [CDExposure] = []
         context.performAndWait {
             results = (try? context.fetch(request)) ?? []
         }

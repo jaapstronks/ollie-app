@@ -5,7 +5,7 @@
 //  Extensions for converting between WalkSpot and CDWalkSpot
 //
 
-import CoreData
+@preconcurrency import CoreData
 import OtisShared
 
 // MARK: - CDEntityConvertible Conformance
@@ -21,7 +21,7 @@ extension CDWalkSpot: CDEntityConvertible {
         let request = NSFetchRequest<CDWalkSpot>(entityName: "CDWalkSpot")
         request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
         request.fetchLimit = 1
-        var result: CDWalkSpot?
+        nonisolated(unsafe) var result: CDWalkSpot?
         context.performAndWait {
             result = try? context.fetch(request).first
         }
@@ -101,7 +101,7 @@ extension CDWalkSpot {
             NSSortDescriptor(keyPath: \CDWalkSpot.visitCount, ascending: false)
         ]
 
-        var results: [CDWalkSpot] = []
+        nonisolated(unsafe) var results: [CDWalkSpot] = []
         context.performAndWait {
             results = (try? context.fetch(request)) ?? []
         }
@@ -114,7 +114,7 @@ extension CDWalkSpot {
         request.predicate = NSPredicate(format: "isFavorite == YES")
         request.sortDescriptors = [NSSortDescriptor(keyPath: \CDWalkSpot.visitCount, ascending: false)]
 
-        var results: [CDWalkSpot] = []
+        nonisolated(unsafe) var results: [CDWalkSpot] = []
         context.performAndWait {
             results = (try? context.fetch(request)) ?? []
         }

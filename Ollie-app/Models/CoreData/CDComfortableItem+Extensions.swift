@@ -5,7 +5,7 @@
 //  Extensions for converting between ComfortableItem and CDComfortableItem
 //
 
-import CoreData
+@preconcurrency import CoreData
 import OtisShared
 
 extension CDComfortableItem {
@@ -60,7 +60,7 @@ extension CDComfortableItem {
         let request = NSFetchRequest<CDComfortableItem>(entityName: "CDComfortableItem")
         request.sortDescriptors = [NSSortDescriptor(keyPath: \CDComfortableItem.comfortableAt, ascending: false)]
 
-        var results: [CDComfortableItem] = []
+        nonisolated(unsafe) var results: [CDComfortableItem] = []
         context.performAndWait {
             results = (try? context.fetch(request)) ?? []
         }
@@ -72,7 +72,7 @@ extension CDComfortableItem {
         let request = NSFetchRequest<CDComfortableItem>(entityName: "CDComfortableItem")
         request.predicate = NSPredicate(format: "itemId == %@", itemId)
         request.fetchLimit = 1
-        var result: CDComfortableItem?
+        nonisolated(unsafe) var result: CDComfortableItem?
         context.performAndWait {
             result = try? context.fetch(request).first
         }
@@ -85,7 +85,7 @@ extension CDComfortableItem {
         request.predicate = NSPredicate(format: "itemId == %@", itemId)
         request.fetchLimit = 1
 
-        var count = 0
+        nonisolated(unsafe) var count = 0
         context.performAndWait {
             count = (try? context.count(for: request)) ?? 0
         }

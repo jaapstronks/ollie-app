@@ -4,7 +4,7 @@
 //
 //  Extensions for converting between DogContact and CDDogContact
 
-import CoreData
+@preconcurrency import CoreData
 import OtisShared
 
 // MARK: - CDEntityConvertible Conformance
@@ -20,7 +20,7 @@ extension CDDogContact: CDEntityConvertible {
         let request = NSFetchRequest<CDDogContact>(entityName: "CDDogContact")
         request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
         request.fetchLimit = 1
-        var result: CDDogContact?
+        nonisolated(unsafe) var result: CDDogContact?
         context.performAndWait {
             result = try? context.fetch(request).first
         }
@@ -97,7 +97,7 @@ extension CDDogContact {
     static func fetchAllContacts(in context: NSManagedObjectContext) -> [CDDogContact] {
         let request = NSFetchRequest<CDDogContact>(entityName: "CDDogContact")
         request.sortDescriptors = [NSSortDescriptor(keyPath: \CDDogContact.createdAt, ascending: false)]
-        var results: [CDDogContact] = []
+        nonisolated(unsafe) var results: [CDDogContact] = []
         context.performAndWait {
             results = (try? context.fetch(request)) ?? []
         }
@@ -109,7 +109,7 @@ extension CDDogContact {
         let request = NSFetchRequest<CDDogContact>(entityName: "CDDogContact")
         request.predicate = NSPredicate(format: "contactType == %@", type.rawValue)
         request.sortDescriptors = [NSSortDescriptor(keyPath: \CDDogContact.createdAt, ascending: false)]
-        var results: [CDDogContact] = []
+        nonisolated(unsafe) var results: [CDDogContact] = []
         context.performAndWait {
             results = (try? context.fetch(request)) ?? []
         }
@@ -119,7 +119,7 @@ extension CDDogContact {
     /// Count all contacts
     static func countContacts(in context: NSManagedObjectContext) -> Int {
         let request = NSFetchRequest<CDDogContact>(entityName: "CDDogContact")
-        var count = 0
+        nonisolated(unsafe) var count = 0
         context.performAndWait {
             count = (try? context.count(for: request)) ?? 0
         }

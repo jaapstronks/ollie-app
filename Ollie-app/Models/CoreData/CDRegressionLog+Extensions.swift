@@ -6,7 +6,7 @@
 //  Provides conversion to/from RegressionLogEntry model.
 //
 
-import CoreData
+@preconcurrency import CoreData
 import OtisShared
 
 extension CDRegressionLog {
@@ -72,7 +72,7 @@ extension CDRegressionLog {
         let request = NSFetchRequest<CDRegressionLog>(entityName: "CDRegressionLog")
         request.sortDescriptors = [NSSortDescriptor(key: "occurredAt", ascending: false)]
 
-        var results: [CDRegressionLog] = []
+        nonisolated(unsafe) var results: [CDRegressionLog] = []
         context.performAndWait {
             do {
                 results = try context.fetch(request)
@@ -89,7 +89,7 @@ extension CDRegressionLog {
         request.predicate = NSPredicate(format: "skillId == %@", skillId)
         request.sortDescriptors = [NSSortDescriptor(key: "occurredAt", ascending: false)]
 
-        var results: [CDRegressionLog] = []
+        nonisolated(unsafe) var results: [CDRegressionLog] = []
         context.performAndWait {
             do {
                 results = try context.fetch(request)
@@ -106,7 +106,7 @@ extension CDRegressionLog {
         request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
         request.fetchLimit = 1
 
-        var result: CDRegressionLog?
+        nonisolated(unsafe) var result: CDRegressionLog?
         context.performAndWait {
             do {
                 result = try context.fetch(request).first
@@ -120,11 +120,11 @@ extension CDRegressionLog {
     /// Fetch recent regressions (within the specified number of days)
     static func fetchRecent(days: Int, in context: NSManagedObjectContext) -> [CDRegressionLog] {
         let request = NSFetchRequest<CDRegressionLog>(entityName: "CDRegressionLog")
-        let cutoffDate = Calendar.current.date(byAdding: .day, value: -days, to: Date()) ?? Date()
+        let cutoffDate = Date.daysAgo(days)
         request.predicate = NSPredicate(format: "occurredAt >= %@", cutoffDate as CVarArg)
         request.sortDescriptors = [NSSortDescriptor(key: "occurredAt", ascending: false)]
 
-        var results: [CDRegressionLog] = []
+        nonisolated(unsafe) var results: [CDRegressionLog] = []
         context.performAndWait {
             do {
                 results = try context.fetch(request)
@@ -141,7 +141,7 @@ extension CDRegressionLog {
         request.predicate = NSPredicate(format: "recoveredAt == nil")
         request.sortDescriptors = [NSSortDescriptor(key: "occurredAt", ascending: false)]
 
-        var results: [CDRegressionLog] = []
+        nonisolated(unsafe) var results: [CDRegressionLog] = []
         context.performAndWait {
             do {
                 results = try context.fetch(request)
@@ -158,7 +158,7 @@ extension CDRegressionLog {
         request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
         request.fetchLimit = 1
 
-        var exists = false
+        nonisolated(unsafe) var exists = false
         context.performAndWait {
             do {
                 let count = try context.count(for: request)
