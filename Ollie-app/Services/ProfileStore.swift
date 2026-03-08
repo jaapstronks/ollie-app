@@ -347,8 +347,7 @@ class ProfileStore: ObservableObject {
         // Link any orphaned events to the first profile
         migrateOrphanedEventsIfNeeded()
 
-        // Ensure current user exists in household members
-        ensureCurrentUserExists()
+        // Note: User identity is now handled by UserIdentityStore, not ProfileStore
     }
 
     /// Link orphaned events (without profile relationship) to the first profile
@@ -597,6 +596,24 @@ class ProfileStore: ObservableObject {
     /// Get a profile by ID
     func profile(for id: UUID) -> PuppyProfile? {
         profiles.first { $0.id == id }
+    }
+
+    // MARK: - Partner Activity Tracking
+
+    /// Key for storing last seen partner activity timestamp
+    private var partnerActivityKey: String {
+        guard let id = activeProfileId else { return "lastSeenPartnerActivity" }
+        return "lastSeenPartnerActivity.\(id.uuidString)"
+    }
+
+    /// Timestamp when partner activity was last seen/dismissed
+    var lastSeenPartnerActivityTimestamp: Date? {
+        UserDefaults.standard.object(forKey: partnerActivityKey) as? Date
+    }
+
+    /// Mark partner activity as seen (dismiss the card)
+    func markPartnerActivitySeen() {
+        UserDefaults.standard.set(Date(), forKey: partnerActivityKey)
     }
 }
 

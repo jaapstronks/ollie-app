@@ -91,9 +91,12 @@ struct AISocializationGuidanceCard: View {
         isLoading = true
         defer { isLoading = false }
 
+        // Socialization guidance needs 14 days of history for exposure frequency
+        let recentEvents = eventStore.getEvents(from: Date.daysAgo(14), to: Date())
+
         let result = await AI.requestSocializationGuidance(
             profile: profile,
-            events: eventStore.events
+            events: recentEvents
         )
 
         switch result {

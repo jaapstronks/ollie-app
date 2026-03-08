@@ -228,6 +228,14 @@ final class AIOrchestrator {
     func registerSocializationProgressProvider(_ provider: @escaping (PuppyProfile) -> SocializationProgress?) {
         contextBuilder.registerSocializationProgressProvider(provider)
     }
+
+    func registerBehaviorInterventionProvider(_ provider: @escaping () -> [BehaviorIntervention]) {
+        contextBuilder.registerBehaviorInterventionProvider(provider)
+    }
+
+    func registerSentimentStateProvider(_ provider: @escaping () -> SentimentState?) {
+        contextBuilder.registerSentimentStateProvider(provider)
+    }
 }
 
 // MARK: - Private Helpers
@@ -443,7 +451,8 @@ private extension Date {
 extension AIOrchestrator {
 
     /// Test result for new AI surfaces
-    struct NewAITestResult {
+    struct NewAITestResult: Identifiable {
+        let id: UUID = UUID()
         let surface: AISurface
         let timestamp: Date
         let latencyMs: Int

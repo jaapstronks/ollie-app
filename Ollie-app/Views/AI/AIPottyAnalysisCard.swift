@@ -104,9 +104,12 @@ struct AIPottyAnalysisCard: View {
         isLoading = true
         defer { isLoading = false }
 
+        // Potty analysis needs 14 days of history for gap patterns and streaks
+        let recentEvents = eventStore.getEvents(from: Date.daysAgo(14), to: Date())
+
         let result = await AI.requestPottyAnalysis(
             profile: profile,
-            events: eventStore.events,
+            events: recentEvents,
             prediction: prediction,
             gapStats: gapStats
         )

@@ -91,12 +91,7 @@ struct AITrainingGuidanceCard: View {
                         .font(.caption)
                         .foregroundStyle(.tertiary)
                     ForEach(warmup, id: \.self) { skillId in
-                        Text(skillDisplayName(skillId))
-                            .font(.caption)
-                            .padding(.horizontal, 8)
-                            .padding(.vertical, 3)
-                            .background(Color.purple.opacity(0.15))
-                            .clipShape(Capsule())
+                        CapsuleBadge(skillDisplayName(skillId), color: .purple, style: .tinted)
                     }
                 }
             }
@@ -122,9 +117,12 @@ struct AITrainingGuidanceCard: View {
         isLoading = true
         defer { isLoading = false }
 
+        // Training guidance needs 30 days of history for pattern analysis
+        let recentEvents = eventStore.getEvents(from: Date.daysAgo(30), to: Date())
+
         let result = await AI.requestTrainingGuidance(
             profile: profile,
-            events: eventStore.events
+            events: recentEvents
         )
 
         switch result {

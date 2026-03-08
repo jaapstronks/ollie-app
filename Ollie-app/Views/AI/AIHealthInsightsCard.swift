@@ -97,9 +97,12 @@ struct AIHealthInsightsCard: View {
         isLoading = true
         defer { isLoading = false }
 
+        // Health insights need 30 days of history for weight trends and patterns
+        let recentEvents = eventStore.getEvents(from: Date.daysAgo(30), to: Date())
+
         let result = await AI.requestHealthInsights(
             profile: profile,
-            events: eventStore.events
+            events: recentEvents
         )
 
         switch result {

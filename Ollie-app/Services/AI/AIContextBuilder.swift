@@ -25,6 +25,8 @@ final class AIContextBuilder {
     private var skillProgressProvider: (() -> [SkillProgress])?
     private var regressionLogProvider: (() -> [RegressionLogEntry])?
     private var socializationProgressProvider: ((PuppyProfile) -> SocializationProgress?)?
+    private var behaviorInterventionProvider: (() -> [BehaviorIntervention])?
+    private var sentimentStateProvider: (() -> SentimentState?)?
 
     /// Initialize with optional stores.
     /// If stores are not provided, context building will return empty/default components.
@@ -51,6 +53,16 @@ final class AIContextBuilder {
     /// Register a provider for socialization progress data
     func registerSocializationProgressProvider(_ provider: @escaping (PuppyProfile) -> SocializationProgress?) {
         self.socializationProgressProvider = provider
+    }
+
+    /// Register a provider for behavior intervention data
+    func registerBehaviorInterventionProvider(_ provider: @escaping () -> [BehaviorIntervention]) {
+        self.behaviorInterventionProvider = provider
+    }
+
+    /// Register a provider for sentiment state data
+    func registerSentimentStateProvider(_ provider: @escaping () -> SentimentState?) {
+        self.sentimentStateProvider = provider
     }
 
     // MARK: - Build Context
@@ -121,7 +133,12 @@ final class AIContextBuilder {
             return AnyCodable(DogIdentityContext(profile: profile))
 
         case .household:
-            let context = HouseholdContext(profile: profile)
+            // Access current user record ID on main actor for HouseholdContext
+            // Use nonisolated read from cached value
+            let context = HouseholdContext(
+                profile: profile,
+                currentUserRecordID: UserIdentityStore.cachedCurrentUserRecordID
+            )
             // Only include if there are household members
             return context.memberCount > 0 ? AnyCodable(context) : nil
 
@@ -163,6 +180,17 @@ final class AIContextBuilder {
 
         case .health:
             return AnyCodable(HealthContext(profile: profile, events: events))
+
+        case .sentiment:
+            // Build sentiment context from provider if available
+            if let state = sentimentStateProvider?() {
+                return AnyCodable(UserSentimentContext(state: state))
+            }
+            return nil
+
+        case .behavior:
+            let interventions = behaviorInterventionProvider?() ?? []
+            return AnyCodable(BehaviorChallengesContext(events: events, interventions: interventions))
         }
     }
 

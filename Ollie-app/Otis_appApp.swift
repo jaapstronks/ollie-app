@@ -151,6 +151,9 @@ private extension OtisApp {
         // Process any pending CloudKit share
         await CloudKitShareHandler.processPendingShare(profileStore: profileStore)
 
+        // Refresh participant info from CloudKit shares (for partner activity cards)
+        await ParticipantResolver.shared.refreshFromCloudKit()
+
         // Seed default milestones
         milestoneStore.seedDefaultMilestonesIfNeeded()
 
@@ -192,6 +195,7 @@ private extension OtisApp {
             await spotStore.forceSync()
             await medicationStore.forceSync()
             await CloudKitService.shared.checkShareAccessStatus()
+            await ParticipantResolver.shared.refreshFromCloudKit()
         }
 
         WatchSyncService.shared.syncToWatch()
