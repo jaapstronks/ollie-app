@@ -26,6 +26,7 @@ struct TodayView: View {
     @State private var showProfilePicker = false
     @State private var dismissedCrateNudgeDate: Date?
     @State private var dismissedWalkTargetNudgeDate: Date?
+    @State private var dismissedGroomingNudgeDate: Date?
     @State private var showMonthRecapSheet = false
     @State private var showYearRecapSheet = false
     @State private var showVetTipsSheet = false
@@ -43,6 +44,7 @@ struct TodayView: View {
     @EnvironmentObject private var eventStore: EventStore
     @EnvironmentObject private var milestoneStore: MilestoneStore
     @EnvironmentObject private var weightStore: WeightStore
+    @EnvironmentObject private var routineStore: RoutineStore
 
     // Trial touchpoint state
     @ObservedObject private var trialManager = TrialManager.shared
@@ -71,6 +73,17 @@ struct TodayView: View {
             walkStats: viewModel.walkStats,
             dismissedDate: dismissedWalkTargetNudgeDate
         )
+    }
+
+    /// Overdue grooming activities to show in nudge card
+    /// Returns empty if dismissed today
+    private var overdueGroomingActivities: [GroomingActivity] {
+        // Check if dismissed today
+        if let dismissedDate = dismissedGroomingNudgeDate,
+           Calendar.current.isDateInToday(dismissedDate) {
+            return []
+        }
+        return routineStore.overdueGroomingActivities
     }
 
     /// Whether to show the potty status card based on crate training mastery and urgency
@@ -440,14 +453,22 @@ struct TodayView: View {
             shouldShowCrateNudge: shouldShowCrateNudge,
             shouldShowWalkTargetNudge: shouldShowWalkTargetNudge,
             shouldShowAppointmentNudgeNapContext: shouldShowAppointmentNudgeNapContext,
+            overdueGroomingActivities: overdueGroomingActivities,
             onNavigateToTrain: onNavigateToTrain,
             onDismissCrateNudge: { dismissedCrateNudgeDate = Date() },
             onDismissWalkTargetNudge: { dismissedWalkTargetNudgeDate = Date() },
+            onDismissGroomingNudge: { dismissedGroomingNudgeDate = Date() },
             onDismissAppointmentNudge: { dismissAppointmentNudge(for: $0) },
             onMarkAppointmentDone: { candidate in
                 milestoneToComplete = candidate.milestone
             },
             onCreateAppointmentPrefill: { createAppointmentPrefill(for: $0) },
+            onMarkGroomingComplete: { activity in
+                routineStore.markGroomingCompleted(activity)
+            },
+            onViewAllGrooming: {
+                viewModel.sheetCoordinator.presentSheet(.groomingSettings)
+            },
             onShowMonthRecap: { showMonthRecapSheet = true },
             onShowYearRecap: { showYearRecapSheet = true }
         )

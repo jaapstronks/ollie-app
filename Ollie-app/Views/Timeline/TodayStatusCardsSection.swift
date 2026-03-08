@@ -18,14 +18,18 @@ struct TodayStatusCardsSection: View {
     let shouldShowCrateNudge: Bool
     let shouldShowWalkTargetNudge: Bool
     let shouldShowAppointmentNudgeNapContext: Bool
+    let overdueGroomingActivities: [GroomingActivity]
     var onNavigateToTrain: (() -> Void)?
 
     // Nudge dismissal callbacks
     var onDismissCrateNudge: () -> Void
     var onDismissWalkTargetNudge: () -> Void
+    var onDismissGroomingNudge: () -> Void
     var onDismissAppointmentNudge: (String) -> Void
     var onMarkAppointmentDone: (AppointmentNudgeCandidate) -> Void
     var onCreateAppointmentPrefill: (AppointmentNudgeCandidate) -> AppointmentPrefill?
+    var onMarkGroomingComplete: (GroomingActivity) -> Void
+    var onViewAllGrooming: () -> Void
 
     // Recap callbacks
     var onShowMonthRecap: () -> Void
@@ -82,6 +86,9 @@ struct TodayStatusCardsSection: View {
 
             // Walk target nudge card
             walkTargetNudgeCard(combinedState)
+
+            // Grooming nudge card
+            groomingNudgeCard(combinedState)
 
             // Appointment nudge card
             appointmentNudgeCard(combinedState)
@@ -338,6 +345,22 @@ private extension TodayStatusCardsSection {
                 onDismiss: onDismissWalkTargetNudge
             )
             .animatedAppear(delay: 0.025)
+        }
+    }
+
+    @ViewBuilder
+    func groomingNudgeCard(_ combinedState: CombinedSleepPottyState) -> some View {
+        if !overdueGroomingActivities.isEmpty && !combinedState.shouldShowFirstRunCard {
+            GroomingNudgeCard(
+                activities: overdueGroomingActivities,
+                puppyName: viewModel.puppyName,
+                onMarkComplete: { activity in
+                    onMarkGroomingComplete(activity)
+                },
+                onDismiss: onDismissGroomingNudge,
+                onViewAll: onViewAllGrooming
+            )
+            .animatedAppear(delay: 0.028)
         }
     }
 

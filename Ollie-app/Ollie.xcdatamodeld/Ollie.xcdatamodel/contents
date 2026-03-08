@@ -20,6 +20,7 @@
         <attribute name="walkScheduleData" optional="YES" attributeType="Binary"/>
         <attribute name="householdMembersData" optional="YES" attributeType="Binary"/>
         <attribute name="lastAcknowledgedPhase" optional="YES" attributeType="String"/>
+        <attribute name="coatType" optional="YES" attributeType="String"/>
         <relationship name="appointments" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDDogAppointment" inverseName="profile" inverseEntity="CDDogAppointment"/>
         <relationship name="documents" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDDocument" inverseName="profile" inverseEntity="CDDocument"/>
         <relationship name="events" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDPuppyEvent" inverseName="profile" inverseEntity="CDPuppyEvent"/>
@@ -69,6 +70,7 @@
         <attribute name="failedReps" optional="YES" attributeType="Integer 32" usesScalarValueType="NO"/>
         <attribute name="trainingContext" optional="YES" attributeType="String"/>
         <attribute name="skillPhase" optional="YES" attributeType="String"/>
+        <attribute name="likesData" optional="YES" attributeType="Binary"/>
         <relationship name="profile" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDPuppyProfile" inverseName="events" inverseEntity="CDPuppyProfile"/>
         <fetchIndex name="byTimeIndex">
             <fetchIndexElement property="time" type="Binary" order="descending"/>

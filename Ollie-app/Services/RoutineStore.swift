@@ -351,15 +351,51 @@ final class RoutineStore: BaseStore, ProfileAccessible {
     /// Seed default grooming activities if none exist
     func seedDefaultGroomingActivitiesIfNeeded() {
         guard groomingActivities.isEmpty else { return }
+        guard let cdProfile = getCurrentProfile() else { return }
+
+        // Get coat type from profile (effectiveCoatType is on PuppyProfile, not CDPuppyProfile)
+        // First try explicit coatType, then breed-based suggestion
+        let coatType: CoatType?
+        if let coatTypeString = cdProfile.coatType {
+            coatType = CoatType(rawValue: coatTypeString)
+        } else {
+            coatType = CoatType.suggested(for: cdProfile.breed)
+        }
+
+        // Use coat-type-specific defaults if available
+        let defaults: [GroomingActivity]
+        if let coatType = coatType {
+            defaults = GroomingActivity.defaultActivities(for: coatType)
+        } else {
+            defaults = GroomingActivity.defaultActivities()
+        }
+
+        for activity in defaults {
+            _ = CDGroomingActivity.create(from: activity, profile: cdProfile, in: viewContext)
+        }
+
+        performSave(operation: "Seeded default grooming activities") {
+            performInitialLoad()
+        }
+    }
+
+    /// Reset grooming activities to coat-type defaults
+    /// Useful when user changes coat type
+    func resetGroomingActivitiesToDefaults(for coatType: CoatType) {
         guard let profile = getCurrentProfile() else { return }
 
-        let defaults = GroomingActivity.defaultActivities()
+        // Delete all existing grooming activities
+        for cdActivity in CDGroomingActivity.fetchActivities(for: profile, in: viewContext) {
+            viewContext.delete(cdActivity)
+        }
 
+        // Create new defaults for the coat type
+        let defaults = GroomingActivity.defaultActivities(for: coatType)
         for activity in defaults {
             _ = CDGroomingActivity.create(from: activity, profile: profile, in: viewContext)
         }
 
-        performSave(operation: "Seeded default grooming activities") {
+        performSave(operation: "Reset grooming to \(coatType.label) defaults") {
             performInitialLoad()
         }
     }

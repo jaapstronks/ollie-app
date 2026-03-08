@@ -225,36 +225,33 @@ struct DogSettingsCard: View {
                 )
             }
 
-            // Household Members link (only for active profile)
+            Divider()
+                .padding(.leading, 52)
+
+            // Grooming & Care link
+            NavigationLink {
+                GroomingSettingsView(profileStore: profileStore, profileId: profile.id)
+            } label: {
+                settingsRow(
+                    icon: "comb.fill",
+                    iconColor: .cyan,
+                    title: Strings.Grooming.schedule
+                )
+            }
+
+            // Your Profile link (only for active profile)
             if isActive {
                 Divider()
                     .padding(.leading, 52)
 
                 NavigationLink {
-                    HouseholdSettingsView(profileStore: profileStore)
+                    UserProfileSettingsView(userIdentityStore: .shared)
                 } label: {
-                    HStack(spacing: 12) {
-                        Image(systemName: "person.2.fill")
-                            .font(.system(size: 18))
-                            .foregroundColor(.purple)
-                            .frame(width: 28)
-
-                        Text(Strings.Household.title)
-                            .font(.subheadline)
-
-                        Spacer()
-
-                        if let memberCount = profileStore.profile?.householdMembers.members.count, memberCount > 0 {
-                            Text("\(memberCount)")
-                                .font(.subheadline)
-                                .foregroundStyle(.secondary)
-                        }
-
-                        ChevronIcon(style: .small)
-                    }
-                    .padding(.horizontal)
-                    .padding(.vertical, 12)
-                    .contentShape(Rectangle())
+                    settingsRow(
+                        icon: "person.fill",
+                        iconColor: .purple,
+                        title: Strings.UserProfile.title
+                    )
                 }
             }
 

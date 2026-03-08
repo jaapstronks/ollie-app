@@ -76,6 +76,8 @@ final class SheetCoordinator: ObservableObject {
         case symptomLog(conditionId: UUID? = nil)
         // Senior wellness sheets (Brief 05)
         case seniorMobility
+        // Grooming/care settings sheet (Brief 09)
+        case groomingSettings
 
         var id: String {
             switch self {
@@ -116,6 +118,7 @@ final class SheetCoordinator: ObservableObject {
             case .medicationLog: return "medicationLog"
             case .symptomLog(let conditionId): return "symptomLog-\(conditionId?.uuidString ?? "general")"
             case .seniorMobility: return "seniorMobility"
+            case .groomingSettings: return "groomingSettings"
             }
         }
     }

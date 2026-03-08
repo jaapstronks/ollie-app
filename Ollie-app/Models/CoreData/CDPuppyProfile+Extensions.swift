@@ -26,6 +26,7 @@ extension CDPuppyProfile {
         self.profilePhotoFilename = profile.profilePhotoFilename
         self.passedDate = profile.passedDate
         self.legacyPremiumUnlocked = profile.legacyPremiumUnlocked
+        self.coatType = profile.coatType?.rawValue
 
         // Encode nested configs as JSON Data
         let encoder = JSONEncoder()
@@ -37,7 +38,7 @@ extension CDPuppyProfile {
         self.walkScheduleData = try? encoder.encode(profile.walkSchedule)
         self.notificationSettingsData = try? encoder.encode(profile.notificationSettings)
         self.medicationScheduleData = try? encoder.encode(profile.medicationSchedule)
-        self.householdMembersData = try? encoder.encode(profile.householdMembers)
+        // Note: householdMembersData no longer used - identity is now per-device via UserIdentityStore
     }
 
     /// Create a new CDPuppyProfile from a PuppyProfile struct
@@ -114,13 +115,7 @@ extension CDPuppyProfile {
             medicationSchedule = MedicationSchedule.empty()
         }
 
-        let householdMembers: HouseholdMembers
-        if let data = self.householdMembersData,
-           let decoded = try? decoder.decode(HouseholdMembers.self, from: data) {
-            householdMembers = decoded
-        } else {
-            householdMembers = HouseholdMembers.empty()
-        }
+        // Note: householdMembers no longer used - identity is now per-device via UserIdentityStore
 
         // Parse lastAcknowledgedPhase from stored string
         let lastAcknowledgedPhase: LifecyclePhase?
@@ -128,6 +123,14 @@ extension CDPuppyProfile {
             lastAcknowledgedPhase = LifecyclePhase(rawValue: phaseString)
         } else {
             lastAcknowledgedPhase = nil
+        }
+
+        // Parse coatType from stored string
+        let coatType: CoatType?
+        if let coatTypeString = self.coatType {
+            coatType = CoatType(rawValue: coatTypeString)
+        } else {
+            coatType = nil
         }
 
         return PuppyProfile(
@@ -144,7 +147,7 @@ extension CDPuppyProfile {
             walkSchedule: walkSchedule,
             notificationSettings: notificationSettings,
             medicationSchedule: medicationSchedule,
-            householdMembers: householdMembers,
+            coatType: coatType,
             modifiedAt: modifiedAt,
             lastAcknowledgedPhase: lastAcknowledgedPhase,
             profilePhotoFilename: self.profilePhotoFilename,

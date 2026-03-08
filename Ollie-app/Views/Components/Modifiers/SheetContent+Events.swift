@@ -76,8 +76,7 @@ extension SheetCoordinator.ActiveSheet {
                 onDelete: {
                     context.viewModel.deleteEvent(event)
                     context.sheetCoordinator.dismissSheet()
-                },
-                householdMembers: context.profile?.householdMembers
+                }
             )
 
         case .medicationLog:
@@ -121,6 +120,11 @@ extension SheetCoordinator.ActiveSheet {
                 }
             )
             .environmentObject(context.viewModel.profileStore)
+
+        case .groomingSettings:
+            NavigationStack {
+                GroomingSettingsView(profileStore: context.viewModel.profileStore)
+            }
 
         default:
             EmptyView()

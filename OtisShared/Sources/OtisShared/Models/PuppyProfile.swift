@@ -57,10 +57,11 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
     public var notificationSettings: NotificationSettings
     public var medicationSchedule: MedicationSchedule
     public var webhookConfig: WebhookConfig
-    public var householdMembers: HouseholdMembers
+    // Note: householdMembers removed - replaced by CloudKit-based UserIdentity (see UserIdentityStore)
     public var behaviorInterventions: [BehaviorIntervention]
     public var healthConditions: [HealthCondition]
     public var allergies: [Allergy]
+    public var coatType: CoatType?
     public var modifiedAt: Date
 
     /// Last lifecycle phase the user acknowledged via transition sheet
@@ -283,7 +284,6 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
             notificationSettings: NotificationSettings.defaultSettings(),
             medicationSchedule: MedicationSchedule.empty(),
             webhookConfig: WebhookConfig.defaultConfig(),
-            householdMembers: HouseholdMembers.empty(),
             healthConditions: [],
             allergies: [],
             modifiedAt: Date(),
@@ -309,10 +309,10 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
         notificationSettings: NotificationSettings,
         medicationSchedule: MedicationSchedule = MedicationSchedule.empty(),
         webhookConfig: WebhookConfig = WebhookConfig.defaultConfig(),
-        householdMembers: HouseholdMembers = HouseholdMembers.empty(),
         behaviorInterventions: [BehaviorIntervention] = [],
         healthConditions: [HealthCondition] = [],
         allergies: [Allergy] = [],
+        coatType: CoatType? = nil,
         modifiedAt: Date? = nil,
         lastAcknowledgedPhase: LifecyclePhase? = nil,
         profilePhotoFilename: String? = nil,
@@ -335,10 +335,10 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
         self.notificationSettings = notificationSettings
         self.medicationSchedule = medicationSchedule
         self.webhookConfig = webhookConfig
-        self.householdMembers = householdMembers
         self.behaviorInterventions = behaviorInterventions
         self.healthConditions = healthConditions
         self.allergies = allergies
+        self.coatType = coatType
         self.modifiedAt = modifiedAt ?? Date()
         self.lastAcknowledgedPhase = lastAcknowledgedPhase
         self.profilePhotoFilename = profilePhotoFilename
@@ -354,13 +354,14 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
         case name, breed, breedId, birthDate, homeDate, sizeCategory, gender
         case mealSchedule, exerciseConfig, predictionConfig
         case walkSchedule, notificationSettings, medicationSchedule, webhookConfig
-        case householdMembers, behaviorInterventions, healthConditions, allergies
+        case behaviorInterventions, healthConditions, allergies, coatType
         case modifiedAt
         case lastAcknowledgedPhase
         case profilePhotoFilename
         case passedDate
         // Legacy fields for migration (read old values)
         case freeStartDate, isPremiumUnlocked
+        case householdMembers // Legacy - kept for reading old data but no longer used
         // New field
         case legacyPremiumUnlocked
     }
@@ -382,10 +383,13 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
         notificationSettings = try container.decodeIfPresent(NotificationSettings.self, forKey: .notificationSettings) ?? NotificationSettings.defaultSettings()
         medicationSchedule = try container.decodeIfPresent(MedicationSchedule.self, forKey: .medicationSchedule) ?? MedicationSchedule.empty()
         webhookConfig = try container.decodeIfPresent(WebhookConfig.self, forKey: .webhookConfig) ?? WebhookConfig.defaultConfig()
-        householdMembers = try container.decodeIfPresent(HouseholdMembers.self, forKey: .householdMembers) ?? HouseholdMembers.empty()
+        // Note: householdMembers is no longer used - UserIdentity is now stored per-device
+        // We still decode it for backwards compatibility but ignore the value
+        _ = try? container.decodeIfPresent(HouseholdMembers.self, forKey: .householdMembers)
         behaviorInterventions = try container.decodeIfPresent([BehaviorIntervention].self, forKey: .behaviorInterventions) ?? []
         healthConditions = try container.decodeIfPresent([HealthCondition].self, forKey: .healthConditions) ?? []
         allergies = try container.decodeIfPresent([Allergy].self, forKey: .allergies) ?? []
+        coatType = try container.decodeIfPresent(CoatType.self, forKey: .coatType)
         modifiedAt = try container.decodeIfPresent(Date.self, forKey: .modifiedAt) ?? Date()
         lastAcknowledgedPhase = try container.decodeIfPresent(LifecyclePhase.self, forKey: .lastAcknowledgedPhase)
         profilePhotoFilename = try container.decodeIfPresent(String.self, forKey: .profilePhotoFilename)
@@ -419,10 +423,11 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
         try container.encode(notificationSettings, forKey: .notificationSettings)
         try container.encode(medicationSchedule, forKey: .medicationSchedule)
         try container.encode(webhookConfig, forKey: .webhookConfig)
-        try container.encode(householdMembers, forKey: .householdMembers)
+        // Note: householdMembers no longer encoded - replaced by CloudKit-based UserIdentity
         try container.encode(behaviorInterventions, forKey: .behaviorInterventions)
         try container.encode(healthConditions, forKey: .healthConditions)
         try container.encode(allergies, forKey: .allergies)
+        try container.encodeIfPresent(coatType, forKey: .coatType)
         try container.encode(modifiedAt, forKey: .modifiedAt)
         try container.encodeIfPresent(lastAcknowledgedPhase, forKey: .lastAcknowledgedPhase)
         try container.encodeIfPresent(profilePhotoFilename, forKey: .profilePhotoFilename)
@@ -499,5 +504,17 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
     /// Screenings that are due based on age
     public var dueScreenings: [ConditionRisk] {
         BreedHealthRisk.screeningsDue(for: breed, sizeCategory: sizeCategory, ageMonths: ageInMonths)
+    }
+
+    // MARK: - Coat Type
+
+    /// Suggested coat type based on breed name
+    public var suggestedCoatType: CoatType? {
+        CoatType.suggested(for: breed)
+    }
+
+    /// Effective coat type (explicit or suggested from breed)
+    public var effectiveCoatType: CoatType? {
+        coatType ?? suggestedCoatType
     }
 }
