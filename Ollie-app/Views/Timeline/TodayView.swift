@@ -27,6 +27,7 @@ struct TodayView: View {
     @State private var dismissedCrateNudgeDate: Date?
     @State private var dismissedWalkTargetNudgeDate: Date?
     @State private var showMonthRecapSheet = false
+    @State private var showYearRecapSheet = false
     @State private var showVetTipsSheet = false
     @State private var showVisitSummary = false
 
@@ -40,6 +41,7 @@ struct TodayView: View {
     @EnvironmentObject private var foodRecallService: FoodRecallService
     @EnvironmentObject private var eventStore: EventStore
     @EnvironmentObject private var milestoneStore: MilestoneStore
+    @EnvironmentObject private var weightStore: WeightStore
 
     // Trial touchpoint state
     @ObservedObject private var trialManager = TrialManager.shared
@@ -206,7 +208,6 @@ struct TodayView: View {
             if viewModel.isShowingToday, let partnerSummary = viewModel.partnerActivitySummary {
                 PartnerActivitySummaryCard(
                     summary: partnerSummary,
-                    householdMembers: viewModel.householdMembersContainer,
                     onDismiss: { viewModel.dismissPartnerActivitySummary() }
                 )
                 .padding(.horizontal)
@@ -395,6 +396,16 @@ struct TodayView: View {
                 onDismiss: { showMonthRecapSheet = false }
             )
         }
+        .sheet(isPresented: $showYearRecapSheet) {
+            YearRecapView(
+                viewModel: YearRecapViewModel(
+                    eventStore: eventStore,
+                    profileStore: viewModel.profileStore,
+                    weightStore: weightStore
+                ),
+                onDismiss: { showYearRecapSheet = false }
+            )
+        }
         .sheet(isPresented: $showVetTipsSheet) {
             if let appointment = upcomingVetAppointment {
                 VetVisitTipsSheet(
@@ -433,7 +444,8 @@ struct TodayView: View {
             onDismissWalkTargetNudge: { dismissedWalkTargetNudgeDate = Date() },
             onDismissAppointmentNudge: { dismissAppointmentNudge(for: $0) },
             onCreateAppointmentPrefill: { createAppointmentPrefill(for: $0) },
-            onShowMonthRecap: { showMonthRecapSheet = true }
+            onShowMonthRecap: { showMonthRecapSheet = true },
+            onShowYearRecap: { showYearRecapSheet = true }
         )
     }
 

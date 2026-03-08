@@ -26,8 +26,9 @@ struct TodayStatusCardsSection: View {
     var onDismissAppointmentNudge: (String) -> Void
     var onCreateAppointmentPrefill: (AppointmentNudgeCandidate) -> AppointmentPrefill?
 
-    // Month recap callback
+    // Recap callbacks
     var onShowMonthRecap: () -> Void
+    var onShowYearRecap: () -> Void
 
     @ObservedObject private var trialManager = TrialManager.shared
 
@@ -53,6 +54,9 @@ struct TodayStatusCardsSection: View {
 
             // Monthly recap tease card
             monthRecapTeaseCard(combinedState)
+
+            // Year in review tease card (Dec 15 - Jan 15)
+            yearRecapTeaseCard(combinedState)
 
             // Stale logging banner
             staleLoggingBanner(combinedState)
@@ -184,6 +188,30 @@ private extension TodayStatusCardsSection {
                     onTap: onShowMonthRecap
                 )
                 .animatedAppear(delay: 0.045)
+            }
+        }
+    }
+
+    @ViewBuilder
+    func yearRecapTeaseCard(_ combinedState: CombinedSleepPottyState) -> some View {
+        if !combinedState.shouldShowFirstRunCard,
+           YearRecapViewModel.shouldShowRecapCard(),
+           let profile = viewModel.profileStore.profile {
+            let recapYear = YearRecapViewModel.recapYear()
+            let yearStats = YearCalculations.calculateStats(
+                from: YearCalculations.eventsInYear(recapYear, from: viewModel.eventStore.events)
+            )
+            let photoEvents = YearCalculations.photoEvents(for: recapYear, from: viewModel.eventStore.events)
+
+            if yearStats.totalWalks > 0 || yearStats.photoCount > 0 {
+                YearRecapTeaseCard(
+                    puppyName: profile.name,
+                    year: recapYear,
+                    photoEvents: photoEvents,
+                    stats: yearStats,
+                    onTap: onShowYearRecap
+                )
+                .animatedAppear(delay: 0.05)
             }
         }
     }
