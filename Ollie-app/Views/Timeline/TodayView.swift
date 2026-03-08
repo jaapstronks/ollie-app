@@ -394,7 +394,8 @@ struct TodayView: View {
                 onAddDog: {
                     // Dismiss profile picker first, then trigger onboarding
                     showProfilePicker = false
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    Task { @MainActor in
+                        try? await Task.sleep(for: .seconds(0.3))
                         onAddDog?()
                     }
                 },
@@ -427,7 +428,8 @@ struct TodayView: View {
                     tips: vetVisitTips,
                     onPrepareSummary: {
                         showVetTipsSheet = false
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        Task { @MainActor in
+                            try? await Task.sleep(for: .seconds(0.3))
                             showVisitSummary = true
                         }
                     }
@@ -467,7 +469,7 @@ struct TodayView: View {
                 routineStore.markGroomingCompleted(activity)
             },
             onViewAllGrooming: {
-                viewModel.sheetCoordinator.presentSheet(.groomingSettings)
+                viewModel.sheetCoordinator.presentSheet(.groomingQuickLog())
             },
             onShowMonthRecap: { showMonthRecapSheet = true },
             onShowYearRecap: { showYearRecapSheet = true }

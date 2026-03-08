@@ -51,7 +51,7 @@ extension SheetCoordinator.ActiveSheet {
             return .guide
 
         // Placeholder sheets (handled elsewhere)
-        case .weightLog, .trainingLog, .socializationLog, .settings, .profileEdit, .notificationSettings:
+        case .weightLog, .trainingLog, .socializationLog, .settings, .profileEdit, .notificationSettings, .groomingSettings, .groomingQuickLog:
             return .placeholder
         }
     }

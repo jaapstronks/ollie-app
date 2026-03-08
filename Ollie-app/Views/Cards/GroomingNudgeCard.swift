@@ -182,34 +182,6 @@ struct GroomingNudgeCard: View {
     }
 }
 
-// MARK: - Strings Extension
-
-extension Strings {
-    enum GroomingNudge {
-        static func overdueTitle(activity: String) -> String {
-            String(localized: "\(activity) is overdue", table: "Routines")
-        }
-
-        static func multipleOverdueTitle(count: Int) -> String {
-            String(localized: "\(count) grooming tasks overdue", table: "Routines")
-        }
-
-        static func dueTitle(activity: String) -> String {
-            String(localized: "Time for \(activity)?", table: "Routines")
-        }
-
-        static func overdueSubtitle(days: Int, name: String) -> String {
-            String(localized: "\(days) days past due for \(name)", table: "Routines")
-        }
-
-        static let lastDoneSubtitle = String(localized: "Last done", table: "Routines")
-        static func lastDoneSubtitle(date: String) -> String {
-            String(localized: "Last done \(date)", table: "Routines")
-        }
-        static let neverDoneSubtitle = String(localized: "Never logged", table: "Routines")
-    }
-}
-
 // MARK: - Preview
 
 #Preview("Single Overdue") {

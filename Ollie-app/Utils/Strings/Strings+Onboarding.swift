@@ -33,6 +33,18 @@ extension Strings {
         static let alreadyInSubtitle = String(localized: "Just start tracking. Patterns emerge fast.", table: table)
         static let getStarted = String(localized: "Get Started", table: table)
 
+        // Join existing profile
+        static let joiningTitle = String(localized: "Joining someone else's puppy?", table: table)
+        static let joiningSubtitle = String(localized: "Wait for the owner to share access with you.", table: table)
+        static let joinExisting = String(localized: "Join Existing Profile", table: table)
+
+        // Awaiting invite view
+        static let awaitingInviteTitle = String(localized: "Waiting for an invite", table: table)
+        static let awaitingInviteDescription = String(localized: "Ask the puppy owner to share access with you from their Settings.", table: table)
+        static let awaitingInviteHint = String(localized: "Once they share, you'll automatically get access.", table: table)
+        static let createOwnProfile = String(localized: "Create my own profile instead", table: table)
+        static let waiting = String(localized: "Waiting...", table: table)
+
         static let nameQuestion = String(localized: "What's your puppy's name?", table: table)
         static let nameSubtitle = String(localized: "We'll use this in logs and reminders. You can edit it any time.", table: table)
         static let namePlaceholder = String(localized: "Name", table: table)
@@ -50,6 +62,12 @@ extension Strings {
             String(localized: "Search to find more breeds (\(count) total)", table: table)
         }
         static let skipForNow = String(localized: "Skip for now", table: table)
+
+        // Coat type step
+        static func coatTypeQuestion(name: String) -> String {
+            String(localized: "What type of coat does \(name) have?", table: table)
+        }
+        static let coatTypeSubtitle = String(localized: "This helps us recommend the right grooming schedule.", table: table)
 
         static func birthDateQuestion(name: String) -> String {
             String(localized: "When was \(name) born?", table: table)

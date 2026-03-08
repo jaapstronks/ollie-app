@@ -213,11 +213,8 @@ struct GroomingSettingsView: View {
         profile.coatType = coatType
         profile.modifiedAt = Date()
 
-        if let id = profileId {
-            profileStore.updateProfile(profile, for: id)
-        } else {
-            profileStore.save(profile)
-        }
+        // saveProfile handles both new and existing profiles by ID
+        profileStore.saveProfile(profile)
 
         selectedCoatType = coatType
 
@@ -270,7 +267,7 @@ private struct GroomingActivityRow: View {
             HStack(spacing: 12) {
                 Image(systemName: activity.type.icon)
                     .font(.system(size: 18))
-                    .foregroundStyle(activity.isEnabled ? .otisAccent : .secondary)
+                    .foregroundStyle(activity.isEnabled ? Color.otisAccent : .secondary)
                     .frame(width: 28)
 
                 VStack(alignment: .leading, spacing: 2) {
@@ -369,7 +366,7 @@ private struct CoatTypePickerSheet: View {
                         HStack(spacing: 12) {
                             Image(systemName: coatType.icon)
                                 .font(.system(size: 20))
-                                .foregroundStyle(.otisAccent)
+                                .foregroundStyle(Color.otisAccent)
                                 .frame(width: 32)
 
                             VStack(alignment: .leading, spacing: 4) {
@@ -399,7 +396,7 @@ private struct CoatTypePickerSheet: View {
                             if selectedCoatType == coatType {
                                 Image(systemName: "checkmark")
                                     .font(.subheadline.weight(.semibold))
-                                    .foregroundStyle(.otisAccent)
+                                    .foregroundStyle(Color.otisAccent)
                             }
                         }
                         .padding(.vertical, 4)
@@ -416,26 +413,6 @@ private struct CoatTypePickerSheet: View {
                 }
             }
         }
-    }
-}
-
-// MARK: - Strings Extension
-
-extension Strings.Grooming {
-    static let coatType = String(localized: "Coat Type", table: "Routines")
-    static let selectCoatType = String(localized: "Select Coat Type", table: "Routines")
-    static let notSet = String(localized: "Not set", table: "Routines")
-    static let suggested = String(localized: "Suggested", table: "Routines")
-    static let careTips = String(localized: "Care Tips", table: "Routines")
-    static let noActivities = String(localized: "No grooming activities", table: "Routines")
-    static let setupDefaults = String(localized: "Set Up Defaults", table: "Routines")
-    static let setCoatTypeFirst = String(localized: "Set a coat type to see recommended schedule", table: "Routines")
-    static let resetToDefaults = String(localized: "Reset to Defaults", table: "Routines")
-    static let resetToDefaultsTitle = String(localized: "Reset Grooming Schedule?", table: "Routines")
-    static let resetToDefaultsMessage = String(localized: "This will replace your current grooming schedule with the defaults for your dog's coat type.", table: "Routines")
-
-    static func coatTypeSuggestion(_ coatType: String) -> String {
-        String(localized: "Based on your dog's breed, we suggest \"\(coatType)\" as the coat type.", table: "Routines")
     }
 }
 

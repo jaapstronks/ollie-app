@@ -21,11 +21,15 @@ struct OnboardingView: View {
     // Step state - default to Name step for faster time-to-value
     @State private var currentStep: Int = 1
 
+    // Awaiting invite state (for family members joining existing profile)
+    @AppStorage(UserPreferences.Key.isAwaitingInvite.rawValue) private var isAwaitingInvite = false
+
     // Profile data
     @State private var name: String = ""
     @State private var selectedBreed: Breed? = nil
     @State private var customBreed: String = ""
     @State private var isCustomBreed: Bool = false
+    @State private var selectedCoatType: CoatType? = nil
     @State private var birthDate: Date = Calendar.current.date(byAdding: .month, value: -2, to: Date()) ?? Date()
     @State private var isExpecting: Bool = false  // true = dog hasn't arrived yet
     @State private var homeDate: Date = Date()
@@ -52,6 +56,16 @@ struct OnboardingView: View {
         return ""
     }
 
+    /// Suggested coat type based on selected breed
+    private var suggestedCoatType: CoatType? {
+        CoatType.suggested(for: breedToSave)
+    }
+
+    /// Whether coat type step should be shown (show if breed was selected, skip if custom/unknown)
+    private var shouldShowCoatTypeStep: Bool {
+        selectedBreed != nil || !customBreed.isEmpty
+    }
+
     /// Whether size step should be shown (only for custom breeds)
     private var shouldShowSizeStep: Bool {
         isCustomBreed
@@ -64,33 +78,35 @@ struct OnboardingView: View {
 
     /// Total steps shown in progress bar (excludes welcome, size step when not needed, photo step when expecting, and permission steps)
     /// Welcome step (0) doesn't show progress, permission steps don't show progress
-    /// Steps: Name(1), Breed(2), Birth(3), Gender(4), Status(5), Home(6), [Size(7)], [Photo(8)], Confirm(9)
-    /// Permission steps (10, 11) are not counted in progress bar
+    /// Steps: Name(1), Breed(2), [CoatType(3)], Birth(4), Gender(5), Status(6), Home(7), [Size(8)], [Photo(9)], Confirm(10)
+    /// Permission steps (11, 12, 13, 14) are not counted in progress bar
     private var totalSteps: Int {
         var count = 7  // Base: Name, Breed, Birth, Gender, Status, Home, Confirm
+        if shouldShowCoatTypeStep { count += 1 }
         if shouldShowSizeStep { count += 1 }
         if shouldShowPhotoStep { count += 1 }
         return count
     }
 
     /// Maps the visual step (for progress indicator) to actual step
-    /// Welcome step (0) and permission steps (10, 11, 12) are not shown in progress bar
+    /// Welcome step (0) and permission steps (11+) are not shown in progress bar
     private var visualStep: Int {
-        if currentStep == 0 || currentStep >= 10 {
+        if currentStep == 0 || currentStep >= 11 {
             return -1 // Not shown in progress bar
         }
         var adjustedStep = currentStep - 1
         // Adjust for skipped steps
         var skippedSteps = 0
-        if !shouldShowSizeStep && currentStep >= 7 { skippedSteps += 1 }
-        if !shouldShowPhotoStep && currentStep >= 8 { skippedSteps += 1 }
+        if !shouldShowCoatTypeStep && currentStep >= 3 { skippedSteps += 1 }
+        if !shouldShowSizeStep && currentStep >= 8 { skippedSteps += 1 }
+        if !shouldShowPhotoStep && currentStep >= 9 { skippedSteps += 1 }
         adjustedStep -= skippedSteps
         return adjustedStep
     }
 
     /// Whether to show progress indicator (hidden on welcome step and permission steps)
     private var showProgress: Bool {
-        currentStep > 0 && currentStep < 10
+        currentStep > 0 && currentStep < 11
     }
 
     /// Whether to skip permission steps (skip when adding profile, already granted)
@@ -101,6 +117,28 @@ struct OnboardingView: View {
     // MARK: - Body
 
     var body: some View {
+        // Show awaiting invite view if user chose to join existing profile
+        if isAwaitingInvite && !isAddingProfile {
+            AwaitingInviteView(
+                onCreateOwnProfile: {
+                    isAwaitingInvite = false
+                    currentStep = 0
+                }
+            )
+            .onReceive(NotificationCenter.default.publisher(for: .cloudKitShareAccepted)) { _ in
+                // Share was accepted - complete onboarding
+                isAwaitingInvite = false
+                onComplete()
+            }
+        } else {
+            onboardingFlow
+        }
+    }
+
+    // MARK: - Onboarding Flow
+
+    @ViewBuilder
+    private var onboardingFlow: some View {
         VStack {
             // Cancel button when adding a profile (user already has dogs)
             if isAddingProfile {
@@ -123,10 +161,13 @@ struct OnboardingView: View {
             }
 
             // Content - always include all steps to keep TabView structure stable
-            // Steps: Welcome(0), Name(1), Breed(2), Birth(3), Gender(4), Status(5), Home(6), Size(7), Photo(8), Confirm(9), Notifications(10), Location(11), Trial(12)
+            // Steps: Welcome(0), Name(1), Breed(2), [CoatType(3)], Birth(4), Gender(5), Status(6), Home(7), [Size(8)], [Photo(9)], Confirm(10), Notifications(11), Location(12), UserProfile(13), Trial(14)
             TabView(selection: $currentStep) {
                 OnboardingWelcomeStep(
-                    onNext: { navigateToStep(1) }
+                    onNext: { navigateToStep(1) },
+                    onJoinExisting: {
+                        isAwaitingInvite = true
+                    }
                 ).tag(0)
 
                 OnboardingNameStep(
@@ -142,30 +183,41 @@ struct OnboardingView: View {
                     isCustomBreed: $isCustomBreed,
                     sizeCategory: $sizeCategory,
                     isCustomBreedFieldFocused: $isCustomBreedFieldFocused,
-                    onNext: { navigateToStep(3) },
+                    onNext: {
+                        // Navigate: CoatType(3) if breed selected, else Birth(4)
+                        navigateToStep(shouldShowCoatTypeStep ? 3 : 4)
+                    },
                     onBack: { navigateToStep(1) }
                 ).tag(2)
 
-                OnboardingBirthStep(
+                OnboardingCoatTypeStep(
                     puppyName: name,
-                    birthDate: $birthDate,
+                    suggestedCoatType: suggestedCoatType,
+                    selectedCoatType: $selectedCoatType,
                     onNext: { navigateToStep(4) },
                     onBack: { navigateToStep(2) }
                 ).tag(3)
 
+                OnboardingBirthStep(
+                    puppyName: name,
+                    birthDate: $birthDate,
+                    onNext: { navigateToStep(5) },
+                    onBack: { navigateToStep(shouldShowCoatTypeStep ? 3 : 2) }
+                ).tag(4)
+
                 OnboardingGenderStep(
                     puppyName: name,
                     gender: $gender,
-                    onNext: { navigateToStep(5) },
-                    onBack: { navigateToStep(3) }
-                ).tag(4)
+                    onNext: { navigateToStep(6) },
+                    onBack: { navigateToStep(4) }
+                ).tag(5)
 
                 OnboardingStatusStep(
                     puppyName: name,
                     isExpecting: $isExpecting,
-                    onNext: { navigateToStep(6) },
-                    onBack: { navigateToStep(4) }
-                ).tag(5)
+                    onNext: { navigateToStep(7) },
+                    onBack: { navigateToStep(5) }
+                ).tag(6)
 
                 OnboardingHomeStep(
                     puppyName: name,
@@ -173,34 +225,34 @@ struct OnboardingView: View {
                     minDate: birthDate,
                     isExpecting: isExpecting,
                     onNext: {
-                        // Navigate: Size(7) if custom breed, else Photo(8) if not expecting, else Confirm(9)
+                        // Navigate: Size(8) if custom breed, else Photo(9) if not expecting, else Confirm(10)
                         if shouldShowSizeStep {
-                            navigateToStep(7)
-                        } else if shouldShowPhotoStep {
                             navigateToStep(8)
-                        } else {
+                        } else if shouldShowPhotoStep {
                             navigateToStep(9)
+                        } else {
+                            navigateToStep(10)
                         }
                     },
-                    onBack: { navigateToStep(5) }
-                ).tag(6)
+                    onBack: { navigateToStep(6) }
+                ).tag(7)
 
                 OnboardingSizeStep(
                     puppyName: name,
                     sizeCategory: $sizeCategory,
                     onNext: {
-                        // Navigate: Photo(8) if not expecting, else Confirm(9)
-                        navigateToStep(shouldShowPhotoStep ? 8 : 9)
+                        // Navigate: Photo(9) if not expecting, else Confirm(10)
+                        navigateToStep(shouldShowPhotoStep ? 9 : 10)
                     },
-                    onBack: { navigateToStep(6) }
-                ).tag(7)
+                    onBack: { navigateToStep(7) }
+                ).tag(8)
 
                 OnboardingPhotoStep(
                     puppyName: name,
                     selectedImage: $profilePhoto,
-                    onNext: { navigateToStep(9) },
-                    onBack: { navigateToStep(shouldShowSizeStep ? 7 : 6) }
-                ).tag(8)
+                    onNext: { navigateToStep(10) },
+                    onBack: { navigateToStep(shouldShowSizeStep ? 8 : 7) }
+                ).tag(9)
 
                 OnboardingConfirmStep(
                     name: name,
@@ -212,24 +264,29 @@ struct OnboardingView: View {
                     profilePhoto: profilePhoto,
                     onSave: saveProfile,
                     onBack: {
-                        // Navigate back: Photo(8) if shown, else Size(7) if shown, else Home(6)
+                        // Navigate back: Photo(9) if shown, else Size(8) if shown, else Home(7)
                         if shouldShowPhotoStep {
-                            navigateToStep(8)
+                            navigateToStep(9)
                         } else if shouldShowSizeStep {
-                            navigateToStep(7)
+                            navigateToStep(8)
                         } else {
-                            navigateToStep(6)
+                            navigateToStep(7)
                         }
                     }
-                ).tag(9)
-
-                OnboardingNotificationsStep(
-                    onNext: { navigateToStep(11) }
                 ).tag(10)
 
-                OnboardingLocationStep(
-                    onComplete: { navigateToStep(12) }
+                OnboardingNotificationsStep(
+                    onNext: { navigateToStep(12) }
                 ).tag(11)
+
+                OnboardingLocationStep(
+                    onComplete: { navigateToStep(13) }
+                ).tag(12)
+
+                OnboardingUserProfileStep(
+                    onNext: { navigateToStep(14) },
+                    onSkip: { navigateToStep(14) }
+                ).tag(13)
 
                 OnboardingTrialStartStep(
                     puppyName: name,
@@ -241,7 +298,7 @@ struct OnboardingView: View {
                         TrialManager.shared.declineTrial()
                         completeOnboarding()
                     }
-                ).tag(12)
+                ).tag(14)
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
             .animation(reduceMotion ? nil : .easeInOut, value: currentStep)
@@ -321,6 +378,11 @@ struct OnboardingView: View {
             profile.breedId = breed.id
         }
 
+        // Set coat type if selected
+        if let coatType = selectedCoatType {
+            profile.coatType = coatType
+        }
+
         // Save profile photo if selected
         if let photo = profilePhoto {
             if let filename = try? ProfilePhotoStore.shared.save(image: photo) {
@@ -335,7 +397,8 @@ struct OnboardingView: View {
                 // Switch to the new profile
                 profileStore.switchToProfile(profile.id)
                 // Skip permission screens when adding a profile (already granted)
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                Task { @MainActor in
+                    try? await Task.sleep(for: .seconds(0.1))
                     completeOnboarding()
                 }
             } else {
@@ -355,8 +418,9 @@ struct OnboardingView: View {
             )
 
             // Navigate to permission screens after saving profile
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                navigateToStep(10)
+            Task { @MainActor in
+                try? await Task.sleep(for: .seconds(0.1))
+                navigateToStep(11)
             }
         }
     }

@@ -176,6 +176,57 @@ extension Strings {
         static let pawCare_desc = String(localized: "Check pads and trim fur between toes", table: table)
         static let eyeCleaning_desc = String(localized: "Clean eye area and remove tear stains", table: table)
         static let analGlands_desc = String(localized: "Express anal glands if needed", table: table)
+
+        // Coat type settings (from GroomingSettingsView)
+        static let coatType = String(localized: "Coat Type", table: table)
+        static let selectCoatType = String(localized: "Select Coat Type", table: table)
+        static let notSet = String(localized: "Not set", table: table)
+        static let suggested = String(localized: "Suggested", table: table)
+        static let careTips = String(localized: "Care Tips", table: table)
+        static let noActivities = String(localized: "No grooming activities", table: table)
+        static let setupDefaults = String(localized: "Set Up Defaults", table: table)
+        static let setCoatTypeFirst = String(localized: "Set a coat type to see recommended schedule", table: table)
+        static let resetToDefaults = String(localized: "Reset to Defaults", table: table)
+        static let resetToDefaultsTitle = String(localized: "Reset Grooming Schedule?", table: table)
+        static let resetToDefaultsMessage = String(localized: "This will replace your current grooming schedule with the defaults for your dog's coat type.", table: table)
+
+        static func coatTypeSuggestion(_ coatType: String) -> String {
+            String(localized: "Based on your dog's breed, we suggest \"\(coatType)\" as the coat type.", table: table)
+        }
+
+        // Quick log sheet
+        static let logActivity = String(localized: "Log Grooming", table: table)
+        static let log = String(localized: "Log", table: table)
+        static let whatDidYouDo = String(localized: "What did you do?", table: table)
+        static let when = String(localized: "When", table: table)
+        static let notesOptional = String(localized: "Notes (optional)", table: table)
+        static let notePlaceholder = String(localized: "Add any notes about this grooming session...", table: table)
+    }
+
+    // MARK: - Grooming Nudge (Today Tab)
+
+    enum GroomingNudge {
+        static func overdueTitle(activity: String) -> String {
+            String(localized: "\(activity) is overdue", table: table)
+        }
+
+        static func multipleOverdueTitle(count: Int) -> String {
+            String(localized: "\(count) grooming tasks overdue", table: table)
+        }
+
+        static func dueTitle(activity: String) -> String {
+            String(localized: "Time for \(activity)?", table: table)
+        }
+
+        static func overdueSubtitle(days: Int, name: String) -> String {
+            String(localized: "\(days) days past due for \(name)", table: table)
+        }
+
+        static let lastDoneSubtitle = String(localized: "Last done", table: table)
+        static func lastDoneSubtitle(date: String) -> String {
+            String(localized: "Last done \(date)", table: table)
+        }
+        static let neverDoneSubtitle = String(localized: "Never logged", table: table)
     }
 
     // MARK: - Enrichment

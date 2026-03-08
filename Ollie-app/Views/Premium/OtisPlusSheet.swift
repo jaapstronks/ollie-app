@@ -4,6 +4,7 @@
 //
 //  Full-screen subscription sheet for Otis+ promotion
 
+import OtisShared
 import StoreKit
 import SwiftUI
 
@@ -18,7 +19,7 @@ struct OtisPlusSheet: View {
     @Environment(\.colorScheme) private var colorScheme
 
     private var dogName: String {
-        profileStore.currentProfile?.name ?? Strings.Health.yourPuppy
+        profileStore.profile?.name ?? Strings.Health.yourPuppy
     }
 
     /// Determines the context for showing the paywall

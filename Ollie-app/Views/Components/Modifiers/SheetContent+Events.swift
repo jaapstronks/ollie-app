@@ -126,6 +126,12 @@ extension SheetCoordinator.ActiveSheet {
                 GroomingSettingsView(profileStore: context.viewModel.profileStore)
             }
 
+        case .groomingQuickLog(let preselectedType):
+            GroomingQuickLogSheet(
+                puppyName: context.viewModel.puppyName,
+                preselectedType: preselectedType
+            )
+
         default:
             EmptyView()
         }

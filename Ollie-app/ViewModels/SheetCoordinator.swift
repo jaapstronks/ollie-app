@@ -78,6 +78,8 @@ final class SheetCoordinator: ObservableObject {
         case seniorMobility
         // Grooming/care settings sheet (Brief 09)
         case groomingSettings
+        // Grooming quick log sheet (Brief 09)
+        case groomingQuickLog(preselectedType: GroomingType? = nil)
 
         var id: String {
             switch self {
@@ -119,6 +121,7 @@ final class SheetCoordinator: ObservableObject {
             case .symptomLog(let conditionId): return "symptomLog-\(conditionId?.uuidString ?? "general")"
             case .seniorMobility: return "seniorMobility"
             case .groomingSettings: return "groomingSettings"
+            case .groomingQuickLog(let type): return "groomingQuickLog-\(type?.rawValue ?? "any")"
             }
         }
     }
