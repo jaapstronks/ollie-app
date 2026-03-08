@@ -89,7 +89,7 @@ struct RegressionAlertBanner: View {
     }
 
     private var skillChipsSection: some View {
-        FlowLayout(spacing: 8) {
+        RegressionFlowLayout(spacing: 8) {
             ForEach(skillsNeedingWork) { skillInfo in
                 skillChipButton(for: skillInfo)
             }
@@ -275,8 +275,8 @@ struct AdolescenceInfoCard: View {
 
 // MARK: - Flow Layout Helper
 
-/// Simple horizontal flow layout for skill chips
-struct FlowLayout: Layout {
+/// Simple horizontal flow layout for skill chips (private to avoid conflict with shared FlowLayout)
+private struct RegressionFlowLayout: Layout {
     var spacing: CGFloat = 8
 
     func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {

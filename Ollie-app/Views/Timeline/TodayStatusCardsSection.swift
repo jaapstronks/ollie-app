@@ -348,7 +348,7 @@ private extension TodayStatusCardsSection {
     func healthCheckInCard(_ combinedState: CombinedSleepPottyState) -> some View {
         if !combinedState.shouldShowFirstRunCard,
            let profile = viewModel.profileStore.profile,
-           let nextCategory = HealthCheckInStore.shared.nextCategoryForCard() {
+           let nextCategory = HealthCheckInStore.shared.nextCategoryForCard(for: profile) {
             let contextSummary = HealthCheckInStore.shared.contextSummary(for: nextCategory, puppyName: profile.name)
             HealthCheckInCard(
                 category: nextCategory,

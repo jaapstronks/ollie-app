@@ -6,6 +6,7 @@
 //  Part of Brief 04: Health Logging
 //
 
+import Combine
 import Foundation
 import SwiftUI
 import OtisShared
@@ -31,23 +32,24 @@ final class HealthCheckInStore: ObservableObject {
     // MARK: - State
 
     /// Current health state for AI context
-    var state: HealthState {
+    /// - Parameter activeConditionCount: Number of active health conditions (pass from profile)
+    func state(activeConditionCount: Int = 0) -> HealthState {
         HealthState(
             checkIns: checkIns,
             lastCheckInDate: checkIns.values.map(\.createdAt).max(),
             recentSymptomCount: HealthSymptomStore.shared.recentSymptoms().count,
-            activeConditionCount: ProfileStore.shared.activeConditions.count
+            activeConditionCount: activeConditionCount
         )
     }
 
     /// Categories where dog is struggling (score 1-2, fresh)
     var strugglingCategories: [HealthCheckInCategory] {
-        state.strugglingCategories
+        state().strugglingCategories
     }
 
     /// Average health score across all fresh check-ins
     var averageScore: Double? {
-        state.averageScore
+        state().averageScore
     }
 
     // MARK: - Check-In Logic
@@ -73,7 +75,7 @@ final class HealthCheckInStore: ObservableObject {
 
     /// Get score for a category if fresh
     func score(for category: HealthCheckInCategory) -> Int? {
-        state.score(for: category)
+        state().score(for: category)
     }
 
     /// Get latest check-in for a category
@@ -166,8 +168,9 @@ final class HealthCheckInStore: ObservableObject {
     }
 
     /// Check if we should show a check-in card
-    var shouldShowCheckInCard: Bool {
-        guard let profile = ProfileStore.shared.activeProfile else { return false }
+    /// - Parameter profile: The puppy profile to check
+    func shouldShowCheckInCard(for profile: PuppyProfile?) -> Bool {
+        guard let profile = profile else { return false }
         let conditions = profile.healthConditions.filter { $0.status == .active }
         let phase = profile.lifecyclePhase
 
@@ -175,8 +178,9 @@ final class HealthCheckInStore: ObservableObject {
     }
 
     /// Get the next category to show in check-in card
-    func nextCategoryForCard() -> HealthCheckInCategory? {
-        guard let profile = ProfileStore.shared.activeProfile else { return nil }
+    /// - Parameter profile: The puppy profile to check
+    func nextCategoryForCard(for profile: PuppyProfile?) -> HealthCheckInCategory? {
+        guard let profile = profile else { return nil }
         let conditions = profile.healthConditions.filter { $0.status == .active }
         let phase = profile.lifecyclePhase
 

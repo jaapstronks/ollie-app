@@ -118,9 +118,6 @@ extension SheetCoordinator.ActiveSheet {
                         note: assessment.note
                     )
                     context.sheetCoordinator.dismissSheet()
-                },
-                onCancel: {
-                    context.sheetCoordinator.dismissSheet()
                 }
             )
             .environmentObject(context.viewModel.profileStore)

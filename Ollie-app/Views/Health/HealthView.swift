@@ -61,6 +61,18 @@ struct HealthView: View {
         return GrowthCurves.curve(for: size)
     }
 
+    // Vet visit state
+    @State private var showVetTipsSheet = false
+    @State private var showVisitSummary = false
+    @State private var showHealthCalendar = false
+    @State private var showAppointmentForm = false
+    @State private var appointmentPrefill: (conditionType: HealthConditionType, title: String)?
+
+    @EnvironmentObject private var appointmentStore: AppointmentStore
+
+    // Vet tip generator
+    private let tipGenerator = VetVisitTipGenerator()
+
     // MARK: - Body
 
     var body: some View {
@@ -75,6 +87,19 @@ struct HealthView: View {
                 if hasActiveConditions {
                     symptomsSection
                 }
+
+                // Breed risk awareness section
+                if let profile = profile {
+                    breedRiskSection(for: profile)
+                }
+
+                // Follow-up reminders section
+                if hasActiveConditions, let profile = profile {
+                    followUpRemindersSection(for: profile)
+                }
+
+                // Health calendar navigation
+                healthCalendarSection
 
                 // Weight section
                 weightSection
@@ -157,7 +182,7 @@ struct HealthView: View {
     }
 
     private var isSenior: Bool {
-        profile?.lifecyclePhase == .senior || seniorWellnessStore.shouldShowSeniorFeatures
+        profile?.lifecyclePhase == .senior || seniorWellnessStore.shouldShowSeniorFeatures(for: profile)
     }
 
     // MARK: - Senior Wellness Section
@@ -224,7 +249,8 @@ struct HealthView: View {
                 }
 
                 // RRR tracking (for heart conditions)
-                if seniorWellnessStore.shouldShowRRRTracking {
+                let activeConditions = profile?.healthConditions.filter { $0.status == .active } ?? []
+                if seniorWellnessStore.shouldShowRRRTracking(activeConditions: activeConditions) {
                     RRRQuickCard(
                         latestReading: seniorWellnessStore.latestRRR,
                         onLogTap: { showRRRSheet = true }
@@ -467,6 +493,143 @@ struct HealthView: View {
         .sheet(isPresented: $showAddMilestoneSheet) {
             AddMilestoneSheet(isPresented: $showAddMilestoneSheet) { milestone in
                 milestoneStore.toggleMilestoneCompletion(milestone)
+            }
+        }
+    }
+
+    // MARK: - Breed Risk Section
+
+    @ViewBuilder
+    private func breedRiskSection(for profile: PuppyProfile) -> some View {
+        let breedRisks = BreedHealthRisk.risks(for: profile.breed)
+        let sizeRisks = BreedHealthRisk.sizeBasedRisks(for: profile.sizeCategory)
+
+        if breedRisks != nil || !sizeRisks.isEmpty {
+            BreedRiskCard(
+                breedRisks: breedRisks,
+                sizeRisks: sizeRisks,
+                existingConditions: profile.healthConditions,
+                ageMonths: profile.ageInMonths,
+                onScheduleScreening: { risk in
+                    appointmentPrefill = (risk.conditionType, "\(risk.conditionType.label) Screening")
+                    showAppointmentForm = true
+                }
+            )
+        }
+    }
+
+    // MARK: - Follow-up Reminders Section
+
+    @ViewBuilder
+    private func followUpRemindersSection(for profile: PuppyProfile) -> some View {
+        let activeConditions = profile.healthConditions.filter { $0.status == .active || $0.status == .monitoring }
+
+        if !activeConditions.isEmpty {
+            FollowUpRemindersCard(
+                conditions: activeConditions,
+                onScheduleFollowUp: { followUp in
+                    appointmentPrefill = (followUp.conditionType, "\(followUp.followUpType.rawValue.capitalized) for \(followUp.conditionType.label)")
+                    showAppointmentForm = true
+                }
+            )
+        }
+    }
+
+    // MARK: - Health Calendar Section
+
+    @ViewBuilder
+    private var healthCalendarSection: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            // Section header
+            HStack(spacing: 8) {
+                Image(systemName: "calendar")
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundStyle(Color.otisAccent)
+
+                Text(Strings.VetVisit.Calendar.title)
+                    .font(.subheadline)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(.secondary)
+
+                Spacer()
+
+                NavigationLink {
+                    HealthCalendarView()
+                        .environmentObject(appointmentStore)
+                        .environmentObject(milestoneStore)
+                        .environmentObject(viewModel.profileStore)
+                } label: {
+                    HStack(spacing: 4) {
+                        Text(Strings.Common.seeAll)
+                        Image(systemName: "chevron.right")
+                    }
+                    .font(.subheadline)
+                    .foregroundStyle(.blue)
+                }
+            }
+            .padding(.horizontal, 4)
+
+            // Quick preview of upcoming events
+            upcomingAppointmentsSection
+            .background(Color(.secondarySystemGroupedBackground))
+            .clipShape(RoundedRectangle(cornerRadius: 12))
+        }
+        .sheet(isPresented: $showHealthCalendar) {
+            NavigationStack {
+                HealthCalendarView()
+                    .environmentObject(appointmentStore)
+                    .environmentObject(milestoneStore)
+                    .environmentObject(viewModel.profileStore)
+            }
+        }
+    }
+
+    // MARK: - Upcoming Appointments Section
+
+    @ViewBuilder
+    private var upcomingAppointmentsSection: some View {
+        let appointments = Array(appointmentStore.upcomingAppointments.prefix(2))
+        VStack(spacing: 12) {
+            if appointments.isEmpty {
+                HStack {
+                    Image(systemName: "calendar.badge.clock")
+                        .foregroundStyle(.secondary)
+                    Text(Strings.VetVisit.Calendar.noEvents)
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                    Spacer()
+                }
+                .padding()
+            } else {
+                ForEach(appointments, id: \.id) { appointment in
+                    HStack(spacing: 12) {
+                        Image(systemName: appointment.appointmentType.icon)
+                            .foregroundStyle(appointment.appointmentType.isHealthRelated ? Color.otisHealth : Color.otisAccent)
+                            .frame(width: 24)
+
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(appointment.title)
+                                .font(.subheadline.weight(.medium))
+
+                            Text(appointment.dateString)
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+
+                        Spacer()
+
+                        if appointment.isToday {
+                            Text(Strings.VetVisit.visitToday)
+                                .font(.caption2.weight(.medium))
+                                .foregroundStyle(.white)
+                                .padding(.horizontal, 6)
+                                .padding(.vertical, 2)
+                                .background(Color.otisDanger)
+                                .clipShape(Capsule())
+                        }
+                    }
+                }
+                .padding()
             }
         }
     }

@@ -6,6 +6,7 @@
 //  Part of Brief 05: Senior Wellness
 //
 
+import Combine
 import SwiftUI
 import OtisShared
 
@@ -15,6 +16,10 @@ struct RespiratoryRateSheet: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var profileStore: ProfileStore
     @StateObject private var wellnessStore = SeniorWellnessStore.shared
+
+    init(onSave: @escaping (RespiratoryRateReading) -> Void) {
+        self.onSave = onSave
+    }
 
     @State private var breathCount: Int = 0
     @State private var isTimerRunning = false

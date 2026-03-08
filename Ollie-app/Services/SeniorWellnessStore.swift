@@ -7,6 +7,7 @@
 //  Part of Brief 05: Senior Wellness
 //
 
+import Combine
 import Foundation
 import SwiftUI
 import OtisShared
@@ -137,13 +138,14 @@ final class SeniorWellnessStore: ObservableObject {
     // MARK: - Respiratory Rate State
 
     /// Current RRR state for AI context
-    var rrrState: RRRState {
+    /// - Parameter activeConditions: The dog's active health conditions (pass from profile)
+    func rrrState(activeConditions: [HealthCondition] = []) -> RRRState {
         let latest = latestRRR
         let trend = calculateRRRTrend()
         let weekReadings = rrrReadingsThisWeek()
         let avgBPM = weekReadings.isEmpty ? nil : Double(weekReadings.reduce(0) { $0 + $1.breathsPerMinute }) / Double(weekReadings.count)
         let elevatedCount = weekReadings.filter { $0.isConcerning }.count
-        let hasHeartCondition = ProfileStore.shared.activeConditions.contains { condition in
+        let hasHeartCondition = activeConditions.contains { condition in
             [.heartMurmur, .congestiveHeartFailure].contains(condition.type)
         }
 
@@ -322,8 +324,9 @@ final class SeniorWellnessStore: ObservableObject {
     // MARK: - Dashboard Helpers
 
     /// Whether to show senior wellness features (senior phase or has relevant conditions)
-    var shouldShowSeniorFeatures: Bool {
-        guard let profile = ProfileStore.shared.activeProfile else { return false }
+    /// - Parameter profile: The puppy profile to check
+    func shouldShowSeniorFeatures(for profile: PuppyProfile?) -> Bool {
+        guard let profile = profile else { return false }
         if profile.lifecyclePhase == .senior { return true }
 
         // Also show for certain age-related conditions in adults
@@ -337,11 +340,12 @@ final class SeniorWellnessStore: ObservableObject {
     }
 
     /// Whether to show RRR tracking (heart conditions)
-    var shouldShowRRRTracking: Bool {
+    /// - Parameter activeConditions: The dog's active health conditions
+    func shouldShowRRRTracking(activeConditions: [HealthCondition]) -> Bool {
         let heartConditions: Set<HealthConditionType> = [
             .heartMurmur, .congestiveHeartFailure
         ]
-        return ProfileStore.shared.activeConditions.contains { condition in
+        return activeConditions.contains { condition in
             heartConditions.contains(condition.type)
         }
     }

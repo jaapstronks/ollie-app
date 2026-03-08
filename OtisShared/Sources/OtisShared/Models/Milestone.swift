@@ -541,9 +541,186 @@ public enum MilestoneLabelResolver {
         case "milestone.dogLicense.detail":
             return String(localized: "Register with your municipality if required")
 
+        // Age-based health milestones
+        case "milestone.dentalBaseline":
+            return String(localized: "Dental baseline check")
+        case "milestone.dentalBaseline.detail":
+            return String(localized: "Establish dental health baseline at 2 years")
+        case "milestone.annualWellness":
+            return String(localized: "Annual wellness exam")
+        case "milestone.annualWellness.detail":
+            return String(localized: "Yearly comprehensive health checkup")
+        case "milestone.seniorScreening":
+            return String(localized: "Senior wellness screening")
+        case "milestone.seniorScreening.detail":
+            return String(localized: "Comprehensive bloodwork and organ function tests")
+        case "milestone.semiAnnualSenior":
+            return String(localized: "Semi-annual senior checkup")
+        case "milestone.semiAnnualSenior.detail":
+            return String(localized: "More frequent monitoring for senior dogs")
+
+        // Breed-specific screening milestones
+        case "milestone.hipScreening":
+            return String(localized: "Hip screening")
+        case "milestone.hipScreening.detail":
+            return String(localized: "X-ray evaluation for hip dysplasia")
+        case "milestone.elbowScreening":
+            return String(localized: "Elbow screening")
+        case "milestone.elbowScreening.detail":
+            return String(localized: "X-ray evaluation for elbow dysplasia")
+        case "milestone.heartScreening":
+            return String(localized: "Heart screening")
+        case "milestone.heartScreening.detail":
+            return String(localized: "Cardiac auscultation and evaluation")
+        case "milestone.eyeScreening":
+            return String(localized: "Eye screening")
+        case "milestone.eyeScreening.detail":
+            return String(localized: "CERF/OFA eye examination")
+
         default:
             // For custom milestones, the key is the user-entered title
             return key
+        }
+    }
+}
+
+// MARK: - Health Milestones Generator
+
+extension Milestone {
+
+    /// Generate health milestones for a profile, skipping milestones the dog has already passed
+    public static func healthMilestones(for profile: PuppyProfile) -> [Milestone] {
+        var milestones: [Milestone] = []
+        var sortOrder = 100  // Start after default milestones
+
+        let currentAgeMonths = profile.ageInMonths
+
+        // Dental baseline at 24 months (2 years)
+        if currentAgeMonths < 24 {
+            milestones.append(Milestone(
+                category: .health,
+                labelKey: "milestone.dentalBaseline",
+                detailKey: "milestone.dentalBaseline.detail",
+                targetAgeMonths: 24,
+                icon: "mouth.fill",
+                sortOrder: sortOrder
+            ))
+            sortOrder += 1
+        }
+
+        // Annual wellness exams (from year 2 onwards)
+        for year in 2...15 {
+            let months = year * 12
+            if currentAgeMonths < months {
+                milestones.append(Milestone(
+                    category: .health,
+                    labelKey: "milestone.annualWellness",
+                    detailKey: "milestone.annualWellness.detail",
+                    targetAgeMonths: months,
+                    icon: "heart.text.square.fill",
+                    sortOrder: sortOrder
+                ))
+                sortOrder += 1
+                break  // Only add the next upcoming one
+            }
+        }
+
+        // Senior wellness screening (age varies by size)
+        let seniorStartMonths = profile.seniorAgeMonths
+        if currentAgeMonths < seniorStartMonths {
+            milestones.append(Milestone(
+                category: .health,
+                labelKey: "milestone.seniorScreening",
+                detailKey: "milestone.seniorScreening.detail",
+                targetAgeMonths: seniorStartMonths,
+                icon: "stethoscope",
+                sortOrder: sortOrder
+            ))
+            sortOrder += 1
+        }
+
+        // Semi-annual checkups for seniors (every 6 months after senior threshold)
+        if currentAgeMonths >= seniorStartMonths {
+            let nextCheckupMonths = ((currentAgeMonths - seniorStartMonths) / 6 + 1) * 6 + seniorStartMonths
+            milestones.append(Milestone(
+                category: .health,
+                labelKey: "milestone.semiAnnualSenior",
+                detailKey: "milestone.semiAnnualSenior.detail",
+                targetAgeMonths: nextCheckupMonths,
+                isRecurring: true,
+                recurrenceMonths: 6,
+                icon: "heart.fill",
+                sortOrder: sortOrder
+            ))
+            sortOrder += 1
+        }
+
+        // Breed-specific screenings
+        milestones.append(contentsOf: breedScreeningMilestones(for: profile, startingSortOrder: sortOrder))
+
+        return milestones
+    }
+
+    /// Generate breed-specific screening milestones
+    private static func breedScreeningMilestones(for profile: PuppyProfile, startingSortOrder: Int) -> [Milestone] {
+        var milestones: [Milestone] = []
+        var sortOrder = startingSortOrder
+
+        let currentAgeMonths = profile.ageInMonths
+        let dueScreenings = profile.dueScreenings
+
+        // Add milestones for each due screening
+        for screening in dueScreenings {
+            guard let screeningAge = screening.screeningRecommendedAgeMonths,
+                  currentAgeMonths < screeningAge else {
+                continue
+            }
+
+            let (labelKey, detailKey, icon) = screeningMilestoneInfo(for: screening.conditionType)
+
+            milestones.append(Milestone(
+                category: .health,
+                labelKey: labelKey,
+                detailKey: detailKey,
+                targetAgeMonths: screeningAge,
+                icon: icon,
+                sortOrder: sortOrder
+            ))
+            sortOrder += 1
+        }
+
+        // Add size-based screenings for large/extra-large dogs
+        if profile.sizeCategory == .large || profile.sizeCategory == .extraLarge {
+            // Hip screening at 24 months for large breeds
+            if currentAgeMonths < 24 && !dueScreenings.contains(where: { $0.conditionType == .hipDysplasia }) {
+                milestones.append(Milestone(
+                    category: .health,
+                    labelKey: "milestone.hipScreening",
+                    detailKey: "milestone.hipScreening.detail",
+                    targetAgeMonths: 24,
+                    icon: "figure.walk",
+                    sortOrder: sortOrder
+                ))
+                sortOrder += 1
+            }
+        }
+
+        return milestones
+    }
+
+    /// Map condition type to milestone label, detail, and icon
+    private static func screeningMilestoneInfo(for conditionType: HealthConditionType) -> (labelKey: String, detailKey: String, icon: String) {
+        switch conditionType {
+        case .hipDysplasia:
+            return ("milestone.hipScreening", "milestone.hipScreening.detail", "figure.walk")
+        case .elbowDysplasia:
+            return ("milestone.elbowScreening", "milestone.elbowScreening.detail", "figure.walk")
+        case .heartMurmur, .dilatedCardiomyopathy, .mitralValveDisease:
+            return ("milestone.heartScreening", "milestone.heartScreening.detail", "heart.fill")
+        case .cataracts, .glaucoma, .progressiveRetinalAtrophy:
+            return ("milestone.eyeScreening", "milestone.eyeScreening.detail", "eye.fill")
+        default:
+            return (conditionType.label, "", conditionType.icon)
         }
     }
 }

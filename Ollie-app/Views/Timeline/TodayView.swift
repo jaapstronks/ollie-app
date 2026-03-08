@@ -27,6 +27,8 @@ struct TodayView: View {
     @State private var dismissedCrateNudgeDate: Date?
     @State private var dismissedWalkTargetNudgeDate: Date?
     @State private var showMonthRecapSheet = false
+    @State private var showVetTipsSheet = false
+    @State private var showVisitSummary = false
 
     // First-visit tip tracking
     @AppStorage("hasSeenTodayTip") private var hasSeenTodayTip = false
@@ -92,6 +94,43 @@ struct TodayView: View {
             // Don't show for these states
             return false
         }
+    }
+
+    // MARK: - Vet Visit Tips
+
+    private let tipGenerator = VetVisitTipGenerator()
+
+    /// Upcoming vet appointment within 3 days
+    private var upcomingVetAppointment: DogAppointment? {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        guard let threeDaysFromNow = calendar.date(byAdding: .day, value: 3, to: today) else { return nil }
+
+        let vetTypes: [AppointmentType] = [.vetCheckup, .vetVaccination, .vetEmergency, .vetSurgery]
+        return appointmentStore.appointments
+            .filter { vetTypes.contains($0.appointmentType) }
+            .filter { appointment in
+                let appointmentDay = calendar.startOfDay(for: appointment.startDate)
+                return appointmentDay >= today && appointmentDay <= threeDaysFromNow
+            }
+            .sorted { $0.startDate < $1.startDate }
+            .first
+    }
+
+    /// Generated tips for the upcoming vet visit
+    private var vetVisitTips: [VetVisitTip] {
+        guard let appointment = upcomingVetAppointment,
+              let profile = viewModel.profileStore.profile else {
+            return []
+        }
+
+        let recentSymptoms = HealthSymptomStore.shared.recentSymptoms()
+        return tipGenerator.generateTips(
+            for: profile,
+            appointment: appointment,
+            recentSymptoms: recentSymptoms,
+            conditions: profile.healthConditions
+        )
     }
 
     // MARK: - Appointment Nudge
@@ -247,6 +286,16 @@ struct TodayView: View {
                             .animatedAppear(delay: 0.14)
                     }
 
+                    // Vet visit tips (when appointment is within 3 days)
+                    if viewModel.isShowingToday, let upcomingVetAppointment = upcomingVetAppointment {
+                        VetVisitTipsCard(
+                            appointment: upcomingVetAppointment,
+                            tipCount: vetVisitTips.count,
+                            onTap: { showVetTipsSheet = true }
+                        )
+                        .animatedAppear(delay: 0.15)
+                    }
+
                     // Timeline section
                     timelineSection
                         .animatedAppear(delay: 0.15)
@@ -345,6 +394,24 @@ struct TodayView: View {
                 ),
                 onDismiss: { showMonthRecapSheet = false }
             )
+        }
+        .sheet(isPresented: $showVetTipsSheet) {
+            if let appointment = upcomingVetAppointment {
+                VetVisitTipsSheet(
+                    appointment: appointment,
+                    tips: vetVisitTips,
+                    onPrepareSummary: {
+                        showVetTipsSheet = false
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                            showVisitSummary = true
+                        }
+                    }
+                )
+            }
+        }
+        .sheet(isPresented: $showVisitSummary) {
+            VisitSummaryView()
+                .environmentObject(viewModel.profileStore)
         }
     }
 

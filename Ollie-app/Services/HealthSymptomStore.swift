@@ -6,6 +6,7 @@
 //  Part of Brief 04: Health Logging
 //
 
+import Combine
 import Foundation
 import SwiftUI
 import OtisShared

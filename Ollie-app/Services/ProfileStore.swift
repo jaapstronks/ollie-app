@@ -16,6 +16,14 @@ import os
 /// Architecture: Core Data with NSPersistentCloudKitContainer for automatic CloudKit sync
 @MainActor
 class ProfileStore: ObservableObject {
+    // MARK: - Shared Instance (for previews)
+
+    /// Convenience accessor for SwiftUI previews and legacy compatibility.
+    /// Services should receive ProfileStore as a parameter instead of using this.
+    static var shared: ProfileStore {
+        ProfileStoreProvider.shared.store
+    }
+
     // MARK: - Multi-Profile Support
 
     /// All loaded profiles (owned + shared)

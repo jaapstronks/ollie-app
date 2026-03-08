@@ -178,10 +178,6 @@ struct BehaviorChallengesContext: AIContextComponent {
     }
 
     init(events: [PuppyEvent], interventions: [BehaviorIntervention]) {
-        let now = Date()
-        let sevenDaysAgo = Calendar.current.date(byAdding: .day, value: -7, to: now) ?? now
-        let fourteenDaysAgo = Calendar.current.date(byAdding: .day, value: -14, to: now) ?? now
-
         let behaviorEvents = events.filter { $0.isBehaviorIncident }.thisMonth()
         let thisWeekEvents = behaviorEvents.filter { $0.time.isThisWeek }
         let lastWeekEvents = behaviorEvents.filter { $0.time.isLastWeek }
@@ -278,58 +274,83 @@ struct SeniorWellnessContext: AIContextComponent {
     let medicationCount: Int
     let daysWithSymptoms: Int
 
-    init(profile: PuppyProfile) {
-        self.isSenior = profile.lifecyclePhase == .senior
+    init(
+        isSenior: Bool = false,
+        latestMobilityScore: Int? = nil,
+        mobilityTrend: String? = nil,
+        latestCCDScore: Int? = nil,
+        ccdSeverity: String? = nil,
+        latestQoLScore: Int? = nil,
+        qolInterpretation: String? = nil,
+        activeConditions: [String] = [],
+        medicationCount: Int = 0,
+        daysWithSymptoms: Int = 0
+    ) {
+        self.isSenior = isSenior
+        self.latestMobilityScore = latestMobilityScore
+        self.mobilityTrend = mobilityTrend
+        self.latestCCDScore = latestCCDScore
+        self.ccdSeverity = ccdSeverity
+        self.latestQoLScore = latestQoLScore
+        self.qolInterpretation = qolInterpretation
+        self.activeConditions = activeConditions
+        self.medicationCount = medicationCount
+        self.daysWithSymptoms = daysWithSymptoms
+    }
 
+    /// Factory method to create context from stores (must be called on MainActor)
+    @MainActor
+    static func fromStores(profile: PuppyProfile) -> SeniorWellnessContext {
         let wellnessStore = SeniorWellnessStore.shared
+        let symptomStore = HealthSymptomStore.shared
 
         // Mobility
+        let mobilityScore: Int?
         if let mobility = wellnessStore.latestMobility, mobility.isFresh {
-            self.latestMobilityScore = mobility.score
+            mobilityScore = mobility.score
         } else {
-            self.latestMobilityScore = nil
+            mobilityScore = nil
         }
-        self.mobilityTrend = wellnessStore.mobilityState.trend?.rawValue
+        let mobilityTrend = wellnessStore.mobilityState.trend?.rawValue
 
         // Cognitive
+        let ccdScore: Int?
+        let ccdSeverity: String?
         if let cognitive = wellnessStore.latestCognitive, cognitive.isCurrent {
-            self.latestCCDScore = cognitive.totalScore
-            self.ccdSeverity = cognitive.severity.rawValue
+            ccdScore = cognitive.totalScore
+            ccdSeverity = cognitive.severity.rawValue
         } else {
-            self.latestCCDScore = nil
-            self.ccdSeverity = nil
+            ccdScore = nil
+            ccdSeverity = nil
         }
 
         // Quality of Life
+        let qolScore: Int?
+        let qolInterpretation: String?
         if let qol = wellnessStore.latestQoL, qol.isCurrent {
-            self.latestQoLScore = qol.totalScore
-            self.qolInterpretation = qol.interpretation.rawValue
+            qolScore = qol.totalScore
+            qolInterpretation = qol.interpretation.rawValue
         } else {
-            self.latestQoLScore = nil
-            self.qolInterpretation = nil
+            qolScore = nil
+            qolInterpretation = nil
         }
 
         // Conditions and medications
-        self.activeConditions = profile.healthConditions
+        let activeConditions = profile.healthConditions
             .filter { $0.status == .active }
             .map { $0.type.rawValue }
 
-        self.medicationCount = profile.medicationSchedule.medications.count
-
-        // Recent symptoms
-        self.daysWithSymptoms = HealthSymptomStore.shared.recentSymptoms().count
-    }
-
-    init() {
-        self.isSenior = false
-        self.latestMobilityScore = nil
-        self.mobilityTrend = nil
-        self.latestCCDScore = nil
-        self.ccdSeverity = nil
-        self.latestQoLScore = nil
-        self.qolInterpretation = nil
-        self.activeConditions = []
-        self.medicationCount = 0
-        self.daysWithSymptoms = 0
+        return SeniorWellnessContext(
+            isSenior: profile.lifecyclePhase == .senior,
+            latestMobilityScore: mobilityScore,
+            mobilityTrend: mobilityTrend,
+            latestCCDScore: ccdScore,
+            ccdSeverity: ccdSeverity,
+            latestQoLScore: qolScore,
+            qolInterpretation: qolInterpretation,
+            activeConditions: activeConditions,
+            medicationCount: profile.medicationSchedule.medications.count,
+            daysWithSymptoms: symptomStore.recentSymptoms().count
+        )
     }
 }
