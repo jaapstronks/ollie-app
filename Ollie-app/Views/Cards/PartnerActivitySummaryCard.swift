@@ -3,6 +3,7 @@
 //  Otis-app
 //
 //  Partner activity handoff card - shows what partners logged while user was away
+//  Updated to use CloudKit-based identity and Phase 2 features (featured moments, summaries)
 //
 
 import SwiftUI
@@ -11,7 +12,6 @@ import OtisShared
 /// Dismissable card showing partner activities since user's last visit
 struct PartnerActivitySummaryCard: View {
     let summary: PartnerActivitySummary
-    let householdMembers: HouseholdMembers
     let onDismiss: () -> Void
 
     @State private var isExpanded = false
@@ -19,14 +19,23 @@ struct PartnerActivitySummaryCard: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
+            // Featured moment photo (if available)
+            if summary.hasFeaturedMoment {
+                featuredMomentSection
+            }
+
             // Header with partner info and dismiss button
             header
 
             // Time range badge
             timeRangeBadge
 
-            // Summary text
-            summaryText
+            // Natural language summary (Phase 2) or legacy summary
+            if let handoverSummary = summary.handoverSummary, !handoverSummary.isEmpty {
+                naturalLanguageSummary(handoverSummary)
+            } else {
+                summaryText
+            }
 
             // Highlighted activities
             highlightedActivities
@@ -79,18 +88,26 @@ struct PartnerActivitySummaryCard: View {
 
     @ViewBuilder
     private var partnerAvatars: some View {
+        // Show partner initial in a colored circle
+        // In Phase 2, ParticipantResolver will provide actual partner info
         HStack(spacing: -6) {
-            ForEach(summary.partnerIds.prefix(3), id: \.self) { partnerId in
-                if let member = householdMembers.member(byId: partnerId) {
-                    HouseholdMemberAvatar(member: member, size: 24)
-                        .overlay(
-                            Circle()
-                                .strokeBorder(
-                                    colorScheme == .dark ? Color.black : Color.white,
-                                    lineWidth: 1.5
-                                )
-                        )
+            ForEach(summary.partnerNames.prefix(3), id: \.self) { name in
+                ZStack {
+                    Circle()
+                        .fill(Color.accentColor.opacity(0.2))
+                        .frame(width: 24, height: 24)
+
+                    Text(String(name.prefix(1)).uppercased())
+                        .font(.system(size: 10, weight: .semibold))
+                        .foregroundStyle(Color.accentColor)
                 }
+                .overlay(
+                    Circle()
+                        .strokeBorder(
+                            colorScheme == .dark ? Color.black : Color.white,
+                            lineWidth: 1.5
+                        )
+                )
             }
         }
     }
@@ -99,13 +116,42 @@ struct PartnerActivitySummaryCard: View {
 
     @ViewBuilder
     private var timeRangeBadge: some View {
-        Text(Strings.Handoff.timeRange(start: summary.startTime, end: summary.endTime))
-            .font(.caption)
-            .foregroundStyle(.secondary)
-            .padding(.horizontal, 8)
-            .padding(.vertical, 4)
-            .background(Color(.tertiarySystemFill))
-            .clipShape(Capsule())
+        CapsuleBadge(Strings.Handoff.timeRange(start: summary.startTime, end: summary.endTime))
+    }
+
+    // MARK: - Featured Moment Section
+
+    @ViewBuilder
+    private var featuredMomentSection: some View {
+        if let moment = summary.featuredMoment {
+            VStack(alignment: .leading, spacing: 6) {
+                // Thumbnail
+                if let thumbnailPath = moment.thumbnailPath {
+                    AsyncThumbnailView(relativePath: thumbnailPath)
+                        .frame(height: 160)
+                        .frame(maxWidth: .infinity)
+                        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                }
+
+                // Caption if available
+                if let note = moment.note, !note.isEmpty {
+                    Text(note)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .lineLimit(2)
+                }
+            }
+        }
+    }
+
+    // MARK: - Natural Language Summary
+
+    @ViewBuilder
+    private func naturalLanguageSummary(_ text: String) -> some View {
+        Text(text)
+            .font(.subheadline)
+            .fontWeight(.medium)
+            .foregroundStyle(.primary)
     }
 
     // MARK: - Summary Text
@@ -129,7 +175,7 @@ struct PartnerActivitySummaryCard: View {
         VStack(alignment: .leading, spacing: 8) {
             // Training events
             ForEach(Array(summary.trainingEvents.prefix(2))) { event in
-                activityRow(
+                ActivityRow(
                     icon: "graduationcap.fill",
                     iconColor: .orange,
                     text: event.exercise.map { Strings.Handoff.trainingExercise($0) } ?? Strings.Handoff.training
@@ -138,7 +184,7 @@ struct PartnerActivitySummaryCard: View {
 
             // Socialization events
             ForEach(Array(summary.socializationEvents.prefix(2))) { event in
-                activityRow(
+                ActivityRow(
                     icon: "dog.fill",
                     iconColor: .purple,
                     text: event.who.map { Strings.Handoff.metSomeone($0) } ?? Strings.Handoff.socialization
@@ -147,7 +193,7 @@ struct PartnerActivitySummaryCard: View {
 
             // Walk events
             ForEach(Array(summary.walkEvents.prefix(2))) { event in
-                activityRow(
+                ActivityRow(
                     icon: "figure.walk",
                     iconColor: .green,
                     text: walkTextFor(event)
@@ -156,25 +202,6 @@ struct PartnerActivitySummaryCard: View {
         }
     }
 
-    // MARK: - Activity Row
-
-    @ViewBuilder
-    private func activityRow(icon: String, iconColor: Color, text: String) -> some View {
-        HStack(spacing: 10) {
-            Image(systemName: icon)
-                .font(.system(size: 12))
-                .foregroundStyle(iconColor)
-                .frame(width: 24, height: 24)
-                .background(iconColor.opacity(colorScheme == .dark ? 0.2 : 0.1))
-                .clipShape(Circle())
-
-            Text(text)
-                .font(.subheadline)
-                .lineLimit(1)
-
-            Spacer()
-        }
-    }
 
     // MARK: - Expandable Section
 
@@ -184,7 +211,7 @@ struct PartnerActivitySummaryCard: View {
             // Show remaining events
             VStack(alignment: .leading, spacing: 8) {
                 ForEach(remainingEvents) { event in
-                    activityRow(
+                    ActivityRow(
                         icon: event.type.icon,
                         iconColor: .secondary,
                         text: event.type.label
@@ -271,28 +298,27 @@ struct PartnerActivitySummaryCard: View {
 // MARK: - Preview
 
 #Preview {
+    let trainingEvent = PuppyEvent(type: .training, exercise: "Sit")
+    let walkEvent = PuppyEvent(type: .uitlaten, durationMin: 30)
+    let socialEvent = PuppyEvent(type: .sociaal, who: "Luna the Labrador")
+
     let summary = PartnerActivitySummary(
-        partnerIds: [UUID()],
+        partnerRecordIDs: ["partner-123"],
         partnerNames: ["Sarah"],
-        events: [
-            PuppyEvent(type: .training, exercise: "Sit"),
-            PuppyEvent(type: .uitlaten, durationMin: 30),
-            PuppyEvent(type: .sociaal, who: "Luna the Labrador")
-        ],
+        events: [trainingEvent, walkEvent, socialEvent],
         startTime: Date().addingTimeInterval(-3600 * 3),
         endTime: Date().addingTimeInterval(-3600),
-        trainingEvents: [PuppyEvent(type: .training, exercise: "Sit")],
-        socializationEvents: [PuppyEvent(type: .sociaal, who: "Luna the Labrador")],
-        walkEvents: [PuppyEvent(type: .uitlaten, durationMin: 30)],
-        otherNotableEvents: []
+        trainingEvents: [trainingEvent],
+        socializationEvents: [socialEvent],
+        walkEvents: [walkEvent],
+        otherNotableEvents: [],
+        featuredMoment: nil,
+        handoverSummary: "1 nap, 30 min walk, training — all potty outside!"
     )
 
     return VStack {
         PartnerActivitySummaryCard(
             summary: summary,
-            householdMembers: HouseholdMembers(members: [
-                HouseholdMember(name: "Sarah", colorHex: "#4ECDC4")
-            ]),
             onDismiss: { print("Dismissed") }
         )
     }

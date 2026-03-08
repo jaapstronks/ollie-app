@@ -193,7 +193,7 @@ struct HealthView: View {
 
     private var isAdult: Bool {
         guard let phase = profile?.lifecyclePhase else { return false }
-        return phase == .adult || phase == .youngAdult
+        return phase == .adult
     }
 
     // MARK: - Adult Wellness Section
@@ -202,7 +202,7 @@ struct HealthView: View {
     private var adultWellnessSection: some View {
         VStack(alignment: .leading, spacing: 10) {
             // Section header
-            SectionHeader(title: Strings.Routine.wellness, icon: "figure.walk.motion", tint: .green) {
+            SectionHeader(title: Strings.AdultWellness.title, icon: "figure.walk.motion", tint: .green) {
                 NavigationLink(destination: RoutineView().environmentObject(routineStore)) {
                     Text(Strings.Common.seeAll)
                         .font(.subheadline)
@@ -225,7 +225,7 @@ struct HealthView: View {
                 }
 
                 // Enrichment suggestion
-                if let suggestion = routineStore.enrichmentSuggestion {
+                if let suggestion = routineStore.enrichmentSuggestion() {
                     EnrichmentCard(
                         activities: routineStore.enrichmentActivities,
                         suggestion: suggestion,
@@ -237,13 +237,13 @@ struct HealthView: View {
                 }
 
                 // Weight goal progress (if active goal exists)
-                if let goal = routineStore.weightGoal {
-                    WeightGoalCard(
-                        goal: goal,
-                        currentWeight: weightStore.latestWeight?.weight,
-                        onTap: {}
-                    )
-                }
+                WeightGoalCard(
+                    goal: routineStore.weightGoal,
+                    currentWeight: weightStore.latestWeight?.weight,
+                    latestBCS: routineStore.bodyConditionScores.first,
+                    onGoalTap: {},
+                    onBCSTap: {}
+                )
             }
         }
     }
@@ -619,13 +619,7 @@ struct HealthView: View {
                         Spacer()
 
                         if appointment.isToday {
-                            Text(Strings.VetVisit.visitToday)
-                                .font(.caption2.weight(.medium))
-                                .foregroundStyle(.white)
-                                .padding(.horizontal, 6)
-                                .padding(.vertical, 2)
-                                .background(Color.otisDanger)
-                                .clipShape(Capsule())
+                            CapsuleBadge(Strings.VetVisit.visitToday, color: .otisDanger, style: .filled)
                         }
                     }
                 }

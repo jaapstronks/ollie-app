@@ -13,11 +13,46 @@ import OtisShared
 /// Uses liquid glass card styling throughout
 struct StatsView: View {
     @ObservedObject var viewModel: TimelineViewModel
+    @StateObject private var contributionViewModel: ContributionStatsViewModel
+
+    init(viewModel: TimelineViewModel) {
+        self.viewModel = viewModel
+        _contributionViewModel = StateObject(wrappedValue: ContributionStatsViewModel(eventStore: viewModel.eventStore))
+    }
 
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 20) {
+                    // Period picker for contributions
+                    if contributionViewModel.currentUserStats != nil {
+                        ContributionPeriodPicker(selectedPeriod: $contributionViewModel.selectedPeriod)
+                            .onChange(of: contributionViewModel.selectedPeriod) { _, newPeriod in
+                                contributionViewModel.selectPeriod(newPeriod)
+                                Analytics.track(.contributionStatsViewed, properties: [
+                                    "period": newPeriod.rawValue,
+                                    "is_team": contributionViewModel.hasTeam
+                                ])
+                            }
+                    }
+
+                    // Team contributions section (only show if team has multiple members)
+                    if contributionViewModel.hasTeam, let summary = contributionViewModel.summary {
+                        TeamContributionCard(
+                            stats: contributionViewModel.stats,
+                            period: contributionViewModel.selectedPeriod,
+                            summary: summary
+                        )
+                        .inSection(title: OtisShared.Strings.ContributionStats.teamContributions, icon: "person.3.fill", tint: .otisAccent)
+                    } else if let userStats = contributionViewModel.currentUserStats {
+                        // Show individual stats if solo user
+                        YourContributionCard(
+                            stat: userStats,
+                            period: contributionViewModel.selectedPeriod
+                        )
+                        .inSection(title: OtisShared.Strings.ContributionStats.yourContributions, icon: "person.fill", tint: .otisAccent)
+                    }
+
                     // Streak section
                     StreakStatsCard(streakInfo: viewModel.streakInfo)
                         .inSection(title: Strings.Stats.outdoorStreak, icon: "flame.fill", tint: .otisAccent)
@@ -42,6 +77,9 @@ struct StatsView: View {
             }
             .navigationTitle(Strings.Stats.title)
             .navigationBarTitleDisplayMode(.large)
+            .onAppear {
+                contributionViewModel.refresh()
+            }
         }
     }
 
@@ -50,8 +88,7 @@ struct StatsView: View {
     }
 
     private var recentEvents: [PuppyEvent] {
-        let sevenDaysAgo = Calendar.current.date(byAdding: .day, value: -7, to: Date())!
-        return viewModel.eventStore.getEvents(from: sevenDaysAgo, to: Date())
+        viewModel.eventStore.getEvents(from: Date.daysAgo(7), to: Date())
     }
 }
 

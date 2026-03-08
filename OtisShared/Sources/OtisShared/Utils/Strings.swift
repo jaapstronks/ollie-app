@@ -1743,4 +1743,60 @@ public enum Strings {
         public static var rrrTrendStable: String { String(localized: "Stable", bundle: Strings.bundle) }
         public static var rrrTrendIncreasing: String { String(localized: "Increasing", bundle: Strings.bundle) }
     }
+
+    // MARK: - Contribution Stats
+    public enum ContributionStats {
+        /// "Today"
+        public static var today: String { String(localized: "Today", bundle: Strings.bundle) }
+
+        /// "This week"
+        public static var thisWeek: String { String(localized: "This week", bundle: Strings.bundle) }
+
+        /// "This month"
+        public static var thisMonth: String { String(localized: "This month", bundle: Strings.bundle) }
+
+        /// "All time"
+        public static var allTime: String { String(localized: "All time", bundle: Strings.bundle) }
+
+        /// "Team contributions"
+        public static var teamContributions: String { String(localized: "Team contributions", bundle: Strings.bundle) }
+
+        /// "Your contributions"
+        public static var yourContributions: String { String(localized: "Your contributions", bundle: Strings.bundle) }
+
+        /// "Events logged"
+        public static var eventsLogged: String { String(localized: "Events logged", bundle: Strings.bundle) }
+
+        /// "Walks"
+        public static var walks: String { String(localized: "Walks", bundle: Strings.bundle) }
+
+        /// "Walk minutes"
+        public static var walkMinutes: String { String(localized: "Walk minutes", bundle: Strings.bundle) }
+
+        /// "Training sessions"
+        public static var trainingSessions: String { String(localized: "Training sessions", bundle: Strings.bundle) }
+
+        /// "Potty breaks"
+        public static var pottyBreaks: String { String(localized: "Potty breaks", bundle: Strings.bundle) }
+
+        /// "Moments captured"
+        public static var momentsCaptured: String { String(localized: "Moments captured", bundle: Strings.bundle) }
+
+        /// "Meals logged"
+        public static var mealsLogged: String { String(localized: "Meals logged", bundle: Strings.bundle) }
+
+        /// "Social events"
+        public static var socialEvents: String { String(localized: "Social events", bundle: Strings.bundle) }
+
+        /// "Top contributor"
+        public static var topContributor: String { String(localized: "Top contributor", bundle: Strings.bundle) }
+
+        /// "Team effort!"
+        public static var teamEffort: String { String(localized: "Team effort!", bundle: Strings.bundle) }
+
+        /// "%d%% of all events"
+        public static func percentageOfEvents(_ percentage: Int) -> String {
+            String(localized: "\(percentage)% of all events", bundle: Strings.bundle)
+        }
+    }
 }

@@ -49,6 +49,13 @@ enum Analytics {
         case partnerActivityCardViewed = "partner_activity_card_viewed"
         case partnerActivityCardDismissed = "partner_activity_card_dismissed"
 
+        // Social / Likes
+        case eventLiked = "event_liked"
+        case eventUnliked = "event_unliked"
+
+        // Contribution Stats
+        case contributionStatsViewed = "contribution_stats_viewed"
+
         // Navigation
         case tabSelected = "tab_selected"
         case settingsOpened = "settings_opened"
