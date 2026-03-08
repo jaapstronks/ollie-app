@@ -151,6 +151,9 @@ struct AppointmentNudgeCard: View {
                     Text(Strings.AppointmentNudge.remindLater)
                         .font(.caption)
                         .foregroundStyle(.secondary)
+                        .padding(.vertical, 8)
+                        .padding(.horizontal, 16)
+                        .contentShape(Rectangle())
                 }
             }
         }

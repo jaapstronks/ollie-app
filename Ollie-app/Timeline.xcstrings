@@ -806,6 +806,86 @@
         }
       }
     },
+    "1 more poop expected today" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Noch 1 Häufchen heute erwartet"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se espera 1 caca más hoy"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 caca de plus attendu aujourd'hui"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 altra cacca prevista oggi"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nog 1 poepje verwacht vandaag"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 bajs till förväntat idag"
+          }
+        }
+      }
+    },
+    "%lld more poops expected today" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Noch %lld Häufchen heute erwartet"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se esperan %lld cacas más hoy"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld cacas de plus attendus aujourd'hui"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld altre cacche previste oggi"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nog %lld poepjes verwacht vandaag"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld bajs till förväntade idag"
+          }
+        }
+      }
+    },
     "Accident" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -1450,42 +1530,8 @@
         }
       }
     },
-    "Awake since: %@" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Wach seit: %@"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Despierto desde: %@"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Éveillé depuis : %@"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sveglio dalle: %@"
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Wakker sinds: %@"
-          }
-        }
-      }
-    },
     "Awake since %@ (%@)" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1521,6 +1567,41 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Vaken sedan %@ (%@)"
+          }
+        }
+      }
+    },
+    "Awake since: %@" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wach seit: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Despierto desde: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Éveillé depuis : %@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sveglio dalle: %@"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wakker sinds: %@"
           }
         }
       }
@@ -3311,6 +3392,7 @@
       }
     },
     "Nap in ~%lld min?" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -3626,6 +3708,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Nog niet gepoept vandaag"
+          }
+        }
+      }
+    },
+    "No recent activity" : {
+      "comment" : "Text to display when there is no recent activity.",
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geen recente activiteit"
           }
         }
       }
@@ -4645,6 +4739,18 @@
         }
       }
     },
+    "Recent Activity" : {
+      "comment" : "Title of the section that lists recent activity.",
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recente activiteit"
+          }
+        }
+      }
+    },
     "Scheduled for %@" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -5205,6 +5311,18 @@
         }
       }
     },
+    "Start logging to see events here" : {
+      "comment" : "Hint text to encourage users to start logging events.",
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Begin met loggen om gebeurtenissen te zien"
+          }
+        }
+      }
+    },
     "Start nap" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -5731,6 +5849,7 @@
       }
     },
     "Time for a nap!" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -6046,6 +6165,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Wordt meestal nu wakker"
+          }
+        }
+      }
+    },
+    "View full timeline" : {
+      "comment" : "Text for the action button that navigates to the full timeline sheet.",
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bekijk volledige tijdlijn"
           }
         }
       }
@@ -6676,50 +6807,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Gisteren"
-          }
-        }
-      }
-    },
-    "Recent Activity" : {
-      "comment" : "Title of the section that lists recent activity.",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Recente activiteit"
-          }
-        }
-      }
-    },
-    "View full timeline" : {
-      "comment" : "Text for the action button that navigates to the full timeline sheet.",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bekijk volledige tijdlijn"
-          }
-        }
-      }
-    },
-    "No recent activity" : {
-      "comment" : "Text to display when there is no recent activity.",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Geen recente activiteit"
-          }
-        }
-      }
-    },
-    "Start logging to see events here" : {
-      "comment" : "Hint text to encourage users to start logging events.",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Begin met loggen om gebeurtenissen te zien"
           }
         }
       }
