@@ -72,8 +72,8 @@ struct MemoriesCard: View {
             VStack(alignment: .leading, spacing: 0) {
                 // Photo with overlay
                 ZStack(alignment: .topLeading) {
-                    // Photo
-                    EventThumbnailView(event: memory.event, showErrorPlaceholder: false)
+                    // Photo with fallback placeholder
+                    MemoryPhotoView(event: memory.event)
                         .frame(height: 140)
                         .frame(maxWidth: .infinity)
                         .clipped()
@@ -289,6 +289,102 @@ struct MemoriesCard: View {
         default:
             return event.type.label
         }
+    }
+}
+
+// MARK: - Memory Photo View
+
+/// Photo view with proper loading states and fallback for cloud-synced photos
+private struct MemoryPhotoView: View {
+    let event: PuppyEvent
+
+    @State private var image: UIImage?
+    @State private var loadState: LoadState = .loading
+
+    private enum LoadState {
+        case loading
+        case loaded
+        case failed
+    }
+
+    private var documentsURL: URL {
+        FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+    }
+
+    var body: some View {
+        Group {
+            switch loadState {
+            case .loading:
+                Rectangle()
+                    .fill(Color.otisAccent.opacity(0.15))
+                    .overlay {
+                        ProgressView()
+                            .tint(.white)
+                    }
+
+            case .loaded:
+                if let image = image {
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFill()
+                }
+
+            case .failed:
+                // Show a styled placeholder with the event type icon
+                Rectangle()
+                    .fill(
+                        LinearGradient(
+                            colors: [Color.otisAccent.opacity(0.3), Color.otisAccent.opacity(0.15)],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .overlay {
+                        VStack(spacing: 8) {
+                            Image(systemName: event.type.icon)
+                                .font(.system(size: 32))
+                                .foregroundStyle(.white.opacity(0.6))
+                            if event.cloudPhotoSynced == true {
+                                // Photo is in cloud but not downloaded locally
+                                Label(Strings.Memories.photoInCloud, systemImage: "icloud.and.arrow.down")
+                                    .font(.caption2)
+                                    .foregroundStyle(.white.opacity(0.5))
+                            }
+                        }
+                    }
+            }
+        }
+        .task(id: event.id) {
+            await loadPhoto()
+        }
+    }
+
+    private func loadPhoto() async {
+        loadState = .loading
+
+        // Try thumbnail first
+        if let thumbnailPath = event.thumbnailPath {
+            let url = documentsURL.appendingPathComponent(thumbnailPath)
+            if let data = try? Data(contentsOf: url),
+               let loaded = UIImage(data: data) {
+                image = loaded
+                loadState = .loaded
+                return
+            }
+        }
+
+        // Fall back to full photo
+        if let photoPath = event.photo {
+            let url = documentsURL.appendingPathComponent(photoPath)
+            if let data = try? Data(contentsOf: url),
+               let loaded = UIImage(data: data) {
+                image = loaded
+                loadState = .loaded
+                return
+            }
+        }
+
+        loadState = .failed
     }
 }
 
