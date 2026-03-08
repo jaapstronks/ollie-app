@@ -24,6 +24,7 @@ public struct DogAppointment: Identifiable, Codable, Sendable, Hashable {
     // Linking
     public var linkedMilestoneID: UUID?
     public var linkedContactID: UUID?
+    public var linkedGroomingType: GroomingType?
     public var calendarEventID: String?
 
     // Completion
@@ -49,6 +50,7 @@ public struct DogAppointment: Identifiable, Codable, Sendable, Hashable {
         recurrence: RecurrenceRule? = nil,
         linkedMilestoneID: UUID? = nil,
         linkedContactID: UUID? = nil,
+        linkedGroomingType: GroomingType? = nil,
         calendarEventID: String? = nil,
         isCompleted: Bool = false,
         completionNotes: String? = nil,
@@ -67,6 +69,7 @@ public struct DogAppointment: Identifiable, Codable, Sendable, Hashable {
         self.recurrence = recurrence
         self.linkedMilestoneID = linkedMilestoneID
         self.linkedContactID = linkedContactID
+        self.linkedGroomingType = linkedGroomingType
         self.calendarEventID = calendarEventID
         self.isCompleted = isCompleted
         self.completionNotes = completionNotes

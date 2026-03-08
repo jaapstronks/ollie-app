@@ -201,11 +201,25 @@ final class AppointmentStore: BaseStore, ProfileAccessible {
     }
 
     /// Mark an appointment as completed
+    /// If this is a grooming appointment with a linked grooming type, optionally mark the grooming activity as complete
     @discardableResult
-    func completeAppointment(_ appointment: DogAppointment, notes: String? = nil) -> Bool {
+    func completeAppointment(
+        _ appointment: DogAppointment,
+        notes: String? = nil,
+        routineStore: RoutineStore? = nil
+    ) -> Bool {
         var updatedAppointment = appointment
         updatedAppointment.isCompleted = true
         updatedAppointment.completionNotes = notes
+
+        // If this is a grooming appointment with a linked type, mark it complete in RoutineStore
+        if appointment.appointmentType == .grooming,
+           let groomingType = appointment.linkedGroomingType,
+           let routineStore = routineStore {
+            routineStore.markGroomingCompleted(type: groomingType, at: Date())
+            logger.info("Marked linked grooming activity \(groomingType.rawValue) as complete")
+        }
+
         return updateAppointment(updatedAppointment)
     }
 

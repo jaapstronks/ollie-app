@@ -27,6 +27,9 @@ extension SheetCoordinator.ActiveSheet {
                 onSelect: { type in
                     handleEventTypeSelection(type, context: context)
                 },
+                onSelectGrooming: { type in
+                    context.sheetCoordinator.transitionToSheet(.groomingQuickLog(preselectedType: type))
+                },
                 onCancel: {
                     context.sheetCoordinator.dismissSheet()
                 }

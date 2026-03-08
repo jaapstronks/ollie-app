@@ -20,6 +20,7 @@ struct HealthTabView: View {
     @EnvironmentObject var appointmentStore: AppointmentStore
     @EnvironmentObject var weightStore: WeightStore
     @EnvironmentObject var socializationStore: SocializationStore
+    @EnvironmentObject var routineStore: RoutineStore
 
     @State private var showWeightSheet = false
     @State private var showGrowthChart = false
@@ -86,6 +87,12 @@ struct HealthTabView: View {
                     if let birthDate = profileStore.profile?.birthDate {
                         medicalMilestonesSection(birthDate: birthDate)
                             .animatedAppear(delay: 0.15)
+                    }
+
+                    // Grooming & Care section
+                    if profileStore.profile != nil {
+                        groomingCareSection
+                            .animatedAppear(delay: 0.18)
                     }
 
                     // Combined potty training section (streak + gaps)
@@ -251,6 +258,20 @@ struct HealthTabView: View {
             InsightsSectionHeader(title: title, icon: icon, tint: tint)
             content()
         }
+    }
+
+    // MARK: - Grooming Care Section
+
+    @ViewBuilder
+    private var groomingCareSection: some View {
+        GroomingCareSection(
+            onShowSchedule: {
+                viewModel.sheetCoordinator.presentSheet(.groomingSettings)
+            },
+            onLogActivity: { type in
+                viewModel.sheetCoordinator.presentSheet(.groomingQuickLog(preselectedType: type))
+            }
+        )
     }
 
     // MARK: - Combined Potty Training Section
@@ -502,4 +523,5 @@ private struct HealthMilestoneRow: View {
     .environmentObject(AppointmentStore())
     .environmentObject(WeightStore())
     .environmentObject(SocializationStore())
+    .environmentObject(RoutineStore())
 }

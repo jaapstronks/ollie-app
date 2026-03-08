@@ -46,6 +46,7 @@ extension CDDogAppointment {
         // Linking
         self.linkedMilestoneID = appointment.linkedMilestoneID
         self.linkedContactID = appointment.linkedContactID
+        self.linkedGroomingType = appointment.linkedGroomingType?.rawValue
         self.calendarEventID = appointment.calendarEventID
 
         // Completion
@@ -103,6 +104,12 @@ extension CDDogAppointment {
             )
         }
 
+        // Parse linkedGroomingType
+        var linkedGroomingType: GroomingType? = nil
+        if let groomingTypeString = self.linkedGroomingType {
+            linkedGroomingType = GroomingType(rawValue: groomingTypeString)
+        }
+
         return DogAppointment(
             id: id,
             title: title,
@@ -116,6 +123,7 @@ extension CDDogAppointment {
             recurrence: recurrence,
             linkedMilestoneID: self.linkedMilestoneID,
             linkedContactID: self.linkedContactID,
+            linkedGroomingType: linkedGroomingType,
             calendarEventID: self.calendarEventID,
             isCompleted: self.isCompleted,
             completionNotes: self.completionNotes,

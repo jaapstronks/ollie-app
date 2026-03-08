@@ -194,6 +194,11 @@ extension Strings {
             String(localized: "Based on your dog's breed, we suggest \"\(coatType)\" as the coat type.", table: table)
         }
 
+        // Count strings
+        static func moreActivities(_ count: Int) -> String {
+            String(localized: "+\(count) more", table: table)
+        }
+
         // Quick log sheet
         static let logActivity = String(localized: "Log Grooming", table: table)
         static let log = String(localized: "Log", table: table)

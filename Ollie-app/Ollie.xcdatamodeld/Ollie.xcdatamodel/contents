@@ -207,6 +207,7 @@
         <attribute name="isAllDay" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="isCompleted" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="linkedContactID" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="linkedGroomingType" optional="YES" attributeType="String"/>
         <attribute name="linkedMilestoneID" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="location" optional="YES" attributeType="String"/>
         <attribute name="modifiedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
@@ -366,6 +367,18 @@
         <relationship name="profile" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDPuppyProfile" inverseName="enrichmentActivities" inverseEntity="CDPuppyProfile"/>
         <fetchIndex name="byCompletedAtIndex">
             <fetchIndexElement property="completedAt" type="Binary" order="descending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="CDUserIdentity" representedClassName="CDUserIdentity" syncable="YES" codeGenerationType="class">
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="name" attributeType="String" defaultValueString=""/>
+        <attribute name="avatarData" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
+        <attribute name="colorHex" attributeType="String" defaultValueString="#4ECDC4"/>
+        <attribute name="cloudKitUserRecordID" attributeType="String" defaultValueString=""/>
+        <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="modifiedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <fetchIndex name="byCloudKitRecordIDIndex">
+            <fetchIndexElement property="cloudKitUserRecordID" type="Binary" order="ascending"/>
         </fetchIndex>
     </entity>
 </model>

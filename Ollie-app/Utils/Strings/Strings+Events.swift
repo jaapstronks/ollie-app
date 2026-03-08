@@ -90,6 +90,7 @@ extension Strings {
         static let title = String(localized: "Log event", table: table)
         static let moreEvents = String(localized: "More events", table: table)
         static let quickEvents = String(localized: "Quick events", table: table)
+        static let careGrooming = String(localized: "Care & Grooming", table: table)
     }
 
     // MARK: - Log Event Sheet
@@ -175,6 +176,7 @@ extension Strings {
         // View modes
         static let galleryMode = String(localized: "Gallery", table: table)
         static let diaryMode = String(localized: "Diary", table: table)
+        static let viewMode = String(localized: "View Mode", table: table)
     }
 
     // MARK: - Media Attachment Button

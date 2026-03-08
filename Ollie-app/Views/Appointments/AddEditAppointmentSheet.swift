@@ -28,6 +28,7 @@ struct AddEditAppointmentSheet: View {
 
     // Linking
     @State private var linkedContactID: UUID?
+    @State private var linkedGroomingType: GroomingType?
 
     // Validation
     @State private var showingTitleError = false
@@ -60,6 +61,29 @@ struct AddEditAppointmentSheet: View {
                         }
                         // Suggest contact if available
                         suggestContact(for: newType)
+                        // Clear grooming type if not a grooming appointment
+                        if newType != .grooming {
+                            linkedGroomingType = nil
+                        }
+                    }
+
+                    // Grooming type picker (only for grooming appointments)
+                    if appointmentType == .grooming {
+                        Picker(Strings.Grooming.title, selection: $linkedGroomingType) {
+                            Text(Strings.Appointments.appointmentType)
+                                .tag(nil as GroomingType?)
+                            ForEach(GroomingType.allCases, id: \.self) { type in
+                                Label(type.label, systemImage: type.icon)
+                                    .tag(type as GroomingType?)
+                            }
+                        }
+                        .pickerStyle(.menu)
+                        .onChange(of: linkedGroomingType) { _, newType in
+                            // Update title to reflect specific grooming type
+                            if let groomingType = newType {
+                                title = groomingType.label
+                            }
+                        }
                     }
                 }
 
@@ -242,6 +266,7 @@ struct AddEditAppointmentSheet: View {
         notes = appointment.notes ?? ""
         reminderMinutesBefore = appointment.reminderMinutesBefore
         linkedContactID = appointment.linkedContactID
+        linkedGroomingType = appointment.linkedGroomingType
     }
 
     // MARK: - Save
@@ -282,6 +307,7 @@ struct AddEditAppointmentSheet: View {
             recurrence: nil, // TODO: Add recurrence editor for premium
             linkedMilestoneID: milestoneID,
             linkedContactID: linkedContactID,
+            linkedGroomingType: appointmentType == .grooming ? linkedGroomingType : nil,
             calendarEventID: existingAppointment?.calendarEventID,
             isCompleted: existingAppointment?.isCompleted ?? false,
             completionNotes: existingAppointment?.completionNotes,
