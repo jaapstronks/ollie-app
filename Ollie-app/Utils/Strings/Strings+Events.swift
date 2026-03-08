@@ -91,6 +91,7 @@ extension Strings {
         static let moreEvents = String(localized: "More events", table: table)
         static let quickEvents = String(localized: "Quick events", table: table)
         static let careGrooming = String(localized: "Care & Grooming", table: table)
+        static let grooming = String(localized: "Grooming", table: table)
     }
 
     // MARK: - Log Event Sheet

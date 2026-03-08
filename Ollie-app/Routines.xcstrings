@@ -12,6 +12,17 @@
         }
       }
     },
+    "%@ is overdue" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ is achterstallig"
+          }
+        }
+      }
+    },
     "%@/week recommended" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -45,6 +56,28 @@
         }
       }
     },
+    "%lld days past due for %@" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld dagen te laat voor %@"
+          }
+        }
+      }
+    },
+    "%lld grooming tasks overdue" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld verzorgingstaken achterstallig"
+          }
+        }
+      }
+    },
     "%lld min this week" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -63,6 +96,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "9-puntsschaal"
+          }
+        }
+      }
+    },
+    "A good brushing routine prevents tangles" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Een goede borstelroutine voorkomt klitten"
+          }
+        }
+      }
+    },
+    "Add any notes about this grooming session..." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voeg notities toe over deze verzorgingssessie..."
           }
         }
       }
@@ -155,6 +210,28 @@
         }
       }
     },
+    "Apply sunscreen before outdoor time" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Breng zonnebrand aan voor het naar buiten gaan"
+          }
+        }
+      }
+    },
+    "Based on your dog's breed, we suggest \"%@\" as the coat type." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Op basis van het ras van je hond stellen we \"%@\" voor als vachttype."
+          }
+        }
+      }
+    },
     "Bath" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -195,6 +272,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ontbijt"
+          }
+        }
+      }
+    },
+    "Brush more frequently during spring and fall shedding" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Borstel vaker tijdens de lente- en herfstverharing"
+          }
+        }
+      }
+    },
+    "Brush teeth for dental health" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Poets tanden voor gebitsgezondheid"
           }
         }
       }
@@ -243,6 +342,17 @@
         }
       }
     },
+    "Check pads and trim fur between toes" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Controleer voetzolen en trim haar tussen de tenen"
+          }
+        }
+      }
+    },
     "Chew session" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -250,6 +360,50 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Kauwsessie"
+          }
+        }
+      }
+    },
+    "Clean ears to prevent infections" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reinig oren om infecties te voorkomen"
+          }
+        }
+      }
+    },
+    "Clean eye area and remove tear stains" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reinig ooggebied en verwijder traanvlekken"
+          }
+        }
+      }
+    },
+    "Clipping will soften and lighten the coat over time" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Knippen maakt de vacht na verloop van tijd zachter en lichter"
+          }
+        }
+      }
+    },
+    "Coarse, bristly outer coat that may need hand-stripping" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grove, borstelige dekvacht die mogelijk handgetrimd moet worden"
           }
         }
       }
@@ -265,6 +419,39 @@
         }
       }
     },
+    "Consider a sanitary trim for hygiene" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Overweeg een sanitaire trim voor de hygiëne"
+          }
+        }
+      }
+    },
+    "Curly" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Krullend"
+          }
+        }
+      }
+    },
+    "Curly or wavy coat that doesn't shed much but mats easily" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Krullende of golvende vacht die weinig verhaart maar snel klit"
+          }
+        }
+      }
+    },
     "Current weight" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -272,6 +459,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Huidig gewicht"
+          }
+        }
+      }
+    },
+    "Daily brushing prevents painful mats" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dagelijks borstelen voorkomt pijnlijke klitten"
           }
         }
       }
@@ -298,6 +496,17 @@
         }
       }
     },
+    "Dense undercoat with longer outer coat, heavy seasonal shedding" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dichte ondervacht met langere dekvacht, veel seizoensgebonden verharing"
+          }
+        }
+      }
+    },
     "Dinner" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -309,13 +518,35 @@
         }
       }
     },
+    "Double Coat" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dubbele vacht"
+          }
+        }
+      }
+    },
+    "Dry thoroughly after baths to prevent mildew" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Goed drogen na het baden om schimmel te voorkomen"
+          }
+        }
+      }
+    },
     "Due" : {
       "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Gepland"
+            "value" : "Nu"
           }
         }
       }
@@ -485,6 +716,17 @@
         }
       }
     },
+    "Express anal glands if needed" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anaalklieren legen indien nodig"
+          }
+        }
+      }
+    },
     "Eye cleaning" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -518,6 +760,17 @@
         }
       }
     },
+    "Focus on feathering around legs and belly" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Focus op de bevedering rond poten en buik"
+          }
+        }
+      }
+    },
     "Food dispenser" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -525,6 +778,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Voerdispenser"
+          }
+        }
+      }
+    },
+    "Full bath with dog shampoo" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Volledig bad met hondenshampoo"
           }
         }
       }
@@ -580,6 +844,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Knipbeurt"
+          }
+        }
+      }
+    },
+    "Hairless" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Haarloos"
+          }
+        }
+      }
+    },
+    "Hand-stripping maintains coat texture and color" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Handtrimmen behoudt de vachtstructuur en kleur"
           }
         }
       }
@@ -650,6 +936,28 @@
         }
       }
     },
+    "Last done" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laatst gedaan"
+          }
+        }
+      }
+    },
+    "Last done %@" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laatst gedaan %@"
+          }
+        }
+      }
+    },
     "Latest score" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -672,6 +980,28 @@
         }
       }
     },
+    "Little to no coat, requires skin care instead" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weinig tot geen vacht, huidverzorging nodig"
+          }
+        }
+      }
+    },
+    "Log" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loggen"
+          }
+        }
+      }
+    },
     "Log Activity" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -690,6 +1020,39 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "BCS loggen"
+          }
+        }
+      }
+    },
+    "Log Grooming" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verzorging loggen"
+          }
+        }
+      }
+    },
+    "Long" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lang"
+          }
+        }
+      }
+    },
+    "Long, flowing coat that requires daily attention" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lange, golvende vacht die dagelijks verzorging nodig heeft"
           }
         }
       }
@@ -727,6 +1090,17 @@
         }
       }
     },
+    "Medium" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Medium"
+          }
+        }
+      }
+    },
     "Mental" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -745,6 +1119,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Middagwandeling"
+          }
+        }
+      }
+    },
+    "Moderate length coat, may have some feathering" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vacht van gemiddelde lengte, mogelijk met wat bevedering"
+          }
+        }
+      }
+    },
+    "Moisturize regularly to prevent dry skin" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Regelmatig hydrateren om droge huid te voorkomen"
           }
         }
       }
@@ -782,6 +1178,28 @@
         }
       }
     },
+    "Never logged" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nooit gelogd"
+          }
+        }
+      }
+    },
+    "Never shave a double coat - it won't grow back the same" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scheer nooit een dubbele vacht - deze groeit niet meer hetzelfde terug"
+          }
+        }
+      }
+    },
     "New environment" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -815,13 +1233,24 @@
         }
       }
     },
+    "No grooming activities" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geen verzorgingsactiviteiten"
+          }
+        }
+      }
+    },
     "No grooming due right now" : {
       "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Geen verzorging gepland"
+            "value" : "Geen verzorging nodig"
           }
         }
       }
@@ -870,6 +1299,17 @@
         }
       }
     },
+    "Not set" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Niet ingesteld"
+          }
+        }
+      }
+    },
     "Not yet done" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -881,6 +1321,17 @@
         }
       }
     },
+    "Notes (optional)" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notities (optioneel)"
+          }
+        }
+      }
+    },
     "Obese" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -888,6 +1339,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Obees"
+          }
+        }
+      }
+    },
+    "Occasional bathing keeps the coat shiny" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Af en toe een bad houdt de vacht glanzend"
           }
         }
       }
@@ -936,6 +1398,17 @@
         }
       }
     },
+    "Pay attention to behind ears, armpits, and legs" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Let extra op achter de oren, oksels en poten"
+          }
+        }
+      }
+    },
     "Physical" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -954,6 +1427,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Speeltijd"
+          }
+        }
+      }
+    },
+    "Professional coat trimming" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Professionele vachttrimming"
           }
         }
       }
@@ -991,6 +1475,17 @@
         }
       }
     },
+    "Regular professional grooming keeps the coat manageable" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Regelmatige professionele verzorging houdt de vacht handelbaar"
+          }
+        }
+      }
+    },
     "remaining" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -1002,6 +1497,50 @@
         }
       }
     },
+    "Remove loose fur and prevent matting" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verwijder losse haren en voorkom klitten"
+          }
+        }
+      }
+    },
+    "Remove undercoat and reduce shedding" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verwijder ondervacht en verminder verharing"
+          }
+        }
+      }
+    },
+    "Reset Grooming Schedule?" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verzorgingsschema resetten?"
+          }
+        }
+      }
+    },
+    "Reset to Defaults" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terugzetten naar standaard"
+          }
+        }
+      }
+    },
     "Routine and wellness tracking for adult dogs" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -1009,6 +1548,39 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Routine en welzijn bijhouden voor volwassen honden"
+          }
+        }
+      }
+    },
+    "Seasonal coat changes may require more attention" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seizoensgebonden vachtveranderingen vragen extra aandacht"
+          }
+        }
+      }
+    },
+    "Set a coat type to see recommended schedule" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stel een vachttype in om het aanbevolen schema te zien"
+          }
+        }
+      }
+    },
+    "Set Up Defaults" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Standaardwaarden instellen"
           }
         }
       }
@@ -1031,6 +1603,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ernstig obees"
+          }
+        }
+      }
+    },
+    "Short, sleek coat that lies close to the body" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Korte, gladde vacht die dicht tegen het lichaam ligt"
+          }
+        }
+      }
+    },
+    "Short/Smooth" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kort/Glad"
           }
         }
       }
@@ -1090,6 +1684,17 @@
         }
       }
     },
+    "Suggested" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aanbevolen"
+          }
+        }
+      }
+    },
     "Swimming" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -1145,6 +1750,17 @@
         }
       }
     },
+    "This will replace your current grooming schedule with the defaults for your dog's coat type." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dit vervangt je huidige verzorgingsschema door de standaardwaarden voor het vachttype van je hond."
+          }
+        }
+      }
+    },
     "Time" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -1152,6 +1768,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tijd"
+          }
+        }
+      }
+    },
+    "Time for %@?" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tijd voor %@?"
           }
         }
       }
@@ -1185,6 +1812,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Trucjes trainen"
+          }
+        }
+      }
+    },
+    "Trim nails to prevent overgrowth" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Knip nagels om doorgroeien te voorkomen"
           }
         }
       }
@@ -1233,6 +1871,50 @@
         }
       }
     },
+    "Use a rubber curry brush to remove loose hair" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gebruik een rubberen borstel om losse haren te verwijderen"
+          }
+        }
+      }
+    },
+    "Use a slicker brush to prevent matting" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gebruik een hondenborstel om klitten te voorkomen"
+          }
+        }
+      }
+    },
+    "Use a stripping knife or stone for proper technique" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gebruik een trimmes of -steen voor de juiste techniek"
+          }
+        }
+      }
+    },
+    "Use an undercoat rake during heavy shedding periods" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gebruik een ondervaththark tijdens zware verharingsperiodes"
+          }
+        }
+      }
+    },
     "Very thin" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -1240,6 +1922,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Erg mager"
+          }
+        }
+      }
+    },
+    "Watch for blackheads and skin irritation" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Let op mee-eters en huidirritatie"
+          }
+        }
+      }
+    },
+    "Watch for skin issues that are more visible on short coats" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Let op huidproblemen die beter zichtbaar zijn bij korte vachten"
           }
         }
       }
@@ -1277,467 +1981,8 @@
         }
       }
     },
-    "Short/Smooth" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kort/Glad"
-          }
-        }
-      }
-    },
-    "Medium" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Medium"
-          }
-        }
-      }
-    },
-    "Long" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Lang"
-          }
-        }
-      }
-    },
-    "Curly" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Krullend"
-          }
-        }
-      }
-    },
-    "Double Coat" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dubbele vacht"
-          }
-        }
-      }
-    },
-    "Wire/Wiry" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ruw/Draadhaar"
-          }
-        }
-      }
-    },
-    "Hairless" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Haarloos"
-          }
-        }
-      }
-    },
-    "Short, sleek coat that lies close to the body" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Korte, gladde vacht die dicht tegen het lichaam ligt"
-          }
-        }
-      }
-    },
-    "Moderate length coat, may have some feathering" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Vacht van gemiddelde lengte, mogelijk met wat bevedering"
-          }
-        }
-      }
-    },
-    "Long, flowing coat that requires daily attention" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Lange, golvende vacht die dagelijks verzorging nodig heeft"
-          }
-        }
-      }
-    },
-    "Curly or wavy coat that doesn't shed much but mats easily" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Krullende of golvende vacht die weinig verhaart maar snel klit"
-          }
-        }
-      }
-    },
-    "Dense undercoat with longer outer coat, heavy seasonal shedding" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dichte ondervacht met langere dekvacht, veel seizoensgebonden verharing"
-          }
-        }
-      }
-    },
-    "Coarse, bristly outer coat that may need hand-stripping" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Grove, borstelige dekvacht die mogelijk handgetrimd moet worden"
-          }
-        }
-      }
-    },
-    "Little to no coat, requires skin care instead" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Weinig tot geen vacht, huidverzorging nodig"
-          }
-        }
-      }
-    },
-    "Use a rubber curry brush to remove loose hair" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Gebruik een rubberen borstel om losse haren te verwijderen"
-          }
-        }
-      }
-    },
-    "Occasional bathing keeps the coat shiny" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Af en toe een bad houdt de vacht glanzend"
-          }
-        }
-      }
-    },
-    "Watch for skin issues that are more visible on short coats" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Let op huidproblemen die beter zichtbaar zijn bij korte vachten"
-          }
-        }
-      }
-    },
-    "Focus on feathering around legs and belly" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Focus op de bevedering rond poten en buik"
-          }
-        }
-      }
-    },
-    "A good brushing routine prevents tangles" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Een goede borstelroutine voorkomt klitten"
-          }
-        }
-      }
-    },
-    "Seasonal coat changes may require more attention" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Seizoensgebonden vachtveranderingen vragen extra aandacht"
-          }
-        }
-      }
-    },
-    "Daily brushing prevents painful mats" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dagelijks borstelen voorkomt pijnlijke klitten"
-          }
-        }
-      }
-    },
-    "Pay attention to behind ears, armpits, and legs" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Let extra op achter de oren, oksels en poten"
-          }
-        }
-      }
-    },
-    "Consider a sanitary trim for hygiene" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Overweeg een sanitaire trim voor de hygiëne"
-          }
-        }
-      }
-    },
-    "Dry thoroughly after baths to prevent mildew" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Goed drogen na het baden om schimmel te voorkomen"
-          }
-        }
-      }
-    },
-    "Use a slicker brush to prevent matting" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Gebruik een hondenborstel om klitten te voorkomen"
-          }
-        }
-      }
-    },
-    "Regular professional grooming keeps the coat manageable" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Regelmatige professionele verzorging houdt de vacht handelbaar"
-          }
-        }
-      }
-    },
-    "Never shave a double coat - it won't grow back the same" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Scheer nooit een dubbele vacht - deze groeit niet meer hetzelfde terug"
-          }
-        }
-      }
-    },
-    "Brush more frequently during spring and fall shedding" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Borstel vaker tijdens de lente- en herfstverharing"
-          }
-        }
-      }
-    },
-    "Use an undercoat rake during heavy shedding periods" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Gebruik een ondervaththark tijdens zware verharingsperiodes"
-          }
-        }
-      }
-    },
-    "Hand-stripping maintains coat texture and color" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Handtrimmen behoudt de vachtstructuur en kleur"
-          }
-        }
-      }
-    },
-    "Clipping will soften and lighten the coat over time" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Knippen maakt de vacht na verloop van tijd zachter en lichter"
-          }
-        }
-      }
-    },
-    "Use a stripping knife or stone for proper technique" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Gebruik een trimmes of -steen voor de juiste techniek"
-          }
-        }
-      }
-    },
-    "Apply sunscreen before outdoor time" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Breng zonnebrand aan voor het naar buiten gaan"
-          }
-        }
-      }
-    },
-    "Moisturize regularly to prevent dry skin" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Regelmatig hydrateren om droge huid te voorkomen"
-          }
-        }
-      }
-    },
-    "Watch for blackheads and skin irritation" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Let op mee-eters en huidirritatie"
-          }
-        }
-      }
-    },
-    "Not set" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Niet ingesteld"
-          }
-        }
-      }
-    },
-    "Suggested" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aanbevolen"
-          }
-        }
-      }
-    },
-    "No grooming activities" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Geen verzorgingsactiviteiten"
-          }
-        }
-      }
-    },
-    "Set Up Defaults" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Standaardwaarden instellen"
-          }
-        }
-      }
-    },
-    "Set a coat type to see recommended schedule" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Stel een vachttype in om het aanbevolen schema te zien"
-          }
-        }
-      }
-    },
-    "Reset to Defaults" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Terugzetten naar standaard"
-          }
-        }
-      }
-    },
-    "Reset Grooming Schedule?" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verzorgingsschema resetten?"
-          }
-        }
-      }
-    },
-    "This will replace your current grooming schedule with the defaults for your dog's coat type." : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dit vervangt je huidige verzorgingsschema door de standaardwaarden voor het vachttype van je hond."
-          }
-        }
-      }
-    },
-    "Based on your dog's breed, we suggest \"%@\" as the coat type." : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Op basis van het ras van je hond stellen we \"%@\" voor als vachttype."
-          }
-        }
-      }
-    },
-    "Log Grooming" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verzorging loggen"
-          }
-        }
-      }
-    },
-    "Log" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Loggen"
-          }
-        }
-      }
-    },
     "What did you do?" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -1748,6 +1993,7 @@
       }
     },
     "When" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
@@ -1757,192 +2003,13 @@
         }
       }
     },
-    "Notes (optional)" : {
+    "Wire/Wiry" : {
+      "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Notities (optioneel)"
-          }
-        }
-      }
-    },
-    "Add any notes about this grooming session..." : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Voeg notities toe over deze verzorgingssessie..."
-          }
-        }
-      }
-    },
-    "Remove loose fur and prevent matting" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verwijder losse haren en voorkom klitten"
-          }
-        }
-      }
-    },
-    "Full bath with dog shampoo" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Volledig bad met hondenshampoo"
-          }
-        }
-      }
-    },
-    "Trim nails to prevent overgrowth" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Knip nagels om doorgroeien te voorkomen"
-          }
-        }
-      }
-    },
-    "Clean ears to prevent infections" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Reinig oren om infecties te voorkomen"
-          }
-        }
-      }
-    },
-    "Brush teeth for dental health" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Poets tanden voor gebitsgezondheid"
-          }
-        }
-      }
-    },
-    "Professional coat trimming" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Professionele vachttrimming"
-          }
-        }
-      }
-    },
-    "Remove undercoat and reduce shedding" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verwijder ondervacht en verminder verharing"
-          }
-        }
-      }
-    },
-    "Check pads and trim fur between toes" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Controleer voetzolen en trim haar tussen de tenen"
-          }
-        }
-      }
-    },
-    "Clean eye area and remove tear stains" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Reinig ooggebied en verwijder traanvlekken"
-          }
-        }
-      }
-    },
-    "Express anal glands if needed" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Anaalklieren legen indien nodig"
-          }
-        }
-      }
-    },
-    "%@ is overdue" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ is achterstallig"
-          }
-        }
-      }
-    },
-    "%lld grooming tasks overdue" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld verzorgingstaken achterstallig"
-          }
-        }
-      }
-    },
-    "Time for %@?" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tijd voor %@?"
-          }
-        }
-      }
-    },
-    "%lld days past due for %@" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld dagen te laat voor %@"
-          }
-        }
-      }
-    },
-    "Last done" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Laatst gedaan"
-          }
-        }
-      }
-    },
-    "Last done %@" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Laatst gedaan %@"
-          }
-        }
-      }
-    },
-    "Never logged" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nooit gelogd"
+            "value" : "Ruw/Draadhaar"
           }
         }
       }

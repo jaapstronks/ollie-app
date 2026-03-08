@@ -27,8 +27,8 @@ extension SheetCoordinator.ActiveSheet {
                 onSelect: { type in
                     handleEventTypeSelection(type, context: context)
                 },
-                onSelectGrooming: { type in
-                    context.sheetCoordinator.transitionToSheet(.groomingQuickLog(preselectedType: type))
+                onSelectGrooming: {
+                    context.sheetCoordinator.transitionToSheet(.groomingQuickLog(preselectedType: nil))
                 },
                 onCancel: {
                     context.sheetCoordinator.dismissSheet()
@@ -135,6 +135,25 @@ extension SheetCoordinator.ActiveSheet {
                 preselectedType: preselectedType
             )
 
+        case .behaviorLog:
+            BehaviorLogSheet(
+                onSave: { category, trigger, intensity, outcome, behaviorContext, time, note in
+                    context.viewModel.logBehaviorIncident(
+                        category: category,
+                        trigger: trigger,
+                        intensity: intensity,
+                        outcome: outcome,
+                        context: behaviorContext,
+                        time: time,
+                        note: note
+                    )
+                    context.sheetCoordinator.dismissSheet()
+                },
+                onCancel: {
+                    context.sheetCoordinator.dismissSheet()
+                }
+            )
+
         default:
             EmptyView()
         }
@@ -171,6 +190,9 @@ extension SheetCoordinator.ActiveSheet {
 
         case .medicatie:
             context.sheetCoordinator.transitionToSheet(.medicationLog)
+
+        case .gedrag:
+            context.sheetCoordinator.transitionToSheet(.behaviorLog)
 
         default:
             context.sheetCoordinator.transitionToSheet(.quickLog(type))

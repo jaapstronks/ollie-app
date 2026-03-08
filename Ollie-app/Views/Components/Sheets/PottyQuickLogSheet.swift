@@ -31,9 +31,9 @@ enum PottySelection: String, CaseIterable {
 
     var iconColor: Color {
         switch self {
-        case .plassen: return .otisInfo
-        case .poepen: return .otisWarning
-        case .beide: return .otisInfo
+        case .plassen: return .blue           // Pee - blue
+        case .poepen: return .brown           // Poo - brown
+        case .beide: return .blue
         }
     }
 }

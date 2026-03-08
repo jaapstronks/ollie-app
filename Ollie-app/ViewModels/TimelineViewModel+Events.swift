@@ -93,6 +93,35 @@ extension TimelineViewModel {
         sheetCoordinator.dismissSheet()
     }
 
+    // MARK: - Behavior Incident Logging
+
+    /// Log a behavior incident
+    func logBehaviorIncident(
+        category: BehaviorCategory,
+        trigger: String?,
+        intensity: BehaviorIntensity?,
+        outcome: BehaviorOutcome?,
+        context: BehaviorContext?,
+        time: Date,
+        note: String?
+    ) {
+        let loggedBy = UserIdentityStore.shared.currentUserRecordID
+
+        var event = PuppyEvent.behaviorIncident(
+            time: time,
+            category: category,
+            trigger: trigger,
+            intensity: intensity,
+            outcome: outcome,
+            context: context,
+            note: note
+        )
+        event.loggedBy = loggedBy
+
+        persistEvent(event)
+        HapticFeedback.success()
+    }
+
     // MARK: - Quick Log Context
 
     var quickLogContext: QuickLogContext {
@@ -150,7 +179,7 @@ extension TimelineViewModel {
         napLocation: NapLocation? = nil
     ) {
         // Get current user's household member ID for attribution
-        let loggedBy = profileStore.currentUserMemberId
+        let loggedBy = UserIdentityStore.shared.currentUserRecordID
 
         // Note: sleepSessionId is auto-generated for sleep events in PuppyEvent init
         let event = PuppyEvent(
@@ -242,7 +271,7 @@ extension TimelineViewModel {
         note: String? = nil
     ) {
         // Get current user's household member ID for attribution
-        let loggedBy = profileStore.currentUserMemberId
+        let loggedBy = UserIdentityStore.shared.currentUserRecordID
 
         var walkEvent = PuppyEvent.walk(
             time: time,
@@ -303,7 +332,7 @@ extension TimelineViewModel {
             durationMin: durationMin,
             sleepSessionId: UUID(),
             napLocation: napLocation,
-            loggedBy: profileStore.currentUserMemberId
+            loggedBy: UserIdentityStore.shared.currentUserRecordID
         )
         persistEvent(sleepEvent)
         FeedbackManager.logEvent()
@@ -429,7 +458,7 @@ extension TimelineViewModel {
             time: sleepStartTime,
             type: .slapen,
             sleepSessionId: UUID(),
-            loggedBy: profileStore.currentUserMemberId
+            loggedBy: UserIdentityStore.shared.currentUserRecordID
         )
         persistEventWithFeedback(sleepEvent)
         dismissedAssumedSleepDate = Date()
@@ -439,7 +468,7 @@ extension TimelineViewModel {
     /// Log wake-up for the assumed overnight sleep
     /// This confirms the sleep and logs the wake event at the current time (or specified time)
     func confirmAssumedOvernightSleepAndWakeUp(sleepStartTime: Date, wakeTime: Date = Date()) {
-        let loggedBy = profileStore.currentUserMemberId
+        let loggedBy = UserIdentityStore.shared.currentUserRecordID
         let sessionId = UUID()
 
         let sleepEvent = PuppyEvent(
@@ -482,7 +511,7 @@ extension TimelineViewModel {
         let wakeEvent = PuppyEvent(
             time: now,
             type: .ontwaken,
-            loggedBy: profileStore.currentUserMemberId
+            loggedBy: UserIdentityStore.shared.currentUserRecordID
         )
         persistEventWithFeedback(wakeEvent)
         dismissedStaleLoggingDate = now
@@ -497,7 +526,7 @@ extension TimelineViewModel {
         let sleepEvent = PuppyEvent(
             time: Date(),
             type: .slapen,
-            loggedBy: profileStore.currentUserMemberId
+            loggedBy: UserIdentityStore.shared.currentUserRecordID
         )
         persistEventWithFeedback(sleepEvent)
         dismissFirstRunWelcome()
@@ -510,7 +539,7 @@ extension TimelineViewModel {
         let wakeEvent = PuppyEvent(
             time: Date(),
             type: .ontwaken,
-            loggedBy: profileStore.currentUserMemberId
+            loggedBy: UserIdentityStore.shared.currentUserRecordID
         )
         persistEventWithFeedback(wakeEvent)
         dismissFirstRunWelcome()

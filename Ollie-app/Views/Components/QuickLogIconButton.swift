@@ -129,7 +129,8 @@ extension EventType {
     /// Color to use in quick log buttons
     var quickLogColor: Color {
         switch self {
-        case .plassen, .poepen: return .otisInfo
+        case .plassen: return .blue              // Pee - blue
+        case .poepen: return .brown              // Poo - brown
         case .eten, .drinken: return .otisAccent
         case .slapen, .ontwaken: return .otisSleep
         case .uitlaten, .tuin: return .otisSuccess

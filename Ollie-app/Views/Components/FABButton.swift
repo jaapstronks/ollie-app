@@ -20,8 +20,8 @@ struct FABQuickAction: Identifiable {
 
     static var defaultActions: [FABQuickAction] {
         [
-            FABQuickAction(type: .plassen, label: Strings.FAB.peeOutside, icon: "drop.fill", color: .otisInfo, location: .buiten),
-            FABQuickAction(type: .poepen, label: Strings.FAB.poopOutside, icon: "circle.inset.filled", color: .otisWarning, location: .buiten),
+            FABQuickAction(type: .plassen, label: Strings.FAB.peeOutside, icon: "drop.fill", color: .blue, location: .buiten),
+            FABQuickAction(type: .poepen, label: Strings.FAB.poopOutside, icon: "circle.inset.filled", color: .brown, location: .buiten),
             FABQuickAction(type: .eten, label: Strings.FAB.eat, icon: "fork.knife", color: .otisAccent, location: nil),
             FABQuickAction(type: .slapen, label: Strings.FAB.sleep, icon: "moon.zzz.fill", color: .otisSleep, location: nil),
             FABQuickAction(type: .ontwaken, label: Strings.FAB.wakeUp, icon: "sun.max.fill", color: .otisAccent, location: nil),

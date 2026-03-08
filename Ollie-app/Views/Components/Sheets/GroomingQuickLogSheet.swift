@@ -9,6 +9,26 @@
 import SwiftUI
 import OtisShared
 
+// MARK: - Grooming Type Colors
+
+extension GroomingType {
+    /// Distinct color for each grooming type
+    var color: Color {
+        switch self {
+        case .brushing: return .purple           // Classic grooming color
+        case .bathing: return .cyan              // Water/clean
+        case .nailTrim: return .pink             // Salon/beauty
+        case .earCleaning: return .orange        // Health/medical
+        case .teethBrushing: return .mint        // Fresh/dental
+        case .haircut: return .indigo            // Styling
+        case .deShedding: return .brown          // Fur-related
+        case .pawCare: return .teal              // Nature/outdoor
+        case .eyeCleaning: return .blue          // Clear/gentle
+        case .analGlands: return .red            // Medical attention
+        }
+    }
+}
+
 /// Quick log sheet for grooming activities
 struct GroomingQuickLogSheet: View {
     @EnvironmentObject var routineStore: RoutineStore
@@ -244,12 +264,30 @@ private struct GroomingTypeButton: View {
     let isOverdue: Bool
     let onSelect: () -> Void
 
+    @Environment(\.colorScheme) private var colorScheme
+
+    /// The color to use for the icon (overdue uses orange, otherwise type color)
+    private var iconColor: Color {
+        if isSelected {
+            return .white
+        } else if isOverdue {
+            return .orange
+        } else {
+            return type.color
+        }
+    }
+
     var body: some View {
         Button(action: onSelect) {
             VStack(spacing: 6) {
                 Image(systemName: type.icon)
                     .font(.title2)
-                    .foregroundStyle(isSelected ? .white : (isOverdue ? .orange : .primary))
+                    .foregroundStyle(iconColor)
+                    .frame(width: 36, height: 36)
+                    .background(
+                        Circle()
+                            .fill(iconColor.opacity(colorScheme == .dark ? 0.2 : 0.12))
+                    )
 
                 Text(type.label)
                     .font(.caption2)
@@ -270,7 +308,7 @@ private struct GroomingTypeButton: View {
             .padding(.horizontal, 8)
             .background(
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(isSelected ? Color.otisAccent : Color(.secondarySystemBackground))
+                    .fill(isSelected ? type.color : Color(.secondarySystemBackground))
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 12)
