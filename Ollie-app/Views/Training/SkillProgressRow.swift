@@ -14,9 +14,13 @@ struct SkillProgressInfo: Identifiable {
     let skill: Skill
     let status: SkillStatus
     let sessionCount: Int
-    let isLocked: Bool
+    /// Whether prerequisites are not yet met (skill shown dimmed but still tappable)
+    let hasUnmetPrerequisites: Bool
     let isNextUp: Bool
     let missingRequirements: [Skill]
+
+    // Legacy compatibility: isLocked maps to hasUnmetPrerequisites
+    var isLocked: Bool { hasUnmetPrerequisites }
 
     // MARK: - Enhanced Training Progress (optional, from SkillProgress)
 
@@ -63,7 +67,7 @@ struct SkillProgressInfo: Identifiable {
         self.skill = skill
         self.status = status
         self.sessionCount = sessionCount
-        self.isLocked = isLocked
+        self.hasUnmetPrerequisites = isLocked
         self.isNextUp = isNextUp
         self.missingRequirements = missingRequirements
     }
@@ -84,7 +88,7 @@ struct SkillProgressInfo: Identifiable {
         self.skill = skill
         self.status = status
         self.sessionCount = sessionCount
-        self.isLocked = isLocked
+        self.hasUnmetPrerequisites = isLocked
         self.isNextUp = isNextUp
         self.missingRequirements = missingRequirements
         self.learningPhase = learningPhase
@@ -113,7 +117,7 @@ struct SkillProgressInfo: Identifiable {
         self.skill = skill
         self.status = status
         self.sessionCount = sessionCount
-        self.isLocked = isLocked
+        self.hasUnmetPrerequisites = isLocked
         self.isNextUp = isNextUp
         self.missingRequirements = missingRequirements
         self.learningPhase = learningPhase
@@ -191,14 +195,7 @@ struct SkillProgressRow: View {
 
                         // Priority badge (regression > due for review > next up)
                         if let badge = priorityBadge {
-                            Text(badge.label)
-                                .font(.caption2)
-                                .fontWeight(.semibold)
-                                .foregroundStyle(.white)
-                                .padding(.horizontal, 6)
-                                .padding(.vertical, 2)
-                                .background(badge.color)
-                                .clipShape(Capsule())
+                            CapsuleBadge(badge.label, color: badge.color, style: .filled)
                                 .fixedSize()
                         }
                     }
@@ -242,8 +239,8 @@ struct SkillProgressRow: View {
                         .foregroundStyle(Color.otisSuccess)
                 }
 
-                // Chevron (only for non-mastered, unlocked skills)
-                if !info.isLocked && info.status != .mastered {
+                // Chevron for all non-mastered skills (tappable even with unmet prerequisites)
+                if info.status != .mastered {
                     Image(systemName: "chevron.right")
                         .font(.caption)
                         .fontWeight(.semibold)
@@ -255,15 +252,38 @@ struct SkillProgressRow: View {
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
-        .disabled(info.isLocked)
-        .opacity(info.isLocked ? 0.6 : 1.0)
+        .opacity(info.hasUnmetPrerequisites ? 0.6 : 1.0)
         .background(
             RoundedRectangle(cornerRadius: 12, style: .continuous)
                 .fill(rowBackground)
         )
-        // Swipe actions for unlocked skills
+        // Context menu for mastery toggle (discoverable via long press)
+        .contextMenu {
+            if info.status != .mastered, let onToggleMastered = onToggleMastered {
+                Button {
+                    onToggleMastered()
+                } label: {
+                    Label(Strings.Training.markMastered, systemImage: "checkmark.circle.fill")
+                }
+            }
+            if info.status == .mastered, let onToggleMastered = onToggleMastered {
+                Button {
+                    onToggleMastered()
+                } label: {
+                    Label(Strings.Training.unmarkMastered, systemImage: "xmark.circle")
+                }
+            }
+            if let onQuickDone = onQuickDone {
+                Button {
+                    onQuickDone()
+                } label: {
+                    Label(Strings.Training.quickDone, systemImage: "plus.circle")
+                }
+            }
+        }
+        // Swipe actions (secondary option for power users)
         .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-            if !info.isLocked, let onQuickDone = onQuickDone {
+            if let onQuickDone = onQuickDone {
                 Button {
                     onQuickDone()
                 } label: {
@@ -273,13 +293,21 @@ struct SkillProgressRow: View {
             }
         }
         .swipeActions(edge: .leading, allowsFullSwipe: true) {
-            if !info.isLocked, info.status != .mastered, let onToggleMastered = onToggleMastered {
+            if info.status != .mastered, let onToggleMastered = onToggleMastered {
                 Button {
                     onToggleMastered()
                 } label: {
                     Label(Strings.Training.markMastered, systemImage: "star.fill")
                 }
                 .tint(Color.otisSuccess)
+            }
+            if info.status == .mastered, let onToggleMastered = onToggleMastered {
+                Button {
+                    onToggleMastered()
+                } label: {
+                    Label(Strings.Training.unmarkMastered, systemImage: "xmark")
+                }
+                .tint(.secondary)
             }
         }
     }
@@ -335,26 +363,22 @@ struct SkillProgressRow: View {
     }
 
     private var statusIcon: String {
-        if info.isLocked {
-            return "lock.fill"
-        }
-        // Use learning phase icon if available
+        // Use learning phase icon if available (even for skills with unmet prerequisites)
         if let phase = info.learningPhase {
             return phase.icon
         }
+        // Show normal status icon (no lock - skills are always accessible)
         return info.status.statusIndicatorIcon
     }
 
     // phaseIcon and phaseColor are now available via SkillLearningPhase.icon and .color
 
     private var statusColor: Color {
-        if info.isLocked {
-            return .secondary
-        }
         // Use learning phase color if available
         if let phase = info.learningPhase {
             return phase.color
         }
+        // Normal status color (dimmed opacity is applied at row level for unmet prerequisites)
         return info.status.color
     }
 
@@ -366,16 +390,15 @@ struct SkillProgressRow: View {
 
     @ViewBuilder
     private var subtitleView: some View {
-        if info.isLocked {
-            if !info.missingRequirements.isEmpty {
-                HStack(spacing: 4) {
-                    Image(systemName: "lock.fill")
-                        .font(.system(size: 9))
-                    Text(Strings.Training.Progression.masteredSkillsRequired(info.missingRequirements.map { $0.name }.joined(separator: ", ")))
-                        .font(.caption)
-                }
-                .foregroundStyle(.tertiary)
+        if info.hasUnmetPrerequisites && !info.missingRequirements.isEmpty {
+            // Show prerequisites as a soft recommendation (not blocking)
+            HStack(spacing: 4) {
+                Image(systemName: "arrow.turn.up.right")
+                    .font(.system(size: 9))
+                Text(Strings.Training.Progression.masteredSkillsRequired(info.missingRequirements.map { $0.name }.joined(separator: ", ")))
+                    .font(.caption)
             }
+            .foregroundStyle(.tertiary)
         } else {
             HStack(spacing: 6) {
                 // Show learning phase if available, otherwise fall back to simple status

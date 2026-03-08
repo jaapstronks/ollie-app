@@ -77,7 +77,8 @@ struct SkillLearningFlowSheet: View {
                         },
                         onStartTraining: {
                             onDismiss()
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                            Task { @MainActor in
+                            try? await Task.sleep(for: .seconds(0.3))
                                 onStartTraining(phase)  // Pass the current phase
                             }
                         }
@@ -126,7 +127,8 @@ struct SkillLearningFlowSheet: View {
                 Button {
                     HapticFeedback.light()
                     onDismiss()
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    Task { @MainActor in
+                            try? await Task.sleep(for: .seconds(0.3))
                         onLogSession()
                     }
                 } label: {
@@ -145,26 +147,24 @@ struct SkillLearningFlowSheet: View {
                     )
                 }
 
-                // Toggle mastered
-                if status == .practicing || status == .mastered {
-                    Button {
-                        HapticFeedback.medium()
-                        onToggleMastered()
-                    } label: {
-                        HStack(spacing: 6) {
-                            Image(systemName: status == .mastered ? "checkmark.circle.fill" : "checkmark.circle")
-                            Text(status == .mastered ? Strings.Training.unmarkMastered : Strings.Training.markMastered)
-                        }
-                        .font(.subheadline)
-                        .fontWeight(.medium)
-                        .foregroundStyle(status == .mastered ? Color.otisSuccess : .secondary)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 12)
-                        .background(
-                            RoundedRectangle(cornerRadius: 10, style: .continuous)
-                                .fill(colorScheme == .dark ? Color.white.opacity(0.08) : Color.black.opacity(0.04))
-                        )
+                // Toggle mastered (always available)
+                Button {
+                    HapticFeedback.medium()
+                    onToggleMastered()
+                } label: {
+                    HStack(spacing: 6) {
+                        Image(systemName: status == .mastered ? "checkmark.circle.fill" : "checkmark.circle")
+                        Text(status == .mastered ? Strings.Training.unmarkMastered : Strings.Training.markMastered)
                     }
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+                    .foregroundStyle(status == .mastered ? Color.otisSuccess : .secondary)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 12)
+                    .background(
+                        RoundedRectangle(cornerRadius: 10, style: .continuous)
+                            .fill(colorScheme == .dark ? Color.white.opacity(0.08) : Color.black.opacity(0.04))
+                    )
                 }
             }
             .padding(.horizontal)

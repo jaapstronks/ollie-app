@@ -478,11 +478,19 @@ extension Strings {
             static let masteredSection = String(localized: "Mastered", table: table)
             static let inProgressSection = String(localized: "In Progress", table: table)
             static func masteredSkillsRequired(_ skills: String) -> String {
-                String(localized: "Master \(skills) first", table: table)
+                String(localized: "Builds on: \(skills)", table: table)
             }
             static let preparationRequired = String(localized: "Complete preparation first", table: table)
             static let viewRules = String(localized: "View Training Rules", table: table)
             static let allSkillsMastered = String(localized: "All skills mastered!", table: table)
+
+            // Prerequisite warning
+            static let skipPrerequisitesTitle = String(localized: "Start This Skill?", table: table)
+            static func skipPrerequisitesMessage(_ skills: String) -> String {
+                String(localized: "This skill builds on: \(skills). Starting without those foundations may make learning harder.", table: table)
+            }
+            static let startAnyway = String(localized: "Start Anyway", table: table)
+            static let learnPrerequisitesFirst = String(localized: "Learn Prerequisites First", table: table)
 
             // Accessibility
             static func skillLockedAccessibility(name: String, requires: String) -> String {

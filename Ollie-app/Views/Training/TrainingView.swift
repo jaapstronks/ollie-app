@@ -27,6 +27,8 @@ struct TrainingView: View {
     @State private var ruleToAcknowledge: TrainingRule?
     @State private var skillPendingRuleAcknowledgement: Skill?
     @State private var showOtisPlusSheet = false
+    @State private var skillForRefresher: Skill?
+    @State private var skillWithPrerequisiteWarning: SkillProgressInfo?
 
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -126,7 +128,8 @@ struct TrainingView: View {
                         activeTrainingSkill = nil
                         activeTrainingPhase = nil
                         completedSessionData = data
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        Task { @MainActor in
+                            try? await Task.sleep(for: .seconds(0.3))
                             selectedSkill = skill
                         }
                     },
@@ -143,7 +146,8 @@ struct TrainingView: View {
                         activeTrainingSkill = nil
                         activeTrainingPhase = nil
                         completedSessionData = data
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        Task { @MainActor in
+                            try? await Task.sleep(for: .seconds(0.3))
                             selectedSkill = skill
                         }
                     },
@@ -251,7 +255,8 @@ struct TrainingView: View {
                     if let skill = skillPendingRuleAcknowledgement {
                         skillPendingRuleAcknowledgement = nil
                         // Small delay to allow sheet dismissal animation
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        Task { @MainActor in
+                            try? await Task.sleep(for: .seconds(0.3))
                             activeTrainingSkill = skill
                         }
                     }
@@ -265,6 +270,43 @@ struct TrainingView: View {
                 onDismiss: { showOtisPlusSheet = false },
                 onSubscribed: { showOtisPlusSheet = false }
             )
+        }
+        // Skill refresher sheet (for maintenance mode)
+        .sheet(item: $skillForRefresher) { skill in
+            SkillRefresherSheet(
+                skill: skill,
+                onStartPractice: {
+                    // Start a training session for this skill
+                    activeTrainingSkill = skill
+                    // Record the maintenance refresh
+                    skillProgressStore.recordMaintenanceRefresh(for: skill.id)
+                },
+                onDismiss: {
+                    skillForRefresher = nil
+                }
+            )
+            .presentationDetents([.medium, .large])
+        }
+        // Prerequisite warning alert (soft-lock instead of hard-lock)
+        .alert(
+            Strings.Training.Progression.skipPrerequisitesTitle,
+            isPresented: Binding(
+                get: { skillWithPrerequisiteWarning != nil },
+                set: { if !$0 { skillWithPrerequisiteWarning = nil } }
+            ),
+            presenting: skillWithPrerequisiteWarning
+        ) { info in
+            Button(Strings.Training.Progression.startAnyway) {
+                // Allow user to proceed anyway
+                skillForDetailSheet = info.skill
+                skillWithPrerequisiteWarning = nil
+            }
+            Button(Strings.Training.Progression.learnPrerequisitesFirst, role: .cancel) {
+                skillWithPrerequisiteWarning = nil
+            }
+        } message: { info in
+            let prereqNames = info.missingRequirements.map { $0.name }.joined(separator: ", ")
+            Text(Strings.Training.Progression.skipPrerequisitesMessage(prereqNames))
         }
     }
 
@@ -328,6 +370,25 @@ struct TrainingView: View {
             needsAttentionSection
         }
 
+        // Maintenance mode section (shows skills needing refresh)
+        if !skillProgressStore.skillsInMaintenanceMode.isEmpty {
+            MaintenanceSkillsSection(
+                skillProgressStore: skillProgressStore,
+                trainingStore: trainingStore,
+                onSkillTap: { skill in
+                    skillForDetailSheet = skill
+                },
+                onRefresh: { skill, _ in
+                    // Record the refresh and give haptic feedback
+                    skillProgressStore.recordMaintenanceRefresh(for: skill.id)
+                    HapticFeedback.success()
+                },
+                onShowRefresher: { skill in
+                    skillForRefresher = skill
+                }
+            )
+        }
+
         // All skills mastered celebration (if applicable)
         if trainingStore.masteryProgress.mastered == trainingStore.masteryProgress.total {
             allMasteredCard
@@ -381,7 +442,11 @@ struct TrainingView: View {
                     SkillProgressRow(
                         info: info,
                         onTap: {
-                            if info.isLocked { return }
+                            // Show prerequisite warning for skills with unmet prerequisites
+                            if info.hasUnmetPrerequisites && !info.missingRequirements.isEmpty {
+                                skillWithPrerequisiteWarning = info
+                                return
+                            }
 
                             // Skills with phases should show the learning flow first
                             if info.skill.phases != nil && !info.skill.phases!.isEmpty {
@@ -398,7 +463,7 @@ struct TrainingView: View {
                             quickLogSession(for: info.skill)
                         },
                         onToggleMastered: {
-                            trainingStore.markAsMastered(info.skill.id)
+                            trainingStore.toggleMastered(info.skill.id)
                             HapticFeedback.success()
                         }
                     )
