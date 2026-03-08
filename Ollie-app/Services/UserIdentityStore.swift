@@ -153,6 +153,7 @@ public final class UserIdentityStore: ObservableObject {
             }
 
             isSetupComplete = true
+            notifySetupComplete()
         } catch {
             logger.warning("Could not fetch CloudKit user record ID: \(error.localizedDescription)")
             // Still mark as complete - we'll use local-only identity
@@ -169,6 +170,16 @@ public final class UserIdentityStore: ObservableObject {
                 logger.info("Created local-only user identity")
             }
             isSetupComplete = true
+            notifySetupComplete()
+        }
+    }
+
+    /// Notify that user identity setup is complete.
+    /// This allows other stores to reload user-specific data.
+    private func notifySetupComplete() {
+        // Reload sentiment data for the current user
+        Task {
+            await SentimentStore.shared.loadCheckInsFromCoreData()
         }
     }
 

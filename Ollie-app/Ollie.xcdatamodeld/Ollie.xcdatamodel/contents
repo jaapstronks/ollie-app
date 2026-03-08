@@ -381,8 +381,25 @@
         <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="modifiedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <relationship name="profile" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDPuppyProfile" inverseName="userIdentities" inverseEntity="CDPuppyProfile"/>
+        <relationship name="sentimentCheckIns" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDUserSentimentCheckIn" inverseName="userIdentity" inverseEntity="CDUserSentimentCheckIn"/>
         <fetchIndex name="byCloudKitRecordIDIndex">
             <fetchIndexElement property="cloudKitUserRecordID" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="CDUserSentimentCheckIn" representedClassName="CDUserSentimentCheckIn" syncable="YES" codeGenerationType="class">
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="category" attributeType="String" defaultValueString=""/>
+        <attribute name="score" attributeType="Integer 16" defaultValueString="3" usesScalarValueType="YES"/>
+        <attribute name="contextSummary" optional="YES" attributeType="String"/>
+        <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="modifiedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="userIdentity" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDUserIdentity" inverseName="sentimentCheckIns" inverseEntity="CDUserIdentity"/>
+        <fetchIndex name="byCategoryIndex">
+            <fetchIndexElement property="category" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byDateIndex">
+            <fetchIndexElement property="date" type="Binary" order="descending"/>
         </fetchIndex>
     </entity>
 </model>

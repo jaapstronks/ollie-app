@@ -195,11 +195,21 @@ struct SentimentCheckIn: Codable, Identifiable {
     let date: Date
     let contextSummary: String?  // What we showed them about their logged activity
 
+    /// Create a new check-in (generates new ID and uses current date).
     init(category: SentimentCategory, score: Int, contextSummary: String? = nil) {
         self.id = UUID()
         self.category = category
         self.score = max(1, min(5, score))
         self.date = Date()
+        self.contextSummary = contextSummary
+    }
+
+    /// Reconstruct a check-in from stored data (e.g., Core Data).
+    init(id: UUID, category: SentimentCategory, score: Int, date: Date, contextSummary: String?) {
+        self.id = id
+        self.category = category
+        self.score = max(1, min(5, score))
+        self.date = date
         self.contextSummary = contextSummary
     }
 

@@ -2,12 +2,15 @@
 //  SentimentStore.swift
 //  Ollie-app
 //
-//  Manages user sentiment check-ins and determines when to prompt for ratings.
+//  Manages user-specific sentiment check-ins and determines when to prompt for ratings.
+//  Each user (identified by CloudKit record ID) has their own sentiment data,
+//  synced via Core Data + CloudKit.
 //
 
 import Foundation
 import SwiftUI
 import Combine
+import CoreData
 import OtisShared
 
 // MARK: - Sentiment Store
@@ -19,13 +22,35 @@ final class SentimentStore: ObservableObject {
     @Published private(set) var checkIns: [SentimentCategory: SentimentCheckIn] = [:]
     @Published var primaryFocus: SentimentCategory?
 
-    private let fileURL: URL
+    /// Date when onboarding (5 core questions) was completed
+    @Published private(set) var onboardingCompletedAt: Date?
+
     private let checkInIntervalDays = 2  // Ask about each category every 2 days
+    private let postOnboardingGraceDays = 2  // Wait before asking behavioral questions after onboarding
+
+    /// Key for storing onboarding completion date per user
+    private var onboardingCompletedKey: String {
+        guard let userID = UserIdentityStore.shared.currentUserRecordID else {
+            return "sentimentOnboardingCompletedAt"
+        }
+        return "sentimentOnboardingCompletedAt_\(userID)"
+    }
+
+    /// Key for storing primary focus per user
+    private var primaryFocusKey: String {
+        guard let userID = UserIdentityStore.shared.currentUserRecordID else {
+            return "sentimentPrimaryFocus"
+        }
+        return "sentimentPrimaryFocus_\(userID)"
+    }
 
     private init() {
-        let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        self.fileURL = documentsPath.appendingPathComponent("sentiment_checkins.json")
-        load()
+        loadOnboardingDate()
+        loadPrimaryFocus()
+        // Check-ins are loaded when user identity is available
+        Task {
+            await loadCheckInsFromCoreData()
+        }
     }
 
     // MARK: - State
@@ -51,17 +76,22 @@ final class SentimentStore: ObservableObject {
 
     // MARK: - Check-In Logic
 
-    /// Record a new check-in.
+    /// Record a new check-in for the current user.
     func recordCheckIn(category: SentimentCategory, score: Int, contextSummary: String? = nil) {
         let checkIn = SentimentCheckIn(category: category, score: score, contextSummary: contextSummary)
         checkIns[category] = checkIn
-        save()
+        saveToCoreData(checkIn)
+
+        // Check if we just completed onboarding
+        if onboardingCompletedAt == nil && pendingOnboardingQuestions().isEmpty {
+            markOnboardingComplete()
+        }
     }
 
     /// Set or clear the primary focus.
     func setPrimaryFocus(_ category: SentimentCategory?) {
         primaryFocus = category
-        save()
+        savePrimaryFocus()
     }
 
     /// Get score for a category if fresh.
@@ -94,7 +124,11 @@ final class SentimentStore: ObservableObject {
 
         // Build list of relevant categories
         var categories = SentimentCategory.coreCategories
-        categories.append(contentsOf: SentimentCategory.ageRelevantCategories(ageWeeks: ageWeeks))
+
+        // Only add behavioral categories if past grace period after onboarding
+        if shouldIncludeBehavioralQuestions {
+            categories.append(contentsOf: SentimentCategory.ageRelevantCategories(ageWeeks: ageWeeks))
+        }
 
         // On first launch (no check-ins), return the first core category
         if checkIns.isEmpty {
@@ -119,6 +153,24 @@ final class SentimentStore: ObservableObject {
         return sorted.first
     }
 
+    /// Whether behavioral questions should be included in scheduling.
+    /// False during grace period after onboarding.
+    private var shouldIncludeBehavioralQuestions: Bool {
+        // If onboarding isn't complete, don't show behavioral questions at all
+        guard let completedAt = onboardingCompletedAt else {
+            return false
+        }
+
+        // Check if we're past the grace period
+        let daysSinceOnboarding = Calendar.current.dateComponents(
+            [.day],
+            from: completedAt,
+            to: Date()
+        ).day ?? 0
+
+        return daysSinceOnboarding >= postOnboardingGraceDays
+    }
+
     /// Check if initial onboarding questions are needed.
     /// Returns categories that haven't been asked yet from core set.
     func pendingOnboardingQuestions() -> [SentimentCategory] {
@@ -130,51 +182,107 @@ final class SentimentStore: ObservableObject {
         pendingOnboardingQuestions().count >= 3
     }
 
-    // MARK: - Persistence
+    // MARK: - Onboarding Tracking
 
-    private struct StorageModel: Codable {
-        let checkIns: [String: SentimentCheckIn]
-        let primaryFocus: String?
+    /// Mark that onboarding was completed.
+    private func markOnboardingComplete() {
+        let now = Date()
+        onboardingCompletedAt = now
+        UserDefaults.standard.set(now.timeIntervalSince1970, forKey: onboardingCompletedKey)
     }
 
-    private func load() {
-        guard FileManager.default.fileExists(atPath: fileURL.path) else { return }
-
-        do {
-            let data = try Data(contentsOf: fileURL)
-            let decoder = JSONDecoder()
-            decoder.dateDecodingStrategy = .iso8601
-            let storage = try decoder.decode(StorageModel.self, from: data)
-
-            checkIns = Dictionary(
-                uniqueKeysWithValues: storage.checkIns.compactMap { key, value in
-                    guard let category = SentimentCategory(rawValue: key) else { return nil }
-                    return (category, value)
-                }
-            )
-
-            if let focusRaw = storage.primaryFocus {
-                primaryFocus = SentimentCategory(rawValue: focusRaw)
-            }
-        } catch {
-            print("Failed to load sentiment check-ins: \(error)")
+    /// Load onboarding completion date from UserDefaults.
+    private func loadOnboardingDate() {
+        let timestamp = UserDefaults.standard.double(forKey: onboardingCompletedKey)
+        if timestamp > 0 {
+            onboardingCompletedAt = Date(timeIntervalSince1970: timestamp)
         }
     }
 
-    private func save() {
-        do {
-            let storage = StorageModel(
-                checkIns: Dictionary(uniqueKeysWithValues: checkIns.map { ($0.key.rawValue, $0.value) }),
-                primaryFocus: primaryFocus?.rawValue
-            )
+    // MARK: - Primary Focus Persistence
 
-            let encoder = JSONEncoder()
-            encoder.dateEncodingStrategy = .iso8601
-            encoder.outputFormatting = .prettyPrinted
-            let data = try encoder.encode(storage)
-            try data.write(to: fileURL)
-        } catch {
-            print("Failed to save sentiment check-ins: \(error)")
+    private func savePrimaryFocus() {
+        if let focus = primaryFocus {
+            UserDefaults.standard.set(focus.rawValue, forKey: primaryFocusKey)
+        } else {
+            UserDefaults.standard.removeObject(forKey: primaryFocusKey)
+        }
+    }
+
+    private func loadPrimaryFocus() {
+        if let rawValue = UserDefaults.standard.string(forKey: primaryFocusKey),
+           let category = SentimentCategory(rawValue: rawValue) {
+            primaryFocus = category
+        }
+    }
+
+    // MARK: - Core Data Persistence
+
+    /// Load check-ins from Core Data for the current user.
+    func loadCheckInsFromCoreData() async {
+        guard let userRecordID = UserIdentityStore.shared.currentUserRecordID else {
+            // User identity not set up yet - will reload when available
+            return
+        }
+
+        let context = PersistenceController.shared.container.viewContext
+
+        await context.perform { [weak self] in
+            guard let cdIdentity = CDUserIdentity.fetch(byCloudKitRecordID: userRecordID, in: context) else {
+                return
+            }
+
+            let checkInsMap = CDUserSentimentCheckIn.fetchAllAsMap(for: cdIdentity, in: context)
+
+            Task { @MainActor [weak self] in
+                self?.checkIns = checkInsMap
+
+                // Check if onboarding was already completed based on loaded data
+                if self?.onboardingCompletedAt == nil && self?.pendingOnboardingQuestions().isEmpty == true {
+                    self?.markOnboardingComplete()
+                }
+            }
+        }
+    }
+
+    /// Save a check-in to Core Data for the current user.
+    private func saveToCoreData(_ checkIn: SentimentCheckIn) {
+        guard let userRecordID = UserIdentityStore.shared.currentUserRecordID else {
+            print("Cannot save sentiment check-in: no user identity")
+            return
+        }
+
+        let context = PersistenceController.shared.container.viewContext
+
+        context.perform {
+            guard let cdIdentity = CDUserIdentity.fetch(byCloudKitRecordID: userRecordID, in: context) else {
+                print("Cannot save sentiment check-in: user identity not in Core Data")
+                return
+            }
+
+            CDUserSentimentCheckIn.upsert(checkIn, for: cdIdentity, in: context)
+
+            if context.hasChanges {
+                do {
+                    try context.save()
+                } catch {
+                    print("Failed to save sentiment check-in: \(error.localizedDescription)")
+                }
+            }
+        }
+    }
+
+    // MARK: - User Switch Support
+
+    /// Reload check-ins when user changes (e.g., different iCloud account).
+    func reloadForCurrentUser() {
+        checkIns.removeAll()
+        primaryFocus = nil
+        onboardingCompletedAt = nil
+        loadOnboardingDate()
+        loadPrimaryFocus()
+        Task {
+            await loadCheckInsFromCoreData()
         }
     }
 
@@ -182,6 +290,8 @@ final class SentimentStore: ObservableObject {
     func clearAll() {
         checkIns.removeAll()
         primaryFocus = nil
-        save()
+        onboardingCompletedAt = nil
+        UserDefaults.standard.removeObject(forKey: onboardingCompletedKey)
+        UserDefaults.standard.removeObject(forKey: primaryFocusKey)
     }
 }
