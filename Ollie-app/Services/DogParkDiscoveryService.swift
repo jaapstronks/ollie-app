@@ -90,7 +90,10 @@ class DogParkDiscoveryService: ObservableObject {
             let uniqueSpots = deduplicateSpots(allSpots)
 
             discoveredSpots = uniqueSpots
-            cache.store(uniqueSpots, forKey: cacheKey)
+            // Only cache non-empty results to avoid persisting temporary failures
+            if !uniqueSpots.isEmpty {
+                cache.store(uniqueSpots, forKey: cacheKey)
+            }
             logger.info("Discovered \(uniqueSpots.count) dog parks near (\(latitude), \(longitude)) (OSM: \(allSpots.count - govSpots.count), gov: \(govSpots.count))")
         } catch {
             lastError = error
@@ -129,7 +132,10 @@ class DogParkDiscoveryService: ObservableObject {
                 east: east
             )
             discoveredSpots = spots
-            cache.store(spots, forKey: cacheKey)
+            // Only cache non-empty results to avoid persisting temporary failures
+            if !spots.isEmpty {
+                cache.store(spots, forKey: cacheKey)
+            }
             logger.info("Discovered \(spots.count) dog parks in bbox")
         } catch {
             lastError = error
@@ -143,6 +149,12 @@ class DogParkDiscoveryService: ObservableObject {
     func refresh(latitude: Double, longitude: Double, radiusKm: Double = 5.0) async {
         cache.clearForLocation(latitude: latitude, longitude: longitude)
         await discoverNearby(latitude: latitude, longitude: longitude, radiusKm: radiusKm)
+    }
+
+    /// Clear cache and refetch all active place types
+    func forceRefreshAllTypes(latitude: Double, longitude: Double) async {
+        cache.clearForLocation(latitude: latitude, longitude: longitude)
+        await discoverAllActiveTypes(latitude: latitude, longitude: longitude)
     }
 
     /// Get spots within a certain distance
@@ -207,9 +219,13 @@ class DogParkDiscoveryService: ObservableObject {
                 )
                 allSpots.append(contentsOf: spots)
 
-                // Cache the results for this type
-                cache.store(spots, forKey: typeKey)
-                logger.debug("Fetched and cached \(spots.count) \(String(describing: placeType)) at grid \(gridKey)")
+                // Only cache non-empty results to avoid persisting temporary failures
+                if !spots.isEmpty {
+                    cache.store(spots, forKey: typeKey)
+                    logger.debug("Fetched and cached \(spots.count) \(String(describing: placeType)) at grid \(gridKey)")
+                } else {
+                    logger.debug("Fetched 0 \(String(describing: placeType)) at grid \(gridKey) - not caching empty results")
+                }
             }
         }
 
