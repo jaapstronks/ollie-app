@@ -294,6 +294,44 @@ class ProfileStore: ObservableObject {
         deleteProfile(profileId)
     }
 
+    /// Delete a profile along with all associated media files
+    /// This cleans up event photos, thumbnails, and profile photo before deleting the profile
+    func deleteProfileWithMediaCleanup(_ profileId: UUID, mediaStore: MediaStore) async {
+        guard let profile = profiles.first(where: { $0.id == profileId }) else {
+            logger.warning("Cannot delete profile - not found")
+            return
+        }
+
+        // Only clean up media for owned profiles
+        if profile.ownership == .owned {
+            logger.info("Cleaning up media for profile: \(profile.name)")
+
+            // Get all events for this profile to delete their media
+            if let cdProfile = CDPuppyProfile.fetch(byId: profileId, in: viewContext) {
+                let events = CDPuppyEvent.fetchAllEvents(for: cdProfile, in: viewContext)
+
+                for cdEvent in events {
+                    if let event = cdEvent.toPuppyEvent() {
+                        // Delete event photos and thumbnails
+                        if event.photo != nil || event.thumbnailPath != nil {
+                            mediaStore.deleteMedia(photoPath: event.photo, thumbnailPath: event.thumbnailPath)
+                        }
+                    }
+                }
+                logger.info("Deleted media for \(events.count) events")
+            }
+
+            // Delete profile photo
+            if let profilePhotoFilename = profile.profilePhotoFilename {
+                ProfilePhotoStore.shared.delete(filename: profilePhotoFilename)
+                logger.info("Deleted profile photo: \(profilePhotoFilename)")
+            }
+        }
+
+        // Now delete the profile itself
+        deleteProfile(profileId)
+    }
+
     // MARK: - Initial Sync
 
     /// Perform initial sync on app launch

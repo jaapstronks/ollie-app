@@ -94,6 +94,11 @@ extension Strings {
         static let integrations = String(localized: "Integrations", table: table)
         static let celebrateEveryLog = String(localized: "Celebrate every log", table: table)
         static let celebrateEveryLogDescription = String(localized: "Debug mode: trigger a full celebration each time an event is logged.", table: table)
+
+        // Help section
+        static let help = String(localized: "Help", table: table)
+        static let viewAppTour = String(localized: "View App Tour", table: table)
+        static let viewAppTourDescription = String(localized: "Take a guided tour of the app features.", table: table)
     }
 
     // MARK: - Exercise Edit View
@@ -540,6 +545,24 @@ extension Strings {
         static let deviceId = String(localized: "Device ID", table: table)
         static let copiedToClipboard = String(localized: "Copied!", table: table)
         static let betaIndicator = String(localized: "Beta", table: table)
+    }
+
+    // MARK: - Delete Profile
+    enum DeleteProfile {
+        static func deleteButton(_ name: String) -> String {
+            String(localized: "Delete \(name)...", table: table)
+        }
+        static func leaveButton(_ name: String) -> String {
+            String(localized: "Leave \(name)...", table: table)
+        }
+        static let deleteTitle = String(localized: "Delete Profile?", table: table)
+        static let deleteMessage = String(localized: "All data including events, photos, and training progress will be permanently deleted. This cannot be undone.", table: table)
+        static let deleteConfirm = String(localized: "Delete Permanently", table: table)
+        static let leaveTitle = String(localized: "Leave Profile?", table: table)
+        static let leaveMessage = String(localized: "You'll no longer have access to this dog's data. The owner can invite you again later.", table: table)
+        static let leaveConfirm = String(localized: "Leave", table: table)
+        static let cannotDeleteOnly = String(localized: "You must have at least one dog profile.", table: table)
+        static let deleteWarningFooter = String(localized: "This action cannot be undone.", table: table)
     }
 
     // MARK: - Data Export
