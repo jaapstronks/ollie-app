@@ -33,12 +33,17 @@ extension Strings {
         static let remove = String(localized: "Remove", table: table)
         static let yes = String(localized: "Yes", table: table)
         static let no = String(localized: "No", table: table)
+        static let activate = String(localized: "Activate", table: table)
+        static let deactivate = String(localized: "Deactivate", table: table)
         static let share = String(localized: "Share", table: table)
         static let addPhoto = String(localized: "Add Photo", table: table)
         static let notSet = String(localized: "Not set", table: table)
         static let tryAgain = String(localized: "Try Again", table: table)
         static let great = String(localized: "Great!", table: table)
         static let gotIt = String(localized: "Got it", table: table)
+        static let skip = String(localized: "Skip", table: table)
+        static let archive = String(localized: "Archive", table: table)
+        static let note = String(localized: "Note", table: table)
 
         // Error messages
         static let saveFailed = String(localized: "Failed to save. Please try again.", table: table)

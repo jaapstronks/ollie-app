@@ -38,6 +38,7 @@ struct MainTabView: View {
     @State private var showGuidedTour = false
     @State private var selectedPhotoEvent: PuppyEvent?
     @State private var showingArrivalPhotoPrompt = false
+    @State private var spotlightTargetFrames: [SpotlightTargetID: CGRect] = [:]
 
     @AppStorage("hasShownArrivalPhotoPrompt") private var hasShownArrivalPhotoPrompt = false
     @AppStorage(UserPreferences.Key.showFloatingClicker.rawValue) private var showFloatingClicker = false
@@ -105,8 +106,20 @@ struct MainTabView: View {
                     tabContent
                     floatingButtons(safeAreaBottom: safeAreaBottom)
                     celebrationOverlay
+
+                    // Guided tour overlay
+                    if showGuidedTour {
+                        SpotlightTourOverlay(
+                            selectedTab: $selectedTab,
+                            isActive: $showGuidedTour,
+                            targetFrames: spotlightTargetFrames
+                        )
+                    }
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .onPreferenceChange(SpotlightTargetPreferenceKey.self) { frames in
+                    spotlightTargetFrames = frames
+                }
             }
         }
         .sheet(isPresented: $showingSettings) {
@@ -231,6 +244,10 @@ private extension MainTabView {
                 Label(Strings.Tabs.health, systemImage: "heart.text.square.fill")
             }
             .tag(MainTab.health)
+        }
+        .overlay(alignment: .bottom) {
+            // Invisible spotlight targets for tab bar items
+            TabBarSpotlightTargets()
         }
     }
 
