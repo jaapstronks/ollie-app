@@ -37,6 +37,14 @@
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>comgooglemaps</string>
+		<string>instagram-stories</string>
+		<string>instagram</string>
+		<string>facebook-stories</string>
+		<string>fb</string>
+		<string>twitter</string>
+		<string>whatsapp</string>
 	</array>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Save shareable cards to your photo library</string>
 </dict>
 </plist>

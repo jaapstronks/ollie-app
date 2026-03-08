@@ -83,6 +83,15 @@ enum Analytics {
 
         // Lifecycle
         case phaseTransitionAcknowledged = "phase_transition_acknowledged"
+
+        // Sharing
+        case shareAttempted = "share_attempted"
+        case shareCompleted = "share_completed"
+        case shareSavedToPhotos = "share_saved_to_photos"
+        case shareSheetOpened = "share_sheet_opened"
+        case shareSheetDismissed = "share_sheet_dismissed"
+        case shareError = "share_error"
+        case shareFormatSelected = "share_format_selected"
     }
 
     // MARK: - Tracking
