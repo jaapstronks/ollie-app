@@ -44,7 +44,7 @@ struct GroomingCard: View {
                     if dueActivities.count > 3 {
                         HStack {
                             Spacer()
-                            Text("+\(dueActivities.count - 3) more")
+                            Text(Strings.Grooming.moreActivities(dueActivities.count - 3))
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                         }
