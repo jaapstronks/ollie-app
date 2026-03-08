@@ -54,13 +54,14 @@ struct StatusCardHeader<TrailingContent: View>: View {
                     .font(.subheadline)
                     .fontWeight(.semibold)
                     .foregroundStyle(titleColor)
-                    .lineLimit(2)
+                    .lineLimit(3)
+                    .fixedSize(horizontal: false, vertical: true)
 
                 if let subtitle = subtitle {
                     Text(subtitle)
                         .font(.caption)
                         .foregroundStyle(.secondary)
-                        .lineLimit(2)
+                        .lineLimit(3)
                         .fixedSize(horizontal: false, vertical: true)
                 }
             }

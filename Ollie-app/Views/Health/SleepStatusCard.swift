@@ -101,11 +101,12 @@ struct SleepStatusCard: View {
             }
             return Strings.SleepStatus.sleepingFor(duration: durationMin.formatAsDuration())
         case .awake(_, let durationMin):
+            // For warning/overdue states, use short titles since subtitle shows duration
             if durationMin >= SleepCalculations.maxAwakeMinutes {
-                return Strings.SleepStatus.awakeTooLong(duration: durationMin.formatAsDuration())
+                return Strings.SleepStatus.awakeTooLong
             } else if durationMin >= SleepCalculations.awakeWarningMinutes {
                 let remaining = SleepCalculations.maxAwakeMinutes - durationMin
-                return Strings.SleepStatus.awakeWithNapSuggestion(duration: durationMin.formatAsDuration(), remaining: remaining)
+                return Strings.SleepStatus.awakeWithNapSuggestion(remaining: remaining)
             }
             return Strings.SleepStatus.awakeSince(duration: durationMin.formatAsDuration())
         case .unknown:
@@ -121,7 +122,14 @@ struct SleepStatusCard: View {
                 return pendingActionableSubtitle(actionable)
             }
             return Strings.SleepStatus.started(time: since.timeString)
-        case .awake(let since, _):
+        case .awake(let since, let durationMin):
+            // For warning states, show duration in subtitle since title is now shorter
+            if durationMin >= SleepCalculations.awakeWarningMinutes {
+                return Strings.SleepStatus.awakeSinceTimeWithDuration(
+                    time: since.timeString,
+                    duration: durationMin.formatAsDuration()
+                )
+            }
             return Strings.SleepStatus.awakeSinceTime(time: since.timeString)
         case .unknown:
             return ""

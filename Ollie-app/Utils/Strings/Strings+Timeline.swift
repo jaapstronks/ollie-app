@@ -69,11 +69,9 @@ extension Strings {
         static func sleepingFor(duration: String) -> String {
             String(localized: "Been sleeping for \(duration)", table: table)
         }
-        static func awakeTooLong(duration: String) -> String {
-            String(localized: "Awake for \(duration) — time for a nap!", table: table)
-        }
-        static func awakeWithNapSuggestion(duration: String, remaining: Int) -> String {
-            String(localized: "Awake \(duration) — nap in \(remaining) min?", table: table)
+        static let awakeTooLong = String(localized: "Time for a nap!", table: table)
+        static func awakeWithNapSuggestion(remaining: Int) -> String {
+            String(localized: "Nap in ~\(remaining) min?", table: table)
         }
         static func awakeSince(duration: String) -> String {
             String(localized: "Awake for \(duration)", table: table)
@@ -84,6 +82,9 @@ extension Strings {
         }
         static func awakeSinceTime(time: String) -> String {
             String(localized: "Awake since: \(time)", table: table)
+        }
+        static func awakeSinceTimeWithDuration(time: String, duration: String) -> String {
+            String(localized: "Awake since \(time) (\(duration))", table: table)
         }
 
         // Pending activities while sleeping (shown in subtitle)
@@ -453,9 +454,14 @@ extension Strings {
         /// Morning overnight sleep - puppy hasn't peed since last night
         static let pottyFirstThingMorning = String(localized: "Hasn't peed since last night", table: table)
         static let pottyUrgentWhileSleeping = String(localized: "Potty needed soon", table: table)
-        /// Dynamic version with pronouns: "When he/she/they wakes, take him/her/them outside"
-        static func whenWakesTakeOutside(subject: String, object: String) -> String {
-            String(localized: "When \(subject) wakes, take \(object) outside", table: table)
+        /// Dynamic version with pronouns: "When he/she wakes" or "When they wake"
+        /// - Parameters:
+        ///   - subject: Subject pronoun (he/she/they)
+        ///   - object: Object pronoun (him/her/them)
+        ///   - usesPluralVerbForm: Whether to use plural verb form ("wake" vs "wakes")
+        static func whenWakesTakeOutside(subject: String, object: String, usesPluralVerbForm: Bool = false) -> String {
+            let verb = usesPluralVerbForm ? "wake" : "wakes"
+            return String(localized: "When \(subject) \(verb), take \(object) outside", table: table)
         }
         /// Legacy fallback using neutral pronouns
         static let whenWakesTakeOutsideNeutral = String(localized: "When they wake, take them outside", table: table)
@@ -467,12 +473,15 @@ extension Strings {
         static let alsoTimeForMeal = String(localized: "Also time for a meal", table: table)
 
         // Post-wake card
-        /// Dynamic version with pronouns: "He's/She's/They're awake — time for potty!"
-        static func awakeTimePotty(subject: String) -> String {
+        /// Dynamic version with pronouns: "He's/She's awake" or "They're awake"
+        /// - Parameters:
+        ///   - subject: Subject pronoun (he/she/they)
+        ///   - usesPluralVerbForm: Whether to use plural verb form ("'re" vs "'s")
+        static func awakeTimePotty(subject: String, usesPluralVerbForm: Bool = false) -> String {
             // Capitalize first letter of subject for start of sentence
             let capitalizedSubject = subject.prefix(1).uppercased() + subject.dropFirst()
             // Use appropriate verb form (they're vs he's/she's)
-            let verb = subject.lowercased() == "they" ? "'re" : "'s"
+            let verb = usesPluralVerbForm ? "'re" : "'s"
             return String(localized: "\(capitalizedSubject)\(verb) awake — time for potty!", table: table)
         }
         /// Legacy fallback using neutral pronouns
