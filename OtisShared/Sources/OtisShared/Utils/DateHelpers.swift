@@ -82,6 +82,15 @@ public enum DateFormatters {
         formatter.formatOptions = [.withInternetDateTime, .withTimeZone, .withFractionalSeconds]
         return formatter
     }()
+
+    /// Localized medium date (e.g., "Mar 8, 2026" in en_US, "8 mrt 2026" in nl_NL)
+    /// Uses system locale for proper localization
+    public static let localizedMedium: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .none
+        return formatter
+    }()
 }
 
 // MARK: - Cached Calendar
@@ -159,6 +168,31 @@ extension Date {
         AppCalendar.current.isDate(self, inSameDayAs: other)
     }
 
+    /// Check if this date is within the last N days (from now)
+    public func isWithinLastDays(_ days: Int) -> Bool {
+        self >= Date.daysAgo(days)
+    }
+
+    /// Check if this date falls within a specific date range (inclusive)
+    public func isBetween(_ start: Date, and end: Date) -> Bool {
+        self >= start && self < end
+    }
+
+    /// Check if this date is within the "this week" window (last 7 days)
+    public var isThisWeek: Bool {
+        isWithinLastDays(7)
+    }
+
+    /// Check if this date is within the "last week" window (7-14 days ago)
+    public var isLastWeek: Bool {
+        isBetween(Date.daysAgo(14), and: Date.daysAgo(7))
+    }
+
+    /// Check if this date is within the "this month" window (last 30 days)
+    public var isThisMonth: Bool {
+        isWithinLastDays(30)
+    }
+
     // MARK: - Date Arithmetic
 
     /// Add days to date
@@ -171,6 +205,16 @@ extension Date {
         AppCalendar.current.date(byAdding: .weekOfYear, value: weeks, to: self)!
     }
 
+    /// Add months to date
+    public func addingMonths(_ months: Int) -> Date {
+        AppCalendar.current.date(byAdding: .month, value: months, to: self)!
+    }
+
+    /// Add years to date
+    public func addingYears(_ years: Int) -> Date {
+        AppCalendar.current.date(byAdding: .year, value: years, to: self)!
+    }
+
     /// Add hours to date
     public func addingHours(_ hours: Int) -> Date {
         AppCalendar.current.date(byAdding: .hour, value: hours, to: self)!
@@ -179,6 +223,28 @@ extension Date {
     /// Add minutes to date
     public func addingMinutes(_ minutes: Int) -> Date {
         AppCalendar.current.date(byAdding: .minute, value: minutes, to: self)!
+    }
+
+    // MARK: - Convenience Past/Future Dates
+
+    /// Get a date N days ago from now
+    public static func daysAgo(_ days: Int) -> Date {
+        Date().addingDays(-days)
+    }
+
+    /// Get a date N weeks ago from now
+    public static func weeksAgo(_ weeks: Int) -> Date {
+        Date().addingWeeks(-weeks)
+    }
+
+    /// Get a date N months ago from now
+    public static func monthsAgo(_ months: Int) -> Date {
+        Date().addingMonths(-months)
+    }
+
+    /// Get a date N days from now
+    public static func daysFromNow(_ days: Int) -> Date {
+        Date().addingDays(days)
     }
 
     /// Days since another date
@@ -270,6 +336,22 @@ extension Date {
     /// Medium date string (d MMM yyyy)
     public var mediumDateString: String {
         DateFormatters.dutchMediumDate.string(from: self)
+    }
+
+    // MARK: - Localized Display Formatting
+
+    /// Format as localized medium date (e.g., "Mar 8, 2026" or "8 mrt 2026")
+    /// Uses system locale for proper localization
+    public func formattedMedium() -> String {
+        DateFormatters.localizedMedium.string(from: self)
+    }
+
+    /// Format as relative time (e.g., "2h ago", "yesterday")
+    /// - Parameter style: The units style for the formatter (default: .abbreviated)
+    public func relativeFormatted(style: RelativeDateTimeFormatter.UnitsStyle = .abbreviated) -> String {
+        let formatter = RelativeDateTimeFormatter()
+        formatter.unitsStyle = style
+        return formatter.localizedString(for: self, relativeTo: Date())
     }
 }
 

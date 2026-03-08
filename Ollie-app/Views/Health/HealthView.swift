@@ -202,26 +202,13 @@ struct HealthView: View {
     private var adultWellnessSection: some View {
         VStack(alignment: .leading, spacing: 10) {
             // Section header
-            HStack(spacing: 8) {
-                Image(systemName: "figure.walk.motion")
-                    .font(.system(size: 14, weight: .semibold))
-                    .foregroundStyle(Color.green)
-
-                Text(Strings.Routine.wellness)
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
-                    .foregroundStyle(.secondary)
-
-                Spacer()
-
-                // View all button
+            SectionHeader(title: Strings.Routine.wellness, icon: "figure.walk.motion", tint: .green) {
                 NavigationLink(destination: RoutineView().environmentObject(routineStore)) {
                     Text(Strings.Common.seeAll)
                         .font(.subheadline)
                         .foregroundStyle(.blue)
                 }
             }
-            .padding(.horizontal, 4)
 
             // Adult wellness content
             VStack(spacing: 12) {
@@ -267,26 +254,13 @@ struct HealthView: View {
     private var seniorWellnessSection: some View {
         VStack(alignment: .leading, spacing: 10) {
             // Section header
-            HStack(spacing: 8) {
-                Image(systemName: "heart.circle.fill")
-                    .font(.system(size: 14, weight: .semibold))
-                    .foregroundStyle(Color.pink)
-
-                Text(Strings.SeniorWellness.title)
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
-                    .foregroundStyle(.secondary)
-
-                Spacer()
-
-                // View all button
+            SectionHeader(title: Strings.SeniorWellness.title, icon: "heart.circle.fill", tint: .pink) {
                 NavigationLink(destination: SeniorWellnessView().environmentObject(viewModel.profileStore)) {
                     Text(Strings.Common.seeAll)
                         .font(.subheadline)
                         .foregroundStyle(.blue)
                 }
             }
-            .padding(.horizontal, 4)
 
             // Senior wellness card
             VStack(spacing: 16) {
@@ -342,19 +316,7 @@ struct HealthView: View {
     private var symptomsSection: some View {
         VStack(alignment: .leading, spacing: 10) {
             // Section header
-            HStack(spacing: 8) {
-                Image(systemName: "stethoscope")
-                    .font(.system(size: 14, weight: .semibold))
-                    .foregroundStyle(Color.teal)
-
-                Text(Strings.HealthLogging.symptomTrends)
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
-                    .foregroundStyle(.secondary)
-
-                Spacer()
-
-                // Log symptom button
+            SectionHeader(title: Strings.HealthLogging.symptomTrends, icon: "stethoscope", tint: .teal) {
                 Button {
                     showSymptomLogSheet = true
                 } label: {
@@ -363,7 +325,6 @@ struct HealthView: View {
                         .fontWeight(.medium)
                 }
             }
-            .padding(.horizontal, 4)
 
             // Symptoms content
             VStack(spacing: 16) {
@@ -443,19 +404,7 @@ struct HealthView: View {
     private var weightSection: some View {
         VStack(alignment: .leading, spacing: 10) {
             // Section header
-            HStack(spacing: 8) {
-                Image(systemName: "scalemass.fill")
-                    .font(.system(size: 14, weight: .semibold))
-                    .foregroundStyle(Color.otisAccent)
-
-                Text(Strings.Health.weight)
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
-                    .foregroundStyle(.secondary)
-
-                Spacer()
-
-                // Log weight button
+            SectionHeader(title: Strings.Health.weight, icon: "scalemass.fill", tint: .otisAccent) {
                 Button {
                     showWeightSheet = true
                 } label: {
@@ -464,7 +413,6 @@ struct HealthView: View {
                         .fontWeight(.medium)
                 }
             }
-            .padding(.horizontal, 4)
 
             // Weight card
             VStack(spacing: 16) {
@@ -498,7 +446,7 @@ struct HealthView: View {
                 .foregroundStyle(.primary)
 
             // Date
-            Text(formattedDate(date))
+            Text(date.formattedMedium())
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
 
@@ -530,18 +478,7 @@ struct HealthView: View {
     private var milestonesSection: some View {
         VStack(alignment: .leading, spacing: 10) {
             // Section header
-            HStack(spacing: 8) {
-                Image(systemName: "heart.fill")
-                    .font(.system(size: 14, weight: .semibold))
-                    .foregroundStyle(Color.otisDanger)
-
-                Text(Strings.Health.milestones)
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
-                    .foregroundStyle(.secondary)
-
-                Spacer()
-
+            SectionHeader(title: Strings.Health.milestones, icon: "heart.fill", tint: .otisDanger) {
                 // Add button (premium)
                 if subscriptionManager.hasAccess(to: .customMilestones) {
                     Button {
@@ -553,7 +490,6 @@ struct HealthView: View {
                     }
                 }
             }
-            .padding(.horizontal, 4)
 
             // Timeline
             HealthTimelineView(
@@ -617,18 +553,7 @@ struct HealthView: View {
     private var healthCalendarSection: some View {
         VStack(alignment: .leading, spacing: 10) {
             // Section header
-            HStack(spacing: 8) {
-                Image(systemName: "calendar")
-                    .font(.system(size: 14, weight: .semibold))
-                    .foregroundStyle(Color.otisAccent)
-
-                Text(Strings.VetVisit.Calendar.title)
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
-                    .foregroundStyle(.secondary)
-
-                Spacer()
-
+            SectionHeader(title: Strings.VetVisit.Calendar.title, icon: "calendar", tint: .otisAccent) {
                 NavigationLink {
                     HealthCalendarView()
                         .environmentObject(appointmentStore)
@@ -643,7 +568,6 @@ struct HealthView: View {
                     .foregroundStyle(.blue)
                 }
             }
-            .padding(.horizontal, 4)
 
             // Quick preview of upcoming events
             upcomingAppointmentsSection
@@ -710,113 +634,6 @@ struct HealthView: View {
         }
     }
 
-    // MARK: - Helpers
-
-    private func formattedDate(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        formatter.timeStyle = .none
-        return formatter.string(from: date)
-    }
-}
-
-// MARK: - Senior Wellness Supporting Views
-
-private struct AssessmentDueCard: View {
-    let title: String
-    let icon: String
-    let iconColor: Color
-    let lastDate: Date?
-    let action: () -> Void
-
-    var body: some View {
-        Button(action: action) {
-            HStack {
-                Image(systemName: icon)
-                    .foregroundStyle(iconColor)
-                    .frame(width: 24)
-
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(title)
-                        .font(.subheadline)
-                        .fontWeight(.medium)
-                        .foregroundStyle(.primary)
-
-                    if let date = lastDate {
-                        Text("Last: \(date, style: .relative)")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    } else {
-                        Text("Not yet completed")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                }
-
-                Spacer()
-
-                Image(systemName: "circle.fill")
-                    .font(.system(size: 8))
-                    .foregroundStyle(.orange)
-
-                Image(systemName: "chevron.right")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-            .padding()
-            .background(Color(.tertiarySystemBackground))
-            .clipShape(RoundedRectangle(cornerRadius: 12))
-        }
-        .buttonStyle(.plain)
-    }
-}
-
-private struct RRRQuickCard: View {
-    let latestReading: RespiratoryRateReading?
-    let onLogTap: () -> Void
-
-    var body: some View {
-        HStack {
-            Image(systemName: "lungs.fill")
-                .foregroundStyle(.blue)
-                .frame(width: 24)
-
-            VStack(alignment: .leading, spacing: 2) {
-                Text(Strings.SeniorWellness.rrrTitle)
-                    .font(.subheadline)
-                    .fontWeight(.medium)
-
-                if let reading = latestReading {
-                    HStack(spacing: 4) {
-                        Text(reading.formattedBPM)
-                            .font(.caption)
-                        Text("•")
-                            .foregroundStyle(.secondary)
-                        Text(reading.status.label)
-                            .font(.caption)
-                            .foregroundStyle(Color(reading.status.colorName))
-                    }
-                } else {
-                    Text("No readings yet")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-            }
-
-            Spacer()
-
-            Button(action: onLogTap) {
-                Label("Log", systemImage: "plus.circle.fill")
-                    .font(.caption)
-                    .fontWeight(.medium)
-            }
-            .buttonStyle(.bordered)
-            .tint(.blue)
-        }
-        .padding()
-        .background(Color(.tertiarySystemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 12))
-    }
 }
 
 // MARK: - Preview

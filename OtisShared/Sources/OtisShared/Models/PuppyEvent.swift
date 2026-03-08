@@ -277,8 +277,31 @@ public struct PuppyEvent: Codable, Identifiable, Equatable, Sendable {
 
     // MARK: - Attribution Fields
 
-    /// ID of the household member who logged this event (nil for legacy events)
-    public var loggedBy: UUID?
+    /// CloudKit user record ID of who logged this event
+    /// Changed from UUID (HouseholdMember.id) to String (CloudKit record ID)
+    /// For migration: nil for legacy events, existing UUID values are ignored
+    public var loggedBy: String?
+
+    // MARK: - Behavior Incident Fields
+
+    /// Category of behavior incident (reactivity, anxiety, etc.)
+    /// Maps to BehaviorCategory.rawValue
+    public var behaviorCategory: String?
+
+    /// What triggered the behavior
+    public var behaviorTrigger: String?
+
+    /// Intensity of the incident (1-5)
+    /// Maps to BehaviorIntensity.rawValue
+    public var behaviorIntensity: Int?
+
+    /// What happened after the incident
+    /// Maps to BehaviorOutcome.rawValue
+    public var behaviorOutcome: String?
+
+    /// Context where the behavior occurred
+    /// Maps to BehaviorContext.rawValue
+    public var behaviorContext: String?
 
     // MARK: - Media Fields
 
@@ -358,11 +381,16 @@ public struct PuppyEvent: Codable, Identifiable, Equatable, Sendable {
         gapType: CoverageGapType? = nil,
         endTime: Date? = nil,
         gapLocation: String? = nil,
-        loggedBy: UUID? = nil,
+        loggedBy: String? = nil,
         successReps: Int? = nil,
         failedReps: Int? = nil,
         trainingContext: String? = nil,
-        skillPhase: String? = nil
+        skillPhase: String? = nil,
+        behaviorCategory: String? = nil,
+        behaviorTrigger: String? = nil,
+        behaviorIntensity: Int? = nil,
+        behaviorOutcome: String? = nil,
+        behaviorContext: String? = nil
     ) {
         self.id = id
         self.time = time
@@ -397,6 +425,11 @@ public struct PuppyEvent: Codable, Identifiable, Equatable, Sendable {
         self.failedReps = failedReps
         self.trainingContext = trainingContext
         self.skillPhase = skillPhase
+        self.behaviorCategory = behaviorCategory
+        self.behaviorTrigger = behaviorTrigger
+        self.behaviorIntensity = behaviorIntensity
+        self.behaviorOutcome = behaviorOutcome
+        self.behaviorContext = behaviorContext
 
         if type == .slapen {
             self.sleepSessionId = sleepSessionId ?? UUID()
@@ -445,6 +478,11 @@ public struct PuppyEvent: Codable, Identifiable, Equatable, Sendable {
         case failedReps = "failed_reps"
         case trainingContext = "training_context"
         case skillPhase = "skill_phase"
+        case behaviorCategory = "behavior_category"
+        case behaviorTrigger = "behavior_trigger"
+        case behaviorIntensity = "behavior_intensity"
+        case behaviorOutcome = "behavior_outcome"
+        case behaviorContext = "behavior_context"
     }
 
     // MARK: - Custom Decoding
@@ -489,14 +527,28 @@ public struct PuppyEvent: Codable, Identifiable, Equatable, Sendable {
         endTime = try container.decodeIfPresent(Date.self, forKey: .endTime)
         gapLocation = try container.decodeIfPresent(String.self, forKey: .gapLocation)
 
-        // Attribution fields
-        loggedBy = try container.decodeIfPresent(UUID.self, forKey: .loggedBy)
+        // Attribution fields - try String first, fall back to UUID (legacy) and convert
+        if let stringValue = try container.decodeIfPresent(String.self, forKey: .loggedBy) {
+            loggedBy = stringValue
+        } else if let uuidValue = try? container.decodeIfPresent(UUID.self, forKey: .loggedBy) {
+            // Legacy UUID value - convert to string (will show as "Unknown" until migrated)
+            loggedBy = uuidValue.uuidString
+        } else {
+            loggedBy = nil
+        }
 
         // Training session outcome fields
         successReps = try container.decodeIfPresent(Int.self, forKey: .successReps)
         failedReps = try container.decodeIfPresent(Int.self, forKey: .failedReps)
         trainingContext = try container.decodeIfPresent(String.self, forKey: .trainingContext)
         skillPhase = try container.decodeIfPresent(String.self, forKey: .skillPhase)
+
+        // Behavior incident fields
+        behaviorCategory = try container.decodeIfPresent(String.self, forKey: .behaviorCategory)
+        behaviorTrigger = try container.decodeIfPresent(String.self, forKey: .behaviorTrigger)
+        behaviorIntensity = try container.decodeIfPresent(Int.self, forKey: .behaviorIntensity)
+        behaviorOutcome = try container.decodeIfPresent(String.self, forKey: .behaviorOutcome)
+        behaviorContext = try container.decodeIfPresent(String.self, forKey: .behaviorContext)
     }
 }
 
@@ -576,7 +628,7 @@ extension PuppyEvent {
         phase: String? = nil,
         durationMin: Int? = nil,
         note: String? = nil,
-        loggedBy: UUID? = nil
+        loggedBy: String? = nil
     ) -> PuppyEvent {
         PuppyEvent(
             id: id,
@@ -589,5 +641,66 @@ extension PuppyEvent {
             trainingContext: context,
             skillPhase: phase
         )
+    }
+
+    /// Create a behavior incident event
+    public static func behaviorIncident(
+        id: UUID = UUID(),
+        time: Date = Date(),
+        category: BehaviorCategory,
+        trigger: String? = nil,
+        intensity: BehaviorIntensity? = nil,
+        outcome: BehaviorOutcome? = nil,
+        context: BehaviorContext? = nil,
+        durationMin: Int? = nil,
+        note: String? = nil,
+        loggedBy: String? = nil
+    ) -> PuppyEvent {
+        PuppyEvent(
+            id: id,
+            time: time,
+            type: .gedrag,
+            note: note,
+            durationMin: durationMin,
+            loggedBy: loggedBy,
+            behaviorCategory: category.rawValue,
+            behaviorTrigger: trigger,
+            behaviorIntensity: intensity?.rawValue,
+            behaviorOutcome: outcome?.rawValue,
+            behaviorContext: context?.rawValue
+        )
+    }
+}
+
+// MARK: - Behavior Incident Helpers
+
+extension PuppyEvent {
+    /// Whether this is a behavior incident event
+    public var isBehaviorIncident: Bool {
+        type == .gedrag && behaviorCategory != nil
+    }
+
+    /// Get the behavior category as the enum type
+    public var behaviorCategoryEnum: BehaviorCategory? {
+        guard let categoryStr = behaviorCategory else { return nil }
+        return BehaviorCategory(rawValue: categoryStr)
+    }
+
+    /// Get the behavior intensity as the enum type
+    public var behaviorIntensityEnum: BehaviorIntensity? {
+        guard let intensity = behaviorIntensity else { return nil }
+        return BehaviorIntensity(rawValue: intensity)
+    }
+
+    /// Get the behavior outcome as the enum type
+    public var behaviorOutcomeEnum: BehaviorOutcome? {
+        guard let outcome = behaviorOutcome else { return nil }
+        return BehaviorOutcome(rawValue: outcome)
+    }
+
+    /// Get the behavior context as the enum type
+    public var behaviorContextEnum: BehaviorContext? {
+        guard let context = behaviorContext else { return nil }
+        return BehaviorContext(rawValue: context)
     }
 }

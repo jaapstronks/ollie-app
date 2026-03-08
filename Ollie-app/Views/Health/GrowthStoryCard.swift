@@ -114,7 +114,7 @@ struct GrowthStoryCard: View {
             }
 
             // Date of last measurement
-            Text(formattedDate(date))
+            Text(date.formattedMedium())
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }
@@ -169,13 +169,6 @@ struct GrowthStoryCard: View {
         .padding(12)
         .background(tintColor.opacity(colorScheme == .dark ? 0.15 : 0.08))
         .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-    }
-
-    private func formattedDate(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        formatter.timeStyle = .none
-        return formatter.string(from: date)
     }
 
     // MARK: - Full Growth Story View

@@ -154,7 +154,7 @@ struct GrowthDetailSheet: View {
                 .foregroundStyle(delta.delta >= 0 ? Color.otisSuccess : Color.otisWarning)
             }
 
-            Text(Strings.Growth.lastMeasured(formattedDate(date)))
+            Text(Strings.Growth.lastMeasured(date.formattedMedium()))
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }
@@ -292,7 +292,7 @@ struct GrowthDetailSheet: View {
     private func measurementRow(measurement: WeightMeasurement) -> some View {
         HStack {
             VStack(alignment: .leading, spacing: 2) {
-                Text(formattedDate(measurement.date))
+                Text(measurement.date.formattedMedium())
                     .font(.subheadline)
                     .fontWeight(.medium)
 
@@ -327,14 +327,6 @@ struct GrowthDetailSheet: View {
         }
     }
 
-    // MARK: - Helpers
-
-    private func formattedDate(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        formatter.timeStyle = .none
-        return formatter.string(from: date)
-    }
 }
 
 // MARK: - Preview

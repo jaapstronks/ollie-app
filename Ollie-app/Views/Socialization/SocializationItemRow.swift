@@ -121,7 +121,7 @@ struct SocializationItemRow: View {
                 .foregroundStyle(.secondary)
 
             // Date
-            Text(formattedDate(exposure.date))
+            Text(exposure.date.relativeFormatted())
                 .font(.caption)
                 .foregroundStyle(.secondary)
 
@@ -151,11 +151,6 @@ struct SocializationItemRow: View {
         }
     }
 
-    private func formattedDate(_ date: Date) -> String {
-        let formatter = RelativeDateTimeFormatter()
-        formatter.unitsStyle = .abbreviated
-        return formatter.localizedString(for: date, relativeTo: Date())
-    }
 }
 
 // MARK: - Preview
