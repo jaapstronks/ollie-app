@@ -37,6 +37,7 @@
         <relationship name="bodyConditionScores" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDBodyConditionScore" inverseName="profile" inverseEntity="CDBodyConditionScore"/>
         <relationship name="groomingActivities" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDGroomingActivity" inverseName="profile" inverseEntity="CDGroomingActivity"/>
         <relationship name="enrichmentActivities" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDEnrichmentActivity" inverseName="profile" inverseEntity="CDEnrichmentActivity"/>
+        <relationship name="userIdentities" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDUserIdentity" inverseName="profile" inverseEntity="CDUserIdentity"/>
     </entity>
     <entity name="CDPuppyEvent" representedClassName="CDPuppyEvent" syncable="YES" codeGenerationType="class">
         <attribute name="cloudPhotoSynced" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
@@ -375,8 +376,11 @@
         <attribute name="avatarData" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
         <attribute name="colorHex" attributeType="String" defaultValueString="#4ECDC4"/>
         <attribute name="cloudKitUserRecordID" attributeType="String" defaultValueString=""/>
+        <attribute name="responsibilityLevel" attributeType="String" defaultValueString="caregiver"/>
+        <attribute name="enabledNudgesData" optional="YES" attributeType="Binary"/>
         <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="modifiedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="profile" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDPuppyProfile" inverseName="userIdentities" inverseEntity="CDPuppyProfile"/>
         <fetchIndex name="byCloudKitRecordIDIndex">
             <fetchIndexElement property="cloudKitUserRecordID" type="Binary" order="ascending"/>
         </fetchIndex>

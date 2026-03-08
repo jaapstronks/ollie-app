@@ -174,6 +174,7 @@ private extension OtisApp {
         routineStore.migrateOrphanedItems()
         skillProgressStore.configureProfileStore(profileStore)
         milestoneStore.configureProfileStore(profileStore)
+        UserIdentityStore.shared.configureProfileStore(profileStore)
 
         // Sync to Apple Watch
         WatchSyncService.shared.syncToWatch()
