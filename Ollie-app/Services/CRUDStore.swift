@@ -86,6 +86,12 @@ class CRUDStore<Model: StorableModel, Entity: CDEntityConvertible>: BaseStore wh
 
     @Published private(set) var items: [Model] = []
 
+    /// Protected method for subclasses to update items
+    /// Use this when you need custom loading logic (e.g., profile-scoped fetching)
+    func setItems(_ newItems: [Model]) {
+        items = sortOrder.sort(newItems)
+    }
+
     // MARK: - Sort Order
 
     /// Override to customize sort order. Default is no sorting.

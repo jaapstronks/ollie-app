@@ -34,6 +34,15 @@ extension CDMilestone: CDEntityConvertible {
         return cdMilestone
     }
 
+    /// Create a new CDMilestone linked to a profile (required for CloudKit sync)
+    @discardableResult
+    static func create(from milestone: Milestone, profile: CDPuppyProfile, in context: NSManagedObjectContext) -> CDMilestone {
+        let cdMilestone = CDMilestone(context: context)
+        cdMilestone.update(from: milestone)
+        cdMilestone.profile = profile
+        return cdMilestone
+    }
+
     func toModel() -> Milestone? {
         toMilestone()
     }
@@ -194,6 +203,42 @@ extension CDMilestone {
     static func countCompletedMilestones(in context: NSManagedObjectContext) -> Int {
         let request = NSFetchRequest<CDMilestone>(entityName: "CDMilestone")
         request.predicate = NSPredicate(format: "isCompleted == YES")
+        nonisolated(unsafe) var count = 0
+        context.performAndWait {
+            count = (try? context.count(for: request)) ?? 0
+        }
+        return count
+    }
+
+    /// Fetch all milestones for a specific profile
+    static func fetchAllMilestones(for profile: CDPuppyProfile, in context: NSManagedObjectContext) -> [CDMilestone] {
+        let request = NSFetchRequest<CDMilestone>(entityName: "CDMilestone")
+        request.predicate = NSPredicate(format: "profile == %@", profile)
+        request.sortDescriptors = [NSSortDescriptor(keyPath: \CDMilestone.sortOrder, ascending: true)]
+        nonisolated(unsafe) var results: [CDMilestone] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
+    }
+
+    /// Fetch all orphaned milestones (not linked to a profile)
+    /// Used for migration to link existing records to the profile
+    static func fetchOrphanedMilestones(in context: NSManagedObjectContext) -> [CDMilestone] {
+        let request = NSFetchRequest<CDMilestone>(entityName: "CDMilestone")
+        request.predicate = NSPredicate(format: "profile == nil")
+        request.sortDescriptors = [NSSortDescriptor(keyPath: \CDMilestone.sortOrder, ascending: true)]
+        nonisolated(unsafe) var results: [CDMilestone] = []
+        context.performAndWait {
+            results = (try? context.fetch(request)) ?? []
+        }
+        return results
+    }
+
+    /// Count milestones for a specific profile
+    static func countMilestones(for profile: CDPuppyProfile, in context: NSManagedObjectContext) -> Int {
+        let request = NSFetchRequest<CDMilestone>(entityName: "CDMilestone")
+        request.predicate = NSPredicate(format: "profile == %@", profile)
         nonisolated(unsafe) var count = 0
         context.performAndWait {
             count = (try? context.count(for: request)) ?? 0

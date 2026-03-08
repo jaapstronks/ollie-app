@@ -11,7 +11,11 @@ import os
 
 /// Manages milestones with Core Data and automatic CloudKit sync
 @MainActor
-final class MilestoneStore: CRUDStore<Milestone, CDMilestone> {
+final class MilestoneStore: CRUDStore<Milestone, CDMilestone>, ProfileAccessible {
+
+    // MARK: - ProfileAccessible
+
+    weak var profileStore: ProfileStore?
 
     // MARK: - Cached Computed Properties
 
@@ -34,7 +38,45 @@ final class MilestoneStore: CRUDStore<Milestone, CDMilestone> {
 
     override func performInitialLoad() {
         invalidateCaches()
+
+        // If we have a profile, migrate orphans first
+        if let profile = getCurrentProfile() {
+            migrateOrphanedMilestones(to: profile)
+        }
+
+        // Then load items (will use profile-scoped fetch if available)
         super.performInitialLoad()
+    }
+
+    /// Override to load profile-scoped items when profile is available
+    override func loadItems() {
+        if let profile = getCurrentProfile() {
+            // Load profile-scoped milestones
+            let cdMilestones = CDMilestone.fetchAllMilestones(for: profile, in: viewContext)
+            let loadedItems = cdMilestones.compactMap { $0.toMilestone() }
+            setItems(loadedItems)
+            logger.debug("Loaded \(loadedItems.count) milestones for profile")
+        } else {
+            // Fallback to loading all records
+            super.loadItems()
+        }
+    }
+
+    /// Migrate orphaned milestone records to the current profile
+    /// This ensures existing local-only records get synced to CloudKit
+    private func migrateOrphanedMilestones(to profile: CDPuppyProfile) {
+        let orphaned = CDMilestone.fetchOrphanedMilestones(in: viewContext)
+        guard !orphaned.isEmpty else { return }
+
+        logger.info("Migrating \(orphaned.count) orphaned milestones to profile")
+
+        for cdMilestone in orphaned {
+            cdMilestone.profile = profile
+        }
+
+        performSave(operation: "Migrate orphaned milestones to profile") {
+            // No additional state update needed
+        }
     }
 
     private func invalidateCaches() {
@@ -82,13 +124,47 @@ final class MilestoneStore: CRUDStore<Milestone, CDMilestone> {
     @discardableResult
     override func add(_ item: Milestone) -> Bool {
         invalidateCaches()
-        return super.add(item)
+
+        // Create with profile link for CloudKit sync
+        if let profile = getCurrentProfile() {
+            _ = CDMilestone.create(from: item, profile: profile, in: viewContext)
+
+            return performSave(operation: "Added \(item.displayName)") {
+                var newItems = items
+                newItems.append(item)
+                setItems(newItems)
+            }
+        } else {
+            // Fallback to base implementation (will need migration later)
+            logger.warning("Adding milestone without profile link - will need migration")
+            return super.add(item)
+        }
     }
 
     @discardableResult
     override func update(_ item: Milestone) -> Bool {
         invalidateCaches()
-        return super.update(item)
+
+        guard let cdMilestone = CDMilestone.fetch(byId: item.id, in: viewContext) as? CDMilestone else {
+            logger.warning("Milestone not found for update: \(item.id)")
+            setNotFoundError()
+            return false
+        }
+
+        cdMilestone.update(from: item)
+
+        // Ensure profile link exists (for migration of existing records)
+        if cdMilestone.profile == nil, let profile = getCurrentProfile() {
+            cdMilestone.profile = profile
+        }
+
+        return performSave(operation: "Updated \(item.displayName)") {
+            var newItems = items
+            if let index = newItems.firstIndex(where: { $0.id == item.id }) {
+                newItems[index] = item
+            }
+            setItems(newItems)
+        }
     }
 
     @discardableResult
@@ -124,14 +200,23 @@ final class MilestoneStore: CRUDStore<Milestone, CDMilestone> {
         // First, remove any duplicate milestones (same labelKey)
         removeDuplicateMilestones()
 
-        let count = CDMilestone.countMilestones(in: viewContext)
+        // Use profile-scoped count if available
+        let profile = getCurrentProfile()
+        let count = profile != nil
+            ? CDMilestone.countMilestones(for: profile!, in: viewContext)
+            : CDMilestone.countMilestones(in: viewContext)
 
         if count == 0 {
             logger.info("No milestones found, seeding defaults")
             let defaults = DefaultMilestones.create()
 
             for milestone in defaults {
-                _ = CDMilestone.create(from: milestone, in: viewContext)
+                // Link to profile for CloudKit sync
+                if let profile = profile {
+                    _ = CDMilestone.create(from: milestone, profile: profile, in: viewContext)
+                } else {
+                    _ = CDMilestone.create(from: milestone, in: viewContext)
+                }
             }
 
             performSave(operation: "Seeded \(defaults.count) default milestones") {
@@ -188,12 +273,18 @@ final class MilestoneStore: CRUDStore<Milestone, CDMilestone> {
     private func seedMissingDefaultMilestones() {
         let existingLabelKeys = Set(items.map { $0.labelKey })
         let defaults = DefaultMilestones.create()
+        let profile = getCurrentProfile()
 
         var addedCount = 0
         for defaultMilestone in defaults {
             if !existingLabelKeys.contains(defaultMilestone.labelKey) {
                 logger.info("Adding missing default milestone: \(defaultMilestone.labelKey)")
-                _ = CDMilestone.create(from: defaultMilestone, in: viewContext)
+                // Link to profile for CloudKit sync
+                if let profile = profile {
+                    _ = CDMilestone.create(from: defaultMilestone, profile: profile, in: viewContext)
+                } else {
+                    _ = CDMilestone.create(from: defaultMilestone, in: viewContext)
+                }
                 addedCount += 1
             }
         }
