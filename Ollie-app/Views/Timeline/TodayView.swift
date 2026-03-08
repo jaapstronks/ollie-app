@@ -30,6 +30,7 @@ struct TodayView: View {
     @State private var showYearRecapSheet = false
     @State private var showVetTipsSheet = false
     @State private var showVisitSummary = false
+    @State private var milestoneToComplete: Milestone?
 
     // First-visit tip tracking
     @AppStorage("hasSeenTodayTip") private var hasSeenTodayTip = false
@@ -443,10 +444,29 @@ struct TodayView: View {
             onDismissCrateNudge: { dismissedCrateNudgeDate = Date() },
             onDismissWalkTargetNudge: { dismissedWalkTargetNudgeDate = Date() },
             onDismissAppointmentNudge: { dismissAppointmentNudge(for: $0) },
+            onMarkAppointmentDone: { candidate in
+                milestoneToComplete = candidate.milestone
+            },
             onCreateAppointmentPrefill: { createAppointmentPrefill(for: $0) },
             onShowMonthRecap: { showMonthRecapSheet = true },
             onShowYearRecap: { showYearRecapSheet = true }
         )
+        .sheet(item: $milestoneToComplete) { milestone in
+            MilestoneCompletionSheet(
+                milestone: milestone,
+                onDismiss: { milestoneToComplete = nil },
+                onComplete: { notes, photoID, vetClinic, completionDate in
+                    milestoneStore.completeMilestone(
+                        milestone,
+                        notes: notes,
+                        photoID: photoID,
+                        vetClinicName: vetClinic,
+                        completionDate: completionDate
+                    )
+                    milestoneToComplete = nil
+                }
+            )
+        }
     }
 
     // MARK: - Timeline Section

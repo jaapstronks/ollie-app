@@ -24,6 +24,7 @@ struct TodayStatusCardsSection: View {
     var onDismissCrateNudge: () -> Void
     var onDismissWalkTargetNudge: () -> Void
     var onDismissAppointmentNudge: (String) -> Void
+    var onMarkAppointmentDone: (AppointmentNudgeCandidate) -> Void
     var onCreateAppointmentPrefill: (AppointmentNudgeCandidate) -> AppointmentPrefill?
 
     // Recap callbacks
@@ -351,6 +352,9 @@ private extension TodayStatusCardsSection {
                     if let prefill = onCreateAppointmentPrefill(candidate) {
                         viewModel.sheetCoordinator.presentSheet(.addAppointmentWithPrefill(prefill))
                     }
+                },
+                onAlreadyDone: {
+                    onMarkAppointmentDone(candidate)
                 },
                 onDismiss: {
                     onDismissAppointmentNudge(candidate.milestone.labelKey)

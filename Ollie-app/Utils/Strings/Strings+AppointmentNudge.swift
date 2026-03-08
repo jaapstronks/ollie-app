@@ -61,5 +61,8 @@ extension Strings {
 
         /// "Remind me later" button text
         static let remindLater = String(localized: "Remind me later", comment: "Button to dismiss nudge temporarily")
+
+        /// "Already done" button text (for when milestone was already completed)
+        static let alreadyDone = String(localized: "Already done", comment: "Button to mark milestone as already completed")
     }
 }

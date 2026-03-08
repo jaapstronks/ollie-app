@@ -15,6 +15,7 @@ struct AppointmentNudgeCard: View {
     let puppyName: String
     let showNapContext: Bool
     let onSchedule: () -> Void
+    let onAlreadyDone: () -> Void
     let onDismiss: () -> Void
 
     @Environment(\.colorScheme) private var colorScheme
@@ -98,42 +99,58 @@ struct AppointmentNudgeCard: View {
                 Spacer()
             }
 
-            // Action buttons
-            HStack(spacing: 10) {
-                // Dismiss button
-                Button {
-                    onDismiss()
-                } label: {
-                    Text(Strings.AppointmentNudge.remindLater)
+            // Action buttons - 3 options stacked vertically for clarity
+            VStack(spacing: 8) {
+                // Primary actions row
+                HStack(spacing: 10) {
+                    // Already done button (for when vaccination was already given)
+                    Button {
+                        onAlreadyDone()
+                    } label: {
+                        HStack(spacing: 6) {
+                            Image(systemName: "checkmark.circle")
+                                .font(.caption)
+                            Text(Strings.AppointmentNudge.alreadyDone)
+                        }
                         .font(.subheadline)
                         .fontWeight(.medium)
-                        .foregroundStyle(.primary)
+                        .foregroundStyle(Color.otisSuccess)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 10)
                         .background(
                             RoundedRectangle(cornerRadius: 10, style: .continuous)
-                                .fill(Color.secondary.opacity(colorScheme == .dark ? 0.15 : 0.1))
+                                .fill(Color.otisSuccess.opacity(colorScheme == .dark ? 0.15 : 0.1))
                         )
+                    }
+
+                    // Schedule button
+                    Button {
+                        onSchedule()
+                    } label: {
+                        HStack(spacing: 6) {
+                            Image(systemName: "calendar.badge.plus")
+                                .font(.caption)
+                            Text(Strings.AppointmentNudge.scheduleNow)
+                        }
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 10)
+                        .background(
+                            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                                .fill(tintColor)
+                        )
+                    }
                 }
 
-                // Schedule button
+                // Remind later as secondary action
                 Button {
-                    onSchedule()
+                    onDismiss()
                 } label: {
-                    HStack(spacing: 6) {
-                        Image(systemName: "calendar.badge.plus")
-                            .font(.caption)
-                        Text(Strings.AppointmentNudge.scheduleNow)
-                    }
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
-                    .foregroundStyle(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 10)
-                    .background(
-                        RoundedRectangle(cornerRadius: 10, style: .continuous)
-                            .fill(tintColor)
-                    )
+                    Text(Strings.AppointmentNudge.remindLater)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
                 }
             }
         }
@@ -166,6 +183,7 @@ struct AppointmentNudgeCard: View {
             puppyName: "Ollie",
             showNapContext: true,
             onSchedule: { print("Schedule tapped") },
+            onAlreadyDone: { print("Already done tapped") },
             onDismiss: { print("Dismissed") }
         )
 
@@ -179,6 +197,7 @@ struct AppointmentNudgeCard: View {
             puppyName: "Ollie",
             showNapContext: false,
             onSchedule: { print("Schedule tapped") },
+            onAlreadyDone: { print("Already done tapped") },
             onDismiss: { print("Dismissed") }
         )
     }
