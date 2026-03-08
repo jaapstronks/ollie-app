@@ -13,8 +13,8 @@
 # Feature files are split by domain in features/*.yaml
 
 meta:
-  version: 2.0.0
-  last_updated: 2026-03-07
+  version: 2.1.0
+  last_updated: 2026-03-08
   pricing_model: premium_ai  # trial-to-paid, no free tier
   pricing:
     monthly: 5.99  # EUR

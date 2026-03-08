@@ -162,6 +162,42 @@ moments:
     tested: false
     docs: false
 
+  - id: month-recap
+    name: Monthly Recap
+    description: Monthly summary with stats, photos, and shareable cards
+    tier: premium
+    premium_feature: advancedAnalytics
+    status: shipped
+    platforms: [ios]
+    entry_points: [today-tab, moments-tab]
+    key_files:
+      - Views/Recap/MonthRecapSheet.swift
+      - Views/Recap/MonthRecapShareView.swift
+      - Views/Cards/MonthRecapTeaseCard.swift
+      - ViewModels/MonthRecapViewModel.swift
+      - OtisShared/Sources/OtisShared/Calculations/MonthCalculations.swift
+    tested: false
+    docs: false
+
+  - id: year-recap
+    name: Year in Review
+    description: Annual recap with yearly stats, monthly highlights, growth journey, and shareable cards
+    tier: premium
+    premium_feature: advancedAnalytics
+    status: shipped
+    platforms: [ios]
+    entry_points: [today-tab]
+    key_files:
+      - Views/Recap/YearRecapView.swift
+      - Views/Recap/YearRecapTeaseCard.swift
+      - Views/Recap/YearRecapShareView.swift
+      - ViewModels/YearRecapViewModel.swift
+      - OtisShared/Sources/OtisShared/Models/YearRecap.swift
+      - OtisShared/Sources/OtisShared/Calculations/YearCalculations.swift
+    visibility_window: Dec 15 - Jan 15
+    tested: false
+    docs: false
+
 # =============================================================================
 # WALK MANAGEMENT
 # =============================================================================

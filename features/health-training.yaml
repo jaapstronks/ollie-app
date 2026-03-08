@@ -290,3 +290,141 @@ socialization:
       - Views/Socialization/FearProtocolSheet.swift
     tested: false
     docs: false
+
+# =============================================================================
+# VET INTEGRATION
+# =============================================================================
+vet:
+
+  - id: vet-visit-tips
+    name: Vet Visit Tips
+    description: Contextual tips and questions before scheduled vet appointments
+    tier: premium
+    status: shipped
+    platforms: [ios]
+    entry_points: [today-tab, health-tab]
+    key_files:
+      - Views/Health/Vet/VetVisitTipsCard.swift
+      - Views/Health/Vet/VetVisitTipsSheet.swift
+    tested: false
+    docs: false
+
+  - id: health-calendar
+    name: Health Calendar
+    description: Calendar view showing medications, appointments, and health events
+    tier: premium
+    status: shipped
+    platforms: [ios]
+    entry_points: [health-tab]
+    key_files:
+      - Views/Health/Vet/HealthCalendarView.swift
+    tested: false
+    docs: false
+
+  - id: visit-summary
+    name: Visit Summary Export
+    description: Generate shareable vet visit summaries with conditions, meds, and symptoms
+    tier: premium
+    status: shipped
+    platforms: [ios]
+    entry_points: [health-tab]
+    key_files:
+      - Views/Health/Vet/VisitSummaryView.swift
+    tested: false
+    docs: false
+
+  - id: breed-risk
+    name: Breed Risk Awareness
+    description: Breed-specific health screening recommendations and risk awareness
+    tier: premium
+    status: shipped
+    platforms: [ios]
+    entry_points: [health-tab]
+    key_files:
+      - Views/Health/Vet/BreedRiskCard.swift
+    tested: false
+    docs: false
+
+  - id: condition-followups
+    name: Condition Follow-up Reminders
+    description: Automatic follow-up reminders based on diagnosed conditions
+    tier: premium
+    status: shipped
+    platforms: [ios]
+    entry_points: [health-tab]
+    key_files:
+      - Views/Health/Vet/FollowUpRemindersCard.swift
+    tested: false
+    docs: false
+
+# =============================================================================
+# ADULT ROUTINES & WELLNESS
+# =============================================================================
+routines:
+
+  - id: daily-routine
+    name: Daily Routine Tracker
+    description: Configure and track daily routines with linked event types
+    tier: premium
+    status: shipped
+    platforms: [ios]
+    entry_points: [today-tab, settings]
+    key_files:
+      - Views/Routines/RoutineView.swift
+      - Views/Routines/RoutineStatusCard.swift
+      - Views/Routines/RoutineEditSheet.swift
+      - Services/RoutineStore.swift
+    tested: false
+    docs: false
+
+  - id: weight-goal
+    name: Weight Goal Tracking
+    description: Set and track weight goals with progress visualization
+    tier: premium
+    status: shipped
+    platforms: [ios]
+    entry_points: [health-tab]
+    key_files:
+      - Views/Routines/WeightGoalView.swift
+      - Views/Routines/WeightGoalCard.swift
+    depends_on: [growth-tracking]
+    tested: false
+    docs: false
+
+  - id: body-condition
+    name: Body Condition Score
+    description: 9-point BCS scale assessment with guidance
+    tier: premium
+    status: shipped
+    platforms: [ios]
+    entry_points: [health-tab]
+    key_files:
+      - Views/Routines/BodyConditionSheet.swift
+    tested: false
+    docs: false
+
+  - id: grooming-schedule
+    name: Grooming Schedule
+    description: Track grooming activities with due date reminders
+    tier: premium
+    status: shipped
+    platforms: [ios]
+    entry_points: [health-tab, today-tab]
+    key_files:
+      - Views/Routines/GroomingScheduleView.swift
+      - Views/Routines/GroomingCard.swift
+    tested: false
+    docs: false
+
+  - id: enrichment
+    name: Enrichment Suggestions
+    description: Activity ideas for mental stimulation with tracking
+    tier: premium
+    status: shipped
+    platforms: [ios]
+    entry_points: [today-tab]
+    key_files:
+      - Views/Routines/EnrichmentView.swift
+      - Views/Routines/EnrichmentCard.swift
+    tested: false
+    docs: false
