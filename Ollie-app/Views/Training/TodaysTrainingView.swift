@@ -461,7 +461,8 @@ struct TodaysTrainingView: View {
 
         // Check if session is complete
         if isSessionComplete {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            Task { @MainActor in
+                try? await Task.sleep(for: .seconds(0.5))
                 showSessionComplete = true
                 timerActive = false
             }
@@ -484,18 +485,6 @@ struct TodaysTrainingView: View {
         case .maintaining: return Strings.Training.phaseMaintaining
         case .needsWork: return Strings.Training.phaseNeedsWork
         }
-    }
-}
-
-// MARK: - PrioritizedSkill Hashable Extension
-
-extension PrioritizedSkill: Hashable {
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
-    }
-
-    public static func == (lhs: PrioritizedSkill, rhs: PrioritizedSkill) -> Bool {
-        lhs.id == rhs.id
     }
 }
 

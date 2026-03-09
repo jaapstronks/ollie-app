@@ -13,47 +13,40 @@ struct MorningBriefingCard: View {
     @EnvironmentObject var profileStore: ProfileStore
     @EnvironmentObject var eventStore: EventStore
 
-    @State private var briefing: MorningBriefingResponse?
-    @State private var isLoading = false
+    @StateObject private var viewModel = MorningBriefingViewModel()
     @State private var isExpanded = false
 
     @Environment(\.colorScheme) private var colorScheme
 
-    /// Whether the card should be visible
-    private var shouldShow: Bool {
-        isLoading || briefing != nil
-    }
-
     var body: some View {
-        let _ = print("[MorningBriefingCard] body evaluated, shouldShow=\(shouldShow), profile=\(profileStore.profile?.name ?? "nil")")
-        content
-            .task {
-                print("[MorningBriefingCard] task started, profileId=\(profileStore.profile?.id.uuidString ?? "nil")")
-                await loadBriefing()
-            }
-    }
+        ZStack {
+            // Invisible anchor to ensure task always runs
+            Color.clear
+                .frame(width: 0, height: 0)
 
-    @ViewBuilder
-    private var content: some View {
-        if shouldShow {
-            VStack(alignment: .leading, spacing: 0) {
-                // Main card content
-                mainContent
+            if viewModel.shouldShow {
+                VStack(alignment: .leading, spacing: 0) {
+                    // Main card content
+                    mainContent
 
-                // Expandable details
-                if isExpanded, let briefing = briefing {
-                    expandedContent(briefing)
+                    // Expandable details
+                    if isExpanded, let briefing = viewModel.briefing {
+                        expandedContent(briefing)
+                    }
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 14)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .glassBackground(.card)
+                .onTapGesture {
+                    withAnimation(.easeInOut(duration: 0.2)) {
+                        isExpanded.toggle()
+                    }
                 }
             }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 14)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .glassBackground(.card)
-            .onTapGesture {
-                withAnimation(.easeInOut(duration: 0.2)) {
-                    isExpanded.toggle()
-                }
-            }
+        }
+        .task {
+            await viewModel.loadBriefing(profile: profileStore.profile, eventStore: eventStore)
         }
     }
 
@@ -61,7 +54,7 @@ struct MorningBriefingCard: View {
 
     @ViewBuilder
     private var mainContent: some View {
-        if isLoading {
+        if viewModel.isLoading {
             HStack(spacing: 12) {
                 ProgressView()
                     .scaleEffect(0.8)
@@ -69,7 +62,7 @@ struct MorningBriefingCard: View {
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
-        } else if let briefing = briefing {
+        } else if let briefing = viewModel.briefing {
             VStack(alignment: .leading, spacing: 10) {
                 // Headline with icon
                 HStack(spacing: 8) {
@@ -195,60 +188,6 @@ struct MorningBriefingCard: View {
             RoundedRectangle(cornerRadius: 8)
                 .fill(urgencyColor(for: urgency.type).opacity(colorScheme == .dark ? 0.15 : 0.1))
         )
-    }
-
-    // MARK: - Data Loading
-
-    private func loadBriefing() async {
-        // Check first-week experience gate
-        guard FirstWeekExperienceService.shared.shouldShowAIInsights else {
-            print("[MorningBriefing] First week experience: not showing AI insights yet")
-            return
-        }
-
-        guard let profile = profileStore.profile else {
-            print("[MorningBriefing] No profile available yet")
-            return
-        }
-
-        // Check if AI is available
-        guard AI.isAvailable(for: profile) else {
-            print("[MorningBriefing] AI not available for profile")
-            return
-        }
-
-        // Check for cached result first
-        if let cached = AI.cachedMorningBriefing(profileId: profile.id) {
-            print("[MorningBriefing] Using cached briefing")
-            self.briefing = cached
-            return
-        }
-
-        print("[MorningBriefing] Loading fresh briefing...")
-        isLoading = true
-        defer { isLoading = false }
-
-        // Morning briefing needs recent history for context
-        let recentEvents = eventStore.getEvents(from: Date.daysAgo(14), to: Date())
-        print("[MorningBriefing] Got \(recentEvents.count) events from last 14 days")
-
-        let result = await AI.requestMorningBriefing(
-            profile: profile,
-            events: recentEvents
-        )
-
-        switch result {
-        case .success(let response):
-            print("[MorningBriefing] Success: \(response.headline)")
-            self.briefing = response
-
-        case .shadow(let response):
-            print("[MorningBriefing] Shadow mode: \(response.headline)")
-            self.briefing = response
-
-        case .fallback(let reason):
-            print("[MorningBriefing] Fallback: \(reason)")
-        }
     }
 
     // MARK: - Helpers

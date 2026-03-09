@@ -419,20 +419,10 @@ private extension TodayStatusCardsSection {
                 onDismiss: {
                     onDismissAppointmentNudge(candidate.milestone.labelKey)
                 },
-                onCallVet: { phone in
-                    callPhone(phone)
-                }
+                onCallVet: ContactUtilities.callPhoneNumber
             )
             .visibleForNudge(.appointments)
             .animatedAppear(delay: 0.027)
-        }
-    }
-
-    /// Opens the phone dialer with the given number
-    private func callPhone(_ phone: String) {
-        let cleaned = phone.components(separatedBy: CharacterSet.decimalDigits.inverted).joined()
-        if let url = URL(string: "tel://\(cleaned)") {
-            UIApplication.shared.open(url)
         }
     }
 
@@ -587,107 +577,3 @@ private extension TodayStatusCardsSection {
     }
 }
 
-// MARK: - AI Recommendation Card
-
-private struct AIRecommendationCard: View {
-    let recommendation: AILoggingCategoryRecommendation
-    let onKeepCurrent: () -> Void
-    let onReduceReminders: () -> Void
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Text(Strings.AINudges.recommendationTitle)
-                .font(.subheadline.weight(.semibold))
-                .foregroundStyle(.secondary)
-
-            Text(Strings.AINudges.recommendationBody(category: localizedCategoryName(recommendation.category)))
-                .font(.subheadline)
-                .foregroundStyle(.primary)
-
-            HStack(spacing: 10) {
-                Button(Strings.AINudges.keepCurrent, action: onKeepCurrent)
-                    .buttonStyle(.glassPillCompact(tint: .custom(.otisMuted)))
-
-                Button(Strings.AINudges.reduceReminders, action: onReduceReminders)
-                    .buttonStyle(.glassPillCompact(tint: .custom(.otisAccent)))
-            }
-        }
-        .padding(.horizontal, 14)
-        .padding(.vertical, 12)
-        .background(Color(.secondarySystemBackground).opacity(0.6))
-        .cornerRadius(LayoutConstants.cornerRadiusM)
-    }
-
-    private func localizedCategoryName(_ category: AILoggingCategory) -> String {
-        switch category {
-        case .potty: return Strings.AINudges.categoryPotty
-        case .walk: return Strings.AINudges.categoryWalk
-        case .meal: return Strings.AINudges.categoryMeal
-        case .training: return Strings.AINudges.categoryTraining
-        case .socialization: return Strings.AINudges.categorySocialization
-        }
-    }
-}
-
-// MARK: - Senior Mobility Quick Card
-
-private struct SeniorMobilityQuickCard: View {
-    let puppyName: String
-    let onRate: (Int) -> Void
-    let onDetailedLog: () -> Void
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack {
-                Image(systemName: "figure.walk")
-                    .foregroundStyle(.blue)
-                Text(Strings.SeniorWellness.howIsMobility(name: puppyName))
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
-            }
-
-            // Quick 1-5 rating buttons
-            HStack(spacing: 8) {
-                ForEach(1...5, id: \.self) { score in
-                    Button {
-                        onRate(score)
-                    } label: {
-                        Text("\(score)")
-                            .font(.headline)
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 40)
-                            .background(colorForScore(score).opacity(0.2))
-                            .foregroundStyle(colorForScore(score))
-                            .clipShape(RoundedRectangle(cornerRadius: 8))
-                    }
-                    .buttonStyle(.plain)
-                }
-            }
-
-            // Add details button
-            Button(action: onDetailedLog) {
-                HStack {
-                    Text("Add observations")
-                        .font(.caption)
-                    Image(systemName: "chevron.right")
-                        .font(.caption2)
-                }
-                .foregroundStyle(.secondary)
-            }
-        }
-        .padding()
-        .background(Color(.secondarySystemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: LayoutConstants.cornerRadiusM))
-    }
-
-    private func colorForScore(_ score: Int) -> Color {
-        switch score {
-        case 1: return .red
-        case 2: return .orange
-        case 3: return .yellow
-        case 4: return .mint
-        case 5: return .green
-        default: return .gray
-        }
-    }
-}

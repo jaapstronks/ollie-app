@@ -40,11 +40,19 @@ public enum TrainingPriority: Int, Comparable {
 // MARK: - Prioritized Skill
 
 /// A skill with its priority context for session planning
-public struct PrioritizedSkill: Identifiable {
+public struct PrioritizedSkill: Identifiable, Hashable {
     public var id: String { progress.skillId }
     public let progress: SkillProgress
     public let priority: TrainingPriority
     public let reason: String
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+
+    public static func == (lhs: PrioritizedSkill, rhs: PrioritizedSkill) -> Bool {
+        lhs.id == rhs.id
+    }
 
     /// Time since last practiced (nil if never practiced)
     public var timeSinceLastPractice: TimeInterval? {

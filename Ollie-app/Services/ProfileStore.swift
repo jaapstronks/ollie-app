@@ -60,22 +60,23 @@ class ProfileStore: ObservableObject {
         profiles.filter { $0.ownership == .shared }.count
     }
 
-    // MARK: - Existing Properties
+    // MARK: - State Properties
 
     @Published private(set) var isLoading: Bool = true
     @Published private(set) var isSyncing: Bool = false
 
-    private let persistenceController: PersistenceController
+    // MARK: - Internal Storage (accessible by extensions)
+
+    let persistenceController: PersistenceController
     let logger = Logger.otis(category: "ProfileStore")
-    private var cancellables = Set<AnyCancellable>()
-    private var knownSharedProfileIDs = Set<UUID>()
+    var cancellables = Set<AnyCancellable>()
+    var knownSharedProfileIDs = Set<UUID>()
 
-    /// App Group suite name for sharing with Intents/Widgets
-    private static let appGroupSuiteName = Constants.appGroupIdentifier
-
-    private var viewContext: NSManagedObjectContext {
+    var viewContext: NSManagedObjectContext {
         persistenceController.viewContext
     }
+
+    // MARK: - Initialization
 
     init(persistenceController: PersistenceController = .shared) {
         self.persistenceController = persistenceController
@@ -88,91 +89,6 @@ class ProfileStore: ObservableObject {
 
         loadAllProfiles()
         setupRemoteChangeObserver()
-    }
-
-    // MARK: - Setup
-
-    private func setupRemoteChangeObserver() {
-        // Listen for Core Data remote changes (CloudKit sync)
-        NotificationCenter.default.publisher(for: .NSPersistentStoreRemoteChange)
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.handleRemoteChange()
-            }
-            .store(in: &cancellables)
-
-        // Listen for share acceptance to reload profiles
-        NotificationCenter.default.publisher(for: .cloudKitShareAccepted)
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.handleShareAccepted()
-            }
-            .store(in: &cancellables)
-
-        // Listen for seed data profile creation (UI testing mode)
-        NotificationCenter.default.publisher(for: NSNotification.Name("ProfileStoreReload"))
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.logger.info("Received ProfileStoreReload notification - reloading profiles")
-                self?.loadAllProfiles()
-            }
-            .store(in: &cancellables)
-    }
-
-    private func handleRemoteChange() {
-        logger.debug("Detected CloudKit remote change for profiles")
-        loadAllProfiles()
-    }
-
-    private func handleShareAccepted() {
-        logger.info("Share accepted - reloading all profiles")
-        let previousSharedProfileIDs = knownSharedProfileIDs
-
-        Task { @MainActor in
-            _ = await awaitNewlySharedProfile(
-                previousSharedProfileIDs: previousSharedProfileIDs,
-                timeoutSeconds: 30
-            )
-        }
-    }
-
-    /// Snapshot shared profile IDs before accepting an invitation.
-    /// Used to detect which shared profile is newly imported afterwards.
-    func currentSharedProfileIDs() -> Set<UUID> {
-        Set(profiles.filter { $0.ownership == .shared }.map(\.id))
-    }
-
-    /// Waits for a newly shared profile to arrive after invitation acceptance.
-    /// Returns the imported profile once visible, or nil on timeout.
-    func awaitNewlySharedProfile(
-        previousSharedProfileIDs: Set<UUID>,
-        timeoutSeconds: TimeInterval = 30
-    ) async -> PuppyProfile? {
-        let deadline = Date().addingTimeInterval(timeoutSeconds)
-
-        // Shared records can take a while to appear in the shared store after acceptance.
-        while Date() <= deadline {
-            loadAllProfiles()
-
-            let sharedProfiles = profiles.filter { $0.ownership == .shared }
-            let newlyAddedSharedProfiles = sharedProfiles.filter { !previousSharedProfileIDs.contains($0.id) }
-
-            if let profileToActivate = newlyAddedSharedProfiles.max(by: { $0.modifiedAt < $1.modifiedAt }) {
-                switchToProfile(profileToActivate.id)
-                NotificationCenter.default.post(
-                    name: .sharedProfileAutoActivated,
-                    object: nil,
-                    userInfo: ["profileName": profileToActivate.name]
-                )
-                logger.info("Auto-activated newly shared profile: \(profileToActivate.name)")
-                return profileToActivate
-            }
-
-            try? await Task.sleep(for: .seconds(1))
-        }
-
-        logger.info("Timed out waiting for newly shared profile import")
-        return nil
     }
 
     // MARK: - Public Methods
@@ -332,7 +248,7 @@ class ProfileStore: ObservableObject {
         deleteProfile(profileId)
     }
 
-    // MARK: - Initial Sync
+    // MARK: - Sync Methods
 
     /// Perform initial sync on app launch
     func initialSync() async {
@@ -348,46 +264,6 @@ class ProfileStore: ObservableObject {
         migrateOrphanedEventsIfNeeded()
 
         // Note: User identity is now handled by UserIdentityStore, not ProfileStore
-    }
-
-    /// Link orphaned events (without profile relationship) to the first profile
-    private func migrateOrphanedEventsIfNeeded() {
-        guard let firstProfile = profiles.first,
-              let cdProfile = CDPuppyProfile.fetch(byId: firstProfile.id, in: viewContext) else {
-            return
-        }
-
-        let linkedCount = CDPuppyEvent.linkOrphanedEvents(to: cdProfile, in: viewContext)
-        if linkedCount > 0 {
-            do {
-                try persistenceController.save()
-                logger.info("Linked \(linkedCount) orphaned events to profile '\(firstProfile.name)'")
-            } catch {
-                logger.error("Failed to save after linking orphaned events: \(error.localizedDescription)")
-            }
-        }
-    }
-
-    /// Migrate breed name to breedId if profile has breed but no breedId
-    private func migrateBreedNameToId() async {
-        guard let profile = activeProfile,
-              let breedName = profile.breed,
-              !breedName.isEmpty,
-              profile.breedId == nil else {
-            return
-        }
-
-        logger.info("Migrating breed name '\(breedName)' to breedId")
-
-        // Fetch breeds and find matching breed
-        await BreedService.shared.fetchBreeds()
-
-        if let matchedBreed = BreedService.shared.findBreed(named: breedName) {
-            updateBreedId(matchedBreed.id)
-            logger.info("Migrated breed '\(breedName)' to breedId \(matchedBreed.id)")
-        } else {
-            logger.warning("Could not find breed match for '\(breedName)'")
-        }
     }
 
     /// Force sync with CloudKit
@@ -431,36 +307,10 @@ class ProfileStore: ObservableObject {
         }
     }
 
-    // MARK: - Private Methods
-
-    /// Create a test profile for UI testing if none exists
-    private func createTestProfileIfNeeded() {
-        // Check if profile already exists
-        if CDPuppyProfile.fetchProfile(in: viewContext) != nil {
-            return
-        }
-
-        logger.info("Creating test profile for UI testing")
-
-        // Create test profile: "Oliver", 16 weeks old, Golden Retriever
-        let calendar = Calendar.current
-        let birthDate = calendar.date(byAdding: .weekOfYear, value: -16, to: Date()) ?? Date()
-        let homeDate = calendar.date(byAdding: .weekOfYear, value: -8, to: Date()) ?? Date()
-
-        var testProfile = PuppyProfile.defaultProfile(
-            name: "Oliver",
-            birthDate: birthDate,
-            homeDate: homeDate,
-            size: .medium
-        )
-        testProfile.breed = "Golden Retriever"
-
-        _ = CDPuppyProfile.create(from: testProfile, in: viewContext)
-        try? persistenceController.save()
-    }
+    // MARK: - Profile Loading
 
     /// Load all profiles from both private and shared stores
-    private func loadAllProfiles() {
+    func loadAllProfiles() {
         // Only expose a loading state during first bootstrapping.
         // Remote CloudKit updates can happen while modals/sheets are open; toggling
         // root loading there rebuilds the view tree and dismisses active presentations.
@@ -526,101 +376,6 @@ class ProfileStore: ObservableObject {
         syncSharedProfilePhotos()
     }
 
-    /// Sync profile photos from CloudKit for shared profiles that have a photo filename but no local file
-    private func syncSharedProfilePhotos() {
-        let sharedProfiles = profiles.filter { $0.ownership == .shared }
-
-        for profile in sharedProfiles {
-            guard let filename = profile.profilePhotoFilename else { continue }
-
-            // Check if photo exists locally, if not, download from CloudKit
-            Task {
-                await ProfilePhotoStore.shared.syncFromCloudKitIfNeeded(
-                    filename: filename,
-                    profileId: profile.id
-                )
-            }
-        }
-    }
-
-    /// Upload profile photo to CloudKit for a profile (used when enabling sharing or for migration)
-    /// Call this when a user shares their profile to ensure the photo is available to participants
-    func uploadProfilePhotoToCloud(for profileId: UUID) async {
-        guard let profile = profiles.first(where: { $0.id == profileId }),
-              let filename = profile.profilePhotoFilename,
-              ProfilePhotoStore.shared.exists(filename: filename) else {
-            return
-        }
-
-        let localURL = ProfilePhotoStore.shared.fullPath(for: filename)
-
-        do {
-            _ = try await CloudKitService.shared.uploadProfilePhoto(
-                localURL: localURL,
-                profileId: profileId
-            )
-            logger.info("Uploaded profile photo to CloudKit for profile \(profileId)")
-        } catch {
-            logger.warning("Failed to upload profile photo to CloudKit: \(error.localizedDescription)")
-        }
-    }
-
-    // MARK: - Share Acceptance Support
-
-    /// Check if user has an existing profile in their private store
-    /// Used to inform user when accepting a share invitation (no longer destructive)
-    func hasExistingPrivateProfile() -> Bool {
-        guard let privateStore = persistenceController.getPrivateStore() else { return false }
-        return CDPuppyProfile.hasProfile(in: viewContext, store: privateStore)
-    }
-
-    /// Delete existing profile from private store
-    /// Only called for specific user action, not automatically on share acceptance
-    @available(*, deprecated, message: "Multi-puppy support means we no longer need to delete profiles on share acceptance")
-    func deletePrivateProfile() {
-        guard let privateStore = persistenceController.getPrivateStore() else { return }
-
-        CDPuppyProfile.deleteAllProfiles(in: viewContext, from: privateStore)
-
-        do {
-            try persistenceController.save()
-            loadAllProfiles()
-            logger.info("Deleted all profiles from private store")
-        } catch {
-            logger.error("Failed to delete private profile: \(error.localizedDescription)")
-        }
-    }
-
-    // MARK: - App Group Sync
-
-    /// Syncs the active profile to App Group for use by App Intents and Widgets
-    /// Called automatically after any profile save or switch
-    private func syncToAppGroup() {
-        guard let profile = activeProfile else { return }
-
-        let sharedProfile = SharedProfile(from: profile)
-        guard let sharedDefaults = UserDefaults(suiteName: Self.appGroupSuiteName) else {
-            logger.warning("App Group UserDefaults unavailable - widget sync skipped")
-            return
-        }
-
-        do {
-            let data = try JSONEncoder().encode(sharedProfile)
-            sharedDefaults.set(data, forKey: IntentDataStore.profileKey)
-
-            // Also sync the active profile ID for widgets
-            sharedDefaults.set(profile.id.uuidString, forKey: "activeProfileId")
-        } catch {
-            logger.error("Failed to encode profile for App Group sync: \(error.localizedDescription)")
-        }
-    }
-
-    /// Force sync the current profile to App Group
-    /// Call this if profile was loaded from elsewhere and needs to be shared
-    func forceAppGroupSync() {
-        syncToAppGroup()
-    }
-
     // MARK: - Subscription Limits
 
     /// Check if user can add more owned profiles based on subscription
@@ -659,14 +414,10 @@ class ProfileStore: ObservableObject {
     }
 }
 
-extension Notification.Name {
-    static let sharedProfileAutoActivated = Notification.Name("sharedProfileAutoActivated")
-}
-
 // MARK: - Notification Names
 
 extension Notification.Name {
-    /// Posted when the active profile changes
+    static let sharedProfileAutoActivated = Notification.Name("sharedProfileAutoActivated")
     static let activeProfileChanged = Notification.Name("activeProfileChanged")
 }
 

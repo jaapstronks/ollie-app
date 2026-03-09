@@ -223,8 +223,7 @@ final class TrainingPlanStore: BaseStore {
     func recentSessions(for skillId: String, limit: Int = 5) -> [PuppyEvent] {
         guard let eventStore = eventStore else { return [] }
 
-        let thirtyDaysAgo = Calendar.current.date(byAdding: .day, value: -30, to: Date()) ?? Date()
-        let allEvents = eventStore.getEvents(from: thirtyDaysAgo, to: Date())
+        let allEvents = eventStore.getEvents(from: Date.daysAgo(30), to: Date())
 
         return allEvents.training()
             .filter { $0.exercise == skillId }
@@ -289,14 +288,5 @@ final class TrainingPlanStore: BaseStore {
         }
 
         trainingPlan = plan
-    }
-}
-
-// MARK: - Date Extension
-
-extension Date {
-    /// Parse a date string in YYYY-MM-DD format
-    static func fromDateString(_ string: String) -> Date? {
-        DateFormatters.dateOnly.date(from: string)
     }
 }
