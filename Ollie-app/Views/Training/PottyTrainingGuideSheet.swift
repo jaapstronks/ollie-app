@@ -23,11 +23,16 @@ struct PottyTrainingGuideSheet: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.colorScheme) private var colorScheme
 
-    // Mastery state
-    @AppStorage(UserPreferences.Key.pottyTrainingMastered.rawValue) private var isMastered = false
-    @AppStorage(UserPreferences.Key.pottyTrainingMasteredDate.rawValue) private var masteredTimestamp: Double = 0
+    // Training mastery state
+    @EnvironmentObject var trainingMasteryStore: TrainingMasteryStore
 
     @State private var showMasteryConfirmation = false
+
+    // Convenience accessors
+    private var isMastered: Bool { trainingMasteryStore.pottyTrainingMastered }
+    private var masteredTimestamp: Double {
+        trainingMasteryStore.pottyMasteredDate?.timeIntervalSince1970 ?? 0
+    }
 
     /// Determine which age phase the puppy is in
     private var agePhase: AgePhase {
@@ -315,30 +320,28 @@ struct PottyTrainingGuideSheet: View {
 
     private func markAsMastered() {
         withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
-            isMastered = true
-            masteredTimestamp = Date().timeIntervalSince1970
+            trainingMasteryStore.markPottyMastered()
         }
         HapticFeedback.success()
     }
 
     private func reactivateTracking() {
         withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
-            isMastered = false
-            masteredTimestamp = 0
+            trainingMasteryStore.reactivatePottyTraining()
         }
         // Clear dismissal states
-        UserDefaults.standard.removeObject(forKey: UserPreferences.Key.pottyReactivationPromptDismissedDate.rawValue)
-        UserDefaults.standard.removeObject(forKey: UserPreferences.Key.pottyLastIncidentAcknowledgedDate.rawValue)
+        trainingMasteryStore.pottyReactivationPromptDismissedDate = nil
+        trainingMasteryStore.pottyLastIncidentAcknowledgedDate = nil
         HapticFeedback.light()
     }
 
     private func acknowledgeIncident() {
-        UserDefaults.standard.set(Date().timeIntervalSince1970, forKey: UserPreferences.Key.pottyLastIncidentAcknowledgedDate.rawValue)
+        trainingMasteryStore.acknowledgeLastPottyIncident()
         HapticFeedback.selection()
     }
 
     private func dismissReactivationPrompt() {
-        UserDefaults.standard.set(Date().timeIntervalSince1970, forKey: UserPreferences.Key.pottyReactivationPromptDismissedDate.rawValue)
+        trainingMasteryStore.dismissPottyReactivationPrompt()
         HapticFeedback.selection()
     }
 

@@ -36,15 +36,19 @@ struct TodayView: View {
     // First-visit tip tracking
     @AppStorage("hasSeenTodayTip") private var hasSeenTodayTip = false
 
-    // Crate training mastery (hides potty reminders when mastered)
-    @AppStorage(UserPreferences.Key.crateTrainingMastered.rawValue) private var crateTrainingMastered = false
+    // Training mastery state
+    @EnvironmentObject var trainingMasteryStore: TrainingMasteryStore
 
     @EnvironmentObject private var atmosphereProvider: AtmosphereProvider
+
+    // Convenience accessor for crate training mastery
+    private var crateTrainingMastered: Bool { trainingMasteryStore.crateTrainingMastered }
     @EnvironmentObject private var foodRecallService: FoodRecallService
     @EnvironmentObject private var eventStore: EventStore
     @EnvironmentObject private var milestoneStore: MilestoneStore
     @EnvironmentObject private var weightStore: WeightStore
     @EnvironmentObject private var routineStore: RoutineStore
+    @EnvironmentObject private var contactStore: ContactStore
 
     // Trial touchpoint state
     @ObservedObject private var trialManager = TrialManager.shared
@@ -503,17 +507,18 @@ struct TodayView: View {
             MilestoneCompletionSheet(
                 milestone: milestone,
                 onDismiss: { milestoneToComplete = nil },
-                onComplete: { notes, photoID, vetClinic, completionDate in
+                onComplete: { notes, photoID, linkedContactID, completionDate in
                     milestoneStore.completeMilestone(
                         milestone,
                         notes: notes,
                         photoID: photoID,
-                        vetClinicName: vetClinic,
+                        linkedContactID: linkedContactID,
                         completionDate: completionDate
                     )
                     milestoneToComplete = nil
                 }
             )
+            .environmentObject(contactStore)
         }
     }
 

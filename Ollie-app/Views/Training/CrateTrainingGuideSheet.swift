@@ -16,11 +16,16 @@ struct CrateTrainingGuideSheet: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.colorScheme) private var colorScheme
 
-    // Mastery state
-    @AppStorage(UserPreferences.Key.crateTrainingMastered.rawValue) private var isMastered = false
-    @AppStorage(UserPreferences.Key.crateTrainingMasteredDate.rawValue) private var masteredTimestamp: Double = 0
+    // Training mastery state
+    @EnvironmentObject var trainingMasteryStore: TrainingMasteryStore
 
     @State private var showMasteryConfirmation = false
+
+    // Convenience accessors
+    private var isMastered: Bool { trainingMasteryStore.crateTrainingMastered }
+    private var masteredTimestamp: Double {
+        trainingMasteryStore.crateMasteredDate?.timeIntervalSince1970 ?? 0
+    }
 
     /// Calculate percentage of recent naps taken in crate
     private var crateNapStats: (percentage: Int, total: Int) {
@@ -203,16 +208,14 @@ struct CrateTrainingGuideSheet: View {
 
     private func markAsMastered() {
         withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
-            isMastered = true
-            masteredTimestamp = Date().timeIntervalSince1970
+            trainingMasteryStore.markCrateMastered()
         }
         HapticFeedback.success()
     }
 
     private func reactivateTracking() {
         withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
-            isMastered = false
-            masteredTimestamp = 0
+            trainingMasteryStore.reactivateCrateTraining()
         }
         HapticFeedback.light()
     }

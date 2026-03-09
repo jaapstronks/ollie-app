@@ -16,10 +16,10 @@ struct WeightGoalView: View {
 
     @State private var showSetGoalSheet = false
 
-    @AppStorage(UserPreferences.Key.weightUnit.rawValue) private var weightUnitRaw = WeightUnit.kg.rawValue
+    @EnvironmentObject private var unitPreferences: UnitPreferences
 
     private var weightUnit: WeightUnit {
-        WeightUnit(rawValue: weightUnitRaw) ?? .kg
+        unitPreferences.weightUnit
     }
 
     private var currentWeight: Double? {
@@ -246,10 +246,10 @@ private struct SetWeightGoalSheet: View {
     @State private var targetDate: Date = Date().addingTimeInterval(90 * 24 * 60 * 60) // 90 days
     @State private var note: String = ""
 
-    @AppStorage(UserPreferences.Key.weightUnit.rawValue) private var weightUnitRaw = WeightUnit.kg.rawValue
+    @EnvironmentObject private var unitPreferences: UnitPreferences
 
     private var weightUnit: WeightUnit {
-        WeightUnit(rawValue: weightUnitRaw) ?? .kg
+        unitPreferences.weightUnit
     }
 
     private var currentWeight: Double {

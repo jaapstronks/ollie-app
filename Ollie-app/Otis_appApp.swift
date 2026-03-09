@@ -40,6 +40,8 @@ struct OtisApp: App {
     @StateObject private var subscriptionManager = SubscriptionManager.shared
     @StateObject private var atmosphereProvider = AtmosphereProvider()
     @StateObject private var foodRecallService = FoodRecallService()
+    @StateObject private var unitPreferences = UnitPreferences.shared
+    @StateObject private var trainingMasteryStore = TrainingMasteryStore.shared
     @ObservedObject private var cloudKit = CloudKitService.shared
     @State private var toastManager = ToastManager()
 
@@ -89,6 +91,8 @@ struct OtisApp: App {
                 .environmentObject(atmosphereProvider)
                 .environmentObject(foodRecallService)
                 .environmentObject(routineStore)
+                .environmentObject(unitPreferences)
+                .environmentObject(trainingMasteryStore)
                 .toastContainer()
                 .environment(toastManager)
                 .task { await performInitialSetup() }
@@ -158,6 +162,9 @@ private extension OtisApp {
         // Perform initial photo sync - upload any pending photos
         let recentEvents = await eventStore.getEventsAsync(from: Date.daysAgo(30), to: Date())
         PhotoSyncService.shared.performInitialSync(events: recentEvents)
+
+        // Note: Migration for existing photos removed - only new photos will have owner tracking.
+        // Existing photos uploaded before this fix won't sync between partners.
 
         // Seed default milestones
         milestoneStore.seedDefaultMilestonesIfNeeded()

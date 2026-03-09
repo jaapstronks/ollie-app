@@ -16,10 +16,10 @@ struct WeightGoalCard: View {
     let onGoalTap: () -> Void
     let onBCSTap: () -> Void
 
-    @AppStorage(UserPreferences.Key.weightUnit.rawValue) private var weightUnitRaw = WeightUnit.kg.rawValue
+    @EnvironmentObject var unitPreferences: UnitPreferences
 
     private var weightUnit: WeightUnit {
-        WeightUnit(rawValue: weightUnitRaw) ?? .kg
+        unitPreferences.weightUnit
     }
 
     var body: some View {

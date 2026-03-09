@@ -16,11 +16,11 @@ struct ActionableEventCard: View {
     var poopStatus: PoopStatus?
 
     @EnvironmentObject private var socializationStore: SocializationStore
-    @AppStorage(UserPreferences.Key.temperatureUnit.rawValue) private var temperatureUnitRaw = TemperatureUnit.celsius.rawValue
+    @EnvironmentObject var unitPreferences: UnitPreferences
     @State private var showWalkTips = false
 
     private var temperatureUnit: TemperatureUnit {
-        TemperatureUnit(rawValue: temperatureUnitRaw) ?? .celsius
+        unitPreferences.temperatureUnit
     }
 
     /// Suggested items to watch for during walks (max 2)
@@ -331,10 +331,11 @@ struct UpcomingEventsCard: View {
     let isToday: Bool
 
     @State private var isExpanded = false
-    @AppStorage(UserPreferences.Key.temperatureUnit.rawValue) private var temperatureUnitRaw = TemperatureUnit.celsius.rawValue
+
+    @EnvironmentObject var unitPreferences: UnitPreferences
 
     private var temperatureUnit: TemperatureUnit {
-        TemperatureUnit(rawValue: temperatureUnitRaw) ?? .celsius
+        unitPreferences.temperatureUnit
     }
 
     /// Number of items to show by default

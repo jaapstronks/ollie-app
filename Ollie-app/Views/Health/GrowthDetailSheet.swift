@@ -19,7 +19,7 @@ struct GrowthDetailSheet: View {
 
     @Environment(\.dismiss) private var dismiss
     @Environment(\.colorScheme) private var colorScheme
-    @AppStorage(UserPreferences.Key.weightUnit.rawValue) private var weightUnitRaw = WeightUnit.kg.rawValue
+    @EnvironmentObject var unitPreferences: UnitPreferences
 
     @State private var measurementToDelete: WeightMeasurement?
     @State private var showDeleteConfirmation = false
@@ -27,7 +27,7 @@ struct GrowthDetailSheet: View {
     @State private var showEditSheet = false
 
     private var weightUnit: WeightUnit {
-        WeightUnit(rawValue: weightUnitRaw) ?? .kg
+        unitPreferences.weightUnit
     }
 
     // Computed from weightStore for live updates

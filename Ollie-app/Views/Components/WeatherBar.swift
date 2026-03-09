@@ -20,10 +20,11 @@ struct WeatherBar: View {
 /// Single hour cell in the weather bar
 struct WeatherHourCell: View {
     let forecast: HourForecast
-    @AppStorage(UserPreferences.Key.temperatureUnit.rawValue) private var temperatureUnitRaw = TemperatureUnit.celsius.rawValue
+
+    @EnvironmentObject var unitPreferences: UnitPreferences
 
     private var temperatureUnit: TemperatureUnit {
-        TemperatureUnit(rawValue: temperatureUnitRaw) ?? .celsius
+        unitPreferences.temperatureUnit
     }
 
     var body: some View {
@@ -112,10 +113,11 @@ struct WeatherSection: View {
     let forecasts: [HourForecast]
     let alert: WeatherAlert?
     let isLoading: Bool
-    @AppStorage(UserPreferences.Key.temperatureUnit.rawValue) private var temperatureUnitRaw = TemperatureUnit.celsius.rawValue
+
+    @EnvironmentObject var unitPreferences: UnitPreferences
 
     private var temperatureUnit: TemperatureUnit {
-        TemperatureUnit(rawValue: temperatureUnitRaw) ?? .celsius
+        unitPreferences.temperatureUnit
     }
 
     var body: some View {

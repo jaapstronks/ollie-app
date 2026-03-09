@@ -2,7 +2,10 @@
 //  EventStore.swift
 //  Otis-app
 //
-//  Manages reading and writing puppy events with Core Data and automatic CloudKit sync
+//  Manages reading and writing puppy events with Core Data and automatic CloudKit sync.
+//  Observer setup is in EventStore+Observers.swift.
+//  Import logic is in EventStore+Import.swift.
+//  Widget updates are in EventStore+Widgets.swift.
 //
 
 import Combine
@@ -20,18 +23,18 @@ class EventStore: ObservableObject {
     @Published private(set) var isSyncing = false
     @Published private(set) var syncError: String?
 
-    private let logger = Logger.otis(category: "EventStore")
+    let logger = Logger.otis(category: "EventStore")
 
     /// Core Data event store
-    private let coreDataStore: CoreDataEventStore
+    let coreDataStore: CoreDataEventStore
 
     /// Media store for photo operations
     private let mediaStore = MediaStore()
 
     /// Reference to profile store for profile-scoped queries
-    private weak var profileStoreRef: ProfileStore?
+    weak var profileStoreRef: ProfileStore?
 
-    private var cancellables = Set<AnyCancellable>()
+    var cancellables = Set<AnyCancellable>()
 
     /// NSFetchedResultsController for reactive updates
     private var fetchedResultsController: NSFetchedResultsController<CDPuppyEvent>?
@@ -39,11 +42,7 @@ class EventStore: ObservableObject {
     init(persistenceController: PersistenceController = .shared) {
         self.coreDataStore = CoreDataEventStore(persistenceController: persistenceController)
 
-        setupRemoteChangeObserver()
-        setupWatchEventObserver()
-        setupProfileChangeObserver()
-        setupPhotoSyncObserver()
-        setupNotificationActionObserver()
+        setupAllObservers()
         loadEvents(for: currentDate)
     }
 
@@ -54,158 +53,11 @@ class EventStore: ObservableObject {
     }
 
     /// Update the active profile on the Core Data store
-    private func updateActiveProfile() {
+    func updateActiveProfile() {
         coreDataStore.activeProfile = profileStoreRef?.getActiveCDProfile()
     }
 
-    // MARK: - Setup
-
-    private func setupRemoteChangeObserver() {
-        // Listen for Core Data remote changes (CloudKit sync)
-        NotificationCenter.default.publisher(for: .NSPersistentStoreRemoteChange)
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.handleRemoteChange()
-            }
-            .store(in: &cancellables)
-
-        // Listen for share acceptance to reload data
-        NotificationCenter.default.publisher(for: .cloudKitShareAccepted)
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.handleShareAccepted()
-            }
-            .store(in: &cancellables)
-    }
-
-    private func setupWatchEventObserver() {
-        NotificationCenter.default.addObserver(
-            forName: .watchEventReceived,
-            object: nil,
-            queue: .main
-        ) { [weak self] notification in
-            guard let self = self else { return }
-
-            Task { @MainActor in
-                self.logger.info("Received event from Apple Watch, reloading...")
-                self.coreDataStore.invalidateCache(for: self.currentDate)
-                self.loadEvents(for: self.currentDate)
-            }
-        }
-    }
-
-    private func setupProfileChangeObserver() {
-        // Listen for active profile changes to reload events
-        NotificationCenter.default.publisher(for: .activeProfileChanged)
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.handleProfileChange()
-            }
-            .store(in: &cancellables)
-    }
-
-    private func setupPhotoSyncObserver() {
-        // Listen for photo upload completion to update event flags
-        NotificationCenter.default.publisher(for: .photoUploadCompleted)
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] notification in
-                guard let eventId = notification.userInfo?["eventId"] as? UUID else { return }
-                self?.markPhotoAsSynced(eventId: eventId)
-            }
-            .store(in: &cancellables)
-
-        // Listen for photo upload retry requests
-        NotificationCenter.default.publisher(for: .photoUploadRetryRequested)
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] notification in
-                guard let eventId = notification.userInfo?["eventId"] as? UUID,
-                      let self = self else { return }
-                // Fetch the event and retry upload
-                if let event = self.coreDataStore.fetchEvent(byId: eventId) {
-                    PhotoSyncService.shared.retryUpload(for: event)
-                }
-            }
-            .store(in: &cancellables)
-    }
-
-    private func setupNotificationActionObserver() {
-        // Handle like action from moment notification
-        NotificationCenter.default.publisher(for: .likeMomentFromNotification)
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] notification in
-                guard let eventId = notification.userInfo?["eventId"] as? UUID,
-                      let self = self else { return }
-                self.handleLikeFromNotification(eventId: eventId)
-            }
-            .store(in: &cancellables)
-    }
-
-    /// Handle like action triggered from a notification
-    private func handleLikeFromNotification(eventId: UUID) {
-        // Fetch the event from Core Data
-        guard let event = coreDataStore.fetchEvent(byId: eventId) else {
-            logger.warning("Could not find event \(eventId) for notification like action")
-            return
-        }
-
-        // Toggle the like
-        if let updatedEvent = toggleLike(on: event) {
-            logger.info("Liked event \(eventId) from notification: liked=\(updatedEvent.isLikedBy(UserIdentityStore.shared.currentUserRecordID ?? ""))")
-        }
-    }
-
-    private func handleProfileChange() {
-        logger.info("Active profile changed - updating event store")
-        updateActiveProfile()
-        coreDataStore.invalidateAllCaches()
-        loadEvents(for: currentDate)
-    }
-
-    private func handleRemoteChange() {
-        logger.debug("Detected CloudKit remote change")
-
-        // Get current events before cache invalidation for comparison
-        let previousEventIds = Set(events.map { $0.id })
-
-        // Invalidate ALL caches, not just current date
-        // Sleep state calculations need recent events from multiple days
-        coreDataStore.invalidateAllCaches()
-        loadEvents(for: currentDate)
-
-        // Check for new moments from other users and send notifications
-        Task {
-            await checkForNewMomentsAndNotify(previousEventIds: previousEventIds)
-        }
-    }
-
-    /// Check for new moment events from CloudKit sync and send notifications
-    private func checkForNewMomentsAndNotify(previousEventIds: Set<UUID>) async {
-        guard let profile = profileStoreRef?.profile else { return }
-
-        // Get recent events (last 24 hours) to check for new moments
-        let recentEvents = getEvents(from: Date.daysAgo(1), to: Date())
-
-        // Find new events that weren't in our previous set
-        let newEvents = recentEvents.filter { !previousEventIds.contains($0.id) }
-
-        guard !newEvents.isEmpty else { return }
-
-        // Send notifications for new moments from other users
-        await MomentsNotificationHandler.shared.handleRemoteChanges(
-            newEvents: newEvents,
-            currentUserRecordID: UserIdentityStore.shared.currentUserRecordID,
-            puppyName: profile.name,
-            settings: profile.notificationSettings
-        )
-    }
-
-    private func handleShareAccepted() {
-        logger.info("Share accepted - reloading data from shared store")
-        coreDataStore.invalidateAllCaches()
-        loadEvents(for: currentDate)
-    }
-
-    // MARK: - Public Methods
+    // MARK: - Load & Refresh
 
     /// Load events for a specific date
     func loadEvents(for date: Date) {
@@ -232,6 +84,8 @@ class EventStore: ObservableObject {
         coreDataStore.invalidateAllCaches()
         loadEvents(for: currentDate)
     }
+
+    // MARK: - CRUD Operations
 
     /// Add a new event
     func addEvent(_ event: PuppyEvent, profile: PuppyProfile? = nil) {
@@ -331,37 +185,6 @@ class EventStore: ObservableObject {
         }
     }
 
-    /// Mark a photo as synced to CloudKit
-    /// Called by PhotoSyncService after successful upload
-    func markPhotoAsSynced(eventId: UUID) {
-        guard var event = events.first(where: { $0.id == eventId }) else {
-            // Event might be on a different day, fetch from store
-            if let storedEvent = coreDataStore.fetchEvent(byId: eventId) {
-                var mutableEvent = storedEvent
-                mutableEvent.cloudPhotoSynced = true
-                do {
-                    try coreDataStore.saveEvent(mutableEvent)
-                    logger.info("Marked photo as synced for event \(eventId)")
-                } catch {
-                    logger.error("Failed to mark photo as synced: \(error.localizedDescription)")
-                }
-            }
-            return
-        }
-
-        event.cloudPhotoSynced = true
-        do {
-            try coreDataStore.saveEvent(event)
-            // Update in-memory list
-            if let index = events.firstIndex(where: { $0.id == eventId }) {
-                events[index] = event
-            }
-            logger.info("Marked photo as synced for event \(eventId)")
-        } catch {
-            logger.error("Failed to mark photo as synced: \(error.localizedDescription)")
-        }
-    }
-
     /// Update an existing event
     func updateEvent(_ event: PuppyEvent, profile: PuppyProfile? = nil) {
         let updatedEvent = event.withUpdatedTimestamp()
@@ -384,6 +207,82 @@ class EventStore: ObservableObject {
             syncError = error.localizedDescription
         }
     }
+
+    // MARK: - Photo Sync
+
+    /// Mark a photo as synced to CloudKit
+    /// Called by PhotoSyncService after successful upload
+    /// - Parameters:
+    ///   - eventId: The event ID
+    ///   - ownerName: The CloudKit zone owner who uploaded the photo (needed for partner downloads)
+    func markPhotoAsSynced(eventId: UUID, ownerName: String?) {
+        guard var event = events.first(where: { $0.id == eventId }) else {
+            // Event might be on a different day, fetch from store
+            if let storedEvent = coreDataStore.fetchEvent(byId: eventId) {
+                var mutableEvent = storedEvent
+                mutableEvent.cloudPhotoSynced = true
+                mutableEvent.cloudPhotoOwner = ownerName
+                do {
+                    try coreDataStore.saveEvent(mutableEvent)
+                    logger.info("Marked photo as synced for event \(eventId), owner: \(ownerName ?? "unknown")")
+                } catch {
+                    logger.error("Failed to mark photo as synced: \(error.localizedDescription)")
+                }
+            }
+            return
+        }
+
+        event.cloudPhotoSynced = true
+        event.cloudPhotoOwner = ownerName
+        do {
+            try coreDataStore.saveEvent(event)
+            // Update in-memory list
+            if let index = events.firstIndex(where: { $0.id == eventId }) {
+                events[index] = event
+            }
+            logger.info("Marked photo as synced for event \(eventId), owner: \(ownerName ?? "unknown")")
+        } catch {
+            logger.error("Failed to mark photo as synced: \(error.localizedDescription)")
+        }
+    }
+
+    /// Set the photo owner for an event (migration for existing photos)
+    /// Called during migration to backfill cloudPhotoOwner for photos uploaded before owner tracking
+    func setPhotoOwner(eventId: UUID, ownerName: String) {
+        // Try in-memory first
+        if var event = events.first(where: { $0.id == eventId }) {
+            // Only update if not already set
+            guard event.cloudPhotoOwner == nil else { return }
+
+            event.cloudPhotoOwner = ownerName
+            do {
+                try coreDataStore.saveEvent(event)
+                if let index = events.firstIndex(where: { $0.id == eventId }) {
+                    events[index] = event
+                }
+                logger.debug("Migrated photo owner for event \(eventId)")
+            } catch {
+                logger.error("Failed to migrate photo owner: \(error.localizedDescription)")
+            }
+            return
+        }
+
+        // Event might be on a different day, fetch from store
+        if let storedEvent = coreDataStore.fetchEvent(byId: eventId) {
+            guard storedEvent.cloudPhotoOwner == nil else { return }
+
+            var mutableEvent = storedEvent
+            mutableEvent.cloudPhotoOwner = ownerName
+            do {
+                try coreDataStore.saveEvent(mutableEvent)
+                logger.debug("Migrated photo owner for event \(eventId)")
+            } catch {
+                logger.error("Failed to migrate photo owner: \(error.localizedDescription)")
+            }
+        }
+    }
+
+    // MARK: - Like Operations
 
     /// Toggle like on an event from the current user
     /// - Parameter event: The event to like/unlike
@@ -416,6 +315,8 @@ class EventStore: ObservableObject {
             return nil
         }
     }
+
+    // MARK: - Query Operations
 
     /// Get all events for a date range (sync - uses cache, good for small ranges)
     func getEvents(from startDate: Date, to endDate: Date) -> [PuppyEvent] {
@@ -459,6 +360,13 @@ class EventStore: ObservableObject {
         return historicalEvents.first(where: { $0.type == type })
     }
 
+    /// Get the date of the earliest logged event
+    func getEarliestEventDate() -> Date? {
+        coreDataStore.getEarliestEventDate()
+    }
+
+    // MARK: - Utility Methods
+
     /// Check if Core Data has any events
     func dataDirectoryExists() -> Bool {
         // With Core Data, this always returns true
@@ -486,119 +394,5 @@ class EventStore: ObservableObject {
     /// Retry pending operations (no-op with automatic CloudKit sync)
     func retryPendingOperations() async {
         // With NSPersistentCloudKitContainer, retries are automatic
-    }
-
-    /// Get the date of the earliest logged event
-    func getEarliestEventDate() -> Date? {
-        coreDataStore.getEarliestEventDate()
-    }
-
-    // MARK: - App Group Event Import
-
-    /// Import events logged via Siri/Shortcuts from the App Group JSONL files
-    /// Call this when the app becomes active to pick up events logged externally
-    func importPendingIntentEvents(profile: PuppyProfile? = nil) {
-        let fileManager = FileManager.default
-        guard let containerURL = fileManager.containerURL(forSecurityApplicationGroupIdentifier: Constants.appGroupIdentifier) else {
-            logger.debug("App Group container not available")
-            return
-        }
-
-        let dataDir = containerURL.appendingPathComponent("data", isDirectory: true)
-        guard fileManager.fileExists(atPath: dataDir.path) else {
-            logger.debug("No intent data directory found")
-            return
-        }
-
-        do {
-            let files = try fileManager.contentsOfDirectory(at: dataDir, includingPropertiesForKeys: nil)
-            let jsonlFiles = files.filter { $0.pathExtension == "jsonl" }
-
-            guard !jsonlFiles.isEmpty else {
-                return
-            }
-
-            logger.info("Found \(jsonlFiles.count) JSONL files from intents to import")
-
-            var importedCount = 0
-            for fileURL in jsonlFiles {
-                let importedEvents = importEventsFromJSONL(at: fileURL)
-                importedCount += importedEvents
-
-                // Delete the file after successful import
-                do {
-                    try fileManager.removeItem(at: fileURL)
-                } catch {
-                    logger.warning("Could not delete imported intent file \(fileURL.lastPathComponent): \(error.localizedDescription)")
-                }
-            }
-
-            if importedCount > 0 {
-                logger.info("Imported \(importedCount) events from Siri/Shortcuts")
-                // Reload events to show imported data
-                loadEvents(for: currentDate)
-                // Update widgets
-                updateWidgetData(profile: profile)
-                // Sync to watch
-                WatchSyncService.shared.syncToWatch()
-            }
-        } catch {
-            logger.error("Failed to scan intent data directory: \(error.localizedDescription)")
-        }
-    }
-
-    /// Import events from a single JSONL file
-    private func importEventsFromJSONL(at url: URL) -> Int {
-        guard let content = try? String(contentsOf: url, encoding: .utf8) else {
-            return 0
-        }
-
-        let decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .custom { decoder in
-            let container = try decoder.singleValueContainer()
-            let string = try container.decode(String.self)
-            if let date = Date.fromISO8601(string) {
-                return date
-            }
-            throw DecodingError.dataCorruptedError(in: container, debugDescription: "Invalid date format")
-        }
-
-        let lines = content.components(separatedBy: .newlines).filter { !$0.isEmpty }
-        var importedCount = 0
-
-        for line in lines {
-            guard let data = line.data(using: .utf8),
-                  let event = try? decoder.decode(PuppyEvent.self, from: data) else {
-                continue
-            }
-
-            // Check if event already exists (by ID)
-            let existingEvents = coreDataStore.readEvents(for: event.time.startOfDay)
-            if existingEvents.contains(where: { $0.id == event.id }) {
-                logger.debug("Skipping duplicate event: \(event.id)")
-                continue
-            }
-
-            do {
-                try coreDataStore.saveEvent(event)
-                importedCount += 1
-            } catch {
-                logger.error("Failed to import event: \(error.localizedDescription)")
-            }
-        }
-
-        return importedCount
-    }
-
-    // MARK: - Widget Data
-
-    private func updateWidgetData(profile: PuppyProfile?) {
-        let allRecentEvents = getEvents(from: Date.daysAgo(30), to: Date())
-
-        WidgetDataProvider.shared.update(
-            events: events,
-            allEvents: allRecentEvents,
-            profile: profile
-        )
     }
 }

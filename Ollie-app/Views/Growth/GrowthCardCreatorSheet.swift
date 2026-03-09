@@ -49,10 +49,10 @@ struct GrowthCardCreatorSheet: View {
     // Photo selector
     private let photoSelector = GrowthPhotoSelector()
 
-    @AppStorage(UserPreferences.Key.weightUnit.rawValue) private var weightUnitRaw = WeightUnit.kg.rawValue
+    @EnvironmentObject var unitPreferences: UnitPreferences
 
     private var weightUnit: WeightUnit {
-        WeightUnit(rawValue: weightUnitRaw) ?? .kg
+        unitPreferences.weightUnit
     }
 
     private var profile: PuppyProfile? {

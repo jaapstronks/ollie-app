@@ -27,16 +27,14 @@ struct TrainTabView: View {
     // First-visit tip tracking
     @AppStorage("hasSeenTrainTip") private var hasSeenTrainTip = false
 
-    // Crate training mastery
-    @AppStorage(UserPreferences.Key.crateTrainingMastered.rawValue) private var crateTrainingMastered = false
-
-    // Potty training mastery
-    @AppStorage(UserPreferences.Key.pottyTrainingMastered.rawValue) private var pottyTrainingMastered = false
-    @AppStorage(UserPreferences.Key.pottyTrainingMasteredDate.rawValue) private var pottyMasteredTimestamp: Double = 0
-    @AppStorage(UserPreferences.Key.pottyMasteryPromptDismissedDate.rawValue) private var pottyPromptDismissedTimestamp: Double = 0
-    @AppStorage(UserPreferences.Key.pottyMasteryPromptDismissCount.rawValue) private var pottyPromptDismissCount: Int = 0
+    // Training mastery state
+    @EnvironmentObject var trainingMasteryStore: TrainingMasteryStore
 
     @State private var showPottyMasteryConfirmation = false
+
+    // Convenience accessors for training mastery
+    private var crateTrainingMastered: Bool { trainingMasteryStore.crateTrainingMastered }
+    private var pottyTrainingMastered: Bool { trainingMasteryStore.pottyTrainingMastered }
 
     /// Calculate crate nap percentage for guide entry card
     private var crateNapPercentage: Int {
@@ -150,16 +148,14 @@ struct TrainTabView: View {
 
     private func markPottyAsMastered() {
         withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
-            pottyTrainingMastered = true
-            pottyMasteredTimestamp = Date().timeIntervalSince1970
+            trainingMasteryStore.markPottyMastered()
         }
         HapticFeedback.success()
     }
 
     private func dismissPottyMasteryPrompt() {
         withAnimation(.easeOut(duration: 0.2)) {
-            pottyPromptDismissedTimestamp = Date().timeIntervalSince1970
-            pottyPromptDismissCount += 1
+            trainingMasteryStore.dismissPottyMasteryPrompt()
         }
         HapticFeedback.light()
     }

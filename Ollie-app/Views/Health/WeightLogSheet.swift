@@ -18,8 +18,8 @@ struct WeightLogSheet: View {
     @State private var weightText: String = ""
     @State private var selectedDate: Date = Date()
     @FocusState private var isWeightFocused: Bool
-    @AppStorage(UserPreferences.Key.weightUnit.rawValue) private var weightUnitRaw = WeightUnit.kg.rawValue
 
+    @EnvironmentObject var unitPreferences: UnitPreferences
     @Environment(\.colorScheme) private var colorScheme
 
     private var isEditing: Bool {
@@ -27,7 +27,7 @@ struct WeightLogSheet: View {
     }
 
     private var weightUnit: WeightUnit {
-        WeightUnit(rawValue: weightUnitRaw) ?? .kg
+        unitPreferences.weightUnit
     }
 
     private var weightLabel: String {

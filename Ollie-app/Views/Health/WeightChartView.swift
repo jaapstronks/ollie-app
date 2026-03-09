@@ -15,10 +15,10 @@ struct WeightChartView: View {
     let puppyName: String
 
     @Environment(\.colorScheme) private var colorScheme
-    @AppStorage(UserPreferences.Key.weightUnit.rawValue) private var weightUnitRaw = WeightUnit.kg.rawValue
+    @EnvironmentObject var unitPreferences: UnitPreferences
 
     private var weightUnit: WeightUnit {
-        WeightUnit(rawValue: weightUnitRaw) ?? .kg
+        unitPreferences.weightUnit
     }
 
     // Chart bounds (in display units)

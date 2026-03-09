@@ -20,13 +20,13 @@ struct GrowthStoryCard: View {
     let onShowChart: () -> Void
     @Binding var showWeightSheet: Bool
 
-    @AppStorage(UserPreferences.Key.weightUnit.rawValue) private var weightUnitRaw = WeightUnit.kg.rawValue
+    @EnvironmentObject var unitPreferences: UnitPreferences
     @Environment(\.colorScheme) private var colorScheme
 
     @State private var showGrowthCardCreator = false
 
     private var weightUnit: WeightUnit {
-        WeightUnit(rawValue: weightUnitRaw) ?? .kg
+        unitPreferences.weightUnit
     }
 
     /// Whether we have enough data to show a chart
