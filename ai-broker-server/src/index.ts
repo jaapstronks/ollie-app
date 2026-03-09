@@ -272,14 +272,36 @@ app.post("/ai/nudges/decide", async (req, reply) => {
   const { userPrompt, systemInstruction } = buildPrompt(payload);
   const order = normalizeProviderOrder(payload.providerPolicy.preferredOrder);
 
+  // Debug logging for troubleshooting
+  const debugLogPath = process.env.AI_BROKER_DEBUG_LOG_PATH ?? "/var/log/ollie-ai-broker/debug.jsonl";
+  const debugEntry: Record<string, unknown> = {
+    timestamp: new Date().toISOString(),
+    requestId,
+    surface,
+    isModern,
+    hasSystemInstruction: Boolean(payload.systemInstruction),
+    hasOutputFormat: Boolean(payload.outputFormat),
+    systemInstructionPreview: payload.systemInstruction?.substring(0, 200),
+    outputFormatPreview: payload.outputFormat?.substring(0, 500),
+    userPromptPreview: userPrompt.substring(0, 500)
+  };
+
   let lastError: string | null = null;
 
   for (let i = 0; i < order.length; i++) {
     const provider = order[i];
     try {
       const attempt = await callProvider(provider, userPrompt, systemInstruction);
+
+      // Add LLM response to debug log
+      debugEntry.llmResponseRaw = attempt.responseText;
+
       // Parse and normalize LLM output with tolerance for common malformations
       const { output: modelOutput, wasNormalized } = parseAndNormalizeLLMOutput(attempt.responseText, surface);
+
+      // Add parsed output to debug log
+      debugEntry.parsedOutput = modelOutput;
+      debugEntry.wasNormalized = wasNormalized;
 
       // Strict validation after normalization using surface-specific schema
       const schema = getSchemaForSurface(surface);
@@ -328,6 +350,16 @@ app.post("/ai/nudges/decide", async (req, reply) => {
         wasNormalized,
         latencyMs: Date.now() - startedAt
       });
+
+      // Write debug log with final response
+      debugEntry.finalResponse = response;
+      debugEntry.status = "ok";
+      try {
+        await mkdir(dirname(debugLogPath), { recursive: true });
+        await appendFile(debugLogPath, JSON.stringify(debugEntry) + "\n");
+      } catch (e) {
+        console.error("Failed to write debug log:", e);
+      }
 
       return reply.code(200).send(response);
     } catch (error) {
