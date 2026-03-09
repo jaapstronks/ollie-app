@@ -3,38 +3,33 @@
 //  Otis-app
 //
 //  Skeleton loading placeholders for content
+//
+//  NOTE: For new code, prefer using the components from SkeletonModifier.swift
+//  (SkeletonText, SkeletonCircle, SkeletonRect) with the `.skeleton(isLoading:)` modifier.
+//  Those use a single shared shimmer animation for better performance.
 
 import SwiftUI
 
-/// A shimmering skeleton placeholder view
+/// A static skeleton placeholder view (no individual animation)
+///
+/// For shimmer effect, apply `.skeleton(isLoading: true)` at the container level.
+/// This ensures a single animation loop instead of multiple per-element animations.
 struct SkeletonView: View {
     var height: CGFloat = 20
     var cornerRadius: CGFloat = 4
 
-    @State private var isAnimating = false
+    @Environment(\.colorScheme) private var colorScheme
 
     var body: some View {
         RoundedRectangle(cornerRadius: cornerRadius)
-            .fill(
-                LinearGradient(
-                    colors: [
-                        Color.gray.opacity(0.3),
-                        Color.gray.opacity(0.1),
-                        Color.gray.opacity(0.3)
-                    ],
-                    startPoint: isAnimating ? .trailing : .leading,
-                    endPoint: isAnimating ? .leading : .trailing
-                )
-            )
+            .fill(skeletonColor)
             .frame(height: height)
-            .onAppear {
-                withAnimation(
-                    Animation.linear(duration: 1.5)
-                        .repeatForever(autoreverses: false)
-                ) {
-                    isAnimating = true
-                }
-            }
+    }
+
+    private var skeletonColor: Color {
+        colorScheme == .dark
+            ? Color.white.opacity(0.08)
+            : Color.black.opacity(0.08)
     }
 }
 
@@ -61,16 +56,19 @@ struct SkeletonCard: View {
                 .fill(colorScheme == .dark ? Color(.secondarySystemBackground) : Color.white)
                 .shadow(color: .black.opacity(0.05), radius: 8, x: 0, y: 2)
         )
+        .skeleton(isLoading: true)
     }
 }
 
 /// Skeleton for milestone row
 struct MilestoneRowSkeleton: View {
+    @Environment(\.colorScheme) private var colorScheme
+
     var body: some View {
         HStack(spacing: 12) {
             // Icon placeholder
             Circle()
-                .fill(Color.gray.opacity(0.2))
+                .fill(skeletonColor)
                 .frame(width: 36, height: 36)
 
             VStack(alignment: .leading, spacing: 4) {
@@ -87,6 +85,11 @@ struct MilestoneRowSkeleton: View {
                 .frame(width: 50)
         }
         .padding(.vertical, 8)
+        .skeleton(isLoading: true)
+    }
+
+    private var skeletonColor: Color {
+        colorScheme == .dark ? Color.white.opacity(0.08) : Color.black.opacity(0.08)
     }
 }
 
@@ -94,12 +97,16 @@ struct MilestoneRowSkeleton: View {
 struct ThisWeekCardSkeleton: View {
     @Environment(\.colorScheme) private var colorScheme
 
+    private var skeletonColor: Color {
+        colorScheme == .dark ? Color.white.opacity(0.08) : Color.black.opacity(0.08)
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             // Header
             HStack {
                 Circle()
-                    .fill(Color.gray.opacity(0.2))
+                    .fill(skeletonColor)
                     .frame(width: 20, height: 20)
 
                 SkeletonView(height: 14, cornerRadius: 3)
@@ -120,7 +127,7 @@ struct ThisWeekCardSkeleton: View {
                 HStack(spacing: 4) {
                     ForEach(0..<9, id: \.self) { _ in
                         Circle()
-                            .fill(Color.gray.opacity(0.2))
+                            .fill(skeletonColor)
                             .frame(width: 28, height: 28)
                     }
                 }
@@ -131,7 +138,7 @@ struct ThisWeekCardSkeleton: View {
             // Milestone preview
             HStack(spacing: 8) {
                 Circle()
-                    .fill(Color.gray.opacity(0.2))
+                    .fill(skeletonColor)
                     .frame(width: 32, height: 32)
 
                 VStack(alignment: .leading, spacing: 4) {
@@ -149,11 +156,18 @@ struct ThisWeekCardSkeleton: View {
                 .fill(colorScheme == .dark ? Color(.secondarySystemBackground) : Color.white)
                 .shadow(color: .black.opacity(0.05), radius: 8, x: 0, y: 2)
         )
+        .skeleton(isLoading: true)
     }
 }
 
 /// Skeleton for socialization week timeline
 struct SocializationTimelineSkeleton: View {
+    @Environment(\.colorScheme) private var colorScheme
+
+    private var skeletonColor: Color {
+        colorScheme == .dark ? Color.white.opacity(0.08) : Color.black.opacity(0.08)
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             // Header
@@ -175,7 +189,7 @@ struct SocializationTimelineSkeleton: View {
                             .frame(width: 16)
 
                         Circle()
-                            .fill(Color.gray.opacity(0.2))
+                            .fill(skeletonColor)
                             .frame(width: 28, height: 28)
                     }
                 }
@@ -186,7 +200,7 @@ struct SocializationTimelineSkeleton: View {
                 ForEach(0..<3, id: \.self) { _ in
                     HStack(spacing: 4) {
                         Circle()
-                            .fill(Color.gray.opacity(0.2))
+                            .fill(skeletonColor)
                             .frame(width: 8, height: 8)
 
                         SkeletonView(height: 10, cornerRadius: 2)
@@ -196,6 +210,7 @@ struct SocializationTimelineSkeleton: View {
             }
         }
         .padding()
+        .skeleton(isLoading: true)
     }
 }
 
@@ -203,6 +218,12 @@ struct SocializationTimelineSkeleton: View {
 
 /// Skeleton placeholder for AI insight cards (used by AIInsightCardContainer)
 struct AIInsightCardSkeleton: View {
+    @Environment(\.colorScheme) private var colorScheme
+
+    private var skeletonColor: Color {
+        colorScheme == .dark ? Color.white.opacity(0.08) : Color.black.opacity(0.08)
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             SkeletonView(height: 16, cornerRadius: 4)
@@ -212,13 +233,14 @@ struct AIInsightCardSkeleton: View {
 
             HStack(spacing: 6) {
                 Circle()
-                    .fill(Color.gray.opacity(0.2))
+                    .fill(skeletonColor)
                     .frame(width: 14, height: 14)
 
                 SkeletonView(height: 12, cornerRadius: 3)
                     .frame(width: 180)
             }
         }
+        .skeleton(isLoading: true)
     }
 }
 
@@ -226,11 +248,17 @@ struct AIInsightCardSkeleton: View {
 
 /// Skeleton placeholder for the morning briefing card
 struct MorningBriefingSkeleton: View {
+    @Environment(\.colorScheme) private var colorScheme
+
+    private var skeletonColor: Color {
+        colorScheme == .dark ? Color.white.opacity(0.08) : Color.black.opacity(0.08)
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack(spacing: 8) {
                 Circle()
-                    .fill(Color.gray.opacity(0.2))
+                    .fill(skeletonColor)
                     .frame(width: 24, height: 24)
 
                 SkeletonView(height: 18, cornerRadius: 4)
@@ -247,6 +275,7 @@ struct MorningBriefingSkeleton: View {
             SkeletonView(height: 32, cornerRadius: 8)
                 .frame(width: 200)
         }
+        .skeleton(isLoading: true)
     }
 }
 
@@ -254,11 +283,17 @@ struct MorningBriefingSkeleton: View {
 
 /// Skeleton placeholder for weather section
 struct WeatherSectionSkeleton: View {
+    @Environment(\.colorScheme) private var colorScheme
+
+    private var skeletonColor: Color {
+        colorScheme == .dark ? Color.white.opacity(0.08) : Color.black.opacity(0.08)
+    }
+
     var body: some View {
         HStack(spacing: 12) {
             HStack(spacing: 4) {
                 Circle()
-                    .fill(Color.gray.opacity(0.2))
+                    .fill(skeletonColor)
                     .frame(width: 16, height: 16)
 
                 SkeletonView(height: 14, cornerRadius: 3)
@@ -272,6 +307,7 @@ struct WeatherSectionSkeleton: View {
         }
         .padding(.horizontal)
         .padding(.vertical, 6)
+        .skeleton(isLoading: true)
     }
 }
 
@@ -279,12 +315,18 @@ struct WeatherSectionSkeleton: View {
 
 /// Skeleton placeholder for week/month recap sheets
 struct RecapSheetSkeleton: View {
+    @Environment(\.colorScheme) private var colorScheme
+
+    private var skeletonColor: Color {
+        colorScheme == .dark ? Color.white.opacity(0.08) : Color.black.opacity(0.08)
+    }
+
     var body: some View {
         VStack(spacing: 24) {
             // Navigation placeholder
             HStack {
                 Circle()
-                    .fill(Color.gray.opacity(0.2))
+                    .fill(skeletonColor)
                     .frame(width: 24, height: 24)
 
                 Spacer()
@@ -295,7 +337,7 @@ struct RecapSheetSkeleton: View {
                 Spacer()
 
                 Circle()
-                    .fill(Color.gray.opacity(0.2))
+                    .fill(skeletonColor)
                     .frame(width: 24, height: 24)
             }
             .padding(.horizontal)
@@ -305,7 +347,7 @@ struct RecapSheetSkeleton: View {
                 ForEach(0..<3, id: \.self) { _ in
                     VStack(spacing: 6) {
                         Circle()
-                            .fill(Color.gray.opacity(0.2))
+                            .fill(skeletonColor)
                             .frame(width: 28, height: 28)
 
                         SkeletonView(height: 24, cornerRadius: 4)
@@ -328,6 +370,7 @@ struct RecapSheetSkeleton: View {
                 }
             }
         }
+        .skeleton(isLoading: true)
     }
 }
 
