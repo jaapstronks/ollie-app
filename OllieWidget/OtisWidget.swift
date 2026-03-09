@@ -24,6 +24,8 @@ struct WidgetData: Codable {
     let isCurrentlySleeping: Bool
     let sleepStartTime: Date?  // When current sleep started (if sleeping)
     let lastWakeTime: Date?    // When puppy last woke up (for awake timer)
+    let expectedWakeTime: Date?  // Predicted wake time based on average nap duration
+    let averageNapDurationMin: Int?  // Average nap duration for predictions
 
     // MARK: - Meal Data
     let lastMealTime: Date?
@@ -35,12 +37,20 @@ struct WidgetData: Codable {
     let lastWalkTime: Date?
     let nextScheduledWalkTime: Date?  // Next walk target time today
 
+    // MARK: - Latest Event Data
+    let lastEventType: String?  // EventType.rawValue
+    let lastEventTime: Date?
+    let lastEventNote: String?
+    let lastEventLocation: String?  // For potty events
+    let lastEventHasMedia: Bool
+    let lastEventThumbnailName: String?  // Filename of thumbnail in shared container
+
     // MARK: - Meta
     let puppyName: String
     let lastUpdated: Date
 
     // MARK: - Backwards-compatible decoding
-    // Handles cached data that may be missing newer fields like lastWakeTime
+    // Handles cached data that may be missing newer fields
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         lastPlasTime = try container.decodeIfPresent(Date.self, forKey: .lastPlasTime)
@@ -52,12 +62,20 @@ struct WidgetData: Codable {
         isCurrentlySleeping = try container.decode(Bool.self, forKey: .isCurrentlySleeping)
         sleepStartTime = try container.decodeIfPresent(Date.self, forKey: .sleepStartTime)
         lastWakeTime = try container.decodeIfPresent(Date.self, forKey: .lastWakeTime)
+        expectedWakeTime = try container.decodeIfPresent(Date.self, forKey: .expectedWakeTime)
+        averageNapDurationMin = try container.decodeIfPresent(Int.self, forKey: .averageNapDurationMin)
         lastMealTime = try container.decodeIfPresent(Date.self, forKey: .lastMealTime)
         nextScheduledMealTime = try container.decodeIfPresent(Date.self, forKey: .nextScheduledMealTime)
         mealsLoggedToday = try container.decode(Int.self, forKey: .mealsLoggedToday)
         mealsExpectedToday = try container.decode(Int.self, forKey: .mealsExpectedToday)
         lastWalkTime = try container.decodeIfPresent(Date.self, forKey: .lastWalkTime)
         nextScheduledWalkTime = try container.decodeIfPresent(Date.self, forKey: .nextScheduledWalkTime)
+        lastEventType = try container.decodeIfPresent(String.self, forKey: .lastEventType)
+        lastEventTime = try container.decodeIfPresent(Date.self, forKey: .lastEventTime)
+        lastEventNote = try container.decodeIfPresent(String.self, forKey: .lastEventNote)
+        lastEventLocation = try container.decodeIfPresent(String.self, forKey: .lastEventLocation)
+        lastEventHasMedia = try container.decodeIfPresent(Bool.self, forKey: .lastEventHasMedia) ?? false
+        lastEventThumbnailName = try container.decodeIfPresent(String.self, forKey: .lastEventThumbnailName)
         puppyName = try container.decode(String.self, forKey: .puppyName)
         lastUpdated = try container.decode(Date.self, forKey: .lastUpdated)
     }
@@ -73,12 +91,20 @@ struct WidgetData: Codable {
         isCurrentlySleeping: Bool,
         sleepStartTime: Date?,
         lastWakeTime: Date?,
+        expectedWakeTime: Date? = nil,
+        averageNapDurationMin: Int? = nil,
         lastMealTime: Date?,
         nextScheduledMealTime: Date?,
         mealsLoggedToday: Int,
         mealsExpectedToday: Int,
         lastWalkTime: Date?,
         nextScheduledWalkTime: Date?,
+        lastEventType: String? = nil,
+        lastEventTime: Date? = nil,
+        lastEventNote: String? = nil,
+        lastEventLocation: String? = nil,
+        lastEventHasMedia: Bool = false,
+        lastEventThumbnailName: String? = nil,
         puppyName: String,
         lastUpdated: Date
     ) {
@@ -91,12 +117,20 @@ struct WidgetData: Codable {
         self.isCurrentlySleeping = isCurrentlySleeping
         self.sleepStartTime = sleepStartTime
         self.lastWakeTime = lastWakeTime
+        self.expectedWakeTime = expectedWakeTime
+        self.averageNapDurationMin = averageNapDurationMin
         self.lastMealTime = lastMealTime
         self.nextScheduledMealTime = nextScheduledMealTime
         self.mealsLoggedToday = mealsLoggedToday
         self.mealsExpectedToday = mealsExpectedToday
         self.lastWalkTime = lastWalkTime
         self.nextScheduledWalkTime = nextScheduledWalkTime
+        self.lastEventType = lastEventType
+        self.lastEventTime = lastEventTime
+        self.lastEventNote = lastEventNote
+        self.lastEventLocation = lastEventLocation
+        self.lastEventHasMedia = lastEventHasMedia
+        self.lastEventThumbnailName = lastEventThumbnailName
         self.puppyName = puppyName
         self.lastUpdated = lastUpdated
     }
@@ -112,12 +146,20 @@ struct WidgetData: Codable {
             isCurrentlySleeping: false,
             sleepStartTime: nil,
             lastWakeTime: Date().addingTimeInterval(-90 * 60),
+            expectedWakeTime: nil,
+            averageNapDurationMin: 45,
             lastMealTime: Date().addingTimeInterval(-3 * 60 * 60),
             nextScheduledMealTime: Date().addingTimeInterval(1 * 60 * 60),
             mealsLoggedToday: 2,
             mealsExpectedToday: 3,
             lastWalkTime: Date().addingTimeInterval(-2 * 60 * 60),
             nextScheduledWalkTime: Date().addingTimeInterval(30 * 60),
+            lastEventType: "plassen",
+            lastEventTime: Date().addingTimeInterval(-45 * 60),
+            lastEventNote: nil,
+            lastEventLocation: "buiten",
+            lastEventHasMedia: false,
+            lastEventThumbnailName: nil,
             puppyName: "--",
             lastUpdated: Date()
         )

@@ -8,7 +8,6 @@
 
 import SwiftUI
 import OtisShared
-import PhotosUI
 
 struct UserProfileSettingsView: View {
     @ObservedObject var userIdentityStore: UserIdentityStore
@@ -16,9 +15,14 @@ struct UserProfileSettingsView: View {
 
     @State private var name: String = ""
     @State private var selectedColorHex: String = ""
-    @State private var selectedPhotoItem: PhotosPickerItem?
     @State private var avatarImage: UIImage?
     @State private var showRemovePhotoConfirmation = false
+
+    // Media picker state for ImageCropView flow
+    @State private var showingMediaPicker = false
+    @State private var selectedSource: MediaPickerSource = .library
+    @State private var imageToCrop: UIImage?
+    @State private var showingCropView = false
 
     var body: some View {
         Form {
@@ -52,11 +56,18 @@ struct UserProfileSettingsView: View {
 
             // Photo section
             Section {
-                PhotosPicker(selection: $selectedPhotoItem, matching: .images) {
-                    Label(
-                        avatarImage != nil ? Strings.UserProfile.changePhoto : Strings.UserProfile.addPhoto,
-                        systemImage: "camera"
-                    )
+                Button {
+                    selectedSource = .camera
+                    showingMediaPicker = true
+                } label: {
+                    Label(Strings.MediaAttachment.camera, systemImage: "camera")
+                }
+
+                Button {
+                    selectedSource = .library
+                    showingMediaPicker = true
+                } label: {
+                    Label(Strings.MediaAttachment.photoLibrary, systemImage: "photo.on.rectangle")
                 }
 
                 if avatarImage != nil {
@@ -66,6 +77,8 @@ struct UserProfileSettingsView: View {
                         Label(Strings.UserProfile.removePhoto, systemImage: "trash")
                     }
                 }
+            } header: {
+                Text(avatarImage != nil ? Strings.UserProfile.changePhoto : Strings.UserProfile.addPhoto)
             }
 
             // iCloud identity info
@@ -97,9 +110,38 @@ struct UserProfileSettingsView: View {
         .onAppear {
             loadCurrentValues()
         }
-        .onChange(of: selectedPhotoItem) { _, newItem in
-            Task {
-                await loadSelectedPhoto(newItem)
+        .fullScreenCover(isPresented: $showingMediaPicker) {
+            MediaPicker(
+                source: selectedSource,
+                onImageSelected: { image, _ in
+                    imageToCrop = image
+                    showingMediaPicker = false
+                },
+                onCancel: {
+                    showingMediaPicker = false
+                }
+            )
+        }
+        .onChange(of: imageToCrop) { _, newImage in
+            // Show crop view when image is ready (after async PHPicker load completes)
+            if newImage != nil && !showingMediaPicker {
+                showingCropView = true
+            }
+        }
+        .fullScreenCover(isPresented: $showingCropView) {
+            if let image = imageToCrop {
+                ImageCropView(
+                    image: image,
+                    onConfirm: { croppedImage in
+                        avatarImage = croppedImage
+                        showingCropView = false
+                        imageToCrop = nil
+                    },
+                    onCancel: {
+                        showingCropView = false
+                        imageToCrop = nil
+                    }
+                )
             }
         }
         .confirmationDialog(
@@ -137,7 +179,21 @@ struct UserProfileSettingsView: View {
             }
         }
         .overlay(alignment: .bottomTrailing) {
-            PhotosPicker(selection: $selectedPhotoItem, matching: .images) {
+            Menu {
+                Button {
+                    selectedSource = .camera
+                    showingMediaPicker = true
+                } label: {
+                    Label(Strings.MediaAttachment.camera, systemImage: "camera")
+                }
+
+                Button {
+                    selectedSource = .library
+                    showingMediaPicker = true
+                } label: {
+                    Label(Strings.MediaAttachment.photoLibrary, systemImage: "photo.on.rectangle")
+                }
+            } label: {
                 Image(systemName: "camera.fill")
                     .font(.caption)
                     .foregroundStyle(.white)
@@ -188,23 +244,6 @@ struct UserProfileSettingsView: View {
         }
     }
 
-    private func loadSelectedPhoto(_ item: PhotosPickerItem?) async {
-        guard let item else { return }
-
-        do {
-            if let data = try await item.loadTransferable(type: Data.self),
-               let image = UIImage(data: data) {
-                // Resize and compress for storage
-                let resized = image.resizedToFit(maxDimension: 200)
-                await MainActor.run {
-                    avatarImage = resized
-                }
-            }
-        } catch {
-            // Silently fail - user can try again
-        }
-    }
-
     private func save() {
         let trimmedName = name.trimmingCharacters(in: .whitespaces)
         guard !trimmedName.isEmpty else { return }
@@ -213,7 +252,8 @@ struct UserProfileSettingsView: View {
         userIdentityStore.updateColor(selectedColorHex)
 
         if let image = avatarImage {
-            let data = image.jpegData(compressionQuality: 0.7)
+            let resized = image.resizedToFit(maxDimension: 200)
+            let data = resized.jpegData(compressionQuality: 0.7)
             userIdentityStore.updateAvatar(data)
         } else {
             userIdentityStore.updateAvatar(nil)
