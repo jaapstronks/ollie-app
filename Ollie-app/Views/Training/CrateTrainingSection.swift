@@ -13,21 +13,30 @@ struct CrateTrainingSection: View {
     @ObservedObject var eventStore: EventStore
 
     @State private var isExpanded = false
+    @State private var showingBulkEditSheet = false
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
-    /// Calculate percentage of recent naps taken in crate
-    private var crateNapStats: (percentage: Int, total: Int) {
-        let recentNaps = eventStore.events
+    /// Recent naps from last 14 days
+    private var recentNaps: [PuppyEvent] {
+        eventStore.events
             .sleeps()
             .lastDays(14)
+    }
 
+    /// Calculate percentage of recent naps taken in crate
+    private var crateNapStats: (percentage: Int, total: Int) {
         guard !recentNaps.isEmpty else { return (0, 0) }
 
         let crateNaps = recentNaps.filter { $0.napLocation == .crate }
         let percentage = Int((Double(crateNaps.count) / Double(recentNaps.count)) * 100)
 
         return (percentage, recentNaps.count)
+    }
+
+    /// Count of naps without a location set
+    private var napsWithoutLocationCount: Int {
+        recentNaps.filter { $0.napLocation == nil }.count
     }
 
     var body: some View {
@@ -89,6 +98,9 @@ struct CrateTrainingSection: View {
             }
         }
         .glassStatusCard(tintColor: .indigo.opacity(0.2))
+        .sheet(isPresented: $showingBulkEditSheet) {
+            BulkNapEditSheet(eventStore: eventStore)
+        }
     }
 
     @ViewBuilder
@@ -154,45 +166,66 @@ struct CrateTrainingSection: View {
 
     @ViewBuilder
     private var statsCard: some View {
-        HStack(spacing: 16) {
-            // Crate icon
-            ZStack {
-                Circle()
-                    .fill(Color.indigo.opacity(0.15))
-                    .frame(width: 48, height: 48)
+        VStack(spacing: 12) {
+            HStack(spacing: 16) {
+                // Crate icon
+                ZStack {
+                    Circle()
+                        .fill(Color.indigo.opacity(0.15))
+                        .frame(width: 48, height: 48)
 
-                Image(systemName: "house.fill")
-                    .font(.title3)
-                    .foregroundStyle(.indigo)
+                    Image(systemName: "house.fill")
+                        .font(.title3)
+                        .foregroundStyle(.indigo)
+                }
+
+                VStack(alignment: .leading, spacing: 2) {
+                    if crateNapStats.total > 0 {
+                        Text(Strings.Training.CrateTraining.crateNapPercentage(crateNapStats.percentage))
+                            .font(.subheadline)
+                            .fontWeight(.medium)
+
+                        // Progress bar
+                        GeometryReader { geometry in
+                            ZStack(alignment: .leading) {
+                                RoundedRectangle(cornerRadius: 4)
+                                    .fill(Color.indigo.opacity(0.15))
+                                    .frame(height: 6)
+
+                                RoundedRectangle(cornerRadius: 4)
+                                    .fill(Color.indigo)
+                                    .frame(width: geometry.size.width * CGFloat(crateNapStats.percentage) / 100, height: 6)
+                            }
+                        }
+                        .frame(height: 6)
+                    } else {
+                        Text(Strings.Training.CrateTraining.noNapsYet)
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+
+                Spacer()
             }
 
-            VStack(alignment: .leading, spacing: 2) {
-                if crateNapStats.total > 0 {
-                    Text(Strings.Training.CrateTraining.crateNapPercentage(crateNapStats.percentage))
-                        .font(.subheadline)
-                        .fontWeight(.medium)
-
-                    // Progress bar
-                    GeometryReader { geometry in
-                        ZStack(alignment: .leading) {
-                            RoundedRectangle(cornerRadius: 4)
-                                .fill(Color.indigo.opacity(0.15))
-                                .frame(height: 6)
-
-                            RoundedRectangle(cornerRadius: 4)
-                                .fill(Color.indigo)
-                                .frame(width: geometry.size.width * CGFloat(crateNapStats.percentage) / 100, height: 6)
+            // Bulk edit button - show if there are naps to potentially edit
+            if crateNapStats.total > 0 {
+                Button {
+                    showingBulkEditSheet = true
+                    HapticFeedback.light()
+                } label: {
+                    HStack(spacing: 6) {
+                        Image(systemName: "pencil.circle")
+                        Text(Strings.Training.CrateTraining.bulkEditButton)
+                        if napsWithoutLocationCount > 0 {
+                            Text("(\(napsWithoutLocationCount))")
+                                .foregroundStyle(.orange)
                         }
                     }
-                    .frame(height: 6)
-                } else {
-                    Text(Strings.Training.CrateTraining.noNapsYet)
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
+                    .font(.subheadline)
+                    .foregroundStyle(.indigo)
                 }
             }
-
-            Spacer()
         }
         .padding()
         .background(

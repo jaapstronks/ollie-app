@@ -698,6 +698,24 @@ extension Strings {
             static func masteredOn(date: String) -> String {
                 String(localized: "Mastered on \(date)", table: table)
             }
+
+            // Bulk edit
+            static let bulkEditTitle = String(localized: "Edit Nap Locations", table: table)
+            static let bulkEditButton = String(localized: "Edit nap locations", table: table)
+            static let bulkEditExplanation = String(localized: "Select naps to update their location. This helps track crate training progress.", table: table)
+            static let bulkEditEmptyDescription = String(localized: "Log some naps first, then you can set their locations here.", table: table)
+            static let bulkEditFooter = String(localized: "Tap naps to select them, then apply the location.", table: table)
+            static let setLocationTo = String(localized: "Set location to", table: table)
+            static let napsWithoutLocation = String(localized: "Naps without location", table: table)
+            static let napsWithLocation = String(localized: "Naps with location", table: table)
+            static let noLocationSet = String(localized: "No location set", table: table)
+            static func applyToSelected(_ count: Int) -> String {
+                if count == 1 {
+                    return String(localized: "Apply to 1 nap", table: table)
+                } else {
+                    return String(localized: "Apply to \(count) naps", table: table)
+                }
+            }
         }
 
         // Skill content - names, descriptions, done criteria, how-to steps, tips

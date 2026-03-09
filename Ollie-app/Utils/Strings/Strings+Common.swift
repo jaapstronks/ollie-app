@@ -44,6 +44,9 @@ extension Strings {
         static let skip = String(localized: "Skip", table: table)
         static let archive = String(localized: "Archive", table: table)
         static let note = String(localized: "Note", table: table)
+        static let selectAll = String(localized: "Select all", table: table)
+        static let deselectAll = String(localized: "Deselect all", table: table)
+        static let none = String(localized: "None", table: table)
 
         // Error messages
         static let saveFailed = String(localized: "Failed to save. Please try again.", table: table)
