@@ -19,6 +19,7 @@ struct TimelineSheetModifiers: ViewModifier {
     var locationManager: LocationManager
 
     @ObservedObject private var sheetCoordinator: SheetCoordinator
+    @EnvironmentObject private var routineStore: RoutineStore
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
     init(
@@ -46,6 +47,7 @@ struct TimelineSheetModifiers: ViewModifier {
             mediaCaptureViewModel: mediaCaptureViewModel,
             spotStore: spotStore,
             locationManager: locationManager,
+            routineStore: routineStore,
             selectedPhotoEvent: $selectedPhotoEvent
         )
     }

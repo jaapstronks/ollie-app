@@ -134,6 +134,7 @@ extension SheetCoordinator.ActiveSheet {
                 puppyName: context.viewModel.puppyName,
                 preselectedType: preselectedType
             )
+            .environmentObject(context.routineStore)
 
         case .behaviorLog:
             BehaviorLogSheet(
@@ -151,6 +152,16 @@ extension SheetCoordinator.ActiveSheet {
                 },
                 onCancel: {
                     context.sheetCoordinator.dismissSheet()
+                }
+            )
+
+        case .momentsLightbox(let events, let startIndex):
+            MomentsLightboxWrapper(
+                events: events,
+                startIndex: startIndex,
+                onDismiss: { context.sheetCoordinator.dismissSheet() },
+                onDelete: { event in
+                    context.viewModel.deleteEvent(event)
                 }
             )
 

@@ -25,7 +25,7 @@ extension SheetCoordinator.ActiveSheet {
     private var category: SheetCategory {
         switch self {
         // Event sheets
-        case .potty, .allEvents, .quickLog, .logEvent, .locationPicker, .editEvent, .medicationLog, .symptomLog, .seniorMobility, .behaviorLog:
+        case .potty, .allEvents, .quickLog, .logEvent, .locationPicker, .editEvent, .medicationLog, .symptomLog, .seniorMobility, .behaviorLog, .momentsLightbox, .groomingSettings, .groomingQuickLog:
             return .event
 
         // Activity sheets
@@ -51,7 +51,7 @@ extension SheetCoordinator.ActiveSheet {
             return .guide
 
         // Placeholder sheets (handled elsewhere)
-        case .weightLog, .trainingLog, .socializationLog, .settings, .profileEdit, .notificationSettings, .groomingSettings, .groomingQuickLog:
+        case .weightLog, .trainingLog, .socializationLog, .settings, .profileEdit, .notificationSettings:
             return .placeholder
         }
     }

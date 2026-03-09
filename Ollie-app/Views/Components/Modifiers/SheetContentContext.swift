@@ -16,6 +16,7 @@ struct SheetContentContext {
     let mediaCaptureViewModel: MediaCaptureViewModel
     let spotStore: SpotStore
     let locationManager: LocationManager
+    let routineStore: RoutineStore
     var selectedPhotoEvent: Binding<PuppyEvent?>
 
     // MARK: - Convenience Accessors
