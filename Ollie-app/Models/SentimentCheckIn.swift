@@ -177,7 +177,7 @@ enum SentimentCategory: String, Codable, CaseIterable, Identifiable {
     /// Whether this category has a dedicated deep-dive info sheet.
     var hasInfoSheet: Bool {
         switch self {
-        case .pottyTraining, .benchTraining, .sleeping, .nipping, .skillsTraining:
+        case .pottyTraining, .benchTraining, .sleeping, .nipping, .skillsTraining, .leashBehavior:
             return true
         default:
             return false

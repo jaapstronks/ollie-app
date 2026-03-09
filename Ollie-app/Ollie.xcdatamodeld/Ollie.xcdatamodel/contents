@@ -5,6 +5,7 @@
         <attribute name="breed" optional="YES" attributeType="String"/>
         <attribute name="breedId" optional="YES" attributeType="Integer 32" usesScalarValueType="NO"/>
         <attribute name="exerciseConfigData" optional="YES" attributeType="Binary"/>
+        <attribute name="gender" optional="YES" attributeType="String"/>
         <attribute name="homeDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="legacyPremiumUnlocked" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
@@ -44,6 +45,7 @@
     </entity>
     <entity name="CDPuppyEvent" representedClassName="CDPuppyEvent" syncable="YES" codeGenerationType="class">
         <attribute name="cloudPhotoSynced" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="cloudPhotoOwner" optional="YES" attributeType="String"/>
         <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="durationMin" optional="YES" attributeType="Integer 32" usesScalarValueType="YES"/>
         <attribute name="endTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
@@ -58,6 +60,7 @@
         <attribute name="note" optional="YES" attributeType="String"/>
         <attribute name="parentWalkId" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="photo" optional="YES" attributeType="String"/>
+        <attribute name="photoData" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
         <attribute name="result" optional="YES" attributeType="String"/>
         <attribute name="sleepSessionId" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="spotId" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
@@ -75,6 +78,7 @@
         <attribute name="trainingContext" optional="YES" attributeType="String"/>
         <attribute name="skillPhase" optional="YES" attributeType="String"/>
         <attribute name="likesData" optional="YES" attributeType="Binary"/>
+        <attribute name="linkedContactID" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <relationship name="profile" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDPuppyProfile" inverseName="events" inverseEntity="CDPuppyProfile"/>
         <fetchIndex name="byTimeIndex">
             <fetchIndexElement property="time" type="Binary" order="descending"/>
@@ -161,6 +165,7 @@
         <attribute name="targetAgeMonths" optional="YES" attributeType="Integer 32" usesScalarValueType="YES"/>
         <attribute name="targetAgeWeeks" optional="YES" attributeType="Integer 32" usesScalarValueType="YES"/>
         <attribute name="vetClinicName" optional="YES" attributeType="String"/>
+        <attribute name="linkedContactID" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <relationship name="profile" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDPuppyProfile" inverseName="milestones" inverseEntity="CDPuppyProfile"/>
         <fetchIndex name="bySortOrderIndex">
             <fetchIndexElement property="sortOrder" type="Binary" order="ascending"/>
@@ -409,6 +414,7 @@
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="surface" attributeType="String" defaultValueString=""/>
         <attribute name="timeWindow" attributeType="String" defaultValueString=""/>
+        <attribute name="locale" optional="YES" attributeType="String"/>
         <attribute name="responseData" optional="YES" attributeType="Binary"/>
         <attribute name="cachedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="expiresAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>

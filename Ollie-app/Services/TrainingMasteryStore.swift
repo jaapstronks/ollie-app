@@ -94,6 +94,60 @@ final class TrainingMasteryStore: ObservableObject {
         }
     }
 
+    // MARK: - Leash Training
+
+    @Published var leashTrainingMastered: Bool {
+        didSet {
+            UserDefaults.standard.set(leashTrainingMastered, forKey: UserPreferences.Key.leashTrainingMastered.rawValue)
+        }
+    }
+
+    @Published var leashMasteredDate: Date? {
+        didSet {
+            if let date = leashMasteredDate {
+                UserDefaults.standard.set(date.timeIntervalSince1970, forKey: UserPreferences.Key.leashTrainingMasteredDate.rawValue)
+            } else {
+                UserDefaults.standard.removeObject(forKey: UserPreferences.Key.leashTrainingMasteredDate.rawValue)
+            }
+        }
+    }
+
+    @Published var leashMasteryPromptDismissedDate: Date? {
+        didSet {
+            if let date = leashMasteryPromptDismissedDate {
+                UserDefaults.standard.set(date.timeIntervalSince1970, forKey: UserPreferences.Key.leashMasteryPromptDismissedDate.rawValue)
+            } else {
+                UserDefaults.standard.removeObject(forKey: UserPreferences.Key.leashMasteryPromptDismissedDate.rawValue)
+            }
+        }
+    }
+
+    @Published var leashMasteryPromptDismissCount: Int {
+        didSet {
+            UserDefaults.standard.set(leashMasteryPromptDismissCount, forKey: UserPreferences.Key.leashMasteryPromptDismissCount.rawValue)
+        }
+    }
+
+    @Published var leashReactivationPromptDismissedDate: Date? {
+        didSet {
+            if let date = leashReactivationPromptDismissedDate {
+                UserDefaults.standard.set(date.timeIntervalSince1970, forKey: UserPreferences.Key.leashReactivationPromptDismissedDate.rawValue)
+            } else {
+                UserDefaults.standard.removeObject(forKey: UserPreferences.Key.leashReactivationPromptDismissedDate.rawValue)
+            }
+        }
+    }
+
+    @Published var leashLastSentimentAcknowledgedDate: Date? {
+        didSet {
+            if let date = leashLastSentimentAcknowledgedDate {
+                UserDefaults.standard.set(date.timeIntervalSince1970, forKey: UserPreferences.Key.leashLastSentimentAcknowledgedDate.rawValue)
+            } else {
+                UserDefaults.standard.removeObject(forKey: UserPreferences.Key.leashLastSentimentAcknowledgedDate.rawValue)
+            }
+        }
+    }
+
     // MARK: - Initialization
 
     private init() {
@@ -117,6 +171,22 @@ final class TrainingMasteryStore: ObservableObject {
         self.pottyReactivationPromptDismissedDate = reactivationTimestamp > 0 ? Date(timeIntervalSince1970: reactivationTimestamp) : nil
         let incidentTimestamp = UserDefaults.standard.double(forKey: UserPreferences.Key.pottyLastIncidentAcknowledgedDate.rawValue)
         self.pottyLastIncidentAcknowledgedDate = incidentTimestamp > 0 ? Date(timeIntervalSince1970: incidentTimestamp) : nil
+
+        // Leash training
+        self.leashTrainingMastered = UserDefaults.standard.bool(forKey: UserPreferences.Key.leashTrainingMastered.rawValue)
+        let leashTimestamp = UserDefaults.standard.double(forKey: UserPreferences.Key.leashTrainingMasteredDate.rawValue)
+        self.leashMasteredDate = leashTimestamp > 0 ? Date(timeIntervalSince1970: leashTimestamp) : nil
+
+        // Leash prompt tracking
+        let leashDismissedTimestamp = UserDefaults.standard.double(forKey: UserPreferences.Key.leashMasteryPromptDismissedDate.rawValue)
+        self.leashMasteryPromptDismissedDate = leashDismissedTimestamp > 0 ? Date(timeIntervalSince1970: leashDismissedTimestamp) : nil
+        self.leashMasteryPromptDismissCount = UserDefaults.standard.integer(forKey: UserPreferences.Key.leashMasteryPromptDismissCount.rawValue)
+
+        // Leash reactivation tracking
+        let leashReactivationTimestamp = UserDefaults.standard.double(forKey: UserPreferences.Key.leashReactivationPromptDismissedDate.rawValue)
+        self.leashReactivationPromptDismissedDate = leashReactivationTimestamp > 0 ? Date(timeIntervalSince1970: leashReactivationTimestamp) : nil
+        let leashSentimentTimestamp = UserDefaults.standard.double(forKey: UserPreferences.Key.leashLastSentimentAcknowledgedDate.rawValue)
+        self.leashLastSentimentAcknowledgedDate = leashSentimentTimestamp > 0 ? Date(timeIntervalSince1970: leashSentimentTimestamp) : nil
     }
 
     // MARK: - Actions
@@ -161,6 +231,36 @@ final class TrainingMasteryStore: ObservableObject {
         pottyLastIncidentAcknowledgedDate = Date()
     }
 
+    // MARK: - Leash Training Actions
+
+    /// Mark leash training as mastered
+    func markLeashMastered() {
+        leashTrainingMastered = true
+        leashMasteredDate = Date()
+    }
+
+    /// Unmark leash training mastery (reactivate training)
+    func reactivateLeashTraining() {
+        leashTrainingMastered = false
+        leashMasteredDate = nil
+    }
+
+    /// Dismiss the leash mastery prompt
+    func dismissLeashMasteryPrompt() {
+        leashMasteryPromptDismissedDate = Date()
+        leashMasteryPromptDismissCount += 1
+    }
+
+    /// Dismiss the leash reactivation prompt
+    func dismissLeashReactivationPrompt() {
+        leashReactivationPromptDismissedDate = Date()
+    }
+
+    /// Acknowledge leash sentiment
+    func acknowledgeLeashSentiment() {
+        leashLastSentimentAcknowledgedDate = Date()
+    }
+
     // MARK: - Computed Properties
 
     /// Days since potty training was mastered
@@ -172,6 +272,12 @@ final class TrainingMasteryStore: ObservableObject {
     /// Days since crate training was mastered
     var daysSinceCrateMastered: Int? {
         guard let date = crateMasteredDate else { return nil }
+        return Calendar.current.dateComponents([.day], from: date, to: Date()).day
+    }
+
+    /// Days since leash training was mastered
+    var daysSinceLeashMastered: Int? {
+        guard let date = leashMasteredDate else { return nil }
         return Calendar.current.dateComponents([.day], from: date, to: Date()).day
     }
 }

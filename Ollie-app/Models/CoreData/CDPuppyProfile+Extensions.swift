@@ -36,6 +36,7 @@ extension CDPuppyProfile {
         self.birthDate = profile.birthDate
         self.homeDate = profile.homeDate
         self.sizeCategory = profile.sizeCategory.rawValue
+        self.gender = profile.gender.rawValue
         self.modifiedAt = profile.modifiedAt
         self.lastAcknowledgedPhase = profile.lastAcknowledgedPhase?.rawValue
         self.profilePhotoFilename = profile.profilePhotoFilename
@@ -141,6 +142,15 @@ extension CDPuppyProfile {
             lastAcknowledgedPhase = nil
         }
 
+        // Parse gender from stored string
+        let gender: PuppyProfile.Gender
+        if let genderString = self.gender,
+           let parsedGender = PuppyProfile.Gender(rawValue: genderString) {
+            gender = parsedGender
+        } else {
+            gender = .unspecified
+        }
+
         // Parse coatType from stored string
         let coatType: CoatType?
         if let coatTypeString = self.coatType {
@@ -157,6 +167,7 @@ extension CDPuppyProfile {
             birthDate: birthDate,
             homeDate: homeDate,
             sizeCategory: sizeCategory,
+            gender: gender,
             mealSchedule: mealSchedule,
             exerciseConfig: exerciseConfig,
             predictionConfig: predictionConfig,

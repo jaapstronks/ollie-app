@@ -210,9 +210,23 @@ enum UserPreferences {
         case pottyReactivationPromptDismissedDate = "pottyReactivationPromptDismissedDate"
         case pottyLastIncidentAcknowledgedDate = "pottyLastIncidentAcknowledgedDate"
 
+        // Leash training mastery
+        case leashTrainingMastered = "leashTrainingMastered"
+        case leashTrainingMasteredDate = "leashTrainingMasteredDate"
+        case leashMasteryPromptDismissedDate = "leashMasteryPromptDismissedDate"
+        case leashMasteryPromptDismissCount = "leashMasteryPromptDismissCount"
+        case leashReactivationPromptDismissedDate = "leashReactivationPromptDismissedDate"
+        case leashLastSentimentAcknowledgedDate = "leashLastSentimentAcknowledgedDate"
+
         // First week card
         case firstWeekCardCollapsedDate = "firstWeekCardCollapsedDate"
         case needsFirstSessionHandoff = "needsFirstSessionHandoff"
+
+        // Guided tour
+        case hasCompletedGuidedTour = "hasCompletedGuidedTour"
+        case guidedTourStep = "guidedTourStep"
+        case isAwaitingInvite = "isAwaitingInvite"
+        case shouldStartGuidedTour = "shouldStartGuidedTour"
     }
 
     // MARK: - Defaults
@@ -240,9 +254,17 @@ enum UserPreferences {
         Key.crateTrainingMastered.rawValue: false,
         Key.pottyTrainingMastered.rawValue: false,
         Key.pottyMasteryPromptDismissCount.rawValue: 0,
+        Key.leashTrainingMastered.rawValue: false,
+        Key.leashMasteryPromptDismissCount.rawValue: 0,
 
         // Onboarding follow-up defaults
-        Key.needsFirstSessionHandoff.rawValue: false
+        Key.needsFirstSessionHandoff.rawValue: false,
+
+        // Guided tour defaults
+        Key.hasCompletedGuidedTour.rawValue: false,
+        Key.guidedTourStep.rawValue: 0,
+        Key.isAwaitingInvite.rawValue: false,
+        Key.shouldStartGuidedTour.rawValue: false
     ]
 
     /// Register default values on app launch

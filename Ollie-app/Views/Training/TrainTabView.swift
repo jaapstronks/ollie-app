@@ -23,6 +23,7 @@ struct TrainTabView: View {
     // Sheet state for training guides
     @State private var showPottyGuide = false
     @State private var showCrateGuide = false
+    @State private var showLeashGuide = false
 
     // First-visit tip tracking
     @AppStorage("hasSeenTrainTip") private var hasSeenTrainTip = false
@@ -31,10 +32,12 @@ struct TrainTabView: View {
     @EnvironmentObject var trainingMasteryStore: TrainingMasteryStore
 
     @State private var showPottyMasteryConfirmation = false
+    @State private var showLeashMasteryConfirmation = false
 
     // Convenience accessors for training mastery
     private var crateTrainingMastered: Bool { trainingMasteryStore.crateTrainingMastered }
     private var pottyTrainingMastered: Bool { trainingMasteryStore.pottyTrainingMastered }
+    private var leashTrainingMastered: Bool { trainingMasteryStore.leashTrainingMastered }
 
     /// Calculate crate nap percentage for guide entry card
     private var crateNapPercentage: Int {
@@ -81,7 +84,7 @@ struct TrainTabView: View {
                     }
 
                     // Section 1: Training Guides (non-mastered only in normal position)
-                    if pottyTrainingMastered || crateTrainingMastered {
+                    if pottyTrainingMastered || crateTrainingMastered || leashTrainingMastered {
                         // Only show non-mastered guides in normal position
                         nonMasteredGuidesSection
                             .animatedAppear(delay: 0)
@@ -103,7 +106,7 @@ struct TrainTabView: View {
                         .animatedAppear(delay: 0.15)
 
                     // Section 5: Mastered guides (at bottom)
-                    if pottyTrainingMastered || crateTrainingMastered {
+                    if pottyTrainingMastered || crateTrainingMastered || leashTrainingMastered {
                         masteredGuidesSection
                             .animatedAppear(delay: 0.20)
                     }
@@ -129,6 +132,14 @@ struct TrainTabView: View {
             .sheet(isPresented: $showCrateGuide) {
                 CrateTrainingGuideSheet(eventStore: eventStore)
             }
+            .sheet(isPresented: $showLeashGuide) {
+                LeashTrainingGuideSheet(
+                    recentSentimentAverage: viewModel.leashRecentSentimentAverage,
+                    sentimentTrend: viewModel.leashSentimentTrend,
+                    ageInWeeks: profileStore.profile?.ageInWeeks ?? 12,
+                    shouldShowReactivationPrompt: viewModel.shouldShowLeashReactivationPrompt
+                )
+            }
             .confirmationDialog(
                 Strings.Training.PottyTraining.markMastered,
                 isPresented: $showPottyMasteryConfirmation,
@@ -140,6 +151,18 @@ struct TrainTabView: View {
                 Button(Strings.Common.cancel, role: .cancel) {}
             } message: {
                 Text(Strings.Training.PottyTraining.markMasteredDescription)
+            }
+            .confirmationDialog(
+                Strings.Leash.markMastered,
+                isPresented: $showLeashMasteryConfirmation,
+                titleVisibility: .visible
+            ) {
+                Button(Strings.Leash.markMastered) {
+                    markLeashAsMastered()
+                }
+                Button(Strings.Common.cancel, role: .cancel) {}
+            } message: {
+                Text(Strings.Leash.markMasteredDescription)
             }
         }
     }
@@ -156,6 +179,22 @@ struct TrainTabView: View {
     private func dismissPottyMasteryPrompt() {
         withAnimation(.easeOut(duration: 0.2)) {
             trainingMasteryStore.dismissPottyMasteryPrompt()
+        }
+        HapticFeedback.light()
+    }
+
+    // MARK: - Leash Mastery Actions
+
+    private func markLeashAsMastered() {
+        withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+            trainingMasteryStore.markLeashMastered()
+        }
+        HapticFeedback.success()
+    }
+
+    private func dismissLeashMasteryPrompt() {
+        withAnimation(.easeOut(duration: 0.2)) {
+            trainingMasteryStore.dismissLeashMasteryPrompt()
         }
         HapticFeedback.light()
     }
@@ -207,6 +246,29 @@ struct TrainTabView: View {
             ) {
                 showCrateGuide = true
             }
+
+            // Leash Training Guide (shown for puppies 10+ weeks)
+            if viewModel.shouldShowLeashTrainingGuide {
+                LeashProgressCard(
+                    recentAverage: viewModel.leashRecentSentimentAverage,
+                    trend: viewModel.leashSentimentTrend,
+                    isMastered: leashTrainingMastered,
+                    onTap: { showLeashGuide = true }
+                )
+            }
+
+            // Leash Mastery Prompt
+            if viewModel.shouldShowLeashMasteryPrompt {
+                LeashMasteryPromptCard(
+                    weeksAtHighRating: 2,
+                    onMarkMastered: {
+                        showLeashMasteryConfirmation = true
+                    },
+                    onDismiss: {
+                        dismissLeashMasteryPrompt()
+                    }
+                )
+            }
         }
     }
 
@@ -255,6 +317,29 @@ struct TrainTabView: View {
                     showCrateGuide = true
                 }
             }
+
+            // Leash Mastery Prompt (only in non-mastered section)
+            if viewModel.shouldShowLeashMasteryPrompt {
+                LeashMasteryPromptCard(
+                    weeksAtHighRating: 2,
+                    onMarkMastered: {
+                        showLeashMasteryConfirmation = true
+                    },
+                    onDismiss: {
+                        dismissLeashMasteryPrompt()
+                    }
+                )
+            }
+
+            // Show leash guide in normal position only if not mastered and visible
+            if !leashTrainingMastered && viewModel.shouldShowLeashTrainingGuide {
+                LeashProgressCard(
+                    recentAverage: viewModel.leashRecentSentimentAverage,
+                    trend: viewModel.leashSentimentTrend,
+                    isMastered: false,
+                    onTap: { showLeashGuide = true }
+                )
+            }
         }
     }
 
@@ -289,6 +374,16 @@ struct TrainTabView: View {
                 ) {
                     showCrateGuide = true
                 }
+            }
+
+            // Show mastered leash guide at bottom
+            if leashTrainingMastered {
+                LeashProgressCard(
+                    recentAverage: nil,
+                    trend: nil,
+                    isMastered: true,
+                    onTap: { showLeashGuide = true }
+                )
             }
         }
     }

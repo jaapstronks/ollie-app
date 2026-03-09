@@ -7,6 +7,7 @@
 //
 
 @preconcurrency import CoreData
+import OtisShared
 
 extension CDAICache {
 
@@ -20,10 +21,11 @@ extension CDAICache {
     // MARK: - Update from Response
 
     /// Update this cache entry from an AI broker response.
-    func update(surface: AISurface, response: AIBrokerResponse) {
+    func update(surface: AISurface, response: AIBrokerResponse, locale: String?) {
         self.id = UUID()
         self.surface = surface.rawValue
         self.timeWindow = Self.timeWindow(for: surface)
+        self.locale = locale
         self.responseData = try? JSONEncoder().encode(response)
         self.cachedAt = Date()
         self.expiresAt = Date().addingTimeInterval(TimeInterval(surface.cacheDurationMinutes * 60))
@@ -48,19 +50,28 @@ extension CDAICache {
     // MARK: - Fetch Valid Cache
 
     /// Fetch a valid (non-expired) cache entry for the given surface and profile.
+    /// Includes locale matching to ensure responses are in the correct language.
     static func fetchValid(
         surface: AISurface,
         profile: CDPuppyProfile,
         in context: NSManagedObjectContext
     ) -> CDAICache? {
         let window = timeWindow(for: surface)
+        let currentLocale = profile.preferredLocale ?? Locale.current.identifier
         let request = NSFetchRequest<CDAICache>(entityName: "CDAICache")
-        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
+
+        // Include locale in cache key to ensure language-specific responses
+        var predicates: [NSPredicate] = [
             NSPredicate(format: "profile == %@", profile),
             NSPredicate(format: "surface == %@", surface.rawValue),
             NSPredicate(format: "timeWindow == %@", window),
             NSPredicate(format: "expiresAt > %@", Date() as CVarArg)
-        ])
+        ]
+
+        // Match locale (handle nil locale for legacy cache entries)
+        predicates.append(NSPredicate(format: "locale == %@", currentLocale))
+
+        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
         request.fetchLimit = 1
 
         nonisolated(unsafe) var result: CDAICache?
@@ -73,6 +84,7 @@ extension CDAICache {
     // MARK: - Upsert
 
     /// Insert or update a cache entry for the given surface and response.
+    /// Includes locale to ensure language-specific caching.
     @discardableResult
     static func upsert(
         surface: AISurface,
@@ -81,16 +93,21 @@ extension CDAICache {
         in context: NSManagedObjectContext
     ) -> CDAICache {
         let window = timeWindow(for: surface)
+        let currentLocale = profile.preferredLocale ?? Locale.current.identifier
         let request = NSFetchRequest<CDAICache>(entityName: "CDAICache")
+
+        // Include locale in lookup to maintain separate cache entries per language
         request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
             NSPredicate(format: "profile == %@", profile),
             NSPredicate(format: "surface == %@", surface.rawValue),
-            NSPredicate(format: "timeWindow == %@", window)
+            NSPredicate(format: "timeWindow == %@", window),
+            NSPredicate(format: "locale == %@", currentLocale)
         ])
         request.fetchLimit = 1
 
         // Mark as nonisolated(unsafe) since performAndWait is synchronous and safe
         nonisolated(unsafe) let capturedProfile = profile
+        let capturedLocale = currentLocale  // String is Sendable, no unsafe needed
         nonisolated(unsafe) var cache: CDAICache!
         context.performAndWait {
             if let existing = try? context.fetch(request).first {
@@ -101,7 +118,7 @@ extension CDAICache {
                 cache.profile = capturedProfile
                 cache.callCount = 1
             }
-            cache.update(surface: surface, response: response)
+            cache.update(surface: surface, response: response, locale: capturedLocale)
         }
         return cache
     }
@@ -163,18 +180,3 @@ extension CDAICache {
     }
 }
 
-// MARK: - Date Helper
-
-private extension Date {
-    /// Generate a time window stamp for cache deduplication.
-    func windowStamp(hours: Int) -> String {
-        let calendar = Calendar.current
-        let day = calendar.startOfDay(for: self)
-        let hour = calendar.component(.hour, from: self)
-        let bucket = max(1, hours)
-        let window = hour / bucket
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd"
-        return "\(formatter.string(from: day))-\(window)"
-    }
-}
