@@ -111,7 +111,10 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
     }
 
     /// Gender of the dog - used for pronouns throughout the app
-    /// When unspecified, they/them pronouns are used
+    /// When unspecified:
+    /// - English: they/them (singular they works well)
+    /// - Swedish: hen (accepted gender-neutral pronoun)
+    /// - Other languages: defaults to female (avoids awkward plural constructions)
     public enum Gender: String, Codable, CaseIterable, Identifiable, Sendable {
         case male
         case female
@@ -127,47 +130,102 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
             }
         }
 
-        /// Subject pronoun: he/she/they
+        // MARK: - Locale-Aware Neutral Pronoun Strategy
+
+        /// Languages that support true gender-neutral singular pronouns
+        /// - en: they/them works naturally as singular
+        /// - sv: hen is an accepted gender-neutral pronoun
+        private static let languagesWithNeutralPronouns: Set<String> = ["en", "sv"]
+
+        /// Current language code (first two characters of locale identifier)
+        private var currentLanguage: String {
+            String(Locale.current.language.languageCode?.identifier.prefix(2) ?? "en")
+        }
+
+        /// Whether current locale supports true gender-neutral pronouns
+        private var localeSupportsNeutralPronouns: Bool {
+            Self.languagesWithNeutralPronouns.contains(currentLanguage)
+        }
+
+        /// Whether current locale is Swedish (uses hen)
+        private var isSwedish: Bool {
+            currentLanguage == "sv"
+        }
+
+        // MARK: - Pronoun Accessors
+
+        /// Subject pronoun: he/she/they (or hen in Swedish, she in other languages when unspecified)
         public var subjectPronoun: String {
             switch self {
             case .male: return Strings.Pronouns.he
             case .female: return Strings.Pronouns.she
-            case .unspecified: return Strings.Pronouns.they
+            case .unspecified:
+                if isSwedish {
+                    return Strings.Pronouns.hen
+                } else if localeSupportsNeutralPronouns {
+                    return Strings.Pronouns.they
+                } else {
+                    // Default to female for languages without good neutral option
+                    return Strings.Pronouns.she
+                }
             }
         }
 
-        /// Object pronoun: him/her/them
+        /// Object pronoun: him/her/them (or hen in Swedish, her in other languages when unspecified)
         public var objectPronoun: String {
             switch self {
             case .male: return Strings.Pronouns.him
             case .female: return Strings.Pronouns.her
-            case .unspecified: return Strings.Pronouns.them
+            case .unspecified:
+                if isSwedish {
+                    return Strings.Pronouns.hen  // Swedish uses hen for both subject and object
+                } else if localeSupportsNeutralPronouns {
+                    return Strings.Pronouns.them
+                } else {
+                    return Strings.Pronouns.her
+                }
             }
         }
 
-        /// Possessive pronoun: his/her/their
+        /// Possessive pronoun: his/her/their (or hens in Swedish, her in other languages when unspecified)
         public var possessivePronoun: String {
             switch self {
             case .male: return Strings.Pronouns.his
             case .female: return Strings.Pronouns.hers
-            case .unspecified: return Strings.Pronouns.their
+            case .unspecified:
+                if isSwedish {
+                    return Strings.Pronouns.hens
+                } else if localeSupportsNeutralPronouns {
+                    return Strings.Pronouns.their
+                } else {
+                    return Strings.Pronouns.hers
+                }
             }
         }
 
-        /// Reflexive pronoun: himself/herself/themselves
+        /// Reflexive pronoun: himself/herself/themselves (or sig själv in Swedish, herself in other languages when unspecified)
         public var reflexivePronoun: String {
             switch self {
             case .male: return Strings.Pronouns.himself
             case .female: return Strings.Pronouns.herself
-            case .unspecified: return Strings.Pronouns.themselves
+            case .unspecified:
+                if isSwedish {
+                    return Strings.Pronouns.sigSjalv
+                } else if localeSupportsNeutralPronouns {
+                    return Strings.Pronouns.themselves
+                } else {
+                    return Strings.Pronouns.herself
+                }
             }
         }
 
         /// Whether this gender's pronouns require plural verb forms
-        /// "they wake" (plural) vs "he/she wakes" (singular)
-        /// Note: "they" takes plural verb conjugation even when used as singular
+        /// Only English "they" takes plural verb conjugation ("they wake" vs "she wakes")
+        /// Swedish "hen" and female fallback both use singular verb forms
         public var usesPluralVerbForm: Bool {
-            self == .unspecified
+            guard self == .unspecified else { return false }
+            // Only English "they" uses plural verb forms
+            return currentLanguage == "en"
         }
     }
 
