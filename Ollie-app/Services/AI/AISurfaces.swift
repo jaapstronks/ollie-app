@@ -161,6 +161,7 @@ enum AIContextComponentKey: String, Codable, Hashable, Sendable {
     case recentEvents = "recent_events"
     case health = "health"
     case sentiment = "sentiment"  // User sentiment ratings
+    case behavior = "behavior"    // Behavior challenges and interventions
 
     /// Estimated tokens for this component
     var estimatedTokens: Int {
@@ -177,6 +178,7 @@ enum AIContextComponentKey: String, Codable, Hashable, Sendable {
         case .recentEvents: return 80
         case .health: return 70
         case .sentiment: return 60
+        case .behavior: return 120
         }
     }
 }
@@ -192,17 +194,17 @@ protocol AISurfaceResponse: Codable, Sendable {
 
 struct InsightBundleResponse: AISurfaceResponse {
     let confidence: Double
-    let dailyStatus: DailyStatusResponse?
-    let activityOrdering: ActivityOrderingResponse?
+    let dailyStatusDecision: DailyStatusDecision?
+    let walkOrderingDecision: WalkOrderingDecision?
     let loggingRecommendations: [LoggingRecommendation]
 
-    struct DailyStatusResponse: Codable, Sendable {
+    struct DailyStatusDecision: Codable, Sendable {
         let headline: String
         let subtitle: String?
         let confidence: Double
     }
 
-    struct ActivityOrderingResponse: Codable, Sendable {
+    struct WalkOrderingDecision: Codable, Sendable {
         let orderedIds: [String]
         let confidence: Double
     }

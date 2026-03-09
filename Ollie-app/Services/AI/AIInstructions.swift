@@ -179,12 +179,12 @@ enum AIInstructions {
 
     {
       "confidence": 0.0-1.0,  // Your confidence in this assessment
-      "dailyStatus": {
+      "dailyStatusDecision": {
         "headline": "Short status (max 50 chars)",
         "subtitle": "Supporting detail (max 80 chars, optional)",
         "confidence": 0.0-1.0
       },
-      "activityOrdering": {
+      "walkOrderingDecision": {
         "orderedIds": ["id1", "id2", ...],  // Reordered activity IDs by priority
         "confidence": 0.0-1.0
       },

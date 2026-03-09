@@ -134,7 +134,7 @@ private struct ResultRowButton: View {
 
         switch result.surface {
         case .insightBundle:
-            if let daily = response["dailyStatus"] as? [String: Any],
+            if let daily = response["dailyStatusDecision"] as? [String: Any],
                let headline = daily["headline"] as? String {
                 return headline
             }

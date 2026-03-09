@@ -183,7 +183,7 @@ extension InsightBundleResponse {
         confidenceThreshold: Double = 0.65,
         shadowMode: Bool
     ) -> (title: String, subtitle: String?) {
-        guard let status = dailyStatus,
+        guard let status = dailyStatusDecision,
               !shadowMode,
               status.confidence >= confidenceThreshold else {
             return (baselineTitle, baselineSubtitle)
@@ -198,7 +198,7 @@ extension InsightBundleResponse {
         confidenceThreshold: Double = 0.65,
         shadowMode: Bool
     ) -> (actionable: [ActionableItem], upcoming: [UpcomingItem]) {
-        guard let ordering = activityOrdering,
+        guard let ordering = walkOrderingDecision,
               !shadowMode,
               ordering.confidence >= confidenceThreshold else {
             return (actionable, upcoming)
