@@ -137,16 +137,14 @@ struct SleepStatusCard: View {
     }
 
     /// Subtitle text for pending walk/meal when sleeping
-    /// Includes specific meal/walk name and scheduled time for clarity
+    /// When sleeping, we don't show specific times since the dog will wake when they wake
+    /// and walks aren't planned to the minute anyway
     private func pendingActionableSubtitle(_ actionable: ActionableItem) -> String {
-        let label = actionable.item.localizedLabel
-        let time = actionable.item.timeString
-
         switch actionable.item.itemType {
         case .walk:
-            return Strings.SleepStatus.afterWakeTimeForWalkWithDetails(label: label, time: time)
+            return Strings.SleepStatus.afterWakeTimeForWalk
         case .meal:
-            return Strings.SleepStatus.afterWakeTimeForMealWithDetails(label: label, time: time)
+            return Strings.SleepStatus.afterWakeTimeForMeal
         }
     }
 

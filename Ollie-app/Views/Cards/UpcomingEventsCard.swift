@@ -232,7 +232,7 @@ struct ActionableEventCard: View {
         switch actionableItem.state {
         case .overdue:
             // Show "Was scheduled at <time>" for overdue items
-            return Strings.Actionable.wasScheduledAt(time: actionableItem.item.timeString)
+            return Strings.Actionable.wasScheduledAt(time: actionableItem.item.displayTimeString)
         default:
             // Show detail like "2/9 walks today" or "110g"
             return actionableItem.item.detail
@@ -398,8 +398,8 @@ struct UpcomingEventsCard: View {
     @ViewBuilder
     private func upcomingRow(_ item: UpcomingItem) -> some View {
         HStack(spacing: 10) {
-            // Time
-            Text(item.timeString)
+            // Time (rounded to 5 min for walks)
+            Text(item.displayTimeString)
                 .font(.system(.caption, design: .monospaced))
                 .foregroundStyle(.secondary)
                 .frame(minWidth: 40, alignment: .leading)

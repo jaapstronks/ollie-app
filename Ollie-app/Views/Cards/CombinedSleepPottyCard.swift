@@ -20,6 +20,8 @@ struct CombinedSleepPottyCard: View {
     let subjectPronoun: String
     /// Object pronoun for the dog (him/her/them)
     let objectPronoun: String
+    /// Whether to use plural verb forms ("they wake" vs "he/she wakes")
+    let usesPluralVerbForm: Bool
     let onWakeUp: () -> Void
 
     init(
@@ -30,6 +32,7 @@ struct CombinedSleepPottyCard: View {
         pendingActionable: ActionableItem? = nil,
         subjectPronoun: String = "they",
         objectPronoun: String = "them",
+        usesPluralVerbForm: Bool = true,
         onWakeUp: @escaping () -> Void
     ) {
         self.sleepingSince = sleepingSince
@@ -39,6 +42,7 @@ struct CombinedSleepPottyCard: View {
         self.pendingActionable = pendingActionable
         self.subjectPronoun = subjectPronoun
         self.objectPronoun = objectPronoun
+        self.usesPluralVerbForm = usesPluralVerbForm
         self.onWakeUp = onWakeUp
     }
 
@@ -105,7 +109,7 @@ struct CombinedSleepPottyCard: View {
                     .foregroundStyle(.orange)
 
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(Strings.CombinedStatus.whenWakesTakeOutside(subject: subjectPronoun, object: objectPronoun))
+                    Text(Strings.CombinedStatus.whenWakesTakeOutside(subject: subjectPronoun, object: objectPronoun, usesPluralVerbForm: usesPluralVerbForm))
                         .font(.subheadline)
                         .fontWeight(.medium)
                         .foregroundStyle(.primary)
@@ -216,11 +220,11 @@ struct CombinedSleepPottyCard: View {
         }
     }
 
-    /// Subtitle showing specific meal/walk name and time
+    /// Subtitle showing specific meal/walk name (no time when sleeping)
+    /// When sleeping, we don't show specific times since the dog will wake when they wake
     private func pendingActionableSubtitle(_ actionable: ActionableItem) -> String {
-        let label = actionable.item.localizedLabel
-        let time = actionable.item.timeString
-        return "\(label) \(Strings.Common.atTime) \(time)"
+        // Just show the label, no specific time - walks aren't planned to the minute
+        actionable.item.localizedLabel
     }
 }
 
