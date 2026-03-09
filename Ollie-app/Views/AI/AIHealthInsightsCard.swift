@@ -35,7 +35,8 @@ struct AIHealthInsightsCard: View {
                 insightsContent(insights)
             }
         }
-        .task {
+        // Task runs on profile change (including when it becomes available)
+        .task(id: profileStore.profile?.id) {
             await loadInsights()
         }
     }
@@ -123,13 +124,9 @@ struct AIHealthInsightsCard: View {
 
 // MARK: - Preview
 
-#if DEBUG
-struct AIHealthInsightsCard_Previews: PreviewProvider {
-    static var previews: some View {
-        AIHealthInsightsCard()
-            .environmentObject(ProfileStore())
-            .environmentObject(EventStore())
-            .padding()
-    }
+#Preview {
+    AIHealthInsightsCard()
+        .environmentObject(ProfileStore())
+        .environmentObject(EventStore())
+        .padding()
 }
-#endif

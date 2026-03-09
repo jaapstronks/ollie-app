@@ -255,5 +255,10 @@ extension Strings {
         static let wellness = String(localized: "Wellness", table: table)
         static let recommendations = String(localized: "Recommendations", table: table)
         static let riskFactors = String(localized: "Watch for", table: table)
+
+        // Morning briefing
+        static let loadingBriefing = String(localized: "Loading your morning briefing...", table: table)
+        static let quickWins = String(localized: "Quick wins for today:", table: table)
+        static let morningBriefing = String(localized: "Good morning", table: table)
     }
 }

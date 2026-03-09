@@ -247,6 +247,15 @@ struct TodayView: View {
                         )
                     }
 
+                    // Morning briefing (AI-powered daily guidance)
+                    // Debug: always render but let the card handle visibility
+                    MorningBriefingCard()
+                        .padding(.horizontal)
+                        .animatedAppear(delay: 0.04)
+                        .onAppear {
+                            print("[TodayView] MorningBriefingCard appeared, isShowingToday=\(viewModel.isShowingToday), shouldShowAIInsights=\(FirstWeekExperienceService.shared.shouldShowAIInsights)")
+                        }
+
                     // Status cards section (only for today)
                     if viewModel.isShowingToday {
                         statusCardsSection
