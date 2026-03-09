@@ -206,6 +206,25 @@ public final class CloudKitService: ObservableObject {
         )
     }()
 
+    // MARK: - Profile Photo Service
+
+    /// Profile photo service for syncing profile photos via CloudKit
+    public lazy var profilePhotoService: ProfilePhotoCloudService = {
+        ProfilePhotoCloudService(
+            deviceID: deviceID,
+            getDatabase: { [weak self] in
+                guard let self = self else { return CKContainer.default().privateCloudDatabase }
+                return self.isParticipant ? self.sharedDatabase : self.privateDatabase
+            },
+            getZoneID: { [weak self] in
+                CKRecordZone.ID(zoneName: "com.apple.coredata.cloudkit.zone", ownerName: CKCurrentUserDefaultName)
+            },
+            isCloudAvailable: { [weak self] in
+                self?.isCloudAvailable ?? false
+            }
+        )
+    }()
+
     // MARK: - Photo Operations
 
     /// Upload a photo to CloudKit
@@ -227,6 +246,34 @@ public final class CloudKitService: ObservableObject {
     /// Delete a photo from CloudKit
     public func deletePhoto(eventId: UUID) async throws {
         try await mediaService.deletePhoto(eventId: eventId)
+    }
+
+    // MARK: - Profile Photo Operations
+
+    /// Upload a profile photo to CloudKit
+    public func uploadProfilePhoto(
+        localURL: URL,
+        profileId: UUID
+    ) async throws -> CKRecord.ID {
+        try await profilePhotoService.uploadPhoto(localURL: localURL, profileId: profileId)
+    }
+
+    /// Download a profile photo from CloudKit
+    public func downloadProfilePhoto(
+        profileId: UUID,
+        to destinationURL: URL
+    ) async throws -> Bool {
+        try await profilePhotoService.downloadPhoto(profileId: profileId, to: destinationURL)
+    }
+
+    /// Delete a profile photo from CloudKit
+    public func deleteProfilePhoto(profileId: UUID) async throws {
+        try await profilePhotoService.deletePhoto(profileId: profileId)
+    }
+
+    /// Check if a profile photo exists in CloudKit
+    public func profilePhotoExists(profileId: UUID) async throws -> Bool {
+        try await profilePhotoService.photoExists(profileId: profileId)
     }
 }
 

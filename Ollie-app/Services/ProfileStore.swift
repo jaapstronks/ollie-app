@@ -521,6 +521,48 @@ class ProfileStore: ObservableObject {
         }
 
         knownSharedProfileIDs = Set(profiles.filter { $0.ownership == .shared }.map(\.id))
+
+        // Sync profile photos from CloudKit for shared profiles
+        syncSharedProfilePhotos()
+    }
+
+    /// Sync profile photos from CloudKit for shared profiles that have a photo filename but no local file
+    private func syncSharedProfilePhotos() {
+        let sharedProfiles = profiles.filter { $0.ownership == .shared }
+
+        for profile in sharedProfiles {
+            guard let filename = profile.profilePhotoFilename else { continue }
+
+            // Check if photo exists locally, if not, download from CloudKit
+            Task {
+                await ProfilePhotoStore.shared.syncFromCloudKitIfNeeded(
+                    filename: filename,
+                    profileId: profile.id
+                )
+            }
+        }
+    }
+
+    /// Upload profile photo to CloudKit for a profile (used when enabling sharing or for migration)
+    /// Call this when a user shares their profile to ensure the photo is available to participants
+    func uploadProfilePhotoToCloud(for profileId: UUID) async {
+        guard let profile = profiles.first(where: { $0.id == profileId }),
+              let filename = profile.profilePhotoFilename,
+              ProfilePhotoStore.shared.exists(filename: filename) else {
+            return
+        }
+
+        let localURL = ProfilePhotoStore.shared.fullPath(for: filename)
+
+        do {
+            _ = try await CloudKitService.shared.uploadProfilePhoto(
+                localURL: localURL,
+                profileId: profileId
+            )
+            logger.info("Uploaded profile photo to CloudKit for profile \(profileId)")
+        } catch {
+            logger.warning("Failed to upload profile photo to CloudKit: \(error.localizedDescription)")
+        }
     }
 
     // MARK: - Share Acceptance Support

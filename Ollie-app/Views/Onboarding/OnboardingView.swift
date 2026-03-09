@@ -383,10 +383,14 @@ struct OnboardingView: View {
             profile.coatType = coatType
         }
 
-        // Save profile photo if selected
+        // Save profile photo if selected (with CloudKit sync)
         if let photo = profilePhoto {
-            if let filename = try? ProfilePhotoStore.shared.save(image: photo) {
-                profile.profilePhotoFilename = filename
+            Task {
+                if let filename = try? await ProfilePhotoStore.shared.save(image: photo, for: profile.id) {
+                    await MainActor.run {
+                        profileStore.updateProfilePhoto(filename, for: profile.id)
+                    }
+                }
             }
         }
 

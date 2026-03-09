@@ -128,22 +128,30 @@ struct DogProfileSettingsView: View {
 
     private func saveProfilePhoto(_ image: UIImage) {
         guard let profile = targetProfile else { return }
-        do {
-            // Delete old photo if exists
+
+        Task {
+            // Delete old photo if exists (including from CloudKit)
             if let oldFilename = profile.profilePhotoFilename {
-                ProfilePhotoStore.shared.delete(filename: oldFilename)
+                ProfilePhotoStore.shared.delete(filename: oldFilename, profileId: profile.id)
             }
 
-            let filename = try ProfilePhotoStore.shared.save(image: image)
-            profileStore.updateProfilePhoto(filename, for: profileId)
-        } catch {
-            print("Failed to save profile photo: \(error)")
+            do {
+                // Save new photo with CloudKit sync
+                let filename = try await ProfilePhotoStore.shared.save(image: image, for: profile.id)
+                await MainActor.run {
+                    profileStore.updateProfilePhoto(filename, for: profileId)
+                }
+            } catch {
+                print("Failed to save profile photo: \(error)")
+            }
         }
     }
 
     private func removeProfilePhoto() {
-        if let filename = targetProfile?.profilePhotoFilename {
-            ProfilePhotoStore.shared.delete(filename: filename)
+        guard let profile = targetProfile else { return }
+
+        if let filename = profile.profilePhotoFilename {
+            ProfilePhotoStore.shared.delete(filename: filename, profileId: profile.id)
         }
         profileStore.updateProfilePhoto(nil, for: profileId)
     }

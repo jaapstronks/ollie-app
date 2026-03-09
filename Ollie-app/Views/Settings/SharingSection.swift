@@ -353,6 +353,12 @@ struct SharingSection: View {
                 return
             }
 
+            // Upload profile photo to CloudKit before sharing
+            // This ensures the photo is available to participants
+            if let profileId = cdProfile.id {
+                await ProfileStore.shared.uploadProfilePhotoToCloud(for: profileId)
+            }
+
             let share = try await cloudKit.getOrCreateShare(
                 for: cdProfile,
                 using: PersistenceController.shared.container
