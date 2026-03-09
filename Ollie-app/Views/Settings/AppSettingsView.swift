@@ -211,6 +211,20 @@ struct AppSettingsView: View {
                 }
                 .padding(.vertical, 4)
             }
+
+            // Nudge preferences (what this user sees)
+            NavigationLink {
+                NudgePreferencesView(userIdentityStore: userIdentityStore)
+            } label: {
+                HStack {
+                    Label(Strings.Settings.nudgePreferences, systemImage: "bell.badge")
+                    Spacer()
+                    if let identity = userIdentityStore.currentIdentity {
+                        Text(identity.responsibilityLevel.label)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+            }
         } header: {
             Text(Strings.UserProfile.title)
         }
@@ -369,7 +383,8 @@ struct AppSettingsView: View {
                 guidedTourStep = 0
                 dismiss()
                 // Allow settings sheet to dismiss before starting tour
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                Task { @MainActor in
+                    try? await Task.sleep(for: .seconds(0.3))
                     onTriggerTour?()
                 }
             } label: {
