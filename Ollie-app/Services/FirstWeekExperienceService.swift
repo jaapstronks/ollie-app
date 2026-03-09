@@ -264,8 +264,6 @@ final class FirstWeekExperienceService: ObservableObject {
 
     /// Returns retention health status for analytics/intervention
     var retentionHealth: RetentionHealth {
-        let eventsDay1 = cachedTotalEventCount // Simplified - ideally filter by day
-
         switch daysSinceOnboarding {
         case 0:
             return .newUser

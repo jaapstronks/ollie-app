@@ -291,7 +291,7 @@ final class MomentsNotificationHandler: NSObject {
             return Strings.Common.someone
         }
 
-        return await ParticipantResolver.shared.displayName(for: recordID)
+        return ParticipantResolver.shared.displayName(for: recordID)
     }
 }
 
