@@ -150,6 +150,9 @@ class TimelineViewModel: ObservableObject {
     private var predictionServiceCancellable: AnyCancellable?
     private var momentNotificationCancellable: AnyCancellable?
 
+    /// Subscription to reset to today when app becomes active on a new day
+    private var appBecameActiveCancellable: AnyCancellable?
+
     let eventStore: EventStore
     let profileStore: ProfileStore
     var notificationService: NotificationService?
@@ -252,7 +255,23 @@ class TimelineViewModel: ObservableObject {
                 self?.openMomentFromNotification(eventId: eventId)
             }
 
+        // Reset to today when app becomes active on a new day
+        // This handles the case where user opens app on Day 2 but was last viewing Day 1
+        appBecameActiveCancellable = NotificationCenter.default
+            .publisher(for: UIApplication.didBecomeActiveNotification)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.resetToTodayIfNeeded()
+            }
+
         loadEvents()
+    }
+
+    /// Reset to today if the current date is no longer today
+    /// Called when app becomes active to ensure fresh start on new day
+    private func resetToTodayIfNeeded() {
+        guard !currentDate.isToday else { return }
+        goToToday()
     }
 
     /// Open the moments lightbox for an event tapped from a notification
