@@ -21,6 +21,8 @@
         <attribute name="householdMembersData" optional="YES" attributeType="Binary"/>
         <attribute name="lastAcknowledgedPhase" optional="YES" attributeType="String"/>
         <attribute name="coatType" optional="YES" attributeType="String"/>
+        <attribute name="preferredLocale" optional="YES" attributeType="String"/>
+        <attribute name="trainingPreparationData" optional="YES" attributeType="Binary"/>
         <relationship name="appointments" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDDogAppointment" inverseName="profile" inverseEntity="CDDogAppointment"/>
         <relationship name="documents" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDDocument" inverseName="profile" inverseEntity="CDDocument"/>
         <relationship name="events" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDPuppyEvent" inverseName="profile" inverseEntity="CDPuppyEvent"/>
@@ -38,6 +40,7 @@
         <relationship name="groomingActivities" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDGroomingActivity" inverseName="profile" inverseEntity="CDGroomingActivity"/>
         <relationship name="enrichmentActivities" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDEnrichmentActivity" inverseName="profile" inverseEntity="CDEnrichmentActivity"/>
         <relationship name="userIdentities" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDUserIdentity" inverseName="profile" inverseEntity="CDUserIdentity"/>
+        <relationship name="aiCache" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDAICache" inverseName="profile" inverseEntity="CDAICache"/>
     </entity>
     <entity name="CDPuppyEvent" representedClassName="CDPuppyEvent" syncable="YES" codeGenerationType="class">
         <attribute name="cloudPhotoSynced" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
@@ -400,6 +403,21 @@
         </fetchIndex>
         <fetchIndex name="byDateIndex">
             <fetchIndexElement property="date" type="Binary" order="descending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="CDAICache" representedClassName="CDAICache" syncable="YES" codeGenerationType="class">
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="surface" attributeType="String" defaultValueString=""/>
+        <attribute name="timeWindow" attributeType="String" defaultValueString=""/>
+        <attribute name="responseData" optional="YES" attributeType="Binary"/>
+        <attribute name="cachedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="expiresAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="providerUsed" optional="YES" attributeType="String"/>
+        <attribute name="modelUsed" optional="YES" attributeType="String"/>
+        <attribute name="callCount" optional="YES" attributeType="Integer 32" defaultValueString="1" usesScalarValueType="YES"/>
+        <relationship name="profile" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDPuppyProfile" inverseName="aiCache" inverseEntity="CDPuppyProfile"/>
+        <fetchIndex name="bySurfaceIndex">
+            <fetchIndexElement property="surface" type="Binary" order="ascending"/>
         </fetchIndex>
     </entity>
 </model>

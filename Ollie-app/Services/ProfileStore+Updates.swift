@@ -119,4 +119,11 @@ extension ProfileStore {
         currentProfile.medicationSchedule = schedule
         saveProfile(currentProfile)
     }
+
+    /// Update the preferred locale for AI responses
+    func updatePreferredLocale(_ locale: String?, for profileId: UUID? = nil) {
+        guard var currentProfile = profileToUpdate(for: profileId) else { return }
+        currentProfile.preferredLocale = locale
+        saveProfile(currentProfile)
+    }
 }

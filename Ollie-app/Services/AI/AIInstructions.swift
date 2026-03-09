@@ -13,6 +13,30 @@ import Foundation
 /// Generates system instructions and output format specs for AI surfaces.
 enum AIInstructions {
 
+    // MARK: - Shared Language Guidance
+
+    /// Guidance for responding in the profile's preferred language.
+    /// The locale is set by the profile owner and shared across all household members.
+    private static let languageGuidance = """
+
+    LANGUAGE:
+    The request includes a "locale" field indicating the profile's language preference.
+    You MUST respond in the language that matches the locale:
+    - "nl" or "nl_NL" → Respond in Dutch
+    - "de" or "de_DE" → Respond in German
+    - "es" or "es_ES" → Respond in Spanish
+    - "fr" or "fr_FR" → Respond in French
+    - "it" or "it_IT" → Respond in Italian
+    - "sv" or "sv_SE" → Respond in Swedish
+    - "pl" or "pl_PL" → Respond in Polish
+    - "pt" or "pt_BR" or "pt_PT" → Respond in Portuguese
+    - "en" or any other → Respond in English
+
+    All user-facing text in your response (headlines, assessments, advice, suggestions,
+    encouragement messages, etc.) must be in the profile's language. JSON keys remain in English.
+
+    """
+
     // MARK: - Shared Lifecycle Guidance
 
     /// Guidance for lifecycle-appropriate terminology and tone.
@@ -100,6 +124,26 @@ enum AIInstructions {
 
     // MARK: - System Instructions
 
+    /// Get system instruction for legacy AINudgeSurface type.
+    static func systemInstruction(for surface: AINudgeSurface) -> String {
+        switch surface {
+        case .insightBundle:
+            return insightBundleSystemInstruction
+        case .notificationPolicy:
+            return notificationPolicySystemInstruction
+        }
+    }
+
+    /// Get output format for legacy AINudgeSurface type.
+    static func outputFormat(for surface: AINudgeSurface) -> String {
+        switch surface {
+        case .insightBundle:
+            return insightBundleOutputFormat
+        case .notificationPolicy:
+            return notificationPolicyOutputFormat
+        }
+    }
+
     /// Get the system instruction for a surface type.
     static func systemInstruction(for surface: AISurface) -> String {
         switch surface {
@@ -120,6 +164,9 @@ enum AIInstructions {
 
         case .healthInsights:
             return healthInsightsSystemInstruction
+
+        case .morningBriefing:
+            return morningBriefingSystemInstruction
         }
     }
 
@@ -143,6 +190,9 @@ enum AIInstructions {
 
         case .healthInsights:
             return healthInsightsOutputFormat
+
+        case .morningBriefing:
+            return morningBriefingOutputFormat
         }
     }
 
@@ -171,7 +221,7 @@ enum AIInstructions {
         - Practical and specific
         - Avoid alarmist language unless truly urgent
         - Celebrate small wins (streaks, consistency)
-        """ + lifecycleGuidance + sentimentGuidance
+        """ + languageGuidance + lifecycleGuidance + sentimentGuidance
     }
 
     private static let insightBundleOutputFormat = """
@@ -188,20 +238,24 @@ enum AIInstructions {
         "orderedIds": ["id1", "id2", ...],  // Reordered activity IDs by priority
         "confidence": 0.0-1.0
       },
-      "loggingRecommendations": [
-        {
-          "category": "potty|walk|meal|training|socialization",
-          "recommendation": "Specific suggestion",
-          "confidence": 0.0-1.0
-        }
-      ]
+      "loggingRecommendations": []
     }
 
     RULES:
     - headline must be actionable or informative
-    - Only include loggingRecommendations for categories with low recent activity
     - orderedIds should only reorder if there's a clear reason (urgency, pattern)
     - Set confidence lower if data is sparse or ambiguous
+
+    LOGGING RECOMMENDATIONS - BE VERY CONSERVATIVE:
+    - loggingRecommendations should ALMOST ALWAYS be empty []
+    - Only suggest reducing reminders when there's CLEAR evidence of a sustained pattern change:
+      * recentDays*Avg must be at least 30% LOWER than priorDays*Avg
+      * This pattern must be consistent (not just one slow day)
+      * The user must have enough historical data (priorDays*Avg must exist and be > 0)
+    - NEVER recommend based on raw counts alone (recentMealCount, etc.)
+    - If priorDays*Avg is null or 0, do NOT make any recommendations
+    - Users often log less on weekends or busy days - this is normal, not a pattern change
+    - When in doubt, return an empty array - false positives are worse than missing a suggestion
     """
 
     // MARK: - Notification Policy
@@ -226,7 +280,7 @@ enum AIInstructions {
         - Maximum timing adjustment: +/- 30 minutes for non-urgent
         - Maximum timing adjustment: +/- 10 minutes for urgent
         - Suppression only for truly redundant notifications
-        """ + lifecycleGuidance + sentimentGuidance
+        """ + languageGuidance + lifecycleGuidance + sentimentGuidance
     }
 
     private static let notificationPolicyOutputFormat = """
@@ -284,7 +338,7 @@ enum AIInstructions {
         - Match tone to situation: celebratory for wins, supportive for challenges
         - Keep messages warm, specific, and actionable when appropriate
         - Never use generic praise - always reference specific progress or patterns
-        """ + lifecycleGuidance + sentimentGuidance
+        """ + languageGuidance + lifecycleGuidance + sentimentGuidance
     }
 
     private static let trainingGuidanceOutputFormat = """
@@ -346,7 +400,7 @@ enum AIInstructions {
         - Generally reliable; accidents may indicate health issues
         - Senior dogs may need more frequent breaks
         - Consider medication effects on bladder control
-        """ + lifecycleGuidance + sentimentGuidance
+        """ + languageGuidance + lifecycleGuidance + sentimentGuidance
     }
 
     private static let pottyAnalysisOutputFormat = """
@@ -398,7 +452,7 @@ enum AIInstructions {
         - Focus shifts to maintaining positive experiences
         - Address reactivity through controlled exposure
         - Track social interactions as enrichment
-        """ + lifecycleGuidance + sentimentGuidance
+        """ + languageGuidance + lifecycleGuidance + sentimentGuidance
     }
 
     private static let socializationGuidanceOutputFormat = """
@@ -447,7 +501,7 @@ enum AIInstructions {
         - Puppies: Focus on growth milestones, vaccine schedules, development
         - Teenage/Adult: Focus on weight management, activity levels, routine health
         - Senior: Focus on mobility changes, cognitive function, comfort, more frequent checkups
-        """ + lifecycleGuidance + sentimentGuidance
+        """ + languageGuidance + lifecycleGuidance + sentimentGuidance
     }
 
     private static let healthInsightsOutputFormat = """
@@ -471,6 +525,94 @@ enum AIInstructions {
     - recommendations should be general wellness, not medical
     - Include "consult your vet" for any concerning patterns
     - Set confidence lower if data is sparse or trends unclear
+    """
+
+    // MARK: - Morning Briefing
+
+    private static var morningBriefingSystemInstruction: String {
+        """
+        You are a supportive AI companion for dog owners, providing a personalized morning briefing.
+        Your role is to synthesize information from multiple sources and help owners start their day
+        with clear priorities and encouragement.
+
+        YOUR TASK:
+        Create a warm, helpful morning briefing that:
+        1. Acknowledges where they are in their journey (day X with their dog)
+        2. Identifies the MOST IMPORTANT thing to focus on today
+        3. Reflects briefly on yesterday's activity (if data available)
+        4. Looks ahead to upcoming milestones, windows, or events
+        5. Provides appropriate encouragement
+
+        CONTEXT SOURCES:
+        You receive comprehensive data about:
+        - Dog identity: age, lifecycle phase, days home
+        - Training progress: skills being worked on, mastery levels, regressions
+        - Socialization: exposure counts by category, window timing
+        - Health: milestones, appointments, weight trends
+        - Recent events: what happened yesterday and this week
+        - Behavior challenges: any ongoing interventions
+
+        PRIORITIZATION (choose ONE focus type):
+        1. "socialization_urgency" - If within 4 weeks of socialization window closing (8-16 weeks)
+           and there are underexposed categories. This is time-sensitive and critical.
+        2. "health_reminder" - If there are overdue milestones, upcoming appointments, or
+           vaccination schedules to be aware of
+        3. "training_progress" - If there's notable training progress to celebrate or
+           a skill regression that needs attention
+        4. "celebration" - If there's a recent achievement, streak, or milestone worth celebrating
+        5. "encouragement" - General positive support if things are going well
+
+        URGENCIES:
+        Flag time-sensitive matters:
+        - Socialization window closing (calculate days remaining from age)
+        - Overdue health milestones
+        - Training skill regressions
+        - Upcoming vet appointments
+
+        TONE:
+        - Warm and supportive, never preachy
+        - Celebrate progress genuinely
+        - Make urgencies feel actionable, not stressful
+        - Be specific when possible (reference actual skills, categories, events)
+
+        QUICK WINS:
+        Suggest 1-3 easy, concrete things they could do today based on context.
+        These should be achievable and relevant to their priorities.
+        """ + languageGuidance + lifecycleGuidance + sentimentGuidance
+    }
+
+    private static let morningBriefingOutputFormat = """
+    Respond with a JSON object:
+
+    {
+      "confidence": 0.0-1.0,
+      "headline": "Day X with [name]!" or contextual greeting (max 40 chars)",
+      "focusMessage": "The main thing to focus on today (max 150 chars)",
+      "focusType": "socialization_urgency|training_progress|health_reminder|celebration|encouragement",
+      "yesterdaySummary": "Brief reflection on yesterday (max 100 chars, optional)",
+      "lookingAhead": "What to keep in mind for coming days/weeks (max 120 chars, optional)",
+      "urgencies": [
+        {
+          "type": "socialization_window|health_milestone|training_regression|vaccination_due",
+          "message": "Human-readable urgency (max 80 chars)",
+          "daysRemaining": 7
+        }
+      ],
+      "quickWins": [
+        "Easy thing to do today (max 60 chars)"
+      ],
+      "encouragement": "Motivational message based on their progress (max 100 chars, optional)"
+    }
+
+    RULES:
+    - headline should feel personal and warm
+    - focusMessage should be specific and actionable
+    - Only include urgencies if there actually are time-sensitive matters
+    - quickWins should be achievable and relevant to context
+    - Don't include encouragement if focusType is already "celebration" or "encouragement"
+    - Calculate socialization window from age: window closes at 16 weeks (112 days old)
+    - If daysHome is low (< 14), be encouraging about the adjustment period
+    - Set confidence based on data quality and relevance of insights
     """
 }
 

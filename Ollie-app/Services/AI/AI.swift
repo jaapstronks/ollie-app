@@ -153,6 +153,28 @@ enum AI {
             responseType: HealthInsightsResponse.self
         )
     }
+
+    /// Request morning briefing - synthesized daily guidance from all sources.
+    @MainActor
+    static func requestMorningBriefing(
+        profile: PuppyProfile,
+        events: [PuppyEvent]
+    ) async -> AIResult<MorningBriefingResponse> {
+        return await orchestrator.request(
+            surface: .morningBriefing,
+            profile: profile,
+            recentEvents: events,
+            responseType: MorningBriefingResponse.self
+        )
+    }
+
+    // MARK: - Cache Access
+
+    /// Get cached morning briefing if available.
+    @MainActor
+    static func cachedMorningBriefing(profileId: UUID) -> MorningBriefingResponse? {
+        orchestrator.cachedResponse(surface: .morningBriefing, profileId: profileId)
+    }
 }
 
 // MARK: - Usage Examples

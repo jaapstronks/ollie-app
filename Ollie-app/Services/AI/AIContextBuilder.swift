@@ -109,10 +109,14 @@ final class AIContextBuilder {
             }
         }
 
+        // Use profile's preferred locale for consistent caching across household members
+        // Falls back to device locale for legacy profiles without preferredLocale set
+        let locale = profile.preferredLocale ?? Locale.current.identifier
+
         return AIContextPayload(
             surface: surface,
             profileId: profile.id,
-            locale: Locale.current.identifier,
+            locale: locale,
             promptVersion: surface.promptVersion,
             components: components
         )

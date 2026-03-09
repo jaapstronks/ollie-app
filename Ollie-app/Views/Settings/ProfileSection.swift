@@ -27,6 +27,16 @@ struct ProfileSection: View {
         )
     }
 
+    /// Binding for locale picker that updates the profile
+    private var localeBinding: Binding<String> {
+        Binding(
+            get: { profile.preferredLocale ?? Locale.current.identifier },
+            set: { newLocale in
+                profileStore.updatePreferredLocale(newLocale, for: profileId)
+            }
+        )
+    }
+
     var body: some View {
         Section(Strings.Settings.profile) {
             // Profile photo row
@@ -75,6 +85,15 @@ struct ProfileSection: View {
                     Text(gender.label).tag(gender)
                 }
             }
+
+            // AI Language preference (only for owned profiles)
+            if profile.ownership == .owned {
+                Picker(Strings.Settings.aiLanguage, selection: localeBinding) {
+                    ForEach(SupportedAILanguage.allCases) { language in
+                        Text(language.displayName).tag(language.localeIdentifier)
+                    }
+                }
+            }
         }
         .alert(Strings.Settings.changeName, isPresented: $showingNameEditor) {
             TextField(Strings.Settings.name, text: $editedName)
@@ -109,6 +128,57 @@ struct StatsSection: View {
                     .foregroundColor(.secondary)
             }
         }
+    }
+}
+
+// MARK: - Supported AI Languages
+
+/// Languages supported for AI-generated content
+enum SupportedAILanguage: String, CaseIterable, Identifiable {
+    case english = "en"
+    case dutch = "nl"
+    case german = "de"
+    case spanish = "es"
+    case french = "fr"
+    case italian = "it"
+    case swedish = "sv"
+    case polish = "pl"
+    case portuguese = "pt"
+
+    var id: String { rawValue }
+
+    var localeIdentifier: String {
+        switch self {
+        case .english: return "en_US"
+        case .dutch: return "nl_NL"
+        case .german: return "de_DE"
+        case .spanish: return "es_ES"
+        case .french: return "fr_FR"
+        case .italian: return "it_IT"
+        case .swedish: return "sv_SE"
+        case .polish: return "pl_PL"
+        case .portuguese: return "pt_BR"
+        }
+    }
+
+    var displayName: String {
+        switch self {
+        case .english: return "English"
+        case .dutch: return "Nederlands"
+        case .german: return "Deutsch"
+        case .spanish: return "Español"
+        case .french: return "Français"
+        case .italian: return "Italiano"
+        case .swedish: return "Svenska"
+        case .polish: return "Polski"
+        case .portuguese: return "Português"
+        }
+    }
+
+    /// Find the matching language for a locale identifier
+    static func from(localeIdentifier: String) -> SupportedAILanguage {
+        let languageCode = String(localeIdentifier.prefix(2))
+        return allCases.first { $0.rawValue == languageCode } ?? .english
     }
 }
 

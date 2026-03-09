@@ -8,6 +8,21 @@
 @preconcurrency import CoreData
 import OtisShared
 
+// MARK: - Training Preparation State
+
+/// State for training preparation progress, synced via CloudKit with the profile
+struct TrainingPreparationState: Codable, Equatable {
+    var completedPreparationItems: Set<String>
+    var seenRules: Set<String>
+    var completedPhases: [String: Set<String>]  // skillId -> phaseIds
+
+    static let empty = TrainingPreparationState(
+        completedPreparationItems: [],
+        seenRules: [],
+        completedPhases: [:]
+    )
+}
+
 extension CDPuppyProfile {
 
     // MARK: - Convert from Swift Struct
@@ -27,6 +42,7 @@ extension CDPuppyProfile {
         self.passedDate = profile.passedDate
         self.legacyPremiumUnlocked = profile.legacyPremiumUnlocked
         self.coatType = profile.coatType?.rawValue
+        self.preferredLocale = profile.preferredLocale
 
         // Encode nested configs as JSON Data
         let encoder = JSONEncoder()
@@ -148,6 +164,7 @@ extension CDPuppyProfile {
             notificationSettings: notificationSettings,
             medicationSchedule: medicationSchedule,
             coatType: coatType,
+            preferredLocale: self.preferredLocale,
             modifiedAt: modifiedAt,
             lastAcknowledgedPhase: lastAcknowledgedPhase,
             profilePhotoFilename: self.profilePhotoFilename,
@@ -155,6 +172,31 @@ extension CDPuppyProfile {
             ownership: ownership,
             legacyPremiumUnlocked: self.legacyPremiumUnlocked
         )
+    }
+}
+
+// MARK: - Training Preparation State
+
+extension CDPuppyProfile {
+
+    /// Get the training preparation state
+    func getTrainingPreparationState() -> TrainingPreparationState {
+        guard let data = self.trainingPreparationData else {
+            return .empty
+        }
+
+        let decoder = JSONDecoder()
+        do {
+            return try decoder.decode(TrainingPreparationState.self, from: data)
+        } catch {
+            return .empty
+        }
+    }
+
+    /// Set the training preparation state
+    func setTrainingPreparationState(_ state: TrainingPreparationState) {
+        let encoder = JSONEncoder()
+        self.trainingPreparationData = try? encoder.encode(state)
     }
 }
 

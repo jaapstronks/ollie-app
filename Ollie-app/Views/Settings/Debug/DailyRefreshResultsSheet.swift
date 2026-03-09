@@ -161,6 +161,10 @@ private struct ResultRowButton: View {
             if let suppress = response["suppressPotty"] as? Bool {
                 return suppress ? "Suppress potty reminders" : "Keep reminders active"
             }
+        case .morningBriefing:
+            if let headline = response["headline"] as? String {
+                return headline
+            }
         }
 
         if let confidence = response["confidence"] as? Double {

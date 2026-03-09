@@ -31,6 +31,7 @@ extension Strings {
         static let breed = String(localized: "Breed", table: table)
         static let gender = String(localized: "Gender", table: table)
         static let size = String(localized: "Size", table: table)
+        static let aiLanguage = String(localized: "AI Language", table: table)
 
         // Stats section
         static let stats = String(localized: "Stats", table: table)

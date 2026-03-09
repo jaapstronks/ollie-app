@@ -6,6 +6,7 @@
 //  Handles caching, budget limits, rollout, and surface-specific logic.
 //
 
+@preconcurrency import CoreData
 import Foundation
 import OtisShared
 
@@ -25,14 +26,7 @@ final class AIOrchestrator {
 
     // MARK: - State
 
-    private var responseCache: [String: CacheEntry] = [:]
     private var inFlightTasks: [String: Task<Void, Never>] = [:]
-
-    private struct CacheEntry {
-        let surface: AISurface
-        let response: AIBrokerResponse
-        let timestamp: Date
-    }
 
     // MARK: - Init
 
@@ -43,6 +37,15 @@ final class AIOrchestrator {
         self.client = client
         self.subscriptionManager = subscriptionManager
         self.contextBuilder = AIContextBuilder()
+
+        // Cleanup expired cache entries on startup
+        Task {
+            let context = PersistenceController.shared.newBackgroundContext()
+            context.perform {
+                CDAICache.cleanupExpired(in: context)
+                try? context.save()
+            }
+        }
     }
 
     // MARK: - Public API
@@ -64,9 +67,8 @@ final class AIOrchestrator {
             return .fallback(reason: .notEligible)
         }
 
-        // Check cache
-        let cacheKey = cacheKey(surface: surface, profileId: profile.id)
-        if let cached = validCachedResponse(for: cacheKey, surface: surface) {
+        // Check cache (CloudKit-synced Core Data)
+        if let cached = validCachedResponse(for: surface, profileId: profile.id) {
             return decodeResponse(cached, as: responseType)
         }
 
@@ -110,12 +112,8 @@ final class AIOrchestrator {
             let response = try await executeBrokerRequest(request)
             let latencyMs = Int(Date().timeIntervalSince(start) * 1000)
 
-            // Cache response
-            responseCache[cacheKey] = CacheEntry(
-                surface: surface,
-                response: response,
-                timestamp: Date()
-            )
+            // Cache response (CloudKit-synced Core Data)
+            cacheResponse(response, surface: surface, profileId: profile.id)
 
             // Track analytics
             let confidence = extractConfidence(from: response)
@@ -154,8 +152,7 @@ final class AIOrchestrator {
         profileId: UUID,
         responseType: Response.Type
     ) -> Response? {
-        let cacheKey = cacheKey(surface: surface, profileId: profileId)
-        guard let cached = validCachedResponse(for: cacheKey, surface: surface) else {
+        guard let cached = validCachedResponse(for: surface, profileId: profileId) else {
             return nil
         }
 
@@ -175,10 +172,8 @@ final class AIOrchestrator {
         sleepState: SleepState? = nil,
         surfacePayload: Encodable? = nil
     ) {
-        let cacheKey = cacheKey(surface: surface, profileId: profile.id)
-
         // Already cached and fresh
-        if validCachedResponse(for: cacheKey, surface: surface) != nil {
+        if validCachedResponse(for: surface, profileId: profile.id) != nil {
             return
         }
 
@@ -211,7 +206,36 @@ final class AIOrchestrator {
 
     /// Clear all cached responses.
     func clearCache() {
-        responseCache.removeAll()
+        let context = PersistenceController.shared.newBackgroundContext()
+        context.perform {
+            let request = NSFetchRequest<CDAICache>(entityName: "CDAICache")
+            if let entries = try? context.fetch(request) {
+                entries.forEach { context.delete($0) }
+            }
+            try? context.save()
+        }
+    }
+
+    /// Get a cached response for a surface without making a request.
+    /// Returns nil if no valid cache entry exists.
+    func cachedResponse<Response: Codable>(surface: AISurface, profileId: UUID) -> Response? {
+        guard let brokerResponse = validCachedResponse(for: surface, profileId: profileId) else {
+            return nil
+        }
+
+        // Try decoding from the parsed response first
+        if let data = try? JSONEncoder().encode(brokerResponse.response),
+           let response = try? JSONDecoder().decode(Response.self, from: data) {
+            return response
+        }
+
+        // Fall back to raw response string
+        guard let rawString = brokerResponse.rawResponse,
+              let data = rawString.data(using: .utf8) else {
+            return nil
+        }
+
+        return try? JSONDecoder().decode(Response.self, from: data)
     }
 
     // MARK: - Provider Registration
@@ -253,32 +277,42 @@ private extension AIOrchestrator {
         return bucket < AINudgeRollout.rolloutPercentage
     }
 
-    func cacheKey(surface: AISurface, profileId: UUID) -> String {
-        let window = Date().windowStamp(hours: surface.cacheDurationMinutes / 60)
-        return "\(profileId.uuidString)-\(surface.rawValue)-\(window)"
+    /// Fetch a valid cached response from Core Data (CloudKit-synced).
+    func validCachedResponse(for surface: AISurface, profileId: UUID) -> AIBrokerResponse? {
+        let context = PersistenceController.shared.viewContext
+        guard let cdProfile = CDPuppyProfile.fetch(byId: profileId, in: context) else {
+            return nil
+        }
+        guard let entry = CDAICache.fetchValid(surface: surface, profile: cdProfile, in: context),
+              !entry.isExpired else {
+            return nil
+        }
+        return entry.toResponse()
     }
 
-    func validCachedResponse(for key: String, surface: AISurface) -> AIBrokerResponse? {
-        guard let entry = responseCache[key] else { return nil }
-        let age = Date().timeIntervalSince(entry.timestamp)
-        let maxAge = TimeInterval(surface.cacheDurationMinutes * 60)
-        return age < maxAge ? entry.response : nil
+    /// Cache a response to Core Data (CloudKit-synced).
+    func cacheResponse(_ response: AIBrokerResponse, surface: AISurface, profileId: UUID) {
+        let context = PersistenceController.shared.viewContext
+        context.perform {
+            guard let cdProfile = CDPuppyProfile.fetch(byId: profileId, in: context) else { return }
+            CDAICache.upsert(surface: surface, response: response, profile: cdProfile, in: context)
+            try? context.save()
+        }
     }
 
+    /// Check budget using Core Data counts (CloudKit-synced).
     func consumeBudgetIfAvailable(profileId: UUID, surface: AISurface) -> Bool {
-        let day = Date().dayStamp()
-        let key = "ai.budget.\(profileId.uuidString).\(day).\(surface.rawValue)"
-        let current = UserDefaults.standard.integer(forKey: key)
+        let context = PersistenceController.shared.viewContext
+        guard let cdProfile = CDPuppyProfile.fetch(byId: profileId, in: context) else {
+            return false
+        }
 
-        guard current < surface.maxCallsPerDay else { return false }
+        let surfaceCount = CDAICache.todayCallCount(surface: surface, profile: cdProfile, in: context)
+        guard surfaceCount < surface.maxCallsPerDay else { return false }
 
-        // Check total daily budget
-        let totalKey = "ai.budget.\(profileId.uuidString).\(day).total"
-        let total = UserDefaults.standard.integer(forKey: totalKey)
-        guard total < AINudgeRollout.maxTotalCallsPerDay else { return false }
+        let totalCount = CDAICache.todayTotalCallCount(profile: cdProfile, in: context)
+        guard totalCount < AINudgeRollout.maxTotalCallsPerDay else { return false }
 
-        UserDefaults.standard.set(current + 1, forKey: key)
-        UserDefaults.standard.set(total + 1, forKey: totalKey)
         return true
     }
 
@@ -301,7 +335,16 @@ private extension AIOrchestrator {
             recentEventCount: (recentEvents?.value as? RecentEventsSummary)?.eventsLast24h ?? 0,
             recentWalkCount: 0,
             recentMealCount: 0,
-            recentPottyCount: 0
+            recentPottyCount: 0,
+            // Historical comparison not available in legacy conversion
+            recentDaysWalkAvg: nil,
+            priorDaysWalkAvg: nil,
+            recentDaysMealAvg: nil,
+            priorDaysMealAvg: nil,
+            recentDaysPottyAvg: nil,
+            priorDaysPottyAvg: nil,
+            recentDaysTrainingAvg: nil,
+            priorDaysTrainingAvg: nil
         )
 
         return AINudgeBrokerRequest(
@@ -312,6 +355,8 @@ private extension AIOrchestrator {
             promptVersion: request.promptVersion,
             providerPolicy: request.providerPolicy,
             shadowMode: request.shadowMode,
+            systemInstruction: request.systemInstruction,
+            outputFormat: request.outputFormat,
             context: contextSummary,
             payload: .init(insightBundle: nil, notificationPolicy: nil)
         )
@@ -427,12 +472,6 @@ enum AIError: LocalizedError {
 private struct EmptyResponse: Codable {}
 
 private extension Date {
-    func dayStamp() -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd"
-        return formatter.string(from: self)
-    }
-
     func windowStamp(hours: Int) -> String {
         let calendar = Calendar.current
         let day = calendar.startOfDay(for: self)

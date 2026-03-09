@@ -62,6 +62,7 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
     public var healthConditions: [HealthCondition]
     public var allergies: [Allergy]
     public var coatType: CoatType?
+    public var preferredLocale: String?
     public var modifiedAt: Date
 
     /// Last lifecycle phase the user acknowledged via transition sheet
@@ -344,6 +345,7 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
             webhookConfig: WebhookConfig.defaultConfig(),
             healthConditions: [],
             allergies: [],
+            preferredLocale: Locale.current.identifier,  // Set from device locale at creation
             modifiedAt: Date(),
             legacyPremiumUnlocked: false
         )
@@ -371,6 +373,7 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
         healthConditions: [HealthCondition] = [],
         allergies: [Allergy] = [],
         coatType: CoatType? = nil,
+        preferredLocale: String? = nil,
         modifiedAt: Date? = nil,
         lastAcknowledgedPhase: LifecyclePhase? = nil,
         profilePhotoFilename: String? = nil,
@@ -397,6 +400,7 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
         self.healthConditions = healthConditions
         self.allergies = allergies
         self.coatType = coatType
+        self.preferredLocale = preferredLocale
         self.modifiedAt = modifiedAt ?? Date()
         self.lastAcknowledgedPhase = lastAcknowledgedPhase
         self.profilePhotoFilename = profilePhotoFilename
@@ -412,7 +416,7 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
         case name, breed, breedId, birthDate, homeDate, sizeCategory, gender
         case mealSchedule, exerciseConfig, predictionConfig
         case walkSchedule, notificationSettings, medicationSchedule, webhookConfig
-        case behaviorInterventions, healthConditions, allergies, coatType
+        case behaviorInterventions, healthConditions, allergies, coatType, preferredLocale
         case modifiedAt
         case lastAcknowledgedPhase
         case profilePhotoFilename
@@ -448,6 +452,7 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
         healthConditions = try container.decodeIfPresent([HealthCondition].self, forKey: .healthConditions) ?? []
         allergies = try container.decodeIfPresent([Allergy].self, forKey: .allergies) ?? []
         coatType = try container.decodeIfPresent(CoatType.self, forKey: .coatType)
+        preferredLocale = try container.decodeIfPresent(String.self, forKey: .preferredLocale)
         modifiedAt = try container.decodeIfPresent(Date.self, forKey: .modifiedAt) ?? Date()
         lastAcknowledgedPhase = try container.decodeIfPresent(LifecyclePhase.self, forKey: .lastAcknowledgedPhase)
         profilePhotoFilename = try container.decodeIfPresent(String.self, forKey: .profilePhotoFilename)
@@ -486,6 +491,7 @@ public struct PuppyProfile: Codable, Identifiable, Sendable {
         try container.encode(healthConditions, forKey: .healthConditions)
         try container.encode(allergies, forKey: .allergies)
         try container.encodeIfPresent(coatType, forKey: .coatType)
+        try container.encodeIfPresent(preferredLocale, forKey: .preferredLocale)
         try container.encode(modifiedAt, forKey: .modifiedAt)
         try container.encodeIfPresent(lastAcknowledgedPhase, forKey: .lastAcknowledgedPhase)
         try container.encodeIfPresent(profilePhotoFilename, forKey: .profilePhotoFilename)

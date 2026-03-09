@@ -137,6 +137,7 @@ struct DebugAISurfaceTestingSection: View {
     // Last test result - use NavigationLink instead of sheet to avoid nested sheet issues
     // (Settings itself is a sheet, so presenting another sheet from here causes auto-dismiss)
     @State private var lastTestResult: AIOrchestrator.NewAITestResult?
+    @State private var showCacheCleared = false
 
     private var isAnyTestRunning: Bool {
         isTestingInsight || isTestingNotification || isTestingTraining ||
@@ -195,9 +196,23 @@ struct DebugAISurfaceTestingSection: View {
 
             Button {
                 AINudgeOrchestrator.shared.clearCache()
+                AINudgeOrchestrator.shared.resetBudget()
                 AIOrchestrator.shared.clearCache()
+                showCacheCleared = true
+                // Auto-hide after 2 seconds
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                    showCacheCleared = false
+                }
             } label: {
-                Label("Clear AI Cache", systemImage: "arrow.clockwise")
+                HStack {
+                    Label("Clear AI Cache & Budget", systemImage: "arrow.clockwise")
+                    Spacer()
+                    if showCacheCleared {
+                        Text("Cleared!")
+                            .font(.caption)
+                            .foregroundStyle(.green)
+                    }
+                }
             }
 
             // Last result - uses NavigationLink to avoid nested sheet issues
@@ -257,8 +272,7 @@ struct DebugAISurfaceTestingSection: View {
     // MARK: - Test Functions
 
     private func getRecentEvents() -> [PuppyEvent] {
-        let sevenDaysAgo = Calendar.current.date(byAdding: .day, value: -7, to: Date()) ?? Date()
-        return eventStore.getEvents(from: sevenDaysAgo, to: Date())
+        eventStore.getEvents(from: Date.daysAgo(7), to: Date())
     }
 
     private func makeErrorResult(surface: AISurface) -> AIOrchestrator.NewAITestResult {
@@ -407,6 +421,7 @@ extension AISurface {
         case .pottyAnalysis: return "leaf.fill"
         case .socializationGuidance: return "person.3.fill"
         case .healthInsights: return "heart.fill"
+        case .morningBriefing: return "sun.max.fill"
         }
     }
 }

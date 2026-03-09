@@ -138,7 +138,7 @@ extension AI {
     static func useNewSystem(for surface: AISurface) -> Bool {
         switch surface {
         // New surfaces always use new system
-        case .trainingGuidance, .pottyAnalysis, .socializationGuidance, .healthInsights:
+        case .trainingGuidance, .pottyAnalysis, .socializationGuidance, .healthInsights, .morningBriefing:
             return true
 
         // Legacy surfaces can be migrated gradually

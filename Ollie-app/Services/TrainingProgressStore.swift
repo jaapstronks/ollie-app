@@ -2,15 +2,18 @@
 //  TrainingProgressStore.swift
 //  Otis-app
 //
-//  Manages preparation progress and training rules via UserDefaults
+//  Manages preparation progress and training rules via Core Data (synced to CloudKit)
 //
 
 import Foundation
 import Combine
+import CoreData
+import os
+import OtisShared
 
-// MARK: - Storage Keys
+// MARK: - Legacy Storage Keys (for migration)
 
-/// Centralized UserDefaults keys for training progress
+/// Centralized UserDefaults keys for training progress (legacy - migrating to Core Data)
 private enum TrainingStorageKeys {
     static let completedPreparationItems = "training.completedPreparationItems"
     static let seenRules = "training.seenRules"
@@ -18,6 +21,7 @@ private enum TrainingStorageKeys {
 }
 
 /// Manages preparation item completion and rule acknowledgment state
+/// Data is stored on CDPuppyProfile and syncs via CloudKit
 @MainActor
 final class TrainingProgressStore: ObservableObject {
 
@@ -29,13 +33,40 @@ final class TrainingProgressStore: ObservableObject {
 
     // MARK: - Private
 
-    private let defaults: UserDefaults
+    private let persistenceController: PersistenceController
+    private let logger = Logger.otis(category: "TrainingProgressStore")
+    private var cancellables = Set<AnyCancellable>()
+
+    private var viewContext: NSManagedObjectContext {
+        persistenceController.viewContext
+    }
 
     // MARK: - Init
 
-    init(defaults: UserDefaults = .standard) {
-        self.defaults = defaults
+    init(persistenceController: PersistenceController = .shared) {
+        self.persistenceController = persistenceController
         loadState()
+        setupObservers()
+    }
+
+    // MARK: - Setup
+
+    private func setupObservers() {
+        // Reload when active profile changes
+        NotificationCenter.default.publisher(for: .activeProfileChanged)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.loadState()
+            }
+            .store(in: &cancellables)
+
+        // Reload when CloudKit remote changes arrive
+        NotificationCenter.default.publisher(for: .NSPersistentStoreRemoteChange)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.loadState()
+            }
+            .store(in: &cancellables)
     }
 
     // MARK: - Computed Properties
@@ -182,7 +213,37 @@ final class TrainingProgressStore: ObservableObject {
 
     // MARK: - Private: Persistence
 
+    /// Load state from Core Data (with migration from UserDefaults)
     private func loadState() {
+        guard let cdProfile = getActiveProfile() else {
+            // No profile yet - check for legacy UserDefaults data to hold temporarily
+            loadFromUserDefaults()
+            return
+        }
+
+        let state = cdProfile.getTrainingPreparationState()
+
+        // Check if Core Data has data or if we need to migrate from UserDefaults
+        if state.completedPreparationItems.isEmpty && state.seenRules.isEmpty && state.completedPhases.isEmpty {
+            // Try to migrate from UserDefaults
+            if migrateFromUserDefaults(to: cdProfile) {
+                // Reload after migration
+                let newState = cdProfile.getTrainingPreparationState()
+                completedPreparationItems = newState.completedPreparationItems
+                seenRules = newState.seenRules
+                completedPhases = newState.completedPhases
+                return
+            }
+        }
+
+        completedPreparationItems = state.completedPreparationItems
+        seenRules = state.seenRules
+        completedPhases = state.completedPhases
+    }
+
+    /// Legacy: Load from UserDefaults (for temporary state before profile exists)
+    private func loadFromUserDefaults() {
+        let defaults = UserDefaults.standard
         if let savedItems = defaults.stringArray(forKey: TrainingStorageKeys.completedPreparationItems) {
             completedPreparationItems = Set(savedItems)
         }
@@ -194,16 +255,92 @@ final class TrainingProgressStore: ObservableObject {
         }
     }
 
-    private func savePreparationItems() {
+    /// Migrate data from UserDefaults to Core Data
+    /// Returns true if migration was performed
+    @discardableResult
+    private func migrateFromUserDefaults(to cdProfile: CDPuppyProfile) -> Bool {
+        let defaults = UserDefaults.standard
+
+        let savedItems = defaults.stringArray(forKey: TrainingStorageKeys.completedPreparationItems) ?? []
+        let savedRules = defaults.stringArray(forKey: TrainingStorageKeys.seenRules) ?? []
+        let savedPhases = defaults.dictionary(forKey: TrainingStorageKeys.completedPhases) as? [String: [String]] ?? [:]
+
+        // Only migrate if there's data to migrate
+        guard !savedItems.isEmpty || !savedRules.isEmpty || !savedPhases.isEmpty else {
+            return false
+        }
+
+        logger.info("Migrating training preparation data from UserDefaults to Core Data")
+
+        let state = TrainingPreparationState(
+            completedPreparationItems: Set(savedItems),
+            seenRules: Set(savedRules),
+            completedPhases: savedPhases.mapValues { Set($0) }
+        )
+
+        cdProfile.setTrainingPreparationState(state)
+        saveToProfile()
+
+        // Clear UserDefaults after successful migration
+        defaults.removeObject(forKey: TrainingStorageKeys.completedPreparationItems)
+        defaults.removeObject(forKey: TrainingStorageKeys.seenRules)
+        defaults.removeObject(forKey: TrainingStorageKeys.completedPhases)
+
+        logger.info("Successfully migrated training preparation data to Core Data")
+        return true
+    }
+
+    /// Get the active CDPuppyProfile
+    private func getActiveProfile() -> CDPuppyProfile? {
+        guard let activeId = UserDefaults.standard.string(forKey: "activeProfileId"),
+              let uuid = UUID(uuidString: activeId) else {
+            // Fallback: try to get any profile
+            return CDPuppyProfile.fetchProfile(in: viewContext)
+        }
+        return CDPuppyProfile.fetch(byId: uuid, in: viewContext)
+    }
+
+    /// Save current state to Core Data
+    private func saveToProfile() {
+        guard let cdProfile = getActiveProfile() else {
+            // No profile - save to UserDefaults temporarily (will migrate later)
+            saveToUserDefaults()
+            return
+        }
+
+        let state = TrainingPreparationState(
+            completedPreparationItems: completedPreparationItems,
+            seenRules: seenRules,
+            completedPhases: completedPhases
+        )
+
+        cdProfile.setTrainingPreparationState(state)
+
+        do {
+            try persistenceController.save()
+        } catch {
+            logger.error("Failed to save training preparation state: \(error.localizedDescription)")
+        }
+    }
+
+    /// Legacy: Save to UserDefaults (fallback when no profile exists)
+    private func saveToUserDefaults() {
+        let defaults = UserDefaults.standard
         defaults.set(Array(completedPreparationItems), forKey: TrainingStorageKeys.completedPreparationItems)
+        defaults.set(Array(seenRules), forKey: TrainingStorageKeys.seenRules)
+        let serializable = completedPhases.mapValues { Array($0) }
+        defaults.set(serializable, forKey: TrainingStorageKeys.completedPhases)
+    }
+
+    private func savePreparationItems() {
+        saveToProfile()
     }
 
     private func saveSeenRules() {
-        defaults.set(Array(seenRules), forKey: TrainingStorageKeys.seenRules)
+        saveToProfile()
     }
 
     private func saveCompletedPhases() {
-        let serializable = completedPhases.mapValues { Array($0) }
-        defaults.set(serializable, forKey: TrainingStorageKeys.completedPhases)
+        saveToProfile()
     }
 }
