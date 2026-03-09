@@ -2,7 +2,7 @@
 //  Strings+Household.swift
 //  Otis-app
 //
-//  Household members strings
+//  User profile and household strings
 //
 
 import Foundation
@@ -11,7 +11,36 @@ private let table = "Household"
 
 extension Strings {
 
-    // MARK: - Household Members
+    // MARK: - User Profile (CloudKit-based identity)
+    enum UserProfile {
+        static let title = String(localized: "Your Profile", table: table)
+        static let me = String(localized: "Me", table: table)
+        static let name = String(localized: "Name", table: table)
+        static let color = String(localized: "Avatar color", table: table)
+        static let colorHint = String(localized: "Used when no photo is set.", table: table)
+        static let namePlaceholder = String(localized: "Your name", table: table)
+        static let settingsDescription = String(localized: "How you appear in shared data", table: table)
+
+        // Photo
+        static let addPhoto = String(localized: "Add photo", table: table)
+        static let changePhoto = String(localized: "Change photo", table: table)
+        static let removePhoto = String(localized: "Remove photo", table: table)
+
+        // iCloud identity
+        static let iCloudIdentity = String(localized: "iCloud Identity", table: table)
+        static let iCloudIdentityDescription = String(localized: "Your identity is linked to your iCloud account.", table: table)
+        static let notSignedIn = String(localized: "Not signed into iCloud", table: table)
+
+        // Unknown user (for attribution display)
+        static let unknownUser = String(localized: "Unknown", table: table)
+
+        // Setup prompts (onboarding and share acceptance)
+        static let setupTitle = String(localized: "Introduce yourself", table: table)
+        static let setupSubtitle = String(localized: "This helps identify who logged what when sharing with family.", table: table)
+        static let setupLater = String(localized: "Set up later", table: table)
+    }
+
+    // MARK: - Household Members (Legacy - kept for backwards compatibility)
     enum Household {
         // General
         static let title = String(localized: "Household", table: table)
