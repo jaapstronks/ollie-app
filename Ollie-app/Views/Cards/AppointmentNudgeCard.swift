@@ -14,11 +14,35 @@ struct AppointmentNudgeCard: View {
     let candidate: AppointmentNudgeCandidate
     let puppyName: String
     let showNapContext: Bool
+    let vetContact: DogContact?  // Optional vet contact for quick-call button
     let onSchedule: () -> Void
     let onAlreadyDone: () -> Void
     let onDismiss: () -> Void
+    let onCallVet: ((String) -> Void)?  // Called with phone number
 
     @Environment(\.colorScheme) private var colorScheme
+
+    // MARK: - Init with backward compatibility
+
+    init(
+        candidate: AppointmentNudgeCandidate,
+        puppyName: String,
+        showNapContext: Bool,
+        vetContact: DogContact? = nil,
+        onSchedule: @escaping () -> Void,
+        onAlreadyDone: @escaping () -> Void,
+        onDismiss: @escaping () -> Void,
+        onCallVet: ((String) -> Void)? = nil
+    ) {
+        self.candidate = candidate
+        self.puppyName = puppyName
+        self.showNapContext = showNapContext
+        self.vetContact = vetContact
+        self.onSchedule = onSchedule
+        self.onAlreadyDone = onAlreadyDone
+        self.onDismiss = onDismiss
+        self.onCallVet = onCallVet
+    }
 
     /// Tint color based on urgency
     private var tintColor: Color {
@@ -99,7 +123,7 @@ struct AppointmentNudgeCard: View {
                 Spacer()
             }
 
-            // Action buttons - 3 options stacked vertically for clarity
+            // Action buttons
             VStack(spacing: 8) {
                 // Primary actions row
                 HStack(spacing: 10) {
@@ -144,6 +168,28 @@ struct AppointmentNudgeCard: View {
                     }
                 }
 
+                // Call vet button (only shown if vet contact with phone exists)
+                if let contact = vetContact, let phone = contact.phone, !phone.isEmpty {
+                    Button {
+                        onCallVet?(phone)
+                    } label: {
+                        HStack(spacing: 6) {
+                            Image(systemName: "phone.fill")
+                                .font(.caption)
+                            Text(Strings.AppointmentNudge.callVet(name: contact.name))
+                        }
+                        .font(.subheadline)
+                        .fontWeight(.medium)
+                        .foregroundStyle(Color.otisInfo)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 10)
+                        .background(
+                            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                                .fill(Color.otisInfo.opacity(colorScheme == .dark ? 0.15 : 0.1))
+                        )
+                    }
+                }
+
                 // Remind later as secondary action
                 Button {
                     onDismiss()
@@ -175,6 +221,12 @@ struct AppointmentNudgeCard: View {
         icon: "syringe.fill"
     )
 
+    let vetContact = DogContact(
+        name: "Happy Paws Vet",
+        contactType: .vet,
+        phone: "+1 555-123-4567"
+    )
+
     VStack(spacing: 16) {
         AppointmentNudgeCard(
             candidate: AppointmentNudgeCandidate(
@@ -185,9 +237,11 @@ struct AppointmentNudgeCard: View {
             ),
             puppyName: "Ollie",
             showNapContext: true,
+            vetContact: vetContact,
             onSchedule: { print("Schedule tapped") },
             onAlreadyDone: { print("Already done tapped") },
-            onDismiss: { print("Dismissed") }
+            onDismiss: { print("Dismissed") },
+            onCallVet: { phone in print("Calling: \(phone)") }
         )
 
         AppointmentNudgeCard(

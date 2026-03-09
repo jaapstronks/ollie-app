@@ -64,5 +64,10 @@ extension Strings {
 
         /// "Already done" button text (for when milestone was already completed)
         static let alreadyDone = String(localized: "Already done", comment: "Button to mark milestone as already completed")
+
+        /// "Call [vet name]" button text
+        static func callVet(name: String) -> String {
+            String(localized: "Call \(name)", comment: "Button to call the vet clinic")
+        }
     }
 }

@@ -41,6 +41,7 @@ struct TodayStatusCardsSection: View {
 
     @ObservedObject private var trialManager = TrialManager.shared
     @ObservedObject private var firstWeekService = FirstWeekExperienceService.shared
+    @EnvironmentObject private var contactStore: ContactStore
 
     var body: some View {
         VStack(spacing: 12) {
@@ -406,6 +407,7 @@ private extension TodayStatusCardsSection {
                 candidate: candidate,
                 puppyName: viewModel.puppyName,
                 showNapContext: shouldShowAppointmentNudgeNapContext,
+                vetContact: contactStore.vetContactWithPhone,
                 onSchedule: {
                     if let prefill = onCreateAppointmentPrefill(candidate) {
                         viewModel.sheetCoordinator.presentSheet(.addAppointmentWithPrefill(prefill))
@@ -416,10 +418,21 @@ private extension TodayStatusCardsSection {
                 },
                 onDismiss: {
                     onDismissAppointmentNudge(candidate.milestone.labelKey)
+                },
+                onCallVet: { phone in
+                    callPhone(phone)
                 }
             )
             .visibleForNudge(.appointments)
             .animatedAppear(delay: 0.027)
+        }
+    }
+
+    /// Opens the phone dialer with the given number
+    private func callPhone(_ phone: String) {
+        let cleaned = phone.components(separatedBy: CharacterSet.decimalDigits.inverted).joined()
+        if let url = URL(string: "tel://\(cleaned)") {
+            UIApplication.shared.open(url)
         }
     }
 

@@ -68,4 +68,19 @@ final class ContactStore: CRUDStore<DogContact, CDDogContact> {
     func contact(withId id: UUID) -> DogContact? {
         item(withId: id)
     }
+
+    /// Returns the first vet contact with a phone number, preferring regular vet over emergency vet
+    var vetContactWithPhone: DogContact? {
+        // First try regular vet with phone
+        if let vet = items.first(where: { $0.contactType == .vet && $0.phone?.isEmpty == false }) {
+            return vet
+        }
+        // Fall back to emergency vet with phone
+        return items.first(where: { $0.contactType == .emergencyVet && $0.phone?.isEmpty == false })
+    }
+
+    /// Whether at least one vet contact with a phone number exists
+    var hasVetWithPhone: Bool {
+        vetContactWithPhone != nil
+    }
 }
