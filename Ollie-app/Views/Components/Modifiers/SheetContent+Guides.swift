@@ -50,13 +50,15 @@ extension SheetCoordinator.ActiveSheet {
 
         case .pottyTrainingGuide:
             PottyTrainingGuideSheet(
-                streakInfo: context.viewModel.streakInfo,
-                patternAnalysis: context.viewModel.patternAnalysis,
-                outdoorPercentage: context.viewModel.outdoorPercentage,
-                ageInWeeks: context.profile?.ageInWeeks ?? 12,
-                shouldShowIncidentMessage: context.viewModel.shouldShowPottyIncidentMessage,
-                shouldShowReactivationPrompt: context.viewModel.shouldShowPottyReactivationPrompt,
-                incidentCount: context.viewModel.incidentsSincePottyMastery.count
+                viewModel: PottyTrainingGuideViewModel(
+                    streakInfo: context.viewModel.streakInfo,
+                    patternAnalysis: context.viewModel.patternAnalysis,
+                    outdoorPercentage: context.viewModel.outdoorPercentage,
+                    ageInWeeks: context.profile?.ageInWeeks ?? 12,
+                    shouldShowIncidentMessage: context.viewModel.shouldShowPottyIncidentMessage,
+                    shouldShowReactivationPrompt: context.viewModel.shouldShowPottyReactivationPrompt,
+                    incidentCount: context.viewModel.incidentsSincePottyMastery.count
+                )
             )
 
         case .fullTimeline:

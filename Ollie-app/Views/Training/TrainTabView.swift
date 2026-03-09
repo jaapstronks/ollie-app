@@ -120,13 +120,15 @@ struct TrainTabView: View {
             // Training guide sheets
             .sheet(isPresented: $showPottyGuide) {
                 PottyTrainingGuideSheet(
-                    streakInfo: viewModel.streakInfo,
-                    patternAnalysis: viewModel.patternAnalysis,
-                    outdoorPercentage: viewModel.outdoorPercentage,
-                    ageInWeeks: profileStore.profile?.ageInWeeks ?? 12,
-                    shouldShowIncidentMessage: viewModel.shouldShowPottyIncidentMessage,
-                    shouldShowReactivationPrompt: viewModel.shouldShowPottyReactivationPrompt,
-                    incidentCount: viewModel.incidentsSincePottyMastery.count
+                    viewModel: PottyTrainingGuideViewModel(
+                        streakInfo: viewModel.streakInfo,
+                        patternAnalysis: viewModel.patternAnalysis,
+                        outdoorPercentage: viewModel.outdoorPercentage,
+                        ageInWeeks: profileStore.profile?.ageInWeeks ?? 12,
+                        shouldShowIncidentMessage: viewModel.shouldShowPottyIncidentMessage,
+                        shouldShowReactivationPrompt: viewModel.shouldShowPottyReactivationPrompt,
+                        incidentCount: viewModel.incidentsSincePottyMastery.count
+                    )
                 )
             }
             .sheet(isPresented: $showCrateGuide) {

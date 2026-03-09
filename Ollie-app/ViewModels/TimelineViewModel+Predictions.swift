@@ -186,137 +186,47 @@ extension TimelineViewModel {
     }
 
     /// Number of consecutive days at 100% outdoor potty success
-    /// Returns 0 if any indoor accident occurred, or if no data
+    /// Delegates to PottyMasteryService
     var consecutivePerfectDays: Int {
-        let calendar = Calendar.current
-        let today = calendar.startOfDay(for: Date())
-
-        var perfectDays = 0
-        for dayOffset in 0..<14 { // Check up to 14 days back
-            guard let dayStart = calendar.date(byAdding: .day, value: -dayOffset, to: today),
-                  let dayEnd = calendar.date(byAdding: .day, value: 1, to: dayStart) else {
-                continue
-            }
-
-            let dayEvents = eventStore.getEvents(from: dayStart, to: dayEnd)
-            let pottyEvents = dayEvents.potty()
-
-            // Need at least 1 potty event to count the day
-            guard !pottyEvents.isEmpty else {
-                break // No data for this day, stop counting
-            }
-
-            let indoorCount = pottyEvents.filter { $0.location == .binnen }.count
-            if indoorCount > 0 {
-                break // Found an indoor event, streak broken
-            }
-
-            perfectDays += 1
-        }
-
-        return perfectDays
+        PottyMasteryService.consecutivePerfectDays(eventStore: eventStore)
     }
 
     /// Whether potty training guide should be shown in Train tab
-    /// Hides when at 100% outdoor for 4+ consecutive days with activity
-    /// Re-shows when there's an indoor accident
+    /// Delegates to PottyMasteryService
     var shouldShowPottyTrainingGuide: Bool {
-        // Check for recent indoor accident (within last 24 hours)
-        let last24Hours = Date().addingTimeInterval(-24 * 60 * 60)
-        let recentEvents = eventStore.getEvents(from: last24Hours, to: Date())
-        let hasRecentIndoorAccident = recentEvents.potty().contains { $0.location == .binnen }
-
-        // If there's a recent accident, always show the guide
-        if hasRecentIndoorAccident {
-            return true
-        }
-
-        // Hide if 4+ consecutive perfect days
-        return consecutivePerfectDays < 4
+        PottyMasteryService.shouldShowPottyTrainingGuide(eventStore: eventStore)
     }
 
     /// Whether the potty mastery prompt card should be shown
-    /// Shows when at 100% for multiple consecutive days, respecting dismiss cooldown
+    /// Delegates to PottyMasteryService
     var shouldShowPottyMasteryPrompt: Bool {
-        // Check if already mastered
-        let isMastered = UserDefaults.standard.bool(forKey: UserPreferences.Key.pottyTrainingMastered.rawValue)
-        if isMastered {
-            return false
-        }
-
-        // Get dismiss count and calculate required threshold
-        // First time: 3 days, after first dismiss: 5 days, after second: 7 days, etc.
-        let dismissCount = UserDefaults.standard.integer(forKey: UserPreferences.Key.pottyMasteryPromptDismissCount.rawValue)
-        let requiredDays = 3 + (dismissCount * 2)
-
-        // Check if we have enough consecutive perfect days
-        guard consecutivePerfectDays >= requiredDays else {
-            return false
-        }
-
-        // Check if we're within the 2-week cooldown after dismissal
-        let dismissedTimestamp = UserDefaults.standard.double(forKey: UserPreferences.Key.pottyMasteryPromptDismissedDate.rawValue)
-        if dismissedTimestamp > 0 {
-            let dismissedDate = Date(timeIntervalSince1970: dismissedTimestamp)
-            let twoWeeksLater = dismissedDate.addingDays(14)
-            if Date() < twoWeeksLater {
-                return false // Still in cooldown
-            }
-        }
-
-        return true
+        PottyMasteryService.shouldShowMasteryPrompt(eventStore: eventStore)
     }
 
     // MARK: - Potty Mastery Incident Tracking
 
     /// Indoor incidents since potty training was mastered
     var incidentsSincePottyMastery: [PuppyEvent] {
-        let masteredTimestamp = UserDefaults.standard.double(forKey: UserPreferences.Key.pottyTrainingMasteredDate.rawValue)
-        guard masteredTimestamp > 0 else { return [] }
-        let masteredDate = Date(timeIntervalSince1970: masteredTimestamp)
-        let events = getHistoricalEvents(days: 30)
-        return events.indoorPotty().filter { $0.time > masteredDate }
+        let historicalEvents = getHistoricalEvents(days: 30)
+        return PottyMasteryService.incidentsSinceMastery(historicalEvents: historicalEvents)
     }
 
     /// Indoor incidents in the last 7 days
     var indoorIncidentsLastWeek: [PuppyEvent] {
-        getHistoricalEvents(days: 7).indoorPotty()
+        PottyMasteryService.indoorIncidentsLastWeek(historicalEvents: getHistoricalEvents(days: 7))
     }
 
     /// Whether to show reactivation prompt (3+ incidents in a week after mastering)
     var shouldShowPottyReactivationPrompt: Bool {
-        let isMastered = UserDefaults.standard.bool(forKey: UserPreferences.Key.pottyTrainingMastered.rawValue)
-        guard isMastered else { return false }
-
-        // Check 7-day dismissal cooldown
-        let dismissedTimestamp = UserDefaults.standard.double(forKey: UserPreferences.Key.pottyReactivationPromptDismissedDate.rawValue)
-        if dismissedTimestamp > 0 {
-            let dismissedDate = Date(timeIntervalSince1970: dismissedTimestamp)
-            let cooldownEnd = dismissedDate.addingDays(7)
-            if Date() < cooldownEnd { return false }
-        }
-
-        return indoorIncidentsLastWeek.count >= 3
+        PottyMasteryService.shouldShowReactivationPrompt(indoorIncidentsLastWeek: indoorIncidentsLastWeek)
     }
 
     /// Whether to show gentle incident message (1-2 incidents, not yet reactivation)
     var shouldShowPottyIncidentMessage: Bool {
-        let isMastered = UserDefaults.standard.bool(forKey: UserPreferences.Key.pottyTrainingMastered.rawValue)
-        guard isMastered else { return false }
-        guard !shouldShowPottyReactivationPrompt else { return false }
-
-        let incidents = incidentsSincePottyMastery
-        guard !incidents.isEmpty else { return false }
-
-        // Check if latest incident was acknowledged (incidents are newest-first from indoorPotty)
-        guard let lastIncidentTime = incidents.first?.time else { return false }
-        let acknowledgedTimestamp = UserDefaults.standard.double(forKey: UserPreferences.Key.pottyLastIncidentAcknowledgedDate.rawValue)
-        if acknowledgedTimestamp > 0 {
-            let acknowledgedDate = Date(timeIntervalSince1970: acknowledgedTimestamp)
-            if lastIncidentTime <= acknowledgedDate { return false }
-        }
-
-        return true
+        PottyMasteryService.shouldShowIncidentMessage(
+            incidentsSinceMastery: incidentsSincePottyMastery,
+            shouldShowReactivationPrompt: shouldShowPottyReactivationPrompt
+        )
     }
 
     // MARK: - Daily Digest
@@ -426,85 +336,30 @@ extension TimelineViewModel {
     // MARK: - First Week Card
 
     /// Whether the first week card should be shown
-    /// Shows during days 1-7, dismissable for the day
+    /// Delegates to FirstWeekCardService
     var shouldShowFirstWeekCard: Bool {
-        guard let profile = profileStore.profile else { return false }
-        guard isShowingToday else { return false }
-
-        // Only show during first week (days 1-7)
-        guard profile.daysHome >= 1 && profile.daysHome <= 7 else { return false }
-
-        // Check if already collapsed today
-        if isFirstWeekCardCollapsedToday {
-            return true // Show collapsed
-        }
-
-        return true
+        FirstWeekCardService.shouldShowCard(profile: profileStore.profile, isShowingToday: isShowingToday)
     }
 
     /// Whether the first week card is currently collapsed
+    /// Delegates to FirstWeekCardService
     var isFirstWeekCardCollapsed: Bool {
-        isFirstWeekCardCollapsedToday
-    }
-
-    /// Check if card was collapsed today
-    private var isFirstWeekCardCollapsedToday: Bool {
-        guard let collapsedDateString = UserDefaults.standard.string(
-            forKey: UserPreferences.Key.firstWeekCardCollapsedDate.rawValue
-        ) else {
-            return false
-        }
-
-        // Parse the stored date
-        let formatter = ISO8601DateFormatter()
-        formatter.formatOptions = [.withFullDate]
-        guard let collapsedDate = formatter.date(from: collapsedDateString) else {
-            return false
-        }
-
-        // Check if it was collapsed today
-        return Calendar.current.isDateInToday(collapsedDate)
+        FirstWeekCardService.isCollapsed
     }
 
     /// Toggle the first week card collapsed state
     func toggleFirstWeekCard() {
-        if isFirstWeekCardCollapsedToday {
-            // Expand: clear the date
-            UserDefaults.standard.removeObject(
-                forKey: UserPreferences.Key.firstWeekCardCollapsedDate.rawValue
-            )
-        } else {
-            // Collapse: store today's date
-            let formatter = ISO8601DateFormatter()
-            formatter.formatOptions = [.withFullDate]
-            let todayString = formatter.string(from: Date())
-            UserDefaults.standard.set(
-                todayString,
-                forKey: UserPreferences.Key.firstWeekCardCollapsedDate.rawValue
-            )
-        }
+        FirstWeekCardService.toggleCollapsed()
         objectWillChange.send()
     }
 
     /// Calculate first week stats for the card
+    /// Delegates to FirstWeekCardService
     var firstWeekStats: FirstWeekStats? {
-        guard let profile = profileStore.profile else { return nil }
-
-        // Get yesterday's events
-        let calendar = Calendar.current
-        let yesterday = calendar.date(byAdding: .day, value: -1, to: Date()) ?? Date()
-        let startOfYesterday = calendar.startOfDay(for: yesterday)
-        let endOfYesterday = calendar.startOfDay(for: Date())
-        let yesterdayEvents = eventStore.getEvents(from: startOfYesterday, to: endOfYesterday)
-
-        // Get historical events (last 7 days for suppression logic)
-        let historicalEvents = getHistoricalEvents(days: 7)
-
-        return FirstWeekCalculations.calculateStats(
-            profile: profile,
+        FirstWeekCardService.calculateStats(
+            profile: profileStore.profile,
             todayEvents: events,
-            yesterdayEvents: yesterdayEvents,
-            historicalEvents: historicalEvents
+            eventStore: eventStore
         )
     }
 }

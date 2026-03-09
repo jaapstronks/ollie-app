@@ -21,6 +21,8 @@ struct ContentView: View {
     @EnvironmentObject var documentStore: DocumentStore
     @EnvironmentObject var contactStore: ContactStore
     @EnvironmentObject var appointmentStore: AppointmentStore
+    @EnvironmentObject var routineStore: RoutineStore
+    @EnvironmentObject var trainingMasteryStore: TrainingMasteryStore
     @EnvironmentObject var cloudKit: CloudKitService
     @EnvironmentObject var foodRecallService: FoodRecallService
 
@@ -98,6 +100,8 @@ struct ContentView: View {
                         documentStore: documentStore,
                         contactStore: contactStore,
                         appointmentStore: appointmentStore,
+                        routineStore: routineStore,
+                        trainingMasteryStore: trainingMasteryStore,
                         onAddDog: {
                             showAddProfileOnboarding = true
                         }

@@ -3,9 +3,9 @@
 //  Otis-app
 //
 
+import Combine
 import Foundation
 import OtisShared
-import Combine
 
 /// ViewModel for the moments gallery view
 @MainActor
@@ -16,27 +16,21 @@ class MomentsViewModel: ObservableObject {
     @Published private(set) var cachedPhotoClusters: [PhotoCluster] = []
 
     /// Whether there are more events to load
-    @Published private(set) var hasMoreEvents: Bool = true
+    var hasMoreEvents: Bool { paginationService.hasMoreEvents }
+
+    // MARK: - Dependencies
 
     private let eventStore: EventStore
     private let mediaStore: MediaStore
+    private let paginationService: MediaPaginationService
     private var cancellables = Set<AnyCancellable>()
 
-    /// Number of events to load per batch
-    private let batchSize: Int = 50
-
-    /// Current offset for pagination (how many days back we've searched)
-    private var currentDaysOffset: Int = 0
-
-    /// Maximum days to search back
-    private let maxDaysBack: Int = 365
-
-    /// Set of event IDs already loaded (for deduplication)
-    private var loadedEventIds: Set<UUID> = []
+    // MARK: - Init
 
     init(eventStore: EventStore, mediaStore: MediaStore? = nil) {
         self.eventStore = eventStore
         self.mediaStore = mediaStore ?? MediaStore()
+        self.paginationService = MediaPaginationService(eventStore: eventStore)
 
         // Subscribe to EventStore changes to auto-refresh when new events are added
         subscribeToEventStoreChanges()
@@ -55,16 +49,14 @@ class MomentsViewModel: ObservableObject {
     /// Check if there are new photo events that should be added to our list
     private func checkForNewPhotoEvents() {
         // Get today's events with photos that we don't already have
-        let todayEvents = eventStore.events.filter { event in
-            event.photo != nil && !loadedEventIds.contains(event.id)
-        }
+        let newEvents = paginationService.findNewPhotoEvents(from: eventStore.events)
 
-        guard !todayEvents.isEmpty else { return }
+        guard !newEvents.isEmpty else { return }
 
         // Add new events to our list
-        for event in todayEvents {
+        for event in newEvents {
             events.insert(event, at: 0)
-            loadedEventIds.insert(event.id)
+            paginationService.markAsLoaded(event.id)
         }
 
         // Re-sort by time (newest first)
@@ -78,13 +70,16 @@ class MomentsViewModel: ObservableObject {
 
         isLoading = true
         events = []
-        loadedEventIds = []
         cachedPhotoClusters = []
-        currentDaysOffset = 0
-        hasMoreEvents = true
+        paginationService.reset()
 
-        loadNextBatch()
-        isLoading = false
+        paginationService.loadNextBatch { [weak self] newEvents in
+            guard let self else { return }
+            self.events.append(contentsOf: newEvents)
+            self.events.sort { $0.time > $1.time }
+            self.refreshPhotoClusters()
+            self.isLoading = false
+        }
     }
 
     /// Load more events when scrolling near the end
@@ -92,83 +87,18 @@ class MomentsViewModel: ObservableObject {
         guard !isLoadingMore, hasMoreEvents else { return }
 
         // Check if we're near the end of the list (within last 6 items)
-        let thresholdIndex = max(0, events.count - 6)
-        if let currentIndex = events.firstIndex(where: { $0.id == currentEvent.id }),
-           currentIndex >= thresholdIndex {
-            isLoadingMore = true
-            loadNextBatch()
-            isLoadingMore = false
+        guard let currentIndex = events.firstIndex(where: { $0.id == currentEvent.id }),
+              paginationService.shouldLoadMore(currentIndex: currentIndex, totalCount: events.count) else {
+            return
         }
-    }
 
-    /// Task for current batch load (to prevent overlapping loads)
-    private var loadBatchTask: Task<Void, Never>?
-
-    /// Load the next batch of events with photos (async to avoid blocking main thread)
-    private func loadNextBatch() {
-        // Cancel any existing load task
-        loadBatchTask?.cancel()
-
-        loadBatchTask = Task { [weak self] in
-            guard let self = self else { return }
-
-            let calendar = Calendar.current
-            let today = Date()
-
-            var newEvents: [PuppyEvent] = []
-            var daysSearched = 0
-            var localOffset = self.currentDaysOffset
-
-            // Keep searching until we have enough events or hit the max
-            while newEvents.count < self.batchSize && localOffset < self.maxDaysBack {
-                let searchBatchDays = 30 // Search 30 days at a time for efficiency
-
-                let endDate = calendar.date(byAdding: .day, value: -localOffset, to: today)!
-                let startDate = calendar.date(byAdding: .day, value: -(localOffset + searchBatchDays), to: today)!
-
-                // Use async version to avoid blocking main thread
-                let batchEvents = await self.eventStore.getEventsAsync(from: startDate, to: endDate)
-
-                // Check if task was cancelled
-                guard !Task.isCancelled else { return }
-
-                let filteredEvents = batchEvents
-                    .filter { $0.photo != nil && !self.loadedEventIds.contains($0.id) }
-                    .sorted { $0.time > $1.time }
-
-                for event in filteredEvents {
-                    if newEvents.count < self.batchSize {
-                        newEvents.append(event)
-                        self.loadedEventIds.insert(event.id)
-                    } else {
-                        break
-                    }
-                }
-
-                localOffset += searchBatchDays
-                daysSearched += searchBatchDays
-
-                // Safety check to prevent infinite loop
-                if daysSearched > self.maxDaysBack {
-                    break
-                }
-            }
-
-            // Check if task was cancelled before updating UI
-            guard !Task.isCancelled else { return }
-
-            // Update state on main actor
-            self.currentDaysOffset = localOffset
-
-            // Append new events and sort
+        isLoadingMore = true
+        paginationService.loadNextBatch { [weak self] newEvents in
+            guard let self else { return }
             self.events.append(contentsOf: newEvents)
             self.events.sort { $0.time > $1.time }
             self.refreshPhotoClusters()
-
-            // Check if we've reached the end
-            if localOffset >= self.maxDaysBack || newEvents.isEmpty {
-                self.hasMoreEvents = false
-            }
+            self.isLoadingMore = false
         }
     }
 
@@ -185,8 +115,9 @@ class MomentsViewModel: ObservableObject {
         // Delete event from store
         eventStore.deleteEvent(event)
 
-        // Remove from local list
+        // Remove from local list and tracking
         events.removeAll { $0.id == event.id }
+        paginationService.removeFromTracking(event.id)
         refreshPhotoClusters()
     }
 
@@ -226,41 +157,32 @@ class MomentsViewModel: ObservableObject {
 
     /// Find photos taken near a specific spot (within radius meters)
     func photosAtSpot(_ spot: WalkSpot, radiusMeters: Double = 100) -> [PuppyEvent] {
-        events.filter { event in
-            guard let lat = event.latitude, let lon = event.longitude else { return false }
-            let distance = haversineDistance(
-                lat1: lat, lon1: lon,
-                lat2: spot.latitude, lon2: spot.longitude
-            )
-            return distance <= radiusMeters
-        }
+        PhotoClusteringService.photosAtSpot(events: events, spot: spot, radiusMeters: radiusMeters)
     }
 
     /// Find photos near any coordinate (within radius meters)
     func photosNear(latitude: Double, longitude: Double, radiusMeters: Double = 100) -> [PuppyEvent] {
-        events.filter { event in
-            guard let lat = event.latitude, let lon = event.longitude else { return false }
-            let distance = haversineDistance(
-                lat1: lat, lon1: lon,
-                lat2: latitude, lon2: longitude
-            )
-            return distance <= radiusMeters
-        }
+        PhotoClusteringService.photosNear(
+            events: events,
+            latitude: latitude,
+            longitude: longitude,
+            radiusMeters: radiusMeters
+        )
     }
 
     /// Events with location data (for map display)
     var eventsWithLocation: [PuppyEvent] {
-        events.filter { $0.latitude != nil && $0.longitude != nil }
+        PhotoClusteringService.eventsWithLocation(events)
     }
 
     /// Cluster nearby photos for map display
     /// Returns clusters with a representative location and count
-    func clusterPhotos(radiusMeters: Double = 50) -> [PhotoCluster] {
+    func clusterPhotos(radiusMeters: Double = PhotoClusteringService.defaultRadius) -> [PhotoCluster] {
         // Explore map uses the default radius most of the time; keep it cached.
-        if abs(radiusMeters - 50) < 0.001 {
+        if abs(radiusMeters - PhotoClusteringService.defaultRadius) < 0.001 {
             return cachedPhotoClusters
         }
-        return buildPhotoClusters(radiusMeters: radiusMeters)
+        return PhotoClusteringService.cluster(events: events, radiusMeters: radiusMeters)
     }
 
     // MARK: - Place Stats
@@ -280,15 +202,12 @@ class MomentsViewModel: ObservableObject {
 
     /// Get statistics for a specific spot based on all events (not just photos)
     func statsForSpot(_ spot: WalkSpot, allEvents: [PuppyEvent]) -> PlaceStats {
-        // Find events near this spot
-        let eventsAtSpot = allEvents.filter { event in
-            guard let lat = event.latitude, let lon = event.longitude else { return false }
-            let distance = haversineDistance(
-                lat1: lat, lon1: lon,
-                lat2: spot.latitude, lon2: spot.longitude
-            )
-            return distance <= 100 // Within 100 meters
-        }
+        // Find events near this spot (within 100 meters)
+        let eventsAtSpot = PhotoClusteringService.photosAtSpot(
+            events: allEvents,
+            spot: spot,
+            radiusMeters: 100
+        )
 
         // Count outdoor potty successes (buiten plas/poepen)
         let pottySuccessCount = eventsAtSpot.filter { event in
@@ -311,142 +230,10 @@ class MomentsViewModel: ObservableObject {
         )
     }
 
-    // MARK: - Distance Calculation
-
-    /// Calculate distance between two coordinates using Haversine formula
-    private func haversineDistance(lat1: Double, lon1: Double, lat2: Double, lon2: Double) -> Double {
-        let earthRadius: Double = 6371000 // meters
-
-        let dLat = (lat2 - lat1) * .pi / 180
-        let dLon = (lon2 - lon1) * .pi / 180
-
-        let a = sin(dLat / 2) * sin(dLat / 2) +
-                cos(lat1 * .pi / 180) * cos(lat2 * .pi / 180) *
-                sin(dLon / 2) * sin(dLon / 2)
-
-        let c = 2 * atan2(sqrt(a), sqrt(1 - a))
-
-        return earthRadius * c
-    }
-
     // MARK: - Cluster Cache
 
     private func refreshPhotoClusters() {
-        cachedPhotoClusters = buildPhotoClusters(radiusMeters: 50)
-    }
-
-    /// Spatial-hash clustering to avoid O(n²) scan on each render.
-    private func buildPhotoClusters(radiusMeters: Double) -> [PhotoCluster] {
-        let locatedEvents = eventsWithLocation
-        guard !locatedEvents.isEmpty else { return [] }
-
-        struct ClusterAccumulator {
-            var id: UUID
-            var latitude: Double
-            var longitude: Double
-            var count: Int
-            var events: [PuppyEvent]
-        }
-
-        let radius = max(1, radiusMeters)
-        let averageLatitude = locatedEvents.compactMap(\.latitude).reduce(0, +) / Double(locatedEvents.count)
-        let latScale: Double = 111_132
-        let lonScale: Double = max(1, 111_320 * cos(averageLatitude * .pi / 180))
-
-        func bucketKey(lat: Double, lon: Double) -> String {
-            let x = Int(floor((lon * lonScale) / radius))
-            let y = Int(floor((lat * latScale) / radius))
-            return "\(x):\(y)"
-        }
-
-        func neighboringKeys(for key: String) -> [String] {
-            let parts = key.split(separator: ":")
-            guard parts.count == 2,
-                  let x = Int(parts[0]),
-                  let y = Int(parts[1]) else {
-                return [key]
-            }
-
-            var keys: [String] = []
-            keys.reserveCapacity(9)
-            for dx in -1...1 {
-                for dy in -1...1 {
-                    keys.append("\(x + dx):\(y + dy)")
-                }
-            }
-            return keys
-        }
-
-        var clusters: [ClusterAccumulator] = []
-        var bucketToClusterIndices: [String: [Int]] = [:]
-
-        for event in locatedEvents {
-            guard let eventLat = event.latitude, let eventLon = event.longitude else { continue }
-
-            let key = bucketKey(lat: eventLat, lon: eventLon)
-            let candidateIndices = neighboringKeys(for: key).flatMap { bucketToClusterIndices[$0] ?? [] }
-
-            var targetClusterIndex: Int?
-            for candidateIndex in candidateIndices {
-                let cluster = clusters[candidateIndex]
-                let distance = haversineDistance(
-                    lat1: eventLat, lon1: eventLon,
-                    lat2: cluster.latitude, lon2: cluster.longitude
-                )
-                if distance <= radius {
-                    targetClusterIndex = candidateIndex
-                    break
-                }
-            }
-
-            if let clusterIndex = targetClusterIndex {
-                var cluster = clusters[clusterIndex]
-                let nextCount = cluster.count + 1
-                cluster.latitude = (cluster.latitude * Double(cluster.count) + eventLat) / Double(nextCount)
-                cluster.longitude = (cluster.longitude * Double(cluster.count) + eventLon) / Double(nextCount)
-                cluster.count = nextCount
-                cluster.events.append(event)
-                clusters[clusterIndex] = cluster
-            } else {
-                let cluster = ClusterAccumulator(
-                    id: event.id,
-                    latitude: eventLat,
-                    longitude: eventLon,
-                    count: 1,
-                    events: [event]
-                )
-                clusters.append(cluster)
-                bucketToClusterIndices[key, default: []].append(clusters.count - 1)
-            }
-        }
-
-        return clusters.map { cluster in
-            PhotoCluster(
-                id: cluster.id,
-                latitude: cluster.latitude,
-                longitude: cluster.longitude,
-                events: cluster.events.sorted { $0.time > $1.time }
-            )
-        }
-    }
-}
-
-// MARK: - Photo Cluster Model
-
-/// A cluster of nearby photos for map display
-struct PhotoCluster: Identifiable {
-    let id: UUID
-    let latitude: Double
-    let longitude: Double
-    let events: [PuppyEvent]
-
-    var count: Int { events.count }
-    var isSinglePhoto: Bool { count == 1 }
-    var firstEvent: PuppyEvent? { events.first }
-
-    /// Whether this cluster contains any milestone photos
-    var hasMilestonePhoto: Bool {
-        events.contains { $0.type == .milestone }
+        cachedPhotoClusters = PhotoClusteringService.cluster(events: events)
     }
 }
 

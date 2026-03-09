@@ -14,6 +14,7 @@ struct TodayView: View {
     @ObservedObject var viewModel: TimelineViewModel
     @ObservedObject var memoriesViewModel: MemoriesViewModel
     @ObservedObject var appointmentStore: AppointmentStore
+    @ObservedObject var statusViewModel: TodayStatusViewModel
     /// Weather service passed down but not observed here to avoid full view redraws
     /// Weather-dependent sections use their own observation via WeatherSectionContainer
     let weatherService: WeatherService
@@ -24,190 +25,18 @@ struct TodayView: View {
 
     @State private var selectedPhotoEvent: PuppyEvent?
     @State private var showProfilePicker = false
-    @State private var dismissedCrateNudgeDate: Date?
-    @State private var dismissedWalkTargetNudgeDate: Date?
-    @State private var dismissedGroomingNudgeDate: Date?
-    @State private var showMonthRecapSheet = false
-    @State private var showYearRecapSheet = false
-    @State private var showVetTipsSheet = false
-    @State private var showVisitSummary = false
-    @State private var milestoneToComplete: Milestone?
 
     // First-visit tip tracking
     @AppStorage("hasSeenTodayTip") private var hasSeenTodayTip = false
 
-    // Training mastery state
-    @EnvironmentObject var trainingMasteryStore: TrainingMasteryStore
-
     @EnvironmentObject private var atmosphereProvider: AtmosphereProvider
-
-    // Convenience accessor for crate training mastery
-    private var crateTrainingMastered: Bool { trainingMasteryStore.crateTrainingMastered }
     @EnvironmentObject private var foodRecallService: FoodRecallService
     @EnvironmentObject private var eventStore: EventStore
-    @EnvironmentObject private var milestoneStore: MilestoneStore
     @EnvironmentObject private var weightStore: WeightStore
-    @EnvironmentObject private var routineStore: RoutineStore
     @EnvironmentObject private var contactStore: ContactStore
 
     // Trial touchpoint state
     @ObservedObject private var trialManager = TrialManager.shared
-
-    // Appointment nudge dismissals (per-milestone labelKey)
-    @AppStorage("appointmentNudgeDismissals") private var appointmentNudgeDismissalsData: Data = Data()
-
-    /// Whether to show the crate nudge card
-    private var shouldShowCrateNudge: Bool {
-        // Check if dismissed today
-        if let dismissedDate = dismissedCrateNudgeDate,
-           Calendar.current.isDateInToday(dismissedDate) {
-            return false
-        }
-
-        return NudgeCalculations.shouldShowCrateNudge(
-            sleepState: viewModel.currentSleepState,
-            todayEvents: viewModel.events,
-            allEvents: eventStore.events
-        )
-    }
-
-    /// Whether to show the walk target nudge card
-    private var shouldShowWalkTargetNudge: Bool {
-        NudgeCalculations.shouldShowWalkTargetNudge(
-            walkStats: viewModel.walkStats,
-            dismissedDate: dismissedWalkTargetNudgeDate
-        )
-    }
-
-    /// Overdue grooming activities to show in nudge card
-    /// Returns empty if dismissed today
-    private var overdueGroomingActivities: [GroomingActivity] {
-        // Check if dismissed today
-        if let dismissedDate = dismissedGroomingNudgeDate,
-           Calendar.current.isDateInToday(dismissedDate) {
-            return []
-        }
-        return routineStore.overdueGroomingActivities
-    }
-
-    /// Whether to show the potty status card based on crate training mastery and urgency
-    /// - First week: Only show after 3+ potty events (progressive disclosure)
-    /// - If crate training is mastered, don't show (puppy can hold it)
-    /// - If not mastered, only show when < 30 minutes remaining or already urgent/overdue
-    private var shouldShowPottyStatusCard: Bool {
-        // First week progressive disclosure: need 3+ potty events
-        guard FirstWeekExperienceService.shared.shouldShowPottyPredictions else {
-            return false
-        }
-
-        // Don't show if crate training is mastered
-        if crateTrainingMastered {
-            return false
-        }
-
-        // Check minutes remaining based on urgency level
-        switch viewModel.pottyPrediction.urgency {
-        case .soon, .overdue, .postAccident:
-            // Always show when urgent
-            return true
-        case .attention(let minutesRemaining):
-            // Attention is 10-20 min, always < 30
-            return minutesRemaining < 30
-        case .normal(let minutesRemaining):
-            // Only show if < 30 minutes remaining
-            return minutesRemaining < 30
-        case .justWent, .unknown, .coverageGap:
-            // Don't show for these states
-            return false
-        }
-    }
-
-    // MARK: - Vet Visit Tips
-
-    private let tipGenerator = VetVisitTipGenerator()
-
-    /// Upcoming vet appointment within 3 days
-    private var upcomingVetAppointment: DogAppointment? {
-        let calendar = Calendar.current
-        let today = calendar.startOfDay(for: Date())
-        guard let threeDaysFromNow = calendar.date(byAdding: .day, value: 3, to: today) else { return nil }
-
-        let vetTypes: [AppointmentType] = [.vetCheckup, .vetVaccination, .vetEmergency, .vetSurgery]
-        return appointmentStore.appointments
-            .filter { vetTypes.contains($0.appointmentType) }
-            .filter { appointment in
-                let appointmentDay = calendar.startOfDay(for: appointment.startDate)
-                return appointmentDay >= today && appointmentDay <= threeDaysFromNow
-            }
-            .sorted { $0.startDate < $1.startDate }
-            .first
-    }
-
-    /// Generated tips for the upcoming vet visit
-    private var vetVisitTips: [VetVisitTip] {
-        guard let appointment = upcomingVetAppointment,
-              let profile = viewModel.profileStore.profile else {
-            return []
-        }
-
-        let recentSymptoms = HealthSymptomStore.shared.recentSymptoms()
-        return tipGenerator.generateTips(
-            for: profile,
-            appointment: appointment,
-            recentSymptoms: recentSymptoms,
-            conditions: profile.healthConditions
-        )
-    }
-
-    // MARK: - Appointment Nudge
-
-    /// Decoded dismissals dictionary from AppStorage
-    private var appointmentNudgeDismissals: [String: Date] {
-        guard !appointmentNudgeDismissalsData.isEmpty else { return [:] }
-        return (try? JSONDecoder().decode([String: Date].self, from: appointmentNudgeDismissalsData)) ?? [:]
-    }
-
-    /// Top appointment nudge candidate (if any)
-    private var appointmentNudgeCandidate: AppointmentNudgeCandidate? {
-        guard let birthDate = viewModel.profileStore.profile?.birthDate else { return nil }
-
-        return AppointmentNudgeCalculations.topNudgeCandidate(
-            milestones: milestoneStore.milestones,
-            appointments: appointmentStore.appointments,
-            birthDate: birthDate,
-            dismissals: appointmentNudgeDismissals
-        )
-    }
-
-    /// Whether to show the nap context message for the appointment nudge
-    private var shouldShowAppointmentNudgeNapContext: Bool {
-        PuppyContextUtility.shouldShowNapContextMessage(
-            sleepState: viewModel.currentSleepState,
-            events: viewModel.events
-        )
-    }
-
-    /// Dismiss the appointment nudge for a milestone
-    private func dismissAppointmentNudge(for labelKey: String) {
-        var dismissals = appointmentNudgeDismissals
-        dismissals[labelKey] = Date()
-        if let encoded = try? JSONEncoder().encode(dismissals) {
-            appointmentNudgeDismissalsData = encoded
-        }
-    }
-
-    /// Create appointment prefill from nudge candidate
-    private func createAppointmentPrefill(for candidate: AppointmentNudgeCandidate) -> AppointmentPrefill? {
-        guard let birthDate = viewModel.profileStore.profile?.birthDate else { return nil }
-
-        return AppointmentPrefill(
-            appointmentType: candidate.appointmentType,
-            title: candidate.milestone.localizedLabel,
-            notes: nil,
-            linkedMilestoneID: candidate.milestone.id,
-            suggestedDate: AppointmentNudgeCalculations.suggestedAppointmentDate(for: candidate, birthDate: birthDate)
-        )
-    }
 
     var body: some View {
         VStack(spacing: 0) {
@@ -323,11 +152,11 @@ struct TodayView: View {
                     }
 
                     // Vet visit tips (when appointment is within 3 days)
-                    if viewModel.isShowingToday, let upcomingVetAppointment = upcomingVetAppointment {
+                    if viewModel.isShowingToday, let upcomingVetAppointment = statusViewModel.upcomingVetAppointment {
                         VetVisitTipsCard(
                             appointment: upcomingVetAppointment,
-                            tipCount: vetVisitTips.count,
-                            onTap: { showVetTipsSheet = true }
+                            tipCount: statusViewModel.vetVisitTips.count,
+                            onTap: { statusViewModel.showVetTipsSheet = true }
                         )
                         .animatedAppear(delay: 0.15)
                     }
@@ -423,41 +252,41 @@ struct TodayView: View {
                 onManageProfiles: onSettingsTap
             )
         }
-        .sheet(isPresented: $showMonthRecapSheet) {
+        .sheet(isPresented: $statusViewModel.showMonthRecapSheet) {
             MonthRecapSheet(
                 viewModel: MonthRecapViewModel(
                     eventStore: eventStore,
                     profileStore: viewModel.profileStore
                 ),
-                onDismiss: { showMonthRecapSheet = false }
+                onDismiss: { statusViewModel.showMonthRecapSheet = false }
             )
         }
-        .sheet(isPresented: $showYearRecapSheet) {
+        .sheet(isPresented: $statusViewModel.showYearRecapSheet) {
             YearRecapView(
                 viewModel: YearRecapViewModel(
                     eventStore: eventStore,
                     profileStore: viewModel.profileStore,
                     weightStore: weightStore
                 ),
-                onDismiss: { showYearRecapSheet = false }
+                onDismiss: { statusViewModel.showYearRecapSheet = false }
             )
         }
-        .sheet(isPresented: $showVetTipsSheet) {
-            if let appointment = upcomingVetAppointment {
+        .sheet(isPresented: $statusViewModel.showVetTipsSheet) {
+            if let appointment = statusViewModel.upcomingVetAppointment {
                 VetVisitTipsSheet(
                     appointment: appointment,
-                    tips: vetVisitTips,
+                    tips: statusViewModel.vetVisitTips,
                     onPrepareSummary: {
-                        showVetTipsSheet = false
+                        statusViewModel.showVetTipsSheet = false
                         Task { @MainActor in
                             try? await Task.sleep(for: .seconds(0.3))
-                            showVisitSummary = true
+                            statusViewModel.showVisitSummary = true
                         }
                     }
                 )
             }
         }
-        .sheet(isPresented: $showVisitSummary) {
+        .sheet(isPresented: $statusViewModel.showVisitSummary) {
             VisitSummaryView()
                 .environmentObject(viewModel.profileStore)
         }
@@ -470,30 +299,30 @@ struct TodayView: View {
         TodayStatusCardsSection(
             viewModel: viewModel,
             weatherService: weatherService,
-            appointmentNudgeCandidate: appointmentNudgeCandidate,
-            crateTrainingMastered: crateTrainingMastered,
-            shouldShowPottyStatusCard: shouldShowPottyStatusCard,
-            shouldShowCrateNudge: shouldShowCrateNudge,
-            shouldShowWalkTargetNudge: shouldShowWalkTargetNudge,
-            shouldShowAppointmentNudgeNapContext: shouldShowAppointmentNudgeNapContext,
-            overdueGroomingActivities: overdueGroomingActivities,
+            appointmentNudgeCandidate: statusViewModel.appointmentNudgeCandidate,
+            crateTrainingMastered: statusViewModel.crateTrainingMastered,
+            shouldShowPottyStatusCard: statusViewModel.shouldShowPottyStatusCard,
+            shouldShowCrateNudge: statusViewModel.shouldShowCrateNudge,
+            shouldShowWalkTargetNudge: statusViewModel.shouldShowWalkTargetNudge,
+            shouldShowAppointmentNudgeNapContext: statusViewModel.shouldShowAppointmentNudgeNapContext,
+            overdueGroomingActivities: statusViewModel.overdueGroomingActivities,
             onNavigateToTrain: onNavigateToTrain,
-            onDismissCrateNudge: { dismissedCrateNudgeDate = Date() },
-            onDismissWalkTargetNudge: { dismissedWalkTargetNudgeDate = Date() },
-            onDismissGroomingNudge: { dismissedGroomingNudgeDate = Date() },
-            onDismissAppointmentNudge: { dismissAppointmentNudge(for: $0) },
+            onDismissCrateNudge: { statusViewModel.dismissCrateNudge() },
+            onDismissWalkTargetNudge: { statusViewModel.dismissWalkTargetNudge() },
+            onDismissGroomingNudge: { statusViewModel.dismissGroomingNudge() },
+            onDismissAppointmentNudge: { statusViewModel.dismissAppointmentNudge(for: $0) },
             onMarkAppointmentDone: { candidate in
-                milestoneToComplete = candidate.milestone
+                statusViewModel.milestoneToComplete = candidate.milestone
             },
-            onCreateAppointmentPrefill: { createAppointmentPrefill(for: $0) },
+            onCreateAppointmentPrefill: { statusViewModel.createAppointmentPrefill(for: $0) },
             onMarkGroomingComplete: { activity in
-                routineStore.markGroomingCompleted(activity)
+                statusViewModel.markGroomingComplete(activity)
             },
             onViewAllGrooming: {
                 viewModel.sheetCoordinator.presentSheet(.groomingQuickLog())
             },
-            onShowMonthRecap: { showMonthRecapSheet = true },
-            onShowYearRecap: { showYearRecapSheet = true },
+            onShowMonthRecap: { statusViewModel.showMonthRecapSheet = true },
+            onShowYearRecap: { statusViewModel.showYearRecapSheet = true },
             onAddPhoto: {
                 // Open moment source picker (camera or photo library)
                 viewModel.sheetCoordinator.presentSheet(.momentSourcePicker)
@@ -503,19 +332,18 @@ struct TodayView: View {
                 viewModel.sheetCoordinator.presentSheet(.settings)
             }
         )
-        .sheet(item: $milestoneToComplete) { milestone in
+        .sheet(item: $statusViewModel.milestoneToComplete) { milestone in
             MilestoneCompletionSheet(
                 milestone: milestone,
-                onDismiss: { milestoneToComplete = nil },
+                onDismiss: { statusViewModel.milestoneToComplete = nil },
                 onComplete: { notes, photoID, linkedContactID, completionDate in
-                    milestoneStore.completeMilestone(
+                    statusViewModel.completeMilestone(
                         milestone,
                         notes: notes,
                         photoID: photoID,
                         linkedContactID: linkedContactID,
                         completionDate: completionDate
                     )
-                    milestoneToComplete = nil
                 }
             )
             .environmentObject(contactStore)
@@ -582,16 +410,27 @@ struct EmptyTimelineCard: View {
     let profileStore = ProfileStore()
     let appointmentStore = AppointmentStore()
     let milestoneStore = MilestoneStore()
+    let routineStore = RoutineStore()
+    let trainingMasteryStore = TrainingMasteryStore.shared
     let viewModel = TimelineViewModel(eventStore: eventStore, profileStore: profileStore)
     let memoriesViewModel = MemoriesViewModel(eventStore: eventStore)
+    let statusViewModel = TodayStatusViewModel(
+        timelineViewModel: viewModel,
+        eventStore: eventStore,
+        routineStore: routineStore,
+        milestoneStore: milestoneStore,
+        appointmentStore: appointmentStore,
+        trainingMasteryStore: trainingMasteryStore
+    )
     let weatherService = WeatherService()
     let atmosphereProvider = AtmosphereProvider()
     let foodRecallService = FoodRecallService()
 
-    return TodayView(
+    TodayView(
         viewModel: viewModel,
         memoriesViewModel: memoriesViewModel,
         appointmentStore: appointmentStore,
+        statusViewModel: statusViewModel,
         weatherService: weatherService,
         onSettingsTap: { print("Settings tapped") },
         onNavigateToAppointments: { print("Navigate to Appointments") },

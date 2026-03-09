@@ -23,6 +23,8 @@ struct MainTabView: View {
     @ObservedObject var documentStore: DocumentStore
     @ObservedObject var contactStore: ContactStore
     @ObservedObject var appointmentStore: AppointmentStore
+    @ObservedObject var routineStore: RoutineStore
+    @ObservedObject var trainingMasteryStore: TrainingMasteryStore
     var onAddDog: (() -> Void)?
 
     @EnvironmentObject var locationManager: LocationManager
@@ -32,6 +34,7 @@ struct MainTabView: View {
     @StateObject private var momentsViewModel: MomentsViewModel
     @StateObject private var mediaCaptureViewModel = MediaCaptureViewModel(mediaStore: MediaStore())
     @StateObject private var memoriesViewModel: MemoriesViewModel
+    @StateObject private var todayStatusViewModel: TodayStatusViewModel
 
     @State private var showingSettings = false
     @State private var showingFirstSessionHandoff = false
@@ -61,6 +64,8 @@ struct MainTabView: View {
         documentStore: DocumentStore,
         contactStore: ContactStore,
         appointmentStore: AppointmentStore,
+        routineStore: RoutineStore,
+        trainingMasteryStore: TrainingMasteryStore,
         onAddDog: (() -> Void)? = nil
     ) {
         self._selectedTab = selectedTab
@@ -76,20 +81,31 @@ struct MainTabView: View {
         self.documentStore = documentStore
         self.contactStore = contactStore
         self.appointmentStore = appointmentStore
+        self.routineStore = routineStore
+        self.trainingMasteryStore = trainingMasteryStore
         self.onAddDog = onAddDog
 
-        self._viewModel = StateObject(wrappedValue: TimelineViewModel(
+        let viewModel = TimelineViewModel(
             eventStore: eventStore,
             profileStore: profileStore,
             notificationService: notificationService,
             medicationStore: medicationStore,
             appointmentStore: appointmentStore
-        ))
+        )
+        self._viewModel = StateObject(wrappedValue: viewModel)
         self._momentsViewModel = StateObject(wrappedValue: MomentsViewModel(
             eventStore: eventStore
         ))
         self._memoriesViewModel = StateObject(wrappedValue: MemoriesViewModel(
             eventStore: eventStore
+        ))
+        self._todayStatusViewModel = StateObject(wrappedValue: TodayStatusViewModel(
+            timelineViewModel: viewModel,
+            eventStore: eventStore,
+            routineStore: routineStore,
+            milestoneStore: milestoneStore,
+            appointmentStore: appointmentStore,
+            trainingMasteryStore: trainingMasteryStore
         ))
     }
 
@@ -187,6 +203,7 @@ private extension MainTabView {
                 viewModel: viewModel,
                 memoriesViewModel: memoriesViewModel,
                 appointmentStore: appointmentStore,
+                statusViewModel: todayStatusViewModel,
                 weatherService: weatherService,
                 onSettingsTap: { showingSettings = true },
                 onNavigateToAppointments: { selectedTab = .schedule },
@@ -212,6 +229,7 @@ private extension MainTabView {
                 contactStore: contactStore,
                 momentsViewModel: momentsViewModel,
                 locationManager: locationManager,
+                appointmentStore: appointmentStore,
                 onSettingsTap: { showingSettings = true },
                 onAddMoment: {
                     viewModel.sheetCoordinator.presentSheet(.momentSourcePicker)
@@ -337,7 +355,8 @@ private extension MainTabView {
                 showingFirstSessionHandoff = false
                 needsFirstSessionHandoff = false
                 selectedTab = .today
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                Task { @MainActor in
+                    try? await Task.sleep(for: .seconds(0.2))
                     viewModel.showAllEvents()
                 }
             },
@@ -393,7 +412,8 @@ private extension MainTabView {
         let homeDate = calendar.startOfDay(for: profile.homeDate)
 
         if homeDate <= today {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            Task { @MainActor in
+                try? await Task.sleep(for: .seconds(1.0))
                 showingArrivalPhotoPrompt = true
             }
         }
