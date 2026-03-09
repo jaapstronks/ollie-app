@@ -82,6 +82,8 @@ final class SheetCoordinator: ObservableObject {
         case groomingQuickLog(preselectedType: GroomingType? = nil)
         // Behavior incident log sheet
         case behaviorLog
+        // Moments lightbox (swipeable photo gallery)
+        case momentsLightbox(events: [PuppyEvent], startIndex: Int)
 
         var id: String {
             switch self {
@@ -125,8 +127,16 @@ final class SheetCoordinator: ObservableObject {
             case .groomingSettings: return "groomingSettings"
             case .groomingQuickLog(let type): return "groomingQuickLog-\(type?.rawValue ?? "any")"
             case .behaviorLog: return "behaviorLog"
+            case .momentsLightbox(_, let startIndex): return "momentsLightbox-\(startIndex)"
             }
         }
+    }
+
+    // MARK: - Moments Lightbox
+
+    /// Present the moments lightbox at a specific photo
+    func presentMomentsLightbox(events: [PuppyEvent], startIndex: Int) {
+        presentSheet(.momentsLightbox(events: events, startIndex: startIndex))
     }
 
     // MARK: - Published State

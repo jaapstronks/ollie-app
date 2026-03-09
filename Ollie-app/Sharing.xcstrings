@@ -1,822 +1,837 @@
 {
-  "sourceLanguage": "en",
-  "strings": {
-    "Copied to clipboard": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gekopieerd naar klembord"
+  "sourceLanguage" : "en",
+  "strings" : {
+    "Copied to clipboard" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In Zwischenablage kopiert"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "In Zwischenablage kopiert"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copiado al portapapeles"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Copiado al portapapeles"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copié dans le presse-papiers"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Copié dans le presse-papiers"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copiato negli appunti"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Copiato negli appunti"
-          }
-        }
-      }
-    },
-    "Copy": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kopieer"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kopieren"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Copiar"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Copier"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Copia"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gekopieerd naar klembord"
           }
         }
       }
     },
-    "FB Story": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "FB Story"
+    "Copy" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kopieren"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "FB Story"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copiar"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Historia FB"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copier"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Story FB"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copia"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Storia FB"
-          }
-        }
-      }
-    },
-    "Format": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Formaat"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Format"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Formato"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Format"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Formato"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kopieer"
           }
         }
       }
     },
-    "Generating...": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Genereren..."
+    "FB Story" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "FB Story"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wird generiert..."
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Historia FB"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Generando..."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Story FB"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Génération..."
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Storia FB"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Generazione..."
-          }
-        }
-      }
-    },
-    "IG Story": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "IG Story"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "IG Story"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Historia IG"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Story IG"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Storia IG"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "FB Story"
           }
         }
       }
     },
-    "Landscape (16:9)": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Liggend (16:9)"
+    "Format" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Format"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Querformat (16:9)"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Formato"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Horizontal (16:9)"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Format"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Paysage (16:9)"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Formato"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Orizzontale (16:9)"
-          }
-        }
-      }
-    },
-    "Made with Ollie": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gemaakt met Ollie"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Erstellt mit Ollie"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hecho con Ollie"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fait avec Ollie"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Creato con Ollie"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Formaat"
           }
         }
       }
     },
-    "More": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Meer"
+    "Generating..." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wird generiert..."
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mehr"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Generando..."
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Más"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Génération..."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Plus"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Generazione..."
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Altro"
-          }
-        }
-      }
-    },
-    "Other": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Overig"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Andere"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Otro"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Autre"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Altro"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Genereren..."
           }
         }
       }
     },
-    "Photo library access is required to save": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Toegang tot fotobibliotheek is vereist om op te slaan"
+    "IG Story" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "IG Story"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Zugriff auf die Fotobibliothek ist zum Speichern erforderlich"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Historia IG"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Se requiere acceso a la fototeca para guardar"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Story IG"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "L'accès à la photothèque est requis pour enregistrer"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Storia IG"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "È necessario l'accesso alla libreria foto per salvare"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "IG Story"
           }
         }
       }
     },
-    "Photo library access is restricted": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Toegang tot fotobibliotheek is beperkt"
+    "Landscape (16:9)" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Querformat (16:9)"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Der Zugriff auf die Fotobibliothek ist eingeschränkt"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Horizontal (16:9)"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "El acceso a la fototeca está restringido"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paysage (16:9)"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "L'accès à la photothèque est restreint"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Orizzontale (16:9)"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "L'accesso alla libreria foto è limitato"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Liggend (16:9)"
           }
         }
       }
     },
-    "Portrait": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Portret"
+    "Made with Ollie" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erstellt mit Ollie"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hochformat"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hecho con Ollie"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Retrato"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fait avec Ollie"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Portrait"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Creato con Ollie"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ritratto"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gemaakt met Ollie"
           }
         }
       }
     },
-    "Portrait (4:5)": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Staand (4:5)"
+    "More" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mehr"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hochformat (4:5)"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Más"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vertical (4:5)"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plus"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Portrait (4:5)"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Altro"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Verticale (4:5)"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meer"
           }
         }
       }
     },
-    "Save": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bewaar"
+    "Other" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Andere"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Speichern"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otro"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Guardar"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autre"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Enregistrer"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Altro"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Salva"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Overig"
           }
         }
       }
     },
-    "Saved to Photos": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Opgeslagen in Foto's"
+    "Photo library access is required to save" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zugriff auf die Fotobibliothek ist zum Speichern erforderlich"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "In Fotos gespeichert"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se requiere acceso a la fototeca para guardar"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Guardado en Fotos"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L'accès à la photothèque est requis pour enregistrer"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Enregistré dans Photos"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "È necessario l'accesso alla libreria foto per salvare"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Salvato in Foto"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toegang tot fotobibliotheek is vereist om op te slaan"
           }
         }
       }
     },
-    "Share": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Delen"
+    "Photo library access is restricted" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Zugriff auf die Fotobibliothek ist eingeschränkt"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Teilen"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El acceso a la fototeca está restringido"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Compartir"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L'accès à la photothèque est restreint"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Partager"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L'accesso alla libreria foto è limitato"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Condividi"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toegang tot fotobibliotheek is beperkt"
           }
         }
       }
     },
-    "Share to": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Delen naar"
+    "Portrait" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hochformat"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Teilen auf"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retrato"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Compartir en"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Portrait"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Partager sur"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ritratto"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Condividi su"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Portret"
           }
         }
       }
     },
-    "Square": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vierkant"
+    "Portrait (4:5)" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hochformat (4:5)"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Quadrat"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vertical (4:5)"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cuadrado"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Portrait (4:5)"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Carré"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verticale (4:5)"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Quadrato"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Staand (4:5)"
           }
         }
       }
     },
-    "Square (1:1)": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vierkant (1:1)"
+    "Save" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Speichern"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Quadrat (1:1)"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Guardar"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cuadrado (1:1)"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistrer"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Carré (1:1)"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Salva"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Quadrato (1:1)"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bewaar"
           }
         }
       }
     },
-    "Story": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Story"
+    "Saved to Photos" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In Fotos gespeichert"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Story"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Guardado en Fotos"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Historia"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistré dans Photos"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Story"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Salvato in Foto"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Storia"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opgeslagen in Foto's"
           }
         }
       }
     },
-    "Story (9:16)": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Story (9:16)"
+    "Share" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Teilen"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Story (9:16)"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compartir"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Historia (9:16)"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Partager"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Story (9:16)"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Condividi"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Storia (9:16)"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delen"
           }
         }
       }
     },
-    "This app is not installed": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Deze app is niet geïnstalleerd"
+    "Share to" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Teilen auf"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Diese App ist nicht installiert"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compartir en"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Esta app no está instalada"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Partager sur"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cette app n'est pas installée"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Condividi su"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Questa app non è installata"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delen naar"
           }
         }
       }
     },
-    "Unable to create shareable image": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kan deelbare afbeelding niet maken"
+    "Square" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quadrat"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Teilbares Bild kann nicht erstellt werden"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cuadrado"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No se puede crear imagen para compartir"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Carré"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Impossible de créer l'image partageable"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quadrato"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Impossibile creare l'immagine condivisibile"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vierkant"
+          }
+        }
+      }
+    },
+    "Square (1:1)" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quadrat (1:1)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cuadrado (1:1)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Carré (1:1)"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quadrato (1:1)"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vierkant (1:1)"
+          }
+        }
+      }
+    },
+    "Story" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Story"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Historia"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Story"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Storia"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Story"
+          }
+        }
+      }
+    },
+    "Story (9:16)" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Story (9:16)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Historia (9:16)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Story (9:16)"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Storia (9:16)"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Story (9:16)"
+          }
+        }
+      }
+    },
+    "This app is not installed" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diese App ist nicht installiert"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esta app no está instalada"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cette app n'est pas installée"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Questa app non è installata"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deze app is niet geïnstalleerd"
+          }
+        }
+      }
+    },
+    "Unable to create shareable image" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Teilbares Bild kann nicht erstellt werden"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se puede crear imagen para compartir"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossible de créer l'image partageable"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossibile creare l'immagine condivisibile"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kan deelbare afbeelding niet maken"
           }
         }
       }
     }
   },
-  "version": "1.0"
+  "version" : "1.0"
 }

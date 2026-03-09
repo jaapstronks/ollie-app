@@ -32,12 +32,14 @@ enum ShareableCardType: String, CaseIterable {
     case weeklyRecap
     case monthlyRecap
     case yearRecap
+    case gotchaDayAnniversary
     case achievement
     case thenVsNow
     case monthlyGrowth
     case growthChart
     case milestone
     case training
+    case moment
 
     var analyticsName: String {
         rawValue

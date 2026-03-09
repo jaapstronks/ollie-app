@@ -1,2331 +1,2340 @@
 {
-  "sourceLanguage": "en",
-  "strings": {
-    "/month": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "/Monat"
+  "sourceLanguage" : "en",
+  "strings" : {
+    "/month" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "/Monat"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "/mes"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "/mes"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "/mese"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "/mois"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "/maand"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "/mese"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "/mois"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "/maand"
           }
         }
       }
     },
-    "/year": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "/Jahr"
+    "/year" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "/Jahr"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "/año"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "/año"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "/anno"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "/an"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "/jaar"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "/anno"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "/an"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "/jaar"
           }
         }
       }
     },
-    "7 days free": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "7 Tage kostenlos"
+    "7 days free" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "7 Tage kostenlos"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "7 días gratis"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "7 días gratis"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "7 giorni gratis"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "7 jours gratuits"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "7 dagen gratis"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "7 giorni gratis"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "7 jours gratuits"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "7 dagen gratis"
           }
         }
       }
     },
-    "Access all training skills and exercises": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Zugang zu allen Trainingsübungen und Fertigkeiten"
+    "Access all training skills and exercises" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zugang zu allen Trainingsübungen und Fertigkeiten"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Accede a todas las habilidades y ejercicios de entrenamiento"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Accede a todas las habilidades y ejercicios de entrenamiento"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Accedi a tutte le abilità e gli esercizi di addestramento"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Accédez à toutes les compétences et exercices d'entraînement"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Toegang tot alle trainingsvaardigheden en oefeningen"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Accedi a tutte le abilità e gli esercizi di addestramento"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Accédez à toutes les compétences et exercices d'entraînement"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toegang tot alle trainingsvaardigheden en oefeningen"
           }
         }
       }
     },
-    "Active (renews %@)": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aktiv (verlängert am %@)"
+    "Active (renews %@)" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktiv (verlängert am %@)"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Activo (se renueva el %@)"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Activo (se renueva el %@)"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Attivo (si rinnova il %@)"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actif (renouvellement %@)"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Actief (verlengt op %@)"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Attivo (si rinnova il %@)"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Actif (renouvellement %@)"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actief (verlengt op %@)"
           }
         }
       }
     },
-    "Add milestones to your calendar with reminders": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Füge Meilensteine mit Erinnerungen zu deinem Kalender hinzu"
+    "Add milestones to your calendar with reminders" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Füge Meilensteine mit Erinnerungen zu deinem Kalender hinzu"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Añade hitos a tu calendario con recordatorios"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Añade hitos a tu calendario con recordatorios"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aggiungi traguardi al calendario con promemoria"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajoutez des étapes à votre calendrier avec des rappels"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Voeg mijlpalen toe aan je agenda met herinneringen"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aggiungi traguardi al calendario con promemoria"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ajoutez des étapes à votre calendrier avec des rappels"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voeg mijlpalen toe aan je agenda met herinneringen"
           }
         }
       }
     },
-    "Add notes and photos when completing milestones": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Füge Notizen und Fotos beim Erreichen von Meilensteinen hinzu"
+    "Add notes and photos when completing milestones" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Füge Notizen und Fotos beim Erreichen von Meilensteinen hinzu"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Añade notas y fotos al completar hitos"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Añade notas y fotos al completar hitos"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aggiungi note e foto al completamento dei traguardi"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajoutez des notes et photos en complétant les étapes"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Voeg notities en foto's toe bij het voltooien van mijlpalen"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aggiungi note e foto al completamento dei traguardi"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ajoutez des notes et photos en complétant les étapes"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voeg notities en foto's toe bij het voltooien van mijlpalen"
           }
         }
       }
     },
-    "Advanced Analytics": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Erweiterte Analysen"
+    "Advanced Analytics" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erweiterte Analysen"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Análisis avanzado"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Análisis avanzado"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Analisi avanzate"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Analyses avancées"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Geavanceerde analyses"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Analisi avanzate"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Analyses avancées"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geavanceerde analyses"
           }
         }
       }
     },
-    "AI predicts when your puppy needs to go based on patterns": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "KI sagt voraus, wann dein Welpe muss, basierend auf Mustern"
+    "AI predicts when your puppy needs to go based on patterns" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "KI sagt voraus, wann dein Welpe muss, basierend auf Mustern"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "La IA predice cuándo tu cachorro necesita salir según sus patrones"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La IA predice cuándo tu cachorro necesita salir según sus patrones"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "L'IA prevede quando il cucciolo deve uscire in base ai pattern"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L'IA prédit quand votre chiot a besoin de sortir selon ses habitudes"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "AI voorspelt wanneer je puppy moet plassen op basis van patronen"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L'IA prevede quando il cucciolo deve uscire in base ai pattern"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "L'IA prédit quand votre chiot a besoin de sortir selon ses habitudes"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI voorspelt wanneer je puppy moet plassen op basis van patronen"
           }
         }
       }
     },
-    "An error occurred": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ein Fehler ist aufgetreten"
+    "An error occurred" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ein Fehler ist aufgetreten"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ha ocurrido un error"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ha ocurrido un error"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Si è verificato un errore"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Une erreur s'est produite"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Er is een fout opgetreden"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Si è verificato un errore"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Une erreur s'est produite"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Er is een fout opgetreden"
           }
         }
       }
     },
-    "Attach photos and videos to any event": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hänge Fotos und Videos an jedes Ereignis an"
+    "Attach photos and videos to any event" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hänge Fotos und Videos an jedes Ereignis an"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Adjunta fotos y vídeos a cualquier evento"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adjunta fotos y vídeos a cualquier evento"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Allega foto e video a qualsiasi evento"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Joignez des photos et vidéos à n'importe quel événement"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Voeg foto's en video's toe aan elk event"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Allega foto e video a qualsiasi evento"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Joignez des photos et vidéos à n'importe quel événement"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voeg foto's en video's toe aan elk event"
           }
         }
       }
     },
-    "Calendar Integration": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kalender-Integration"
+    "Calendar Integration" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kalender-Integration"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Integración con calendario"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Integración con calendario"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Integrazione calendario"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Intégration calendrier"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Agenda-integratie"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Integrazione calendario"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Intégration calendrier"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Agenda-integratie"
           }
         }
       }
     },
-    "Could not verify purchase": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kauf konnte nicht verifiziert werden"
+    "Could not verify purchase" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kauf konnte nicht verifiziert werden"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No se pudo verificar la compra"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pudo verificar la compra"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Impossibile verificare l'acquisto"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossible de vérifier l'achat"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kon aankoop niet verifiëren"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossibile verificare l'acquisto"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Impossible de vérifier l'achat"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kon aankoop niet verifiëren"
           }
         }
       }
     },
-    "Create your own custom milestones and events": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Erstelle deine eigenen Meilensteine und Ereignisse"
+    "Create your own custom milestones and events" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erstelle deine eigenen Meilensteine und Ereignisse"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Crea tus propios hitos y eventos personalizados"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Crea tus propios hitos y eventos personalizados"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Crea i tuoi traguardi ed eventi personalizzati"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Créez vos propres étapes et événements personnalisés"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Maak je eigen mijlpalen en events aan"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Crea i tuoi traguardi ed eventi personalizzati"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Créez vos propres étapes et événements personnalisés"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maak je eigen mijlpalen en events aan"
           }
         }
       }
     },
-    "Custom Milestones": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Eigene Meilensteine"
+    "Custom Milestones" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eigene Meilensteine"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hitos personalizados"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hitos personalizados"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Traguardi personalizzati"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Étapes personnalisées"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Eigen mijlpalen"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Traguardi personalizzati"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Étapes personnalisées"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eigen mijlpalen"
           }
         }
       }
     },
-    "Deep insights into behavior, health, and routines": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tiefe Einblicke in Verhalten, Gesundheit und Routinen"
+    "Deep insights into behavior, health, and routines" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tiefe Einblicke in Verhalten, Gesundheit und Routinen"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Información detallada sobre comportamiento, salud y rutinas"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Información detallada sobre comportamiento, salud y rutinas"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Approfondimenti su comportamento, salute e routine"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Analyses approfondies du comportement, de la santé et des routines"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Diepgaande inzichten in gedrag, gezondheid en routines"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Approfondimenti su comportamento, salute e routine"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Analyses approfondies du comportement, de la santé et des routines"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diepgaande inzichten in gedrag, gezondheid en routines"
           }
         }
       }
     },
-    "Discover behavioral patterns with Otis+": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Entdecke Verhaltensmuster mit Otis+"
+    "Discover behavioral patterns with Otis+" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entdecke Verhaltensmuster mit Otis+"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Descubre patrones de comportamiento con Otis+"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Descubre patrones de comportamiento con Otis+"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Scopri i pattern comportamentali con Otis+"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Découvrez les schémas comportementaux avec Otis+"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ontdek gedragspatronen met Otis+"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scopri i pattern comportamentali con Otis+"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Découvrez les schémas comportementaux avec Otis+"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ontdek gedragspatronen met Otis+"
           }
         }
       }
     },
-    "Discover premium features": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Entdecke Premium-Funktionen"
+    "Discover premium features" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entdecke Premium-Funktionen"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Descubre las funciones premium"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Descubre las funciones premium"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Scopri le funzioni premium"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Découvrez les fonctionnalités premium"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ontdek premium functies"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scopri le funzioni premium"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Découvrez les fonctionnalités premium"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ontdek premium functies"
           }
         }
       }
     },
-    "Expired": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Abgelaufen"
+    "Expired" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abgelaufen"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Caducado"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caducado"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Scaduto"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Expiré"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Verlopen"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scaduto"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Expiré"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verlopen"
           }
         }
       }
     },
-    "Export logs and reports for your vet": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Exportiere Protokolle und Berichte für deinen Tierarzt"
+    "Export logs and reports for your vet" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exportiere Protokolle und Berichte für deinen Tierarzt"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Exporta registros e informes para tu veterinario"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exporta registros e informes para tu veterinario"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Esporta registri e report per il veterinario"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exportez les journaux et rapports pour votre vétérinaire"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Exporteer logboeken en rapporten voor je dierenarts"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esporta registri e report per il veterinario"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Exportez les journaux et rapports pour votre vétérinaire"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exporteer logboeken en rapporten voor je dierenarts"
           }
         }
       }
     },
-    "Export to PDF": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Als PDF exportieren"
+    "Export to PDF" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Als PDF exportieren"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Exportar a PDF"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exportar a PDF"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Esporta in PDF"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exporter en PDF"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Exporteren naar PDF"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esporta in PDF"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Exporter en PDF"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exporteren naar PDF"
           }
         }
       }
     },
-    "Free": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kostenlos"
+    "Free" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kostenlos"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gratis"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gratis"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gratuit"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gratuit"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gratis"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gratis"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gratis"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gratis"
           }
         }
       }
     },
-    "Full Training Library": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vollständige Trainingsbibliothek"
+    "Full Training Library" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vollständige Trainingsbibliothek"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Biblioteca completa de entrenamiento"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Biblioteca completa de entrenamiento"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Libreria completa di addestramento"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bibliothèque d'entraînement complète"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Volledige trainingsbibliotheek"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Libreria completa di addestramento"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bibliothèque d'entraînement complète"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Volledige trainingsbibliotheek"
           }
         }
       }
     },
-    "Get AI-powered insights, unlimited training, and premium features to help your puppy thrive.": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Erhalte KI-gestützte Einblicke, unbegrenztes Training und Premium-Funktionen, um deinen Welpen optimal zu unterstützen."
+    "Get AI-powered insights, unlimited training, and premium features to help your puppy thrive." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erhalte KI-gestützte Einblicke, unbegrenztes Training und Premium-Funktionen, um deinen Welpen optimal zu unterstützen."
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Obtén información impulsada por IA, entrenamiento ilimitado y funciones premium para ayudar a tu cachorro a prosperar."
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obtén información impulsada por IA, entrenamiento ilimitado y funciones premium para ayudar a tu cachorro a prosperar."
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ottieni analisi basate sull'IA, addestramento illimitato e funzioni premium per aiutare il tuo cucciolo a crescere al meglio."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obtenez des analyses par IA, un entraînement illimité et des fonctionnalités premium pour aider votre chiot à s'épanouir."
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Krijg AI-gestuurde inzichten, onbeperkte training en premium functies om je puppy te helpen bloeien."
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ottieni analisi basate sull'IA, addestramento illimitato e funzioni premium per aiutare il tuo cucciolo a crescere al meglio."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Obtenez des analyses par IA, un entraînement illimité et des fonctionnalités premium pour aider votre chiot à s'épanouir."
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Krijg AI-gestuurde inzichten, onbeperkte training en premium functies om je puppy te helpen bloeien."
           }
         }
       }
     },
-    "Get detailed sleep analysis with Otis+": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Erhalte detaillierte Schlafanalysen mit Otis+"
+    "Get detailed sleep analysis with Otis+" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erhalte detaillierte Schlafanalysen mit Otis+"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Obtén análisis detallado del sueño con Otis+"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obtén análisis detallado del sueño con Otis+"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ottieni analisi dettagliate del sonno con Otis+"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obtenez une analyse détaillée du sommeil avec Otis+"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Krijg gedetailleerde slaapanalyse met Otis+"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ottieni analisi dettagliate del sonno con Otis+"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Obtenez une analyse détaillée du sommeil avec Otis+"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Krijg gedetailleerde slaapanalyse met Otis+"
           }
         }
       }
     },
-    "Get Started": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Jetzt starten"
+    "Get Started" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jetzt starten"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Comenzar"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comenzar"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Inizia"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Commencer"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aan de slag"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inizia"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Commencer"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aan de slag"
           }
         }
       }
     },
-    "Manage Subscription": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Abo verwalten"
+    "Manage Subscription" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abo verwalten"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gestionar suscripción"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gestionar suscripción"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gestisci abbonamento"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gérer l'abonnement"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Abonnement beheren"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gestisci abbonamento"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gérer l'abonnement"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abonnement beheren"
           }
         }
       }
     },
-    "Milestone Notes & Photos": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Meilenstein-Notizen & Fotos"
+    "Milestone Notes & Photos" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meilenstein-Notizen & Fotos"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Notas y fotos de hitos"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notas y fotos de hitos"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Note e foto dei traguardi"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notes et photos des étapes"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Notities en foto's bij mijlpalen"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Note e foto dei traguardi"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Notes et photos des étapes"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notities en foto's bij mijlpalen"
           }
         }
       }
     },
-    "Multiple Dogs": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Meerdere honden"
+    "Monthly" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Monatlich"
           }
-        }
-      }
-    },
-    "Monthly": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Monatlich"
-          }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mensual"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mensual"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mensuel"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mensuel"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mensile"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mensile"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Maandelijks"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maandelijks"
           }
         }
       }
     },
-    "More Training Skills": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mehr Trainingsfertigkeiten"
+    "More Training Skills" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mehr Trainingsfertigkeiten"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Más habilidades de entrenamiento"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Más habilidades de entrenamiento"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Altre abilità di addestramento"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plus de compétences d'entraînement"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Meer trainingsvaardigheden"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Altre abilità di addestramento"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Plus de compétences d'entraînement"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meer trainingsvaardigheden"
+          }
+        }
+      }
+    },
+    "Multiple Dogs" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meerdere honden"
           }
         }
       }
     },
-    "Otis+": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Otis+"
+    "Otis+" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otis+"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Otis+"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otis+"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Otis+"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otis+"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Otis+"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otis+"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Otis+"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otis+"
           }
         }
       }
     },
-    "Partner Sharing": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Delen met partner"
+    "Partner Sharing" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delen met partner"
           }
         }
       }
     },
-    "Pattern Analysis": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Musteranalyse"
+    "Pattern Analysis" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Musteranalyse"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Análisis de patrones"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Análisis de patrones"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Analisi dei pattern"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Analyse des schémas"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Patroonanalyse"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Analisi dei pattern"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Analyse des schémas"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Patroonanalyse"
           }
         }
       }
     },
-    "Photo & Video Attachments": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Foto- & Video-Anhänge"
+    "Photo & Video Attachments" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Foto- & Video-Anhänge"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Adjuntos de fotos y vídeos"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adjuntos de fotos y vídeos"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Allegati foto e video"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pièces jointes photo et vidéo"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Foto- en videobijlagen"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Allegati foto e video"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pièces jointes photo et vidéo"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Foto- en videobijlagen"
           }
         }
       }
     },
-    "Potty Predictions": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pipi-Vorhersagen"
+    "Potty Predictions" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pipi-Vorhersagen"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Predicciones de necesidades"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Predicciones de necesidades"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Previsioni bisognini"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prédictions de besoins"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Plasvoorspellingen"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Previsioni bisognini"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Prédictions de besoins"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plasvoorspellingen"
           }
         }
       }
     },
-    "Premium (Lifetime)": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Premium (Lebenslang)"
+    "Premium (Lifetime)" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Premium (Lebenslang)"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Premium (De por vida)"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Premium (De por vida)"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Premium (A vita)"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Premium (à vie)"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Premium (Levenslang)"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Premium (A vita)"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Premium (à vie)"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Premium (Levenslang)"
           }
         }
       }
     },
-    "Privacy Policy": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Datenschutzerklärung"
+    "Privacy Policy" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Datenschutzerklärung"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Política de privacidad"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Política de privacidad"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Informativa sulla privacy"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Politique de confidentialité"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Privacybeleid"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Informativa sulla privacy"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Politique de confidentialité"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Privacybeleid"
           }
         }
       }
     },
-    "Products not available": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Produkte nicht verfügbar"
+    "Products not available" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Produkte nicht verfügbar"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Productos no disponibles"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Productos no disponibles"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Prodotti non disponibili"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Produits non disponibles"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Producten niet beschikbaar"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prodotti non disponibili"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Produits non disponibles"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Producten niet beschikbaar"
           }
         }
       }
     },
-    "Purchase Failed": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kauf fehlgeschlagen"
+    "Purchase Failed" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kauf fehlgeschlagen"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Compra fallida"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compra fallida"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Acquisto fallito"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Achat échoué"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aankoop mislukt"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Acquisto fallito"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Achat échoué"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aankoop mislukt"
           }
         }
       }
     },
-    "Purchase is pending approval": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kauf wartet auf Genehmigung"
+    "Purchase is pending approval" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kauf wartet auf Genehmigung"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Compra pendiente de aprobación"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compra pendiente de aprobación"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Acquisto in attesa di approvazione"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Achat en attente d'approbation"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aankoop wacht op goedkeuring"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Acquisto in attesa di approvazione"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Achat en attente d'approbation"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aankoop wacht op goedkeuring"
           }
         }
       }
     },
-    "Purchase was cancelled": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kauf wurde abgebrochen"
+    "Purchase was cancelled" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kauf wurde abgebrochen"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Compra cancelada"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compra cancelada"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Acquisto annullato"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Achat annulé"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aankoop is geannuleerd"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Acquisto annullato"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Achat annulé"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aankoop is geannuleerd"
           }
         }
       }
     },
-    "Restore Purchases": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Käufe wiederherstellen"
+    "Restore Purchases" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Käufe wiederherstellen"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Restaurar compras"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restaurar compras"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ripristina acquisti"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restaurer les achats"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aankopen herstellen"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ripristina acquisti"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Restaurer les achats"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aankopen herstellen"
           }
         }
       }
     },
-    "Save %lld%%": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld%% sparen"
+    "Save %lld%%" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld%% sparen"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ahorra %lld%%"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ahorra %lld%%"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Risparmia %lld%%"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Économisez %lld %%"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bespaar %lld%%"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Risparmia %lld%%"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Économisez %lld %%"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bespaar %lld%%"
           }
         }
       }
     },
-    "Share with your whole family, not just one partner": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mit der ganzen Familie teilen, nicht nur mit einem Partner"
+    "Share with your whole family, not just one partner" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mit der ganzen Familie teilen, nicht nur mit einem Partner"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Comparte con toda tu familia, no solo con una persona"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comparte con toda tu familia, no solo con una persona"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Condividi con tutta la famiglia, non solo con un partner"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Partagez avec toute votre famille, pas seulement un partenaire"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Deel met je hele gezin, niet alleen met een partner"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Condividi con tutta la famiglia, non solo con un partner"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Partagez avec toute votre famille, pas seulement un partenaire"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deel met je hele gezin, niet alleen met een partner"
           }
         }
       }
     },
-    "Sleep Insights": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Schlaf-Einblicke"
+    "Sleep Insights" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schlaf-Einblicke"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Información del sueño"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Información del sueño"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Analisi del sonno"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Analyses du sommeil"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Slaapinzichten"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Analisi del sonno"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Analyses du sommeil"
-          }
-        }
-      }
-    },
-    "Smart AI Nudges": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Slimme AI-suggesties"
-          }
-        }
-      }
-    },
-    "Subscribe now to restore %@'s AI-powered insights and predictions.": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Abonneer nu om de AI-gestuurde inzichten en voorspellingen van %@ te herstellen."
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Slaapinzichten"
           }
         }
       }
     },
-    "Subtle AI tuning for daily status text, walk suggestion order, and reminder timing": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Subtiele AI-afstemming voor dagelijkse status, wandelsuggesties en herinneringstiming"
+    "Smart AI Nudges" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Slimme AI-suggesties"
           }
         }
       }
     },
-    "Socialization Progress": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sozialisierungsfortschritt"
+    "Socialization Progress" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sozialisierungsfortschritt"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Progreso de socialización"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Progreso de socialización"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Progressi socializzazione"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Progrès de socialisation"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Socialisatievoortgang"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Progressi socializzazione"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Progrès de socialisation"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Socialisatievoortgang"
           }
         }
       }
     },
-    "Status": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Status"
+    "Status" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Status"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Estado"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estado"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Statut"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Statut"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Stato"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stato"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Status"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Status"
           }
         }
       }
     },
-    "Subscribe": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Abonnieren"
+    "Subscribe" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abonnieren"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Suscribirse"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suscribirse"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "S'abonner"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "S'abonner"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Abbonati"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abbonati"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Abonneren"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abonneren"
           }
         }
       }
     },
-    "Subscriptions automatically renew unless cancelled at least 24 hours before the end of the current period. Payment will be charged to your Apple ID account. Manage your subscriptions in Settings.": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Abonnements verlängern sich automatisch, sofern sie nicht mindestens 24 Stunden vor Ende der aktuellen Laufzeit gekündigt werden. Die Zahlung wird über dein Apple-ID-Konto abgerechnet. Verwalte deine Abonnements in den Einstellungen."
+    "Subscribe now to restore %@'s AI-powered insights and predictions." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abonneer nu om de AI-gestuurde inzichten en voorspellingen van %@ te herstellen."
           }
+        }
+      }
+    },
+    "Subscriptions automatically renew unless cancelled at least 24 hours before the end of the current period. Payment will be charged to your Apple ID account. Manage your subscriptions in Settings." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abonnements verlängern sich automatisch, sofern sie nicht mindestens 24 Stunden vor Ende der aktuellen Laufzeit gekündigt werden. Die Zahlung wird über dein Apple-ID-Konto abgerechnet. Verwalte deine Abonnements in den Einstellungen."
+          }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Las suscripciones se renuevan automáticamente a menos que se cancelen al menos 24 horas antes del final del período actual. El pago se cargará a tu cuenta de Apple ID. Gestiona tus suscripciones en Ajustes."
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Las suscripciones se renuevan automáticamente a menos que se cancelen al menos 24 horas antes del final del período actual. El pago se cargará a tu cuenta de Apple ID. Gestiona tus suscripciones en Ajustes."
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gli abbonamenti si rinnovano automaticamente a meno che non vengano annullati almeno 24 ore prima della fine del periodo corrente. Il pagamento verrà addebitato sul tuo account Apple ID. Gestisci i tuoi abbonamenti nelle Impostazioni."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les abonnements se renouvellent automatiquement sauf annulation au moins 24 heures avant la fin de la période en cours. Le paiement sera prélevé sur votre compte Apple ID. Gérez vos abonnements dans Réglages."
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Abonnementen worden automatisch verlengd tenzij je minimaal 24 uur voor het einde van de huidige periode opzegt. De betaling wordt in rekening gebracht op je Apple ID-account. Beheer je abonnementen in Instellingen."
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gli abbonamenti si rinnovano automaticamente a meno che non vengano annullati almeno 24 ore prima della fine del periodo corrente. Il pagamento verrà addebitato sul tuo account Apple ID. Gestisci i tuoi abbonamenti nelle Impostazioni."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Les abonnements se renouvellent automatiquement sauf annulation au moins 24 heures avant la fin de la période en cours. Le paiement sera prélevé sur votre compte Apple ID. Gérez vos abonnements dans Réglages."
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abonnementen worden automatisch verlengd tenzij je minimaal 24 uur voor het einde van de huidige periode opzegt. De betaling wordt in rekening gebracht op je Apple ID-account. Beheer je abonnementen in Instellingen."
+          }
+        }
+      }
+    },
+    "Subtle AI tuning for daily status text, walk suggestion order, and reminder timing" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Subtiele AI-afstemming voor dagelijkse status, wandelsuggesties en herinneringstiming"
           }
         }
       }
     },
-    "Terms of Service": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nutzungsbedingungen"
+    "Terms of Service" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nutzungsbedingungen"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Términos de servicio"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Términos de servicio"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Termini di servizio"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conditions d'utilisation"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gebruiksvoorwaarden"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Termini di servizio"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Conditions d'utilisation"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gebruiksvoorwaarden"
           }
         }
       }
     },
-    "Track sleep quality and optimize rest schedules": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Schlafqualität verfolgen und Ruhepläne optimieren"
+    "Track sleep quality and optimize rest schedules" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schlafqualität verfolgen und Ruhepläne optimieren"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Controla la calidad del sueño y optimiza los horarios de descanso"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Controla la calidad del sueño y optimiza los horarios de descanso"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Monitora la qualità del sonno e ottimizza gli orari di riposo"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suivez la qualité du sommeil et optimisez les horaires de repos"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Volg slaapkwaliteit en optimaliseer rustschema's"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Monitora la qualità del sonno e ottimizza gli orari di riposo"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Suivez la qualité du sommeil et optimisez les horaires de repos"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Volg slaapkwaliteit en optimaliseer rustschema's"
           }
         }
       }
     },
-    "Track socialization experiences and progress": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sozialisierungserfahrungen und Fortschritte verfolgen"
+    "Track socialization experiences and progress" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sozialisierungserfahrungen und Fortschritte verfolgen"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Registra experiencias de socialización y su progreso"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Registra experiencias de socialización y su progreso"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Monitora le esperienze di socializzazione e i progressi"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suivez les expériences de socialisation et les progrès"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Volg socialisatie-ervaringen en voortgang"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Monitora le esperienze di socializzazione e i progressi"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Suivez les expériences de socialisation et les progrès"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Volg socialisatie-ervaringen en voortgang"
           }
         }
       }
     },
-    "Trial (%lld days left)": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Testphase (%lld Tage übrig)"
+    "Trial (%lld days left)" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Testphase (%lld Tage übrig)"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Prueba (%lld días restantes)"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prueba (%lld días restantes)"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Prova (%lld giorni rimasti)"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Essai (%lld jours restants)"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Proefperiode (%lld dagen over)"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prova (%lld giorni rimasti)"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Essai (%lld jours restants)"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Proefperiode (%lld dagen over)"
           }
         }
       }
     },
-    "Try all Otis+ features risk-free. Cancel anytime.": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Teste alle Otis+ Funktionen risikofrei. Jederzeit kündbar."
+    "Try all Otis+ features risk-free. Cancel anytime." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Teste alle Otis+ Funktionen risikofrei. Jederzeit kündbar."
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Prueba todas las funciones de Otis+ sin riesgo. Cancela cuando quieras."
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prueba todas las funciones de Otis+ sin riesgo. Cancela cuando quieras."
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Prova tutte le funzioni di Otis+ senza rischi. Annulla quando vuoi."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Essayez toutes les fonctionnalités Otis+ sans risque. Annulez à tout moment."
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Probeer alle Otis+ functies risicovrij. Annuleer wanneer je wilt."
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prova tutte le funzioni di Otis+ senza rischi. Annulla quando vuoi."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Essayez toutes les fonctionnalités Otis+ sans risque. Annulez à tout moment."
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Probeer alle Otis+ functies risicovrij. Annuleer wanneer je wilt."
           }
         }
       }
     },
-    "Try Otis+": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Otis+ testen"
+    "Try Otis+" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otis+ testen"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Probar Otis+"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Probar Otis+"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Prova Otis+"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Essayer Otis+"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Probeer Otis+"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prova Otis+"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Essayer Otis+"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Probeer Otis+"
           }
         }
       }
     },
-    "Unlimited Partner Sharing": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Unbegrenztes Teilen mit Partnern"
+    "Unlimited Partner Sharing" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unbegrenztes Teilen mit Partnern"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Compartir ilimitado con familia"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compartir ilimitado con familia"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Condivisione illimitata con partner"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Partage illimité avec des partenaires"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Onbeperkt delen met partners"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Condivisione illimitata con partner"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Partage illimité avec des partenaires"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Onbeperkt delen met partners"
           }
         }
       }
     },
-    "Unlock all training skills with Otis+": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Alle Trainingsfertigkeiten mit Otis+ freischalten"
+    "Unlock all training skills with Otis+" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle Trainingsfertigkeiten mit Otis+ freischalten"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Desbloquea todas las habilidades de entrenamiento con Otis+"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Desbloquea todas las habilidades de entrenamiento con Otis+"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sblocca tutte le abilità di addestramento con Otis+"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Débloquez toutes les compétences d'entraînement avec Otis+"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ontgrendel alle trainingsvaardigheden met Otis+"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sblocca tutte le abilità di addestramento con Otis+"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Débloquez toutes les compétences d'entraînement avec Otis+"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ontgrendel alle trainingsvaardigheden met Otis+"
           }
         }
       }
     },
-    "Unlock the full Otis experience": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Das volle Otis-Erlebnis freischalten"
+    "Unlock the full Otis experience" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das volle Otis-Erlebnis freischalten"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Desbloquea la experiencia completa de Otis"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Desbloquea la experiencia completa de Otis"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sblocca l'esperienza completa di Otis"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Débloquez l'expérience Otis complète"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ontgrendel de volledige Otis-ervaring"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sblocca l'esperienza completa di Otis"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Débloquez l'expérience Otis complète"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ontgrendel de volledige Otis-ervaring"
           }
         }
       }
     },
-    "Unlock with Otis+": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mit Otis+ freischalten"
+    "Unlock with Otis+" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mit Otis+ freischalten"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Desbloquear con Otis+"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Desbloquear con Otis+"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sblocca con Otis+"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Débloquer avec Otis+"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ontgrendel met Otis+"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sblocca con Otis+"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Débloquer avec Otis+"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ontgrendel met Otis+"
           }
         }
       }
     },
-    "Week in Review": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wochenrückblick"
+    "Week in Review" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wochenrückblick"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Resumen semanal"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Resumen semanal"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Riepilogo settimanale"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bilan de la semaine"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Weekoverzicht"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Riepilogo settimanale"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bilan de la semaine"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weekoverzicht"
           }
         }
       }
     },
-    "Weekly summaries with progress highlights": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wöchentliche Zusammenfassungen mit Fortschrittshighlights"
+    "Weekly summaries with progress highlights" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wöchentliche Zusammenfassungen mit Fortschrittshighlights"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Resúmenes semanales con los logros destacados"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Resúmenes semanales con los logros destacados"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Riepiloghi settimanali con i progressi più importanti"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Résumés hebdomadaires avec points forts des progrès"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wekelijkse samenvattingen met voortgangshoogtepunten"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Riepiloghi settimanali con i progressi più importanti"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Résumés hebdomadaires avec points forts des progrès"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wekelijkse samenvattingen met voortgangshoogtepunten"
           }
         }
       }
     },
-    "Welcome to Otis+!": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Willkommen bei Otis+!"
+    "Welcome to Otis+!" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Willkommen bei Otis+!"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "¡Bienvenido a Otis+!"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡Bienvenido a Otis+!"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Benvenuto in Otis+!"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bienvenue sur Otis+ !"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Welkom bij Otis+!"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Benvenuto in Otis+!"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bienvenue sur Otis+ !"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Welkom bij Otis+!"
           }
         }
       }
     },
-    "What's included": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Was enthalten ist"
+    "What's included" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Was enthalten ist"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Qué incluye"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Qué incluye"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cosa include"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ce qui est inclus"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wat zit erin"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cosa include"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ce qui est inclus"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wat zit erin"
           }
         }
       }
     },
-    "Yearly": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Jährlich"
+    "Yearly" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jährlich"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Anual"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anual"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Annuel"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annuel"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Annuale"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annuale"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Jaarlijks"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jaarlijks"
           }
         }
       }
     },
-    "You now have access to all premium features. Let's make the most of your puppy's journey together.": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Du hast jetzt Zugang zu allen Premium-Funktionen. Lass uns gemeinsam das Beste aus der Reise deines Welpen machen."
+    "You and %@ are loving Otis+" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jij en %@ zijn dol op Otis+"
           }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ahora tienes acceso a todas las funciones premium. Aprovechemos al máximo el viaje de tu cachorro juntos."
+        }
+      }
+    },
+    "You now have access to all premium features. Let's make the most of your puppy's journey together." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du hast jetzt Zugang zu allen Premium-Funktionen. Lass uns gemeinsam das Beste aus der Reise deines Welpen machen."
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ora hai accesso a tutte le funzioni premium. Rendiamo insieme il viaggio del tuo cucciolo il migliore possibile."
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ahora tienes acceso a todas las funciones premium. Aprovechemos al máximo el viaje de tu cachorro juntos."
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Je hebt nu toegang tot alle premium functies. Laten we samen het meeste uit de reis van je puppy halen."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vous avez maintenant accès à toutes les fonctionnalités premium. Profitons ensemble au maximum du parcours de votre chiot."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vous avez maintenant accès à toutes les fonctionnalités premium. Profitons ensemble au maximum du parcours de votre chiot."
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ora hai accesso a tutte le funzioni premium. Rendiamo insieme il viaggio del tuo cucciolo il migliore possibile."
           }
-        }
-      }
-    },
-    "You and %@ are loving Otis+": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Jij en %@ zijn dol op Otis+"
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je hebt nu toegang tot alle premium functies. Laten we samen het meeste uit de reis van je puppy halen."
           }
         }
       }
     },
-    "Your trial ends in %lld days. Subscribe to keep %@'s insights.": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Je proefperiode eindigt over %lld dagen. Abonneer om de inzichten van %@ te behouden."
+    "Your trial ends in %lld days. Subscribe to keep %@'s insights." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je proefperiode eindigt over %lld dagen. Abonneer om de inzichten van %@ te behouden."
           }
         }
       }
     },
-    "Your trial ends tomorrow. Subscribe now to keep %@'s AI coach.": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Je proefperiode eindigt morgen. Abonneer nu om de AI-coach van %@ te behouden."
+    "Your trial ends tomorrow. Subscribe now to keep %@'s personalized insights." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je proefperiode eindigt morgen. Abonneer nu om de persoonlijke inzichten van %@ te behouden."
           }
         }
       }
     },
-    "Your Trial Has Ended": {
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Je proefperiode is afgelopen"
+    "Your Trial Has Ended" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je proefperiode is afgelopen"
           }
         }
       }
     }
   },
-  "version": "1.0"
+  "version" : "1.0"
 }

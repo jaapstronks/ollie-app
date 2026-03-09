@@ -101,6 +101,10 @@ struct CaptionGenerator {
         switch card.type {
         case .weeklyRecap, .monthlyRecap, .yearRecap:
             tags.append("#PuppyProgress")
+        case .gotchaDayAnniversary:
+            tags.append("#GotchaDay")
+            tags.append("#AdoptDontShop")
+            tags.append("#PuppyAnniversary")
         case .achievement:
             tags.append("#PuppyAchievement")
         case .thenVsNow, .monthlyGrowth, .growthChart:
@@ -111,6 +115,9 @@ struct CaptionGenerator {
         case .training:
             tags.append("#DogTraining")
             tags.append("#PuppyTraining")
+        case .moment:
+            tags.append("#PuppyMoment")
+            tags.append("#DogPhotography")
         }
 
         // Add general dog tags
@@ -128,6 +135,10 @@ struct CaptionGenerator {
             tags.append("#PuppyTraining")
         case .thenVsNow, .monthlyGrowth, .growthChart:
             tags.append("#PuppyGrowth")
+        case .gotchaDayAnniversary:
+            tags.append("#GotchaDay")
+        case .moment:
+            tags.append("#PuppyMoment")
         default:
             tags.append("#PuppyLife")
         }

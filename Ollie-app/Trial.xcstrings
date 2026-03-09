@@ -265,13 +265,13 @@
         }
       }
     },
-    "Keep %@'s personalized AI coach working for you. Subscribe today to continue." : {
+    "Keep %@'s personalized insights and predictions. Subscribe today to continue." : {
       "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Houd %@'s persoonlijke AI coach voor je werkend. Abonneer vandaag om door te gaan."
+            "value" : "Behoud %@'s persoonlijke inzichten en voorspellingen. Abonneer vandaag om door te gaan."
           }
         }
       }
@@ -342,17 +342,6 @@
         }
       }
     },
-    "One Week with Your AI Coach" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Een week met je AI-coach"
-          }
-        }
-      }
-    },
     "Only 2 Days Left" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -364,13 +353,35 @@
         }
       }
     },
-    "Open Ollie to see what your AI coach is learning" : {
+    "Open Ollie to see what we've learned about your puppy" : {
       "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Open Ollie om te zien wat je AI coach leert"
+            "value" : "Open Ollie om te zien wat we over je puppy hebben geleerd"
+          }
+        }
+      }
+    },
+    "Otis is Learning" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otis leert"
+          }
+        }
+      }
+    },
+    "Otis is Ready for You" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otis staat voor je klaar"
           }
         }
       }
@@ -518,24 +529,13 @@
         }
       }
     },
-    "Your AI Coach is Learning" : {
+    "Your First Week with Otis" : {
       "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Je AI-coach leert"
-          }
-        }
-      }
-    },
-    "Your AI Puppy Coach is Ready" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Je AI-puppycoach is klaar"
+            "value" : "Je eerste week met Otis"
           }
         }
       }

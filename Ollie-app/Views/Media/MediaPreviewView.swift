@@ -13,12 +13,15 @@ struct MediaPreviewView: View {
     let onDelete: () -> Void
 
     @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject private var profileStore: ProfileStore
     @State private var scale: CGFloat = 1.0
     @State private var lastScale: CGFloat = 1.0
     @State private var offset: CGSize = .zero
     @State private var lastOffset: CGSize = .zero
     @State private var showControls: Bool = true
     @State private var showDeleteConfirmation: Bool = false
+    @State private var showShareSheet: Bool = false
+    @State private var loadedImage: UIImage?
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     private var documentsURL: URL {
@@ -42,9 +45,7 @@ struct MediaPreviewView: View {
                 Color.black.ignoresSafeArea()
 
                 // Photo with gestures (fallback to thumbnail if photo is nil)
-                if let photoPath = event.photo ?? event.thumbnailPath,
-                   let data = try? Data(contentsOf: documentsURL.appendingPathComponent(photoPath)),
-                   let uiImage = UIImage(data: data) {
+                if let uiImage = loadedImage {
                     Image(uiImage: uiImage)
                         .resizable()
                         .scaledToFit()
@@ -145,6 +146,20 @@ struct MediaPreviewView: View {
 
                             Spacer()
 
+                            // Share button
+                            Button {
+                                HapticFeedback.light()
+                                showShareSheet = true
+                            } label: {
+                                Image(systemName: "square.and.arrow.up")
+                                    .font(.title2)
+                                    .foregroundColor(.white)
+                                    .padding()
+                                    .background(Circle().fill(Color.black.opacity(0.5)))
+                            }
+                            .accessibilityLabel(Strings.Sharing.shareThisMoment)
+                            .accessibilityIdentifier("MEDIA_SHARE_BUTTON")
+
                             Button {
                                 showDeleteConfirmation = true
                             } label: {
@@ -213,7 +228,29 @@ struct MediaPreviewView: View {
         } message: {
             Text(Strings.MediaPreview.deleteConfirmMessage)
         }
+        .sheet(isPresented: $showShareSheet) {
+            if let image = loadedImage, let profile = profileStore.activeProfile {
+                ShareOptionsSheet(card: MomentShareCard(
+                    event: event,
+                    profile: profile,
+                    momentImage: image
+                ))
+            }
+        }
+        .onAppear {
+            loadImage()
+        }
         .statusBarHidden(true)
+    }
+
+    // MARK: - Image Loading
+
+    private func loadImage() {
+        guard let photoPath = event.photo ?? event.thumbnailPath else { return }
+        let imageURL = documentsURL.appendingPathComponent(photoPath)
+        guard let data = try? Data(contentsOf: imageURL),
+              let image = UIImage(data: data) else { return }
+        loadedImage = image
     }
 }
 
@@ -222,4 +259,5 @@ struct MediaPreviewView: View {
         event: PuppyEvent(time: Date(), type: .moment, note: "Test moment"),
         onDelete: {}
     )
+    .environmentObject(ProfileStore.shared)
 }

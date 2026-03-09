@@ -64,7 +64,31 @@ extension Strings {
             String(localized: "Look how much \(name) has grown!", table: table)
         }
 
+        static func momentCaption(name: String, date: String) -> String {
+            String(localized: "A special moment with \(name) - \(date)", table: table)
+        }
+
+        // Moment sharing
+        static let momentCard = String(localized: "Photo moment card", table: table)
+        static let shareThisMoment = String(localized: "Share this moment", table: table)
+
+        // Age display
+        static func ageMonths(_ months: Int) -> String {
+            String(localized: "\(months)mo", table: table)
+        }
+
+        static func ageYears(_ years: Int) -> String {
+            String(localized: "\(years)yr", table: table)
+        }
+
+        static func ageYearsMonths(_ years: Int, _ months: Int) -> String {
+            String(localized: "\(years)yr \(months)mo", table: table)
+        }
+
         // Watermark
         static let madeWithOllie = String(localized: "Made with Ollie", table: table)
+
+        // Recent moments carousel
+        static let recentMoments = String(localized: "Recent Moments", table: table)
     }
 }

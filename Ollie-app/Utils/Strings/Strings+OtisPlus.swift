@@ -133,7 +133,7 @@ extension Strings {
         }
         static func trialHeroSubtitle(dogName: String, daysLeft: Int) -> String {
             if daysLeft == 1 {
-                return String(localized: "Your trial ends tomorrow. Subscribe now to keep \(dogName)'s AI coach.", table: table)
+                return String(localized: "Your trial ends tomorrow. Subscribe now to keep \(dogName)'s personalized insights.", table: table)
             }
             return String(localized: "Your trial ends in \(daysLeft) days. Subscribe to keep \(dogName)'s insights.", table: table)
         }

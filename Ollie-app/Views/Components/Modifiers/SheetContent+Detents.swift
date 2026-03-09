@@ -60,7 +60,7 @@ extension SheetCoordinator.ActiveSheet {
              .developmentJourney, .socializationWindow, .medicalCare,
              .fullTimeline, .walkScheduleEditor, .crateTrainingGuide,
              .pottyTrainingGuide, .addAppointmentWithPrefill, .symptomLog,
-             .seniorMobility, .behaviorLog:
+             .seniorMobility, .behaviorLog, .momentsLightbox:
             return [.large]
 
         // Default for unspecified sheets

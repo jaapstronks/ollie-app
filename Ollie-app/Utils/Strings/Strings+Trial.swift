@@ -14,7 +14,7 @@ extension Strings {
 
     enum Trial {
         // Onboarding trial step
-        static let heroTitle = String(localized: "Your AI Puppy Coach is Ready", table: table)
+        static let heroTitle = String(localized: "Otis is Ready for You", table: table)
         static let heroSubtitle = String(localized: "Get personalized insights, smart predictions, and expert guidance tailored to your puppy.", table: table)
         static let startTrialButton = String(localized: "Start 14-Day Free Trial", table: table)
         static let skipTrialLink = String(localized: "Continue without trial", table: table)
@@ -86,14 +86,14 @@ extension Strings {
         // MARK: - Touchpoint Cards
 
         // Day 1: First Insight
-        static let day1Title = String(localized: "Your AI Coach is Learning", table: table)
+        static let day1Title = String(localized: "Otis is Learning", table: table)
         static func day1Subtitle(name: String) -> String {
             String(localized: "Your patterns with \(name) are being analyzed. Keep logging to unlock personalized predictions!", table: table)
         }
         static let day1Dismiss = String(localized: "Got it", table: table)
 
         // Day 7: Value Summary
-        static let day7Title = String(localized: "One Week with Your AI Coach", table: table)
+        static let day7Title = String(localized: "Your First Week with Otis", table: table)
         static let day7Subtitle = String(localized: "Look what we've discovered together", table: table)
         static func day7PredictionsMade(_ count: Int) -> String {
             if count == 1 {
@@ -126,13 +126,13 @@ extension Strings {
         // Day 14: Conversion
         static let day14Title = String(localized: "Last Day of Your Trial", table: table)
         static func day14Subtitle(name: String) -> String {
-            String(localized: "Keep \(name)'s personalized AI coach working for you. Subscribe today to continue.", table: table)
+            String(localized: "Keep \(name)'s personalized insights and predictions. Subscribe today to continue.", table: table)
         }
         static let day14Subscribe = String(localized: "Subscribe Now", table: table)
         static let day14Dismiss = String(localized: "Not Yet", table: table)
 
         // Day 3: Notification (push only, no card)
         static let day3NotificationTitle = String(localized: "Your puppy's patterns are forming", table: table)
-        static let day3NotificationBody = String(localized: "Open Ollie to see what your AI coach is learning", table: table)
+        static let day3NotificationBody = String(localized: "Open Ollie to see what we've learned about your puppy", table: table)
     }
 }
