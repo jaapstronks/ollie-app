@@ -274,8 +274,7 @@ private extension TodayStatusCardsSection {
                 wokeAt: wokeAt,
                 minutesSinceWake: minutesSinceWake,
                 pottyWasOverdueBy: overdueBy,
-                subjectPronoun: viewModel.profileStore.profile?.subjectPronoun ?? "they",
-                usesPluralVerbForm: viewModel.profileStore.profile?.usesPluralVerbForm ?? true,
+                gender: viewModel.profileStore.profile?.gender ?? .unspecified,
                 onLogPotty: { viewModel.sheetCoordinator.presentSheet(.potty(preselected: .plassen)) }
             )
         }
@@ -310,9 +309,7 @@ private extension TodayStatusCardsSection {
                 pottyUrgency: urgency,
                 minutesOverdue: overdue,
                 pendingActionable: pendingActionable,
-                subjectPronoun: viewModel.profileStore.profile?.subjectPronoun ?? "they",
-                objectPronoun: viewModel.profileStore.profile?.objectPronoun ?? "them",
-                usesPluralVerbForm: viewModel.profileStore.profile?.usesPluralVerbForm ?? true,
+                gender: viewModel.profileStore.profile?.gender ?? .unspecified,
                 onWakeUp: {
                     viewModel.sheetCoordinator.presentSheet(.endSleep(since))
                 }

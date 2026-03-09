@@ -456,6 +456,47 @@
         }
       }
     },
+    "%lld more poops expected today" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Noch %lld Häufchen heute erwartet"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se esperan %lld cacas más hoy"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld cacas de plus attendus aujourd'hui"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld altre cacche previste oggi"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nog %lld poepjes verwacht vandaag"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld bajs till förväntade idag"
+          }
+        }
+      }
+    },
     "%lld poops today" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -736,6 +777,47 @@
         }
       }
     },
+    "1 more poop expected today" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Noch 1 Häufchen heute erwartet"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se espera 1 caca más hoy"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 caca de plus attendu aujourd'hui"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 altra cacca prevista oggi"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nog 1 poepje verwacht vandaag"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 bajs till förväntat idag"
+          }
+        }
+      }
+    },
     "1 poop today" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -802,86 +884,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "1 keer gepoept (verwacht ~%lld-%lld)"
-          }
-        }
-      }
-    },
-    "1 more poop expected today" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Noch 1 Häufchen heute erwartet"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Se espera 1 caca más hoy"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "1 caca de plus attendu aujourd'hui"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "1 altra cacca prevista oggi"
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nog 1 poepje verwacht vandaag"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "1 bajs till förväntat idag"
-          }
-        }
-      }
-    },
-    "%lld more poops expected today" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Noch %lld Häufchen heute erwartet"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Se esperan %lld cacas más hoy"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld cacas de plus attendus aujourd'hui"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld altre cacche previste oggi"
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nog %lld poepjes verwacht vandaag"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld bajs till förväntade idag"
           }
         }
       }
@@ -2652,6 +2654,47 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Vrieskou"
+          }
+        }
+      }
+    },
+    "He's awake — time for potty!" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Er ist wach — Zeit für Pipi!"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡Está despierto — hora de hacer pipí!"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il est réveillé — l'heure du pipi !"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "È sveglio — ora della pipì!"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hij is wakker — tijd om te plassen!"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Han är vaken — dags att kissa!"
           }
         }
       }
@@ -4494,6 +4537,41 @@
         }
       }
     },
+    "Potty is %@ overdue" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pipi ist %@ überfällig"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pipí retrasado %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Besoins en retard de %@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pipi in ritardo di %@"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plas is %@ te laat"
+          }
+        }
+      }
+    },
     "Potty is %lld min overdue" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -4595,6 +4673,41 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Plasstatus"
+          }
+        }
+      }
+    },
+    "Potty was %@ overdue" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pipi war %@ überfällig"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pipí estaba retrasado %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Besoins étaient en retard de %@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pipi era in ritardo di %@"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plas was %@ te laat"
           }
         }
       }
@@ -4810,13 +4923,19 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "E sveglia — ora della pipi!"
+            "value" : "È sveglia — ora della pipì!"
           }
         },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ze is wakker — tijd om te plassen!"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hon är vaken — dags att kissa!"
           }
         }
       }
@@ -5778,6 +5897,47 @@
         }
       }
     },
+    "They're awake — time for potty!" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sie sind wach — Zeit für Pipi!"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡Están despiertos — hora de hacer pipí!"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ils sont réveillés — l'heure du pipi !"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sono svegli — ora della pipì!"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ze zijn wakker — tijd om te plassen!"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De är vakna — dags att kissa!"
+          }
+        }
+      }
+    },
     "This will delete both the sleep and wake-up events." : {
       "extractionState" : "stale",
       "localizations" : {
@@ -6636,13 +6796,54 @@
         }
       }
     },
+    "When he wakes, take him outside" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wenn er aufwacht, geh mit ihm nach draußen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cuando despierte, llévalo afuera"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quand il se réveille, sortez-le dehors"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quando si sveglia, portalo fuori"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Als hij wakker wordt, neem hem mee naar buiten"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "När han vaknar, ta ut honom"
+          }
+        }
+      }
+    },
     "When she wakes, take her outside" : {
       "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Wenn sie aufwacht, geh nach draussen"
+            "value" : "Wenn sie aufwacht, geh mit ihr nach draußen"
           }
         },
         "es" : {
@@ -6666,7 +6867,54 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Als ze wakker wordt, ga naar buiten"
+            "value" : "Als ze wakker wordt, neem haar mee naar buiten"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "När hon vaknar, ta ut henne"
+          }
+        }
+      }
+    },
+    "When they wake, take them outside" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wenn sie aufwachen, geh mit ihnen nach draußen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cuando despierten, llévalos afuera"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quand ils se réveillent, sortez-les dehors"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quando si svegliano, portali fuori"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Als ze wakker worden, neem ze mee naar buiten"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "När de vaknar, ta ut dem"
           }
         }
       }

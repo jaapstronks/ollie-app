@@ -14,15 +14,15 @@ struct PostWakePottyCard: View {
     let wokeAt: Date
     let minutesSinceWake: Int
     let pottyWasOverdueBy: Int?
-    /// Subject pronoun for the dog (he/she/they)
-    let subjectPronoun: String
+    /// Gender of the dog for localized pronoun strings
+    let gender: PuppyProfile.Gender
     let onLogPotty: () -> Void
 
     @Environment(\.colorScheme) private var colorScheme
 
     /// Title text using proper pronouns
     private var titleText: String {
-        Strings.CombinedStatus.awakeTimePotty(subject: subjectPronoun)
+        Strings.CombinedStatus.awakeTimePotty(isMale: gender == .male, isFemale: gender == .female)
     }
 
     var body: some View {
@@ -90,7 +90,7 @@ struct PostWakePottyCard: View {
             wokeAt: Date().addingTimeInterval(-2 * 60),
             minutesSinceWake: 2,
             pottyWasOverdueBy: 8,
-            subjectPronoun: "she",
+            gender: .female,
             onLogPotty: { print("Log potty tapped") }
         )
         Spacer()
@@ -104,7 +104,7 @@ struct PostWakePottyCard: View {
             wokeAt: Date().addingTimeInterval(-3 * 60),
             minutesSinceWake: 3,
             pottyWasOverdueBy: nil,
-            subjectPronoun: "he",
+            gender: .unspecified,
             onLogPotty: { print("Log potty tapped") }
         )
         Spacer()

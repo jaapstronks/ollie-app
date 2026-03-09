@@ -16,12 +16,8 @@ struct CombinedSleepPottyCard: View {
     let pottyUrgency: PottyUrgency
     let minutesOverdue: Int?
     let pendingActionable: ActionableItem?
-    /// Subject pronoun for the dog (he/she/they)
-    let subjectPronoun: String
-    /// Object pronoun for the dog (him/her/them)
-    let objectPronoun: String
-    /// Whether to use plural verb forms ("they wake" vs "he/she wakes")
-    let usesPluralVerbForm: Bool
+    /// Gender of the dog for localized pronoun strings
+    let gender: PuppyProfile.Gender
     let onWakeUp: () -> Void
 
     init(
@@ -30,9 +26,7 @@ struct CombinedSleepPottyCard: View {
         pottyUrgency: PottyUrgency,
         minutesOverdue: Int?,
         pendingActionable: ActionableItem? = nil,
-        subjectPronoun: String = "they",
-        objectPronoun: String = "them",
-        usesPluralVerbForm: Bool = true,
+        gender: PuppyProfile.Gender = .unspecified,
         onWakeUp: @escaping () -> Void
     ) {
         self.sleepingSince = sleepingSince
@@ -40,9 +34,7 @@ struct CombinedSleepPottyCard: View {
         self.pottyUrgency = pottyUrgency
         self.minutesOverdue = minutesOverdue
         self.pendingActionable = pendingActionable
-        self.subjectPronoun = subjectPronoun
-        self.objectPronoun = objectPronoun
-        self.usesPluralVerbForm = usesPluralVerbForm
+        self.gender = gender
         self.onWakeUp = onWakeUp
     }
 
@@ -109,7 +101,7 @@ struct CombinedSleepPottyCard: View {
                     .foregroundStyle(.orange)
 
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(Strings.CombinedStatus.whenWakesTakeOutside(subject: subjectPronoun, object: objectPronoun, usesPluralVerbForm: usesPluralVerbForm))
+                    Text(Strings.CombinedStatus.whenWakesTakeOutside(isMale: gender == .male, isFemale: gender == .female))
                         .font(.subheadline)
                         .fontWeight(.medium)
                         .foregroundStyle(.primary)

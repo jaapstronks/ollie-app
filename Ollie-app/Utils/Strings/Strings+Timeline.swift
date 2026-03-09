@@ -454,17 +454,22 @@ extension Strings {
         /// Morning overnight sleep - puppy hasn't peed since last night
         static let pottyFirstThingMorning = String(localized: "Hasn't peed since last night", table: table)
         static let pottyUrgentWhileSleeping = String(localized: "Potty needed soon", table: table)
-        /// Dynamic version with pronouns: "When he/she wakes" or "When they wake"
-        /// - Parameters:
-        ///   - subject: Subject pronoun (he/she/they)
-        ///   - object: Object pronoun (him/her/them)
-        ///   - usesPluralVerbForm: Whether to use plural verb form ("wake" vs "wakes")
-        static func whenWakesTakeOutside(subject: String, object: String, usesPluralVerbForm: Bool = false) -> String {
-            let verb = usesPluralVerbForm ? "wake" : "wakes"
-            return String(localized: "When \(subject) \(verb), take \(object) outside", table: table)
-        }
-        /// Legacy fallback using neutral pronouns
+        /// Gender-specific wake/potty message with full sentence translations
+        /// Uses complete sentences to ensure proper localization across languages
+        static let whenWakesTakeOutsideMale = String(localized: "When he wakes, take him outside", table: table)
+        static let whenWakesTakeOutsideFemale = String(localized: "When she wakes, take her outside", table: table)
         static let whenWakesTakeOutsideNeutral = String(localized: "When they wake, take them outside", table: table)
+
+        /// Returns the appropriate wake/potty message for the given gender
+        static func whenWakesTakeOutside(isMale: Bool?, isFemale: Bool?) -> String {
+            if isMale == true {
+                return whenWakesTakeOutsideMale
+            } else if isFemale == true {
+                return whenWakesTakeOutsideFemale
+            } else {
+                return whenWakesTakeOutsideNeutral
+            }
+        }
         static let wakeUp = String(localized: "Woke up", table: table)
         static let sleepingPottyLabel = String(localized: "Sleeping", table: table)
 
@@ -473,19 +478,22 @@ extension Strings {
         static let alsoTimeForMeal = String(localized: "Also time for a meal", table: table)
 
         // Post-wake card
-        /// Dynamic version with pronouns: "He's/She's awake" or "They're awake"
-        /// - Parameters:
-        ///   - subject: Subject pronoun (he/she/they)
-        ///   - usesPluralVerbForm: Whether to use plural verb form ("'re" vs "'s")
-        static func awakeTimePotty(subject: String, usesPluralVerbForm: Bool = false) -> String {
-            // Capitalize first letter of subject for start of sentence
-            let capitalizedSubject = subject.prefix(1).uppercased() + subject.dropFirst()
-            // Use appropriate verb form (they're vs he's/she's)
-            let verb = usesPluralVerbForm ? "'re" : "'s"
-            return String(localized: "\(capitalizedSubject)\(verb) awake — time for potty!", table: table)
-        }
-        /// Legacy fallback using neutral pronouns
+        /// Gender-specific awake/potty message with full sentence translations
+        /// Uses complete sentences to ensure proper localization across languages
+        static let awakeTimePottyMale = String(localized: "He's awake — time for potty!", table: table)
+        static let awakeTimePottyFemale = String(localized: "She's awake — time for potty!", table: table)
         static let awakeTimePottyNeutral = String(localized: "They're awake — time for potty!", table: table)
+
+        /// Returns the appropriate awake/potty message for the given gender
+        static func awakeTimePotty(isMale: Bool?, isFemale: Bool?) -> String {
+            if isMale == true {
+                return awakeTimePottyMale
+            } else if isFemale == true {
+                return awakeTimePottyFemale
+            } else {
+                return awakeTimePottyNeutral
+            }
+        }
         static func pottyWasOverdue(minutes: Int) -> String {
             String(localized: "Potty was \(minutes) min overdue", table: table)
         }
