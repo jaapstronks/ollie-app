@@ -94,6 +94,17 @@
         }
       }
     },
+    "%lld weeks of great ratings": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld weken met goede beoordelingen"
+          }
+        }
+      }
+    },
     "%lld%% of recent naps in crate": {
       "extractionState": "manual",
       "localizations": {
@@ -222,6 +233,17 @@
         }
       }
     },
+    "1 week of great ratings": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 week met goede beoordelingen"
+          }
+        }
+      }
+    },
     "12-16 Weeks: Building Habits": {
       "extractionState": "manual",
       "localizations": {
@@ -229,6 +251,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "12-16 weken: Gewoontes opbouwen"
+          }
+        }
+      }
+    },
+    "14-20 Weeks: Building Skills": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "14-20 weken: Vaardigheden opbouwen"
           }
         }
       }
@@ -244,6 +277,17 @@
         }
       }
     },
+    "20+ Weeks: Adolescent Phase": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "20+ weken: Puberfase"
+          }
+        }
+      }
+    },
     "8-12 Weeks: Foundation Phase": {
       "extractionState": "manual",
       "localizations": {
@@ -251,6 +295,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "8-12 weken: Basisfase"
+          }
+        }
+      }
+    },
+    "8-14 Weeks: Getting Started": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "8-14 weken: Aan de slag"
           }
         }
       }
@@ -343,6 +398,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Voeg eerst duur toe (blijf dichtbij maar langer)"
+          }
+        }
+      }
+    },
+    "Add mild distractions": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voeg lichte afleidingen toe"
           }
         }
       }
@@ -774,6 +840,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Basiscommando's"
+          }
+        }
+      }
+    },
+    "Build duration gradually": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bouw duur geleidelijk op"
           }
         }
       }
@@ -1301,6 +1378,17 @@
         }
       }
     },
+    "Consider a front-clip harness if needed": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Overweeg een tuigje met clip vooraan indien nodig"
+          }
+        }
+      }
+    },
     "Continue training": {
       "comment": "Button text to continue training.",
       "extractionState": "stale",
@@ -1716,6 +1804,28 @@
         }
       }
     },
+    "Expect some regression - it's normal": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verwacht wat terugval - het is normaal"
+          }
+        }
+      }
+    },
+    "Expecting too much too soon": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Te veel te snel verwachten"
+          }
+        }
+      }
+    },
     "Feed meals in the crate so it becomes a positive place": {
       "extractionState": "manual",
       "localizations": {
@@ -1793,6 +1903,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Focus vaardigheden"
+          }
+        }
+      }
+    },
+    "Focus on collar and leash comfort first": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Focus eerst op comfort met halsband en lijn"
           }
         }
       }
@@ -2458,6 +2579,17 @@
         }
       }
     },
+    "Great leash skills!": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geweldige lijnvaardigheden!"
+          }
+        }
+      }
+    },
     "Great to use before crossing streets": {
       "extractionState": "stale",
       "localizations": {
@@ -2546,6 +2678,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Problemen? Heractiveer tracking"
+          }
+        }
+      }
+    },
+    "Having trouble? Reactivate training": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Problemen? Activeer training opnieuw"
+          }
+        }
+      }
+    },
+    "High-value treats - walking competes with exciting smells": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hoogwaardige snoepjes - wandelen concurreert met spannende geuren"
           }
         }
       }
@@ -2690,6 +2844,17 @@
         }
       }
     },
+    "How it's going": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hoe gaat het"
+          }
+        }
+      }
+    },
     "How to train": {
       "extractionState": "stale",
       "localizations": {
@@ -2721,6 +2886,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Hoe te trainen"
+          }
+        }
+      }
+    },
+    "How was the walk?": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hoe was de wandeling?"
           }
         }
       }
@@ -3040,6 +3216,28 @@
         }
       }
     },
+    "Improving": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verbetert"
+          }
+        }
+      }
+    },
+    "Increase reinforcement rate during this phase": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verhoog beloningsfrequentie tijdens deze fase"
+          }
+        }
+      }
+    },
     "Inconsistent schedule (confuses the puppy)": {
       "extractionState": "manual",
       "localizations": {
@@ -3069,6 +3267,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Hou een vast schema aan, ook in het weekend"
+          }
+        }
+      }
+    },
+    "Keep leash loose - tension creates opposition reflex": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Houd de lijn los - spanning veroorzaakt een oppositiereflex"
           }
         }
       }
@@ -3115,6 +3324,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Houd sessies kort (2-3 minuten)"
+          }
+        }
+      }
+    },
+    "Keep sessions very short (2-3 minutes)": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Houd sessies heel kort (2-3 minuten)"
           }
         }
       }
@@ -3197,6 +3417,61 @@
           "stringUnit": {
             "state": "translated",
             "value": "Belangrijke principes"
+          }
+        }
+      }
+    },
+    "Leash Walking": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aan de lijn lopen"
+          }
+        }
+      }
+    },
+    "Leash Walking Guide": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Handleiding aan de lijn lopen"
+          }
+        }
+      }
+    },
+    "Leash behavior": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lijngedrag"
+          }
+        }
+      }
+    },
+    "Leash skills take time. Keep practicing and you'll see improvement.": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lijnvaardigheden kosten tijd. Blijf oefenen en je zult verbetering zien."
+          }
+        }
+      }
+    },
+    "Leash walking progress card": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voortgangskaart aan de lijn lopen"
           }
         }
       }
@@ -3407,6 +3682,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Langdurig blijven - je pup blijft in positie tot hij wordt losgelaten."
+          }
+        }
+      }
+    },
+    "Looks like walks have been challenging lately. Would you like to reactivate leash training guidance?": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Het lijkt erop dat wandelingen de laatste tijd lastig zijn geweest. Wil je de begeleiding voor aan de lijn lopen weer activeren?"
           }
         }
       }
@@ -3654,6 +3940,17 @@
         }
       }
     },
+    "Mark leash walking as mastered": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Markeer aan de lijn lopen als geleerd"
+          }
+        }
+      }
+    },
     "Mastered": {
       "extractionState": "stale",
       "localizations": {
@@ -3851,6 +4148,17 @@
         }
       }
     },
+    "Moving too fast - let them sniff sometimes": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Te snel bewegen - laat ze soms snuffelen"
+          }
+        }
+      }
+    },
     "Name Recognition": {
       "extractionState": "stale",
       "localizations": {
@@ -3894,6 +4202,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Opfriscursus nodig?"
+          }
+        }
+      }
+    },
+    "Need some leash walking tips?": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heb je wat tips nodig voor aan de lijn lopen?"
+          }
+        }
+      }
+    },
+    "Needs attention": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heeft aandacht nodig"
           }
         }
       }
@@ -4056,6 +4386,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nog geen dutjes gelogd"
+          }
+        }
+      }
+    },
+    "No ratings yet": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nog geen beoordelingen"
           }
         }
       }
@@ -4626,6 +4967,17 @@
         }
       }
     },
+    "Practice direction changes": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oefen richtingsveranderingen"
+          }
+        }
+      }
+    },
     "Practice during meals and TV time": {
       "extractionState": "stale",
       "localizations": {
@@ -4703,6 +5055,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Oefen in nieuwe omgevingen om te generaliseren"
+          }
+        }
+      }
+    },
+    "Practice indoors before going outside": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oefen binnen voordat je naar buiten gaat"
           }
         }
       }
@@ -4975,6 +5338,17 @@
         }
       }
     },
+    "Pulling back when they pull (creates tension)": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terugtrekken wanneer ze trekken (veroorzaakt spanning)"
+          }
+        }
+      }
+    },
     "Punishing accidents (creates fear, not learning)": {
       "extractionState": "manual",
       "localizations": {
@@ -5179,6 +5553,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Doe ze erin als ze moe zijn - na het spelen of een wandeling werkt het beste"
+          }
+        }
+      }
+    },
+    "Rate after walks to track progress": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beoordeel na wandelingen om voortgang bij te houden"
+          }
+        }
+      }
+    },
+    "Ready to mark leash walking as mastered?": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Klaar om aan de lijn lopen als geleerd te markeren?"
           }
         }
       }
@@ -5544,6 +5940,17 @@
         }
       }
     },
+    "Reward frequently for staying close": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beloon vaak voor dichtbij blijven"
+          }
+        }
+      }
+    },
     "Reward generously when they reach you": {
       "extractionState": "stale",
       "localizations": {
@@ -5586,6 +5993,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Beloon direct als ze buiten hun behoefte doen"
+          }
+        }
+      }
+    },
+    "Reward position, not movement - mark when beside you": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beloon positie, niet beweging - markeer wanneer naast je"
           }
         }
       }
@@ -6045,6 +6463,17 @@
         }
       }
     },
+    "Stable": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stabiel"
+          }
+        }
+      }
+    },
     "Start Crate Nap": {
       "extractionState": "manual",
       "localizations": {
@@ -6056,6 +6485,17 @@
         }
       }
     },
+    "Start easy - practice indoors/garden before busy streets": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Begin rustig - oefen binnen/in de tuin voor drukke straten"
+          }
+        }
+      }
+    },
     "Start extending time between potty breaks": {
       "extractionState": "manual",
       "localizations": {
@@ -6063,6 +6503,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Begin de tijd tussen plaspauzès te verlengen"
+          }
+        }
+      }
+    },
+    "Start generalizing to new places": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Begin te generaliseren naar nieuwe plekken"
           }
         }
       }
@@ -6399,7 +6850,18 @@
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Blijf in de buurt als ze piepen. Ze zijn aan het leren, niet aan het lijden"
+            "value": "Blijf in de buurt als ze piept. Ze is aan het leren, niet aan het lijden"
+          }
+        }
+      }
+    },
+    "Stay patient and consistent": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Blijf geduldig en consistent"
           }
         }
       }
@@ -6435,6 +6897,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Stop als je pup stresssignalen vertoont"
+          }
+        }
+      }
+    },
+    "Stop when pulling - be a tree, don't pull back": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stop wanneer hij trekt - wees een boom, trek niet terug"
           }
         }
       }
@@ -6805,7 +7278,7 @@
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ze leren tot rust te komen in plaats van oververmoeid en hyper te worden"
+            "value": "Ze leert tot rust te komen in plaats van oververmoeid en hyper te worden"
           }
         }
       }
@@ -7357,6 +7830,17 @@
         }
       }
     },
+    "Using a retractable leash (teaches pulling)": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gebruik van een flexi-lijn (leert trekken aan)"
+          }
+        }
+      }
+    },
     "Wait": {
       "extractionState": "stale",
       "localizations": {
@@ -7543,6 +8027,50 @@
         }
       }
     },
+    "Walk nicely together": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Samen rustig wandelen"
+          }
+        }
+      }
+    },
+    "Walking nicely on leash is now second nature.": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rustig aan de lijn lopen is nu vanzelfsprekend."
+          }
+        }
+      }
+    },
+    "Walks are a work in progress": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wandelingen zijn een lopend project"
+          }
+        }
+      }
+    },
+    "Was that a walk?": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Was dat een wandeling?"
+          }
+        }
+      }
+    },
     "Watch Me": {
       "extractionState": "stale",
       "localizations": {
@@ -7670,6 +8198,17 @@
         }
       }
     },
+    "Yes, log walk": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ja, wandeling vastleggen"
+          }
+        }
+      }
+    },
     "Yes, reactivate": {
       "extractionState": "manual",
       "localizations": {
@@ -7692,13 +8231,24 @@
         }
       }
     },
+    "Your pup is comfortable sleeping in the crate whenever needed": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je pup slaapt comfortabel in de bench wanneer nodig"
+          }
+        }
+      }
+    },
     "Your pup is crate trained. They can sleep comfortably in the crate whenever needed.": {
       "extractionState": "manual",
       "localizations": {
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Je pup is benchgetraind. Ze kunnen comfortabel in de bench slapen wanneer nodig."
+            "value": "Je pup is benchgetraind. Ze kan comfortabel in de bench slapen wanneer nodig."
           }
         }
       }
@@ -7709,7 +8259,7 @@
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Je pup is zindelijk! Ze gaan betrouwbaar naar buiten en geven aan wanneer nodig."
+            "value": "Je pup is zindelijk! Ze gaat betrouwbaar naar buiten en geeft aan wanneer nodig."
           }
         }
       }
@@ -7720,7 +8270,18 @@
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Je pup plast betrouwbaar buiten en geeft aan wanneer ze nodig moeten"
+            "value": "Je pup plast betrouwbaar buiten en geeft aan wanneer ze nodig moet"
+          }
+        }
+      }
+    },
+    "Your pup walks nicely on a loose leash without constant pulling": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je pup loopt rustig aan een losse lijn zonder constant te trekken"
           }
         }
       }
