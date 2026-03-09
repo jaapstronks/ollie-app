@@ -175,6 +175,12 @@ final class CoreDataEventStore: @unchecked Sendable {
             // Link to active profile
             if let profile = activeProfile {
                 cdEvent.profile = profile
+
+                // IMPORTANT: Assign the event to the same store as the profile
+                // This prevents cross-zone references when the profile is shared
+                if let store = profile.persistentStore {
+                    context.assign(cdEvent, to: store)
+                }
             }
         }
 
@@ -197,6 +203,9 @@ final class CoreDataEventStore: @unchecked Sendable {
     func saveEvents(_ events: [PuppyEvent]) throws {
         let context = viewContext
 
+        // Get the store from the active profile once (for efficiency)
+        let profileStore = activeProfile?.persistentStore
+
         for event in events {
             if let existing = CDPuppyEvent.fetch(byId: event.id, in: context) {
                 existing.update(from: event)
@@ -209,6 +218,12 @@ final class CoreDataEventStore: @unchecked Sendable {
                 // Link to active profile
                 if let profile = activeProfile {
                     cdEvent.profile = profile
+
+                    // IMPORTANT: Assign the event to the same store as the profile
+                    // This prevents cross-zone references when the profile is shared
+                    if let store = profileStore {
+                        context.assign(cdEvent, to: store)
+                    }
                 }
             }
         }
@@ -391,6 +406,9 @@ final class CoreDataEventStore: @unchecked Sendable {
     func mergeEvents(_ events: [PuppyEvent]) throws {
         let context = viewContext
 
+        // Get the store from the active profile for new events
+        let profileStore = activeProfile?.persistentStore
+
         for event in events {
             if let existing = CDPuppyEvent.fetch(byId: event.id, in: context) {
                 // Only update if incoming event is newer
@@ -398,7 +416,14 @@ final class CoreDataEventStore: @unchecked Sendable {
                     existing.update(from: event)
                 }
             } else {
-                _ = CDPuppyEvent.create(from: event, in: context)
+                let cdEvent = CDPuppyEvent.create(from: event, in: context)
+                // Link to active profile and assign to correct store
+                if let profile = activeProfile {
+                    cdEvent.profile = profile
+                    if let store = profileStore {
+                        context.assign(cdEvent, to: store)
+                    }
+                }
             }
         }
 

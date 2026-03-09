@@ -297,4 +297,14 @@ extension CDPuppyProfile {
         }
         return count
     }
+
+    /// Get the persistent store this profile belongs to
+    /// Returns nil if the profile is not yet saved or store cannot be determined
+    var persistentStore: NSPersistentStore? {
+        // For non-temporary object IDs, the persistentStore is directly available
+        guard !self.objectID.isTemporaryID else {
+            return nil
+        }
+        return self.objectID.persistentStore
+    }
 }

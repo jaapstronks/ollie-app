@@ -44,6 +44,9 @@ public final class CloudKitService: ObservableObject {
     @Published public private(set) var isParticipant = false
     @Published public private(set) var isSyncing = false
 
+    /// The owner's zone ID when user is a participant (used for media fetches)
+    private var sharedZoneOwnerName: String?
+
     // MARK: - Share Manager
 
     /// Share manager for managing CloudKit shares
@@ -113,10 +116,24 @@ public final class CloudKitService: ObservableObject {
             let zones = try await sharedDatabase.allRecordZones()
             let nowParticipant = !zones.isEmpty
 
+            // Capture the owner's zone name for media fetches
+            // Look for the Core Data zone specifically
+            if let coreDataZone = zones.first(where: { $0.zoneID.zoneName == zoneName }) {
+                sharedZoneOwnerName = coreDataZone.zoneID.ownerName
+                logger.info("Found shared zone owner: \(coreDataZone.zoneID.ownerName)")
+            } else if let firstZone = zones.first {
+                // Fallback to first zone if no exact match
+                sharedZoneOwnerName = firstZone.zoneID.ownerName
+                logger.info("Using first shared zone owner: \(firstZone.zoneID.ownerName)")
+            } else {
+                sharedZoneOwnerName = nil
+            }
+
             // Detect if access was revoked
             if wasParticipant && !nowParticipant {
                 logger.info("Participant access was revoked")
                 shareManager.clearShareState()
+                sharedZoneOwnerName = nil
                 NotificationCenter.default.post(name: .shareAccessRevoked, object: nil)
             }
 
@@ -126,6 +143,7 @@ public final class CloudKitService: ObservableObject {
         } catch {
             logger.debug("Failed to check participant status: \(error.localizedDescription)")
             isParticipant = false
+            sharedZoneOwnerName = nil
         }
     }
 
@@ -198,7 +216,13 @@ public final class CloudKitService: ObservableObject {
                 return self.isParticipant ? self.sharedDatabase : self.privateDatabase
             },
             getZoneID: { [weak self] in
-                CKRecordZone.ID(zoneName: "com.apple.coredata.cloudkit.zone", ownerName: CKCurrentUserDefaultName)
+                guard let self = self else {
+                    return CKRecordZone.ID(zoneName: "com.apple.coredata.cloudkit.zone", ownerName: CKCurrentUserDefaultName)
+                }
+                // For participants, use the shared zone's owner name
+                // For owners, use CKCurrentUserDefaultName
+                let ownerName = self.isParticipant ? (self.sharedZoneOwnerName ?? CKCurrentUserDefaultName) : CKCurrentUserDefaultName
+                return CKRecordZone.ID(zoneName: self.zoneName, ownerName: ownerName)
             },
             isCloudAvailable: { [weak self] in
                 self?.isCloudAvailable ?? false
@@ -217,7 +241,13 @@ public final class CloudKitService: ObservableObject {
                 return self.isParticipant ? self.sharedDatabase : self.privateDatabase
             },
             getZoneID: { [weak self] in
-                CKRecordZone.ID(zoneName: "com.apple.coredata.cloudkit.zone", ownerName: CKCurrentUserDefaultName)
+                guard let self = self else {
+                    return CKRecordZone.ID(zoneName: "com.apple.coredata.cloudkit.zone", ownerName: CKCurrentUserDefaultName)
+                }
+                // For participants, use the shared zone's owner name
+                // For owners, use CKCurrentUserDefaultName
+                let ownerName = self.isParticipant ? (self.sharedZoneOwnerName ?? CKCurrentUserDefaultName) : CKCurrentUserDefaultName
+                return CKRecordZone.ID(zoneName: self.zoneName, ownerName: ownerName)
             },
             isCloudAvailable: { [weak self] in
                 self?.isCloudAvailable ?? false
