@@ -6,7 +6,10 @@
 //
 
 import Foundation
+import os
 import OtisShared
+
+private let aiLogger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "com.otis", category: "AINudgeOrchestrator")
 
 @MainActor
 final class AINudgeOrchestrator {
@@ -31,6 +34,7 @@ final class AINudgeOrchestrator {
     private var inFlightRefreshTasks: [String: Task<Void, Never>] = [:]
     private static let callCountKeyPrefix = "ai.nudges.callCount"
     private static let recommendationActionKeyPrefix = "ai.nudges.recommendationAction"
+    private static let recommendationShownTodayKeyPrefix = "ai.nudges.recommendationShownToday"
 
     private init(
         client: AIModelBrokerClientProtocol = AIModelBrokerClient(),
@@ -49,12 +53,15 @@ final class AINudgeOrchestrator {
         recentEvents: [PuppyEvent]
     ) -> (title: String, subtitle: String?) {
         guard canUseAI(for: profile) else {
+            aiLogger.debug("dailyStatusCopy: canUseAI returned false")
             return (baselineTitle, baselineSubtitle)
         }
 
         // Copy lookup is read-only to avoid network on card rendering.
         let cacheKey = insightCacheKey(profileID: profile.id)
+        aiLogger.debug("dailyStatusCopy: checking cache key \(cacheKey)")
         if let cached = insightCache[cacheKey] {
+            aiLogger.debug("dailyStatusCopy: cache HIT, headline=\(cached.value.dailyStatusDecision?.headline ?? "nil")")
             return applyOrFallbackDailyStatus(
                 cached.value.dailyStatusDecision,
                 baselineTitle: baselineTitle,
@@ -62,6 +69,7 @@ final class AINudgeOrchestrator {
             )
         }
 
+        aiLogger.debug("dailyStatusCopy: cache MISS, returning baseline")
         return (baselineTitle, baselineSubtitle)
     }
 
@@ -72,11 +80,14 @@ final class AINudgeOrchestrator {
         recentEvents: [PuppyEvent]
     ) -> (actionable: [ActionableItem], upcoming: [UpcomingItem]) {
         guard canUseAI(for: profile) else {
+            aiLogger.debug("reorderUpcomingItems: canUseAI returned false")
             return (actionable, upcoming)
         }
 
         let cacheKey = insightCacheKey(profileID: profile.id)
+        aiLogger.debug("reorderUpcomingItems: checking cache key \(cacheKey)")
         if let cached = insightCache[cacheKey] {
+            aiLogger.debug("reorderUpcomingItems: cache HIT")
             return applyOrFallbackOrdering(
                 decision: cached.value.walkOrderingDecision,
                 actionable: actionable,
@@ -84,6 +95,7 @@ final class AINudgeOrchestrator {
             )
         }
 
+        aiLogger.debug("reorderUpcomingItems: cache MISS, scheduling refresh")
         scheduleInsightRefreshIfNeeded(
             profile: profile,
             baselineTitle: PredictionCalculations.displayText(for: pottyPredictionFromEvents(recentEvents), puppyName: profile.name),
@@ -125,6 +137,14 @@ final class AINudgeOrchestrator {
 
     func pendingLoggingRecommendations(for profileID: UUID) -> [AILoggingCategoryRecommendation] {
         let day = Date().dayStamp()
+
+        // Only show one recommendation per day total (not per category)
+        let globalKey = recommendationShownTodayKey(profileID: profileID, dayStamp: day)
+        if UserDefaults.standard.bool(forKey: globalKey) {
+            return []
+        }
+
+        // Also filter out categories that were already actioned today
         return (pendingRecommendations[profileID] ?? []).filter { recommendation in
             let key = recommendationActionKey(profileID: profileID, dayStamp: day, category: recommendation.category)
             return UserDefaults.standard.string(forKey: key) == nil
@@ -133,12 +153,24 @@ final class AINudgeOrchestrator {
 
     func markRecommendationApplied(profileID: UUID, category: AILoggingCategory) {
         markRecommendationAction(profileID: profileID, category: category, action: "applied")
+        markRecommendationShownToday(profileID: profileID)
         removePendingRecommendation(profileID: profileID, category: category)
     }
 
     func markRecommendationDismissed(profileID: UUID, category: AILoggingCategory) {
         markRecommendationAction(profileID: profileID, category: category, action: "dismissed")
+        markRecommendationShownToday(profileID: profileID)
         removePendingRecommendation(profileID: profileID, category: category)
+    }
+
+    private func markRecommendationShownToday(profileID: UUID) {
+        let day = Date().dayStamp()
+        let key = recommendationShownTodayKey(profileID: profileID, dayStamp: day)
+        UserDefaults.standard.set(true, forKey: key)
+    }
+
+    private func recommendationShownTodayKey(profileID: UUID, dayStamp: String) -> String {
+        "\(Self.recommendationShownTodayKeyPrefix).\(profileID.uuidString).\(dayStamp)"
     }
 
     // MARK: - Manual Test Methods (DEBUG only)
@@ -168,11 +200,13 @@ final class AINudgeOrchestrator {
         let request = AINudgeBrokerRequest(
             surface: .insightBundle,
             profileId: profile.id,
-            locale: Locale.current.identifier,
+            locale: profile.preferredLocale ?? Locale.current.identifier,
             policyVersion: "v1",
             promptVersion: "nudge_insight_bundle_v2",
             providerPolicy: defaultProviderPolicy,
             shadowMode: false, // Force shadow mode off for testing
+            systemInstruction: AIInstructions.systemInstruction(for: AINudgeSurface.insightBundle),
+            outputFormat: AIInstructions.outputFormat(for: AINudgeSurface.insightBundle),
             context: buildContext(profile: profile, recentEvents: recentEvents),
             payload: .init(
                 insightBundle: .init(
@@ -221,7 +255,8 @@ final class AINudgeOrchestrator {
                     modelUsed: nil,
                     reasoningTags: nil,
                     insightBundleDecision: nil,
-                    notificationPolicyDecision: nil
+                    notificationPolicyDecision: nil,
+                    response: nil
                 ),
                 error: error.localizedDescription
             )
@@ -241,11 +276,13 @@ final class AINudgeOrchestrator {
         let request = AINudgeBrokerRequest(
             surface: .notificationPolicy,
             profileId: profile.id,
-            locale: Locale.current.identifier,
+            locale: profile.preferredLocale ?? Locale.current.identifier,
             policyVersion: "v1",
             promptVersion: "nudge_notification_policy_v2",
             providerPolicy: defaultProviderPolicy,
             shadowMode: false, // Force shadow mode off for testing
+            systemInstruction: AIInstructions.systemInstruction(for: AINudgeSurface.notificationPolicy),
+            outputFormat: AIInstructions.outputFormat(for: AINudgeSurface.notificationPolicy),
             context: buildContext(profile: profile, recentEvents: recentEvents),
             payload: .init(
                 insightBundle: nil,
@@ -285,7 +322,8 @@ final class AINudgeOrchestrator {
                     modelUsed: nil,
                     reasoningTags: nil,
                     insightBundleDecision: nil,
-                    notificationPolicyDecision: nil
+                    notificationPolicyDecision: nil,
+                    response: nil
                 ),
                 error: error.localizedDescription
             )
@@ -298,6 +336,23 @@ final class AINudgeOrchestrator {
         notificationPolicyCache.removeAll()
         pendingRecommendations.removeAll()
     }
+
+    /// Reset daily budget counters and recommendation limiters (useful for re-testing)
+    func resetBudget() {
+        let defaults = UserDefaults.standard
+        let allKeys = defaults.dictionaryRepresentation().keys
+        for key in allKeys where key.hasPrefix(Self.callCountKeyPrefix) {
+            defaults.removeObject(forKey: key)
+        }
+        // Also clear recommendation shown today keys and per-category action keys
+        for key in allKeys where key.hasPrefix(Self.recommendationShownTodayKeyPrefix) {
+            defaults.removeObject(forKey: key)
+        }
+        for key in allKeys where key.hasPrefix(Self.recommendationActionKeyPrefix) {
+            defaults.removeObject(forKey: key)
+        }
+        aiLogger.debug("resetBudget: cleared all budget counters and recommendation limiters")
+    }
     #endif
 }
 
@@ -309,10 +364,20 @@ private extension AINudgeOrchestrator {
     }
 
     func canUseAI(for profile: PuppyProfile) -> Bool {
-        guard AINudgeRollout.isEnabled else { return false }
-        guard subscriptionManager.hasAccess(to: .aiNudges) else { return false }
+        guard AINudgeRollout.isEnabled else {
+            aiLogger.debug("canUseAI: isEnabled=false")
+            return false
+        }
+        guard subscriptionManager.hasAccess(to: .aiNudges) else {
+            let status = subscriptionManager.effectiveStatus
+            aiLogger.debug("canUseAI: hasAccess(aiNudges)=false, effectiveStatus=\(String(describing: status))")
+            return false
+        }
         let bucket = abs(profile.id.uuidString.hashValue) % 100
-        return bucket < AINudgeRollout.rolloutPercentage
+        let rollout = AINudgeRollout.rolloutPercentage
+        let passes = bucket < rollout
+        aiLogger.debug("canUseAI: bucket=\(bucket), rollout=\(rollout), passes=\(passes)")
+        return passes
     }
 
     func isFresh(_ date: Date, maxAgeMinutes: Int) -> Bool {
@@ -320,14 +385,72 @@ private extension AINudgeOrchestrator {
     }
 
     func buildContext(profile: PuppyProfile, recentEvents: [PuppyEvent]) -> AINudgeContextSummary {
-        .init(
+        // Calculate historical comparisons for smarter recommendations
+        let (recentStats, priorStats) = calculateHistoricalStats(events: recentEvents)
+
+        return .init(
             ageWeeks: profile.ageInWeeks,
             daysHome: profile.daysHome,
             recentEventCount: recentEvents.count,
             recentWalkCount: recentEvents.walks().count,
             recentMealCount: recentEvents.meals().count,
-            recentPottyCount: recentEvents.pee().count
+            recentPottyCount: recentEvents.pee().count,
+            recentDaysWalkAvg: recentStats.walkAvg,
+            priorDaysWalkAvg: priorStats.walkAvg,
+            recentDaysMealAvg: recentStats.mealAvg,
+            priorDaysMealAvg: priorStats.mealAvg,
+            recentDaysPottyAvg: recentStats.pottyAvg,
+            priorDaysPottyAvg: priorStats.pottyAvg,
+            recentDaysTrainingAvg: recentStats.trainingAvg,
+            priorDaysTrainingAvg: priorStats.trainingAvg
         )
+    }
+
+    private struct PeriodStats {
+        var walkAvg: Double?
+        var mealAvg: Double?
+        var pottyAvg: Double?
+        var trainingAvg: Double?
+    }
+
+    /// Calculate average daily counts for recent (last 3 days) vs prior (4 days before that)
+    private func calculateHistoricalStats(events: [PuppyEvent]) -> (recent: PeriodStats, prior: PeriodStats) {
+        let calendar = Calendar.current
+        let now = Date()
+
+        // Recent period: last 3 days (including today)
+        let recentStart = calendar.date(byAdding: .day, value: -2, to: calendar.startOfDay(for: now))!
+        // Prior period: 4 days before that
+        let priorStart = calendar.date(byAdding: .day, value: -6, to: calendar.startOfDay(for: now))!
+
+        let recentEvents = events.filter { $0.time >= recentStart }
+        let priorEvents = events.filter { $0.time >= priorStart && $0.time < recentStart }
+
+        // Calculate averages (recent = 3 days, prior = 4 days)
+        let recentDays = 3.0
+        let priorDays = 4.0
+
+        let recentStats = PeriodStats(
+            walkAvg: Double(recentEvents.walks().count) / recentDays,
+            mealAvg: Double(recentEvents.meals().count) / recentDays,
+            pottyAvg: Double(recentEvents.potty().count) / recentDays,
+            trainingAvg: Double(recentEvents.training().count) / recentDays
+        )
+
+        // Only include prior stats if we have enough history
+        let priorStats: PeriodStats
+        if !priorEvents.isEmpty {
+            priorStats = PeriodStats(
+                walkAvg: Double(priorEvents.walks().count) / priorDays,
+                mealAvg: Double(priorEvents.meals().count) / priorDays,
+                pottyAvg: Double(priorEvents.potty().count) / priorDays,
+                trainingAvg: Double(priorEvents.training().count) / priorDays
+            )
+        } else {
+            priorStats = PeriodStats(walkAvg: nil, mealAvg: nil, pottyAvg: nil, trainingAvg: nil)
+        }
+
+        return (recentStats, priorStats)
     }
 
     func applyOrFallbackDailyStatus(
@@ -483,12 +606,17 @@ private extension AINudgeOrchestrator {
     ) {
         let cacheKey = insightCacheKey(profileID: profile.id)
         if let cached = insightCache[cacheKey], isFresh(cached.updatedAt, maxAgeMinutes: 360) {
+            aiLogger.debug("scheduleInsightRefreshIfNeeded: cache is fresh, skipping")
             return
         }
 
         let dedupeKey = "insight-\(profile.id.uuidString)-\(Date().windowStamp(hours: 6))"
-        guard inFlightRefreshTasks[dedupeKey] == nil else { return }
+        guard inFlightRefreshTasks[dedupeKey] == nil else {
+            aiLogger.debug("scheduleInsightRefreshIfNeeded: already in-flight, skipping")
+            return
+        }
         guard consumeBudgetIfAvailable(profileID: profile.id, kind: .insight) else {
+            aiLogger.debug("scheduleInsightRefreshIfNeeded: budget exhausted")
             Analytics.trackAIDecision(
                 surface: .insightBundle,
                 applied: false,
@@ -502,6 +630,7 @@ private extension AINudgeOrchestrator {
             return
         }
 
+        aiLogger.debug("scheduleInsightRefreshIfNeeded: starting background refresh task")
         let task = Task { [weak self] in
             guard let self else { return }
             await self.refreshInsightBundle(
@@ -555,11 +684,13 @@ private extension AINudgeOrchestrator {
         let request = AINudgeBrokerRequest(
             surface: .insightBundle,
             profileId: profile.id,
-            locale: Locale.current.identifier,
+            locale: profile.preferredLocale ?? Locale.current.identifier,
             policyVersion: "v1",
             promptVersion: "nudge_insight_bundle_v2",
             providerPolicy: defaultProviderPolicy,
             shadowMode: AINudgeRollout.isShadowMode,
+            systemInstruction: AIInstructions.systemInstruction(for: AINudgeSurface.insightBundle),
+            outputFormat: AIInstructions.outputFormat(for: AINudgeSurface.insightBundle),
             context: buildContext(profile: profile, recentEvents: recentEvents),
             payload: .init(
                 insightBundle: .init(
@@ -580,10 +711,18 @@ private extension AINudgeOrchestrator {
             )
         )
 
+        // Debug: check broker config before calling client
+        let rawURL = UserDefaults.standard.string(forKey: "ai.nudges.brokerBaseURL")
+        let rawKey = UserDefaults.standard.string(forKey: "ai.nudges.brokerApiKey")
+        aiLogger.debug("refreshInsightBundle: rawURL=\(rawURL ?? "nil"), rawKeyLen=\(rawKey?.count ?? 0)")
+        aiLogger.debug("refreshInsightBundle: brokerBaseURL=\(AINudgeRollout.brokerBaseURL?.absoluteString ?? "nil")")
+        aiLogger.debug("refreshInsightBundle: sending request to broker")
         let start = Date()
         do {
             let response = try await client.decide(request)
-            if let decision = response.insightBundleDecision {
+            aiLogger.debug("refreshInsightBundle: got response, provider=\(response.providerUsed ?? "nil"), hasDecision=\(response.effectiveInsightDecision != nil)")
+            if let decision = response.effectiveInsightDecision {
+                aiLogger.debug("refreshInsightBundle: decision confidence=\(decision.confidence), headline=\(decision.dailyStatusDecision?.headline ?? "nil")")
                 insightCache[cacheKey] = CacheEntry(value: decision, updatedAt: Date())
                 pendingRecommendations[profile.id] = decision.loggingRecommendations
                 Analytics.trackAIDecision(
@@ -596,8 +735,33 @@ private extension AINudgeOrchestrator {
                     latencyMs: Date().millisecondsSince(start),
                     shadowMode: AINudgeRollout.isShadowMode
                 )
+                aiLogger.debug("refreshInsightBundle: cached decision successfully")
+            } else {
+                aiLogger.debug("refreshInsightBundle: response had no insightBundleDecision")
             }
+        } catch let brokerError as AIModelBrokerError {
+            switch brokerError {
+            case .brokerNotConfigured:
+                aiLogger.error("refreshInsightBundle: BROKER NOT CONFIGURED (but URL was: \(rawURL ?? "nil"))")
+            case .brokerKeyNotConfigured:
+                aiLogger.error("refreshInsightBundle: BROKER KEY NOT CONFIGURED")
+            case .invalidResponse(let statusCode, let body):
+                aiLogger.error("refreshInsightBundle: INVALID RESPONSE HTTP \(statusCode): \(body.prefix(200))")
+            case .decodingFailed(let decodingError, let rawBody):
+                aiLogger.error("refreshInsightBundle: DECODING FAILED: \(decodingError.localizedDescription), raw: \(rawBody.prefix(500))")
+            }
+            Analytics.trackAIDecision(
+                surface: .insightBundle,
+                applied: false,
+                fallbackReason: "request_failed",
+                confidence: nil,
+                provider: nil,
+                model: nil,
+                latencyMs: Date().millisecondsSince(start),
+                shadowMode: AINudgeRollout.isShadowMode
+            )
         } catch {
+            aiLogger.error("refreshInsightBundle: OTHER ERROR: \(type(of: error)) - \(error.localizedDescription)")
             Analytics.trackAIDecision(
                 surface: .insightBundle,
                 applied: false,
@@ -656,11 +820,13 @@ private extension AINudgeOrchestrator {
         let request = AINudgeBrokerRequest(
             surface: .notificationPolicy,
             profileId: profile.id,
-            locale: Locale.current.identifier,
+            locale: profile.preferredLocale ?? Locale.current.identifier,
             policyVersion: "v1",
             promptVersion: "nudge_notification_policy_v2",
             providerPolicy: defaultProviderPolicy,
             shadowMode: AINudgeRollout.isShadowMode,
+            systemInstruction: AIInstructions.systemInstruction(for: AINudgeSurface.notificationPolicy),
+            outputFormat: AIInstructions.outputFormat(for: AINudgeSurface.notificationPolicy),
             context: buildContext(profile: profile, recentEvents: recentEvents),
             payload: .init(
                 insightBundle: nil,

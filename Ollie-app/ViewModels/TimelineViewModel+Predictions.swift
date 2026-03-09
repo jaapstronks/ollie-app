@@ -258,7 +258,7 @@ extension TimelineViewModel {
         let dismissedTimestamp = UserDefaults.standard.double(forKey: UserPreferences.Key.pottyMasteryPromptDismissedDate.rawValue)
         if dismissedTimestamp > 0 {
             let dismissedDate = Date(timeIntervalSince1970: dismissedTimestamp)
-            let twoWeeksLater = Calendar.current.date(byAdding: .day, value: 14, to: dismissedDate) ?? Date()
+            let twoWeeksLater = dismissedDate.addingDays(14)
             if Date() < twoWeeksLater {
                 return false // Still in cooldown
             }
@@ -292,7 +292,7 @@ extension TimelineViewModel {
         let dismissedTimestamp = UserDefaults.standard.double(forKey: UserPreferences.Key.pottyReactivationPromptDismissedDate.rawValue)
         if dismissedTimestamp > 0 {
             let dismissedDate = Date(timeIntervalSince1970: dismissedTimestamp)
-            let cooldownEnd = Calendar.current.date(byAdding: .day, value: 7, to: dismissedDate) ?? Date()
+            let cooldownEnd = dismissedDate.addingDays(7)
             if Date() < cooldownEnd { return false }
         }
 
@@ -419,6 +419,8 @@ extension TimelineViewModel {
         guard let profile = profileStore.profile else { return }
         AINudgeOrchestrator.shared.markRecommendationDismissed(profileID: profile.id, category: recommendation.category)
         HapticFeedback.selection()
+        // Trigger view update so the card disappears
+        objectWillChange.send()
     }
 
     // MARK: - First Week Card
