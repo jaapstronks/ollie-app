@@ -122,15 +122,8 @@ struct WeatherSection: View {
 
     var body: some View {
         if isLoading && forecasts.isEmpty {
-            // Loading state
-            HStack(spacing: 6) {
-                ProgressView()
-                    .scaleEffect(0.7)
-                Text(Strings.Weather.loading)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-            .padding(.vertical, 4)
+            // Loading state - skeleton
+            WeatherSectionSkeleton()
         } else if let current = forecasts.first {
             // Compact single-line weather display
             HStack(spacing: 12) {

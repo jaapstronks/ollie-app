@@ -55,13 +55,7 @@ struct MorningBriefingCard: View {
     @ViewBuilder
     private var mainContent: some View {
         if viewModel.isLoading {
-            HStack(spacing: 12) {
-                ProgressView()
-                    .scaleEffect(0.8)
-                Text(Strings.AINudges.loadingBriefing)
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-            }
+            MorningBriefingSkeleton()
         } else if let briefing = viewModel.briefing {
             VStack(alignment: .leading, spacing: 10) {
                 // Headline with icon

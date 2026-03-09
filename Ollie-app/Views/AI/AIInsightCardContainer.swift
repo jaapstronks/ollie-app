@@ -76,20 +76,11 @@ struct AIInsightCardContainer<Content: View>: View {
                 .fontWeight(.semibold)
                 .foregroundStyle(.secondary)
             Spacer()
-            if isLoading {
-                ProgressView()
-                    .scaleEffect(0.7)
-            }
         }
     }
 
     private var loadingView: some View {
-        HStack {
-            Spacer()
-            ProgressView()
-                .padding(.vertical, 8)
-            Spacer()
-        }
+        AIInsightCardSkeleton()
     }
 }
 
@@ -167,20 +158,20 @@ struct AICategoryBadge: View {
                 .foregroundStyle(.tertiary)
             Text(value)
                 .font(.caption)
-                .fontWeight(.medium)
+                .foregroundStyle(badgeColor)
                 .padding(.horizontal, 8)
-                .padding(.vertical, 3)
-                .background(badgeColor.opacity(colorScheme == .dark ? 0.2 : 0.15))
+                .padding(.vertical, 4)
+                .background(badgeColor.opacity(colorScheme == .dark ? 0.2 : 0.1))
                 .clipShape(Capsule())
         }
     }
 }
 
 /// A labeled section within AI content
-struct AILabeledSection: View {
+struct AILabeledSection<Content: View>: View {
     let label: String
     var labelColor: Color = .blue
-    let content: () -> any View
+    @ViewBuilder let content: () -> Content
 
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
@@ -189,7 +180,7 @@ struct AILabeledSection: View {
                 .fontWeight(.medium)
                 .foregroundStyle(labelColor)
 
-            AnyView(content())
+            content()
         }
     }
 }

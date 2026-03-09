@@ -199,6 +199,138 @@ struct SocializationTimelineSkeleton: View {
     }
 }
 
+// MARK: - AI Insight Card Skeleton
+
+/// Skeleton placeholder for AI insight cards (used by AIInsightCardContainer)
+struct AIInsightCardSkeleton: View {
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            SkeletonView(height: 16, cornerRadius: 4)
+
+            SkeletonView(height: 12, cornerRadius: 3)
+                .frame(width: 200)
+
+            HStack(spacing: 6) {
+                Circle()
+                    .fill(Color.gray.opacity(0.2))
+                    .frame(width: 14, height: 14)
+
+                SkeletonView(height: 12, cornerRadius: 3)
+                    .frame(width: 180)
+            }
+        }
+    }
+}
+
+// MARK: - Morning Briefing Skeleton
+
+/// Skeleton placeholder for the morning briefing card
+struct MorningBriefingSkeleton: View {
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack(spacing: 8) {
+                Circle()
+                    .fill(Color.gray.opacity(0.2))
+                    .frame(width: 24, height: 24)
+
+                SkeletonView(height: 18, cornerRadius: 4)
+                    .frame(width: 180)
+
+                Spacer()
+            }
+
+            SkeletonView(height: 14, cornerRadius: 3)
+
+            SkeletonView(height: 14, cornerRadius: 3)
+                .frame(width: 240)
+
+            SkeletonView(height: 32, cornerRadius: 8)
+                .frame(width: 200)
+        }
+    }
+}
+
+// MARK: - Weather Section Skeleton
+
+/// Skeleton placeholder for weather section
+struct WeatherSectionSkeleton: View {
+    var body: some View {
+        HStack(spacing: 12) {
+            HStack(spacing: 4) {
+                Circle()
+                    .fill(Color.gray.opacity(0.2))
+                    .frame(width: 16, height: 16)
+
+                SkeletonView(height: 14, cornerRadius: 3)
+                    .frame(width: 40)
+            }
+
+            SkeletonView(height: 12, cornerRadius: 3)
+                .frame(width: 60)
+
+            Spacer()
+        }
+        .padding(.horizontal)
+        .padding(.vertical, 6)
+    }
+}
+
+// MARK: - Recap Sheet Skeleton
+
+/// Skeleton placeholder for week/month recap sheets
+struct RecapSheetSkeleton: View {
+    var body: some View {
+        VStack(spacing: 24) {
+            // Navigation placeholder
+            HStack {
+                Circle()
+                    .fill(Color.gray.opacity(0.2))
+                    .frame(width: 24, height: 24)
+
+                Spacer()
+
+                SkeletonView(height: 24, cornerRadius: 4)
+                    .frame(width: 120)
+
+                Spacer()
+
+                Circle()
+                    .fill(Color.gray.opacity(0.2))
+                    .frame(width: 24, height: 24)
+            }
+            .padding(.horizontal)
+
+            // Stats grid
+            HStack(spacing: 20) {
+                ForEach(0..<3, id: \.self) { _ in
+                    VStack(spacing: 6) {
+                        Circle()
+                            .fill(Color.gray.opacity(0.2))
+                            .frame(width: 28, height: 28)
+
+                        SkeletonView(height: 24, cornerRadius: 4)
+                            .frame(width: 40)
+
+                        SkeletonView(height: 10, cornerRadius: 2)
+                            .frame(width: 60)
+                    }
+                    .frame(maxWidth: .infinity)
+                }
+            }
+            .padding()
+            .background(Color(.secondarySystemBackground))
+            .cornerRadius(16)
+
+            // Photo grid
+            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 8) {
+                ForEach(0..<4, id: \.self) { _ in
+                    SkeletonView(height: 120, cornerRadius: 12)
+                }
+            }
+        }
+    }
+}
+
 // MARK: - View Modifier for Loading State
 
 extension View {
@@ -245,6 +377,31 @@ extension View {
             SocializationTimelineSkeleton()
                 .background(Color(.secondarySystemBackground))
                 .clipShape(RoundedRectangle(cornerRadius: 12))
+
+            Text("AI Insight Card Skeleton")
+                .font(.headline)
+            AIInsightCardSkeleton()
+                .padding()
+                .background(Color.purple.opacity(0.1))
+                .clipShape(RoundedRectangle(cornerRadius: 16))
+
+            Text("Morning Briefing Skeleton")
+                .font(.headline)
+            MorningBriefingSkeleton()
+                .padding()
+                .background(Color(.secondarySystemBackground))
+                .clipShape(RoundedRectangle(cornerRadius: 16))
+
+            Text("Weather Section Skeleton")
+                .font(.headline)
+            WeatherSectionSkeleton()
+                .background(Color(.secondarySystemBackground))
+                .clipShape(RoundedRectangle(cornerRadius: 12))
+
+            Text("Recap Sheet Skeleton")
+                .font(.headline)
+            RecapSheetSkeleton()
+                .padding()
         }
         .padding()
     }
