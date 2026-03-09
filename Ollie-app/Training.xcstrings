@@ -1,6 +1,40 @@
 {
   "sourceLanguage": "en",
   "strings": {
+    "%@ hasn't napped in crate today": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ heeft vandaag nog niet in de bench geslapen"
+          }
+        }
+      }
+    },
+    "%lld days at 100%": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld dagen op 100%"
+          }
+        }
+      }
+    },
+    "%lld focus, %lld review": {
+      "comment": "Training plan subtitle showing focus and review counts.",
+      "extractionState": "stale",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld focus, %lld herhalen"
+          }
+        }
+      }
+    },
     "%lld sessions": {
       "extractionState": "stale",
       "localizations": {
@@ -16,6 +50,12 @@
             "value": "%lld sesiones"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld sessions"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -27,11 +67,52 @@
             "state": "translated",
             "value": "%lld sessies"
           }
-        },
-        "fr": {
+        }
+      }
+    },
+    "%lld skills to practice": {
+      "comment": "Subtitle showing multiple skills need practice.",
+      "extractionState": "stale",
+      "localizations": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld sessions"
+            "value": "%lld vaardigheden om te oefenen"
+          }
+        }
+      }
+    },
+    "%lld skills to review": {
+      "comment": "Subtitle showing multiple skills need review.",
+      "extractionState": "stale",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld vaardigheden om te herhalen"
+          }
+        }
+      }
+    },
+    "%lld%% of recent naps in crate": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld%% van recente dutjes in bench"
+          }
+        }
+      }
+    },
+    "%lld/%lld reliable": {
+      "comment": "Shows how many contexts are reliable out of total.",
+      "extractionState": "stale",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld/%lld betrouwbaar"
           }
         }
       }
@@ -51,6 +132,12 @@
             "value": "%lld/%lld iniciados"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld/%lld commencés"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -62,11 +149,16 @@
             "state": "translated",
             "value": "%lld/%lld gestart"
           }
-        },
-        "fr": {
+        }
+      }
+    },
+    "1 day at 100%": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld/%lld commencés"
+            "value": "1 dag op 100%"
           }
         }
       }
@@ -86,6 +178,12 @@
             "value": "1 sesión"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 session"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -97,11 +195,84 @@
             "state": "translated",
             "value": "1 sessie"
           }
-        },
-        "fr": {
+        }
+      }
+    },
+    "1 skill to practice": {
+      "comment": "Subtitle showing 1 skill needs practice.",
+      "extractionState": "stale",
+      "localizations": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "1 session"
+            "value": "1 vaardigheid om te oefenen"
+          }
+        }
+      }
+    },
+    "1 skill to review": {
+      "comment": "Subtitle showing 1 skill needs review.",
+      "extractionState": "stale",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 vaardigheid om te herhalen"
+          }
+        }
+      }
+    },
+    "12-16 Weeks: Building Habits": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "12-16 weken: Gewoontes opbouwen"
+          }
+        }
+      }
+    },
+    "16+ Weeks: Maintaining Success": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "16+ weken: Succes behouden"
+          }
+        }
+      }
+    },
+    "8-12 Weeks: Foundation Phase": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "8-12 weken: Basisfase"
+          }
+        }
+      }
+    },
+    "A cozy den that helps with everything": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Een gezellig holletje dat overal bij helpt"
+          }
+        }
+      }
+    },
+    "A few indoor moments lately. Would you like to reactivate potty training guidance?": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Laatst een paar ongelukjes binnen. Wil je de zindelijkheidsbegeleiding heractiveren?"
           }
         }
       }
@@ -121,6 +292,12 @@
             "value": "Añade distracciones al final"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajoutez les distractions en dernier"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -131,12 +308,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Voeg als laatste afleiding toe"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ajoutez les distractions en dernier"
           }
         }
       }
@@ -156,6 +327,12 @@
             "value": "Añade duración primero (quédate cerca pero más tiempo)"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajoutez d'abord la durée (restez proche mais plus longtemps)"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -166,12 +343,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Voeg eerst duur toe (blijf dichtbij maar langer)"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ajoutez d'abord la durée (restez proche mais plus longtemps)"
           }
         }
       }
@@ -191,6 +362,12 @@
             "value": "Añade la orden 'túmbate' cuando el comportamiento sea fiable"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajoutez le signal « couché » une fois le comportement fiable"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -201,12 +378,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Voeg het commando 'af' toe zodra het gedrag betrouwbaar is"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ajoutez le signal « couché » une fois le comportement fiable"
           }
         }
       }
@@ -226,6 +397,12 @@
             "value": "Añade la orden 'sitio' o 'cama'"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajoutez le signal « place » ou « panier »"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -236,12 +413,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Voeg het commando 'plaats' of 'mand' toe"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ajoutez le signal « place » ou « panier »"
           }
         }
       }
@@ -261,6 +432,12 @@
             "value": "Añade la orden 'toca'"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajoutez le signal « touche »"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -271,12 +448,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Voeg het commando 'touch' toe"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ajoutez le signal « touche »"
           }
         }
       }
@@ -296,6 +467,12 @@
             "value": "Añade la orden 'mira' o 'atento'"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajoutez le signal « regarde » ou « attention »"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -306,12 +483,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Voeg het commando 'kijk' of 'hier' toe"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ajoutez le signal « regarde » ou « attention »"
           }
         }
       }
@@ -331,6 +502,12 @@
             "value": "Añade la palabra 'sienta' cuando el comportamiento sea fiable"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajoutez le mot « assis » une fois le comportement fiable"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -341,12 +518,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Voeg het woord 'zit' toe zodra het gedrag betrouwbaar is"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ajoutez le mot « assis » une fois le comportement fiable"
           }
         }
       }
@@ -366,6 +537,12 @@
             "value": "Todas las categorías"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toutes les catégories"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -377,11 +554,16 @@
             "state": "translated",
             "value": "Alle categorieën"
           }
-        },
-        "fr": {
+        }
+      }
+    },
+    "Always go out within 5 minutes of waking": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Toutes les catégories"
+            "value": "Ga altijd binnen 5 minuten na het wakker worden naar buiten"
           }
         }
       }
@@ -401,6 +583,12 @@
             "value": "Haz que venir a ti siempre valga la pena"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Faites toujours en sorte que venir vers vous en vaille la peine"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -411,12 +599,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Zorg dat naar jou toekomen altijd de moeite waard is"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Faites toujours en sorte que venir vers vous en vaille la peine"
           }
         }
       }
@@ -436,6 +618,12 @@
             "value": "Siempre vuelve al cachorro - no lo llames para romper el quieto"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Revenez toujours vers le chiot - ne l'appelez pas pour interrompre le reste"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -446,12 +634,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Keer altijd terug naar je pup - roep hem niet om het blijven te verbreken"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Revenez toujours vers le chiot - ne l'appelez pas pour interrompre le reste"
           }
         }
       }
@@ -471,6 +653,12 @@
             "value": "Cuando su cabeza sube, su trasero baja"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quand sa tête monte, son arrière-train descend"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -481,12 +669,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Als zijn hoofd omhoog gaat, gaat zijn achterwerk omlaag"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Quand sa tête monte, son arrière-train descend"
           }
         }
       }
@@ -506,6 +688,12 @@
             "value": "Pide que se tumbe en la alfombra"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Demandez un couché sur le tapis"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -516,12 +704,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Vraag om af op het matje"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Demandez un couché sur le tapis"
           }
         }
       }
@@ -541,6 +723,12 @@
             "value": "Engancha la correa y deja que la arrastre bajo supervisión"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Attachez la laisse et laissez-le la traîner sous surveillance"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -551,12 +739,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Maak de riem vast en laat hem deze onder toezicht slepen"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Attachez la laisse et laissez-le la traîner sous surveillance"
           }
         }
       }
@@ -576,6 +758,12 @@
             "value": "Órdenes básicas"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Commandes de base"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -586,12 +774,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Basiscommando's"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Commandes de base"
           }
         }
       }
@@ -611,6 +793,12 @@
             "value": "Aumenta la duración muy lentamente"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Augmentez la durée très lentement"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -622,11 +810,16 @@
             "state": "translated",
             "value": "Bouw de duur heel langzaam op"
           }
-        },
-        "fr": {
+        }
+      }
+    },
+    "Building good crate habits": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Augmentez la durée très lentement"
+            "value": "Goede benchgewoontes opbouwen"
           }
         }
       }
@@ -646,6 +839,12 @@
             "value": "Se puede usar para guiar al cachorro a posiciones"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Peut être utilisé pour guider le chiot vers des positions"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -656,12 +855,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Kan gebruikt worden om je pup naar posities te leiden"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Peut être utilisé pour guider le chiot vers des positions"
           }
         }
       }
@@ -681,6 +874,12 @@
             "value": "Cuidados"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Soins"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -692,11 +891,16 @@
             "state": "translated",
             "value": "Verzorging"
           }
-        },
-        "fr": {
+        }
+      }
+    },
+    "Celebrate outdoor successes enthusiastically": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Soins"
+            "value": "Vier successen buiten enthousiast"
           }
         }
       }
@@ -716,6 +920,12 @@
             "value": "Cambia de dirección frecuentemente para mantener la atención"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Changez souvent de direction pour maintenir l'attention"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -726,12 +936,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Verander vaak van richting om de aandacht vast te houden"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Changez souvent de direction pour maintenir l'attention"
           }
         }
       }
@@ -751,6 +955,12 @@
             "value": "Comprueba el ajuste del collar - deben caber dos dedos debajo"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vérifiez l'ajustement du collier - deux doigts doivent passer dessous"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -761,12 +971,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Controleer of de halsband goed zit - twee vingers moeten eronder passen"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vérifiez l'ajustement du collier - deux doigts doivent passer dessous"
           }
         }
       }
@@ -786,6 +990,12 @@
             "value": "Haz clic y premia en el momento que el trasero toque el suelo"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cliquez et récompensez dès que l'arrière-train touche le sol"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -796,12 +1006,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Klik en geef een snoepje zodra het achterwerk de grond raakt"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cliquez et récompensez dès que l'arrière-train touche le sol"
           }
         }
       }
@@ -821,6 +1025,12 @@
             "value": "Haz clic y premia cuando los codos toquen el suelo"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cliquez et récompensez quand les coudes touchent le sol"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -831,12 +1041,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Klik en geef een snoepje wanneer de ellebogen de grond raken"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cliquez et récompensez quand les coudes touchent le sol"
           }
         }
       }
@@ -856,6 +1060,12 @@
             "value": "Haz clic y premia cuando la nariz toque la palma"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cliquez et récompensez quand le nez touche la paume"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -866,12 +1076,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Klik en geef een snoepje wanneer de neus de handpalm raakt"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cliquez et récompensez quand le nez touche la paume"
           }
         }
       }
@@ -891,6 +1095,12 @@
             "value": "Haz clic con el clicker (o usa una palabra marcadora como 'sí')"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cliquez sur le clicker (ou utilisez un mot marqueur comme « oui »)"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -901,12 +1111,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Klik met de clicker (of gebruik een markerwoord zoals 'ja')"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cliquez sur le clicker (ou utilisez un mot marqueur comme « oui »)"
           }
         }
       }
@@ -926,6 +1130,12 @@
             "value": "Clicker"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clicker"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -933,12 +1143,6 @@
           }
         },
         "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Clicker"
-          }
-        },
-        "fr": {
           "stringUnit": {
             "state": "translated",
             "value": "Clicker"
@@ -961,6 +1165,12 @@
             "value": "Collar y correa"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Collier et laisse"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -971,12 +1181,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Halsband & riem"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Collier et laisse"
           }
         }
       }
@@ -1031,6 +1235,12 @@
             "value": "Venir a ti debe ser lo mejor del mundo"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Venir vers vous doit être la meilleure chose au monde"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -1042,11 +1252,16 @@
             "state": "translated",
             "value": "Naar jou toekomen moet het beste zijn dat er is"
           }
-        },
-        "fr": {
+        }
+      }
+    },
+    "Common Mistakes": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Venir vers vous doit être la meilleure chose au monde"
+            "value": "Veelgemaakte fouten"
           }
         }
       }
@@ -1066,6 +1281,12 @@
             "value": "Semana de consolidación"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Semaine de consolidation"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -1077,46 +1298,94 @@
             "state": "translated",
             "value": "Consolidatieweek"
           }
-        },
-        "fr": {
+        }
+      }
+    },
+    "Continue training": {
+      "comment": "Button text to continue training.",
+      "extractionState": "stale",
+      "localizations": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Semaine de consolidation"
+            "value": "Ga verder met trainen"
           }
         }
       }
     },
-    "day streak": {
-      "extractionState": "stale",
+    "Crate Nap Progress": {
+      "extractionState": "manual",
       "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tage in Folge"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "días consecutivos"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "giorni consecutivi"
-          }
-        },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "dagen op rij"
+            "value": "Voortgang dutjes in bench"
           }
-        },
-        "fr": {
+        }
+      }
+    },
+    "Crate Training": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "jours consécutifs"
+            "value": "Benchtraining"
+          }
+        }
+      }
+    },
+    "Crate Training Guide": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gids voor benchtraining"
+          }
+        }
+      }
+    },
+    "Crate naps are usually longer and more restorative": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dutjes in de bench zijn meestal langer en rustgevender"
+          }
+        }
+      }
+    },
+    "Crate naps help with potty training and settling": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dutjes in de bench helpen met zindelijkheidstraining en tot rust komen"
+          }
+        }
+      }
+    },
+    "Crate training complete!": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Benchtraining voltooid!"
+          }
+        }
+      }
+    },
+    "Current Progress": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Huidige voortgang"
           }
         }
       }
@@ -1136,10 +1405,10 @@
             "value": "No hagas clic para llamar la atención - haz clic para marcar comportamiento"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Klik niet om aandacht te krijgen - klik om gedrag te markeren"
+            "value": "Ne cliquez pas pour attirer l'attention - cliquez pour marquer le comportement"
           }
         },
         "it": {
@@ -1148,10 +1417,21 @@
             "value": "Non cliccare per attirare l'attenzione - clicca per marcare il comportamento"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ne cliquez pas pour attirer l'attention - cliquez pour marquer le comportement"
+            "value": "Klik niet om aandacht te krijgen - klik om gedrag te markeren"
+          }
+        }
+      }
+    },
+    "Don't let them out while crying - wait for a quiet moment": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Laat ze niet eruit terwijl ze huilen - wacht op een rustig moment"
           }
         }
       }
@@ -1171,10 +1451,10 @@
             "value": "No empujes al cachorro hacia abajo"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Duw je pup niet omlaag"
+            "value": "Ne poussez pas le chiot vers le bas"
           }
         },
         "it": {
@@ -1183,10 +1463,10 @@
             "value": "Non spingere il cucciolo giù"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ne poussez pas le chiot vers le bas"
+            "value": "Duw je pup niet omlaag"
           }
         }
       }
@@ -1206,10 +1486,10 @@
             "value": "No empujes su trasero hacia abajo"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Duw zijn achterwerk niet omlaag"
+            "value": "Ne poussez pas son arrière-train vers le bas"
           }
         },
         "it": {
@@ -1218,10 +1498,10 @@
             "value": "Non spingere giù il sedere"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ne poussez pas son arrière-train vers le bas"
+            "value": "Duw zijn achterwerk niet omlaag"
           }
         }
       }
@@ -1241,10 +1521,10 @@
             "value": "No empujes tu mano hacia su cara"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Duw je hand niet in zijn gezicht"
+            "value": "Ne poussez pas votre main vers son visage"
           }
         },
         "it": {
@@ -1253,10 +1533,10 @@
             "value": "Non spingere la mano verso il muso"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ne poussez pas votre main vers son visage"
+            "value": "Duw je hand niet in zijn gezicht"
           }
         }
       }
@@ -1276,10 +1556,10 @@
             "value": "Completado cuando"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Klaar wanneer"
+            "value": "Terminé quand"
           }
         },
         "it": {
@@ -1288,10 +1568,10 @@
             "value": "Completato quando"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Terminé quand"
+            "value": "Klaar wanneer"
           }
         }
       }
@@ -1381,10 +1661,10 @@
             "value": "Entrenamiento de duración"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Duurtraining"
+            "value": "Entraînement à la durée"
           }
         },
         "it": {
@@ -1393,45 +1673,10 @@
             "value": "Addestramento sulla durata"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Entraînement à la durée"
-          }
-        }
-      }
-    },
-    "e.g. Good focus, needed help": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "z.B. Gute Konzentration, brauchte Hilfe"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ej. Buena concentración, necesitó ayuda"
-          }
-        },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "bijv. Goede focus, had hulp nodig"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "es. Buona concentrazione, ha avuto bisogno di aiuto"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ex. Bonne concentration, a eu besoin d'aide"
+            "value": "Duurtraining"
           }
         }
       }
@@ -1451,10 +1696,10 @@
             "value": "Eventualmente transforma el señuelo en una señal con la mano"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Laat het lokken uiteindelijk overgaan in een handgebaar"
+            "value": "Progressivement, transformez le leurre en signal de la main"
           }
         },
         "it": {
@@ -1463,10 +1708,21 @@
             "value": "Gradualmente trasforma l'esca in un segnale con la mano"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Progressivement, transformez le leurre en signal de la main"
+            "value": "Laat het lokken uiteindelijk overgaan in een handgebaar"
+          }
+        }
+      }
+    },
+    "Feed meals in the crate so it becomes a positive place": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geef maaltijden in de bench zodat het een fijne plek wordt"
           }
         }
       }
@@ -1486,10 +1742,10 @@
             "value": "Primeras órdenes"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Eerste commando's"
+            "value": "Premières commandes"
           }
         },
         "it": {
@@ -1498,10 +1754,10 @@
             "value": "Primi comandi"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Premières commandes"
+            "value": "Eerste commando's"
           }
         }
       }
@@ -1521,10 +1777,10 @@
             "value": "Habilidades de enfoque"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Focus vaardigheden"
+            "value": "Compétences de concentration"
           }
         },
         "it": {
@@ -1533,10 +1789,10 @@
             "value": "Abilità di concentrazione"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Compétences de concentration"
+            "value": "Focus vaardigheden"
           }
         }
       }
@@ -1556,10 +1812,10 @@
             "value": "Semana de fundamentos"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Basisweek"
+            "value": "Semaine de fondation"
           }
         },
         "it": {
@@ -1568,10 +1824,10 @@
             "value": "Settimana delle basi"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Semaine de fondation"
+            "value": "Basisweek"
           }
         }
       }
@@ -1591,6 +1847,12 @@
             "value": "Fundamentos"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fondations"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -1601,12 +1863,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Basis"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fondations"
           }
         }
       }
@@ -1626,10 +1882,10 @@
             "value": "Toca suavemente orejas, patas, cola y boca"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Raak zachtjes oren, poten, staart en bek aan"
+            "value": "Touchez doucement les oreilles, les pattes, la queue, la bouche"
           }
         },
         "it": {
@@ -1638,10 +1894,21 @@
             "value": "Tocca delicatamente orecchie, zampe, coda, bocca"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Touchez doucement les oreilles, les pattes, la queue, la bouche"
+            "value": "Raak zachtjes oren, poten, staart en bek aan"
+          }
+        }
+      }
+    },
+    "Get started": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aan de slag"
           }
         }
       }
@@ -1661,10 +1928,10 @@
             "value": "Haz que tu cachorro se sienta cómodo siendo tocado en todas partes. Importante para visitas al veterinario, aseo y revisiones de salud."
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Laat je pup wennen aan overal aangeraakt worden. Belangrijk voor dierenartsbezoeken, verzorging en gezondheidscontroles."
+            "value": "Habituez votre chiot à être touché partout. Important pour les visites vétérinaires, le toilettage et les examens de santé."
           }
         },
         "it": {
@@ -1673,10 +1940,10 @@
             "value": "Abitua il tuo cucciolo a essere toccato ovunque. Importante per le visite dal veterinario, la toelettatura e i controlli di salute."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Habituez votre chiot à être touché partout. Important pour les visites vétérinaires, le toilettage et les examens de santé."
+            "value": "Laat je pup wennen aan overal aangeraakt worden. Belangrijk voor dierenartsbezoeken, verzorging en gezondheidscontroles."
           }
         }
       }
@@ -1696,10 +1963,10 @@
             "value": "Haz que tu cachorro se sienta cómodo usando collar y correa. Base para todo el entrenamiento al aire libre."
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Laat je pup wennen aan het dragen van een halsband en aan de riem lopen. Basis voor alle buitentraining."
+            "value": "Habituez votre chiot à porter un collier et être en laisse. Base de tout entraînement extérieur."
           }
         },
         "it": {
@@ -1708,10 +1975,32 @@
             "value": "Abitua il tuo cucciolo a indossare il collare e stare al guinzaglio. Base per tutto l'addestramento all'aperto."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Habituez votre chiot à porter un collier et être en laisse. Base de tout entraînement extérieur."
+            "value": "Laat je pup wennen aan het dragen van een halsband en aan de riem lopen. Basis voor alle buitentraining."
+          }
+        }
+      }
+    },
+    "Getting started": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aan de slag"
+          }
+        }
+      }
+    },
+    "Getting started with crate naps": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beginnen met dutjes in de bench"
           }
         }
       }
@@ -1731,10 +2020,10 @@
             "value": "Da premios mientras lo manipulas"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Geef snoepjes tijdens het aanraken"
+            "value": "Donnez des friandises pendant la manipulation"
           }
         },
         "it": {
@@ -1743,10 +2032,21 @@
             "value": "Dai premietti mentre lo manipoli"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Donnez des friandises pendant la manipulation"
+            "value": "Geef snoepjes tijdens het aanraken"
+          }
+        }
+      }
+    },
+    "Gives them a safe retreat when visitors come or when life gets overwhelming": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geeft ze een veilige plek als er bezoek komt of als het even teveel wordt"
           }
         }
       }
@@ -1766,10 +2066,10 @@
             "value": "Ve despacio - esto construye confianza de por vida"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ga langzaam - dit bouwt levenslang vertrouwen"
+            "value": "Allez lentement - cela construit une confiance à vie"
           }
         },
         "it": {
@@ -1778,10 +2078,10 @@
             "value": "Vai piano - questo costruisce fiducia per tutta la vita"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Allez lentement - cela construit une confiance à vie"
+            "value": "Ga langzaam - dit bouwt levenslang vertrouwen"
           }
         }
       }
@@ -1801,10 +2101,10 @@
             "value": "Añade distracciones gradualmente"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Voeg geleidelijk afleiding toe"
+            "value": "Ajoutez progressivement des distractions"
           }
         },
         "it": {
@@ -1813,10 +2113,10 @@
             "value": "Aggiungi gradualmente le distrazioni"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ajoutez progressivement des distractions"
+            "value": "Voeg geleidelijk afleiding toe"
           }
         }
       }
@@ -1836,10 +2136,10 @@
             "value": "Añade gradualmente duración y distancia"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Voeg geleidelijk duur en afstand toe"
+            "value": "Ajoutez progressivement durée et distance"
           }
         },
         "it": {
@@ -1848,10 +2148,10 @@
             "value": "Aggiungi gradualmente durata e distanza"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ajoutez progressivement durée et distance"
+            "value": "Voeg geleidelijk duur en afstand toe"
           }
         }
       }
@@ -1871,10 +2171,10 @@
             "value": "Aumenta gradualmente la distancia y duración"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Vergroot geleidelijk de afstand en duur"
+            "value": "Augmentez progressivement la distance et la durée"
           }
         },
         "it": {
@@ -1883,10 +2183,10 @@
             "value": "Aumenta gradualmente distanza e durata"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Augmentez progressivement la distance et la durée"
+            "value": "Vergroot geleidelijk de afstand en duur"
           }
         }
       }
@@ -1906,10 +2206,10 @@
             "value": "Aumenta gradualmente la duración"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Verleng geleidelijk de duur"
+            "value": "Augmentez progressivement la durée"
           }
         },
         "it": {
@@ -1918,10 +2218,10 @@
             "value": "Aumenta gradualmente la durata"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Augmentez progressivement la durée"
+            "value": "Verleng geleidelijk de duur"
           }
         }
       }
@@ -1941,10 +2241,10 @@
             "value": "Aumenta gradualmente la duración y presión"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Verleng geleidelijk de duur en druk"
+            "value": "Augmentez progressivement la durée et la pression"
           }
         },
         "it": {
@@ -1953,10 +2253,10 @@
             "value": "Aumenta gradualmente durata e pressione"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Augmentez progressivement la durée et la pression"
+            "value": "Verleng geleidelijk de duur en druk"
           }
         }
       }
@@ -1976,10 +2276,10 @@
             "value": "Elimina gradualmente el movimiento de la mano"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Laat de handbeweging geleidelijk weg"
+            "value": "Éliminez progressivement le mouvement de la main"
           }
         },
         "it": {
@@ -1988,10 +2288,21 @@
             "value": "Elimina gradualmente il movimento della mano"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Éliminez progressivement le mouvement de la main"
+            "value": "Laat de handbeweging geleidelijk weg"
+          }
+        }
+      }
+    },
+    "Gradually reduce supervision as reliability builds": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verminder geleidelijk het toezicht naarmate betrouwbaarheid groeit"
           }
         }
       }
@@ -2011,10 +2322,10 @@
             "value": "Gran alternativa a 'ven' para la llamada"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Geweldig alternatief voor 'kom' bij terugroepen"
+            "value": "Excellente alternative à « viens » pour le rappel"
           }
         },
         "it": {
@@ -2023,10 +2334,21 @@
             "value": "Ottima alternativa a 'vieni' per il richiamo"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Excellente alternative à « viens » pour le rappel"
+            "value": "Geweldig alternatief voor 'kom' bij terugroepen"
+          }
+        }
+      }
+    },
+    "Great crate routine established!": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Goede benchroutine vastgesteld!"
           }
         }
       }
@@ -2046,10 +2368,10 @@
             "value": "Genial para visitas a restaurantes y cafeterías"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Geweldig voor restaurant- en cafébezoeken"
+            "value": "Idéal pour les sorties au restaurant et au café"
           }
         },
         "it": {
@@ -2058,10 +2380,10 @@
             "value": "Ottimo per le visite al ristorante e al bar"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Idéal pour les sorties au restaurant et au café"
+            "value": "Geweldig voor restaurant- en cafébezoeken"
           }
         }
       }
@@ -2081,10 +2403,10 @@
             "value": "Genial para seguridad en puertas y bordillos"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Geweldig voor veiligheid bij deuren en stoepranden"
+            "value": "Idéal pour la sécurité aux portes et aux trottoirs"
           }
         },
         "it": {
@@ -2093,10 +2415,10 @@
             "value": "Ottimo per la sicurezza alle porte e ai marciapiedi"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Idéal pour la sécurité aux portes et aux trottoirs"
+            "value": "Geweldig voor veiligheid bij deuren en stoepranden"
           }
         }
       }
@@ -2116,10 +2438,10 @@
             "value": "Genial para cuando llegan invitados"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Geweldig voor als er gasten komen"
+            "value": "Idéal quand des invités arrivent"
           }
         },
         "it": {
@@ -2128,10 +2450,10 @@
             "value": "Ottimo per quando arrivano gli ospiti"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Idéal quand des invités arrivent"
+            "value": "Geweldig voor als er gasten komen"
           }
         }
       }
@@ -2151,10 +2473,10 @@
             "value": "Genial para usar antes de cruzar calles"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Geweldig om te gebruiken voor het oversteken"
+            "value": "Idéal avant de traverser la rue"
           }
         },
         "it": {
@@ -2163,10 +2485,10 @@
             "value": "Ottimo da usare prima di attraversare la strada"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Idéal avant de traverser la rue"
+            "value": "Geweldig om te gebruiken voor het oversteken"
           }
         }
       }
@@ -2186,6 +2508,12 @@
             "value": "Manipulación"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Manipulation"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -2197,11 +2525,27 @@
             "state": "translated",
             "value": "Aanraken"
           }
-        },
-        "fr": {
+        }
+      }
+    },
+    "Having accidents? Reactivate tracking": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Manipulation"
+            "value": "Ongelukjes? Heractiveer tracking"
+          }
+        }
+      }
+    },
+    "Having issues? Reactivate tracking": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Problemen? Heractiveer tracking"
           }
         }
       }
@@ -2221,10 +2565,10 @@
             "value": "Sostén un premio entre el pulgar y los dedos"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Houd een snoepje tussen je duim en vingers"
+            "value": "Tenez une friandise entre le pouce et les doigts"
           }
         },
         "it": {
@@ -2233,10 +2577,10 @@
             "value": "Tieni un premietto tra il pollice e le dita"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tenez une friandise entre le pouce et les doigts"
+            "value": "Houd een snoepje tussen je duim en vingers"
           }
         }
       }
@@ -2256,10 +2600,10 @@
             "value": "Sostén un premio cerca de tu cara"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Houd een snoepje bij je gezicht"
+            "value": "Tenez une friandise près de votre visage"
           }
         },
         "it": {
@@ -2268,10 +2612,10 @@
             "value": "Tieni un premietto vicino al viso"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tenez une friandise près de votre visage"
+            "value": "Houd een snoepje bij je gezicht"
           }
         }
       }
@@ -2291,10 +2635,10 @@
             "value": "Sostén el premio sobre la nariz del cachorro"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Houd een snoepje boven de neus van je pup"
+            "value": "Tenez la friandise au-dessus du nez du chiot"
           }
         },
         "it": {
@@ -2303,10 +2647,10 @@
             "value": "Tieni il premietto sopra il naso del cucciolo"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tenez la friandise au-dessus du nez du chiot"
+            "value": "Houd een snoepje boven de neus van je pup"
           }
         }
       }
@@ -2326,10 +2670,10 @@
             "value": "Ten premios listos en tu mano"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Houd snoepjes klaar in je hand"
+            "value": "Gardez des friandises prêtes dans votre main"
           }
         },
         "it": {
@@ -2338,10 +2682,10 @@
             "value": "Tieni i premietti pronti in mano"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Gardez des friandises prêtes dans votre main"
+            "value": "Houd snoepjes klaar in je hand"
           }
         }
       }
@@ -2361,10 +2705,10 @@
             "value": "Cómo entrenar"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Hoe te trainen"
+            "value": "Comment entraîner"
           }
         },
         "it": {
@@ -2373,10 +2717,10 @@
             "value": "Come addestrare"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Comment entraîner"
+            "value": "Hoe te trainen"
           }
         }
       }
@@ -2396,10 +2740,10 @@
             "value": "Si el cachorro se queda quieto, atráelo hacia adelante con premios"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Als je pup bevriest, lok hem dan vooruit met snoepjes"
+            "value": "Si le chiot se fige, attirez-le avec des friandises"
           }
         },
         "it": {
@@ -2408,10 +2752,10 @@
             "value": "Se il cucciolo si blocca, attiralo in avanti con i premietti"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Si le chiot se fige, attirez-le avec des friandises"
+            "value": "Als je pup bevriest, lok hem dan vooruit met snoepjes"
           }
         }
       }
@@ -2431,10 +2775,10 @@
             "value": "Si el cachorro tira, deja de caminar inmediatamente"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Als je pup trekt, stop direct met lopen"
+            "value": "Si le chiot tire, arrêtez-vous immédiatement"
           }
         },
         "it": {
@@ -2443,10 +2787,10 @@
             "value": "Se il cucciolo tira, smetti subito di camminare"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Si le chiot tire, arrêtez-vous immédiatement"
+            "value": "Als je pup trekt, stop direct met lopen"
           }
         }
       }
@@ -2466,10 +2810,10 @@
             "value": "Si se levanta, simplemente reinicia sin castigar"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Als hij breekt, reset simpelweg zonder straf"
+            "value": "S'il bouge, recommencez simplement sans punir"
           }
         },
         "it": {
@@ -2478,10 +2822,10 @@
             "value": "Se si interrompe, ricomincia semplicemente senza punire"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "S'il bouge, recommencez simplement sans punir"
+            "value": "Als hij breekt, reset simpelweg zonder straf"
           }
         }
       }
@@ -2501,10 +2845,10 @@
             "value": "Si no responde, inténtalo más tarde o reduce las distracciones"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Als hij niet reageert, probeer het later opnieuw of verminder de afleiding"
+            "value": "S'il ne répond pas, réessayez plus tard ou réduisez les distractions"
           }
         },
         "it": {
@@ -2513,10 +2857,10 @@
             "value": "Se non risponde, riprova più tardi o riduci le distrazioni"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "S'il ne répond pas, réessayez plus tard ou réduisez les distractions"
+            "value": "Als hij niet reageert, probeer het later opnieuw of verminder de afleiding"
           }
         }
       }
@@ -2536,10 +2880,10 @@
             "value": "Si salta, sostén el premio más cerca de su nariz"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Als hij springt, houd het snoepje dichter bij zijn neus"
+            "value": "S'il saute, tenez la friandise plus près du nez"
           }
         },
         "it": {
@@ -2548,10 +2892,10 @@
             "value": "Se salta, tieni il premietto più vicino al naso"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "S'il saute, tenez la friandise plus près du nez"
+            "value": "Als hij springt, houd het snoepje dichter bij zijn neus"
           }
         }
       }
@@ -2571,10 +2915,10 @@
             "value": "Si pierde interés, usa premios de mayor valor"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Als hij de interesse verliest, gebruik lekkerder snoepjes"
+            "value": "S'il perd l'intérêt, utilisez des friandises de plus grande valeur"
           }
         },
         "it": {
@@ -2583,10 +2927,10 @@
             "value": "Se perde interesse, usa premietti più appetitosi"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "S'il perd l'intérêt, utilisez des friandises de plus grande valeur"
+            "value": "Als hij de interesse verliest, gebruik lekkerder snoepjes"
           }
         }
       }
@@ -2606,10 +2950,10 @@
             "value": "Si se levanta, moviste el premio demasiado lejos"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Als hij gaat staan, heb je het snoepje te ver bewogen"
+            "value": "S'il se lève, vous avez déplacé la friandise trop loin"
           }
         },
         "it": {
@@ -2618,10 +2962,10 @@
             "value": "Se si alza, hai spostato il premietto troppo lontano"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "S'il se lève, vous avez déplacé la friandise trop loin"
+            "value": "Als hij gaat staan, heb je het snoepje te ver bewogen"
           }
         }
       }
@@ -2641,10 +2985,10 @@
             "value": "Da un premio inmediatamente en 1-2 segundos"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Geef direct een snoepje binnen 1-2 seconden"
+            "value": "Donnez immédiatement une friandise en 1-2 secondes"
           }
         },
         "it": {
@@ -2653,10 +2997,10 @@
             "value": "Dai subito un premietto entro 1-2 secondi"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Donnez immédiatement une friandise en 1-2 secondes"
+            "value": "Geef direct een snoepje binnen 1-2 seconden"
           }
         }
       }
@@ -2676,10 +3020,10 @@
             "value": "Control de impulsos"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Impulscontrole"
+            "value": "Contrôle des impulsions"
           }
         },
         "it": {
@@ -2688,10 +3032,54 @@
             "value": "Controllo degli impulsi"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Contrôle des impulsions"
+            "value": "Impulscontrole"
+          }
+        }
+      }
+    },
+    "Inconsistent schedule (confuses the puppy)": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wisselend schema (verwarrend voor de pup)"
+          }
+        }
+      }
+    },
+    "It happens": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Het gebeurt"
+          }
+        }
+      }
+    },
+    "Keep a consistent schedule, even on weekends": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hou een vast schema aan, ook in het weekend"
+          }
+        }
+      }
+    },
+    "Keep rewarding to maintain the habit": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Blijf belonen om de gewoonte te behouden"
           }
         }
       }
@@ -2711,10 +3099,10 @@
             "value": "Mantén las sesiones cortas (2-3 minutos)"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Houd sessies kort (2-3 minuten)"
+            "value": "Gardez les sessions courtes (2-3 minutes)"
           }
         },
         "it": {
@@ -2723,10 +3111,10 @@
             "value": "Mantieni le sessioni brevi (2-3 minuti)"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Gardez les sessions courtes (2-3 minutes)"
+            "value": "Houd sessies kort (2-3 minuten)"
           }
         }
       }
@@ -2746,10 +3134,10 @@
             "value": "Mantén las sesiones muy cortas al principio"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Houd sessies in het begin heel kort"
+            "value": "Gardez les sessions très courtes au début"
           }
         },
         "it": {
@@ -2758,10 +3146,10 @@
             "value": "Mantieni le sessioni molto brevi all'inizio"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Gardez les sessions très courtes au début"
+            "value": "Houd sessies in het begin heel kort"
           }
         }
       }
@@ -2781,10 +3169,10 @@
             "value": "Mantén el premio cerca de su nariz"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Houd het snoepje dicht bij zijn neus"
+            "value": "Gardez la friandise près de son nez"
           }
         },
         "it": {
@@ -2793,10 +3181,22 @@
             "value": "Tieni il premietto vicino al naso"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Gardez la friandise près de son nez"
+            "value": "Houd het snoepje dicht bij zijn neus"
+          }
+        }
+      }
+    },
+    "Key Principles": {
+      "comment": "Title of a section in the Potty Training Guide that lists the key principles.",
+      "extractionState": "stale",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Belangrijke principes"
           }
         }
       }
@@ -2816,10 +3216,10 @@
             "value": "Deja que el cachorro olfatee el collar primero"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Laat je pup eerst aan de halsband ruiken"
+            "value": "Laissez le chiot renifler le collier d'abord"
           }
         },
         "it": {
@@ -2828,10 +3228,10 @@
             "value": "Lascia che il cucciolo annusi prima il collare"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Laissez le chiot renifler le collier d'abord"
+            "value": "Laat je pup eerst aan de halsband ruiken"
           }
         }
       }
@@ -2851,10 +3251,10 @@
             "value": "Deja que tu cachorro huela el premio pero no lo coma"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Laat je pup aan het snoepje ruiken maar niet opeten"
+            "value": "Laissez votre chiot sentir la friandise mais pas la manger"
           }
         },
         "it": {
@@ -2863,10 +3263,10 @@
             "value": "Lascia che il cucciolo annusi il premietto ma non lo mangi"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Laissez votre chiot sentir la friandise mais pas la manger"
+            "value": "Laat je pup aan het snoepje ruiken maar niet opeten"
           }
         }
       }
@@ -2892,51 +3292,16 @@
             "value": "Verrouillé"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vergrendeld"
-          }
-        },
         "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Bloccato"
           }
-        }
-      }
-    },
-    "Log session": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Einheit protokollieren"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Registrar sesión"
-          }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sessie loggen"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Registra sessione"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Enregistrer la session"
+            "value": "Vergrendeld"
           }
         }
       }
@@ -2956,10 +3321,10 @@
             "value": "Registrar sesión de entrenamiento"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Trainingssessie loggen"
+            "value": "Enregistrer une session d'entraînement"
           }
         },
         "it": {
@@ -2968,10 +3333,45 @@
             "value": "Registra sessione di addestramento"
           }
         },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trainingssessie loggen"
+          }
+        }
+      }
+    },
+    "Log session": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Einheit protokollieren"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registrar sesión"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Enregistrer une session d'entraînement"
+            "value": "Enregistrer la session"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registra sessione"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sessie loggen"
           }
         }
       }
@@ -2991,10 +3391,10 @@
             "value": "Quieto de larga duración - el cachorro permanece en posición hasta que se le libere."
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Langdurig blijven - je pup blijft in positie tot hij wordt losgelaten."
+            "value": "Reste longue durée - le chiot reste en position jusqu'à libération."
           }
         },
         "it": {
@@ -3003,10 +3403,10 @@
             "value": "Resta prolungato - il cucciolo rimane in posizione finché non viene liberato."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Reste longue durée - le chiot reste en position jusqu'à libération."
+            "value": "Langdurig blijven - je pup blijft in positie tot hij wordt losgelaten."
           }
         }
       }
@@ -3026,10 +3426,10 @@
             "value": "Paseo con correa suelta"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Aan de losse lijn lopen"
+            "value": "Marche en laisse détendue"
           }
         },
         "it": {
@@ -3038,10 +3438,10 @@
             "value": "Camminata al guinzaglio lento"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Marche en laisse détendue"
+            "value": "Aan de losse lijn lopen"
           }
         }
       }
@@ -3061,10 +3461,10 @@
             "value": "Atrae al cachorro a su cama o alfombra"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Lok je pup naar zijn mand of matje"
+            "value": "Attirez le chiot sur son panier ou tapis"
           }
         },
         "it": {
@@ -3073,10 +3473,10 @@
             "value": "Attira il cucciolo sulla sua cuccia o tappetino"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Attirez le chiot sur son panier ou tapis"
+            "value": "Lok je pup naar zijn mand of matje"
           }
         }
       }
@@ -3096,10 +3496,10 @@
             "value": "Guía el premio desde la nariz hacia abajo hasta el suelo"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Lok met een snoepje van de neus recht naar beneden naar de grond"
+            "value": "Guidez la friandise du nez jusqu'au sol"
           }
         },
         "it": {
@@ -3108,10 +3508,10 @@
             "value": "Guida il premietto dal naso dritto verso il pavimento"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Guidez la friandise du nez jusqu'au sol"
+            "value": "Lok met een snoepje van de neus recht naar beneden naar de grond"
           }
         }
       }
@@ -3131,10 +3531,10 @@
             "value": "Señuelo"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Lokken"
+            "value": "Guidage"
           }
         },
         "it": {
@@ -3143,10 +3543,32 @@
             "value": "Attrarre con esca"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Guidage"
+            "value": "Lokken"
+          }
+        }
+      }
+    },
+    "Maintain the schedule that's working": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hou het schema aan dat werkt"
+          }
+        }
+      }
+    },
+    "Make it cozy with a blanket and safe chew toy": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Maak het gezellig met een dekentje en veilig kauwspeeltje"
           }
         }
       }
@@ -3166,10 +3588,10 @@
             "value": "Hazlo parte de la rutina diaria"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Maak het onderdeel van de dagelijkse routine"
+            "value": "Intégrez-le à la routine quotidienne"
           }
         },
         "it": {
@@ -3178,10 +3600,21 @@
             "value": "Rendilo parte della routine quotidiana"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Intégrez-le à la routine quotidienne"
+            "value": "Maak het onderdeel van de dagelijkse routine"
+          }
+        }
+      }
+    },
+    "Mark as Mastered": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Markeer als voltooid"
           }
         }
       }
@@ -3201,10 +3634,10 @@
             "value": "Marcar como dominado"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Markeer als beheerst"
+            "value": "Marquer comme maîtrisé"
           }
         },
         "it": {
@@ -3213,10 +3646,10 @@
             "value": "Segna come padroneggiato"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Marquer comme maîtrisé"
+            "value": "Markeer als beheerst"
           }
         }
       }
@@ -3236,10 +3669,10 @@
             "value": "Dominado"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Beheerst"
+            "value": "Maîtrisé"
           }
         },
         "it": {
@@ -3248,45 +3681,32 @@
             "value": "Padroneggiato"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Maîtrisé"
+            "value": "Beheerst"
           }
         }
       }
     },
-    "minutes": {
-      "extractionState": "stale",
+    "Mastered on %@": {
+      "extractionState": "manual",
       "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Minuten"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "minutos"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "minutes"
-          }
-        },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "minuten"
+            "value": "Voltooid op %@"
           }
-        },
-        "it": {
+        }
+      }
+    },
+    "Most puppies love their crate within a week. It becomes their happy place.": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "minuti"
+            "value": "De meeste pups houden binnen een week van hun bench. Het wordt hun fijne plekje."
           }
         }
       }
@@ -3306,10 +3726,10 @@
             "value": "La mayoría de los cachorros investigarán naturalmente"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "De meeste pups zullen van nature onderzoeken"
+            "value": "La plupart des chiots vont naturellement explorer"
           }
         },
         "it": {
@@ -3318,10 +3738,10 @@
             "value": "La maggior parte dei cuccioli esplorerà naturalmente"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "La plupart des chiots vont naturellement explorer"
+            "value": "De meeste pups zullen van nature onderzoeken"
           }
         }
       }
@@ -3341,10 +3761,10 @@
             "value": "Muévete lenta y suavemente"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Beweeg langzaam en soepel"
+            "value": "Bougez lentement et en douceur"
           }
         },
         "it": {
@@ -3353,10 +3773,10 @@
             "value": "Muoviti lentamente e fluidamente"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Bougez lentement et en douceur"
+            "value": "Beweeg langzaam en soepel"
           }
         }
       }
@@ -3376,10 +3796,10 @@
             "value": "Mueve el premio lentamente - la nariz de tu cachorro debe seguirlo"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Beweeg het snoepje langzaam - de neus van je pup moet volgen"
+            "value": "Déplacez la friandise lentement - le nez de votre chiot doit suivre"
           }
         },
         "it": {
@@ -3388,10 +3808,10 @@
             "value": "Muovi il premietto lentamente - il naso del cucciolo deve seguire"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Déplacez la friandise lentement - le nez de votre chiot doit suivre"
+            "value": "Beweeg het snoepje langzaam - de neus van je pup moet volgen"
           }
         }
       }
@@ -3411,10 +3831,10 @@
             "value": "Mueve el premio lentamente hacia atrás sobre su cabeza"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Beweeg het snoepje langzaam naar achteren over zijn hoofd"
+            "value": "Déplacez la friandise lentement au-dessus de sa tête"
           }
         },
         "it": {
@@ -3423,10 +3843,10 @@
             "value": "Muovi il premietto lentamente all'indietro sopra la testa"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Déplacez la friandise lentement au-dessus de sa tête"
+            "value": "Beweeg het snoepje langzaam naar achteren over zijn hoofd"
           }
         }
       }
@@ -3446,10 +3866,10 @@
             "value": "Reconocimiento del nombre"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Naam herkenning"
+            "value": "Reconnaissance du nom"
           }
         },
         "it": {
@@ -3458,10 +3878,22 @@
             "value": "Riconoscimento del nome"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Reconnaissance du nom"
+            "value": "Naam herkenning"
+          }
+        }
+      }
+    },
+    "Need some refresher tips?": {
+      "comment": "Prompt to encourage users to reactivate potty training guidance.",
+      "extractionState": "stale",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Opfriscursus nodig?"
           }
         }
       }
@@ -3481,10 +3913,10 @@
             "value": "Nunca lo llames para algo negativo"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Roep nooit voor iets negatiefs"
+            "value": "N'appelez jamais pour quelque chose de négatif"
           }
         },
         "it": {
@@ -3493,10 +3925,10 @@
             "value": "Non chiamare mai per qualcosa di negativo"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "N'appelez jamais pour quelque chose de négatif"
+            "value": "Roep nooit voor iets negatiefs"
           }
         }
       }
@@ -3516,10 +3948,10 @@
             "value": "Nunca persigas a tu cachorro si no viene"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Achtervolg je pup nooit als hij niet komt"
+            "value": "Ne poursuivez jamais votre chiot s'il ne vient pas"
           }
         },
         "it": {
@@ -3528,10 +3960,10 @@
             "value": "Non inseguire mai il cucciolo se non viene"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ne poursuivez jamais votre chiot s'il ne vient pas"
+            "value": "Achtervolg je pup nooit als hij niet komt"
           }
         }
       }
@@ -3551,10 +3983,10 @@
             "value": "Nunca dejes la correa puesta sin supervisión"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Laat de riem nooit onbewaakt aan"
+            "value": "Ne laissez jamais la laisse sans surveillance"
           }
         },
         "it": {
@@ -3563,10 +3995,21 @@
             "value": "Non lasciare mai il guinzaglio senza supervisione"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ne laissez jamais la laisse sans surveillance"
+            "value": "Laat de riem nooit onbewaakt aan"
+          }
+        }
+      }
+    },
+    "Never punish accidents - just clean and move on": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Straf ongelukjes nooit - maak schoon en ga verder"
           }
         }
       }
@@ -3586,10 +4029,10 @@
             "value": "Nunca uses su nombre de forma negativa"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Gebruik zijn naam nooit negatief"
+            "value": "N'utilisez jamais son nom négativement"
           }
         },
         "it": {
@@ -3598,10 +4041,21 @@
             "value": "Non usare mai il nome in modo negativo"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "N'utilisez jamais son nom négativement"
+            "value": "Gebruik zijn naam nooit negatief"
+          }
+        }
+      }
+    },
+    "No naps logged yet": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nog geen dutjes gelogd"
           }
         }
       }
@@ -3621,10 +4075,10 @@
             "value": "Aún no hay habilidades iniciadas"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nog geen vaardigheden gestart"
+            "value": "Aucune compétence commencée"
           }
         },
         "it": {
@@ -3633,10 +4087,32 @@
             "value": "Nessuna abilità iniziata ancora"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Aucune compétence commencée"
+            "value": "Nog geen vaardigheden gestart"
+          }
+        }
+      }
+    },
+    "Not going outside with them (missing reward moments)": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Niet mee naar buiten gaan (beloningsmomentjes missen)"
+          }
+        }
+      }
+    },
+    "Not now": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Niet nu"
           }
         }
       }
@@ -3656,10 +4132,10 @@
             "value": "No iniciado"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Niet gestart"
+            "value": "Non commencé"
           }
         },
         "it": {
@@ -3668,10 +4144,10 @@
             "value": "Non iniziato"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Non commencé"
+            "value": "Niet gestart"
           }
         }
       }
@@ -3697,16 +4173,27 @@
             "value": "Note"
           }
         },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nota"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
             "value": "Notitie"
           }
-        },
-        "it": {
+        }
+      }
+    },
+    "One indoor moment doesn't undo all that progress. Tomorrow's a new day.": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nota"
+            "value": "Eén ongelukje binnen maakt alle vooruitgang niet ongedaan. Morgen is een nieuwe dag."
           }
         }
       }
@@ -3726,10 +4213,10 @@
             "value": "Di el nombre solo una vez - no lo repitas"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zeg de naam maar één keer - niet herhalen"
+            "value": "Ne dites le nom qu'une fois - ne le répétez pas"
           }
         },
         "it": {
@@ -3738,10 +4225,10 @@
             "value": "Dì il nome solo una volta - non ripeterlo"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ne dites le nom qu'une fois - ne le répétez pas"
+            "value": "Zeg de naam maar één keer - niet herhalen"
           }
         }
       }
@@ -3761,10 +4248,10 @@
             "value": "Nota opcional..."
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Optionele notitie..."
+            "value": "Note facultative..."
           }
         },
         "it": {
@@ -3773,45 +4260,43 @@
             "value": "Nota opzionale..."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Note facultative..."
+            "value": "Optionele notitie..."
           }
         }
       }
     },
-    "outdoor this week": {
-      "extractionState": "stale",
+    "Outdoor Rate": {
+      "extractionState": "manual",
       "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "draussen diese Woche"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "al aire libre esta semana"
-          }
-        },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "buiten deze week"
+            "value": "Buiten percentage"
           }
-        },
-        "it": {
+        }
+      }
+    },
+    "Outdoor Streak": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "all'aperto questa settimana"
+            "value": "Buiten reeks"
           }
-        },
-        "fr": {
+        }
+      }
+    },
+    "Outdoor success tips": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "dehors cette semaine"
+            "value": "Tips voor succes buiten"
           }
         }
       }
@@ -3831,10 +4316,10 @@
             "value": "Combínalo con contacto visual para máxima atención"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Combineer met oogcontact voor maximale aandacht"
+            "value": "Associez au contact visuel pour une attention maximale"
           }
         },
         "it": {
@@ -3843,10 +4328,21 @@
             "value": "Abbina al contatto visivo per la massima attenzione"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Associez au contact visuel pour une attention maximale"
+            "value": "Combineer met oogcontact voor maximale aandacht"
+          }
+        }
+      }
+    },
+    "Pick a consistent potty spot outside": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kies een vaste plek buiten voor het plassen"
           }
         }
       }
@@ -3866,10 +4362,10 @@
             "value": "Recoge la correa y sigue al cachorro"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pak de riem op en volg je pup"
+            "value": "Prenez la laisse et suivez le chiot"
           }
         },
         "it": {
@@ -3878,10 +4374,10 @@
             "value": "Prendi il guinzaglio e segui il cucciolo"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Prenez la laisse et suivez le chiot"
+            "value": "Pak de riem op en volg je pup"
           }
         }
       }
@@ -3901,10 +4397,10 @@
             "value": "Sitio"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plaats"
+            "value": "Place"
           }
         },
         "it": {
@@ -3913,10 +4409,10 @@
             "value": "Posto"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Place"
+            "value": "Plaats"
           }
         }
       }
@@ -3936,10 +4432,10 @@
             "value": "Progreso de higiene"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zindelijkheid"
+            "value": "Progrès propreté"
           }
         },
         "it": {
@@ -3948,10 +4444,44 @@
             "value": "Progressi igienici"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Progrès propreté"
+            "value": "Zindelijkheid"
+          }
+        }
+      }
+    },
+    "Potty Training": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zindelijkheidstraining"
+          }
+        }
+      }
+    },
+    "Potty Training Guide": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gids voor zindelijkheidstraining"
+          }
+        }
+      }
+    },
+    "Potty training complete!": {
+      "comment": "Celebration text when potty training is mastered.",
+      "extractionState": "stale",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zindelijkheidstraining voltooid!"
           }
         }
       }
@@ -3971,10 +4501,10 @@
             "value": "Practica giros de 'vamos' para redirigir"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Oefen 'kom mee' bochten om af te leiden"
+            "value": "Pratiquez les demi-tours « on y va » pour rediriger"
           }
         },
         "it": {
@@ -3983,10 +4513,10 @@
             "value": "Pratica le curve con 'andiamo' per reindirizzare"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pratiquez les demi-tours « on y va » pour rediriger"
+            "value": "Oefen 'kom mee' bochten om af te leiden"
           }
         }
       }
@@ -4006,10 +4536,10 @@
             "value": "Practica a diferentes alturas y distancias"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Oefen op verschillende hoogtes en afstanden"
+            "value": "Pratiquez à différentes hauteurs et distances"
           }
         },
         "it": {
@@ -4018,10 +4548,10 @@
             "value": "Pratica a diverse altezze e distanze"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pratiquez à différentes hauteurs et distances"
+            "value": "Oefen op verschillende hoogtes en afstanden"
           }
         }
       }
@@ -4041,10 +4571,10 @@
             "value": "Practica antes de las comidas para motivación extra"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Oefen voor de maaltijden voor extra motivatie"
+            "value": "Pratiquez avant les repas pour plus de motivation"
           }
         },
         "it": {
@@ -4053,10 +4583,10 @@
             "value": "Pratica prima dei pasti per motivazione extra"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pratiquez avant les repas pour plus de motivation"
+            "value": "Oefen voor de maaltijden voor extra motivatie"
           }
         }
       }
@@ -4076,10 +4606,10 @@
             "value": "Practica antes de poner el plato de comida"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Oefen voordat je de voerbak neerzet"
+            "value": "Pratiquez avant de poser la gamelle"
           }
         },
         "it": {
@@ -4088,10 +4618,10 @@
             "value": "Pratica prima di mettere giù la ciotola"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pratiquez avant de poser la gamelle"
+            "value": "Oefen voordat je de voerbak neerzet"
           }
         }
       }
@@ -4111,10 +4641,10 @@
             "value": "Practica durante las comidas y mientras ves la TV"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Oefen tijdens maaltijden en tv-tijd"
+            "value": "Pratiquez pendant les repas et devant la télé"
           }
         },
         "it": {
@@ -4123,10 +4653,10 @@
             "value": "Pratica durante i pasti e mentre guardi la TV"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pratiquez pendant les repas et devant la télé"
+            "value": "Oefen tijdens maaltijden en tv-tijd"
           }
         }
       }
@@ -4146,10 +4676,10 @@
             "value": "Practica en diferentes lugares"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Oefen op verschillende locaties"
+            "value": "Pratiquez dans différents endroits"
           }
         },
         "it": {
@@ -4158,10 +4688,21 @@
             "value": "Pratica in luoghi diversi"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pratiquez dans différents endroits"
+            "value": "Oefen op verschillende locaties"
+          }
+        }
+      }
+    },
+    "Practice in new environments to generalize": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oefen in nieuwe omgevingen om te generaliseren"
           }
         }
       }
@@ -4181,10 +4722,10 @@
             "value": "Practica dentro antes de salir afuera"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Oefen eerst binnen voordat je naar buiten gaat"
+            "value": "Pratiquez à l'intérieur avant d'aller dehors"
           }
         },
         "it": {
@@ -4193,10 +4734,10 @@
             "value": "Pratica dentro prima di andare fuori"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pratiquez à l'intérieur avant d'aller dehors"
+            "value": "Oefen eerst binnen voordat je naar buiten gaat"
           }
         }
       }
@@ -4216,10 +4757,10 @@
             "value": "Practica levantar las patas y mirar en las orejas"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Oefen met poten optillen en in de oren kijken"
+            "value": "Pratiquez le lever des pattes et l'examen des oreilles"
           }
         },
         "it": {
@@ -4228,10 +4769,10 @@
             "value": "Pratica sollevando le zampe e guardando nelle orecchie"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pratiquez le lever des pattes et l'examen des oreilles"
+            "value": "Oefen met poten optillen en in de oren kijken"
           }
         }
       }
@@ -4251,10 +4792,10 @@
             "value": "Practica moviéndote en diferentes direcciones"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Oefen met bewegen in verschillende richtingen"
+            "value": "Pratiquez les déplacements dans différentes directions"
           }
         },
         "it": {
@@ -4263,10 +4804,10 @@
             "value": "Pratica muovendoti in direzioni diverse"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pratiquez les déplacements dans différentes directions"
+            "value": "Oefen met bewegen in verschillende richtingen"
           }
         }
       }
@@ -4286,10 +4827,10 @@
             "value": "Practica primero en una superficie cómoda"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Oefen eerst op een comfortabel oppervlak"
+            "value": "Pratiquez d'abord sur une surface confortable"
           }
         },
         "it": {
@@ -4298,10 +4839,10 @@
             "value": "Pratica prima su una superficie comoda"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pratiquez d'abord sur une surface confortable"
+            "value": "Oefen eerst op een comfortabel oppervlak"
           }
         }
       }
@@ -4321,10 +4862,10 @@
             "value": "Practica aleatoriamente durante el día"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Oefen willekeurig door de dag heen"
+            "value": "Pratiquez de façon aléatoire tout au long de la journée"
           }
         },
         "it": {
@@ -4333,10 +4874,22 @@
             "value": "Pratica casualmente durante il giorno"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pratiquez de façon aléatoire tout au long de la journée"
+            "value": "Oefen willekeurig door de dag heen"
+          }
+        }
+      }
+    },
+    "Practiced in": {
+      "comment": "Label for contexts where a skill has been practiced.",
+      "extractionState": "stale",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geoefend in"
           }
         }
       }
@@ -4356,10 +4909,10 @@
             "value": "Practicando"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Aan het oefenen"
+            "value": "En pratique"
           }
         },
         "it": {
@@ -4368,10 +4921,10 @@
             "value": "In pratica"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "En pratique"
+            "value": "Aan het oefenen"
           }
         }
       }
@@ -4391,10 +4944,10 @@
             "value": "Presenta la palma plana cerca de la nariz del cachorro"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Houd je vlakke handpalm bij de neus van je pup"
+            "value": "Présentez la paume à plat près du nez du chiot"
           }
         },
         "it": {
@@ -4403,10 +4956,43 @@
             "value": "Presenta il palmo aperto vicino al naso del cucciolo"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Présentez la paume à plat près du nez du chiot"
+            "value": "Houd je vlakke handpalm bij de neus van je pup"
+          }
+        }
+      }
+    },
+    "Prevents separation anxiety by teaching them to be calm alone for short periods": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voorkomt verlatingsangst door ze te leren korte tijd alleen rustig te zijn"
+          }
+        }
+      }
+    },
+    "Punishing accidents (creates fear, not learning)": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ongelukjes bestraffen (zorgt voor angst, geen leren)"
+          }
+        }
+      }
+    },
+    "Puppies avoid soiling their sleeping area, making potty training faster": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pups vermijden hun slaapplek te bevuilen, wat de zindelijkheidstraining versnelt"
           }
         }
       }
@@ -4426,10 +5012,10 @@
             "value": "El cachorro va a su cama o alfombra y se queda allí. Genial para calmarse en casa."
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Je pup gaat naar zijn mand of matje en blijft daar. Geweldig om thuis te kalmeren."
+            "value": "Le chiot va sur son panier ou tapis et y reste. Idéal pour se calmer à la maison."
           }
         },
         "it": {
@@ -4438,10 +5024,10 @@
             "value": "Il cucciolo va sulla sua cuccia o tappetino e ci resta. Ottimo per calmarsi a casa."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Le chiot va sur son panier ou tapis et y reste. Idéal pour se calmer à la maison."
+            "value": "Je pup gaat naar zijn mand of matje en blijft daar. Geweldig om thuis te kalmeren."
           }
         }
       }
@@ -4461,10 +5047,10 @@
             "value": "El cachorro aprende a tocar tu palma con su nariz. Útil para posicionamiento y llamada."
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Je pup leert zijn neus tegen je handpalm te duwen. Handig voor positionering en terugroepen."
+            "value": "Le chiot apprend à toucher votre paume avec son nez. Utile pour le positionnement et le rappel."
           }
         },
         "it": {
@@ -4473,10 +5059,10 @@
             "value": "Il cucciolo impara a toccare il palmo con il naso. Utile per il posizionamento e il richiamo."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Le chiot apprend à toucher votre paume avec son nez. Utile pour le positionnement et le rappel."
+            "value": "Je pup leert zijn neus tegen je handpalm te duwen. Handig voor positionering en terugroepen."
           }
         }
       }
@@ -4496,10 +5082,10 @@
             "value": "El cachorro se tumba a la orden. Una posición tranquila útil para calmarse."
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Je pup gaat liggen op commando. Een rustige positie die handig is om te kalmeren."
+            "value": "Le chiot se couche sur commande. Une position calme utile pour se détendre."
           }
         },
         "it": {
@@ -4508,10 +5094,10 @@
             "value": "Il cucciolo si sdraia a comando. Una posizione calma utile per rilassarsi."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Le chiot se couche sur commande. Une position calme utile pour se détendre."
+            "value": "Je pup gaat liggen op commando. Een rustige positie die handig is om te kalmeren."
           }
         }
       }
@@ -4531,10 +5117,10 @@
             "value": "Pon el collar durante momentos positivos (comidas, juego)"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Doe de halsband om tijdens positieve momenten (maaltijden, spelen)"
+            "value": "Mettez le collier lors de moments positifs (repas, jeux)"
           }
         },
         "it": {
@@ -4543,10 +5129,10 @@
             "value": "Metti il collare durante momenti positivi (pasti, gioco)"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Mettez le collier lors de moments positifs (repas, jeux)"
+            "value": "Doe de halsband om tijdens positieve momenten (maaltijden, spelen)"
           }
         }
       }
@@ -4566,10 +5152,10 @@
             "value": "Pon al cachorro en sentado"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zet je pup in zit"
+            "value": "Mettez le chiot en position assise"
           }
         },
         "it": {
@@ -4578,10 +5164,32 @@
             "value": "Metti il cucciolo seduto"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Mettez le chiot en position assise"
+            "value": "Zet je pup in zit"
+          }
+        }
+      }
+    },
+    "Put them in when tired - after play or a walk works best": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Doe ze erin als ze moe zijn - na het spelen of een wandeling werkt het beste"
+          }
+        }
+      }
+    },
+    "Ready to mark potty training as mastered?": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Klaar om zindelijkheidstraining als voltooid te markeren?"
           }
         }
       }
@@ -4601,10 +5209,10 @@
             "value": "Llamada - la orden de seguridad más importante. Tu cachorro viene cuando lo llamas."
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Terugroepen - het belangrijkste veiligheidscommando. Je pup komt naar je toe wanneer je roept."
+            "value": "Rappel - la commande de sécurité la plus importante. Votre chiot vient vers vous quand on l'appelle."
           }
         },
         "it": {
@@ -4613,10 +5221,10 @@
             "value": "Richiamo - il comando di sicurezza più importante. Il tuo cucciolo viene da te quando lo chiami."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Rappel - la commande de sécurité la plus importante. Votre chiot vient vers vous quand on l'appelle."
+            "value": "Terugroepen - het belangrijkste veiligheidscommando. Je pup komt naar je toe wanneer je roept."
           }
         }
       }
@@ -4636,6 +5244,12 @@
             "value": "Sesiones recientes"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sessions récentes"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -4646,12 +5260,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Recente sessies"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sessions récentes"
           }
         }
       }
@@ -4671,10 +5279,10 @@
             "value": "Libera con 'vale' o 'libre'"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Laat los met 'oké' of 'vrij'"
+            "value": "Libérez avec « ok » ou « libre »"
           }
         },
         "it": {
@@ -4683,10 +5291,10 @@
             "value": "Libera con 'okay' o 'libero'"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Libérez avec « ok » ou « libre »"
+            "value": "Laat los met 'oké' of 'vrij'"
           }
         }
       }
@@ -4706,10 +5314,10 @@
             "value": "Repite 10-15 veces por sesión"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Herhaal 10-15 keer per sessie"
+            "value": "Répétez 10-15 fois par session"
           }
         },
         "it": {
@@ -4718,10 +5326,10 @@
             "value": "Ripeti 10-15 volte per sessione"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Répétez 10-15 fois par session"
+            "value": "Herhaal 10-15 keer per sessie"
           }
         }
       }
@@ -4741,10 +5349,10 @@
             "value": "Requiere"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Vereist"
+            "value": "Nécessite"
           }
         },
         "it": {
@@ -4753,10 +5361,10 @@
             "value": "Richiede"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nécessite"
+            "value": "Vereist"
           }
         }
       }
@@ -4811,10 +5419,10 @@
             "value": "Vuelve y premia antes de que se mueva"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kom terug en geef een snoepje voordat hij beweegt"
+            "value": "Revenez et récompensez avant qu'il bouge"
           }
         },
         "it": {
@@ -4823,10 +5431,10 @@
             "value": "Torna e premia prima che si muova"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Revenez et récompensez avant qu'il bouge"
+            "value": "Kom terug en geef een snoepje voordat hij beweegt"
           }
         }
       }
@@ -4846,10 +5454,10 @@
             "value": "Vuelve al cachorro antes de liberarlo"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Keer terug naar je pup voordat je loslaat"
+            "value": "Revenez vers le chiot avant de le libérer"
           }
         },
         "it": {
@@ -4858,10 +5466,10 @@
             "value": "Torna dal cucciolo prima di liberarlo"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Revenez vers le chiot avant de le libérer"
+            "value": "Keer terug naar je pup voordat je loslaat"
           }
         }
       }
@@ -4881,10 +5489,10 @@
             "value": "Premia por quedarse en la alfombra"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Beloon voor het blijven op het matje"
+            "value": "Récompensez pour rester sur le tapis"
           }
         },
         "it": {
@@ -4893,10 +5501,10 @@
             "value": "Premia per essere rimasto sul tappetino"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Récompensez pour rester sur le tapis"
+            "value": "Beloon voor het blijven op het matje"
           }
         }
       }
@@ -4916,10 +5524,10 @@
             "value": "Premia frecuentemente por quedarse a tu lado"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Beloon regelmatig voor het naast je blijven"
+            "value": "Récompensez souvent pour rester à vos côtés"
           }
         },
         "it": {
@@ -4928,10 +5536,10 @@
             "value": "Premia spesso per stare al tuo fianco"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Récompensez souvent pour rester à vos côtés"
+            "value": "Beloon regelmatig voor het naast je blijven"
           }
         }
       }
@@ -4951,10 +5559,10 @@
             "value": "Premia generosamente cuando llegue a ti"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Beloon royaal wanneer hij bij je komt"
+            "value": "Récompensez généreusement quand il vous rejoint"
           }
         },
         "it": {
@@ -4963,10 +5571,21 @@
             "value": "Premia generosamente quando ti raggiunge"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Récompensez généreusement quand il vous rejoint"
+            "value": "Beloon royaal wanneer hij bij je komt"
+          }
+        }
+      }
+    },
+    "Reward immediately when they go outside": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beloon direct als ze buiten hun behoefte doen"
           }
         }
       }
@@ -4986,10 +5605,10 @@
             "value": "Premia cuando siga el señuelo suavemente"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Beloon wanneer hij het lokker soepel volgt"
+            "value": "Récompensez quand il suit le leurre en douceur"
           }
         },
         "it": {
@@ -4998,10 +5617,10 @@
             "value": "Premia quando segue l'esca fluidamente"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Récompensez quand il suit le leurre en douceur"
+            "value": "Beloon wanneer hij het lokker soepel volgt"
           }
         }
       }
@@ -5021,10 +5640,10 @@
             "value": "Frota un premio en la palma si necesita estímulo"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wrijf een snoepje over je handpalm als hij aanmoediging nodig heeft"
+            "value": "Frottez une friandise sur la paume s'il a besoin d'encouragement"
           }
         },
         "it": {
@@ -5033,10 +5652,10 @@
             "value": "Strofina un premietto sul palmo se ha bisogno di incoraggiamento"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Frottez une friandise sur la paume s'il a besoin d'encouragement"
+            "value": "Wrijf een snoepje over je handpalm als hij aanmoediging nodig heeft"
           }
         }
       }
@@ -5056,6 +5675,12 @@
             "value": "Seguridad"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sécurité"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -5066,12 +5691,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Veiligheid"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sécurité"
           }
         }
       }
@@ -5091,6 +5710,12 @@
             "value": "Seguridad y movimiento"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sécurité et mouvement"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -5101,12 +5726,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Veiligheid & beweging"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sécurité et mouvement"
           }
         }
       }
@@ -5126,10 +5745,10 @@
             "value": "Di el nombre del cachorro + 'ven' con voz emocionada"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zeg de naam van je pup + 'kom' met een enthousiaste stem"
+            "value": "Dites le nom du chiot + « viens » avec enthousiasme"
           }
         },
         "it": {
@@ -5138,10 +5757,10 @@
             "value": "Dì il nome del cucciolo + 'vieni' con voce eccitata"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dites le nom du chiot + « viens » avec enthousiasme"
+            "value": "Zeg de naam van je pup + 'kom' met een enthousiaste stem"
           }
         }
       }
@@ -5161,10 +5780,10 @@
             "value": "Di su nombre una vez con voz alegre"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zeg zijn naam één keer met een blije stem"
+            "value": "Dites son nom une fois d'une voix joyeuse"
           }
         },
         "it": {
@@ -5173,10 +5792,10 @@
             "value": "Dì il nome una volta con voce allegra"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dites son nom une fois d'une voix joyeuse"
+            "value": "Zeg zijn naam één keer met een blije stem"
           }
         }
       }
@@ -5196,10 +5815,10 @@
             "value": "Espera corta - el cachorro pausa brevemente en puertas, antes de comer, etc."
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Korte stop - je pup pauzeert even bij deuren, voor maaltijden, etc."
+            "value": "Reste court - le chiot s'arrête brièvement aux portes, avant les repas, etc."
           }
         },
         "it": {
@@ -5208,10 +5827,10 @@
             "value": "Resta breve - il cucciolo si ferma brevemente alle porte, prima dei pasti, ecc."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Reste court - le chiot s'arrête brièvement aux portes, avant les repas, etc."
+            "value": "Korte stop - je pup pauzeert even bij deuren, voor maaltijden, etc."
           }
         }
       }
@@ -5231,10 +5850,10 @@
             "value": "Muestra la palma y di 'espera'"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Toon je handpalm en zeg 'wacht'"
+            "value": "Montrez la paume et dites « attends »"
           }
         },
         "it": {
@@ -5243,10 +5862,10 @@
             "value": "Mostra il palmo e dì 'aspetta'"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Montrez la paume et dites « attends »"
+            "value": "Toon je handpalm en zeg 'wacht'"
           }
         }
       }
@@ -5301,10 +5920,10 @@
             "value": "Seguimiento de habilidades"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Vaardigheden bijhouden"
+            "value": "Suivi des compétences"
           }
         },
         "it": {
@@ -5313,10 +5932,10 @@
             "value": "Tracciatore abilità"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Suivi des compétences"
+            "value": "Vaardigheden bijhouden"
           }
         }
       }
@@ -5406,10 +6025,10 @@
             "value": "Algunos perros encuentran incómodo el contacto visual directo - ten paciencia"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sommige honden vinden direct oogcontact ongemakkelijk - wees geduldig"
+            "value": "Certains chiens trouvent le contact visuel direct inconfortable - soyez patient"
           }
         },
         "it": {
@@ -5418,10 +6037,32 @@
             "value": "Alcuni cani trovano il contatto visivo diretto scomodo - sii paziente"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Certains chiens trouvent le contact visuel direct inconfortable - soyez patient"
+            "value": "Sommige honden vinden direct oogcontact ongemakkelijk - wees geduldig"
+          }
+        }
+      }
+    },
+    "Start Crate Nap": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start benchdutje"
+          }
+        }
+      }
+    },
+    "Start extending time between potty breaks": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Begin de tijd tussen plaspauzès te verlengen"
           }
         }
       }
@@ -5441,10 +6082,10 @@
             "value": "Empieza desde sentado o tumbado"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Begin vanuit zit of af"
+            "value": "Commencez depuis assis ou couché"
           }
         },
         "it": {
@@ -5453,10 +6094,10 @@
             "value": "Inizia da seduto o terra"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Commencez depuis assis ou couché"
+            "value": "Begin vanuit zit of af"
           }
         }
       }
@@ -5476,10 +6117,10 @@
             "value": "Empieza en un entorno con pocas distracciones"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Begin in een omgeving met weinig afleiding"
+            "value": "Commencez dans un environnement peu distrayant"
           }
         },
         "it": {
@@ -5488,10 +6129,10 @@
             "value": "Inizia in un ambiente con poche distrazioni"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Commencez dans un environnement peu distrayant"
+            "value": "Begin in een omgeving met weinig afleiding"
           }
         }
       }
@@ -5511,10 +6152,10 @@
             "value": "Empieza dentro o en un área aburrida"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Begin binnen of in een saaie omgeving"
+            "value": "Commencez à l'intérieur ou dans un endroit calme"
           }
         },
         "it": {
@@ -5523,10 +6164,10 @@
             "value": "Inizia dentro o in un'area noiosa"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Commencez à l'intérieur ou dans un endroit calme"
+            "value": "Begin binnen of in een saaie omgeving"
           }
         }
       }
@@ -5546,10 +6187,10 @@
             "value": "Empieza muy cerca con premios de alto valor"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Begin heel dichtbij met extra lekkere snoepjes"
+            "value": "Commencez très près avec des friandises de haute valeur"
           }
         },
         "it": {
@@ -5558,10 +6199,10 @@
             "value": "Inizia molto vicino con premietti di alto valore"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Commencez très près avec des friandises de haute valeur"
+            "value": "Begin heel dichtbij met extra lekkere snoepjes"
           }
         }
       }
@@ -5581,10 +6222,10 @@
             "value": "Empieza cuando el cachorro esté tranquilo y relajado"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Begin wanneer je pup rustig en ontspannen is"
+            "value": "Commencez quand le chiot est calme et détendu"
           }
         },
         "it": {
@@ -5593,10 +6234,10 @@
             "value": "Inizia quando il cucciolo è calmo e rilassato"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Commencez quand le chiot est calme et détendu"
+            "value": "Begin wanneer je pup rustig en ontspannen is"
           }
         }
       }
@@ -5616,10 +6257,10 @@
             "value": "Empieza con el cachorro sentado"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Begin met je pup in zit"
+            "value": "Commencez avec le chiot assis"
           }
         },
         "it": {
@@ -5628,10 +6269,10 @@
             "value": "Inizia con il cucciolo seduto"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Commencez avec le chiot assis"
+            "value": "Begin met je pup in zit"
           }
         }
       }
@@ -5651,10 +6292,10 @@
             "value": "Empieza con períodos cortos"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Begin met korte periodes"
+            "value": "Commencez par de courtes périodes"
           }
         },
         "it": {
@@ -5663,10 +6304,21 @@
             "value": "Inizia con periodi brevi"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Commencez par de courtes périodes"
+            "value": "Begin met korte periodes"
+          }
+        }
+      }
+    },
+    "Start with short periods and gradually increase": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Begin met korte periodes en bouw geleidelijk op"
           }
         }
       }
@@ -5686,6 +6338,12 @@
             "value": "Iniciado"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Commencé"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -5696,12 +6354,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Gestart"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Commencé"
           }
         }
       }
@@ -5741,6 +6393,17 @@
         }
       }
     },
+    "Stay nearby when they whimper. They're learning, not suffering": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Blijf in de buurt als ze piepen. Ze zijn aan het leren, niet aan het lijden"
+          }
+        }
+      }
+    },
     "Stop if puppy shows stress signals": {
       "extractionState": "stale",
       "localizations": {
@@ -5756,10 +6419,10 @@
             "value": "Para si el cachorro muestra señales de estrés"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Stop als je pup stresssignalen vertoont"
+            "value": "Arrêtez si le chiot montre des signes de stress"
           }
         },
         "it": {
@@ -5768,10 +6431,21 @@
             "value": "Fermati se il cucciolo mostra segnali di stress"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Arrêtez si le chiot montre des signes de stress"
+            "value": "Stop als je pup stresssignalen vertoont"
+          }
+        }
+      }
+    },
+    "Supervise constantly indoors - prevention is key": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hou binnen constant toezicht - voorkomen is beter dan genezen"
           }
         }
       }
@@ -5791,10 +6465,10 @@
             "value": "Da un pequeño paso hacia atrás"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Neem één kleine stap naar achteren"
+            "value": "Faites un petit pas en arrière"
           }
         },
         "it": {
@@ -5803,10 +6477,32 @@
             "value": "Fai un piccolo passo indietro"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Faites un petit pas en arrière"
+            "value": "Neem één kleine stap naar achteren"
+          }
+        }
+      }
+    },
+    "Take out after waking, eating, and playing": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Neem naar buiten na het wakker worden, eten en spelen"
+          }
+        }
+      }
+    },
+    "Take out every 30-45 minutes while awake": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Neem elke 30-45 minuten naar buiten wanneer wakker"
           }
         }
       }
@@ -5826,10 +6522,10 @@
             "value": "Toca una habilidad para comenzar el entrenamiento"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tik op een vaardigheid om te beginnen"
+            "value": "Appuyez sur une compétence pour commencer"
           }
         },
         "it": {
@@ -5838,10 +6534,22 @@
             "value": "Tocca un'abilità per iniziare l'addestramento"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Appuyez sur une compétence pour commencer"
+            "value": "Tik op een vaardigheid om te beginnen"
+          }
+        }
+      }
+    },
+    "Teach essential commands": {
+      "comment": "Description of the skills section in the training tab.",
+      "extractionState": "stale",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Leer essentiële commando's"
           }
         }
       }
@@ -5861,10 +6569,10 @@
             "value": "Enseña a tu cachorro que el sonido del clic significa que viene un premio. Esta es la base de todo el entrenamiento con marcador."
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Leer je pup dat het klikgeluid betekent dat er een snoepje aankomt. Dit is de basis voor alle markertraining."
+            "value": "Apprenez à votre chiot que le son du clic signifie qu'une friandise arrive. C'est la base de tout entraînement basé sur un marqueur."
           }
         },
         "it": {
@@ -5873,10 +6581,10 @@
             "value": "Insegna al tuo cucciolo che il suono del click significa che arriva un premietto. Questa è la base per tutto l'addestramento con marker."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Apprenez à votre chiot que le son du clic signifie qu'une friandise arrive. C'est la base de tout entraînement basé sur un marqueur."
+            "value": "Leer je pup dat het klikgeluid betekent dat er een snoepje aankomt. Dit is de basis voor alle markertraining."
           }
         }
       }
@@ -5896,10 +6604,10 @@
             "value": "La orden clásica de sentarse. Un pilar fundamental para muchos otros comportamientos."
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Het klassieke zit-commando. Een bouwsteen voor veel ander gedrag."
+            "value": "La commande assis classique. Une base pour de nombreux autres comportements."
           }
         },
         "it": {
@@ -5908,10 +6616,10 @@
             "value": "Il classico comando seduto. Un mattone fondamentale per molti altri comportamenti."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "La commande assis classique. Une base pour de nombreux autres comportements."
+            "value": "Het klassieke zit-commando. Een bouwsteen voor veel ander gedrag."
           }
         }
       }
@@ -5931,10 +6639,10 @@
             "value": "El clic SIEMPRE debe ir seguido de un premio"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Op de klik moet ALTIJD een snoepje volgen"
+            "value": "Le clic doit TOUJOURS être suivi d'une friandise"
           }
         },
         "it": {
@@ -5943,10 +6651,10 @@
             "value": "Al click deve SEMPRE seguire un premietto"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Le clic doit TOUJOURS être suivi d'une friandise"
+            "value": "Op de klik moet ALTIJD een snoepje volgen"
           }
         }
       }
@@ -5966,10 +6674,10 @@
             "value": "En el momento que mire a tus ojos, haz clic y premia"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Op het moment dat hij naar je ogen kijkt, klik en geef een snoepje"
+            "value": "Dès qu'il regarde vos yeux, cliquez et récompensez"
           }
         },
         "it": {
@@ -5978,10 +6686,10 @@
             "value": "Nel momento in cui guarda nei tuoi occhi, clicca e premia"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dès qu'il regarde vos yeux, cliquez et récompensez"
+            "value": "Op het moment dat hij naar je ogen kijkt, klik en geef een snoepje"
           }
         }
       }
@@ -6001,10 +6709,10 @@
             "value": "Las tres D: Duración, Distancia, Distracción - aumenta una a la vez"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "De drie D's: Duur, Afstand, Afleiding - verhoog er één tegelijk"
+            "value": "Les trois D : Durée, Distance, Distraction - augmentez un à la fois"
           }
         },
         "it": {
@@ -6013,10 +6721,10 @@
             "value": "Le tre D: Durata, Distanza, Distrazione - aumenta una alla volta"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Les trois D : Durée, Distance, Distraction - augmentez un à la fois"
+            "value": "De drie D's: Duur, Afstand, Afleiding - verhoog er één tegelijk"
           }
         }
       }
@@ -6036,10 +6744,10 @@
             "value": "Luego añade distancia (quédate lejos pero menos tiempo)"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Voeg dan afstand toe (blijf ver maar korter)"
+            "value": "Puis ajoutez la distance (restez loin mais moins longtemps)"
           }
         },
         "it": {
@@ -6048,10 +6756,10 @@
             "value": "Poi aggiungi distanza (resta lontano ma per meno tempo)"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Puis ajoutez la distance (restez loin mais moins longtemps)"
+            "value": "Voeg dan afstand toe (blijf ver maar korter)"
           }
         }
       }
@@ -6071,10 +6779,10 @@
             "value": "Luego aleja lentamente el premio del cachorro por el suelo"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Trek het snoepje dan langzaam over de grond van je pup weg"
+            "value": "Puis tirez lentement la friandise le long du sol"
           }
         },
         "it": {
@@ -6083,10 +6791,21 @@
             "value": "Poi trascina lentamente il premietto lontano dal cucciolo lungo il pavimento"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Puis tirez lentement la friandise le long du sol"
+            "value": "Trek het snoepje dan langzaam over de grond van je pup weg"
+          }
+        }
+      }
+    },
+    "They learn to settle and self-soothe instead of getting overtired and hyper": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ze leren tot rust te komen in plaats van oververmoeid en hyper te worden"
           }
         }
       }
@@ -6106,10 +6825,10 @@
             "value": "Esto es diferente de 'quieto' - más corto y casual"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dit is anders dan 'blijf' - korter en meer informeel"
+            "value": "C'est différent de « reste » - plus court et décontracté"
           }
         },
         "it": {
@@ -6118,10 +6837,10 @@
             "value": "Questo è diverso da 'resta' - più breve e informale"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "C'est différent de « reste » - plus court et décontracté"
+            "value": "Dit is anders dan 'blijf' - korter en meer informeel"
           }
         }
       }
@@ -6141,10 +6860,10 @@
             "value": "Esto lleva meses dominarlo - ten paciencia"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dit duurt maanden om te beheersen - wees geduldig"
+            "value": "Cela prend des mois à maîtriser - soyez patient"
           }
         },
         "it": {
@@ -6153,10 +6872,10 @@
             "value": "Ci vogliono mesi per padroneggiarlo - sii paziente"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Cela prend des mois à maîtriser - soyez patient"
+            "value": "Dit duurt maanden om te beheersen - wees geduldig"
           }
         }
       }
@@ -6176,10 +6895,10 @@
             "value": "Esto lleva semanas dominarlo - ten paciencia"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dit duurt weken om te beheersen - wees geduldig"
+            "value": "Cela prend des semaines à maîtriser - soyez patient"
           }
         },
         "it": {
@@ -6188,10 +6907,10 @@
             "value": "Ci vogliono settimane per padroneggiarlo - sii paziente"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Cela prend des semaines à maîtriser - soyez patient"
+            "value": "Dit duurt weken om te beheersen - wees geduldig"
           }
         }
       }
@@ -6231,6 +6950,17 @@
         }
       }
     },
+    "Tips for Your Puppy": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tips voor je pup"
+          }
+        }
+      }
+    },
     "Tired puppies walk better - play first": {
       "extractionState": "stale",
       "localizations": {
@@ -6246,10 +6976,10 @@
             "value": "Los cachorros cansados caminan mejor - juega primero"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Vermoeide pups lopen beter - speel eerst"
+            "value": "Les chiots fatigués marchent mieux - jouez d'abord"
           }
         },
         "it": {
@@ -6258,10 +6988,10 @@
             "value": "I cuccioli stanchi camminano meglio - prima gioca"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Les chiots fatigués marchent mieux - jouez d'abord"
+            "value": "Vermoeide pups lopen beter - speel eerst"
           }
         }
       }
@@ -6281,10 +7011,10 @@
             "value": "Principales desencadenantes"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Belangrijkste triggers"
+            "value": "Principaux déclencheurs"
           }
         },
         "it": {
@@ -6293,10 +7023,10 @@
             "value": "Principali stimoli"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Principaux déclencheurs"
+            "value": "Belangrijkste triggers"
           }
         }
       }
@@ -6316,6 +7046,12 @@
             "value": "Toca"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Touche"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -6326,12 +7062,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Aanraken"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Touche"
           }
         }
       }
@@ -6386,10 +7116,10 @@
             "value": "Desmarcar dominado"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Markering verwijderen"
+            "value": "Retirer maîtrisé"
           }
         },
         "it": {
@@ -6398,10 +7128,21 @@
             "value": "Rimuovi padroneggiato"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Retirer maîtrisé"
+            "value": "Markering verwijderen"
+          }
+        }
+      }
+    },
+    "Use a crate for naps to build bladder control": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gebruik een bench voor dutjes om de blaascontrole te trainen"
           }
         }
       }
@@ -6421,10 +7162,10 @@
             "value": "Usa un arnés antitirones si tira mucho"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Gebruik een anti-trektuig als het trekken ernstig is"
+            "value": "Utilisez un harnais à attache frontale si le tirage est intense"
           }
         },
         "it": {
@@ -6433,10 +7174,10 @@
             "value": "Usa una pettorina con aggancio frontale se tira molto"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Utilisez un harnais à attache frontale si le tirage est intense"
+            "value": "Gebruik een anti-trektuig als het trekken ernstig is"
           }
         }
       }
@@ -6456,10 +7197,10 @@
             "value": "Usa una correa larga para seguridad durante el entrenamiento"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Gebruik een lange lijn voor veiligheid tijdens het trainen"
+            "value": "Utilisez une longe pour la sécurité pendant l'entraînement"
           }
         },
         "it": {
@@ -6468,10 +7209,10 @@
             "value": "Usa una longhina per sicurezza durante l'addestramento"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Utilisez une longe pour la sécurité pendant l'entraînement"
+            "value": "Gebruik een lange lijn voor veiligheid tijdens het trainen"
           }
         }
       }
@@ -6491,10 +7232,10 @@
             "value": "Usa una alfombra portátil para transferir esta habilidad a cualquier lugar"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Gebruik een draagbaar matje om deze vaardigheid overal toe te passen"
+            "value": "Utilisez un tapis portable pour transférer cette compétence partout"
           }
         },
         "it": {
@@ -6503,10 +7244,10 @@
             "value": "Usa un tappetino portatile per trasferire questa abilità ovunque"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Utilisez un tapis portable pour transférer cette compétence partout"
+            "value": "Gebruik een draagbaar matje om deze vaardigheid overal toe te passen"
           }
         }
       }
@@ -6526,10 +7267,10 @@
             "value": "Usa un premio para guiar a tu cachorro a posiciones. Esta técnica se usa para enseñar muchas otras órdenes."
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Gebruik een snoepje om je pup naar posities te leiden. Deze techniek wordt gebruikt om veel andere commando's te leren."
+            "value": "Utilisez une friandise pour guider votre chiot vers des positions. Cette technique est utilisée pour enseigner de nombreuses autres commandes."
           }
         },
         "it": {
@@ -6538,10 +7279,10 @@
             "value": "Usa un premietto per guidare il cucciolo nelle posizioni. Questa tecnica viene usata per insegnare molti altri comandi."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Utilisez une friandise pour guider votre chiot vers des positions. Cette technique est utilisée pour enseigner de nombreuses autres commandes."
+            "value": "Gebruik een snoepje om je pup naar posities te leiden. Deze techniek wordt gebruikt om veel andere commando's te leren."
           }
         }
       }
@@ -6561,10 +7302,10 @@
             "value": "Usa premios de alto valor"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Gebruik extra lekkere snoepjes"
+            "value": "Utilisez des friandises de haute valeur"
           }
         },
         "it": {
@@ -6573,10 +7314,10 @@
             "value": "Usa premietti di alto valore"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Utilisez des friandises de haute valeur"
+            "value": "Gebruik extra lekkere snoepjes"
           }
         }
       }
@@ -6596,10 +7337,10 @@
             "value": "Usa esto para redirigir la atención de las distracciones"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Gebruik dit om de aandacht van afleiding af te leiden"
+            "value": "Utilisez ceci pour détourner l'attention des distractions"
           }
         },
         "it": {
@@ -6608,10 +7349,10 @@
             "value": "Usalo per reindirizzare l'attenzione dalle distrazioni"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Utilisez ceci pour détourner l'attention des distractions"
+            "value": "Gebruik dit om de aandacht van afleiding af te leiden"
           }
         }
       }
@@ -6666,10 +7407,10 @@
             "value": "Espera el contacto visual"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wacht op oogcontact"
+            "value": "Attendez le contact visuel"
           }
         },
         "it": {
@@ -6678,10 +7419,10 @@
             "value": "Aspetta il contatto visivo"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Attendez le contact visuel"
+            "value": "Wacht op oogcontact"
           }
         }
       }
@@ -6701,10 +7442,10 @@
             "value": "Espera a que la correa esté suelta antes de continuar"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wacht op een losse riem voordat je verder gaat"
+            "value": "Attendez que la laisse soit détendue avant de continuer"
           }
         },
         "it": {
@@ -6713,10 +7454,10 @@
             "value": "Aspetta che il guinzaglio sia lento prima di continuare"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Attendez que la laisse soit détendue avant de continuer"
+            "value": "Wacht op een losse riem voordat je verder gaat"
           }
         }
       }
@@ -6736,10 +7477,10 @@
             "value": "Espera hasta que tu cachorro mire hacia otro lado"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wacht tot je pup wegkijkt"
+            "value": "Attendez que votre chiot détourne le regard"
           }
         },
         "it": {
@@ -6748,10 +7489,21 @@
             "value": "Aspetta che il cucciolo guardi altrove"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Attendez que votre chiot détourne le regard"
+            "value": "Wacht tot je pup wegkijkt"
+          }
+        }
+      }
+    },
+    "Waiting too long after triggers (meals, naps)": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Te lang wachten na triggers (maaltijden, dutjes)"
           }
         }
       }
@@ -6771,10 +7523,10 @@
             "value": "Camina bien con correa suelta sin tirar. Hace los paseos agradables para ambos."
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Netjes lopen aan een losse riem zonder te trekken. Maakt wandelingen leuk voor jullie beiden."
+            "value": "Marcher bien en laisse détendue sans tirer. Rend les promenades agréables pour vous deux."
           }
         },
         "it": {
@@ -6783,10 +7535,10 @@
             "value": "Cammina bene al guinzaglio lento senza tirare. Rende le passeggiate piacevoli per entrambi."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Marcher bien en laisse détendue sans tirer. Rend les promenades agréables pour vous deux."
+            "value": "Netjes lopen aan een losse riem zonder te trekken. Maakt wandelingen leuk voor jullie beiden."
           }
         }
       }
@@ -6806,6 +7558,12 @@
             "value": "Mírame"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Regarde-moi"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -6817,11 +7575,16 @@
             "state": "translated",
             "value": "Kijk naar mij"
           }
-        },
-        "fr": {
+        }
+      }
+    },
+    "Watch for sniffing or circling - immediate potty signal": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Regarde-moi"
+            "value": "Let op snuffelen of rondjes draaien - direct signaal voor plassen"
           }
         }
       }
@@ -6841,6 +7604,12 @@
             "value": "Semana %lld"
           }
         },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Semaine %lld"
+          }
+        },
         "it": {
           "stringUnit": {
             "state": "translated",
@@ -6851,12 +7620,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Week %lld"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Semaine %lld"
           }
         }
       }
@@ -6876,10 +7639,10 @@
             "value": "Cuando te mire, haz clic y premia"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wanneer hij naar je kijkt, klik en geef een snoepje"
+            "value": "Quand il vous regarde, cliquez et récompensez"
           }
         },
         "it": {
@@ -6888,10 +7651,87 @@
             "value": "Quando ti guarda, clicca e premia"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Quand il vous regarde, cliquez et récompensez"
+            "value": "Wanneer hij naar je kijkt, klik en geef een snoepje"
+          }
+        }
+      }
+    },
+    "Why it helps": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Waarom het helpt"
+          }
+        }
+      }
+    },
+    "Yes, reactivate": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ja, heractiveren"
+          }
+        }
+      }
+    },
+    "Your pup has been at 100% outdoor success for several days": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je pup is al meerdere dagen 100% succesvol buiten"
+          }
+        }
+      }
+    },
+    "Your pup is crate trained. They can sleep comfortably in the crate whenever needed.": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je pup is benchgetraind. Ze kunnen comfortabel in de bench slapen wanneer nodig."
+          }
+        }
+      }
+    },
+    "Your pup is potty trained! They reliably go outside and signal when needed.": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je pup is zindelijk! Ze gaan betrouwbaar naar buiten en geven aan wanneer nodig."
+          }
+        }
+      }
+    },
+    "Your pup reliably goes potty outside and signals when they need to go": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je pup plast betrouwbaar buiten en geeft aan wanneer ze nodig moeten"
+          }
+        }
+      }
+    },
+    "Your pup's happy place": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Een fijne plek voor je pup"
           }
         }
       }
@@ -6911,10 +7751,10 @@
             "value": "Tu cachorro puede caminar 10 metros con correa suelta con distracciones moderadas."
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Je pup kan 10 meter lopen aan een losse riem met matige afleiding."
+            "value": "Votre chiot peut marcher 10 mètres en laisse détendue avec des distractions modérées."
           }
         },
         "it": {
@@ -6923,10 +7763,10 @@
             "value": "Il tuo cucciolo può camminare 10 metri al guinzaglio lento con distrazioni moderate."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Votre chiot peut marcher 10 mètres en laisse détendue avec des distractions modérées."
+            "value": "Je pup kan 10 meter lopen aan een losse riem met matige afleiding."
           }
         }
       }
@@ -6946,10 +7786,10 @@
             "value": "Tu cachorro viene inmediatamente cuando lo llamas en casa y el jardín."
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Je pup komt direct wanneer je roept in huis en tuin."
+            "value": "Votre chiot vient immédiatement quand on l'appelle dans la maison et le jardin."
           }
         },
         "it": {
@@ -6958,10 +7798,10 @@
             "value": "Il tuo cucciolo viene subito quando chiamato in casa e in giardino."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Votre chiot vient immédiatement quand on l'appelle dans la maison et le jardin."
+            "value": "Je pup komt direct wanneer je roept in huis en tuin."
           }
         }
       }
@@ -6981,10 +7821,10 @@
             "value": "Tu cachorro sigue el premio suavemente en cualquier dirección sin saltar ni agarrar."
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Je pup volgt het snoepje soepel in elke richting zonder te springen of te grijpen."
+            "value": "Votre chiot suit la friandise en douceur dans toutes les directions sans sauter ni attraper."
           }
         },
         "it": {
@@ -6993,10 +7833,10 @@
             "value": "Il tuo cucciolo segue il premietto fluidamente in qualsiasi direzione senza saltare o afferrare."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Votre chiot suit la friandise en douceur dans toutes les directions sans sauter ni attraper."
+            "value": "Je pup volgt het snoepje soepel in elke richting zonder te springen of te grijpen."
           }
         }
       }
@@ -7016,10 +7856,10 @@
             "value": "Tu cachorro va a su cama y se tumba durante 2 minutos."
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Je pup gaat naar zijn mand en gaat 2 minuten liggen."
+            "value": "Votre chiot va sur son panier et se couche pendant 2 minutes."
           }
         },
         "it": {
@@ -7028,10 +7868,10 @@
             "value": "Il tuo cucciolo va sulla cuccia e si sdraia per 2 minuti."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Votre chiot va sur son panier et se couche pendant 2 minutes."
+            "value": "Je pup gaat naar zijn mand en gaat 2 minuten liggen."
           }
         }
       }
@@ -7051,10 +7891,10 @@
             "value": "Tu cachorro ignora el collar y no se asusta cuando se engancha o levanta la correa."
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Je pup negeert de halsband en raakt niet in paniek wanneer de riem wordt vastgemaakt of opgetild."
+            "value": "Votre chiot ignore le collier et ne panique pas quand la laisse est attachée ou soulevée."
           }
         },
         "it": {
@@ -7063,10 +7903,10 @@
             "value": "Il tuo cucciolo ignora il collare e non si agita quando il guinzaglio viene attaccato o sollevato."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Votre chiot ignore le collier et ne panique pas quand la laisse est attachée ou soulevée."
+            "value": "Je pup negeert de halsband en raakt niet in paniek wanneer de riem wordt vastgemaakt of opgetild."
           }
         }
       }
@@ -7086,10 +7926,10 @@
             "value": "Tu cachorro mira inmediatamente a ti o a tu mano cuando oye el clic, esperando un premio."
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Je pup kijkt meteen naar jou of je hand als hij de klik hoort, in afwachting van een snoepje."
+            "value": "Votre chiot vous regarde immédiatement ou regarde votre main quand il entend le clic, s'attendant à une friandise."
           }
         },
         "it": {
@@ -7098,10 +7938,10 @@
             "value": "Il tuo cucciolo guarda subito te o la tua mano quando sente il click, aspettando un premietto."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Votre chiot vous regarde immédiatement ou regarde votre main quand il entend le clic, s'attendant à une friandise."
+            "value": "Je pup kijkt meteen naar jou of je hand als hij de klik hoort, in afwachting van een snoepje."
           }
         }
       }
@@ -7121,10 +7961,10 @@
             "value": "Tu cachorro te mira inmediatamente cuando dices su nombre, incluso con distracciones leves."
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Je pup kijkt meteen naar je als je zijn naam zegt, zelfs met lichte afleiding."
+            "value": "Votre chiot vous regarde immédiatement quand vous dites son nom, même avec de légères distractions."
           }
         },
         "it": {
@@ -7133,10 +7973,10 @@
             "value": "Il tuo cucciolo ti guarda subito quando dici il suo nome, anche con lievi distrazioni."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Votre chiot vous regarde immédiatement quand vous dites son nom, même avec de légères distractions."
+            "value": "Je pup kijkt meteen naar je als je zijn naam zegt, zelfs met lichte afleiding."
           }
         }
       }
@@ -7156,10 +7996,10 @@
             "value": "Tu cachorro aprende a mirarte cuando oye su nombre. Esencial para captar su atención antes de dar órdenes."
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Je pup leert naar je te kijken als hij zijn naam hoort. Essentieel om aandacht te krijgen voordat je commando's geeft."
+            "value": "Votre chiot apprend à vous regarder quand il entend son nom. Essentiel pour attirer l'attention avant de donner des commandes."
           }
         },
         "it": {
@@ -7168,10 +8008,10 @@
             "value": "Il tuo cucciolo impara a guardarti quando sente il suo nome. Essenziale per attirare l'attenzione prima di dare comandi."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Votre chiot apprend à vous regarder quand il entend son nom. Essentiel pour attirer l'attention avant de donner des commandes."
+            "value": "Je pup leert naar je te kijken als hij zijn naam hoort. Essentieel om aandacht te krijgen voordat je commando's geeft."
           }
         }
       }
@@ -7191,10 +8031,10 @@
             "value": "Tu cachorro aprende a hacer contacto visual a la orden. Genial para conseguir enfoque antes de otras órdenes."
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Je pup leert oogcontact te maken op commando. Geweldig om focus te krijgen voor andere commando's."
+            "value": "Votre chiot apprend à établir un contact visuel sur commande. Idéal pour obtenir l'attention avant d'autres commandes."
           }
         },
         "it": {
@@ -7203,10 +8043,10 @@
             "value": "Il tuo cucciolo impara a fare contatto visivo a comando. Ottimo per ottenere concentrazione prima di altri comandi."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Votre chiot apprend à établir un contact visuel sur commande. Idéal pour obtenir l'attention avant d'autres commandes."
+            "value": "Je pup leert oogcontact te maken op commando. Geweldig om focus te krijgen voor andere commando's."
           }
         }
       }
@@ -7226,10 +8066,10 @@
             "value": "Tu cachorro se tumba a la orden desde sentado, sin señuelo."
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Je pup gaat liggen op commando vanuit zit, zonder lokker."
+            "value": "Votre chiot se couche sur commande depuis la position assise, sans leurre."
           }
         },
         "it": {
@@ -7238,10 +8078,10 @@
             "value": "Il tuo cucciolo si sdraia a comando da seduto, senza esca."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Votre chiot se couche sur commande depuis la position assise, sans leurre."
+            "value": "Je pup gaat liggen op commando vanuit zit, zonder lokker."
           }
         }
       }
@@ -7261,10 +8101,10 @@
             "value": "Tu cachorro hace contacto visual durante 3-5 segundos a la orden."
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Je pup maakt 3-5 seconden oogcontact op commando."
+            "value": "Votre chiot maintient le contact visuel pendant 3-5 secondes sur commande."
           }
         },
         "it": {
@@ -7273,10 +8113,10 @@
             "value": "Il tuo cucciolo fa contatto visivo per 3-5 secondi a comando."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Votre chiot maintient le contact visuel pendant 3-5 secondes sur commande."
+            "value": "Je pup maakt 3-5 seconden oogcontact op commando."
           }
         }
       }
@@ -7296,10 +8136,10 @@
             "value": "Tu cachorro debe empezar a buscar premios cuando oye el clic"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Je pup moet beginnen te zoeken naar snoepjes als hij de klik hoort"
+            "value": "Votre chiot devrait commencer à chercher des friandises quand il entend le clic"
           }
         },
         "it": {
@@ -7308,10 +8148,10 @@
             "value": "Il tuo cucciolo dovrebbe iniziare a cercare i premietti quando sente il click"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Votre chiot devrait commencer à chercher des friandises quand il entend le clic"
+            "value": "Je pup moet beginnen te zoeken naar snoepjes als hij de klik hoort"
           }
         }
       }
@@ -7331,10 +8171,10 @@
             "value": "Tu cachorro se sienta a la orden solo con la señal verbal, sin necesidad de señuelo."
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Je pup gaat zitten op commando met alleen het verbale signaal, geen lokker nodig."
+            "value": "Votre chiot s'assoit sur commande avec juste le signal verbal, sans leurre."
           }
         },
         "it": {
@@ -7343,10 +8183,10 @@
             "value": "Il tuo cucciolo si siede a comando solo con il segnale verbale, senza bisogno di esca."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Votre chiot s'assoit sur commande avec juste le signal verbal, sans leurre."
+            "value": "Je pup gaat zitten op commando met alleen het verbale signaal, geen lokker nodig."
           }
         }
       }
@@ -7366,10 +8206,10 @@
             "value": "Tu cachorro se queda quieto 30 segundos mientras te alejas 5 metros."
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Je pup blijft 30 seconden terwijl je 5 meter wegloopt."
+            "value": "Votre chiot reste pendant 30 secondes pendant que vous vous éloignez de 5 mètres."
           }
         },
         "it": {
@@ -7378,10 +8218,10 @@
             "value": "Il tuo cucciolo resta per 30 secondi mentre ti allontani di 5 metri."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Votre chiot reste pendant 30 secondes pendant que vous vous éloignez de 5 mètres."
+            "value": "Je pup blijft 30 seconden terwijl je 5 meter wegloopt."
           }
         }
       }
@@ -7401,10 +8241,10 @@
             "value": "Tu cachorro se mantiene relajado cuando tocas sus orejas, patas, boca y cola."
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Je pup blijft ontspannen wanneer je zijn oren, poten, bek en staart aanraakt."
+            "value": "Votre chiot reste détendu quand vous touchez ses oreilles, pattes, bouche et queue."
           }
         },
         "it": {
@@ -7413,10 +8253,10 @@
             "value": "Il tuo cucciolo resta rilassato quando tocchi orecchie, zampe, bocca e coda."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Votre chiot reste détendu quand vous touchez ses oreilles, pattes, bouche et queue."
+            "value": "Je pup blijft ontspannen wanneer je zijn oren, poten, bek en staart aanraakt."
           }
         }
       }
@@ -7436,10 +8276,10 @@
             "value": "Tu cachorro toca tu palma con la nariz a la orden desde 1 metro de distancia."
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Je pup duwt zijn neus tegen je handpalm op commando vanaf 1 meter afstand."
+            "value": "Votre chiot touche votre paume avec son nez sur commande à 1 mètre de distance."
           }
         },
         "it": {
@@ -7448,10 +8288,10 @@
             "value": "Il tuo cucciolo tocca il palmo con il naso a comando da 1 metro di distanza."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Votre chiot touche votre paume avec son nez sur commande à 1 mètre de distance."
+            "value": "Je pup duwt zijn neus tegen je handpalm op commando vanaf 1 meter afstand."
           }
         }
       }
@@ -7471,10 +8311,10 @@
             "value": "Tu cachorro espera 10 segundos en las puertas y antes de las comidas."
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Je pup wacht 10 seconden bij deuren en voor maaltijden."
+            "value": "Votre chiot attend 10 secondes aux portes et avant les repas."
           }
         },
         "it": {
@@ -7483,142 +8323,150 @@
             "value": "Il tuo cucciolo aspetta 10 secondi alle porte e prima dei pasti."
           }
         },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je pup wacht 10 seconden bij deuren en voor maaltijden."
+          }
+        }
+      }
+    },
+    "day streak": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tage in Folge"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "días consecutivos"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Votre chiot attend 10 secondes aux portes et avant les repas."
+            "value": "jours consécutifs"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "giorni consecutivi"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "dagen op rij"
           }
         }
       }
     },
-    "Teach essential commands": {
-      "comment": "Description of the skills section in the training tab.",
+    "e.g. Good focus, needed help": {
+      "extractionState": "stale",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "z.B. Gute Konzentration, brauchte Hilfe"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ej. Buena concentración, necesitó ayuda"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ex. Bonne concentration, a eu besoin d'aide"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "es. Buona concentrazione, ha avuto bisogno di aiuto"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Leer essentiële commando's"
+            "value": "bijv. Goede focus, had hulp nodig"
           }
         }
       }
     },
-    "1 skill to practice": {
-      "comment": "Subtitle showing 1 skill needs practice.",
+    "minutes": {
+      "extractionState": "stale",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Minuten"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "minutos"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "minutes"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "minuti"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "1 vaardigheid om te oefenen"
+            "value": "minuten"
           }
         }
       }
     },
-    "%lld skills to practice": {
-      "comment": "Subtitle showing multiple skills need practice.",
+    "outdoor this week": {
+      "extractionState": "stale",
       "localizations": {
-        "nl": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld vaardigheden om te oefenen"
+            "value": "draussen diese Woche"
           }
-        }
-      }
-    },
-    "1 skill to review": {
-      "comment": "Subtitle showing 1 skill needs review.",
-      "localizations": {
-        "nl": {
+        },
+        "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "1 vaardigheid om te herhalen"
+            "value": "al aire libre esta semana"
           }
-        }
-      }
-    },
-    "%lld skills to review": {
-      "comment": "Subtitle showing multiple skills need review.",
-      "localizations": {
-        "nl": {
+        },
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld vaardigheden om te herhalen"
+            "value": "dehors cette semaine"
           }
-        }
-      }
-    },
-    "%lld focus, %lld review": {
-      "comment": "Training plan subtitle showing focus and review counts.",
-      "localizations": {
-        "nl": {
+        },
+        "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld focus, %lld herhalen"
+            "value": "all'aperto questa settimana"
           }
-        }
-      }
-    },
-    "Need some refresher tips?": {
-      "comment": "Prompt to encourage users to reactivate potty training guidance.",
-      "localizations": {
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Opfriscursus nodig?"
-          }
-        }
-      }
-    },
-    "Key Principles": {
-      "comment": "Title of a section in the Potty Training Guide that lists the key principles.",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Belangrijke principes"
-          }
-        }
-      }
-    },
-    "Potty training complete!": {
-      "comment": "Celebration text when potty training is mastered.",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Zindelijkheidstraining voltooid!"
-          }
-        }
-      }
-    },
-    "Continue training": {
-      "comment": "Button text to continue training.",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ga verder met trainen"
-          }
-        }
-      }
-    },
-    "Practiced in": {
-      "comment": "Label for contexts where a skill has been practiced.",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Geoefend in"
-          }
-        }
-      }
-    },
-    "%lld/%lld reliable": {
-      "comment": "Shows how many contexts are reliable out of total.",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld/%lld betrouwbaar"
+            "value": "buiten deze week"
           }
         }
       }
