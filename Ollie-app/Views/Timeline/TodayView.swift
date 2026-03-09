@@ -87,9 +87,15 @@ struct TodayView: View {
     }
 
     /// Whether to show the potty status card based on crate training mastery and urgency
+    /// - First week: Only show after 3+ potty events (progressive disclosure)
     /// - If crate training is mastered, don't show (puppy can hold it)
     /// - If not mastered, only show when < 30 minutes remaining or already urgent/overdue
     private var shouldShowPottyStatusCard: Bool {
+        // First week progressive disclosure: need 3+ potty events
+        guard FirstWeekExperienceService.shared.shouldShowPottyPredictions else {
+            return false
+        }
+
         // Don't show if crate training is mastered
         if crateTrainingMastered {
             return false
@@ -296,7 +302,9 @@ struct TodayView: View {
                     }
 
                     // AI Health Insights (personalized wellness observations)
-                    if viewModel.isShowingToday {
+                    // First week: only show after 15+ events over 3+ days
+                    if viewModel.isShowingToday,
+                       FirstWeekExperienceService.shared.shouldShowAIInsights {
                         AIHealthInsightsCard()
                             .animatedAppear(delay: 0.14)
                     }
@@ -472,7 +480,15 @@ struct TodayView: View {
                 viewModel.sheetCoordinator.presentSheet(.groomingQuickLog())
             },
             onShowMonthRecap: { showMonthRecapSheet = true },
-            onShowYearRecap: { showYearRecapSheet = true }
+            onShowYearRecap: { showYearRecapSheet = true },
+            onAddPhoto: {
+                // Open moment source picker (camera or photo library)
+                viewModel.sheetCoordinator.presentSheet(.momentSourcePicker)
+            },
+            onInviteFamily: {
+                // Navigate to settings where user can access sharing
+                viewModel.sheetCoordinator.presentSheet(.settings)
+            }
         )
         .sheet(item: $milestoneToComplete) { milestone in
             MilestoneCompletionSheet(

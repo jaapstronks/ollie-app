@@ -79,6 +79,8 @@ struct ContentView: View {
                         hasCompletedOnboarding = true
                         needsFirstSessionHandoff = true
                         showOnboarding = false
+                        // Start first-week experience tracking
+                        FirstWeekExperienceService.shared.markOnboardingCompleted()
                     }
                 } else {
                     // Main app with tabs

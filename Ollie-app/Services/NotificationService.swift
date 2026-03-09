@@ -29,6 +29,7 @@ class NotificationService: ObservableObject {
     private let walkScheduler = WalkNotificationScheduler()
     private let appointmentScheduler = AppointmentNotificationScheduler()
     private let trialScheduler = TrialNotificationScheduler()
+    private let firstWeekScheduler = FirstWeekNotificationScheduler()
 
     // MARK: - Initialization
 
@@ -151,6 +152,10 @@ class NotificationService: ObservableObject {
         // Schedule trial touchpoint notifications (Day 3 and Day 12)
         // These are always scheduled when trial is active - no user toggle
         await trialScheduler.schedule()
+
+        // Schedule first-week engagement notifications
+        // These provide gentle retention nudges during the critical first week
+        await firstWeekScheduler.schedule(profile: profile, events: events)
     }
 
     // MARK: - Cancellation

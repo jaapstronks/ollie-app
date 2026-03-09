@@ -535,6 +535,8 @@ class TimelineViewModel: ObservableObject {
     func syncEventsFromStore() {
         self.events = eventStore.events
         rebuildTimelineItems()
+        // Update first-week experience counts for progressive disclosure
+        FirstWeekExperienceService.shared.refreshCounts(from: eventStore.events)
     }
 
     /// Notify to refresh notifications

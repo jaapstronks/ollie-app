@@ -35,7 +35,12 @@ struct TodayStatusCardsSection: View {
     var onShowMonthRecap: () -> Void
     var onShowYearRecap: () -> Void
 
+    // First week prompt callbacks
+    var onAddPhoto: () -> Void
+    var onInviteFamily: () -> Void
+
     @ObservedObject private var trialManager = TrialManager.shared
+    @ObservedObject private var firstWeekService = FirstWeekExperienceService.shared
 
     var body: some View {
         VStack(spacing: 12) {
@@ -62,6 +67,9 @@ struct TodayStatusCardsSection: View {
 
             // Year in review tease card (Dec 15 - Jan 15)
             yearRecapTeaseCard(combinedState)
+
+            // Recent moments carousel
+            recentMomentsCarousel(combinedState)
 
             // Stale logging banner
             staleLoggingBanner(combinedState)
@@ -95,6 +103,12 @@ struct TodayStatusCardsSection: View {
 
             // AI recommendation card
             aiRecommendationCard(aiRecommendation, combinedState: combinedState)
+
+            // First-week photo prompt card (Day 2+)
+            photoPromptCard(combinedState)
+
+            // First-week family invite prompt card (Day 3+)
+            familyInvitePromptCard(combinedState)
 
             // Health check-in card (for dogs with conditions or seniors)
             healthCheckInCard(combinedState)
@@ -225,6 +239,25 @@ private extension TodayStatusCardsSection {
     }
 
     @ViewBuilder
+    func recentMomentsCarousel(_ combinedState: CombinedSleepPottyState) -> some View {
+        if !combinedState.shouldShowFirstRunCard {
+            let recentPhotos = viewModel.recentPhotoEvents
+            if !recentPhotos.isEmpty {
+                RecentMomentsCarousel(
+                    photoEvents: recentPhotos,
+                    onPhotoTap: { _, index in
+                        viewModel.sheetCoordinator.presentMomentsLightbox(
+                            events: recentPhotos,
+                            startIndex: index
+                        )
+                    }
+                )
+                .animatedAppear(delay: 0.06)
+            }
+        }
+    }
+
+    @ViewBuilder
     func staleLoggingBanner(_ combinedState: CombinedSleepPottyState) -> some View {
         if case .staleLogging = combinedState {
             StaleLoggingBanner(
@@ -344,6 +377,7 @@ private extension TodayStatusCardsSection {
                 },
                 onDismiss: onDismissWalkTargetNudge
             )
+            .visibleForNudge(.walks)
             .animatedAppear(delay: 0.025)
         }
     }
@@ -360,6 +394,7 @@ private extension TodayStatusCardsSection {
                 onDismiss: onDismissGroomingNudge,
                 onViewAll: onViewAllGrooming
             )
+            .visibleForNudge(.grooming)
             .animatedAppear(delay: 0.028)
         }
     }
@@ -383,6 +418,7 @@ private extension TodayStatusCardsSection {
                     onDismissAppointmentNudge(candidate.milestone.labelKey)
                 }
             )
+            .visibleForNudge(.appointments)
             .animatedAppear(delay: 0.027)
         }
     }
@@ -395,7 +431,41 @@ private extension TodayStatusCardsSection {
                 onKeepCurrent: { viewModel.dismissAILoggingRecommendation(recommendation) },
                 onReduceReminders: { viewModel.applyAILoggingRecommendation(recommendation) }
             )
+            .visibleForNudge(.training)
             .animatedAppear(delay: 0.03)
+        }
+    }
+
+    @ViewBuilder
+    func photoPromptCard(_ combinedState: CombinedSleepPottyState) -> some View {
+        if firstWeekService.shouldShowPhotoPrompt,
+           !combinedState.shouldShowFirstRunCard {
+            PhotoPromptCard(
+                puppyName: viewModel.puppyName,
+                onAddPhoto: onAddPhoto,
+                onDismiss: {
+                    firstWeekService.dismissPhotoPrompt()
+                }
+            )
+            .animatedAppear(delay: 0.032)
+        }
+    }
+
+    @ViewBuilder
+    func familyInvitePromptCard(_ combinedState: CombinedSleepPottyState) -> some View {
+        if firstWeekService.shouldShowInvitePrompt,
+           !combinedState.shouldShowFirstRunCard {
+            FamilyInvitePromptCard(
+                puppyName: viewModel.puppyName,
+                onInvite: {
+                    onInviteFamily()
+                    firstWeekService.markFamilyInviteSent()
+                },
+                onDismiss: {
+                    firstWeekService.dismissInvitePrompt()
+                }
+            )
+            .animatedAppear(delay: 0.034)
         }
     }
 
@@ -477,17 +547,19 @@ private extension TodayStatusCardsSection {
         isSleeping: Bool
     ) -> some View {
         if !combinedState.shouldShowFirstRunCard {
-            // Medication reminders
-            ForEach(viewModel.pendingMedications) { pending in
-                MedicationReminderCard(
-                    medication: pending.medication,
-                    time: pending.time,
-                    scheduledDate: pending.scheduledDate,
-                    isOverdue: pending.isOverdue,
-                    onComplete: { medicationName in
-                        viewModel.completeMedication(pending, medicationName: medicationName)
-                    }
-                )
+            // Medication reminders (filtered by nudge preferences)
+            if NudgeCategory.medications.isEnabledForCurrentUser {
+                ForEach(viewModel.pendingMedications) { pending in
+                    MedicationReminderCard(
+                        medication: pending.medication,
+                        time: pending.time,
+                        scheduledDate: pending.scheduledDate,
+                        isOverdue: pending.isOverdue,
+                        onComplete: { medicationName in
+                            viewModel.completeMedication(pending, medicationName: medicationName)
+                        }
+                    )
+                }
             }
 
             // Scheduled events section

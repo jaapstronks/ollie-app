@@ -29,6 +29,8 @@ struct SentimentCheckInContainer: View {
         guard !isDismissed else { return nil }
         guard !isAlreadyAskedToday else { return nil }
         guard !isRecentShareParticipant else { return nil }
+        // Don't ask on Day 0 (first day after onboarding)
+        guard FirstWeekExperienceService.shared.shouldShowSentimentCheckIn else { return nil }
         return sentimentStore.nextQuestionToAsk(profile: profile)
     }
 
