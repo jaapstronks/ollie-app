@@ -64,6 +64,9 @@ extension Strings {
         /// No appointments on selected day
         static let noAppointmentsOnDay = String(localized: "No appointments", table: table)
 
+        /// All day event indicator
+        static let allDay = String(localized: "All Day", table: table)
+
         /// Milestones due this week
         static let milestonesDueThisWeek = String(localized: "Due this week", table: table)
 
@@ -103,5 +106,31 @@ extension Strings {
 
         /// Socialization window sheet link label
         static let viewSocializationWindow = String(localized: "View Socialization Window", table: table)
+
+        // MARK: - Today Appointment Card
+
+        /// Label for today's appointment card header
+        static let todayAppointment = String(localized: "Today's Appointment", table: table)
+
+        /// Get directions button label
+        static let getDirections = String(localized: "Get Directions", table: table)
+
+        // MARK: - Errors
+
+        /// Calendar access denied error
+        static let errorAccessDenied = String(localized: "Calendar access denied. Please enable calendar access in Settings.", table: table)
+
+        /// Invalid milestone date error
+        static let errorInvalidDate = String(localized: "Invalid milestone date.", table: table)
+
+        /// Failed to save event error
+        static func errorSaveFailed(_ error: String) -> String {
+            String(localized: "Failed to save event: \(error)", table: table)
+        }
+
+        /// Failed to remove event error
+        static func errorRemoveFailed(_ error: String) -> String {
+            String(localized: "Failed to remove event: \(error)", table: table)
+        }
     }
 }

@@ -161,13 +161,13 @@ enum CalendarError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .accessDenied:
-            return String(localized: "Calendar access denied. Please enable calendar access in Settings.")
+            return Strings.Calendar.errorAccessDenied
         case .invalidDate:
-            return String(localized: "Invalid milestone date.")
+            return Strings.Calendar.errorInvalidDate
         case .saveFailed(let error):
-            return String(localized: "Failed to save event: \(error.localizedDescription)")
+            return Strings.Calendar.errorSaveFailed(error.localizedDescription)
         case .removeFailed(let error):
-            return String(localized: "Failed to remove event: \(error.localizedDescription)")
+            return Strings.Calendar.errorRemoveFailed(error.localizedDescription)
         }
     }
 }
