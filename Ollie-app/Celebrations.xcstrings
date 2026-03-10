@@ -1,912 +1,1045 @@
 {
   "sourceLanguage": "en",
   "strings": {
-    "%@ has been awake for %lld minutes": {
+    "Add a photo to remember this moment with %@": {
       "extractionState": "stale",
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@ ist seit %lld Minuten wach"
+            "value": "Füge ein Foto hinzu, um diesen Moment mit %@ festzuhalten"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@ lleva %lld minutos despierto"
+            "value": "Agrega una foto para recordar este momento con %@"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@ est réveillé depuis %lld minutes"
+            "value": "Ajoutez une photo pour vous souvenir de ce moment avec %@"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@ e sveglio da %lld minuti"
+            "value": "Aggiungi una foto per ricordare questo momento con %@"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@ is al %lld minuten wakker"
+            "value": "Voeg een foto toe om dit moment met %@ te bewaren"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lägg till ett foto för att minnas detta ögonblick med %@"
           }
         }
       }
     },
-    "%@ needs to pee in ~%lld min": {
+    "Add from Library": {
       "extractionState": "stale",
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@ muss in ~%lld Min. pinkeln"
+            "value": "Aus Mediathek hinzufügen"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@ necesita hacer pis en ~%lld min"
+            "value": "Agregar desde la biblioteca"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@ doit faire pipi dans ~%lld min"
+            "value": "Ajouter depuis la bibliothèque"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@ deve fare pipi tra ~%lld min"
+            "value": "Aggiungi dalla libreria"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@ moet over ~%lld min plassen"
+            "value": "Toevoegen uit bibliotheek"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lägg till från bibliotek"
           }
         }
       }
     },
-    "%@ needs to pee now!": {
+    "All celebration tiers as designed": {
       "extractionState": "stale",
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@ muss jetzt pinkeln!"
+            "value": "Alle Feier-Stufen wie vorgesehen"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@ necesita hacer pis ahora!"
+            "value": "Todos los niveles de celebración según diseño"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@ doit faire pipi maintenant !"
+            "value": "Tous les niveaux de célébration comme prévu"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@ deve fare pipi adesso!"
+            "value": "Tutti i livelli di celebrazione come progettato"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@ moet nu plassen!"
+            "value": "Alle vieringsniveaus zoals ontworpen"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alla firandenivåer som designat"
           }
         }
       }
     },
-    "%@ needs to pee soon!": {
+    "All celebrations become subtle": {
       "extractionState": "stale",
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@ muss bald pinkeln!"
+            "value": "Alle Feiern werden dezent"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@ necesita hacer pis pronto!"
+            "value": "Todas las celebraciones se vuelven sutiles"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@ doit faire pipi bientôt !"
+            "value": "Toutes les célébrations deviennent subtiles"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@ deve fare pipi presto!"
+            "value": "Tutte le celebrazioni diventano discrete"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@ moet binnenkort plassen!"
+            "value": "Alle vieringen worden subtiel"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alla firanden blir subtila"
           }
         }
       }
     },
-    "Go outside now!": {
+    "Amazing!": {
       "extractionState": "stale",
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Jetzt nach draußen!"
+            "value": "Fantastisch!"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sal afuera ahora!"
+            "value": "Increíble!"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sortez maintenant !"
+            "value": "Incroyable !"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Esci subito!"
+            "value": "Fantastico!"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nu naar buiten!"
+            "value": "Geweldig!"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fantastiskt!"
           }
         }
       }
     },
-    "Nap needed?": {
+    "Capture this moment": {
       "extractionState": "stale",
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Schläfchen nötig?"
+            "value": "Diesen Moment festhalten"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Necesita siesta?"
+            "value": "Captura este momento"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Besoin d'une sieste ?"
+            "value": "Capturer ce moment"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pisolino necessario?"
+            "value": "Cattura questo momento"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dutje nodig?"
+            "value": "Leg dit moment vast"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fånga detta ögonblick"
           }
         }
       }
     },
-    "Now": {
+    "Cards become shimmer effects": {
       "extractionState": "stale",
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Jetzt"
+            "value": "Karten werden zu Schimmer-Effekten"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ahora"
+            "value": "Las tarjetas se convierten en efectos de brillo"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Maintenant"
+            "value": "Les cartes deviennent des effets de scintillement"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ora"
+            "value": "Le schede diventano effetti luccicanti"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nu"
+            "value": "Kaarten worden glinstering-effecten"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kort blir skimrande effekter"
           }
         }
       }
     },
-    "Otis Overview": {
+    "Celebration Style": {
       "extractionState": "stale",
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Otis Übersicht"
+            "value": "Feier-Stil"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Resumen de Otis"
+            "value": "Estilo de celebración"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Aperçu Otis"
+            "value": "Style de célébration"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Panoramica Otis"
+            "value": "Stile celebrazione"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Otis Overzicht"
+            "value": "Vieringsstijl"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Firandestil"
           }
         }
       }
     },
-    "Potty Timer": {
-      "extractionState": "stale",
+    "Celebrations": {
+      "comment": "A section header for the celebration testing options.",
+      "extractionState": "manual",
+      "isCommentAutoGenerated": true,
       "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pipi-Timer"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Temporizador de pis"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Minuteur pipi"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Timer Pipi"
-          }
-        },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plastimer"
+            "value": "Vieringen"
           }
         }
       }
     },
-    "Potty alarm!": {
+    "Choose how achievements are celebrated": {
       "extractionState": "stale",
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pipi-Alarm!"
+            "value": "Wähle, wie Erfolge gefeiert werden"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Alarma de pis!"
+            "value": "Elige cómo se celebran los logros"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Alerte pipi !"
+            "value": "Choisissez comment les réalisations sont célébrées"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Allarme pipi!"
+            "value": "Scegli come vengono celebrati i risultati"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plasalarm!"
+            "value": "Kies hoe prestaties worden gevierd"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Välj hur prestationer firas"
           }
         }
       }
     },
-    "Potty timer and streak in one widget.": {
+    "Congratulations!": {
       "extractionState": "stale",
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pipi-Timer und Serie in einem Widget."
+            "value": "Herzlichen Glückwunsch!"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Temporizador y racha de pis en un widget."
+            "value": "Felicidades!"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Minuteur pipi et série dans un seul widget."
+            "value": "Félicitations !"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Timer pipi e serie in un widget."
+            "value": "Congratulazioni!"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plastimer en reeks in een widget."
+            "value": "Gefeliciteerd!"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Grattis!"
           }
         }
       }
     },
-    "See how long since the last potty break.": {
+    "Full celebrations": {
       "extractionState": "stale",
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sieh, wie lange seit der letzten Pipi-Pause."
+            "value": "Volle Feiern"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Mira cuanto tiempo desde el ultimo descanso para pis."
+            "value": "Celebraciones completas"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Voyez combien de temps depuis la dernière pause pipi."
+            "value": "Célébrations complètes"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Vedi quanto tempo dall'ultima pausa pipi."
+            "value": "Celebrazioni complete"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zie hoe lang geleden de laatste plasbreak was."
+            "value": "Volledige vieringen"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fullständiga firanden"
           }
         }
       }
     },
-    "Start fresh!": {
-      "extractionState": "stale",
+    "Full-screen celebration": {
+      "comment": "A description of a full-screen celebration view.",
+      "extractionState": "manual",
+      "isCommentAutoGenerated": true,
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Neu starten!"
+            "value": "Vollbild-Feier"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Empezar de nuevo!"
+            "value": "Celebracion de pantalla completa"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Repartir à zéro !"
+            "value": "Célébration plein écran"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ricomincia!"
+            "value": "Celebrazione a schermo intero"
           }
         },
-        "nl": {
+        "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Begin opnieuw!"
+            "value": "Full-screen celebration"
           }
         }
       }
     },
-    "Streak Counter": {
-      "extractionState": "stale",
+    "Great job!": {
+      "comment": "A celebratory message for a successful potty break.",
+      "isCommentAutoGenerated": true,
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Serienzähler"
+            "value": "Super gemacht!"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Contador de racha"
+            "value": "¡Buen trabajo!"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Compteur de série"
+            "value": "Bien joué !"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Contatore Serie"
+            "value": "Ottimo lavoro!"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Reeksteller"
+            "value": "Goed gedaan!"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bra jobbat!"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "Great work!": {
+      "comment": "A celebratory headline for when a user successfully completes a training session.",
+      "isCommentAutoGenerated": true,
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toll gemacht!"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¡Excelente trabajo!"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Super travail !"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ottimo lavoro!"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Goed bezig!"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bra jobbat!"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "How celebrations work": {
+      "comment": "A label displayed above the information about how celebrations work.",
+      "isCommentAutoGenerated": true,
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "So funktionieren Feiern"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Como funcionan las celebraciones"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Comment fonctionnent les célébrations"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Come funzionano le celebrazioni"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "How celebrations work"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "Keep up the great work!": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weiter so!"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sigue así!"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continuez comme ça !"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continua così!"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ga zo door!"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fortsätt så!"
           }
         }
       }
     },
-    "Time for %@'s %@": {
+    "Maybe Later": {
       "extractionState": "stale",
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zeit für %1$@s %2$@"
+            "value": "Vielleicht später"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Hora del %2$@ de %1$@"
+            "value": "Quizás después"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "C'est l'heure du %2$@ de %1$@"
+            "value": "Peut-être plus tard"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "E ora del %2$@ di %1$@"
+            "value": "Forse dopo"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tijd voor %1$@'s %2$@"
+            "value": "Misschien later"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kanske senare"
           }
         }
       }
     },
-    "Time for %@'s walk": {
+    "Minimal": {
       "extractionState": "stale",
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zeit für %@s Spaziergang"
+            "value": "Minimal"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Hora del paseo de %@"
+            "value": "Mínimo"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "C'est l'heure de la promenade de %@"
+            "value": "Minimal"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "E ora della passeggiata di %@"
+            "value": "Minimo"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tijd voor %@'s wandeling"
+            "value": "Minimaal"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Minimal"
           }
         }
       }
     },
-    "Time for a potty break!": {
+    "New Record!": {
       "extractionState": "stale",
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zeit für eine Pipi-Pause!"
+            "value": "Neuer Rekord!"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Hora de hacer pis!"
+            "value": "Nuevo récord!"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "C'est l'heure d'une pause pipi !"
+            "value": "Nouveau record !"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "E ora della pausa pipi!"
+            "value": "Nuovo record!"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tijd voor een plasbreak!"
+            "value": "Nieuw record!"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nytt rekord!"
           }
         }
       }
     },
-    "Time for a walk!": {
-      "extractionState": "stale",
+    "Nice!": {
+      "comment": "A celebratory message displayed when logging a quick note.",
+      "isCommentAutoGenerated": true,
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zeit für einen Spaziergang!"
+            "value": "Prima!"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Hora del paseo!"
+            "value": "¡Genial!"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "C'est l'heure de la promenade !"
+            "value": "Super !"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "E ora della passeggiata!"
+            "value": "Bene!"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tijd voor een wandeling!"
+            "value": "Mooi!"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Snyggt!"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "No celebration UI (achievements still tracked)": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine Feier-UI (Erfolge werden weiterhin erfasst)"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sin interfaz de celebración (los logros aún se registran)"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pas d'interface de célébration (les réalisations sont toujours suivies)"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nessuna interfaccia celebrazione (i risultati vengono comunque tracciati)"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geen vierings-UI (prestaties worden nog steeds bijgehouden)"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inget firande-UI (prestationer spåras fortfarande)"
           }
         }
       }
     },
-    "Time to eat!": {
+    "Off": {
       "extractionState": "stale",
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zeit zum Fressen!"
+            "value": "Aus"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Hora de comer!"
+            "value": "Desactivado"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "C'est l'heure de manger !"
+            "value": "Désactivé"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "E ora di mangiare!"
+            "value": "Disattivato"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tijd om te eten!"
+            "value": "Uit"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Av"
           }
         }
       }
     },
-    "Track your outdoor potty streak.": {
-      "extractionState": "stale",
+    "On a roll!": {
+      "comment": "A celebratory message for when a user's streak reaches a new high.",
+      "isCommentAutoGenerated": true,
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Verfolge deine Draußen-Pipi-Serie."
+            "value": "Läuft super!"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sigue tu racha de pis al exterior."
+            "value": "¡En racha!"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Suivez votre série de pipis dehors."
+            "value": "En forme !"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tieni traccia della serie di pipi fuori."
+            "value": "Che serie!"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Volg je buitenplas-reeks."
+            "value": "Lekker bezig!"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "På rulle!"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "Shows the new in-app celebration animation": {
+      "comment": "A description of what happens when the \"Preview celebration\" button is tapped in the Celebration Settings view.",
+      "isCommentAutoGenerated": true,
+      "extractionState": "manual"
+    },
+    "Subtle only": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nur dezent"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Solo sutil"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Subtil uniquement"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Solo discreto"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alleen subtiel"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Endast subtil"
           }
         }
       }
     },
-    "outdoor": {
+    "Take a photo with %@": {
       "extractionState": "stale",
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "draußen"
+            "value": "Mach ein Foto mit %@"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "exterior"
+            "value": "Toma una foto con %@"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "dehors"
+            "value": "Prenez une photo avec %@"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "fuori"
+            "value": "Fai una foto con %@"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "buiten"
-          }
-        }
-      }
-    },
-    "outdoor streak": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Draußen-Serie"
+            "value": "Maak een foto met %@"
           }
         },
-        "es": {
+        "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "racha exterior"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "série dehors"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "serie fuori"
-          }
-        },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "buitenreeks"
-          }
-        }
-      }
-    },
-    "potty": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pipi"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "pis"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "pipi"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "pipi"
-          }
-        },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "plas"
-          }
-        }
-      }
-    },
-    "record": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Rekord"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "record"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "record"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "record"
-          }
-        },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "record"
-          }
-        }
-      }
-    },
-    "since last potty": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "seit letztem Pipi"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "desde el ultimo pis"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "depuis le dernier pipi"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "dall'ultima pipi"
-          }
-        },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "sinds laatste plas"
-          }
-        }
-      }
-    },
-    "since potty": {
-      "extractionState": "stale",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "seit Pipi"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "desde el pis"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "depuis pipi"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "dalla pipi"
-          }
-        },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "sinds plas"
+            "value": "Ta ett foto med %@"
           }
         }
       }

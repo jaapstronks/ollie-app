@@ -1,852 +1,852 @@
 {
-  "sourceLanguage" : "en",
-  "strings" : {
-    "%lld crate naps yesterday" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld Boxen-Nickerchen gestern"
+  "sourceLanguage": "en",
+  "strings": {
+    "%lld crate naps yesterday": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld Boxen-Nickerchen gestern"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld crate naps yesterday"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld crate naps yesterday"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld siestas en jaula ayer"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld siestas en jaula ayer"
           }
         },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld siestes en cage hier"
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld siestes en cage hier"
           }
         },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld pisolini in gabbia ieri"
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld pisolini in gabbia ieri"
           }
         },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld bench-dutjes gisteren"
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld bench-dutjes gisteren"
           }
         },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld bur-tupplurer igår"
-          }
-        }
-      }
-    },
-    "%lld outdoor potties yesterday" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld Mal draußen gepinkelt gestern"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld outdoor potties yesterday"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld pipís afuera ayer"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld pipis dehors hier"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld pipì fuori ieri"
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld keer buiten geplast gisteren"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld utomhuskissar igår"
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld bur-tupplurer igår"
           }
         }
       }
     },
-    "1 crate nap yesterday" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "1 Boxen-Nickerchen gestern"
+    "%lld outdoor potties yesterday": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld Mal draußen gepinkelt gestern"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "1 crate nap yesterday"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld outdoor potties yesterday"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "1 siesta en jaula ayer"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld pipís afuera ayer"
           }
         },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "1 sieste en cage hier"
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld pipis dehors hier"
           }
         },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "1 pisolino in gabbia ieri"
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld pipì fuori ieri"
           }
         },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "1 bench-dutje gisteren"
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld keer buiten geplast gisteren"
           }
         },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "1 bur-tupplur igår"
-          }
-        }
-      }
-    },
-    "1 outdoor potty yesterday" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "1 Mal draußen gepinkelt gestern"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "1 outdoor potty yesterday"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "1 pipí afuera ayer"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "1 pipi dehors hier"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "1 pipì fuori ieri"
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "1 keer buiten geplast gisteren"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "1 utomhuskiss igår"
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld utomhuskissar igår"
           }
         }
       }
     },
-    "All %lld naps in crate yesterday!" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Alle %lld Nickerchen gestern in der Box!"
+    "1 crate nap yesterday": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 Boxen-Nickerchen gestern"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "All %lld naps in crate yesterday!"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 crate nap yesterday"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "¡Las %lld siestas en jaula ayer!"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 siesta en jaula ayer"
           }
         },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Les %lld siestes en cage hier !"
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 sieste en cage hier"
           }
         },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tutti i %lld pisolini in gabbia ieri!"
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 pisolino in gabbia ieri"
           }
         },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Alle %lld dutjes gisteren in de bench!"
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 bench-dutje gisteren"
           }
         },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Alla %lld tupplurer i buren igår!"
-          }
-        }
-      }
-    },
-    "All naps in crate yesterday!" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Alle Nickerchen gestern in der Box!"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "All naps in crate yesterday!"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "¡Todas las siestas en jaula ayer!"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Toutes les siestes en cage hier !"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tutti i pisolini in gabbia ieri!"
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Alle dutjes gisteren in de bench!"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Alla tupplurer i buren igår!"
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 bur-tupplur igår"
           }
         }
       }
     },
-    "Almost through week one!" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Fast durch die erste Woche!"
+    "1 outdoor potty yesterday": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 Mal draußen gepinkelt gestern"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Almost through week one!"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 outdoor potty yesterday"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "¡Casi terminas la primera semana!"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 pipí afuera ayer"
           }
         },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Presque la fin de la première semaine !"
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 pipi dehors hier"
           }
         },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Quasi alla fine della prima settimana!"
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 pipì fuori ieri"
           }
         },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bijna door de eerste week!"
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 keer buiten geplast gisteren"
           }
         },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nästan igenom första veckan!"
-          }
-        }
-      }
-    },
-    "Building your first rhythms together." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ihr findet gemeinsam euren ersten Rhythmus."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Building your first rhythms together."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Construyendo sus primeros ritmos juntos."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Vous construisez vos premiers rythmes ensemble."
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "State costruendo i vostri primi ritmi insieme."
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Jullie vinden samen je eerste ritme."
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ni bygger era första rutiner tillsammans."
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 utomhuskiss igår"
           }
         }
       }
     },
-    "Day %lld with %@" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tag %lld mit %@"
+    "All %lld naps in crate yesterday!": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alle %lld Nickerchen gestern in der Box!"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Day %lld with %@"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All %lld naps in crate yesterday!"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Día %lld con %@"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¡Las %lld siestas en jaula ayer!"
           }
         },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Jour %lld avec %@"
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les %lld siestes en cage hier !"
           }
         },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Giorno %lld con %@"
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tutti i %lld pisolini in gabbia ieri!"
           }
         },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dag %lld met %@"
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alle %lld dutjes gisteren in de bench!"
           }
         },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dag %lld med %@"
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alla %lld tupplurer i buren igår!"
           }
         }
       }
     },
-    "First week summary. Day %lld with %@." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zusammenfassung der ersten Woche. Tag %lld mit %@."
+    "All naps in crate yesterday!": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alle Nickerchen gestern in der Box!"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "First week summary. Day %lld with %@."
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All naps in crate yesterday!"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Resumen de la primera semana. Día %lld con %@."
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¡Todas las siestas en jaula ayer!"
           }
         },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Résumé de la première semaine. Jour %lld avec %@."
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toutes les siestes en cage hier !"
           }
         },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Riepilogo della prima settimana. Giorno %lld con %@."
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tutti i pisolini in gabbia ieri!"
           }
         },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Samenvatting eerste week. Dag %lld met %@."
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alle dutjes gisteren in de bench!"
           }
         },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sammanfattning av första veckan. Dag %lld med %@."
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alla tupplurer i buren igår!"
           }
         }
       }
     },
-    "Focus on bonding and feeling safe. The routines can wait." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Konzentriert euch auf Bindung und Geborgenheit. Die Routinen können warten."
+    "Almost through week one!": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fast durch die erste Woche!"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Focus on bonding and feeling safe. The routines can wait."
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Almost through week one!"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Concéntrate en crear vínculos y sentirse seguro. Las rutinas pueden esperar."
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¡Casi terminas la primera semana!"
           }
         },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Concentrez-vous sur les liens et la sécurité. Les routines peuvent attendre."
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Presque la fin de la première semaine !"
           }
         },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Concentratevi sul legame e sul sentirvi al sicuro. Le routine possono aspettare."
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quasi alla fine della prima settimana!"
           }
         },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Focus op de band en veiligheid. De routines kunnen wachten."
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bijna door de eerste week!"
           }
         },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Fokusera på att knyta band och känna er trygga. Rutinerna kan vänta."
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nästan igenom första veckan!"
           }
         }
       }
     },
-    "No crate naps yet — that's okay." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Noch keine Boxen-Nickerchen — das ist okay."
+    "Building your first rhythms together.": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ihr findet gemeinsam euren ersten Rhythmus."
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No crate naps yet — that's okay."
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Building your first rhythms together."
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sin siestas en jaula aún — está bien."
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Construyendo sus primeros ritmos juntos."
           }
         },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pas encore de siestes en cage — c'est normal."
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vous construisez vos premiers rythmes ensemble."
           }
         },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nessun pisolino in gabbia ancora — va bene così."
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "State costruendo i vostri primi ritmi insieme."
           }
         },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nog geen bench-dutjes — dat is oké."
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jullie vinden samen je eerste ritme."
           }
         },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Inga bur-tupplurer än — det är okej."
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ni bygger era första rutiner tillsammans."
           }
         }
       }
     },
-    "No outdoor potties yesterday — keep trying!" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Gestern nicht draußen gepinkelt — weiter versuchen!"
+    "Day %lld with %@": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tag %lld mit %@"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No outdoor potties yesterday — keep trying!"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Day %lld with %@"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sin pipís afuera ayer — ¡sigue intentando!"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Día %lld con %@"
           }
         },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pas de pipi dehors hier — continuez !"
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jour %lld avec %@"
           }
         },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nessuna pipì fuori ieri — continua a provare!"
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Giorno %lld con %@"
           }
         },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Gisteren niet buiten geplast — blijf proberen!"
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dag %lld met %@"
           }
         },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Inga utomhuskissar igår — fortsätt försöka!"
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dag %lld med %@"
           }
         }
       }
     },
-    "Tap to collapse" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tippen zum Einklappen"
+    "First week summary. Day %lld with %@.": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zusammenfassung der ersten Woche. Tag %lld mit %@."
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tap to collapse"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "First week summary. Day %lld with %@."
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Toca para contraer"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Resumen de la primera semana. Día %lld con %@."
           }
         },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Toucher pour réduire"
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Résumé de la première semaine. Jour %lld avec %@."
           }
         },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tocca per comprimere"
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Riepilogo della prima settimana. Giorno %lld con %@."
           }
         },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tik om in te klappen"
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Samenvatting eerste week. Dag %lld met %@."
           }
         },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tryck för att fälla ihop"
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sammanfattning av första veckan. Dag %lld med %@."
           }
         }
       }
     },
-    "Tap to expand" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tippen zum Ausklappen"
+    "Focus on bonding and feeling safe. The routines can wait.": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Konzentriert euch auf Bindung und Geborgenheit. Die Routinen können warten."
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tap to expand"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Focus on bonding and feeling safe. The routines can wait."
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Toca para expandir"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Concéntrate en crear vínculos y sentirse seguro. Las rutinas pueden esperar."
           }
         },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Toucher pour agrandir"
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Concentrez-vous sur les liens et la sécurité. Les routines peuvent attendre."
           }
         },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tocca per espandere"
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Concentratevi sul legame e sul sentirvi al sicuro. Le routine possono aspettare."
           }
         },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tik om uit te klappen"
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Focus op de band en veiligheid. De routines kunnen wachten."
           }
         },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tryck för att expandera"
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fokusera på att knyta band och känna er trygga. Rutinerna kan vänta."
           }
         }
       }
     },
-    "The routine is taking shape." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Die Routine nimmt Form an."
+    "No crate naps yet — that's okay.": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Noch keine Boxen-Nickerchen — das ist okay."
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "The routine is taking shape."
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No crate naps yet — that's okay."
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "La rutina está tomando forma."
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sin siestas en jaula aún — está bien."
           }
         },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "La routine prend forme."
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pas encore de siestes en cage — c'est normal."
           }
         },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "La routine sta prendendo forma."
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nessun pisolino in gabbia ancora — va bene così."
           }
         },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "De routine krijgt vorm."
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nog geen bench-dutjes — dat is oké."
           }
         },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Rutinen börjar ta form."
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inga bur-tupplurer än — det är okej."
           }
         }
       }
     },
-    "Tip: Log where naps happen to track crate comfort." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tipp: Notiere wo Nickerchen stattfinden, um den Box-Komfort zu verfolgen."
+    "No outdoor potties yesterday — keep trying!": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gestern nicht draußen gepinkelt — weiter versuchen!"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tip: Log where naps happen to track crate comfort."
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No outdoor potties yesterday — keep trying!"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Consejo: Registra dónde duerme para seguir su comodidad con la jaula."
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sin pipís afuera ayer — ¡sigue intentando!"
           }
         },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Astuce : Notez où se passent les siestes pour suivre le confort en cage."
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pas de pipi dehors hier — continuez !"
           }
         },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Suggerimento: Registra dove avvengono i pisolini per monitorare il comfort nella gabbia."
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nessuna pipì fuori ieri — continua a provare!"
           }
         },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tip: Log waar dutjes plaatsvinden om bench-comfort te volgen."
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gisteren niet buiten geplast — blijf proberen!"
           }
         },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tips: Logga var tupplurerna sker för att följa bur-komforten."
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inga utomhuskissar igår — fortsätt försöka!"
           }
         }
       }
     },
-    "You're doing great." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ihr macht das toll."
+    "Tap to collapse": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tippen zum Einklappen"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "You're doing great."
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap to collapse"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Lo estás haciendo genial."
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toca para contraer"
           }
         },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Vous vous en sortez très bien."
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toucher pour réduire"
           }
         },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "State andando alla grande."
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tocca per comprimere"
           }
         },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Jullie doen het geweldig."
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tik om in te klappen"
           }
         },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ni gör det jättebra."
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tryck för att fälla ihop"
+          }
+        }
+      }
+    },
+    "Tap to expand": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tippen zum Ausklappen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap to expand"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toca para expandir"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toucher pour agrandir"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tocca per espandere"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tik om uit te klappen"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tryck för att expandera"
+          }
+        }
+      }
+    },
+    "The routine is taking shape.": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Routine nimmt Form an."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The routine is taking shape."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La rutina está tomando forma."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La routine prend forme."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La routine sta prendendo forma."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "De routine krijgt vorm."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rutinen börjar ta form."
+          }
+        }
+      }
+    },
+    "Tip: Log where naps happen to track crate comfort.": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tipp: Notiere wo Nickerchen stattfinden, um den Box-Komfort zu verfolgen."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tip: Log where naps happen to track crate comfort."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Consejo: Registra dónde duerme para seguir su comodidad con la jaula."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Astuce : Notez où se passent les siestes pour suivre le confort en cage."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suggerimento: Registra dove avvengono i pisolini per monitorare il comfort nella gabbia."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tip: Log waar dutjes plaatsvinden om bench-comfort te volgen."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tips: Logga var tupplurerna sker för att följa bur-komforten."
+          }
+        }
+      }
+    },
+    "You're doing great.": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ihr macht das toll."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You're doing great."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lo estás haciendo genial."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vous vous en sortez très bien."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "State andando alla grande."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jullie doen het geweldig."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ni gör det jättebra."
           }
         }
       }
     }
   },
-  "version" : "1.0"
+  "version": "1.0"
 }

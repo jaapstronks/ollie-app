@@ -6,7 +6,7 @@ Track progress on cleaning up the localization infrastructure. Work in small bat
 
 | Metric | Start | Current | Target |
 |--------|-------|---------|--------|
-| Localizable.xcstrings | 3,744 | **959** | <100 |
+| Localizable.xcstrings | 3,744 | **520** | <100 |
 | Duplicate strings | ~2,600 | **0** | 0 |
 | String(localized:) without table | ~40 | 0 | 0 |
 
@@ -159,7 +159,7 @@ Category breakdown:
 
 ## Future Work (Optional)
 
-The remaining 959 strings in Localizable.xcstrings work fine but aren't organized by domain. This is **lower priority** since the core architecture goal is achieved.
+Most domain-specific strings have been migrated. The remaining ~520 strings in Localizable.xcstrings are mostly format strings and truly generic labels.
 
 ### Batch 6: Migrate Training Strings (245 strings) ✅
 The largest category. Training tips, skill descriptions, and common mistakes.
@@ -176,25 +176,37 @@ Vet, medication, and wellness strings.
 
 **Completed:** Moved 71 strings to Health.xcstrings. Removed 1 symbol collision.
 
-### Batch 9: Migrate Socialization Strings (16 strings)
+### Batch 9: Migrate Socialization Strings (16 strings) ✅
 Social exposure and confidence tracking strings.
 
-### Batch 10: Clean Up Misc Strings (845 short + 69 long)
-Review remaining strings and either:
-- Migrate to appropriate domains
-- Keep in Localizable.xcstrings if truly generic (like "%@")
-- Remove if unused
+**Completed:** Moved 16 strings to Social.xcstrings.
+
+### Batch 10: Clean Up Misc Strings ✅
+Migrated domain-specific strings to their appropriate xcstrings files:
+- Walks.xcstrings: +39 strings
+- Events.xcstrings: +67 strings (potty, sleep, meals)
+- Common.xcstrings: +121 strings
+- Profile.xcstrings: +48 strings
+- Sharing.xcstrings: +35 strings
+- Recap.xcstrings: +18 strings
+- Places.xcstrings: +24 strings
+- Milestones.xcstrings: +20 strings
+- And others...
+
+**Result:** Localizable.xcstrings reduced to 520 strings. Remaining strings are mostly format strings ("%@", "%lld") and truly generic labels that belong in Localizable.
 
 ---
 
 ## Completed Batches
 
-### ✅ Batches 6-8 (2026-03-10)
-- **Batch 6:** Migrated 245 training strings to Training.xcstrings (353 → 597)
-- **Batch 7:** Migrated 76 timeline strings to Timeline.xcstrings (202 → 275)
-- **Batch 8:** Migrated 71 health strings to Health.xcstrings (44 → 114)
-- Removed 5 symbol collisions (case variants like "sessions" vs "Sessions")
-- **Result:** Localizable.xcstrings reduced from 1,351 → **959** strings
+### ✅ Batches 6-10 (2026-03-10)
+- **Batch 6:** Migrated 245 training strings to Training.xcstrings
+- **Batch 7:** Migrated 76 timeline strings to Timeline.xcstrings
+- **Batch 8:** Migrated 71 health strings to Health.xcstrings
+- **Batch 9:** Migrated 16 socialization strings to Social.xcstrings
+- **Batch 10:** Migrated 400+ strings across 15 domain files (Walks, Events, Common, Profile, Sharing, Recap, Places, Milestones, GrowthCards, Celebrations, GuidedTour, FoodRecall, Development, Contacts, Lifecycle)
+- Removed 6 symbol collisions (case variants)
+- **Result:** Localizable.xcstrings reduced from 1,351 → **520** strings
 
 ### ✅ Batches 1-3, 5 (2026-03-10)
 - **Batch 1:** Created Memories.xcstrings (7 strings), fixed Strings+Memories.swift

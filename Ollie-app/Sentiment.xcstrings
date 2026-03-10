@@ -84,7 +84,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Een hongerige pup is een gemotiveerde pup. Plan trainingssessies voor de maaltijden."
+            "value" : "Een hongerige pup is een gemotiveerde pup. Plan tr maalainingssessies voorafgaand aan een maaltijd."
           }
         }
       }
@@ -95,7 +95,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Een snelle check-in helpt ons advies te focussen op wat het belangrijkst is."
+            "value" : "Een snelle check-in helpt de app om tips te finetunen."
           }
         }
       }
@@ -117,7 +117,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Alle puppy's gaan door een bijtfase. Met consistent management piekt het rond 12-16 weken en verdwijnt dan."
+            "value" : "Alle puppy's gaan door een bijtfase. Met een consistente aanpak piekt het gedrag rond 12-16 weken en verdwijnt dan."
           }
         }
       }
@@ -128,7 +128,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Heb altijd speelgoed in de buurt om bijten om te leiden. Prijs als ze in het speelgoed bijten in plaats van jou."
+            "value" : "Heb altijd speelgoed in de buurt om bij bijtgedrag af te te leiden. Prijs als ze in het speelgoed bijten in plaats van jou."
           }
         }
       }
@@ -249,7 +249,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ruim rustig op zonder te schelden. Straffen creëert angst, geen leren."
+            "value" : "Ruim rustig op zonder te schelden. Straffen creëert angst en ze leren er niks nuttigs van."
           }
         }
       }
@@ -265,13 +265,24 @@
         }
       }
     },
+    "Commands like sit, down, stay, come, and leave it." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Commando's zoals zit, lig, blijf, hier en los."
+          }
+        }
+      }
+    },
     "Cover the crate with a blanket to create a den-like feeling. Leave one side open for airflow." : {
       "extractionState" : "stale",
       "localizations" : {
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bedek de bench met een deken voor een holgevoel. Laat één kant open voor ventilatie."
+            "value" : "Bedek de bench met een deken voor een nestgevoel. Laat één kant open voor ventilatie."
           }
         }
       }
@@ -304,7 +315,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Benchtraining bouwt comfort op met alleen zijn, wat verlatingsangst voorkomt."
+            "value" : "Benchtraining laat wennen aan alleen zijn, wat verlatingsangst voorkomt."
           }
         }
       }
@@ -315,7 +326,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Benchtraining helpt bij zindelijkheidstraining - puppy's vermijden van nature hun hol te bevuilen."
+            "value" : "Benchtraining helpt bij zindelijkheidstraining - puppy's hebben een aangeboren neiging om hun nest niet te bevuilen."
           }
         }
       }
@@ -326,7 +337,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Creëer een gezellig hol"
+            "value" : "Creëer een gezellig nest"
           }
         }
       }
@@ -602,36 +613,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Hoe gaat het?"
-          }
-        }
-      }
-    },
-    "Thanks for sharing!" : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bedankt voor het delen!"
-          }
-        }
-      }
-    },
-    "We'll use this to give you more relevant tips and advice." : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "We gebruiken dit om je relevantere tips en advies te geven."
-          }
-        }
-      }
-    },
-    "Commands like sit, down, stay, come, and leave it." : {
-      "localizations" : {
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Commando's zoals zit, lig, blijf, hier en laat."
           }
         }
       }
@@ -1109,6 +1090,17 @@
         }
       }
     },
+    "Thanks for sharing!" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bedankt voor het delen!"
+          }
+        }
+      }
+    },
     "The 1-minute rule" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -1138,6 +1130,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "De bench moet altijd positief zijn. Gebruik het nooit als straf, anders gaat je pup tegenstribbelen."
+          }
+        }
+      }
+    },
+    "This is a good area to focus on right now." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dit is een goed gebied om nu op te focussen."
           }
         }
       }
@@ -1248,6 +1251,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "We hebben hier nog geen data over."
+          }
+        }
+      }
+    },
+    "We'll use this to give you more relevant tips and advice." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "We gebruiken dit om je relevantere tips en advies te geven."
           }
         }
       }
