@@ -3,6 +3,7 @@
 //  Otis-app
 //
 //  Analyzes historical poop patterns for pattern-aware predictions
+//  Optimized: Uses EventCategories for single-pass event filtering
 //
 
 import Foundation
@@ -18,33 +19,44 @@ struct PoopPatternAnalyzer {
 
     /// Analyze poop patterns from historical data
     static func analyzePattern(events: [PuppyEvent], currentTime: Date = Date()) -> PoopPattern {
-        // Filter to poop events only, exclude today
-        let allPoops = events.poop()
-        let excludingToday = allPoops.filter { !$0.time.isToday }
-        let poopEvents = excludingToday.chronological()
+        // Use optimized single-pass categorization
+        let categories = events.categorized()
+        return analyzePattern(categories: categories, currentTime: currentTime)
+    }
 
-        guard !poopEvents.isEmpty else { return .empty }
+    /// Optimized: Analyze patterns using pre-categorized events
+    static func analyzePattern(categories: EventCategories, currentTime: Date = Date()) -> PoopPattern {
+        // Filter poop refs to exclude today (lightweight - no struct copies)
+        let todayStart = Calendar.current.startOfDay(for: currentTime)
+        let poopRefs = categories.poops.filter { $0.time < todayStart }
+
+        guard !poopRefs.isEmpty else { return .empty }
 
         // Group by day to calculate daily counts
-        let groupedByDay = poopEvents.groupedByDate()
+        let calendar = Calendar.current
+        var countsByDay: [Date: Int] = [:]
+        for ref in poopRefs {
+            let dayStart = calendar.startOfDay(for: ref.time)
+            countsByDay[dayStart, default: 0] += 1
+        }
 
-        let dailyCounts = groupedByDay.values.map { $0.count }
-        let daysAnalyzed = groupedByDay.count
+        let dailyCounts = Array(countsByDay.values)
+        let daysAnalyzed = countsByDay.count
 
         guard daysAnalyzed > 0 else { return .empty }
 
         // Calculate median daily count
         let medianDaily = calculateMedian(dailyCounts.map { Double($0) })
 
-        // Calculate daytime gaps
-        let daytimeGaps = PoopGapCalculator.calculateDaytimeGaps(poopEvents: poopEvents, currentTime: currentTime)
+        // Calculate daytime gaps using refs
+        let daytimeGaps = PoopGapCalculator.calculateDaytimeGaps(poopRefs: poopRefs, currentTime: currentTime)
         let medianGap = calculateMedianInt(daytimeGaps)
 
-        // Calculate walk-poop correlation
-        let walkEvents = events.walks()
+        // Calculate walk-poop correlation using refs
+        let walkRefs = categories.walks
         let postWalkPoopRate = calculatePostWalkPoopRate(
-            walkEvents: walkEvents,
-            poopEvents: poopEvents
+            walkRefs: walkRefs,
+            poopRefs: poopRefs
         )
 
         return PoopPattern(
@@ -57,7 +69,33 @@ struct PoopPatternAnalyzer {
 
     // MARK: - Walk Correlation
 
-    /// Calculate how often poops follow walks
+    /// Calculate how often poops follow walks (optimized with refs)
+    private static func calculatePostWalkPoopRate(
+        walkRefs: [EventRef],
+        poopRefs: [EventRef]
+    ) -> Double {
+        guard !walkRefs.isEmpty else { return 0 }
+
+        var walksWithPoop = 0
+
+        for walk in walkRefs {
+            let walkDuration = walk.durationMin ?? 30
+            let walkEnd = walk.time.addingTimeInterval(Double(walkDuration) * 60)
+
+            // Check if any poop occurred during this walk
+            let poopDuringWalk = poopRefs.contains { poop in
+                poop.time >= walk.time && poop.time <= walkEnd
+            }
+
+            if poopDuringWalk {
+                walksWithPoop += 1
+            }
+        }
+
+        return Double(walksWithPoop) / Double(walkRefs.count)
+    }
+
+    /// Legacy: Calculate using full PuppyEvent arrays
     private static func calculatePostWalkPoopRate(
         walkEvents: [PuppyEvent],
         poopEvents: [PuppyEvent]
@@ -70,7 +108,6 @@ struct PoopPatternAnalyzer {
             let walkDuration = walk.durationMin ?? 30
             let walkEnd = walk.time.addingTimeInterval(Double(walkDuration) * 60)
 
-            // Check if any poop occurred during this walk
             let poopDuringWalk = poopEvents.contains { poop in
                 poop.time >= walk.time && poop.time <= walkEnd
             }

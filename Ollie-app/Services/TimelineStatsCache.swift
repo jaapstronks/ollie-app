@@ -3,6 +3,7 @@
 //  Otis-app
 //
 //  Extracted from TimelineViewModel - manages cached stats to avoid recomputation
+//  Optimized: Heavy calculations run on background thread to avoid UI freezes
 //
 
 import Foundation
@@ -39,10 +40,16 @@ final class TimelineStatsCache: ObservableObject {
     /// Cached rolling walk stats (14 days) for adaptive walk target nudges
     @Published private(set) var walkStats: WalkStats?
 
+    /// Whether stats are currently being computed
+    @Published private(set) var isLoading: Bool = false
+
     // MARK: - Internal State
 
     /// Last time stats were computed (for debouncing)
     private var lastStatsUpdate: Date?
+
+    /// Active computation task (cancelled if new refresh requested)
+    private var computationTask: Task<Void, Never>?
 
     // MARK: - Init
 
@@ -53,7 +60,8 @@ final class TimelineStatsCache: ObservableObject {
 
     // MARK: - Public Methods
 
-    /// Refresh cached stats (debounced, only if data changed)
+    /// Refresh cached stats asynchronously (debounced, only if data changed)
+    /// Heavy calculations run on background thread to avoid UI freezes
     /// - Parameter force: When true, bypasses debounce (use after event changes)
     func refresh(force: Bool = false) {
         // Debounce: only update if more than 1 second since last update
@@ -64,42 +72,108 @@ final class TimelineStatsCache: ObservableObject {
         }
         lastStatsUpdate = now
 
-        // Fetch 8 days of events in a single query (7 days + 1 for sleep overlap)
-        // This is small enough to do synchronously for immediate UI updates
+        // Cancel any in-progress computation
+        computationTask?.cancel()
+
+        // Start new background computation
+        computationTask = Task {
+            await computeStatsAsync()
+        }
+    }
+
+    // MARK: - Private Methods
+
+    /// Compute stats on background thread and update published properties on main thread
+    private func computeStatsAsync() async {
+        isLoading = true
+
+        // Fetch events on main thread (EventStore may not be thread-safe)
         let eightDaysAgo = Date().addingDays(-8)
+        let fifteenDaysAgo = Date().addingDays(-15)
         let allRecentEvents = eventStore.getEvents(from: eightDaysAgo, to: Date())
+        let extendedEvents = eventStore.getEvents(from: fifteenDaysAgo, to: Date())
+        let walksPerDay = profileStore.profile?.walkSchedule.walksPerDay ?? 3
 
-        // Update cached recent events (7 days)
+        // Move heavy computation to background thread
+        let results = await Task.detached(priority: .userInitiated) {
+            self.computeStatsBackground(
+                allRecentEvents: allRecentEvents,
+                extendedEvents: extendedEvents,
+                walksPerDay: walksPerDay
+            )
+        }.value
+
+        // Check if cancelled before updating UI
+        guard !Task.isCancelled else {
+            isLoading = false
+            return
+        }
+
+        // Update published properties on main thread
+        self.recentEvents = results.recentEvents
+        self.patternAnalysis = results.patternAnalysis
+        self.weekStats = results.weekStats
+        self.recentWalks = results.recentWalks
+        self.weekWalkStats = results.weekWalkStats
+        self.walkStats = results.walkStats
+        self.isLoading = false
+    }
+
+    /// Background computation - no UI access, pure data processing
+    private nonisolated func computeStatsBackground(
+        allRecentEvents: [PuppyEvent],
+        extendedEvents: [PuppyEvent],
+        walksPerDay: Int
+    ) -> StatsResults {
         let sevenDaysAgo = Date().addingDays(-7)
-        recentEvents = allRecentEvents.filter { $0.time >= sevenDaysAgo }
 
-        // Update cached pattern analysis
-        patternAnalysis = PatternCalculations.analyzePatterns(
+        // Filter recent events (7 days)
+        let recentEvents = allRecentEvents.filter { $0.time >= sevenDaysAgo }
+
+        // Calculate pattern analysis
+        let patternAnalysis = PatternCalculations.analyzePatterns(
             events: recentEvents,
             periodDays: 7
         )
 
-        // Update cached week stats using optimized batch method (single partition instead of 7 queries)
-        weekStats = WeekCalculations.calculateWeekStatsBatch(from: allRecentEvents)
+        // Calculate week stats using optimized batch method
+        let weekStats = WeekCalculations.calculateWeekStatsBatch(from: allRecentEvents)
 
-        // Update cached recent walks (7 days)
-        recentWalks = recentEvents.walks()
+        // Filter recent walks
+        let recentWalks = recentEvents.walks()
 
-        // Update cached walk stats
+        // Calculate walk stats
         let totalWalkMinutes = recentWalks.compactMap { $0.durationMin }.reduce(0, +)
-        weekWalkStats = (recentWalks.count, totalWalkMinutes)
+        let weekWalkStats = (recentWalks.count, totalWalkMinutes)
 
-        // Update rolling walk stats (14 days) for adaptive walk target nudges
-        let fifteenDaysAgo = Date().addingDays(-15)  // 14 days + buffer
-        let extendedEvents = eventStore.getEvents(from: fifteenDaysAgo, to: Date())
-        if let profile = profileStore.profile {
-            walkStats = WalkStatsCalculations.calculateRollingStats(
-                from: extendedEvents,
-                periodDays: 14,
-                scheduledWalksPerDay: profile.walkSchedule.walksPerDay
-            )
-        } else {
-            walkStats = nil
-        }
+        // Calculate rolling walk stats (14 days)
+        let walkStats = WalkStatsCalculations.calculateRollingStats(
+            from: extendedEvents,
+            periodDays: 14,
+            scheduledWalksPerDay: walksPerDay
+        )
+
+        return StatsResults(
+            recentEvents: recentEvents,
+            patternAnalysis: patternAnalysis,
+            weekStats: weekStats,
+            recentWalks: recentWalks,
+            weekWalkStats: weekWalkStats,
+            walkStats: walkStats
+        )
+    }
+}
+
+// MARK: - Helper Types
+
+extension TimelineStatsCache {
+    /// Container for computed stats results (passed from background to main thread)
+    private struct StatsResults: Sendable {
+        let recentEvents: [PuppyEvent]
+        let patternAnalysis: PatternAnalysis
+        let weekStats: [DayStats]
+        let recentWalks: [PuppyEvent]
+        let weekWalkStats: (count: Int, totalMinutes: Int)
+        let walkStats: WalkStats
     }
 }
