@@ -6,7 +6,7 @@ Track progress on cleaning up the localization infrastructure. Work in small bat
 
 | Metric | Start | Current | Target |
 |--------|-------|---------|--------|
-| Localizable.xcstrings | 3,744 | **1,351** | <100 |
+| Localizable.xcstrings | 3,744 | **1,106** | <100 |
 | Duplicate strings | ~2,600 | **0** | 0 |
 | String(localized:) without table | ~40 | 0 | 0 |
 
@@ -159,15 +159,12 @@ Category breakdown:
 
 ## Future Work (Optional)
 
-The remaining 1,351 strings in Localizable.xcstrings work fine but aren't organized by domain. This is **lower priority** since the core architecture goal is achieved.
+The remaining 1,106 strings in Localizable.xcstrings work fine but aren't organized by domain. This is **lower priority** since the core architecture goal is achieved.
 
-### Batch 6: Migrate Training Strings (278 strings)
-The largest category. These are training tips, skill descriptions, and common mistakes.
+### Batch 6: Migrate Training Strings (245 strings) ✅
+The largest category. Training tips, skill descriptions, and common mistakes.
 
-**Steps:**
-1. Extract training-related strings from Localizable.xcstrings to Training.xcstrings
-2. Update any Swift files using these strings to use `Strings.Training` constants
-3. Remove migrated strings from Localizable.xcstrings
+**Completed:** Moved 245 strings to Training.xcstrings. Removed 1 duplicate ("sessions" conflicted with "Sessions").
 
 ### Batch 7: Migrate Timeline Strings (79 strings)
 Event logging and history strings.
@@ -187,6 +184,11 @@ Review remaining strings and either:
 ---
 
 ## Completed Batches
+
+### ✅ Batch 6 (2026-03-10)
+- **Batch 6:** Migrated 245 training strings to Training.xcstrings (353 → 597 strings)
+- Removed 1 symbol collision ("sessions" vs "Sessions")
+- **Result:** Localizable.xcstrings reduced from 1,351 → **1,106** strings
 
 ### ✅ Batches 1-3, 5 (2026-03-10)
 - **Batch 1:** Created Memories.xcstrings (7 strings), fixed Strings+Memories.swift
