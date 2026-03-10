@@ -6,7 +6,7 @@ Track progress on cleaning up the localization infrastructure. Work in small bat
 
 | Metric | Start | Current | Target |
 |--------|-------|---------|--------|
-| Localizable.xcstrings | 3,744 | **1,106** | <100 |
+| Localizable.xcstrings | 3,744 | **959** | <100 |
 | Duplicate strings | ~2,600 | **0** | 0 |
 | String(localized:) without table | ~40 | 0 | 0 |
 
@@ -159,18 +159,22 @@ Category breakdown:
 
 ## Future Work (Optional)
 
-The remaining 1,106 strings in Localizable.xcstrings work fine but aren't organized by domain. This is **lower priority** since the core architecture goal is achieved.
+The remaining 959 strings in Localizable.xcstrings work fine but aren't organized by domain. This is **lower priority** since the core architecture goal is achieved.
 
 ### Batch 6: Migrate Training Strings (245 strings) ✅
 The largest category. Training tips, skill descriptions, and common mistakes.
 
 **Completed:** Moved 245 strings to Training.xcstrings. Removed 1 duplicate ("sessions" conflicted with "Sessions").
 
-### Batch 7: Migrate Timeline Strings (79 strings)
-Event logging and history strings.
+### Batch 7: Migrate Timeline Strings (76 strings) ✅
+Event logging, import/export, and history strings.
 
-### Batch 8: Migrate Health Strings (64 strings)
+**Completed:** Moved 76 strings to Timeline.xcstrings. Removed 3 symbol collisions.
+
+### Batch 8: Migrate Health Strings (71 strings) ✅
 Vet, medication, and wellness strings.
+
+**Completed:** Moved 71 strings to Health.xcstrings. Removed 1 symbol collision.
 
 ### Batch 9: Migrate Socialization Strings (16 strings)
 Social exposure and confidence tracking strings.
@@ -185,10 +189,12 @@ Review remaining strings and either:
 
 ## Completed Batches
 
-### ✅ Batch 6 (2026-03-10)
-- **Batch 6:** Migrated 245 training strings to Training.xcstrings (353 → 597 strings)
-- Removed 1 symbol collision ("sessions" vs "Sessions")
-- **Result:** Localizable.xcstrings reduced from 1,351 → **1,106** strings
+### ✅ Batches 6-8 (2026-03-10)
+- **Batch 6:** Migrated 245 training strings to Training.xcstrings (353 → 597)
+- **Batch 7:** Migrated 76 timeline strings to Timeline.xcstrings (202 → 275)
+- **Batch 8:** Migrated 71 health strings to Health.xcstrings (44 → 114)
+- Removed 5 symbol collisions (case variants like "sessions" vs "Sessions")
+- **Result:** Localizable.xcstrings reduced from 1,351 → **959** strings
 
 ### ✅ Batches 1-3, 5 (2026-03-10)
 - **Batch 1:** Created Memories.xcstrings (7 strings), fixed Strings+Memories.swift
