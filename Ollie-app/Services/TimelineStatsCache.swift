@@ -20,6 +20,12 @@ import Sentry
 @MainActor
 final class TimelineStatsCache: ObservableObject {
 
+    // MARK: - Global Computation Lock
+    // PERF: Prevents multiple TimelineStatsCache instances from computing simultaneously
+    // This handles the case where SwiftUI creates multiple ViewModel instances
+    private static var isGlobalComputationInProgress = false
+    private static var lastGlobalComputationTime: Date = .distantPast
+
     // MARK: - Dependencies
 
     private let eventDataProvider: EventDataProvider
@@ -95,12 +101,20 @@ final class TimelineStatsCache: ObservableObject {
 
     /// Refresh cached stats asynchronously (debounced, only if data changed)
     /// Heavy calculations run on background thread to avoid UI freezes
-    /// - Parameter force: When true, bypasses debounce (use after event changes)
+    /// - Parameter force: When true, uses shorter debounce (500ms vs 2s)
     func refresh(force: Bool = false) {
-        // Debounce: only update if more than 1 second since last update
-        // Skip debounce when force is true (e.g., after event edits)
         let now = Date()
-        if !force, let lastUpdate = lastStatsUpdate, now.timeIntervalSince(lastUpdate) < 1.0 {
+
+        // PERF: Global debounce across ALL TimelineStatsCache instances
+        // This prevents multiple ViewModel instances from computing simultaneously
+        let globalDebounce: TimeInterval = force ? 0.5 : 2.0
+        if now.timeIntervalSince(Self.lastGlobalComputationTime) < globalDebounce {
+            return
+        }
+
+        // Local debounce for this instance
+        let localDebounce: TimeInterval = force ? 0.5 : 1.0
+        if let lastUpdate = lastStatsUpdate, now.timeIntervalSince(lastUpdate) < localDebounce {
             return
         }
         lastStatsUpdate = now
@@ -127,14 +141,22 @@ final class TimelineStatsCache: ObservableObject {
             return
         }
 
+        // PERF: Global lock to prevent multiple instances computing simultaneously
+        guard !Self.isGlobalComputationInProgress else {
+            return
+        }
+        Self.isGlobalComputationInProgress = true
+        Self.lastGlobalComputationTime = Date()
+        defer { Self.isGlobalComputationInProgress = false }
+
         // PERFORMANCE: Track stats computation time
         let statsTransaction = CrashReporter.startTransaction(
             name: "Compute Timeline Stats",
             operation: "stats.compute"
         )
 
-        // Send single notification at start
-        objectWillChange.send()
+        // PERF: Removed objectWillChange at START - only send when computation completes
+        // This halves the number of view rebuilds triggered by stats computation
         _isLoading = true
 
         // Get events from shared cache (no DB fetch needed!)
@@ -158,7 +180,7 @@ final class TimelineStatsCache: ObservableObject {
         // Check if cancelled
         guard !Task.isCancelled else {
             _isLoading = false
-            objectWillChange.send()
+            // PERF: Don't send objectWillChange on cancellation - nothing changed
             statsTransaction?.finish()
             return
         }
@@ -198,7 +220,7 @@ final class TimelineStatsCache: ObservableObject {
         // Check if cancelled before rest of computation
         guard !Task.isCancelled else {
             _isLoading = false
-            objectWillChange.send()
+            // PERF: Don't send objectWillChange on cancellation - nothing changed
             statsTransaction?.finish()
             return
         }
@@ -222,7 +244,7 @@ final class TimelineStatsCache: ObservableObject {
         // Check if cancelled before updating UI
         guard !Task.isCancelled else {
             _isLoading = false
-            objectWillChange.send()
+            // PERF: Don't send objectWillChange on cancellation - nothing changed
             statsTransaction?.finish()
             return
         }

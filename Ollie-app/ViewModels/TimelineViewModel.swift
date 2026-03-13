@@ -282,16 +282,15 @@ class TimelineViewModel: ObservableObject {
                 self?.objectWillChange.send()
             }
 
-        // Forward TimelineStatsCache's objectWillChange to this ViewModel
-        statsCacheCancellable = statsCache.objectWillChange
-            .receive(on: RunLoop.main)
-            .sink { [weak self] _ in
-                guard !PerformanceDebug.disableObjectWillChangeForwarding else { return }
-                if PerformanceDebug.logObjectWillChange {
-                    print("[PERF] objectWillChange forwarded from: TimelineStatsCache")
-                }
-                self?.objectWillChange.send()
-            }
+        // PERF: DISABLED - Don't forward TimelineStatsCache's objectWillChange
+        // Stats are accessed via statsCache property - views that need stats should
+        // observe statsCache directly. Forwarding caused cascade: stats compute ->
+        // objectWillChange -> view rebuild -> trigger more computation.
+        // statsCacheCancellable = statsCache.objectWillChange
+        //     .receive(on: RunLoop.main)
+        //     .sink { [weak self] _ in
+        //         self?.objectWillChange.send()
+        //     }
 
         // Forward EventLoggingService's objectWillChange to this ViewModel
         eventLoggingServiceCancellable = eventLoggingService.objectWillChange
@@ -342,8 +341,9 @@ class TimelineViewModel: ObservableObject {
 
         // Subscribe to EventDataProvider changes to refresh caches when historical data loads
         // This fixes the race condition where refreshCachedProperties runs before data is ready
+        // PERF: Increased debounce from 200ms to 1s to coalesce rapid changes
         eventDataProviderCancellable = eventDataProvider.objectWillChange
-            .debounce(for: .milliseconds(200), scheduler: RunLoop.main)
+            .debounce(for: .seconds(1), scheduler: RunLoop.main)
             .sink { [weak self] _ in
                 guard let self = self else { return }
                 Task {
@@ -464,10 +464,20 @@ class TimelineViewModel: ObservableObject {
         // updated events and call rebuildTimelineItems() + refreshCachedStats().
     }
 
+    // PERF: Debounce timestamp for rebuildTimelineItems
+    private static var lastTimelineRebuild: Date = .distantPast
+
     /// Rebuild the pre-computed timeline items from current events
     /// This avoids O(n²) session building on every view render
     /// Delegates to TimelineItemBuilder for pure function logic
     internal func rebuildTimelineItems() {
+        // PERF: Global debounce - skip if rebuilt recently by any instance
+        let now = Date()
+        guard now.timeIntervalSince(Self.lastTimelineRebuild) > 0.1 else {
+            return
+        }
+        Self.lastTimelineRebuild = now
+
         // PERFORMANCE: Track timeline rebuild time
         let rebuildTransaction = CrashReporter.startTransaction(
             name: "Rebuild Timeline Items",
@@ -704,11 +714,11 @@ class TimelineViewModel: ObservableObject {
         // Cancel any pending refresh
         backgroundRefreshTask?.cancel()
 
-        // Schedule new refresh after short delay
-        // This allows rapid events (e.g., quick logging, bulk import) to coalesce
+        // Schedule new refresh after delay
+        // PERF: Increased from 150ms to 500ms to better coalesce rapid changes
         backgroundRefreshTask = Task {
-            // Wait 150ms for additional events to arrive
-            try? await Task.sleep(for: .milliseconds(150))
+            // Wait for additional events to arrive
+            try? await Task.sleep(for: .milliseconds(500))
             guard !Task.isCancelled else { return }
 
             // PERFORMANCE: Skip heavy refreshes while a sheet is active
@@ -718,7 +728,8 @@ class TimelineViewModel: ObservableObject {
             }
 
             // Now run the expensive refreshes
-            self.statsCache.refresh(force: true)
+            // PERF: Don't use force: true - let the global debounce in TimelineStatsCache work
+            self.statsCache.refresh(force: false)
             self.refreshPredictions()
 
             // PERFORMANCE: Refresh cached properties that were previously computed
@@ -727,9 +738,19 @@ class TimelineViewModel: ObservableObject {
         }
     }
 
+    // PERF: Global timestamp to prevent multiple ViewModel instances from refreshing simultaneously
+    private static var lastCachedPropertiesRefresh: Date = .distantPast
+
     /// Refresh cached properties that were previously expensive computed properties
     /// Uses pre-fetched data from EventDataProvider to avoid blocking main thread
     private func refreshCachedProperties() async {
+        // PERF: Global debounce - skip if refreshed recently by any instance
+        let now = Date()
+        guard now.timeIntervalSince(Self.lastCachedPropertiesRefresh) > 0.5 else {
+            return
+        }
+        Self.lastCachedPropertiesRefresh = now
+
         // PERFORMANCE: Track cached properties refresh
         let refreshTransaction = CrashReporter.startTransaction(
             name: "Refresh Cached Properties",
