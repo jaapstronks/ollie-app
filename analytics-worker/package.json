@@ -1,13 +1,13 @@
 {
-  "name": "ollie-analytics",
+  "name": "otis-analytics",
   "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "wrangler dev",
     "deploy": "wrangler deploy",
-    "db:create": "wrangler d1 create ollie-analytics",
-    "db:init": "wrangler d1 execute ollie-analytics --file=./schema.sql",
-    "db:query": "wrangler d1 execute ollie-analytics"
+    "db:create": "wrangler d1 create otis-analytics",
+    "db:init": "wrangler d1 execute otis-analytics --file=./schema.sql",
+    "db:query": "wrangler d1 execute otis-analytics"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20240117.0",

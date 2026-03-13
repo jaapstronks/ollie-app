@@ -1,12 +1,17 @@
-name = "ollie-analytics"
+name = "otis-analytics"
 main = "src/index.ts"
 compatibility_date = "2024-01-01"
+
+# Custom domain - configure in Cloudflare dashboard:
+# 1. Go to Workers & Pages > otis-analytics > Settings > Triggers
+# 2. Add Custom Domain: analytics.otis.dev
+# 3. Cloudflare will automatically provision SSL
 
 # D1 database binding
 # Replace <your-database-id> with the ID from: wrangler d1 create ollie-analytics
 [[d1_databases]]
 binding = "DB"
-database_name = "ollie-analytics"
+database_name = "otis-analytics"
 database_id = "676b4b78-88bf-47a3-88e5-6902e7f66ffb"
 
 # Environment variables are set via: wrangler secret put API_KEY
