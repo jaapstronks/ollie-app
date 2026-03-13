@@ -25,8 +25,9 @@ extension EventStore {
 
     func setupRemoteChangeObserver() {
         // Listen for Core Data remote changes (CloudKit sync)
+        // PERF: Use RunLoop.main to prevent "Publishing changes from within view updates"
         NotificationCenter.default.publisher(for: .NSPersistentStoreRemoteChange)
-            .receive(on: DispatchQueue.main)
+            .receive(on: RunLoop.main)
             .sink { [weak self] _ in
                 self?.handleRemoteChange()
             }
@@ -34,7 +35,7 @@ extension EventStore {
 
         // Listen for share acceptance to reload data
         NotificationCenter.default.publisher(for: .cloudKitShareAccepted)
-            .receive(on: DispatchQueue.main)
+            .receive(on: RunLoop.main)
             .sink { [weak self] _ in
                 self?.handleShareAccepted()
             }
@@ -60,7 +61,7 @@ extension EventStore {
     func setupProfileChangeObserver() {
         // Listen for active profile changes to reload events
         NotificationCenter.default.publisher(for: .activeProfileChanged)
-            .receive(on: DispatchQueue.main)
+            .receive(on: RunLoop.main)
             .sink { [weak self] _ in
                 self?.handleProfileChange()
             }
@@ -70,7 +71,7 @@ extension EventStore {
     func setupPhotoSyncObserver() {
         // Listen for photo upload completion to update event flags
         NotificationCenter.default.publisher(for: .photoUploadCompleted)
-            .receive(on: DispatchQueue.main)
+            .receive(on: RunLoop.main)
             .sink { [weak self] notification in
                 guard let eventId = notification.userInfo?["eventId"] as? UUID else { return }
                 // Extract owner name from upload result - this is critical for partner photo downloads
@@ -81,7 +82,7 @@ extension EventStore {
 
         // Listen for photo upload retry requests
         NotificationCenter.default.publisher(for: .photoUploadRetryRequested)
-            .receive(on: DispatchQueue.main)
+            .receive(on: RunLoop.main)
             .sink { [weak self] notification in
                 guard let eventId = notification.userInfo?["eventId"] as? UUID,
                       let self = self else { return }
@@ -94,7 +95,7 @@ extension EventStore {
 
         // Listen for photo owner migration (backfill for existing photos)
         NotificationCenter.default.publisher(for: .photoOwnerMigrationNeeded)
-            .receive(on: DispatchQueue.main)
+            .receive(on: RunLoop.main)
             .sink { [weak self] notification in
                 guard let eventId = notification.userInfo?["eventId"] as? UUID,
                       let ownerName = notification.userInfo?["ownerName"] as? String,
@@ -107,7 +108,7 @@ extension EventStore {
     func setupNotificationActionObserver() {
         // Handle like action from moment notification
         NotificationCenter.default.publisher(for: .likeMomentFromNotification)
-            .receive(on: DispatchQueue.main)
+            .receive(on: RunLoop.main)
             .sink { [weak self] notification in
                 guard let eventId = notification.userInfo?["eventId"] as? UUID,
                       let self = self else { return }
@@ -125,6 +126,9 @@ extension EventStore {
         loadEvents(for: currentDate)
     }
 
+    /// Timestamp of last remote sync (for incremental aggregate updates)
+    private static var lastRemoteSyncTime: Date = Date.distantPast
+
     func handleRemoteChange() {
         logger.debug("Detected CloudKit remote change")
 
@@ -136,9 +140,55 @@ extension EventStore {
         coreDataStore.invalidateAllCaches()
         loadEvents(for: currentDate)
 
+        // Incrementally update affected daily aggregates
+        Task {
+            await handleIncrementalAggregateUpdate()
+        }
+
         // Check for new moments from other users and send notifications
         Task {
             await checkForNewMomentsAndNotify(previousEventIds: previousEventIds)
+        }
+    }
+
+    /// Handle incremental aggregate updates for CloudKit synced events
+    private func handleIncrementalAggregateUpdate() async {
+        guard let profileId = profileStoreRef?.profile?.id else { return }
+
+        let context = PersistenceController.shared.viewContext
+
+        // Find events modified since last sync
+        let modifiedCDEvents = CDPuppyEvent.fetchEventsModified(
+            after: Self.lastRemoteSyncTime,
+            in: context
+        )
+
+        // Get affected dates
+        let calendar = Calendar.current
+        var affectedDates = Set<Date>()
+        for cdEvent in modifiedCDEvents {
+            if let time = cdEvent.time {
+                affectedDates.insert(calendar.startOfDay(for: time))
+            }
+        }
+
+        Self.lastRemoteSyncTime = Date()
+
+        // Recompute aggregates for affected dates
+        guard !affectedDates.isEmpty else { return }
+
+        logger.debug("Recomputing aggregates for \(affectedDates.count) dates after CloudKit sync")
+
+        for date in affectedDates {
+            let rangeStart = calendar.date(byAdding: .day, value: -1, to: date)!
+            let rangeEnd = calendar.date(byAdding: .day, value: 2, to: date)!
+            let events = await getEventsAsync(from: rangeStart, to: rangeEnd)
+
+            await dailyAggregateServiceRef?.recompute(
+                date: date,
+                profileId: profileId,
+                events: events
+            )
         }
     }
 

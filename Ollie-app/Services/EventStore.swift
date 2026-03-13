@@ -34,6 +34,9 @@ class EventStore: ObservableObject {
     /// Reference to profile store for profile-scoped queries
     weak var profileStoreRef: ProfileStore?
 
+    /// Reference to daily aggregate service for cache invalidation
+    weak var dailyAggregateServiceRef: DailyAggregateService?
+
     var cancellables = Set<AnyCancellable>()
 
     /// NSFetchedResultsController for reactive updates
@@ -44,6 +47,10 @@ class EventStore: ObservableObject {
 
         setupAllObservers()
         loadEvents(for: currentDate)
+
+        // PERFORMANCE: Extract synced photos in background (runs once at launch)
+        // This replaces synchronous extraction that was blocking every event fetch
+        coreDataStore.processPhotoExtractionAsync()
     }
 
     /// Set the profile store reference for profile-scoped queries
@@ -52,16 +59,44 @@ class EventStore: ObservableObject {
         updateActiveProfile()
     }
 
+    /// Set the daily aggregate service reference for cache invalidation
+    func setDailyAggregateService(_ service: DailyAggregateService) {
+        self.dailyAggregateServiceRef = service
+    }
+
     /// Update the active profile on the Core Data store
     func updateActiveProfile() {
         coreDataStore.activeProfile = profileStoreRef?.getActiveCDProfile()
+    }
+
+    /// Trigger aggregate recompute for the date of an event
+    /// Called after add/update/delete operations
+    private func triggerAggregateRecompute(for date: Date) {
+        guard let profileId = profileStoreRef?.profile?.id else { return }
+
+        Task {
+            // Get events for the affected day (and surrounding days for sleep calculation)
+            let calendar = Calendar.current
+            let dayStart = calendar.startOfDay(for: date)
+            let rangeStart = calendar.date(byAdding: .day, value: -1, to: dayStart)!
+            let rangeEnd = calendar.date(byAdding: .day, value: 2, to: dayStart)!
+            let events = await getEventsAsync(from: rangeStart, to: rangeEnd)
+
+            await dailyAggregateServiceRef?.recompute(
+                date: date,
+                profileId: profileId,
+                events: events
+            )
+        }
     }
 
     // MARK: - Load & Refresh
 
     /// Load events for a specific date
     func loadEvents(for date: Date) {
-        // Defer to next run loop to avoid "Publishing changes from within view updates"
+        // Defer all @Published mutations to the next run loop tick to avoid
+        // "Publishing changes from within view updates" when called during
+        // a SwiftUI body evaluation.
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
             self.currentDate = date
@@ -124,14 +159,20 @@ class EventStore: ObservableObject {
             // Sync to Apple Watch
             WatchSyncService.shared.syncToWatch()
 
+            // Recompute daily aggregate for this event's date
+            triggerAggregateRecompute(for: newEvent.time)
+
             // Check if it's time to request a review
             ReviewService.shared.checkForUsageBasedReview()
 
             // Check for streak milestone review (for outdoor potty events)
+            // Run async to avoid blocking main thread with 30-day event fetch
             if newEvent.type == .plassen && newEvent.location == .buiten {
-                let allEvents = getEvents(from: Date.daysAgo(30), to: Date())
-                let currentStreak = StreakCalculations.calculateCurrentStreak(events: allEvents)
-                ReviewService.shared.checkForStreakMilestoneReview(currentStreak: currentStreak)
+                Task {
+                    let allEvents = await getEventsAsync(from: Date.daysAgo(30), to: Date())
+                    let currentStreak = StreakCalculations.calculateCurrentStreak(events: allEvents)
+                    ReviewService.shared.checkForStreakMilestoneReview(currentStreak: currentStreak)
+                }
             }
 
             // Upload photo to CloudKit if present
@@ -179,6 +220,9 @@ class EventStore: ObservableObject {
 
             // Sync to Apple Watch
             WatchSyncService.shared.syncToWatch()
+
+            // Recompute daily aggregate for this event's date
+            triggerAggregateRecompute(for: event.time)
         } catch {
             logger.error("Failed to delete event: \(error.localizedDescription)")
             syncError = error.localizedDescription
@@ -202,6 +246,9 @@ class EventStore: ObservableObject {
 
             // Sync to Apple Watch
             WatchSyncService.shared.syncToWatch()
+
+            // Recompute daily aggregate for this event's date
+            triggerAggregateRecompute(for: updatedEvent.time)
         } catch {
             logger.error("Failed to update event: \(error.localizedDescription)")
             syncError = error.localizedDescription

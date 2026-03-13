@@ -426,4 +426,26 @@
             <fetchIndexElement property="surface" type="Binary" order="ascending"/>
         </fetchIndex>
     </entity>
+    <entity name="CDDailyAggregate" representedClassName="CDDailyAggregate" syncable="NO" codeGenerationType="class">
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="outdoorPotty" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="indoorPotty" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="meals" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="walks" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="sleepMinutes" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="trainingSessions" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="sortedGapDurations" optional="YES" attributeType="Binary"/>
+        <attribute name="streakAtEndOfDay" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="lastEventModifiedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="computedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="profileId" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <fetchIndex name="byDateIndex">
+            <fetchIndexElement property="date" type="Binary" order="descending"/>
+        </fetchIndex>
+        <fetchIndex name="byProfileAndDateIndex">
+            <fetchIndexElement property="profileId" type="Binary" order="ascending"/>
+            <fetchIndexElement property="date" type="Binary" order="descending"/>
+        </fetchIndex>
+    </entity>
 </model>
