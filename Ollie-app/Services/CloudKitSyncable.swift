@@ -44,8 +44,10 @@ extension CloudKitSyncable {
     /// Set up the remote change observer for CloudKit sync
     /// Call this in your store's init()
     func setupRemoteChangeObserver() {
+        // PERF: Use RunLoop.main to ensure handling happens on NEXT runloop tick,
+        // preventing "Publishing changes from within view updates" warnings
         NotificationCenter.default.publisher(for: .NSPersistentStoreRemoteChange)
-            .receive(on: DispatchQueue.main)
+            .receive(on: RunLoop.main)
             .sink { [weak self] _ in
                 self?.handleRemoteChange()
             }
@@ -154,7 +156,8 @@ extension ProfileAccessible {
     /// Get the current CDPuppyProfile from Core Data
     func getCurrentProfile() -> CDPuppyProfile? {
         guard let profileId = currentProfileId else {
-            logger.warning("No profile available for operations")
+            // Use debug level since this is expected during app startup before profile loads
+            logger.debug("No profile available for operations")
             return nil
         }
         return CDPuppyProfile.fetch(byId: profileId, in: viewContext)
@@ -172,7 +175,7 @@ extension ProfileAccessible {
 /// Abstract base class for Core Data stores with CloudKit sync support.
 /// Subclasses should override `performInitialLoad()` to load their data.
 @MainActor
-class BaseStore: ObservableObject, CloudKitSyncable, ErrorTrackable {
+class BaseStore: ObservableObject, CloudKitSyncable, ErrorTrackable, CloudKitRefreshable {
 
     // MARK: - CloudKitSyncable
 
@@ -198,7 +201,14 @@ class BaseStore: ObservableObject, CloudKitSyncable, ErrorTrackable {
         self.persistenceController = persistenceController
         self.logger = Logger.otis(category: logCategory)
         performInitialLoad()
-        setupRemoteChangeObserver()
+        // PERF: Register with centralized coordinator instead of individual observer
+        // This reduces 12+ simultaneous reactions to 1 coordinated response
+        registerWithCoordinator(identifier: logCategory)
+    }
+
+    /// Register this store with the centralized CloudKit sync coordinator
+    private func registerWithCoordinator(identifier: String) {
+        CloudKitSyncCoordinator.shared.register(store: self, identifier: identifier)
     }
 
     // MARK: - Abstract Methods
@@ -220,6 +230,13 @@ class BaseStore: ObservableObject, CloudKitSyncable, ErrorTrackable {
     func syncFromCloud() async {
         viewContext.refreshAllObjects()
         performInitialLoad()
+    }
+
+    // MARK: - CloudKitRefreshable
+
+    /// Called by CloudKitSyncCoordinator when remote changes are detected
+    func refreshFromCloud() async {
+        await syncFromCloud()
     }
 
     /// Force sync with CloudKit

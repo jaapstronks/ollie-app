@@ -16,17 +16,15 @@ import os
 extension ProfileStore {
 
     func setupRemoteChangeObserver() {
-        // Listen for Core Data remote changes (CloudKit sync)
-        NotificationCenter.default.publisher(for: .NSPersistentStoreRemoteChange)
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.handleRemoteChange()
-            }
-            .store(in: &cancellables)
+        // PERF: Register with centralized coordinator instead of individual listener
+        // This reduces 12+ simultaneous reactions to 1 coordinated, debounced response
+        CloudKitSyncCoordinator.shared.registerCallback(identifier: "ProfileStore") { [weak self] in
+            self?.handleRemoteChange()
+        }
 
         // Listen for share acceptance to reload profiles
         NotificationCenter.default.publisher(for: .cloudKitShareAccepted)
-            .receive(on: DispatchQueue.main)
+            .receive(on: RunLoop.main)
             .sink { [weak self] _ in
                 self?.handleShareAccepted()
             }
@@ -34,7 +32,7 @@ extension ProfileStore {
 
         // Listen for seed data profile creation (UI testing mode)
         NotificationCenter.default.publisher(for: NSNotification.Name("ProfileStoreReload"))
-            .receive(on: DispatchQueue.main)
+            .receive(on: RunLoop.main)
             .sink { [weak self] _ in
                 self?.logger.info("Received ProfileStoreReload notification - reloading profiles")
                 self?.loadAllProfiles()

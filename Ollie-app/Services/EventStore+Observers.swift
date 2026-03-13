@@ -24,14 +24,11 @@ extension EventStore {
     }
 
     func setupRemoteChangeObserver() {
-        // Listen for Core Data remote changes (CloudKit sync)
-        // PERF: Use RunLoop.main to prevent "Publishing changes from within view updates"
-        NotificationCenter.default.publisher(for: .NSPersistentStoreRemoteChange)
-            .receive(on: RunLoop.main)
-            .sink { [weak self] _ in
-                self?.handleRemoteChange()
-            }
-            .store(in: &cancellables)
+        // PERF: Register with centralized coordinator instead of individual listener
+        // This reduces 12+ simultaneous reactions to 1 coordinated, debounced response
+        CloudKitSyncCoordinator.shared.registerCallback(identifier: "EventStore") { [weak self] in
+            self?.handleRemoteChange()
+        }
 
         // Listen for share acceptance to reload data
         NotificationCenter.default.publisher(for: .cloudKitShareAccepted)

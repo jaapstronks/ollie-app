@@ -24,12 +24,28 @@ enum CrashReporter {
 
     /// Call this in app init, before any other code runs
     static func start() {
-        guard let dsn = dsn, !dsn.isEmpty, dsn != "$(SENTRY_DSN)" else {
+        #if DEBUG
+        print("[CrashReporter] DSN from Info.plist: \(dsn ?? "nil")")
+        #endif
+
+        // Validate DSN is properly configured
+        guard let dsn = dsn,
+              !dsn.isEmpty,
+              dsn != "$(SENTRY_DSN)",           // Unsubstituted build variable
+              dsn.hasPrefix("https://"),         // Must be a valid URL
+              dsn.contains("sentry.io"),         // Must be a Sentry endpoint (any region)
+              !dsn.contains("YOUR_")             // Must not contain placeholder text
+        else {
             #if DEBUG
             print("[CrashReporter] Sentry DSN not configured - crash reporting disabled")
+            print("[CrashReporter] DSN validation failed. Value: \(dsn ?? "nil")")
             #endif
             return
         }
+
+        #if DEBUG
+        print("[CrashReporter] Starting Sentry with DSN: \(dsn.prefix(50))...")
+        #endif
 
         SentrySDK.start { options in
             options.dsn = dsn
@@ -37,9 +53,12 @@ enum CrashReporter {
             // Environment (debug vs release)
             #if DEBUG
             options.environment = "development"
-            // Lower sample rate in development
-            options.sampleRate = 0.1
-            options.tracesSampleRate = 0.1
+            // Full capture in development for debugging performance issues
+            options.sampleRate = 1.0
+            options.tracesSampleRate = 1.0
+            // PERF: Disable Sentry debug logging - it generates millions of log lines
+            // Only enable temporarily when debugging Sentry integration issues
+            options.debug = false
             #else
             options.environment = "production"
             // Capture all errors in production
@@ -73,6 +92,19 @@ enum CrashReporter {
             options.enableAppHangTracking = true
             options.appHangTimeoutInterval = 2.0
 
+            // Core Data tracking (for fetch/save operations)
+            options.enableCoreDataTracing = true
+
+            // File I/O tracking
+            options.enableFileIOTracing = true
+
+            // Automatic UI performance (view rendering)
+            options.enableUIViewControllerTracing = true
+            options.enableUserInteractionTracing = true
+
+            // Time-to-initial-display for app launch
+            options.enableTimeToFullDisplayTracing = true
+
             // Disable screenshot capture for privacy
             options.attachScreenshot = false
             options.attachViewHierarchy = false
@@ -100,6 +132,11 @@ enum CrashReporter {
                 return event
             }
         }
+
+        #if DEBUG
+        print("[CrashReporter] ✅ Sentry SDK started successfully")
+        print("[CrashReporter] Environment: development, tracesSampleRate: 1.0")
+        #endif
     }
 
     // MARK: - User Context
@@ -142,6 +179,48 @@ enum CrashReporter {
         SentrySDK.capture(message: message) { scope in
             scope.setLevel(level)
         }
+    }
+
+    // MARK: - Performance Tracing
+
+    /// Start a transaction for measuring performance of an operation
+    /// - Parameters:
+    ///   - name: Name of the operation (e.g., "Load Events")
+    ///   - operation: Type of operation (e.g., "db.query", "ui.load", "http.client")
+    /// - Returns: A span that must be finished when operation completes
+    static func startTransaction(name: String, operation: String) -> Span? {
+        SentrySDK.startTransaction(name: name, operation: operation)
+    }
+
+    /// Create a child span within an existing transaction
+    static func startSpan(parent: Span, operation: String, description: String) -> Span {
+        parent.startChild(operation: operation, description: description)
+    }
+
+    /// Measure a synchronous operation
+    static func measure<T>(name: String, operation: String, block: () throws -> T) rethrows -> T {
+        let transaction = startTransaction(name: name, operation: operation)
+        defer { transaction?.finish() }
+        return try block()
+    }
+
+    /// Measure an async operation
+    static func measureAsync<T>(name: String, operation: String, block: () async throws -> T) async rethrows -> T {
+        let transaction = startTransaction(name: name, operation: operation)
+        defer { transaction?.finish() }
+        return try await block()
+    }
+
+    /// Add a breadcrumb for debugging
+    static func addBreadcrumb(category: String, message: String, data: [String: Any]? = nil) {
+        let crumb = Breadcrumb()
+        crumb.category = category
+        crumb.message = message
+        crumb.level = .info
+        if let data = data {
+            crumb.data = data
+        }
+        SentrySDK.addBreadcrumb(crumb)
     }
 
 }

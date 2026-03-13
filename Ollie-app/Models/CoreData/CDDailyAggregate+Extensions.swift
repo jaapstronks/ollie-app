@@ -97,13 +97,19 @@ extension CDDailyAggregate {
         let calendar = Calendar.current
         let dayStart = calendar.startOfDay(for: date)
 
-        // Try to find existing
-        let existing = fetch(for: dayStart, profileId: profileId, in: context)
-
         nonisolated(unsafe) var aggregate: CDDailyAggregate!
 
+        // Perform all Core Data operations inside performAndWait to avoid Sendable warnings
         context.performAndWait {
-            if let existingAggregate = existing {
+            // Try to find existing inside the block
+            let request = NSFetchRequest<CDDailyAggregate>(entityName: "CDDailyAggregate")
+            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
+                NSPredicate(format: "profileId == %@", profileId as CVarArg),
+                NSPredicate(format: "date == %@", dayStart as CVarArg)
+            ])
+            request.fetchLimit = 1
+
+            if let existingAggregate = try? context.fetch(request).first {
                 aggregate = existingAggregate
             } else {
                 aggregate = CDDailyAggregate(context: context)
@@ -200,8 +206,19 @@ extension CDDailyAggregate {
         profileId: UUID,
         in context: NSManagedObjectContext
     ) {
-        guard let aggregate = fetch(for: date, profileId: profileId, in: context) else { return }
+        let calendar = Calendar.current
+        let dayStart = calendar.startOfDay(for: date)
+
+        // Perform fetch and delete inside the same performAndWait to avoid Sendable warnings
         context.performAndWait {
+            let request = NSFetchRequest<CDDailyAggregate>(entityName: "CDDailyAggregate")
+            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
+                NSPredicate(format: "profileId == %@", profileId as CVarArg),
+                NSPredicate(format: "date == %@", dayStart as CVarArg)
+            ])
+            request.fetchLimit = 1
+
+            guard let aggregate = try? context.fetch(request).first else { return }
             context.delete(aggregate)
         }
     }

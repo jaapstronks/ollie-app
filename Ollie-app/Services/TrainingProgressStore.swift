@@ -53,20 +53,19 @@ final class TrainingProgressStore: ObservableObject {
 
     private func setupObservers() {
         // Reload when active profile changes
+        // PERF: Use RunLoop.main to prevent "Publishing changes from within view updates"
         NotificationCenter.default.publisher(for: .activeProfileChanged)
-            .receive(on: DispatchQueue.main)
+            .receive(on: RunLoop.main)
             .sink { [weak self] _ in
                 self?.loadState()
             }
             .store(in: &cancellables)
 
-        // Reload when CloudKit remote changes arrive
-        NotificationCenter.default.publisher(for: .NSPersistentStoreRemoteChange)
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.loadState()
-            }
-            .store(in: &cancellables)
+        // PERF: Register with centralized coordinator instead of individual listener
+        // This reduces 12+ simultaneous reactions to 1 coordinated, debounced response
+        CloudKitSyncCoordinator.shared.registerCallback(identifier: "TrainingProgressStore") { [weak self] in
+            self?.loadState()
+        }
     }
 
     // MARK: - Computed Properties

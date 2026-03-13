@@ -64,8 +64,10 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         }
 
         if notification.notificationType == .recordZone {
-            NotificationCenter.default.post(name: .NSPersistentStoreRemoteChange, object: nil)
-            logger.info("Received CloudKit remote change notification")
+            // PERF: Don't manually post NSPersistentStoreRemoteChange - it causes duplicate handling
+            // NSPersistentCloudKitContainer already posts this notification automatically
+            // The CloudKitSyncCoordinator will handle it with proper debouncing
+            logger.info("Received CloudKit remote change notification (handled by coordinator)")
             completionHandler(.newData)
         } else {
             completionHandler(.noData)
