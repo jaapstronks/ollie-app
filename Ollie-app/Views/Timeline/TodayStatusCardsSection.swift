@@ -45,9 +45,10 @@ struct TodayStatusCardsSection: View {
 
     var body: some View {
         VStack(spacing: 12) {
-            let combinedState = viewModel.combinedSleepPottyState
+            // PERFORMANCE: Use cached values instead of computing on every render
+            let combinedState = viewModel.cachedCombinedState
             let isSleeping = combinedState.isSleeping
-            let separated = viewModel.separatedUpcomingItems(forecasts: weatherService.forecasts)
+            let separated = viewModel.cachedSeparatedItems
             let pendingActionable = isSleeping ? separated.actionable.first : nil
             let aiRecommendation = viewModel.aiLoggingRecommendations.first
 
@@ -69,8 +70,8 @@ struct TodayStatusCardsSection: View {
             // Year in review tease card (Dec 15 - Jan 15)
             yearRecapTeaseCard(combinedState)
 
-            // Recent moments carousel
-            recentMomentsCarousel(combinedState)
+            // Recent moments carousel - disabled for performance
+            // recentMomentsCarousel(combinedState)
 
             // Stale logging banner
             staleLoggingBanner(combinedState)
@@ -151,7 +152,7 @@ private extension TodayStatusCardsSection {
                 isCollapsed: viewModel.isFirstWeekCardCollapsed,
                 onToggle: { viewModel.toggleFirstWeekCard() }
             )
-            .animatedAppear(delay: 0.03)
+            .animatedAppear(delay: 0.05)
         }
     }
 
@@ -171,7 +172,7 @@ private extension TodayStatusCardsSection {
                     viewModel.sheetCoordinator.presentSheet(.otisPlus)
                 }
             )
-            .animatedAppear(delay: 0.035)
+            .animatedAppear(delay: 0.08)
         }
     }
 
@@ -186,7 +187,7 @@ private extension TodayStatusCardsSection {
                 totalWalks: viewModel.cachedWeekWalkStats.count,
                 totalMinutes: viewModel.cachedWeekWalkStats.totalMinutes
             )
-            .animatedAppear(delay: 0.04)
+            .animatedAppear(delay: 0.1)
         }
     }
 
@@ -210,7 +211,7 @@ private extension TodayStatusCardsSection {
                     stats: stats,
                     onTap: onShowMonthRecap
                 )
-                .animatedAppear(delay: 0.045)
+                .animatedAppear(delay: 0.12)
             }
         }
     }
@@ -234,7 +235,7 @@ private extension TodayStatusCardsSection {
                     stats: yearStats,
                     onTap: onShowYearRecap
                 )
-                .animatedAppear(delay: 0.05)
+                .animatedAppear(delay: 0.14)
             }
         }
     }
@@ -253,7 +254,7 @@ private extension TodayStatusCardsSection {
                         )
                     }
                 )
-                .animatedAppear(delay: 0.06)
+                .animatedAppear(delay: 0.16)
             }
         }
     }
@@ -359,7 +360,7 @@ private extension TodayStatusCardsSection {
                 },
                 onDismiss: onDismissCrateNudge
             )
-            .animatedAppear(delay: 0.02)
+            .animatedAppear(delay: 0.05)
         }
     }
 
@@ -376,7 +377,7 @@ private extension TodayStatusCardsSection {
                 onDismiss: onDismissWalkTargetNudge
             )
             .visibleForNudge(.walks)
-            .animatedAppear(delay: 0.025)
+            .animatedAppear(delay: 0.08)
         }
     }
 
@@ -393,7 +394,7 @@ private extension TodayStatusCardsSection {
                 onViewAll: onViewAllGrooming
             )
             .visibleForNudge(.grooming)
-            .animatedAppear(delay: 0.028)
+            .animatedAppear(delay: 0.1)
         }
     }
 
@@ -419,7 +420,7 @@ private extension TodayStatusCardsSection {
                 onCallVet: ContactUtilities.callPhoneNumber
             )
             .visibleForNudge(.appointments)
-            .animatedAppear(delay: 0.027)
+            .animatedAppear(delay: 0.12)
         }
     }
 
@@ -432,7 +433,7 @@ private extension TodayStatusCardsSection {
                 onReduceReminders: { viewModel.applyAILoggingRecommendation(recommendation) }
             )
             .visibleForNudge(.training)
-            .animatedAppear(delay: 0.03)
+            .animatedAppear(delay: 0.14)
         }
     }
 
@@ -447,7 +448,7 @@ private extension TodayStatusCardsSection {
                     firstWeekService.dismissPhotoPrompt()
                 }
             )
-            .animatedAppear(delay: 0.032)
+            .animatedAppear(delay: 0.16)
         }
     }
 
@@ -465,7 +466,7 @@ private extension TodayStatusCardsSection {
                     firstWeekService.dismissInvitePrompt()
                 }
             )
-            .animatedAppear(delay: 0.034)
+            .animatedAppear(delay: 0.18)
         }
     }
 
@@ -490,7 +491,7 @@ private extension TodayStatusCardsSection {
                     // User dismissed, we'll ask again in a few days
                 }
             )
-            .animatedAppear(delay: 0.035)
+            .animatedAppear(delay: 0.2)
         }
     }
 
@@ -511,7 +512,7 @@ private extension TodayStatusCardsSection {
                             // Navigate to health detail view - could add navigation here
                         }
                     )
-                    .animatedAppear(delay: 0.04)
+                    .animatedAppear(delay: 0.22)
                 }
             }
         }
@@ -535,7 +536,7 @@ private extension TodayStatusCardsSection {
                         viewModel.sheetCoordinator.presentSheet(.seniorMobility)
                     }
                 )
-                .animatedAppear(delay: 0.045)
+                .animatedAppear(delay: 0.24)
             }
         }
     }
