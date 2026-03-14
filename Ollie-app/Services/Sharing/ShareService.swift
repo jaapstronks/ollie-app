@@ -9,19 +9,20 @@ import SwiftUI
 import UIKit
 import Photos
 import os
-import Combine
 import OtisShared
 
 /// Main service for sharing content across platforms
+@Observable
 @MainActor
-final class ShareService: ObservableObject {
+final class ShareService {
 
     // MARK: - Properties
 
+    @ObservationIgnored
     private let logger = Logger.otis(category: "ShareService")
 
-    @Published var isSharing = false
-    @Published var lastError: ShareError?
+    var isSharing = false
+    var lastError: ShareError?
 
     // MARK: - Standard Share Sheet
 

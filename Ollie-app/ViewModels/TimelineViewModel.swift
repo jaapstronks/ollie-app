@@ -245,8 +245,8 @@ class TimelineViewModel {
 
         // NOTE: With @Observable, we no longer need to forward objectWillChange from nested objects.
         // Views will only re-render when they access specific properties that change.
-        // The nested services (sheetCoordinator, activityManager, etc.) still use ObservableObject
-        // for now, but their changes are reflected through the properties they update on this class.
+        // All nested services (sheetCoordinator, activityManager, etc.) use @Observable,
+        // and their changes are reflected through the properties they update on this class.
 
         // Flush deferred celebrations as soon as sheets are dismissed.
         // Note: SheetCoordinator is @Observable, so we use notifications instead of Combine publishers
@@ -346,8 +346,7 @@ class TimelineViewModel {
     // MARK: - Convenience Accessors for Sheet State
 
     /// Active sheet binding for SwiftUI sheet(item:) modifier
-    /// This binding is needed because $viewModel.sheetCoordinator.activeSheet
-    /// doesn't properly trigger view updates with nested ObservableObjects
+    /// This binding provides a convenient way to access the nested sheet coordinator's state
     var activeSheetBinding: Binding<SheetCoordinator.ActiveSheet?> {
         Binding(
             get: { self.sheetCoordinator.activeSheet },

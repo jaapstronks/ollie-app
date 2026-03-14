@@ -2,14 +2,13 @@
 //  UnitPreferences.swift
 //  Ollie-app
 //
-//  Observable object for unit preferences (weight, temperature).
-//  Use as @EnvironmentObject instead of repeating @AppStorage patterns.
+//  Observable store for unit preferences (weight, temperature).
+//  Use via @Environment(UnitPreferences.self) instead of repeating @AppStorage patterns.
 //
 
 import SwiftUI
-import Combine
 
-/// Centralized unit preferences accessible via environment.
+/// Centralized unit preferences accessible via @Environment.
 /// Replaces repeated @AppStorage patterns for weightUnit and temperatureUnit.
 @Observable
 @MainActor

@@ -8,33 +8,37 @@
 //  This service is initialized in AppDelegate.didFinishLaunchingWithOptions.
 
 import Foundation
-import Combine
 import WatchConnectivity
 import OtisShared
 import CoreData
 import os
 
 /// Service to sync puppy data to paired Apple Watch
-final class WatchSyncService: NSObject, @unchecked Sendable {
+@Observable
+@MainActor
+final class WatchSyncService: NSObject {
     static let shared = WatchSyncService()
 
+    @ObservationIgnored
     private var session: WCSession?
+    @ObservationIgnored
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "Otis", category: "WatchSync")
+    @ObservationIgnored
     private let eventStore = CoreDataEventStore()
 
     // MARK: - Sync Status
 
     /// Whether the watch is currently connected and reachable
-    @Published private(set) var isWatchReachable: Bool = false
+    private(set) var isWatchReachable: Bool = false
 
     /// Whether the watch app is installed
-    @Published private(set) var isWatchAppInstalled: Bool = false
+    private(set) var isWatchAppInstalled: Bool = false
 
     /// Last successful sync time
-    @Published private(set) var lastSyncTime: Date?
+    private(set) var lastSyncTime: Date?
 
     /// Current sync state
-    @Published private(set) var syncState: SyncState = .idle
+    private(set) var syncState: SyncState = .idle
 
     enum SyncState {
         case idle
@@ -45,8 +49,11 @@ final class WatchSyncService: NSObject, @unchecked Sendable {
 
     // MARK: - Retry Configuration
 
+    @ObservationIgnored
     private var retryCount = 0
+    @ObservationIgnored
     private let maxRetries = 3
+    @ObservationIgnored
     private var retryWorkItem: DispatchWorkItem?
 
     // MARK: - Persistence Keys
@@ -266,80 +273,121 @@ final class WatchSyncService: NSObject, @unchecked Sendable {
 // MARK: - WCSessionDelegate
 
 extension WatchSyncService: WCSessionDelegate {
-    func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
-        if activationState == .activated {
-            logger.info("WatchConnectivity activated, paired: \(session.isPaired), installed: \(session.isWatchAppInstalled), reachable: \(session.isReachable)")
+    nonisolated func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
+        // Capture session state before entering Task to avoid data races
+        let isPaired = session.isPaired
+        let isInstalled = session.isWatchAppInstalled
+        let isReachable = session.isReachable
+        let errorDescription = error?.localizedDescription
 
-            // Update published state
-            isWatchReachable = session.isReachable
-            isWatchAppInstalled = session.isWatchAppInstalled
+        Task { @MainActor in
+            if activationState == .activated {
+                logger.info("WatchConnectivity activated, paired: \(isPaired), installed: \(isInstalled), reachable: \(isReachable)")
 
-            // Sync immediately and retry any pending sync
-            syncToWatch()
-            retryPendingSyncIfNeeded()
-        } else if let error = error {
-            logger.error("WatchConnectivity activation failed: \(error.localizedDescription)")
+                // Update state
+                isWatchReachable = isReachable
+                isWatchAppInstalled = isInstalled
+
+                // Sync immediately and retry any pending sync
+                syncToWatch()
+                retryPendingSyncIfNeeded()
+            } else if let errorDesc = errorDescription {
+                logger.error("WatchConnectivity activation failed: \(errorDesc)")
+            }
         }
     }
 
-    func sessionDidBecomeInactive(_ session: WCSession) {
+    nonisolated func sessionDidBecomeInactive(_ session: WCSession) {
         // Required for iOS
-        logger.debug("WCSession became inactive")
+        Task { @MainActor in
+            logger.debug("WCSession became inactive")
+        }
     }
 
-    func sessionDidDeactivate(_ session: WCSession) {
+    nonisolated func sessionDidDeactivate(_ session: WCSession) {
         // Required for iOS - reactivate for watch switching
-        logger.debug("WCSession deactivated, reactivating...")
+        Task { @MainActor in
+            logger.debug("WCSession deactivated, reactivating...")
+        }
         session.activate()
     }
 
-    func sessionWatchStateDidChange(_ session: WCSession) {
-        logger.info("Watch state changed - paired: \(session.isPaired), installed: \(session.isWatchAppInstalled)")
+    nonisolated func sessionWatchStateDidChange(_ session: WCSession) {
+        // Capture session state before entering Task to avoid data races
+        let isPaired = session.isPaired
+        let isInstalled = session.isWatchAppInstalled
 
-        isWatchAppInstalled = session.isWatchAppInstalled
+        Task { @MainActor in
+            logger.info("Watch state changed - paired: \(isPaired), installed: \(isInstalled)")
 
-        if session.isPaired && session.isWatchAppInstalled {
-            syncToWatch()
+            isWatchAppInstalled = isInstalled
+
+            if isPaired && isInstalled {
+                syncToWatch()
+            }
         }
     }
 
-    func sessionReachabilityDidChange(_ session: WCSession) {
-        logger.info("Watch reachability changed: \(session.isReachable)")
+    nonisolated func sessionReachabilityDidChange(_ session: WCSession) {
+        // Capture session state before entering Task to avoid data races
+        let isReachable = session.isReachable
 
-        isWatchReachable = session.isReachable
+        Task { @MainActor in
+            logger.info("Watch reachability changed: \(isReachable)")
 
-        if session.isReachable {
-            // Watch became reachable - retry any pending sync
-            retryPendingSyncIfNeeded()
+            isWatchReachable = isReachable
+
+            if isReachable {
+                // Watch became reachable - retry any pending sync
+                retryPendingSyncIfNeeded()
+            }
         }
     }
 
     // Handle sync requests and events from Watch (real-time delivery)
-    func session(_ session: WCSession, didReceiveMessage message: [String: Any]) {
-        if message["request"] as? String == "sync" {
-            syncToWatch()
-        } else if message["action"] as? String == "logEvent" {
-            // Handle real-time event delivery (same logic as didReceiveUserInfo)
-            handleReceivedEvent(from: message)
+    nonisolated func session(_ session: WCSession, didReceiveMessage message: [String: Any]) {
+        // Extract all values before entering Task to avoid data races with [String: Any]
+        let request = message["request"] as? String
+        let action = message["action"] as? String
+        let eventJSON = message["event"] as? String
+
+        Task { @MainActor in
+            if request == "sync" {
+                syncToWatch()
+            } else if action == "logEvent" {
+                // Handle real-time event delivery
+                handleReceivedEvent(eventJSON: eventJSON)
+            }
         }
     }
 
     // Handle real-time messages with reply
-    func session(_ session: WCSession, didReceiveMessage message: [String: Any], replyHandler: @escaping ([String: Any]) -> Void) {
-        if message["action"] as? String == "logEvent" {
-            handleReceivedEvent(from: message)
+    nonisolated func session(_ session: WCSession, didReceiveMessage message: [String: Any], replyHandler: @escaping ([String: Any]) -> Void) {
+        // Extract all values before entering Task to avoid data races with [String: Any]
+        let action = message["action"] as? String
+        let request = message["request"] as? String
+        let eventJSON = message["event"] as? String
+
+        // Determine response synchronously, then dispatch work to MainActor
+        if action == "logEvent" {
+            Task { @MainActor in
+                handleReceivedEvent(eventJSON: eventJSON)
+            }
             replyHandler(["status": "received"])
-        } else if message["request"] as? String == "sync" {
-            syncToWatch()
+        } else if request == "sync" {
+            Task { @MainActor in
+                syncToWatch()
+            }
             replyHandler(["status": "syncing"])
         } else {
             replyHandler(["status": "unknown"])
         }
     }
 
-    /// Process an event received from Watch (either via message or userInfo)
-    private func handleReceivedEvent(from data: [String: Any]) {
-        guard let eventJSON = data["event"] as? String,
+    /// Process an event received from Watch
+    /// - Parameter eventJSON: JSON-encoded PuppyEvent string
+    private func handleReceivedEvent(eventJSON: String?) {
+        guard let eventJSON = eventJSON,
               let eventData = eventJSON.data(using: .utf8) else {
             logger.error("Invalid event data from Watch")
             return
@@ -361,27 +409,31 @@ extension WatchSyncService: WCSessionDelegate {
             return
         }
 
-        // Store the event on main actor since Core Data context requires it
-        Task { @MainActor in
-            do {
-                try eventStore.saveEvent(event)
-                logger.info("Received and stored event from Watch: \(event.type.rawValue)")
-            } catch {
-                logger.error("Failed to save event from Watch: \(error.localizedDescription)")
-            }
-
-            // Sync updated data back to watch
-            syncToWatch()
-
-            // Notify the app that data changed
-            NotificationCenter.default.post(name: .watchEventReceived, object: event)
+        // Store the event - we're already on MainActor
+        do {
+            try eventStore.saveEvent(event)
+            logger.info("Received and stored event from Watch: \(event.type.rawValue)")
+        } catch {
+            logger.error("Failed to save event from Watch: \(error.localizedDescription)")
         }
+
+        // Sync updated data back to watch
+        syncToWatch()
+
+        // Notify the app that data changed
+        NotificationCenter.default.post(name: .watchEventReceived, object: event)
     }
 
     // Handle events transferred from Watch (guaranteed delivery / queued)
-    func session(_ session: WCSession, didReceiveUserInfo userInfo: [String: Any] = [:]) {
-        guard userInfo["action"] as? String == "logEvent" else { return }
-        handleReceivedEvent(from: userInfo)
+    nonisolated func session(_ session: WCSession, didReceiveUserInfo userInfo: [String: Any] = [:]) {
+        // Extract all values before entering Task to avoid data races with [String: Any]
+        let action = userInfo["action"] as? String
+        let eventJSON = userInfo["event"] as? String
+
+        guard action == "logEvent" else { return }
+        Task { @MainActor in
+            handleReceivedEvent(eventJSON: eventJSON)
+        }
     }
 }
 

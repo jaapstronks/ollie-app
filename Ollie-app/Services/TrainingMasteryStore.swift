@@ -2,13 +2,13 @@
 //  TrainingMasteryStore.swift
 //  Ollie-app
 //
-//  Observable object for training mastery state (potty, crate).
-//  Use as @EnvironmentObject instead of repeating @AppStorage patterns.
+//  Observable store for training mastery state (potty, crate, leash).
+//  Use via @Environment(TrainingMasteryStore.self) instead of repeating @AppStorage patterns.
 //
 
 import SwiftUI
 
-/// Centralized training mastery state accessible via environment object.
+/// Centralized training mastery state accessible via @Environment.
 /// Replaces repeated @AppStorage patterns for training mastery flags.
 @Observable
 @MainActor

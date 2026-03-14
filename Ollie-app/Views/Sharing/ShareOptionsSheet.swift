@@ -13,7 +13,7 @@ import OtisShared
 struct ShareOptionsSheet<Card: ShareableCard>: View {
     let card: Card
 
-    @StateObject private var shareService = ShareService()
+    @State private var shareService = ShareService()
     @State private var selectedFormat: ShareFormat = .portrait
     @State private var renderedImage: UIImage?
     @State private var isRendering = true
@@ -314,7 +314,7 @@ struct SimpleShareSheet: View {
     let image: UIImage
     let caption: String?
 
-    @StateObject private var shareService = ShareService()
+    @State private var shareService = ShareService()
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {

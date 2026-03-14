@@ -8,7 +8,7 @@ import SwiftUI
 import OtisShared
 
 struct StatusView: View {
-    @ObservedObject var dataProvider: WatchDataProvider
+    var dataProvider: WatchDataProvider
 
     // Timer for periodic refresh
     let refreshTimer = Timer.publish(every: 30, on: .main, in: .common).autoconnect()

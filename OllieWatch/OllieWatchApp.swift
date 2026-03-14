@@ -12,8 +12,8 @@ import SwiftUI
 @main
 struct OtisWatchApp: App {
     /// WatchDataProvider manages WatchConnectivity session and data sync
-    /// Using @StateObject ensures it's created once and persists for app lifetime
-    @StateObject private var dataProvider = WatchDataProvider.shared
+    /// Using @State with shared instance ensures it persists for app lifetime
+    @State private var dataProvider = WatchDataProvider.shared
 
     init() {
         // Activate WCSession as early as possible in app lifecycle
@@ -26,7 +26,7 @@ struct OtisWatchApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .environmentObject(dataProvider)
+                .environment(dataProvider)
                 .onAppear {
                     // Ensure session is activated (backup in case init didn't run)
                     dataProvider.activateSession()
