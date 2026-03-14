@@ -2992,6 +2992,16 @@
         }
       }
     },
+    "Got it": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gesnopen"
+          }
+        }
+      }
+    },
     "Gradually add distractions": {
       "extractionState": "stale",
       "localizations": {

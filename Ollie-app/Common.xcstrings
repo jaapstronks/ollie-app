@@ -1253,6 +1253,16 @@
       },
       "extractionState": "manual"
     },
+    "Got it": {
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gesnopen"
+          }
+        }
+      }
+    },
     "Health": {
       "extractionState": "stale",
       "localizations": {
