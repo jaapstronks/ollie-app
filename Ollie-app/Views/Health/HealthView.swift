@@ -98,7 +98,7 @@ struct HealthView: View {
     // MARK: - Body
 
     var body: some View {
-        ScrollView {
+        ScrollView(.vertical) {
             VStack(spacing: 20) {
                 // Senior wellness section (for senior dogs)
                 if isSenior {

@@ -33,7 +33,7 @@ struct HealthTabView: View {
 
     var body: some View {
         NavigationStack {
-            ScrollView {
+            ScrollView(.vertical) {
                 VStack(spacing: 20) {
                     // MARK: - Development & Growth Section
 
