@@ -251,7 +251,7 @@ struct SpotCard: View {
 
                 Image(systemName: "mappin.circle.fill")
                     .font(.title2)
-                    .foregroundColor(.otisAccent)
+                    .foregroundStyle(Color.otisAccent)
             }
             .frame(width: 80, height: 60)
 
@@ -263,7 +263,7 @@ struct SpotCard: View {
 
                 Text(Strings.WalkLocations.visitCount(spot.visitCount))
                     .font(.caption2)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
             }
         }
         .frame(width: 80)

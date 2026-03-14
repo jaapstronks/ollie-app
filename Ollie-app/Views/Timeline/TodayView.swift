@@ -408,16 +408,16 @@ struct EmptyTimelineCard: View {
         VStack(spacing: 16) {
             Image(systemName: "pawprint")
                 .font(.system(size: 40))
-                .foregroundColor(.secondary)
+                .foregroundStyle(.secondary)
                 .accessibilityHidden(true)
 
             Text(Strings.Timeline.noEvents)
                 .font(.headline)
-                .foregroundColor(.secondary)
+                .foregroundStyle(.secondary)
 
             Text(Strings.Timeline.tapToLog)
                 .font(.subheadline)
-                .foregroundColor(.secondary)
+                .foregroundStyle(.secondary)
 
             TipView(quickLogBarTip)
         }

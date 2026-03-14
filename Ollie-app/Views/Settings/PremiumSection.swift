@@ -22,7 +22,7 @@ struct PremiumSection: View {
                 Text(Strings.OtisPlus.settingsStatus)
                 Spacer()
                 Text(subscriptionManager.effectiveStatus.displayLabel)
-                    .foregroundColor(statusColor)
+                    .foregroundStyle(statusColor)
             }
 
             // Action buttons based on status

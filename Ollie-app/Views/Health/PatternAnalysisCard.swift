@@ -38,7 +38,7 @@ struct PatternAnalysisCard: View {
     private var noDataView: some View {
         Text(Strings.Patterns.insufficientData)
             .font(.subheadline)
-            .foregroundColor(.secondary)
+            .foregroundStyle(.secondary)
             .padding()
     }
 }
@@ -64,11 +64,11 @@ struct TriggerRow: View {
                 Text("\(trigger.successRate)%")
                     .font(.subheadline)
                     .fontWeight(.semibold)
-                    .foregroundColor(successColor)
+                    .foregroundStyle(successColor)
 
                 Text("(\(trigger.totalCount)x)")
                     .font(.caption)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
             }
 
             // Success rate bar - minimum 16pt height for accessibility
@@ -143,7 +143,7 @@ struct CompactTriggerBadge: View {
             Text("\(trigger.successRate)%")
                 .font(.caption)
                 .fontWeight(.semibold)
-                .foregroundColor(successColor)
+                .foregroundStyle(successColor)
         }
         .padding(.horizontal, 8)
         .padding(.vertical, 4)

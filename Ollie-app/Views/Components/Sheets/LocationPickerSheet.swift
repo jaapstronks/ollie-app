@@ -22,7 +22,7 @@ struct LocationPickerSheet: View {
 
             Text(Strings.LocationPicker.title)
                 .font(.subheadline)
-                .foregroundColor(.secondary)
+                .foregroundStyle(.secondary)
 
             HStack(spacing: 20) {
                 LocationButtonIcon(
@@ -39,7 +39,7 @@ struct LocationPickerSheet: View {
             Button(Strings.Common.cancel, role: .cancel) {
                 onCancel()
             }
-            .foregroundColor(.secondary)
+            .foregroundStyle(.secondary)
         }
         .padding()
     }

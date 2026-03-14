@@ -75,7 +75,7 @@ struct ImportSheet: View {
             // Icon
             Image(systemName: "folder.badge.plus")
                 .font(.system(size: 60))
-                .foregroundColor(.otisInfo)
+                .foregroundStyle(Color.otisInfo)
 
             VStack(spacing: 8) {
                 Text(Strings.DataImport.selectFolder)
@@ -83,7 +83,7 @@ struct ImportSheet: View {
 
                 Text(Strings.DataImport.selectFolderDescription)
                     .font(.subheadline)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal)
             }
@@ -99,7 +99,7 @@ struct ImportSheet: View {
                     Text(Strings.DataImport.chooseFolder)
                 }
                 .font(.headline)
-                .foregroundColor(.white)
+                .foregroundStyle(.white)
                 .frame(maxWidth: .infinity)
                 .padding()
                 .background(Color.otisInfo)
@@ -117,14 +117,14 @@ struct ImportSheet: View {
             // Icon
             Image(systemName: "arrow.down.circle.fill")
                 .font(.system(size: 60))
-                .foregroundColor(.otisInfo)
+                .foregroundStyle(Color.otisInfo)
                 .padding(.top, 20)
 
             if let preview = dataImporter.lastPreview {
                 previewContent(preview)
             } else {
                 Text(Strings.DataImport.couldNotLoadPreview)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
             }
 
             Spacer()
@@ -145,7 +145,7 @@ struct ImportSheet: View {
                 if let date = preview.exportDate {
                     Text(Strings.DataImport.exportedOn(date: formatDate(date)))
                         .font(.subheadline)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 }
             }
 
@@ -155,18 +155,18 @@ struct ImportSheet: View {
             VStack(alignment: .leading, spacing: 8) {
                 Text(Strings.DataImport.componentsToImport)
                     .font(.subheadline)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
 
                 ForEach(preview.components, id: \.self) { component in
                     HStack {
                         Image(systemName: iconForComponent(component))
                             .frame(width: 24)
-                            .foregroundColor(.otisInfo)
+                            .foregroundStyle(Color.otisInfo)
                         Text(localizedComponentName(component))
                         Spacer()
                         if let count = preview.itemCounts[component], count > 0 {
                             Text("\(count)")
-                                .foregroundColor(.secondary)
+                                .foregroundStyle(.secondary)
                         }
                     }
                     .font(.subheadline)
@@ -181,7 +181,7 @@ struct ImportSheet: View {
                     Text(Strings.Settings.overwriteExisting)
                     Text(Strings.DataImport.overwriteDescription)
                         .font(.caption)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 }
             }
 
@@ -196,7 +196,7 @@ struct ImportSheet: View {
                     Image(systemName: "arrow.right")
                 }
                 .font(.headline)
-                .foregroundColor(.white)
+                .foregroundStyle(.white)
                 .frame(maxWidth: .infinity)
                 .padding()
                 .background(Color.otisInfo)
@@ -215,7 +215,7 @@ struct ImportSheet: View {
             // Animated icon
             Image(systemName: "arrow.down.circle")
                 .font(.system(size: 60))
-                .foregroundColor(.otisInfo)
+                .foregroundStyle(Color.otisInfo)
                 .symbolEffect(.pulse.wholeSymbol, options: .repeating)
 
             Text(Strings.DataImport.importing)
@@ -235,12 +235,12 @@ struct ImportSheet: View {
 
                     Text(localizedComponentName(progress.currentComponent))
                         .font(.caption)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
 
                     if progress.itemsImportedSoFar > 0 {
                         Text(Strings.DataImport.itemsImported(progress.itemsImportedSoFar))
                             .font(.subheadline)
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(.secondary)
                     }
                 }
                 .padding(.horizontal, 40)
@@ -263,7 +263,7 @@ struct ImportSheet: View {
             // Success icon
             Image(systemName: "checkmark.circle.fill")
                 .font(.system(size: 60))
-                .foregroundColor(.otisSuccess)
+                .foregroundStyle(Color.otisSuccess)
 
             Text(Strings.DataImport.importComplete)
                 .font(.headline)
@@ -274,12 +274,12 @@ struct ImportSheet: View {
                         .font(.title3)
 
                     Text(Strings.DataImport.totalItems(result.itemsImported))
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
 
                     if !result.errors.isEmpty {
                         Text(Strings.DataImport.errors(result.errors.count))
                             .font(.caption)
-                            .foregroundColor(.otisWarning)
+                            .foregroundStyle(Color.otisWarning)
                     }
                 }
             }
@@ -292,7 +292,7 @@ struct ImportSheet: View {
             } label: {
                 Text(Strings.Common.done)
                     .font(.headline)
-                    .foregroundColor(.white)
+                    .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
                     .padding()
                     .background(Color.otisSuccess)
@@ -312,7 +312,7 @@ struct ImportSheet: View {
             // Error icon
             Image(systemName: "exclamationmark.triangle.fill")
                 .font(.system(size: 60))
-                .foregroundColor(.otisWarning)
+                .foregroundStyle(Color.otisWarning)
 
             Text(Strings.DataImport.importFailed)
                 .font(.headline)
@@ -320,7 +320,7 @@ struct ImportSheet: View {
             if let error = errorMessage {
                 Text(error)
                     .font(.subheadline)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
             }
 
@@ -334,7 +334,7 @@ struct ImportSheet: View {
                 } label: {
                     Text(Strings.Common.tryAgain)
                         .font(.headline)
-                        .foregroundColor(.white)
+                        .foregroundStyle(.white)
                         .frame(maxWidth: .infinity)
                         .padding()
                         .background(Color.otisInfo)
@@ -345,7 +345,7 @@ struct ImportSheet: View {
                     onDismiss()
                 } label: {
                     Text(Strings.Common.cancel)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 }
             }
             .padding(.bottom, 20)

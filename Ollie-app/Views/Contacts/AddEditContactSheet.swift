@@ -59,7 +59,7 @@ struct AddEditContactSheet: View {
                 } footer: {
                     if showingNameError && name.trimmingCharacters(in: .whitespaces).isEmpty {
                         Text(Strings.Contacts.nameRequired)
-                            .foregroundColor(.red)
+                            .foregroundStyle(.red)
                     }
                 }
 

@@ -38,7 +38,7 @@ struct DiaryCardView: View {
                             .overlay {
                                 Image(systemName: "photo")
                                     .font(.largeTitle)
-                                    .foregroundColor(.secondary)
+                                    .foregroundStyle(.secondary)
                             }
                     }
                 }

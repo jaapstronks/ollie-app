@@ -42,7 +42,7 @@ struct ProfileRow: View {
     var body: some View {
         HStack {
             Text(label)
-                .foregroundColor(.secondary)
+                .foregroundStyle(.secondary)
             Spacer()
             Text(value)
                 .fontWeight(.medium)

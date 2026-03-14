@@ -22,7 +22,7 @@ struct FoodRecallSettingsView: View {
                         Text(Strings.FoodRecall.enableAlerts)
                     } icon: {
                         Image(systemName: "bell.badge.fill")
-                            .foregroundColor(.orange)
+                            .foregroundStyle(.orange)
                     }
                 }
                 .onChange(of: foodRecallService.settings.enabled) { _, enabled in
@@ -79,23 +79,23 @@ struct FoodRecallSettingsView: View {
                         HStack {
                             ProgressView()
                             Text(Strings.FoodRecall.checking)
-                                .foregroundColor(.secondary)
+                                .foregroundStyle(.secondary)
                         }
                     } else if let lastChecked = foodRecallService.lastChecked {
                         HStack {
                             Text(Strings.FoodRecall.lastChecked)
                             Spacer()
                             Text(lastChecked, style: .relative)
-                                .foregroundColor(.secondary)
+                                .foregroundStyle(.secondary)
                         }
                     }
 
                     if let error = foodRecallService.lastError {
                         HStack {
                             Image(systemName: "exclamationmark.triangle.fill")
-                                .foregroundColor(.orange)
+                                .foregroundStyle(.orange)
                             Text(error.localizedDescription)
-                                .foregroundColor(.secondary)
+                                .foregroundStyle(.secondary)
                                 .font(.caption)
                         }
                     }
@@ -107,7 +107,7 @@ struct FoodRecallSettingsView: View {
                         } label: {
                             HStack {
                                 Image(systemName: "exclamationmark.triangle.fill")
-                                    .foregroundColor(.orange)
+                                    .foregroundStyle(.orange)
                                 Text(Strings.FoodRecall.matchingRecalls(count: foodRecallService.matchingRecalls.count))
                             }
                         }
@@ -163,7 +163,7 @@ private struct BrandPickerSheet: View {
                         if !customBrand.isEmpty {
                             Button(action: addCustomBrand) {
                                 Image(systemName: "plus.circle.fill")
-                                    .foregroundColor(.blue)
+                                    .foregroundStyle(.blue)
                             }
                         }
                     }
@@ -179,11 +179,11 @@ private struct BrandPickerSheet: View {
                         } label: {
                             HStack {
                                 Text(brand)
-                                    .foregroundColor(.primary)
+                                    .foregroundStyle(.primary)
                                 Spacer()
                                 if selectedBrands.contains(brand) {
                                     Image(systemName: "checkmark")
-                                        .foregroundColor(.blue)
+                                        .foregroundStyle(.blue)
                                 }
                             }
                         }
@@ -256,27 +256,27 @@ private struct RecallRowView: View {
                 VStack(alignment: .leading, spacing: 4) {
                     HStack {
                         Image(systemName: recall.severity.icon)
-                            .foregroundColor(severityColor)
+                            .foregroundStyle(severityColor)
                         Text(recall.brand)
                             .font(.headline)
-                            .foregroundColor(.primary)
+                            .foregroundStyle(.primary)
                     }
 
                     Text(recall.product)
                         .font(.subheadline)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                         .lineLimit(1)
 
                     Text(recall.date, style: .date)
                         .font(.caption)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 }
 
                 Spacer()
 
                 if isAcknowledged {
                     Image(systemName: "checkmark.circle.fill")
-                        .foregroundColor(.green)
+                        .foregroundStyle(.green)
                 }
             }
             .opacity(isAcknowledged ? 0.6 : 1)
@@ -316,7 +316,7 @@ private struct RecallDetailSheet: View {
                     VStack(alignment: .leading, spacing: 8) {
                         HStack {
                             Image(systemName: recall.severity.icon)
-                                .foregroundColor(severityColor)
+                                .foregroundStyle(severityColor)
                             Text(recall.severity.label)
                                 .font(.headline)
                         }

@@ -159,7 +159,7 @@ struct DocumentDetailView: View {
                     Text("PDF")
                         .font(.caption2)
                         .fontWeight(.semibold)
-                        .foregroundColor(.white)
+                        .foregroundStyle(.white)
                         .padding(.horizontal, 8)
                         .padding(.vertical, 4)
                         .background(.red, in: RoundedRectangle(cornerRadius: 4))
@@ -177,7 +177,7 @@ struct DocumentDetailView: View {
                         Text(Strings.Documents.noAttachment)
                             .font(.caption)
                     }
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
                 }
         }
     }
@@ -228,13 +228,13 @@ struct DocumentDetailView: View {
     private func detailRow(icon: String, title: String, value: String) -> some View {
         HStack(spacing: 12) {
             Image(systemName: icon)
-                .foregroundColor(.otisAccent)
+                .foregroundStyle(Color.otisAccent)
                 .frame(width: 24)
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(title)
                     .font(.caption)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
                 Text(value)
                     .font(.body)
             }
@@ -245,13 +245,13 @@ struct DocumentDetailView: View {
     private func expiryRow(expiry: Date) -> some View {
         HStack(spacing: 12) {
             Image(systemName: "clock.badge.exclamationmark")
-                .foregroundColor(expiryColor)
+                .foregroundStyle(expiryColor)
                 .frame(width: 24)
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(Strings.Documents.expiryDate)
                     .font(.caption)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
 
                 HStack {
                     Text(expiry.formatted(date: .long, time: .omitted))
@@ -261,7 +261,7 @@ struct DocumentDetailView: View {
                         Text(Strings.Documents.expired)
                             .font(.caption2)
                             .fontWeight(.medium)
-                            .foregroundColor(.white)
+                            .foregroundStyle(.white)
                             .padding(.horizontal, 8)
                             .padding(.vertical, 2)
                             .background(.red, in: Capsule())
@@ -269,7 +269,7 @@ struct DocumentDetailView: View {
                         Text(Strings.Documents.expiresSoon)
                             .font(.caption2)
                             .fontWeight(.medium)
-                            .foregroundColor(.white)
+                            .foregroundStyle(.white)
                             .padding(.horizontal, 8)
                             .padding(.vertical, 2)
                             .background(.orange, in: Capsule())
@@ -298,7 +298,7 @@ struct DocumentDetailView: View {
 
             Text(note)
                 .font(.body)
-                .foregroundColor(.secondary)
+                .foregroundStyle(.secondary)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding()
@@ -331,7 +331,7 @@ struct DocumentDetailView: View {
                         showingFullImage = false
                     } label: {
                         Image(systemName: "xmark")
-                            .foregroundColor(.white)
+                            .foregroundStyle(.white)
                     }
                 }
             }
@@ -357,7 +357,7 @@ struct DocumentDetailView: View {
                         showingFullPDF = false
                     } label: {
                         Image(systemName: "xmark")
-                            .foregroundColor(.primary)
+                            .foregroundStyle(.primary)
                     }
                 }
             }

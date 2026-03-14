@@ -81,12 +81,12 @@ private struct SettingsItemRow: View {
                 Text(title)
             } icon: {
                 Image(systemName: icon)
-                    .foregroundColor(iconColor)
+                    .foregroundStyle(iconColor)
             }
             Spacer()
             if count > 0 {
                 Text("\(count)")
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
             }
         }
     }

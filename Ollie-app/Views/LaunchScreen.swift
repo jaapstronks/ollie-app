@@ -24,12 +24,12 @@ struct LaunchScreen: View {
                 // Paw icon
                 Image(systemName: "pawprint.fill")
                     .font(.system(size: 80))
-                    .foregroundColor(.white)
+                    .foregroundStyle(.white)
 
                 Text(Strings.App.name)
                     .font(.largeTitle)
                     .fontWeight(.bold)
-                    .foregroundColor(.white)
+                    .foregroundStyle(.white)
 
                 Spacer()
 
@@ -38,7 +38,7 @@ struct LaunchScreen: View {
                     .font(.title3)
                     .fontWeight(.semibold)
                     .multilineTextAlignment(.center)
-                    .foregroundColor(.white.opacity(0.9))
+                    .foregroundStyle(.white.opacity(0.9))
                     .padding(.horizontal, 32)
                     .padding(.bottom, 60)
             }

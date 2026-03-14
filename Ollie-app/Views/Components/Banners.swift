@@ -17,7 +17,7 @@ struct UndoBanner: View {
     var body: some View {
         HStack {
             Text(message)
-                .foregroundColor(.white)
+                .foregroundStyle(.white)
 
             Spacer()
 
@@ -25,14 +25,14 @@ struct UndoBanner: View {
                 onUndo()
             }
             .fontWeight(.semibold)
-            .foregroundColor(.yellow)
+            .foregroundStyle(.yellow)
             .frame(minWidth: 44, minHeight: 44)
 
             Button {
                 onDismiss()
             } label: {
                 Image(systemName: "xmark")
-                    .foregroundColor(.white.opacity(0.7))
+                    .foregroundStyle(.white.opacity(0.7))
                     .frame(minWidth: 44, minHeight: 44)
             }
         }

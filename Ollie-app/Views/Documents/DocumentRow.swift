@@ -34,7 +34,7 @@ struct DocumentRow: View {
                 if document.title != nil {
                     Label(document.type.displayName, systemImage: document.type.icon)
                         .font(.caption)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 }
 
                 // Expiry badge
@@ -45,7 +45,7 @@ struct DocumentRow: View {
                 } else if let days = document.daysUntilExpiry, days <= 60 {
                     Text(Strings.Documents.expiresIn(days))
                         .font(.caption)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 }
             }
 
@@ -59,7 +59,7 @@ struct DocumentRow: View {
         Text(text)
             .font(.caption2)
             .fontWeight(.medium)
-            .foregroundColor(.white)
+            .foregroundStyle(.white)
             .padding(.horizontal, 8)
             .padding(.vertical, 2)
             .background(color, in: Capsule())

@@ -49,7 +49,7 @@ struct WalkSessionRow: View {
             // Time display
             Text(session.startTime.timeString)
                 .font(.caption)
-                .foregroundColor(.secondary)
+                .foregroundStyle(.secondary)
                 .frame(width: 44, alignment: .trailing)
 
             // Walk icon with green accent
@@ -60,7 +60,7 @@ struct WalkSessionRow: View {
 
                 Image(systemName: "figure.walk")
                     .font(.system(size: 16, weight: .semibold))
-                    .foregroundColor(.otisSuccess)
+                    .foregroundStyle(Color.otisSuccess)
             }
 
             // Content
@@ -91,7 +91,7 @@ struct WalkSessionRow: View {
                 if let note = session.note, !note.isEmpty {
                     Text(note)
                         .font(.subheadline)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                         .lineLimit(2)
                 }
             }
@@ -124,7 +124,7 @@ struct WalkSessionRow: View {
             // Indented time (empty space to align with parent)
             Text(event.time.timeString)
                 .font(.caption2)
-                .foregroundColor(.secondary)
+                .foregroundStyle(.secondary)
                 .frame(width: 44, alignment: .trailing)
 
             // Small icon
@@ -133,12 +133,12 @@ struct WalkSessionRow: View {
             // Label
             Text(event.type.label)
                 .font(.subheadline)
-                .foregroundColor(.primary)
+                .foregroundStyle(.primary)
 
             if let location = event.location {
                 Text("(\(location.label.lowercased()))")
                     .font(.caption)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
             }
 
             Spacer()
@@ -168,7 +168,7 @@ struct WalkSessionRow: View {
 
             Image(systemName: icon)
                 .font(.system(size: 11, weight: .semibold))
-                .foregroundColor(color)
+                .foregroundStyle(color)
         }
     }
 

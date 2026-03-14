@@ -180,7 +180,7 @@ private struct SettingsHubRow: View {
         HStack(spacing: 16) {
             Image(systemName: icon)
                 .font(.title2)
-                .foregroundColor(iconColor)
+                .foregroundStyle(iconColor)
                 .frame(width: 32)
 
             VStack(alignment: .leading, spacing: 2) {
@@ -188,7 +188,7 @@ private struct SettingsHubRow: View {
                     .font(.headline)
                 Text(subtitle)
                     .font(.subheadline)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
             }
         }
         .padding(.vertical, 8)

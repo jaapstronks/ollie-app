@@ -97,21 +97,21 @@ struct WalkLogSheet: View {
                     } label: {
                         HStack {
                             Image(systemName: "mappin.circle.fill")
-                                .foregroundColor(.otisAccent)
+                                .foregroundStyle(Color.otisAccent)
 
                             if let spot = selectedSpot {
                                 Text(spot.name)
-                                    .foregroundColor(.primary)
+                                    .foregroundStyle(.primary)
                             } else {
                                 Text(Strings.WalkLog.pickSpot)
-                                    .foregroundColor(.secondary)
+                                    .foregroundStyle(.secondary)
                             }
 
                             Spacer()
 
                             Image(systemName: "chevron.right")
                                 .font(.caption)
-                                .foregroundColor(.secondary)
+                                .foregroundStyle(.secondary)
                         }
                     }
                     .buttonStyle(.plain)
@@ -145,7 +145,7 @@ struct WalkLogSheet: View {
                     } label: {
                         Text(Strings.WalkLog.logWalk)
                             .fontWeight(.semibold)
-                            .foregroundColor(.white)
+                            .foregroundStyle(.white)
                             .padding(.horizontal, 16)
                             .padding(.vertical, 8)
                             .background(Color.otisAccent)
@@ -190,7 +190,7 @@ struct WalkLogSheet: View {
             .padding(.horizontal, 16)
             .padding(.vertical, 10)
             .background(isOn.wrappedValue ? color.opacity(0.2) : Color(.tertiarySystemBackground))
-            .foregroundColor(isOn.wrappedValue ? color : .secondary)
+            .foregroundStyle(isOn.wrappedValue ? color : .secondary)
             .overlay(
                 RoundedRectangle(cornerRadius: 10)
                     .strokeBorder(isOn.wrappedValue ? color : Color.clear, lineWidth: 2)

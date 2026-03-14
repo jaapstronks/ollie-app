@@ -79,17 +79,17 @@ struct MealPortionDisplayRow: View {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(portion.label)
                         .font(.headline)
-                        .foregroundColor(.primary)
+                        .foregroundStyle(.primary)
 
                     HStack(spacing: 8) {
                         Label(portion.amount, systemImage: "scalemass")
                             .font(.subheadline)
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(.secondary)
 
                         if let time = portion.targetTime {
                             Label(time, systemImage: "clock")
                                 .font(.subheadline)
-                                .foregroundColor(.secondary)
+                                .foregroundStyle(.secondary)
                         }
                     }
                 }
@@ -98,7 +98,7 @@ struct MealPortionDisplayRow: View {
 
                 Image(systemName: "chevron.right")
                     .font(.caption)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
             }
         }
         .sheet(isPresented: $showingEditor) {

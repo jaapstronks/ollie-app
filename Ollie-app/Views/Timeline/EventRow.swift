@@ -29,7 +29,7 @@ struct EventRow: View {
             // Time
             Text(event.time.timeString)
                 .font(.caption)
-                .foregroundColor(.secondary)
+                .foregroundStyle(.secondary)
                 .frame(width: 44, alignment: .trailing)
 
             // Event icon
@@ -45,33 +45,33 @@ struct EventRow: View {
                     if let location = event.location {
                         Text("(\(location.label.lowercased()))")
                             .font(.subheadline)
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(.secondary)
                     }
                 }
 
                 if let note = event.note, !note.isEmpty {
                     Text(note)
                         .font(.subheadline)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                         .lineLimit(2)
                 }
 
                 if let who = event.who, !who.isEmpty {
                     Label(who, systemImage: "person")
                         .font(.caption)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 }
 
                 if let exercise = event.exercise {
                     Label(exercise, systemImage: "figure.walk")
                         .font(.caption)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 }
 
                 if let result = event.result {
                     Label(result, systemImage: "checkmark.circle")
                         .font(.caption)
-                        .foregroundColor(.green)
+                        .foregroundStyle(.green)
                 }
 
                 // Linked trainer for training events
@@ -84,7 +84,7 @@ struct EventRow: View {
                 if let duration = event.durationMin {
                     Label("\(duration) min", systemImage: "timer")
                         .font(.caption)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 }
 
                 // Walk location
@@ -109,16 +109,16 @@ struct EventRow: View {
 
                     Image(systemName: "chevron.right")
                         .font(.caption)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 }
             } else if event.photo != nil || event.video != nil {
                 HStack(spacing: 8) {
                     Image(systemName: event.video != nil ? "video" : "photo")
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
 
                     Image(systemName: "chevron.right")
                         .font(.caption)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 }
             }
         }

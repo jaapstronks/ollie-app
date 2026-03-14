@@ -80,7 +80,7 @@ struct FlowingDigestText: View {
     var body: some View {
         Text(formattedText)
             .font(.caption)
-            .foregroundColor(.secondary)
+            .foregroundStyle(.secondary)
     }
 
     private var formattedText: String {

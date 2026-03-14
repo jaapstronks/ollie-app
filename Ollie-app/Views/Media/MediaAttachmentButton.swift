@@ -41,7 +41,7 @@ struct MediaAttachmentButton: View {
                         }
                     } label: {
                         Label(Strings.MediaAttachment.remove, systemImage: "xmark.circle.fill")
-                            .foregroundColor(.red)
+                            .foregroundStyle(.red)
                     }
                 }
             } else {
@@ -53,7 +53,7 @@ struct MediaAttachmentButton: View {
                         Image(systemName: buttonIcon)
                         Text(buttonLabel)
                     }
-                    .foregroundColor(.accentColor)
+                    .foregroundStyle(Color.accentColor)
                 }
             }
         }

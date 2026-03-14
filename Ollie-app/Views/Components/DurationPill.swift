@@ -19,7 +19,7 @@ struct DurationPill: View {
         Text(text)
             .font(.caption)
             .fontWeight(.medium)
-            .foregroundColor(isHighlighted ? color : .secondary)
+            .foregroundStyle(isHighlighted ? color : .secondary)
             .padding(.horizontal, 8)
             .padding(.vertical, 4)
             .background(

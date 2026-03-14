@@ -57,10 +57,10 @@ struct ProfileSection: View {
             } label: {
                 HStack {
                     Text(Strings.Settings.name)
-                        .foregroundColor(.primary)
+                        .foregroundStyle(.primary)
                     Spacer()
                     Text(profile.name)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 }
             }
 
@@ -69,7 +69,7 @@ struct ProfileSection: View {
                     Text(Strings.Settings.breed)
                     Spacer()
                     Text(breed)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 }
             }
 
@@ -77,7 +77,7 @@ struct ProfileSection: View {
                 Text(Strings.Settings.size)
                 Spacer()
                 Text(profile.sizeCategory.label)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
             }
 
             Picker(Strings.Settings.gender, selection: genderBinding) {
@@ -118,14 +118,14 @@ struct StatsSection: View {
                 Text(Strings.Settings.age)
                 Spacer()
                 Text("\(profile.ageInWeeks) \(Strings.Common.weeks)")
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
             }
 
             HStack {
                 Text(Strings.Settings.daysHome)
                 Spacer()
                 Text("\(profile.daysHome) \(Strings.Common.days)")
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
             }
         }
     }

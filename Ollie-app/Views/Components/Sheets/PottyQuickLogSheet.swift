@@ -80,7 +80,7 @@ struct PottyQuickLogSheet: View {
                     VStack(spacing: 8) {
                         Text(Strings.PottyQuickLog.what)
                             .font(.subheadline)
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(.secondary)
 
                         HStack(spacing: 12) {
                             ForEach(PottySelection.allCases, id: \.self) { potty in
@@ -106,7 +106,7 @@ struct PottyQuickLogSheet: View {
                     VStack(spacing: 8) {
                         Text(Strings.PottyQuickLog.where_)
                             .font(.subheadline)
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(.secondary)
 
                         HStack(spacing: 16) {
                             LocationSelectionButton(

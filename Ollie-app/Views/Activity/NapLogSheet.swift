@@ -241,7 +241,7 @@ struct NapLogSheet: View {
                     } label: {
                         Text(Strings.NapLog.logNap)
                             .fontWeight(.semibold)
-                            .foregroundColor(.white)
+                            .foregroundStyle(.white)
                             .padding(.horizontal, 16)
                             .padding(.vertical, 8)
                             .background(isValid ? Color.otisSleep : Color.gray)

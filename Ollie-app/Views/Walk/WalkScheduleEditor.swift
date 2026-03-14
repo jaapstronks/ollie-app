@@ -90,13 +90,13 @@ struct WalkScheduleEditor: View {
                 } label: {
                     HStack {
                         Text(walk.label)
-                            .foregroundColor(.primary)
+                            .foregroundStyle(.primary)
                         Spacer()
                         Text(walk.targetTime)
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(.secondary)
                         Image(systemName: "chevron.right")
                             .font(.caption)
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(.secondary)
                     }
                 }
             }
@@ -113,7 +113,7 @@ struct WalkScheduleEditor: View {
                 Text(Strings.WalkScheduleEditor.walksSection)
                 Spacer()
                 Text(Strings.WalkScheduleEditor.walksCount(schedule.walks.count))
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
                     .font(.caption)
             }
         } footer: {
@@ -134,7 +134,7 @@ struct WalkScheduleEditor: View {
                     Text(Strings.WalkScheduleEditor.intervalBetweenWalks)
                     Spacer()
                     Text(Strings.WalkScheduleEditor.intervalMinutes(schedule.intervalMinutes))
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 }
             }
         } header: {
@@ -156,7 +156,7 @@ struct WalkScheduleEditor: View {
                     Text(Strings.WalkScheduleEditor.firstWalkAfter)
                     Spacer()
                     Text(String(format: "%02d:00", schedule.dayStartHour))
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 }
             }
 
@@ -168,7 +168,7 @@ struct WalkScheduleEditor: View {
                     Text(Strings.WalkScheduleEditor.lastWalkBefore)
                     Spacer()
                     Text(schedule.dayEndHour == 24 ? "00:00" : String(format: "%02d:00", schedule.dayEndHour))
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 }
             }
         } header: {
@@ -186,7 +186,7 @@ struct WalkScheduleEditor: View {
 
                 Text(Strings.WalkScheduleEditor.fiveMinuteRule)
                     .font(.caption)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
 
                 switch schedule.maxDurationRule {
                 case .minutesPerMonth(let minutes):
@@ -199,7 +199,7 @@ struct WalkScheduleEditor: View {
                                 .font(.title2)
                                 .fontWeight(.semibold)
                             Text(Strings.WalkScheduleEditor.minutesPerMonthValue(minutes))
-                                .foregroundColor(.secondary)
+                                .foregroundStyle(.secondary)
                         }
                     }
                 case .fixedMinutes(let minutes):
@@ -212,7 +212,7 @@ struct WalkScheduleEditor: View {
                                 .font(.title2)
                                 .fontWeight(.semibold)
                             Text(Strings.Common.minutes)
-                                .foregroundColor(.secondary)
+                                .foregroundStyle(.secondary)
                         }
                     }
                 }

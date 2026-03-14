@@ -34,12 +34,12 @@ struct LogMomentSheet: View {
                         // Date
                         HStack {
                             Image(systemName: "calendar")
-                                .foregroundColor(.secondary)
+                                .foregroundStyle(.secondary)
                             if let date = viewModel.extractedDate {
                                 VStack(alignment: .leading) {
                                     Text(Strings.LogMoment.dateFromPhoto)
                                         .font(.caption)
-                                        .foregroundColor(.secondary)
+                                        .foregroundStyle(.secondary)
                                     Text(date.formatted(date: .long, time: .shortened))
                                         .font(.body)
                                 }
@@ -47,12 +47,12 @@ struct LogMomentSheet: View {
                                 VStack(alignment: .leading) {
                                     Text(Strings.LogMoment.date)
                                         .font(.caption)
-                                        .foregroundColor(.secondary)
+                                        .foregroundStyle(.secondary)
                                     Text(Date().formatted(date: .long, time: .shortened))
                                         .font(.body)
                                     Text(Strings.LogMoment.nowNoDateInPhoto)
                                         .font(.caption2)
-                                        .foregroundColor(.secondary)
+                                        .foregroundStyle(.secondary)
                                 }
                             }
                             Spacer()
@@ -66,11 +66,11 @@ struct LogMomentSheet: View {
                            let lon = viewModel.extractedLongitude {
                             HStack {
                                 Image(systemName: "location")
-                                    .foregroundColor(.secondary)
+                                    .foregroundStyle(.secondary)
                                 VStack(alignment: .leading) {
                                     Text(Strings.LogMoment.locationFromPhoto)
                                         .font(.caption)
-                                        .foregroundColor(.secondary)
+                                        .foregroundStyle(.secondary)
                                     Text(String(format: "%.4f, %.4f", lat, lon))
                                         .font(.body)
                                 }
@@ -86,7 +86,7 @@ struct LogMomentSheet: View {
                     VStack(alignment: .leading, spacing: 8) {
                         Text(Strings.LogMoment.note)
                             .font(.caption)
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(.secondary)
 
                         TextField(Strings.LogMoment.whatHappened, text: $viewModel.note, axis: .vertical)
                             .lineLimit(3...6)

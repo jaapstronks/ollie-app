@@ -110,14 +110,14 @@ struct ContactDetailView: View {
         VStack(spacing: 12) {
             Image(systemName: contact.contactType.icon)
                 .font(.system(size: 40))
-                .foregroundColor(.otisAccent)
+                .foregroundStyle(Color.otisAccent)
                 .frame(width: 80, height: 80)
                 .background(Color.otisAccent.opacity(0.1))
                 .clipShape(Circle())
 
             Text(contact.contactType.displayName)
                 .font(.subheadline)
-                .foregroundColor(.secondary)
+                .foregroundStyle(.secondary)
         }
     }
 
@@ -170,14 +170,14 @@ struct ContactDetailView: View {
             VStack(spacing: 6) {
                 Image(systemName: icon)
                     .font(.system(size: 24))
-                    .foregroundColor(color)
+                    .foregroundStyle(color)
                     .frame(width: 56, height: 56)
                     .background(color.opacity(0.1))
                     .clipShape(Circle())
 
                 Text(label)
                     .font(.caption)
-                    .foregroundColor(.primary)
+                    .foregroundStyle(.primary)
             }
         }
         .buttonStyle(.plain)
@@ -227,7 +227,7 @@ struct ContactDetailView: View {
                     Spacer()
                     Text(Strings.Contacts.noContactsHint)
                         .font(.subheadline)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)
                     Spacer()
                 }
@@ -244,13 +244,13 @@ struct ContactDetailView: View {
     private func detailRow(icon: String, title: String, value: String) -> some View {
         HStack(spacing: 12) {
             Image(systemName: icon)
-                .foregroundColor(.otisAccent)
+                .foregroundStyle(Color.otisAccent)
                 .frame(width: 24)
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(title)
                     .font(.caption)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
                 Text(value)
                     .font(.body)
             }
@@ -365,7 +365,7 @@ struct ContactDetailView: View {
 
             Text(notes)
                 .font(.body)
-                .foregroundColor(.secondary)
+                .foregroundStyle(.secondary)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding()

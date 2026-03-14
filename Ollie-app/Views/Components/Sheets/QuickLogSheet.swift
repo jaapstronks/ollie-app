@@ -66,7 +66,7 @@ struct QuickLogSheet: View {
                 VStack(spacing: 8) {
                     Text(Strings.QuickLogSheet.where_)
                         .font(.subheadline)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
 
                     HStack(spacing: 16) {
                         LocationToggleButton(
@@ -136,10 +136,10 @@ struct QuickLogSheet: View {
             HStack {
                 Text(Strings.WalkLocations.location)
                     .font(.subheadline)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
                 Text(Strings.WalkLocations.optional)
                     .font(.caption)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
             }
 
             if showingSpotNameInput, let lat = capturedLatitude, let lon = capturedLongitude {

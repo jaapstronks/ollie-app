@@ -99,7 +99,7 @@ struct AppSettingsView: View {
                     VStack(alignment: .leading, spacing: 4) {
                         Text(Strings.DataImport.lastImportResult)
                             .font(.caption)
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(.secondary)
                         Text(Strings.DataImport.importSummary(
                             components: result.componentsImported,
                             items: result.itemsImported

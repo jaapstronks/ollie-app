@@ -59,7 +59,7 @@ struct AddDocumentSheet: View {
                                 if let pageCount = PDFDocument(data: pdfData)?.pageCount {
                                     Text(Strings.Documents.pageCount(pageCount))
                                         .font(.caption)
-                                        .foregroundColor(.secondary)
+                                        .foregroundStyle(.secondary)
                                 }
                             }
 
@@ -74,7 +74,7 @@ struct AddDocumentSheet: View {
                                 }
                             } label: {
                                 Label(Strings.MediaAttachment.remove, systemImage: "xmark.circle.fill")
-                                    .foregroundColor(.red)
+                                    .foregroundStyle(.red)
                             }
                         }
                     } else {
@@ -302,7 +302,7 @@ private struct PDFThumbnailPreview: View {
                     .fill(Color(.systemGray5))
                     .overlay {
                         Image(systemName: "doc.fill")
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(.secondary)
                     }
             }
         }

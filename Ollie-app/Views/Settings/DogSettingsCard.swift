@@ -277,7 +277,7 @@ struct DogSettingsCard: View {
         HStack(spacing: 12) {
             Image(systemName: icon)
                 .font(.system(size: 18))
-                .foregroundColor(iconColor)
+                .foregroundStyle(iconColor)
                 .frame(width: 28)
 
             Text(title)

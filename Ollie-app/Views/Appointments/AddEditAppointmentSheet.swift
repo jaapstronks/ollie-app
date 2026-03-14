@@ -95,7 +95,7 @@ struct AddEditAppointmentSheet: View {
                 } footer: {
                     if showingTitleError && title.trimmingCharacters(in: .whitespaces).isEmpty {
                         Text(Strings.Contacts.nameRequired)
-                            .foregroundColor(.red)
+                            .foregroundStyle(.red)
                     }
                 }
 
@@ -194,7 +194,7 @@ struct AddEditAppointmentSheet: View {
 
         if suggestedContacts.isEmpty {
             Text(Strings.Appointments.noContact)
-                .foregroundColor(.secondary)
+                .foregroundStyle(.secondary)
         } else {
             Picker(Strings.Appointments.linkedContact, selection: $linkedContactID) {
                 Text(Strings.Appointments.noContact).tag(nil as UUID?)

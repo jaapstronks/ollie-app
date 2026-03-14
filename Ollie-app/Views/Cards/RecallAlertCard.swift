@@ -28,18 +28,18 @@ struct RecallAlertCard: View {
                             .frame(width: 40, height: 40)
                         Image(systemName: highestSeverity.icon)
                             .font(.system(size: 18))
-                            .foregroundColor(iconColor)
+                            .foregroundStyle(iconColor)
                     }
 
                     // Content
                     VStack(alignment: .leading, spacing: 2) {
                         Text(Strings.FoodRecall.alertTitle)
                             .font(.headline)
-                            .foregroundColor(.primary)
+                            .foregroundStyle(.primary)
 
                         Text(alertMessage)
                             .font(.subheadline)
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(.secondary)
                             .lineLimit(2)
                     }
 
@@ -48,7 +48,7 @@ struct RecallAlertCard: View {
                     // Chevron
                     Image(systemName: "chevron.right")
                         .font(.caption)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 }
                 .padding()
                 .background(
@@ -162,27 +162,27 @@ private struct RecallAlertRow: View {
                 VStack(alignment: .leading, spacing: 4) {
                     HStack {
                         Image(systemName: recall.severity.icon)
-                            .foregroundColor(severityColor)
+                            .foregroundStyle(severityColor)
                         Text(recall.brand)
                             .font(.headline)
-                            .foregroundColor(.primary)
+                            .foregroundStyle(.primary)
                     }
 
                     Text(recall.reason)
                         .font(.subheadline)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                         .lineLimit(2)
 
                     Text(recall.date, style: .date)
                         .font(.caption)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 }
 
                 Spacer()
 
                 Image(systemName: "chevron.right")
                     .font(.caption)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
             }
         }
         .sheet(isPresented: $showingDetail) {
@@ -215,7 +215,7 @@ private struct RecallDetailView: View {
                     HStack {
                         Image(systemName: recall.severity.icon)
                             .font(.title)
-                            .foregroundColor(severityColor)
+                            .foregroundStyle(severityColor)
                         Text(recall.severity.label)
                             .font(.title2.bold())
                     }
@@ -237,7 +237,7 @@ private struct RecallDetailView: View {
                             .font(.headline)
                         Text(recall.reason)
                             .font(.body)
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(.secondary)
                     }
 
                     // Actions
@@ -266,7 +266,7 @@ private struct RecallDetailView: View {
                             .frame(maxWidth: .infinity)
                             .padding()
                             .background(Color.green.opacity(0.1))
-                            .foregroundColor(.green)
+                            .foregroundStyle(.green)
                             .cornerRadius(10)
                         }
                     }
@@ -304,10 +304,10 @@ private struct DetailRow: View {
     var body: some View {
         HStack {
             Text(label)
-                .foregroundColor(.secondary)
+                .foregroundStyle(.secondary)
             Spacer()
             Text(value)
-                .foregroundColor(.primary)
+                .foregroundStyle(.primary)
         }
     }
 }

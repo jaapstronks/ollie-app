@@ -51,7 +51,7 @@ struct EndSleepSheet: View {
             HStack(spacing: 12) {
                 Image(systemName: "sun.max.fill")
                     .font(.title)
-                    .foregroundColor(.yellow)
+                    .foregroundStyle(.yellow)
 
                 Text(Strings.SleepSession.endSleep)
                     .font(.title2)
@@ -66,7 +66,7 @@ struct EndSleepSheet: View {
 
                 Text(Strings.SleepStatus.started(time: sleepStartTime.timeString))
                     .font(.subheadline)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
             }
             .padding()
             .frame(maxWidth: .infinity)
@@ -77,7 +77,7 @@ struct EndSleepSheet: View {
             VStack(spacing: 12) {
                 Text(Strings.SleepSession.wakeUpTime)
                     .font(.subheadline)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
 
                 // Tappable time display
                 Button {
@@ -85,13 +85,13 @@ struct EndSleepSheet: View {
                 } label: {
                     HStack {
                         Image(systemName: "clock")
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(.secondary)
                         Text(wakeUpTime.timeString)
                             .font(.title3)
                             .fontWeight(.medium)
                         Image(systemName: "chevron.down")
                             .font(.caption)
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(.secondary)
                     }
                     .padding(.horizontal, 16)
                     .padding(.vertical, 10)
@@ -129,7 +129,7 @@ struct EndSleepSheet: View {
                 Button(Strings.Common.cancel) {
                     onCancel()
                 }
-                .foregroundColor(.secondary)
+                .foregroundStyle(.secondary)
                 .frame(minWidth: 44, minHeight: 44)
                 .accessibilityIdentifier("END_SLEEP_CANCEL_BUTTON")
 
@@ -142,7 +142,7 @@ struct EndSleepSheet: View {
                         Text(Strings.SleepSession.logWakeUp)
                     }
                     .font(.headline)
-                    .foregroundColor(.white)
+                    .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 14)
                     .background(Color.accentColor)

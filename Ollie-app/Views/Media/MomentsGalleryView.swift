@@ -205,7 +205,7 @@ struct GalleryThumbnail: View {
                         .fill(Color(.tertiarySystemBackground))
                         .overlay {
                             Image(systemName: "photo")
-                                .foregroundColor(.secondary)
+                                .foregroundStyle(.secondary)
                         }
                 }
             }

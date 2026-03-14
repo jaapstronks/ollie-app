@@ -124,7 +124,7 @@ struct MediaPreviewView: View {
                         .accessibilityHint(Strings.MediaPreview.zoomHint)
                 } else {
                     Text(Strings.MediaPreview.photoNotFound)
-                        .foregroundColor(.white)
+                        .foregroundStyle(.white)
                 }
 
                 // Controls overlay
@@ -137,7 +137,7 @@ struct MediaPreviewView: View {
                             } label: {
                                 Image(systemName: "xmark")
                                     .font(.title2)
-                                    .foregroundColor(.white)
+                                    .foregroundStyle(.white)
                                     .padding()
                                     .background(Circle().fill(Color.black.opacity(0.5)))
                             }
@@ -153,7 +153,7 @@ struct MediaPreviewView: View {
                             } label: {
                                 Image(systemName: "square.and.arrow.up")
                                     .font(.title2)
-                                    .foregroundColor(.white)
+                                    .foregroundStyle(.white)
                                     .padding()
                                     .background(Circle().fill(Color.black.opacity(0.5)))
                             }
@@ -165,7 +165,7 @@ struct MediaPreviewView: View {
                             } label: {
                                 Image(systemName: "trash")
                                     .font(.title2)
-                                    .foregroundColor(.red)
+                                    .foregroundStyle(.red)
                                     .padding()
                                     .background(Circle().fill(Color.black.opacity(0.5)))
                             }
@@ -183,25 +183,25 @@ struct MediaPreviewView: View {
                                     .accessibilityHidden(true)
                                 Text(event.type.label)
                                     .font(.headline)
-                                    .foregroundColor(.white)
+                                    .foregroundStyle(.white)
 
                                 Spacer()
 
                                 Text(event.time.formatted(date: .abbreviated, time: .shortened))
                                     .font(.subheadline)
-                                    .foregroundColor(.white.opacity(0.8))
+                                    .foregroundStyle(.white.opacity(0.8))
                             }
 
                             if let note = event.note, !note.isEmpty {
                                 Text(note)
                                     .font(.body)
-                                    .foregroundColor(.white.opacity(0.9))
+                                    .foregroundStyle(.white.opacity(0.9))
                             }
 
                             if let lat = event.latitude, let lon = event.longitude {
                                 Label(String(format: "%.4f, %.4f", lat, lon), systemImage: "location")
                                     .font(.caption)
-                                    .foregroundColor(.white.opacity(0.7))
+                                    .foregroundStyle(.white.opacity(0.7))
                             }
                         }
                         .padding()

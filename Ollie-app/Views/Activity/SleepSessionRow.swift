@@ -22,17 +22,17 @@ struct SleepSessionRow: View {
             VStack(alignment: .trailing, spacing: 2) {
                 Text(session.startTime.timeString)
                     .font(.caption)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
 
                 if let endTime = session.endTime {
                     Text(endTime.timeString)
                         .font(.caption)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 } else {
                     // Ongoing indicator
                     Text("...")
                         .font(.caption)
-                        .foregroundColor(.otisSleep)
+                        .foregroundStyle(Color.otisSleep)
                 }
             }
             .frame(width: 44, alignment: .trailing)
@@ -52,7 +52,7 @@ struct SleepSessionRow: View {
                 if let note = note, !note.isEmpty {
                     Text(note)
                         .font(.subheadline)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                         .lineLimit(2)
                 }
             }
@@ -99,7 +99,7 @@ struct SleepSessionRow: View {
             if session.isShortNap {
                 Text("(\(Strings.SleepSession.shortNap))")
                     .font(.caption)
-                    .foregroundColor(.otisWarning)
+                    .foregroundStyle(Color.otisWarning)
             }
         }
     }
