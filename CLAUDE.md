@@ -1,64 +1,108 @@
-# Otis iOS — Puppy Logbook App
+# Ollie iOS — Puppy Logbook App
 
 ## Project
-Native iOS app (SwiftUI, Swift) for tracking daily puppy events. Sister project of the [Otis web PWA](https://github.com/jaapstronks/Otis). Works for any puppy — user creates a profile during onboarding with name, birth date, home date, and size category.
+Native iOS app (SwiftUI, Swift) for tracking daily puppy/dog events. Works for any dog — user creates a profile during onboarding with name, birth date, home date, and size category. Supports multiple dogs and family sharing via CloudKit.
 
 ## Architecture
 
-### Pattern: MVVM
+> **Full architecture documentation:** See `docs/ARCHITECTURE.md` for comprehensive patterns and examples.
+
+### Pattern: MVVM with @Observable
 - **Models/** — Data types (`PuppyEvent`, `EventType`, `PuppyProfile`, `MealSchedule`, etc.)
-- **ViewModels/** — Business logic, state management (`TimelineViewModel`)
+- **ViewModels/** — Business logic, state management (`TimelineViewModel`) — use `@Observable`
 - **Views/** — SwiftUI views, composable and small
-- **Services/** — Data persistence (`EventStore`, `ProfileStore`, `DataImporter`)
+- **Services/** — Data persistence stores (`EventStore`, `ProfileStore`, etc.) — use `@Observable`
 - **Utils/** — Helpers, extensions, constants
 
-### PuppyProfile Model
-Each app instance has a `PuppyProfile` stored in `profile.json`:
+### State Management (IMPORTANT)
+
+**Use Swift's Observation framework (iOS 17+), NOT ObservableObject.**
+
+| Pattern | Usage |
+|---------|-------|
+| `@Observable` | All stores and view models |
+| `@State` | View owns the observable (replaces `@StateObject`) |
+| `@Bindable` | View needs bindings to observable properties (replaces `@ObservedObject`) |
+| `@Environment` | Shared observable from ancestor (replaces `@EnvironmentObject`) |
+| `@ObservationIgnored` | Properties excluded from observation |
+
 ```swift
-struct PuppyProfile: Codable {
-    var name: String
-    var breed: String?
-    var birthDate: Date
-    var homeDate: Date
-    var sizeCategory: SizeCategory  // small, medium, large, extraLarge
-    var mealSchedule: MealSchedule
-    var exerciseConfig: ExerciseConfig
-    var predictionConfig: PredictionConfig
+// CORRECT
+@Observable
+@MainActor
+class ProfileStore {
+    var profile: PuppyProfile?
+}
+
+// In App
+.environment(profileStore)
+
+// In View
+@Environment(ProfileStore.self) var profileStore
+
+// WRONG - Do not use
+class ProfileStore: ObservableObject {
+    @Published var profile: PuppyProfile?
+}
+.environmentObject(profileStore)
+@EnvironmentObject var profileStore: ProfileStore
+```
+
+### CloudKit Sync Architecture
+
+CloudKit notifications flow through `CloudKitSyncCoordinator`:
+1. Debounces rapid-fire notifications
+2. Each store checks if its data ACTUALLY changed before reloading
+3. Avoids cascade reloads and infinite loops
+
+**Every store handling CloudKit changes must implement change detection:**
+```swift
+func handleRemoteChange() {
+    let previousIds = Set(items.map { $0.id })
+    let freshItems = fetchFromCoreData()
+
+    // Skip if nothing changed
+    if Set(freshItems.map { $0.id }) == previousIds {
+        return
+    }
+
+    items = freshItems
 }
 ```
-Profile provides computed properties: `ageInWeeks`, `ageInMonths`, `daysHome`, `maxExerciseMinutes`.
+
+**Never save to Core Data inside a sync handler** — this triggers new notifications and creates loops.
 
 ### Data Model
-Events are stored as JSONL (one JSON object per line), same format as the web app:
-```json
-{"time":"2026-02-19T08:15:00+01:00","type":"sociaal","who":"Buurhond Sasha","note":"Kennismaking","photo":"https://..."}
-```
 
-**Event types:** `eten`, `drinken`, `plassen`, `poepen`, `slapen`, `ontwaken`, `uitlaten`, `tuin`, `training`, `bench`, `sociaal`, `milestone`, `gedrag`, `gewicht`
+All data is stored in **Core Data with CloudKit** sync via `NSPersistentCloudKitContainer`.
 
-**Key fields:**
+**PuppyProfile** — stored in Core Data, provides computed properties: `ageInWeeks`, `ageInMonths`, `daysHome`, `maxExerciseMinutes`.
+
+**PuppyEvent** — the core event entity with fields:
 | Field | Type | When |
 |-------|------|------|
-| `time` | ISO 8601 with timezone (+01:00 / +02:00) | Always |
-| `type` | String (see above) | Always |
-| `location` | `"buiten"` / `"binnen"` | Required for `plassen`, `poepen` |
+| `time` | Date | Always |
+| `type` | EventType enum | Always |
+| `location` | `.buiten` / `.binnen` | Required for `plassen`, `poepen` |
 | `note` | String | Optional, free text |
 | `who` | String | `sociaal` events |
 | `exercise` / `result` | String | `training` events |
-| `duration_min` | Int | Optional duration |
-| `photo` / `video` | URL string | Optional media |
+| `durationMin` | Int | Optional duration |
+| `photo` / `thumbnailPath` | String | Local file paths for media |
+
+**Event types:** `eten`, `drinken`, `plassen`, `poepen`, `slapen`, `ontwaken`, `uitlaten`, `tuin`, `training`, `bench`, `sociaal`, `milestone`, `gedrag`, `gewicht`, `moment`
 
 ### Storage
-- Local JSONL files in app documents directory: `data/YYYY-MM-DD.jsonl`
-- Same format as web app for potential data portability
-- No Core Data, no SwiftData — keep it simple
+- **Core Data with CloudKit** — `NSPersistentCloudKitContainer` for sync
+- Private store: user's own data
+- Shared store: data shared between family/partner accounts
+- CloudKit sync handled by `CloudKitSyncCoordinator`
+- Media files stored locally with CloudKit sync via `MediaCloudService`
 
 ### Constants
-App-wide constants (non-profile-specific) are in `Utils/Constants.swift`:
-- `dataDirectoryName` — folder for JSONL files
-- `profileFileName` — profile storage file
+App-wide constants are in `Utils/Constants.swift`:
 - `quickLogTypes` — event types shown in quick-log bar
-- GitHub repo info for data import
+- Layout constants, animation durations, etc.
 
 User-specific values (birth date, bedtime hour, etc.) come from `PuppyProfile`.
 
@@ -100,38 +144,40 @@ eventType.label  // Returns localized string
 ## Design Principles
 - **Mobile-first UX** — Big tap targets, quick event logging (2 taps max for common events)
 - **Timeline view** as home screen — today's events chronologically
-- **Quick-log bar** — persistent bottom bar with most common event types
-- **SwiftUI native** — use system components, SF Symbols, no custom design system yet
+- **FAB with radial menu** — floating action button for quick event logging
+- **SwiftUI native** — use system components, SF Symbols
 - **Dark mode support** from day one
+- **Atmospheric UI** — dynamic backgrounds based on time of day and weather
 
-## Key Features (in order of priority)
+## Key Features
 1. **Onboarding** — new users create puppy profile (name, birth date, home date, size)
 2. **Event logging** — tap to log, auto-timestamp, optional details
 3. **Timeline view** — today's events with emoji, time, notes
 4. **Day navigation** — pick date to see other days
-5. **Quick-log bar** — bottom bar with common event types (plassen, poepen, eten, slapen, etc.)
+5. **FAB (Floating Action Button)** — quick access to all event types
 6. **Stats dashboard** — potty gaps, sleep analysis, meal tracking
 7. **Potty predictions** — "time since last plas" + predicted next based on patterns
-8. **Data import** — import existing data from GitHub (Otis web app repo)
-9. **Settings** — view/edit profile, meal schedule, import data
-10. **Photo attachment** — camera or library, stored with event (TODO)
-11. **Notifications** — "het is X min geleden sinds laatste plas" (TODO)
+8. **Photo/video moments** — camera or library, stored with event, CloudKit synced
+9. **Notifications** — potty reminders, walk suggestions, medication reminders
+10. **Multi-dog support** — switch between profiles, shared household data
+11. **Family sharing** — CloudKit shared zone for partner/family access
+12. **AI insights** — morning briefings, health analysis, training guidance (Otis+)
 
-## Business Logic (port from web app)
-The web app (JS) has battle-tested calculation modules to port:
-- `calculations/gaps.js` — potty gap analysis, median/average intervals
-- `calculations/predictions.js` — next potty prediction with trigger adjustments
-- `calculations/sleep.js` — night sleep analysis, nap tracking
-- `calculations/patterns.js` — behavioral pattern detection
-- `calculations/streaks.js` — consecutive outdoor potty streaks
+## Business Logic
+Calculation modules in `Calculations/` and `OtisShared/Sources/OtisShared/Calculations/`:
+- Gap analysis — potty gap tracking, median/average intervals
+- Predictions — next potty prediction with trigger adjustments
+- Sleep analysis — night sleep, nap tracking, session building
+- Pattern detection — behavioral patterns, trigger analysis
+- Streaks — consecutive outdoor potty streaks
 
 **Important rule:** Naps < 15 minutes count toward total sleep time but do NOT trigger post-sleep potty predictions.
 
 ## Build & Run
-- Open `Otis-app.xcodeproj` in Xcode
+- Open `Ollie-app.xcodeproj` in Xcode
 - Select iPhone simulator or connected device
 - `Cmd+R` to build and run
-- Or from terminal: `xcodebuild -scheme Otis-app -destination 'platform=iOS Simulator,name=iPhone 16'`
+- Or from terminal: `xcodebuild -scheme Ollie-app -destination 'platform=iOS Simulator,name=iPhone 16'`
 
 ## Conventions
 - Swift naming conventions (camelCase properties, PascalCase types)
