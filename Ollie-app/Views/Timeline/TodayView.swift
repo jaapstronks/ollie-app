@@ -375,6 +375,9 @@ struct TodayView: View {
                     events: recentPhotos,
                     startIndex: 0
                 )
+            },
+            onLikeToggle: { event in
+                _ = eventStore.toggleLike(on: event)
             }
         )
     }
