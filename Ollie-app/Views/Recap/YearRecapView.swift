@@ -9,7 +9,7 @@ import OtisShared
 
 /// Full-screen sheet showing year-end statistics and moments
 struct YearRecapView: View {
-    @ObservedObject var viewModel: YearRecapViewModel
+    @Bindable var viewModel: YearRecapViewModel
     let onDismiss: () -> Void
 
     @State private var showingShareSheet = false

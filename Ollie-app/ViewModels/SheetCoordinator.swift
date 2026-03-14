@@ -21,8 +21,9 @@ struct AppointmentPrefill: Equatable {
 }
 
 /// Manages sheet presentation state for the timeline view
+@Observable
 @MainActor
-final class SheetCoordinator: ObservableObject {
+final class SheetCoordinator {
 
     // MARK: - Active Sheet Enum
 
@@ -139,28 +140,35 @@ final class SheetCoordinator: ObservableObject {
         presentSheet(.momentsLightbox(events: events, startIndex: startIndex))
     }
 
-    // MARK: - Published State
+    // MARK: - State
 
     /// Current active sheet (nil when no sheet is shown)
-    @Published var activeSheet: ActiveSheet?
+    var activeSheet: ActiveSheet? {
+        didSet {
+            // Notify when sheet is dismissed (for celebration flush)
+            if activeSheet == nil && oldValue != nil {
+                NotificationCenter.default.post(name: .sheetDismissed, object: self)
+            }
+        }
+    }
 
     /// Delete confirmation state (separate from sheets - uses confirmation dialog)
-    @Published var showingDeleteConfirmation: Bool = false
-    @Published var eventToDelete: PuppyEvent?
+    var showingDeleteConfirmation: Bool = false
+    var eventToDelete: PuppyEvent?
 
     /// Undo banner state (separate from sheets - uses overlay)
-    @Published var showingUndoBanner: Bool = false
-    @Published var lastDeletedEvent: PuppyEvent?
+    var showingUndoBanner: Bool = false
+    var lastDeletedEvent: PuppyEvent?
 
     /// Celebration banner state (separate from sheets - uses overlay)
-    @Published var showingCelebrationBanner: Bool = false
-    @Published var celebrationMessage: String = ""
+    var showingCelebrationBanner: Bool = false
+    var celebrationMessage: String = ""
 
     /// Undo task for auto-dismiss
-    private var undoTask: Task<Void, Never>?
+    @ObservationIgnored private var undoTask: Task<Void, Never>?
 
     /// Celebration banner task for auto-dismiss
-    private var celebrationTask: Task<Void, Never>?
+    @ObservationIgnored private var celebrationTask: Task<Void, Never>?
 
     // MARK: - Sheet Data Accessors
 
@@ -281,4 +289,10 @@ final class SheetCoordinator: ObservableObject {
         showingCelebrationBanner = false
         celebrationMessage = ""
     }
+}
+
+// MARK: - Notifications
+
+extension Notification.Name {
+    static let sheetDismissed = Notification.Name("sheetDismissed")
 }

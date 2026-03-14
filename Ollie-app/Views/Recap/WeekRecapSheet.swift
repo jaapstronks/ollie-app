@@ -9,7 +9,7 @@ import OtisShared
 
 /// Full-screen sheet showing weekly statistics and moments
 struct WeekRecapSheet: View {
-    @ObservedObject var viewModel: WeekRecapViewModel
+    @Bindable var viewModel: WeekRecapViewModel
     let onDismiss: () -> Void
 
     @State private var showingShareSheet = false

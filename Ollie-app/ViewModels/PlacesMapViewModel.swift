@@ -45,35 +45,36 @@ enum PlaceMarker: Identifiable {
 }
 
 /// ViewModel for managing the expanded places map state
+@Observable
 @MainActor
-class PlacesMapViewModel: ObservableObject {
+class PlacesMapViewModel {
 
-    // MARK: - Published State
+    // MARK: - State
 
-    @Published var activeFilters: Set<PlacesFilterCategory> = [.spots, .discovered, .contacts, .photos] {
+    var activeFilters: Set<PlacesFilterCategory> = [.spots, .discovered, .contacts, .photos] {
         didSet { rebuildVisibleMarkers() }
     }
-    @Published var selectedContactTypes: Set<ContactType> = Set(ContactType.allCases) {
+    var selectedContactTypes: Set<ContactType> = Set(ContactType.allCases) {
         didSet { rebuildVisibleMarkers() }
     }
-    @Published var selectedSpotCategories: Set<SpotCategory> = Set(SpotCategory.allCases) {
+    var selectedSpotCategories: Set<SpotCategory> = Set(SpotCategory.allCases) {
         didSet { rebuildVisibleMarkers() }
     }
-    @Published var selectedDiscoveryTypes: Set<DiscoverablePlaceType> = Set(DiscoverablePlaceType.allCases) {
+    var selectedDiscoveryTypes: Set<DiscoverablePlaceType> = Set(DiscoverablePlaceType.allCases) {
         didSet { rebuildVisibleMarkers() }
     }
 
-    @Published var selectedMarker: PlaceMarker?
-    @Published var cameraPosition: MapCameraPosition = .automatic
-    @Published private(set) var visibleMarkers: [PlaceMarker] = []
+    var selectedMarker: PlaceMarker?
+    var cameraPosition: MapCameraPosition = .automatic
+    private(set) var visibleMarkers: [PlaceMarker] = []
 
     // MARK: - Dependencies
 
-    private let spotStore: SpotStore
-    private let contactStore: ContactStore
-    private let momentsViewModel: MomentsViewModel
-    let discoveryService: DogParkDiscoveryService
-    private var cancellables = Set<AnyCancellable>()
+    @ObservationIgnored private let spotStore: SpotStore
+    @ObservationIgnored private let contactStore: ContactStore
+    @ObservationIgnored private let momentsViewModel: MomentsViewModel
+    @ObservationIgnored let discoveryService: DogParkDiscoveryService
+    @ObservationIgnored private var cancellables = Set<AnyCancellable>()
 
     // MARK: - Init
 
@@ -87,47 +88,31 @@ class PlacesMapViewModel: ObservableObject {
         self.momentsViewModel = momentsViewModel
         self.discoveryService = DogParkDiscoveryService()
 
-        // Observe changes to discovered spots and propagate to this view model
-        // This ensures the view re-renders when discovered spots are loaded
-        discoveryService.$discoveredSpots
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.objectWillChange.send()
-            }
-            .store(in: &cancellables)
-
-        // Also observe isLoading state changes
-        discoveryService.$isLoading
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.objectWillChange.send()
-            }
-            .store(in: &cancellables)
-
         // Rebuild markers when underlying sources change.
-        spotStore.$items
-            .receive(on: DispatchQueue.main)
+        // Note: SpotStore and ContactStore are @Observable via CRUDStore, so we use notifications
+        NotificationCenter.default.publisher(for: .crudStoreItemsDidChange)
+            .filter { notification in
+                guard let identifier = notification.userInfo?["storeIdentifier"] as? String else { return false }
+                return identifier.contains("SpotStore") || identifier.contains("ContactStore")
+            }
+            .receive(on: RunLoop.main)
             .sink { [weak self] _ in
                 self?.rebuildVisibleMarkers()
             }
             .store(in: &cancellables)
 
-        contactStore.$items
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.rebuildVisibleMarkers()
-            }
-            .store(in: &cancellables)
-
+        // DogParkDiscoveryService is still ObservableObject, observe via Combine
         discoveryService.$discoveredSpots
-            .receive(on: DispatchQueue.main)
+            .receive(on: RunLoop.main)
             .sink { [weak self] _ in
                 self?.rebuildVisibleMarkers()
             }
             .store(in: &cancellables)
 
-        momentsViewModel.$cachedPhotoClusters
-            .receive(on: DispatchQueue.main)
+        // MomentsViewModel is @Observable, use notification pattern
+        // Note: MomentsViewModel updates cachedPhotoClusters internally when events change
+        NotificationCenter.default.publisher(for: .eventsDidChange)
+            .debounce(for: .milliseconds(200), scheduler: RunLoop.main)
             .sink { [weak self] _ in
                 self?.rebuildVisibleMarkers()
             }

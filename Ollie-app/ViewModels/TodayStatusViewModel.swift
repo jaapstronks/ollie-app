@@ -12,38 +12,47 @@ import OtisShared
 import SwiftUI
 
 /// ViewModel managing TodayView status calculations and nudge state
+@Observable
 @MainActor
-final class TodayStatusViewModel: ObservableObject {
+final class TodayStatusViewModel {
 
-    // MARK: - Published State (Dismissals)
+    // MARK: - State (Dismissals)
 
-    @Published private(set) var dismissedCrateNudgeDate: Date?
-    @Published private(set) var dismissedWalkTargetNudgeDate: Date?
-    @Published private(set) var dismissedGroomingNudgeDate: Date?
+    private(set) var dismissedCrateNudgeDate: Date?
+    private(set) var dismissedGroomingNudgeDate: Date?
+
+    // MARK: - Persisted Dismissals (7-day cooldown)
+
+    /// Persisted dismissal for walk target nudge (7-day cooldown, survives app restart)
+    @ObservationIgnored @AppStorage("walkTargetNudgeDismissedDate") private var walkTargetNudgeDismissedTimestamp: Double = 0
+
+    private var dismissedWalkTargetNudgeDate: Date? {
+        walkTargetNudgeDismissedTimestamp > 0 ? Date(timeIntervalSince1970: walkTargetNudgeDismissedTimestamp) : nil
+    }
 
     // MARK: - Sheet State
 
-    @Published var showMonthRecapSheet = false
-    @Published var showYearRecapSheet = false
-    @Published var showVetTipsSheet = false
-    @Published var showVisitSummary = false
-    @Published var milestoneToComplete: Milestone?
+    var showMonthRecapSheet = false
+    var showYearRecapSheet = false
+    var showVetTipsSheet = false
+    var showVisitSummary = false
+    var milestoneToComplete: Milestone?
 
     // MARK: - Appointment Nudge Dismissals (Persisted)
 
-    @AppStorage("appointmentNudgeDismissals") private var appointmentNudgeDismissalsData: Data = Data()
+    @ObservationIgnored @AppStorage("appointmentNudgeDismissals") private var appointmentNudgeDismissalsData: Data = Data()
 
     // MARK: - Dependencies
 
-    private let timelineViewModel: TimelineViewModel
-    private let eventStore: EventStore
-    private let routineStore: RoutineStore
-    private let milestoneStore: MilestoneStore
-    private let appointmentStore: AppointmentStore
-    private let trainingMasteryStore: TrainingMasteryStore
+    @ObservationIgnored private let timelineViewModel: TimelineViewModel
+    @ObservationIgnored private let eventStore: EventStore
+    @ObservationIgnored private let routineStore: RoutineStore
+    @ObservationIgnored private let milestoneStore: MilestoneStore
+    @ObservationIgnored private let appointmentStore: AppointmentStore
+    @ObservationIgnored private let trainingMasteryStore: TrainingMasteryStore
 
-    private let tipGenerator = VetVisitTipGenerator()
-    private var cancellables = Set<AnyCancellable>()
+    @ObservationIgnored private let tipGenerator = VetVisitTipGenerator()
+    @ObservationIgnored private var cancellables = Set<AnyCancellable>()
 
     // MARK: - Init
 
@@ -95,7 +104,7 @@ final class TodayStatusViewModel: ObservableObject {
     }
 
     func dismissWalkTargetNudge() {
-        dismissedWalkTargetNudgeDate = Date()
+        walkTargetNudgeDismissedTimestamp = Date().timeIntervalSince1970
     }
 
     // MARK: - Grooming Nudge

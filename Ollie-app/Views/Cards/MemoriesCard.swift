@@ -9,7 +9,7 @@ import OtisShared
 
 /// Photo-forward card showing memories from 1 week / 1 month / 1 year ago
 struct MemoriesCard: View {
-    @ObservedObject var viewModel: MemoriesViewModel
+    var viewModel: MemoriesViewModel
 
     /// Callback when a memory event is tapped - navigates to that date
     var onMemoryTap: ((PuppyEvent) -> Void)?
@@ -244,7 +244,8 @@ struct MemoriesCard: View {
         }
 
         // Then persist to storage (so it stays hidden on scroll/rerender)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+        Task { @MainActor in
+            try? await Task.sleep(for: .seconds(0.25))
             let formatter = ISO8601DateFormatter()
             formatter.formatOptions = [.withFullDate]
             dismissedDateString = formatter.string(from: Date())

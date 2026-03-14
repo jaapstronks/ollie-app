@@ -9,7 +9,7 @@ import OtisShared
 
 /// Card showing this week's focus: socialization progress and upcoming milestones
 struct ThisWeekCard: View {
-    @ObservedObject var viewModel: ThisWeekViewModel
+    var viewModel: ThisWeekViewModel
     var onNavigateToInsights: (() -> Void)?
 
     @Environment(\.colorScheme) private var colorScheme
@@ -33,13 +33,7 @@ struct ThisWeekCard: View {
                         Spacer()
 
                         // Age badge
-                        Text(Strings.Health.weekNumber(viewModel.ageInWeeks))
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                            .padding(.horizontal, 8)
-                            .padding(.vertical, 4)
-                            .background(Color.secondary.opacity(0.1))
-                            .clipShape(Capsule())
+                        CapsuleBadge(Strings.Health.weekNumber(viewModel.ageInWeeks))
 
                         // Navigation indicator
                         Image(systemName: "chevron.right")
@@ -156,13 +150,7 @@ struct ThisWeekCard: View {
                         .foregroundStyle(.secondary)
 
                     ForEach(viewModel.focusCategories, id: \.id) { category in
-                        Text(category.localizedDisplayName)
-                            .font(.caption)
-                            .fontWeight(.medium)
-                            .padding(.horizontal, 6)
-                            .padding(.vertical, 2)
-                            .background(Color.otisAccent.opacity(colorScheme == .dark ? 0.2 : 0.1))
-                            .clipShape(Capsule())
+                        CapsuleBadge(category.localizedDisplayName, color: .otisAccent, style: .tinted)
                     }
                 }
             }

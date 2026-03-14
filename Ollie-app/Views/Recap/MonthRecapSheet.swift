@@ -9,7 +9,7 @@ import OtisShared
 
 /// Full-screen sheet showing monthly statistics and moments
 struct MonthRecapSheet: View {
-    @ObservedObject var viewModel: MonthRecapViewModel
+    @Bindable var viewModel: MonthRecapViewModel
     let onDismiss: () -> Void
 
     @State private var showingShareSheet = false

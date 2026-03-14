@@ -8,23 +8,24 @@ import Combine
 import OtisShared
 import SwiftUI
 
+@Observable
 @MainActor
-final class YearRecapViewModel: ObservableObject {
+final class YearRecapViewModel {
 
-    // MARK: - Published State
+    // MARK: - State
 
-    @Published var recap: YearRecap?
-    @Published var photoEvents: [PuppyEvent] = []
-    @Published var selectedYear: Int
-    @Published var availableYears: [Int] = []
-    @Published var isLoading: Bool = false
+    var recap: YearRecap?
+    var photoEvents: [PuppyEvent] = []
+    var selectedYear: Int
+    var availableYears: [Int] = []
+    var isLoading: Bool = false
 
     // MARK: - Dependencies
 
-    private let eventStore: EventStore
-    private let profileStore: ProfileStore
-    private let weightStore: WeightStore
-    private var cancellables = Set<AnyCancellable>()
+    @ObservationIgnored private let eventStore: EventStore
+    @ObservationIgnored private let profileStore: ProfileStore
+    @ObservationIgnored private let weightStore: WeightStore
+    @ObservationIgnored private var cancellables = Set<AnyCancellable>()
 
     // MARK: - Initialization
 
@@ -117,7 +118,8 @@ final class YearRecapViewModel: ObservableObject {
 
     private func setupBindings() {
         // Reload when events change
-        eventStore.$events
+        // Note: EventStore is @Observable, not ObservableObject, so we use notifications
+        NotificationCenter.default.publisher(for: .eventsDidChange)
             .debounce(for: .milliseconds(300), scheduler: RunLoop.main)
             .sink { [weak self] _ in
                 guard let self = self else { return }

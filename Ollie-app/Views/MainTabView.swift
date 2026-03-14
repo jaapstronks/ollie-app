@@ -16,25 +16,25 @@ struct MainTabView: View {
     let dataImporter: DataImporter
     @ObservedObject var weatherService: WeatherService
     @ObservedObject var notificationService: NotificationService
-    @ObservedObject var spotStore: SpotStore
-    @ObservedObject var medicationStore: MedicationStore
-    @ObservedObject var socializationStore: SocializationStore
-    @ObservedObject var milestoneStore: MilestoneStore
-    @ObservedObject var documentStore: DocumentStore
-    @ObservedObject var contactStore: ContactStore
-    @ObservedObject var appointmentStore: AppointmentStore
-    @ObservedObject var routineStore: RoutineStore
+    var spotStore: SpotStore
+    var medicationStore: MedicationStore
+    var socializationStore: SocializationStore
+    var milestoneStore: MilestoneStore
+    var documentStore: DocumentStore
+    var contactStore: ContactStore
+    var appointmentStore: AppointmentStore
+    var routineStore: RoutineStore
     @ObservedObject var trainingMasteryStore: TrainingMasteryStore
     var onAddDog: (() -> Void)?
 
     @EnvironmentObject var locationManager: LocationManager
     @EnvironmentObject var foodRecallService: FoodRecallService
 
-    @StateObject private var viewModel: TimelineViewModel
-    @StateObject private var momentsViewModel: MomentsViewModel
+    @State private var viewModel: TimelineViewModel
+    @State private var momentsViewModel: MomentsViewModel
     @StateObject private var mediaCaptureViewModel = MediaCaptureViewModel(mediaStore: MediaStore())
-    @StateObject private var memoriesViewModel: MemoriesViewModel
-    @StateObject private var todayStatusViewModel: TodayStatusViewModel
+    @State private var memoriesViewModel: MemoriesViewModel
+    @State private var todayStatusViewModel: TodayStatusViewModel
 
     @State private var showingSettings = false
     @State private var showingFirstSessionHandoff = false
@@ -92,14 +92,14 @@ struct MainTabView: View {
             medicationStore: medicationStore,
             appointmentStore: appointmentStore
         )
-        self._viewModel = StateObject(wrappedValue: viewModel)
-        self._momentsViewModel = StateObject(wrappedValue: MomentsViewModel(
+        self._viewModel = State(initialValue: viewModel)
+        self._momentsViewModel = State(initialValue: MomentsViewModel(
             eventStore: eventStore
         ))
-        self._memoriesViewModel = StateObject(wrappedValue: MemoriesViewModel(
+        self._memoriesViewModel = State(initialValue: MemoriesViewModel(
             eventStore: eventStore
         ))
-        self._todayStatusViewModel = StateObject(wrappedValue: TodayStatusViewModel(
+        self._todayStatusViewModel = State(initialValue: TodayStatusViewModel(
             timelineViewModel: viewModel,
             eventStore: eventStore,
             routineStore: routineStore,

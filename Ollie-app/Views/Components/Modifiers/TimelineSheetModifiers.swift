@@ -11,15 +11,15 @@ import OtisShared
 
 /// ViewModifier that applies all timeline sheet handling
 struct TimelineSheetModifiers: ViewModifier {
-    @ObservedObject var viewModel: TimelineViewModel
+    @Bindable var viewModel: TimelineViewModel
     @ObservedObject var mediaCaptureViewModel: MediaCaptureViewModel
     @Binding var selectedPhotoEvent: PuppyEvent?
     let reduceMotion: Bool
     var spotStore: SpotStore
     var locationManager: LocationManager
 
-    @ObservedObject private var sheetCoordinator: SheetCoordinator
-    @EnvironmentObject private var routineStore: RoutineStore
+    @Bindable private var sheetCoordinator: SheetCoordinator
+    @Environment(RoutineStore.self) private var routineStore
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
     init(
@@ -54,14 +54,29 @@ struct TimelineSheetModifiers: ViewModifier {
 
     // MARK: - Sheet Binding
 
-    /// Binding that excludes mediaPicker from sheet presentation (handled by fullScreenCover)
+    /// Binding that excludes mediaPicker and momentsLightbox from sheet presentation (handled by fullScreenCover)
     private var sheetBinding: Binding<SheetCoordinator.ActiveSheet?> {
         Binding(
             get: {
-                if case .mediaPicker = sheetCoordinator.activeSheet {
+                switch sheetCoordinator.activeSheet {
+                case .mediaPicker, .momentsLightbox:
                     return nil
+                default:
+                    return sheetCoordinator.activeSheet
                 }
-                return sheetCoordinator.activeSheet
+            },
+            set: { sheetCoordinator.activeSheet = $0 }
+        )
+    }
+
+    /// Binding for moments lightbox fullScreenCover presentation
+    private var momentsLightboxBinding: Binding<SheetCoordinator.ActiveSheet?> {
+        Binding(
+            get: {
+                if case .momentsLightbox = sheetCoordinator.activeSheet {
+                    return sheetCoordinator.activeSheet
+                }
+                return nil
             },
             set: { sheetCoordinator.activeSheet = $0 }
         )
@@ -74,6 +89,7 @@ struct TimelineSheetModifiers: ViewModifier {
             .sheetPresentation(binding: sheetBinding, context: context, sizeClass: horizontalSizeClass)
             .mediaPickerPresentation(viewModel: viewModel, mediaCaptureViewModel: mediaCaptureViewModel)
             .mediaPreviewPresentation(selectedPhotoEvent: $selectedPhotoEvent, viewModel: viewModel)
+            .momentsLightboxPresentation(binding: momentsLightboxBinding, context: context)
             .deleteConfirmation(viewModel: viewModel)
             .undoBannerOverlay(viewModel: viewModel, reduceMotion: reduceMotion)
             .celebrationBannerOverlay(viewModel: viewModel, reduceMotion: reduceMotion)
@@ -138,6 +154,29 @@ private extension View {
                     selectedPhotoEvent.wrappedValue = nil
                 }
             )
+        }
+    }
+}
+
+// MARK: - Moments Lightbox Presentation
+
+private extension View {
+
+    func momentsLightboxPresentation(
+        binding: Binding<SheetCoordinator.ActiveSheet?>,
+        context: SheetContentContext
+    ) -> some View {
+        fullScreenCover(item: binding) { sheet in
+            if case .momentsLightbox(let events, let startIndex) = sheet {
+                MomentsLightboxWrapper(
+                    events: events,
+                    startIndex: startIndex,
+                    onDismiss: { context.sheetCoordinator.dismissSheet() },
+                    onDelete: { event in
+                        context.viewModel.deleteEvent(event)
+                    }
+                )
+            }
         }
     }
 }

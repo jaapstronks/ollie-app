@@ -14,6 +14,7 @@
 //
 
 import Foundation
+import Observation
 import OtisShared
 import SwiftUI
 import Combine
@@ -41,10 +42,12 @@ enum TimelineItem: Identifiable {
 }
 
 /// ViewModel for the timeline view, manages event display and logging
+/// Uses @Observable for granular view updates (only re-renders views that access changed properties)
+@Observable
 @MainActor
-class TimelineViewModel: ObservableObject {
-    @Published var currentDate: Date = Date()
-    @Published var events: [PuppyEvent] = []
+class TimelineViewModel {
+    var currentDate: Date = Date()
+    var events: [PuppyEvent] = []
 
     /// Events filtered for timeline display (excludes weight events which belong on Health tab only)
     var timelineDisplayEvents: [PuppyEvent] {
@@ -53,37 +56,41 @@ class TimelineViewModel: ObservableObject {
 
     /// Pre-computed timeline items (events + sleep sessions)
     /// Updated only when events change to avoid O(n²) recomputation on every view render
-    @Published private(set) var timelineItems: [TimelineItem] = []
+    private(set) var timelineItems: [TimelineItem] = []
 
     /// Cached recent photo events (7 days) - updated only when events change
     /// PERFORMANCE: Avoids synchronous Core Data fetch on every view render
-    @Published private(set) var recentPhotoEventsCache: [PuppyEvent] = []
+    private(set) var recentPhotoEventsCache: [PuppyEvent] = []
 
     /// Cached partner activity summary - updated only when events change
     /// PERFORMANCE: Avoids synchronous Core Data fetch on every view render
-    @Published private(set) var partnerActivitySummaryCache: PartnerActivitySummary?
+    private(set) var partnerActivitySummaryCache: PartnerActivitySummary?
 
     /// Cached combined sleep/potty state - updated only when events change
     /// PERFORMANCE: Avoids recomputation on every view render
-    @Published private(set) var cachedCombinedState: CombinedSleepPottyState = .unknown
+    private(set) var cachedCombinedState: CombinedSleepPottyState = .unknown
 
     /// Cached separated upcoming items - updated only when events/forecasts change
     /// PERFORMANCE: Avoids UpcomingCalculations + AI reordering on every view render
-    @Published private(set) var cachedSeparatedItems: (actionable: [ActionableItem], upcoming: [UpcomingItem]) = ([], [])
+    private(set) var cachedSeparatedItems: (actionable: [ActionableItem], upcoming: [UpcomingItem]) = ([], [])
 
     /// Cached vertical timeline items - updated only when events change
     /// PERFORMANCE: buildVerticalItems was called 3+ times per render (for filtering)
-    @Published private(set) var cachedVerticalTimelineItems: [VerticalTimelineItem] = []
+    private(set) var cachedVerticalTimelineItems: [VerticalTimelineItem] = []
 
     /// Celebration trigger for milestone moments
-    @Published var showCelebration = false
-    @Published var celebrationStyle: CelebrationPreset = .milestone
-    @Published var celebrationStreakCount: Int?
+    var showCelebration = false
+    var celebrationStyle: CelebrationPreset = .milestone
+    var celebrationStreakCount: Int?
     private var pendingCelebrationStyle: CelebrationPreset?
     private var pendingCelebrationStreakCount: Int?
 
+    /// Refresh trigger for forcing view updates when external state changes
+    /// Increment this to trigger a view update (used with @Observable)
+    var refreshTrigger: Int = 0
+
     /// Sheet coordinator for all sheet presentations
-    @Published var sheetCoordinator = SheetCoordinator()
+    var sheetCoordinator = SheetCoordinator()
 
     // MARK: - Activity State
 
@@ -140,19 +147,19 @@ class TimelineViewModel: ObservableObject {
 
     /// Captured potty state at wake time (for post-wake tracking)
     /// Delegates to PredictionService
-    @Published private(set) var wakeTimePottyState: WakeTimePottyState?
+    private(set) var wakeTimePottyState: WakeTimePottyState?
 
     /// Time of last potty event (for clearing post-wake state)
     internal var lastPottyLogTime: Date?
 
     /// Date when user dismissed the assumed overnight sleep card (reset daily)
-    @Published internal var dismissedAssumedSleepDate: Date?
+    internal var dismissedAssumedSleepDate: Date?
 
     /// Date when user dismissed the stale logging banner (reset daily)
-    @Published internal var dismissedStaleLoggingDate: Date?
+    internal var dismissedStaleLoggingDate: Date?
 
     /// Whether user has dismissed the first run welcome card (persisted)
-    @Published internal var dismissedFirstRunWelcome: Bool = UserDefaults.standard.bool(forKey: "dismissedFirstRunWelcome")
+    internal var dismissedFirstRunWelcome: Bool = UserDefaults.standard.bool(forKey: "dismissedFirstRunWelcome")
 
     /// Background notification task (stored for cancellation)
     private var notificationTask: Task<Void, Never>?
@@ -160,24 +167,13 @@ class TimelineViewModel: ObservableObject {
     /// Background refresh task for stats/predictions (coalesces rapid event changes)
     private var backgroundRefreshTask: Task<Void, Never>?
 
-    /// Subscription to forward SheetCoordinator changes
-    private var sheetCoordinatorCancellable: AnyCancellable?
+    /// Subscription for sheet dismissal handling
     private var activeSheetCancellable: AnyCancellable?
-
-    /// Subscription to forward ActivityTrackingManager changes
-    private var activityManagerCancellable: AnyCancellable?
 
     /// Subscription to observe EventStore events
     private var eventStoreCancellable: AnyCancellable?
 
-    /// Subscription to forward TimelineStatsCache changes
-    private var statsCacheCancellable: AnyCancellable?
-
-    /// Subscription to forward EventLoggingService changes
-    private var eventLoggingServiceCancellable: AnyCancellable?
-
-    /// Subscription to forward PredictionService changes
-    private var predictionServiceCancellable: AnyCancellable?
+    /// Subscription for moment notification handling
     private var momentNotificationCancellable: AnyCancellable?
 
     /// Subscription to reset to today when app becomes active on a new day
@@ -250,70 +246,17 @@ class TimelineViewModel: ObservableObject {
         self.predictionService = PredictionService(profileStore: profileStore)
         servicesSpan?.finish()
 
-        // Forward SheetCoordinator's objectWillChange to this ViewModel
-        // This ensures views are notified when sheet state changes
-        // PERF: Use receive(on: RunLoop.main) to ensure forwarding happens on NEXT runloop tick
-        // This prevents "Publishing changes from within view updates" warnings
-        sheetCoordinatorCancellable = sheetCoordinator.objectWillChange
-            .receive(on: RunLoop.main)
-            .sink { [weak self] _ in
-                guard !PerformanceDebug.disableObjectWillChangeForwarding else { return }
-                if PerformanceDebug.logObjectWillChange {
-                    print("[PERF] objectWillChange forwarded from: SheetCoordinator")
-                }
-                self?.objectWillChange.send()
-            }
+        // NOTE: With @Observable, we no longer need to forward objectWillChange from nested objects.
+        // Views will only re-render when they access specific properties that change.
+        // The nested services (sheetCoordinator, activityManager, etc.) still use ObservableObject
+        // for now, but their changes are reflected through the properties they update on this class.
 
         // Flush deferred celebrations as soon as sheets are dismissed.
-        activeSheetCancellable = sheetCoordinator.$activeSheet
-            .sink { [weak self] activeSheet in
-                guard activeSheet == nil else { return }
+        // Note: SheetCoordinator is @Observable, so we use notifications instead of Combine publishers
+        activeSheetCancellable = NotificationCenter.default.publisher(for: .sheetDismissed)
+            .receive(on: RunLoop.main)
+            .sink { [weak self] _ in
                 self?.flushPendingCelebrationIfNeeded()
-            }
-
-        // Forward ActivityTrackingManager's objectWillChange to this ViewModel
-        activityManagerCancellable = activityManager.objectWillChange
-            .receive(on: RunLoop.main)
-            .sink { [weak self] _ in
-                guard !PerformanceDebug.disableObjectWillChangeForwarding else { return }
-                if PerformanceDebug.logObjectWillChange {
-                    print("[PERF] objectWillChange forwarded from: ActivityTrackingManager")
-                }
-                self?.objectWillChange.send()
-            }
-
-        // PERF: DISABLED - Don't forward TimelineStatsCache's objectWillChange
-        // Stats are accessed via statsCache property - views that need stats should
-        // observe statsCache directly. Forwarding caused cascade: stats compute ->
-        // objectWillChange -> view rebuild -> trigger more computation.
-        // statsCacheCancellable = statsCache.objectWillChange
-        //     .receive(on: RunLoop.main)
-        //     .sink { [weak self] _ in
-        //         self?.objectWillChange.send()
-        //     }
-
-        // Forward EventLoggingService's objectWillChange to this ViewModel
-        eventLoggingServiceCancellable = eventLoggingService.objectWillChange
-            .receive(on: RunLoop.main)
-            .sink { [weak self] _ in
-                guard !PerformanceDebug.disableObjectWillChangeForwarding else { return }
-                if PerformanceDebug.logObjectWillChange {
-                    print("[PERF] objectWillChange forwarded from: EventLoggingService")
-                }
-                self?.objectWillChange.send()
-            }
-
-        // Note: CoverageGapService uses callbacks, not ObservableObject
-
-        // Forward PredictionService's objectWillChange to this ViewModel
-        predictionServiceCancellable = predictionService.objectWillChange
-            .receive(on: RunLoop.main)
-            .sink { [weak self] _ in
-                guard !PerformanceDebug.disableObjectWillChangeForwarding else { return }
-                if PerformanceDebug.logObjectWillChange {
-                    print("[PERF] objectWillChange forwarded from: PredictionService")
-                }
-                self?.objectWillChange.send()
             }
 
         // Set up service callbacks
@@ -324,15 +267,19 @@ class TimelineViewModel: ObservableObject {
 
         // Observe EventStore's events and sync to this ViewModel
         // This ensures events are updated when EventStore loads them asynchronously
-        // PERF: Use RunLoop.main to prevent "Publishing changes from within view updates"
-        eventStoreCancellable = eventStore.$events
+        // Note: EventStore is @Observable, not ObservableObject, so we use notifications
+        eventStoreCancellable = NotificationCenter.default.publisher(for: .eventsDidChange)
             .receive(on: RunLoop.main)
-            .sink { [weak self] loadedEvents in
+            .sink { [weak self] _ in
                 guard let self = self else { return }
-                self.events = loadedEvents
+                self.events = self.eventStore.events
 
                 // Rebuild timeline items immediately (UI needs this)
                 self.rebuildTimelineItems()
+
+                // REACTIVITY FIX: Update combined state immediately for sleep/potty card visibility
+                // This prevents stale card visibility after logging events (e.g., sleep card staying visible after wake)
+                self.cachedCombinedState = self.combinedSleepPottyState
 
                 // Debounce expensive stats/predictions refresh
                 // This coalesces rapid event changes (e.g., bulk import, quick logging)
@@ -696,6 +643,11 @@ class TimelineViewModel: ObservableObject {
         rebuildTimelineItems()
         // Update first-week experience counts for progressive disclosure
         FirstWeekExperienceService.shared.refreshCounts(from: eventStore.events)
+
+        // REACTIVITY FIX: Update combined state immediately for sleep/potty card visibility
+        // This prevents stale card visibility after logging events (e.g., sleep card staying visible after wake)
+        // The full refreshCachedProperties() will still run after debounce for other cached values
+        self.cachedCombinedState = self.combinedSleepPottyState
     }
 
     /// Notify to refresh notifications

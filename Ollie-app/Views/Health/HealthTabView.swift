@@ -10,17 +10,18 @@ import OtisShared
 
 /// Health tab showing medical timeline, weight, potty training, and stats
 struct HealthTabView: View {
-    @ObservedObject var viewModel: TimelineViewModel
-    @ObservedObject var momentsViewModel: MomentsViewModel
+    @Bindable var viewModel: TimelineViewModel
+    var momentsViewModel: MomentsViewModel
     let onSettingsTap: () -> Void
 
     @EnvironmentObject var subscriptionManager: SubscriptionManager
-    @EnvironmentObject var profileStore: ProfileStore
-    @EnvironmentObject var milestoneStore: MilestoneStore
-    @EnvironmentObject var appointmentStore: AppointmentStore
-    @EnvironmentObject var weightStore: WeightStore
-    @EnvironmentObject var socializationStore: SocializationStore
-    @EnvironmentObject var routineStore: RoutineStore
+    @Environment(ProfileStore.self) var profileStore
+    @Environment(MilestoneStore.self) var milestoneStore
+    @Environment(AppointmentStore.self) var appointmentStore
+    @Environment(WeightStore.self) var weightStore
+    @Environment(SocializationStore.self) var socializationStore
+    @Environment(RoutineStore.self) var routineStore
+    @Environment(ContactStore.self) var contactStore
 
     @State private var showWeightSheet = false
     @State private var showGrowthChart = false
@@ -162,17 +163,18 @@ struct HealthTabView: View {
                 MilestoneCompletionSheet(
                     milestone: milestone,
                     onDismiss: { selectedMilestone = nil },
-                    onComplete: { notes, photoID, vetClinic, completionDate in
+                    onComplete: { notes, photoID, linkedContactID, completionDate in
                         milestoneStore.completeMilestone(
                             milestone,
                             notes: notes,
                             photoID: photoID,
-                            vetClinicName: vetClinic,
+                            linkedContactID: linkedContactID,
                             completionDate: completionDate
                         )
                         selectedMilestone = nil
                     }
                 )
+                .environment(contactStore)
                 .adaptivePresentationDetents(
                     compact: [.large],
                     regular: [.medium, .large]
@@ -518,10 +520,10 @@ private struct HealthMilestoneRow: View {
         onSettingsTap: { print("Settings tapped") }
     )
     .environmentObject(SubscriptionManager.shared)
-    .environmentObject(profileStore)
-    .environmentObject(MilestoneStore())
-    .environmentObject(AppointmentStore())
-    .environmentObject(WeightStore())
-    .environmentObject(SocializationStore())
-    .environmentObject(RoutineStore())
+    .environment(profileStore)
+    .environment(MilestoneStore())
+    .environment(AppointmentStore())
+    .environment(WeightStore())
+    .environment(SocializationStore())
+    .environment(RoutineStore())
 }

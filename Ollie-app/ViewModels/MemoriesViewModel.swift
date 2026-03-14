@@ -10,21 +10,22 @@ import OtisShared
 import Combine
 
 /// ViewModel for the "On This Day" memories card on Today view
+@Observable
 @MainActor
-class MemoriesViewModel: ObservableObject {
+class MemoriesViewModel {
 
-    // MARK: - Published State
+    // MARK: - State
 
     /// The best memory to display (with photo/notes prioritized)
-    @Published var memoryItem: MemoryItem?
+    var memoryItem: MemoryItem?
 
     /// All memorable events from the target date
-    @Published var allMemoriesForDay: [PuppyEvent] = []
+    var allMemoriesForDay: [PuppyEvent] = []
 
     // MARK: - Dependencies
 
-    private let eventStore: EventStore
-    private var cancellables = Set<AnyCancellable>()
+    @ObservationIgnored private let eventStore: EventStore
+    @ObservationIgnored private var cancellables = Set<AnyCancellable>()
 
     // MARK: - Computed Properties
 
@@ -76,16 +77,9 @@ class MemoriesViewModel: ObservableObject {
 
     private func setupObservers() {
         // Watch for event changes with debounce to prevent rapid refreshes during active logging
-        eventStore.$events
+        // Note: EventStore is @Observable, not ObservableObject, so we use notifications
+        NotificationCenter.default.publisher(for: .eventsDidChange)
             .debounce(for: .milliseconds(500), scheduler: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.refresh()
-            }
-            .store(in: &cancellables)
-
-        // Watch for current date changes (no debounce needed - date changes are intentional)
-        eventStore.$currentDate
-            .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 self?.refresh()
             }

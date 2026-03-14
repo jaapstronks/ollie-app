@@ -11,10 +11,10 @@ import TipKit
 
 /// Main "Today" tab showing the daily hub
 struct TodayView: View {
-    @ObservedObject var viewModel: TimelineViewModel
-    @ObservedObject var memoriesViewModel: MemoriesViewModel
-    @ObservedObject var appointmentStore: AppointmentStore
-    @ObservedObject var statusViewModel: TodayStatusViewModel
+    @Bindable var viewModel: TimelineViewModel
+    var memoriesViewModel: MemoriesViewModel
+    var appointmentStore: AppointmentStore
+    @Bindable var statusViewModel: TodayStatusViewModel
     /// Weather service passed down but not observed here to avoid full view redraws
     /// Weather-dependent sections use their own observation via WeatherSectionContainer
     let weatherService: WeatherService
@@ -31,9 +31,9 @@ struct TodayView: View {
 
     @EnvironmentObject private var atmosphereProvider: AtmosphereProvider
     @EnvironmentObject private var foodRecallService: FoodRecallService
-    @EnvironmentObject private var eventStore: EventStore
-    @EnvironmentObject private var weightStore: WeightStore
-    @EnvironmentObject private var contactStore: ContactStore
+    @Environment(EventStore.self) private var eventStore
+    @Environment(WeightStore.self) private var weightStore
+    @Environment(ContactStore.self) private var contactStore
 
     // Trial touchpoint state
     @ObservedObject private var trialManager = TrialManager.shared
@@ -288,7 +288,7 @@ struct TodayView: View {
         }
         .sheet(isPresented: $statusViewModel.showVisitSummary) {
             VisitSummaryView()
-                .environmentObject(viewModel.profileStore)
+                .environment(viewModel.profileStore)
         }
     }
 
@@ -346,7 +346,7 @@ struct TodayView: View {
                     )
                 }
             )
-            .environmentObject(contactStore)
+            .environment(contactStore)
         }
     }
 
@@ -439,7 +439,7 @@ struct EmptyTimelineCard: View {
     )
     .environmentObject(atmosphereProvider)
     .environmentObject(foodRecallService)
-    .environmentObject(SocializationStore())
-    .environmentObject(milestoneStore)
-    .environmentObject(eventStore)
+    .environment(SocializationStore())
+    .environment(milestoneStore)
+    .environment(eventStore)
 }

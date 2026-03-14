@@ -10,21 +10,22 @@ import OtisShared
 import Combine
 
 /// ViewModel for the "This Week" card on Today view
+@Observable
 @MainActor
-class ThisWeekViewModel: ObservableObject {
+class ThisWeekViewModel {
 
-    // MARK: - Published State
+    // MARK: - State
 
-    @Published var upcomingMilestones: [Milestone] = []
-    @Published var currentWeekProgress: WeeklyProgress?
-    @Published var focusCategories: [SocializationCategory] = []
+    var upcomingMilestones: [Milestone] = []
+    var currentWeekProgress: WeeklyProgress?
+    var focusCategories: [SocializationCategory] = []
 
     // MARK: - Dependencies
 
-    private let profileStore: ProfileStore
-    private let milestoneStore: MilestoneStore
-    private let socializationStore: SocializationStore
-    private var cancellables = Set<AnyCancellable>()
+    @ObservationIgnored private let profileStore: ProfileStore
+    @ObservationIgnored private let milestoneStore: MilestoneStore
+    @ObservationIgnored private let socializationStore: SocializationStore
+    @ObservationIgnored private var cancellables = Set<AnyCancellable>()
 
     // MARK: - Computed Properties
 
@@ -108,17 +109,23 @@ class ThisWeekViewModel: ObservableObject {
     // MARK: - Setup
 
     private func setupObservers() {
-        // Watch for profile changes (using activeProfileId since activeProfile is computed)
-        profileStore.$activeProfileId
-            .receive(on: DispatchQueue.main)
+        // Watch for profile changes via notification (ProfileStore is @Observable, not ObservableObject)
+        NotificationCenter.default.publisher(for: .activeProfileChanged)
+            .receive(on: RunLoop.main)
             .sink { [weak self] _ in
                 self?.refresh()
             }
             .store(in: &cancellables)
 
         // Watch for milestone changes
-        milestoneStore.$items
-            .receive(on: DispatchQueue.main)
+        // Note: MilestoneStore is @Observable via CRUDStore, so we use notifications
+        NotificationCenter.default.publisher(for: .crudStoreItemsDidChange)
+            .filter { notification in
+                // Filter for MilestoneStore notifications only
+                guard let identifier = notification.userInfo?["storeIdentifier"] as? String else { return false }
+                return identifier.contains("MilestoneStore")
+            }
+            .receive(on: RunLoop.main)
             .sink { [weak self] _ in
                 self?.refreshMilestones()
             }

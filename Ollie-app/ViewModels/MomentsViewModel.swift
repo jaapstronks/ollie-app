@@ -8,22 +8,23 @@ import Foundation
 import OtisShared
 
 /// ViewModel for the moments gallery view
+@Observable
 @MainActor
-class MomentsViewModel: ObservableObject {
-    @Published var events: [PuppyEvent] = []
-    @Published var isLoading: Bool = false
-    @Published var isLoadingMore: Bool = false
-    @Published private(set) var cachedPhotoClusters: [PhotoCluster] = []
+class MomentsViewModel {
+    var events: [PuppyEvent] = []
+    var isLoading: Bool = false
+    var isLoadingMore: Bool = false
+    private(set) var cachedPhotoClusters: [PhotoCluster] = []
 
     /// Whether there are more events to load
     var hasMoreEvents: Bool { paginationService.hasMoreEvents }
 
     // MARK: - Dependencies
 
-    private let eventStore: EventStore
-    private let mediaStore: MediaStore
-    private let paginationService: MediaPaginationService
-    private var cancellables = Set<AnyCancellable>()
+    @ObservationIgnored private let eventStore: EventStore
+    @ObservationIgnored private let mediaStore: MediaStore
+    @ObservationIgnored private let paginationService: MediaPaginationService
+    @ObservationIgnored private var cancellables = Set<AnyCancellable>()
 
     // MARK: - Init
 
@@ -38,7 +39,8 @@ class MomentsViewModel: ObservableObject {
 
     /// Subscribe to EventStore changes to detect newly added photo events
     private func subscribeToEventStoreChanges() {
-        eventStore.objectWillChange
+        // Note: EventStore is @Observable, not ObservableObject, so we use notifications
+        NotificationCenter.default.publisher(for: .eventsDidChange)
             .debounce(for: .milliseconds(100), scheduler: RunLoop.main)
             .sink { [weak self] _ in
                 self?.checkForNewPhotoEvents()
@@ -148,8 +150,9 @@ class MomentsViewModel: ObservableObject {
         let grouped = Dictionary(grouping: events) { event in
             Calendar.current.startOfDay(for: event.time)
         }
+        // PERF: Use max(by:) O(n) instead of sorted().first O(n log n)
         return grouped.values
-            .compactMap { $0.sorted { $0.time > $1.time }.first }
+            .compactMap { $0.max(by: { $0.time < $1.time }) }
             .sorted { $0.time > $1.time }
     }
 
