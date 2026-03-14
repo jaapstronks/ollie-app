@@ -55,10 +55,16 @@ extension SheetCoordinator.ActiveSheet {
                 sleepStartTime: startTime,
                 onSave: { wakeUpTime in
                     context.viewModel.logWakeUp(time: wakeUpTime)
-                    context.sheetCoordinator.dismissSheet()
+                    // Don't dismiss here - the sheet will show post-wake state
                 },
                 onCancel: {
                     context.sheetCoordinator.dismissSheet()
+                },
+                onStartWalk: {
+                    // Dismiss sheet first, then start walk and show map
+                    context.sheetCoordinator.dismissSheet()
+                    context.viewModel.startWalk()
+                    context.viewModel.showWalkMap()
                 }
             )
 

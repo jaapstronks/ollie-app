@@ -112,6 +112,12 @@ extension Strings {
         static let deleteSessionMessage = String(localized: "This will delete both the sleep and wake-up events.", table: table)
         static let editStartTime = String(localized: "Edit sleep time", table: table)
         static let editEndTime = String(localized: "Edit wake-up time", table: table)
+
+        // Post-wake walk prompt
+        static let wakeUpLogged = String(localized: "Awake!", table: table)
+        static let postWakeWalkPrompt = String(localized: "Time for a quick potty break outside?", table: table)
+        static let startWalk = String(localized: "Start Walk", table: table)
+        static let maybeLater = String(localized: "Maybe later", table: table)
     }
 
     // MARK: - Duration Picker
@@ -373,6 +379,7 @@ extension Strings {
         // Activity in progress
         static let walkInProgress = String(localized: "Walk in progress", table: table)
         static let napInProgress = String(localized: "Napping", table: table)
+        static let tapToEnd = String(localized: "Tap to end", table: table)
         static func inProgressSince(time: String) -> String {
             String(localized: "Started \(time)", table: table)
         }
