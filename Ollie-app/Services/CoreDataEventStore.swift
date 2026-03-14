@@ -20,6 +20,12 @@ final class CoreDataEventStore: @unchecked Sendable {
 
     private let persistenceController: PersistenceController
     private let logger = Logger.otis(category: "CoreDataEventStore")
+    private let fileManager = FileManager.default
+
+    /// Documents directory for photo storage
+    private var documentsURL: URL {
+        fileManager.urls(for: .documentDirectory, in: .userDomainMask).first ?? fileManager.temporaryDirectory
+    }
 
     /// Active profile for scoped queries (set by EventStore)
     /// When set, all read operations will filter by this profile
@@ -28,7 +34,8 @@ final class CoreDataEventStore: @unchecked Sendable {
     /// In-memory cache for frequently accessed date ranges
     private var rangeCache: [String: (events: [PuppyEvent], timestamp: Date)] = [:]
     private let rangeCacheLock = NSLock()
-    private let rangeCacheMaxAge: TimeInterval = 30 // Cache valid for 30 seconds
+    /// PERFORMANCE: Increased from 30s to 120s - cache only invalidated when events change
+    private let rangeCacheMaxAge: TimeInterval = 120 // Cache valid for 120 seconds
 
     // MARK: - Initialization
 
@@ -81,6 +88,10 @@ final class CoreDataEventStore: @unchecked Sendable {
         } else {
             cdEvents = CDPuppyEvent.fetchEvents(from: startDate, to: endDate, in: viewContext)
         }
+
+        // PERFORMANCE: Photo extraction moved to lazy background processing
+        // See processPhotoExtractionAsync() - called once on app launch instead of every fetch
+
         let events = cdEvents.compactMap { $0.toPuppyEvent() }.sorted { $0.time > $1.time }
 
         // Update range cache
@@ -92,11 +103,22 @@ final class CoreDataEventStore: @unchecked Sendable {
     }
 
     /// Async version of readEvents for date ranges - runs on background thread
+    /// PERFORMANCE: Uses cache to avoid redundant Core Data fetches
     func readEventsAsync(from startDate: Date, to endDate: Date) async -> [PuppyEvent] {
+        // Include profile ID in cache key for profile-scoped caching
+        let profileSuffix = activeProfile?.id?.uuidString ?? "all"
+        let cacheKey = "\(startDate.dateString)_to_\(endDate.dateString)_\(profileSuffix)"
+
+        // Check cache synchronously first
+        if let cached = getCachedEvents(for: cacheKey) {
+            return cached
+        }
+
+        // Fetch from Core Data on background thread
         let context = newBackgroundContext()
         let profileId = activeProfile?.id
 
-        return await context.perform {
+        let events = await context.perform {
             let cdEvents: [CDPuppyEvent]
             if let profileId = profileId,
                let profile = CDPuppyProfile.fetch(byId: profileId, in: context) {
@@ -106,6 +128,30 @@ final class CoreDataEventStore: @unchecked Sendable {
             }
             return cdEvents.compactMap { $0.toPuppyEvent() }.sorted { $0.time > $1.time }
         }
+
+        // Update cache synchronously
+        setCachedEvents(events, for: cacheKey)
+
+        return events
+    }
+
+    /// Get cached events (thread-safe, synchronous)
+    private func getCachedEvents(for key: String) -> [PuppyEvent]? {
+        rangeCacheLock.lock()
+        defer { rangeCacheLock.unlock() }
+
+        guard let cached = rangeCache[key],
+              Date().timeIntervalSince(cached.timestamp) < rangeCacheMaxAge else {
+            return nil
+        }
+        return cached.events
+    }
+
+    /// Set cached events (thread-safe, synchronous)
+    private func setCachedEvents(_ events: [PuppyEvent], for key: String) {
+        rangeCacheLock.lock()
+        defer { rangeCacheLock.unlock() }
+        rangeCache[key] = (events: events, timestamp: Date())
     }
 
     /// Read all events for the active profile (or all events if no profile set)
@@ -116,6 +162,7 @@ final class CoreDataEventStore: @unchecked Sendable {
         } else {
             cdEvents = CDPuppyEvent.fetchAllEvents(in: viewContext)
         }
+        // PERFORMANCE: Photo extraction moved to lazy background processing
         return cdEvents.compactMap { $0.toPuppyEvent() }
     }
 
@@ -124,6 +171,9 @@ final class CoreDataEventStore: @unchecked Sendable {
         guard let cdEvent = CDPuppyEvent.fetch(byId: id, in: viewContext) else {
             return nil
         }
+        // PERFORMANCE: Lazy extract only when viewing this specific event's photo
+        // This is acceptable since it's a single event, not a batch
+        extractPhotoDataIfNeeded(from: cdEvent)
         return cdEvent.toPuppyEvent()
     }
 
@@ -154,7 +204,83 @@ final class CoreDataEventStore: @unchecked Sendable {
         } else {
             cdEvents = CDPuppyEvent.fetchRecentEvents(limit: limit, in: viewContext)
         }
+        // PERFORMANCE: Photo extraction moved to lazy background processing
         return cdEvents.compactMap { $0.toPuppyEvent() }
+    }
+
+    // MARK: - Photo Data Helpers
+
+    /// Read photo data from local file system
+    private func readPhotoData(from relativePath: String) -> Data? {
+        let fullURL = documentsURL.appendingPathComponent(relativePath)
+        guard fileManager.fileExists(atPath: fullURL.path) else { return nil }
+        return try? Data(contentsOf: fullURL)
+    }
+
+    /// Write photo data to local file system (background-safe)
+    private nonisolated func writePhotoData(_ data: Data, to relativePath: String, documentsURL: URL) {
+        let fullURL = documentsURL.appendingPathComponent(relativePath)
+
+        // Ensure directory exists
+        let directory = fullURL.deletingLastPathComponent()
+        try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+
+        try? data.write(to: fullURL)
+    }
+
+    /// Check if a photo file exists locally (background-safe)
+    private nonisolated func photoExists(at relativePath: String, documentsURL: URL) -> Bool {
+        let fullURL = documentsURL.appendingPathComponent(relativePath)
+        return FileManager.default.fileExists(atPath: fullURL.path)
+    }
+
+    /// Extract embedded photo data to local file if needed (for photos synced from other users)
+    /// Only used for single-event fetches where the overhead is acceptable
+    private func extractPhotoDataIfNeeded(from cdEvent: CDPuppyEvent) {
+        guard let photoPath = cdEvent.photo,
+              let photoData = cdEvent.photoData,
+              !photoExists(at: photoPath, documentsURL: documentsURL) else {
+            return
+        }
+
+        writePhotoData(photoData, to: photoPath, documentsURL: documentsURL)
+        logger.info("Extracted synced photo for event \(cdEvent.id?.uuidString ?? "unknown")")
+    }
+
+    /// Process synced photos in background - call once at app launch
+    /// This extracts photo data from CloudKit-synced events to local files
+    /// PERFORMANCE: Runs on background thread to avoid blocking main thread
+    func processPhotoExtractionAsync() {
+        let context = newBackgroundContext()
+        let docsURL = self.documentsURL
+
+        Task.detached(priority: .utility) { [weak self] in
+            guard let self = self else { return }
+
+            await context.perform {
+                // Fetch only events that have photoData (synced from other users)
+                let fetchRequest: NSFetchRequest<CDPuppyEvent> = CDPuppyEvent.fetchRequest()
+                fetchRequest.predicate = NSPredicate(format: "photoData != nil AND photo != nil")
+
+                guard let cdEvents = try? context.fetch(fetchRequest) else { return }
+
+                var extractedCount = 0
+                for cdEvent in cdEvents {
+                    guard let photoPath = cdEvent.photo,
+                          let photoData = cdEvent.photoData,
+                          !self.photoExists(at: photoPath, documentsURL: docsURL) else {
+                        continue
+                    }
+
+                    self.writePhotoData(photoData, to: photoPath, documentsURL: docsURL)
+                    extractedCount += 1
+                }
+
+                if extractedCount > 0 {
+                    self.logger.info("Background extracted \(extractedCount) synced photos")
+                }
+            }
+        }
     }
 
     // MARK: - Writing Events
@@ -164,14 +290,16 @@ final class CoreDataEventStore: @unchecked Sendable {
         let context = viewContext
 
         // Check if event already exists
+        let cdEvent: CDPuppyEvent
         if let existing = CDPuppyEvent.fetch(byId: event.id, in: context) {
             existing.update(from: event)
             // Ensure profile link is maintained
             if existing.profile == nil, let profile = activeProfile {
                 existing.profile = profile
             }
+            cdEvent = existing
         } else {
-            let cdEvent = CDPuppyEvent.create(from: event, in: context)
+            cdEvent = CDPuppyEvent.create(from: event, in: context)
             // Link to active profile
             if let profile = activeProfile {
                 cdEvent.profile = profile
@@ -181,6 +309,15 @@ final class CoreDataEventStore: @unchecked Sendable {
                 if let store = profile.persistentStore {
                     context.assign(cdEvent, to: store)
                 }
+            }
+        }
+
+        // Embed photo data in Core Data for sharing between users
+        // This ensures photos sync through the existing CKShare mechanism
+        if let photoPath = event.photo, cdEvent.photoData == nil {
+            if let photoData = readPhotoData(from: photoPath) {
+                cdEvent.photoData = photoData
+                logger.info("Embedded photo data (\(photoData.count) bytes) for event \(event.id)")
             }
         }
 

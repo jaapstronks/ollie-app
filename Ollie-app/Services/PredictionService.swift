@@ -90,6 +90,14 @@ final class PredictionService: ObservableObject {
         isShowingToday: Bool,
         hasActiveCoverageGap: Bool
     ) {
+        // PERFORMANCE: Check debug toggle to skip expensive prediction calculations
+        guard !PerformanceDebug.disablePredictions else {
+            if PerformanceDebug.logExpensiveOperations {
+                print("[PERF] SKIPPED: PredictionService.refresh (disabled by toggle)")
+            }
+            return
+        }
+
         guard let profile = profileStore.profile else {
             // Reset to defaults if no profile
             pottyPrediction = PottyPrediction(

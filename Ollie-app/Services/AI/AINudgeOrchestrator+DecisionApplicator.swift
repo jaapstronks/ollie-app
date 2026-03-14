@@ -19,17 +19,9 @@ extension AINudgeOrchestrator {
         guard let decision else {
             return (baselineTitle, baselineSubtitle)
         }
+        // Note: Analytics is tracked when the decision is first fetched/cached,
+        // not here (this runs on every view render)
         let canApply = !AINudgeRollout.isShadowMode && decision.confidence >= 0.65
-        Analytics.trackAIDecision(
-            surface: .insightBundle,
-            applied: canApply,
-            fallbackReason: canApply ? nil : "shadow_or_low_confidence",
-            confidence: decision.confidence,
-            provider: nil,
-            model: nil,
-            latencyMs: nil,
-            shadowMode: AINudgeRollout.isShadowMode
-        )
         if canApply {
             return (decision.headline, decision.subtitle ?? baselineSubtitle)
         }
@@ -44,18 +36,10 @@ extension AINudgeOrchestrator {
         guard let decision else {
             return (actionable, upcoming)
         }
+        // Note: Analytics is tracked when the decision is first fetched/cached,
+        // not here (this runs on every view render)
         let canApply = !AINudgeRollout.isShadowMode && decision.confidence >= 0.65
         if !canApply {
-            Analytics.trackAIDecision(
-                surface: .insightBundle,
-                applied: false,
-                fallbackReason: "shadow_or_low_confidence",
-                confidence: decision.confidence,
-                provider: nil,
-                model: nil,
-                latencyMs: nil,
-                shadowMode: AINudgeRollout.isShadowMode
-            )
             return (actionable, upcoming)
         }
 
@@ -70,16 +54,6 @@ extension AINudgeOrchestrator {
             return lhsRank < rhsRank
         }
 
-        Analytics.trackAIDecision(
-            surface: .insightBundle,
-            applied: true,
-            fallbackReason: nil,
-            confidence: decision.confidence,
-            provider: nil,
-            model: nil,
-            latencyMs: nil,
-            shadowMode: AINudgeRollout.isShadowMode
-        )
         return (reorderedActionable, reorderedUpcoming)
     }
 

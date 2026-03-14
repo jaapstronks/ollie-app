@@ -65,7 +65,7 @@ struct SentimentTipProvider {
         }
 
         if let primary = sorted.first {
-            return (primary, "This is a good area to focus on right now.")
+            return (primary, Strings.Sentiment.goodAreaToFocus)
         }
 
         return nil
@@ -346,11 +346,12 @@ struct SentimentTipProvider {
 
 /// A tip for a sentiment category (renamed to avoid conflict with TipKit's Tip protocol)
 struct SentimentTip: Identifiable {
-    let id = UUID()
     let title: String
     let body: String
     let actionLabel: String?
     let infoSheetType: InfoSheetType?
+
+    var id: String { "\(title)-\(body.prefix(20))" }
 }
 
 // MARK: - Info Sheet Types

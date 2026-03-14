@@ -21,6 +21,7 @@ final class EventLoggingService: ObservableObject {
 
     private let eventStore: EventStore
     private let profileStore: ProfileStore
+    private let userIdentityStore: UserIdentityStore
 
     // MARK: - Undo State
 
@@ -42,9 +43,21 @@ final class EventLoggingService: ObservableObject {
 
     // MARK: - Init
 
-    init(eventStore: EventStore, profileStore: ProfileStore) {
+    init(
+        eventStore: EventStore,
+        profileStore: ProfileStore,
+        userIdentityStore: UserIdentityStore = .shared
+    ) {
         self.eventStore = eventStore
         self.profileStore = profileStore
+        self.userIdentityStore = userIdentityStore
+    }
+
+    // MARK: - Attribution Helper
+
+    /// Get the current user's CloudKit record ID for event attribution
+    private var currentUserRecordID: String? {
+        userIdentityStore.currentUserRecordID
     }
 
     // MARK: - Event CRUD
@@ -63,8 +76,8 @@ final class EventLoggingService: ObservableObject {
         sleepSessionId: UUID? = nil,
         napLocation: NapLocation? = nil
     ) -> PuppyEvent {
-        // Get current user's household member ID for attribution
-        let loggedBy = profileStore.currentUserMember()?.id
+        // Get current user's CloudKit record ID for attribution
+        let loggedBy = currentUserRecordID
 
         // Note: sleepSessionId is auto-generated for sleep events in PuppyEvent init
         let event = PuppyEvent(
@@ -123,8 +136,8 @@ final class EventLoggingService: ObservableObject {
         longitude: Double? = nil,
         note: String? = nil
     ) {
-        // Get current user's household member ID for attribution
-        let loggedBy = profileStore.currentUserMember()?.id
+        // Get current user's CloudKit record ID for attribution
+        let loggedBy = currentUserRecordID
 
         var walkEvent = PuppyEvent.walk(
             time: time,
@@ -174,8 +187,8 @@ final class EventLoggingService: ObservableObject {
 
     /// Log a completed nap with start and end time (single-event model with durationMin)
     func logCompletedNap(startTime: Date, endTime: Date, note: String?, napLocation: NapLocation? = nil) {
-        // Get current user's household member ID for attribution
-        let loggedBy = profileStore.currentUserMember()?.id
+        // Get current user's CloudKit record ID for attribution
+        let loggedBy = currentUserRecordID
         let sessionId = UUID()
 
         // Calculate duration in minutes
@@ -279,8 +292,8 @@ final class EventLoggingService: ObservableObject {
 
     /// Confirm the assumed overnight sleep with the given start time
     func confirmAssumedOvernightSleep(sleepStartTime: Date) {
-        // Get current user's household member ID for attribution
-        let loggedBy = profileStore.currentUserMember()?.id
+        // Get current user's CloudKit record ID for attribution
+        let loggedBy = currentUserRecordID
         let sessionId = UUID()
 
         // Log sleep event at the provided start time
@@ -301,8 +314,8 @@ final class EventLoggingService: ObservableObject {
 
     /// Log wake-up for the assumed overnight sleep
     func confirmAssumedOvernightSleepAndWakeUp(sleepStartTime: Date, wakeTime: Date = Date()) {
-        // Get current user's household member ID for attribution
-        let loggedBy = profileStore.currentUserMember()?.id
+        // Get current user's CloudKit record ID for attribution
+        let loggedBy = currentUserRecordID
         let sessionId = UUID()
 
         // Log sleep event at the start time
@@ -334,8 +347,8 @@ final class EventLoggingService: ObservableObject {
 
     /// Start fresh after a logging gap
     func startFreshAfterLoggingGap() {
-        // Get current user's household member ID for attribution
-        let loggedBy = profileStore.currentUserMember()?.id
+        // Get current user's CloudKit record ID for attribution
+        let loggedBy = currentUserRecordID
         let now = Date()
 
         // Log a wake event at the current time to establish a new baseline
@@ -357,8 +370,8 @@ final class EventLoggingService: ObservableObject {
 
     /// Handle "puppy is sleeping" response from first run welcome
     func firstRunPuppyIsSleeping() {
-        // Get current user's household member ID for attribution
-        let loggedBy = profileStore.currentUserMember()?.id
+        // Get current user's CloudKit record ID for attribution
+        let loggedBy = currentUserRecordID
         let now = Date()
 
         // Log a sleep event at the current time
@@ -378,8 +391,8 @@ final class EventLoggingService: ObservableObject {
 
     /// Handle "puppy is awake" response from first run welcome
     func firstRunPuppyIsAwake() {
-        // Get current user's household member ID for attribution
-        let loggedBy = profileStore.currentUserMember()?.id
+        // Get current user's CloudKit record ID for attribution
+        let loggedBy = currentUserRecordID
         let now = Date()
 
         // Log a wake event at the current time

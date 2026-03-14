@@ -52,6 +52,8 @@ struct DogIdentityContext: AIContextComponent {
         let object: String
         let possessive: String
         let reflexive: String
+        /// Whether this pronoun set requires plural verb forms ("they wake" vs "he/she wakes")
+        let usesPluralVerbForm: Bool
     }
 
     init(profile: PuppyProfile) {
@@ -91,33 +93,31 @@ struct DogIdentityContext: AIContextComponent {
             subject: profile.gender.subjectPronoun,
             object: profile.gender.objectPronoun,
             possessive: profile.gender.possessivePronoun,
-            reflexive: profile.gender.reflexivePronoun
+            reflexive: profile.gender.reflexivePronoun,
+            usesPluralVerbForm: profile.gender.usesPluralVerbForm
         )
     }
 }
 
 // MARK: - Household Context
 
-/// Information about household members involved in puppy care.
+/// Information about users involved in puppy care.
+/// Updated to use CloudKit-based identity instead of profile-embedded HouseholdMembers.
 struct HouseholdContext: AIContextComponent {
     static let componentKey = "household"
     static let estimatedTokens = 30
 
-    /// Number of household members involved
+    /// Number of household members involved (1 = single user, >1 = shared via CloudKit)
     let memberCount: Int
 
-    /// Pseudonymized member roles
-    let memberRoles: [String: String]
+    /// Whether we have a current user identity set up
+    let hasCurrentUser: Bool
 
-    init(profile: PuppyProfile) {
-        let members = profile.householdMembers.members
-        self.memberCount = members.count
-
-        var roles: [String: String] = [:]
-        for (index, member) in members.enumerated() {
-            let key = "M\(index + 1)"
-            roles[key] = member.isCurrentUser ? "primary" : "member"
-        }
-        self.memberRoles = roles
+    init(profile: PuppyProfile, currentUserRecordID: String?) {
+        // In the new CloudKit-based identity system, member count comes from
+        // CloudKit share participants (not implemented yet in Phase 2).
+        // For now, assume single user if we have a current user identity.
+        self.hasCurrentUser = currentUserRecordID != nil
+        self.memberCount = hasCurrentUser ? 1 : 0
     }
 }

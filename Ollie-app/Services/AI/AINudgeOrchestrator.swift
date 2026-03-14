@@ -31,14 +31,29 @@ final class AINudgeOrchestrator {
     var pendingRecommendations: [UUID: [AILoggingCategoryRecommendation]] = [:]
     var inFlightRefreshTasks: [String: Task<Void, Never>] = [:]
 
+    /// Tracks when budget was last exhausted to avoid repeated attempts
+    var lastBudgetExhaustedTime: [String: Date] = [:]
+
+    /// Cooldown period before retrying after budget exhaustion (60 seconds)
+    private let budgetExhaustedCooldown: TimeInterval = 60
+
     // MARK: - Initialization
 
     private init(
-        client: AIModelBrokerClientProtocol = AIModelBrokerClient(),
+        client: AIModelBrokerClientProtocol? = nil,
         subscriptionManager: SubscriptionManager = .shared
     ) {
-        self.client = client
+        // Use mock client in test mode, real client otherwise
+        if AINudgeRollout.isTestMode {
+            self.client = MockAIModelBrokerClient()
+            aiLogger.info("AINudgeOrchestrator: using MOCK client (test mode enabled)")
+        } else {
+            self.client = client ?? AIModelBrokerClient()
+        }
         self.subscriptionManager = subscriptionManager
+
+        // Load cache from disk on startup
+        loadCacheFromDiskIfNeeded()
     }
 
     // MARK: - Public API
@@ -78,14 +93,11 @@ final class AINudgeOrchestrator {
         recentEvents: [PuppyEvent]
     ) -> (actionable: [ActionableItem], upcoming: [UpcomingItem]) {
         guard canUseAI(for: profile) else {
-            logger.debug("reorderUpcomingItems: canUseAI returned false")
             return (actionable, upcoming)
         }
 
         let cacheKey = insightCacheKey(profileID: profile.id)
-        logger.debug("reorderUpcomingItems: checking cache key \(cacheKey)")
         if let cached = getCachedInsight(for: cacheKey) {
-            logger.debug("reorderUpcomingItems: cache HIT")
             return applyOrFallbackOrdering(
                 decision: cached.value.walkOrderingDecision,
                 actionable: actionable,
@@ -93,7 +105,7 @@ final class AINudgeOrchestrator {
             )
         }
 
-        logger.debug("reorderUpcomingItems: cache MISS, scheduling refresh")
+        // Cache miss - schedule refresh (this will handle cooldowns internally)
         scheduleInsightRefreshIfNeeded(
             profile: profile,
             baselineTitle: PredictionCalculations.displayText(for: pottyPredictionFromEvents(recentEvents), puppyName: profile.name),
@@ -174,27 +186,37 @@ extension AINudgeOrchestrator {
     ) {
         let cacheKey = insightCacheKey(profileID: profile.id)
         if let cached = getCachedInsight(for: cacheKey), isFresh(cached.updatedAt, maxAgeMinutes: 360) {
-            logger.debug("scheduleInsightRefreshIfNeeded: cache is fresh, skipping")
-            return
+            return // Cache is fresh, no need to log
         }
 
         let dedupeKey = "insight-\(profile.id.uuidString)-\(Date().windowStamp(hours: 6))"
         guard !hasInFlightTask(for: dedupeKey) else {
-            logger.debug("scheduleInsightRefreshIfNeeded: already in-flight, skipping")
-            return
+            return // Already in-flight, no need to log
         }
+
+        // Check if we're in cooldown after budget exhaustion
+        if let lastExhausted = lastBudgetExhaustedTime[dedupeKey],
+           Date().timeIntervalSince(lastExhausted) < budgetExhaustedCooldown {
+            return // Still in cooldown, silently skip
+        }
+
         guard consumeBudgetIfAvailable(profileID: profile.id, kind: .insight) else {
-            logger.debug("scheduleInsightRefreshIfNeeded: budget exhausted")
-            Analytics.trackAIDecision(
-                surface: .insightBundle,
-                applied: false,
-                fallbackReason: "budget_exhausted",
-                confidence: nil,
-                provider: nil,
-                model: nil,
-                latencyMs: nil,
-                shadowMode: AINudgeRollout.isShadowMode
-            )
+            // Record exhaustion time and log only once
+            if lastBudgetExhaustedTime[dedupeKey] == nil {
+                let cooldownSecs = Int(budgetExhaustedCooldown)
+                logger.info("scheduleInsightRefreshIfNeeded: budget exhausted, cooling down for \(cooldownSecs)s")
+                Analytics.trackAIDecision(
+                    surface: .insightBundle,
+                    applied: false,
+                    fallbackReason: "budget_exhausted",
+                    confidence: nil,
+                    provider: nil,
+                    model: nil,
+                    latencyMs: nil,
+                    shadowMode: AINudgeRollout.isShadowMode
+                )
+            }
+            lastBudgetExhaustedTime[dedupeKey] = Date()
             return
         }
 
@@ -279,19 +301,28 @@ extension AINudgeOrchestrator {
             )
         )
 
-        let rawURL = UserDefaults.standard.string(forKey: "ai.nudges.brokerBaseURL")
-        let rawKey = UserDefaults.standard.string(forKey: "ai.nudges.brokerApiKey")
-        logger.debug("refreshInsightBundle: rawURL=\(rawURL ?? "nil"), rawKeyLen=\(rawKey?.count ?? 0)")
-        logger.debug("refreshInsightBundle: brokerBaseURL=\(AINudgeRollout.brokerBaseURL?.absoluteString ?? "nil")")
-        logger.debug("refreshInsightBundle: sending request to broker")
+        let isMocked = AINudgeRollout.isTestMode
         let start = Date()
         do {
             let response = try await client.decide(request)
-            logger.debug("refreshInsightBundle: got response, provider=\(response.providerUsed ?? "nil"), hasDecision=\(response.effectiveInsightDecision != nil)")
+            let latencyMs = Date().millisecondsSince(start)
+
             if let decision = response.effectiveInsightDecision {
-                logger.debug("refreshInsightBundle: decision confidence=\(decision.confidence), headline=\(decision.dailyStatusDecision?.headline ?? "nil")")
+                logger.info("refreshInsightBundle: \(isMocked ? "MOCK" : "API") response, confidence=\(String(format: "%.0f%%", decision.confidence * 100)), latency=\(latencyMs)ms")
                 setCachedInsight(decision, for: cacheKey)
                 setPendingRecommendations(decision.loggingRecommendations, for: profile.id)
+
+                // Track usage
+                AIUsageMonitor.shared.record(
+                    surface: .insightBundle,
+                    provider: response.providerUsed,
+                    model: response.modelUsed,
+                    latencyMs: latencyMs,
+                    success: true,
+                    cached: false,
+                    mocked: isMocked
+                )
+
                 Analytics.trackAIDecision(
                     surface: .insightBundle,
                     applied: !AINudgeRollout.isShadowMode && decision.confidence >= 0.65,
@@ -299,24 +330,24 @@ extension AINudgeOrchestrator {
                     confidence: decision.confidence,
                     provider: response.providerUsed,
                     model: response.modelUsed,
-                    latencyMs: Date().millisecondsSince(start),
+                    latencyMs: latencyMs,
                     shadowMode: AINudgeRollout.isShadowMode
                 )
-                logger.debug("refreshInsightBundle: cached decision successfully")
-            } else {
-                logger.debug("refreshInsightBundle: response had no insightBundleDecision")
             }
         } catch let brokerError as AIModelBrokerError {
-            switch brokerError {
-            case .brokerNotConfigured:
-                logger.error("refreshInsightBundle: BROKER NOT CONFIGURED (but URL was: \(rawURL ?? "nil"))")
-            case .brokerKeyNotConfigured:
-                logger.error("refreshInsightBundle: BROKER KEY NOT CONFIGURED")
-            case .invalidResponse(let statusCode, let body):
-                logger.error("refreshInsightBundle: INVALID RESPONSE HTTP \(statusCode): \(body.prefix(200))")
-            case .decodingFailed(let decodingError, let rawBody):
-                logger.error("refreshInsightBundle: DECODING FAILED: \(decodingError.localizedDescription), raw: \(rawBody.prefix(500))")
-            }
+            let latencyMs = Date().millisecondsSince(start)
+            logger.error("refreshInsightBundle: \(String(describing: brokerError))")
+
+            AIUsageMonitor.shared.record(
+                surface: .insightBundle,
+                provider: nil,
+                model: nil,
+                latencyMs: latencyMs,
+                success: false,
+                cached: false,
+                mocked: false
+            )
+
             Analytics.trackAIDecision(
                 surface: .insightBundle,
                 applied: false,
@@ -324,11 +355,23 @@ extension AINudgeOrchestrator {
                 confidence: nil,
                 provider: nil,
                 model: nil,
-                latencyMs: Date().millisecondsSince(start),
+                latencyMs: latencyMs,
                 shadowMode: AINudgeRollout.isShadowMode
             )
         } catch {
-            logger.error("refreshInsightBundle: OTHER ERROR: \(type(of: error)) - \(error.localizedDescription)")
+            let latencyMs = Date().millisecondsSince(start)
+            logger.error("refreshInsightBundle: \(error.localizedDescription)")
+
+            AIUsageMonitor.shared.record(
+                surface: .insightBundle,
+                provider: nil,
+                model: nil,
+                latencyMs: latencyMs,
+                success: false,
+                cached: false,
+                mocked: false
+            )
+
             Analytics.trackAIDecision(
                 surface: .insightBundle,
                 applied: false,
@@ -336,7 +379,7 @@ extension AINudgeOrchestrator {
                 confidence: nil,
                 provider: nil,
                 model: nil,
-                latencyMs: Date().millisecondsSince(start),
+                latencyMs: latencyMs,
                 shadowMode: AINudgeRollout.isShadowMode
             )
         }
@@ -353,17 +396,29 @@ extension AINudgeOrchestrator {
 
         let dedupeKey = "notif-\(profile.id.uuidString)-\(Date().windowStamp(hours: 4))"
         guard !hasInFlightTask(for: dedupeKey) else { return }
+
+        // Check if we're in cooldown after budget exhaustion
+        if let lastExhausted = lastBudgetExhaustedTime[dedupeKey],
+           Date().timeIntervalSince(lastExhausted) < budgetExhaustedCooldown {
+            return // Still in cooldown, silently skip
+        }
+
         guard consumeBudgetIfAvailable(profileID: profile.id, kind: .notificationPolicy) else {
-            Analytics.trackAIDecision(
-                surface: .notificationPolicy,
-                applied: false,
-                fallbackReason: "budget_exhausted",
-                confidence: nil,
-                provider: nil,
-                model: nil,
-                latencyMs: nil,
-                shadowMode: AINudgeRollout.isShadowMode
-            )
+            // Record exhaustion time and log only once
+            if lastBudgetExhaustedTime[dedupeKey] == nil {
+                logger.info("scheduleNotificationPolicyRefreshIfNeeded: budget exhausted, cooling down")
+                Analytics.trackAIDecision(
+                    surface: .notificationPolicy,
+                    applied: false,
+                    fallbackReason: "budget_exhausted",
+                    confidence: nil,
+                    provider: nil,
+                    model: nil,
+                    latencyMs: nil,
+                    shadowMode: AINudgeRollout.isShadowMode
+                )
+            }
+            lastBudgetExhaustedTime[dedupeKey] = Date()
             return
         }
 
@@ -405,11 +460,26 @@ extension AINudgeOrchestrator {
             )
         )
 
+        let isMocked = AINudgeRollout.isTestMode
         let start = Date()
         do {
             let response = try await client.decide(request)
+            let latencyMs = Date().millisecondsSince(start)
+
             if let policy = response.notificationPolicyDecision {
+                logger.info("refreshNotificationPolicy: \(isMocked ? "MOCK" : "API") response, confidence=\(String(format: "%.0f%%", policy.confidence * 100)), latency=\(latencyMs)ms")
                 setCachedNotificationPolicy(policy, for: cacheKey)
+
+                AIUsageMonitor.shared.record(
+                    surface: .notificationPolicy,
+                    provider: response.providerUsed,
+                    model: response.modelUsed,
+                    latencyMs: latencyMs,
+                    success: true,
+                    cached: false,
+                    mocked: isMocked
+                )
+
                 Analytics.trackAIDecision(
                     surface: .notificationPolicy,
                     applied: !AINudgeRollout.isShadowMode && policy.confidence >= 0.65,
@@ -417,11 +487,24 @@ extension AINudgeOrchestrator {
                     confidence: policy.confidence,
                     provider: response.providerUsed,
                     model: response.modelUsed,
-                    latencyMs: Date().millisecondsSince(start),
+                    latencyMs: latencyMs,
                     shadowMode: AINudgeRollout.isShadowMode
                 )
             }
         } catch {
+            let latencyMs = Date().millisecondsSince(start)
+            logger.error("refreshNotificationPolicy: \(error.localizedDescription)")
+
+            AIUsageMonitor.shared.record(
+                surface: .notificationPolicy,
+                provider: nil,
+                model: nil,
+                latencyMs: latencyMs,
+                success: false,
+                cached: false,
+                mocked: false
+            )
+
             Analytics.trackAIDecision(
                 surface: .notificationPolicy,
                 applied: false,
@@ -429,7 +512,7 @@ extension AINudgeOrchestrator {
                 confidence: nil,
                 provider: nil,
                 model: nil,
-                latencyMs: Date().millisecondsSince(start),
+                latencyMs: latencyMs,
                 shadowMode: AINudgeRollout.isShadowMode
             )
         }

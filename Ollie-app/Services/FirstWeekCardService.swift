@@ -84,6 +84,7 @@ struct FirstWeekCardService {
     // MARK: - Stats
 
     /// Calculate first week stats for the card
+    /// PERFORMANCE: Prefer the overload with pre-fetched events to avoid blocking main thread
     @MainActor
     static func calculateStats(
         profile: PuppyProfile?,
@@ -108,6 +109,28 @@ struct FirstWeekCardService {
             todayEvents: todayEvents,
             yesterdayEvents: yesterdayEvents,
             historicalEvents: historicalEvents
+        )
+    }
+
+    /// Calculate first week stats using pre-fetched events
+    /// PERFORMANCE: Use this overload with cached events to avoid Core Data fetches
+    static func calculateStats(
+        profile: PuppyProfile?,
+        todayEvents: [PuppyEvent],
+        recentEvents: [PuppyEvent],  // Contains yesterday + today events
+        weekEvents: [PuppyEvent]     // Contains 7 days of events
+    ) -> FirstWeekStats? {
+        guard let profile = profile else { return nil }
+
+        // Filter yesterday's events from recent events
+        let calendar = Calendar.current
+        let yesterdayEvents = recentEvents.filter { calendar.isDateInYesterday($0.time) }
+
+        return FirstWeekCalculations.calculateStats(
+            profile: profile,
+            todayEvents: todayEvents,
+            yesterdayEvents: yesterdayEvents,
+            historicalEvents: weekEvents
         )
     }
 }

@@ -136,7 +136,8 @@ final class WatchSyncService: NSObject, @unchecked Sendable {
                 syncState = .success
 
                 // Reset to idle after a moment
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                Task { @MainActor in
+                    try? await Task.sleep(for: .seconds(2))
                     if case .success = self.syncState {
                         self.syncState = .idle
                     }
@@ -204,10 +205,11 @@ final class WatchSyncService: NSObject, @unchecked Sendable {
     // MARK: - Build Sync Data
 
     private func buildSyncData() async -> [String: Any] {
-        let events = loadRecentEvents()
+        // Load events asynchronously on background thread (main perf win)
+        let events = await loadRecentEventsAsync()
         let profile = loadProfile()
 
-        // Calculate derived values
+        // Calculate derived values (fast on 2 days of events)
         let lastPeeTime = events.pee().reverseChronological().first?.time
         let lastPoopTime = events.poop().reverseChronological().first?.time
         let streak = StreakCalculations.calculateCurrentStreak(events: events)
@@ -235,25 +237,22 @@ final class WatchSyncService: NSObject, @unchecked Sendable {
             data["isSleeping"] = false
         }
 
-        // Include current user member ID for event attribution
-        if let currentUserMemberId = profile?.householdMembers.currentUser()?.id {
-            data["currentUserMemberId"] = currentUserMemberId.uuidString
+        // Include current user CloudKit record ID for event attribution
+        // Use cached value to avoid main actor isolation issues
+        if let currentUserRecordID = UserIdentityStore.cachedCurrentUserRecordID {
+            data["currentUserRecordID"] = currentUserRecordID
         }
 
         return data
     }
 
-    private func loadRecentEvents() -> [PuppyEvent] {
+    /// Load recent events asynchronously on background thread
+    private func loadRecentEventsAsync() async -> [PuppyEvent] {
         let today = Date()
-        var events: [PuppyEvent] = []
+        let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: today) ?? today
 
-        // Load today + yesterday for accurate calculations
-        events.append(contentsOf: eventStore.readEvents(for: today))
-        if let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: today) {
-            events.append(contentsOf: eventStore.readEvents(for: yesterday))
-        }
-
-        return events
+        // Use async Core Data fetch on background context
+        return await eventStore.readEventsAsync(from: yesterday, to: today)
     }
 
     private func loadProfile() -> PuppyProfile? {

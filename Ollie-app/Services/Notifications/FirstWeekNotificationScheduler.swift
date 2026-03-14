@@ -39,7 +39,7 @@ final class FirstWeekNotificationScheduler {
         switch service.daysSinceOnboarding {
         case 0:
             // Day 0: If no events after 2 hours, send gentle nudge
-            if events.filter({ $0.type != .coverageGap }).isEmpty {
+            if !events.contains(where: { $0.type != .coverageGap }) {
                 await scheduleIfNeeded(
                     id: "day0_first_log",
                     title: Strings.FirstWeek.howIsPuppy(name: puppyName),

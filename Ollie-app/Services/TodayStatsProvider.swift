@@ -39,16 +39,22 @@ struct TodayStatsProvider {
     // MARK: - Main Stats Computation
 
     /// Compute all today's stats from events and profile
+    /// PERF: Caches intermediate filter results to avoid O(n) filtering multiple times
     static func compute(events: [PuppyEvent], profile: PuppyProfile?) -> TodayStats {
-        let peeCount = events.pee().count
-        let outdoorPeeCount = events.outdoorPee().count
-        let indoorPeeCount = events.pee().indoor().count
-        let poopCount = events.poop().count
-        let outdoorPoopCount = events.poop().outdoor().count
+        // Cache filtered arrays to avoid repeated O(n) filtering
+        let peeEvents = events.pee()
+        let poopEvents = events.poop()
+        let walkEvents = events.walks()
+
+        let peeCount = peeEvents.count
+        let outdoorPeeCount = peeEvents.outdoor().count
+        let indoorPeeCount = peeEvents.indoor().count
+        let poopCount = poopEvents.count
+        let outdoorPoopCount = poopEvents.outdoor().count
         let mealCount = events.meals().count
         let expectedMealCount = profile?.mealSchedule.mealsPerDay ?? 3
-        let walkCount = events.walks().count
-        let totalWalkMinutes = events.walks().compactMap { $0.durationMin }.reduce(0, +)
+        let walkCount = walkEvents.count
+        let totalWalkMinutes = walkEvents.compactMap { $0.durationMin }.reduce(0, +)
         let sleepMinutes = SleepCalculations.totalSleepToday(events: events)
         let napCount = events.sleeps().count
 
@@ -135,10 +141,12 @@ struct TodayStatsProvider {
     }
 
     /// Outdoor potty percentage today
+    /// PERF: Caches pee events to avoid filtering twice
     static func outdoorPercentage(events: [PuppyEvent]) -> Int {
-        let total = events.pee().count
+        let peeEvents = events.pee()
+        let total = peeEvents.count
         guard total > 0 else { return 100 }
-        return Int((Double(events.outdoorPee().count) / Double(total)) * 100)
+        return Int((Double(peeEvents.outdoor().count) / Double(total)) * 100)
     }
 
     /// Sleep progress toward goal (0.0 - 1.0)

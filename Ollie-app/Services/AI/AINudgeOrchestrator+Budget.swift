@@ -22,20 +22,22 @@ extension AINudgeOrchestrator {
     }
 
     func canUseAI(for profile: PuppyProfile) -> Bool {
+        // PERFORMANCE: Check debug toggle to disable AI nudges
+        guard !PerformanceDebug.disableAINudges else {
+            if PerformanceDebug.logExpensiveOperations {
+                logger.info("[PERF] AI nudges disabled by toggle")
+            }
+            return false
+        }
         guard AINudgeRollout.isEnabled else {
-            logger.debug("canUseAI: isEnabled=false")
             return false
         }
         guard subscriptionManager.hasAccess(to: .aiNudges) else {
-            let status = subscriptionManager.effectiveStatus
-            logger.debug("canUseAI: hasAccess(aiNudges)=false, effectiveStatus=\(String(describing: status))")
             return false
         }
         let bucket = abs(profile.id.uuidString.hashValue) % 100
         let rollout = AINudgeRollout.rolloutPercentage
-        let passes = bucket < rollout
-        logger.debug("canUseAI: bucket=\(bucket), rollout=\(rollout), passes=\(passes)")
-        return passes
+        return bucket < rollout
     }
 
     func consumeBudgetIfAvailable(profileID: UUID, kind: BundleKind) -> Bool {

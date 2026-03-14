@@ -41,8 +41,18 @@ struct PottyMasteryService {
 
     /// Calculate number of consecutive days at 100% outdoor potty success
     /// Returns 0 if any indoor accident occurred, or if no data
+    /// PERFORMANCE: Use the events-based overload with pre-fetched data instead
     @MainActor
     static func consecutivePerfectDays(eventStore: EventStore) -> Int {
+        // Fetch 14 days of events once instead of 14 individual day queries
+        let fourteenDaysAgo = Date().addingDays(-14)
+        let allEvents = eventStore.getEvents(from: fourteenDaysAgo, to: Date())
+        return consecutivePerfectDays(from: allEvents)
+    }
+
+    /// Calculate number of consecutive days at 100% outdoor potty success
+    /// PERFORMANCE: Uses pre-fetched events to avoid Core Data queries
+    static func consecutivePerfectDays(from allEvents: [PuppyEvent]) -> Int {
         let calendar = Calendar.current
         let today = calendar.startOfDay(for: Date())
 
@@ -53,7 +63,8 @@ struct PottyMasteryService {
                 continue
             }
 
-            let dayEvents = eventStore.getEvents(from: dayStart, to: dayEnd)
+            // Filter events for this day from pre-fetched data
+            let dayEvents = allEvents.filter { $0.time >= dayStart && $0.time < dayEnd }
             let pottyEvents = dayEvents.potty()
 
             // Need at least 1 potty event to count the day

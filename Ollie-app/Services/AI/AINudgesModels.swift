@@ -35,6 +35,17 @@ struct AINudgeContextSummary: Codable {
     let recentWalkCount: Int
     let recentMealCount: Int
     let recentPottyCount: Int
+
+    // Historical comparison for smarter recommendations
+    // Shows last 3 days vs prior 4 days (week comparison)
+    let recentDaysWalkAvg: Double?       // Average walks per day in last 3 days
+    let priorDaysWalkAvg: Double?        // Average walks per day in prior 4 days
+    let recentDaysMealAvg: Double?       // Average meals per day in last 3 days
+    let priorDaysMealAvg: Double?        // Average meals per day in prior 4 days
+    let recentDaysPottyAvg: Double?      // Average potty breaks per day in last 3 days
+    let priorDaysPottyAvg: Double?       // Average potty breaks per day in prior 4 days
+    let recentDaysTrainingAvg: Double?   // Average training sessions per day in last 3 days
+    let priorDaysTrainingAvg: Double?    // Average training sessions per day in prior 4 days
 }
 
 enum AILoggingCategory: String, Codable {
@@ -95,6 +106,11 @@ struct AINudgeBrokerRequest: Codable {
     let promptVersion: String
     let providerPolicy: AIVendorPolicy
     let shadowMode: Bool
+
+    /// Modern format fields - if provided, broker uses client instructions instead of hardcoded prompts
+    let systemInstruction: String?
+    let outputFormat: String?
+
     let context: AINudgeContextSummary
     let payload: Payload
 
@@ -141,8 +157,18 @@ struct AINudgeBrokerResponse: Codable {
     let providerUsed: String?
     let modelUsed: String?
     let reasoningTags: [String]?
+
+    // Legacy format fields
     let insightBundleDecision: AIInsightBundleDecision?
     let notificationPolicyDecision: AINotificationPolicyDecision?
+
+    // Modern format field (when systemInstruction/outputFormat are provided)
+    let response: AIInsightBundleDecision?
+
+    /// Get the insight decision from either modern or legacy response format
+    var effectiveInsightDecision: AIInsightBundleDecision? {
+        response ?? insightBundleDecision
+    }
 }
 
 enum AINudgeRollout {
@@ -159,14 +185,25 @@ enum AINudgeRollout {
 
     static func registerDefaults() {
         let isBeta = AppEnvironment.current.isBeta
+        #if DEBUG
+        // Reasonable limits for development - enough to test, not enough to burn budget
+        // Use testMode=true in settings for unlimited local testing without API calls
+        let insightLimit = 10
+        let notificationLimit = 10
+        let totalLimit = 15
+        #else
+        let insightLimit = 4
+        let notificationLimit = 6
+        let totalLimit = 10
+        #endif
         UserDefaults.standard.register(defaults: [
             enabledKey: true,
             rolloutPercentageKey: isBeta ? 100 : 0,
             shadowModeKey: isBeta,
             brokerBaseURLKey: defaultBrokerBaseURL,
-            maxInsightCallsPerDayKey: 4,
-            maxNotificationCallsPerDayKey: 6,
-            maxTotalCallsPerDayKey: 10
+            maxInsightCallsPerDayKey: insightLimit,
+            maxNotificationCallsPerDayKey: notificationLimit,
+            maxTotalCallsPerDayKey: totalLimit
         ])
     }
 
@@ -201,19 +238,31 @@ enum AINudgeRollout {
     }
 
     static var maxInsightCallsPerDay: Int {
+        #if DEBUG
+        let fallback = 100
+        #else
         let fallback = 4
+        #endif
         let raw = UserDefaults.standard.object(forKey: maxInsightCallsPerDayKey) as? Int ?? fallback
         return max(0, raw)
     }
 
     static var maxNotificationCallsPerDay: Int {
+        #if DEBUG
+        let fallback = 100
+        #else
         let fallback = 6
+        #endif
         let raw = UserDefaults.standard.object(forKey: maxNotificationCallsPerDayKey) as? Int ?? fallback
         return max(0, raw)
     }
 
     static var maxTotalCallsPerDay: Int {
+        #if DEBUG
+        let fallback = 200
+        #else
         let fallback = 10
+        #endif
         let raw = UserDefaults.standard.object(forKey: maxTotalCallsPerDayKey) as? Int ?? fallback
         return max(0, raw)
     }

@@ -31,6 +31,8 @@ enum AI {
     /// Check if AI features are available for a profile.
     @MainActor
     static func isAvailable(for profile: PuppyProfile) -> Bool {
+        // PERFORMANCE: Check debug toggle to disable AI cards
+        guard !PerformanceDebug.disableAICards else { return false }
         guard AINudgeRollout.isEnabled else { return false }
         guard SubscriptionManager.shared.hasAccess(to: .aiNudges) else { return false }
         let bucket = abs(profile.id.uuidString.hashValue) % 100
