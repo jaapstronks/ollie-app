@@ -767,19 +767,19 @@ extension Strings {
             static let luringMistake1 = String(localized: "Moving the lure too fast (puppy can't follow)", table: table)
             static let luringMistake2 = String(localized: "Holding the treat too far from the nose (puppy jumps)", table: table)
 
-            // MARK: - Handling
-            static let handlingName = String(localized: "Handling", table: table)
-            static let handlingDescription = String(localized: "Get your puppy comfortable being touched everywhere. Important for vet visits, grooming, and health checks.", table: table)
-            static let handlingDoneWhen = String(localized: "Your puppy stays relaxed when you touch their ears, paws, mouth, and tail.", table: table)
-            static let handlingHowTo1 = String(localized: "Start when puppy is calm and relaxed", table: table)
-            static let handlingHowTo2 = String(localized: "Gently touch ears, paws, tail, mouth", table: table)
-            static let handlingHowTo3 = String(localized: "Give treats while handling", table: table)
-            static let handlingHowTo4 = String(localized: "Keep sessions very short at first", table: table)
-            static let handlingHowTo5 = String(localized: "Gradually increase duration and pressure", table: table)
-            static let handlingTip1 = String(localized: "Go slowly - this builds lifelong trust", table: table)
-            static let handlingTip2 = String(localized: "Stop if puppy shows stress signals", table: table)
-            static let handlingTip3 = String(localized: "Practice lifting paws and looking in ears", table: table)
-            static let handlingTip4 = String(localized: "Make it part of daily routine", table: table)
+            // MARK: - Touch & Handling
+            static let handlingName = String(localized: "Touch & Handling", table: table)
+            static let handlingDescription = String(localized: "Teach your puppy to touch their nose to your palm (targeting) and to stay relaxed when being touched everywhere. Essential for positioning, recall, vet visits, and grooming.", table: table)
+            static let handlingDoneWhen = String(localized: "Your puppy touches their nose to your palm on cue and stays relaxed when you touch their ears, paws, mouth, and tail.", table: table)
+            static let handlingHowTo1 = String(localized: "Present a flat palm near your puppy's nose - most will naturally investigate", table: table)
+            static let handlingHowTo2 = String(localized: "Click and treat when their nose touches your palm", table: table)
+            static let handlingHowTo3 = String(localized: "Add the cue 'touch' once reliable, then practice at different heights and distances", table: table)
+            static let handlingHowTo4 = String(localized: "For body handling: start when calm, gently touch ears, paws, tail, mouth while giving treats", table: table)
+            static let handlingHowTo5 = String(localized: "Gradually increase duration and pressure of handling - make it part of daily routine", table: table)
+            static let handlingTip1 = String(localized: "Don't push your hand into their face - let them come to you", table: table)
+            static let handlingTip2 = String(localized: "Rub a treat on your palm if they need encouragement for nose targeting", table: table)
+            static let handlingTip3 = String(localized: "Touch targeting is a great alternative to 'come' for recall", table: table)
+            static let handlingTip4 = String(localized: "Stop handling if puppy shows stress signals - go slower next time", table: table)
 
             // MARK: - Collar & Leash
             static let collarLeashName = String(localized: "Collar & Leash", table: table)

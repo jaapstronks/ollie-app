@@ -329,25 +329,6 @@ enum SkillContent {
                 Strings.Training.Skills.watchMeMistake3
             ]
         ),
-        "touch": SkillMetadata(
-            name: Strings.Training.Skills.touchName,
-            description: Strings.Training.Skills.touchDescription,
-            doneWhen: Strings.Training.Skills.touchDoneWhen,
-            howTo: [
-                Strings.Training.Skills.touchHowTo1,
-                Strings.Training.Skills.touchHowTo2,
-                Strings.Training.Skills.touchHowTo3,
-                Strings.Training.Skills.touchHowTo4,
-                Strings.Training.Skills.touchHowTo5
-            ],
-            tips: [
-                Strings.Training.Skills.touchTip1,
-                Strings.Training.Skills.touchTip2,
-                Strings.Training.Skills.touchTip3,
-                Strings.Training.Skills.touchTip4
-            ],
-            mistakes: []
-        ),
         "looseLeash": SkillMetadata(
             name: Strings.Training.Skills.looseLeashName,
             description: Strings.Training.Skills.looseLeashDescription,
