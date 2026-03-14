@@ -16,15 +16,16 @@ struct DogProfileSettingsView: View {
     @State private var showDeleteConfirmation = false
     @State private var showLeaveConfirmation = false
     @Environment(\.dismiss) private var dismiss
+    @AppStorage(UserPreferences.Key.hasCompletedOnboarding.rawValue) private var hasCompletedOnboarding = false
 
     /// The profile being edited (looked up by ID)
     private var targetProfile: PuppyProfile? {
         profileStore.profile(for: profileId)
     }
 
-    /// Whether this profile can be deleted (must have at least one profile remaining)
-    private var canDeleteProfile: Bool {
-        profileStore.profiles.count > 1
+    /// Whether this is the last profile (will trigger re-onboarding if deleted)
+    private var isLastProfile: Bool {
+        profileStore.profiles.count == 1
     }
 
     var body: some View {
@@ -48,7 +49,7 @@ struct DogProfileSettingsView: View {
                 // Delete/Leave section
                 DeleteProfileSection(
                     profile: profile,
-                    canDelete: canDeleteProfile,
+                    isLastProfile: isLastProfile,
                     onDeleteTapped: {
                         if profile.ownership == .shared {
                             showLeaveConfirmation = true
@@ -104,18 +105,32 @@ struct DogProfileSettingsView: View {
     // MARK: - Delete/Leave Actions
 
     private func performDelete() {
+        let willTriggerOnboarding = isLastProfile
         Task {
             HapticFeedback.warning()
             await profileStore.deleteProfileWithMediaCleanup(profileId, mediaStore: MediaStore())
             HapticFeedback.success()
+
+            // If this was the last profile, reset onboarding state
+            if willTriggerOnboarding {
+                hasCompletedOnboarding = false
+            }
+
             dismiss()
         }
     }
 
     private func performLeave() {
+        let willTriggerOnboarding = isLastProfile
         HapticFeedback.warning()
         profileStore.leaveSharedProfile(profileId)
         HapticFeedback.success()
+
+        // If this was the last profile, reset onboarding state
+        if willTriggerOnboarding {
+            hasCompletedOnboarding = false
+        }
+
         dismiss()
     }
 
@@ -162,7 +177,7 @@ struct DogProfileSettingsView: View {
 /// Section for deleting or leaving a dog profile
 private struct DeleteProfileSection: View {
     let profile: PuppyProfile
-    let canDelete: Bool
+    let isLastProfile: Bool
     let onDeleteTapped: () -> Void
 
     var body: some View {
@@ -182,10 +197,9 @@ private struct DeleteProfileSection: View {
                         : "trash")
                 }
             }
-            .disabled(!canDelete)
         } footer: {
-            if !canDelete {
-                Text(Strings.DeleteProfile.cannotDeleteOnly)
+            if isLastProfile {
+                Text(Strings.DeleteProfile.lastProfileWarning)
             } else {
                 Text(Strings.DeleteProfile.deleteWarningFooter)
             }

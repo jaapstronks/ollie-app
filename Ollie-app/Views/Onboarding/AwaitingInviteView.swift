@@ -20,8 +20,8 @@ struct AwaitingInviteView: View {
 
             // Icon and title
             VStack(spacing: 20) {
-                Image(systemName: "person.2.badge.gearshape.fill")
-                    .font(.system(size: 72))
+                Image(systemName: "link.circle.fill")
+                    .font(.system(size: 80))
                     .foregroundStyle(Color.otisAccent)
                     .scaleEffect(hasAppeared ? 1.0 : 0.8)
                     .opacity(hasAppeared ? 1.0 : 0.0)
@@ -34,21 +34,35 @@ struct AwaitingInviteView: View {
             }
 
             Spacer()
-                .frame(height: 32)
+                .frame(height: 40)
 
             // Instructions
-            VStack(spacing: 16) {
-                InstructionRow(
-                    number: 1,
-                    text: Strings.Onboarding.awaitingInviteDescription
-                )
+            VStack(alignment: .leading, spacing: 24) {
+                // Primary instruction
+                HStack(alignment: .top, spacing: 16) {
+                    Image(systemName: "1.circle.fill")
+                        .font(.title2)
+                        .foregroundStyle(Color.otisAccent)
+
+                    Text(Strings.Onboarding.awaitingInviteDescription)
+                        .font(.body)
+                        .foregroundStyle(.primary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
                 .opacity(hasAppeared ? 1.0 : 0.0)
                 .offset(y: hasAppeared ? 0 : 10)
 
-                InstructionRow(
-                    number: 2,
-                    text: Strings.Onboarding.awaitingInviteHint
-                )
+                // Secondary hint
+                HStack(alignment: .top, spacing: 16) {
+                    Image(systemName: "questionmark.circle")
+                        .font(.title2)
+                        .foregroundStyle(.secondary)
+
+                    Text(Strings.Onboarding.awaitingInviteHint)
+                        .font(.callout)
+                        .foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
                 .opacity(hasAppeared ? 1.0 : 0.0)
                 .offset(y: hasAppeared ? 0 : 10)
             }
@@ -56,20 +70,21 @@ struct AwaitingInviteView: View {
 
             Spacer()
 
-            // Waiting indicator
-            VStack(spacing: 12) {
+            // Waiting indicator - subtle
+            HStack(spacing: 8) {
                 ProgressView()
                     .progressViewStyle(.circular)
-                    .scaleEffect(1.2)
+                    .scaleEffect(0.8)
 
                 Text(Strings.Onboarding.waiting)
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                    .font(.footnote)
+                    .foregroundStyle(.tertiary)
             }
-            .padding(.vertical, 24)
+            .padding(.vertical, 16)
             .opacity(hasAppeared ? 1.0 : 0.0)
 
             Spacer()
+                .frame(height: 20)
 
             // Create own profile button
             Button {
@@ -79,7 +94,7 @@ struct AwaitingInviteView: View {
                     .font(.subheadline)
                     .foregroundStyle(Color.otisAccent)
             }
-            .padding(.bottom, 32)
+            .padding(.bottom, 40)
             .opacity(hasAppeared ? 1.0 : 0.0)
         }
         .padding(.horizontal, 24)
@@ -87,31 +102,6 @@ struct AwaitingInviteView: View {
             withAnimation(.easeOut(duration: 0.5)) {
                 hasAppeared = true
             }
-        }
-    }
-}
-
-/// Row showing an instruction step
-private struct InstructionRow: View {
-    let number: Int
-    let text: String
-
-    var body: some View {
-        HStack(alignment: .top, spacing: 16) {
-            Text("\(number)")
-                .font(.headline)
-                .fontWeight(.bold)
-                .foregroundStyle(.white)
-                .frame(width: 28, height: 28)
-                .background(Color.otisAccent)
-                .clipShape(Circle())
-
-            Text(text)
-                .font(.body)
-                .foregroundStyle(.primary)
-                .fixedSize(horizontal: false, vertical: true)
-
-            Spacer()
         }
     }
 }

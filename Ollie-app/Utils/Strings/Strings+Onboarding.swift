@@ -33,17 +33,23 @@ extension Strings {
         static let alreadyInSubtitle = String(localized: "Just start tracking. Patterns emerge fast.", table: table)
         static let getStarted = String(localized: "Get Started", table: table)
 
-        // Join existing profile
+        // Welcome choice buttons
+        static let addMyDog = String(localized: "Add my dog", table: table)
+        static let addMyDogSubtitle = String(localized: "Create a profile for your pup", table: table)
+        static let joinSharedDog = String(localized: "Join a shared dog", table: table)
+        static let joinSharedDogSubtitle = String(localized: "Someone invited you to co-manage their pup", table: table)
+
+        // Join existing profile (legacy, keeping for compatibility)
         static let joiningTitle = String(localized: "Joining someone else's puppy?", table: table)
         static let joiningSubtitle = String(localized: "Wait for the owner to share access with you.", table: table)
         static let joinExisting = String(localized: "Join Existing Profile", table: table)
 
         // Awaiting invite view
-        static let awaitingInviteTitle = String(localized: "Waiting for an invite", table: table)
-        static let awaitingInviteDescription = String(localized: "Ask the puppy owner to share access with you from their Settings.", table: table)
-        static let awaitingInviteHint = String(localized: "Once they share, you'll automatically get access.", table: table)
-        static let createOwnProfile = String(localized: "Create my own profile instead", table: table)
-        static let waiting = String(localized: "Waiting...", table: table)
+        static let awaitingInviteTitle = String(localized: "Ready to join?", table: table)
+        static let awaitingInviteDescription = String(localized: "Open the invite link you received from the dog's owner.", table: table)
+        static let awaitingInviteHint = String(localized: "Don't have a link yet? Ask them to share from Settings → Family Sharing.", table: table)
+        static let createOwnProfile = String(localized: "Add my own dog instead", table: table)
+        static let waiting = String(localized: "Waiting for invite link...", table: table)
 
         static let nameQuestion = String(localized: "What's your puppy's name?", table: table)
         static let nameSubtitle = String(localized: "We'll use this in logs and reminders. You can edit it any time.", table: table)

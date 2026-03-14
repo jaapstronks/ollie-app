@@ -211,6 +211,74 @@
         }
       }
     },
+    "Add my dog": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meinen Hund hinzufügen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Agregar mi perro"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajouter mon chien"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aggiungi il mio cane"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mijn hond toevoegen"
+          }
+        }
+      }
+    },
+    "Add my own dog instead": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stattdessen meinen eigenen Hund hinzufügen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Agregar mi propio perro"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajouter mon propre chien"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aggiungi il mio cane invece"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voeg liever mijn eigen hond toe"
+          }
+        }
+      }
+    },
     "All milestones completed!": {
       "extractionState": "stale",
       "localizations": {
@@ -456,6 +524,40 @@
         }
       }
     },
+    "Create a profile for your pup": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erstelle ein Profil für deinen Welpen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Crea un perfil para tu cachorro"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Créez un profil pour votre chiot"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Crea un profilo per il tuo cucciolo"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Maak een profiel voor je pup"
+          }
+        }
+      }
+    },
     "Came home": {
       "extractionState": "stale",
       "localizations": {
@@ -592,6 +694,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Date d'arrivée prévue de %@"
+          }
+        }
+      }
+    },
+    "Don't have a link yet? Ask them to share from Settings → Family Sharing.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Noch keinen Link? Bitte sie, über Einstellungen → Familienfreigabe zu teilen."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¿Aún no tienes un enlace? Pídeles que compartan desde Configuración → Compartir en familia."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pas encore de lien ? Demandez-leur de partager depuis Réglages → Partage familial."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Non hai ancora un link? Chiedi di condividere da Impostazioni → Condivisione in famiglia."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nog geen link? Vraag hen om te delen via Instellingen → Gezinsdeling."
           }
         }
       }
@@ -907,6 +1043,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "%@ est-il déjà à la maison ?"
+          }
+        }
+      }
+    },
+    "Join a shared dog": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Einem geteilten Hund beitreten"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unirse a un perro compartido"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rejoindre un chien partagé"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unisciti a un cane condiviso"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meedoen met een gedeelde hond"
           }
         }
       }
@@ -1436,6 +1606,40 @@
         }
       }
     },
+    "Open the invite link you received from the dog's owner.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Öffne den Einladungslink, den du vom Hundebesitzer erhalten hast."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abre el enlace de invitación que recibiste del dueño del perro."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrez le lien d'invitation reçu du propriétaire du chien."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apri il link di invito ricevuto dal proprietario del cane."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open de uitnodigingslink die je hebt ontvangen van de eigenaar."
+          }
+        }
+      }
+    },
     "Other / Unknown": {
       "extractionState": "stale",
       "localizations": {
@@ -1642,6 +1846,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Âge du chiot"
+          }
+        }
+      }
+    },
+    "Ready to join?": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bereit beizutreten?"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¿Listo para unirte?"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prêt à rejoindre ?"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pronto a unirti?"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Klaar om mee te doen?"
           }
         }
       }
@@ -1887,6 +2125,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Des rappels intelligents vous aident à anticiper les besoins de votre chiot."
+          }
+        }
+      }
+    },
+    "Someone invited you to co-manage their pup": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jemand hat dich eingeladen, sich um seinen Welpen zu kümmern"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alguien te invitó a cuidar a su cachorro"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quelqu'un vous a invité à co-gérer son chiot"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Qualcuno ti ha invitato a prenderti cura del suo cucciolo"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Iemand heeft je uitgenodigd om mee te zorgen voor hun pup"
           }
         }
       }
@@ -2169,6 +2441,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Prochaines étapes"
+          }
+        }
+      }
+    },
+    "Waiting for invite link...": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Warte auf Einladungslink..."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esperando enlace de invitación..."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En attente du lien d'invitation..."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In attesa del link di invito..."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wachten op uitnodigingslink..."
           }
         }
       }

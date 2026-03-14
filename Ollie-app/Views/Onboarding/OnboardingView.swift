@@ -18,8 +18,8 @@ struct OnboardingView: View {
     @Environment(LocationManager.self) var locationManager
     let onComplete: () -> Void
 
-    // Step state - default to Name step for faster time-to-value
-    @State private var currentStep: Int = 1
+    // Step state - default to Welcome step for new users to choose flow
+    @State private var currentStep: Int = 0
 
     // Awaiting invite state (for family members joining existing profile)
     @AppStorage(UserPreferences.Key.isAwaitingInvite.rawValue) private var isAwaitingInvite = false
@@ -306,8 +306,8 @@ struct OnboardingView: View {
             .highPriorityGesture(DragGesture())
         }
         .onAppear {
-            // Keep add-profile flow aligned with first profile flow: jump directly to Name.
-            if currentStep == 0 {
+            // Skip welcome screen when adding another profile (user already chose their path)
+            if isAddingProfile && currentStep == 0 {
                 currentStep = 1
             }
         }

@@ -579,6 +579,7 @@ extension Strings {
         static let leaveMessage = String(localized: "You'll no longer have access to this dog's data. The owner can invite you again later.", table: table)
         static let leaveConfirm = String(localized: "Leave", table: table)
         static let cannotDeleteOnly = String(localized: "You must have at least one dog profile.", table: table)
+        static let lastProfileWarning = String(localized: "Deleting your only profile will return you to the start screen.", table: table)
         static let deleteWarningFooter = String(localized: "This action cannot be undone.", table: table)
     }
 

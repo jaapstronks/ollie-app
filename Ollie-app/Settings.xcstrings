@@ -1899,6 +1899,40 @@
         }
       }
     },
+    "Deleting your only profile will return you to the start screen.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wenn du dein einziges Profil löschst, kehrst du zum Startbildschirm zurück."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eliminar tu único perfil te devolverá a la pantalla de inicio."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Supprimer votre seul profil vous ramènera à l'écran d'accueil."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L'eliminazione del tuo unico profilo ti riporterà alla schermata iniziale."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Als je je enige profiel verwijdert, keer je terug naar het startscherm."
+          }
+        }
+      }
+    },
     "Dinner": {
       "extractionState": "stale",
       "localizations": {

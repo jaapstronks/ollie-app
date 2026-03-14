@@ -18,7 +18,9 @@ struct SharingSection: View {
     /// Whether to show section header (false when used standalone with nav title)
     let showHeader: Bool
 
-    @State private var activeShareSheet: ShareSheetItem?
+    /// Binding for navigation destination - must be handled by parent view outside Form/List
+    @Binding var activeShareSheet: ShareSheetItem?
+
     @State private var isPreparingShare = false
     @State private var shareError: String?
     @State private var showStopSharingConfirm = false
@@ -29,9 +31,10 @@ struct SharingSection: View {
         cloudKit.shareManager
     }
 
-    init(cloudKit: CloudKitService, showHeader: Bool = true) {
+    init(cloudKit: CloudKitService, showHeader: Bool = true, activeShareSheet: Binding<ShareSheetItem?>) {
         self.cloudKit = cloudKit
         self.showHeader = showHeader
+        self._activeShareSheet = activeShareSheet
     }
 
     var body: some View {
@@ -41,22 +44,6 @@ struct SharingSection: View {
             if showHeader {
                 Text(Strings.CloudSharing.sharing)
             }
-        } footer: {
-            if cloudKit.isCloudAvailable && !cloudKit.isParticipant {
-                Text(Strings.CloudSharing.sharingDescription)
-            }
-        }
-        .navigationDestination(item: $activeShareSheet) { item in
-            CloudSharingView(
-                share: item.share,
-                container: CKContainer(identifier: "iCloud.nl.jaapstronks.Otis"),
-                onDismiss: {
-                    activeShareSheet = nil
-                    Task { await cloudKit.updateShareState() }
-                }
-            )
-            .navigationTitle(Strings.CloudSharing.manageSharing)
-            .navigationBarTitleDisplayMode(.inline)
         }
         .alert(Strings.CloudSharing.stopSharing, isPresented: $showStopSharingConfirm) {
             Button(Strings.Common.cancel, role: .cancel) {}
@@ -123,59 +110,77 @@ struct SharingSection: View {
     // MARK: - Row Views
 
     private var iCloudUnavailableRow: some View {
-        Label {
-            Text(Strings.CloudSharing.iCloudUnavailable)
-        } icon: {
+        HStack(spacing: 12) {
             Image(systemName: "exclamationmark.icloud")
+                .font(.title3)
                 .foregroundStyle(Color.otisWarning)
+                .frame(width: 28)
+
+            Text(Strings.CloudSharing.iCloudUnavailable)
+
+            Spacer()
         }
     }
 
     private var participantRow: some View {
-        Label {
-            VStack(alignment: .leading, spacing: 2) {
+        HStack(spacing: 12) {
+            Image(systemName: "person.2.fill")
+                .font(.title3)
+                .foregroundStyle(Color.otisInfo)
+                .frame(width: 28)
+
+            VStack(alignment: .leading, spacing: 4) {
                 Text(Strings.CloudSharing.sharedData)
                 Text(Strings.CloudSharing.viewingOthersData)
-                    .font(.caption)
+                    .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
-        } icon: {
-            Image(systemName: "person.2.fill")
-                .foregroundStyle(Color.otisInfo)
+
+            Spacer()
         }
     }
 
     private var sharedStatusRow: some View {
-        Label {
-            Text(Strings.CloudSharing.shared)
-        } icon: {
+        HStack(spacing: 12) {
             Image(systemName: "checkmark.circle.fill")
+                .font(.title3)
                 .foregroundStyle(Color.otisSuccess)
+                .frame(width: 28)
+
+            Text(Strings.CloudSharing.shared)
+
+            Spacer()
         }
     }
 
     @ViewBuilder
     private var participantsRows: some View {
         if shareManager.shareParticipants.isEmpty {
-            Label {
+            HStack(spacing: 12) {
+                Image(systemName: "person.fill")
+                    .font(.title3)
+                    .foregroundStyle(.secondary)
+                    .frame(width: 28)
+
                 Text(Strings.CloudSharing.noParticipants)
                     .foregroundStyle(.secondary)
-            } icon: {
-                Image(systemName: "person.fill")
-                    .foregroundStyle(.secondary)
+
+                Spacer()
             }
         } else {
             ForEach(shareManager.shareParticipants) { participant in
-                Label {
-                    HStack {
-                        Text(participant.name.isEmpty ? Strings.CloudSharing.partner : participant.name)
-                        Spacer()
-                        Text(participant.status.label)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                } icon: {
+                HStack(spacing: 12) {
                     Image(systemName: "person.fill")
+                        .font(.title3)
+                        .foregroundStyle(.secondary)
+                        .frame(width: 28)
+
+                    Text(participant.name.isEmpty ? Strings.CloudSharing.partner : participant.name)
+
+                    Spacer()
+
+                    Text(participant.status.label)
+                        .font(.subheadline)
                         .foregroundStyle(.secondary)
                 }
             }
@@ -195,16 +200,15 @@ struct SharingSection: View {
         } label: {
             HStack(spacing: 12) {
                 Image(systemName: "person.badge.plus")
+                    .font(.title3)
                     .foregroundStyle(Color.otisAccent)
+                    .frame(width: 28)
 
-                VStack(alignment: .leading, spacing: 2) {
+                VStack(alignment: .leading, spacing: 4) {
                     Text(Strings.OtisPlus.featureUnlimitedSharing)
-                        .font(.subheadline)
-                        .foregroundStyle(.primary)
                     Text(Strings.OtisPlus.sharingRequiresPlus)
-                        .font(.caption)
+                        .font(.subheadline)
                         .foregroundStyle(.secondary)
-                        .lineLimit(2)
                 }
 
                 Spacer()
@@ -221,6 +225,7 @@ struct SharingSection: View {
                 .padding(.vertical, 4)
                 .background(Capsule().fill(Color.otisAccent))
             }
+            .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
     }
@@ -233,16 +238,15 @@ struct SharingSection: View {
         } label: {
             HStack(spacing: 12) {
                 Image(systemName: "person.badge.plus")
+                    .font(.title3)
                     .foregroundStyle(Color.otisAccent)
+                    .frame(width: 28)
 
-                VStack(alignment: .leading, spacing: 2) {
+                VStack(alignment: .leading, spacing: 4) {
                     Text(Strings.OtisPlus.featureUnlimitedSharing)
-                        .font(.subheadline)
-                        .foregroundStyle(.primary)
                     Text(Strings.OtisPlus.sharingRequiresPlus)
-                        .font(.caption)
+                        .font(.subheadline)
                         .foregroundStyle(.secondary)
-                        .lineLimit(2)
                 }
 
                 Spacer()
@@ -259,6 +263,7 @@ struct SharingSection: View {
                 .padding(.vertical, 4)
                 .background(Capsule().fill(Color.otisAccent))
             }
+            .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
     }
@@ -267,9 +272,21 @@ struct SharingSection: View {
         Button {
             Task { await prepareAndShowShare() }
         } label: {
-            HStack {
-                Label(Strings.CloudSharing.shareWithPartner, systemImage: "person.badge.plus")
+            HStack(spacing: 12) {
+                Image(systemName: "person.badge.plus")
+                    .font(.title2)
+                    .foregroundStyle(Color.otisAccent)
+                    .frame(width: 28)
+
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(Strings.CloudSharing.shareWithPartner)
+                    Text(Strings.CloudSharing.sharingDescription)
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+
                 Spacer()
+
                 if isPreparingShare {
                     ProgressView()
                 } else {
@@ -288,9 +305,16 @@ struct SharingSection: View {
         Button {
             Task { await manageExistingShare() }
         } label: {
-            HStack {
-                Label(Strings.CloudSharing.manageSharing, systemImage: "person.2.fill")
+            HStack(spacing: 12) {
+                Image(systemName: "person.2.fill")
+                    .font(.title3)
+                    .foregroundStyle(Color.otisAccent)
+                    .frame(width: 28)
+
+                Text(Strings.CloudSharing.manageSharing)
+
                 Spacer()
+
                 if isPreparingShare {
                     ProgressView()
                 } else {
@@ -309,9 +333,16 @@ struct SharingSection: View {
         Button {
             Task { await prepareAndShowShare() }
         } label: {
-            HStack {
-                Label(Strings.CloudSharing.inviteAnother, systemImage: "person.badge.plus")
+            HStack(spacing: 12) {
+                Image(systemName: "person.badge.plus")
+                    .font(.title3)
+                    .foregroundStyle(Color.otisAccent)
+                    .frame(width: 28)
+
+                Text(Strings.CloudSharing.inviteAnother)
+
                 Spacer()
+
                 if isPreparingShare {
                     ProgressView()
                 } else {
@@ -331,8 +362,13 @@ struct SharingSection: View {
             HapticFeedback.warning()
             showStopSharingConfirm = true
         } label: {
-            HStack {
-                Label(Strings.CloudSharing.stopSharing, systemImage: "xmark.circle")
+            HStack(spacing: 12) {
+                Image(systemName: "xmark.circle")
+                    .font(.title3)
+                    .frame(width: 28)
+
+                Text(Strings.CloudSharing.stopSharing)
+
                 Spacer()
             }
             .contentShape(Rectangle())
@@ -418,7 +454,7 @@ struct SharingSection: View {
     }
 }
 
-private struct ShareSheetItem: Identifiable, Hashable {
+struct ShareSheetItem: Identifiable, Hashable {
     let id = UUID()
     let share: CKShare
 
