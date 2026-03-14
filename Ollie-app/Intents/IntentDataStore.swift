@@ -76,6 +76,38 @@ final class IntentDataStore: @unchecked Sendable {
         sharedDefaults.set(data, forKey: Self.profileKey)
     }
 
+    // MARK: - Pending Actions
+
+    private static let pendingWalkStartKey = "pendingWalkStart"
+
+    /// Store a pending walk start for the main app to pick up
+    func setPendingWalkStart() {
+        guard let sharedDefaults = UserDefaults(suiteName: Self.suiteName) else { return }
+        let startTime = Date()
+        sharedDefaults.set(startTime.timeIntervalSince1970, forKey: Self.pendingWalkStartKey)
+        logger.info("Set pending walk start at \(startTime)")
+    }
+
+    /// Check and consume pending walk start
+    /// Returns the start time if there was a pending walk, nil otherwise
+    func consumePendingWalkStart() -> Date? {
+        guard let sharedDefaults = UserDefaults(suiteName: Self.suiteName) else { return nil }
+        guard sharedDefaults.object(forKey: Self.pendingWalkStartKey) != nil else { return nil }
+
+        let timestamp = sharedDefaults.double(forKey: Self.pendingWalkStartKey)
+        sharedDefaults.removeObject(forKey: Self.pendingWalkStartKey)
+
+        let startTime = Date(timeIntervalSince1970: timestamp)
+        logger.info("Consumed pending walk start from \(startTime)")
+        return startTime
+    }
+
+    /// Check if there's a pending walk start (without consuming it)
+    func hasPendingWalkStart() -> Bool {
+        guard let sharedDefaults = UserDefaults(suiteName: Self.suiteName) else { return false }
+        return sharedDefaults.object(forKey: Self.pendingWalkStartKey) != nil
+    }
+
     // MARK: - Widget Data
 
     private static let widgetDataKey = "widgetData"

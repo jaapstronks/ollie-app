@@ -160,6 +160,12 @@ struct MainTabView: View {
             if needsFirstSessionHandoff {
                 showingFirstSessionHandoff = true
             }
+            // Check for pending walk starts from Siri/Widget
+            viewModel.checkForPendingWalkStart()
+        }
+        .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
+            // Check for pending walk starts when app becomes active
+            viewModel.checkForPendingWalkStart()
         }
         .onChange(of: selectedTab) { _, newTab in
             Analytics.track(.tabSelected, properties: [
@@ -192,6 +198,12 @@ private extension MainTabView {
                 onTap: {
                     selectedTab = .today
                     viewModel.sheetCoordinator.presentSheet(.endActivity)
+                },
+                onLogPee: {
+                    viewModel.logPottyDuringWalk(type: .plassen)
+                },
+                onLogPoop: {
+                    viewModel.logPottyDuringWalk(type: .poepen)
                 }
             )
         }

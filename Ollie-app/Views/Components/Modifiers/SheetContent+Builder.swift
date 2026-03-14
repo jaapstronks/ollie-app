@@ -50,8 +50,8 @@ extension SheetCoordinator.ActiveSheet {
              .walkScheduleEditor, .addAppointmentWithPrefill:
             return .guide
 
-        // Placeholder sheets (handled elsewhere)
-        case .weightLog, .trainingLog, .socializationLog, .settings, .profileEdit, .notificationSettings:
+        // Placeholder sheets (handled elsewhere or fullScreenCover)
+        case .weightLog, .trainingLog, .socializationLog, .settings, .profileEdit, .notificationSettings, .walkMap:
             return .placeholder
         }
     }

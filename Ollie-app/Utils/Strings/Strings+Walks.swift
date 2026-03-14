@@ -180,4 +180,12 @@ extension Strings {
             String(localized: "\(minutes) min total", table: table)
         }
     }
+
+    // MARK: - Walk Map (GPS Tracking)
+    enum WalkMap {
+        static let duration = String(localized: "Duration", table: table)
+        static let distance = String(localized: "Distance", table: table)
+        static let endWalk = String(localized: "End Walk", table: table)
+        static let endWalkQuestion = String(localized: "End this walk?", table: table)
+    }
 }

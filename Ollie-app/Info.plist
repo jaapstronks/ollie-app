@@ -20,7 +20,9 @@
 	<key>NSCameraUsageDescription</key>
 	<string>Otis wants to use the camera to take photos of your puppy.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Otis uses your location to save walk spots so you can easily log walks at your favorite places.</string>
+	<string>Otis uses your location to save walk spots and track your walks on the map.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Otis tracks your location during walks to show your route on the map, even when the app is in the background.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Otis wants access to your photos to add moments.</string>
 	<key>NSCalendarsFullAccessUsageDescription</key>
@@ -31,6 +33,7 @@
 	<array>
 		<string>fetch</string>
 		<string>remote-notification</string>
+		<string>location</string>
 	</array>
 	<key>CKSharingSupported</key>
 	<true/>

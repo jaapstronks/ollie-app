@@ -54,12 +54,12 @@ struct TimelineSheetModifiers: ViewModifier {
 
     // MARK: - Sheet Binding
 
-    /// Binding that excludes mediaPicker and momentsLightbox from sheet presentation (handled by fullScreenCover)
+    /// Binding that excludes mediaPicker, momentsLightbox, and walkMap from sheet presentation (handled by fullScreenCover)
     private var sheetBinding: Binding<SheetCoordinator.ActiveSheet?> {
         Binding(
             get: {
                 switch sheetCoordinator.activeSheet {
-                case .mediaPicker, .momentsLightbox:
+                case .mediaPicker, .momentsLightbox, .walkMap:
                     return nil
                 default:
                     return sheetCoordinator.activeSheet
@@ -82,6 +82,19 @@ struct TimelineSheetModifiers: ViewModifier {
         )
     }
 
+    /// Binding for walk map fullScreenCover presentation
+    private var walkMapBinding: Binding<Bool> {
+        Binding(
+            get: {
+                if case .walkMap = sheetCoordinator.activeSheet {
+                    return true
+                }
+                return false
+            },
+            set: { if !$0 { sheetCoordinator.activeSheet = nil } }
+        )
+    }
+
     // MARK: - Body
 
     func body(content: Content) -> some View {
@@ -90,6 +103,7 @@ struct TimelineSheetModifiers: ViewModifier {
             .mediaPickerPresentation(viewModel: viewModel, mediaCaptureViewModel: mediaCaptureViewModel)
             .mediaPreviewPresentation(selectedPhotoEvent: $selectedPhotoEvent, viewModel: viewModel)
             .momentsLightboxPresentation(binding: momentsLightboxBinding, context: context)
+            .walkMapPresentation(binding: walkMapBinding, viewModel: viewModel)
             .deleteConfirmation(viewModel: viewModel)
             .undoBannerOverlay(viewModel: viewModel, reduceMotion: reduceMotion)
             .celebrationBannerOverlay(viewModel: viewModel, reduceMotion: reduceMotion)
@@ -177,6 +191,20 @@ private extension View {
                     }
                 )
             }
+        }
+    }
+}
+
+// MARK: - Walk Map Presentation
+
+private extension View {
+
+    func walkMapPresentation(
+        binding: Binding<Bool>,
+        viewModel: TimelineViewModel
+    ) -> some View {
+        fullScreenCover(isPresented: binding) {
+            WalkMapView(viewModel: viewModel)
         }
     }
 }

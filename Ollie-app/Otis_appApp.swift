@@ -43,6 +43,7 @@ struct OtisApp: App {
     @State private var foodRecallService = FoodRecallService()
     @State private var unitPreferences = UnitPreferences.shared
     @State private var trainingMasteryStore = TrainingMasteryStore.shared
+    @State private var walkTrackingService = WalkTrackingService()
     private var cloudKit = CloudKitService.shared
     private let dailyAggregateService = DailyAggregateService.shared
     @State private var toastManager = ToastManager()
@@ -95,6 +96,7 @@ struct OtisApp: App {
                 .environment(routineStore)
                 .environment(unitPreferences)
                 .environment(trainingMasteryStore)
+                .environment(walkTrackingService)
                 .toastContainer()
                 .environment(toastManager)
                 .task { await performInitialSetup() }

@@ -85,6 +85,8 @@ final class SheetCoordinator {
         case behaviorLog
         // Moments lightbox (swipeable photo gallery)
         case momentsLightbox(events: [PuppyEvent], startIndex: Int)
+        // Walk map (full-screen GPS tracking view)
+        case walkMap
 
         var id: String {
             switch self {
@@ -129,6 +131,7 @@ final class SheetCoordinator {
             case .groomingQuickLog(let type): return "groomingQuickLog-\(type?.rawValue ?? "any")"
             case .behaviorLog: return "behaviorLog"
             case .momentsLightbox(_, let startIndex): return "momentsLightbox-\(startIndex)"
+            case .walkMap: return "walkMap"
             }
         }
     }
