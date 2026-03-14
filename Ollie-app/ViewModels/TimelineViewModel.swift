@@ -279,7 +279,11 @@ class TimelineViewModel {
 
                 // REACTIVITY FIX: Update combined state immediately for sleep/potty card visibility
                 // This prevents stale card visibility after logging events (e.g., sleep card staying visible after wake)
-                self.cachedCombinedState = self.combinedSleepPottyState
+                // Use fresh events (yesterday + today) instead of stale cached events
+                let yesterday = Date().addingDays(-1).startOfDay
+                let endOfToday = Date().endOfDay
+                let freshRecentEvents = self.eventStore.getEvents(from: yesterday, to: endOfToday)
+                self.cachedCombinedState = self.calculateCombinedState(withEvents: freshRecentEvents)
 
                 // Debounce expensive stats/predictions refresh
                 // This coalesces rapid event changes (e.g., bulk import, quick logging)
@@ -646,8 +650,11 @@ class TimelineViewModel {
 
         // REACTIVITY FIX: Update combined state immediately for sleep/potty card visibility
         // This prevents stale card visibility after logging events (e.g., sleep card staying visible after wake)
-        // The full refreshCachedProperties() will still run after debounce for other cached values
-        self.cachedCombinedState = self.combinedSleepPottyState
+        // Use fresh events (yesterday + today) instead of stale cached events
+        let yesterday = Date().addingDays(-1).startOfDay
+        let endOfToday = Date().endOfDay
+        let freshRecentEvents = eventStore.getEvents(from: yesterday, to: endOfToday)
+        self.cachedCombinedState = self.calculateCombinedState(withEvents: freshRecentEvents)
     }
 
     /// Notify to refresh notifications
@@ -735,11 +742,12 @@ class TimelineViewModel {
         self.partnerActivitySummaryCache = partnerSummary
 
         // PERFORMANCE: Cache combined state (previously computed on every view render)
+        // Use the recentEvents we already fetched to ensure consistency
         let stateSpan = refreshTransaction?.startChild(
             operation: "cache.compute",
             description: "Combined Sleep/Potty State"
         )
-        self.cachedCombinedState = self.combinedSleepPottyState
+        self.cachedCombinedState = self.calculateCombinedState(withEvents: recentEvents)
         stateSpan?.finish()
 
         // PERFORMANCE: Cache separated upcoming items (previously computed on every view render)

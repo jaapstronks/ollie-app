@@ -23,20 +23,9 @@ extension TimelineViewModel {
     /// Items prepared for vertical timeline display
     /// Groups sleep sessions, walks with duration, point events, and appointments
     /// Sorted newest-first (future at top, past at bottom)
-    /// Delegates to TimelineItemBuilder
+    /// PERFORMANCE: Returns cached value to avoid rebuilding on every access
     var verticalTimelineItems: [VerticalTimelineItem] {
-        let todaysAppointments: [DogAppointment]
-        if let store = appointmentStore {
-            todaysAppointments = store.appointments(for: currentDate)
-        } else {
-            todaysAppointments = []
-        }
-
-        return TimelineItemBuilder.buildVerticalItems(
-            events: events,
-            appointments: todaysAppointments,
-            puppyName: puppyName
-        )
+        cachedVerticalTimelineItems
     }
 
     /// Timeline start time (6am or first event - 1 hour, whichever is earlier)

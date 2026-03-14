@@ -23,9 +23,18 @@ final class ContributionStatsViewModel: ObservableObject {
     }
 
     /// Refresh contribution stats for the selected period
+    /// PERFORMANCE: Use async event fetch to avoid blocking main thread
     func refresh() {
+        Task {
+            await refreshAsync()
+        }
+    }
+
+    /// Async refresh implementation
+    private func refreshAsync() async {
         let period = selectedPeriod.dateInterval
-        let events = eventStore.getEvents(from: period.start, to: period.end)
+        // PERFORMANCE: Use async version to avoid blocking main thread
+        let events = await eventStore.getEventsAsync(from: period.start, to: period.end)
         let currentUserRecordID = UserIdentityStore.shared.currentUserRecordID
 
         // Calculate stats with name resolution via ParticipantResolver

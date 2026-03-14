@@ -55,7 +55,8 @@ final class MorningBriefingViewModel: ObservableObject {
         defer { isLoading = false }
 
         // Morning briefing needs recent history for context
-        let recentEvents = eventStore.getEvents(from: Date.daysAgo(14), to: Date())
+        // PERFORMANCE: Use async version to avoid blocking main thread
+        let recentEvents = await eventStore.getEventsAsync(from: Date.daysAgo(14), to: Date())
         logger.debug("Got \(recentEvents.count) events from last 14 days")
 
         let result = await AI.requestMorningBriefing(

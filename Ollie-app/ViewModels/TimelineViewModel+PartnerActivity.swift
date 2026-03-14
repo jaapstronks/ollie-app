@@ -3,6 +3,7 @@
 //  Otis-app
 //
 //  Partner activity summary (handoff card) extension for TimelineViewModel
+//  Updated to use CloudKit-based identity (UserIdentityStore) instead of HouseholdMembers
 //
 
 import Combine
@@ -13,52 +14,46 @@ extension TimelineViewModel {
 
     // MARK: - Partner Activity Summary
 
-    /// Computed partner activity summary for the handoff card
-    /// Returns nil if:
-    /// - No household members configured
-    /// - No current user set
-    /// - No partner activity since last seen
-    /// - Activity doesn't meet threshold (no highlights and < 3 events)
+    /// Cached partner activity summary for the handoff card
+    /// PERFORMANCE: Now returns cached value instead of synchronous Core Data fetch
+    /// Cache is updated asynchronously when events change
     var partnerActivitySummary: PartnerActivitySummary? {
-        // Must be showing today
+        // Must be showing today for the summary to be relevant
         guard isShowingToday else { return nil }
+        return partnerActivitySummaryCache
+    }
 
-        // Must have household members configured
-        guard let household = profileStore.activeProfile?.householdMembers,
-              household.members.count > 1 else {
+    /// Calculate partner activity summary from provided events (used by async refresh)
+    /// This is a pure function that doesn't do any fetching
+    func calculatePartnerActivitySummary(from recentEvents: [PuppyEvent]) -> PartnerActivitySummary? {
+        // Must have current user CloudKit ID
+        guard let currentUserRecordID = UserIdentityStore.shared.currentUserRecordID else {
             return nil
         }
-
-        // Must have current user set
-        guard let currentUser = household.currentUser() else {
-            return nil
-        }
-
-        // Get recent events (today and yesterday for cross-midnight tracking)
-        let recentEvents = getRecentEvents()
 
         // Find user's last activity time
-        let userLastActivity = PartnerActivityCalculations.findUserLastActivityTime(
+        let userLastActivity = PartnerActivityCalculations.findUserLastActivityTimeByRecordID(
             events: recentEvents,
-            currentUserId: currentUser.id
+            currentUserRecordID: currentUserRecordID
         )
 
         // Get last seen timestamp
         let lastSeen = profileStore.lastSeenPartnerActivityTimestamp
 
-        // Calculate partner activity summary
-        return PartnerActivityCalculations.findPartnerActivity(
-            events: recentEvents,
-            currentUserId: currentUser.id,
-            lastSeenTimestamp: lastSeen,
-            householdMembers: household,
-            userLastActivityTime: userLastActivity
-        )
-    }
+        // Get puppy name for natural language summary
+        let puppyName = profileStore.profile?.name
 
-    /// Household members container for display
-    var householdMembersContainer: HouseholdMembers {
-        profileStore.activeProfile?.householdMembers ?? HouseholdMembers.empty()
+        // Calculate partner activity summary using CloudKit record IDs
+        return PartnerActivityCalculations.findPartnerActivityByRecordID(
+            events: recentEvents,
+            currentUserRecordID: currentUserRecordID,
+            lastSeenTimestamp: lastSeen,
+            userLastActivityTime: userLastActivity,
+            puppyName: puppyName,
+            partnerNameResolver: { recordID in
+                ParticipantResolver.shared.resolve(cloudKitRecordID: recordID).displayName
+            }
+        )
     }
 
     // MARK: - Actions
@@ -66,7 +61,7 @@ extension TimelineViewModel {
     /// Dismiss the partner activity summary card
     func dismissPartnerActivitySummary() {
         profileStore.markPartnerActivitySeen()
-        // Trigger view update
-        objectWillChange.send()
+        // With @Observable, touching a tracked property triggers view update
+        refreshTrigger += 1
     }
 }
