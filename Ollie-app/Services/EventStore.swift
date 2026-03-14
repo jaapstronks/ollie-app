@@ -19,8 +19,9 @@ import os
 @Observable
 @MainActor
 class EventStore {
-    private(set) var events: [PuppyEvent] = []
-    private(set) var currentDate: Date = Date()
+    // Note: setter is internal (not private) to allow EventStore+Observers extension to update
+    var events: [PuppyEvent] = []
+    var currentDate: Date = Date()
     private(set) var isSyncing = false
     private(set) var syncError: String?
 
@@ -40,8 +41,19 @@ class EventStore {
 
     @ObservationIgnored var cancellables = Set<AnyCancellable>()
 
-    /// NSFetchedResultsController for reactive updates
-    @ObservationIgnored private var fetchedResultsController: NSFetchedResultsController<CDPuppyEvent>?
+    /// Feature flag for FRC-based timeline updates (vs full reload)
+    @ObservationIgnored let useFetchedResultsController: Bool = true
+
+    /// Timeline fetch controller for incremental updates
+    @ObservationIgnored lazy var timelineFetchController: TimelineFetchController = {
+        let controller = TimelineFetchController(
+            context: PersistenceController.shared.viewContext
+        )
+        controller.onContentChange = { [weak self] in
+            self?.handleFetchedResultsChange()
+        }
+        return controller
+    }()
 
     init(persistenceController: PersistenceController = .shared) {
         self.coreDataStore = CoreDataEventStore(persistenceController: persistenceController)
@@ -101,9 +113,44 @@ class EventStore {
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
             self.currentDate = date
-            self.events = self.coreDataStore.readEvents(for: date)
+
+            if self.useFetchedResultsController {
+                self.timelineFetchController.configure(
+                    for: date,
+                    profile: self.profileStoreRef?.getActiveCDProfile()
+                )
+                do {
+                    try self.timelineFetchController.performFetch()
+                    self.events = self.timelineFetchController.fetchedEvents
+                } catch {
+                    self.logger.error("FRC fetch failed: \(error)")
+                    self.events = self.coreDataStore.readEvents(for: date)
+                }
+            } else {
+                self.events = self.coreDataStore.readEvents(for: date)
+            }
+
             self.notifyEventsDidChange()
         }
+    }
+
+    /// Handle changes detected by the NSFetchedResultsController
+    func handleFetchedResultsChange() {
+        guard useFetchedResultsController else { return }
+
+        let newEvents = timelineFetchController.fetchedEvents
+        let previousIds = Set(events.map { $0.id })
+        let newIds = Set(newEvents.map { $0.id })
+
+        // Skip update if nothing actually changed (same IDs and same count)
+        guard newIds != previousIds || newEvents.count != events.count else {
+            logger.debug("FRC change but no actual differences")
+            return
+        }
+
+        logger.info("FRC: \(newIds.subtracting(previousIds).count) new, \(previousIds.subtracting(newIds).count) removed")
+        events = newEvents
+        notifyEventsDidChange()
     }
 
     /// Refresh events (re-read from Core Data)

@@ -120,7 +120,23 @@ extension EventStore {
         logger.info("Active profile changed - updating event store")
         updateActiveProfile()
         coreDataStore.invalidateAllCaches()
-        loadEvents(for: currentDate)
+
+        if useFetchedResultsController {
+            timelineFetchController.configure(
+                for: currentDate,
+                profile: profileStoreRef?.getActiveCDProfile()
+            )
+            do {
+                try timelineFetchController.performFetch()
+                events = timelineFetchController.fetchedEvents
+                notifyEventsDidChange()
+            } catch {
+                logger.error("FRC fetch failed on profile change: \(error)")
+                loadEvents(for: currentDate)
+            }
+        } else {
+            loadEvents(for: currentDate)
+        }
     }
 
     /// Timestamp of last remote sync (for incremental aggregate updates)
@@ -131,34 +147,53 @@ extension EventStore {
 
         // Get current events before refresh for comparison
         let previousEventIds = Set(events.map { $0.id })
-        let previousEventCount = events.count
 
-        // Check if there are actually new/changed events before doing expensive work
-        // This prevents unnecessary refreshes from WAL checkpoints and local operations
-        let freshEvents = coreDataStore.readEvents(for: currentDate)
-        let freshEventIds = Set(freshEvents.map { $0.id })
-
-        // Skip full refresh if nothing changed
-        if freshEventIds == previousEventIds && freshEvents.count == previousEventCount {
-            logger.debug("No actual changes detected, skipping full refresh")
-            return
-        }
-
-        // Actual changes detected - do the full refresh
-        logger.info("Remote changes detected: \(freshEventIds.subtracting(previousEventIds).count) new, \(previousEventIds.subtracting(freshEventIds).count) removed")
-
-        // Invalidate ALL caches, not just current date
+        // Invalidate ALL caches (stats, predictions still need this)
         // Sleep state calculations need recent events from multiple days
         coreDataStore.invalidateAllCaches()
-        loadEvents(for: currentDate)
 
-        // NOTE: Do NOT recompute aggregates here - it triggers a Core Data save
-        // which sends another CloudKit notification, creating a loop.
-        // Aggregates will be recomputed lazily when accessed.
+        if useFetchedResultsController {
+            // With FRC, the delegate will automatically be notified of changes
+            // to the current day's events. We just need to:
+            // 1. Invalidate caches (done above)
+            // 2. Check for new moments from other users
+            //
+            // The FRC's controllerDidChangeContent delegate method will fire
+            // if there are actual changes to the fetched results.
 
-        // Check for new moments from other users and send notifications
-        Task {
-            await checkForNewMomentsAndNotify(previousEventIds: previousEventIds)
+            // NOTE: Do NOT recompute aggregates here - it triggers a Core Data save
+            // which sends another CloudKit notification, creating a loop.
+
+            // Check for new moments from other users and send notifications
+            Task {
+                await checkForNewMomentsAndNotify(previousEventIds: previousEventIds)
+            }
+        } else {
+            // Fallback: existing full-reload path
+            let previousEventCount = events.count
+
+            // Check if there are actually new/changed events before doing expensive work
+            let freshEvents = coreDataStore.readEvents(for: currentDate)
+            let freshEventIds = Set(freshEvents.map { $0.id })
+
+            // Skip full refresh if nothing changed
+            if freshEventIds == previousEventIds && freshEvents.count == previousEventCount {
+                logger.debug("No actual changes detected, skipping full refresh")
+                return
+            }
+
+            // Actual changes detected - do the full refresh
+            logger.info("Remote changes detected: \(freshEventIds.subtracting(previousEventIds).count) new, \(previousEventIds.subtracting(freshEventIds).count) removed")
+            loadEvents(for: currentDate)
+
+            // NOTE: Do NOT recompute aggregates here - it triggers a Core Data save
+            // which sends another CloudKit notification, creating a loop.
+            // Aggregates will be recomputed lazily when accessed.
+
+            // Check for new moments from other users and send notifications
+            Task {
+                await checkForNewMomentsAndNotify(previousEventIds: previousEventIds)
+            }
         }
     }
 
