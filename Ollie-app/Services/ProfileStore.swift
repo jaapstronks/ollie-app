@@ -14,8 +14,9 @@ import os
 
 /// Manages reading and writing puppy profiles
 /// Architecture: Core Data with NSPersistentCloudKitContainer for automatic CloudKit sync
+@Observable
 @MainActor
-class ProfileStore: ObservableObject {
+class ProfileStore {
     // MARK: - Shared Instance (for previews)
 
     /// Convenience accessor for SwiftUI previews and legacy compatibility.
@@ -27,10 +28,10 @@ class ProfileStore: ObservableObject {
     // MARK: - Multi-Profile Support
 
     /// All loaded profiles (owned + shared)
-    @Published private(set) var profiles: [PuppyProfile] = []
+    private(set) var profiles: [PuppyProfile] = []
 
     /// ID of the currently active profile
-    @Published private(set) var activeProfileId: UUID? {
+    private(set) var activeProfileId: UUID? {
         didSet {
             if let id = activeProfileId {
                 UserDefaults.standard.set(id.uuidString, forKey: "activeProfileId")
@@ -62,15 +63,16 @@ class ProfileStore: ObservableObject {
 
     // MARK: - State Properties
 
-    @Published private(set) var isLoading: Bool = true
-    @Published private(set) var isSyncing: Bool = false
+    private(set) var isLoading: Bool = true
+    private(set) var isSyncing: Bool = false
 
     // MARK: - Internal Storage (accessible by extensions)
+    // These are excluded from observation tracking
 
-    let persistenceController: PersistenceController
-    let logger = Logger.otis(category: "ProfileStore")
-    var cancellables = Set<AnyCancellable>()
-    var knownSharedProfileIDs = Set<UUID>()
+    @ObservationIgnored let persistenceController: PersistenceController
+    @ObservationIgnored let logger = Logger.otis(category: "ProfileStore")
+    @ObservationIgnored var cancellables = Set<AnyCancellable>()
+    @ObservationIgnored var knownSharedProfileIDs = Set<UUID>()
 
     var viewContext: NSManagedObjectContext {
         persistenceController.viewContext
@@ -87,7 +89,11 @@ class ProfileStore: ObservableObject {
             activeProfileId = uuid
         }
 
-        loadAllProfiles()
+        // Defer heavy profile loading to avoid blocking app startup
+        // The loading is triggered via Task to return from init immediately
+        Task {
+            loadAllProfiles()
+        }
         setupRemoteChangeObserver()
     }
 

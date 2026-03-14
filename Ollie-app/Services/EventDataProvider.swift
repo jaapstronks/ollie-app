@@ -91,17 +91,16 @@ final class EventDataProvider: ObservableObject {
     init(eventStore: EventStore) {
         self.eventStore = eventStore
 
-        // Subscribe to event changes with debouncing
+        // Subscribe to event changes via NotificationCenter
         // When events change, update today's events immediately and schedule historical refresh
-        // PERF: Use RunLoop.main to ensure updates happen on NEXT runloop tick,
-        // preventing "Publishing changes from within view updates" warnings
-        eventStoreCancellable = eventStore.$events
+        // Note: EventStore is @Observable, not ObservableObject, so we use notifications
+        eventStoreCancellable = NotificationCenter.default.publisher(for: .eventsDidChange)
             .receive(on: RunLoop.main)
-            .sink { [weak self] events in
+            .sink { [weak self] _ in
                 guard let self = self else { return }
 
                 // Update today's events immediately (triggers single objectWillChange)
-                self._todayEvents = events
+                self._todayEvents = self.eventStore.events
                 self.objectWillChange.send()
 
                 // Invalidate historical cache and schedule refresh

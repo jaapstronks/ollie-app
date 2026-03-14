@@ -16,10 +16,10 @@ import os
 @MainActor
 final class SkillProgressStore: BaseStore, ProfileAccessible {
 
-    // MARK: - Published State
+    // MARK: - State
 
-    @Published private(set) var skillProgress: [SkillProgress] = []
-    @Published private(set) var isLoading: Bool = true
+    private(set) var skillProgress: [SkillProgress] = []
+    private(set) var isLoading: Bool = true
 
     // MARK: - ProfileAccessible
 

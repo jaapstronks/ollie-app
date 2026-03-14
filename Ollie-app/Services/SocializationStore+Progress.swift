@@ -48,7 +48,8 @@ extension SocializationStore {
 
     /// Most recent exposure for an item
     func lastExposure(for itemId: String) -> Exposure? {
-        getExposures(for: itemId).sorted { $0.date > $1.date }.first
+        // PERF: Use max(by:) O(n) instead of sorted().first O(n log n)
+        getExposures(for: itemId).max(by: { $0.date < $1.date })
     }
 
     // MARK: - Item Lookup
@@ -80,7 +81,8 @@ extension SocializationStore {
         let scoredItems = availableItems.map { item -> (SocializationItem, Int) in
             let exposures = getExposures(for: item.id)
             let positiveCount = exposures.filter { $0.reaction.isPositive }.count
-            let lastExposure = exposures.sorted { $0.date > $1.date }.first
+            // PERF: Use max(by:) O(n) instead of sorted().first O(n log n)
+            let lastExposure = exposures.max(by: { $0.date < $1.date })
 
             var score = item.priority * 20 // Priority is key
 

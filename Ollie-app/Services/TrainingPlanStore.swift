@@ -15,11 +15,11 @@ import os
 @MainActor
 final class TrainingPlanStore: BaseStore {
 
-    // MARK: - Published State
+    // MARK: - State
 
-    @Published private(set) var trainingPlan: TrainingPlan?
-    @Published private(set) var masteredSkills: [MasteredSkill] = []
-    @Published private(set) var isLoading: Bool = true
+    private(set) var trainingPlan: TrainingPlan?
+    private(set) var masteredSkills: [MasteredSkill] = []
+    private(set) var isLoading: Bool = true
 
     private var eventStore: EventStore?
     private weak var skillProgressStore: SkillProgressStore?

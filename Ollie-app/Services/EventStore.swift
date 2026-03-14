@@ -16,31 +16,32 @@ import os
 
 /// Manages reading and writing puppy events
 /// Architecture: Core Data with NSPersistentCloudKitContainer for automatic CloudKit sync
+@Observable
 @MainActor
-class EventStore: ObservableObject {
-    @Published private(set) var events: [PuppyEvent] = []
-    @Published private(set) var currentDate: Date = Date()
-    @Published private(set) var isSyncing = false
-    @Published private(set) var syncError: String?
+class EventStore {
+    private(set) var events: [PuppyEvent] = []
+    private(set) var currentDate: Date = Date()
+    private(set) var isSyncing = false
+    private(set) var syncError: String?
 
-    let logger = Logger.otis(category: "EventStore")
+    @ObservationIgnored let logger = Logger.otis(category: "EventStore")
 
     /// Core Data event store
-    let coreDataStore: CoreDataEventStore
+    @ObservationIgnored let coreDataStore: CoreDataEventStore
 
     /// Media store for photo operations
-    private let mediaStore = MediaStore()
+    @ObservationIgnored private let mediaStore = MediaStore()
 
     /// Reference to profile store for profile-scoped queries
-    weak var profileStoreRef: ProfileStore?
+    @ObservationIgnored weak var profileStoreRef: ProfileStore?
 
     /// Reference to daily aggregate service for cache invalidation
-    weak var dailyAggregateServiceRef: DailyAggregateService?
+    @ObservationIgnored weak var dailyAggregateServiceRef: DailyAggregateService?
 
-    var cancellables = Set<AnyCancellable>()
+    @ObservationIgnored var cancellables = Set<AnyCancellable>()
 
     /// NSFetchedResultsController for reactive updates
-    private var fetchedResultsController: NSFetchedResultsController<CDPuppyEvent>?
+    @ObservationIgnored private var fetchedResultsController: NSFetchedResultsController<CDPuppyEvent>?
 
     init(persistenceController: PersistenceController = .shared) {
         self.coreDataStore = CoreDataEventStore(persistenceController: persistenceController)
@@ -94,13 +95,14 @@ class EventStore: ObservableObject {
 
     /// Load events for a specific date
     func loadEvents(for date: Date) {
-        // Defer all @Published mutations to the next run loop tick to avoid
+        // Defer mutations to the next run loop tick to avoid
         // "Publishing changes from within view updates" when called during
         // a SwiftUI body evaluation.
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
             self.currentDate = date
             self.events = self.coreDataStore.readEvents(for: date)
+            self.notifyEventsDidChange()
         }
     }
 
@@ -191,6 +193,9 @@ class EventStore: ObservableObject {
                     )
                 }
             }
+
+            // Notify observers of event changes
+            notifyEventsDidChange()
         } catch {
             logger.error("Failed to save event: \(error.localizedDescription)")
             syncError = error.localizedDescription
@@ -223,6 +228,9 @@ class EventStore: ObservableObject {
 
             // Recompute daily aggregate for this event's date
             triggerAggregateRecompute(for: event.time)
+
+            // Notify observers of event changes
+            notifyEventsDidChange()
         } catch {
             logger.error("Failed to delete event: \(error.localizedDescription)")
             syncError = error.localizedDescription
@@ -249,6 +257,9 @@ class EventStore: ObservableObject {
 
             // Recompute daily aggregate for this event's date
             triggerAggregateRecompute(for: updatedEvent.time)
+
+            // Notify observers of event changes
+            notifyEventsDidChange()
         } catch {
             logger.error("Failed to update event: \(error.localizedDescription)")
             syncError = error.localizedDescription
@@ -355,6 +366,10 @@ class EventStore: ObservableObject {
             Analytics.track(isNowLiked ? .eventLiked : .eventUnliked)
 
             logger.debug("Toggled like on event \(event.id.uuidString): now \(isNowLiked ? "liked" : "unliked")")
+
+            // Notify observers of event changes
+            notifyEventsDidChange()
+
             return updatedEvent
         } catch {
             logger.error("Failed to toggle like: \(error.localizedDescription)")
@@ -433,6 +448,7 @@ class EventStore: ObservableObject {
         events = []
         do {
             try coreDataStore.deleteAllEvents()
+            notifyEventsDidChange()
         } catch {
             logger.error("Failed to delete all events: \(error.localizedDescription)")
         }
@@ -442,4 +458,16 @@ class EventStore: ObservableObject {
     func retryPendingOperations() async {
         // With NSPersistentCloudKitContainer, retries are automatic
     }
+
+    /// Post notification when events change
+    /// Used by EventDataProvider and other observers since @Observable doesn't support Combine
+    func notifyEventsDidChange() {
+        NotificationCenter.default.post(name: .eventsDidChange, object: self)
+    }
+}
+
+// MARK: - Notifications
+
+extension Notification.Name {
+    static let eventsDidChange = Notification.Name("eventsDidChange")
 }

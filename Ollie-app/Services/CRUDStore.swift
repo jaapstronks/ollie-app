@@ -82,14 +82,29 @@ struct StoreSortOrder<Model> {
 @MainActor
 class CRUDStore<Model: StorableModel, Entity: CDEntityConvertible>: BaseStore where Entity.Model == Model {
 
-    // MARK: - Published State
+    // MARK: - State
 
-    @Published private(set) var items: [Model] = []
+    private(set) var items: [Model] = []
+
+    /// Store identifier for notifications (uses class name)
+    @ObservationIgnored
+    private lazy var storeIdentifier: String = String(describing: type(of: self))
 
     /// Protected method for subclasses to update items
     /// Use this when you need custom loading logic (e.g., profile-scoped fetching)
     func setItems(_ newItems: [Model]) {
         items = sortOrder.sort(newItems)
+        notifyItemsDidChange()
+    }
+
+    /// Post notification when items change
+    /// Used by ViewModels since @Observable doesn't support Combine publishers
+    func notifyItemsDidChange() {
+        NotificationCenter.default.post(
+            name: .crudStoreItemsDidChange,
+            object: self,
+            userInfo: ["storeIdentifier": storeIdentifier]
+        )
     }
 
     // MARK: - Sort Order
@@ -195,6 +210,7 @@ class CRUDStore<Model: StorableModel, Entity: CDEntityConvertible>: BaseStore wh
         items = cdEntities.compactMap { $0.toModel() }
         items = sortOrder.sort(items)
         logger.info("Loaded \(self.items.count) items")
+        notifyItemsDidChange()
     }
 
     /// Default implementation reloads all items
@@ -247,4 +263,12 @@ extension Milestone: StorableModel {
 
 extension DogAppointment: StorableModel {
     public var displayName: String { title }
+}
+
+// MARK: - Notifications
+
+extension Notification.Name {
+    /// Posted when a CRUDStore's items change
+    /// UserInfo contains "storeIdentifier" key with the store class name
+    static let crudStoreItemsDidChange = Notification.Name("crudStoreItemsDidChange")
 }

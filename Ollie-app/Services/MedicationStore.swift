@@ -15,9 +15,9 @@ import os
 @MainActor
 final class MedicationStore: BaseStore {
 
-    // MARK: - Published State
+    // MARK: - State
 
-    @Published private(set) var completions: [MedicationCompletion] = []
+    private(set) var completions: [MedicationCompletion] = []
 
     // MARK: - Init
 
@@ -122,7 +122,7 @@ final class MedicationStore: BaseStore {
 
     /// Clean up old completions (older than 90 days)
     func cleanupOldCompletions() {
-        let cutoffDate = Calendar.current.date(byAdding: .day, value: -90, to: Date()) ?? Date()
+        let cutoffDate = Date.daysAgo(90)
 
         let request = NSFetchRequest<CDMedicationCompletion>(entityName: "CDMedicationCompletion")
         request.predicate = NSPredicate(format: "date < %@", cutoffDate as CVarArg)

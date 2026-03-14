@@ -17,9 +17,9 @@ import os
 @MainActor
 final class WeightStore: BaseStore, ProfileAccessible {
 
-    // MARK: - Published State
+    // MARK: - State
 
-    @Published private(set) var measurements: [WeightMeasurement] = []
+    private(set) var measurements: [WeightMeasurement] = []
 
     // MARK: - ProfileAccessible
 

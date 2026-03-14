@@ -16,9 +16,9 @@ import os
 @MainActor
 final class DocumentStore: BaseStore, ProfileAccessible {
 
-    // MARK: - Published State
+    // MARK: - State
 
-    @Published private(set) var documents: [Document] = []
+    private(set) var documents: [Document] = []
 
     // MARK: - ProfileAccessible
 

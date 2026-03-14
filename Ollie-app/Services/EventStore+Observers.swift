@@ -129,18 +129,32 @@ extension EventStore {
     func handleRemoteChange() {
         logger.debug("Detected CloudKit remote change")
 
-        // Get current events before cache invalidation for comparison
+        // Get current events before refresh for comparison
         let previousEventIds = Set(events.map { $0.id })
+        let previousEventCount = events.count
+
+        // Check if there are actually new/changed events before doing expensive work
+        // This prevents unnecessary refreshes from WAL checkpoints and local operations
+        let freshEvents = coreDataStore.readEvents(for: currentDate)
+        let freshEventIds = Set(freshEvents.map { $0.id })
+
+        // Skip full refresh if nothing changed
+        if freshEventIds == previousEventIds && freshEvents.count == previousEventCount {
+            logger.debug("No actual changes detected, skipping full refresh")
+            return
+        }
+
+        // Actual changes detected - do the full refresh
+        logger.info("Remote changes detected: \(freshEventIds.subtracting(previousEventIds).count) new, \(previousEventIds.subtracting(freshEventIds).count) removed")
 
         // Invalidate ALL caches, not just current date
         // Sleep state calculations need recent events from multiple days
         coreDataStore.invalidateAllCaches()
         loadEvents(for: currentDate)
 
-        // Incrementally update affected daily aggregates
-        Task {
-            await handleIncrementalAggregateUpdate()
-        }
+        // NOTE: Do NOT recompute aggregates here - it triggers a Core Data save
+        // which sends another CloudKit notification, creating a loop.
+        // Aggregates will be recomputed lazily when accessed.
 
         // Check for new moments from other users and send notifications
         Task {

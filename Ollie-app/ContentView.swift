@@ -9,19 +9,19 @@ import OtisShared
 
 /// Root view with tab navigation or onboarding
 struct ContentView: View {
-    @EnvironmentObject var profileStore: ProfileStore
-    @EnvironmentObject var eventStore: EventStore
+    @Environment(ProfileStore.self) var profileStore
+    @Environment(EventStore.self) var eventStore
     @EnvironmentObject var dataImporter: DataImporter
     @EnvironmentObject var weatherService: WeatherService
     @EnvironmentObject var notificationService: NotificationService
-    @EnvironmentObject var spotStore: SpotStore
-    @EnvironmentObject var medicationStore: MedicationStore
-    @EnvironmentObject var socializationStore: SocializationStore
-    @EnvironmentObject var milestoneStore: MilestoneStore
-    @EnvironmentObject var documentStore: DocumentStore
-    @EnvironmentObject var contactStore: ContactStore
-    @EnvironmentObject var appointmentStore: AppointmentStore
-    @EnvironmentObject var routineStore: RoutineStore
+    @Environment(SpotStore.self) var spotStore
+    @Environment(MedicationStore.self) var medicationStore
+    @Environment(SocializationStore.self) var socializationStore
+    @Environment(MilestoneStore.self) var milestoneStore
+    @Environment(DocumentStore.self) var documentStore
+    @Environment(ContactStore.self) var contactStore
+    @Environment(AppointmentStore.self) var appointmentStore
+    @Environment(RoutineStore.self) var routineStore
     @EnvironmentObject var trainingMasteryStore: TrainingMasteryStore
     @EnvironmentObject var cloudKit: CloudKitService
     @EnvironmentObject var foodRecallService: FoodRecallService
@@ -357,18 +357,19 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
-        .environmentObject(ProfileStore())
-        .environmentObject(EventStore())
+        .environment(ProfileStore())
+        .environment(EventStore())
         .environmentObject(DataImporter())
         .environmentObject(WeatherService())
         .environmentObject(NotificationService())
-        .environmentObject(SpotStore())
+        .environment(SpotStore())
         .environmentObject(LocationManager())
-        .environmentObject(MedicationStore())
-        .environmentObject(SocializationStore())
-        .environmentObject(MilestoneStore())
-        .environmentObject(DocumentStore())
-        .environmentObject(ContactStore())
-        .environmentObject(AppointmentStore())
+        .environment(MedicationStore())
+        .environment(SocializationStore())
+        .environment(MilestoneStore())
+        .environment(DocumentStore())
+        .environment(ContactStore())
+        .environment(AppointmentStore())
+        .environment(RoutineStore())
         .environmentObject(CloudKitService.shared)
 }

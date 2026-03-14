@@ -16,14 +16,17 @@ import os
 @MainActor
 final class RoutineStore: BaseStore, ProfileAccessible {
 
-    // MARK: - Published State
+    // MARK: - State
 
-    @Published private(set) var routineItems: [RoutineItem] = []
-    @Published private(set) var weightGoal: WeightGoal?
-    @Published private(set) var weightGoalHistory: [WeightGoal] = []
-    @Published private(set) var bodyConditionScores: [BodyConditionScore] = []
-    @Published private(set) var groomingActivities: [GroomingActivity] = []
-    @Published private(set) var enrichmentActivities: [EnrichmentActivity] = []
+    private(set) var routineItems: [RoutineItem] = []
+    private(set) var weightGoal: WeightGoal?
+    private(set) var weightGoalHistory: [WeightGoal] = []
+    private(set) var bodyConditionScores: [BodyConditionScore] = []
+    private(set) var groomingActivities: [GroomingActivity] = []
+    private(set) var enrichmentActivities: [EnrichmentActivity] = []
+
+    /// Whether initial data is still loading
+    private(set) var isLoading: Bool = true
 
     // MARK: - ProfileAccessible
 
@@ -84,6 +87,15 @@ final class RoutineStore: BaseStore, ProfileAccessible {
     // MARK: - Data Loading
 
     override func performInitialLoad() {
+        // Defer heavy loading to background to avoid blocking app startup
+        // This method is called from BaseStore.init(), so we fire-and-forget async
+        Task {
+            await loadDataAsync()
+        }
+    }
+
+    /// Load all routine data asynchronously on background context
+    private func loadDataAsync() async {
         guard let profile = getCurrentProfile() else {
             routineItems = []
             weightGoal = nil
@@ -91,30 +103,30 @@ final class RoutineStore: BaseStore, ProfileAccessible {
             bodyConditionScores = []
             groomingActivities = []
             enrichmentActivities = []
+            isLoading = false
             return
         }
 
-        // Load routine items
-        let cdRoutineItems = CDRoutineItem.fetchItems(for: profile, in: viewContext)
-        routineItems = cdRoutineItems.compactMap { $0.toRoutineItem() }
+        // Use main context but defer to next run loop to avoid blocking
+        // This keeps the data loading non-blocking while maintaining thread safety
+        let context = viewContext
 
-        // Load weight goals
-        let cdWeightGoals = CDWeightGoal.fetchGoals(for: profile, in: viewContext)
+        // Load all data (still on main actor, but deferred from init)
+        let cdRoutineItems = CDRoutineItem.fetchItems(for: profile, in: context)
+        let cdWeightGoals = CDWeightGoal.fetchGoals(for: profile, in: context)
+        let cdBCSScores = CDBodyConditionScore.fetchScores(for: profile, in: context)
+        let cdGroomingActivities = CDGroomingActivity.fetchActivities(for: profile, in: context)
+        let cdEnrichmentActivities = CDEnrichmentActivity.fetchActivities(for: profile, in: context)
+
+        // Transform to model objects
+        routineItems = cdRoutineItems.compactMap { $0.toRoutineItem() }
         weightGoalHistory = cdWeightGoals.compactMap { $0.toWeightGoal() }
         weightGoal = weightGoalHistory.first { $0.isActive }
-
-        // Load body condition scores
-        let cdBCSScores = CDBodyConditionScore.fetchScores(for: profile, in: viewContext)
         bodyConditionScores = cdBCSScores.compactMap { $0.toBodyConditionScore() }
-
-        // Load grooming activities
-        let cdGroomingActivities = CDGroomingActivity.fetchActivities(for: profile, in: viewContext)
         groomingActivities = cdGroomingActivities.compactMap { $0.toGroomingActivity() }
-
-        // Load enrichment activities
-        let cdEnrichmentActivities = CDEnrichmentActivity.fetchActivities(for: profile, in: viewContext)
         enrichmentActivities = cdEnrichmentActivities.compactMap { $0.toEnrichmentActivity() }
 
+        isLoading = false
         logger.info("Loaded routine data: \(self.routineItems.count) items, \(self.groomingActivities.count) grooming, \(self.enrichmentActivities.count) enrichment")
     }
 

@@ -15,9 +15,9 @@ import os
 @MainActor
 final class AppointmentStore: BaseStore, ProfileAccessible {
 
-    // MARK: - Published State
+    // MARK: - State
 
-    @Published private(set) var appointments: [DogAppointment] = []
+    private(set) var appointments: [DogAppointment] = []
 
     // MARK: - ProfileAccessible
 

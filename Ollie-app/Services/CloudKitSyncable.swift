@@ -174,22 +174,23 @@ extension ProfileAccessible {
 
 /// Abstract base class for Core Data stores with CloudKit sync support.
 /// Subclasses should override `performInitialLoad()` to load their data.
+@Observable
 @MainActor
-class BaseStore: ObservableObject, CloudKitSyncable, ErrorTrackable, CloudKitRefreshable {
+class BaseStore: CloudKitSyncable, ErrorTrackable, CloudKitRefreshable {
 
     // MARK: - CloudKitSyncable
 
-    let persistenceController: PersistenceController
-    var cancellables = Set<AnyCancellable>()
-    let logger: Logger
+    @ObservationIgnored let persistenceController: PersistenceController
+    @ObservationIgnored var cancellables = Set<AnyCancellable>()
+    @ObservationIgnored let logger: Logger
 
     // MARK: - ErrorTrackable
 
-    @Published var lastError: AppError?
+    var lastError: AppError?
 
     // MARK: - Common State
 
-    @Published private(set) var isSyncing = false
+    private(set) var isSyncing = false
 
     // MARK: - Init
 

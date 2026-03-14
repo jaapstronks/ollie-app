@@ -15,13 +15,13 @@ import os
 @MainActor
 final class SocializationStore: BaseStore {
 
-    // MARK: - Published State
+    // MARK: - State
 
-    @Published var categories: [SocializationCategory] = []
-    @Published var exposuresByItem: [String: [Exposure]] = [:]
-    @Published var comfortableItems: [ComfortableItem] = []
-    @Published var earlyMilestones: [EarlyMilestoneRecord] = []
-    @Published var startedDate: Date?
+    var categories: [SocializationCategory] = []
+    var exposuresByItem: [String: [Exposure]] = [:]
+    var comfortableItems: [ComfortableItem] = []
+    var earlyMilestones: [EarlyMilestoneRecord] = []
+    var startedDate: Date?
 
     // MARK: - Phase Assignments (loaded from JSON)
 

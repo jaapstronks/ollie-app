@@ -42,7 +42,30 @@ extension ProfileStore {
 
     func handleRemoteChange() {
         logger.debug("Detected CloudKit remote change for profiles")
+
+        // Capture current state for comparison
+        let previousProfileIds = Set(profiles.map { $0.id })
+        let previousModifiedDates = Dictionary(uniqueKeysWithValues: profiles.map { ($0.id, $0.modifiedAt) })
+
+        // Load fresh profiles
         loadAllProfiles()
+
+        // Check if anything actually changed
+        let currentProfileIds = Set(profiles.map { $0.id })
+        let hasNewOrRemovedProfiles = currentProfileIds != previousProfileIds
+        let hasModifiedProfiles = profiles.contains { profile in
+            previousModifiedDates[profile.id] != profile.modifiedAt
+        }
+
+        if !hasNewOrRemovedProfiles && !hasModifiedProfiles {
+            logger.debug("No actual profile changes detected, skipping cascade")
+            return
+        }
+
+        // Actual changes - log what changed
+        let newProfiles = currentProfileIds.subtracting(previousProfileIds)
+        let removedProfiles = previousProfileIds.subtracting(currentProfileIds)
+        logger.info("Profile changes: \(newProfiles.count) new, \(removedProfiles.count) removed, modifications detected: \(hasModifiedProfiles)")
     }
 
     func handleShareAccepted() {

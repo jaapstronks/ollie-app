@@ -16,10 +16,10 @@ import os
 @MainActor
 final class RegressionLogStore: BaseStore {
 
-    // MARK: - Published State
+    // MARK: - State
 
-    @Published private(set) var regressionLogs: [RegressionLogEntry] = []
-    @Published private(set) var isLoading: Bool = true
+    private(set) var regressionLogs: [RegressionLogEntry] = []
+    private(set) var isLoading: Bool = true
 
     // MARK: - Computed Properties
 
@@ -30,7 +30,7 @@ final class RegressionLogStore: BaseStore {
 
     /// Get regressions from the last N days
     func recentRegressions(days: Int) -> [RegressionLogEntry] {
-        let cutoff = Calendar.current.date(byAdding: .day, value: -days, to: Date()) ?? Date()
+        let cutoff = Date.daysAgo(days)
         return regressionLogs.filter { $0.occurredAt >= cutoff }
     }
 
@@ -137,7 +137,7 @@ final class RegressionLogStore: BaseStore {
 
     /// Check if a skill has had recent regressions (within days)
     func hasRecentRegression(skillId: String, withinDays days: Int) -> Bool {
-        let cutoff = Calendar.current.date(byAdding: .day, value: -days, to: Date()) ?? Date()
+        let cutoff = Date.daysAgo(days)
         return regressionLogs.contains { $0.skillId == skillId && $0.occurredAt >= cutoff }
     }
 

@@ -304,6 +304,7 @@ final class MilestoneStore: CRUDStore<Milestone, CDMilestone>, ProfileAccessible
         notes: String? = nil,
         photoID: UUID? = nil,
         vetClinicName: String? = nil,
+        linkedContactID: UUID? = nil,
         completionDate: Date? = nil
     ) {
         var updated = milestone
@@ -312,6 +313,7 @@ final class MilestoneStore: CRUDStore<Milestone, CDMilestone>, ProfileAccessible
         updated.completionNotes = notes
         updated.completionPhotoID = photoID
         updated.vetClinicName = vetClinicName
+        updated.linkedContactID = linkedContactID
         updated.modifiedAt = Date()
 
         update(updated)
