@@ -419,15 +419,15 @@ extension Strings {
             static let looseLeashProofEnvironmentsName = String(localized: "Proof in Environments", table: table)
             static let looseLeashProofEnvironmentsSubtitle = String(localized: "Practice in progressively distracting locations", table: table)
 
-            // Come (Recall) phases
-            static let comeFoundationName = String(localized: "Foundation", table: table)
-            static let comeFoundationSubtitle = String(localized: "Build enthusiasm for running to you", table: table)
-            static let comeFrontPositionName = String(localized: "Front Position", table: table)
-            static let comeFrontPositionSubtitle = String(localized: "Coming directly to you and allowing collar touch", table: table)
-            static let comeBuildDistanceName = String(localized: "Build Distance", table: table)
-            static let comeBuildDistanceSubtitle = String(localized: "Practice with increasing distance on a long line", table: table)
-            static let comeProofDistractionsName = String(localized: "Proof with Distractions", table: table)
-            static let comeProofDistractionsSubtitle = String(localized: "Reliable recall in challenging environments", table: table)
+            // Come (Magic Recall) phases
+            static let comeChooseMagicWordName = String(localized: "Choose Your Magic Word", table: table)
+            static let comeChooseMagicWordSubtitle = String(localized: "Pick a special word and high-value treat", table: table)
+            static let comeBuildAssociationName = String(localized: "Build the Association", table: table)
+            static let comeBuildAssociationSubtitle = String(localized: "Magic word = jackpot treat, every time", table: table)
+            static let comePartnerExerciseName = String(localized: "Partner Exercise", table: table)
+            static let comePartnerExerciseSubtitle = String(localized: "Sit down, spread arms, call with excitement", table: table)
+            static let comeProofAndProgressName = String(localized: "Proof & Progress", table: table)
+            static let comeProofAndProgressSubtitle = String(localized: "Practice in new places, add distractions gradually", table: table)
 
             // Sit phases
             static let sitLureToPositionName = String(localized: "Lure to Position", table: table)
@@ -739,17 +739,17 @@ extension Strings {
 
             // MARK: - Name Recognition
             static let nameRecognitionName = String(localized: "Name Recognition", table: table)
-            static let nameRecognitionDescription = String(localized: "Your puppy learns to look at you when they hear their name. Essential for getting attention before giving commands.", table: table)
-            static let nameRecognitionDoneWhen = String(localized: "Your puppy immediately looks at you when you say their name, even with mild distractions.", table: table)
-            static let nameRecognitionHowTo1 = String(localized: "Wait until your puppy looks away", table: table)
-            static let nameRecognitionHowTo2 = String(localized: "Say their name once in a happy voice", table: table)
-            static let nameRecognitionHowTo3 = String(localized: "When they look at you, click and treat", table: table)
-            static let nameRecognitionHowTo4 = String(localized: "Gradually add distractions", table: table)
-            static let nameRecognitionHowTo5 = String(localized: "Practice in different locations", table: table)
-            static let nameRecognitionTip1 = String(localized: "Never use their name negatively", table: table)
-            static let nameRecognitionTip2 = String(localized: "Only say the name once - don't repeat it", table: table)
-            static let nameRecognitionTip3 = String(localized: "If they don't respond, try again later or reduce distractions", table: table)
-            static let nameRecognitionTip4 = String(localized: "Pair with eye contact for maximum attention", table: table)
+            static let nameRecognitionDescription = String(localized: "A simple skill to get your puppy's attention. Note: your puppy's name gets used constantly in daily life ('Good dog, Max!', 'No, Max!', 'Max, stop that!'), so it becomes background noise over time. That's perfectly fine — the name is for casual attention, not emergencies. For reliable recall, you'll use a special 'magic word' later.", table: table)
+            static let nameRecognitionDoneWhen = String(localized: "Your puppy looks at you when you say their name in a calm environment. Don't expect perfection — this is a 'nice to have' attention-getter, not a critical command.", table: table)
+            static let nameRecognitionHowTo1 = String(localized: "Wait until your puppy looks away from you", table: table)
+            static let nameRecognitionHowTo2 = String(localized: "Say their name once in a happy, upbeat voice", table: table)
+            static let nameRecognitionHowTo3 = String(localized: "When they look at you, click and treat. That's it!", table: table)
+            static let nameRecognitionHowTo4 = String(localized: "Repeat a few times, but keep sessions very short (1-2 minutes)", table: table)
+            static let nameRecognitionHowTo5 = String(localized: "Practice casually throughout the day — no need to drill this one", table: table)
+            static let nameRecognitionTip1 = String(localized: "Don't worry about perfecting this — name recognition naturally fades as the name becomes 'just a word' they hear all day", table: table)
+            static let nameRecognitionTip2 = String(localized: "Only say the name once. If they don't respond, just try later — no big deal", table: table)
+            static let nameRecognitionTip3 = String(localized: "For emergencies and reliable recall, you'll train a separate 'magic word' that stays powerful", table: table)
+            static let nameRecognitionTip4 = String(localized: "Keep it fun and casual — this is an easy win to build training confidence", table: table)
 
             // MARK: - Luring
             static let luringName = String(localized: "Luring", table: table)
@@ -902,38 +902,38 @@ extension Strings {
             static let downMistake2 = String(localized: "Waiting for perfect position instead of rewarding progress", table: table)
             static let downMistake3 = String(localized: "Physically pushing the dog into position", table: table)
 
-            // MARK: - Come
-            static let comeName = String(localized: "Come", table: table)
-            static let comeDescription = String(localized: "Recall is the most important safety command you'll ever teach. A reliable recall can save your puppy's life in emergencies and opens up a world of off-leash adventures together.", table: table)
-            static let comeDoneWhen = String(localized: "Your puppy comes immediately when called, even with distractions, and allows you to touch their collar.", table: table)
-            // Phase 1: Foundation - Run With Me
-            static let comeHowTo1 = String(localized: "Start with puppy at your side on a standard leash. Say 'Come!' and immediately run 2-4 meters forward together.", table: table)
-            static let comeHowTo2 = String(localized: "Click as your puppy follows alongside you. Slow down so they can catch up. Reward with treats from your hand.", table: table)
-            static let comeHowTo3 = String(localized: "Repeat 10 times per session. Your puppy learns that 'come' means exciting movement toward you, building a strong positive association.", table: table)
-            // Phase 2: Front Position & Collar Grab
-            static let comeHowTo4 = String(localized: "Face your puppy from 1-2 meters away. Say 'Come!' and move backward quickly. Click when they take the first steps toward you.", table: table)
-            static let comeHowTo5 = String(localized: "Reward between your legs to teach a straight approach. This prevents circling behavior and teaches them to come directly to you.", table: table)
-            static let comeHowTo6 = String(localized: "While treating, gently slide your fingers under the collar. Practice until collar touch is part of the reward sequence - this prevents 'close but out of reach' behavior.", table: table)
-            // Phase 3: Build Distance
-            static let comeHowTo7 = String(localized: "Attach a long line (10m) for safety. Have a helper hold your puppy, or use a 'stay' if reliable. Increase distance gradually: 3m, 5m, 10m+.", table: table)
-            static let comeHowTo8 = String(localized: "Call 'Come!' and move away from your puppy. Click while they're running at full speed toward you. Open your legs and toss a treat through them.", table: table)
-            static let comeHowTo9 = String(localized: "As they grab the treat, turn and run the opposite direction. This builds speed and enthusiasm - recall becomes a chase game they love.", table: table)
-            // Phase 4: Proof with Distractions
-            static let comeHowTo10 = String(localized: "Practice in progressively challenging environments: different rooms, backyard, front yard, quiet park, busier areas. Always use a long line until 100% reliable.", table: table)
-            static let comeHowTo11 = String(localized: "Practice when your puppy is sniffing, watching other dogs at distance, or exploring. Use treats of higher value than the competing distraction.", table: table)
-            static let comeHowTo12 = String(localized: "Integrate recall into daily life: call before meals, before going outside, randomly during play. Vary rewards - sometimes treats, sometimes play, sometimes just praise and release back to fun.", table: table)
+            // MARK: - Come (Magic Word Recall)
+            static let comeName = String(localized: "Magic Recall", table: table)
+            static let comeDescription = String(localized: "A bombproof recall that could save your dog's life. Here's the secret: don't use their name or 'come' — those words are worn out from daily overuse ('Come here!', 'Max, come!', 'Come on, let's go!'). Instead, you'll choose a 'magic word' that you ONLY use for emergency recall, paired with a high-value treat that makes coming to you irresistible.", table: table)
+            static let comeDoneWhen = String(localized: "Your dog drops everything and sprints to you when they hear the magic word, even with major distractions.", table: table)
+            // Phase 1: Choose Your Magic Word
+            static let comeHowTo1 = String(localized: "Pick a word that sounds happy and exciting but isn't used in daily conversation. For non-English speakers, 'Happy!' works great. Or invent a fun word like 'Bingo!', 'Yippee!', or 'Presto!' — something you'll enjoy saying with enthusiasm.", table: table)
+            static let comeHowTo2 = String(localized: "The word should be short (1-2 syllables), easy to say with excitement, and completely unique to recall. Never use it casually. This word = jackpot treat, always.", table: table)
+            static let comeHowTo3 = String(localized: "Choose your high-value treat: chicken, cheese, hot dog, or whatever makes your dog go absolutely crazy. This treat is ONLY for magic word training — never for anything else.", table: table)
+            // Phase 2: Build the Association
+            static let comeHowTo4 = String(localized: "Start indoors with no distractions. Say your magic word excitedly, then immediately give the jackpot treat. Your dog doesn't need to do anything yet — just build the association: magic word = amazing treat.", table: table)
+            static let comeHowTo5 = String(localized: "Repeat 5-10 times per session. Within a few sessions, your dog should perk up and look excited the moment they hear the magic word.", table: table)
+            static let comeHowTo6 = String(localized: "Test the association: say the magic word when your dog is slightly distracted. If they whip around excitedly, you're ready for the next phase.", table: table)
+            // Phase 3: Partner Exercise
+            static let comeHowTo7 = String(localized: "Have a partner hold your dog gently (or have them on a long line). Sit down on the floor about 2-3 meters away, spread your arms wide, and call the magic word with genuine excitement.", table: table)
+            static let comeHowTo8 = String(localized: "When your dog runs to you, make it a HUGE celebration. Jackpot treats, praise, petting — the works. This should feel like winning the lottery to them.", table: table)
+            static let comeHowTo9 = String(localized: "Gradually increase distance. When reliable, progress to standing (but still with open arms and excitement). Eventually, you can be more casual, but always reward generously.", table: table)
+            // Phase 4: Proof and Progress
+            static let comeHowTo10 = String(localized: "Practice in new locations: backyard, front yard, quiet park. Always use a long line until 100% reliable. Vary the distance and your body position.", table: table)
+            static let comeHowTo11 = String(localized: "Add mild distractions gradually. Call when sniffing, exploring, or watching (but not chasing) other dogs. The magic word should cut through anything.", table: table)
+            static let comeHowTo12 = String(localized: "Keep the magic word special: use it sparingly (a few times per week), always reward with high-value treats, and never use it for anything unpleasant. This word stays powerful for life.", table: table)
             // Tips by phase
-            static let comeTip1 = String(localized: "Puppies naturally love running with their people - use this enthusiasm to build a powerful positive association with the recall command", table: table)
-            static let comeTip2 = String(localized: "Pick a fresh cue word if your current recall has been 'poisoned' by negative experiences or being ignored repeatedly", table: table)
-            static let comeTip3 = String(localized: "Many dogs shy away when you reach for their collar. Practice collar touches with rewards until it's a positive part of coming to you", table: table)
-            static let comeTip4 = String(localized: "Never practice recall off-leash until it's 100% reliable on the long line - one failed recall teaches your puppy that ignoring you is an option", table: table)
-            static let comeTip5 = String(localized: "If recall fails, don't repeat the command. Wait, reward any movement toward you, and make the exercise easier next time", table: table)
-            static let comeTip6 = String(localized: "Coming to you should NEVER end the fun. After a recall during play, reward and release back to play. This teaches that coming doesn't mean game over", table: table)
+            static let comeTip1 = String(localized: "The magic word works because it's never 'polluted' by everyday use. Your dog's name and 'come' have been said thousands of times with no reward — they've learned to tune them out", table: table)
+            static let comeTip2 = String(localized: "Examples of good magic words: 'Bingo!', 'Yippee!', 'Presto!', 'Party!', 'Jackpot!', 'Happy!' (great for non-native English speakers)", table: table)
+            static let comeTip3 = String(localized: "Sitting down with open arms is irresistible to dogs — it looks welcoming and non-threatening. This body language makes them want to run to you", table: table)
+            static let comeTip4 = String(localized: "Never practice off-leash until it's 100% reliable on the long line — one failed recall weakens the magic", table: table)
+            static let comeTip5 = String(localized: "If recall fails, don't repeat the word. Walk closer, show the treat, and try again later with less distraction. Protect the magic word's power", table: table)
+            static let comeTip6 = String(localized: "Reserve the magic word for when you really need it. Use your dog's name or 'come here' for casual situations — save the magic for emergencies", table: table)
             // Mistakes
-            static let comeMistake1 = String(localized: "Calling your dog for something unpleasant (bath, nail trim, end of play) - go get them instead", table: table)
-            static let comeMistake2 = String(localized: "Chasing your dog when they don't come - this turns into a fun keep-away game for them", table: table)
-            static let comeMistake3 = String(localized: "Repeating 'come, come, COME' - this teaches them the word is meaningless until you sound angry", table: table)
-            static let comeMistake4 = String(localized: "Practicing off-leash before recall is rock-solid - one successful escape teaches them ignoring works", table: table)
+            static let comeMistake1 = String(localized: "Using the magic word too often or for casual situations — this dilutes its power", table: table)
+            static let comeMistake2 = String(localized: "Using the magic word then giving a low-value reward — always use the jackpot treat", table: table)
+            static let comeMistake3 = String(localized: "Calling for something unpleasant (bath, nail trim, crate) — go get them instead", table: table)
+            static let comeMistake4 = String(localized: "Practicing off-leash before rock-solid reliability — one successful escape teaches them ignoring works", table: table)
 
             // MARK: - Wait
             static let waitName = String(localized: "Wait", table: table)
