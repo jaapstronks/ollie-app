@@ -343,51 +343,23 @@ private struct PhotoCard: View {
 
     private var isZoomed: Bool { scale > 1.0 }
 
-    // Available space for the image (with padding)
-    private var availableWidth: CGFloat {
-        geometry.size.width - 32
-    }
-
-    // Leave room for: top bar (~56), bottom card (~180), padding (~24)
-    // Use proportional sizing that works across different screen sizes
+    // Available space for the image (accounting for top/bottom UI)
+    // Top bar ~56pt, bottom card ~180pt, safe padding ~24pt
     private var availableHeight: CGFloat {
-        max(geometry.size.height - 260, geometry.size.height * 0.55)
-    }
-
-    // Calculate optimal frame size based on actual image aspect ratio
-    private func imageFrame(for image: UIImage) -> CGSize {
-        let imageAspect = image.size.width / image.size.height
-
-        // Calculate both possible sizes (constrained by width vs height)
-        let widthConstrainedHeight = availableWidth / imageAspect
-        let heightConstrainedWidth = availableHeight * imageAspect
-
-        // Choose the size that fits within both constraints
-        if widthConstrainedHeight <= availableHeight {
-            // Image fits when constrained by width
-            return CGSize(width: availableWidth, height: widthConstrainedHeight)
-        } else {
-            // Image fits when constrained by height
-            return CGSize(width: heightConstrainedWidth, height: availableHeight)
-        }
+        geometry.size.height - 280
     }
 
     var body: some View {
-        VStack {
-            Spacer()
-
+        Group {
             if let uiImage = loadedImage {
-                let frameSize = imageFrame(for: uiImage)
-
                 // Photo with elegant card presentation
                 Image(uiImage: uiImage)
                     .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: frameSize.width, height: frameSize.height)
-                    .clipped()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(maxWidth: geometry.size.width - 32, maxHeight: availableHeight)
+                    .clipShape(RoundedRectangle(cornerRadius: 20))
                     .scaleEffect(scale)
                     .offset(offset)
-                    .clipShape(RoundedRectangle(cornerRadius: 20))
                     // Subtle shadow for depth
                     .shadow(color: .black.opacity(0.4), radius: 20, x: 0, y: 10)
                     // Subtle border
@@ -435,20 +407,17 @@ private struct PhotoCard: View {
                     }
                     .accessibilityLabel(Strings.MediaPreview.photoOf(event.type.label))
             } else {
-                // Loading placeholder - use a reasonable default aspect ratio
-                let placeholderHeight = min(availableHeight, availableWidth * 1.33)
+                // Loading placeholder
                 RoundedRectangle(cornerRadius: 20)
                     .fill(.ultraThinMaterial)
-                    .frame(width: availableWidth, height: placeholderHeight)
+                    .frame(width: 280, height: 380)
                     .overlay(
                         ProgressView()
                             .tint(.white)
                     )
             }
-
-            Spacer()
         }
-        .frame(width: geometry.size.width)
+        .frame(width: geometry.size.width, height: geometry.size.height)
     }
 
     private func resetOffset() {
