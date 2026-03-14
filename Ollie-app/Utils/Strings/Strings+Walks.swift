@@ -132,6 +132,28 @@ extension Strings {
         static let adjustSchedule = String(localized: "Adjust schedule", table: table)
     }
 
+    // MARK: - Walk Summary Card
+    enum WalkSummary {
+        static let title = String(localized: "This Week", table: table)
+
+        static func minutes(_ count: Int) -> String {
+            String(localized: "\(count) min", table: table)
+        }
+
+        static func hours(_ hours: Double) -> String {
+            let rounded = String(format: "%.1f", hours)
+            return String(localized: "\(rounded) hours", table: table)
+        }
+
+        static func daysProgress(days: Int) -> String {
+            String(localized: "\(days)/7 days", table: table)
+        }
+
+        static func accessibilityLabel(walks: Int, days: Int) -> String {
+            String(localized: "Weekly walk summary: \(walks) walks over \(days) days", table: table)
+        }
+    }
+
     // MARK: - Walks Tab
     enum WalksTab {
         static let title = String(localized: "Walks", table: table)

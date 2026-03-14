@@ -105,6 +105,8 @@ extension Strings {
         static let exercise = String(localized: "Exercise", table: table)
         static let result = String(localized: "Result", table: table)
         static let duration = String(localized: "Duration", table: table)
+        static let trainer = String(localized: "Trainer", table: table)
+        static let selectTrainer = String(localized: "Select trainer", table: table)
 
         // Accessibility
         static let noteAccessibilityHint = String(localized: "Enter an optional note", table: table)

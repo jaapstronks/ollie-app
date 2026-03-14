@@ -164,6 +164,26 @@ enum LayoutConstants {
     /// Slow animation duration
     static let animationSlow: Double = 0.4
 
+    // MARK: - Opacity
+
+    /// Disabled state opacity
+    static let opacityDisabled: Double = 0.4
+
+    /// Subtle background opacity (for tinted backgrounds)
+    static let opacitySubtle: Double = 0.08
+
+    /// Light background opacity
+    static let opacityLight: Double = 0.12
+
+    /// Medium background opacity
+    static let opacityMedium: Double = 0.15
+
+    /// Emphasis opacity
+    static let opacityEmphasis: Double = 0.2
+
+    /// Overlay opacity (for modals, sheets)
+    static let opacityOverlay: Double = 0.5
+
     // MARK: - Timeline Grid
 
     /// Height per hour in the vertical timeline (90pt per hour - 50% more room)

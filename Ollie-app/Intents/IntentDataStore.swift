@@ -238,7 +238,7 @@ final class IntentDataStore: @unchecked Sendable {
         // Inject loggedBy from shared profile if available
         var eventToSave = event
         if eventToSave.loggedBy == nil, let profile = loadProfile() {
-            eventToSave.loggedBy = profile.currentUserMemberId
+            eventToSave.loggedBy = profile.currentUserRecordID
         }
 
         guard let dataDir = dataDirectoryURL else {

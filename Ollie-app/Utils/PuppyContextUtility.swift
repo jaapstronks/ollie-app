@@ -51,7 +51,8 @@ enum PuppyContextUtility {
     /// - Parameter events: Today's events
     /// - Returns: true if 4+ hours since last event
     static func hasStaleLogging(events: [PuppyEvent]) -> Bool {
-        guard let lastEvent = events.sorted(by: { $0.time > $1.time }).first else {
+        // PERF: Use max(by:) O(n) instead of sorted().first O(n log n)
+        guard let lastEvent = events.max(by: { $0.time < $1.time }) else {
             // No events today - consider stale
             return true
         }

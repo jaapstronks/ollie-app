@@ -27,7 +27,12 @@ enum UpcomingItemType {
 
 /// Represents an upcoming scheduled item (meal or walk)
 struct UpcomingItem: Identifiable {
-    let id = UUID()
+    /// Stable ID based on item type and target time
+    /// This ensures ForEach can correctly track items across re-renders
+    var id: String {
+        "\(itemType)-\(Int(targetTime.timeIntervalSince1970))"
+    }
+
     let icon: String             // SF Symbol name
     let label: String
     let detail: String?
@@ -234,7 +239,12 @@ enum ActionableItemState {
 
 /// An item that requires action (within 10 min or overdue)
 struct ActionableItem: Identifiable {
-    let id = UUID()
+    /// Stable ID derived from the underlying item
+    /// This ensures ForEach can correctly track items across re-renders
+    var id: String {
+        "actionable-\(item.id)"
+    }
+
     let item: UpcomingItem
     let state: ActionableItemState
 }

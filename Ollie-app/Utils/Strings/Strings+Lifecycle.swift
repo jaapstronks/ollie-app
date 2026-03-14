@@ -55,6 +55,7 @@ extension Strings {
 
         // MARK: - Notification Preferences
         enum Notifications {
+            static let title = String(localized: "Notification Preferences", table: table)
             static let keepCurrent = String(localized: "Keep current settings", table: table)
             static let useDefaults = String(localized: "Use recommended settings", table: table)
             static func defaultsDescription(phase: String) -> String {

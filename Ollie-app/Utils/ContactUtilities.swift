@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 
+@MainActor
 enum ContactUtilities {
 
     /// Open the phone dialer with the given number

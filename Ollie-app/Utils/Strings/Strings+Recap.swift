@@ -88,6 +88,62 @@ extension Strings {
             String(localized: "Monthly recap for \(month): \(walks) walks, \(training) training sessions", table: table)
         }
 
+        // MARK: - Weekly Recap
+
+        // Week card titles
+        static let weekRecapTitle = String(localized: "Your week", table: table)
+        static let weekRecapReady = String(localized: "Your week recap is ready!", table: table)
+        static let viewWeekRecap = String(localized: "View week recap", table: table)
+        static let weekSheetTitle = String(localized: "Weekly Recap", table: table)
+        static let weekWith = String(localized: "week with", table: table)
+
+        // Week-specific labels
+        static let previousWeek = String(localized: "Previous week", table: table)
+        static let nextWeek = String(localized: "Next week", table: table)
+        static let noPhotosThisWeek = String(localized: "No photos this week", table: table)
+        static let noDataThisWeek = String(localized: "No activity logged this week", table: table)
+        static let dailyActivity = String(localized: "Daily Activity", table: table)
+        static let outdoors = String(localized: "outdoors", table: table)
+
+        static func avgSleep(_ hours: String) -> String {
+            String(localized: "\(hours) avg sleep", table: table)
+        }
+
+        static func weekRecapAccessibilityLabel(dateRange: String, walks: Int, training: Int) -> String {
+            String(localized: "Weekly recap for \(dateRange): \(walks) walks, \(training) training sessions", table: table)
+        }
+
+        // MARK: - Gotcha Day Anniversary
+
+        static let gotchaDayTitle = String(localized: "Happy Gotcha Day!", table: table)
+        static let shareCelebration = String(localized: "Share celebration", table: table)
+        static let thenLabel = String(localized: "Then", table: table)
+        static let nowLabel = String(localized: "Now", table: table)
+        static let dayOne = String(localized: "Day 1", table: table)
+        static let today = String(localized: "Today", table: table)
+
+        static func cameHome(_ date: String) -> String {
+            String(localized: "Came home \(date)", table: table)
+        }
+
+        static func gotchaDayAccessibilityLabel(years: Int, name: String) -> String {
+            if years == 1 {
+                return String(localized: "Happy Gotcha Day! 1 year with \(name)", table: table)
+            } else {
+                return String(localized: "Happy Gotcha Day! \(years) years with \(name)", table: table)
+            }
+        }
+
+        // Gotcha day sheet
+        static let lifetimeStats = String(localized: "Lifetime Stats", table: table)
+        static let skillsLearned = String(localized: "skills", table: table)
+        static let yourJourney = String(localized: "Your Journey", table: table)
+        static let daysTogetherLabel = String(localized: "days together", table: table)
+
+        static func totalWalkTime(_ time: String) -> String {
+            String(localized: "\(time) of walks", table: table)
+        }
+
         // MARK: - Year in Review
 
         // Year card titles

@@ -71,6 +71,7 @@ extension CDMilestone {
         self.completionNotes = milestone.completionNotes
         self.completionPhotoID = milestone.completionPhotoID
         self.vetClinicName = milestone.vetClinicName
+        self.linkedContactID = milestone.linkedContactID
         self.calendarEventID = milestone.calendarEventID
         self.reminderDaysBefore = Int32(milestone.reminderDaysBefore)
         self.icon = milestone.icon
@@ -113,6 +114,7 @@ extension CDMilestone {
             completionNotes: self.completionNotes,
             completionPhotoID: self.completionPhotoID,
             vetClinicName: self.vetClinicName,
+            linkedContactID: self.linkedContactID,
             calendarEventID: self.calendarEventID,
             reminderDaysBefore: Int(self.reminderDaysBefore),
             icon: icon,

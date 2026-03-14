@@ -82,6 +82,11 @@ extension Strings {
         static let comfortableState = String(localized: "Comfortable", table: table)
         static let needsPractice = String(localized: "Needs practice", table: table)
 
+        // Week detail
+        static let positiveRate = String(localized: "positive", table: table)
+        static let weeklyGoal = String(localized: "Weekly Goal", table: table)
+        static let categoryBreakdown = String(localized: "Category Breakdown", table: table)
+
         // Walk suggestions
         static let walkSuggestionsTitle = String(localized: "Watch for during walk", table: table)
         static let walkSuggestionsTip = String(localized: "Tap to log exposure", table: table)

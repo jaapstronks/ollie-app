@@ -62,7 +62,9 @@ extension CDEnrichmentActivity {
         self.type = activity.type.rawValue
         self.completedAt = activity.completedAt
         if let minutes = activity.durationMinutes {
-            self.durationMinutes = Int32(minutes)
+            self.durationMinutes = NSNumber(value: minutes)
+        } else {
+            self.durationMinutes = nil
         }
         self.note = activity.note
         self.createdAt = activity.createdAt
@@ -85,7 +87,7 @@ extension CDEnrichmentActivity {
             return nil
         }
 
-        let durationMinutes = self.durationMinutes > 0 ? Int(self.durationMinutes) : nil
+        let durationMinutes = self.durationMinutes?.intValue
 
         return EnrichmentActivity(
             id: id,

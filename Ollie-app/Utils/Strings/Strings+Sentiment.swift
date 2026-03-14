@@ -104,6 +104,9 @@ extension Strings {
         static let setPrimaryFocus = String(localized: "Set as main focus", table: table)
         static let clearPrimaryFocus = String(localized: "Clear main focus", table: table)
 
+        // MARK: - Focus Area
+        static let goodAreaToFocus = String(localized: "This is a good area to focus on right now.", table: table)
+
         // MARK: - Root Cause Explanations
         static let rootCausePottyCrate = String(localized: "Crate training helps with potty training - puppies naturally avoid soiling their den.", table: table)
         static let rootCauseNippingSleep = String(localized: "Overtired puppies bite more. Getting enough sleep will reduce nipping.", table: table)

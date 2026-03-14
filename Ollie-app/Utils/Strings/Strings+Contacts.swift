@@ -73,5 +73,8 @@ extension Strings {
         static let visitHistory = String(localized: "Visit history", table: table, comment: "Section header for past appointments")
         static let noAppointments = String(localized: "No appointments scheduled", table: table, comment: "Empty state when no appointments")
         static let viewInCalendar = String(localized: "View in Calendar", table: table, comment: "Button to navigate to calendar")
+
+        // Contact types
+        static let emergencyVet = String(localized: "Emergency Vet", table: table, comment: "Emergency vet contact type label")
     }
 }

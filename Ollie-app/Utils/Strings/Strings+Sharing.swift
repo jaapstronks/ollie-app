@@ -23,6 +23,11 @@ extension Strings {
         static let formatPortrait = String(localized: "Portrait", table: table)
         static let formatLandscape = String(localized: "Landscape", table: table)
 
+        // Format with aspect ratios
+        static let formatSquareRatio = String(localized: "Square (1:1)", table: table)
+        static let formatStoryRatio = String(localized: "Story (9:16)", table: table)
+        static let formatHorizontalRatio = String(localized: "Horizontal (16:9)", table: table)
+
         // Actions
         static let shareTo = String(localized: "Share to", table: table)
         static let instagramStory = String(localized: "IG Story", table: table)

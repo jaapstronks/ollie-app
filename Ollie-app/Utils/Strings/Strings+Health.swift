@@ -136,6 +136,8 @@ extension Strings {
         static let notesPlaceholder = String(localized: "Optional notes about this milestone...", table: milestonesTable)
         static let vetClinic = String(localized: "Vet clinic", table: milestonesTable)
         static let vetClinicPlaceholder = String(localized: "Clinic name (optional)", table: milestonesTable)
+        static let selectVet = String(localized: "Select vet", table: milestonesTable)
+        static let noVetContactsHint = String(localized: "Add a vet contact first in the Contacts section", table: milestonesTable)
         static let addToCalendar = String(localized: "Add to Calendar", table: milestonesTable)
         static let removeFromCalendar = String(localized: "Remove from Calendar", table: milestonesTable)
         static let addPhoto = String(localized: "Add Photo", table: milestonesTable)

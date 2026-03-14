@@ -30,6 +30,7 @@ extension CDPuppyEvent {
         self.video = event.video
         self.thumbnailPath = event.thumbnailPath
         self.cloudPhotoSynced = event.cloudPhotoSynced ?? false
+        self.cloudPhotoOwner = event.cloudPhotoOwner
         self.latitude = event.latitude ?? 0
         self.longitude = event.longitude ?? 0
         self.spotId = event.spotId
@@ -39,7 +40,7 @@ extension CDPuppyEvent {
         self.gapType = event.gapType?.rawValue
         self.endTime = event.endTime
         self.gapLocation = event.gapLocation
-        self.loggedBy = event.loggedBy
+        self.loggedBy = event.loggedBy  // Now a String (CloudKit record ID)
         self.napLocation = event.napLocation?.rawValue
 
         // Training session outcome fields
@@ -55,6 +56,16 @@ extension CDPuppyEvent {
         }
         self.trainingContext = event.trainingContext
         self.skillPhase = event.skillPhase
+
+        // Social fields - encode likes as JSON data
+        if let likes = event.likes, !likes.isEmpty {
+            self.likesData = try? JSONEncoder().encode(likes)
+        } else {
+            self.likesData = nil
+        }
+
+        // Contact linking
+        self.linkedContactID = event.linkedContactID
     }
 
     /// Create a new CDPuppyEvent from a PuppyEvent struct
@@ -98,6 +109,14 @@ extension CDPuppyEvent {
             napLocation = nil
         }
 
+        // Decode likes from JSON data
+        let likes: [EventLike]?
+        if let likesData = self.likesData {
+            likes = try? JSONDecoder().decode([EventLike].self, from: likesData)
+        } else {
+            likes = nil
+        }
+
         return PuppyEvent(
             id: id,
             time: time,
@@ -116,6 +135,7 @@ extension CDPuppyEvent {
             longitude: self.longitude != 0 ? self.longitude : nil,
             thumbnailPath: self.thumbnailPath,
             cloudPhotoSynced: self.cloudPhotoSynced,
+            cloudPhotoOwner: self.cloudPhotoOwner,
             weightKg: self.weightKg != 0 ? self.weightKg : nil,
             spotId: self.spotId,
             spotName: self.spotName,
@@ -129,7 +149,9 @@ extension CDPuppyEvent {
             successReps: self.successReps?.intValue,
             failedReps: self.failedReps?.intValue,
             trainingContext: self.trainingContext,
-            skillPhase: self.skillPhase
+            skillPhase: self.skillPhase,
+            likes: likes,
+            linkedContactID: self.linkedContactID
         )
     }
 }

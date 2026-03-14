@@ -133,8 +133,8 @@ enum AppointmentNudgeCalculations {
             ))
         }
 
-        // Sort by priority and return the top candidate
-        return candidates.sorted { $0.priorityScore < $1.priorityScore }.first
+        // PERF: Use min(by:) O(n) instead of sorted().first O(n log n)
+        return candidates.min(by: { $0.priorityScore < $1.priorityScore })
     }
 
     // MARK: - Helpers
