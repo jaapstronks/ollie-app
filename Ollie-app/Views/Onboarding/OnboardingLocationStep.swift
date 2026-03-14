@@ -10,7 +10,7 @@ import CoreLocation
 
 /// Pre-permission screen explaining location benefits before requesting
 struct OnboardingLocationStep: View {
-    @EnvironmentObject var locationManager: LocationManager
+    @Environment(LocationManager.self) var locationManager
     let onComplete: () -> Void
 
     @State private var showingCheckmark = false
@@ -180,5 +180,5 @@ private struct LocationBenefitRow: View {
 
 #Preview {
     OnboardingLocationStep(onComplete: {})
-        .environmentObject(LocationManager())
+        .environment(LocationManager())
 }

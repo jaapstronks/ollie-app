@@ -7,7 +7,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject private var dataProvider = WatchDataProvider.shared
+    @State private var dataProvider = WatchDataProvider.shared
 
     var body: some View {
         TabView {

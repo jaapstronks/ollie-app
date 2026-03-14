@@ -6,22 +6,22 @@
 //  Part of Brief 04: Health Logging
 //
 
-import Combine
 import Foundation
 import SwiftUI
 import OtisShared
 
 // MARK: - Health Check-In Store
 
+@Observable
 @MainActor
-final class HealthCheckInStore: ObservableObject {
+final class HealthCheckInStore {
     static let shared = HealthCheckInStore()
 
-    @Published private(set) var checkIns: [HealthCheckInCategory: HealthCheckIn] = [:]
+    private(set) var checkIns: [HealthCheckInCategory: HealthCheckIn] = [:]
 
-    private let fileURL: URL
-    private let checkInIntervalDays = 3  // Ask about each category every 3 days
-    private let calendar = Calendar.current
+    @ObservationIgnored private let fileURL: URL
+    @ObservationIgnored private let checkInIntervalDays = 3  // Ask about each category every 3 days
+    @ObservationIgnored private let calendar = Calendar.current
 
     private init() {
         let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]

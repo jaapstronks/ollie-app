@@ -19,7 +19,7 @@ struct WeightLogSheet: View {
     @State private var selectedDate: Date = Date()
     @FocusState private var isWeightFocused: Bool
 
-    @EnvironmentObject var unitPreferences: UnitPreferences
+    @Environment(UnitPreferences.self) var unitPreferences
     @Environment(\.colorScheme) private var colorScheme
 
     private var isEditing: Bool {

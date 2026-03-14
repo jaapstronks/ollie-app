@@ -16,7 +16,7 @@ struct ActionableEventCard: View {
     var poopStatus: PoopStatus?
 
     @Environment(SocializationStore.self) private var socializationStore
-    @EnvironmentObject var unitPreferences: UnitPreferences
+    @Environment(UnitPreferences.self) var unitPreferences
     @State private var showWalkTips = false
 
     private var temperatureUnit: TemperatureUnit {
@@ -285,7 +285,7 @@ struct ActionableEventCard: View {
 /// Separates items that need action now vs items coming later
 struct ScheduledEventsSection: View {
     @Bindable var viewModel: TimelineViewModel
-    @ObservedObject var weatherService: WeatherService
+    var weatherService: WeatherService
 
     /// Pre-computed separated items (optional, to avoid redundant calculation when passed from parent)
     var precomputedSeparated: (actionable: [ActionableItem], upcoming: [UpcomingItem])?
@@ -332,7 +332,7 @@ struct UpcomingEventsCard: View {
 
     @State private var isExpanded = false
 
-    @EnvironmentObject var unitPreferences: UnitPreferences
+    @Environment(UnitPreferences.self) var unitPreferences
 
     private var temperatureUnit: TemperatureUnit {
         unitPreferences.temperatureUnit

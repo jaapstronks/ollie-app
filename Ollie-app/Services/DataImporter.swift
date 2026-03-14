@@ -6,7 +6,6 @@
 
 import Foundation
 import OtisShared
-import Combine
 import CoreData
 import UIKit
 import os
@@ -38,19 +37,20 @@ struct ImportResult {
 }
 
 /// Service for importing data from exported JSON files
+@Observable
 @MainActor
-class DataImporter: ObservableObject {
-    @Published private(set) var isImporting: Bool = false
-    @Published private(set) var progress: String = ""
-    @Published private(set) var importProgress: ImportProgress?
-    @Published private(set) var lastResult: ImportResult?
-    @Published private(set) var lastPreview: ImportPreview?
-    @Published private(set) var lastError: String?
+class DataImporter {
+    private(set) var isImporting: Bool = false
+    private(set) var progress: String = ""
+    private(set) var importProgress: ImportProgress?
+    private(set) var lastResult: ImportResult?
+    private(set) var lastPreview: ImportPreview?
+    private(set) var lastError: String?
 
-    private let fileManager = FileManager.default
-    private let persistenceController: PersistenceController
-    private let logger = Logger.otis(category: "DataImporter")
-    private let decoder: JSONDecoder
+    @ObservationIgnored private let fileManager = FileManager.default
+    @ObservationIgnored private let persistenceController: PersistenceController
+    @ObservationIgnored private let logger = Logger.otis(category: "DataImporter")
+    @ObservationIgnored private let decoder: JSONDecoder
 
     // MARK: - Security
 

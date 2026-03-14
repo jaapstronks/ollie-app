@@ -12,7 +12,7 @@ import OtisShared
 /// Sheet for adding a new walk spot
 struct AddSpotSheet: View {
     var spotStore: SpotStore
-    @ObservedObject var locationManager: LocationManager
+    var locationManager: LocationManager
 
     @Environment(\.dismiss) private var dismiss
 

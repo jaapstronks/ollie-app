@@ -17,7 +17,7 @@ struct CalendarTabView: View {
     let onNavigateToSocialization: () -> Void
 
     @Environment(ProfileStore.self) var profileStore
-    @StateObject private var achievementService = AchievementService.shared
+    @State private var achievementService = AchievementService.shared
 
     // View mode state with persistence - using new key to avoid migration issues
     @AppStorage("scheduleViewMode") private var viewMode: CalendarViewMode = .calendar

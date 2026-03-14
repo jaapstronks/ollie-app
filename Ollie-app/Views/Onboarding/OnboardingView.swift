@@ -14,8 +14,8 @@ struct OnboardingView: View {
     var profileStore: ProfileStore
     /// When true, this is adding a second profile (skip welcome/permissions)
     var isAddingProfile: Bool = false
-    @EnvironmentObject var notificationService: NotificationService
-    @EnvironmentObject var locationManager: LocationManager
+    @Environment(NotificationService.self) var notificationService
+    @Environment(LocationManager.self) var locationManager
     let onComplete: () -> Void
 
     // Step state - default to Name step for faster time-to-value
@@ -440,6 +440,6 @@ struct OnboardingView: View {
     OnboardingView(profileStore: ProfileStore()) {
         print("Onboarding complete")
     }
-    .environmentObject(NotificationService())
-    .environmentObject(LocationManager())
+    .environment(NotificationService())
+    .environment(LocationManager())
 }

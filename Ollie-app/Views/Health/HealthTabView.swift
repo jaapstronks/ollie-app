@@ -14,7 +14,7 @@ struct HealthTabView: View {
     var momentsViewModel: MomentsViewModel
     let onSettingsTap: () -> Void
 
-    @EnvironmentObject var subscriptionManager: SubscriptionManager
+    @Environment(SubscriptionManager.self) var subscriptionManager
     @Environment(ProfileStore.self) var profileStore
     @Environment(MilestoneStore.self) var milestoneStore
     @Environment(AppointmentStore.self) var appointmentStore
@@ -519,7 +519,7 @@ private struct HealthMilestoneRow: View {
         momentsViewModel: momentsViewModel,
         onSettingsTap: { print("Settings tapped") }
     )
-    .environmentObject(SubscriptionManager.shared)
+    .environment(SubscriptionManager.shared)
     .environment(profileStore)
     .environment(MilestoneStore())
     .environment(AppointmentStore())

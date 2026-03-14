@@ -8,21 +8,21 @@
 import Foundation
 import SwiftUI
 import OtisShared
-import Combine
 import os
 
 /// Service for detecting achievements and managing the celebration queue
+@Observable
 @MainActor
-final class AchievementService: ObservableObject {
+final class AchievementService {
 
-    // MARK: - Published State
+    // MARK: - State
 
-    @Published private(set) var state: AchievementState
-    @Published private(set) var pendingCelebration: Achievement?
+    private(set) var state: AchievementState
+    private(set) var pendingCelebration: Achievement?
 
     // MARK: - Settings
 
-    @AppStorage(UserPreferences.Key.celebrationStyle.rawValue)
+    @ObservationIgnored @AppStorage(UserPreferences.Key.celebrationStyle.rawValue)
     private var celebrationStyleRaw: String = CelebrationStyle.full.rawValue
 
     var celebrationStyle: CelebrationStyle {
@@ -31,9 +31,8 @@ final class AchievementService: ObservableObject {
 
     // MARK: - Private
 
-    private let logger = Logger.otis(category: "AchievementService")
-    private static let stateFileName = "achievement_state.json"
-    private var cancellables = Set<AnyCancellable>()
+    @ObservationIgnored private let logger = Logger.otis(category: "AchievementService")
+    @ObservationIgnored private static let stateFileName = "achievement_state.json"
 
     // MARK: - Singleton
 

@@ -11,7 +11,7 @@ import OtisShared
 
 struct SentimentOnboardingSheet: View {
     @Environment(\.dismiss) private var dismiss
-    @ObservedObject var sentimentStore: SentimentStore
+    var sentimentStore: SentimentStore
 
     let profile: PuppyProfile
     let events: [PuppyEvent]

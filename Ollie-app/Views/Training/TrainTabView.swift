@@ -29,7 +29,7 @@ struct TrainTabView: View {
     @AppStorage("hasSeenTrainTip") private var hasSeenTrainTip = false
 
     // Training mastery state
-    @EnvironmentObject var trainingMasteryStore: TrainingMasteryStore
+    @Environment(TrainingMasteryStore.self) var trainingMasteryStore
 
     @State private var showPottyMasteryConfirmation = false
     @State private var showLeashMasteryConfirmation = false

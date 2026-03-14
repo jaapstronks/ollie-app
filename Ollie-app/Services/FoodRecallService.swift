@@ -5,25 +5,25 @@
 //  Service for fetching pet food recall alerts from FDA API
 
 import Foundation
-import Combine
 import os
 import OtisShared
 
 /// Service for fetching and managing pet food recall alerts
+@Observable
 @MainActor
-class FoodRecallService: ObservableObject {
+class FoodRecallService {
 
     // MARK: - Published State
 
-    @Published var recalls: [FoodRecall] = []
-    @Published var matchingRecalls: [FoodRecall] = []
-    @Published var isLoading = false
-    @Published var lastError: Error?
-    @Published var lastChecked: Date?
+    var recalls: [FoodRecall] = []
+    var matchingRecalls: [FoodRecall] = []
+    var isLoading = false
+    var lastError: Error?
+    var lastChecked: Date?
 
     // MARK: - Settings
 
-    @Published var settings: FoodAlertSettings {
+    var settings: FoodAlertSettings {
         didSet {
             saveSettings()
         }
@@ -31,9 +31,9 @@ class FoodRecallService: ObservableObject {
 
     // MARK: - Private
 
-    private let logger = Logger.otis(category: "FoodRecallService")
-    private var cache: (recalls: [FoodRecall], fetchedAt: Date)?
-    private let cacheValidityHours: Double = 6
+    @ObservationIgnored private let logger = Logger.otis(category: "FoodRecallService")
+    @ObservationIgnored private var cache: (recalls: [FoodRecall], fetchedAt: Date)?
+    @ObservationIgnored private let cacheValidityHours: Double = 6
 
     // MARK: - Common Pet Food Brands
 

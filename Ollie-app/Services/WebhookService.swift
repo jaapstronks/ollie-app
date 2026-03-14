@@ -4,25 +4,25 @@
 //
 //  Sends webhook notifications when events are logged
 
-import Combine
 import Foundation
 import OtisShared
 import os
 
 /// Service for sending webhook notifications
+@Observable
 @MainActor
-class WebhookService: ObservableObject {
+class WebhookService {
     static let shared = WebhookService()
 
-    @Published private(set) var lastError: Error?
-    @Published private(set) var isSending = false
-    @Published private(set) var lastSentTime: Date?
-    @Published private(set) var lastStatusCode: Int?
+    private(set) var lastError: Error?
+    private(set) var isSending = false
+    private(set) var lastSentTime: Date?
+    private(set) var lastStatusCode: Int?
 
-    private let logger = Logger.otis(category: "WebhookService")
+    @ObservationIgnored private let logger = Logger.otis(category: "WebhookService")
 
     /// Request timeout in seconds
-    private let requestTimeout: TimeInterval = 10
+    @ObservationIgnored private let requestTimeout: TimeInterval = 10
 
     private init() {}
 

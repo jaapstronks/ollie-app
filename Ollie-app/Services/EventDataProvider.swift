@@ -24,17 +24,18 @@ import Sentry
 
 /// Centralized event data provider with intelligent caching
 /// Services should use this instead of fetching directly from EventStore
+@Observable
 @MainActor
-final class EventDataProvider: ObservableObject {
+final class EventDataProvider {
 
     // MARK: - Global Refresh Lock
     // PERF: Prevents multiple EventDataProvider instances from refreshing simultaneously
-    private static var isGlobalRefreshInProgress = false
-    private static var lastGlobalRefreshTime: Date = .distantPast
+    @ObservationIgnored private static var isGlobalRefreshInProgress = false
+    @ObservationIgnored private static var lastGlobalRefreshTime: Date = .distantPast
 
     // MARK: - Dependencies
 
-    private let eventStore: EventStore
+    @ObservationIgnored private let eventStore: EventStore
 
     // MARK: - Cached Data
     // PERFORMANCE: Using manual backing storage to batch objectWillChange notifications
@@ -71,20 +72,20 @@ final class EventDataProvider: ObservableObject {
     // MARK: - Cache State
 
     /// Last time historical data was refreshed
-    private var lastHistoricalRefresh: Date?
+    @ObservationIgnored private var lastHistoricalRefresh: Date?
 
     /// Active refresh task (cancelled if new refresh requested)
-    private var refreshTask: Task<Void, Never>?
+    @ObservationIgnored private var refreshTask: Task<Void, Never>?
 
     /// Flag to prevent concurrent refreshes
-    private var isRefreshInProgress: Bool = false
+    @ObservationIgnored private var isRefreshInProgress: Bool = false
 
     /// How long cached historical data remains valid
     /// PERFORMANCE: Increased from 30s to 120s - data only changes when user logs events
-    private let cacheValidDuration: TimeInterval = 120 // seconds
+    @ObservationIgnored private let cacheValidDuration: TimeInterval = 120 // seconds
 
     /// Subscription to EventStore changes
-    private var eventStoreCancellable: AnyCancellable?
+    @ObservationIgnored private var eventStoreCancellable: AnyCancellable?
 
     // MARK: - Initialization
 
@@ -99,9 +100,8 @@ final class EventDataProvider: ObservableObject {
             .sink { [weak self] _ in
                 guard let self = self else { return }
 
-                // Update today's events immediately (triggers single objectWillChange)
+                // Update today's events immediately
                 self._todayEvents = self.eventStore.events
-                self.objectWillChange.send()
 
                 // Invalidate historical cache and schedule refresh
                 self.invalidateAndRefresh()
@@ -288,9 +288,6 @@ final class EventDataProvider: ObservableObject {
 
         lastHistoricalRefresh = Date()
         _isRefreshing = false
-
-        // Single objectWillChange for all updates
-        objectWillChange.send()
 
         refreshTransaction?.finish()
     }

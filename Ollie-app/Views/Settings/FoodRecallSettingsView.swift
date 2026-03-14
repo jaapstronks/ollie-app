@@ -8,7 +8,7 @@ import SwiftUI
 
 /// Settings view for food recall alerts configuration
 struct FoodRecallSettingsView: View {
-    @ObservedObject var foodRecallService: FoodRecallService
+    @Bindable var foodRecallService: FoodRecallService
     @State private var showingBrandPicker = false
     @State private var customBrand = ""
     @FocusState private var isCustomBrandFocused: Bool
@@ -225,7 +225,7 @@ private struct BrandPickerSheet: View {
 
 private struct RecallListView: View {
     let recalls: [FoodRecall]
-    @ObservedObject var foodRecallService: FoodRecallService
+    var foodRecallService: FoodRecallService
 
     var body: some View {
         List {
@@ -241,7 +241,7 @@ private struct RecallListView: View {
 
 private struct RecallRowView: View {
     let recall: FoodRecall
-    @ObservedObject var foodRecallService: FoodRecallService
+    var foodRecallService: FoodRecallService
     @State private var showingDetail = false
 
     private var isAcknowledged: Bool {
@@ -300,7 +300,7 @@ private struct RecallRowView: View {
 
 private struct RecallDetailSheet: View {
     let recall: FoodRecall
-    @ObservedObject var foodRecallService: FoodRecallService
+    var foodRecallService: FoodRecallService
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {

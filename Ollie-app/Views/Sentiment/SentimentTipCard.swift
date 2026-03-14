@@ -117,7 +117,7 @@ struct SentimentTipCard: View {
 /// Container that shows tips for all struggling areas.
 /// Tips can be dismissed for the rest of the day.
 struct SentimentTipsContainer: View {
-    @ObservedObject var sentimentStore: SentimentStore
+    var sentimentStore: SentimentStore
     let onInfoSheet: ((InfoSheetType) -> Void)?
 
     // Track dismissed tip date - when dismissed today, hide until tomorrow

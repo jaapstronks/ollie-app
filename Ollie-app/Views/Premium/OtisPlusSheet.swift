@@ -13,8 +13,8 @@ struct OtisPlusSheet: View {
     let onDismiss: () -> Void
     let onSubscribed: () -> Void
 
-    @ObservedObject var subscriptionManager = SubscriptionManager.shared
-    @ObservedObject private var trialManager = TrialManager.shared
+    var subscriptionManager = SubscriptionManager.shared
+    private let trialManager = TrialManager.shared
     var profileStore = ProfileStore.shared
     @Environment(\.colorScheme) private var colorScheme
 

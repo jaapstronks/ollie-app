@@ -9,13 +9,15 @@ import Foundation
 import Combine
 import OtisShared
 
+@Observable
 @MainActor
-final class ContributionStatsViewModel: ObservableObject {
-    @Published private(set) var stats: [ContributionStats] = []
-    @Published private(set) var summary: ContributionSummary?
-    @Published private(set) var currentUserStats: ContributionStats?
-    @Published var selectedPeriod: ContributionPeriod = .thisWeek
+final class ContributionStatsViewModel {
+    private(set) var stats: [ContributionStats] = []
+    private(set) var summary: ContributionSummary?
+    private(set) var currentUserStats: ContributionStats?
+    var selectedPeriod: ContributionPeriod = .thisWeek
 
+    @ObservationIgnored
     private let eventStore: EventStore
 
     init(eventStore: EventStore) {

@@ -7,12 +7,12 @@
 //
 
 import SwiftUI
-import Combine
 
 /// Centralized training mastery state accessible via environment object.
 /// Replaces repeated @AppStorage patterns for training mastery flags.
+@Observable
 @MainActor
-final class TrainingMasteryStore: ObservableObject {
+final class TrainingMasteryStore {
 
     // MARK: - Shared Instance
 
@@ -20,13 +20,13 @@ final class TrainingMasteryStore: ObservableObject {
 
     // MARK: - Potty Training
 
-    @Published var pottyTrainingMastered: Bool {
+    var pottyTrainingMastered: Bool {
         didSet {
             UserDefaults.standard.set(pottyTrainingMastered, forKey: UserPreferences.Key.pottyTrainingMastered.rawValue)
         }
     }
 
-    @Published var pottyMasteredDate: Date? {
+    var pottyMasteredDate: Date? {
         didSet {
             if let date = pottyMasteredDate {
                 UserDefaults.standard.set(date.timeIntervalSince1970, forKey: UserPreferences.Key.pottyTrainingMasteredDate.rawValue)
@@ -38,13 +38,13 @@ final class TrainingMasteryStore: ObservableObject {
 
     // MARK: - Crate Training
 
-    @Published var crateTrainingMastered: Bool {
+    var crateTrainingMastered: Bool {
         didSet {
             UserDefaults.standard.set(crateTrainingMastered, forKey: UserPreferences.Key.crateTrainingMastered.rawValue)
         }
     }
 
-    @Published var crateMasteredDate: Date? {
+    var crateMasteredDate: Date? {
         didSet {
             if let date = crateMasteredDate {
                 UserDefaults.standard.set(date.timeIntervalSince1970, forKey: UserPreferences.Key.crateTrainingMasteredDate.rawValue)
@@ -56,7 +56,7 @@ final class TrainingMasteryStore: ObservableObject {
 
     // MARK: - Potty Mastery Prompt Tracking
 
-    @Published var pottyMasteryPromptDismissedDate: Date? {
+    var pottyMasteryPromptDismissedDate: Date? {
         didSet {
             if let date = pottyMasteryPromptDismissedDate {
                 UserDefaults.standard.set(date.timeIntervalSince1970, forKey: UserPreferences.Key.pottyMasteryPromptDismissedDate.rawValue)
@@ -66,7 +66,7 @@ final class TrainingMasteryStore: ObservableObject {
         }
     }
 
-    @Published var pottyMasteryPromptDismissCount: Int {
+    var pottyMasteryPromptDismissCount: Int {
         didSet {
             UserDefaults.standard.set(pottyMasteryPromptDismissCount, forKey: UserPreferences.Key.pottyMasteryPromptDismissCount.rawValue)
         }
@@ -74,7 +74,7 @@ final class TrainingMasteryStore: ObservableObject {
 
     // MARK: - Potty Incident Tracking
 
-    @Published var pottyReactivationPromptDismissedDate: Date? {
+    var pottyReactivationPromptDismissedDate: Date? {
         didSet {
             if let date = pottyReactivationPromptDismissedDate {
                 UserDefaults.standard.set(date.timeIntervalSince1970, forKey: UserPreferences.Key.pottyReactivationPromptDismissedDate.rawValue)
@@ -84,7 +84,7 @@ final class TrainingMasteryStore: ObservableObject {
         }
     }
 
-    @Published var pottyLastIncidentAcknowledgedDate: Date? {
+    var pottyLastIncidentAcknowledgedDate: Date? {
         didSet {
             if let date = pottyLastIncidentAcknowledgedDate {
                 UserDefaults.standard.set(date.timeIntervalSince1970, forKey: UserPreferences.Key.pottyLastIncidentAcknowledgedDate.rawValue)
@@ -96,13 +96,13 @@ final class TrainingMasteryStore: ObservableObject {
 
     // MARK: - Leash Training
 
-    @Published var leashTrainingMastered: Bool {
+    var leashTrainingMastered: Bool {
         didSet {
             UserDefaults.standard.set(leashTrainingMastered, forKey: UserPreferences.Key.leashTrainingMastered.rawValue)
         }
     }
 
-    @Published var leashMasteredDate: Date? {
+    var leashMasteredDate: Date? {
         didSet {
             if let date = leashMasteredDate {
                 UserDefaults.standard.set(date.timeIntervalSince1970, forKey: UserPreferences.Key.leashTrainingMasteredDate.rawValue)
@@ -112,7 +112,7 @@ final class TrainingMasteryStore: ObservableObject {
         }
     }
 
-    @Published var leashMasteryPromptDismissedDate: Date? {
+    var leashMasteryPromptDismissedDate: Date? {
         didSet {
             if let date = leashMasteryPromptDismissedDate {
                 UserDefaults.standard.set(date.timeIntervalSince1970, forKey: UserPreferences.Key.leashMasteryPromptDismissedDate.rawValue)
@@ -122,13 +122,13 @@ final class TrainingMasteryStore: ObservableObject {
         }
     }
 
-    @Published var leashMasteryPromptDismissCount: Int {
+    var leashMasteryPromptDismissCount: Int {
         didSet {
             UserDefaults.standard.set(leashMasteryPromptDismissCount, forKey: UserPreferences.Key.leashMasteryPromptDismissCount.rawValue)
         }
     }
 
-    @Published var leashReactivationPromptDismissedDate: Date? {
+    var leashReactivationPromptDismissedDate: Date? {
         didSet {
             if let date = leashReactivationPromptDismissedDate {
                 UserDefaults.standard.set(date.timeIntervalSince1970, forKey: UserPreferences.Key.leashReactivationPromptDismissedDate.rawValue)
@@ -138,7 +138,7 @@ final class TrainingMasteryStore: ObservableObject {
         }
     }
 
-    @Published var leashLastSentimentAcknowledgedDate: Date? {
+    var leashLastSentimentAcknowledgedDate: Date? {
         didSet {
             if let date = leashLastSentimentAcknowledgedDate {
                 UserDefaults.standard.set(date.timeIntervalSince1970, forKey: UserPreferences.Key.leashLastSentimentAcknowledgedDate.rawValue)

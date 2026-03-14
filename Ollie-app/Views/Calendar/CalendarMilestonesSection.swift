@@ -14,7 +14,7 @@ struct CalendarMilestonesSection: View {
     var onCelebration: ((Achievement, Milestone) -> Void)?
 
     @State private var selectedMilestone: Milestone?
-    @StateObject private var achievementService = AchievementService.shared
+    @State private var achievementService = AchievementService.shared
     @Environment(ContactStore.self) var contactStore
 
     @Environment(\.colorScheme) private var colorScheme

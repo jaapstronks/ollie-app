@@ -47,9 +47,10 @@ enum MainTab: Int, CaseIterable, Codable, Hashable {
     }
 }
 
+@Observable
 @MainActor
-final class AppNavigationState: ObservableObject {
-    @Published var selectedTab: MainTab
+final class AppNavigationState {
+    var selectedTab: MainTab
 
     init(selectedTab: MainTab = .today) {
         self.selectedTab = selectedTab

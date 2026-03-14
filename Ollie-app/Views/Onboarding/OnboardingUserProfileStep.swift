@@ -14,7 +14,7 @@ struct OnboardingUserProfileStep: View {
     let onNext: () -> Void
     let onSkip: () -> Void
 
-    @StateObject private var userIdentityStore = UserIdentityStore.shared
+    @State private var userIdentityStore = UserIdentityStore.shared
 
     @State private var name: String = ""
     @State private var selectedColorHex: String = ""

@@ -15,7 +15,7 @@ struct InsightsHealthSection: View {
     @Bindable var viewModel: TimelineViewModel
     @Binding var showWeightSheet: Bool
 
-    @EnvironmentObject var unitPreferences: UnitPreferences
+    @Environment(UnitPreferences.self) var unitPreferences
     @Environment(\.colorScheme) private var colorScheme
 
     private var weightUnit: WeightUnit {

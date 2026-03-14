@@ -13,7 +13,7 @@ struct MorningBriefingCard: View {
     @Environment(ProfileStore.self) var profileStore
     @Environment(EventStore.self) var eventStore
 
-    @StateObject private var viewModel = MorningBriefingViewModel()
+    @State private var viewModel = MorningBriefingViewModel()
     @State private var isExpanded = false
 
     @Environment(\.colorScheme) private var colorScheme

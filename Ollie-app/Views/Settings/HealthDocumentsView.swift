@@ -12,7 +12,7 @@ struct HealthDocumentsView: View {
     var profileStore: ProfileStore
     var medicationStore: MedicationStore
     var documentStore: DocumentStore
-    @ObservedObject var foodRecallService: FoodRecallService
+    var foodRecallService: FoodRecallService
     let profileId: UUID
 
     /// The profile being edited (looked up by ID)

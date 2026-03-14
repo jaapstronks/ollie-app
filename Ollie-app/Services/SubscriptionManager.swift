@@ -12,8 +12,9 @@ import UIKit
 import os
 
 /// Manages Otis+ subscription state and purchases
+@Observable
 @MainActor
-class SubscriptionManager: ObservableObject {
+class SubscriptionManager {
     static let shared = SubscriptionManager()
 
     // MARK: - Product IDs
@@ -31,7 +32,7 @@ class SubscriptionManager: ObservableObject {
     /// When set, overrides the actual subscription status for testing
     /// Only available in beta builds (debug and TestFlight)
     /// Set to nil to use actual StoreKit status
-    @Published var betaOverrideStatus: OtisPlusStatus? = nil {
+    var betaOverrideStatus: OtisPlusStatus? = nil {
         didSet {
             guard AppEnvironment.current.isBeta else { return }
             // Persist beta override across app launches
@@ -72,23 +73,25 @@ class SubscriptionManager: ObservableObject {
         TrialManager.shared.isTrialExpired && !subscriptionStatus.hasOtisPlus
     }
 
-    // MARK: - Published State
+    // MARK: - Observable State
 
-    @Published var products: [Product] = []
-    @Published var subscriptionStatus: OtisPlusStatus = .free {
+    var products: [Product] = []
+    var subscriptionStatus: OtisPlusStatus = .free {
         didSet {
             cacheSubscriptionStatus()
             handleAnalyticsTransition(from: oldValue, to: subscriptionStatus)
         }
     }
-    @Published var isPurchasing = false
-    @Published var purchaseError: Error?
-    @Published var isTrialEligible = false
+    var isPurchasing = false
+    var purchaseError: Error?
+    var isTrialEligible = false
 
+    @ObservationIgnored
     private let logger = Logger.otis(category: "SubscriptionManager")
 
     // MARK: - Private
 
+    @ObservationIgnored
     private var updateListenerTask: Task<Void, Error>?
 
     // MARK: - Initialization
@@ -380,19 +383,20 @@ class SubscriptionManager: ObservableObject {
         }
 
         // Check if cached status is still valid (not expired)
+        // Note: We set subscriptionStatus directly here. The didSet will re-cache,
+        // but that's acceptable since we're loading the same value anyway.
         switch cachedStatus {
         case .trial(let until), .active(let until):
             if until > Date() {
                 // Still valid, use cached status
-                // Set directly to avoid triggering didSet (which would re-cache)
-                _subscriptionStatus = Published(initialValue: cachedStatus)
+                subscriptionStatus = cachedStatus
             } else {
                 // Expired, set to expired state
-                _subscriptionStatus = Published(initialValue: .expired)
+                subscriptionStatus = .expired
             }
         case .free, .expired, .legacy:
             // These states don't expire
-            _subscriptionStatus = Published(initialValue: cachedStatus)
+            subscriptionStatus = cachedStatus
         }
     }
 

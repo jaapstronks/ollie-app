@@ -8,7 +8,7 @@ import SwiftUI
 
 /// Card displayed on Today view when there are unacknowledged food recalls
 struct RecallAlertCard: View {
-    @ObservedObject var foodRecallService: FoodRecallService
+    var foodRecallService: FoodRecallService
     @State private var showingRecalls = false
 
     private var unacknowledgedRecalls: [FoodRecall] {
@@ -124,7 +124,7 @@ struct RecallAlertCard: View {
 
 private struct RecallAlertSheet: View {
     let recalls: [FoodRecall]
-    @ObservedObject var foodRecallService: FoodRecallService
+    var foodRecallService: FoodRecallService
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
@@ -151,7 +151,7 @@ private struct RecallAlertSheet: View {
 
 private struct RecallAlertRow: View {
     let recall: FoodRecall
-    @ObservedObject var foodRecallService: FoodRecallService
+    var foodRecallService: FoodRecallService
     @State private var showingDetail = false
 
     var body: some View {
@@ -204,7 +204,7 @@ private struct RecallAlertRow: View {
 
 private struct RecallDetailView: View {
     let recall: FoodRecall
-    @ObservedObject var foodRecallService: FoodRecallService
+    var foodRecallService: FoodRecallService
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {

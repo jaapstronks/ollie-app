@@ -11,7 +11,7 @@ import OtisShared
 /// Otis+ subscription status and management section
 struct PremiumSection: View {
     let profile: PuppyProfile
-    @ObservedObject var subscriptionManager = SubscriptionManager.shared
+    var subscriptionManager = SubscriptionManager.shared
     @Binding var showingOtisPlusSheet: Bool
     @Binding var showingSubscriptionSuccess: Bool
 

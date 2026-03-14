@@ -8,40 +8,40 @@
 
 import Foundation
 import OtisShared
-import Combine
 
 /// Handles prediction calculations and state management
 /// Extracted from TimelineViewModel to improve testability and separation of concerns
+@Observable
 @MainActor
-final class PredictionService: ObservableObject {
+final class PredictionService {
 
     // MARK: - Dependencies
 
-    private let profileStore: ProfileStore
+    @ObservationIgnored private let profileStore: ProfileStore
 
-    // MARK: - Published State
+    // MARK: - State
 
-    @Published private(set) var pottyPrediction: PottyPrediction
-    @Published private(set) var sleepState: SleepState
-    @Published private(set) var combinedState: CombinedSleepPottyState
-    @Published private(set) var poopStatus: PoopStatus
-    @Published private(set) var streakInfo: StreakInfo
-    @Published private(set) var dailyDigest: DailyDigest
-    @Published private(set) var wakeTimePottyState: WakeTimePottyState?
+    private(set) var pottyPrediction: PottyPrediction
+    private(set) var sleepState: SleepState
+    private(set) var combinedState: CombinedSleepPottyState
+    private(set) var poopStatus: PoopStatus
+    private(set) var streakInfo: StreakInfo
+    private(set) var dailyDigest: DailyDigest
+    private(set) var wakeTimePottyState: WakeTimePottyState?
 
     // MARK: - Internal State
 
     /// Time of last potty event (for clearing post-wake state)
-    private(set) var lastPottyLogTime: Date?
+    @ObservationIgnored private(set) var lastPottyLogTime: Date?
 
     /// Date when user dismissed the assumed overnight sleep card
-    var dismissedAssumedSleepDate: Date?
+    @ObservationIgnored var dismissedAssumedSleepDate: Date?
 
     /// Date when user dismissed the stale logging banner
-    var dismissedStaleLoggingDate: Date?
+    @ObservationIgnored var dismissedStaleLoggingDate: Date?
 
     /// Whether user has dismissed the first run welcome
-    var dismissedFirstRunWelcome: Bool = UserDefaults.standard.bool(forKey: "dismissedFirstRunWelcome")
+    @ObservationIgnored var dismissedFirstRunWelcome: Bool = UserDefaults.standard.bool(forKey: "dismissedFirstRunWelcome")
 
     // MARK: - Init
 

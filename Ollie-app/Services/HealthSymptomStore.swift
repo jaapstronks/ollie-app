@@ -6,7 +6,6 @@
 //  Part of Brief 04: Health Logging
 //
 
-import Combine
 import Foundation
 import SwiftUI
 import OtisShared
@@ -34,14 +33,15 @@ struct SymptomTrendSummary: Equatable {
 
 // MARK: - Health Symptom Store
 
+@Observable
 @MainActor
-final class HealthSymptomStore: ObservableObject {
+final class HealthSymptomStore {
     static let shared = HealthSymptomStore()
 
-    @Published private(set) var symptoms: [HealthSymptomLog] = []
+    private(set) var symptoms: [HealthSymptomLog] = []
 
-    private let fileURL: URL
-    private let calendar = Calendar.current
+    @ObservationIgnored private let fileURL: URL
+    @ObservationIgnored private let calendar = Calendar.current
 
     private init() {
         let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]

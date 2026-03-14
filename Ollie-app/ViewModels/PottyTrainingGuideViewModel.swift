@@ -61,8 +61,9 @@ enum PottyAgePhase {
 }
 
 /// ViewModel managing potty training guide state and calculations
+@Observable
 @MainActor
-final class PottyTrainingGuideViewModel: ObservableObject {
+final class PottyTrainingGuideViewModel {
 
     // MARK: - Input Data
 
@@ -78,11 +79,12 @@ final class PottyTrainingGuideViewModel: ObservableObject {
 
     // MARK: - Dependencies
 
+    @ObservationIgnored
     private let trainingMasteryStore: TrainingMasteryStore
 
-    // MARK: - Published State
+    // MARK: - Observable State
 
-    @Published var showMasteryConfirmation = false
+    var showMasteryConfirmation = false
 
     // MARK: - Init
 

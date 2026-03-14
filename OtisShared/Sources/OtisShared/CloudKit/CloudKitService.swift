@@ -9,43 +9,43 @@
 import Foundation
 import CloudKit
 import CoreData
-import Combine
 import os
 
 /// Manages CloudKit sharing with Core Data
 /// Note: Data sync is automatic via NSPersistentCloudKitContainer
 /// This service handles: sharing, share acceptance, and media (photos)
+@Observable
 @MainActor
-public final class CloudKitService: ObservableObject {
+public final class CloudKitService {
     public static let shared = CloudKitService()
 
     // MARK: - Configuration
 
     public static let containerIdentifier = "iCloud.nl.jaapstronks.Otis"
-    private let zoneName = "com.apple.coredata.cloudkit.zone"
+    @ObservationIgnored private let zoneName = "com.apple.coredata.cloudkit.zone"
 
     // MARK: - CloudKit Objects
 
-    private lazy var container: CKContainer = {
+    @ObservationIgnored private lazy var container: CKContainer = {
         CKContainer(identifier: Self.containerIdentifier)
     }()
 
-    private lazy var privateDatabase: CKDatabase = {
+    @ObservationIgnored private lazy var privateDatabase: CKDatabase = {
         container.privateCloudDatabase
     }()
 
-    private lazy var sharedDatabase: CKDatabase = {
+    @ObservationIgnored private lazy var sharedDatabase: CKDatabase = {
         container.sharedCloudDatabase
     }()
 
     // MARK: - State
 
-    @Published public private(set) var isCloudAvailable = false
-    @Published public private(set) var isParticipant = false
-    @Published public private(set) var isSyncing = false
+    public private(set) var isCloudAvailable = false
+    public private(set) var isParticipant = false
+    public private(set) var isSyncing = false
 
     /// The owner's zone ID when user is a participant (used for media fetches)
-    private var sharedZoneOwnerName: String?
+    @ObservationIgnored private var sharedZoneOwnerName: String?
 
     /// The current user's actual CloudKit record ID (not __defaultOwner__)
     /// This is needed for storing photo ownership so other users can download
@@ -54,7 +54,7 @@ public final class CloudKitService: ObservableObject {
     // MARK: - Share Manager
 
     /// Share manager for managing CloudKit shares
-    public let shareManager = CloudKitShareManager()
+    @ObservationIgnored public let shareManager = CloudKitShareManager()
 
     /// Whether data is currently shared (delegates to shareManager)
     public var isShared: Bool {
@@ -71,10 +71,10 @@ public final class CloudKitService: ObservableObject {
         shareManager.currentShare
     }
 
-    private let logger = Logger.otis(category: "CloudKitService")
+    @ObservationIgnored private let logger = Logger.otis(category: "CloudKitService")
 
     /// Device identifier for tracking which device created records
-    private let deviceID: String = {
+    @ObservationIgnored private let deviceID: String = {
         let key = "otis.device.id"
         if let existing = UserDefaults.standard.string(forKey: key) {
             return existing
@@ -122,7 +122,7 @@ public final class CloudKitService: ObservableObject {
     // MARK: - Participant Detection
 
     /// Track if user was previously a participant (for removal detection)
-    private var wasParticipant = false
+    @ObservationIgnored private var wasParticipant = false
 
     /// Check if user is a participant in a shared zone
     private func checkParticipantStatus() async {
@@ -223,7 +223,7 @@ public final class CloudKitService: ObservableObject {
     // MARK: - Media Service
 
     /// Media service for photo operations (CKAsset handling)
-    public lazy var mediaService: MediaCloudService = {
+    @ObservationIgnored public lazy var mediaService: MediaCloudService = {
         MediaCloudService(
             deviceID: deviceID,
             getDatabase: { [weak self] in
@@ -251,7 +251,7 @@ public final class CloudKitService: ObservableObject {
     // MARK: - Profile Photo Service
 
     /// Profile photo service for syncing profile photos via CloudKit
-    public lazy var profilePhotoService: ProfilePhotoCloudService = {
+    @ObservationIgnored public lazy var profilePhotoService: ProfilePhotoCloudService = {
         ProfilePhotoCloudService(
             deviceID: deviceID,
             getDatabase: { [weak self] in

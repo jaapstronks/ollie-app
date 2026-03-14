@@ -7,18 +7,18 @@
 
 import Foundation
 import OtisShared
-import Combine
 import os
 
 /// Service for fetching and caching dog breed data from TheDogAPI
+@Observable
 @MainActor
-class BreedService: ObservableObject {
+class BreedService {
 
-    // MARK: - Published State
+    // MARK: - State
 
-    @Published private(set) var breeds: [Breed] = []
-    @Published private(set) var isLoading = false
-    @Published private(set) var lastError: Error?
+    private(set) var breeds: [Breed] = []
+    private(set) var isLoading = false
+    private(set) var lastError: Error?
 
     // MARK: - Singleton
 
@@ -26,7 +26,7 @@ class BreedService: ObservableObject {
 
     // MARK: - Private Properties
 
-    private let logger = Logger.otis(category: "BreedService")
+    @ObservationIgnored private let logger = Logger.otis(category: "BreedService")
 
     /// UserDefaults keys for caching
     private enum CacheKeys {

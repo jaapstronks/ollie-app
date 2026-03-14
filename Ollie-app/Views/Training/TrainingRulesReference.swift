@@ -9,7 +9,7 @@ import SwiftUI
 
 /// View showing all acknowledged training rules for reference
 struct TrainingRulesReference: View {
-    @ObservedObject var progressStore: TrainingProgressStore
+    var progressStore: TrainingProgressStore
     let allRules: [TrainingRule]
 
     @Environment(\.dismiss) private var dismiss

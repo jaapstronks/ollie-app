@@ -22,20 +22,21 @@ private enum TrainingStorageKeys {
 
 /// Manages preparation item completion and rule acknowledgment state
 /// Data is stored on CDPuppyProfile and syncs via CloudKit
+@Observable
 @MainActor
-final class TrainingProgressStore: ObservableObject {
+final class TrainingProgressStore {
 
-    // MARK: - Published State
+    // MARK: - State
 
-    @Published private(set) var completedPreparationItems: Set<String> = []
-    @Published private(set) var seenRules: Set<String> = []
-    @Published private(set) var completedPhases: [String: Set<String>] = [:]  // skillId -> phaseIds
+    private(set) var completedPreparationItems: Set<String> = []
+    private(set) var seenRules: Set<String> = []
+    private(set) var completedPhases: [String: Set<String>] = [:]  // skillId -> phaseIds
 
     // MARK: - Private
 
-    private let persistenceController: PersistenceController
-    private let logger = Logger.otis(category: "TrainingProgressStore")
-    private var cancellables = Set<AnyCancellable>()
+    @ObservationIgnored private let persistenceController: PersistenceController
+    @ObservationIgnored private let logger = Logger.otis(category: "TrainingProgressStore")
+    @ObservationIgnored private var cancellables = Set<AnyCancellable>()
 
     private var viewContext: NSManagedObjectContext {
         persistenceController.viewContext

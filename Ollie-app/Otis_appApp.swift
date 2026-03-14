@@ -23,11 +23,11 @@ struct OtisApp: App {
 
     @State private var profileStore = ProfileStore()
     @State private var eventStore = EventStore()
-    @StateObject private var dataImporter = DataImporter()
-    @StateObject private var weatherService = WeatherService()
-    @StateObject private var notificationService = NotificationService()
+    @State private var dataImporter = DataImporter()
+    @State private var weatherService = WeatherService()
+    @State private var notificationService = NotificationService()
     @State private var spotStore = SpotStore()
-    @StateObject private var locationManager = LocationManager()
+    @State private var locationManager = LocationManager()
     @State private var medicationStore = MedicationStore()
     @State private var socializationStore = SocializationStore()
     @State private var milestoneStore = MilestoneStore()
@@ -38,12 +38,12 @@ struct OtisApp: App {
     @State private var skillProgressStore = SkillProgressStore()
     @State private var regressionLogStore = RegressionLogStore()
     @State private var routineStore = RoutineStore()
-    @StateObject private var subscriptionManager = SubscriptionManager.shared
-    @StateObject private var atmosphereProvider = AtmosphereProvider()
-    @StateObject private var foodRecallService = FoodRecallService()
-    @StateObject private var unitPreferences = UnitPreferences.shared
-    @StateObject private var trainingMasteryStore = TrainingMasteryStore.shared
-    @ObservedObject private var cloudKit = CloudKitService.shared
+    @State private var subscriptionManager = SubscriptionManager.shared
+    @State private var atmosphereProvider = AtmosphereProvider()
+    @State private var foodRecallService = FoodRecallService()
+    @State private var unitPreferences = UnitPreferences.shared
+    @State private var trainingMasteryStore = TrainingMasteryStore.shared
+    private var cloudKit = CloudKitService.shared
     private let dailyAggregateService = DailyAggregateService.shared
     @State private var toastManager = ToastManager()
 
@@ -75,11 +75,11 @@ struct OtisApp: App {
                 .environment(\.managedObjectContext, persistenceController.viewContext)
                 .environment(profileStore)
                 .environment(eventStore)
-                .environmentObject(dataImporter)
-                .environmentObject(weatherService)
-                .environmentObject(notificationService)
+                .environment(dataImporter)
+                .environment(weatherService)
+                .environment(notificationService)
                 .environment(spotStore)
-                .environmentObject(locationManager)
+                .environment(locationManager)
                 .environment(medicationStore)
                 .environment(socializationStore)
                 .environment(milestoneStore)
@@ -87,14 +87,14 @@ struct OtisApp: App {
                 .environment(contactStore)
                 .environment(appointmentStore)
                 .environment(weightStore)
-                .environmentObject(subscriptionManager)
+                .environment(subscriptionManager)
                 .environment(skillProgressStore)
-                .environmentObject(cloudKit)
-                .environmentObject(atmosphereProvider)
-                .environmentObject(foodRecallService)
+                .environment(cloudKit)
+                .environment(atmosphereProvider)
+                .environment(foodRecallService)
                 .environment(routineStore)
-                .environmentObject(unitPreferences)
-                .environmentObject(trainingMasteryStore)
+                .environment(unitPreferences)
+                .environment(trainingMasteryStore)
                 .toastContainer()
                 .environment(toastManager)
                 .task { await performInitialSetup() }

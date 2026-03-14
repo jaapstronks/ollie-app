@@ -7,7 +7,7 @@
 import SwiftUI
 
 struct StatusView: View {
-    @ObservedObject var dataProvider: WatchDataProvider
+    var dataProvider: WatchDataProvider
 
     var body: some View {
         VStack(spacing: 12) {

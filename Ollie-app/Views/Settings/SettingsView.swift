@@ -10,13 +10,13 @@ import OtisShared
 /// Settings hub screen with app settings and dog-specific settings cards
 struct SettingsView: View {
     var profileStore: ProfileStore
-    @ObservedObject var dataImporter: DataImporter
+    var dataImporter: DataImporter
     var eventStore: EventStore
-    @ObservedObject var notificationService: NotificationService
+    var notificationService: NotificationService
     var medicationStore: MedicationStore
     var documentStore: DocumentStore
     var contactStore: ContactStore
-    @ObservedObject var foodRecallService: FoodRecallService
+    var foodRecallService: FoodRecallService
 
     var onAddDog: (() -> Void)?
     var onTriggerTour: (() -> Void)?

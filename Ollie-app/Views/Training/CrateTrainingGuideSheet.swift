@@ -17,7 +17,7 @@ struct CrateTrainingGuideSheet: View {
     @Environment(\.colorScheme) private var colorScheme
 
     // Training mastery state
-    @EnvironmentObject var trainingMasteryStore: TrainingMasteryStore
+    @Environment(TrainingMasteryStore.self) var trainingMasteryStore
 
     @State private var showMasteryConfirmation = false
 

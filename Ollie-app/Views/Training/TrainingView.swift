@@ -13,9 +13,9 @@ struct TrainingView: View {
     var eventStore: EventStore
 
     @State private var trainingStore = TrainingPlanStore()
-    @StateObject private var progressStore = TrainingProgressStore()
+    @State private var progressStore = TrainingProgressStore()
     @Environment(SkillProgressStore.self) var skillProgressStore
-    @EnvironmentObject var subscriptionManager: SubscriptionManager
+    @Environment(SubscriptionManager.self) var subscriptionManager
 
     @State private var selectedSkill: Skill?
     @State private var activeTrainingSkill: Skill?
@@ -582,6 +582,6 @@ struct TrainingView: View {
 #Preview {
     NavigationStack {
         TrainingView(eventStore: EventStore())
-            .environmentObject(SubscriptionManager.shared)
+            .environment(SubscriptionManager.shared)
     }
 }

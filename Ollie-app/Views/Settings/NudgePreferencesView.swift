@@ -10,7 +10,7 @@ import SwiftUI
 import OtisShared
 
 struct NudgePreferencesView: View {
-    @ObservedObject var userIdentityStore: UserIdentityStore
+    var userIdentityStore: UserIdentityStore
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {

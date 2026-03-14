@@ -21,7 +21,7 @@ struct WeatherBar: View {
 struct WeatherHourCell: View {
     let forecast: HourForecast
 
-    @EnvironmentObject var unitPreferences: UnitPreferences
+    @Environment(UnitPreferences.self) var unitPreferences
 
     private var temperatureUnit: TemperatureUnit {
         unitPreferences.temperatureUnit
@@ -114,7 +114,7 @@ struct WeatherSection: View {
     let alert: WeatherAlert?
     let isLoading: Bool
 
-    @EnvironmentObject var unitPreferences: UnitPreferences
+    @Environment(UnitPreferences.self) var unitPreferences
 
     private var temperatureUnit: TemperatureUnit {
         unitPreferences.temperatureUnit
@@ -177,7 +177,7 @@ struct WeatherSection: View {
 /// Isolated container that owns weather observation
 /// Prevents parent view from re-rendering when weather updates
 struct WeatherSectionContainer: View {
-    @ObservedObject var weatherService: WeatherService
+    var weatherService: WeatherService
     let isToday: Bool
     let predictedPottyTime: Date?
 

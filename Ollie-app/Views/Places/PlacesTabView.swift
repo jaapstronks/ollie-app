@@ -14,7 +14,7 @@ struct PlacesTabView: View {
     var spotStore: SpotStore
     var contactStore: ContactStore
     var momentsViewModel: MomentsViewModel
-    @ObservedObject var locationManager: LocationManager
+    var locationManager: LocationManager
     var appointmentStore: AppointmentStore?
     var onSettingsTap: (() -> Void)?
     var onAddMoment: (() -> Void)?

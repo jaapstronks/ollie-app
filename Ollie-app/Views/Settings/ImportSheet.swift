@@ -19,7 +19,7 @@ enum ImportStage {
 
 /// Sheet for importing data from exported JSON folder
 struct ImportSheet: View {
-    @ObservedObject var dataImporter: DataImporter
+    var dataImporter: DataImporter
     let onDismiss: () -> Void
     let onComplete: () -> Void
 

@@ -6,7 +6,6 @@
 //  Uses a single shared animation phase for optimal performance.
 //
 
-import Combine
 import QuartzCore
 import SwiftUI
 
@@ -14,18 +13,19 @@ import SwiftUI
 
 /// Shared animation phase for all skeleton shimmer effects.
 /// Uses CADisplayLink for a controllable, cancellable animation.
+@Observable
 @MainActor
-private final class ShimmerPhaseProvider: ObservableObject {
+private final class ShimmerPhaseProvider {
     static let shared = ShimmerPhaseProvider()
 
     /// Current shimmer phase (0...1), cycles every 1.5 seconds
-    @Published private(set) var phase: CGFloat = 0
+    private(set) var phase: CGFloat = 0
 
     /// Number of active subscribers - animation only runs when > 0
-    private var subscriberCount = 0
-    private var displayLink: CADisplayLink?
-    private var startTime: CFTimeInterval = 0
-    private let duration: CFTimeInterval = 1.5
+    @ObservationIgnored private var subscriberCount = 0
+    @ObservationIgnored private var displayLink: CADisplayLink?
+    @ObservationIgnored private var startTime: CFTimeInterval = 0
+    @ObservationIgnored private let duration: CFTimeInterval = 1.5
 
     private init() {}
 
@@ -72,7 +72,7 @@ private final class ShimmerPhaseProvider: ObservableObject {
 struct SkeletonModifier: ViewModifier {
     let isLoading: Bool
 
-    @StateObject private var phaseProvider = ShimmerPhaseProvider.shared
+    @State private var phaseProvider = ShimmerPhaseProvider.shared
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     func body(content: Content) -> some View {

@@ -20,7 +20,7 @@ struct GrowthStoryCard: View {
     let onShowChart: () -> Void
     @Binding var showWeightSheet: Bool
 
-    @EnvironmentObject var unitPreferences: UnitPreferences
+    @Environment(UnitPreferences.self) var unitPreferences
     @Environment(\.colorScheme) private var colorScheme
 
     @State private var showGrowthCardCreator = false

@@ -10,7 +10,7 @@ import SwiftUI
 
 /// Applies subtle atmospheric background tint based on current context
 struct AtmosphereBackgroundModifier: ViewModifier {
-    @EnvironmentObject private var atmosphere: AtmosphereProvider
+    @Environment(AtmosphereProvider.self) private var atmosphere
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
@@ -65,14 +65,14 @@ struct AtmosphereBackgroundModifier: ViewModifier {
     }
 
     private var sleepingSaturation: Double {
-        guard atmosphere.shouldApplyStateEffects && atmosphere.puppyState == .sleeping else {
+        guard atmosphere.shouldApplyStateEffects && atmosphere.puppyState == PuppyActivityState.sleeping else {
             return 1.0
         }
         return 1.0 - AtmosphereColors.sleepingDesaturation
     }
 
     private var sleepingBrightness: Double {
-        guard atmosphere.shouldApplyStateEffects && atmosphere.puppyState == .sleeping else {
+        guard atmosphere.shouldApplyStateEffects && atmosphere.puppyState == PuppyActivityState.sleeping else {
             return 0
         }
         return -AtmosphereColors.sleepingBrightnessReduction
@@ -83,7 +83,7 @@ struct AtmosphereBackgroundModifier: ViewModifier {
 
 /// Applies atmospheric accent tint to foreground elements
 struct AtmosphereTintModifier: ViewModifier {
-    @EnvironmentObject private var atmosphere: AtmosphereProvider
+    @Environment(AtmosphereProvider.self) private var atmosphere
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     func body(content: Content) -> some View {
@@ -104,7 +104,7 @@ struct AtmosphereTintModifier: ViewModifier {
 
 /// Applies atmosphere styling specifically to navigation bar areas
 struct AtmosphereNavBarModifier: ViewModifier {
-    @EnvironmentObject private var atmosphere: AtmosphereProvider
+    @Environment(AtmosphereProvider.self) private var atmosphere
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 

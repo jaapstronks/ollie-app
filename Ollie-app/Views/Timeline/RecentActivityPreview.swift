@@ -16,8 +16,20 @@ struct RecentActivityPreview: View {
     var onDeleteEvent: ((PuppyEvent) -> Void)?
 
     @Environment(\.colorScheme) private var colorScheme
-    @ObservedObject private var userIdentityStore = UserIdentityStore.shared
-    @ObservedObject private var participantResolver = ParticipantResolver.shared
+    private let userIdentityStore = UserIdentityStore.shared
+    private let participantResolver = ParticipantResolver.shared
+
+    init(
+        events: [PuppyEvent],
+        onViewFullTimeline: @escaping () -> Void,
+        onEditEvent: ((PuppyEvent) -> Void)? = nil,
+        onDeleteEvent: ((PuppyEvent) -> Void)? = nil
+    ) {
+        self.events = events
+        self.onViewFullTimeline = onViewFullTimeline
+        self.onEditEvent = onEditEvent
+        self.onDeleteEvent = onDeleteEvent
+    }
 
     /// PERF: Cached recent events to avoid recomputation on every access
     @State private var cachedRecentEvents: [PuppyEvent] = []

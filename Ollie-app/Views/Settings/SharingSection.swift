@@ -12,9 +12,8 @@ import SwiftUI
 
 /// CloudKit sharing section for settings
 struct SharingSection: View {
-    @ObservedObject var cloudKit: CloudKitService
-    @ObservedObject private var shareManager: CloudKitShareManager
-    @EnvironmentObject var subscriptionManager: SubscriptionManager
+    var cloudKit: CloudKitService
+    @Environment(SubscriptionManager.self) var subscriptionManager
 
     /// Whether to show section header (false when used standalone with nav title)
     let showHeader: Bool
@@ -25,10 +24,14 @@ struct SharingSection: View {
     @State private var showStopSharingConfirm = false
     @State private var showOtisPlusSheet = false
 
+    /// Access share manager directly from cloudKit
+    private var shareManager: CloudKitShareManager {
+        cloudKit.shareManager
+    }
+
     init(cloudKit: CloudKitService, showHeader: Bool = true) {
         self.cloudKit = cloudKit
         self.showHeader = showHeader
-        _shareManager = ObservedObject(wrappedValue: cloudKit.shareManager)
     }
 
     var body: some View {

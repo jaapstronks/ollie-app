@@ -9,24 +9,25 @@
 import SwiftUI
 import Combine
 
-/// Centralized unit preferences accessible via environment object.
+/// Centralized unit preferences accessible via environment.
 /// Replaces repeated @AppStorage patterns for weightUnit and temperatureUnit.
+@Observable
 @MainActor
-final class UnitPreferences: ObservableObject {
+final class UnitPreferences {
 
     // MARK: - Shared Instance
 
     static let shared = UnitPreferences()
 
-    // MARK: - Published Properties
+    // MARK: - Observable Properties
 
-    @Published var weightUnit: WeightUnit {
+    var weightUnit: WeightUnit {
         didSet {
             UserDefaults.standard.set(weightUnit.rawValue, forKey: UserPreferences.Key.weightUnit.rawValue)
         }
     }
 
-    @Published var temperatureUnit: TemperatureUnit {
+    var temperatureUnit: TemperatureUnit {
         didSet {
             UserDefaults.standard.set(temperatureUnit.rawValue, forKey: UserPreferences.Key.temperatureUnit.rawValue)
         }

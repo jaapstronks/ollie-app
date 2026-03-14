@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Combine
 import OtisShared
 import os
 import CoreLocation
@@ -39,24 +38,25 @@ enum DiscoverablePlaceType: CaseIterable {
 }
 
 /// Service for discovering dog parks from external data sources
+@Observable
 @MainActor
-class DogParkDiscoveryService: ObservableObject {
+class DogParkDiscoveryService {
 
     // MARK: - Published State
 
-    @Published var discoveredSpots: [DiscoveredSpot] = []
-    @Published var isLoading = false
-    @Published var lastError: Error?
+    var discoveredSpots: [DiscoveredSpot] = []
+    var isLoading = false
+    var lastError: Error?
 
     /// Active place type filters (which types are currently being shown)
-    @Published var activePlaceTypes: Set<DiscoverablePlaceType> = Set(DiscoverablePlaceType.allCases)
+    var activePlaceTypes: Set<DiscoverablePlaceType> = Set(DiscoverablePlaceType.allCases)
 
     // MARK: - Private Properties
 
-    private let logger = Logger.otis(category: "DogParkDiscovery")
-    private let cache = DiscoveredSpotsCache()
-    private let overpassClient = OverpassAPIClient()
-    private let governmentProviders = GovernmentDataProviders()
+    @ObservationIgnored private let logger = Logger.otis(category: "DogParkDiscovery")
+    @ObservationIgnored private let cache = DiscoveredSpotsCache()
+    @ObservationIgnored private let overpassClient = OverpassAPIClient()
+    @ObservationIgnored private let governmentProviders = GovernmentDataProviders()
 
     // MARK: - Public Methods
 

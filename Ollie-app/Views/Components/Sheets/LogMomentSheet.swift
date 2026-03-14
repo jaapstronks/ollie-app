@@ -8,7 +8,7 @@ import OtisShared
 
 /// Photo-first logging sheet: shows preview + extracted date/location + optional note
 struct LogMomentSheet: View {
-    @ObservedObject var viewModel: MediaCaptureViewModel
+    @Bindable var viewModel: MediaCaptureViewModel
     let onSave: (PuppyEvent) -> Void
     let onCancel: () -> Void
 

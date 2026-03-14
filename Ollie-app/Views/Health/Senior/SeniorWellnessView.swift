@@ -11,7 +11,7 @@ import OtisShared
 
 struct SeniorWellnessView: View {
     @Environment(ProfileStore.self) private var profileStore
-    @StateObject private var wellnessStore = SeniorWellnessStore.shared
+    @State private var wellnessStore = SeniorWellnessStore.shared
 
     @State private var showMobilitySheet = false
     @State private var showCognitiveSheet = false

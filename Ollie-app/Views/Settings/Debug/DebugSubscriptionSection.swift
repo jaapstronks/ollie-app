@@ -57,7 +57,7 @@ enum DebugSubscriptionState: String, CaseIterable, Identifiable {
 
 /// Debug section for subscription state override
 struct DebugSubscriptionSection: View {
-    @ObservedObject private var subscriptionManager = SubscriptionManager.shared
+    private var subscriptionManager = SubscriptionManager.shared
 
     var body: some View {
         Section {

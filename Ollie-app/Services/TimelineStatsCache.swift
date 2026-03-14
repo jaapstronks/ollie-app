@@ -17,20 +17,21 @@ import Sentry
 /// Performance optimization: Uses DailyAggregateService to read pre-computed
 /// daily stats instead of calculating from raw events. This reduces week stats
 /// computation from ~1.7s to ~10ms.
+@Observable
 @MainActor
-final class TimelineStatsCache: ObservableObject {
+final class TimelineStatsCache {
 
     // MARK: - Global Computation Lock
     // PERF: Prevents multiple TimelineStatsCache instances from computing simultaneously
     // This handles the case where SwiftUI creates multiple ViewModel instances
-    private static var isGlobalComputationInProgress = false
-    private static var lastGlobalComputationTime: Date = .distantPast
+    @ObservationIgnored private static var isGlobalComputationInProgress = false
+    @ObservationIgnored private static var lastGlobalComputationTime: Date = .distantPast
 
     // MARK: - Dependencies
 
-    private let eventDataProvider: EventDataProvider
-    private let profileStore: ProfileStore
-    private let dailyAggregateService: DailyAggregateService
+    @ObservationIgnored private let eventDataProvider: EventDataProvider
+    @ObservationIgnored private let profileStore: ProfileStore
+    @ObservationIgnored private let dailyAggregateService: DailyAggregateService
 
     // MARK: - Cached Stats
     // PERFORMANCE: Using manual backing storage to batch objectWillChange notifications
@@ -80,10 +81,10 @@ final class TimelineStatsCache: ObservableObject {
     // MARK: - Internal State
 
     /// Last time stats were computed (for debouncing)
-    private var lastStatsUpdate: Date?
+    @ObservationIgnored private var lastStatsUpdate: Date?
 
     /// Active computation task (cancelled if new refresh requested)
-    private var computationTask: Task<Void, Never>?
+    @ObservationIgnored private var computationTask: Task<Void, Never>?
 
     // MARK: - Init
 
@@ -249,8 +250,7 @@ final class TimelineStatsCache: ObservableObject {
             return
         }
 
-        // PERFORMANCE: Update all properties without triggering individual objectWillChange
-        // Then send a single notification at the end
+        // Update all cached properties
         _recentEvents = results.recentEvents
         _patternAnalysis = results.patternAnalysis
         _weekStats = results.weekStats
@@ -259,9 +259,6 @@ final class TimelineStatsCache: ObservableObject {
         _walkStats = results.walkStats
         _gapStats = results.gapStats
         _isLoading = false
-
-        // Single objectWillChange for all updates
-        objectWillChange.send()
 
         statsTransaction?.finish()
     }

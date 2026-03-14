@@ -13,11 +13,11 @@ import OtisShared
 /// Uses liquid glass card styling throughout
 struct StatsView: View {
     @Bindable var viewModel: TimelineViewModel
-    @StateObject private var contributionViewModel: ContributionStatsViewModel
+    @Bindable var contributionViewModel: ContributionStatsViewModel
 
     init(viewModel: TimelineViewModel) {
         self.viewModel = viewModel
-        _contributionViewModel = StateObject(wrappedValue: ContributionStatsViewModel(eventStore: viewModel.eventStore))
+        self.contributionViewModel = ContributionStatsViewModel(eventStore: viewModel.eventStore)
     }
 
     var body: some View {

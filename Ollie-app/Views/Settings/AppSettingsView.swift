@@ -13,10 +13,10 @@ import OtisShared
 /// Settings screen for all app-related configuration
 struct AppSettingsView: View {
     var profileStore: ProfileStore
-    @ObservedObject var dataImporter: DataImporter
+    var dataImporter: DataImporter
     var eventStore: EventStore
-    @ObservedObject var cloudKit = CloudKitService.shared
-    @ObservedObject var userIdentityStore = UserIdentityStore.shared
+    var cloudKit = CloudKitService.shared
+    var userIdentityStore = UserIdentityStore.shared
     var onTriggerTour: (() -> Void)? = nil
 
     @State private var showingOtisPlusSheet = false

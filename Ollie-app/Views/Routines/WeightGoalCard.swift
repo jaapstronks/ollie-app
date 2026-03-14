@@ -16,7 +16,7 @@ struct WeightGoalCard: View {
     let onGoalTap: () -> Void
     let onBCSTap: () -> Void
 
-    @EnvironmentObject var unitPreferences: UnitPreferences
+    @Environment(UnitPreferences.self) var unitPreferences
 
     private var weightUnit: WeightUnit {
         unitPreferences.weightUnit

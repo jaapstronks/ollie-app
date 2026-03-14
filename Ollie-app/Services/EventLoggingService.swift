@@ -6,7 +6,6 @@
 //  Handles event CRUD operations and undo functionality
 //
 
-import Combine
 import Foundation
 import OtisShared
 
@@ -14,32 +13,33 @@ import OtisShared
 
 /// Handles event CRUD operations
 /// Extracted from TimelineViewModel to improve testability and separation of concerns
+@Observable
 @MainActor
-final class EventLoggingService: ObservableObject {
+final class EventLoggingService {
 
     // MARK: - Dependencies
 
-    private let eventStore: EventStore
-    private let profileStore: ProfileStore
-    private let userIdentityStore: UserIdentityStore
+    @ObservationIgnored private let eventStore: EventStore
+    @ObservationIgnored private let profileStore: ProfileStore
+    @ObservationIgnored private let userIdentityStore: UserIdentityStore
 
     // MARK: - Undo State
 
-    @Published private(set) var lastDeletedEvent: PuppyEvent?
+    private(set) var lastDeletedEvent: PuppyEvent?
 
     // MARK: - Callbacks
 
     /// Called when events change (for syncing and refreshing UI)
-    var onEventsChanged: (() -> Void)?
+    @ObservationIgnored var onEventsChanged: (() -> Void)?
 
     /// Called when a celebration should be triggered
-    var onCelebration: ((CelebrationPreset, String?) -> Void)?
+    @ObservationIgnored var onCelebration: ((CelebrationPreset, String?) -> Void)?
 
     /// Called when notifications should be refreshed
-    var onRefreshNotifications: (() -> Void)?
+    @ObservationIgnored var onRefreshNotifications: (() -> Void)?
 
     /// Called when potty log time should be recorded (for post-wake state)
-    var onRecordPottyLogTime: (() -> Void)?
+    @ObservationIgnored var onRecordPottyLogTime: (() -> Void)?
 
     // MARK: - Init
 

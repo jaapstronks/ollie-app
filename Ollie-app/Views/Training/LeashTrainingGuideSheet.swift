@@ -19,7 +19,7 @@ struct LeashTrainingGuideSheet: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.colorScheme) private var colorScheme
 
-    @EnvironmentObject var trainingMasteryStore: TrainingMasteryStore
+    @Environment(TrainingMasteryStore.self) var trainingMasteryStore
 
     @State private var showMasteryConfirmation = false
 
@@ -486,7 +486,7 @@ struct LeashTrainingGuideSheet: View {
         ageInWeeks: 16,
         shouldShowReactivationPrompt: false
     )
-    .environmentObject(TrainingMasteryStore.shared)
+    .environment(TrainingMasteryStore.shared)
 }
 
 #Preview("New User") {
@@ -496,7 +496,7 @@ struct LeashTrainingGuideSheet: View {
         ageInWeeks: 10,
         shouldShowReactivationPrompt: false
     )
-    .environmentObject(TrainingMasteryStore.shared)
+    .environment(TrainingMasteryStore.shared)
 }
 
 #Preview("Adolescent Puppy") {
@@ -506,7 +506,7 @@ struct LeashTrainingGuideSheet: View {
         ageInWeeks: 24,
         shouldShowReactivationPrompt: false
     )
-    .environmentObject(TrainingMasteryStore.shared)
+    .environment(TrainingMasteryStore.shared)
 }
 
 #Preview("With Reactivation Prompt") {
@@ -516,5 +516,5 @@ struct LeashTrainingGuideSheet: View {
         ageInWeeks: 20,
         shouldShowReactivationPrompt: true
     )
-    .environmentObject(TrainingMasteryStore.shared)
+    .environment(TrainingMasteryStore.shared)
 }

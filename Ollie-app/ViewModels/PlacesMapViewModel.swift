@@ -101,13 +101,8 @@ class PlacesMapViewModel {
             }
             .store(in: &cancellables)
 
-        // DogParkDiscoveryService is still ObservableObject, observe via Combine
-        discoveryService.$discoveredSpots
-            .receive(on: RunLoop.main)
-            .sink { [weak self] _ in
-                self?.rebuildVisibleMarkers()
-            }
-            .store(in: &cancellables)
+        // DogParkDiscoveryService is @Observable, use observation tracking
+        observeDiscoveryService()
 
         // MomentsViewModel is @Observable, use notification pattern
         // Note: MomentsViewModel updates cachedPhotoClusters internally when events change
@@ -119,6 +114,18 @@ class PlacesMapViewModel {
             .store(in: &cancellables)
 
         rebuildVisibleMarkers()
+    }
+
+    /// Observe DogParkDiscoveryService changes using Swift Observation framework
+    private func observeDiscoveryService() {
+        withObservationTracking {
+            _ = discoveryService.discoveredSpots
+        } onChange: { [weak self] in
+            Task { @MainActor [weak self] in
+                self?.rebuildVisibleMarkers()
+                self?.observeDiscoveryService()
+            }
+        }
     }
 
     // MARK: - Markers

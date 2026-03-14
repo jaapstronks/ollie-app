@@ -10,7 +10,7 @@ import SwiftUI
 import OtisShared
 
 struct UserProfileSettingsView: View {
-    @ObservedObject var userIdentityStore: UserIdentityStore
+    var userIdentityStore: UserIdentityStore
     @Environment(\.dismiss) private var dismiss
 
     @State private var name: String = ""

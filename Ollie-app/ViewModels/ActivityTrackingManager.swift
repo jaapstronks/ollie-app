@@ -45,18 +45,22 @@ struct EventLogRequest {
 
 /// Manages in-progress activity tracking (walks and naps)
 /// Used by TimelineViewModel to handle activity lifecycle
+@Observable
 @MainActor
-class ActivityTrackingManager: ObservableObject {
+class ActivityTrackingManager {
     /// Currently in-progress activity (walk or nap)
-    @Published var currentActivity: InProgressActivity?
+    var currentActivity: InProgressActivity?
 
     /// Callback to log an event (delegated to TimelineViewModel)
+    @ObservationIgnored
     var onLogEvent: ((EventLogRequest) -> Void)?
 
     /// Callback when activity is dismissed
+    @ObservationIgnored
     var onDismiss: (() -> Void)?
 
     /// Callback to delete an event by sleep session ID
+    @ObservationIgnored
     var onDeleteSleepEvent: ((UUID) -> PuppyEvent?)?
 
     /// Whether a walk is currently in progress

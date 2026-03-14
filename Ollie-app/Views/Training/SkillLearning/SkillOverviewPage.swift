@@ -14,7 +14,7 @@ struct SkillOverviewPage: View {
     let status: SkillStatus
     let sessionCount: Int
     let phases: [SkillPhase]
-    @ObservedObject var progressStore: TrainingProgressStore
+    var progressStore: TrainingProgressStore
     let skillProgress: SkillProgress?
     let onStartLearning: () -> Void
 

@@ -29,14 +29,14 @@ struct TodayView: View {
     // First-visit tip tracking
     @AppStorage("hasSeenTodayTip") private var hasSeenTodayTip = false
 
-    @EnvironmentObject private var atmosphereProvider: AtmosphereProvider
-    @EnvironmentObject private var foodRecallService: FoodRecallService
+    @Environment(AtmosphereProvider.self) private var atmosphereProvider
+    @Environment(FoodRecallService.self) private var foodRecallService
     @Environment(EventStore.self) private var eventStore
     @Environment(WeightStore.self) private var weightStore
     @Environment(ContactStore.self) private var contactStore
 
-    // Trial touchpoint state
-    @ObservedObject private var trialManager = TrialManager.shared
+    // Trial touchpoint state (using direct access to singleton, not injected)
+    private let trialManager = TrialManager.shared
 
     var body: some View {
         VStack(spacing: 0) {
@@ -437,8 +437,8 @@ struct EmptyTimelineCard: View {
         onNavigateToTrain: { print("Navigate to Train") },
         onAddDog: { print("Add dog") }
     )
-    .environmentObject(atmosphereProvider)
-    .environmentObject(foodRecallService)
+    .environment(atmosphereProvider)
+    .environment(foodRecallService)
     .environment(SocializationStore())
     .environment(milestoneStore)
     .environment(eventStore)

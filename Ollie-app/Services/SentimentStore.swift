@@ -9,24 +9,24 @@
 
 import Foundation
 import SwiftUI
-import Combine
 import CoreData
 import OtisShared
 
 // MARK: - Sentiment Store
 
+@Observable
 @MainActor
-final class SentimentStore: ObservableObject {
+final class SentimentStore {
     static let shared = SentimentStore()
 
-    @Published private(set) var checkIns: [SentimentCategory: SentimentCheckIn] = [:]
-    @Published var primaryFocus: SentimentCategory?
+    private(set) var checkIns: [SentimentCategory: SentimentCheckIn] = [:]
+    var primaryFocus: SentimentCategory?
 
     /// Date when onboarding (5 core questions) was completed
-    @Published private(set) var onboardingCompletedAt: Date?
+    private(set) var onboardingCompletedAt: Date?
 
-    private let checkInIntervalDays = 2  // Ask about each category every 2 days
-    private let postOnboardingGraceDays = 2  // Wait before asking behavioral questions after onboarding
+    @ObservationIgnored private let checkInIntervalDays = 2  // Ask about each category every 2 days
+    @ObservationIgnored private let postOnboardingGraceDays = 2  // Wait before asking behavioral questions after onboarding
 
     /// Key for storing onboarding completion date per user
     private var onboardingCompletedKey: String {

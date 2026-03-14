@@ -396,7 +396,7 @@ struct AddDogButton: View {
         }
         .background(Color(.systemGroupedBackground))
     }
-    .environmentObject(SubscriptionManager.shared)
+    .environment(SubscriptionManager.shared)
 }
 
 #Preview("Multiple Dogs") {
@@ -447,5 +447,5 @@ struct AddDogButton: View {
         }
         .background(Color(.systemGroupedBackground))
     }
-    .environmentObject(SubscriptionManager.shared)
+    .environment(SubscriptionManager.shared)
 }

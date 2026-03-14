@@ -12,7 +12,7 @@ struct AddMilestoneSheet: View {
     @Binding var isPresented: Bool
     let onAdd: (Milestone) -> Void
 
-    @EnvironmentObject var subscriptionManager: SubscriptionManager
+    @Environment(SubscriptionManager.self) var subscriptionManager
     @Environment(ProfileStore.self) var profileStore
     @Environment(\.colorScheme) private var colorScheme
 
@@ -200,6 +200,6 @@ struct AddMilestoneSheet: View {
     return AddMilestoneSheet(isPresented: $isPresented) { milestone in
         print("Added milestone: \(milestone.localizedLabel)")
     }
-    .environmentObject(SubscriptionManager.shared)
+    .environment(SubscriptionManager.shared)
     .environment(ProfileStore())
 }

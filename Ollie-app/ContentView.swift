@@ -11,9 +11,9 @@ import OtisShared
 struct ContentView: View {
     @Environment(ProfileStore.self) var profileStore
     @Environment(EventStore.self) var eventStore
-    @EnvironmentObject var dataImporter: DataImporter
-    @EnvironmentObject var weatherService: WeatherService
-    @EnvironmentObject var notificationService: NotificationService
+    @Environment(DataImporter.self) var dataImporter
+    @Environment(WeatherService.self) var weatherService
+    @Environment(NotificationService.self) var notificationService
     @Environment(SpotStore.self) var spotStore
     @Environment(MedicationStore.self) var medicationStore
     @Environment(SocializationStore.self) var socializationStore
@@ -22,9 +22,11 @@ struct ContentView: View {
     @Environment(ContactStore.self) var contactStore
     @Environment(AppointmentStore.self) var appointmentStore
     @Environment(RoutineStore.self) var routineStore
-    @EnvironmentObject var trainingMasteryStore: TrainingMasteryStore
-    @EnvironmentObject var cloudKit: CloudKitService
-    @EnvironmentObject var foodRecallService: FoodRecallService
+    @Environment(TrainingMasteryStore.self) var trainingMasteryStore
+    @Environment(CloudKitService.self) var cloudKit
+    @Environment(FoodRecallService.self) var foodRecallService
+    @Environment(SubscriptionManager.self) var subscriptionManager
+    @Environment(LocationManager.self) var locationManager
 
     @State private var showOnboarding = false
     @State private var showAddProfileOnboarding = false
@@ -34,11 +36,10 @@ struct ContentView: View {
     @State private var showOtisPlusSheet = false
     @State private var showPhaseTransitionSheet = false
     @State private var showUserProfileSetupSheet = false
-    @StateObject private var subscriptionManager = SubscriptionManager.shared
     @AppStorage(UserPreferences.Key.lastSelectedTab.rawValue) private var selectedTabRawValue = MainTab.today.rawValue
     @AppStorage(UserPreferences.Key.needsFirstSessionHandoff.rawValue) private var needsFirstSessionHandoff = false
     @AppStorage(UserPreferences.Key.hasCompletedOnboarding.rawValue) private var hasCompletedOnboarding = false
-    @StateObject private var navigationState = AppNavigationState()
+    @State private var navigationState = AppNavigationState()
     @AppStorage(UserPreferences.Key.appearanceMode.rawValue) private var appearanceMode = AppearanceMode.system.rawValue
     @State private var showLaunchScreen = true
     @Environment(\.scenePhase) private var scenePhase
@@ -359,11 +360,11 @@ struct ContentView: View {
     ContentView()
         .environment(ProfileStore())
         .environment(EventStore())
-        .environmentObject(DataImporter())
-        .environmentObject(WeatherService())
-        .environmentObject(NotificationService())
+        .environment(DataImporter())
+        .environment(WeatherService())
+        .environment(NotificationService())
         .environment(SpotStore())
-        .environmentObject(LocationManager())
+        .environment(LocationManager())
         .environment(MedicationStore())
         .environment(SocializationStore())
         .environment(MilestoneStore())
@@ -371,5 +372,6 @@ struct ContentView: View {
         .environment(ContactStore())
         .environment(AppointmentStore())
         .environment(RoutineStore())
-        .environmentObject(CloudKitService.shared)
+        .environment(SubscriptionManager.shared)
+        .environment(CloudKitService.shared)
 }

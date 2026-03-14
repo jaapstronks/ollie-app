@@ -53,7 +53,7 @@ struct GrowthCardCreatorSheet: View {
     // Photo selector
     private let photoSelector = GrowthPhotoSelector()
 
-    @EnvironmentObject var unitPreferences: UnitPreferences
+    @Environment(UnitPreferences.self) var unitPreferences
 
     private var weightUnit: WeightUnit {
         unitPreferences.weightUnit

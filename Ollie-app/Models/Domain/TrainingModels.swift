@@ -214,22 +214,22 @@ enum SkillPhaseContent {
             name: Strings.Training.Phases.looseLeashProofEnvironmentsName,
             subtitle: Strings.Training.Phases.looseLeashProofEnvironmentsSubtitle
         ),
-        // Come (Recall) phases
-        "come.foundation": PhaseMetadata(
-            name: Strings.Training.Phases.comeFoundationName,
-            subtitle: Strings.Training.Phases.comeFoundationSubtitle
+        // Come (Magic Recall) phases
+        "come.chooseMagicWord": PhaseMetadata(
+            name: Strings.Training.Phases.comeChooseMagicWordName,
+            subtitle: Strings.Training.Phases.comeChooseMagicWordSubtitle
         ),
-        "come.frontPosition": PhaseMetadata(
-            name: Strings.Training.Phases.comeFrontPositionName,
-            subtitle: Strings.Training.Phases.comeFrontPositionSubtitle
+        "come.buildAssociation": PhaseMetadata(
+            name: Strings.Training.Phases.comeBuildAssociationName,
+            subtitle: Strings.Training.Phases.comeBuildAssociationSubtitle
         ),
-        "come.buildDistance": PhaseMetadata(
-            name: Strings.Training.Phases.comeBuildDistanceName,
-            subtitle: Strings.Training.Phases.comeBuildDistanceSubtitle
+        "come.partnerExercise": PhaseMetadata(
+            name: Strings.Training.Phases.comePartnerExerciseName,
+            subtitle: Strings.Training.Phases.comePartnerExerciseSubtitle
         ),
-        "come.proofDistractions": PhaseMetadata(
-            name: Strings.Training.Phases.comeProofDistractionsName,
-            subtitle: Strings.Training.Phases.comeProofDistractionsSubtitle
+        "come.proofAndProgress": PhaseMetadata(
+            name: Strings.Training.Phases.comeProofAndProgressName,
+            subtitle: Strings.Training.Phases.comeProofAndProgressSubtitle
         ),
         // Sit phases
         "sit.lureToPosition": PhaseMetadata(

@@ -12,7 +12,7 @@ import OtisShared
 /// Container that manages sentiment check-in display on TodayView.
 /// Shows either onboarding (multiple questions) or single daily check-in.
 struct SentimentCheckInContainer: View {
-    @ObservedObject var sentimentStore: SentimentStore
+    var sentimentStore: SentimentStore
     let profile: PuppyProfile
     let events: [PuppyEvent]
 

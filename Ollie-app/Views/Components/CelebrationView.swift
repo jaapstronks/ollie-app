@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import Combine
 
 /// Celebration style presets
 enum CelebrationPreset {
@@ -142,11 +141,12 @@ extension View {
     }
 }
 
+@Observable
 @MainActor
-final class CelebrationTrigger: ObservableObject {
-    @Published var isActive = false
-    @Published var style: CelebrationPreset = .milestone
-    @Published var streakCount: Int?
+final class CelebrationTrigger {
+    var isActive = false
+    var style: CelebrationPreset = .milestone
+    var streakCount: Int?
 
     func trigger(_ style: CelebrationPreset = .milestone, streakCount: Int? = nil) {
         self.style = style

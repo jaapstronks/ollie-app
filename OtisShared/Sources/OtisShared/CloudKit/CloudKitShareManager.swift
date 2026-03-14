@@ -8,23 +8,23 @@
 import Foundation
 import CloudKit
 import CoreData
-import Combine
 import os
 
 /// Handles CloudKit share management for Core Data
 /// Uses NSPersistentCloudKitContainer's sharing APIs
+@Observable
 @MainActor
-public final class CloudKitShareManager: ObservableObject {
-    private let container: CKContainer
-    private let logger = Logger.otis(category: "CloudKitShare")
+public final class CloudKitShareManager {
+    @ObservationIgnored private let container: CKContainer
+    @ObservationIgnored private let logger = Logger.otis(category: "CloudKitShare")
 
     // MARK: - Published State
 
-    @Published public private(set) var isShared = false
-    @Published public private(set) var shareParticipants: [ShareParticipant] = []
-    @Published public private(set) var currentShare: CKShare?
-    @Published public private(set) var isLoading = false
-    @Published public private(set) var error: String?
+    public private(set) var isShared = false
+    public private(set) var shareParticipants: [ShareParticipant] = []
+    public private(set) var currentShare: CKShare?
+    public private(set) var isLoading = false
+    public private(set) var error: String?
 
     // MARK: - Init
 

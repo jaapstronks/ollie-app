@@ -12,7 +12,7 @@ import OtisShared
 /// ViewModifier that applies all timeline sheet handling
 struct TimelineSheetModifiers: ViewModifier {
     @Bindable var viewModel: TimelineViewModel
-    @ObservedObject var mediaCaptureViewModel: MediaCaptureViewModel
+    @Bindable var mediaCaptureViewModel: MediaCaptureViewModel
     @Binding var selectedPhotoEvent: PuppyEvent?
     let reduceMotion: Bool
     var spotStore: SpotStore

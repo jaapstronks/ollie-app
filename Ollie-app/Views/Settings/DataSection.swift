@@ -9,7 +9,7 @@ import OtisShared
 
 /// Data import and management section
 struct DataSection: View {
-    @ObservedObject var dataImporter: DataImporter
+    var dataImporter: DataImporter
     var eventStore: EventStore
     @Binding var showingImportSheet: Bool
 

@@ -11,7 +11,7 @@ import OtisShared
 
 struct SeniorWellnessCard: View {
     @Environment(ProfileStore.self) private var profileStore
-    @StateObject private var wellnessStore = SeniorWellnessStore.shared
+    @State private var wellnessStore = SeniorWellnessStore.shared
 
     let onMobilityTap: () -> Void
     let onCognitiveTap: () -> Void

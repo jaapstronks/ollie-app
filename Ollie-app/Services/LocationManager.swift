@@ -10,19 +10,22 @@ import CoreLocation
 import Combine
 
 /// Service for handling location requests
+@Observable
 @MainActor
-class LocationManager: NSObject, ObservableObject {
+class LocationManager: NSObject {
 
-    // MARK: - Published State
+    // MARK: - Observable State
 
-    @Published var authorizationStatus: CLAuthorizationStatus = .notDetermined
-    @Published var currentLocation: CLLocation?
-    @Published var isRequestingLocation = false
-    @Published var lastError: Error?
+    var authorizationStatus: CLAuthorizationStatus = .notDetermined
+    var currentLocation: CLLocation?
+    var isRequestingLocation = false
+    var lastError: Error?
 
     // MARK: - Private
 
+    @ObservationIgnored
     private let locationManager = CLLocationManager()
+    @ObservationIgnored
     private var locationContinuation: CheckedContinuation<CLLocation, Error>?
 
     // MARK: - Init

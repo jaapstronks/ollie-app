@@ -10,7 +10,7 @@ import OtisShared
 
 /// Personalized potty training guide sheet
 struct PottyTrainingGuideSheet: View {
-    @ObservedObject var viewModel: PottyTrainingGuideViewModel
+    @Bindable var viewModel: PottyTrainingGuideViewModel
 
     @Environment(\.dismiss) private var dismiss
     @Environment(\.colorScheme) private var colorScheme

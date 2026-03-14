@@ -240,58 +240,29 @@ class TimelineViewModel {
 
 ## Migration Status
 
-### Migrated to @Observable
+**✅ Migration Complete** - All stores, services, and ViewModels now use `@Observable`.
 
-**Stores (via BaseStore/CRUDStore):**
-- [x] ProfileStore
-- [x] EventStore
-- [x] **BaseStore** (base class - migrates all inheriting stores)
-- [x] MedicationStore (via BaseStore)
-- [x] SocializationStore (via BaseStore)
-- [x] SkillProgressStore (via BaseStore)
-- [x] RegressionLogStore (via BaseStore)
-- [x] RoutineStore (via BaseStore)
-- [x] TrainingPlanStore (via BaseStore)
-- [x] **CRUDStore** (via BaseStore - migrates all inheriting stores)
-- [x] SpotStore (via CRUDStore)
-- [x] ContactStore (via CRUDStore)
-- [x] MilestoneStore (via CRUDStore)
-- [x] DocumentStore (via BaseStore)
-- [x] AppointmentStore (via BaseStore)
-- [x] WeightStore (via BaseStore)
+### Stores (via BaseStore/CRUDStore)
+- ProfileStore, EventStore, BaseStore, CRUDStore
+- MedicationStore, SocializationStore, SkillProgressStore, RegressionLogStore
+- RoutineStore, TrainingPlanStore, SpotStore, ContactStore
+- MilestoneStore, DocumentStore, AppointmentStore, WeightStore
 
-**ViewModels:**
-- [x] TimelineViewModel
-- [x] SheetCoordinator
-- [x] ThisWeekViewModel
-- [x] TodayStatusViewModel
-- [x] MomentsViewModel
-- [x] MemoriesViewModel
-- [x] PlacesMapViewModel
-- [x] MonthRecapViewModel
-- [x] WeekRecapViewModel
-- [x] YearRecapViewModel
+### Standalone Services
+- SubscriptionManager, WeatherService, NotificationService, LocationManager
+- TrialManager, UnitPreferences, CloudKitService, CloudKitShareManager
+- DogParkDiscoveryService, TrainingProgressStore, UserIdentityStore, TrainingMasteryStore
+- ActivityTrackingManager, AtmosphereProvider, ErrorHandling
 
-### Still Using ObservableObject
-These services are standalone and don't inherit from BaseStore:
-- [ ] SubscriptionManager
-- [ ] WeatherService
-- [ ] NotificationService
-- [ ] LocationManager
-- [ ] TrainingProgressStore
-- [ ] UserIdentityStore
-- [ ] TrainingMasteryStore
-- [ ] CloudKitService
-- [ ] MediaCaptureViewModel
-- [ ] DogParkDiscoveryService
-- [ ] And other standalone services
+### ViewModels
+- TimelineViewModel, SheetCoordinator, ThisWeekViewModel, TodayStatusViewModel
+- MomentsViewModel, MemoriesViewModel, PlacesMapViewModel
+- MonthRecapViewModel, WeekRecapViewModel, YearRecapViewModel
+- ContributionStatsViewModel, MorningBriefingViewModel, PottyTrainingGuideViewModel
+- AppNavigationState, MediaCaptureViewModel
 
-### Migration Order
-
-1. **ProfileStore** - Core dependency, most stores reference it ✅
-2. **EventStore** - Heavy use, already has change detection ✅
-3. **BaseStore** - Migrates all data stores at once ✅
-4. **Remaining services** - Migrate as needed
+### Watch App
+- WatchDataProvider - Uses `@Observable @MainActor` with WatchConnectivity
 
 ---
 

@@ -14,8 +14,8 @@ struct MainTabView: View {
     let eventStore: EventStore
     let profileStore: ProfileStore
     let dataImporter: DataImporter
-    @ObservedObject var weatherService: WeatherService
-    @ObservedObject var notificationService: NotificationService
+    var weatherService: WeatherService
+    var notificationService: NotificationService
     var spotStore: SpotStore
     var medicationStore: MedicationStore
     var socializationStore: SocializationStore
@@ -24,15 +24,15 @@ struct MainTabView: View {
     var contactStore: ContactStore
     var appointmentStore: AppointmentStore
     var routineStore: RoutineStore
-    @ObservedObject var trainingMasteryStore: TrainingMasteryStore
+    var trainingMasteryStore: TrainingMasteryStore
     var onAddDog: (() -> Void)?
 
-    @EnvironmentObject var locationManager: LocationManager
-    @EnvironmentObject var foodRecallService: FoodRecallService
+    @Environment(LocationManager.self) var locationManager
+    @Environment(FoodRecallService.self) var foodRecallService
 
     @State private var viewModel: TimelineViewModel
     @State private var momentsViewModel: MomentsViewModel
-    @StateObject private var mediaCaptureViewModel = MediaCaptureViewModel(mediaStore: MediaStore())
+    @State private var mediaCaptureViewModel = MediaCaptureViewModel(mediaStore: MediaStore())
     @State private var memoriesViewModel: MemoriesViewModel
     @State private var todayStatusViewModel: TodayStatusViewModel
 

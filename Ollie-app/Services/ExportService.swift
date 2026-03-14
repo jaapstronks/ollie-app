@@ -5,7 +5,6 @@
 //  Handles exporting all puppy data to a shareable folder
 //
 
-import Combine
 import CoreData
 import Foundation
 import OtisShared
@@ -13,22 +12,23 @@ import os
 import UIKit
 
 /// Service for exporting all puppy data to a shareable folder
+@Observable
 @MainActor
-class ExportService: ObservableObject {
+class ExportService {
 
     // MARK: - Published State
 
-    @Published var isExporting = false
-    @Published var progress: Double = 0.0
-    @Published var currentStep: ExportStep = .preparing
-    @Published var exportError: ExportError?
+    var isExporting = false
+    var progress: Double = 0.0
+    var currentStep: ExportStep = .preparing
+    var exportError: ExportError?
 
     // MARK: - Dependencies
 
-    private let persistenceController: PersistenceController
-    private let logger = Logger.otis(category: "ExportService")
-    private let fileManager = FileManager.default
-    private let encoder: JSONEncoder
+    @ObservationIgnored private let persistenceController: PersistenceController
+    @ObservationIgnored private let logger = Logger.otis(category: "ExportService")
+    @ObservationIgnored private let fileManager = FileManager.default
+    @ObservationIgnored private let encoder: JSONEncoder
 
     // MARK: - Init
 

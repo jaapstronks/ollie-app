@@ -11,7 +11,7 @@ import OtisShared
 /// View for exporting puppy data with configurable options
 struct ExportDataView: View {
     var profileStore: ProfileStore
-    @StateObject private var exportService = ExportService()
+    @State private var exportService = ExportService()
 
     @Environment(\.dismiss) private var dismiss
 

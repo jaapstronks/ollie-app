@@ -13,22 +13,33 @@ import Combine
 import os
 
 /// Service for managing smart puppy notifications
+@Observable
 @MainActor
-class NotificationService: ObservableObject {
-    @Published private(set) var authorizationStatus: UNAuthorizationStatus = .notDetermined
-    @Published private(set) var isAuthorized: Bool = false
+class NotificationService {
+    private(set) var authorizationStatus: UNAuthorizationStatus = .notDetermined
+    private(set) var isAuthorized: Bool = false
 
+    @ObservationIgnored
     private let notificationCenter = UNUserNotificationCenter.current()
+    @ObservationIgnored
     private let logger = Logger.otis(category: "NotificationService")
 
-    // Individual schedulers
+    // Individual schedulers (not observed - internal infrastructure)
+    @ObservationIgnored
     private let pottyScheduler = PottyNotificationScheduler()
+    @ObservationIgnored
     private let mealScheduler = MealNotificationScheduler()
+    @ObservationIgnored
     private let napScheduler = NapNotificationScheduler()
+    @ObservationIgnored
     private let wakeUpSoonScheduler = WakeUpSoonNotificationScheduler()
+    @ObservationIgnored
     private let walkScheduler = WalkNotificationScheduler()
+    @ObservationIgnored
     private let appointmentScheduler = AppointmentNotificationScheduler()
+    @ObservationIgnored
     private let trialScheduler = TrialNotificationScheduler()
+    @ObservationIgnored
     private let firstWeekScheduler = FirstWeekNotificationScheduler()
 
     // MARK: - Initialization

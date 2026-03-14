@@ -6,14 +6,14 @@
 import Foundation
 import OtisShared
 import UIKit
-import Combine
 import os
 
 /// Manages saving, loading, and deleting photo media files
+@Observable
 @MainActor
-class MediaStore: ObservableObject {
-    private let fileManager = FileManager.default
-    private let logger = Logger.otis(category: "MediaStore")
+class MediaStore {
+    @ObservationIgnored private let fileManager = FileManager.default
+    @ObservationIgnored private let logger = Logger.otis(category: "MediaStore")
 
     // MARK: - Directory URLs
 

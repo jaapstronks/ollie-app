@@ -3,31 +3,35 @@ import OtisShared
 import Combine
 
 /// Service for fetching weather forecasts from Open-Meteo API
+@Observable
 @MainActor
-class WeatherService: ObservableObject {
+class WeatherService {
 
-    // MARK: - Published State
+    // MARK: - Observable State
 
-    @Published var forecasts: [HourForecast] = []
-    @Published var isLoading = false
-    @Published var lastError: Error?
+    var forecasts: [HourForecast] = []
+    var isLoading = false
+    var lastError: Error?
 
     /// Today's sunrise time (if available)
-    @Published var sunrise: Date?
+    var sunrise: Date?
 
     /// Today's sunset time (if available)
-    @Published var sunset: Date?
+    var sunset: Date?
 
     /// Current air quality (if available)
-    @Published var airQuality: AirQuality?
+    var airQuality: AirQuality?
 
     // MARK: - Dependencies
 
+    @ObservationIgnored
     private weak var locationManager: LocationManager?
 
     // MARK: - Cache
 
+    @ObservationIgnored
     private var cache: (forecasts: [HourForecast], sunrise: Date?, sunset: Date?, airQuality: AirQuality?, fetchedAt: Date, location: (lat: Double, lon: Double))?
+    @ObservationIgnored
     private let cacheValidityMinutes: Double = 30
 
     // MARK: - Default Location (Rotterdam - fallback when location unavailable)

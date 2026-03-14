@@ -19,7 +19,7 @@ struct GrowthDetailSheet: View {
 
     @Environment(\.dismiss) private var dismiss
     @Environment(\.colorScheme) private var colorScheme
-    @EnvironmentObject var unitPreferences: UnitPreferences
+    @Environment(UnitPreferences.self) var unitPreferences
 
     @State private var measurementToDelete: WeightMeasurement?
     @State private var showDeleteConfirmation = false

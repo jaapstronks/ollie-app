@@ -15,7 +15,7 @@ struct WeightChartView: View {
     let puppyName: String
 
     @Environment(\.colorScheme) private var colorScheme
-    @EnvironmentObject var unitPreferences: UnitPreferences
+    @Environment(UnitPreferences.self) var unitPreferences
 
     private var weightUnit: WeightUnit {
         unitPreferences.weightUnit

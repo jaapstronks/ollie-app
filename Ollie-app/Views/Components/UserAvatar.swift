@@ -45,8 +45,13 @@ struct UserAvatar: View {
 struct UserAvatarFromRecordID: View {
     let cloudKitRecordID: String?
     var size: CGFloat = 20
-    @ObservedObject private var userIdentityStore = UserIdentityStore.shared
-    @ObservedObject private var participantResolver = ParticipantResolver.shared
+    private let userIdentityStore = UserIdentityStore.shared
+    private let participantResolver = ParticipantResolver.shared
+
+    init(cloudKitRecordID: String?, size: CGFloat = 20) {
+        self.cloudKitRecordID = cloudKitRecordID
+        self.size = size
+    }
 
     var body: some View {
         if let recordID = cloudKitRecordID {

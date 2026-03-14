@@ -12,11 +12,12 @@ import os
 
 private let logger = Logger.otis(category: "MorningBriefing")
 
+@Observable
 @MainActor
-final class MorningBriefingViewModel: ObservableObject {
+final class MorningBriefingViewModel {
 
-    @Published private(set) var briefing: MorningBriefingResponse?
-    @Published private(set) var isLoading = false
+    private(set) var briefing: MorningBriefingResponse?
+    private(set) var isLoading = false
 
     /// Whether the card should be visible
     var shouldShow: Bool {

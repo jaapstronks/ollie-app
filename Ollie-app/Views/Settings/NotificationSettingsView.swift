@@ -11,7 +11,7 @@ import OtisShared
 /// View for configuring notification settings
 struct NotificationSettingsView: View {
     let profileStore: ProfileStore
-    @ObservedObject var notificationService: NotificationService
+    var notificationService: NotificationService
     var profileId: UUID? = nil
     @Environment(\.dismiss) private var dismiss
 

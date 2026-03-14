@@ -39,9 +39,57 @@ struct TodayStatusCardsSection: View {
     var onAddPhoto: () -> Void
     var onInviteFamily: () -> Void
 
-    @ObservedObject private var trialManager = TrialManager.shared
-    @ObservedObject private var firstWeekService = FirstWeekExperienceService.shared
+    private let trialManager = TrialManager.shared
+    private let firstWeekService = FirstWeekExperienceService.shared
     @Environment(ContactStore.self) private var contactStore
+
+    init(
+        viewModel: TimelineViewModel,
+        weatherService: WeatherService,
+        appointmentNudgeCandidate: AppointmentNudgeCandidate?,
+        crateTrainingMastered: Bool,
+        shouldShowPottyStatusCard: Bool,
+        shouldShowCrateNudge: Bool,
+        shouldShowWalkTargetNudge: Bool,
+        shouldShowAppointmentNudgeNapContext: Bool,
+        overdueGroomingActivities: [GroomingActivity],
+        onNavigateToTrain: (() -> Void)? = nil,
+        onDismissCrateNudge: @escaping () -> Void,
+        onDismissWalkTargetNudge: @escaping () -> Void,
+        onDismissGroomingNudge: @escaping () -> Void,
+        onDismissAppointmentNudge: @escaping (String) -> Void,
+        onMarkAppointmentDone: @escaping (AppointmentNudgeCandidate) -> Void,
+        onCreateAppointmentPrefill: @escaping (AppointmentNudgeCandidate) -> AppointmentPrefill?,
+        onMarkGroomingComplete: @escaping (GroomingActivity) -> Void,
+        onViewAllGrooming: @escaping () -> Void,
+        onShowMonthRecap: @escaping () -> Void,
+        onShowYearRecap: @escaping () -> Void,
+        onAddPhoto: @escaping () -> Void,
+        onInviteFamily: @escaping () -> Void
+    ) {
+        self._viewModel = Bindable(viewModel)
+        self.weatherService = weatherService
+        self.appointmentNudgeCandidate = appointmentNudgeCandidate
+        self.crateTrainingMastered = crateTrainingMastered
+        self.shouldShowPottyStatusCard = shouldShowPottyStatusCard
+        self.shouldShowCrateNudge = shouldShowCrateNudge
+        self.shouldShowWalkTargetNudge = shouldShowWalkTargetNudge
+        self.shouldShowAppointmentNudgeNapContext = shouldShowAppointmentNudgeNapContext
+        self.overdueGroomingActivities = overdueGroomingActivities
+        self.onNavigateToTrain = onNavigateToTrain
+        self.onDismissCrateNudge = onDismissCrateNudge
+        self.onDismissWalkTargetNudge = onDismissWalkTargetNudge
+        self.onDismissGroomingNudge = onDismissGroomingNudge
+        self.onDismissAppointmentNudge = onDismissAppointmentNudge
+        self.onMarkAppointmentDone = onMarkAppointmentDone
+        self.onCreateAppointmentPrefill = onCreateAppointmentPrefill
+        self.onMarkGroomingComplete = onMarkGroomingComplete
+        self.onViewAllGrooming = onViewAllGrooming
+        self.onShowMonthRecap = onShowMonthRecap
+        self.onShowYearRecap = onShowYearRecap
+        self.onAddPhoto = onAddPhoto
+        self.onInviteFamily = onInviteFamily
+    }
 
     var body: some View {
         VStack(spacing: 12) {

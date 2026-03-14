@@ -7,36 +7,36 @@
 //  - Download: On-demand download when viewing photos not available locally
 //
 
-import Combine
 import Foundation
 import OtisShared
 import os
 
 /// Coordinates bidirectional photo sync with CloudKit
+@Observable
 @MainActor
-final class PhotoSyncService: ObservableObject {
+final class PhotoSyncService {
     static let shared = PhotoSyncService()
 
-    // MARK: - Published State
+    // MARK: - State
 
-    @Published private(set) var pendingUploads: Set<UUID> = []
-    @Published private(set) var pendingDownloads: Set<UUID> = []
-    @Published private(set) var failedUploads: Set<UUID> = []
-    @Published private(set) var activeDownloads: Set<UUID> = []
+    private(set) var pendingUploads: Set<UUID> = []
+    private(set) var pendingDownloads: Set<UUID> = []
+    private(set) var failedUploads: Set<UUID> = []
+    private(set) var activeDownloads: Set<UUID> = []
 
     // MARK: - Configuration
 
-    private let maxConcurrentUploads = 5
-    private let retryDelay: TimeInterval = 30
-    private let maxRetryAttempts = 3
+    @ObservationIgnored private let maxConcurrentUploads = 5
+    @ObservationIgnored private let retryDelay: TimeInterval = 30
+    @ObservationIgnored private let maxRetryAttempts = 3
 
     // MARK: - Private State
 
-    private let logger = Logger.otis(category: "PhotoSyncService")
-    private let mediaStore = MediaStore()
-    private var retryAttempts: [UUID: Int] = [:]
-    private var uploadTasks: [UUID: Task<Void, Never>] = [:]
-    private var downloadTasks: [UUID: Task<Bool, Never>] = [:]
+    @ObservationIgnored private let logger = Logger.otis(category: "PhotoSyncService")
+    @ObservationIgnored private let mediaStore = MediaStore()
+    @ObservationIgnored private var retryAttempts: [UUID: Int] = [:]
+    @ObservationIgnored private var uploadTasks: [UUID: Task<Void, Never>] = [:]
+    @ObservationIgnored private var downloadTasks: [UUID: Task<Bool, Never>] = [:]
 
     private init() {}
 

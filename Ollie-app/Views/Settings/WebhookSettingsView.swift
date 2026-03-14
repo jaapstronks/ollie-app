@@ -9,7 +9,7 @@ import OtisShared
 
 struct WebhookSettingsView: View {
     var profileStore: ProfileStore
-    @StateObject private var webhookService = WebhookService.shared
+    @State private var webhookService = WebhookService.shared
 
     @State private var isEnabled: Bool = false
     @State private var webhookURL: String = ""

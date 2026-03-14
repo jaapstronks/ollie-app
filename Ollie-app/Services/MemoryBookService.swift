@@ -5,7 +5,6 @@
 //  Generates a memory book PDF for a dog who has passed
 //
 
-import Combine
 import CoreData
 import Foundation
 import OtisShared
@@ -14,21 +13,22 @@ import PDFKit
 import UIKit
 
 /// Service for generating memory book PDFs
+@Observable
 @MainActor
-class MemoryBookService: ObservableObject {
+class MemoryBookService {
 
-    // MARK: - Published State
+    // MARK: - State
 
-    @Published var isGenerating = false
-    @Published var progress: Double = 0.0
-    @Published var currentStep: String = ""
-    @Published var generatedPDFURL: URL?
+    var isGenerating = false
+    var progress: Double = 0.0
+    var currentStep: String = ""
+    var generatedPDFURL: URL?
 
     // MARK: - Dependencies
 
-    private let persistenceController: PersistenceController
-    private let logger = Logger.otis(category: "MemoryBookService")
-    private let fileManager = FileManager.default
+    @ObservationIgnored private let persistenceController: PersistenceController
+    @ObservationIgnored private let logger = Logger.otis(category: "MemoryBookService")
+    @ObservationIgnored private let fileManager = FileManager.default
 
     // MARK: - Constants
 

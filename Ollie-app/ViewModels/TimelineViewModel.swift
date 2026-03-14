@@ -179,9 +179,6 @@ class TimelineViewModel {
     /// Subscription to reset to today when app becomes active on a new day
     private var appBecameActiveCancellable: AnyCancellable?
 
-    /// Subscription to EventDataProvider changes (historical data loaded)
-    private var eventDataProviderCancellable: AnyCancellable?
-
     let eventStore: EventStore
     let profileStore: ProfileStore
     var notificationService: NotificationService?
@@ -292,15 +289,8 @@ class TimelineViewModel {
 
         // Subscribe to EventDataProvider changes to refresh caches when historical data loads
         // This fixes the race condition where refreshCachedProperties runs before data is ready
-        // PERF: Increased debounce from 200ms to 1s to coalesce rapid changes
-        eventDataProviderCancellable = eventDataProvider.objectWillChange
-            .debounce(for: .seconds(1), scheduler: RunLoop.main)
-            .sink { [weak self] _ in
-                guard let self = self else { return }
-                Task {
-                    await self.refreshCachedProperties()
-                }
-            }
+        // PERF: Using Swift Observation instead of Combine
+        observeEventDataProvider()
 
         // Listen for moment notification taps to open lightbox
         momentNotificationCancellable = NotificationCenter.default
@@ -403,6 +393,31 @@ class TimelineViewModel {
     /// Dismiss the celebration banner
     func dismissCelebrationBanner() {
         sheetCoordinator.dismissCelebrationBanner()
+    }
+
+    /// Observe EventDataProvider changes using Swift Observation framework
+    /// When historical data loads, refresh cached properties
+    @ObservationIgnored private var eventDataProviderObservationTask: Task<Void, Never>?
+
+    private func observeEventDataProvider() {
+        withObservationTracking {
+            // Track changes to historical event data
+            _ = eventDataProvider.weekEvents
+            _ = eventDataProvider.monthEvents
+            _ = eventDataProvider.isRefreshing
+        } onChange: { [weak self] in
+            Task { @MainActor [weak self] in
+                guard let self else { return }
+                // Debounce rapid changes by scheduling on next run loop
+                self.eventDataProviderObservationTask?.cancel()
+                self.eventDataProviderObservationTask = Task {
+                    try? await Task.sleep(for: .seconds(1))
+                    guard !Task.isCancelled else { return }
+                    await self.refreshCachedProperties()
+                }
+                self.observeEventDataProvider()
+            }
+        }
     }
 
     // MARK: - Event Loading

@@ -15,7 +15,7 @@ struct RespiratoryRateSheet: View {
 
     @Environment(\.dismiss) private var dismiss
     @Environment(ProfileStore.self) private var profileStore
-    @StateObject private var wellnessStore = SeniorWellnessStore.shared
+    @State private var wellnessStore = SeniorWellnessStore.shared
 
     init(onSave: @escaping (RespiratoryRateReading) -> Void) {
         self.onSave = onSave

@@ -12,13 +12,16 @@ import OtisShared
 /// Manages local 14-day trial state
 /// This is separate from StoreKit's introductory offer - it's a local trial
 /// that gives users full access for 14 days without requiring payment info
+@Observable
 @MainActor
-class TrialManager: ObservableObject {
+class TrialManager {
     static let shared = TrialManager()
 
     // MARK: - Constants
 
+    @ObservationIgnored
     private static let trialDurationDays = 14
+    @ObservationIgnored
     private static let existingUserEventThreshold = 20
 
     // MARK: - Storage Keys
@@ -28,17 +31,18 @@ class TrialManager: ObservableObject {
         static let hasDeclinedTrial = "trial.hasDeclined"
     }
 
-    // MARK: - Published State
+    // MARK: - Observable State
 
     /// The date when the trial started (nil if never started)
-    @Published private(set) var trialStartDate: Date?
+    private(set) var trialStartDate: Date?
 
     /// Set of touchpoints that have been shown to the user
-    @Published private(set) var shownTouchpoints: Set<Int> = []
+    private(set) var shownTouchpoints: Set<Int> = []
 
     /// Whether the user explicitly declined the trial
-    @Published private(set) var hasDeclinedTrial: Bool = false
+    private(set) var hasDeclinedTrial: Bool = false
 
+    @ObservationIgnored
     private let logger = Logger.otis(category: "TrialManager")
 
     // MARK: - Computed Properties

@@ -19,7 +19,7 @@ struct SkillLearningFlowSheet: View {
     let onToggleMastered: () -> Void
     let onDismiss: () -> Void
 
-    @ObservedObject var progressStore: TrainingProgressStore
+    @Bindable var progressStore: TrainingProgressStore
     var skillProgressStore: SkillProgressStore
 
     @State private var currentPage: Int = 0

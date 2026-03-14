@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Combine
 import CloudKit
 import os
 import OtisShared
@@ -49,20 +48,21 @@ public struct ResolvedParticipant: Identifiable, Equatable, Sendable {
 }
 
 /// Service to resolve CloudKit participant identities
+@Observable
 @MainActor
-public final class ParticipantResolver: ObservableObject {
+public final class ParticipantResolver {
     public static let shared = ParticipantResolver()
 
-    private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "Ollie", category: "ParticipantResolver")
+    @ObservationIgnored private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "Ollie", category: "ParticipantResolver")
 
     /// Cache of resolved participants
-    @Published public private(set) var resolvedParticipants: [String: ResolvedParticipant] = [:]
+    public private(set) var resolvedParticipants: [String: ResolvedParticipant] = [:]
 
     /// Whether we're currently resolving
-    @Published public private(set) var isResolving: Bool = false
+    public private(set) var isResolving: Bool = false
 
     /// Last resolution time
-    @Published public private(set) var lastResolutionTime: Date?
+    public private(set) var lastResolutionTime: Date?
 
     private init() {}
 

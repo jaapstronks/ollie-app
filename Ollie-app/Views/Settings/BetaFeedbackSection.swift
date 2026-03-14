@@ -10,7 +10,7 @@ import OtisShared
 
 /// Feedback section visible in beta builds (debug and TestFlight)
 struct BetaFeedbackSection: View {
-    @ObservedObject private var subscriptionManager = SubscriptionManager.shared
+    private var subscriptionManager = SubscriptionManager.shared
     @Environment(ProfileStore.self) var profileStore
     @State private var showingCopiedToast = false
 

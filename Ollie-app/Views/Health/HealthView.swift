@@ -15,7 +15,7 @@ struct HealthView: View {
     @Bindable var viewModel: TimelineViewModel
     var milestoneStore: MilestoneStore
 
-    @EnvironmentObject var subscriptionManager: SubscriptionManager
+    @Environment(SubscriptionManager.self) var subscriptionManager
     @Environment(WeightStore.self) var weightStore
     @Environment(RoutineStore.self) var routineStore
 
@@ -23,11 +23,11 @@ struct HealthView: View {
     @State var showAddMilestoneSheet = false
     @State var showSymptomLogSheet = false
 
-    @EnvironmentObject var unitPreferences: UnitPreferences
+    @Environment(UnitPreferences.self) var unitPreferences
 
-    @StateObject var symptomStore = HealthSymptomStore.shared
-    @StateObject var checkInStore = HealthCheckInStore.shared
-    @StateObject var seniorWellnessStore = SeniorWellnessStore.shared
+    @State var symptomStore = HealthSymptomStore.shared
+    @State var checkInStore = HealthCheckInStore.shared
+    @State var seniorWellnessStore = SeniorWellnessStore.shared
 
     @State var showMobilitySheet = false
     @State var showCognitiveSheet = false
@@ -214,7 +214,7 @@ struct HealthView: View {
     NavigationStack {
         HealthView(viewModel: viewModel, milestoneStore: milestoneStore)
     }
-    .environmentObject(SubscriptionManager.shared)
+    .environment(SubscriptionManager.shared)
     .environment(WeightStore())
     .environment(RoutineStore())
 }

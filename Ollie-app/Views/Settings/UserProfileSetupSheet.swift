@@ -12,7 +12,7 @@ import OtisShared
 /// Reusable user profile setup view
 /// Used in onboarding and after share acceptance
 struct UserProfileSetupSheet: View {
-    @ObservedObject var userIdentityStore: UserIdentityStore
+    var userIdentityStore: UserIdentityStore
     let onComplete: () -> Void
     let onSkip: (() -> Void)?
 

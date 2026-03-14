@@ -11,7 +11,7 @@ import OtisShared
 /// Settings screen for schedules and preferences
 struct SchedulePreferencesView: View {
     var profileStore: ProfileStore
-    @ObservedObject var notificationService: NotificationService
+    var notificationService: NotificationService
     let profileId: UUID
 
     @State private var showingMealEdit = false

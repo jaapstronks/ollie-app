@@ -7,28 +7,28 @@
 //  Part of Brief 05: Senior Wellness
 //
 
-import Combine
 import Foundation
 import SwiftUI
 import OtisShared
 
 // MARK: - Senior Wellness Store
 
+@Observable
 @MainActor
-final class SeniorWellnessStore: ObservableObject {
+final class SeniorWellnessStore {
     static let shared = SeniorWellnessStore()
 
-    // MARK: - Published State
+    // MARK: - State
 
-    @Published private(set) var mobilityAssessments: [MobilityAssessment] = []
-    @Published private(set) var cognitiveAssessments: [CognitiveAssessment] = []
-    @Published private(set) var qualityOfLifeAssessments: [QualityOfLifeAssessment] = []
-    @Published private(set) var respiratoryReadings: [RespiratoryRateReading] = []
+    private(set) var mobilityAssessments: [MobilityAssessment] = []
+    private(set) var cognitiveAssessments: [CognitiveAssessment] = []
+    private(set) var qualityOfLifeAssessments: [QualityOfLifeAssessment] = []
+    private(set) var respiratoryReadings: [RespiratoryRateReading] = []
 
     // MARK: - Storage
 
-    private let storageURL: URL
-    private let calendar = Calendar.current
+    @ObservationIgnored private let storageURL: URL
+    @ObservationIgnored private let calendar = Calendar.current
 
     private init() {
         let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]

@@ -13,15 +13,15 @@
 
 import Foundation
 import CloudKit
-import Combine
 import CoreData
 import os
 import OtisShared
 
 /// Manages the current user's identity for event attribution
 /// Uses CloudKit user record ID as the stable identifier across devices
+@Observable
 @MainActor
-public final class UserIdentityStore: ObservableObject {
+public final class UserIdentityStore {
 
     // MARK: - Singleton
 
@@ -33,18 +33,18 @@ public final class UserIdentityStore: ObservableObject {
 
     // MARK: - Published State
 
-    @Published public private(set) var currentIdentity: UserIdentity?
-    @Published public private(set) var isSetupComplete = false
-    @Published public private(set) var cloudKitRecordID: String?
+    public private(set) var currentIdentity: UserIdentity?
+    public private(set) var isSetupComplete = false
+    public private(set) var cloudKitRecordID: String?
 
     // MARK: - Private
 
-    private let logger = Logger.otis(category: "UserIdentityStore")
-    private let container: CKContainer
-    private let userDefaultsKey = "otis.user.identity"
+    @ObservationIgnored private let logger = Logger.otis(category: "UserIdentityStore")
+    @ObservationIgnored private let container: CKContainer
+    @ObservationIgnored private let userDefaultsKey = "otis.user.identity"
 
     /// Profile store reference for CloudKit sharing (set during app setup)
-    private weak var profileStore: ProfileStore?
+    @ObservationIgnored private weak var profileStore: ProfileStore?
 
     // MARK: - Init
 

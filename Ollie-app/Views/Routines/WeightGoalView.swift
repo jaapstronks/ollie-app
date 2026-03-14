@@ -16,7 +16,7 @@ struct WeightGoalView: View {
 
     @State private var showSetGoalSheet = false
 
-    @EnvironmentObject private var unitPreferences: UnitPreferences
+    @Environment(UnitPreferences.self) private var unitPreferences
 
     private var weightUnit: WeightUnit {
         unitPreferences.weightUnit
@@ -246,7 +246,7 @@ private struct SetWeightGoalSheet: View {
     @State private var targetDate: Date = Date().addingTimeInterval(90 * 24 * 60 * 60) // 90 days
     @State private var note: String = ""
 
-    @EnvironmentObject private var unitPreferences: UnitPreferences
+    @Environment(UnitPreferences.self) private var unitPreferences
 
     private var weightUnit: WeightUnit {
         unitPreferences.weightUnit

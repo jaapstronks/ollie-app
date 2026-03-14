@@ -312,7 +312,7 @@ struct MilestoneRow: View {
     let milestones = DefaultMilestones.create()
     let birthDate = Calendar.current.date(byAdding: .weekOfYear, value: -10, to: Date())!
 
-    return NavigationStack {
+    NavigationStack {
         ScrollView {
             HealthTimelineView(
                 milestones: milestones,
@@ -325,5 +325,5 @@ struct MilestoneRow: View {
         }
         .navigationTitle("Health")
     }
-    .environmentObject(SubscriptionManager.shared)
+    .environment(SubscriptionManager.shared)
 }

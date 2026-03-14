@@ -6,15 +6,15 @@
 //  Controls when features unlock based on actual usage patterns.
 //
 
-import Combine
 import Foundation
 import OtisShared
 import SwiftUI
 
 /// Service that manages progressive disclosure of features during first week.
 /// Features unlock based on actual usage, not just time.
+@Observable
 @MainActor
-final class FirstWeekExperienceService: ObservableObject {
+final class FirstWeekExperienceService {
     static let shared = FirstWeekExperienceService()
 
     // MARK: - Storage Keys
@@ -32,20 +32,20 @@ final class FirstWeekExperienceService: ObservableObject {
         case streakCelebrationLastDay = "firstWeek_streakCelebrationLastDay"
     }
 
-    // MARK: - Published State
+    // MARK: - State
 
-    @Published private(set) var isFirstWeek: Bool = true
-    @Published private(set) var daysSinceOnboarding: Int = 0
+    private(set) var isFirstWeek: Bool = true
+    private(set) var daysSinceOnboarding: Int = 0
 
     // MARK: - Cached Event Counts
 
-    private var cachedPottyCount: Int = 0
-    private var cachedSleepWakeCycles: Int = 0
-    private var cachedMealCount: Int = 0
-    private var cachedWalkCount: Int = 0
-    private var cachedTotalEventCount: Int = 0
-    private var cachedPhotoCount: Int = 0
-    private var cachedDaysWithEvents: Int = 0
+    @ObservationIgnored private var cachedPottyCount: Int = 0
+    @ObservationIgnored private var cachedSleepWakeCycles: Int = 0
+    @ObservationIgnored private var cachedMealCount: Int = 0
+    @ObservationIgnored private var cachedWalkCount: Int = 0
+    @ObservationIgnored private var cachedTotalEventCount: Int = 0
+    @ObservationIgnored private var cachedPhotoCount: Int = 0
+    @ObservationIgnored private var cachedDaysWithEvents: Int = 0
 
     // MARK: - Initialization
 
@@ -186,7 +186,6 @@ final class FirstWeekExperienceService: ObservableObject {
         UserDefaults.standard.set(Date().timeIntervalSince1970, forKey: Key.photoPromptDismissDate.rawValue)
         let count = UserDefaults.standard.integer(forKey: Key.photoPromptDismissCount.rawValue)
         UserDefaults.standard.set(count + 1, forKey: Key.photoPromptDismissCount.rawValue)
-        objectWillChange.send()
     }
 
     // MARK: - Family Invite Prompt
@@ -222,12 +221,10 @@ final class FirstWeekExperienceService: ObservableObject {
         UserDefaults.standard.set(Date().timeIntervalSince1970, forKey: Key.invitePromptDismissDate.rawValue)
         let count = UserDefaults.standard.integer(forKey: Key.invitePromptDismissCount.rawValue)
         UserDefaults.standard.set(count + 1, forKey: Key.invitePromptDismissCount.rawValue)
-        objectWillChange.send()
     }
 
     func markFamilyInviteSent() {
         UserDefaults.standard.set(true, forKey: Key.familyInviteSent.rawValue)
-        objectWillChange.send()
     }
 
     // MARK: - First Event Celebration

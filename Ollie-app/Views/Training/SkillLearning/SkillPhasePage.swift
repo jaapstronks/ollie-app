@@ -15,7 +15,7 @@ struct SkillPhasePage: View {
     let phaseIndex: Int
     let totalPhases: Int
     let isLastPhase: Bool
-    @ObservedObject var progressStore: TrainingProgressStore
+    var progressStore: TrainingProgressStore
     let onContinue: () -> Void
     let onStartTraining: () -> Void
 

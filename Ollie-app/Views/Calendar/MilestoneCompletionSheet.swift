@@ -15,7 +15,7 @@ struct MilestoneCompletionSheet: View {
     /// Callback with (notes, photoID, linkedContactID, completionDate)
     let onComplete: (String?, UUID?, UUID?, Date) -> Void
 
-    @EnvironmentObject var subscriptionManager: SubscriptionManager
+    @Environment(SubscriptionManager.self) var subscriptionManager
     @Environment(ContactStore.self) var contactStore
     @Environment(\.colorScheme) private var colorScheme
 
@@ -30,7 +30,7 @@ struct MilestoneCompletionSheet: View {
     @State private var photoPickerSource: MediaPickerSource = .library
     @State private var showPhotoSaveError: Bool = false
 
-    @StateObject private var mediaStore = MediaStore()
+    @State private var mediaStore = MediaStore()
 
     // Available vet contacts for picker
     private var vetContacts: [DogContact] {
@@ -434,6 +434,6 @@ struct MilestoneCompletionSheet: View {
             print("Completed with notes: \(notes ?? "none"), contactID: \(linkedContactID?.uuidString ?? "none"), date: \(completionDate)")
         }
     )
-    .environmentObject(SubscriptionManager.shared)
+    .environment(SubscriptionManager.shared)
     .environment(contactStore)
 }
