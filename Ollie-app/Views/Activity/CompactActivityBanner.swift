@@ -14,6 +14,7 @@ struct CompactActivityBanner: View {
     let onTap: () -> Void
     var onLogPee: (() -> Void)?
     var onLogPoop: (() -> Void)?
+    var onShowMap: (() -> Void)?
 
     @State private var isPulsing = false
     @State private var isAnimating = false
@@ -33,46 +34,62 @@ struct CompactActivityBanner: View {
 
     private var walkBanner: some View {
         VStack(spacing: 0) {
-            // Top row: status info (tappable to end walk)
-            Button {
-                HapticFeedback.selection()
-                onTap()
-            } label: {
-                HStack(spacing: 12) {
-                    // Pulsing dot
-                    pulsingDot
+            // Top row: status info with map and end buttons
+            HStack(spacing: 12) {
+                // Pulsing dot
+                pulsingDot
 
-                    // Activity type
-                    Image(systemName: activity.type.icon)
-                        .font(.subheadline)
-                        .foregroundStyle(iconColor)
+                // Activity type
+                Image(systemName: activity.type.icon)
+                    .font(.subheadline)
+                    .foregroundStyle(iconColor)
 
-                    // Label
-                    Text(activityLabel)
-                        .font(.subheadline)
-                        .fontWeight(.medium)
+                // Label
+                Text(activityLabel)
+                    .font(.subheadline)
+                    .fontWeight(.medium)
 
-                    // Elapsed time
-                    Text(activity.elapsedTimeFormatted)
-                        .font(.subheadline)
-                        .fontWeight(.semibold)
-                        .foregroundStyle(iconColor)
+                // Elapsed time
+                Text(activity.elapsedTimeFormatted)
+                    .font(.subheadline)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(iconColor)
 
-                    Spacer()
+                Spacer()
 
-                    // End walk hint
-                    Text(Strings.Activity.tapToEnd)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-
-                    Image(systemName: "chevron.right")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+                // Show map button
+                if onShowMap != nil {
+                    Button {
+                        HapticFeedback.selection()
+                        onShowMap?()
+                    } label: {
+                        Image(systemName: "map")
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundStyle(iconColor)
+                            .frame(width: 36, height: 28)
+                            .background(iconColor.opacity(0.15))
+                            .clipShape(RoundedRectangle(cornerRadius: 6))
+                    }
+                    .buttonStyle(.plain)
                 }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 8)
+
+                // End walk button
+                Button {
+                    HapticFeedback.selection()
+                    onTap()
+                } label: {
+                    Text(Strings.Activity.end)
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(.white)
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 6)
+                        .background(iconColor)
+                        .clipShape(RoundedRectangle(cornerRadius: 6))
+                }
+                .buttonStyle(.plain)
             }
-            .buttonStyle(.plain)
+            .padding(.horizontal, 16)
+            .padding(.vertical, 8)
 
             // Bottom row: quick potty buttons
             HStack(spacing: 16) {
@@ -269,9 +286,10 @@ struct CompactActivityBanner: View {
                 .padding(.horizontal, 16)
             CompactActivityBanner(
                 activity: InProgressActivity(type: .walk, startTime: Date().addingTimeInterval(-20 * 60)),
-                onTap: { print("Banner tapped") },
+                onTap: { print("End tapped") },
                 onLogPee: { print("Pee logged") },
-                onLogPoop: { print("Poop logged") }
+                onLogPoop: { print("Poop logged") },
+                onShowMap: { print("Show map") }
             )
         }
 

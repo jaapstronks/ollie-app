@@ -25,16 +25,29 @@ struct MainTabView: View {
     var appointmentStore: AppointmentStore
     var routineStore: RoutineStore
     var trainingMasteryStore: TrainingMasteryStore
+    var injectedMomentsViewModel: MomentsViewModel?
+    var injectedPlacesMapViewModel: PlacesMapViewModel?
     var onAddDog: (() -> Void)?
 
     @Environment(LocationManager.self) var locationManager
     @Environment(FoodRecallService.self) var foodRecallService
 
     @State private var viewModel: TimelineViewModel
-    @State private var momentsViewModel: MomentsViewModel
+    @State private var localMomentsViewModel: MomentsViewModel?
     @State private var mediaCaptureViewModel = MediaCaptureViewModel(mediaStore: MediaStore())
     @State private var memoriesViewModel: MemoriesViewModel
     @State private var todayStatusViewModel: TodayStatusViewModel
+    @State private var localPlacesMapViewModel: PlacesMapViewModel?
+
+    /// Resolved moments view model (injected or local fallback)
+    private var momentsViewModel: MomentsViewModel {
+        injectedMomentsViewModel ?? localMomentsViewModel!
+    }
+
+    /// Resolved places map view model (injected or local fallback)
+    private var placesMapViewModel: PlacesMapViewModel {
+        injectedPlacesMapViewModel ?? localPlacesMapViewModel!
+    }
 
     @State private var showingSettings = false
     @State private var showingFirstSessionHandoff = false
@@ -66,6 +79,8 @@ struct MainTabView: View {
         appointmentStore: AppointmentStore,
         routineStore: RoutineStore,
         trainingMasteryStore: TrainingMasteryStore,
+        momentsViewModel: MomentsViewModel? = nil,
+        placesMapViewModel: PlacesMapViewModel? = nil,
         onAddDog: (() -> Void)? = nil
     ) {
         self._selectedTab = selectedTab
@@ -83,6 +98,8 @@ struct MainTabView: View {
         self.appointmentStore = appointmentStore
         self.routineStore = routineStore
         self.trainingMasteryStore = trainingMasteryStore
+        self.injectedMomentsViewModel = momentsViewModel
+        self.injectedPlacesMapViewModel = placesMapViewModel
         self.onAddDog = onAddDog
 
         let viewModel = TimelineViewModel(
@@ -93,9 +110,22 @@ struct MainTabView: View {
             appointmentStore: appointmentStore
         )
         self._viewModel = State(initialValue: viewModel)
-        self._momentsViewModel = State(initialValue: MomentsViewModel(
-            eventStore: eventStore
-        ))
+
+        // Only create local view models if not injected from app level
+        // This avoids creating expensive objects on every MainTabView init
+        if momentsViewModel == nil {
+            let localMomentsVM = MomentsViewModel(eventStore: eventStore)
+            self._localMomentsViewModel = State(initialValue: localMomentsVM)
+            self._localPlacesMapViewModel = State(initialValue: PlacesMapViewModel(
+                spotStore: spotStore,
+                contactStore: contactStore,
+                momentsViewModel: localMomentsVM
+            ))
+        } else {
+            self._localMomentsViewModel = State(initialValue: nil)
+            self._localPlacesMapViewModel = State(initialValue: nil)
+        }
+
         self._memoriesViewModel = State(initialValue: MemoriesViewModel(
             eventStore: eventStore
         ))
@@ -204,7 +234,11 @@ private extension MainTabView {
                 },
                 onLogPoop: {
                     viewModel.logPottyDuringWalk(type: .poepen)
-                }
+                },
+                onShowMap: activity.type == .walk ? {
+                    selectedTab = .today
+                    viewModel.showWalkMap()
+                } : nil
             )
         }
     }
@@ -237,6 +271,7 @@ private extension MainTabView {
             .tag(MainTab.train)
 
             PlacesTabView(
+                mapViewModel: placesMapViewModel,
                 spotStore: spotStore,
                 contactStore: contactStore,
                 momentsViewModel: momentsViewModel,
@@ -275,6 +310,7 @@ private extension MainTabView {
             }
             .tag(MainTab.health)
         }
+        .tabViewStyle(.tabBarOnly)
         .overlay(alignment: .bottom) {
             // Invisible spotlight targets for tab bar items
             TabBarSpotlightTargets()

@@ -94,13 +94,22 @@ struct WalkMapView: View {
 
     private var topBar: some View {
         VStack(spacing: 0) {
-            // Status bar spacer
-            Color.clear
-                .frame(height: 0)
-                .background(.ultraThinMaterial)
-
-            // Stats row
+            // Stats row with proper safe area
             HStack(spacing: 24) {
+                // Minimize button
+                Button {
+                    HapticFeedback.medium()
+                    dismiss()
+                } label: {
+                    Image(systemName: "chevron.down")
+                        .font(.title3.weight(.semibold))
+                        .foregroundStyle(.primary)
+                        .frame(width: 44, height: 44)
+                        .background(.ultraThinMaterial, in: Circle())
+                }
+
+                Spacer()
+
                 // Duration
                 VStack(spacing: 2) {
                     Text(trackingService.formattedLiveDurationLong)
@@ -146,6 +155,7 @@ struct WalkMapView: View {
             }
             .padding(.horizontal, 20)
             .padding(.vertical, 12)
+            .padding(.top, 50) // Safe area for status bar
             .background(.ultraThinMaterial)
         }
     }

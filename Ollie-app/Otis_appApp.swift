@@ -48,6 +48,10 @@ struct OtisApp: App {
     private let dailyAggregateService = DailyAggregateService.shared
     @State private var toastManager = ToastManager()
 
+    // View models that need to be created once (not on every MainTabView init)
+    @State private var momentsViewModel: MomentsViewModel?
+    @State private var placesMapViewModel: PlacesMapViewModel?
+
     // MARK: - Initialization
 
     init() {
@@ -97,9 +101,24 @@ struct OtisApp: App {
                 .environment(unitPreferences)
                 .environment(trainingMasteryStore)
                 .environment(walkTrackingService)
+                .environment(momentsViewModel)
+                .environment(placesMapViewModel)
                 .toastContainer()
                 .environment(toastManager)
-                .task { await performInitialSetup() }
+                .task {
+                    // Create view models once at app launch (not on every MainTabView init)
+                    if momentsViewModel == nil {
+                        momentsViewModel = MomentsViewModel(eventStore: eventStore)
+                    }
+                    if placesMapViewModel == nil, let momentsVM = momentsViewModel {
+                        placesMapViewModel = PlacesMapViewModel(
+                            spotStore: spotStore,
+                            contactStore: contactStore,
+                            momentsViewModel: momentsVM
+                        )
+                    }
+                    await performInitialSetup()
+                }
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
                     handleForegroundEntry()
                 }
@@ -309,6 +328,12 @@ private extension OtisApp {
         logger.info("🔗 onOpenURL called: \(url.absoluteString)")
         logger.info("🔗 URL scheme: \(url.scheme ?? "nil")")
 
+        // Handle otis:// deep links
+        if url.scheme == "otis" {
+            handleOtisDeepLink(url, logger: logger)
+            return
+        }
+
         let isCloudKitScheme = url.scheme?.hasPrefix("cloudkit") == true
         let isICloudShareURL = url.absoluteString.contains("icloud.com/share")
 
@@ -317,6 +342,24 @@ private extension OtisApp {
             Task {
                 await CloudKitShareHandler.handleShareURL(url, profileStore: profileStore)
             }
+        }
+    }
+
+    private func handleOtisDeepLink(_ url: URL, logger: Logger) {
+        guard let host = url.host else {
+            logger.warning("🔗 Otis deep link missing host: \(url.absoluteString)")
+            return
+        }
+
+        switch host {
+        case "start-walk":
+            logger.info("🔗 Start walk deep link received")
+            // Set pending walk start - MainTabView will pick this up
+            IntentDataStore.shared.setPendingWalkStart()
+            // Post notification to trigger immediate check
+            NotificationCenter.default.post(name: UIApplication.didBecomeActiveNotification, object: nil)
+        default:
+            logger.info("🔗 Unknown Otis deep link: \(host)")
         }
     }
 

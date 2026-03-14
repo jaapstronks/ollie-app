@@ -385,6 +385,7 @@ extension Strings {
         }
 
         // End activity
+        static let end = String(localized: "End", table: table)
         static let endNow = String(localized: "End now", table: table)
         static let endWalk = String(localized: "End walk", table: table)
         static let wakeUp = String(localized: "Woke up", table: table)

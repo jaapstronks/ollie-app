@@ -12,6 +12,14 @@
 				<string>cloudkit-iCloud.nl.jaapstronks.Otis</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>Otis Deep Links</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>otis</string>
+			</array>
+		</dict>
 	</array>
 	<key>SENTRY_DSN</key>
 	<string>$(SENTRY_DSN)</string>

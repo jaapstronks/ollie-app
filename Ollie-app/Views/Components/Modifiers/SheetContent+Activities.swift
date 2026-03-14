@@ -23,6 +23,10 @@ extension SheetCoordinator.ActiveSheet {
                 onStartNow: { startTime, napLocation in
                     context.viewModel.startActivity(type: activityType, startTime: startTime, napLocation: napLocation)
                     context.sheetCoordinator.dismissSheet()
+                    // Show walk map for walks
+                    if activityType == .walk {
+                        context.viewModel.showWalkMap()
+                    }
                 },
                 onLogCompleted: {
                     handleLogCompletedActivity(activityType, context: context)

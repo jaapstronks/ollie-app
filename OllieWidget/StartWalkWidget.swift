@@ -76,43 +76,39 @@ struct StartWalkWidgetEntryView: View {
     // MARK: - Circular (Lock Screen)
 
     private var circularView: some View {
-        Button(intent: WidgetStartWalkIntent()) {
-            ZStack {
-                AccessoryWidgetBackground()
-                Image(systemName: "figure.walk")
-                    .font(.system(size: 24, weight: .semibold))
-                    .foregroundStyle(.green)
-            }
+        ZStack {
+            AccessoryWidgetBackground()
+            Image(systemName: "figure.walk")
+                .font(.system(size: 24, weight: .semibold))
+                .foregroundStyle(.green)
         }
-        .buttonStyle(.plain)
+        .widgetURL(URL(string: "otis://start-walk"))
     }
 
     // MARK: - Rectangular (Lock Screen)
 
     private var rectangularView: some View {
-        Button(intent: WidgetStartWalkIntent()) {
-            HStack(spacing: 8) {
-                Image(systemName: "figure.walk")
-                    .font(.system(size: 20, weight: .semibold))
-                    .foregroundStyle(.green)
+        HStack(spacing: 8) {
+            Image(systemName: "figure.walk")
+                .font(.system(size: 20, weight: .semibold))
+                .foregroundStyle(.green)
 
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("Start Walk")
-                        .font(.system(size: 14, weight: .semibold))
-                    Text("Tap to begin")
-                        .font(.system(size: 11))
-                        .foregroundStyle(.secondary)
-                }
-
-                Spacer()
-
-                Image(systemName: "chevron.right")
-                    .font(.system(size: 12))
+            VStack(alignment: .leading, spacing: 2) {
+                Text("Start Walk")
+                    .font(.system(size: 14, weight: .semibold))
+                Text("Tap to begin")
+                    .font(.system(size: 11))
                     .foregroundStyle(.secondary)
             }
-            .padding(.horizontal, 8)
+
+            Spacer()
+
+            Image(systemName: "chevron.right")
+                .font(.system(size: 12))
+                .foregroundStyle(.secondary)
         }
-        .buttonStyle(.plain)
+        .padding(.horizontal, 8)
+        .widgetURL(URL(string: "otis://start-walk"))
     }
 
     // MARK: - Inline (Complications)
