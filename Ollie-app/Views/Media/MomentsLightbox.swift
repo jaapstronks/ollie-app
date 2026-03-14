@@ -46,25 +46,23 @@ struct MomentsLightbox: View {
     }
 
     var body: some View {
-        GeometryReader { geometry in
-            ZStack {
-                // Rich gradient background
-                backgroundGradient
-
-                // Photo carousel - full width for proper swiping
+        // Background fills entire screen
+        backgroundGradient
+            .overlay {
+                // Photo carousel
                 TabView(selection: $selectedIndex) {
                     ForEach(Array(localEvents.enumerated()), id: \.element.id) { index, event in
                         PhotoCard(
                             event: event,
-                            loadedImage: loadedImages[event.id],
-                            geometry: geometry
+                            loadedImage: loadedImages[event.id]
                         )
                         .tag(index)
                     }
                 }
                 .tabViewStyle(.page(indexDisplayMode: .never))
-
-                // Overlay controls - fixed position, not affected by swipe
+            }
+            .overlay {
+                // Overlay controls - fixed position, constrained to screen width
                 VStack(spacing: 0) {
                     // Top navigation bar
                     topNavigationBar
@@ -85,8 +83,7 @@ struct MomentsLightbox: View {
                     }
                 }
             }
-        }
-        .statusBarHidden(true)
+            .statusBarHidden(true)
         .confirmationDialog(
             Strings.MediaPreview.deleteTitle,
             isPresented: $showDeleteConfirmation,
@@ -333,7 +330,6 @@ private struct GlassButton: View {
 private struct PhotoCard: View {
     let event: PuppyEvent
     let loadedImage: UIImage?
-    let geometry: GeometryProxy
 
     @State private var scale: CGFloat = 1.0
     @State private var lastScale: CGFloat = 1.0
@@ -343,81 +339,79 @@ private struct PhotoCard: View {
 
     private var isZoomed: Bool { scale > 1.0 }
 
-    // Available space for the image (accounting for top/bottom UI)
-    // Top bar ~56pt, bottom card ~180pt, safe padding ~24pt
-    private var availableHeight: CGFloat {
-        geometry.size.height - 280
-    }
-
     var body: some View {
-        Group {
-            if let uiImage = loadedImage {
-                // Photo with elegant card presentation
-                Image(uiImage: uiImage)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(maxWidth: geometry.size.width - 32, maxHeight: availableHeight)
-                    .clipShape(RoundedRectangle(cornerRadius: 20))
-                    .scaleEffect(scale)
-                    .offset(offset)
-                    // Subtle shadow for depth
-                    .shadow(color: .black.opacity(0.4), radius: 20, x: 0, y: 10)
-                    // Subtle border
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 20)
-                            .strokeBorder(
-                                LinearGradient(
-                                    colors: [.white.opacity(0.2), .white.opacity(0.05)],
-                                    startPoint: .topLeading,
-                                    endPoint: .bottomTrailing
-                                ),
-                                lineWidth: 1
-                            )
-                    )
-                    // Gestures
-                    .gesture(
-                        MagnificationGesture()
-                            .onChanged { value in
-                                let newScale = lastScale * value
-                                scale = min(max(newScale, 1.0), 4.0)
-                            }
-                            .onEnded { _ in
-                                lastScale = scale
-                                if scale == 1.0 {
-                                    resetOffset()
-                                }
-                            }
-                    )
-                    .highPriorityGesture(
-                        isZoomed ?
-                        DragGesture()
-                            .onChanged { value in
-                                offset = CGSize(
-                                    width: lastOffset.width + value.translation.width,
-                                    height: lastOffset.height + value.translation.height
+        GeometryReader { geometry in
+            let horizontalPadding: CGFloat = 16
+            let topSpace: CGFloat = 70    // Top bar + padding
+            let bottomSpace: CGFloat = 220 // Bottom card + dots + safe area
+            let availableWidth = geometry.size.width - (horizontalPadding * 2)
+            let availableHeight = geometry.size.height - topSpace - bottomSpace
+
+            Group {
+                if let uiImage = loadedImage {
+                    Image(uiImage: uiImage)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .clipShape(RoundedRectangle(cornerRadius: 20))
+                        .scaleEffect(scale)
+                        .offset(offset)
+                        .shadow(color: .black.opacity(0.4), radius: 20, x: 0, y: 10)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 20)
+                                .strokeBorder(
+                                    LinearGradient(
+                                        colors: [.white.opacity(0.2), .white.opacity(0.05)],
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
+                                    ),
+                                    lineWidth: 1
                                 )
-                            }
-                            .onEnded { _ in
-                                lastOffset = offset
-                            }
-                        : nil
-                    )
-                    .onTapGesture(count: 2) {
-                        toggleZoom()
-                    }
-                    .accessibilityLabel(Strings.MediaPreview.photoOf(event.type.label))
-            } else {
-                // Loading placeholder
-                RoundedRectangle(cornerRadius: 20)
-                    .fill(.ultraThinMaterial)
-                    .frame(width: 280, height: 380)
-                    .overlay(
-                        ProgressView()
-                            .tint(.white)
-                    )
+                        )
+                        .gesture(
+                            MagnificationGesture()
+                                .onChanged { value in
+                                    let newScale = lastScale * value
+                                    scale = min(max(newScale, 1.0), 4.0)
+                                }
+                                .onEnded { _ in
+                                    lastScale = scale
+                                    if scale == 1.0 {
+                                        resetOffset()
+                                    }
+                                }
+                        )
+                        .highPriorityGesture(
+                            isZoomed ?
+                            DragGesture()
+                                .onChanged { value in
+                                    offset = CGSize(
+                                        width: lastOffset.width + value.translation.width,
+                                        height: lastOffset.height + value.translation.height
+                                    )
+                                }
+                                .onEnded { _ in
+                                    lastOffset = offset
+                                }
+                            : nil
+                        )
+                        .onTapGesture(count: 2) {
+                            toggleZoom()
+                        }
+                        .accessibilityLabel(Strings.MediaPreview.photoOf(event.type.label))
+                } else {
+                    RoundedRectangle(cornerRadius: 20)
+                        .fill(.ultraThinMaterial)
+                        .frame(width: 280, height: 380)
+                        .overlay(
+                            ProgressView()
+                                .tint(.white)
+                        )
+                }
             }
+            .frame(width: availableWidth, height: availableHeight)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .offset(y: (topSpace - bottomSpace) / 2) // Shift up to account for bottom UI
         }
-        .frame(width: geometry.size.width, height: geometry.size.height)
     }
 
     private func resetOffset() {

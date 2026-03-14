@@ -767,14 +767,18 @@ class TimelineViewModel {
         self.recentPhotoEventsCache = photoEvents
         self.partnerActivitySummaryCache = partnerSummary
 
-        // PERFORMANCE: Cache combined state (previously computed on every view render)
-        // Use the recentEvents we already fetched to ensure consistency
+        // REACTIVITY FIX: Use fresh events from EventStore for sleep/potty state
+        // The EventDataProvider cache may be stale due to its 300ms refresh delay
+        // This prevents "fighting" status cards where stale state overwrites correct state
         let stateSpan = refreshTransaction?.startChild(
             operation: "cache.compute",
             description: "Combined Sleep/Potty State"
         )
-        self.cachedCombinedState = self.calculateCombinedState(withEvents: recentEvents)
-        self.cachedSleepState = SleepCalculations.currentSleepState(events: recentEvents)
+        let yesterday = Date().addingDays(-1).startOfDay
+        let endOfToday = Date().endOfDay
+        let freshStateEvents = eventStore.getEvents(from: yesterday, to: endOfToday)
+        self.cachedCombinedState = self.calculateCombinedState(withEvents: freshStateEvents)
+        self.cachedSleepState = SleepCalculations.currentSleepState(events: freshStateEvents)
         stateSpan?.finish()
 
         // PERFORMANCE: Cache separated upcoming items (previously computed on every view render)
