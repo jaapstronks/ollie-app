@@ -27,6 +27,8 @@ struct DebugDataSection: View {
     @State private var zoneFixResult: String?
     @State private var sharingResult: String?
     @State private var cacheCleared = false
+    @State private var sharedDBResult: String?
+    @State private var isCheckingSharedDB = false
 
     var body: some View {
         Section {
@@ -88,6 +90,26 @@ struct DebugDataSection: View {
                 Text(result)
                     .font(.caption)
                     .foregroundStyle(result.contains("Error") ? .red : .green)
+            }
+
+            // Debug shared database
+            Button {
+                Task { await checkSharedDatabase() }
+            } label: {
+                HStack {
+                    Label("Check Shared Database", systemImage: "icloud.and.arrow.down")
+                    if isCheckingSharedDB {
+                        Spacer()
+                        ProgressView()
+                    }
+                }
+            }
+            .disabled(isCheckingSharedDB)
+
+            if let result = sharedDBResult {
+                Text(result)
+                    .font(.caption)
+                    .foregroundStyle(result.contains("Error") || result.contains("0 zones") ? .red : .green)
             }
 
             // Clear discovery cache
@@ -432,6 +454,110 @@ struct DebugDataSection: View {
         }
 
         isFixingZones = false
+    }
+
+    // MARK: - Check Shared Database
+
+    private func checkSharedDatabase() async {
+        isCheckingSharedDB = true
+        sharedDBResult = nil
+
+        let container = CKContainer(identifier: "iCloud.nl.jaapstronks.Otis")
+        let sharedDB = container.sharedCloudDatabase
+        let privateDB = container.privateCloudDatabase
+
+        var results: [String] = []
+
+        // Check shared database zones
+        do {
+            let zones = try await sharedDB.allRecordZones()
+            results.append("Shared DB: \(zones.count) zone(s)")
+            print("=== SHARED DATABASE ZONES ===")
+            for zone in zones {
+                print("  Zone: \(zone.zoneID.zoneName) (owner: \(zone.zoneID.ownerName))")
+                results.append("  - \(zone.zoneID.zoneName)")
+
+                // Try to fetch records from this zone
+                let query = CKQuery(recordType: "CD_CDPuppyProfile", predicate: NSPredicate(value: true))
+                let (records, _) = try await sharedDB.records(
+                    matching: query,
+                    inZoneWith: zone.zoneID,
+                    desiredKeys: ["CD_name"],
+                    resultsLimit: 10
+                )
+                print("  Found \(records.count) profile record(s)")
+                for (recordID, result) in records {
+                    switch result {
+                    case .success(let record):
+                        let name = record["CD_name"] as? String ?? "unnamed"
+                        print("    - \(name) (\(recordID.recordName))")
+                        results.append("    Profile: \(name)")
+                    case .failure(let error):
+                        print("    - Error: \(error.localizedDescription)")
+                    }
+                }
+            }
+            print("=== END SHARED ZONES ===")
+        } catch {
+            results.append("Shared DB error: \(error.localizedDescription)")
+            print("Error fetching shared zones: \(error)")
+        }
+
+        // Check private database for shares
+        do {
+            print("\n=== PRIVATE DATABASE SHARES ===")
+            // Query for CKShare records in the Core Data zone
+            let zoneName = "com.apple.coredata.cloudkit.zone"
+            let zoneID = CKRecordZone.ID(zoneName: zoneName, ownerName: CKCurrentUserDefaultName)
+
+            // Check if there's a share in the private database
+            let query = CKQuery(recordType: "cloudkit.share", predicate: NSPredicate(value: true))
+            let (shareRecords, _) = try await privateDB.records(
+                matching: query,
+                inZoneWith: zoneID,
+                desiredKeys: nil,
+                resultsLimit: 10
+            )
+
+            results.append("Private DB shares: \(shareRecords.count)")
+            print("Found \(shareRecords.count) CKShare record(s)")
+
+            for (recordID, result) in shareRecords {
+                switch result {
+                case .success(let record):
+                    if let share = record as? CKShare {
+                        print("  Share URL: \(share.url?.absoluteString ?? "none")")
+                        print("  Participants: \(share.participants.count)")
+                        for p in share.participants {
+                            let status = p.acceptanceStatus == .accepted ? "accepted" : "pending"
+                            print("    - \(p.userIdentity.nameComponents?.formatted() ?? "?") (\(status))")
+                        }
+                    }
+                case .failure(let error):
+                    print("  Error: \(error.localizedDescription)")
+                }
+            }
+            print("=== END PRIVATE SHARES ===")
+        } catch {
+            results.append("Private shares check: \(error.localizedDescription)")
+            print("Error checking private shares: \(error)")
+        }
+
+        // Check Core Data shared store
+        if let sharedStore = PersistenceController.shared.getSharedStore() {
+            let context = PersistenceController.shared.viewContext
+            let request = NSFetchRequest<NSManagedObject>(entityName: "CDPuppyProfile")
+            request.affectedStores = [sharedStore]
+
+            if let count = try? context.count(for: request) {
+                results.append("Core Data shared store: \(count) profile(s)")
+            }
+        } else {
+            results.append("Core Data shared store: unavailable")
+        }
+
+        sharedDBResult = results.joined(separator: "\n")
+        isCheckingSharedDB = false
     }
 
     // MARK: - Clear Discovery Cache

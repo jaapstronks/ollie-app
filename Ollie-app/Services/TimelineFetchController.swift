@@ -24,6 +24,10 @@ final class TimelineFetchController: NSObject, @unchecked Sendable {
     /// Callback when fetched results change (insert/delete/update/move)
     var onContentChange: (() -> Void)?
 
+    /// Track whether any actual object changes occurred during this FRC update cycle.
+    /// This prevents spurious notifications when context saves don't affect our fetched objects.
+    private var hasPendingChanges = false
+
     init(context: NSManagedObjectContext) {
         self.context = context
         super.init()
@@ -81,7 +85,38 @@ final class TimelineFetchController: NSObject, @unchecked Sendable {
 }
 
 extension TimelineFetchController: NSFetchedResultsControllerDelegate {
+
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        hasPendingChanges = false
+    }
+
+    func controller(
+        _ controller: NSFetchedResultsController<NSFetchRequestResult>,
+        didChange anObject: Any,
+        at indexPath: IndexPath?,
+        for type: NSFetchedResultsChangeType,
+        newIndexPath: IndexPath?
+    ) {
+        // Only care about structural changes (insert/delete/move), not updates.
+        // Updates are often just CloudKit sync touching modifiedAt timestamps
+        // without changing actual event data.
+        switch type {
+        case .insert, .delete, .move:
+            hasPendingChanges = true
+        case .update:
+            // Skip - updates don't change the set of events, just their contents
+            // and handleFetchedResultsChange() would reject them anyway
+            break
+        @unknown default:
+            hasPendingChanges = true
+        }
+    }
+
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        // Only notify if actual objects changed (not just context noise)
+        guard hasPendingChanges else {
+            return
+        }
         logger.debug("FRC detected changes - notifying EventStore")
         onContentChange?()
     }

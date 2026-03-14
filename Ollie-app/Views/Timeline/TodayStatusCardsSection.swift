@@ -93,10 +93,11 @@ struct TodayStatusCardsSection: View {
 
     var body: some View {
         VStack(spacing: 12) {
-            // PERFORMANCE: Use cached values instead of computing on every render
+            // PERFORMANCE: Use cached values where possible
             let combinedState = viewModel.cachedCombinedState
             let isSleeping = combinedState.isSleeping
-            let separated = viewModel.cachedSeparatedItems
+            // Note: Compute with forecasts to include weather data for walks
+            let separated = viewModel.separatedUpcomingItems(forecasts: weatherService.forecasts)
             let pendingActionable = isSleeping ? separated.actionable.first : nil
             let aiRecommendation = viewModel.aiLoggingRecommendations.first
 

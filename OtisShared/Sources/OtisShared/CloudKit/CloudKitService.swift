@@ -128,7 +128,14 @@ public final class CloudKitService {
     private func checkParticipantStatus() async {
         do {
             // Check shared database for any zones
+            logger.info("Checking shared database for zones...")
             let zones = try await sharedDatabase.allRecordZones()
+            logger.info("Found \(zones.count) zone(s) in shared database")
+
+            for zone in zones {
+                logger.info("  Zone: \(zone.zoneID.zoneName) (owner: \(zone.zoneID.ownerName))")
+            }
+
             let nowParticipant = !zones.isEmpty
 
             // Capture the owner's zone name for media fetches
@@ -142,6 +149,7 @@ public final class CloudKitService {
                 logger.info("Using first shared zone owner: \(firstZone.zoneID.ownerName)")
             } else {
                 sharedZoneOwnerName = nil
+                logger.info("No shared zones found - user is not a participant")
             }
 
             // Detect if access was revoked
@@ -156,7 +164,7 @@ public final class CloudKitService {
             isParticipant = nowParticipant
             logger.info("Participant status: \(self.isParticipant)")
         } catch {
-            logger.debug("Failed to check participant status: \(error.localizedDescription)")
+            logger.error("Failed to check participant status: \(error.localizedDescription)")
             isParticipant = false
             sharedZoneOwnerName = nil
         }

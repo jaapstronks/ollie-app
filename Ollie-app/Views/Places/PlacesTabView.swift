@@ -11,6 +11,7 @@ import MapKit
 
 /// Explore tab - full-screen map with spots, contacts, and photo pins
 struct PlacesTabView: View {
+    @Bindable var mapViewModel: PlacesMapViewModel
     var spotStore: SpotStore
     var contactStore: ContactStore
     var momentsViewModel: MomentsViewModel
@@ -20,7 +21,6 @@ struct PlacesTabView: View {
     var onAddMoment: (() -> Void)?
 
     @Environment(ProfileStore.self) var profileStore
-    @State private var mapViewModel: PlacesMapViewModel
 
     // View mode toggle (Map vs Gallery)
     @AppStorage("exploreViewMode") private var viewMode: ExploreViewMode = .map
@@ -41,29 +41,6 @@ struct PlacesTabView: View {
     @State private var hasDiscoveredNearbyPlaces = false
     @State private var discoveryRefreshTask: Task<Void, Never>?
     @Namespace private var heroNamespace
-
-    init(
-        spotStore: SpotStore,
-        contactStore: ContactStore,
-        momentsViewModel: MomentsViewModel,
-        locationManager: LocationManager,
-        appointmentStore: AppointmentStore? = nil,
-        onSettingsTap: (() -> Void)? = nil,
-        onAddMoment: (() -> Void)? = nil
-    ) {
-        self.spotStore = spotStore
-        self.contactStore = contactStore
-        self.momentsViewModel = momentsViewModel
-        self.locationManager = locationManager
-        self.appointmentStore = appointmentStore
-        self.onSettingsTap = onSettingsTap
-        self.onAddMoment = onAddMoment
-        self._mapViewModel = State(initialValue: PlacesMapViewModel(
-            spotStore: spotStore,
-            contactStore: contactStore,
-            momentsViewModel: momentsViewModel
-        ))
-    }
 
     var body: some View {
         NavigationStack {
@@ -466,10 +443,19 @@ struct PlacesTabView: View {
 // MARK: - Preview
 
 #Preview {
-    PlacesTabView(
-        spotStore: SpotStore(),
-        contactStore: ContactStore(),
-        momentsViewModel: MomentsViewModel(eventStore: EventStore()),
+    let spotStore = SpotStore()
+    let contactStore = ContactStore()
+    let momentsVM = MomentsViewModel(eventStore: EventStore())
+
+    return PlacesTabView(
+        mapViewModel: PlacesMapViewModel(
+            spotStore: spotStore,
+            contactStore: contactStore,
+            momentsViewModel: momentsVM
+        ),
+        spotStore: spotStore,
+        contactStore: contactStore,
+        momentsViewModel: momentsVM,
         locationManager: LocationManager()
     )
     .environment(ProfileStore())

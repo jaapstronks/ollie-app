@@ -126,8 +126,8 @@ struct HealthTabView: View {
                     .animatedAppear(delay: 0.30)
                 }
                 .padding()
-                .adaptiveContainer()
             }
+            .scrollBounceBehavior(.basedOnSize, axes: .horizontal)
             .navigationTitle(Strings.Tabs.health)
             .navigationBarTitleDisplayMode(.inline)
             .profileToolbar(profile: profileStore.profile, action: onSettingsTap)

@@ -236,19 +236,70 @@ final class DailyAggregateService {
     }
 
     /// Pre-populate aggregates for the last N days (run on app update)
+    /// Skips days that already have fresh aggregates to avoid redundant computation
     func prepopulate(
         days: Int,
         profileId: UUID,
         events: [PuppyEvent]
     ) async {
         let calendar = Calendar.current
-        let today = Date()
+        let today = calendar.startOfDay(for: Date())
+        let context = persistenceController.viewContext
 
-        logger.info("Pre-populating aggregates for last \(days) days")
+        // Fetch existing aggregates for the date range
+        let rangeStart = calendar.date(byAdding: .day, value: -(days - 1), to: today) ?? today
+        let existing = CDDailyAggregate.fetchRange(
+            from: rangeStart,
+            to: today,
+            profileId: profileId,
+            in: context
+        )
+
+        // Build lookup by date for quick access
+        var aggregatesByDate: [Date: CDDailyAggregate] = [:]
+        for aggregate in existing {
+            if let date = aggregate.date {
+                aggregatesByDate[calendar.startOfDay(for: date)] = aggregate
+            }
+        }
+
+        // Group events by day for per-day staleness checks
+        var eventsByDay: [Date: [PuppyEvent]] = [:]
+        for event in events {
+            let dayStart = calendar.startOfDay(for: event.time)
+            eventsByDay[dayStart, default: []].append(event)
+        }
+
+        // Count how many actually need recomputation
+        var recomputeCount = 0
 
         for daysAgo in 0..<days {
             guard let date = calendar.date(byAdding: .day, value: -daysAgo, to: today) else { continue }
+            let dayStart = calendar.startOfDay(for: date)
+
+            // Get max modifiedAt for THIS day's events only
+            let dayEvents = eventsByDay[dayStart] ?? []
+            let maxModForDay = dayEvents.map { $0.modifiedAt }.max()
+
+            // Skip if aggregate exists and is fresh compared to THIS day's events
+            if let existingAggregate = aggregatesByDate[dayStart] {
+                // If no events for this day, aggregate is fresh if it exists
+                if dayEvents.isEmpty {
+                    continue
+                }
+                // Compare against this day's max modifiedAt
+                if let maxMod = maxModForDay, !existingAggregate.isStale(comparedTo: maxMod) {
+                    continue
+                }
+            }
+
+            // Needs recomputation
+            recomputeCount += 1
             await recompute(date: date, profileId: profileId, events: events)
+        }
+
+        if recomputeCount > 0 {
+            logger.info("Pre-populated \(recomputeCount) stale/missing aggregates (of \(days) days checked)")
         }
 
         cleanupOld(profileId: profileId)

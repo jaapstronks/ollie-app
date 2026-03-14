@@ -183,9 +183,13 @@ class EventStore {
         do {
             try coreDataStore.saveEvent(newEvent)
 
-            // Add to in-memory list
-            events.append(newEvent)
-            events.sort { $0.time > $1.time }
+            // Add to in-memory list (only if FRC is disabled)
+            // When FRC is enabled, the FRC callback fires synchronously during save
+            // and already updates the events array - appending here would create duplicates
+            if !useFetchedResultsController {
+                events.append(newEvent)
+                events.sort { $0.time > $1.time }
+            }
 
             // Track analytics
             OtisAnalytics.shared.trackEventLogged(

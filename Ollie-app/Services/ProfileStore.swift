@@ -347,10 +347,20 @@ class ProfileStore {
 
         // Load shared profiles from shared store
         if let sharedStore = persistenceController.getSharedStore() {
+            logger.info("Shared store available, fetching profiles...")
             let sharedCDProfiles = CDPuppyProfile.fetchAllProfiles(in: viewContext, from: sharedStore)
-            let shared = sharedCDProfiles.compactMap { $0.toPuppyProfile(ownership: .shared) }
+            logger.info("Found \(sharedCDProfiles.count) CDPuppyProfile(s) in shared store")
+            let shared = sharedCDProfiles.compactMap { cdProfile -> PuppyProfile? in
+                let profile = cdProfile.toPuppyProfile(ownership: .shared)
+                if profile == nil {
+                    logger.warning("Failed to convert CDPuppyProfile to PuppyProfile: id=\(cdProfile.id?.uuidString ?? "nil"), name=\(cdProfile.name ?? "nil")")
+                }
+                return profile
+            }
             allProfiles.append(contentsOf: shared)
             logger.info("Loaded \(shared.count) shared profile(s) from shared store")
+        } else {
+            logger.warning("Shared store not available - cannot load shared profiles")
         }
 
         // Fallback: if stores not available, try generic fetch

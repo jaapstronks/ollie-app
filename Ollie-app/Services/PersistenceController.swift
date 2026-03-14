@@ -381,9 +381,38 @@ final class PersistenceController: @unchecked Sendable {
     /// Accept a share invitation
     func acceptShareInvitation(from metadata: CKShare.Metadata) async throws {
         guard let sharedStore = sharedStore else {
+            print("ERROR: Shared store unavailable when accepting share invitation")
             throw PersistenceError.sharedStoreUnavailable
         }
+
+        print("Accepting share invitation into shared store...")
+        print("  Share record ID: \(metadata.share.recordID)")
+        print("  Zone: \(metadata.share.recordID.zoneID.zoneName)")
+        print("  Owner: \(metadata.share.recordID.zoneID.ownerName)")
+        print("  Container: \(metadata.containerIdentifier)")
+
         try await container.acceptShareInvitations(from: [metadata], into: sharedStore)
+
+        print("Share invitation accepted successfully")
+
+        // Force the view context to refresh and pick up any new shared records
+        await MainActor.run {
+            viewContext.refreshAllObjects()
+        }
+
+        // Give CloudKit a moment to sync the shared records
+        try? await Task.sleep(for: .seconds(2))
+
+        // Refresh again after delay
+        await MainActor.run {
+            viewContext.refreshAllObjects()
+        }
+
+        // Log what we have in the shared store now
+        let request = NSFetchRequest<NSManagedObject>(entityName: "CDPuppyProfile")
+        request.affectedStores = [sharedStore]
+        let sharedProfileCount = (try? viewContext.count(for: request)) ?? 0
+        print("After share acceptance: found \(sharedProfileCount) profile(s) in shared store")
     }
 
     /// Get shares for objects

@@ -27,6 +27,8 @@ struct ContentView: View {
     @Environment(FoodRecallService.self) var foodRecallService
     @Environment(SubscriptionManager.self) var subscriptionManager
     @Environment(LocationManager.self) var locationManager
+    @Environment(MomentsViewModel.self) var momentsViewModel: MomentsViewModel?
+    @Environment(PlacesMapViewModel.self) var placesMapViewModel: PlacesMapViewModel?
 
     @State private var showOnboarding = false
     @State private var showAddProfileOnboarding = false
@@ -103,6 +105,8 @@ struct ContentView: View {
                         appointmentStore: appointmentStore,
                         routineStore: routineStore,
                         trainingMasteryStore: trainingMasteryStore,
+                        momentsViewModel: momentsViewModel,
+                        placesMapViewModel: placesMapViewModel,
                         onAddDog: {
                             showAddProfileOnboarding = true
                         }

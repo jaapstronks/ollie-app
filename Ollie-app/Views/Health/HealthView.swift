@@ -136,6 +136,7 @@ struct HealthView: View {
             }
             .padding()
         }
+        .scrollBounceBehavior(.basedOnSize, axes: .horizontal)
         .navigationTitle(Strings.Health.title)
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {

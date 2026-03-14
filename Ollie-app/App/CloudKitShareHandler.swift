@@ -170,10 +170,22 @@ enum CloudKitShareHandler {
 
         do {
             let previousSharedProfileIDs = profileStore?.currentSharedProfileIDs() ?? sharedProfileIDSnapshot()
+            logger.info("Previous shared profile IDs: \(previousSharedProfileIDs)")
 
+            logger.info("Calling acceptShareInvitation...")
             try await PersistenceController.shared.acceptShareInvitation(from: metadata)
+            logger.info("acceptShareInvitation completed successfully")
 
             CloudKitService.shared.markAsParticipant()
+            logger.info("Marked as participant")
+
+            // Re-check participant status from CloudKit to confirm
+            await CloudKitService.shared.checkShareAccessStatus()
+            logger.info("Participant status after check: \(CloudKitService.shared.isParticipant)")
+
+            // Force a sync refresh to pull shared data
+            logger.info("Forcing CloudKit sync refresh...")
+            await CloudKitSyncCoordinator.shared.forceRefresh()
 
             let dateFormatter = ISO8601DateFormatter()
             UserDefaults.standard.set(dateFormatter.string(from: Date()), forKey: "shareAcceptedDate")
