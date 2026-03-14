@@ -63,7 +63,7 @@ extension EventType {
         case .sociaal, .milestone, .training, .uitlaten, .moment, .gewicht:
             return true
         case .plassen, .poepen, .eten, .drinken, .slapen, .ontwaken,
-             .medicatie, .bench, .tuin, .gedrag, .coverageGap:
+             .medicatie, .bench, .tuin, .gedrag, .verzorging, .coverageGap:
             return false
         }
     }

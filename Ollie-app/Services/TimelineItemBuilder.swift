@@ -35,7 +35,8 @@ struct TimelineItemBuilder {
         )
 
         // Build lookup dictionary for events by ID - O(1) lookup instead of O(n)
-        let eventsById: [UUID: PuppyEvent] = Dictionary(uniqueKeysWithValues: events.map { ($0.id, $0) })
+        // Use init(_:uniquingKeysWith:) to handle potential duplicates gracefully (keep first occurrence)
+        let eventsById: [UUID: PuppyEvent] = Dictionary(events.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
 
         // 1. Build sleep sessions
         let sleepSessions = SleepSession.buildSessions(from: events)
@@ -163,11 +164,13 @@ struct TimelineItemBuilder {
         let sessions = SleepSession.buildSessions(from: events)
 
         // Create a lookup dictionary for event IDs -> notes (O(1) lookup instead of O(n))
+        // Use init(_:uniquingKeysWith:) to handle potential duplicates gracefully
         let eventNotes: [UUID: String] = Dictionary(
-            uniqueKeysWithValues: events.compactMap { event in
+            events.compactMap { event -> (UUID, String)? in
                 guard let note = event.note else { return nil }
                 return (event.id, note)
-            }
+            },
+            uniquingKeysWith: { first, _ in first }
         )
 
         // Get IDs of events that are part of sessions
@@ -362,6 +365,12 @@ struct TimelineItemBuilder {
                 return Strings.VerticalTimeline.wasWith(name: puppyName, caregiver: gapType.label)
             }
             return Strings.VerticalTimeline.wasWithCaregiver(name: puppyName)
+
+        case .verzorging:
+            if let note = event.note, !note.isEmpty {
+                return Strings.VerticalTimeline.hadGroomingType(name: puppyName, type: note)
+            }
+            return Strings.VerticalTimeline.hadGrooming(name: puppyName)
 
         default:
             return event.type.label

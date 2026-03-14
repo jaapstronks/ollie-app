@@ -156,6 +156,7 @@ public enum Strings {
         public static var weight: String { String(localized: "Weight", table: table, bundle: Strings.bundle) }
         public static var moment: String { String(localized: "Moment", table: table, bundle: Strings.bundle) }
         public static var medication: String { String(localized: "Medication", table: table, bundle: Strings.bundle) }
+        public static var grooming: String { String(localized: "Grooming", table: table, bundle: Strings.bundle) }
     }
 
     // MARK: - Event Locations

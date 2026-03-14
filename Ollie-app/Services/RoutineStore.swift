@@ -32,6 +32,11 @@ final class RoutineStore: BaseStore, ProfileAccessible {
 
     weak var profileStore: ProfileStore?
 
+    // MARK: - Event Store Reference (for timeline events)
+
+    /// Reference to EventStore for creating timeline events when grooming is logged
+    weak var eventStoreRef: EventStore?
+
     // MARK: - Computed Properties
 
     /// Latest body condition score
@@ -82,6 +87,11 @@ final class RoutineStore: BaseStore, ProfileAccessible {
     /// Set the profile store (for when it's not available at init time)
     func setProfileStore(_ profileStore: ProfileStore) {
         configureProfileStore(profileStore)
+    }
+
+    /// Set the event store reference for creating timeline events
+    func setEventStore(_ eventStore: EventStore) {
+        self.eventStoreRef = eventStore
     }
 
     // MARK: - Data Loading
@@ -327,22 +337,52 @@ final class RoutineStore: BaseStore, ProfileAccessible {
     func markGroomingCompleted(_ activity: GroomingActivity, at date: Date = Date()) -> Bool {
         var updatedActivity = activity
         updatedActivity.markCompleted(at: date)
-        return updateGroomingActivity(updatedActivity)
+        let result = updateGroomingActivity(updatedActivity)
+
+        // Also create a PuppyEvent so it appears on the timeline
+        if result {
+            createGroomingTimelineEvent(type: activity.type, date: date)
+        }
+
+        return result
     }
 
     /// Mark a grooming type as completed (creates if doesn't exist)
     @discardableResult
     func markGroomingCompleted(type: GroomingType, at date: Date = Date(), note: String? = nil) -> Bool {
+        let result: Bool
         if var existing = groomingActivities.first(where: { $0.type == type }) {
             existing.markCompleted(at: date)
             if let note = note {
                 existing.note = note
             }
-            return updateGroomingActivity(existing)
+            result = updateGroomingActivity(existing)
         } else {
             let activity = GroomingActivity.justCompleted(type: type, note: note)
-            return addGroomingActivity(activity)
+            result = addGroomingActivity(activity)
         }
+
+        // Also create a PuppyEvent so it appears on the timeline
+        if result {
+            createGroomingTimelineEvent(type: type, date: date)
+        }
+
+        return result
+    }
+
+    /// Create a timeline event for a grooming activity
+    private func createGroomingTimelineEvent(type: GroomingType, date: Date) {
+        guard let eventStore = eventStoreRef else {
+            logger.warning("EventStore not set - grooming won't appear on timeline")
+            return
+        }
+
+        let groomingEvent = PuppyEvent(
+            time: date,
+            type: .verzorging,
+            note: type.label  // Store the grooming type label for display
+        )
+        eventStore.addEvent(groomingEvent)
     }
 
     /// Delete a grooming activity

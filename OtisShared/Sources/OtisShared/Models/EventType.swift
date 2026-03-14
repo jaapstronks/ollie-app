@@ -25,6 +25,7 @@ public enum EventType: String, Codable, CaseIterable, Identifiable, Sendable {
     case gewicht
     case moment
     case medicatie
+    case verzorging
     case coverageGap
 
     public var id: String { rawValue }
@@ -48,6 +49,7 @@ public enum EventType: String, Codable, CaseIterable, Identifiable, Sendable {
         case .gewicht: return "scalemass.fill"
         case .moment: return "camera.fill"
         case .medicatie: return "pills.fill"
+        case .verzorging: return "comb.fill"
         case .coverageGap: return "person.badge.clock.fill"
         }
     }
@@ -70,6 +72,7 @@ public enum EventType: String, Codable, CaseIterable, Identifiable, Sendable {
         case .gewicht: return Strings.EventType.weight
         case .moment: return Strings.EventType.moment
         case .medicatie: return Strings.EventType.medication
+        case .verzorging: return Strings.EventType.grooming
         case .coverageGap: return Strings.CoverageGap.eventLabel
         }
     }

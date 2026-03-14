@@ -247,7 +247,7 @@ struct GroomingQuickLogSheet: View {
 
         HapticFeedback.success()
 
-        // Mark the activity as completed
+        // Mark the activity as completed (also creates timeline event automatically)
         let noteToSave = note.isEmpty ? nil : note
         routineStore.markGroomingCompleted(type: type, at: logDate, note: noteToSave)
 

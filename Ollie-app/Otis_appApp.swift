@@ -159,6 +159,7 @@ private extension OtisApp {
         appointmentStore.setProfileStore(profileStore)
         weightStore.setProfileStore(profileStore)
         routineStore.setProfileStore(profileStore)
+        routineStore.setEventStore(eventStore)
         skillProgressStore.configureProfileStore(profileStore)
         milestoneStore.configureProfileStore(profileStore)
         UserIdentityStore.shared.configureProfileStore(profileStore)

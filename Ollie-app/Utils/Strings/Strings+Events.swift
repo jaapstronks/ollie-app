@@ -28,6 +28,7 @@ extension Strings {
         static let weight = String(localized: "Weight", table: table)
         static let moment = String(localized: "Moment", table: table)
         static let medication = String(localized: "Medication", table: table)
+        static let grooming = String(localized: "Grooming", table: table)
     }
 
     // MARK: - Event Locations
