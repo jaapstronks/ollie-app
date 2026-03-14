@@ -72,9 +72,15 @@ extension TimelineViewModel {
     // MARK: - Sleep Status
 
     /// Current sleep state (sleeping, awake, or unknown)
-    /// PERFORMANCE: Uses cached events to avoid synchronous Core Data fetch
+    /// REACTIVITY FIX: Returns cachedSleepState which is updated immediately when events change
+    /// This ensures sleep status card updates instantly after logging wake-up events
     var currentSleepState: SleepState {
-        // PERFORMANCE: Use EventDataProvider's cached data instead of synchronous fetch
+        // Use cached value that's updated immediately in syncEventsFromStore()
+        // Falls back to computed value only when cache is still initializing
+        if cachedSleepState != .unknown {
+            return cachedSleepState
+        }
+        // Fallback for initial load before first sync
         let recentEvents = cachedRecentEvents.isEmpty ? eventDataProvider.recentEvents : cachedRecentEvents
         return SleepCalculations.currentSleepState(events: recentEvents)
     }

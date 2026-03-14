@@ -70,6 +70,10 @@ class TimelineViewModel {
     /// PERFORMANCE: Avoids recomputation on every view render
     private(set) var cachedCombinedState: CombinedSleepPottyState = .unknown
 
+    /// Cached sleep state - updated immediately when events change
+    /// REACTIVITY FIX: Ensures sleep status card updates instantly after logging wake-up
+    private(set) var cachedSleepState: SleepState = .unknown
+
     /// Cached separated upcoming items - updated only when events/forecasts change
     /// PERFORMANCE: Avoids UpcomingCalculations + AI reordering on every view render
     private(set) var cachedSeparatedItems: (actionable: [ActionableItem], upcoming: [UpcomingItem]) = ([], [])
@@ -281,6 +285,10 @@ class TimelineViewModel {
                 let endOfToday = Date().endOfDay
                 let freshRecentEvents = self.eventStore.getEvents(from: yesterday, to: endOfToday)
                 self.cachedCombinedState = self.calculateCombinedState(withEvents: freshRecentEvents)
+
+                // REACTIVITY FIX: Update sleep state immediately for status card content
+                // This ensures the sleep card shows correct state (sleeping vs awake) after logging
+                self.cachedSleepState = SleepCalculations.currentSleepState(events: freshRecentEvents)
 
                 // Debounce expensive stats/predictions refresh
                 // This coalesces rapid event changes (e.g., bulk import, quick logging)
@@ -669,6 +677,10 @@ class TimelineViewModel {
         let endOfToday = Date().endOfDay
         let freshRecentEvents = eventStore.getEvents(from: yesterday, to: endOfToday)
         self.cachedCombinedState = self.calculateCombinedState(withEvents: freshRecentEvents)
+
+        // REACTIVITY FIX: Update sleep state immediately for status card content
+        // This ensures the sleep card shows correct state (sleeping vs awake) after logging
+        self.cachedSleepState = SleepCalculations.currentSleepState(events: freshRecentEvents)
     }
 
     /// Notify to refresh notifications
@@ -762,6 +774,7 @@ class TimelineViewModel {
             description: "Combined Sleep/Potty State"
         )
         self.cachedCombinedState = self.calculateCombinedState(withEvents: recentEvents)
+        self.cachedSleepState = SleepCalculations.currentSleepState(events: recentEvents)
         stateSpan?.finish()
 
         // PERFORMANCE: Cache separated upcoming items (previously computed on every view render)
