@@ -268,6 +268,13 @@ public struct SkillProgress: Codable, Identifiable, Sendable, Equatable {
     /// Last time this skill was practiced
     public var lastPracticedAt: Date?
 
+    // MARK: - Maintenance Mode
+
+    /// Whether this skill is in simplified maintenance mode
+    /// When true, the skill bypasses the normal phase progression and uses
+    /// simplified weekly reminders instead of the full training lifecycle
+    public var isInMaintenanceMode: Bool
+
     // MARK: - Generalization Contexts
 
     /// Locations/environments where this skill has been practiced
@@ -304,6 +311,27 @@ public struct SkillProgress: Codable, Identifiable, Sendable, Equatable {
         practicedContexts.filter { $0.successRate >= 0.8 }.count
     }
 
+    /// Days since last practice
+    public var daysSinceLastPractice: Int? {
+        guard let lastPractice = lastPracticedAt else { return nil }
+        return Calendar.current.dateComponents([.day], from: lastPractice, to: Date()).day
+    }
+
+    /// Whether the skill needs a maintenance refresh (for maintenance mode)
+    /// Skills in maintenance mode should be refreshed weekly
+    public var needsMaintenanceRefresh: Bool {
+        guard isInMaintenanceMode else { return false }
+        guard let days = daysSinceLastPractice else { return true }
+        return days >= 7
+    }
+
+    /// Whether the skill is overdue for maintenance (2+ weeks without practice)
+    public var isMaintenanceOverdue: Bool {
+        guard isInMaintenanceMode else { return false }
+        guard let days = daysSinceLastPractice else { return true }
+        return days >= 14
+    }
+
     /// Whether skill qualifies for generalization phase
     /// Requires 80%+ success rate in proofing
     public var readyForGeneralization: Bool {
@@ -334,6 +362,7 @@ public struct SkillProgress: Codable, Identifiable, Sendable, Equatable {
         maintenanceTier: Int = 0,
         nextReviewDate: Date? = nil,
         lastPracticedAt: Date? = nil,
+        isInMaintenanceMode: Bool = false,
         practicedContexts: [TrainingContext] = [],
         createdAt: Date = Date(),
         modifiedAt: Date? = nil
@@ -349,6 +378,7 @@ public struct SkillProgress: Codable, Identifiable, Sendable, Equatable {
         self.maintenanceTier = maintenanceTier
         self.nextReviewDate = nextReviewDate
         self.lastPracticedAt = lastPracticedAt
+        self.isInMaintenanceMode = isInMaintenanceMode
         self.practicedContexts = practicedContexts
         self.createdAt = createdAt
         self.modifiedAt = modifiedAt ?? createdAt
@@ -368,6 +398,7 @@ public struct SkillProgress: Codable, Identifiable, Sendable, Equatable {
         case maintenanceTier = "maintenance_tier"
         case nextReviewDate = "next_review_date"
         case lastPracticedAt = "last_practiced_at"
+        case isInMaintenanceMode = "is_in_maintenance_mode"
         case practicedContexts = "practiced_contexts"
         case createdAt = "created_at"
         case modifiedAt = "modified_at"
@@ -561,6 +592,42 @@ extension SkillProgress {
         var copy = self
         copy.modifiedAt = Date()
         return copy
+    }
+
+    // MARK: - Maintenance Mode Methods
+
+    /// Enable simplified maintenance mode for this skill
+    /// This bypasses the normal phase progression and uses weekly reminders
+    public mutating func enableMaintenanceMode() {
+        isInMaintenanceMode = true
+        phase = .maintaining
+        maintenanceTier = 3  // Start at weekly tier
+        lastPracticedAt = lastPracticedAt ?? Date()
+        modifiedAt = Date()
+    }
+
+    /// Disable maintenance mode and return to normal phase progression
+    public mutating func disableMaintenanceMode() {
+        isInMaintenanceMode = false
+        modifiedAt = Date()
+    }
+
+    /// Record a maintenance refresh (simplified session recording)
+    public mutating func recordMaintenanceRefresh() {
+        lastPracticedAt = Date()
+        modifiedAt = Date()
+
+        // If in maintenance mode, just update the timestamp
+        // No need to track success/failure for simple refreshes
+        if isInMaintenanceMode {
+            return
+        }
+
+        // For normal maintenance phase, use regular tracking
+        if phase == .maintaining {
+            maintenanceTier = min(maintenanceTier + 1, 6)
+            scheduleNextReview()
+        }
     }
 }
 

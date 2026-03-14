@@ -25,26 +25,37 @@ public final class MediaCloudService {
     /// Closure to check if CloudKit is available
     private let isCloudAvailable: () -> Bool
 
+    /// Closure to get the current user's actual CloudKit record name
+    private let getCurrentUserRecordName: () -> String?
+
     public init(
         deviceID: String,
         getDatabase: @escaping () -> CKDatabase,
         getZoneID: @escaping () -> CKRecordZone.ID,
-        isCloudAvailable: @escaping () -> Bool
+        isCloudAvailable: @escaping () -> Bool,
+        getCurrentUserRecordName: @escaping () -> String? = { nil }
     ) {
         self.deviceID = deviceID
         self.getDatabase = getDatabase
         self.getZoneID = getZoneID
         self.isCloudAvailable = isCloudAvailable
+        self.getCurrentUserRecordName = getCurrentUserRecordName
     }
 
     // MARK: - Upload
+
+    /// Result of a successful photo upload
+    public struct UploadResult {
+        public let recordID: CKRecord.ID
+        public let ownerName: String
+    }
 
     /// Upload a photo for an event to CloudKit
     /// - Parameters:
     ///   - localURL: Local file URL of the photo
     ///   - eventId: UUID of the associated PuppyEvent
-    /// - Returns: The CloudKit record ID of the uploaded media
-    public func uploadPhoto(localURL: URL, eventId: UUID) async throws -> CKRecord.ID {
+    /// - Returns: Upload result containing the record ID and zone owner name
+    public func uploadPhoto(localURL: URL, eventId: UUID) async throws -> UploadResult {
         guard isCloudAvailable() else {
             throw CloudKitError.notAvailable
         }
@@ -67,8 +78,10 @@ public final class MediaCloudService {
 
         do {
             let savedRecord = try await database.save(record)
-            logger.info("Uploaded photo for event \(eventId)")
-            return savedRecord.recordID
+            // Use actual user record name, not __defaultOwner__ which is device-relative
+            let actualOwnerName = getCurrentUserRecordName() ?? zoneID.ownerName
+            logger.info("Uploaded photo for event \(eventId), owner: \(actualOwnerName)")
+            return UploadResult(recordID: savedRecord.recordID, ownerName: actualOwnerName)
         } catch let error as CKError {
             logger.error("Failed to upload photo: \(error.localizedDescription)")
             throw MediaCloudError.uploadFailed(error.localizedDescription)
@@ -81,15 +94,37 @@ public final class MediaCloudService {
     /// - Parameters:
     ///   - eventId: UUID of the associated PuppyEvent
     ///   - destinationURL: Local URL where the photo should be saved
+    ///   - ownerName: Optional CloudKit zone owner name. If provided, uses this to construct the zone ID.
+    ///                This is required when downloading photos uploaded by a different user (partner sharing).
     /// - Returns: True if download was successful
-    public func downloadPhoto(eventId: UUID, to destinationURL: URL) async throws -> Bool {
+    public func downloadPhoto(eventId: UUID, to destinationURL: URL, ownerName: String? = nil) async throws -> Bool {
         guard isCloudAvailable() else {
             throw CloudKitError.notAvailable
         }
 
-        let zoneID = getZoneID()
+        // If ownerName is provided, construct a zone ID with that owner
+        // Otherwise, use the default zone ID (for own uploads or when owner is unknown)
+        let zoneID: CKRecordZone.ID
+        if let ownerName = ownerName {
+            // Use the Core Data CloudKit zone name with the specified owner
+            zoneID = CKRecordZone.ID(zoneName: "com.apple.coredata.cloudkit.zone", ownerName: ownerName)
+            logger.debug("Downloading photo for event \(eventId) from zone owned by \(ownerName)")
+        } else {
+            zoneID = getZoneID()
+            logger.debug("Downloading photo for event \(eventId) from default zone")
+        }
+
         let recordID = CKRecord.ID(recordName: "media-\(eventId.uuidString)", zoneID: zoneID)
-        let database = getDatabase()
+
+        // Determine which database to use based on owner
+        // If owner is different from current user, must use shared database
+        let database: CKDatabase
+        if ownerName != nil && ownerName != CKCurrentUserDefaultName {
+            // Photo is from another user, look in shared database
+            database = CKContainer(identifier: "iCloud.nl.jaapstronks.Otis").sharedCloudDatabase
+        } else {
+            database = getDatabase()
+        }
 
         do {
             let record = try await database.record(for: recordID)

@@ -47,6 +47,10 @@ public final class CloudKitService: ObservableObject {
     /// The owner's zone ID when user is a participant (used for media fetches)
     private var sharedZoneOwnerName: String?
 
+    /// The current user's actual CloudKit record ID (not __defaultOwner__)
+    /// This is needed for storing photo ownership so other users can download
+    public private(set) var currentUserRecordName: String?
+
     // MARK: - Share Manager
 
     /// Share manager for managing CloudKit shares
@@ -94,6 +98,17 @@ public final class CloudKitService: ObservableObject {
 
             if isCloudAvailable {
                 logger.info("CloudKit available")
+
+                // Fetch the current user's actual record ID (not __defaultOwner__)
+                // This is needed for photo sharing between users
+                do {
+                    let userRecordID = try await container.userRecordID()
+                    currentUserRecordName = userRecordID.recordName
+                    logger.info("Current user record name: \(userRecordID.recordName)")
+                } catch {
+                    logger.error("Failed to get user record ID: \(error.localizedDescription)")
+                }
+
                 await checkParticipantStatus()
             } else {
                 logger.info("CloudKit not available: \(String(describing: status))")
@@ -226,6 +241,9 @@ public final class CloudKitService: ObservableObject {
             },
             isCloudAvailable: { [weak self] in
                 self?.isCloudAvailable ?? false
+            },
+            getCurrentUserRecordName: { [weak self] in
+                self?.currentUserRecordName
             }
         )
     }()
@@ -258,19 +276,25 @@ public final class CloudKitService: ObservableObject {
     // MARK: - Photo Operations
 
     /// Upload a photo to CloudKit
+    /// - Returns: Upload result containing the record ID and zone owner name (needed for partner downloads)
     public func uploadPhoto(
         localURL: URL,
         eventId: UUID
-    ) async throws -> CKRecord.ID {
+    ) async throws -> MediaCloudService.UploadResult {
         try await mediaService.uploadPhoto(localURL: localURL, eventId: eventId)
     }
 
     /// Download a photo from CloudKit
+    /// - Parameters:
+    ///   - eventId: Event ID
+    ///   - destinationURL: Where to save the photo
+    ///   - ownerName: Optional zone owner name. Required when downloading photos from a partner.
     public func downloadPhoto(
         eventId: UUID,
-        to destinationURL: URL
+        to destinationURL: URL,
+        ownerName: String? = nil
     ) async throws -> Bool {
-        try await mediaService.downloadPhoto(eventId: eventId, to: destinationURL)
+        try await mediaService.downloadPhoto(eventId: eventId, to: destinationURL, ownerName: ownerName)
     }
 
     /// Delete a photo from CloudKit

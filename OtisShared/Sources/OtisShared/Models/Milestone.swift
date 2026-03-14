@@ -84,7 +84,8 @@ public struct Milestone: Identifiable, Codable, Sendable, Hashable {
     public var completionPhotoID: UUID?      // Otis+ feature
 
     // Premium features
-    public var vetClinicName: String?        // Otis+ feature
+    public var vetClinicName: String?        // Otis+ feature (deprecated, use linkedContactID)
+    public var linkedContactID: UUID?        // Otis+ feature: linked vet contact
     public var calendarEventID: String?      // Otis+ feature
     public var reminderDaysBefore: Int
 
@@ -117,6 +118,7 @@ public struct Milestone: Identifiable, Codable, Sendable, Hashable {
         completionNotes: String? = nil,
         completionPhotoID: UUID? = nil,
         vetClinicName: String? = nil,
+        linkedContactID: UUID? = nil,
         calendarEventID: String? = nil,
         reminderDaysBefore: Int = 3,
         icon: String = "heart.fill",
@@ -142,6 +144,7 @@ public struct Milestone: Identifiable, Codable, Sendable, Hashable {
         self.completionNotes = completionNotes
         self.completionPhotoID = completionPhotoID
         self.vetClinicName = vetClinicName
+        self.linkedContactID = linkedContactID
         self.calendarEventID = calendarEventID
         self.reminderDaysBefore = reminderDaysBefore
         self.icon = icon

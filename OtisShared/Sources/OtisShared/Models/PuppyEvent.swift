@@ -193,6 +193,22 @@ public struct MediaInfo: Codable, Equatable, Sendable {
     public static let empty = MediaInfo()
 }
 
+// MARK: - Event Like
+
+/// Represents a like on an event from a household member
+public struct EventLike: Codable, Equatable, Sendable {
+    /// CloudKit user record ID of who liked the event
+    public let likedBy: String
+
+    /// When the like was added
+    public let likedAt: Date
+
+    public init(likedBy: String, likedAt: Date = Date()) {
+        self.likedBy = likedBy
+        self.likedAt = likedAt
+    }
+}
+
 // MARK: - Location Info
 
 /// Encapsulates GPS location data for walk events
@@ -282,6 +298,16 @@ public struct PuppyEvent: Codable, Identifiable, Equatable, Sendable {
     /// For migration: nil for legacy events, existing UUID values are ignored
     public var loggedBy: String?
 
+    // MARK: - Social Fields
+
+    /// Likes on this event from other users
+    public var likes: [EventLike]?
+
+    // MARK: - Contact Linking Fields
+
+    /// Linked contact ID (e.g., trainer for training events)
+    public var linkedContactID: UUID?
+
     // MARK: - Behavior Incident Fields
 
     /// Category of behavior incident (reactivity, anxiety, etc.)
@@ -309,6 +335,8 @@ public struct PuppyEvent: Codable, Identifiable, Equatable, Sendable {
     public var video: String?
     public var thumbnailPath: String?
     public var cloudPhotoSynced: Bool?
+    /// CloudKit zone owner name who uploaded the photo (needed for cross-user downloads)
+    public var cloudPhotoOwner: String?
 
     // MARK: - Location Fields
 
@@ -372,6 +400,7 @@ public struct PuppyEvent: Codable, Identifiable, Equatable, Sendable {
         longitude: Double? = nil,
         thumbnailPath: String? = nil,
         cloudPhotoSynced: Bool? = nil,
+        cloudPhotoOwner: String? = nil,
         weightKg: Double? = nil,
         spotId: UUID? = nil,
         spotName: String? = nil,
@@ -390,7 +419,9 @@ public struct PuppyEvent: Codable, Identifiable, Equatable, Sendable {
         behaviorTrigger: String? = nil,
         behaviorIntensity: Int? = nil,
         behaviorOutcome: String? = nil,
-        behaviorContext: String? = nil
+        behaviorContext: String? = nil,
+        likes: [EventLike]? = nil,
+        linkedContactID: UUID? = nil
     ) {
         self.id = id
         self.time = time
@@ -412,6 +443,7 @@ public struct PuppyEvent: Codable, Identifiable, Equatable, Sendable {
         self.longitude = longitude
         self.thumbnailPath = thumbnailPath
         self.cloudPhotoSynced = cloudPhotoSynced
+        self.cloudPhotoOwner = cloudPhotoOwner
         self.weightKg = weightKg
         self.spotId = spotId
         self.spotName = spotName
@@ -430,6 +462,8 @@ public struct PuppyEvent: Codable, Identifiable, Equatable, Sendable {
         self.behaviorIntensity = behaviorIntensity
         self.behaviorOutcome = behaviorOutcome
         self.behaviorContext = behaviorContext
+        self.likes = likes
+        self.linkedContactID = linkedContactID
 
         if type == .slapen {
             self.sleepSessionId = sleepSessionId ?? UUID()
@@ -464,6 +498,7 @@ public struct PuppyEvent: Codable, Identifiable, Equatable, Sendable {
         case longitude
         case thumbnailPath = "thumbnail_path"
         case cloudPhotoSynced = "cloud_photo_synced"
+        case cloudPhotoOwner = "cloud_photo_owner"
         case weightKg = "weight_kg"
         case spotId = "spot_id"
         case spotName = "spot_name"
@@ -483,6 +518,8 @@ public struct PuppyEvent: Codable, Identifiable, Equatable, Sendable {
         case behaviorIntensity = "behavior_intensity"
         case behaviorOutcome = "behavior_outcome"
         case behaviorContext = "behavior_context"
+        case likes
+        case linkedContactID = "linked_contact_id"
     }
 
     // MARK: - Custom Decoding
@@ -509,6 +546,7 @@ public struct PuppyEvent: Codable, Identifiable, Equatable, Sendable {
         longitude = try container.decodeIfPresent(Double.self, forKey: .longitude)
         thumbnailPath = try container.decodeIfPresent(String.self, forKey: .thumbnailPath)
         cloudPhotoSynced = try container.decodeIfPresent(Bool.self, forKey: .cloudPhotoSynced)
+        cloudPhotoOwner = try container.decodeIfPresent(String.self, forKey: .cloudPhotoOwner)
         weightKg = try container.decodeIfPresent(Double.self, forKey: .weightKg)
         spotId = try container.decodeIfPresent(UUID.self, forKey: .spotId)
         spotName = try container.decodeIfPresent(String.self, forKey: .spotName)
@@ -549,6 +587,12 @@ public struct PuppyEvent: Codable, Identifiable, Equatable, Sendable {
         behaviorIntensity = try container.decodeIfPresent(Int.self, forKey: .behaviorIntensity)
         behaviorOutcome = try container.decodeIfPresent(String.self, forKey: .behaviorOutcome)
         behaviorContext = try container.decodeIfPresent(String.self, forKey: .behaviorContext)
+
+        // Social fields
+        likes = try container.decodeIfPresent([EventLike].self, forKey: .likes)
+
+        // Contact linking
+        linkedContactID = try container.decodeIfPresent(UUID.self, forKey: .linkedContactID)
     }
 }
 
@@ -596,6 +640,56 @@ extension PuppyEvent {
     public var gapDurationMinutes: Int? {
         guard type == .coverageGap, let endTime = endTime else { return nil }
         return Int(endTime.timeIntervalSince(time) / 60)
+    }
+
+    // MARK: - Likes Helpers
+
+    /// Number of likes on this event
+    public var likeCount: Int {
+        likes?.count ?? 0
+    }
+
+    /// Whether this event has any likes
+    public var hasLikes: Bool {
+        likeCount > 0
+    }
+
+    /// Check if a specific user has liked this event
+    public func isLikedBy(_ userRecordID: String) -> Bool {
+        likes?.contains { $0.likedBy == userRecordID } ?? false
+    }
+
+    /// Add a like from a user
+    public func withLike(from userRecordID: String) -> PuppyEvent {
+        var copy = self
+        // Don't add duplicate likes
+        guard !isLikedBy(userRecordID) else { return copy }
+
+        var newLikes = copy.likes ?? []
+        newLikes.append(EventLike(likedBy: userRecordID))
+        copy.likes = newLikes
+        copy.modifiedAt = Date()
+        return copy
+    }
+
+    /// Remove a like from a user
+    public func withoutLike(from userRecordID: String) -> PuppyEvent {
+        var copy = self
+        copy.likes = copy.likes?.filter { $0.likedBy != userRecordID }
+        if copy.likes?.isEmpty == true {
+            copy.likes = nil
+        }
+        copy.modifiedAt = Date()
+        return copy
+    }
+
+    /// Toggle like state for a user
+    public func withLikeToggled(by userRecordID: String) -> PuppyEvent {
+        if isLikedBy(userRecordID) {
+            return withoutLike(from: userRecordID)
+        } else {
+            return withLike(from: userRecordID)
+        }
     }
 
     // MARK: - Training Session Helpers

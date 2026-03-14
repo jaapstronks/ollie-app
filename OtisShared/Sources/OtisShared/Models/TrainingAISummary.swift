@@ -403,9 +403,8 @@ extension TrainingAISummary {
         }
 
         // Recent regressions (last 30 days)
-        let thirtyDaysAgo = Calendar.current.date(byAdding: .day, value: -30, to: Date()) ?? Date()
         let recentRegressions = regressionLog
-            .filter { $0.occurredAt >= thirtyDaysAgo }
+            .filter { $0.occurredAt.isThisMonth }
             .map { entry in
                 RegressionEvent(
                     skillId: entry.skillId,
@@ -432,7 +431,7 @@ extension TrainingAISummary {
             .filter { $0.phase != .notStarted && $0.lastPracticedAt != nil }
             .compactMap { progress -> StaleSkillInfo? in
                 guard let lastPracticed = progress.lastPracticedAt else { return nil }
-                let days = Calendar.current.dateComponents([.day], from: lastPracticed, to: Date()).day ?? 0
+                let days = Date().daysSince(lastPracticed)
                 guard days > 3 else { return nil }  // Only flag if > 3 days
                 return StaleSkillInfo(
                     skillId: progress.skillId,
@@ -446,10 +445,9 @@ extension TrainingAISummary {
         var paceWarning: PaceWarning?
 
         // Too fast: multiple regressions in last 14 days
-        let twoWeeksAgo = Calendar.current.date(byAdding: .day, value: -14, to: Date()) ?? Date()
-        let recentRegressionCount = regressionLog.filter { $0.occurredAt >= twoWeeksAgo }.count
+        let recentRegressionCount = regressionLog.filter { $0.occurredAt >= Date.daysAgo(14) }.count
         if recentRegressionCount >= 3 {
-            let affectedSkills = Array(Set(regressionLog.filter { $0.occurredAt >= twoWeeksAgo }.map { $0.skillId }))
+            let affectedSkills = Array(Set(regressionLog.filter { $0.occurredAt >= Date.daysAgo(14) }.map { $0.skillId }))
             paceWarning = PaceWarning(
                 type: .tooFast,
                 details: "\(recentRegressionCount) regressions in the last 2 weeks suggests advancing too quickly",
