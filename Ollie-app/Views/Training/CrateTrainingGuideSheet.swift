@@ -11,7 +11,7 @@ import OtisShared
 
 /// Personalized crate training guide sheet
 struct CrateTrainingGuideSheet: View {
-    @ObservedObject var eventStore: EventStore
+    var eventStore: EventStore
 
     @Environment(\.dismiss) private var dismiss
     @Environment(\.colorScheme) private var colorScheme

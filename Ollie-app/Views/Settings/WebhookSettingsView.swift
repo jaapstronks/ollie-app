@@ -8,7 +8,7 @@ import SwiftUI
 import OtisShared
 
 struct WebhookSettingsView: View {
-    @ObservedObject var profileStore: ProfileStore
+    var profileStore: ProfileStore
     @StateObject private var webhookService = WebhookService.shared
 
     @State private var isEnabled: Bool = false

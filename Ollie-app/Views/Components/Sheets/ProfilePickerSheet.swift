@@ -10,7 +10,7 @@ import OtisShared
 
 /// Sheet for switching between puppy profiles
 struct ProfilePickerSheet: View {
-    @ObservedObject var profileStore: ProfileStore
+    var profileStore: ProfileStore
     @Binding var isPresented: Bool
 
     var onAddDog: (() -> Void)?
@@ -201,7 +201,8 @@ struct ProfilePickerSheet: View {
         profileStore.switchToProfile(profile.id)
 
         // Brief delay before dismissing to show the selection
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+        Task { @MainActor in
+            try? await Task.sleep(for: .seconds(0.3))
             isPresented = false
         }
     }
@@ -347,7 +348,7 @@ private struct ProfilePickerRow: View {
 
 #Preview {
     struct PreviewWrapper: View {
-        @StateObject private var profileStore = ProfileStore()
+        @State private var profileStore = ProfileStore()
         @State private var isPresented = true
 
         var body: some View {

@@ -10,8 +10,8 @@ import OtisShared
 
 /// Section showing grooming care status in the Health tab
 struct GroomingCareSection: View {
-    @EnvironmentObject private var routineStore: RoutineStore
-    @EnvironmentObject private var profileStore: ProfileStore
+    @Environment(RoutineStore.self) private var routineStore
+    @Environment(ProfileStore.self) private var profileStore
 
     let onShowSchedule: () -> Void
     let onLogActivity: (GroomingType?) -> Void
@@ -206,8 +206,8 @@ private struct GroomingActivityRow: View {
                 onShowSchedule: {},
                 onLogActivity: { _ in }
             )
-            .environmentObject(RoutineStore())
-            .environmentObject(ProfileStore())
+            .environment(RoutineStore())
+            .environment(ProfileStore())
         }
         .padding()
     }

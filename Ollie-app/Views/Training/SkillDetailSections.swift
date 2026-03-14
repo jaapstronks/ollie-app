@@ -173,7 +173,8 @@ struct SkillActionButtons: View {
             Button {
                 HapticFeedback.medium()
                 onDismiss()
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                Task { @MainActor in
+                    try? await Task.sleep(for: .seconds(0.3))
                     onStartTraining()
                 }
             } label: {
@@ -196,7 +197,8 @@ struct SkillActionButtons: View {
                 Button {
                     HapticFeedback.light()
                     onDismiss()
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    Task { @MainActor in
+                    try? await Task.sleep(for: .seconds(0.3))
                         onLogSession()
                     }
                 } label: {

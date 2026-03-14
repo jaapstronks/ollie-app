@@ -9,8 +9,8 @@ import OtisShared
 
 /// Sheet for adding or editing an appointment
 struct AddEditAppointmentSheet: View {
-    @ObservedObject var appointmentStore: AppointmentStore
-    @EnvironmentObject var contactStore: ContactStore
+    var appointmentStore: AppointmentStore
+    @Environment(ContactStore.self) var contactStore
     var existingAppointment: DogAppointment?
     var prefill: AppointmentPrefill?
 
@@ -327,5 +327,5 @@ struct AddEditAppointmentSheet: View {
 
 #Preview {
     AddEditAppointmentSheet(appointmentStore: AppointmentStore())
-        .environmentObject(ContactStore())
+        .environment(ContactStore())
 }

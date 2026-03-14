@@ -9,12 +9,13 @@ import OtisShared
 
 /// Section displaying overdue and upcoming milestones
 struct CalendarMilestonesSection: View {
-    @ObservedObject var milestoneStore: MilestoneStore
+    var milestoneStore: MilestoneStore
     let birthDate: Date
     var onCelebration: ((Achievement, Milestone) -> Void)?
 
     @State private var selectedMilestone: Milestone?
     @StateObject private var achievementService = AchievementService.shared
+    @Environment(ContactStore.self) var contactStore
 
     @Environment(\.colorScheme) private var colorScheme
 
@@ -62,13 +63,13 @@ struct CalendarMilestonesSection: View {
             MilestoneCompletionSheet(
                 milestone: milestone,
                 onDismiss: { selectedMilestone = nil },
-                onComplete: { notes, photoID, vetClinic, completionDate in
+                onComplete: { notes, photoID, linkedContactID, completionDate in
                     // Complete the milestone
                     milestoneStore.completeMilestone(
                         milestone,
                         notes: notes,
                         photoID: photoID,
-                        vetClinicName: vetClinic,
+                        linkedContactID: linkedContactID,
                         completionDate: completionDate
                     )
 
@@ -77,7 +78,8 @@ struct CalendarMilestonesSection: View {
                         // Dismiss completion sheet first, then trigger celebration
                         selectedMilestone = nil
                         // Small delay to allow sheet dismissal animation
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                        Task { @MainActor in
+                            try? await Task.sleep(for: .seconds(0.4))
                             onCelebration?(achievement, milestone)
                         }
                     } else {
@@ -85,6 +87,7 @@ struct CalendarMilestonesSection: View {
                     }
                 }
             )
+            .environment(contactStore)
         }
     }
 

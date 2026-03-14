@@ -10,8 +10,8 @@ import OtisShared
 /// Detail view for displaying and managing an appointment
 struct AppointmentDetailView: View {
     let appointment: DogAppointment
-    @ObservedObject var appointmentStore: AppointmentStore
-    @EnvironmentObject var contactStore: ContactStore
+    var appointmentStore: AppointmentStore
+    @Environment(ContactStore.self) var contactStore
 
     @State private var showingEditSheet = false
     @State private var showingDeleteConfirmation = false
@@ -233,7 +233,7 @@ struct AppointmentDetailView: View {
 /// Sheet for marking an appointment as completed with optional notes
 private struct CompletionSheet: View {
     let appointment: DogAppointment
-    @ObservedObject var appointmentStore: AppointmentStore
+    var appointmentStore: AppointmentStore
 
     @Environment(\.dismiss) private var dismiss
     @State private var completionNotes: String = ""
@@ -292,6 +292,6 @@ private struct CompletionSheet: View {
             ),
             appointmentStore: AppointmentStore()
         )
-        .environmentObject(ContactStore())
+        .environment(ContactStore())
     }
 }

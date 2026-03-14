@@ -10,9 +10,9 @@ import OtisShared
 
 /// Comprehensive sheet showing medical care timeline, upcoming and overdue items
 struct MedicalCareSheet: View {
-    @EnvironmentObject var profileStore: ProfileStore
-    @EnvironmentObject var milestoneStore: MilestoneStore
-    @EnvironmentObject var weightStore: WeightStore
+    @Environment(ProfileStore.self) var profileStore
+    @Environment(MilestoneStore.self) var milestoneStore
+    @Environment(WeightStore.self) var weightStore
 
     var onNavigateToDevelopment: (() -> Void)?
     var onSelectMilestone: ((Milestone) -> Void)?
@@ -244,7 +244,8 @@ struct MedicalCareSheet: View {
                         onTap: {
                             if let onSelect = onSelectMilestone {
                                 dismiss()
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                Task { @MainActor in
+                                    try? await Task.sleep(for: .seconds(0.3))
                                     onSelect(milestone)
                                 }
                             }
@@ -261,7 +262,8 @@ struct MedicalCareSheet: View {
                         onTap: {
                             if let onSelect = onSelectMilestone {
                                 dismiss()
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                Task { @MainActor in
+                                    try? await Task.sleep(for: .seconds(0.3))
                                     onSelect(milestone)
                                 }
                             }
@@ -290,7 +292,8 @@ struct MedicalCareSheet: View {
                         onTap: {
                             if let onSelect = onSelectMilestone {
                                 dismiss()
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                Task { @MainActor in
+                                    try? await Task.sleep(for: .seconds(0.3))
                                     onSelect(milestone)
                                 }
                             }
@@ -411,7 +414,8 @@ struct MedicalCareSheet: View {
 
                 Button {
                     dismiss()
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    Task { @MainActor in
+                                    try? await Task.sleep(for: .seconds(0.3))
                         onNavigate()
                     }
                 } label: {
@@ -589,7 +593,7 @@ private struct MedicalMilestoneRow: View {
         onNavigateToDevelopment: { print("Navigate to development") },
         onSelectMilestone: { milestone in print("Selected: \(milestone.labelKey)") }
     )
-    .environmentObject(ProfileStore())
-    .environmentObject(MilestoneStore())
-    .environmentObject(WeightStore())
+    .environment(ProfileStore())
+    .environment(MilestoneStore())
+    .environment(WeightStore())
 }

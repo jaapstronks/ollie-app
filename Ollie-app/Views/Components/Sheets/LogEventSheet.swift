@@ -9,15 +9,22 @@ import OtisShared
 /// Sheet for adding details to an event (note, who, exercise, etc.)
 struct LogEventSheet: View {
     let eventType: EventType
-    let onSave: (String?, String?, String?, String?, Int?) -> Void
+    let onSave: (String?, String?, String?, String?, Int?, UUID?) -> Void
 
     @Environment(\.dismiss) private var dismiss
+    @Environment(ContactStore.self) var contactStore
 
     @State private var note: String = ""
     @State private var who: String = ""
     @State private var exercise: String = ""
     @State private var result: String = ""
     @State private var durationMin: String = ""
+    @State private var linkedContactID: UUID? = nil
+
+    // Available trainer contacts for picker
+    private var trainerContacts: [DogContact] {
+        contactStore.contacts.filter { $0.contactType == .trainer }
+    }
 
     var body: some View {
         NavigationStack {
@@ -55,6 +62,19 @@ struct LogEventSheet: View {
                             .accessibilityLabel(Strings.LogEvent.result)
                             .accessibilityHint(Strings.LogEvent.resultAccessibilityHint)
                     }
+
+                    // Trainer contact picker (optional)
+                    if !trainerContacts.isEmpty {
+                        Section(Strings.LogEvent.trainer) {
+                            Picker(Strings.LogEvent.selectTrainer, selection: $linkedContactID) {
+                                Text(Strings.Common.none).tag(nil as UUID?)
+                                ForEach(trainerContacts) { contact in
+                                    Text(contact.name).tag(contact.id as UUID?)
+                                }
+                            }
+                            .pickerStyle(.menu)
+                        }
+                    }
                 }
 
                 Section(Strings.LogEvent.duration) {
@@ -82,7 +102,8 @@ struct LogEventSheet: View {
                             who.nilIfBlank,
                             exercise.nilIfBlank,
                             result.nilIfBlank,
-                            duration
+                            duration,
+                            linkedContactID
                         )
                     }
                 }
@@ -92,7 +113,8 @@ struct LogEventSheet: View {
 }
 
 #Preview {
-    LogEventSheet(eventType: .training) { note, who, exercise, result, duration in
-        print("Saved: \(note ?? ""), \(who ?? ""), \(exercise ?? ""), \(result ?? ""), \(duration ?? 0)")
+    LogEventSheet(eventType: .training) { note, who, exercise, result, duration, linkedContactID in
+        print("Saved: \(note ?? ""), \(who ?? ""), \(exercise ?? ""), \(result ?? ""), \(duration ?? 0), contact: \(linkedContactID?.uuidString ?? "none")")
     }
+    .environment(ContactStore())
 }

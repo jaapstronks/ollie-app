@@ -137,24 +137,11 @@ struct Day7ValueSummaryCard: View {
     let onDismiss: () -> Void
 
     @Environment(\.colorScheme) private var colorScheme
-    @EnvironmentObject private var eventStore: EventStore
+    @Environment(EventStore.self) private var eventStore
 
-    // Computed stats for the trial period
-    private var eventCount: Int {
-        eventStore.events.count
-    }
-
-    // Estimate patterns learned based on unique event types
-    private var patternsLearned: Int {
-        let uniqueTypes = Set(eventStore.events.map { $0.type })
-        return uniqueTypes.count
-    }
-
-    // Estimate insights (based on days with data)
-    private var insightsGenerated: Int {
-        let uniqueDates = Set(eventStore.events.map { Calendar.current.startOfDay(for: $0.time) })
-        return uniqueDates.count
-    }
+    // Cached stats - computed once on appear, not on every render
+    @State private var cachedPatternsLearned: Int = 0
+    @State private var cachedInsightsGenerated: Int = 0
 
     var body: some View {
         VStack(spacing: 12) {
@@ -188,12 +175,12 @@ struct Day7ValueSummaryCard: View {
             HStack(spacing: 16) {
                 StatPill(
                     icon: "chart.line.uptrend.xyaxis",
-                    text: Strings.Trial.day7PatternsLearned(patternsLearned)
+                    text: Strings.Trial.day7PatternsLearned(cachedPatternsLearned)
                 )
 
                 StatPill(
                     icon: "lightbulb.fill",
-                    text: Strings.Trial.day7InsightsGenerated(insightsGenerated)
+                    text: Strings.Trial.day7InsightsGenerated(cachedInsightsGenerated)
                 )
             }
 
@@ -217,6 +204,28 @@ struct Day7ValueSummaryCard: View {
         .glassStatusCard(tintColor: .green.opacity(0.15))
         .accessibilityElement(children: .combine)
         .accessibilityLabel(Strings.Trial.day7Title)
+        .task {
+            // Compute expensive stats once on appear, not on every render
+            await computeStats()
+        }
+    }
+
+    /// Compute stats off the main actor for better performance
+    private func computeStats() async {
+        let events = eventStore.events
+
+        // Compute on background to avoid blocking UI
+        let (patterns, insights) = await Task.detached(priority: .userInitiated) {
+            let uniqueTypes = Set(events.map { $0.type })
+            let calendar = Calendar.current
+            let uniqueDates = Set(events.map { calendar.startOfDay(for: $0.time) })
+            return (uniqueTypes.count, uniqueDates.count)
+        }.value
+
+        await MainActor.run {
+            cachedPatternsLearned = patterns
+            cachedInsightsGenerated = insights
+        }
     }
 }
 
@@ -424,7 +433,7 @@ struct Day14ConversionCard: View {
         )
     }
     .padding()
-    .environmentObject(EventStore())
+    .environment(EventStore())
 }
 
 #Preview("Day 7") {
@@ -434,7 +443,7 @@ struct Day14ConversionCard: View {
         )
     }
     .padding()
-    .environmentObject(EventStore())
+    .environment(EventStore())
 }
 
 #Preview("Day 12") {

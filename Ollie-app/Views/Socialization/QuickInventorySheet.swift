@@ -9,7 +9,7 @@ import OtisShared
 
 /// Sheet for quickly marking items as comfortable
 struct QuickInventorySheet: View {
-    @EnvironmentObject var socializationStore: SocializationStore
+    @Environment(SocializationStore.self) var socializationStore
     @Environment(\.dismiss) private var dismiss
     @Environment(\.colorScheme) private var colorScheme
 
@@ -236,5 +236,5 @@ struct QuickInventorySheet: View {
 
 #Preview {
     QuickInventorySheet()
-        .environmentObject(SocializationStore())
+        .environment(SocializationStore())
 }

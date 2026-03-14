@@ -69,7 +69,8 @@ struct RuleAcknowledgeSheet: View {
         .interactiveDismissDisabled()
         .onAppear {
             // Move VoiceOver focus to the title when sheet appears
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            Task { @MainActor in
+                try? await Task.sleep(for: .seconds(0.5))
                 isTitleFocused = true
             }
         }

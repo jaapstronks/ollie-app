@@ -9,11 +9,41 @@
 import SwiftUI
 import OtisShared
 
+// MARK: - Phone Call Helper
+
+@MainActor
+private func callPhoneNumber(_ number: String) {
+    let cleaned = number.replacingOccurrences(of: " ", with: "")
+        .replacingOccurrences(of: "-", with: "")
+        .replacingOccurrences(of: "(", with: "")
+        .replacingOccurrences(of: ")", with: "")
+    if let url = URL(string: "tel://\(cleaned)") {
+        UIApplication.shared.open(url)
+    }
+}
+
 // MARK: - This Week Rows
 
 struct ThisWeekAppointmentRow: View {
     let appointment: DogAppointment
+    let linkedContact: DogContact?
     let onTap: () -> Void
+    let onCallContact: ((String) -> Void)?
+    let onOpenAddress: ((String) -> Void)?
+
+    init(
+        appointment: DogAppointment,
+        linkedContact: DogContact? = nil,
+        onTap: @escaping () -> Void,
+        onCallContact: ((String) -> Void)? = nil,
+        onOpenAddress: ((String) -> Void)? = nil
+    ) {
+        self.appointment = appointment
+        self.linkedContact = linkedContact
+        self.onTap = onTap
+        self.onCallContact = onCallContact
+        self.onOpenAddress = onOpenAddress
+    }
 
     var body: some View {
         Button(action: onTap) {
@@ -46,6 +76,39 @@ struct ThisWeekAppointmentRow: View {
                         .font(.caption)
                         .fontWeight(.medium)
                         .foregroundStyle(Color.otisAccent)
+                }
+
+                // Contact action buttons
+                if let contact = linkedContact {
+                    HStack(spacing: 8) {
+                        if let phone = contact.phone, !phone.isEmpty {
+                            Button {
+                                onCallContact?(phone)
+                            } label: {
+                                Image(systemName: "phone.fill")
+                                    .font(.caption)
+                                    .foregroundStyle(.white)
+                                    .padding(6)
+                                    .background(Color.otisSuccess)
+                                    .clipShape(Circle())
+                            }
+                            .buttonStyle(.plain)
+                        }
+
+                        if contact.hasLocation, let address = contact.address, !address.isEmpty {
+                            Button {
+                                onOpenAddress?(address)
+                            } label: {
+                                Image(systemName: "location.fill")
+                                    .font(.caption)
+                                    .foregroundStyle(.white)
+                                    .padding(6)
+                                    .background(Color.otisInfo)
+                                    .clipShape(Circle())
+                            }
+                            .buttonStyle(.plain)
+                        }
+                    }
                 }
             }
             .padding()
@@ -83,7 +146,28 @@ struct ThisWeekAppointmentRow: View {
 struct ThisWeekMilestoneRow: View {
     let milestone: Milestone
     let birthDate: Date
+    let vetContact: DogContact?
     let onTap: () -> Void
+    let onCallVet: ((String) -> Void)?
+
+    init(
+        milestone: Milestone,
+        birthDate: Date,
+        vetContact: DogContact? = nil,
+        onTap: @escaping () -> Void,
+        onCallVet: ((String) -> Void)? = nil
+    ) {
+        self.milestone = milestone
+        self.birthDate = birthDate
+        self.vetContact = vetContact
+        self.onTap = onTap
+        self.onCallVet = onCallVet
+    }
+
+    private var showVetCallButton: Bool {
+        // Show vet call button for health milestones when a vet contact with phone exists
+        milestone.category == .health && vetContact != nil && !(vetContact?.phone?.isEmpty ?? true)
+    }
 
     var body: some View {
         Button(action: onTap) {
@@ -129,6 +213,21 @@ struct ThisWeekMilestoneRow: View {
                             .foregroundStyle(.secondary)
                     }
                 }
+
+                // Vet call button for health milestones
+                if showVetCallButton, let phone = vetContact?.phone {
+                    Button {
+                        onCallVet?(phone)
+                    } label: {
+                        Image(systemName: "phone.fill")
+                            .font(.caption)
+                            .foregroundStyle(.white)
+                            .padding(6)
+                            .background(Color.otisSuccess)
+                            .clipShape(Circle())
+                    }
+                    .buttonStyle(.plain)
+                }
             }
             .padding()
             .background(Color(.secondarySystemBackground))
@@ -142,7 +241,21 @@ struct ThisWeekMilestoneRow: View {
 
 struct ComingUpAppointmentRow: View {
     let appointment: DogAppointment
+    let linkedContact: DogContact?
     let onTap: () -> Void
+    let onCallContact: ((String) -> Void)?
+
+    init(
+        appointment: DogAppointment,
+        linkedContact: DogContact? = nil,
+        onTap: @escaping () -> Void,
+        onCallContact: ((String) -> Void)? = nil
+    ) {
+        self.appointment = appointment
+        self.linkedContact = linkedContact
+        self.onTap = onTap
+        self.onCallContact = onCallContact
+    }
 
     var body: some View {
         Button(action: onTap) {
@@ -163,12 +276,38 @@ struct ComingUpAppointmentRow: View {
                         .fontWeight(.medium)
                         .foregroundStyle(.primary)
 
-                    Text(appointment.dateString)
-                        .font(.caption2)
-                        .foregroundStyle(.secondary)
+                    HStack(spacing: 4) {
+                        Text(appointment.dateString)
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
+
+                        if let contact = linkedContact {
+                            Text("·")
+                                .font(.caption2)
+                                .foregroundStyle(.tertiary)
+                            Text(contact.name)
+                                .font(.caption2)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
                 }
 
                 Spacer()
+
+                // Call button if contact has phone
+                if let phone = linkedContact?.phone, !phone.isEmpty {
+                    Button {
+                        onCallContact?(phone)
+                    } label: {
+                        Image(systemName: "phone.fill")
+                            .font(.caption2)
+                            .foregroundStyle(.white)
+                            .padding(5)
+                            .background(Color.otisSuccess)
+                            .clipShape(Circle())
+                    }
+                    .buttonStyle(.plain)
+                }
             }
             .padding(.vertical, 8)
             .padding(.horizontal, 12)
@@ -182,7 +321,27 @@ struct ComingUpAppointmentRow: View {
 struct ComingUpMilestoneRow: View {
     let milestone: Milestone
     let birthDate: Date
+    let vetContact: DogContact?
     let onTap: () -> Void
+    let onCallVet: ((String) -> Void)?
+
+    init(
+        milestone: Milestone,
+        birthDate: Date,
+        vetContact: DogContact? = nil,
+        onTap: @escaping () -> Void,
+        onCallVet: ((String) -> Void)? = nil
+    ) {
+        self.milestone = milestone
+        self.birthDate = birthDate
+        self.vetContact = vetContact
+        self.onTap = onTap
+        self.onCallVet = onCallVet
+    }
+
+    private var showVetCallButton: Bool {
+        milestone.category == .health && vetContact != nil && !(vetContact?.phone?.isEmpty ?? true)
+    }
 
     var body: some View {
         Button(action: onTap) {
@@ -212,9 +371,24 @@ struct ComingUpMilestoneRow: View {
 
                 Spacer()
 
-                Image(systemName: "chevron.right")
-                    .font(.caption2)
-                    .foregroundStyle(.tertiary)
+                // Vet call button for health milestones
+                if showVetCallButton, let phone = vetContact?.phone {
+                    Button {
+                        onCallVet?(phone)
+                    } label: {
+                        Image(systemName: "phone.fill")
+                            .font(.caption2)
+                            .foregroundStyle(.white)
+                            .padding(5)
+                            .background(Color.otisSuccess)
+                            .clipShape(Circle())
+                    }
+                    .buttonStyle(.plain)
+                } else {
+                    Image(systemName: "chevron.right")
+                        .font(.caption2)
+                        .foregroundStyle(.tertiary)
+                }
             }
             .padding(.vertical, 8)
             .padding(.horizontal, 12)

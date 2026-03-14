@@ -147,18 +147,27 @@ struct SleepSessionRow: View {
 
 private struct PulsingAnimation: ViewModifier {
     @State private var isPulsing = false
+    @State private var isAnimating = false
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     func body(content: Content) -> some View {
         content
             .opacity(isPulsing ? 0.4 : 1.0)
             .animation(
-                reduceMotion ? nil : .easeInOut(duration: 1.0).repeatForever(autoreverses: true),
+                isAnimating
+                    ? .easeInOut(duration: 1.0).repeatForever(autoreverses: true)
+                    : .default,
                 value: isPulsing
             )
             .onAppear {
                 guard !reduceMotion else { return }
+                isAnimating = true
                 isPulsing = true
+            }
+            .onDisappear {
+                // Stop animation on disappear
+                isAnimating = false
+                isPulsing = false
             }
     }
 }

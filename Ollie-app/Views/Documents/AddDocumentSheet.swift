@@ -11,7 +11,7 @@ import UniformTypeIdentifiers
 
 /// Sheet for adding or editing a document
 struct AddDocumentSheet: View {
-    @ObservedObject var documentStore: DocumentStore
+    var documentStore: DocumentStore
     var existingDocument: Document?
 
     @Environment(\.dismiss) private var dismiss

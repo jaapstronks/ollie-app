@@ -10,8 +10,8 @@ import OtisShared
 
 /// Settings view for managing medications
 struct MedicationSettingsView: View {
-    @ObservedObject var profileStore: ProfileStore
-    @ObservedObject var medicationStore: MedicationStore
+    var profileStore: ProfileStore
+    var medicationStore: MedicationStore
     var profileId: UUID? = nil
     @State private var showingAddSheet = false
     @State private var medicationToEdit: Medication?

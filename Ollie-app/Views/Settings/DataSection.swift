@@ -10,7 +10,7 @@ import OtisShared
 /// Data import and management section
 struct DataSection: View {
     @ObservedObject var dataImporter: DataImporter
-    @ObservedObject var eventStore: EventStore
+    var eventStore: EventStore
     @Binding var showingImportSheet: Bool
 
     var body: some View {
@@ -47,7 +47,7 @@ struct DataSection: View {
 
 /// Danger zone section for destructive actions
 struct DangerSection: View {
-    @ObservedObject var profileStore: ProfileStore
+    var profileStore: ProfileStore
 
     var body: some View {
         Section {

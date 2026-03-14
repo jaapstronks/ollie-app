@@ -17,7 +17,7 @@ extension HealthView {
         VStack(alignment: .leading, spacing: 10) {
             // Section header
             SectionHeader(title: Strings.AdultWellness.title, icon: "figure.walk.motion", tint: .green) {
-                NavigationLink(destination: RoutineView().environmentObject(routineStore)) {
+                NavigationLink(destination: RoutineView().environment(routineStore)) {
                     Text(Strings.Common.seeAll)
                         .font(.subheadline)
                         .foregroundStyle(.blue)
@@ -69,7 +69,7 @@ extension HealthView {
         VStack(alignment: .leading, spacing: 10) {
             // Section header
             SectionHeader(title: Strings.SeniorWellness.title, icon: "heart.circle.fill", tint: .pink) {
-                NavigationLink(destination: SeniorWellnessView().environmentObject(viewModel.profileStore)) {
+                NavigationLink(destination: SeniorWellnessView().environment(viewModel.profileStore)) {
                     Text(Strings.Common.seeAll)
                         .font(.subheadline)
                         .foregroundStyle(.blue)
@@ -85,7 +85,7 @@ extension HealthView {
                         // Navigate to history
                     }
                 )
-                .environmentObject(viewModel.profileStore)
+                .environment(viewModel.profileStore)
 
                 // Additional assessments reminder
                 if seniorWellnessStore.cognitiveAssessmentDue || seniorWellnessStore.qolAssessmentDue {

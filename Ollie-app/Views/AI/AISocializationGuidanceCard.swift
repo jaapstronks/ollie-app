@@ -10,8 +10,8 @@ import OtisShared
 
 /// Card displaying AI-powered socialization guidance.
 struct AISocializationGuidanceCard: View {
-    @EnvironmentObject var profileStore: ProfileStore
-    @EnvironmentObject var eventStore: EventStore
+    @Environment(ProfileStore.self) var profileStore
+    @Environment(EventStore.self) var eventStore
 
     @State private var guidance: SocializationGuidanceResponse?
     @State private var isLoading = false
@@ -92,7 +92,8 @@ struct AISocializationGuidanceCard: View {
         defer { isLoading = false }
 
         // Socialization guidance needs 14 days of history for exposure frequency
-        let recentEvents = eventStore.getEvents(from: Date.daysAgo(14), to: Date())
+        // PERFORMANCE: Use async version to avoid blocking main thread
+        let recentEvents = await eventStore.getEventsAsync(from: Date.daysAgo(14), to: Date())
 
         let result = await AI.requestSocializationGuidance(
             profile: profile,
@@ -133,13 +134,9 @@ struct AISocializationGuidanceCard: View {
 
 // MARK: - Preview
 
-#if DEBUG
-struct AISocializationGuidanceCard_Previews: PreviewProvider {
-    static var previews: some View {
-        AISocializationGuidanceCard()
-            .environmentObject(ProfileStore())
-            .environmentObject(EventStore())
-            .padding()
-    }
+#Preview {
+    AISocializationGuidanceCard()
+        .environment(ProfileStore())
+        .environment(EventStore())
+        .padding()
 }
-#endif

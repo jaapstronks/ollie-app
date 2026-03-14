@@ -20,7 +20,7 @@ struct SkillLearningFlowSheet: View {
     let onDismiss: () -> Void
 
     @ObservedObject var progressStore: TrainingProgressStore
-    @ObservedObject var skillProgressStore: SkillProgressStore
+    var skillProgressStore: SkillProgressStore
 
     @State private var currentPage: Int = 0
     @Environment(\.colorScheme) private var colorScheme

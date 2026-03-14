@@ -11,7 +11,7 @@ import OtisShared
 /// Sheet for editing the daily routine
 struct RoutineEditSheet: View {
     @Environment(\.dismiss) private var dismiss
-    @EnvironmentObject private var routineStore: RoutineStore
+    @Environment(RoutineStore.self) private var routineStore
 
     @State private var editingItem: RoutineItem?
     @State private var showAddSheet = false
@@ -120,7 +120,7 @@ private struct RoutineItemRow: View {
 
 private struct RoutineItemEditSheet: View {
     @Environment(\.dismiss) private var dismiss
-    @EnvironmentObject private var routineStore: RoutineStore
+    @Environment(RoutineStore.self) private var routineStore
 
     let item: RoutineItem?
 
@@ -232,5 +232,5 @@ private struct RoutineItemEditSheet: View {
 
 #Preview {
     RoutineEditSheet()
-        .environmentObject(RoutineStore())
+        .environment(RoutineStore())
 }

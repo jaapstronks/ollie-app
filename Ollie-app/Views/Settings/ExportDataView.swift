@@ -10,7 +10,7 @@ import OtisShared
 
 /// View for exporting puppy data with configurable options
 struct ExportDataView: View {
-    @ObservedObject var profileStore: ProfileStore
+    var profileStore: ProfileStore
     @StateObject private var exportService = ExportService()
 
     @Environment(\.dismiss) private var dismiss

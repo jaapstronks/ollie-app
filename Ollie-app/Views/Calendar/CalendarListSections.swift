@@ -12,7 +12,24 @@ import OtisShared
 
 struct CalendarTodaySection: View {
     let appointments: [DogAppointment]
+    let contactStore: ContactStore?
     let onAppointmentTap: (DogAppointment) -> Void
+    let onCallContact: ((String) -> Void)?
+    let onOpenAddress: ((String) -> Void)?
+
+    init(
+        appointments: [DogAppointment],
+        contactStore: ContactStore? = nil,
+        onAppointmentTap: @escaping (DogAppointment) -> Void,
+        onCallContact: ((String) -> Void)? = nil,
+        onOpenAddress: ((String) -> Void)? = nil
+    ) {
+        self.appointments = appointments
+        self.contactStore = contactStore
+        self.onAppointmentTap = onAppointmentTap
+        self.onCallContact = onCallContact
+        self.onOpenAddress = onOpenAddress
+    }
 
     var body: some View {
         if !appointments.isEmpty {
@@ -25,9 +42,14 @@ struct CalendarTodaySection: View {
 
                 VStack(spacing: 8) {
                     ForEach(appointments) { appointment in
-                        ThisWeekAppointmentRow(appointment: appointment) {
-                            onAppointmentTap(appointment)
-                        }
+                        let linkedContact = appointment.linkedContactID.flatMap { contactStore?.contact(withId: $0) }
+                        ThisWeekAppointmentRow(
+                            appointment: appointment,
+                            linkedContact: linkedContact,
+                            onTap: { onAppointmentTap(appointment) },
+                            onCallContact: onCallContact,
+                            onOpenAddress: onOpenAddress
+                        )
                     }
                 }
             }
@@ -41,8 +63,37 @@ struct CalendarThisWeekSection: View {
     let appointments: [DogAppointment]
     let milestones: [Milestone]
     let birthDate: Date
+    let contactStore: ContactStore?
+    let vetContact: DogContact?
     let onAppointmentTap: (DogAppointment) -> Void
     let onMilestoneTap: (Milestone) -> Void
+    let onCallVet: ((String) -> Void)?
+    let onCallContact: ((String) -> Void)?
+    let onOpenAddress: ((String) -> Void)?
+
+    init(
+        appointments: [DogAppointment],
+        milestones: [Milestone],
+        birthDate: Date,
+        contactStore: ContactStore? = nil,
+        vetContact: DogContact? = nil,
+        onAppointmentTap: @escaping (DogAppointment) -> Void,
+        onMilestoneTap: @escaping (Milestone) -> Void,
+        onCallVet: ((String) -> Void)? = nil,
+        onCallContact: ((String) -> Void)? = nil,
+        onOpenAddress: ((String) -> Void)? = nil
+    ) {
+        self.appointments = appointments
+        self.milestones = milestones
+        self.birthDate = birthDate
+        self.contactStore = contactStore
+        self.vetContact = vetContact
+        self.onAppointmentTap = onAppointmentTap
+        self.onMilestoneTap = onMilestoneTap
+        self.onCallVet = onCallVet
+        self.onCallContact = onCallContact
+        self.onOpenAddress = onOpenAddress
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -56,19 +107,25 @@ struct CalendarThisWeekSection: View {
                 VStack(spacing: 8) {
                     // Appointments this week (excluding today)
                     ForEach(appointments.prefix(3)) { appointment in
-                        ThisWeekAppointmentRow(appointment: appointment) {
-                            onAppointmentTap(appointment)
-                        }
+                        let linkedContact = appointment.linkedContactID.flatMap { contactStore?.contact(withId: $0) }
+                        ThisWeekAppointmentRow(
+                            appointment: appointment,
+                            linkedContact: linkedContact,
+                            onTap: { onAppointmentTap(appointment) },
+                            onCallContact: onCallContact,
+                            onOpenAddress: onOpenAddress
+                        )
                     }
 
                     // Milestones this week
                     ForEach(milestones.prefix(3)) { milestone in
                         ThisWeekMilestoneRow(
                             milestone: milestone,
-                            birthDate: birthDate
-                        ) {
-                            onMilestoneTap(milestone)
-                        }
+                            birthDate: birthDate,
+                            vetContact: vetContact,
+                            onTap: { onMilestoneTap(milestone) },
+                            onCallVet: onCallVet
+                        )
                     }
                 }
             } else {
@@ -84,8 +141,34 @@ struct CalendarComingUpSection: View {
     let appointments: [DogAppointment]
     let milestones: [Milestone]
     let birthDate: Date
+    let contactStore: ContactStore?
+    let vetContact: DogContact?
     let onAppointmentTap: (DogAppointment) -> Void
     let onMilestoneTap: (Milestone) -> Void
+    let onCallVet: ((String) -> Void)?
+    let onCallContact: ((String) -> Void)?
+
+    init(
+        appointments: [DogAppointment],
+        milestones: [Milestone],
+        birthDate: Date,
+        contactStore: ContactStore? = nil,
+        vetContact: DogContact? = nil,
+        onAppointmentTap: @escaping (DogAppointment) -> Void,
+        onMilestoneTap: @escaping (Milestone) -> Void,
+        onCallVet: ((String) -> Void)? = nil,
+        onCallContact: ((String) -> Void)? = nil
+    ) {
+        self.appointments = appointments
+        self.milestones = milestones
+        self.birthDate = birthDate
+        self.contactStore = contactStore
+        self.vetContact = vetContact
+        self.onAppointmentTap = onAppointmentTap
+        self.onMilestoneTap = onMilestoneTap
+        self.onCallVet = onCallVet
+        self.onCallContact = onCallContact
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -99,19 +182,24 @@ struct CalendarComingUpSection: View {
                 if !appointments.isEmpty || !milestones.isEmpty {
                     // Appointments coming up
                     ForEach(appointments.prefix(3)) { appointment in
-                        ComingUpAppointmentRow(appointment: appointment) {
-                            onAppointmentTap(appointment)
-                        }
+                        let linkedContact = appointment.linkedContactID.flatMap { contactStore?.contact(withId: $0) }
+                        ComingUpAppointmentRow(
+                            appointment: appointment,
+                            linkedContact: linkedContact,
+                            onTap: { onAppointmentTap(appointment) },
+                            onCallContact: onCallContact
+                        )
                     }
 
                     // Milestones coming up
                     ForEach(milestones.prefix(3)) { milestone in
                         ComingUpMilestoneRow(
                             milestone: milestone,
-                            birthDate: birthDate
-                        ) {
-                            onMilestoneTap(milestone)
-                        }
+                            birthDate: birthDate,
+                            vetContact: vetContact,
+                            onTap: { onMilestoneTap(milestone) },
+                            onCallVet: onCallVet
+                        )
                     }
                 } else {
                     EmptyComingUpState()

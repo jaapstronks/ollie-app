@@ -16,6 +16,12 @@ struct PartnerActivitySummaryCard: View {
 
     @State private var isExpanded = false
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(ProfileStore.self) private var profileStore
+
+    /// Dog name for the header text
+    private var puppyName: String {
+        profileStore.profile?.name ?? ""
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -54,13 +60,25 @@ struct PartnerActivitySummaryCard: View {
 
     // MARK: - Header
 
+    /// Header text: "Sarah has been taking care of [dog]" or "Sarah and Mike have been taking care of [dog]" or "While you were away"
+    private var headerText: String {
+        if !puppyName.isEmpty && !summary.partnerDisplayName.isEmpty {
+            return Strings.Handoff.takingCareOf(
+                summary.partnerDisplayName,
+                dogName: puppyName,
+                partnerCount: summary.partnerCount
+            )
+        }
+        return Strings.Handoff.whileYouWereAway
+    }
+
     @ViewBuilder
     private var header: some View {
         HStack(spacing: 8) {
-            // Partner avatar(s)
+            // Partner avatar(s) - using actual CloudKit-based avatars
             partnerAvatars
 
-            Text(Strings.Handoff.whileYouWereAway)
+            Text(headerText)
                 .font(.subheadline)
                 .fontWeight(.semibold)
                 .foregroundStyle(.primary)
@@ -88,26 +106,17 @@ struct PartnerActivitySummaryCard: View {
 
     @ViewBuilder
     private var partnerAvatars: some View {
-        // Show partner initial in a colored circle
-        // In Phase 2, ParticipantResolver will provide actual partner info
+        // Use actual CloudKit-based avatars via UserAvatarFromRecordID
         HStack(spacing: -6) {
-            ForEach(summary.partnerNames.prefix(3), id: \.self) { name in
-                ZStack {
-                    Circle()
-                        .fill(Color.accentColor.opacity(0.2))
-                        .frame(width: 24, height: 24)
-
-                    Text(String(name.prefix(1)).uppercased())
-                        .font(.system(size: 10, weight: .semibold))
-                        .foregroundStyle(Color.accentColor)
-                }
-                .overlay(
-                    Circle()
-                        .strokeBorder(
-                            colorScheme == .dark ? Color.black : Color.white,
-                            lineWidth: 1.5
-                        )
-                )
+            ForEach(Array(summary.partnerRecordIDs.prefix(3).enumerated()), id: \.offset) { _, recordID in
+                UserAvatarFromRecordID(cloudKitRecordID: recordID, size: 28)
+                    .overlay(
+                        Circle()
+                            .strokeBorder(
+                                colorScheme == .dark ? Color.black : Color.white,
+                                lineWidth: 1.5
+                            )
+                    )
             }
         }
     }
@@ -219,7 +228,7 @@ struct PartnerActivitySummaryCard: View {
                 }
             }
 
-            // Collapse button
+            // Collapse button - with proper tap target
             Button {
                 withAnimation(.easeInOut(duration: 0.25)) {
                     isExpanded = false
@@ -228,12 +237,19 @@ struct PartnerActivitySummaryCard: View {
             } label: {
                 HStack {
                     Spacer()
-                    Text(Strings.Handoff.showLess)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+                    HStack(spacing: 4) {
+                        Image(systemName: "chevron.up")
+                            .font(.caption2)
+                        Text(Strings.Handoff.showLess)
+                            .font(.caption)
+                    }
+                    .foregroundStyle(.secondary)
                     Spacer()
                 }
+                .padding(.vertical, 8)
             }
+            .buttonStyle(.plain)
+            .contentShape(Rectangle())
         } else {
             // Expand button
             Button {
@@ -244,12 +260,18 @@ struct PartnerActivitySummaryCard: View {
             } label: {
                 HStack {
                     Spacer()
-                    Text(Strings.Handoff.moreEvents(remainingEventCount))
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+                    HStack(spacing: 4) {
+                        Text(Strings.Handoff.moreEvents(remainingEventCount))
+                            .font(.caption)
+                        Image(systemName: "chevron.down")
+                            .font(.caption2)
+                    }
+                    .foregroundStyle(.secondary)
                     Spacer()
                 }
+                .padding(.vertical, 8)
             }
+            .buttonStyle(.plain)
             .contentShape(Rectangle())
         }
     }

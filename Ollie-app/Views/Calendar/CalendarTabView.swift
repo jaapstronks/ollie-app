@@ -9,14 +9,14 @@ import OtisShared
 
 /// Main Schedule tab view displaying age header, appointments, milestones, and contacts
 struct CalendarTabView: View {
-    @ObservedObject var milestoneStore: MilestoneStore
-    @ObservedObject var appointmentStore: AppointmentStore
-    @ObservedObject var socializationStore: SocializationStore
-    @ObservedObject var contactStore: ContactStore
+    var milestoneStore: MilestoneStore
+    var appointmentStore: AppointmentStore
+    var socializationStore: SocializationStore
+    var contactStore: ContactStore
     let onSettingsTap: () -> Void
     let onNavigateToSocialization: () -> Void
 
-    @EnvironmentObject var profileStore: ProfileStore
+    @Environment(ProfileStore.self) var profileStore
     @StateObject private var achievementService = AchievementService.shared
 
     // View mode state with persistence - using new key to avoid migration issues
@@ -57,6 +57,7 @@ struct CalendarTabView: View {
                             appointmentStore: appointmentStore,
                             milestoneStore: milestoneStore,
                             socializationStore: socializationStore,
+                            contactStore: contactStore,
                             profile: profileStore.profile,
                             onAppointmentTap: { appointment in
                                 selectedAppointment = appointment
@@ -92,7 +93,8 @@ struct CalendarTabView: View {
                 DevelopmentJourneySheet(
                     onNavigateToSocialization: {
                         showDevelopmentJourney = false
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        Task { @MainActor in
+                            try? await Task.sleep(for: .seconds(0.3))
                             showSocializationWindow = true
                         }
                     },
@@ -107,18 +109,20 @@ struct CalendarTabView: View {
                 SocializationWindowSheet(
                     onNavigateToDevelopment: {
                         showSocializationWindow = false
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        Task { @MainActor in
+                            try? await Task.sleep(for: .seconds(0.3))
                             showDevelopmentJourney = true
                         }
                     },
                     onLogExposure: {
                         showSocializationWindow = false
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        Task { @MainActor in
+                            try? await Task.sleep(for: .seconds(0.3))
                             onNavigateToSocialization()
                         }
                     }
                 )
-                .environmentObject(socializationStore)
+                .environment(socializationStore)
                 .adaptivePresentationDetents(
                     compact: [.large],
                     regular: [.medium, .large]
@@ -130,7 +134,7 @@ struct CalendarTabView: View {
                         appointment: appointment,
                         appointmentStore: appointmentStore
                     )
-                    .environmentObject(contactStore)
+                    .environment(contactStore)
                 }
                 .adaptivePresentationDetents(
                     compact: [.large],
@@ -139,7 +143,7 @@ struct CalendarTabView: View {
             }
             .sheet(isPresented: $showAddAppointment) {
                 AddEditAppointmentSheet(appointmentStore: appointmentStore)
-                    .environmentObject(contactStore)
+                    .environment(contactStore)
                     .adaptivePresentationDetents(
                         compact: [.large],
                         regular: [.medium, .large]
@@ -149,12 +153,12 @@ struct CalendarTabView: View {
                 MilestoneCompletionSheet(
                     milestone: milestone,
                     onDismiss: { selectedMilestone = nil },
-                    onComplete: { notes, photoID, vetClinic, completionDate in
+                    onComplete: { notes, photoID, linkedContactID, completionDate in
                         milestoneStore.completeMilestone(
                             milestone,
                             notes: notes,
                             photoID: photoID,
-                            vetClinicName: vetClinic,
+                            linkedContactID: linkedContactID,
                             completionDate: completionDate
                         )
 
@@ -162,7 +166,8 @@ struct CalendarTabView: View {
                         if let achievement = achievementService.checkMilestoneCompletion(milestone: milestone) {
                             selectedMilestone = nil
                             // Delay celebration to allow sheet dismissal
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                            Task { @MainActor in
+                                try? await Task.sleep(for: .seconds(0.4))
                                 triggerCelebration(for: achievement)
                             }
                         } else {
@@ -170,6 +175,7 @@ struct CalendarTabView: View {
                         }
                     }
                 )
+                .environment(contactStore)
                 .adaptivePresentationDetents(
                     compact: [.large],
                     regular: [.medium, .large]
@@ -301,5 +307,5 @@ struct CalendarTabView: View {
         onSettingsTap: { print("Settings tapped") },
         onNavigateToSocialization: { print("Navigate to socialization") }
     )
-    .environmentObject(profileStore)
+    .environment(profileStore)
 }

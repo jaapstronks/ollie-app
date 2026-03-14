@@ -66,12 +66,12 @@ struct WalkTargetNudgeCard: View {
                     Text(Strings.WalkNudge.keepTarget)
                         .font(.subheadline)
                         .fontWeight(.medium)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(.primary)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 10)
                         .background(
                             RoundedRectangle(cornerRadius: 10, style: .continuous)
-                                .fill(Color.secondary.opacity(colorScheme == .dark ? 0.15 : 0.1))
+                                .fill(Color(.secondarySystemFill))
                         )
                 }
 

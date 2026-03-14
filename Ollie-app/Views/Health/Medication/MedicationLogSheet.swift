@@ -10,8 +10,8 @@ import OtisShared
 
 /// Sheet for selecting and logging a medication
 struct MedicationLogSheet: View {
-    @ObservedObject var profileStore: ProfileStore
-    @ObservedObject var medicationStore: MedicationStore
+    var profileStore: ProfileStore
+    var medicationStore: MedicationStore
     let onComplete: (Medication) -> Void
     let onCancel: () -> Void
 

@@ -14,8 +14,8 @@ struct GrowthDetailSheet: View {
     let puppyName: String
     @Binding var showWeightSheet: Bool
 
-    @EnvironmentObject var weightStore: WeightStore
-    @EnvironmentObject var profileStore: ProfileStore
+    @Environment(WeightStore.self) var weightStore
+    @Environment(ProfileStore.self) var profileStore
 
     @Environment(\.dismiss) private var dismiss
     @Environment(\.colorScheme) private var colorScheme
@@ -337,8 +337,8 @@ struct GrowthDetailSheet: View {
         puppyName: "Max",
         showWeightSheet: .constant(false)
     )
-    .environmentObject(WeightStore())
-    .environmentObject(ProfileStore())
+    .environment(WeightStore())
+    .environment(ProfileStore())
 }
 
 #Preview("Empty") {
@@ -347,6 +347,6 @@ struct GrowthDetailSheet: View {
         puppyName: "Max",
         showWeightSheet: .constant(false)
     )
-    .environmentObject(WeightStore())
-    .environmentObject(ProfileStore())
+    .environment(WeightStore())
+    .environment(ProfileStore())
 }

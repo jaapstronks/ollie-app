@@ -10,8 +10,8 @@ import OtisShared
 
 /// Card displaying AI-powered health and wellness insights.
 struct AIHealthInsightsCard: View {
-    @EnvironmentObject var profileStore: ProfileStore
-    @EnvironmentObject var eventStore: EventStore
+    @Environment(ProfileStore.self) var profileStore
+    @Environment(EventStore.self) var eventStore
 
     @State private var insights: HealthInsightsResponse?
     @State private var isLoading = false
@@ -99,7 +99,8 @@ struct AIHealthInsightsCard: View {
         defer { isLoading = false }
 
         // Health insights need 30 days of history for weight trends and patterns
-        let recentEvents = eventStore.getEvents(from: Date.daysAgo(30), to: Date())
+        // PERFORMANCE: Use async version to avoid blocking main thread
+        let recentEvents = await eventStore.getEventsAsync(from: Date.daysAgo(30), to: Date())
 
         let result = await AI.requestHealthInsights(
             profile: profile,
@@ -126,7 +127,7 @@ struct AIHealthInsightsCard: View {
 
 #Preview {
     AIHealthInsightsCard()
-        .environmentObject(ProfileStore())
-        .environmentObject(EventStore())
+        .environment(ProfileStore())
+        .environment(EventStore())
         .padding()
 }

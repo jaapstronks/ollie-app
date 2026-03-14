@@ -10,7 +10,7 @@ import CoreLocation
 
 /// Sheet for picking a saved spot or capturing current location
 struct SpotPickerSheet: View {
-    @ObservedObject var spotStore: SpotStore
+    var spotStore: SpotStore
     @ObservedObject var locationManager: LocationManager
     let onSelect: (WalkSpot) -> Void
     let onCancel: () -> Void

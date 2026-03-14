@@ -123,13 +123,7 @@ struct VetVisitTipsSheet: View {
                     // High priority badge
                     let highPriorityCount = tips.filter { $0.priority == .high }.count
                     if highPriorityCount > 0 {
-                        Text("\(highPriorityCount)")
-                            .font(.caption.weight(.bold))
-                            .foregroundStyle(.white)
-                            .padding(.horizontal, 8)
-                            .padding(.vertical, 2)
-                            .background(Color.otisDanger)
-                            .clipShape(Capsule())
+                        CapsuleBadge("\(highPriorityCount)", color: .otisDanger, style: .filled)
                     }
 
                     Image(systemName: expandedCategories.contains(category) ? "chevron.up" : "chevron.down")

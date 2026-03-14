@@ -19,9 +19,18 @@ struct RecentActivityPreview: View {
     @ObservedObject private var userIdentityStore = UserIdentityStore.shared
     @ObservedObject private var participantResolver = ParticipantResolver.shared
 
-    /// Filter events to show recent activity
-    /// Shows events from the last 3 hours OR most recent 5, whichever is more
+    /// PERF: Cached recent events to avoid recomputation on every access
+    @State private var cachedRecentEvents: [PuppyEvent] = []
+    /// PERF: Cached event groups to avoid recomputation on every access
+    @State private var cachedEventGroups: [EventGroup] = []
+
+    /// Filter events to show recent activity - returns cached value
     private var recentEvents: [PuppyEvent] {
+        cachedRecentEvents
+    }
+
+    /// Computes recent events - called when events change
+    private func computeRecentEvents() -> [PuppyEvent] {
         let now = Date()
         let threeHoursAgo = now.addingTimeInterval(-3 * 60 * 60)
 
@@ -42,10 +51,15 @@ struct RecentActivityPreview: View {
     /// Represents a group of events logged by the same person
     @MainActor
     private struct EventGroup: Identifiable {
-        let id = UUID()
         let events: [PuppyEvent]
         let loggedByRecordID: String?
         let isPartner: Bool  // true if logged by someone other than current user
+
+        var id: String {
+            let loggerPart = loggedByRecordID ?? "unknown"
+            let firstEventId = events.first?.id.uuidString ?? "empty"
+            return "\(loggerPart)-\(firstEventId)"
+        }
 
         var partnerName: String? {
             guard isPartner, let recordID = loggedByRecordID else { return nil }
@@ -53,15 +67,20 @@ struct RecentActivityPreview: View {
         }
     }
 
-    /// Group consecutive events by the same logger
+    /// Group consecutive events by the same logger - returns cached value
     private var eventGroups: [EventGroup] {
-        guard !recentEvents.isEmpty else { return [] }
+        cachedEventGroups
+    }
+
+    /// Computes event groups - called when recent events change
+    private func computeEventGroups(from recent: [PuppyEvent]) -> [EventGroup] {
+        guard !recent.isEmpty else { return [] }
 
         var groups: [EventGroup] = []
         var currentGroupEvents: [PuppyEvent] = []
         var currentLoggedBy: String?
 
-        for event in recentEvents {
+        for event in recent {
             let eventLoggedBy = event.loggedBy
 
             // Check if this event belongs to the same group
@@ -96,6 +115,13 @@ struct RecentActivityPreview: View {
         }
 
         return groups
+    }
+
+    /// Updates all cached values - called on appear and when events change
+    private func updateCache() {
+        let recent = computeRecentEvents()
+        cachedRecentEvents = recent
+        cachedEventGroups = computeEventGroups(from: recent)
     }
 
     var body: some View {
@@ -193,6 +219,12 @@ struct RecentActivityPreview: View {
                 RoundedRectangle(cornerRadius: 12)
                     .strokeBorder(borderColor, lineWidth: 0.5)
             )
+        }
+        .onAppear {
+            updateCache()
+        }
+        .onChange(of: events) { _, _ in
+            updateCache()
         }
     }
 

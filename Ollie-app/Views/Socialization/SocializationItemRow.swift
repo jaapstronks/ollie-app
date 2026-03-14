@@ -10,7 +10,7 @@ import OtisShared
 /// Row displaying a socialization item with progress bar and last exposure info
 struct SocializationItemRow: View {
     let item: SocializationItem
-    @EnvironmentObject var socializationStore: SocializationStore
+    @Environment(SocializationStore.self) var socializationStore
 
     @Environment(\.colorScheme) private var colorScheme
 
@@ -165,8 +165,8 @@ struct SocializationItemRow: View {
         isWalkable: true
     )
 
-    return List {
+    List {
         SocializationItemRow(item: item)
-            .environmentObject(store)
+            .environment(store)
     }
 }

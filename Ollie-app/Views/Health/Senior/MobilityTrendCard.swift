@@ -10,7 +10,7 @@ import SwiftUI
 import OtisShared
 
 struct MobilityTrendCard: View {
-    @EnvironmentObject private var profileStore: ProfileStore
+    @Environment(ProfileStore.self) private var profileStore
     @StateObject private var wellnessStore = SeniorWellnessStore.shared
 
     let onLogTap: () -> Void
@@ -207,6 +207,6 @@ private extension MobilityAssessment {
         onLogTap: {},
         onViewHistoryTap: {}
     )
-    .environmentObject(ProfileStore.shared)
+    .environment(ProfileStore.shared)
     .padding()
 }

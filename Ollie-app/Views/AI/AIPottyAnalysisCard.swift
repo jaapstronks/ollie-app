@@ -10,8 +10,8 @@ import OtisShared
 
 /// Card displaying AI-powered potty training analysis.
 struct AIPottyAnalysisCard: View {
-    @EnvironmentObject var profileStore: ProfileStore
-    @EnvironmentObject var eventStore: EventStore
+    @Environment(ProfileStore.self) var profileStore
+    @Environment(EventStore.self) var eventStore
 
     /// Optional pre-calculated stats to pass to AI
     var prediction: PottyPrediction?
@@ -105,7 +105,8 @@ struct AIPottyAnalysisCard: View {
         defer { isLoading = false }
 
         // Potty analysis needs 14 days of history for gap patterns and streaks
-        let recentEvents = eventStore.getEvents(from: Date.daysAgo(14), to: Date())
+        // PERFORMANCE: Use async version to avoid blocking main thread
+        let recentEvents = await eventStore.getEventsAsync(from: Date.daysAgo(14), to: Date())
 
         let result = await AI.requestPottyAnalysis(
             profile: profile,
@@ -139,13 +140,9 @@ struct AIPottyAnalysisCard: View {
 
 // MARK: - Preview
 
-#if DEBUG
-struct AIPottyAnalysisCard_Previews: PreviewProvider {
-    static var previews: some View {
-        AIPottyAnalysisCard()
-            .environmentObject(ProfileStore())
-            .environmentObject(EventStore())
-            .padding()
-    }
+#Preview {
+    AIPottyAnalysisCard()
+        .environment(ProfileStore())
+        .environment(EventStore())
+        .padding()
 }
-#endif

@@ -43,7 +43,7 @@ struct MomentsViewModeToggle: View {
                     .tag(viewMode)
             }
         } label: {
-            Text("View Mode")
+            Text(Strings.MomentsGallery.viewMode)
         }
         .pickerStyle(.segmented)
         .accessibilityLabel("Moments view mode")

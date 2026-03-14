@@ -12,7 +12,7 @@ import OtisShared
 /// Full statistics view with all metrics
 /// Uses liquid glass card styling throughout
 struct StatsView: View {
-    @ObservedObject var viewModel: TimelineViewModel
+    @Bindable var viewModel: TimelineViewModel
     @StateObject private var contributionViewModel: ContributionStatsViewModel
 
     init(viewModel: TimelineViewModel) {
@@ -87,8 +87,10 @@ struct StatsView: View {
         viewModel.events
     }
 
+    /// Use cached recent events from TimelineViewModel to avoid synchronous Core Data fetch
+    /// PERFORMANCE: cachedRecentEvents is pre-computed asynchronously
     private var recentEvents: [PuppyEvent] {
-        viewModel.eventStore.getEvents(from: Date.daysAgo(7), to: Date())
+        viewModel.cachedRecentEvents
     }
 }
 

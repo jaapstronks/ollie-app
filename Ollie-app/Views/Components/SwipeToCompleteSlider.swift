@@ -235,7 +235,8 @@ struct SwipeToCompleteSlider: View {
         }
 
         // Call completion quickly
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+        Task { @MainActor in
+            try? await Task.sleep(for: .seconds(0.15))
             onComplete()
         }
     }
@@ -244,7 +245,7 @@ struct SwipeToCompleteSlider: View {
 // MARK: - Strings Extension
 
 extension Strings.Common {
-    static let doubleTapHint = String(localized: "Double-tap to complete")
+    static let doubleTapHint = String(localized: "Double-tap to complete", table: "Common")
 }
 
 // MARK: - Preview

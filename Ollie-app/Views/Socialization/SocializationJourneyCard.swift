@@ -9,8 +9,8 @@ import OtisShared
 
 /// Action-focused card for logging socialization exposures from Train tab
 struct SocializationJourneyCard: View {
-    @EnvironmentObject var socializationStore: SocializationStore
-    @EnvironmentObject var profileStore: ProfileStore
+    @Environment(SocializationStore.self) var socializationStore
+    @Environment(ProfileStore.self) var profileStore
 
     @Environment(\.colorScheme) private var colorScheme
 
@@ -264,7 +264,7 @@ struct SocializationJourneyCard: View {
 
 #Preview("Settling In") {
     SocializationJourneyCard()
-        .environmentObject(SocializationStore())
-        .environmentObject(ProfileStore())
+        .environment(SocializationStore())
+        .environment(ProfileStore())
         .padding()
 }

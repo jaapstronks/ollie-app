@@ -15,8 +15,8 @@ struct MomentsLightbox: View {
     var onDismiss: () -> Void
     var onDelete: (PuppyEvent) -> Void
 
-    @EnvironmentObject private var eventStore: EventStore
-    @EnvironmentObject private var profileStore: ProfileStore
+    @Environment(EventStore.self) private var eventStore
+    @Environment(ProfileStore.self) private var profileStore
     @State private var localEvents: [PuppyEvent]
     @State private var showShareSheet = false
     @State private var showDeleteConfirmation = false
@@ -343,13 +343,33 @@ private struct PhotoCard: View {
 
     private var isZoomed: Bool { scale > 1.0 }
 
-    // Card sizing - leave room for top bar, bottom card, and padding
-    private var cardWidth: CGFloat {
+    // Available space for the image (with padding)
+    private var availableWidth: CGFloat {
         geometry.size.width - 32
     }
 
-    private var cardHeight: CGFloat {
-        geometry.size.height - 280
+    // Leave room for: top bar (~56), bottom card (~180), padding (~24)
+    // Use proportional sizing that works across different screen sizes
+    private var availableHeight: CGFloat {
+        max(geometry.size.height - 260, geometry.size.height * 0.55)
+    }
+
+    // Calculate optimal frame size based on actual image aspect ratio
+    private func imageFrame(for image: UIImage) -> CGSize {
+        let imageAspect = image.size.width / image.size.height
+
+        // Calculate both possible sizes (constrained by width vs height)
+        let widthConstrainedHeight = availableWidth / imageAspect
+        let heightConstrainedWidth = availableHeight * imageAspect
+
+        // Choose the size that fits within both constraints
+        if widthConstrainedHeight <= availableHeight {
+            // Image fits when constrained by width
+            return CGSize(width: availableWidth, height: widthConstrainedHeight)
+        } else {
+            // Image fits when constrained by height
+            return CGSize(width: heightConstrainedWidth, height: availableHeight)
+        }
     }
 
     var body: some View {
@@ -357,11 +377,14 @@ private struct PhotoCard: View {
             Spacer()
 
             if let uiImage = loadedImage {
+                let frameSize = imageFrame(for: uiImage)
+
                 // Photo with elegant card presentation
                 Image(uiImage: uiImage)
                     .resizable()
-                    .scaledToFit()
-                    .frame(maxWidth: cardWidth, maxHeight: cardHeight)
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: frameSize.width, height: frameSize.height)
+                    .clipped()
                     .scaleEffect(scale)
                     .offset(offset)
                     .clipShape(RoundedRectangle(cornerRadius: 20))
@@ -412,10 +435,11 @@ private struct PhotoCard: View {
                     }
                     .accessibilityLabel(Strings.MediaPreview.photoOf(event.type.label))
             } else {
-                // Loading placeholder
+                // Loading placeholder - use a reasonable default aspect ratio
+                let placeholderHeight = min(availableHeight, availableWidth * 1.33)
                 RoundedRectangle(cornerRadius: 20)
                     .fill(.ultraThinMaterial)
-                    .frame(width: cardWidth, height: cardHeight)
+                    .frame(width: availableWidth, height: placeholderHeight)
                     .overlay(
                         ProgressView()
                             .tint(.white)
@@ -589,8 +613,8 @@ struct MomentsLightboxWrapper: View {
                 onDismiss: { print("Dismiss") },
                 onDelete: { event in print("Delete \(event.id)") }
             )
-            .environmentObject(EventStore())
-            .environmentObject(ProfileStore.shared)
+            .environment(EventStore())
+            .environment(ProfileStore.shared)
         }
     }
 

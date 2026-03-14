@@ -15,7 +15,7 @@ struct AllEventsSheet: View {
     let onSelectGrooming: () -> Void
     let onCancel: () -> Void
 
-    @EnvironmentObject private var routineStore: RoutineStore
+    @Environment(RoutineStore.self) private var routineStore
     @Environment(\.colorScheme) private var colorScheme
 
     /// Whether any grooming activity is overdue
@@ -442,5 +442,5 @@ struct CareTypeButton: View {
         },
         onCancel: {}
     )
-    .environmentObject(RoutineStore())
+    .environment(RoutineStore())
 }

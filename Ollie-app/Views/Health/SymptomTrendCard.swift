@@ -67,16 +67,7 @@ struct SymptomTrendCard: View {
 
                     FlowLayout(spacing: 6) {
                         ForEach(topTriggers, id: \.trigger) { trigger, count in
-                            HStack(spacing: 4) {
-                                Text(trigger)
-                                Text("(\(count)x)")
-                                    .foregroundStyle(.secondary)
-                            }
-                            .font(.caption)
-                            .padding(.horizontal, 10)
-                            .padding(.vertical, 5)
-                            .background(Color(.tertiarySystemBackground))
-                            .clipShape(Capsule())
+                            CapsuleBadge("\(trigger) (\(count)x)")
                         }
                     }
                 }
@@ -113,17 +104,7 @@ private struct TrendBadge: View {
     let trend: SymptomTrend
 
     var body: some View {
-        HStack(spacing: 4) {
-            Image(systemName: trend.icon)
-            Text(trend.label)
-        }
-        .font(.caption)
-        .fontWeight(.medium)
-        .foregroundStyle(trendColor)
-        .padding(.horizontal, 10)
-        .padding(.vertical, 6)
-        .background(trendColor.opacity(0.15))
-        .clipShape(Capsule())
+        CapsuleBadge(trend.label, icon: trend.icon, color: trendColor, style: .tinted)
     }
 
     private var trendColor: Color {

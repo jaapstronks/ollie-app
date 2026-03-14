@@ -19,9 +19,9 @@ extension HealthView {
             SectionHeader(title: Strings.VetVisit.Calendar.title, icon: "calendar", tint: .otisAccent) {
                 NavigationLink {
                     HealthCalendarView()
-                        .environmentObject(appointmentStore)
-                        .environmentObject(milestoneStore)
-                        .environmentObject(viewModel.profileStore)
+                        .environment(appointmentStore)
+                        .environment(milestoneStore)
+                        .environment(viewModel.profileStore)
                 } label: {
                     HStack(spacing: 4) {
                         Text(Strings.Common.seeAll)
@@ -40,9 +40,9 @@ extension HealthView {
         .sheet(isPresented: $showHealthCalendar) {
             NavigationStack {
                 HealthCalendarView()
-                    .environmentObject(appointmentStore)
-                    .environmentObject(milestoneStore)
-                    .environmentObject(viewModel.profileStore)
+                    .environment(appointmentStore)
+                    .environment(milestoneStore)
+                    .environment(viewModel.profileStore)
             }
         }
     }

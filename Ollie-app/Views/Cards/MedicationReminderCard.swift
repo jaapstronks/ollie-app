@@ -169,7 +169,8 @@ struct MedicationReminderCard: View {
         }
 
         // Animate card out after brief pause
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+        Task { @MainActor in
+            try? await Task.sleep(for: .seconds(0.6))
             withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
                 cardScale = 0.9
                 cardOpacity = 0
@@ -177,9 +178,8 @@ struct MedicationReminderCard: View {
             }
 
             // Notify parent to log event
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                onComplete(medication.name)
-            }
+            try? await Task.sleep(for: .seconds(0.2))
+            onComplete(medication.name)
         }
     }
 
@@ -200,7 +200,7 @@ struct MedicationReminderCard: View {
 // MARK: - Strings Extension
 
 extension Strings.Medications {
-    static let completed = String(localized: "Done! Added to timeline")
+    static let completed = String(localized: "Done! Added to timeline", table: "Medications")
 }
 
 // MARK: - Preview

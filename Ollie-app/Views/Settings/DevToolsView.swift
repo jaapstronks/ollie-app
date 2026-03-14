@@ -12,8 +12,8 @@ import OtisShared
 
 /// Developer tools screen with debug settings, AI testing, and data management
 struct DevToolsView: View {
-    @EnvironmentObject var profileStore: ProfileStore
-    @EnvironmentObject var eventStore: EventStore
+    @Environment(ProfileStore.self) var profileStore
+    @Environment(EventStore.self) var eventStore
 
     // Celebration debug settings
     @AppStorage(UserPreferences.Key.forceCelebrateEveryLog.rawValue) private var forceCelebrateEveryLog = false
@@ -80,8 +80,8 @@ struct DevToolsView: View {
 #Preview {
     NavigationStack {
         DevToolsView()
-            .environmentObject(ProfileStore())
-            .environmentObject(EventStore())
+            .environment(ProfileStore())
+            .environment(EventStore())
     }
 }
 

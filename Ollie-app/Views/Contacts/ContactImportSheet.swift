@@ -27,7 +27,7 @@ struct ImportedContactData {
 
 /// Sheet for importing a contact from the iOS Address Book
 struct ContactImportSheet: View {
-    @ObservedObject var contactStore: ContactStore
+    var contactStore: ContactStore
     @Environment(\.dismiss) private var dismiss
 
     @State private var showingContactPicker = false

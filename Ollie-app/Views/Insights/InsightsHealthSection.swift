@@ -12,7 +12,7 @@ import OtisShared
 struct InsightsHealthSection: View {
     let latestWeight: (weight: Double, date: Date)?
     let weightDelta: (delta: Double, previousDate: Date)?
-    @ObservedObject var viewModel: TimelineViewModel
+    @Bindable var viewModel: TimelineViewModel
     @Binding var showWeightSheet: Bool
 
     @EnvironmentObject var unitPreferences: UnitPreferences

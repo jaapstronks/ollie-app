@@ -13,7 +13,7 @@ struct QualityOfLifeSheet: View {
     let onSave: (QualityOfLifeAssessment) -> Void
 
     @Environment(\.dismiss) private var dismiss
-    @EnvironmentObject private var profileStore: ProfileStore
+    @Environment(ProfileStore.self) private var profileStore
 
     @State private var scores: [QoLCategory: Int] = [:]
     @State private var note: String = ""
@@ -232,5 +232,5 @@ struct QualityOfLifeSheet: View {
     QualityOfLifeSheet { assessment in
         print("Saved: \(assessment)")
     }
-    .environmentObject(ProfileStore.shared)
+    .environment(ProfileStore.shared)
 }

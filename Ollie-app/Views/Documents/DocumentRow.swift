@@ -10,7 +10,7 @@ import OtisShared
 /// Row view for displaying a document in a list
 struct DocumentRow: View {
     let document: Document
-    @ObservedObject var documentStore: DocumentStore
+    var documentStore: DocumentStore
 
     private let thumbnailSize: CGFloat = 60
 

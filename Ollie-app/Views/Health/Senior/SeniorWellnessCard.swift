@@ -10,7 +10,7 @@ import SwiftUI
 import OtisShared
 
 struct SeniorWellnessCard: View {
-    @EnvironmentObject private var profileStore: ProfileStore
+    @Environment(ProfileStore.self) private var profileStore
     @StateObject private var wellnessStore = SeniorWellnessStore.shared
 
     let onMobilityTap: () -> Void
@@ -20,6 +20,10 @@ struct SeniorWellnessCard: View {
 
     private var puppyName: String {
         profileStore.activeProfile?.name ?? "Your dog"
+    }
+
+    private var activeConditions: [HealthCondition] {
+        profileStore.activeProfile?.healthConditions.filter { $0.status == .active } ?? []
     }
 
     var body: some View {
@@ -68,7 +72,7 @@ struct SeniorWellnessCard: View {
             }
 
             // Breathing rate (if heart condition)
-            if wellnessStore.shouldShowRRRTracking {
+            if wellnessStore.shouldShowRRRTracking(activeConditions: activeConditions) {
                 Divider()
 
                 HStack {
@@ -91,14 +95,10 @@ struct SeniorWellnessCard: View {
 
                     Spacer()
 
-                    Button("Log", action: onRRRTap)
-                        .font(.caption)
-                        .fontWeight(.medium)
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 6)
-                        .background(Color.blue.opacity(0.1))
-                        .foregroundStyle(.blue)
-                        .clipShape(Capsule())
+                    Button(action: onRRRTap) {
+                        CapsuleBadge("Log", color: .blue, style: .tinted)
+                    }
+                    .buttonStyle(.plain)
                 }
             }
 
@@ -206,6 +206,6 @@ private struct QuickStatusTile: View {
         onQoLTap: {},
         onRRRTap: {}
     )
-    .environmentObject(ProfileStore.shared)
+    .environment(ProfileStore.shared)
     .padding()
 }

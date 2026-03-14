@@ -11,6 +11,7 @@ import OtisShared
 /// Welcome step - first step of onboarding with brand messaging
 struct OnboardingWelcomeStep: View {
     let onNext: () -> Void
+    var onJoinExisting: (() -> Void)? = nil
 
     @State private var hasAppeared = false
 
@@ -53,7 +54,7 @@ struct OnboardingWelcomeStep: View {
             Spacer()
                 .frame(height: 40)
 
-            // Two personas
+            // Personas
             VStack(spacing: 12) {
                 PersonaCard(
                     icon: "book.fill",
@@ -70,6 +71,23 @@ struct OnboardingWelcomeStep: View {
                 )
                 .opacity(hasAppeared ? 1.0 : 0.0)
                 .offset(y: hasAppeared ? 0 : 20)
+
+                // Third option: Join existing profile (for family members)
+                if onJoinExisting != nil {
+                    Button {
+                        onJoinExisting?()
+                    } label: {
+                        PersonaCard(
+                            icon: "person.2.fill",
+                            title: Strings.Onboarding.joiningTitle,
+                            subtitle: Strings.Onboarding.joiningSubtitle,
+                            isInteractive: true
+                        )
+                    }
+                    .buttonStyle(.plain)
+                    .opacity(hasAppeared ? 1.0 : 0.0)
+                    .offset(y: hasAppeared ? 0 : 20)
+                }
             }
 
             Spacer()
@@ -103,6 +121,7 @@ private struct PersonaCard: View {
     let icon: String
     let title: String
     let subtitle: String
+    var isInteractive: Bool = false
 
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
@@ -121,6 +140,12 @@ private struct PersonaCard: View {
             }
 
             Spacer()
+
+            if isInteractive {
+                Image(systemName: "chevron.right")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            }
         }
         .padding()
         .background(Color(.secondarySystemBackground))
@@ -129,7 +154,8 @@ private struct PersonaCard: View {
 }
 
 #Preview {
-    OnboardingWelcomeStep {
-        print("Next tapped")
-    }
+    OnboardingWelcomeStep(
+        onNext: { print("Next tapped") },
+        onJoinExisting: { print("Join existing tapped") }
+    )
 }

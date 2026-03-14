@@ -12,9 +12,9 @@ import OtisShared
 
 /// Settings screen for all app-related configuration
 struct AppSettingsView: View {
-    @ObservedObject var profileStore: ProfileStore
+    var profileStore: ProfileStore
     @ObservedObject var dataImporter: DataImporter
-    @ObservedObject var eventStore: EventStore
+    var eventStore: EventStore
     @ObservedObject var cloudKit = CloudKitService.shared
     @ObservedObject var userIdentityStore = UserIdentityStore.shared
     var onTriggerTour: (() -> Void)? = nil
@@ -127,7 +127,7 @@ struct AppSettingsView: View {
             // Beta feedback section (visible in debug and TestFlight)
             if AppEnvironment.current.isBeta {
                 BetaFeedbackSection()
-                    .environmentObject(profileStore)
+                    .environment(profileStore)
             }
         }
         .navigationTitle(Strings.Settings.appSettings)

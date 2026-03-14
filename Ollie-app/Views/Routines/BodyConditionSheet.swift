@@ -11,7 +11,7 @@ import OtisShared
 /// Sheet for recording body condition score
 struct BodyConditionSheet: View {
     @Environment(\.dismiss) private var dismiss
-    @EnvironmentObject private var routineStore: RoutineStore
+    @Environment(RoutineStore.self) private var routineStore
 
     @State private var selectedScore: Int = 5
     @State private var note: String = ""
@@ -238,5 +238,5 @@ struct BodyConditionSheet: View {
 
 #Preview {
     BodyConditionSheet()
-        .environmentObject(RoutineStore())
+        .environment(RoutineStore())
 }

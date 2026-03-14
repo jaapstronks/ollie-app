@@ -2,102 +2,30 @@
 //  MemberAttributionView.swift
 //  Ollie-app
 //
-//  Components for displaying training session attribution to household members.
-//  Shows who trained what, contribution stats, and session history.
+//  Components for displaying training session attribution.
+//  Uses CloudKit-based identity (UserIdentityStore) and ParticipantResolver for names.
 //
 
 import SwiftUI
 import OtisShared
 
-// MARK: - Member Avatar
-
-/// Small avatar for household member display
-struct MemberAvatar: View {
-    let member: HouseholdMember?
-    let size: AvatarSize
-
-    @Environment(\.colorScheme) private var colorScheme
-
-    enum AvatarSize {
-        case small   // 24pt - inline use
-        case medium  // 32pt - list items
-        case large   // 44pt - headers
-
-        var dimension: CGFloat {
-            switch self {
-            case .small: return 24
-            case .medium: return 32
-            case .large: return 44
-            }
-        }
-
-        var fontSize: CGFloat {
-            switch self {
-            case .small: return 11
-            case .medium: return 14
-            case .large: return 18
-            }
-        }
-    }
-
-    var body: some View {
-        if let member = member {
-            memberAvatar(member)
-        } else {
-            unknownAvatar
-        }
-    }
-
-    @ViewBuilder
-    private func memberAvatar(_ member: HouseholdMember) -> some View {
-        if let avatarData = member.avatarData,
-           let uiImage = UIImage(data: avatarData) {
-            Image(uiImage: uiImage)
-                .resizable()
-                .scaledToFill()
-                .frame(width: size.dimension, height: size.dimension)
-                .clipShape(Circle())
-        } else {
-            Text(member.initial)
-                .font(.system(size: size.fontSize, weight: .semibold))
-                .foregroundStyle(.white)
-                .frame(width: size.dimension, height: size.dimension)
-                .background(memberColor(member))
-                .clipShape(Circle())
-        }
-    }
-
-    private var unknownAvatar: some View {
-        Image(systemName: "person.fill")
-            .font(.system(size: size.fontSize))
-            .foregroundStyle(.secondary)
-            .frame(width: size.dimension, height: size.dimension)
-            .background(Color.secondary.opacity(0.2))
-            .clipShape(Circle())
-    }
-
-    private func memberColor(_ member: HouseholdMember) -> Color {
-        Color(hex: member.colorHex)
-    }
-}
-
 // MARK: - Training Contribution Card
 
-/// Shows training contributions by household member
+/// Shows training contributions by user (using CloudKit record IDs)
 struct TrainingContributionCard: View {
-    let sessionsByMember: [String: Int]
-    let householdMembers: [HouseholdMember]
+    /// Session counts keyed by CloudKit record ID
+    let sessionsByRecordID: [String: Int]
     let totalSessions: Int
 
     @Environment(\.colorScheme) private var colorScheme
 
-    private var sortedContributions: [(member: HouseholdMember?, count: Int, percentage: Double)] {
-        var contributions: [(member: HouseholdMember?, count: Int, percentage: Double)] = []
+    private var sortedContributions: [(recordID: String, count: Int, percentage: Double, isCurrentUser: Bool)] {
+        var contributions: [(recordID: String, count: Int, percentage: Double, isCurrentUser: Bool)] = []
 
-        for (memberId, count) in sessionsByMember.sorted(by: { $0.value > $1.value }) {
-            let member = householdMembers.first { $0.id.uuidString == memberId }
+        for (recordID, count) in sessionsByRecordID.sorted(by: { $0.value > $1.value }) {
             let percentage = totalSessions > 0 ? Double(count) / Double(totalSessions) : 0
-            contributions.append((member, count, percentage))
+            let isCurrentUser = UserIdentityStore.shared.isCurrentUser(recordID)
+            contributions.append((recordID, count, percentage, isCurrentUser))
         }
 
         return contributions
@@ -119,7 +47,7 @@ struct TrainingContributionCard: View {
             }
 
             // Contribution bars
-            ForEach(sortedContributions, id: \.member?.id) { contribution in
+            ForEach(sortedContributions, id: \.recordID) { contribution in
                 contributionRow(contribution)
             }
         }
@@ -131,13 +59,13 @@ struct TrainingContributionCard: View {
     }
 
     @ViewBuilder
-    private func contributionRow(_ contribution: (member: HouseholdMember?, count: Int, percentage: Double)) -> some View {
+    private func contributionRow(_ contribution: (recordID: String, count: Int, percentage: Double, isCurrentUser: Bool)) -> some View {
         HStack(spacing: 10) {
-            MemberAvatar(member: contribution.member, size: .small)
+            UserAvatarFromRecordID(cloudKitRecordID: contribution.recordID, size: 24)
 
             VStack(alignment: .leading, spacing: 4) {
                 HStack {
-                    Text(contribution.member?.name ?? Strings.Common.unknown)
+                    Text(displayName(for: contribution))
                         .font(.caption)
                         .fontWeight(.medium)
                     Spacer()
@@ -155,7 +83,7 @@ struct TrainingContributionCard: View {
                             .frame(height: 6)
 
                         Capsule()
-                            .fill(memberColor(contribution.member))
+                            .fill(contribution.isCurrentUser ? Color.accentColor : Color.secondary)
                             .frame(width: geo.size.width * contribution.percentage, height: 6)
                     }
                 }
@@ -164,9 +92,11 @@ struct TrainingContributionCard: View {
         }
     }
 
-    private func memberColor(_ member: HouseholdMember?) -> Color {
-        guard let member = member else { return Color.secondary }
-        return Color(hex: member.colorHex)
+    private func displayName(for contribution: (recordID: String, count: Int, percentage: Double, isCurrentUser: Bool)) -> String {
+        if contribution.isCurrentUser {
+            return UserIdentityStore.shared.currentIdentity?.name ?? Strings.UserProfile.me
+        }
+        return ParticipantResolver.shared.resolve(cloudKitRecordID: contribution.recordID).displayName
     }
 }
 
@@ -174,24 +104,37 @@ struct TrainingContributionCard: View {
 
 /// Inline label showing who logged a training session
 struct SessionAttributionLabel: View {
-    let member: HouseholdMember?
+    let cloudKitRecordID: String?
     let timestamp: Date
     let showName: Bool
 
     @Environment(\.colorScheme) private var colorScheme
 
-    init(member: HouseholdMember?, timestamp: Date, showName: Bool = true) {
-        self.member = member
+    init(cloudKitRecordID: String?, timestamp: Date, showName: Bool = true) {
+        self.cloudKitRecordID = cloudKitRecordID
         self.timestamp = timestamp
         self.showName = showName
     }
 
+    private var isCurrentUser: Bool {
+        guard let recordID = cloudKitRecordID else { return false }
+        return UserIdentityStore.shared.isCurrentUser(recordID)
+    }
+
+    private var displayName: String {
+        if isCurrentUser {
+            return UserIdentityStore.shared.currentIdentity?.name ?? Strings.UserProfile.me
+        }
+        guard let recordID = cloudKitRecordID else { return Strings.Handoff.partner }
+        return ParticipantResolver.shared.resolve(cloudKitRecordID: recordID).displayName
+    }
+
     var body: some View {
         HStack(spacing: 6) {
-            MemberAvatar(member: member, size: .small)
+            UserAvatarFromRecordID(cloudKitRecordID: cloudKitRecordID, size: 24)
 
-            if showName, let member = member {
-                Text(member.name)
+            if showName, cloudKitRecordID != nil {
+                Text(displayName)
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
@@ -203,21 +146,20 @@ struct SessionAttributionLabel: View {
     }
 }
 
-// MARK: - Recent Sessions by Member
+// MARK: - Recent Sessions by User
 
-/// Shows recent training sessions grouped by household member
-struct RecentSessionsByMember: View {
-    let sessions: [(skillId: String, memberId: String?, timestamp: Date, successRate: Double)]
-    let householdMembers: [HouseholdMember]
+/// Shows recent training sessions grouped by user
+struct RecentSessionsByUser: View {
+    let sessions: [(skillId: String, recordID: String?, timestamp: Date, successRate: Double)]
     let skillNames: [String: String]  // skillId -> name mapping
 
     @Environment(\.colorScheme) private var colorScheme
 
-    private var sessionsByMember: [String: [(skillId: String, timestamp: Date, successRate: Double)]] {
+    private var sessionsByRecordID: [String: [(skillId: String, timestamp: Date, successRate: Double)]] {
         var grouped: [String: [(skillId: String, timestamp: Date, successRate: Double)]] = [:]
 
         for session in sessions {
-            let key = session.memberId ?? "unknown"
+            let key = session.recordID ?? "unknown"
             grouped[key, default: []].append((session.skillId, session.timestamp, session.successRate))
         }
 
@@ -226,25 +168,28 @@ struct RecentSessionsByMember: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            ForEach(Array(sessionsByMember.keys.sorted()), id: \.self) { memberId in
-                if let memberSessions = sessionsByMember[memberId] {
-                    memberSection(memberId: memberId, sessions: memberSessions)
+            ForEach(Array(sessionsByRecordID.keys.sorted()), id: \.self) { recordID in
+                if let userSessions = sessionsByRecordID[recordID] {
+                    userSection(recordID: recordID, sessions: userSessions)
                 }
             }
         }
     }
 
     @ViewBuilder
-    private func memberSection(memberId: String, sessions: [(skillId: String, timestamp: Date, successRate: Double)]) -> some View {
-        let member = householdMembers.first { $0.id.uuidString == memberId }
+    private func userSection(recordID: String, sessions: [(skillId: String, timestamp: Date, successRate: Double)]) -> some View {
+        let isCurrentUser = UserIdentityStore.shared.isCurrentUser(recordID)
+        let displayName = isCurrentUser
+            ? (UserIdentityStore.shared.currentIdentity?.name ?? Strings.UserProfile.me)
+            : ParticipantResolver.shared.resolve(cloudKitRecordID: recordID).displayName
 
         VStack(alignment: .leading, spacing: 8) {
-            // Member header
+            // User header
             HStack(spacing: 8) {
-                MemberAvatar(member: member, size: .medium)
+                UserAvatarFromRecordID(cloudKitRecordID: recordID, size: 32)
 
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(member?.name ?? Strings.Common.unknown)
+                    Text(displayName)
                         .font(.subheadline)
                         .fontWeight(.medium)
 
@@ -296,20 +241,31 @@ struct RecentSessionsByMember: View {
     }
 }
 
-// MARK: - Member Streak Badge
+// MARK: - User Streak Badge
 
-/// Shows member's training streak
-struct MemberStreakBadge: View {
-    let member: HouseholdMember
+/// Shows a user's training streak
+struct UserStreakBadge: View {
+    let cloudKitRecordID: String
     let streakDays: Int
     let isCurrentStreak: Bool
 
+    private var isCurrentUser: Bool {
+        UserIdentityStore.shared.isCurrentUser(cloudKitRecordID)
+    }
+
+    private var displayName: String {
+        if isCurrentUser {
+            return UserIdentityStore.shared.currentIdentity?.name ?? Strings.UserProfile.me
+        }
+        return ParticipantResolver.shared.resolve(cloudKitRecordID: cloudKitRecordID).displayName
+    }
+
     var body: some View {
         HStack(spacing: 8) {
-            MemberAvatar(member: member, size: .small)
+            UserAvatarFromRecordID(cloudKitRecordID: cloudKitRecordID, size: 24)
 
             VStack(alignment: .leading, spacing: 2) {
-                Text(member.name)
+                Text(displayName)
                     .font(.caption)
                     .fontWeight(.medium)
 
@@ -337,7 +293,7 @@ struct MemberStreakBadge: View {
 
 /// Fun leaderboard showing top trainers this week
 struct TrainingLeaderboard: View {
-    let rankings: [(member: HouseholdMember, sessionCount: Int, streakDays: Int)]
+    let rankings: [(recordID: String, sessionCount: Int, streakDays: Int)]
 
     @Environment(\.colorScheme) private var colorScheme
 
@@ -353,7 +309,7 @@ struct TrainingLeaderboard: View {
             }
 
             // Rankings
-            ForEach(Array(rankings.enumerated()), id: \.element.member.id) { index, ranking in
+            ForEach(Array(rankings.enumerated()), id: \.element.recordID) { index, ranking in
                 leaderboardRow(index: index + 1, ranking: ranking)
             }
         }
@@ -365,7 +321,12 @@ struct TrainingLeaderboard: View {
     }
 
     @ViewBuilder
-    private func leaderboardRow(index: Int, ranking: (member: HouseholdMember, sessionCount: Int, streakDays: Int)) -> some View {
+    private func leaderboardRow(index: Int, ranking: (recordID: String, sessionCount: Int, streakDays: Int)) -> some View {
+        let isCurrentUser = UserIdentityStore.shared.isCurrentUser(ranking.recordID)
+        let displayName = isCurrentUser
+            ? (UserIdentityStore.shared.currentIdentity?.name ?? Strings.UserProfile.me)
+            : ParticipantResolver.shared.resolve(cloudKitRecordID: ranking.recordID).displayName
+
         HStack(spacing: 12) {
             // Rank
             Text("\(index)")
@@ -373,10 +334,10 @@ struct TrainingLeaderboard: View {
                 .foregroundStyle(index == 1 ? Color.otisWarning : .secondary)
                 .frame(width: 20)
 
-            MemberAvatar(member: ranking.member, size: .medium)
+            UserAvatarFromRecordID(cloudKitRecordID: ranking.recordID, size: 32)
 
             VStack(alignment: .leading, spacing: 2) {
-                Text(ranking.member.name)
+                Text(displayName)
                     .font(.subheadline)
                     .fontWeight(.medium)
 
@@ -405,46 +366,38 @@ struct TrainingLeaderboard: View {
 
 // MARK: - Previews
 
-#Preview("Member Avatar") {
-    let member = HouseholdMember(name: "John", colorHex: "#FF6B6B")
-    return VStack(spacing: 16) {
-        MemberAvatar(member: member, size: .small)
-        MemberAvatar(member: member, size: .medium)
-        MemberAvatar(member: member, size: .large)
-        MemberAvatar(member: nil, size: .medium)
-    }
-    .padding()
-}
-
 #Preview("Contribution Card") {
-    let members = [
-        HouseholdMember(id: UUID(), name: "John", colorHex: "#FF6B6B"),
-        HouseholdMember(id: UUID(), name: "Sarah", colorHex: "#4ECDC4")
-    ]
-
-    return TrainingContributionCard(
-        sessionsByMember: [
-            members[0].id.uuidString: 15,
-            members[1].id.uuidString: 8
+    TrainingContributionCard(
+        sessionsByRecordID: [
+            "user-1": 15,
+            "user-2": 8
         ],
-        householdMembers: members,
         totalSessions: 23
     )
     .padding()
 }
 
-#Preview("Leaderboard") {
-    let members = [
-        HouseholdMember(name: "John", colorHex: "#FF6B6B"),
-        HouseholdMember(name: "Sarah", colorHex: "#4ECDC4"),
-        HouseholdMember(name: "Mike", colorHex: "#45B7D1")
-    ]
+#Preview("Session Attribution") {
+    VStack(spacing: 16) {
+        SessionAttributionLabel(
+            cloudKitRecordID: "user-1",
+            timestamp: Date().addingTimeInterval(-3600)
+        )
 
-    return TrainingLeaderboard(
+        SessionAttributionLabel(
+            cloudKitRecordID: nil,
+            timestamp: Date().addingTimeInterval(-7200)
+        )
+    }
+    .padding()
+}
+
+#Preview("Leaderboard") {
+    TrainingLeaderboard(
         rankings: [
-            (members[0], 12, 5),
-            (members[1], 8, 3),
-            (members[2], 4, 0)
+            ("user-1", 12, 5),
+            ("user-2", 8, 3),
+            ("user-3", 4, 0)
         ]
     )
     .padding()

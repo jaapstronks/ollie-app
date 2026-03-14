@@ -11,8 +11,8 @@ import OtisShared
 /// Detail view showing a medication's full information and adherence
 struct MedicationDetailView: View {
     let medication: Medication
-    @ObservedObject var profileStore: ProfileStore
-    @ObservedObject var medicationStore: MedicationStore
+    var profileStore: ProfileStore
+    var medicationStore: MedicationStore
     var profileId: UUID? = nil
 
     @State private var showingEditSheet = false

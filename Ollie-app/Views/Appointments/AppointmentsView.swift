@@ -9,7 +9,7 @@ import OtisShared
 
 /// Main view for listing and managing appointments
 struct AppointmentsView: View {
-    @ObservedObject var appointmentStore: AppointmentStore
+    var appointmentStore: AppointmentStore
 
     @State private var showingAddSheet = false
     @State private var appointmentToDelete: DogAppointment?

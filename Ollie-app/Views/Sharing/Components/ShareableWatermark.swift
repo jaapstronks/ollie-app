@@ -44,7 +44,7 @@ struct ShareableWatermark: View {
                 .foregroundStyle(iconColor)
 
             if style != .minimal {
-                Text("Made with Ollie")
+                Text(Strings.Sharing.madeWithOllie)
                     .font(.system(size: fontSize, weight: .medium))
                     .foregroundStyle(.secondary)
             }
@@ -52,7 +52,7 @@ struct ShareableWatermark: View {
             if style == .detailed {
                 Text("•")
                     .foregroundStyle(.tertiary)
-                Text("ollie.pet")
+                Text(Strings.App.websiteUrl)
                     .font(.system(size: fontSize))
                     .foregroundStyle(.tertiary)
             }

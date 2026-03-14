@@ -138,7 +138,7 @@ private struct DayDetailAppointmentRow: View {
                 // Time and indicators
                 VStack(alignment: .trailing, spacing: 4) {
                     if appointment.isAllDay {
-                        Text(String(localized: "All Day"))
+                        Text(Strings.Calendar.allDay)
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     } else {

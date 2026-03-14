@@ -31,7 +31,7 @@ extension GroomingType {
 
 /// Quick log sheet for grooming activities
 struct GroomingQuickLogSheet: View {
-    @EnvironmentObject var routineStore: RoutineStore
+    @Environment(RoutineStore.self) var routineStore
     @Environment(\.dismiss) private var dismiss
 
     let puppyName: String
@@ -324,13 +324,13 @@ private struct GroomingTypeButton: View {
 
 #Preview("Empty") {
     GroomingQuickLogSheet(puppyName: "Luna")
-        .environmentObject(RoutineStore())
+        .environment(RoutineStore())
 }
 
 #Preview("With Activities") {
     let store = RoutineStore()
     // Note: In real use, the store would have activities populated
 
-    return GroomingQuickLogSheet(puppyName: "Ollie")
-        .environmentObject(store)
+    GroomingQuickLogSheet(puppyName: "Ollie")
+        .environment(store)
 }

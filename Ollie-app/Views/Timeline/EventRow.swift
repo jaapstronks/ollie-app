@@ -8,25 +8,24 @@ import OtisShared
 import UIKit
 
 /// Single event row in the timeline
+/// Note: Attribution is shown at the group level in RecentActivityPreview and PartnerActivitySummaryCard,
+/// not per-event. This keeps the timeline clean when a partner logs multiple events in a row.
 struct EventRow: View {
     let event: PuppyEvent
-    var householdMembers: HouseholdMembers?
 
-    /// Look up the member who logged this event
-    private var loggedByMember: HouseholdMember? {
-        guard let loggedBy = event.loggedBy,
-              let members = householdMembers else { return nil }
-        return members.member(byId: loggedBy)
+    @Environment(ContactStore.self) var contactStore
+
+    // Linked trainer contact for training events
+    private var linkedTrainer: DogContact? {
+        guard event.type == .training,
+              let contactID = event.linkedContactID else {
+            return nil
+        }
+        return contactStore.contact(withId: contactID)
     }
 
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
-            // Attribution avatar (only shown when loggedBy is set)
-            if loggedByMember != nil {
-                HouseholdMemberAvatar(member: loggedByMember, size: 18)
-                    .padding(.top, 2)
-            }
-
             // Time
             Text(event.time.timeString)
                 .font(.caption)
@@ -75,6 +74,13 @@ struct EventRow: View {
                         .foregroundColor(.green)
                 }
 
+                // Linked trainer for training events
+                if let trainer = linkedTrainer {
+                    Label(trainer.name, systemImage: "person.badge.key")
+                        .font(.caption)
+                        .foregroundStyle(Color.otisAccent)
+                }
+
                 if let duration = event.durationMin {
                     Label("\(duration) min", systemImage: "timer")
                         .font(.caption)
@@ -87,6 +93,9 @@ struct EventRow: View {
                         .font(.caption)
                         .foregroundStyle(Color.otisAccent)
                 }
+
+                // Like indicator (if event has likes)
+                LikeIndicator(event: event)
             }
 
             Spacer()
@@ -205,4 +214,5 @@ struct ThumbnailView: View {
             who: "Neighbor's dog Sasha"
         ))
     }
+    .environment(ContactStore())
 }

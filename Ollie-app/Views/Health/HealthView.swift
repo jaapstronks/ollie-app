@@ -12,12 +12,12 @@ import OtisShared
 
 /// Main health view showing weight tracking and health milestones
 struct HealthView: View {
-    @ObservedObject var viewModel: TimelineViewModel
-    @ObservedObject var milestoneStore: MilestoneStore
+    @Bindable var viewModel: TimelineViewModel
+    var milestoneStore: MilestoneStore
 
     @EnvironmentObject var subscriptionManager: SubscriptionManager
-    @EnvironmentObject var weightStore: WeightStore
-    @EnvironmentObject var routineStore: RoutineStore
+    @Environment(WeightStore.self) var weightStore
+    @Environment(RoutineStore.self) var routineStore
 
     @State var showWeightSheet = false
     @State var showAddMilestoneSheet = false
@@ -73,7 +73,7 @@ struct HealthView: View {
     @State var showAppointmentForm = false
     @State var appointmentPrefill: (conditionType: HealthConditionType, title: String)?
 
-    @EnvironmentObject var appointmentStore: AppointmentStore
+    @Environment(AppointmentStore.self) var appointmentStore
 
     // Vet tip generator
     let tipGenerator = VetVisitTipGenerator()
@@ -82,7 +82,7 @@ struct HealthView: View {
 
     var hasActiveConditions: Bool {
         guard let profile = profile else { return false }
-        return !profile.healthConditions.filter { $0.status == .active }.isEmpty ||
+        return profile.healthConditions.contains { $0.status == .active } ||
                profile.lifecyclePhase == .senior
     }
 
@@ -154,7 +154,7 @@ struct HealthView: View {
                     showSymptomLogSheet = false
                 }
             )
-            .environmentObject(viewModel.profileStore)
+            .environment(viewModel.profileStore)
         }
         .sheet(isPresented: $showMobilitySheet) {
             MobilityAssessmentSheet(onSave: { assessment in
@@ -164,7 +164,7 @@ struct HealthView: View {
                     note: assessment.note
                 )
             })
-            .environmentObject(viewModel.profileStore)
+            .environment(viewModel.profileStore)
         }
         .sheet(isPresented: $showCognitiveSheet) {
             CognitiveAssessmentSheet(onSave: { assessment in
@@ -173,7 +173,7 @@ struct HealthView: View {
                     note: assessment.note
                 )
             })
-            .environmentObject(viewModel.profileStore)
+            .environment(viewModel.profileStore)
         }
         .sheet(isPresented: $showQoLSheet) {
             QualityOfLifeSheet(onSave: { assessment in
@@ -188,7 +188,7 @@ struct HealthView: View {
                     note: assessment.note
                 )
             })
-            .environmentObject(viewModel.profileStore)
+            .environment(viewModel.profileStore)
         }
         .sheet(isPresented: $showRRRSheet) {
             RespiratoryRateSheet(onSave: { reading in
@@ -198,7 +198,7 @@ struct HealthView: View {
                     note: reading.note
                 )
             })
-            .environmentObject(viewModel.profileStore)
+            .environment(viewModel.profileStore)
         }
     }
 }
@@ -215,6 +215,6 @@ struct HealthView: View {
         HealthView(viewModel: viewModel, milestoneStore: milestoneStore)
     }
     .environmentObject(SubscriptionManager.shared)
-    .environmentObject(WeightStore())
-    .environmentObject(RoutineStore())
+    .environment(WeightStore())
+    .environment(RoutineStore())
 }

@@ -12,10 +12,11 @@ import OtisShared
 
 /// Predefined dog breeds with their typical size categories
 struct DogBreed: Identifiable {
-    let id = UUID()
     let name: String
     let size: PuppyProfile.SizeCategory
     let weightRange: String
+
+    var id: String { name }
 
     static let breeds: [DogBreed] = [
         DogBreed(name: "Golden Retriever", size: .large, weightRange: "25-40 kg"),

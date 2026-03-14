@@ -9,7 +9,7 @@ import OtisShared
 
 /// Settings screen for dog profile identity information
 struct DogProfileSettingsView: View {
-    @ObservedObject var profileStore: ProfileStore
+    var profileStore: ProfileStore
     let profileId: UUID
 
     @State private var showingPhotoPicker = false

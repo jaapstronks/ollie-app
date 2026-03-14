@@ -126,7 +126,8 @@ struct OnboardingNotificationsStep: View {
                     withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
                         showingCheckmark = true
                     }
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    Task { @MainActor in
+                        try? await Task.sleep(for: .seconds(0.5))
                         onNext()
                     }
                 } else {

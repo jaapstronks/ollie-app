@@ -130,7 +130,7 @@ struct PhaseTransitionSheet: View {
 
     private var notificationPreferencePicker: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Notification Preferences")
+            Text(Strings.LifecycleTransition.Notifications.title)
                 .font(.headline)
 
             VStack(spacing: 8) {

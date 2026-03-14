@@ -11,8 +11,8 @@ import OtisShared
 /// Full view for managing weight goals
 struct WeightGoalView: View {
     @Environment(\.dismiss) private var dismiss
-    @EnvironmentObject private var routineStore: RoutineStore
-    @EnvironmentObject private var weightStore: WeightStore
+    @Environment(RoutineStore.self) private var routineStore
+    @Environment(WeightStore.self) private var weightStore
 
     @State private var showSetGoalSheet = false
 
@@ -238,8 +238,8 @@ struct WeightGoalView: View {
 
 private struct SetWeightGoalSheet: View {
     @Environment(\.dismiss) private var dismiss
-    @EnvironmentObject private var routineStore: RoutineStore
-    @EnvironmentObject private var weightStore: WeightStore
+    @Environment(RoutineStore.self) private var routineStore
+    @Environment(WeightStore.self) private var weightStore
 
     @State private var targetWeight: Double = 25.0
     @State private var hasTargetDate: Bool = false
@@ -323,6 +323,6 @@ private struct SetWeightGoalSheet: View {
 
 #Preview {
     WeightGoalView()
-        .environmentObject(RoutineStore())
-        .environmentObject(WeightStore())
+        .environment(RoutineStore())
+        .environment(WeightStore())
 }

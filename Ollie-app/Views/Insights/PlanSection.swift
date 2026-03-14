@@ -9,9 +9,10 @@ import OtisShared
 
 /// Plan section showing puppy age, socialization progress, and upcoming milestones
 struct PlanSection: View {
-    @ObservedObject var socializationStore: SocializationStore
-    @ObservedObject var milestoneStore: MilestoneStore
-    @EnvironmentObject var profileStore: ProfileStore
+    var socializationStore: SocializationStore
+    var milestoneStore: MilestoneStore
+    @Environment(ProfileStore.self) var profileStore
+    @Environment(ContactStore.self) var contactStore
 
     @State private var showMilestoneDetail = false
     @State private var selectedMilestone: Milestone?
@@ -111,17 +112,18 @@ struct PlanSection: View {
                 MilestoneCompletionSheet(
                     milestone: milestone,
                     onDismiss: { showMilestoneDetail = false },
-                    onComplete: { notes, photoID, vetClinic, completionDate in
+                    onComplete: { notes, photoID, linkedContactID, completionDate in
                         milestoneStore.completeMilestone(
                             milestone,
                             notes: notes,
                             photoID: photoID,
-                            vetClinicName: vetClinic,
+                            linkedContactID: linkedContactID,
                             completionDate: completionDate
                         )
                         showMilestoneDetail = false
                     }
                 )
+                .environment(contactStore)
             }
         }
     }
@@ -162,14 +164,7 @@ struct PlanSection: View {
                     Spacer()
 
                     // Age stage badge
-                    Text(ageStageLabel(for: profile))
-                        .font(.caption)
-                        .fontWeight(.medium)
-                        .foregroundStyle(.white)
-                        .padding(.horizontal, 10)
-                        .padding(.vertical, 6)
-                        .background(ageStageColor(for: profile))
-                        .clipShape(Capsule())
+                    CapsuleBadge(ageStageLabel(for: profile), color: ageStageColor(for: profile), style: .filled)
                 }
 
                 // Readable age text
@@ -235,27 +230,9 @@ struct PlanSection: View {
 
                 // Window status badge
                 if socializationStore.socializationWindowClosed(profile: profile) {
-                    HStack {
-                        Image(systemName: "clock.badge.checkmark.fill")
-                        Text(Strings.Socialization.windowClosed)
-                    }
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 6)
-                    .background(Color.secondary.opacity(0.1))
-                    .clipShape(Capsule())
+                    CapsuleBadge(Strings.Socialization.windowClosed, icon: "clock.badge.checkmark.fill")
                 } else if SocializationWindow.weeksRemaining(ageWeeks: profile.ageInWeeks) <= 2 {
-                    HStack {
-                        Image(systemName: "exclamationmark.triangle.fill")
-                        Text(Strings.Socialization.windowClosing)
-                    }
-                    .font(.caption)
-                    .foregroundStyle(Color.otisWarning)
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 6)
-                    .background(Color.otisWarning.opacity(colorScheme == .dark ? 0.2 : 0.1))
-                    .clipShape(Capsule())
+                    CapsuleBadge(Strings.Socialization.windowClosing, icon: "exclamationmark.triangle.fill", color: .otisWarning, style: .tinted)
                 }
             }
         }
@@ -459,6 +436,6 @@ struct MilestonePreviewRow: View {
             )
             .padding()
         }
-        .environmentObject(ProfileStore())
+        .environment(ProfileStore())
     }
 }

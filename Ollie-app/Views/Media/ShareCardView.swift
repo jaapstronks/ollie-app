@@ -144,7 +144,7 @@ struct ShareCardView: View {
     private var branding: some View {
         HStack {
             Spacer()
-            Text("otis.pet")
+            Text(Strings.App.websiteUrl)
                 .font(.system(size: brandingFontSize, weight: .medium))
                 .foregroundStyle(.tertiary)
         }
@@ -271,9 +271,9 @@ enum ShareCardAspectRatio: String, CaseIterable {
 
     var displayName: String {
         switch self {
-        case .square: return String(localized: "Square (1:1)")
-        case .story: return String(localized: "Story (9:16)")
-        case .horizontal: return String(localized: "Horizontal (16:9)")
+        case .square: return Strings.Sharing.formatSquareRatio
+        case .story: return Strings.Sharing.formatStoryRatio
+        case .horizontal: return Strings.Sharing.formatHorizontalRatio
         }
     }
 }

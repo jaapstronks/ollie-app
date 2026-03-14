@@ -10,10 +10,10 @@ import OtisShared
 
 /// Main calendar grid view with month/week navigation and day detail
 struct CalendarGridView: View {
-    @ObservedObject var appointmentStore: AppointmentStore
-    @ObservedObject var milestoneStore: MilestoneStore
-    @ObservedObject var socializationStore: SocializationStore
-    @ObservedObject var contactStore: ContactStore
+    var appointmentStore: AppointmentStore
+    var milestoneStore: MilestoneStore
+    var socializationStore: SocializationStore
+    var contactStore: ContactStore
     let profile: PuppyProfile?
     let onAppointmentTap: (DogAppointment) -> Void
     let onMilestoneTap: (Milestone) -> Void
@@ -277,7 +277,7 @@ struct CalendarGridView: View {
         if calendar.isDateInToday(date) {
             return Strings.Calendar.today
         } else if calendar.isDateInTomorrow(date) {
-            return String(localized: "Tomorrow")
+            return Strings.Common.tomorrow
         } else {
             let formatter = DateFormatter()
             formatter.dateFormat = "EEEE, MMM d"
@@ -364,7 +364,7 @@ private struct ListAppointmentRow: View {
         onMilestoneTap: { _ in },
         onSocializationTap: { }
     )
-    .environmentObject(profileStore)
-    .environmentObject(milestoneStore)
-    .environmentObject(contactStore)
+    .environment(profileStore)
+    .environment(milestoneStore)
+    .environment(contactStore)
 }

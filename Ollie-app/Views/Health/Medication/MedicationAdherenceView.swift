@@ -11,7 +11,7 @@ import OtisShared
 /// View showing medication adherence history and statistics
 struct MedicationAdherenceView: View {
     let medication: Medication
-    @ObservedObject var medicationStore: MedicationStore
+    var medicationStore: MedicationStore
 
     @State private var selectedPeriod: AdherencePeriod = .last30Days
 

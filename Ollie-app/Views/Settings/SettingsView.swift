@@ -9,13 +9,13 @@ import OtisShared
 
 /// Settings hub screen with app settings and dog-specific settings cards
 struct SettingsView: View {
-    @ObservedObject var profileStore: ProfileStore
+    var profileStore: ProfileStore
     @ObservedObject var dataImporter: DataImporter
-    @ObservedObject var eventStore: EventStore
+    var eventStore: EventStore
     @ObservedObject var notificationService: NotificationService
-    @ObservedObject var medicationStore: MedicationStore
-    @ObservedObject var documentStore: DocumentStore
-    @ObservedObject var contactStore: ContactStore
+    var medicationStore: MedicationStore
+    var documentStore: DocumentStore
+    var contactStore: ContactStore
     @ObservedObject var foodRecallService: FoodRecallService
 
     var onAddDog: (() -> Void)?
@@ -129,8 +129,8 @@ struct SettingsView: View {
     private var devToolsSection: some View {
         NavigationLink {
             DevToolsView()
-                .environmentObject(profileStore)
-                .environmentObject(eventStore)
+                .environment(profileStore)
+                .environment(eventStore)
         } label: {
             HStack(spacing: 16) {
                 ZStack {

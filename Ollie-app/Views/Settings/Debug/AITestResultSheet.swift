@@ -235,7 +235,8 @@ private struct AITestResultContent: View {
                 socializationProgressText: nil,
                 loggingRecommendations: []
             ),
-            notificationPolicyDecision: nil
+            notificationPolicyDecision: nil,
+            response: nil
         ),
         error: nil
     ))

@@ -11,8 +11,8 @@ import OtisShared
 
 /// Comprehensive sheet showing development journey, stages, and active periods
 struct DevelopmentJourneySheet: View {
-    @EnvironmentObject var profileStore: ProfileStore
-    @EnvironmentObject var milestoneStore: MilestoneStore
+    @Environment(ProfileStore.self) var profileStore
+    @Environment(MilestoneStore.self) var milestoneStore
 
     var onNavigateToSocialization: (() -> Void)?
     var onNavigateToMedical: (() -> Void)?
@@ -195,7 +195,8 @@ struct DevelopmentJourneySheet: View {
             if ageInWeeks <= 20, let onNavigate = onNavigateToSocialization {
                 Button {
                     dismiss()
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    Task { @MainActor in
+                        try? await Task.sleep(for: .seconds(0.3))
                         onNavigate()
                     }
                 } label: {
@@ -212,7 +213,8 @@ struct DevelopmentJourneySheet: View {
             if let onNavigate = onNavigateToMedical {
                 Button {
                     dismiss()
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    Task { @MainActor in
+                        try? await Task.sleep(for: .seconds(0.3))
                         onNavigate()
                     }
                 } label: {
@@ -377,6 +379,6 @@ private struct StageTimelineRow: View {
         onNavigateToSocialization: { print("Navigate to socialization") },
         onNavigateToMedical: { print("Navigate to medical") }
     )
-    .environmentObject(ProfileStore())
-    .environmentObject(MilestoneStore())
+    .environment(ProfileStore())
+    .environment(MilestoneStore())
 }

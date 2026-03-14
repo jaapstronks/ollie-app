@@ -11,7 +11,7 @@ import Combine
 
 /// Vertical day-planner style timeline with hour markers, duration blocks, and point events
 struct VerticalTimelineView: View {
-    @ObservedObject var viewModel: TimelineViewModel
+    @Bindable var viewModel: TimelineViewModel
     let onEditEvent: (PuppyEvent) -> Void
     let onDeleteEvent: (PuppyEvent) -> Void
     var onPhotoTap: ((PuppyEvent) -> Void)?
@@ -20,15 +20,25 @@ struct VerticalTimelineView: View {
     /// Optional WeatherService for sunrise/sunset data
     var weatherService: WeatherService?
 
-    /// Household members for event attribution display
-    private var householdMembers: HouseholdMembers? {
-        viewModel.profileStore.profile?.householdMembers
-    }
+    // Note: Event attribution now uses CloudKit record IDs via UserIdentityStore
+    // instead of profile-embedded HouseholdMembers
 
     @Environment(\.colorScheme) private var colorScheme
 
     /// Expanded training sessions (by session ID)
     @State private var expandedTrainingSessions: Set<UUID> = []
+
+    /// Cached hours array to avoid recomputation on every access
+    /// Updated via .onChange when currentDate changes
+    @State private var cachedHoursToShow: [Int] = []
+
+    /// Cached hour index lookup for O(1) position calculation instead of O(n) firstIndex
+    @State private var hourIndexLookup: [Int: Int] = [:]
+
+    /// Cached filtered items to avoid repeated filtering on every render
+    @State private var cachedDurationItems: [VerticalTimelineItem] = []
+    @State private var cachedPointItems: [VerticalTimelineItem] = []
+    @State private var cachedTrainingSessionItems: [VerticalTimelineItem] = []
 
     /// Height per hour in points
     private let hourHeight: CGFloat = LayoutConstants.timelineHourHeight
@@ -51,10 +61,14 @@ struct VerticalTimelineView: View {
     /// Prevent cards from collapsing in split-view widths
     private let minimumTimelineContentWidth: CGFloat = 220
 
-    /// Hours to display (0 to max hour, reverse order)
-    /// For today: shows up to current hour + 1
-    /// For past days: shows full day (0-23)
+    /// Hours to display - uses cached value for performance
+    /// PERF: Cached to avoid recomputation on every access (was called 4+ times per render)
     private var hoursToShow: [Int] {
+        cachedHoursToShow
+    }
+
+    /// Computes the hours array - called once when date changes
+    private func computeHoursToShow() -> [Int] {
         let calendar = Calendar.current
 
         // Check if viewing today or a past date
@@ -72,24 +86,40 @@ struct VerticalTimelineView: View {
         return Array((0...maxHour).reversed())
     }
 
+    /// Updates the cached hours and lookup dictionary
+    private func updateHoursCache() {
+        let hours = computeHoursToShow()
+        cachedHoursToShow = hours
+        // Build O(1) lookup dictionary for hour -> index
+        hourIndexLookup = Dictionary(uniqueKeysWithValues: hours.enumerated().map { ($1, $0) })
+    }
+
     /// Total height of the grid (hours + top padding for label)
     private var totalGridHeight: CGFloat {
-        CGFloat(hoursToShow.count) * hourHeight + (labelHeight / 2)
+        CGFloat(cachedHoursToShow.count) * hourHeight + (labelHeight / 2)
     }
 
-    /// Duration items (naps and walks) from the view model
+    /// Duration items (naps and walks) from the view model - uses cached value
     private var durationItems: [VerticalTimelineItem] {
-        viewModel.verticalTimelineItems.filter { $0.hasDuration && $0.isActivityBlock }
+        cachedDurationItems
     }
 
-    /// Point events (pee, poo, meals, etc.) from the view model - excludes training sessions
+    /// Point events (pee, poo, meals, etc.) from the view model - uses cached value
     private var pointItems: [VerticalTimelineItem] {
-        viewModel.verticalTimelineItems.filter { !$0.hasDuration && !$0.isTrainingSession }
+        cachedPointItems
     }
 
-    /// Training session items (grouped training events)
+    /// Training session items (grouped training events) - uses cached value
     private var trainingSessionItems: [VerticalTimelineItem] {
-        viewModel.verticalTimelineItems.filter { $0.isTrainingSession }
+        cachedTrainingSessionItems
+    }
+
+    /// Updates the cached filtered item arrays
+    private func updateFilteredItemsCache() {
+        let allItems = viewModel.verticalTimelineItems
+        cachedDurationItems = allItems.filter { $0.hasDuration && $0.isActivityBlock }
+        cachedPointItems = allItems.filter { !$0.hasDuration && !$0.isTrainingSession }
+        cachedTrainingSessionItems = allItems.filter { $0.isTrainingSession }
     }
 
     var body: some View {
@@ -108,33 +138,49 @@ struct VerticalTimelineView: View {
                 timelineContent
             }
         }
+        .onAppear {
+            updateHoursCache()
+            updateFilteredItemsCache()
+        }
+        .onChange(of: viewModel.currentDate) { _, _ in
+            updateHoursCache()
+            updateFilteredItemsCache()
+        }
+        .onChange(of: viewModel.cachedVerticalTimelineItems) { _, _ in
+            updateFilteredItemsCache()
+        }
     }
 
     // MARK: - Timeline Content
 
+    /// PERF: Single GeometryReader instead of 3 separate ones (each GeometryReader = layout pass)
     private var timelineContent: some View {
         ScrollView {
-            ZStack(alignment: .topLeading) {
-                // Hour grid (bottom layer)
-                hourGrid
-                    .padding(.top, labelHeight / 2)
-                    .zIndex(0)
+            GeometryReader { geometry in
+                let contentWidth = timelineContentWidth(for: geometry.size.width)
 
-                // Current time indicator
-                currentTimeIndicator
-                    .zIndex(1)
+                ZStack(alignment: .topLeading) {
+                    // Hour grid (bottom layer)
+                    hourGrid
+                        .padding(.top, labelHeight / 2)
+                        .zIndex(0)
 
-                // Duration blocks (naps and walks) - full width
-                durationBlocksLayer
-                    .zIndex(2)
+                    // Current time indicator
+                    currentTimeIndicator
+                        .zIndex(1)
 
-                // Training sessions layer
-                trainingSessionsLayer
-                    .zIndex(3)
+                    // Duration blocks (naps and walks) - full width
+                    durationBlocksContent(contentWidth: contentWidth)
+                        .zIndex(2)
 
-                // Point events with stems (top layer - always on top)
-                pointEventsLayer
-                    .zIndex(4)
+                    // Training sessions layer
+                    trainingSessionsContent(contentWidth: contentWidth)
+                        .zIndex(3)
+
+                    // Point events with stems (top layer - always on top)
+                    pointEventsContent(contentWidth: contentWidth)
+                        .zIndex(4)
+                }
             }
             .frame(height: totalGridHeight)
         }
@@ -151,92 +197,84 @@ struct VerticalTimelineView: View {
         }
     }
 
-    // MARK: - Duration Blocks Layer
+    // MARK: - Duration Blocks Content
 
-    private var durationBlocksLayer: some View {
-        GeometryReader { geometry in
-            let contentWidth = timelineContentWidth(for: geometry.size.width)
+    @ViewBuilder
+    private func durationBlocksContent(contentWidth: CGFloat) -> some View {
+        ForEach(durationItems) { item in
+            let position = calculateBlockPosition(for: item)
 
-            ForEach(durationItems) { item in
-                let position = calculateBlockPosition(for: item)
-
-                DurationBlockView(
-                    item: item,
-                    onTap: {
-                        handleItemTap(item)
-                    }
-                )
-                .frame(width: contentWidth, height: position.height)
-                .offset(x: timeColumnWidth + timelineHorizontalInset, y: position.yOffset)
-            }
-        }
-    }
-
-    // MARK: - Training Sessions Layer
-
-    private var trainingSessionsLayer: some View {
-        GeometryReader { geometry in
-            let contentWidth = timelineContentWidth(for: geometry.size.width)
-            let cardWidth = max(contentWidth * 0.7, 180)  // Keep cards usable on narrow split widths
-
-            ForEach(trainingSessionItems) { item in
-                if case .trainingSession(let session) = item.type {
-                    let anchorY = calculateYPosition(for: item.startTime)
-                    let isExpanded = expandedTrainingSessions.contains(session.id)
-
-                    TrainingSessionCardWithStem(
-                        session: session,
-                        anchorY: anchorY,
-                        cardWidth: cardWidth,
-                        timeColumnWidth: timeColumnWidth,
-                        contentWidth: contentWidth,
-                        isExpanded: isExpanded,
-                        onTap: {
-                            withAnimation(.easeInOut(duration: 0.2)) {
-                                if expandedTrainingSessions.contains(session.id) {
-                                    expandedTrainingSessions.remove(session.id)
-                                } else {
-                                    expandedTrainingSessions.insert(session.id)
-                                }
-                            }
-                        },
-                        onEventTap: { event in
-                            onEditEvent(event)
-                        }
-                    )
+            DurationBlockView(
+                item: item,
+                onTap: {
+                    handleItemTap(item)
                 }
-            }
+            )
+            .frame(width: contentWidth, height: position.height)
+            .offset(x: timeColumnWidth + timelineHorizontalInset, y: position.yOffset)
         }
     }
 
-    // MARK: - Point Events Layer
+    // MARK: - Training Sessions Content
 
-    private var pointEventsLayer: some View {
-        GeometryReader { geometry in
-            let contentWidth = timelineContentWidth(for: geometry.size.width)
-            let cardWidth = max(contentWidth * 0.6, 170)  // Keep cards readable on narrow split widths
-            let stemAnchorX = contentWidth * 0.5  // Middle of timeline for stem anchor
+    @ViewBuilder
+    private func trainingSessionsContent(contentWidth: CGFloat) -> some View {
+        let cardWidth = max(contentWidth * 0.7, 180)  // Keep cards usable on narrow split widths
 
-            // Calculate positions with collision detection
-            let layoutItems = calculatePointEventLayout(
-                items: pointItems,
-                cardWidth: cardWidth,
-                contentWidth: contentWidth
-            )
+        ForEach(trainingSessionItems) { item in
+            if case .trainingSession(let session) = item.type {
+                let anchorY = calculateYPosition(for: item.startTime)
+                let isExpanded = expandedTrainingSessions.contains(session.id)
 
-            ForEach(layoutItems, id: \.item.id) { layoutItem in
-                PointEventWithStem(
-                    item: layoutItem.item,
-                    anchorY: layoutItem.anchorY,
-                    cardY: layoutItem.cardY,
+                TrainingSessionCardWithStem(
+                    session: session,
+                    anchorY: anchorY,
                     cardWidth: cardWidth,
-                    stemAnchorX: stemAnchorX,
                     timeColumnWidth: timeColumnWidth,
                     contentWidth: contentWidth,
-                    householdMembers: householdMembers,
-                    onTap: { handleItemTap(layoutItem.item) }
+                    isExpanded: isExpanded,
+                    onTap: {
+                        withAnimation(.easeInOut(duration: 0.2)) {
+                            if expandedTrainingSessions.contains(session.id) {
+                                expandedTrainingSessions.remove(session.id)
+                            } else {
+                                expandedTrainingSessions.insert(session.id)
+                            }
+                        }
+                    },
+                    onEventTap: { event in
+                        onEditEvent(event)
+                    }
                 )
             }
+        }
+    }
+
+    // MARK: - Point Events Content
+
+    @ViewBuilder
+    private func pointEventsContent(contentWidth: CGFloat) -> some View {
+        let cardWidth = max(contentWidth * 0.6, 170)  // Keep cards readable on narrow split widths
+        let stemAnchorX = contentWidth * 0.5  // Middle of timeline for stem anchor
+
+        // Calculate positions with collision detection
+        let layoutItems = calculatePointEventLayout(
+            items: pointItems,
+            cardWidth: cardWidth,
+            contentWidth: contentWidth
+        )
+
+        ForEach(layoutItems, id: \.item.id) { layoutItem in
+            PointEventWithStem(
+                item: layoutItem.item,
+                anchorY: layoutItem.anchorY,
+                cardY: layoutItem.cardY,
+                cardWidth: cardWidth,
+                stemAnchorX: stemAnchorX,
+                timeColumnWidth: timeColumnWidth,
+                contentWidth: contentWidth,
+                onTap: { handleItemTap(layoutItem.item) }
+            )
         }
     }
 
@@ -263,6 +301,10 @@ struct VerticalTimelineView: View {
 
         var layoutItems: [PointEventLayoutItem] = []
 
+        // Track occupied Y ranges for O(n) collision detection instead of O(n²)
+        // Each range is (top, bottom) of an occupied area
+        var occupiedRanges: [(top: CGFloat, bottom: CGFloat)] = []
+
         for item in sortedItems {
             let anchorY = calculateYPosition(for: item.startTime)
 
@@ -272,26 +314,26 @@ struct VerticalTimelineView: View {
             // Ensure card doesn't go above the timeline top
             cardY = max(cardY, 0)
 
-            // Check collisions with existing cards and offset if needed
-            // Keep checking until we find a non-colliding position
-            var hasCollision = true
-            while hasCollision {
-                hasCollision = false
-                for existingItem in layoutItems {
-                    let existingTop = existingItem.cardY
-                    let existingBottom = existingItem.cardY + pointEventCardHeight
+            // Find placement using sorted occupied ranges
+            // Check against occupied ranges and find the next available slot
+            for range in occupiedRanges {
+                let cardTop = cardY
+                let cardBottom = cardY + pointEventCardHeight
 
-                    let newTop = cardY
-                    let newBottom = cardY + pointEventCardHeight
-
-                    // Check if they overlap (with spacing)
-                    if newTop < existingBottom + pointEventSpacing && newBottom > existingTop - pointEventSpacing {
-                        // Collision detected - move this card below the existing one
-                        cardY = existingBottom + pointEventSpacing
-                        hasCollision = true
-                        break  // Re-check all items at new position
-                    }
+                // Check if they overlap
+                if cardTop < range.bottom + pointEventSpacing && cardBottom > range.top - pointEventSpacing {
+                    // Collision - move below this range
+                    cardY = range.bottom + pointEventSpacing
                 }
+            }
+
+            // Add this card's range to occupied list (keep sorted by top position)
+            let newRange = (top: cardY, bottom: cardY + pointEventCardHeight)
+            // Insert in sorted order for efficient future checks
+            if let insertIndex = occupiedRanges.firstIndex(where: { $0.top > newRange.top }) {
+                occupiedRanges.insert(newRange, at: insertIndex)
+            } else {
+                occupiedRanges.append(newRange)
             }
 
             layoutItems.append(PointEventLayoutItem(
@@ -306,12 +348,13 @@ struct VerticalTimelineView: View {
 
     // MARK: - Y Position Calculation
 
+    /// PERF: Uses O(1) dictionary lookup instead of O(n) firstIndex search
     private func calculateYPosition(for time: Date) -> CGFloat {
         let calendar = Calendar.current
         let hour = calendar.component(.hour, from: time)
         let minute = calendar.component(.minute, from: time)
 
-        guard let rowIndex = hoursToShow.firstIndex(of: hour) else {
+        guard let rowIndex = hourIndexLookup[hour] else {
             // Time is beyond displayed hours
             return labelHeight / 2
         }
@@ -408,8 +451,8 @@ struct VerticalTimelineView: View {
         let minute = calendar.component(.minute, from: now)
 
         // Calculate Y position
-        // First, find which row the current hour is in
-        if let rowIndex = hoursToShow.firstIndex(of: hour) {
+        // PERF: Use O(1) dictionary lookup instead of O(n) firstIndex
+        if let rowIndex = hourIndexLookup[hour] {
             // Position within that hour (0.0 at top of hour, 1.0 at bottom)
             let minuteProgress = CGFloat(minute) / 60.0
 

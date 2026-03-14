@@ -35,9 +35,9 @@ enum GrowthCardType: String, CaseIterable, Identifiable {
 
 /// Sheet for creating growth shareable cards
 struct GrowthCardCreatorSheet: View {
-    @EnvironmentObject var weightStore: WeightStore
-    @EnvironmentObject var eventStore: EventStore
-    @EnvironmentObject var profileStore: ProfileStore
+    @Environment(WeightStore.self) var weightStore
+    @Environment(EventStore.self) var eventStore
+    @Environment(ProfileStore.self) var profileStore
 
     @Environment(\.dismiss) private var dismiss
 
@@ -45,6 +45,10 @@ struct GrowthCardCreatorSheet: View {
     @State private var showShareSheet = false
     @State private var renderedImage: UIImage?
     @State private var isRendering = false
+
+    /// PERFORMANCE: Cached photo events loaded asynchronously
+    @State private var allPhotosCache: [PuppyEvent] = []
+    @State private var isLoadingPhotos = true
 
     // Photo selector
     private let photoSelector = GrowthPhotoSelector()
@@ -61,11 +65,9 @@ struct GrowthCardCreatorSheet: View {
 
     // MARK: - Computed Properties
 
+    /// PERFORMANCE: Use cached photos instead of synchronous Core Data fetch
     private var allPhotos: [PuppyEvent] {
-        // Get all events with photos
-        let endDate = Date()
-        let startDate = profile?.homeDate ?? Calendar.current.date(byAdding: .year, value: -2, to: endDate)!
-        return eventStore.getEventsWithMedia(from: startDate, to: endDate)
+        allPhotosCache
     }
 
     private var thenNowPair: (then: GrowthPhotoSelection, now: GrowthPhotoSelection)? {
@@ -101,6 +103,10 @@ struct GrowthCardCreatorSheet: View {
     }
 
     private var canCreateSelectedCard: Bool {
+        // Don't show empty state while still loading
+        if isLoadingPhotos && (cardType == .thenVsNow || cardType == .monthlyGrid) {
+            return true // Will show loading state instead
+        }
         switch cardType {
         case .thenVsNow:
             return thenNowPair != nil
@@ -149,6 +155,14 @@ struct GrowthCardCreatorSheet: View {
             if let image = renderedImage {
                 ShareSheet(activityItems: [image])
             }
+        }
+        .task {
+            // PERFORMANCE: Load photos asynchronously to avoid blocking main thread
+            isLoadingPhotos = true
+            let endDate = Date()
+            let startDate = profile?.homeDate ?? Calendar.current.date(byAdding: .year, value: -2, to: endDate)!
+            allPhotosCache = await eventStore.getEventsWithMediaAsync(from: startDate, to: endDate)
+            isLoadingPhotos = false
         }
     }
 
@@ -357,7 +371,7 @@ struct GrowthCardCreatorSheet: View {
 
 #Preview {
     GrowthCardCreatorSheet()
-        .environmentObject(WeightStore())
-        .environmentObject(EventStore())
-        .environmentObject(ProfileStore())
+        .environment(WeightStore())
+        .environment(EventStore())
+        .environment(ProfileStore())
 }

@@ -15,7 +15,7 @@ struct ActionableEventCard: View {
     var onNavigateToSocialization: (() -> Void)?
     var poopStatus: PoopStatus?
 
-    @EnvironmentObject private var socializationStore: SocializationStore
+    @Environment(SocializationStore.self) private var socializationStore
     @EnvironmentObject var unitPreferences: UnitPreferences
     @State private var showWalkTips = false
 
@@ -284,7 +284,7 @@ struct ActionableEventCard: View {
 /// Wrapper view for actionable and upcoming events
 /// Separates items that need action now vs items coming later
 struct ScheduledEventsSection: View {
-    @ObservedObject var viewModel: TimelineViewModel
+    @Bindable var viewModel: TimelineViewModel
     @ObservedObject var weatherService: WeatherService
 
     /// Pre-computed separated items (optional, to avoid redundant calculation when passed from parent)
@@ -489,7 +489,7 @@ struct UpcomingEventsCard: View {
         Spacer()
     }
     .padding()
-    .environmentObject(SocializationStore())
+    .environment(SocializationStore())
 }
 
 #Preview("Actionable - Due (meal)") {
@@ -510,7 +510,7 @@ struct UpcomingEventsCard: View {
         Spacer()
     }
     .padding()
-    .environmentObject(SocializationStore())
+    .environment(SocializationStore())
 }
 
 #Preview("Actionable - Due (walk, cloudy)") {
@@ -533,7 +533,7 @@ struct UpcomingEventsCard: View {
         Spacer()
     }
     .padding()
-    .environmentObject(SocializationStore())
+    .environment(SocializationStore())
 }
 
 #Preview("Actionable - Overdue (rainy)") {
@@ -557,7 +557,7 @@ struct UpcomingEventsCard: View {
         Spacer()
     }
     .padding()
-    .environmentObject(SocializationStore())
+    .environment(SocializationStore())
 }
 
 #Preview("Upcoming List") {

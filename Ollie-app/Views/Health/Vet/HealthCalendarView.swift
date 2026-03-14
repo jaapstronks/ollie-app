@@ -10,9 +10,9 @@ import OtisShared
 
 /// Calendar view displaying health-related events and schedules
 struct HealthCalendarView: View {
-    @EnvironmentObject private var appointmentStore: AppointmentStore
-    @EnvironmentObject private var milestoneStore: MilestoneStore
-    @EnvironmentObject private var profileStore: ProfileStore
+    @Environment(AppointmentStore.self) private var appointmentStore
+    @Environment(MilestoneStore.self) private var milestoneStore
+    @Environment(ProfileStore.self) private var profileStore
 
     @State private var selectedMonth: Date = Date()
     @State private var selectedDate: Date?
@@ -244,13 +244,7 @@ struct HealthCalendarView: View {
             Spacer()
 
             if appointment.isToday {
-                Text(Strings.VetVisit.visitToday)
-                    .font(.caption.weight(.medium))
-                    .foregroundStyle(.white)
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 4)
-                    .background(Color.otisDanger)
-                    .clipShape(Capsule())
+                CapsuleBadge(Strings.VetVisit.visitToday, color: .otisDanger, style: .filled)
             }
         }
         .padding()
@@ -393,7 +387,7 @@ struct HealthCalendarView: View {
     private func hasMedicationDue(on date: Date) -> Bool {
         // Simplified: check if any active medication would be due
         guard let medications = profile?.medicationSchedule.medications else { return false }
-        return !medications.filter { $0.isActive }.isEmpty
+        return medications.contains { $0.isActive }
     }
 
     private func appointmentsForDate(_ date: Date) -> [DogAppointment] {
@@ -459,8 +453,8 @@ struct AppointmentDaySheet: View {
 #Preview {
     NavigationStack {
         HealthCalendarView()
-            .environmentObject(AppointmentStore())
-            .environmentObject(MilestoneStore())
-            .environmentObject(ProfileStore.shared)
+            .environment(AppointmentStore())
+            .environment(MilestoneStore())
+            .environment(ProfileStore.shared)
     }
 }

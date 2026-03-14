@@ -9,7 +9,7 @@ import OtisShared
 
 /// Card showing today's scheduled appointments
 struct TodaysScheduleCard: View {
-    @ObservedObject var appointmentStore: AppointmentStore
+    var appointmentStore: AppointmentStore
     var onViewAll: (() -> Void)?
 
     @Environment(\.colorScheme) private var colorScheme

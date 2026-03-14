@@ -276,10 +276,10 @@ struct WeekDetailSheet: View {
 
 extension Strings {
     enum WeekDetail {
-        static let positiveRate = String(localized: "positive")
-        static let weeklyGoal = String(localized: "Weekly Goal")
-        static let inProgress = String(localized: "In progress")
-        static let categoryBreakdown = String(localized: "Category Breakdown")
+        static let positiveRate = String(localized: "positive", table: "Social")
+        static let weeklyGoal = String(localized: "Weekly Goal", table: "Social")
+        static let inProgress = String(localized: "In progress", table: "Social")
+        static let categoryBreakdown = String(localized: "Category Breakdown", table: "Social")
     }
 }
 

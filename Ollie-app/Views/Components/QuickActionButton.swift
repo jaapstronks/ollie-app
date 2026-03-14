@@ -113,7 +113,8 @@ struct QuickActionButton: View {
             }
 
             // Reset after duration
-            DispatchQueue.main.asyncAfter(deadline: .now() + confirmationDuration) {
+            Task { @MainActor in
+                try? await Task.sleep(for: .seconds(confirmationDuration))
                 withAnimation(.easeOut(duration: 0.2)) {
                     showConfirmation = false
                 }

@@ -11,7 +11,7 @@ import OtisShared
 struct DocumentThumbnailView: View {
     let document: Document
     let size: CGFloat
-    @ObservedObject var documentStore: DocumentStore
+    var documentStore: DocumentStore
 
     @State private var image: UIImage?
 

@@ -113,7 +113,7 @@ final class SharingHostViewController: UIViewController {
 
 /// Sync status indicator for the timeline or other views
 struct SyncStatusView: View {
-    @ObservedObject var eventStore: EventStore
+    var eventStore: EventStore
     @ObservedObject var cloudKit = CloudKitService.shared
 
     var body: some View {

@@ -12,8 +12,8 @@ struct LogExposureSheet: View {
     let item: SocializationItem
     var onLogged: ((SocializationReaction) -> Void)?
 
-    @EnvironmentObject var socializationStore: SocializationStore
-    @EnvironmentObject var profileStore: ProfileStore
+    @Environment(SocializationStore.self) var socializationStore
+    @Environment(ProfileStore.self) var profileStore
     @Environment(\.dismiss) private var dismiss
 
     @State private var selectedDistance: ExposureDistance?
@@ -338,6 +338,6 @@ struct LogExposureSheet: View {
             isWalkable: true
         )
     )
-    .environmentObject(SocializationStore())
-    .environmentObject(ProfileStore())
+    .environment(SocializationStore())
+    .environment(ProfileStore())
 }

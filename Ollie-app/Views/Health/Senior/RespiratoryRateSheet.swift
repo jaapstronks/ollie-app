@@ -14,7 +14,7 @@ struct RespiratoryRateSheet: View {
     let onSave: (RespiratoryRateReading) -> Void
 
     @Environment(\.dismiss) private var dismiss
-    @EnvironmentObject private var profileStore: ProfileStore
+    @Environment(ProfileStore.self) private var profileStore
     @StateObject private var wellnessStore = SeniorWellnessStore.shared
 
     init(onSave: @escaping (RespiratoryRateReading) -> Void) {
@@ -324,5 +324,5 @@ struct RespiratoryRateSheet: View {
     RespiratoryRateSheet { reading in
         print("Saved: \(reading)")
     }
-    .environmentObject(ProfileStore.shared)
+    .environment(ProfileStore.shared)
 }

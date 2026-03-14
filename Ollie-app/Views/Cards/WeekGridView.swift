@@ -9,11 +9,12 @@ import OtisShared
 
 /// Row configuration for the week grid
 private struct WeekGridRow: Identifiable {
-    let id = UUID()
     let iconName: String
     let label: String
     let color: Color
     let getValue: (DayStats) -> String
+
+    var id: String { label }
 }
 
 /// 7-day grid showing daily counts for key metrics

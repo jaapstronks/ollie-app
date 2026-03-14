@@ -28,7 +28,7 @@ struct EditEventSheet: View {
     @State private var showingPhotoViewer = false
     @State private var localEvent: PuppyEvent
 
-    @EnvironmentObject private var eventStore: EventStore
+    @Environment(EventStore.self) private var eventStore
 
     /// Get the CloudKit record ID of who logged this event
     private var loggedByRecordID: String? {
@@ -288,5 +288,5 @@ struct EditEventSheet: View {
     ) { event in
         print("Saved: \(event)")
     }
-    .environmentObject(EventStore())
+    .environment(EventStore())
 }

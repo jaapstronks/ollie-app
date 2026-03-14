@@ -11,7 +11,7 @@ import OtisShared
 
 /// Onboarding flow for new users
 struct OnboardingView: View {
-    @ObservedObject var profileStore: ProfileStore
+    var profileStore: ProfileStore
     /// When true, this is adding a second profile (skip welcome/permissions)
     var isAddingProfile: Bool = false
     @EnvironmentObject var notificationService: NotificationService

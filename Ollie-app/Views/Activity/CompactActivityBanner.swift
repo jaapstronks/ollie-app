@@ -13,6 +13,7 @@ struct CompactActivityBanner: View {
     let onTap: () -> Void
 
     @State private var isPulsing = false
+    @State private var isAnimating = false
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
@@ -27,6 +28,12 @@ struct CompactActivityBanner: View {
                     .frame(width: 10, height: 10)
                     .scaleEffect(isPulsing ? 1.2 : 1.0)
                     .opacity(isPulsing ? 0.7 : 1.0)
+                    .animation(
+                        isAnimating
+                            ? .easeInOut(duration: 1.0).repeatForever(autoreverses: true)
+                            : .default,
+                        value: isPulsing
+                    )
 
                 // Activity type
                 Image(systemName: activity.type.icon)
@@ -58,9 +65,13 @@ struct CompactActivityBanner: View {
         .buttonStyle(.plain)
         .onAppear {
             guard !reduceMotion else { return }
-            withAnimation(.easeInOut(duration: 1.0).repeatForever(autoreverses: true)) {
-                isPulsing = true
-            }
+            isAnimating = true
+            isPulsing = true
+        }
+        .onDisappear {
+            // Stop animation by removing the repeatForever modifier
+            isAnimating = false
+            isPulsing = false
         }
     }
 

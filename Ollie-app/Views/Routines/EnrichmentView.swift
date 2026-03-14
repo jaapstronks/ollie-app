@@ -11,7 +11,7 @@ import OtisShared
 /// Full view for browsing enrichment activities and viewing history
 struct EnrichmentView: View {
     @Environment(\.dismiss) private var dismiss
-    @EnvironmentObject private var routineStore: RoutineStore
+    @Environment(RoutineStore.self) private var routineStore
 
     @State private var selectedTab: Int = 0
     @State private var showLogSheet = false
@@ -237,7 +237,7 @@ private struct EnrichmentTypeCard: View {
 
 private struct EnrichmentLogDetailSheet: View {
     @Environment(\.dismiss) private var dismiss
-    @EnvironmentObject private var routineStore: RoutineStore
+    @Environment(RoutineStore.self) private var routineStore
 
     @State private var selectedType: EnrichmentType = .puzzleToy
     @State private var duration: Int = 15
@@ -306,5 +306,5 @@ private struct EnrichmentLogDetailSheet: View {
 
 #Preview {
     EnrichmentView()
-        .environmentObject(RoutineStore())
+        .environment(RoutineStore())
 }

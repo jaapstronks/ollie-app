@@ -9,9 +9,9 @@ import OtisShared
 
 /// Settings screen for health documents: medications, documents, and food alerts
 struct HealthDocumentsView: View {
-    @ObservedObject var profileStore: ProfileStore
-    @ObservedObject var medicationStore: MedicationStore
-    @ObservedObject var documentStore: DocumentStore
+    var profileStore: ProfileStore
+    var medicationStore: MedicationStore
+    var documentStore: DocumentStore
     @ObservedObject var foodRecallService: FoodRecallService
     let profileId: UUID
 

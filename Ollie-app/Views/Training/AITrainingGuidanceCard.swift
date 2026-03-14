@@ -10,9 +10,9 @@ import OtisShared
 
 /// Card displaying AI-powered training suggestions.
 struct AITrainingGuidanceCard: View {
-    @EnvironmentObject var profileStore: ProfileStore
-    @EnvironmentObject var eventStore: EventStore
-    @EnvironmentObject var skillProgressStore: SkillProgressStore
+    @Environment(ProfileStore.self) var profileStore
+    @Environment(EventStore.self) var eventStore
+    @Environment(SkillProgressStore.self) var skillProgressStore
 
     @State private var guidance: TrainingGuidanceResponse?
     @State private var isLoading = false
@@ -118,7 +118,8 @@ struct AITrainingGuidanceCard: View {
         defer { isLoading = false }
 
         // Training guidance needs 30 days of history for pattern analysis
-        let recentEvents = eventStore.getEvents(from: Date.daysAgo(30), to: Date())
+        // PERFORMANCE: Use async version to avoid blocking main thread
+        let recentEvents = await eventStore.getEventsAsync(from: Date.daysAgo(30), to: Date())
 
         let result = await AI.requestTrainingGuidance(
             profile: profile,
@@ -152,14 +153,10 @@ struct AITrainingGuidanceCard: View {
 
 // MARK: - Preview
 
-#if DEBUG
-struct AITrainingGuidanceCard_Previews: PreviewProvider {
-    static var previews: some View {
-        AITrainingGuidanceCard()
-            .environmentObject(ProfileStore())
-            .environmentObject(EventStore())
-            .environmentObject(SkillProgressStore())
-            .padding()
-    }
+#Preview {
+    AITrainingGuidanceCard()
+        .environment(ProfileStore())
+        .environment(EventStore())
+        .environment(SkillProgressStore())
+        .padding()
 }
-#endif

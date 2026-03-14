@@ -3,37 +3,91 @@
 //  Otis-app
 //
 //  Shimmer loading effect for skeleton screens.
-//  Creates a polished loading state that feels faster than spinners.
+//  Uses a single shared animation phase for optimal performance.
 //
 
+import Combine
+import QuartzCore
 import SwiftUI
+
+// MARK: - Shared Shimmer Phase
+
+/// Shared animation phase for all skeleton shimmer effects.
+/// Uses CADisplayLink for a controllable, cancellable animation.
+@MainActor
+private final class ShimmerPhaseProvider: ObservableObject {
+    static let shared = ShimmerPhaseProvider()
+
+    /// Current shimmer phase (0...1), cycles every 1.5 seconds
+    @Published private(set) var phase: CGFloat = 0
+
+    /// Number of active subscribers - animation only runs when > 0
+    private var subscriberCount = 0
+    private var displayLink: CADisplayLink?
+    private var startTime: CFTimeInterval = 0
+    private let duration: CFTimeInterval = 1.5
+
+    private init() {}
+
+    func subscribe() {
+        subscriberCount += 1
+        if subscriberCount == 1 {
+            startAnimation()
+        }
+    }
+
+    func unsubscribe() {
+        subscriberCount = max(0, subscriberCount - 1)
+        if subscriberCount == 0 {
+            stopAnimation()
+        }
+    }
+
+    private func startAnimation() {
+        guard displayLink == nil else { return }
+        startTime = CACurrentMediaTime()
+
+        let link = CADisplayLink(target: self, selector: #selector(tick))
+        link.add(to: .main, forMode: .common)
+        displayLink = link
+    }
+
+    private func stopAnimation() {
+        displayLink?.invalidate()
+        displayLink = nil
+        phase = 0
+    }
+
+    @objc private func tick() {
+        let elapsed = CACurrentMediaTime() - startTime
+        // Map to 0...1 range, cycling every `duration` seconds
+        phase = CGFloat(elapsed.truncatingRemainder(dividingBy: duration) / duration)
+    }
+}
 
 // MARK: - Skeleton View Modifier
 
-/// Applies a shimmering skeleton loading effect to any view
+/// Applies a shimmering skeleton loading effect to any view.
+/// Uses a shared animation source for optimal performance.
 struct SkeletonModifier: ViewModifier {
     let isLoading: Bool
 
-    @State private var shimmerOffset: CGFloat = -1
-    @Environment(\.colorScheme) private var colorScheme
+    @StateObject private var phaseProvider = ShimmerPhaseProvider.shared
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     func body(content: Content) -> some View {
         if isLoading {
             content
                 .redacted(reason: .placeholder)
-                .overlay(
-                    GeometryReader { geometry in
-                        if !reduceMotion {
-                            shimmerGradient
-                                .frame(width: geometry.size.width * 2)
-                                .offset(x: shimmerOffset * geometry.size.width * 2)
-                        }
-                    }
-                    .clipped()
-                )
+                .overlay(shimmerOverlay)
                 .onAppear {
-                    startShimmerAnimation()
+                    // PERFORMANCE: Check debug toggle to disable shimmer animation
+                    if !reduceMotion && !PerformanceDebug.disableSkeletons {
+                        phaseProvider.subscribe()
+                    }
+                }
+                .onDisappear {
+                    phaseProvider.unsubscribe()
                 }
                 .accessibilityLabel("Loading")
         } else {
@@ -41,37 +95,62 @@ struct SkeletonModifier: ViewModifier {
         }
     }
 
-    private var shimmerGradient: some View {
-        LinearGradient(
-            colors: [
-                Color.clear,
-                Color.white.opacity(colorScheme == .dark ? 0.15 : 0.4),
-                Color.white.opacity(colorScheme == .dark ? 0.25 : 0.6),
-                Color.white.opacity(colorScheme == .dark ? 0.15 : 0.4),
-                Color.clear
-            ],
-            startPoint: .leading,
-            endPoint: .trailing
-        )
-    }
-
-    private func startShimmerAnimation() {
-        guard !reduceMotion else { return }
-
-        shimmerOffset = -1
-        withAnimation(
-            .linear(duration: 1.5)
-            .repeatForever(autoreverses: false)
-        ) {
-            shimmerOffset = 1
+    @ViewBuilder
+    private var shimmerOverlay: some View {
+        if !reduceMotion {
+            ShimmerOverlay(phase: phaseProvider.phase)
+                .drawingGroup()
         }
     }
 }
 
+/// Efficient shimmer overlay using a single gradient pass
+private struct ShimmerOverlay: View {
+    let phase: CGFloat
+
+    @Environment(\.colorScheme) private var colorScheme
+
+    var body: some View {
+        GeometryReader { geometry in
+            let width = geometry.size.width
+            // Offset ranges from -width to +width based on phase
+            let offset = (phase * 3 - 1) * width
+
+            LinearGradient(
+                colors: shimmerColors,
+                startPoint: .leading,
+                endPoint: .trailing
+            )
+            .frame(width: width)
+            .offset(x: offset)
+        }
+        .clipped()
+    }
+
+    private var shimmerColors: [Color] {
+        let opacity1 = colorScheme == .dark ? 0.15 : 0.4
+        let opacity2 = colorScheme == .dark ? 0.25 : 0.6
+        return [
+            Color.clear,
+            Color.white.opacity(opacity1),
+            Color.white.opacity(opacity2),
+            Color.white.opacity(opacity1),
+            Color.clear
+        ]
+    }
+}
+
 extension View {
-    /// Applies a skeleton loading effect when isLoading is true
-    func skeleton(isLoading: Bool) -> some View {
+    /// Applies a shimmering skeleton loading effect when isLoading is true.
+    /// Use this on container views wrapping skeleton shape components.
+    func shimmer(isLoading: Bool) -> some View {
         modifier(SkeletonModifier(isLoading: isLoading))
+    }
+
+    /// Applies a skeleton loading effect when isLoading is true.
+    /// Convenience method that calls shimmer(isLoading:).
+    func skeleton(isLoading: Bool) -> some View {
+        shimmer(isLoading: isLoading)
     }
 }
 
@@ -148,9 +227,10 @@ struct SkeletonRect: View {
     }
 }
 
-// MARK: - Pre-built Skeleton Components
+// MARK: - Pre-built Skeleton Components (No individual animation)
 
-/// Skeleton for a timeline event row
+/// Skeleton for a timeline event row.
+/// NOTE: Apply `.skeleton(isLoading: true)` at the container level, not here.
 struct SkeletonEventRow: View {
     var body: some View {
         HStack(spacing: 12) {
@@ -170,7 +250,8 @@ struct SkeletonEventRow: View {
     }
 }
 
-/// Skeleton for a status card
+/// Skeleton for a status card.
+/// NOTE: Apply `.skeleton(isLoading: true)` at the container level, not here.
 struct SkeletonStatusCard: View {
     var body: some View {
         HStack(spacing: 12) {
@@ -190,18 +271,17 @@ struct SkeletonStatusCard: View {
     }
 }
 
-/// Skeleton for a gallery thumbnail
+/// Skeleton for a gallery thumbnail.
+/// NOTE: Apply `.skeleton(isLoading: true)` at the container level, not here.
 struct SkeletonThumbnail: View {
     var body: some View {
         SkeletonRect(height: 100, cornerRadius: LayoutConstants.cornerRadiusS)
     }
 }
 
-/// Skeleton for a full timeline loading state
+/// Skeleton for a full timeline loading state.
+/// This is a container - applies a SINGLE shimmer animation to all children.
 struct SkeletonTimeline: View {
-    @State private var shimmerOffset: CGFloat = -1
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
-
     var body: some View {
         VStack(spacing: 0) {
             // Status card skeleton
@@ -214,7 +294,7 @@ struct SkeletonTimeline: View {
                 SkeletonEventRow()
             }
         }
-        .skeleton(isLoading: true)
+        .shimmer(isLoading: true) // Single animation for the entire container
     }
 }
 
@@ -238,14 +318,17 @@ struct SkeletonTimeline: View {
                     SkeletonRect(height: 80)
                 }
             }
+            .shimmer(isLoading: true)
 
             GroupBox("Event Row Skeleton") {
                 SkeletonEventRow()
             }
+            .shimmer(isLoading: true)
 
             GroupBox("Status Card Skeleton") {
                 SkeletonStatusCard()
             }
+            .shimmer(isLoading: true)
 
             GroupBox("Timeline Skeleton") {
                 SkeletonTimeline()
@@ -275,7 +358,7 @@ struct SkeletonTimeline: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding()
                 .glassBackground(.card)
-                .skeleton(isLoading: isLoading)
+                .shimmer(isLoading: isLoading)
                 .padding(.horizontal)
 
                 Spacer()

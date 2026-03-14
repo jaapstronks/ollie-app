@@ -10,8 +10,8 @@ import OtisShared
 
 /// Settings view for managing grooming schedule and coat type
 struct GroomingSettingsView: View {
-    @ObservedObject var profileStore: ProfileStore
-    @EnvironmentObject var routineStore: RoutineStore
+    var profileStore: ProfileStore
+    @Environment(RoutineStore.self) var routineStore
     var profileId: UUID? = nil
 
     @State private var showingCoatTypePicker = false
@@ -421,6 +421,6 @@ private struct CoatTypePickerSheet: View {
 #Preview {
     NavigationStack {
         GroomingSettingsView(profileStore: ProfileStore())
-            .environmentObject(RoutineStore())
+            .environment(RoutineStore())
     }
 }

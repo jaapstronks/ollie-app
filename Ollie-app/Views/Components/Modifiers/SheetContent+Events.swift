@@ -50,14 +50,15 @@ extension SheetCoordinator.ActiveSheet {
             )
 
         case .logEvent(let type):
-            LogEventSheet(eventType: type) { note, who, exercise, result, durationMin in
+            LogEventSheet(eventType: type) { note, who, exercise, result, durationMin, linkedContactID in
                 context.viewModel.logEvent(
                     type: type,
                     note: note,
                     who: who,
                     exercise: exercise,
                     result: result,
-                    durationMin: durationMin
+                    durationMin: durationMin,
+                    linkedContactID: linkedContactID
                 )
                 context.sheetCoordinator.dismissSheet()
             }
@@ -109,7 +110,7 @@ extension SheetCoordinator.ActiveSheet {
                     context.sheetCoordinator.dismissSheet()
                 }
             )
-            .environmentObject(context.viewModel.profileStore)
+            .environment(context.viewModel.profileStore)
 
         case .seniorMobility:
             MobilityAssessmentSheet(
@@ -122,7 +123,7 @@ extension SheetCoordinator.ActiveSheet {
                     context.sheetCoordinator.dismissSheet()
                 }
             )
-            .environmentObject(context.viewModel.profileStore)
+            .environment(context.viewModel.profileStore)
 
         case .groomingSettings:
             NavigationStack {
@@ -134,7 +135,7 @@ extension SheetCoordinator.ActiveSheet {
                 puppyName: context.viewModel.puppyName,
                 preselectedType: preselectedType
             )
-            .environmentObject(context.routineStore)
+            .environment(context.routineStore)
 
         case .behaviorLog:
             BehaviorLogSheet(

@@ -13,7 +13,7 @@ struct CognitiveAssessmentSheet: View {
     let onSave: (CognitiveAssessment) -> Void
 
     @Environment(\.dismiss) private var dismiss
-    @EnvironmentObject private var profileStore: ProfileStore
+    @Environment(ProfileStore.self) private var profileStore
 
     @State private var selectedSymptoms: Set<CCDSymptom> = []
     @State private var note: String = ""
@@ -256,5 +256,5 @@ private struct GuidanceSheet: View {
     CognitiveAssessmentSheet { assessment in
         print("Saved: \(assessment)")
     }
-    .environmentObject(ProfileStore.shared)
+    .environment(ProfileStore.shared)
 }

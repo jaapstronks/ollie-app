@@ -13,7 +13,7 @@ import OtisShared
 
 /// Debug section for data import and reset operations
 struct DebugDataSection: View {
-    @EnvironmentObject var eventStore: EventStore
+    @Environment(EventStore.self) var eventStore
 
     @State private var showResetConfirm = false
     @State private var showImportConfirm = false
@@ -462,7 +462,7 @@ struct DebugDataSection: View {
     Form {
         DebugDataSection()
     }
-    .environmentObject(EventStore())
+    .environment(EventStore())
 }
 
 #endif

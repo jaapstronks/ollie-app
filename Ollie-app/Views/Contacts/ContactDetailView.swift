@@ -10,7 +10,7 @@ import OtisShared
 /// Detail view for a contact
 struct ContactDetailView: View {
     let contact: DogContact
-    @ObservedObject var contactStore: ContactStore
+    var contactStore: ContactStore
     var appointmentStore: AppointmentStore?
 
     @Environment(\.dismiss) private var dismiss

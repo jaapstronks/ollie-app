@@ -11,12 +11,13 @@ import OtisShared
 
 /// Quick action item for the FAB menu
 struct FABQuickAction: Identifiable {
-    let id = UUID()
     let type: EventType
     let label: String
     let icon: String
     let color: Color
     let location: EventLocation?
+
+    var id: String { type.rawValue }
 
     static var defaultActions: [FABQuickAction] {
         [

@@ -21,7 +21,7 @@ struct PointEventWithStem: View {
     let stemAnchorX: CGFloat  // Not used anymore, kept for API compatibility
     let timeColumnWidth: CGFloat
     let contentWidth: CGFloat
-    var householdMembers: HouseholdMembers?
+    // Note: householdMembers removed - attribution now uses CloudKit record IDs
     let onTap: () -> Void
 
     @Environment(\.colorScheme) private var colorScheme
@@ -76,7 +76,7 @@ struct PointEventWithStem: View {
                 .offset(x: anchorX - 3, y: anchorY - 3)
 
             // Event card (right-aligned, pill-shaped)
-            PointEventCard(item: item, iconColor: iconColor, householdMembers: householdMembers, onTap: onTap)
+            PointEventCard(item: item, iconColor: iconColor, onTap: onTap)
                 .frame(width: cardWidth, height: iconSize)
                 .offset(x: cardLeftX, y: cardY)
         }
@@ -149,7 +149,6 @@ struct StemLine: View {
 struct PointEventCard: View {
     let item: VerticalTimelineItem
     let iconColor: Color
-    var householdMembers: HouseholdMembers?
     let onTap: () -> Void
 
     @Environment(\.colorScheme) private var colorScheme
@@ -162,12 +161,10 @@ struct PointEventCard: View {
         item.photoThumbnail != nil
     }
 
-    /// Look up the member who logged this event
-    private var loggedByMember: HouseholdMember? {
-        guard case .pointEvent(let event) = item.type,
-              let loggedBy = event.loggedBy,
-              let members = householdMembers else { return nil }
-        return members.member(byId: loggedBy)
+    /// Get the CloudKit record ID of who logged this event
+    private var loggedByRecordID: String? {
+        guard case .pointEvent(let event) = item.type else { return nil }
+        return event.loggedBy
     }
 
     var body: some View {
@@ -197,11 +194,10 @@ struct PointEventCard: View {
                         .foregroundStyle(.primary)
                         .lineLimit(1)
 
-                    // Attribution avatar (only shown when loggedBy is set and there are multiple members)
-                    if let member = loggedByMember,
-                       let members = householdMembers,
-                       members.members.count > 1 {
-                        HouseholdMemberAvatar(member: member, size: 14)
+                    // Attribution avatar (only shown when event was logged by someone else)
+                    if let recordID = loggedByRecordID,
+                       !UserIdentityStore.shared.isCurrentUser(recordID) {
+                        UserAvatarFromRecordID(cloudKitRecordID: recordID, size: 14)
                     }
                 }
                 .padding(.leading, 6)

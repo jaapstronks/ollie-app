@@ -9,6 +9,49 @@
 import SwiftUI
 import OtisShared
 
+/// Debug section for AI usage monitoring
+struct DebugAIUsageSection: View {
+    @State private var usageText: String = ""
+    @State private var showClearConfirm = false
+
+    var body: some View {
+        Section {
+            VStack(alignment: .leading, spacing: 8) {
+                Text(usageText.isEmpty ? "Loading..." : usageText)
+                    .font(.system(.caption, design: .monospaced))
+                    .foregroundStyle(.secondary)
+            }
+            .onAppear { refreshUsage() }
+
+            Button {
+                refreshUsage()
+            } label: {
+                Label("Refresh Stats", systemImage: "arrow.clockwise")
+            }
+
+            Button(role: .destructive) {
+                showClearConfirm = true
+            } label: {
+                Label("Clear Usage Stats", systemImage: "trash")
+            }
+            .confirmationDialog("Clear all usage stats?", isPresented: $showClearConfirm) {
+                Button("Clear Stats", role: .destructive) {
+                    AIUsageMonitor.shared.clearAll()
+                    refreshUsage()
+                }
+            }
+        } header: {
+            Label("AI Usage Stats", systemImage: "chart.bar")
+        } footer: {
+            Text("Tracks API calls, cache hits, and mock responses. Stats are persisted across app launches.")
+        }
+    }
+
+    private func refreshUsage() {
+        usageText = AIUsageMonitor.shared.summaryText
+    }
+}
+
 /// Debug section for AI broker configuration and testing
 struct DebugAIBrokerSection: View {
     // AI broker debug config (stored in UserDefaults via AINudgeRollout keys)
@@ -17,6 +60,7 @@ struct DebugAIBrokerSection: View {
     @AppStorage("ai.nudges.rolloutPercentage") private var aiRolloutPercentage = 100
     @AppStorage("ai.nudges.shadowMode") private var aiShadowMode = true
     @AppStorage("ai.nudges.enabled") private var aiEnabled = true
+    @AppStorage("ai.nudges.testMode") private var aiTestMode = false
 
     @State private var isTestingBroker = false
     @State private var brokerTestResult: String?
@@ -25,6 +69,16 @@ struct DebugAIBrokerSection: View {
         Section {
             Toggle("AI Nudges Enabled", isOn: $aiEnabled)
             Toggle("AI Shadow Mode", isOn: $aiShadowMode)
+
+            Toggle(isOn: $aiTestMode) {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Mock Mode (No API Calls)")
+                    Text("Returns fake responses for testing UI")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            }
+            .tint(.orange)
 
             HStack {
                 Text("Rollout %")
@@ -121,8 +175,8 @@ struct DebugAIBrokerSection: View {
 
 /// Debug section for testing AI surfaces
 struct DebugAISurfaceTestingSection: View {
-    @EnvironmentObject var profileStore: ProfileStore
-    @EnvironmentObject var eventStore: EventStore
+    @Environment(ProfileStore.self) var profileStore
+    @Environment(EventStore.self) var eventStore
 
     @AppStorage("ai.nudges.brokerApiKey") private var aiBrokerApiKey = ""
 
@@ -402,8 +456,8 @@ struct DebugAISurfaceTestingSection: View {
     Form {
         DebugAISurfaceTestingSection()
     }
-    .environmentObject(ProfileStore())
-    .environmentObject(EventStore())
+    .environment(ProfileStore())
+    .environment(EventStore())
 }
 
 // MARK: - AISurface Display Extensions

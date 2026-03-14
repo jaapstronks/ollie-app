@@ -15,7 +15,7 @@ struct OtisPlusSheet: View {
 
     @ObservedObject var subscriptionManager = SubscriptionManager.shared
     @ObservedObject private var trialManager = TrialManager.shared
-    @ObservedObject private var profileStore = ProfileStore.shared
+    var profileStore = ProfileStore.shared
     @Environment(\.colorScheme) private var colorScheme
 
     private var dogName: String {

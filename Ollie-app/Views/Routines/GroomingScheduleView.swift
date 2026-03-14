@@ -11,7 +11,7 @@ import OtisShared
 /// Full view for managing grooming schedule
 struct GroomingScheduleView: View {
     @Environment(\.dismiss) private var dismiss
-    @EnvironmentObject private var routineStore: RoutineStore
+    @Environment(RoutineStore.self) private var routineStore
 
     @State private var editingActivity: GroomingActivity?
 
@@ -200,7 +200,7 @@ private struct GroomingScheduleRow: View {
 
 private struct GroomingEditSheet: View {
     @Environment(\.dismiss) private var dismiss
-    @EnvironmentObject private var routineStore: RoutineStore
+    @Environment(RoutineStore.self) private var routineStore
 
     let activity: GroomingActivity
 
@@ -289,5 +289,5 @@ private struct GroomingEditSheet: View {
 
 #Preview {
     GroomingScheduleView()
-        .environmentObject(RoutineStore())
+        .environment(RoutineStore())
 }

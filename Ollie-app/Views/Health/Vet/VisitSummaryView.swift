@@ -11,7 +11,7 @@ import OtisShared
 
 /// View for displaying and sharing vet visit summary
 struct VisitSummaryView: View {
-    @EnvironmentObject private var profileStore: ProfileStore
+    @Environment(ProfileStore.self) private var profileStore
 
     @Environment(\.dismiss) private var dismiss
 
@@ -60,7 +60,7 @@ struct VisitSummaryView: View {
                     profileSection
 
                     // Allergies (if critical)
-                    if !allergies.filter({ $0.severity == .severe || $0.severity == .lifeThreatening }).isEmpty {
+                    if allergies.contains(where: { $0.severity == .severe || $0.severity == .lifeThreatening }) {
                         allergiesSection
                     }
 
@@ -491,7 +491,8 @@ struct VisitSummaryView: View {
             showCopiedToast = true
         }
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+        Task { @MainActor in
+            try? await Task.sleep(for: .seconds(2))
             withAnimation {
                 showCopiedToast = false
             }

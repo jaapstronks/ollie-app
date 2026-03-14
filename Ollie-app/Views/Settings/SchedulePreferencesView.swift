@@ -10,7 +10,7 @@ import OtisShared
 
 /// Settings screen for schedules and preferences
 struct SchedulePreferencesView: View {
-    @ObservedObject var profileStore: ProfileStore
+    var profileStore: ProfileStore
     @ObservedObject var notificationService: NotificationService
     let profileId: UUID
 

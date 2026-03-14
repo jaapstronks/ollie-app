@@ -10,7 +10,7 @@ import OtisShared
 /// Sheet for logging or editing a weight measurement
 struct WeightLogSheet: View {
     @Binding var isPresented: Bool
-    @EnvironmentObject var weightStore: WeightStore
+    @Environment(WeightStore.self) var weightStore
 
     /// Optional measurement to edit. If nil, creates a new measurement.
     var measurementToEdit: WeightMeasurement?
@@ -167,5 +167,5 @@ struct WeightLogSheet: View {
 
 #Preview {
     WeightLogSheet(isPresented: .constant(true))
-        .environmentObject(WeightStore())
+        .environment(WeightStore())
 }

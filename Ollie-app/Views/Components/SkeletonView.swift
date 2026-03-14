@@ -4,9 +4,9 @@
 //
 //  Skeleton loading placeholders for content
 //
-//  NOTE: For new code, prefer using the components from SkeletonModifier.swift
-//  (SkeletonText, SkeletonCircle, SkeletonRect) with the `.skeleton(isLoading:)` modifier.
-//  Those use a single shared shimmer animation for better performance.
+//  IMPORTANT: These are static shape components. Apply `.skeleton(isLoading: true)`
+//  at the CONTAINER level only, never on individual skeleton components.
+//  This ensures a single shared animation instead of multiple overlapping animations.
 
 import SwiftUI
 
@@ -33,7 +33,8 @@ struct SkeletonView: View {
     }
 }
 
-/// Skeleton placeholder for a card
+/// Skeleton placeholder for a card.
+/// Apply `.skeleton(isLoading: true)` at the container level when using.
 struct SkeletonCard: View {
     var lineCount: Int = 3
     @Environment(\.colorScheme) private var colorScheme
@@ -56,11 +57,12 @@ struct SkeletonCard: View {
                 .fill(colorScheme == .dark ? Color(.secondarySystemBackground) : Color.white)
                 .shadow(color: .black.opacity(0.05), radius: 8, x: 0, y: 2)
         )
-        .skeleton(isLoading: true)
+        // NO .skeleton() here - apply at container level
     }
 }
 
-/// Skeleton for milestone row
+/// Skeleton for milestone row.
+/// Apply `.skeleton(isLoading: true)` at the container level when using.
 struct MilestoneRowSkeleton: View {
     @Environment(\.colorScheme) private var colorScheme
 
@@ -85,7 +87,7 @@ struct MilestoneRowSkeleton: View {
                 .frame(width: 50)
         }
         .padding(.vertical, 8)
-        .skeleton(isLoading: true)
+        // NO .skeleton() here - apply at container level
     }
 
     private var skeletonColor: Color {
@@ -93,7 +95,8 @@ struct MilestoneRowSkeleton: View {
     }
 }
 
-/// Skeleton for the This Week card
+/// Skeleton for the This Week card.
+/// Apply `.skeleton(isLoading: true)` at the container level when using.
 struct ThisWeekCardSkeleton: View {
     @Environment(\.colorScheme) private var colorScheme
 
@@ -156,11 +159,12 @@ struct ThisWeekCardSkeleton: View {
                 .fill(colorScheme == .dark ? Color(.secondarySystemBackground) : Color.white)
                 .shadow(color: .black.opacity(0.05), radius: 8, x: 0, y: 2)
         )
-        .skeleton(isLoading: true)
+        // NO .skeleton() here - apply at container level
     }
 }
 
-/// Skeleton for socialization week timeline
+/// Skeleton for socialization week timeline.
+/// Apply `.skeleton(isLoading: true)` at the container level when using.
 struct SocializationTimelineSkeleton: View {
     @Environment(\.colorScheme) private var colorScheme
 
@@ -210,13 +214,14 @@ struct SocializationTimelineSkeleton: View {
             }
         }
         .padding()
-        .skeleton(isLoading: true)
+        // NO .skeleton() here - apply at container level
     }
 }
 
 // MARK: - AI Insight Card Skeleton
 
-/// Skeleton placeholder for AI insight cards (used by AIInsightCardContainer)
+/// Skeleton placeholder for AI insight cards (used by AIInsightCardContainer).
+/// Apply `.skeleton(isLoading: true)` at the container level when using.
 struct AIInsightCardSkeleton: View {
     @Environment(\.colorScheme) private var colorScheme
 
@@ -240,13 +245,14 @@ struct AIInsightCardSkeleton: View {
                     .frame(width: 180)
             }
         }
-        .skeleton(isLoading: true)
+        // NO .skeleton() here - apply at container level
     }
 }
 
 // MARK: - Morning Briefing Skeleton
 
-/// Skeleton placeholder for the morning briefing card
+/// Skeleton placeholder for the morning briefing card.
+/// Apply `.skeleton(isLoading: true)` at the container level when using.
 struct MorningBriefingSkeleton: View {
     @Environment(\.colorScheme) private var colorScheme
 
@@ -275,13 +281,14 @@ struct MorningBriefingSkeleton: View {
             SkeletonView(height: 32, cornerRadius: 8)
                 .frame(width: 200)
         }
-        .skeleton(isLoading: true)
+        .shimmer(isLoading: true) // This one IS a container for the briefing
     }
 }
 
 // MARK: - Weather Section Skeleton
 
-/// Skeleton placeholder for weather section
+/// Skeleton placeholder for weather section.
+/// Apply `.skeleton(isLoading: true)` at the container level when using.
 struct WeatherSectionSkeleton: View {
     @Environment(\.colorScheme) private var colorScheme
 
@@ -307,13 +314,14 @@ struct WeatherSectionSkeleton: View {
         }
         .padding(.horizontal)
         .padding(.vertical, 6)
-        .skeleton(isLoading: true)
+        .shimmer(isLoading: true) // This one IS a container for weather
     }
 }
 
 // MARK: - Recap Sheet Skeleton
 
-/// Skeleton placeholder for week/month recap sheets
+/// Skeleton placeholder for week/month recap sheets.
+/// Apply `.skeleton(isLoading: true)` at the container level when using.
 struct RecapSheetSkeleton: View {
     @Environment(\.colorScheme) private var colorScheme
 
@@ -370,7 +378,7 @@ struct RecapSheetSkeleton: View {
                 }
             }
         }
-        .skeleton(isLoading: true)
+        .shimmer(isLoading: true) // This one IS a container for recap
     }
 }
 
@@ -399,6 +407,7 @@ extension View {
             Text("Skeleton Card")
                 .font(.headline)
             SkeletonCard()
+                .shimmer(isLoading: true)
 
             Text("Milestone Row Skeleton")
                 .font(.headline)
@@ -410,16 +419,19 @@ extension View {
             .padding()
             .background(Color(.secondarySystemBackground))
             .clipShape(RoundedRectangle(cornerRadius: 12))
+            .shimmer(isLoading: true)
 
             Text("This Week Card Skeleton")
                 .font(.headline)
             ThisWeekCardSkeleton()
+                .shimmer(isLoading: true)
 
             Text("Timeline Skeleton")
                 .font(.headline)
             SocializationTimelineSkeleton()
                 .background(Color(.secondarySystemBackground))
                 .clipShape(RoundedRectangle(cornerRadius: 12))
+                .shimmer(isLoading: true)
 
             Text("AI Insight Card Skeleton")
                 .font(.headline)
@@ -427,6 +439,7 @@ extension View {
                 .padding()
                 .background(Color.purple.opacity(0.1))
                 .clipShape(RoundedRectangle(cornerRadius: 16))
+                .shimmer(isLoading: true)
 
             Text("Morning Briefing Skeleton")
                 .font(.headline)

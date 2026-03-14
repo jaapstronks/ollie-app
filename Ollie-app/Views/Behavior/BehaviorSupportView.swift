@@ -11,8 +11,8 @@ import OtisShared
 /// Full view for managing behavior challenges
 /// Includes professional disclaimer, active issues, and intervention tracking
 struct BehaviorSupportView: View {
-    @EnvironmentObject var eventStore: EventStore
-    @EnvironmentObject var profileStore: ProfileStore
+    @Environment(EventStore.self) var eventStore
+    @Environment(ProfileStore.self) var profileStore
 
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.dismiss) private var dismiss
@@ -29,26 +29,26 @@ struct BehaviorSupportView: View {
         profileStore.profile
     }
 
+    /// All behavior incidents (filter once, reuse for time-based filtering)
+    private var allBehaviorIncidents: [PuppyEvent] {
+        eventStore.events.filter { $0.isBehaviorIncident }
+    }
+
     /// All behavior incidents from last 30 days
     private var recentIncidents: [PuppyEvent] {
-        eventStore.events
-            .filter { $0.isBehaviorIncident }
+        allBehaviorIncidents
             .lastDays(30)
             .sorted { $0.time > $1.time }
     }
 
-    /// Incidents from the last 7 days
+    /// Incidents from the last 7 days (filtered from recentIncidents for efficiency)
     private var thisWeekIncidents: [PuppyEvent] {
-        eventStore.events
-            .filter { $0.isBehaviorIncident }
-            .thisWeek()
+        recentIncidents.filter { $0.time.isThisWeek }
     }
 
     /// Incidents from 7-14 days ago (for comparison)
     private var lastWeekIncidents: [PuppyEvent] {
-        eventStore.events
-            .filter { $0.isBehaviorIncident }
-            .lastWeek()
+        recentIncidents.filter { $0.time.isLastWeek }
     }
 
     /// Aggregate incidents by category (last 30 days)
@@ -559,8 +559,8 @@ private struct BehaviorSupportViewPreview: View {
         return NavigationStack {
             BehaviorSupportView()
         }
-        .environmentObject(eventStore)
-        .environmentObject(profileStore)
+        .environment(eventStore)
+        .environment(profileStore)
     }
 }
 

@@ -13,7 +13,7 @@ struct MobilityAssessmentSheet: View {
     let onSave: (MobilityAssessment) -> Void
 
     @Environment(\.dismiss) private var dismiss
-    @EnvironmentObject private var profileStore: ProfileStore
+    @Environment(ProfileStore.self) private var profileStore
 
     @State private var selectedScore: Int = 3
     @State private var selectedObservations: Set<MobilityObservation> = []
@@ -217,5 +217,5 @@ private struct ObservationChip: View {
     MobilityAssessmentSheet { assessment in
         print("Saved: \(assessment)")
     }
-    .environmentObject(ProfileStore.shared)
+    .environment(ProfileStore.shared)
 }

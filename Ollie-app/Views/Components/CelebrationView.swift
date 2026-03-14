@@ -28,11 +28,11 @@ enum CelebrationPreset {
 
     var headline: String {
         switch self {
-        case .milestone: return String(localized: "Amazing!")
-        case .pottySuccess: return String(localized: "Great job!")
-        case .streak: return String(localized: "On a roll!")
-        case .training: return String(localized: "Great work!")
-        case .quickLog: return String(localized: "Nice!")
+        case .milestone: return Strings.Celebrations.amazing
+        case .pottySuccess: return Strings.Celebrations.greatJob
+        case .streak: return Strings.Celebrations.onARoll
+        case .training: return Strings.Celebrations.greatWork
+        case .quickLog: return Strings.Celebrations.nice
         }
     }
 }
@@ -117,7 +117,8 @@ struct CelebrationView: View {
             progress = 1
         }
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + duration + 0.15) {
+        Task { @MainActor in
+            try? await Task.sleep(for: .seconds(duration + 0.15))
             isActive = false
         }
     }

@@ -10,7 +10,7 @@ import SwiftUI
 
 /// Status cards section showing current puppy state and actionable items
 struct TodayStatusCardsSection: View {
-    @ObservedObject var viewModel: TimelineViewModel
+    @Bindable var viewModel: TimelineViewModel
     let weatherService: WeatherService
     let appointmentNudgeCandidate: AppointmentNudgeCandidate?
     let crateTrainingMastered: Bool
@@ -41,7 +41,7 @@ struct TodayStatusCardsSection: View {
 
     @ObservedObject private var trialManager = TrialManager.shared
     @ObservedObject private var firstWeekService = FirstWeekExperienceService.shared
-    @EnvironmentObject private var contactStore: ContactStore
+    @Environment(ContactStore.self) private var contactStore
 
     var body: some View {
         VStack(spacing: 12) {

@@ -10,9 +10,9 @@ import OtisShared
 
 /// Main routine dashboard showing daily routine, grooming, enrichment, and weight management
 struct RoutineView: View {
-    @EnvironmentObject private var routineStore: RoutineStore
-    @EnvironmentObject private var weightStore: WeightStore
-    @EnvironmentObject private var profileStore: ProfileStore
+    @Environment(RoutineStore.self) private var routineStore
+    @Environment(WeightStore.self) private var weightStore
+    @Environment(ProfileStore.self) private var profileStore
 
     @State private var showRoutineEdit = false
     @State private var showWeightGoalSheet = false
@@ -188,7 +188,7 @@ struct RoutineView: View {
 
 private struct EnrichmentLogSheet: View {
     @Environment(\.dismiss) private var dismiss
-    @EnvironmentObject private var routineStore: RoutineStore
+    @Environment(RoutineStore.self) private var routineStore
 
     @State private var selectedType: EnrichmentType = .puzzleToy
     @State private var duration: Int = 15
@@ -244,7 +244,7 @@ private struct EnrichmentLogSheet: View {
     NavigationStack {
         RoutineView()
     }
-    .environmentObject(RoutineStore())
-    .environmentObject(WeightStore())
-    .environmentObject(ProfileStore())
+    .environment(RoutineStore())
+    .environment(WeightStore())
+    .environment(ProfileStore())
 }

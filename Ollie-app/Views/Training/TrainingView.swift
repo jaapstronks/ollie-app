@@ -10,11 +10,11 @@ import OtisShared
 
 /// Main training view with preparation gate and linear skill progression
 struct TrainingView: View {
-    @ObservedObject var eventStore: EventStore
+    var eventStore: EventStore
 
-    @StateObject private var trainingStore = TrainingPlanStore()
+    @State private var trainingStore = TrainingPlanStore()
     @StateObject private var progressStore = TrainingProgressStore()
-    @EnvironmentObject var skillProgressStore: SkillProgressStore
+    @Environment(SkillProgressStore.self) var skillProgressStore
     @EnvironmentObject var subscriptionManager: SubscriptionManager
 
     @State private var selectedSkill: Skill?

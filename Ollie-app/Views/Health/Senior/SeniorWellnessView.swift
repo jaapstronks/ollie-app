@@ -10,7 +10,7 @@ import SwiftUI
 import OtisShared
 
 struct SeniorWellnessView: View {
-    @EnvironmentObject private var profileStore: ProfileStore
+    @Environment(ProfileStore.self) private var profileStore
     @StateObject private var wellnessStore = SeniorWellnessStore.shared
 
     @State private var showMobilitySheet = false
@@ -20,6 +20,10 @@ struct SeniorWellnessView: View {
 
     private var puppyName: String {
         profileStore.activeProfile?.name ?? "Your dog"
+    }
+
+    private var activeConditions: [HealthCondition] {
+        profileStore.activeProfile?.healthConditions.filter { $0.status == .active } ?? []
     }
 
     var body: some View {
@@ -121,7 +125,8 @@ struct SeniorWellnessView: View {
                 }
 
                 // Breathing (if heart condition)
-                if wellnessStore.shouldShowRRRTracking {
+                if wellnessStore.shouldShowRRRTracking(activeConditions: activeConditions) {
+                    let rrrState = wellnessStore.rrrState(activeConditions: activeConditions)
                     WellnessStatusCard(
                         title: Strings.SeniorWellness.rrrCard,
                         icon: "lungs.fill",
@@ -129,9 +134,9 @@ struct SeniorWellnessView: View {
                         maxScore: nil,
                         status: wellnessStore.latestRRR?.status.label,
                         statusColor: wellnessStore.latestRRR.map { Color($0.status.colorName) },
-                        trend: wellnessStore.rrrState.trend?.label,
-                        trendIcon: wellnessStore.rrrState.trend?.icon,
-                        trendColor: wellnessStore.rrrState.trend.map { Color($0.colorName) }
+                        trend: rrrState.trend?.label,
+                        trendIcon: rrrState.trend?.icon,
+                        trendColor: rrrState.trend.map { Color($0.colorName) }
                     ) {
                         showRRRSheet = true
                     }
@@ -220,7 +225,7 @@ struct SeniorWellnessView: View {
                 }
 
                 // RRR readings
-                let elevatedCount = wellnessStore.rrrState.elevatedReadingsThisWeek
+                let elevatedCount = wellnessStore.rrrState(activeConditions: activeConditions).elevatedReadingsThisWeek
                 if elevatedCount > 0 {
                     HStack(spacing: 6) {
                         Image(systemName: "exclamationmark.triangle.fill")
@@ -261,12 +266,7 @@ struct SeniorWellnessView: View {
                 if !qol.concerningCategories.isEmpty {
                     HStack(spacing: 8) {
                         ForEach(qol.concerningCategories.prefix(3), id: \.self) { category in
-                            Label(category.label, systemImage: category.icon)
-                                .font(.caption)
-                                .padding(.horizontal, 8)
-                                .padding(.vertical, 4)
-                                .background(Color.orange.opacity(0.2))
-                                .clipShape(Capsule())
+                            CapsuleBadge(category.label, icon: category.icon, color: .orange, style: .tinted)
                         }
                     }
                 }
@@ -384,12 +384,7 @@ private struct AssessmentRow: View {
                 Spacer()
 
                 if let status = status {
-                    Text(status)
-                        .font(.caption)
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 4)
-                        .background((statusColor ?? .gray).opacity(0.2))
-                        .clipShape(Capsule())
+                    CapsuleBadge(status, color: statusColor ?? .gray, style: .tinted)
                 }
 
                 if isDue {
@@ -421,6 +416,6 @@ struct SeniorWellnessHistoryView: View {
 #Preview {
     NavigationStack {
         SeniorWellnessView()
-            .environmentObject(ProfileStore.shared)
+            .environment(ProfileStore.shared)
     }
 }

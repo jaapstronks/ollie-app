@@ -13,7 +13,7 @@ struct MediaPreviewView: View {
     let onDelete: () -> Void
 
     @Environment(\.dismiss) private var dismiss
-    @EnvironmentObject private var profileStore: ProfileStore
+    @Environment(ProfileStore.self) private var profileStore
     @State private var scale: CGFloat = 1.0
     @State private var lastScale: CGFloat = 1.0
     @State private var offset: CGSize = .zero
@@ -259,5 +259,5 @@ struct MediaPreviewView: View {
         event: PuppyEvent(time: Date(), type: .moment, note: "Test moment"),
         onDelete: {}
     )
-    .environmentObject(ProfileStore.shared)
+    .environment(ProfileStore.shared)
 }

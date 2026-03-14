@@ -9,8 +9,8 @@ import OtisShared
 
 /// Pure action view: a checklist to work through, with logging
 struct SocializationJourneyView: View {
-    @EnvironmentObject var socializationStore: SocializationStore
-    @EnvironmentObject var profileStore: ProfileStore
+    @Environment(SocializationStore.self) var socializationStore
+    @Environment(ProfileStore.self) var profileStore
 
     @Environment(\.colorScheme) private var colorScheme
 
@@ -417,7 +417,7 @@ private struct PhaseItemRow: View {
     let item: SocializationItem
     @Binding var isEditMode: Bool
 
-    @EnvironmentObject var socializationStore: SocializationStore
+    @Environment(SocializationStore.self) var socializationStore
     @Environment(\.colorScheme) private var colorScheme
 
     @State private var showingLogSheet = false
@@ -536,7 +536,7 @@ private struct PhaseItemRow: View {
 #Preview {
     NavigationStack {
         SocializationJourneyView()
-            .environmentObject(SocializationStore())
-            .environmentObject(ProfileStore())
+            .environment(SocializationStore())
+            .environment(ProfileStore())
     }
 }

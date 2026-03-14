@@ -10,7 +10,7 @@ import OtisShared
 /// Profile information section showing puppy details
 struct ProfileSection: View {
     let profile: PuppyProfile
-    @ObservedObject var profileStore: ProfileStore
+    var profileStore: ProfileStore
     var profileId: UUID? = nil
     @Binding var showingPhotoPicker: Bool
 

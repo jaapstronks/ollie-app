@@ -10,7 +10,7 @@ import OtisShared
 
 /// Section showing crate training guidance with nap statistics
 struct CrateTrainingSection: View {
-    @ObservedObject var eventStore: EventStore
+    var eventStore: EventStore
 
     @State private var isExpanded = false
     @State private var showingBulkEditSheet = false

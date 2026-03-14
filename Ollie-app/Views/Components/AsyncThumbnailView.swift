@@ -40,6 +40,12 @@ struct AsyncThumbnailView: View {
     }
 
     private func loadThumbnail() async {
+        // PERFORMANCE: Check debug toggle to disable photo loading
+        guard !PerformanceDebug.disablePhotoLoading else {
+            loadFailed = true
+            return
+        }
+
         if let loaded = await ImageCache.shared.loadImage(relativePath: relativePath, isThumbnail: true) {
             if !Task.isCancelled {
                 image = loaded
@@ -122,6 +128,12 @@ struct EventThumbnailView: View {
     }
 
     private func loadThumbnail() async {
+        // PERFORMANCE: Check debug toggle to disable photo loading
+        guard !PerformanceDebug.disablePhotoLoading else {
+            loadFailed = true
+            return
+        }
+
         // Try thumbnail first
         if let thumbnailPath = event.thumbnailPath {
             if let loaded = await ImageCache.shared.loadImage(relativePath: thumbnailPath, isThumbnail: true) {

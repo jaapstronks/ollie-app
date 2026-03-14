@@ -10,9 +10,10 @@ import Charts
 
 /// Data point for the potty trend chart
 struct PottyTrendPoint: Identifiable {
-    let id = UUID()
     let date: Date
     let percentage: Int
+
+    var id: Int { Int(date.timeIntervalSince1970) }
 
     /// Color based on percentage: green (>=70%), orange (40-69%), red (<40%)
     var color: Color {

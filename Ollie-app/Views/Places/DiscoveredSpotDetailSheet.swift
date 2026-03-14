@@ -12,7 +12,7 @@ import MapKit
 /// Detail sheet for a discovered dog park
 struct DiscoveredSpotDetailSheet: View {
     let spot: DiscoveredSpot
-    @ObservedObject var spotStore: SpotStore
+    var spotStore: SpotStore
     var hideMapPreview: Bool = false
 
     @Environment(\.dismiss) private var dismiss

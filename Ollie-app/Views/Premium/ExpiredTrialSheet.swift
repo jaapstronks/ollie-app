@@ -170,7 +170,8 @@ struct ExpiredTrialSheet: View {
                 "days_tracking": daysTracking
             ])
             // Show "Not now" button after 3 seconds
-            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            Task { @MainActor in
+                try? await Task.sleep(for: .seconds(3))
                 withAnimation {
                     showNotNowButton = true
                 }

@@ -26,7 +26,7 @@ struct SymptomLogSheet: View {
     @State private var note: String = ""
 
     @Environment(\.colorScheme) private var colorScheme
-    @EnvironmentObject private var profileStore: ProfileStore
+    @Environment(ProfileStore.self) private var profileStore
 
     init(
         preselectedConditionId: UUID? = nil,
@@ -466,5 +466,5 @@ private struct SelectableChip: View {
         },
         onCancel: {}
     )
-    .environmentObject(ProfileStore.shared)
+    .environment(ProfileStore.shared)
 }

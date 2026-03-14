@@ -10,7 +10,7 @@ import OtisShared
 /// Card displaying walkable socialization items to watch for
 /// Shows 1 item by default, expandable to show all 3
 struct WalkSuggestionsCard: View {
-    @EnvironmentObject var socializationStore: SocializationStore
+    @Environment(SocializationStore.self) var socializationStore
 
     @State private var selectedItem: SocializationItem?
     @State private var showLogSheet = false
@@ -101,7 +101,8 @@ struct WalkSuggestionsCard: View {
                 if let item = selectedItem {
                     LogExposureSheet(item: item) { reaction in
                         if reaction.needsFearProtocol {
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            Task { @MainActor in
+                                try? await Task.sleep(for: .seconds(0.5))
                                 showFearProtocol = true
                             }
                         }
@@ -179,6 +180,6 @@ struct WalkSuggestionsCard: View {
 
 #Preview {
     WalkSuggestionsCard()
-        .environmentObject(SocializationStore())
+        .environment(SocializationStore())
         .padding()
 }

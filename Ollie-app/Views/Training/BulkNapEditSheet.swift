@@ -10,7 +10,7 @@ import OtisShared
 
 /// Sheet for bulk editing nap locations
 struct BulkNapEditSheet: View {
-    @ObservedObject var eventStore: EventStore
+    var eventStore: EventStore
 
     @Environment(\.dismiss) private var dismiss
     @Environment(\.colorScheme) private var colorScheme

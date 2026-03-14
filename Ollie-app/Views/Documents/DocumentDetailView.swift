@@ -11,7 +11,7 @@ import PDFKit
 /// Detail view for a document
 struct DocumentDetailView: View {
     let document: Document
-    @ObservedObject var documentStore: DocumentStore
+    var documentStore: DocumentStore
 
     @Environment(\.dismiss) private var dismiss
 
@@ -462,7 +462,7 @@ private struct PDFKitThumbnailView: UIViewRepresentable {
 
 private struct AsyncDocumentImageLoader: View {
     let document: Document
-    @ObservedObject var documentStore: DocumentStore
+    var documentStore: DocumentStore
 
     @State private var image: UIImage?
 

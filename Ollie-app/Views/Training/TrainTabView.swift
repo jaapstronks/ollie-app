@@ -9,13 +9,13 @@ import SwiftUI
 
 /// Train tab - unified view with potty progress, socialization checklist, and skills tracker
 struct TrainTabView: View {
-    @ObservedObject var viewModel: TimelineViewModel
+    @Bindable var viewModel: TimelineViewModel
     let onSettingsTap: () -> Void
 
-    @EnvironmentObject var eventStore: EventStore
-    @EnvironmentObject var socializationStore: SocializationStore
-    @EnvironmentObject var profileStore: ProfileStore
-    @EnvironmentObject var skillProgressStore: SkillProgressStore
+    @Environment(EventStore.self) var eventStore
+    @Environment(SocializationStore.self) var socializationStore
+    @Environment(ProfileStore.self) var profileStore
+    @Environment(SkillProgressStore.self) var skillProgressStore
 
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
@@ -501,10 +501,10 @@ struct TrainTabView: View {
 
 /// Compact preview of current week's training focus
 private struct SkillsPreviewCard: View {
-    @ObservedObject var eventStore: EventStore
-    @ObservedObject var skillProgressStore: SkillProgressStore
-    @StateObject private var trainingStore = TrainingPlanStore()
-    @EnvironmentObject var profileStore: ProfileStore
+    var eventStore: EventStore
+    var skillProgressStore: SkillProgressStore
+    @State private var trainingStore = TrainingPlanStore()
+    @Environment(ProfileStore.self) var profileStore
 
     @State private var showTodaysTraining = false
 
@@ -680,7 +680,7 @@ private struct SkillsPreviewCard: View {
         viewModel: viewModel,
         onSettingsTap: { print("Settings tapped") }
     )
-    .environmentObject(eventStore)
-    .environmentObject(SocializationStore())
-    .environmentObject(profileStore)
+    .environment(eventStore)
+    .environment(SocializationStore())
+    .environment(profileStore)
 }

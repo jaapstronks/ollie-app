@@ -10,8 +10,8 @@ import OtisShared
 
 /// Card displaying synthesized morning briefing from multiple AI sources.
 struct MorningBriefingCard: View {
-    @EnvironmentObject var profileStore: ProfileStore
-    @EnvironmentObject var eventStore: EventStore
+    @Environment(ProfileStore.self) var profileStore
+    @Environment(EventStore.self) var eventStore
 
     @StateObject private var viewModel = MorningBriefingViewModel()
     @State private var isExpanded = false
@@ -256,8 +256,8 @@ struct MorningBriefingCard: View {
 #Preview {
     VStack {
         MorningBriefingCard()
-            .environmentObject(ProfileStore())
-            .environmentObject(EventStore())
+            .environment(ProfileStore())
+            .environment(EventStore())
             .padding()
 
         Spacer()

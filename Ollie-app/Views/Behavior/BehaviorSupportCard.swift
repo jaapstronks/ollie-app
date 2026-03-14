@@ -11,13 +11,21 @@ import OtisShared
 /// Compact card for behavior support shown in Train tab
 /// Shows for teenage+ dogs OR when behavior incidents have been logged
 struct BehaviorSupportCard: View {
-    @EnvironmentObject var eventStore: EventStore
-    @EnvironmentObject var profileStore: ProfileStore
+    @Environment(EventStore.self) var eventStore
+    @Environment(ProfileStore.self) var profileStore
 
     @Environment(\.colorScheme) private var colorScheme
 
     @State private var showBehaviorLogSheet = false
     @State private var showFullView = false
+
+    // MARK: - Cached State
+
+    /// PERF: Cached computed values to avoid repeated filtering
+    @State private var cachedRecentIncidents: [PuppyEvent] = []
+    @State private var cachedThisWeekIncidents: [PuppyEvent] = []
+    @State private var cachedLastWeekIncidents: [PuppyEvent] = []
+    @State private var cachedIncidentsByCategory: [(category: BehaviorCategory, count: Int, incidents: [PuppyEvent])] = []
 
     // MARK: - Computed Properties
 
@@ -25,29 +33,24 @@ struct BehaviorSupportCard: View {
         profileStore.profile
     }
 
-    /// All behavior incidents from last 30 days
+    /// All behavior incidents from last 30 days (cached)
     private var recentIncidents: [PuppyEvent] {
-        eventStore.events
-            .filter { $0.isBehaviorIncident }
-            .lastDays(30)
-            .sorted { $0.time > $1.time }
+        cachedRecentIncidents
     }
 
-    /// Incidents from the last 7 days
+    /// Incidents from the last 7 days (cached)
     private var thisWeekIncidents: [PuppyEvent] {
-        eventStore.events
-            .filter { $0.isBehaviorIncident }
-            .thisWeek()
+        cachedThisWeekIncidents
     }
 
-    /// Aggregate incidents by category
+    /// Incidents from 7-14 days ago (cached)
+    private var lastWeekIncidents: [PuppyEvent] {
+        cachedLastWeekIncidents
+    }
+
+    /// Aggregate incidents by category (cached)
     private var incidentsByCategory: [(category: BehaviorCategory, count: Int, incidents: [PuppyEvent])] {
-        let grouped = Dictionary(grouping: thisWeekIncidents) { $0.behaviorCategoryEnum }
-        return grouped.compactMap { category, incidents in
-            guard let cat = category else { return nil }
-            return (category: cat, count: incidents.count, incidents: incidents)
-        }
-        .sorted { $0.count > $1.count }
+        cachedIncidentsByCategory
     }
 
     /// Whether to show this card
@@ -55,8 +58,33 @@ struct BehaviorSupportCard: View {
     var shouldShow: Bool {
         guard let profile = profile else { return false }
         let isTeenageOrOlder = profile.lifecyclePhase != .puppy
-        let hasIncidents = !recentIncidents.isEmpty
+        let hasIncidents = !cachedRecentIncidents.isEmpty
         return isTeenageOrOlder || hasIncidents
+    }
+
+    /// Updates all cached values - called on appear and when events change
+    private func updateCache() {
+        // Filter behavior incidents once
+        let allBehaviorIncidents = eventStore.events.filter { $0.isBehaviorIncident }
+
+        // Recent incidents (last 30 days)
+        cachedRecentIncidents = allBehaviorIncidents
+            .lastDays(30)
+            .sorted { $0.time > $1.time }
+
+        // This week incidents (from recent for efficiency)
+        cachedThisWeekIncidents = cachedRecentIncidents.filter { $0.time.isThisWeek }
+
+        // Last week incidents (from recent for efficiency)
+        cachedLastWeekIncidents = cachedRecentIncidents.filter { $0.time.isLastWeek }
+
+        // Group by category
+        let grouped = Dictionary(grouping: cachedThisWeekIncidents) { $0.behaviorCategoryEnum }
+        cachedIncidentsByCategory = grouped.compactMap { category, incidents in
+            guard let cat = category else { return nil }
+            return (category: cat, count: incidents.count, incidents: incidents)
+        }
+        .sorted { $0.count > $1.count }
     }
 
     // MARK: - Body
@@ -131,6 +159,12 @@ struct BehaviorSupportCard: View {
         }
         .accessibilityElement(children: .contain)
         .accessibilityLabel(OtisShared.Strings.BehaviorSupport.behaviorSupportAccessibilityLabel)
+        .onAppear {
+            updateCache()
+        }
+        .onChange(of: eventStore.events) { _, _ in
+            updateCache()
+        }
     }
 
     // MARK: - Empty State
@@ -212,19 +246,16 @@ struct BehaviorSupportCard: View {
 
     @ViewBuilder
     private func trendIndicator(for category: BehaviorCategory) -> some View {
-        // Simplified trend: compare this week vs last week
-        let thisWeek = thisWeekIncidents.filter { $0.behaviorCategoryEnum == category }.count
-        let lastWeekIncidents = eventStore.events
-            .filter { $0.isBehaviorIncident && $0.behaviorCategoryEnum == category }
-            .lastWeek()
-            .count
+        // PERF: Use cached data instead of re-filtering eventStore
+        let thisWeekCount = cachedThisWeekIncidents.filter { $0.behaviorCategoryEnum == category }.count
+        let lastWeekCount = cachedLastWeekIncidents.filter { $0.behaviorCategoryEnum == category }.count
 
         let trend: TrendDirection = {
-            if lastWeekIncidents == 0 {
+            if lastWeekCount == 0 {
                 return .new
-            } else if thisWeek < lastWeekIncidents {
+            } else if thisWeekCount < lastWeekCount {
                 return .improving
-            } else if thisWeek > lastWeekIncidents {
+            } else if thisWeekCount > lastWeekCount {
                 return .worsening
             }
             return .stable
@@ -337,8 +368,8 @@ private struct BehaviorSupportCardPreview: View {
                     .padding()
             }
         }
-        .environmentObject(eventStore)
-        .environmentObject(profileStore)
+        .environment(eventStore)
+        .environment(profileStore)
     }
 }
 

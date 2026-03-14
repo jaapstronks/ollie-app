@@ -9,7 +9,7 @@ import OtisShared
 
 /// Sheet for adding or editing a contact
 struct AddEditContactSheet: View {
-    @ObservedObject var contactStore: ContactStore
+    var contactStore: ContactStore
     var existingContact: DogContact?
 
     @Environment(\.dismiss) private var dismiss

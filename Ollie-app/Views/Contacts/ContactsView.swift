@@ -9,7 +9,7 @@ import OtisShared
 
 /// Main view for listing and managing contacts
 struct ContactsView: View {
-    @ObservedObject var contactStore: ContactStore
+    var contactStore: ContactStore
     var appointmentStore: AppointmentStore?
 
     @State private var showingAddSheet = false
