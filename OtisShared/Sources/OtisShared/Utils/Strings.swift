@@ -139,36 +139,39 @@ public enum Strings {
 
     // MARK: - Event Types
     public enum EventType {
-        public static var eat: String { String(localized: "Eat", bundle: Strings.bundle) }
-        public static var drink: String { String(localized: "Drink", bundle: Strings.bundle) }
-        public static var pee: String { String(localized: "Pee", bundle: Strings.bundle) }
-        public static var poop: String { String(localized: "Poop", bundle: Strings.bundle) }
-        public static var sleep: String { String(localized: "Sleep", bundle: Strings.bundle) }
-        public static var wakeUp: String { String(localized: "Wake up", bundle: Strings.bundle) }
-        public static var walk: String { String(localized: "Walk", bundle: Strings.bundle) }
-        public static var garden: String { String(localized: "Garden", bundle: Strings.bundle) }
-        public static var training: String { String(localized: "Training", bundle: Strings.bundle) }
-        public static var crate: String { String(localized: "Crate", bundle: Strings.bundle) }
-        public static var social: String { String(localized: "Social", bundle: Strings.bundle) }
-        public static var milestone: String { String(localized: "Milestone", bundle: Strings.bundle) }
-        public static var behavior: String { String(localized: "Behavior", bundle: Strings.bundle) }
-        public static var weight: String { String(localized: "Weight", bundle: Strings.bundle) }
-        public static var moment: String { String(localized: "Moment", bundle: Strings.bundle) }
-        public static var medication: String { String(localized: "Medication", bundle: Strings.bundle) }
+        private static let table = "Events"
+        public static var eat: String { String(localized: "Eat", table: table, bundle: Strings.bundle) }
+        public static var drink: String { String(localized: "Drink", table: table, bundle: Strings.bundle) }
+        public static var pee: String { String(localized: "Pee", table: table, bundle: Strings.bundle) }
+        public static var poop: String { String(localized: "Poop", table: table, bundle: Strings.bundle) }
+        public static var sleep: String { String(localized: "Sleep", table: table, bundle: Strings.bundle) }
+        public static var wakeUp: String { String(localized: "Woke up", table: table, bundle: Strings.bundle) }
+        public static var walk: String { String(localized: "Walk", table: table, bundle: Strings.bundle) }
+        public static var garden: String { String(localized: "Garden", table: table, bundle: Strings.bundle) }
+        public static var training: String { String(localized: "Training", table: table, bundle: Strings.bundle) }
+        public static var crate: String { String(localized: "Crate", table: table, bundle: Strings.bundle) }
+        public static var social: String { String(localized: "Social", table: table, bundle: Strings.bundle) }
+        public static var milestone: String { String(localized: "Milestone", table: table, bundle: Strings.bundle) }
+        public static var behavior: String { String(localized: "Behavior", table: table, bundle: Strings.bundle) }
+        public static var weight: String { String(localized: "Weight", table: table, bundle: Strings.bundle) }
+        public static var moment: String { String(localized: "Moment", table: table, bundle: Strings.bundle) }
+        public static var medication: String { String(localized: "Medication", table: table, bundle: Strings.bundle) }
     }
 
     // MARK: - Event Locations
     public enum EventLocation {
-        public static var outside: String { String(localized: "Outside", bundle: Strings.bundle) }
-        public static var inside: String { String(localized: "Inside", bundle: Strings.bundle) }
+        private static let table = "Events"
+        public static var outside: String { String(localized: "Outside", table: table, bundle: Strings.bundle) }
+        public static var inside: String { String(localized: "Inside", table: table, bundle: Strings.bundle) }
     }
 
     // MARK: - Nap Locations
     public enum NapLocation {
-        public static var crate: String { String(localized: "Crate", bundle: Strings.bundle) }
-        public static var dogBed: String { String(localized: "Dog bed", bundle: Strings.bundle) }
-        public static var other: String { String(localized: "Other", bundle: Strings.bundle) }
-        public static var wherePrompt: String { String(localized: "Where?", bundle: Strings.bundle) }
+        private static let table = "Events"
+        public static var crate: String { String(localized: "Crate", table: table, bundle: Strings.bundle) }
+        public static var dogBed: String { String(localized: "Dog bed", table: table, bundle: Strings.bundle) }
+        public static var other: String { String(localized: "Other", table: table, bundle: Strings.bundle) }
+        public static var wherePrompt: String { String(localized: "Where?", table: table, bundle: Strings.bundle) }
     }
 
     // MARK: - Size Categories
