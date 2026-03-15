@@ -64,7 +64,7 @@ struct MaintenanceSkillsSection: View {
                 Spacer()
 
                 if dueCount > 0 {
-                    Text("\(dueCount) due")
+                    Text(Strings.Training.skillsDueBadge(dueCount))
                         .font(.caption)
                         .fontWeight(.medium)
                         .foregroundStyle(.white)

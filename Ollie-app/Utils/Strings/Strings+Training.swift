@@ -166,6 +166,14 @@ extension Strings {
                 return String(localized: "\(count) skills due for review", table: table)
             }
         }
+        /// Short badge label for maintenance skills section (e.g., "2 due")
+        static func skillsDueBadge(_ count: Int) -> String {
+            if count == 1 {
+                return String(localized: "1 due", table: table, comment: "Short badge showing 1 skill is due for review")
+            } else {
+                return String(localized: "\(count) due", table: table, comment: "Short badge showing multiple skills are due for review")
+            }
+        }
         static let practiceInNewContext = String(localized: "Practice in new location", table: table)
         static let warmUp = String(localized: "Warm-up", table: table)
 
