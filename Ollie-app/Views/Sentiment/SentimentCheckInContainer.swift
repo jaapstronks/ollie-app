@@ -55,7 +55,7 @@ struct SentimentCheckInContainer: View {
 
     /// Whether to show onboarding (skip for recent share participants)
     private var shouldShowOnboarding: Bool {
-        sentimentStore.needsOnboarding && !isRecentShareParticipant
+        !isDismissed && sentimentStore.needsOnboarding && !isRecentShareParticipant
     }
 
     var body: some View {
@@ -90,6 +90,14 @@ struct SentimentCheckInContainer: View {
                 Text(Strings.Sentiment.onboardingTitle)
                     .font(.headline)
                 Spacer()
+                Button {
+                    withAnimation {
+                        isDismissed = true
+                    }
+                } label: {
+                    Image(systemName: "xmark")
+                        .foregroundStyle(.secondary)
+                }
             }
 
             Text(Strings.Sentiment.onboardingSubtitle)
