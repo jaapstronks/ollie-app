@@ -684,6 +684,18 @@
         }
       }
     },
+    "Add Appointment" : {
+      "comment" : "Action button for the Calendar view tip.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afspraak toevoegen"
+          }
+        }
+      }
+    },
     "Add distractions last" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -6605,6 +6617,18 @@
         }
       }
     },
+    "Plan ahead" : {
+      "comment" : "Title for the Calendar view tip.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plan vooruit"
+          }
+        }
+      }
+    },
     "Position & Distraction" : {
       "comment" : "Title of a training phase in the \"Watch Me\" module.",
       "extractionState" : "manual",
@@ -8456,6 +8480,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "'Zit' zeggen voordat ze het gedrag kennen - het woord wordt betekenisloos"
+          }
+        }
+      }
+    },
+    "Schedule vet appointments, training classes, and grooming sessions. Never miss an important date." : {
+      "comment" : "Message for the Calendar view tip, explaining how to use the calendar to schedule appointments.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plan dierenarts afspraken, trainingen en trimsessies. Mis nooit meer een belangrijke datum."
           }
         }
       }
