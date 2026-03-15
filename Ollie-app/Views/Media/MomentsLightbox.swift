@@ -2,7 +2,7 @@
 //  MomentsLightbox.swift
 //  Ollie-app
 //
-//  Premium full-screen photo gallery with swipeable timeline navigation
+//  Full-screen photo gallery using ScrollView + scrollTargetBehavior (iOS 17+)
 //
 
 import SwiftUI
@@ -17,13 +17,14 @@ struct MomentsLightbox: View {
 
     @Environment(EventStore.self) private var eventStore
     @Environment(ProfileStore.self) private var profileStore
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
     @State private var localEvents: [PuppyEvent]
+    @State private var currentEventID: UUID?
     @State private var showShareSheet = false
     @State private var showDeleteConfirmation = false
     @State private var showLikersSheet = false
     @State private var loadedImages: [UUID: UIImage] = [:]
-    @State private var dragOffset: CGFloat = 0
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     init(
         photoEvents: [PuppyEvent],
@@ -36,54 +37,89 @@ struct MomentsLightbox: View {
         self.onDismiss = onDismiss
         self.onDelete = onDelete
         self._localEvents = State(initialValue: photoEvents)
+        // Initialize currentEventID from selectedIndex
+        if selectedIndex.wrappedValue < photoEvents.count {
+            self._currentEventID = State(initialValue: photoEvents[selectedIndex.wrappedValue].id)
+        }
     }
 
     private var currentEvent: PuppyEvent {
-        guard selectedIndex >= 0, selectedIndex < localEvents.count else {
-            return localEvents.first ?? PuppyEvent(type: .moment)
-        }
-        return localEvents[selectedIndex]
+        localEvents.first { $0.id == currentEventID } ?? localEvents.first ?? PuppyEvent(type: .moment)
+    }
+
+    private var currentIndex: Int {
+        localEvents.firstIndex { $0.id == currentEventID } ?? 0
     }
 
     var body: some View {
-        // Background fills entire screen
-        backgroundGradient
-            .overlay {
-                // Photo carousel
-                TabView(selection: $selectedIndex) {
-                    ForEach(Array(localEvents.enumerated()), id: \.element.id) { index, event in
-                        PhotoCard(
+        ZStack {
+            // Background
+            Color.black.ignoresSafeArea()
+
+            // Ambient glow from current image
+            if let image = loadedImages[currentEvent.id] {
+                Image(uiImage: image)
+                    .resizable()
+                    .scaledToFill()
+                    .blur(radius: 80)
+                    .opacity(0.2)
+                    .scaleEffect(1.5)
+                    .ignoresSafeArea()
+            }
+
+            // Main carousel using ScrollView + scrollTargetBehavior
+            ScrollView(.horizontal) {
+                LazyHStack(spacing: 0) {
+                    ForEach(localEvents) { event in
+                        MomentPageView(
                             event: event,
-                            loadedImage: loadedImages[event.id]
+                            loadedImage: loadedImages[event.id],
+                            onLikeToggle: { toggleLike(for: event) },
+                            onShowLikers: { showLikersSheet = true }
                         )
-                        .tag(index)
+                        .containerRelativeFrame(.horizontal)
+                        .id(event.id)
                     }
                 }
-                .tabViewStyle(.page(indexDisplayMode: .never))
+                .scrollTargetLayout()
             }
-            .overlay {
-                // Overlay controls - fixed position, constrained to screen width
-                VStack(spacing: 0) {
-                    // Top navigation bar
-                    topNavigationBar
-                        .padding(.horizontal, 16)
-                        .padding(.top, 8)
+            .scrollTargetBehavior(.viewAligned)
+            .scrollPosition(id: $currentEventID)
+            .scrollIndicators(.hidden)
+            .scrollTransition(.animated, axis: .horizontal) { content, phase in
+                content
+                    .opacity(phase.isIdentity ? 1.0 : 0.7)
+                    .scaleEffect(phase.isIdentity ? 1.0 : 0.95)
+            }
 
-                    Spacer()
+            // Fixed overlay controls
+            VStack(spacing: 0) {
+                // Top bar
+                topNavigationBar
+                    .padding(.horizontal, 16)
+                    .padding(.top, 8)
 
-                    // Bottom info card
-                    bottomInfoCard
-                        .padding(.horizontal, 16)
+                Spacer()
 
-                    // Timeline dots
-                    if localEvents.count > 1 {
-                        timelineDots
-                            .padding(.top, 12)
-                            .padding(.bottom, 8)
-                    }
+                // Bottom info card
+                bottomInfoCard
+                    .padding(.horizontal, 16)
+                    .padding(.bottom, 8)
+
+                // Page indicator dots
+                if localEvents.count > 1 {
+                    pageIndicator
+                        .padding(.bottom, 16)
                 }
             }
-            .statusBarHidden(true)
+        }
+        .statusBarHidden(true)
+        .onChange(of: currentEventID) { _, newID in
+            // Sync selectedIndex when scroll position changes
+            if let newID, let index = localEvents.firstIndex(where: { $0.id == newID }) {
+                selectedIndex = index
+            }
+        }
         .confirmationDialog(
             Strings.MediaPreview.deleteTitle,
             isPresented: $showDeleteConfirmation,
@@ -112,72 +148,73 @@ struct MomentsLightbox: View {
         .task {
             await preloadImages()
         }
-    }
-
-    // MARK: - Background
-
-    private var backgroundGradient: some View {
-        ZStack {
-            // Base dark color
-            Color(white: 0.08)
-
-            // Subtle gradient overlay
-            LinearGradient(
-                colors: [
-                    Color(white: 0.12),
-                    Color(white: 0.06),
-                    Color(white: 0.04)
-                ],
-                startPoint: .top,
-                endPoint: .bottom
-            )
-
-            // Subtle ambient glow from current image color
-            if let image = loadedImages[currentEvent.id] {
-                Image(uiImage: image)
-                    .resizable()
-                    .scaledToFill()
-                    .blur(radius: 100)
-                    .opacity(0.15)
-                    .scaleEffect(1.5)
+        // Accessibility: adjustable trait for carousel navigation
+        .accessibilityAdjustableAction { direction in
+            switch direction {
+            case .increment:
+                if currentIndex + 1 < localEvents.count {
+                    currentEventID = localEvents[currentIndex + 1].id
+                }
+            case .decrement:
+                if currentIndex - 1 >= 0 {
+                    currentEventID = localEvents[currentIndex - 1].id
+                }
+            @unknown default: break
             }
         }
-        .ignoresSafeArea()
     }
 
-    // MARK: - Top Navigation
+    // MARK: - Top Navigation Bar
 
     private var topNavigationBar: some View {
         HStack(spacing: 12) {
             // Close button
-            GlassButton(icon: "xmark", action: onDismiss)
-                .accessibilityLabel(Strings.Common.close)
+            Button(action: onDismiss) {
+                Image(systemName: "xmark")
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundStyle(.white)
+                    .frame(width: 40, height: 40)
+                    .background(.ultraThinMaterial, in: Circle())
+            }
+            .accessibilityLabel(Strings.Common.close)
+            .accessibilityHint("Returns to the previous screen")
 
             Spacer()
 
             // Photo counter
             if localEvents.count > 1 {
-                Text("\(selectedIndex + 1) / \(localEvents.count)")
+                Text("\(currentIndex + 1) / \(localEvents.count)")
                     .font(.subheadline.weight(.medium))
-                    .foregroundStyle(.white.opacity(0.7))
+                    .foregroundStyle(.white.opacity(0.8))
                     .padding(.horizontal, 12)
                     .padding(.vertical, 6)
-                    .background(.ultraThinMaterial.opacity(0.5))
-                    .clipShape(Capsule())
+                    .background(.ultraThinMaterial, in: Capsule())
             }
 
             Spacer()
 
             // Action buttons
             HStack(spacing: 8) {
-                GlassButton(icon: "square.and.arrow.up") {
+                Button {
                     HapticFeedback.light()
                     showShareSheet = true
+                } label: {
+                    Image(systemName: "square.and.arrow.up")
+                        .font(.system(size: 15, weight: .semibold))
+                        .foregroundStyle(.white)
+                        .frame(width: 40, height: 40)
+                        .background(.ultraThinMaterial, in: Circle())
                 }
                 .accessibilityLabel(Strings.Sharing.shareThisMoment)
 
-                GlassButton(icon: "trash", tint: .red) {
+                Button {
                     showDeleteConfirmation = true
+                } label: {
+                    Image(systemName: "trash")
+                        .font(.system(size: 15, weight: .semibold))
+                        .foregroundStyle(.red)
+                        .frame(width: 40, height: 40)
+                        .background(.ultraThinMaterial, in: Circle())
                 }
                 .accessibilityLabel(Strings.Common.delete)
             }
@@ -187,8 +224,7 @@ struct MomentsLightbox: View {
     // MARK: - Bottom Info Card
 
     private var bottomInfoCard: some View {
-        VStack(spacing: 0) {
-            // Date header
+        VStack(alignment: .leading, spacing: 12) {
             HStack {
                 VStack(alignment: .leading, spacing: 2) {
                     Text(currentEvent.time.formatted(.dateTime.weekday(.wide).month(.wide).day()))
@@ -202,71 +238,60 @@ struct MomentsLightbox: View {
 
                 Spacer()
 
-                // Like button with count
-                LikeButtonStyled(
+                // Like button
+                LikeButton(
                     event: currentEvent,
-                    onToggle: toggleLike,
+                    onToggle: { toggleLike(for: currentEvent) },
                     onShowLikers: { showLikersSheet = true }
                 )
             }
 
-            // Note/caption if present
+            // Caption if present
             if let note = currentEvent.note, !note.isEmpty {
                 Text(note)
                     .font(.body)
                     .foregroundStyle(.white.opacity(0.85))
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.top, 12)
                     .lineLimit(3)
             }
 
             // Liker avatars if multiple likes
             if currentEvent.likeCount > 1 {
                 HStack(spacing: 8) {
-                    LikerAvatarsStack(likerRecordIDs: currentEvent.likes?.map { $0.likedBy } ?? [])
+                    LikerAvatarsRow(likerRecordIDs: currentEvent.likes?.map { $0.likedBy } ?? [])
 
                     Text(Strings.Likes.multipleLikes(currentEvent.likeCount))
                         .font(.caption)
                         .foregroundStyle(.white.opacity(0.6))
-
-                    Spacer()
                 }
-                .padding(.top, 10)
                 .onTapGesture { showLikersSheet = true }
             }
         }
         .padding(16)
-        .background(
-            RoundedRectangle(cornerRadius: 16)
-                .fill(.ultraThinMaterial.opacity(0.6))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 16)
-                        .strokeBorder(.white.opacity(0.1), lineWidth: 1)
-                )
-        )
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16))
     }
 
-    // MARK: - Timeline Dots
+    // MARK: - Page Indicator
 
-    private var timelineDots: some View {
-        HStack(spacing: 8) {
-            ForEach(0..<localEvents.count, id: \.self) { index in
+    private var pageIndicator: some View {
+        HStack(spacing: 6) {
+            ForEach(Array(localEvents.enumerated()), id: \.element.id) { index, _ in
                 Circle()
-                    .fill(index == selectedIndex ? Color.white : Color.white.opacity(0.3))
-                    .frame(width: index == selectedIndex ? 8 : 6, height: index == selectedIndex ? 8 : 6)
-                    .animation(.spring(response: 0.3), value: selectedIndex)
+                    .fill(index == currentIndex ? Color.white : Color.white.opacity(0.3))
+                    .frame(width: index == currentIndex ? 8 : 6, height: index == currentIndex ? 8 : 6)
             }
         }
-        .padding(.vertical, 8)
+        .animation(.spring(response: 0.3), value: currentIndex)
     }
 
     // MARK: - Actions
 
-    private func toggleLike() {
+    private func toggleLike(for event: PuppyEvent) {
         HapticFeedback.light()
-        if let updated = eventStore.toggleLike(on: currentEvent) {
+        if let updated = eventStore.toggleLike(on: event) {
             withAnimation(.spring(response: 0.3)) {
-                localEvents[selectedIndex] = updated
+                if let index = localEvents.firstIndex(where: { $0.id == event.id }) {
+                    localEvents[index] = updated
+                }
             }
         }
     }
@@ -274,13 +299,18 @@ struct MomentsLightbox: View {
     private func deleteCurrentPhoto() {
         HapticFeedback.warning()
         let eventToDelete = currentEvent
+        let deletedIndex = currentIndex
+
         localEvents.removeAll { $0.id == eventToDelete.id }
         onDelete(eventToDelete)
-        if selectedIndex >= localEvents.count {
-            selectedIndex = max(0, localEvents.count - 1)
-        }
+
         if localEvents.isEmpty {
             onDismiss()
+        } else {
+            // Move to next photo, or previous if we deleted the last one
+            let newIndex = min(deletedIndex, localEvents.count - 1)
+            currentEventID = localEvents[newIndex].id
+            selectedIndex = newIndex
         }
     }
 
@@ -299,157 +329,53 @@ struct MomentsLightbox: View {
     }
 }
 
-// MARK: - Glass Button
+// MARK: - Moment Page View
 
-private struct GlassButton: View {
-    let icon: String
-    var tint: Color = .white
-    let action: () -> Void
-
-    var body: some View {
-        Button(action: action) {
-            Image(systemName: icon)
-                .font(.system(size: 15, weight: .semibold))
-                .foregroundStyle(tint)
-                .frame(width: 40, height: 40)
-                .background(
-                    Circle()
-                        .fill(.ultraThinMaterial.opacity(0.6))
-                        .overlay(
-                            Circle()
-                                .strokeBorder(.white.opacity(0.15), lineWidth: 1)
-                        )
-                )
-        }
-        .buttonStyle(.plain)
-    }
-}
-
-// MARK: - Photo Card
-
-private struct PhotoCard: View {
+private struct MomentPageView: View {
     let event: PuppyEvent
     let loadedImage: UIImage?
-
-    @State private var scale: CGFloat = 1.0
-    @State private var lastScale: CGFloat = 1.0
-    @State private var offset: CGSize = .zero
-    @State private var lastOffset: CGSize = .zero
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
-
-    private var isZoomed: Bool { scale > 1.0 }
+    let onLikeToggle: () -> Void
+    let onShowLikers: () -> Void
 
     var body: some View {
-        GeometryReader { geometry in
-            let horizontalPadding: CGFloat = 16
-            let topSpace: CGFloat = 70    // Top bar + padding
-            let bottomSpace: CGFloat = 220 // Bottom card + dots + safe area
-            let availableWidth = geometry.size.width - (horizontalPadding * 2)
-            let availableHeight = geometry.size.height - topSpace - bottomSpace
+        VStack {
+            Spacer()
 
-            Group {
-                if let uiImage = loadedImage {
-                    Image(uiImage: uiImage)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(maxWidth: availableWidth, maxHeight: availableHeight)
-                        .clipShape(RoundedRectangle(cornerRadius: 20))
-                        .scaleEffect(scale)
-                        .offset(offset)
-                        .shadow(color: .black.opacity(0.4), radius: 20, x: 0, y: 10)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 20)
-                                .strokeBorder(
-                                    LinearGradient(
-                                        colors: [.white.opacity(0.2), .white.opacity(0.05)],
-                                        startPoint: .topLeading,
-                                        endPoint: .bottomTrailing
-                                    ),
-                                    lineWidth: 1
-                                )
-                        )
-                        .gesture(
-                            MagnificationGesture()
-                                .onChanged { value in
-                                    let newScale = lastScale * value
-                                    scale = min(max(newScale, 1.0), 4.0)
-                                }
-                                .onEnded { _ in
-                                    lastScale = scale
-                                    if scale == 1.0 {
-                                        resetOffset()
-                                    }
-                                }
-                        )
-                        .highPriorityGesture(
-                            isZoomed ?
-                            DragGesture()
-                                .onChanged { value in
-                                    offset = CGSize(
-                                        width: lastOffset.width + value.translation.width,
-                                        height: lastOffset.height + value.translation.height
-                                    )
-                                }
-                                .onEnded { _ in
-                                    lastOffset = offset
-                                }
-                            : nil
-                        )
-                        .onTapGesture(count: 2) {
-                            toggleZoom()
-                        }
-                        .accessibilityLabel(Strings.MediaPreview.photoOf(event.type.label))
-                } else {
-                    RoundedRectangle(cornerRadius: 20)
-                        .fill(.ultraThinMaterial)
-                        .frame(width: 280, height: 380)
-                        .overlay(
-                            ProgressView()
-                                .tint(.white)
-                        )
-                }
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .offset(y: (topSpace - bottomSpace) / 2) // Shift up to account for bottom UI
-        }
-    }
-
-    private func resetOffset() {
-        if reduceMotion {
-            offset = .zero
-            lastOffset = .zero
-        } else {
-            withAnimation(.spring(response: 0.3)) {
-                offset = .zero
-                lastOffset = .zero
-            }
-        }
-    }
-
-    private func toggleZoom() {
-        let animation: Animation? = reduceMotion ? nil : .spring(response: 0.3)
-        withAnimation(animation) {
-            if scale > 1.0 {
-                scale = 1.0
-                lastScale = 1.0
-                offset = .zero
-                lastOffset = .zero
+            // Photo
+            if let uiImage = loadedImage {
+                Image(uiImage: uiImage)
+                    .resizable()
+                    .scaledToFit()
+                    .clipShape(RoundedRectangle(cornerRadius: 16))
+                    .shadow(color: .black.opacity(0.3), radius: 20, y: 10)
+                    .padding(.horizontal, 20)
             } else {
-                scale = 2.0
-                lastScale = 2.0
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(.ultraThinMaterial)
+                    .aspectRatio(3/4, contentMode: .fit)
+                    .overlay(ProgressView().tint(.white))
+                    .padding(.horizontal, 20)
             }
+
+            Spacer()
+
+            // Spacing for bottom card
+            Spacer()
+                .frame(height: 180)
         }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(Strings.MediaPreview.photoOf(event.type.label))
+        .accessibilityHint("Swipe left or right to browse moments")
+        .accessibilityAddTraits(.isImage)
     }
 }
 
-// MARK: - Styled Like Button
+// MARK: - Like Button
 
-private struct LikeButtonStyled: View {
+private struct LikeButton: View {
     let event: PuppyEvent
     let onToggle: () -> Void
     let onShowLikers: () -> Void
-
-    @State private var isAnimating = false
 
     private var isLiked: Bool {
         guard let currentUserID = UserIdentityStore.shared.currentUserRecordID else { return false }
@@ -457,20 +383,12 @@ private struct LikeButtonStyled: View {
     }
 
     var body: some View {
-        Button {
-            withAnimation(.spring(response: 0.3, dampingFraction: 0.5)) {
-                isAnimating = true
-            }
-            onToggle()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                isAnimating = false
-            }
-        } label: {
+        Button(action: onToggle) {
             HStack(spacing: 6) {
                 Image(systemName: isLiked ? "heart.fill" : "heart")
                     .font(.system(size: 18, weight: .medium))
                     .foregroundStyle(isLiked ? .red : .white)
-                    .scaleEffect(isAnimating ? 1.3 : 1.0)
+                    .contentTransition(.symbolEffect(.replace))
 
                 if event.likeCount > 0 {
                     Text("\(event.likeCount)")
@@ -483,29 +401,24 @@ private struct LikeButtonStyled: View {
             .background(
                 Capsule()
                     .fill(isLiked ? Color.red.opacity(0.2) : .white.opacity(0.1))
-                    .overlay(
-                        Capsule()
-                            .strokeBorder(isLiked ? Color.red.opacity(0.4) : .white.opacity(0.2), lineWidth: 1)
-                    )
             )
         }
         .buttonStyle(.plain)
+        .accessibilityLabel(isLiked ? "Unlike this moment" : "Like this moment")
+        .accessibilityHint(isLiked ? "Double-tap to remove your like" : "Double-tap to like this moment")
     }
 }
 
-// MARK: - Liker Avatars Stack
+// MARK: - Liker Avatars Row
 
-private struct LikerAvatarsStack: View {
+private struct LikerAvatarsRow: View {
     let likerRecordIDs: [String]
 
     var body: some View {
         HStack(spacing: -8) {
             ForEach(Array(likerRecordIDs.prefix(4).enumerated()), id: \.element) { index, recordID in
                 UserAvatarFromRecordID(cloudKitRecordID: recordID, size: 28)
-                    .overlay(
-                        Circle()
-                            .strokeBorder(.white.opacity(0.8), lineWidth: 2)
-                    )
+                    .overlay(Circle().strokeBorder(.white.opacity(0.8), lineWidth: 2))
                     .zIndex(Double(4 - index))
             }
             if likerRecordIDs.count > 4 {
@@ -513,21 +426,15 @@ private struct LikerAvatarsStack: View {
                     .font(.caption2.weight(.semibold))
                     .foregroundStyle(.white)
                     .frame(width: 28, height: 28)
-                    .background(.ultraThinMaterial)
-                    .clipShape(Circle())
-                    .overlay(
-                        Circle()
-                            .strokeBorder(.white.opacity(0.3), lineWidth: 1)
-                    )
+                    .background(.ultraThinMaterial, in: Circle())
             }
         }
     }
 }
 
-// MARK: - Wrapper (for sheet presentation)
+// MARK: - Wrapper
 
 /// Wrapper that manages selectedIndex state internally
-/// Used when presenting from SheetCoordinator
 struct MomentsLightboxWrapper: View {
     let events: [PuppyEvent]
     let startIndex: Int
@@ -568,7 +475,7 @@ struct MomentsLightboxWrapper: View {
         var body: some View {
             MomentsLightbox(
                 photoEvents: [
-                    PuppyEvent(type: .moment, note: "Playing in the park on a sunny afternoon"),
+                    PuppyEvent(type: .moment, note: "Playing in the park"),
                     PuppyEvent(type: .moment, note: "Morning cuddles"),
                     PuppyEvent(type: .moment)
                 ],
