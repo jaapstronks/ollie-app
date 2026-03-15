@@ -22,6 +22,7 @@ struct TodayView: View {
     var onNavigateToAppointments: (() -> Void)?
     var onNavigateToTrain: (() -> Void)?
     var onAddDog: (() -> Void)?
+    var onNavigateToDiary: (() -> Void)?
 
     @State private var selectedPhotoEvent: PuppyEvent?
     @State private var showProfilePicker = false
@@ -330,6 +331,14 @@ struct TodayView: View {
             onInviteFamily: {
                 // Navigate to settings where user can access sharing
                 viewModel.sheetCoordinator.presentSheet(.settings)
+            },
+            mostRecentMoment: statusViewModel.mostRecentMoment,
+            shouldShowRecentMomentCard: statusViewModel.shouldShowRecentMomentCard,
+            onNavigateToDiary: {
+                onNavigateToDiary?()
+            },
+            onDismissRecentMoment: {
+                statusViewModel.dismissRecentMomentCard()
             }
         )
         .sheet(item: $statusViewModel.milestoneToComplete) { milestone in
@@ -435,7 +444,8 @@ struct EmptyTimelineCard: View {
         onSettingsTap: { print("Settings tapped") },
         onNavigateToAppointments: { print("Navigate to Appointments") },
         onNavigateToTrain: { print("Navigate to Train") },
-        onAddDog: { print("Add dog") }
+        onAddDog: { print("Add dog") },
+        onNavigateToDiary: { print("Navigate to Diary") }
     )
     .environment(atmosphereProvider)
     .environment(foodRecallService)

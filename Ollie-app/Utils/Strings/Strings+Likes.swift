@@ -35,6 +35,21 @@ extension Strings {
         /// "Liked by"
         static let likedBy = String(localized: "Liked by", table: table)
 
+        /// "Liked by [name]"
+        static func likedByName(_ name: String) -> String {
+            String(localized: "Liked by \(name)", table: table)
+        }
+
+        /// "Liked by [name] and 1 other"
+        static func likedByNameAndOneOther(_ name: String) -> String {
+            String(localized: "Liked by \(name) and 1 other", table: table)
+        }
+
+        /// "Liked by [name] and X others"
+        static func likedByNameAndOthers(_ name: String, count: Int) -> String {
+            String(localized: "Liked by \(name) and \(count) others", table: table)
+        }
+
         /// "No likes yet"
         static let noLikesYet = String(localized: "No likes yet", table: table)
 

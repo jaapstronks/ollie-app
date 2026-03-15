@@ -21,6 +21,15 @@ final class TodayStatusViewModel {
     private(set) var dismissedCrateNudgeDate: Date?
     private(set) var dismissedGroomingNudgeDate: Date?
 
+    // MARK: - Recent Moment Card Dismissal
+
+    /// Stores the ID of the dismissed moment - card stays hidden until a newer moment appears
+    @ObservationIgnored @AppStorage("dismissedRecentMomentID") private var dismissedRecentMomentIDString: String = ""
+
+    private var dismissedRecentMomentID: UUID? {
+        dismissedRecentMomentIDString.isEmpty ? nil : UUID(uuidString: dismissedRecentMomentIDString)
+    }
+
     // MARK: - Persisted Dismissals (7-day cooldown)
 
     /// Persisted dismissal for walk target nudge (7-day cooldown, survives app restart)
@@ -278,5 +287,35 @@ final class TodayStatusViewModel {
 
     var crateTrainingMastered: Bool {
         trainingMasteryStore.crateTrainingMastered
+    }
+
+    // MARK: - Recent Moment Card
+
+    /// The most recent moment event with a photo
+    var mostRecentMoment: PuppyEvent? {
+        eventStore.events
+            .filter { $0.type == .moment && $0.photo != nil }
+            .sorted { $0.time > $1.time }
+            .first
+    }
+
+    /// Whether to show the recent moment card
+    /// - Shows if there's a moment with a photo
+    /// - Hidden if the user dismissed this specific moment (reappears when a newer moment is posted)
+    var shouldShowRecentMomentCard: Bool {
+        guard let moment = mostRecentMoment else { return false }
+
+        // If user dismissed a moment, don't show if it's the same moment
+        if let dismissedID = dismissedRecentMomentID {
+            return moment.id != dismissedID
+        }
+
+        return true
+    }
+
+    /// Dismiss the recent moment card until a newer moment is posted
+    func dismissRecentMomentCard() {
+        guard let moment = mostRecentMoment else { return }
+        dismissedRecentMomentIDString = moment.id.uuidString
     }
 }

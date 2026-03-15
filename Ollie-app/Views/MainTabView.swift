@@ -59,6 +59,8 @@ struct MainTabView: View {
     @AppStorage("hasShownArrivalPhotoPrompt") private var hasShownArrivalPhotoPrompt = false
     @AppStorage(UserPreferences.Key.showFloatingClicker.rawValue) private var showFloatingClicker = false
     @AppStorage(UserPreferences.Key.needsFirstSessionHandoff.rawValue) private var needsFirstSessionHandoff = false
+    @AppStorage("exploreViewMode") private var exploreViewMode: ExploreViewMode = .map
+    @AppStorage("momentsViewMode") private var momentsViewMode: MomentsViewMode = .gallery
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     // MARK: - Initialization
@@ -254,7 +256,13 @@ private extension MainTabView {
                 onSettingsTap: { showingSettings = true },
                 onNavigateToAppointments: { selectedTab = .schedule },
                 onNavigateToTrain: { selectedTab = .train },
-                onAddDog: onAddDog
+                onAddDog: onAddDog,
+                onNavigateToDiary: {
+                    // Switch to Explore tab with Diary view mode
+                    exploreViewMode = .gallery
+                    momentsViewMode = .diary
+                    selectedTab = .explore
+                }
             )
             .tabItem {
                 Label(Strings.Tabs.today, systemImage: "pawprint.fill")

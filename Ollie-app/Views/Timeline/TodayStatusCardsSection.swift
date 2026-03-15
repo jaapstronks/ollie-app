@@ -39,6 +39,12 @@ struct TodayStatusCardsSection: View {
     var onAddPhoto: () -> Void
     var onInviteFamily: () -> Void
 
+    // Recent moment card
+    let mostRecentMoment: PuppyEvent?
+    let shouldShowRecentMomentCard: Bool
+    var onNavigateToDiary: () -> Void
+    var onDismissRecentMoment: () -> Void
+
     private let trialManager = TrialManager.shared
     private let firstWeekService = FirstWeekExperienceService.shared
     @Environment(ContactStore.self) private var contactStore
@@ -65,7 +71,11 @@ struct TodayStatusCardsSection: View {
         onShowMonthRecap: @escaping () -> Void,
         onShowYearRecap: @escaping () -> Void,
         onAddPhoto: @escaping () -> Void,
-        onInviteFamily: @escaping () -> Void
+        onInviteFamily: @escaping () -> Void,
+        mostRecentMoment: PuppyEvent? = nil,
+        shouldShowRecentMomentCard: Bool = false,
+        onNavigateToDiary: @escaping () -> Void,
+        onDismissRecentMoment: @escaping () -> Void
     ) {
         self._viewModel = Bindable(viewModel)
         self.weatherService = weatherService
@@ -89,6 +99,10 @@ struct TodayStatusCardsSection: View {
         self.onShowYearRecap = onShowYearRecap
         self.onAddPhoto = onAddPhoto
         self.onInviteFamily = onInviteFamily
+        self.mostRecentMoment = mostRecentMoment
+        self.shouldShowRecentMomentCard = shouldShowRecentMomentCard
+        self.onNavigateToDiary = onNavigateToDiary
+        self.onDismissRecentMoment = onDismissRecentMoment
     }
 
     var body: some View {
@@ -118,6 +132,9 @@ struct TodayStatusCardsSection: View {
 
             // Year in review tease card (Dec 15 - Jan 15)
             yearRecapTeaseCard(combinedState)
+
+            // Recent moment card
+            recentMomentCard(combinedState)
 
             // Stale logging banner
             staleLoggingBanner(combinedState)
@@ -283,6 +300,20 @@ private extension TodayStatusCardsSection {
                 )
                 .animatedAppear(delay: 0.14)
             }
+        }
+    }
+
+    @ViewBuilder
+    func recentMomentCard(_ combinedState: CombinedSleepPottyState) -> some View {
+        if shouldShowRecentMomentCard,
+           !combinedState.shouldShowFirstRunCard,
+           let moment = mostRecentMoment {
+            RecentMomentCard(
+                event: moment,
+                onNavigateToDiary: onNavigateToDiary,
+                onDismiss: onDismissRecentMoment
+            )
+            .animatedAppear(delay: 0.15)
         }
     }
 
