@@ -37,9 +37,10 @@ struct MomentsLightbox: View {
         self.onDismiss = onDismiss
         self.onDelete = onDelete
         self._localEvents = State(initialValue: photoEvents)
-        // Initialize currentEventID from selectedIndex
-        if selectedIndex.wrappedValue < photoEvents.count {
-            self._currentEventID = State(initialValue: photoEvents[selectedIndex.wrappedValue].id)
+        // Initialize currentEventID - always set to a valid value
+        let validIndex = min(max(0, selectedIndex.wrappedValue), max(0, photoEvents.count - 1))
+        if !photoEvents.isEmpty {
+            self._currentEventID = State(initialValue: photoEvents[validIndex].id)
         }
     }
 
@@ -52,68 +53,66 @@ struct MomentsLightbox: View {
     }
 
     var body: some View {
-        ZStack {
-            // Background
-            Color.black.ignoresSafeArea()
+        GeometryReader { geometry in
+            ZStack {
+                // Background
+                Color.black
 
-            // Ambient glow from current image
-            if let image = loadedImages[currentEvent.id] {
-                Image(uiImage: image)
-                    .resizable()
-                    .scaledToFill()
-                    .blur(radius: 80)
-                    .opacity(0.2)
-                    .scaleEffect(1.5)
-                    .ignoresSafeArea()
-            }
-
-            // Main carousel using ScrollView + scrollTargetBehavior
-            ScrollView(.horizontal) {
-                LazyHStack(spacing: 0) {
-                    ForEach(localEvents) { event in
-                        MomentPageView(
-                            event: event,
-                            loadedImage: loadedImages[event.id],
-                            onLikeToggle: { toggleLike(for: event) },
-                            onShowLikers: { showLikersSheet = true }
-                        )
-                        .containerRelativeFrame(.horizontal)
-                        .id(event.id)
-                    }
+                // Ambient glow from current image
+                if let image = loadedImages[currentEvent.id] {
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFill()
+                        .blur(radius: 80)
+                        .opacity(0.2)
+                        .scaleEffect(1.5)
                 }
-                .scrollTargetLayout()
-            }
-            .scrollTargetBehavior(.viewAligned)
-            .scrollPosition(id: $currentEventID)
-            .scrollIndicators(.hidden)
-            .scrollTransition(.animated, axis: .horizontal) { content, phase in
-                content
-                    .opacity(phase.isIdentity ? 1.0 : 0.7)
-                    .scaleEffect(phase.isIdentity ? 1.0 : 0.95)
-            }
 
-            // Fixed overlay controls
-            VStack(spacing: 0) {
-                // Top bar
-                topNavigationBar
-                    .padding(.horizontal, 16)
-                    .padding(.top, 8)
+                // Main carousel using ScrollView + scrollTargetBehavior
+                ScrollView(.horizontal) {
+                    LazyHStack(spacing: 0) {
+                        ForEach(localEvents) { event in
+                            MomentPageView(
+                                event: event,
+                                loadedImage: loadedImages[event.id],
+                                safeAreaTop: geometry.safeAreaInsets.top,
+                                safeAreaBottom: geometry.safeAreaInsets.bottom
+                            )
+                            .containerRelativeFrame(.horizontal)
+                            .id(event.id)
+                        }
+                    }
+                    .scrollTargetLayout()
+                }
+                .scrollTargetBehavior(.viewAligned)
+                .scrollPosition(id: $currentEventID)
+                .scrollIndicators(.hidden)
 
-                Spacer()
+                // Fixed overlay controls
+                VStack(spacing: 0) {
+                    // Top bar
+                    topNavigationBar
+                        .padding(.horizontal, 16)
+                        .padding(.top, geometry.safeAreaInsets.top + 8)
 
-                // Bottom info card
-                bottomInfoCard
-                    .padding(.horizontal, 16)
-                    .padding(.bottom, 8)
+                    Spacer()
 
-                // Page indicator dots
-                if localEvents.count > 1 {
-                    pageIndicator
-                        .padding(.bottom, 16)
+                    // Bottom info card
+                    bottomInfoCard
+                        .padding(.horizontal, 16)
+                        .padding(.bottom, 8)
+
+                    // Page indicator dots
+                    if localEvents.count > 1 {
+                        pageIndicator
+                            .padding(.bottom, geometry.safeAreaInsets.bottom + 16)
+                    } else {
+                        Spacer().frame(height: geometry.safeAreaInsets.bottom + 16)
+                    }
                 }
             }
         }
-        .statusBarHidden(true)
+        .ignoresSafeArea()
         .onChange(of: currentEventID) { _, newID in
             // Sync selectedIndex when scroll position changes
             if let newID, let index = localEvents.firstIndex(where: { $0.id == newID }) {
@@ -334,12 +333,18 @@ struct MomentsLightbox: View {
 private struct MomentPageView: View {
     let event: PuppyEvent
     let loadedImage: UIImage?
-    let onLikeToggle: () -> Void
-    let onShowLikers: () -> Void
+    let safeAreaTop: CGFloat
+    let safeAreaBottom: CGFloat
+
+    // Space needed for overlay controls
+    private var topControlsHeight: CGFloat { 56 + safeAreaTop }
+    private var bottomControlsHeight: CGFloat { 180 + safeAreaBottom }
 
     var body: some View {
-        VStack {
+        VStack(spacing: 0) {
+            // Top spacing for controls
             Spacer()
+                .frame(height: topControlsHeight)
 
             // Photo
             if let uiImage = loadedImage {
@@ -357,11 +362,9 @@ private struct MomentPageView: View {
                     .padding(.horizontal, 20)
             }
 
+            // Bottom spacing for controls
             Spacer()
-
-            // Spacing for bottom card
-            Spacer()
-                .frame(height: 180)
+                .frame(height: bottomControlsHeight)
         }
         .accessibilityElement(children: .combine)
         .accessibilityLabel(Strings.MediaPreview.photoOf(event.type.label))
