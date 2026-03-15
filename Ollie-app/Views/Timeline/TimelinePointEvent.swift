@@ -203,9 +203,9 @@ struct PointEventCard: View {
                 .padding(.leading, 6)
                 .padding(.trailing, hasPhoto ? 4 : 12)
 
-                // Photo thumbnail (if available)
-                if let thumbnailPath = item.photoThumbnail {
-                    AsyncThumbnailView(relativePath: thumbnailPath, showErrorPlaceholder: false)
+                // Photo thumbnail (if available) - use EventThumbnailView for CloudKit download fallback
+                if case .pointEvent(let event) = item.type, item.photoThumbnail != nil {
+                    EventThumbnailView(event: event, showErrorPlaceholder: false)
                         .frame(width: iconSize - 4, height: iconSize - 4)
                         .clipShape(RoundedRectangle(cornerRadius: 4))
                         .padding(.trailing, 4)

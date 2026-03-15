@@ -103,19 +103,19 @@ struct MemoriesCard: View {
 
                         Spacer()
 
-                        // Dismiss button
+                        // Dismiss button (custom styling for photo overlay)
                         Button {
                             dismissCard()
                         } label: {
                             Image(systemName: "xmark")
-                                .font(.caption)
-                                .fontWeight(.medium)
+                                .font(.system(size: 10, weight: .semibold))
                                 .foregroundStyle(.white)
                                 .frame(width: 24, height: 24)
                                 .background(.ultraThinMaterial.opacity(0.8))
                                 .clipShape(Circle())
                         }
                         .buttonStyle(.plain)
+                        .accessibilityLabel(Strings.Common.close)
                     }
                     .padding(10)
                 }
@@ -210,13 +210,14 @@ struct MemoriesCard: View {
                     dismissCard()
                 } label: {
                     Image(systemName: "xmark")
-                        .font(.caption)
+                        .font(.system(size: 10, weight: .semibold))
                         .foregroundStyle(.secondary)
-                        .frame(width: 28, height: 28)
-                        .background(Color(.tertiarySystemBackground))
+                        .frame(width: 24, height: 24)
+                        .background(Color(.tertiarySystemFill))
                         .clipShape(Circle())
                 }
                 .buttonStyle(.plain)
+                .accessibilityLabel(Strings.Common.close)
             }
             .padding(12)
             .background(Color(.secondarySystemBackground).opacity(0.6))
@@ -382,6 +383,32 @@ private struct MemoryPhotoView: View {
                 image = loaded
                 loadState = .loaded
                 return
+            }
+        }
+
+        // If local load failed but photo is synced to cloud, try downloading
+        if event.cloudPhotoSynced == true && event.photo != nil {
+            let success = await PhotoSyncService.shared.downloadPhoto(for: event)
+            if success {
+                // Retry loading after download
+                if let thumbnailPath = event.thumbnailPath {
+                    let url = documentsURL.appendingPathComponent(thumbnailPath)
+                    if let data = try? Data(contentsOf: url),
+                       let loaded = UIImage(data: data) {
+                        image = loaded
+                        loadState = .loaded
+                        return
+                    }
+                }
+                if let photoPath = event.photo {
+                    let url = documentsURL.appendingPathComponent(photoPath)
+                    if let data = try? Data(contentsOf: url),
+                       let loaded = UIImage(data: data) {
+                        image = loaded
+                        loadState = .loaded
+                        return
+                    }
+                }
             }
         }
 

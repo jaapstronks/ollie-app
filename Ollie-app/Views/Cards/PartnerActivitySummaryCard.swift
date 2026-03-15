@@ -86,19 +86,11 @@ struct PartnerActivitySummaryCard: View {
             Spacer()
 
             // Dismiss button
-            Button {
+            CardDismissButton {
                 HapticFeedback.selection()
                 Analytics.track(.partnerActivityCardDismissed)
                 onDismiss()
-            } label: {
-                Image(systemName: "xmark")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                    .frame(width: 24, height: 24)
-                    .background(Color(.tertiarySystemFill))
-                    .clipShape(Circle())
             }
-            .accessibilityLabel(Strings.Handoff.dismiss)
         }
     }
 
@@ -134,9 +126,9 @@ struct PartnerActivitySummaryCard: View {
     private var featuredMomentSection: some View {
         if let moment = summary.featuredMoment {
             VStack(alignment: .leading, spacing: 6) {
-                // Thumbnail
-                if let thumbnailPath = moment.thumbnailPath {
-                    AsyncThumbnailView(relativePath: thumbnailPath)
+                // Thumbnail - use EventThumbnailView for CloudKit download fallback
+                if moment.thumbnailPath != nil || moment.photo != nil {
+                    EventThumbnailView(event: moment)
                         .frame(height: 160)
                         .frame(maxWidth: .infinity)
                         .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))

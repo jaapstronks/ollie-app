@@ -158,7 +158,7 @@ struct MomentsGalleryView: View {
     private var diaryContent: some View {
         ScrollView {
             LazyVStack(spacing: 24) {
-                ForEach(Array(viewModel.eventsPerDay.enumerated()), id: \.element.id) { index, event in
+                ForEach(Array(viewModel.events.enumerated()), id: \.element.id) { index, event in
                     DiaryCardView(event: event)
                         .zoomTransitionSource(id: event.id, in: heroNamespace)
                         .onTapGesture {
@@ -187,44 +187,15 @@ struct MomentsGalleryView: View {
 }
 
 /// Single thumbnail in the gallery grid
+/// Uses EventThumbnailView for CloudKit download fallback
 struct GalleryThumbnail: View {
     let event: PuppyEvent
-    @State private var image: UIImage?
 
     var body: some View {
         GeometryReader { geometry in
-            Group {
-                if let image = image {
-                    Image(uiImage: image)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: geometry.size.width, height: geometry.size.width)
-                        .clipped()
-                } else {
-                    Rectangle()
-                        .fill(Color(.tertiarySystemBackground))
-                        .overlay {
-                            Image(systemName: "photo")
-                                .foregroundStyle(.secondary)
-                        }
-                }
-            }
-        }
-        .task {
-            await loadThumbnail()
-        }
-    }
-
-    /// Load thumbnail asynchronously using the shared image cache
-    private func loadThumbnail() async {
-        // Try thumbnail first, fall back to full photo
-        let path = event.thumbnailPath ?? event.photo
-        guard let path = path else { return }
-
-        // Use ImageCache for async loading with caching and deduplication
-        let loaded = await ImageCache.shared.loadImage(relativePath: path, isThumbnail: true)
-        if let loaded = loaded {
-            image = loaded
+            EventThumbnailView(event: event)
+                .frame(width: geometry.size.width, height: geometry.size.width)
+                .clipped()
         }
     }
 }

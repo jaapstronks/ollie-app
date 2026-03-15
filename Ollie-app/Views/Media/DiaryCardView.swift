@@ -16,6 +16,8 @@ struct DiaryCardView: View {
 
     @Environment(EventStore.self) private var eventStore
     @State private var image: UIImage?
+    @State private var isDownloading: Bool = false
+    @State private var downloadFailed: Bool = false
 
     private var documentsURL: URL {
         FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
@@ -168,6 +170,34 @@ struct DiaryCardView: View {
                         .scaledToFill()
                         .frame(width: geometry.size.width, height: geometry.size.width * 0.75)
                         .clipped()
+                } else if isDownloading {
+                    Rectangle()
+                        .fill(Color(.tertiarySystemBackground))
+                        .overlay {
+                            VStack(spacing: 4) {
+                                Image(systemName: "icloud.and.arrow.down")
+                                    .foregroundStyle(.secondary)
+                                ProgressView()
+                                    .scaleEffect(0.8)
+                            }
+                        }
+                } else if downloadFailed {
+                    Rectangle()
+                        .fill(Color(.tertiarySystemBackground))
+                        .overlay {
+                            Button {
+                                Task { await downloadFromCloud() }
+                            } label: {
+                                VStack(spacing: 4) {
+                                    Image(systemName: "arrow.clockwise.icloud")
+                                        .foregroundStyle(.secondary)
+                                    Text(Strings.Common.tryAgain)
+                                        .font(.caption2)
+                                        .foregroundStyle(.secondary)
+                                }
+                            }
+                            .buttonStyle(.plain)
+                        }
                 } else {
                     Rectangle()
                         .fill(Color(.tertiarySystemBackground))
@@ -234,6 +264,33 @@ struct DiaryCardView: View {
         // Use ImageCache for async loading
         if let loaded = await ImageCache.shared.loadImage(relativePath: path, isThumbnail: false) {
             image = loaded
+            return
+        }
+
+        // If local load failed but photo is synced to cloud, try downloading
+        if event.cloudPhotoSynced == true {
+            await downloadFromCloud()
+        }
+    }
+
+    private func downloadFromCloud() async {
+        isDownloading = true
+        downloadFailed = false
+
+        let success = await PhotoSyncService.shared.downloadPhoto(for: event)
+
+        isDownloading = false
+
+        if success {
+            // Reload the image after download
+            if let path = event.photo,
+               let loaded = await ImageCache.shared.loadImage(relativePath: path, isThumbnail: false) {
+                image = loaded
+            } else {
+                downloadFailed = true
+            }
+        } else {
+            downloadFailed = true
         }
     }
 }

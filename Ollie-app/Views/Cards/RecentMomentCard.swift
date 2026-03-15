@@ -16,7 +16,6 @@ struct RecentMomentCard: View {
     let onDismiss: () -> Void
 
     @Environment(EventStore.self) private var eventStore
-    @State private var thumbnail: UIImage?
 
     private var documentsURL: URL {
         FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
@@ -55,25 +54,13 @@ struct RecentMomentCard: View {
             // Header with title and dismiss
             HStack {
                 Label(Strings.Moments.latestMoment, systemImage: "photo.on.rectangle.angled")
-                    .font(.caption)
+                    .font(.subheadline)
                     .fontWeight(.medium)
                     .foregroundStyle(.secondary)
 
                 Spacer()
 
-                // Dismiss button
-                Button(action: onDismiss) {
-                    Image(systemName: "xmark")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                        .frame(width: 24, height: 24)
-                        .background(
-                            Circle()
-                                .fill(Color(.secondarySystemFill))
-                        )
-                }
-                .buttonStyle(.plain)
-                .accessibilityLabel(Strings.Common.close)
+                CardDismissButton(action: onDismiss)
             }
 
             // Main content row
@@ -112,9 +99,6 @@ struct RecentMomentCard: View {
         .padding(14)
         .glassStatusCard(tintColor: .purple.opacity(0.1))
         .accessibilityElement(children: .contain)
-        .task {
-            await loadThumbnail()
-        }
     }
 
     /// Combined accessibility label for the content area
@@ -137,23 +121,10 @@ struct RecentMomentCard: View {
 
     @ViewBuilder
     private var thumbnailView: some View {
-        Group {
-            if let thumbnail = thumbnail {
-                Image(uiImage: thumbnail)
-                    .resizable()
-                    .scaledToFill()
-            } else {
-                Rectangle()
-                    .fill(Color(.tertiarySystemBackground))
-                    .overlay {
-                        Image(systemName: "photo")
-                            .font(.title3)
-                            .foregroundStyle(.secondary)
-                    }
-            }
-        }
-        .frame(width: 64, height: 64)
-        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+        // Use EventThumbnailView for CloudKit download fallback
+        EventThumbnailView(event: event)
+            .frame(width: 64, height: 64)
+            .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
     }
 
     // MARK: - Content View
@@ -202,19 +173,6 @@ struct RecentMomentCard: View {
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-    }
-
-    // MARK: - Image Loading
-
-    private func loadThumbnail() async {
-        // Prefer thumbnail, fall back to full photo
-        let path = event.thumbnailPath ?? event.photo
-        guard let path = path else { return }
-
-        // Use ImageCache for async loading with caching and deduplication
-        if let loaded = await ImageCache.shared.loadImage(relativePath: path, isThumbnail: true) {
-            thumbnail = loaded
-        }
     }
 }
 

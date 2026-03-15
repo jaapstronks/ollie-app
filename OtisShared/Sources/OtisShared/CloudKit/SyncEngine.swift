@@ -285,6 +285,13 @@ public final class SyncEngine: @unchecked Sendable {
         return engine.state.pendingRecordZoneChanges.filter { context.options.scope.contains($0) }
     }
 
+    /// Remove stale pending changes from the sync queue
+    /// Call this when an entity no longer exists locally
+    public func removePendingChanges(_ changes: [CKSyncEngine.PendingRecordZoneChange]) {
+        guard let engine = engine, !changes.isEmpty else { return }
+        engine.state.remove(pendingRecordZoneChanges: changes)
+    }
+
     // MARK: - Zone Check
 
     /// Check if our zone exists, create if needed
