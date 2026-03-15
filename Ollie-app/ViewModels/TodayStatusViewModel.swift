@@ -56,7 +56,13 @@ final class TodayStatusViewModel {
 
     // MARK: - Appointment Nudge Dismissals (Persisted)
 
+    /// Persisted dismissals for appointment nudges (7-day cooldown per milestone)
+    /// Note: We use a separate tracked property to trigger UI updates since @AppStorage
+    /// doesn't participate in @Observable tracking.
     @ObservationIgnored @AppStorage("appointmentNudgeDismissals") private var appointmentNudgeDismissalsData: Data = Data()
+
+    /// Tracked property to trigger UI re-render when dismissal changes
+    private var appointmentNudgeDismissedVersion: Int = 0
 
     // MARK: - Dependencies
 
@@ -218,6 +224,8 @@ final class TodayStatusViewModel {
 
     /// Decoded dismissals dictionary from AppStorage
     private var appointmentNudgeDismissals: [String: Date] {
+        // Reference tracked version to participate in observation
+        _ = appointmentNudgeDismissedVersion
         guard !appointmentNudgeDismissalsData.isEmpty else { return [:] }
         return (try? JSONDecoder().decode([String: Date].self, from: appointmentNudgeDismissalsData)) ?? [:]
     }
@@ -249,6 +257,7 @@ final class TodayStatusViewModel {
         if let encoded = try? JSONEncoder().encode(dismissals) {
             appointmentNudgeDismissalsData = encoded
         }
+        appointmentNudgeDismissedVersion += 1
     }
 
     /// Create appointment prefill from nudge candidate
