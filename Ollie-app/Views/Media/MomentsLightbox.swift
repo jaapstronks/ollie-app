@@ -370,45 +370,6 @@ private struct MomentPageView: View {
     }
 }
 
-// MARK: - Like Button
-
-private struct LikeButton: View {
-    let event: PuppyEvent
-    let onToggle: () -> Void
-    let onShowLikers: () -> Void
-
-    private var isLiked: Bool {
-        guard let currentUserID = UserIdentityStore.shared.currentUserRecordID else { return false }
-        return event.isLikedBy(currentUserID)
-    }
-
-    var body: some View {
-        Button(action: onToggle) {
-            HStack(spacing: 6) {
-                Image(systemName: isLiked ? "heart.fill" : "heart")
-                    .font(.system(size: 18, weight: .medium))
-                    .foregroundStyle(isLiked ? .red : .white)
-                    .contentTransition(.symbolEffect(.replace))
-
-                if event.likeCount > 0 {
-                    Text("\(event.likeCount)")
-                        .font(.subheadline.weight(.medium))
-                        .foregroundStyle(.white.opacity(0.8))
-                }
-            }
-            .padding(.horizontal, 14)
-            .padding(.vertical, 8)
-            .background(
-                Capsule()
-                    .fill(isLiked ? Color.red.opacity(0.2) : .white.opacity(0.1))
-            )
-        }
-        .buttonStyle(.plain)
-        .accessibilityLabel(isLiked ? "Unlike this moment" : "Like this moment")
-        .accessibilityHint(isLiked ? "Double-tap to remove your like" : "Double-tap to like this moment")
-    }
-}
-
 // MARK: - Liker Avatars Row
 
 private struct LikerAvatarsRow: View {
