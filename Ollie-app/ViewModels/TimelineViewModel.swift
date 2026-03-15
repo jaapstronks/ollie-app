@@ -58,10 +58,6 @@ class TimelineViewModel {
     /// Updated only when events change to avoid O(n²) recomputation on every view render
     private(set) var timelineItems: [TimelineItem] = []
 
-    /// Cached recent photo events (7 days) - updated only when events change
-    /// PERFORMANCE: Avoids synchronous Core Data fetch on every view render
-    private(set) var recentPhotoEventsCache: [PuppyEvent] = []
-
     /// Cached partner activity summary - updated only when events change
     /// PERFORMANCE: Avoids synchronous Core Data fetch on every view render
     private(set) var partnerActivitySummaryCache: PartnerActivitySummary?
@@ -316,9 +312,14 @@ class TimelineViewModel {
             .receive(on: RunLoop.main)
             .sink { [weak self] _ in
                 self?.resetToTodayIfNeeded()
+                // Check for pending Live Activity actions (e.g., "Wake Up" button tapped)
+                self?.checkForPendingLiveActivityActions()
             }
 
         loadEvents()
+
+        // Clean up any orphaned Live Activities from app crashes or force-quits
+        cleanupOrphanedLiveActivities()
 
         // Finish init transaction
         initTransaction?.finish()
@@ -516,15 +517,6 @@ class TimelineViewModel {
         subscriptionManager.effectiveStatus.trialDaysRemaining ?? 0
     }
 
-    // MARK: - Recent Photos
-
-    /// Get events with photos from the last 7 days, sorted most recent first
-    /// PERFORMANCE: Now returns cached value instead of synchronous Core Data fetch
-    /// Cache is updated asynchronously when events change
-    var recentPhotoEvents: [PuppyEvent] {
-        recentPhotoEventsCache
-    }
-
     // MARK: - Medication Helpers
 
     /// Get pending medications for today
@@ -621,6 +613,11 @@ class TimelineViewModel {
         activityManager.onDeleteSleepEvent = { [weak self] sessionId -> PuppyEvent? in
             guard let self = self else { return nil }
             return self.events.first(where: { $0.sleepSessionId == sessionId && $0.type == .slapen })
+        }
+
+        // Provide puppy name for Live Activities
+        activityManager.getPuppyName = { [weak self] in
+            self?.puppyName ?? "Puppy"
         }
     }
 
@@ -742,18 +739,6 @@ class TimelineViewModel {
             operation: "cache.refresh"
         )
 
-        // Use EventDataProvider's pre-cached week events (no DB fetch)
-        let weekEvents = eventDataProvider.weekEvents
-
-        // Calculate recent photo events from cache
-        let photoSpan = refreshTransaction?.startChild(
-            operation: "cache.compute",
-            description: "Photo Events Filter"
-        )
-        let photoEvents = weekEvents.filter { $0.photo != nil }
-            .sorted { $0.time > $1.time }
-        photoSpan?.finish()
-
         // Calculate partner activity from cache (uses recentEvents from EventDataProvider)
         let partnerSpan = refreshTransaction?.startChild(
             operation: "cache.compute",
@@ -764,7 +749,6 @@ class TimelineViewModel {
         partnerSpan?.finish()
 
         // Update cached properties on main thread
-        self.recentPhotoEventsCache = photoEvents
         self.partnerActivitySummaryCache = partnerSummary
 
         // REACTIVITY FIX: Use fresh events from EventStore for sleep/potty state

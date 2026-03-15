@@ -134,12 +134,6 @@ struct TodayView: View {
                         .animatedAppear(delay: 0.08)
                     }
 
-                    // Recent moments preview (latest 3 photos)
-                    if viewModel.isShowingToday {
-                        recentMomentsSection
-                            .animatedAppear(delay: 0.09)
-                    }
-
                     // Today's scheduled appointments
                     if viewModel.isShowingToday {
                         TodaysScheduleCard(
@@ -354,32 +348,6 @@ struct TodayView: View {
             )
             .environment(contactStore)
         }
-    }
-
-    // MARK: - Recent Moments Section
-
-    @ViewBuilder
-    private var recentMomentsSection: some View {
-        let recentPhotos = viewModel.recentPhotoEvents
-        RecentMomentsPreviewCard(
-            photoEvents: recentPhotos,
-            onPhotoTap: { _, index in
-                viewModel.sheetCoordinator.presentMomentsLightbox(
-                    events: recentPhotos,
-                    startIndex: index
-                )
-            },
-            onViewAll: {
-                // Open lightbox at first photo for full gallery experience
-                viewModel.sheetCoordinator.presentMomentsLightbox(
-                    events: recentPhotos,
-                    startIndex: 0
-                )
-            },
-            onLikeToggle: { event in
-                _ = eventStore.toggleLike(on: event)
-            }
-        )
     }
 
     // MARK: - Timeline Section

@@ -93,9 +93,6 @@ extension Strings {
         // Watermark
         static let madeWithOllie = String(localized: "Made with Ollie", table: table)
 
-        // Recent moments carousel
-        static let recentMoments = String(localized: "Recent Moments", table: table)
-
         // Moment attribution
         static func capturedBy(_ name: String) -> String {
             String(localized: "Captured by \(name)", table: table)

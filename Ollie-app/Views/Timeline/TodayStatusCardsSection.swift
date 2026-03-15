@@ -119,9 +119,6 @@ struct TodayStatusCardsSection: View {
             // Year in review tease card (Dec 15 - Jan 15)
             yearRecapTeaseCard(combinedState)
 
-            // Recent moments carousel - disabled for performance
-            // recentMomentsCarousel(combinedState)
-
             // Stale logging banner
             staleLoggingBanner(combinedState)
 
@@ -285,25 +282,6 @@ private extension TodayStatusCardsSection {
                     onTap: onShowYearRecap
                 )
                 .animatedAppear(delay: 0.14)
-            }
-        }
-    }
-
-    @ViewBuilder
-    func recentMomentsCarousel(_ combinedState: CombinedSleepPottyState) -> some View {
-        if !combinedState.shouldShowFirstRunCard {
-            let recentPhotos = viewModel.recentPhotoEvents
-            if !recentPhotos.isEmpty {
-                RecentMomentsCarousel(
-                    photoEvents: recentPhotos,
-                    onPhotoTap: { _, index in
-                        viewModel.sheetCoordinator.presentMomentsLightbox(
-                            events: recentPhotos,
-                            startIndex: index
-                        )
-                    }
-                )
-                .animatedAppear(delay: 0.16)
             }
         }
     }
