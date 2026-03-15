@@ -7,7 +7,7 @@
 
 import Foundation
 
-private let table = "Localizable"
+private let table = "Training"
 
 extension Strings {
 

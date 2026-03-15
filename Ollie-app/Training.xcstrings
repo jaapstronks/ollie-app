@@ -1447,6 +1447,48 @@
         }
       }
     },
+    "Build good habits" : {
+      "comment" : "Title for the Skills section tip.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gute Gewohnheiten aufbauen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Construye buenos hábitos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Construire de bonnes habitudes"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Costruisci buone abitudini"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bouw goede gewoontes op"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bygg goda vanor"
+          }
+        }
+      }
+    },
     "Build the Association" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -5482,6 +5524,48 @@
         }
       }
     },
+    "Monitor health & growth" : {
+      "comment" : "Title for the Health view tip.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gesundheit & Wachstum verfolgen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Monitorea salud y crecimiento"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Surveiller santé et croissance"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Monitora salute e crescita"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Volg gezondheid en groei"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Följ hälsa och tillväxt"
+          }
+        }
+      }
+    },
     "Most puppies love their crate within a week. It becomes their happy place." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -8376,6 +8460,90 @@
         }
       }
     },
+    "See everything at a glance: sleep status, potty progress, and upcoming events. Use the + button to quickly log activities." : {
+      "comment" : "Message for the Today view introduction tip.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sieh alles auf einen Blick: Schlafstatus, Töpfchenfortschritt und anstehende Ereignisse. Verwende die + Taste, um Aktivitäten schnell zu protokollieren."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ve todo de un vistazo: estado de sueño, progreso del baño y próximos eventos. Usa el botón + para registrar actividades rápidamente."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voyez tout d'un coup d'œil : état du sommeil, progrès de la propreté et événements à venir. Utilisez le bouton + pour enregistrer rapidement les activités."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vedi tutto a colpo d'occhio: stato del sonno, progressi della pipì e eventi in arrivo. Usa il pulsante + per registrare rapidamente le attività."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zie alles in één oogopslag: slaapstatus, zindelijkheidstraining en komende gebeurtenissen. Gebruik de + knop om snel activiteiten te loggen."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se allt på en gång: sömnstatus, kissframsteg och kommande händelser. Använd + knappen för att snabbt logga aktiviteter."
+          }
+        }
+      }
+    },
+    "See what developmental stage your puppy is in, upcoming milestones, and the critical socialization window timeline." : {
+      "comment" : "Message for the Development view tip.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sieh, in welcher Entwicklungsphase dein Welpe ist, kommende Meilensteine und die kritische Sozialisierungsfenster-Zeitleiste."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mira en qué etapa de desarrollo está tu cachorro, los próximos hitos y la línea de tiempo de la ventana de socialización crítica."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voyez à quelle étape de développement se trouve votre chiot, les prochaines étapes et la chronologie de la fenêtre de socialisation critique."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vedi in quale fase di sviluppo si trova il tuo cucciolo, le prossime tappe e la cronologia della finestra di socializzazione critica."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bekijk in welke ontwikkelingsfase je puppy zit, aankomende mijlpalen en de tijdlijn van het kritieke socialisatievenster."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se vilken utvecklingsfas din valp är i, kommande milstolpar och tidslinjen för det kritiska socialiseringsfönstret."
+          }
+        }
+      }
+    },
     "Select naps to update their location. This helps track crate training progress." : {
       "comment" : "Title and description for a view where a user can select and edit the nap locations logged for a puppy.",
       "extractionState" : "manual",
@@ -8762,6 +8930,48 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Socialisatie"
+          }
+        }
+      }
+    },
+    "Socialize with confidence" : {
+      "comment" : "Title for the Socialization section tip.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Selbstbewusst sozialisieren"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Socializa con confianza"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Socialiser avec confiance"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Socializza con sicurezza"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Socialiseer met vertrouwen"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Socialisera med självförtroende"
           }
         }
       }
@@ -9622,6 +9832,48 @@
       "extractionState" : "manual",
       "isCommentAutoGenerated" : true
     },
+    "The first 16 weeks are critical. Track exposures to people, animals, sounds, and environments to raise a confident dog." : {
+      "comment" : "Message for the Socialization section tip.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die ersten 16 Wochen sind entscheidend. Verfolge Begegnungen mit Menschen, Tieren, Geräuschen und Umgebungen, um einen selbstbewussten Hund aufzuziehen."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Las primeras 16 semanas son críticas. Registra las exposiciones a personas, animales, sonidos y entornos para criar un perro seguro."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les 16 premières semaines sont cruciales. Suivez les expositions aux personnes, animaux, sons et environnements pour élever un chien confiant."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le prime 16 settimane sono critiche. Traccia le esposizioni a persone, animali, suoni e ambienti per crescere un cane sicuro."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De eerste 16 weken zijn cruciaal. Volg blootstellingen aan mensen, dieren, geluiden en omgevingen om een zelfverzekerde hond op te voeden."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De första 16 veckorna är kritiska. Följ exponeringar för människor, djur, ljud och miljöer för att uppfostra en trygg hund."
+          }
+        }
+      }
+    },
     "The classic sit command. A building block for many other behaviors." : {
       "extractionState" : "stale",
       "localizations" : {
@@ -10275,15 +10527,131 @@
         }
       }
     },
+    "Track development stages" : {
+      "comment" : "Title for the Development view tip.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entwicklungsphasen verfolgen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sigue las etapas de desarrollo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suivre les étapes de développement"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Segui le fasi di sviluppo"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Volg ontwikkelingsfases"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Följ utvecklingsstadier"
+          }
+        }
+      }
+    },
     "Track training progress on essential commands and behaviors. Celebrate small wins as your puppy learns." : {
       "comment" : "Tip for the \"Skills\" section of the Train tab, providing guidance on tracking and celebrating training progress.",
       "extractionState" : "manual",
-      "isCommentAutoGenerated" : true
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verfolge den Trainingsfortschritt bei wichtigen Kommandos und Verhaltensweisen. Feiere kleine Erfolge während dein Welpe lernt."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sigue el progreso del entrenamiento en comandos y comportamientos esenciales. Celebra las pequeñas victorias mientras tu cachorro aprende."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suivez les progrès d'entraînement sur les commandes et comportements essentiels. Célébrez les petites victoires pendant que votre chiot apprend."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Segui i progressi dell'addestramento su comandi e comportamenti essenziali. Celebra le piccole vittorie mentre il tuo cucciolo impara."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Volg de trainingsvoortgang op essentiële commando's en gedrag. Vier kleine overwinningen terwijl je pup leert."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Följ träningsframsteg på viktiga kommandon och beteenden. Fira små segrar när din valp lär sig."
+          }
+        }
+      }
     },
     "Track weight, vaccinations, and potty training progress. Spot patterns and celebrate milestones." : {
       "comment" : "Message for the Health tab introduction tip, explaining the purpose of the Health tab and its features.",
       "extractionState" : "manual",
-      "isCommentAutoGenerated" : true
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verfolge Gewicht, Impfungen und Töpfchentraining-Fortschritt. Erkenne Muster und feiere Meilensteine."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sigue el peso, las vacunas y el progreso del entrenamiento para ir al baño. Detecta patrones y celebra los hitos."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suivez le poids, les vaccinations et les progrès de la propreté. Repérez les tendances et célébrez les étapes."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Segui peso, vaccinazioni e progressi dell'addestramento alla pipì. Individua i modelli e celebra le tappe."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Volg gewicht, vaccinaties en zindelijkheidstraining. Ontdek patronen en vier mijlpalen."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Följ vikt, vaccinationer och kissträningsframsteg. Upptäck mönster och fira milstolpar."
+          }
+        }
+      }
     },
     "Trainer guides the dog with a food lure. Produces faster initial learning. Used for: sit, down, come." : {
       "comment" : "Description of the \"Classical (Active)\" training method.",
