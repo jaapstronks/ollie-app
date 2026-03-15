@@ -841,6 +841,11 @@ class TimelineViewModel {
         wakeTimePottyState = nil
     }
 
+    /// Clear the partner activity summary cache (used when dismissing the card)
+    func clearPartnerActivityCache() {
+        partnerActivitySummaryCache = nil
+    }
+
     /// Get events from the past N days (for pattern analysis)
     /// Uses in-memory events for today + Core Data for historical data
     func getHistoricalEvents(days: Int) -> [PuppyEvent] {

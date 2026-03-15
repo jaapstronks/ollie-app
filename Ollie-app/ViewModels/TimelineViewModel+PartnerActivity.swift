@@ -61,7 +61,7 @@ extension TimelineViewModel {
     /// Dismiss the partner activity summary card
     func dismissPartnerActivitySummary() {
         profileStore.markPartnerActivitySeen()
-        // With @Observable, touching a tracked property triggers view update
-        refreshTrigger += 1
+        // Clear the cache immediately so the card disappears
+        clearPartnerActivityCache()
     }
 }

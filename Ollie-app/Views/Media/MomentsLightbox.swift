@@ -352,6 +352,7 @@ private struct PhotoCard: View {
                     Image(uiImage: uiImage)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
+                        .frame(maxWidth: availableWidth, maxHeight: availableHeight)
                         .clipShape(RoundedRectangle(cornerRadius: 20))
                         .scaleEffect(scale)
                         .offset(offset)
@@ -408,7 +409,6 @@ private struct PhotoCard: View {
                         )
                 }
             }
-            .frame(width: availableWidth, height: availableHeight)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .offset(y: (topSpace - bottomSpace) / 2) // Shift up to account for bottom UI
         }
