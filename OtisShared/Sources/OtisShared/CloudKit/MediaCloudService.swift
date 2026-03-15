@@ -76,6 +76,22 @@ public final class MediaCloudService {
 
         let database = getDatabase()
 
+        // Since we bypass CKSyncEngine for media uploads, we need to handle
+        // transient errors manually with retry logic
+        return try await saveRecordWithRetry(record, to: database, zoneID: zoneID, eventId: eventId)
+    }
+
+    /// Save a record with automatic retry for transient errors
+    /// CKSyncEngine handles these automatically, but since we use direct database saves
+    /// for media, we need to handle retries ourselves
+    private func saveRecordWithRetry(
+        _ record: CKRecord,
+        to database: CKDatabase,
+        zoneID: CKRecordZone.ID,
+        eventId: UUID,
+        maxRetries: Int = 3,
+        currentRetry: Int = 0
+    ) async throws -> UploadResult {
         do {
             let savedRecord = try await database.save(record)
             // Use actual user record name, not __defaultOwner__ which is device-relative
@@ -83,8 +99,42 @@ public final class MediaCloudService {
             logger.info("Uploaded photo for event \(eventId), owner: \(actualOwnerName)")
             return UploadResult(recordID: savedRecord.recordID, ownerName: actualOwnerName)
         } catch let error as CKError {
-            logger.error("Failed to upload photo: \(error.localizedDescription)")
+            // Check if this is a retryable transient error
+            if isRetryableError(error) && currentRetry < maxRetries {
+                // Get retry delay from error or use exponential backoff
+                let delay = error.retryAfterSeconds ?? Double(pow(2.0, Double(currentRetry)))
+                logger.warning("Retryable error uploading photo (attempt \(currentRetry + 1)/\(maxRetries)): \(error.localizedDescription). Retrying in \(delay)s")
+
+                try await Task.sleep(for: .seconds(delay))
+
+                return try await saveRecordWithRetry(
+                    record,
+                    to: database,
+                    zoneID: zoneID,
+                    eventId: eventId,
+                    maxRetries: maxRetries,
+                    currentRetry: currentRetry + 1
+                )
+            }
+
+            logger.error("Failed to upload photo after \(currentRetry) retries: \(error.localizedDescription)")
             throw MediaCloudError.uploadFailed(error.localizedDescription)
+        }
+    }
+
+    /// Check if a CKError is a transient error that should be retried
+    /// These are the same errors that CKSyncEngine handles automatically
+    private func isRetryableError(_ error: CKError) -> Bool {
+        switch error.code {
+        case .networkFailure,
+             .networkUnavailable,
+             .zoneBusy,
+             .serviceUnavailable,
+             .requestRateLimited,
+             .operationCancelled:
+            return true
+        default:
+            return false
         }
     }
 
@@ -102,29 +152,30 @@ public final class MediaCloudService {
             throw CloudKitError.notAvailable
         }
 
-        // If ownerName is provided, construct a zone ID with that owner
-        // Otherwise, use the default zone ID (for own uploads or when owner is unknown)
+        // Determine if this is the user's own data or shared data
+        // This affects both database and zone selection
+        let currentUserRecordName = getCurrentUserRecordName()
+        let isOwnData = ownerName == nil ||
+                        ownerName == CKCurrentUserDefaultName ||
+                        ownerName == currentUserRecordName
+
+        let database: CKDatabase
         let zoneID: CKRecordZone.ID
-        if let ownerName = ownerName {
-            // Use the Core Data CloudKit zone name with the specified owner
-            zoneID = CKRecordZone.ID(zoneName: "com.apple.coredata.cloudkit.zone", ownerName: ownerName)
-            logger.debug("Downloading photo for event \(eventId) from zone owned by \(ownerName)")
-        } else {
+
+        if isOwnData {
+            // Own data - use private database with default zone
+            // IMPORTANT: Private database uses CKCurrentUserDefaultName, not actual user record name
+            database = getDatabase()
             zoneID = getZoneID()
-            logger.debug("Downloading photo for event \(eventId) from default zone")
+            logger.debug("Downloading photo for event \(eventId) from own private zone")
+        } else {
+            // Photo is from another user - use shared database with their zone
+            database = CKContainer(identifier: "iCloud.nl.jaapstronks.Otis").sharedCloudDatabase
+            zoneID = CKRecordZone.ID(zoneName: "com.apple.coredata.cloudkit.zone", ownerName: ownerName!)
+            logger.debug("Downloading photo for event \(eventId) from shared zone owned by \(ownerName!)")
         }
 
         let recordID = CKRecord.ID(recordName: "media-\(eventId.uuidString)", zoneID: zoneID)
-
-        // Determine which database to use based on owner
-        // If owner is different from current user, must use shared database
-        let database: CKDatabase
-        if ownerName != nil && ownerName != CKCurrentUserDefaultName {
-            // Photo is from another user, look in shared database
-            database = CKContainer(identifier: "iCloud.nl.jaapstronks.Otis").sharedCloudDatabase
-        } else {
-            database = getDatabase()
-        }
 
         do {
             let record = try await database.record(for: recordID)

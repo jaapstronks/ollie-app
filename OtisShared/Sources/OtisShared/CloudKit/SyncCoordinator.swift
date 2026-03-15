@@ -49,7 +49,8 @@ public final class SyncCoordinator {
     private var sharedEngine: SyncEngine?
 
     /// Zone name for the app's data
-    public let zoneName = "OllieZone"
+    /// Uses NSPersistentCloudKitContainer's default zone for backward compatibility
+    public let zoneName = "com.apple.coredata.cloudkit.zone"
 
     /// Whether sync is enabled (false if no iCloud account)
     public private(set) var isSyncEnabled: Bool = false
@@ -82,6 +83,12 @@ public final class SyncCoordinator {
 
     /// Called when account status changes
     public var onAccountChange: ((CKSyncEngine.Event.AccountChange) -> Void)?
+
+    // MARK: - Store Assignment
+
+    /// Callback to get the shared Core Data store for assigning shared entities
+    /// Set this from PersistenceController to enable proper store routing
+    public var getSharedStore: (() -> NSPersistentStore?)?
 
     // MARK: - Initialization
 
@@ -129,6 +136,10 @@ public final class SyncCoordinator {
         privateEngine?.ensureZoneExists()
 
         // Create and start shared engine
+        // Note: We don't call ensureZoneExists() for shared engine because:
+        // 1. Participants don't create zones - they access zones shared by the owner
+        // 2. CKSyncEngine automatically discovers zones in the shared database
+        // 3. Records from shared database are routed to the shared Core Data store via getSharedStore
         let sharedConfig = SyncEngineConfiguration(
             database: container.sharedCloudDatabase,
             identifier: "shared",
@@ -138,7 +149,7 @@ public final class SyncCoordinator {
         sharedEngine?.delegate = self
         sharedEngine?.start()
 
-        logger.info("SyncCoordinator started successfully")
+        logger.info("SyncCoordinator started successfully (private + shared engines)")
     }
 
     /// Stop sync engines
@@ -156,6 +167,13 @@ public final class SyncCoordinator {
     public func registerHandler<T: EntitySyncHandler>(_ handler: T) {
         entityHandlers[T.recordType] = handler
         logger.debug("Registered handler for \(T.recordType)")
+    }
+
+    /// Register a handler for a specific record type with an alias
+    /// Use this to handle records that may have different type names (e.g., legacy records)
+    public func registerHandler<T: EntitySyncHandler>(_ handler: T, forRecordType recordType: String) {
+        entityHandlers[recordType] = handler
+        logger.debug("Registered handler for \(recordType) (alias)")
     }
 
     // MARK: - Pending Changes
@@ -227,6 +245,25 @@ public final class SyncCoordinator {
     public func sharedZoneID(ownerName: String) -> CKRecordZone.ID {
         CKRecordZone.ID(zoneName: zoneName, ownerName: ownerName)
     }
+
+    // MARK: - Record ID Helpers
+
+    /// Build a CKRecord.ID from entity name or record type and UUID
+    /// Convention: recordName format is "CD_EntityName:UUID" to match NSPersistentCloudKitContainer
+    ///
+    /// Examples:
+    /// - recordID(for: "CDPuppyEvent", id: uuid) → "CD_CDPuppyEvent:UUID"
+    /// - recordID(for: "CD_CDPuppyEvent", id: uuid) → "CD_CDPuppyEvent:UUID" (already prefixed)
+    public func recordID(for entityNameOrRecordType: String, id: UUID) -> CKRecord.ID {
+        // If already has CD_ prefix, use as-is; otherwise add the prefix
+        let recordType = entityNameOrRecordType.hasPrefix("CD_")
+            ? entityNameOrRecordType
+            : "CD_\(entityNameOrRecordType)"
+        return CKRecord.ID(
+            recordName: "\(recordType):\(id.uuidString)",
+            zoneID: privateZoneID
+        )
+    }
 }
 
 // MARK: - SyncEngineDelegate
@@ -243,12 +280,29 @@ extension SyncCoordinator: SyncEngineDelegate {
             return nil
         }
 
-        let isShared = syncEngine === sharedEngine
-        let pendingChanges = context.pendingRecordZoneChanges
+        let _ = syncEngine === sharedEngine  // Reserved for future shared database handling
+        let pendingChanges = syncEngine.pendingRecordZoneChanges(for: context)
 
-        // Group by record type for efficient fetching
-        var recordsByType: [String: [CKRecord]] = [:]
-        var deletions: [CKRecord.ID] = []
+        guard !pendingChanges.isEmpty else {
+            return nil
+        }
+
+        // Debug: log what records are being requested
+        logger.info("Processing \(pendingChanges.count) pending changes:")
+        for change in pendingChanges {
+            switch change {
+            case .saveRecord(let recordID):
+                logger.info("  SAVE: \(recordID.recordName)")
+            case .deleteRecord(let recordID):
+                logger.info("  DELETE: \(recordID.recordName)")
+            @unknown default:
+                logger.info("  UNKNOWN change type")
+            }
+        }
+
+        // Pre-fetch all records for save operations
+        // Build a dictionary of recordID -> CKRecord for the provider closure
+        var recordsCache: [CKRecord.ID: CKRecord] = [:]
 
         for change in pendingChanges {
             switch change {
@@ -264,31 +318,37 @@ extension SyncCoordinator: SyncEngineDelegate {
                     zoneID: syncEngine.zoneID,
                     in: viewContext
                 ) {
-                    recordsByType[recordType, default: []].append(record)
+                    recordsCache[recordID] = record
                 }
 
-            case .deleteRecord(let recordID):
-                deletions.append(recordID)
+            case .deleteRecord:
+                // Deletions don't need records, just pass through
+                break
 
             @unknown default:
                 break
             }
         }
 
-        // Flatten records
-        let recordsToSave = recordsByType.values.flatMap { $0 }
+        pendingChangesCount = max(0, pendingChangesCount - pendingChanges.count)
 
-        guard !recordsToSave.isEmpty || !deletions.isEmpty else {
-            return nil
+        // Capture the cache as a let constant for use in the closure
+        let cache = recordsCache
+
+        // Debug: log how many records we actually have
+        logger.info("Prepared \(cache.count) records for batch (requested \(pendingChanges.count))")
+
+        // Use the pendingChanges-based initializer so CKSyncEngine knows
+        // which pending changes are satisfied by this batch
+        return await CKSyncEngine.RecordZoneChangeBatch(pendingChanges: pendingChanges) { recordID in
+            // Return the cached record, or nil if not found (entity was deleted locally)
+            let record = cache[recordID]
+            if record == nil {
+                // This shouldn't happen often - means entity was deleted between queue and send
+                self.logger.warning("No record found for \(recordID.recordName) - entity may have been deleted")
+            }
+            return record
         }
-
-        pendingChangesCount = max(0, pendingChangesCount - recordsToSave.count - deletions.count)
-
-        return CKSyncEngine.RecordZoneChangeBatch(
-            recordsToSave: recordsToSave,
-            recordIDsToDelete: deletions,
-            atomicByZone: true
-        )
     }
 
     public func handleFetchedRecordZoneChanges(
@@ -302,6 +362,9 @@ extension SyncCoordinator: SyncEngineDelegate {
 
         let isShared = syncEngine === sharedEngine
 
+        // Get the target store for shared records
+        let targetStore: NSPersistentStore? = isShared ? getSharedStore?() : nil
+
         // Process modifications
         for modification in changes.modifications {
             let record = modification.record
@@ -312,7 +375,7 @@ extension SyncCoordinator: SyncEngineDelegate {
                 continue
             }
 
-            await handler.handleFetchedRecord(record, in: viewContext, isShared: isShared)
+            await handler.handleFetchedRecord(record, in: viewContext, isShared: isShared, targetStore: targetStore)
         }
 
         // Process deletions
@@ -335,8 +398,20 @@ extension SyncCoordinator: SyncEngineDelegate {
             do {
                 try viewContext.save()
                 logger.debug("Saved fetched changes to Core Data")
-            } catch {
+            } catch let error as NSError {
                 logger.error("Failed to save fetched changes: \(error.localizedDescription)")
+                // Log detailed validation errors
+                if let errors = error.userInfo[NSDetailedErrorsKey] as? [NSError] {
+                    for detailedError in errors {
+                        logger.error("  Validation error: \(detailedError.localizedDescription)")
+                        if let key = detailedError.userInfo[NSValidationKeyErrorKey] {
+                            logger.error("    Key: \(String(describing: key))")
+                        }
+                        if let object = detailedError.userInfo[NSValidationObjectErrorKey] as? NSManagedObject {
+                            logger.error("    Entity: \(object.entity.name ?? "unknown")")
+                        }
+                    }
+                }
             }
         }
 
@@ -352,11 +427,84 @@ extension SyncCoordinator: SyncEngineDelegate {
         for deletion in changes.deletions {
             logger.info("Zone deleted: \(deletion.zoneID.zoneName), reason: \(String(describing: deletion.reason))")
 
-            // If the zone was purged, we should delete local data
-            if deletion.reason == .purged {
-                // TODO: Delete all local data for this zone
+            switch deletion.reason {
+            case .purged:
+                // Zone was purged - user went through Settings > iCloud > Manage Storage
+                // Per CKSyncEngine best practices:
+                // 1. Delete all local data (user explicitly asked for this)
+                // 2. Clear state serialization (change tokens are no longer valid)
+                await deleteLocalDataForZone(deletion.zoneID, isShared: syncEngine === sharedEngine)
+                syncEngine.clearStateSerialization()
+
+            case .deleted:
+                // Zone was explicitly deleted programmatically
+                // Delete local data but keep state (we initiated this)
+                await deleteLocalDataForZone(deletion.zoneID, isShared: syncEngine === sharedEngine)
+
+            case .encryptedDataReset:
+                // User reset encrypted data during account recovery
+                // Per CKSyncEngine best practices:
+                // 1. Clear state serialization (change tokens are no longer valid)
+                // 2. Re-upload all local data to minimize data loss
+                logger.warning("Encrypted data reset - clearing state and re-uploading all local data")
+                syncEngine.clearStateSerialization()
+                await reuploadAllDataForZone(deletion.zoneID, isShared: syncEngine === sharedEngine)
+
+            @unknown default:
+                logger.warning("Unknown zone deletion reason: \(String(describing: deletion.reason))")
             }
         }
+    }
+
+    /// Delete all local data associated with a specific zone
+    /// Called when a zone is purged (e.g., user left a share)
+    private func deleteLocalDataForZone(_ zoneID: CKRecordZone.ID, isShared: Bool) async {
+        guard let viewContext = viewContext else {
+            logger.error("No view context - cannot delete zone data")
+            return
+        }
+
+        logger.info("Deleting local data for zone: \(zoneID.zoneName), isShared: \(isShared)")
+
+        // Notify all registered handlers to delete records for this zone
+        for (recordType, handler) in entityHandlers {
+            await handler.handleZonePurge(zoneID: zoneID, in: viewContext)
+            logger.debug("Purged \(recordType) records for zone \(zoneID.zoneName)")
+        }
+
+        // Save context after deletions
+        if viewContext.hasChanges {
+            do {
+                try viewContext.save()
+                logger.info("Saved context after zone purge")
+            } catch {
+                logger.error("Failed to save after zone purge: \(error.localizedDescription)")
+            }
+        }
+
+        // Notify observers that data changed
+        onRemoteChanges?()
+    }
+
+    /// Re-upload all local data for a zone after encrypted data reset
+    /// Called when user resets encrypted CloudKit data in Settings
+    private func reuploadAllDataForZone(_ zoneID: CKRecordZone.ID, isShared: Bool) async {
+        guard let viewContext = viewContext else {
+            logger.error("No view context - cannot re-upload zone data")
+            return
+        }
+
+        logger.info("Re-uploading all data for zone: \(zoneID.zoneName), isShared: \(isShared)")
+
+        // Notify all registered handlers to queue their records for re-upload
+        for (recordType, handler) in entityHandlers {
+            await handler.handleEncryptedDataReset(zoneID: zoneID, in: viewContext)
+            logger.debug("Queued \(recordType) records for re-upload")
+        }
+
+        // Trigger send to upload the queued records
+        let engine = isShared ? sharedEngine : privateEngine
+        await engine?.sendChanges()
     }
 
     public func handleSentRecordZoneChanges(
@@ -375,20 +523,68 @@ extension SyncCoordinator: SyncEngineDelegate {
         }
 
         // Handle failures
+        // Note: CKSyncEngine automatically handles transient errors like:
+        // .networkFailure, .networkUnavailable, .zoneBusy, .serviceUnavailable,
+        // .notAuthenticated, .operationCancelled, .requestRateLimited
+        // We only need to handle non-transient errors here
         for failure in changes.failedRecordSaves {
             let recordID = failure.record.recordID
             let error = failure.error
             logger.error("Failed to save record \(recordID.recordName): \(error.localizedDescription)")
 
-            // Check for conflict
-            if let ckError = error as? CKError, ckError.code == CKError.Code.serverRecordChanged {
-                // Server has newer version - fetch it
-                if let serverRecord = ckError.serverRecord {
+            switch error.code {
+            case .serverRecordChanged:
+                // Conflict: server has newer version - accept server version
+                // This is the "server wins" strategy; adjust if you need different conflict resolution
+                if let serverRecord = error.serverRecord {
                     let recordType = serverRecord.recordType
+                    let isShared = syncEngine === sharedEngine
+                    let targetStore: NSPersistentStore? = isShared ? getSharedStore?() : nil
                     if let handler = entityHandlers[recordType] {
-                        await handler.handleFetchedRecord(serverRecord, in: viewContext, isShared: syncEngine === sharedEngine)
+                        await handler.handleFetchedRecord(serverRecord, in: viewContext, isShared: isShared, targetStore: targetStore)
+                        logger.info("Resolved conflict for \(recordID.recordName) by accepting server version")
                     }
                 }
+
+            case .quotaExceeded:
+                // User ran out of iCloud storage
+                // CKSyncEngine pauses but does NOT re-add the item to the queue
+                // Per CKSyncEngine best practices, we must re-add it manually
+                // The item will retry after the user frees up space or the retry delay passes
+                syncEngine.addPendingSaves([recordID])
+                logger.warning("Quota exceeded - re-queued record \(recordID.recordName) for retry")
+
+            case .assetFileNotFound:
+                // The local file for a CKAsset was deleted before upload completed
+                // Don't retry - the data is gone
+                logger.error("Asset file not found for record \(recordID.recordName) - cannot retry")
+
+            case .assetFileModified:
+                // The local file was modified during upload - re-queue to try again
+                syncEngine.addPendingSaves([recordID])
+                logger.warning("Asset file modified during upload - re-queued \(recordID.recordName)")
+
+            case .zoneNotFound:
+                // Zone doesn't exist - ensure it's created then retry
+                syncEngine.ensureZoneExists()
+                syncEngine.addPendingSaves([recordID])
+                logger.warning("Zone not found - creating zone and re-queuing \(recordID.recordName)")
+
+            case .unknownItem:
+                // Record doesn't exist on server (might have been deleted)
+                // This shouldn't happen for saves, but if it does, just log it
+                logger.warning("Unknown item error for \(recordID.recordName) - record may have been deleted")
+
+            case .batchRequestFailed:
+                // Part of a batch failed - CKSyncEngine should retry automatically
+                // but if not, re-queue just in case
+                syncEngine.addPendingSaves([recordID])
+                logger.warning("Batch request failed - re-queued \(recordID.recordName)")
+
+            default:
+                // For other errors, log them but don't automatically retry
+                // These might be permanent failures (invalid arguments, permission denied, etc.)
+                logger.error("Unhandled error \(error.code.rawValue) for \(recordID.recordName): \(error.localizedDescription)")
             }
         }
 
@@ -403,12 +599,12 @@ extension SyncCoordinator: SyncEngineDelegate {
         for syncEngine: SyncEngine
     ) async {
         // Log any zone save/delete failures
-        for failure in changes.failedZoneSaves {
-            logger.error("Failed to save zone \(failure.zoneID.zoneName): \(failure.error.localizedDescription)")
+        if !changes.failedZoneSaves.isEmpty {
+            logger.error("Failed to save \(changes.failedZoneSaves.count) zone(s)")
         }
 
-        for failure in changes.failedZoneDeletes {
-            logger.error("Failed to delete zone \(failure.zoneID.zoneName): \(failure.error.localizedDescription)")
+        if !changes.failedZoneDeletes.isEmpty {
+            logger.error("Failed to delete \(changes.failedZoneDeletes.count) zone(s)")
         }
     }
 
@@ -421,18 +617,37 @@ extension SyncCoordinator: SyncEngineDelegate {
         switch change.changeType {
         case .signIn:
             isSyncEnabled = true
+            // Fetch all data for the new account
+            // Schedule on next run loop to avoid reentrancy into CKSyncEngine from delegate callback
+            scheduleAsyncWork { [weak self] in
+                await self?.fetchChanges()
+            }
 
         case .signOut:
             isSyncEnabled = false
-            // Per Apple recommendation, delete local data on sign out
-            // to prevent sharing data with wrong account
-            // TODO: Implement data deletion
-            break
+            // Per Apple/CKSyncEngine best practices:
+            // 1. Delete local CloudKit-synced data to prevent sharing with wrong account
+            // 2. Clear state serialization so engine starts fresh
+            // 3. Stop engines (they're invalid without an account)
+            // Schedule on next run loop to avoid reentrancy into CKSyncEngine from delegate callback
+            scheduleAsyncWork { [weak self] in
+                await self?.deleteAllSyncedData()
+                await self?.reinitializeEngines(restart: false)
+            }
 
         case .switchAccounts:
-            // Account switched - need to re-sync everything
-            // TODO: Clear and re-fetch data
-            break
+            // Account switched - this is a combined sign out + sign in
+            // Per CKSyncEngine best practices, we must:
+            // 1. Delete all local synced data
+            // 2. Clear state serialization (tokens are no longer valid)
+            // 3. Re-initialize engines with fresh state
+            // 4. Fetch data for the new account
+            isSyncEnabled = true
+            // Schedule on next run loop to avoid reentrancy into CKSyncEngine from delegate callback
+            scheduleAsyncWork { [weak self] in
+                await self?.deleteAllSyncedData()
+                await self?.reinitializeEngines(restart: true)
+            }
 
         @unknown default:
             break
@@ -441,7 +656,76 @@ extension SyncCoordinator: SyncEngineDelegate {
         onAccountChange?(change)
     }
 
+    /// Re-initialize sync engines with cleared state
+    /// Called on sign out or account switch per CKSyncEngine best practices
+    /// - Parameter restart: Whether to restart engines after clearing (true for account switch, false for sign out)
+    private func reinitializeEngines(restart: Bool) async {
+        logger.info("Re-initializing sync engines (restart: \(restart))")
+
+        // Clear state serialization - tokens are no longer valid
+        privateEngine?.clearStateSerialization()
+        sharedEngine?.clearStateSerialization()
+
+        // Stop current engines
+        privateEngine?.stop()
+        sharedEngine?.stop()
+        privateEngine = nil
+        sharedEngine = nil
+
+        // Restart if needed (account switch case)
+        if restart {
+            await start()
+        }
+    }
+
+    /// Delete all locally synced data (called on sign out or account switch)
+    /// This clears CloudKit-synced entities but preserves local-only data
+    private func deleteAllSyncedData() async {
+        guard let viewContext = viewContext else {
+            logger.error("No view context - cannot delete synced data")
+            return
+        }
+
+        logger.info("Deleting all synced data due to account change")
+
+        // Notify all registered handlers to clear their synced data
+        for (recordType, handler) in entityHandlers {
+            await handler.handleAccountSignOut(in: viewContext)
+            logger.debug("Cleared synced data for \(recordType)")
+        }
+
+        // Save context after deletions
+        if viewContext.hasChanges {
+            do {
+                try viewContext.save()
+                logger.info("Saved context after clearing synced data")
+            } catch {
+                logger.error("Failed to save after clearing synced data: \(error.localizedDescription)")
+            }
+        }
+
+        // Reset pending changes count
+        pendingChangesCount = 0
+
+        // Notify observers that data changed
+        onRemoteChanges?()
+    }
+
     // MARK: - Helpers
+
+    /// Schedule async work in a truly detached context
+    /// Used to avoid reentrancy into CKSyncEngine from delegate callbacks
+    /// IMPORTANT: Uses Task.detached to completely break out of the current CKSyncEngine context
+    private nonisolated func scheduleAsyncWork(_ work: @escaping @MainActor @Sendable () async -> Void) {
+        // Use Task.detached to create a completely new task hierarchy
+        // that CKSyncEngine doesn't track as part of the delegate callback
+        Task.detached {
+            // Create a new Task on MainActor inside the detached context
+            await Task { @MainActor in
+                await work()
+            }.value
+        }
+    }
 
     /// Extract record type from record ID
     /// Convention: recordName format is "RecordType:UUID" or just "UUID"
@@ -472,11 +756,17 @@ public protocol EntitySyncHandler: Sendable {
     ) async -> CKRecord?
 
     /// Handle a fetched record from CloudKit
+    /// - Parameters:
+    ///   - record: The fetched CKRecord
+    ///   - context: The Core Data context
+    ///   - isShared: Whether this record came from the shared database
+    ///   - targetStore: The Core Data store to assign new entities to (nil = default store)
     @MainActor
     func handleFetchedRecord(
         _ record: CKRecord,
         in context: NSManagedObjectContext,
-        isShared: Bool
+        isShared: Bool,
+        targetStore: NSPersistentStore?
     ) async
 
     /// Handle a deleted record from CloudKit
@@ -492,4 +782,58 @@ public protocol EntitySyncHandler: Sendable {
         _ record: CKRecord,
         in context: NSManagedObjectContext
     ) async
+
+    /// Handle zone purge - delete all local records for the given zone
+    /// Called when a zone is purged (e.g., user left a share)
+    @MainActor
+    func handleZonePurge(
+        zoneID: CKRecordZone.ID,
+        in context: NSManagedObjectContext
+    ) async
+
+    /// Handle account sign out - delete all synced records
+    /// Called when user signs out of iCloud or switches accounts
+    @MainActor
+    func handleAccountSignOut(
+        in context: NSManagedObjectContext
+    ) async
+
+    /// Handle encrypted data reset - re-upload all records
+    /// Called when user resets encrypted CloudKit data in Settings
+    @MainActor
+    func handleEncryptedDataReset(
+        zoneID: CKRecordZone.ID,
+        in context: NSManagedObjectContext
+    ) async
+}
+
+// MARK: - Default Implementations
+
+@available(iOS 17.0, macOS 14.0, watchOS 10.0, *)
+public extension EntitySyncHandler {
+    /// Default no-op implementation for zone purge
+    /// Handlers can override to provide entity-specific cleanup
+    func handleZonePurge(
+        zoneID: CKRecordZone.ID,
+        in context: NSManagedObjectContext
+    ) async {
+        // Default: no-op - handlers can override for entity-specific cleanup
+    }
+
+    /// Default no-op implementation for account sign out
+    /// Handlers can override to provide entity-specific cleanup
+    func handleAccountSignOut(
+        in context: NSManagedObjectContext
+    ) async {
+        // Default: no-op - handlers can override for entity-specific cleanup
+    }
+
+    /// Default no-op implementation for encrypted data reset
+    /// Handlers can override to queue records for re-upload
+    func handleEncryptedDataReset(
+        zoneID: CKRecordZone.ID,
+        in context: NSManagedObjectContext
+    ) async {
+        // Default: no-op - handlers can override to queue records for re-upload
+    }
 }
