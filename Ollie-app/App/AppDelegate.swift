@@ -21,6 +21,20 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
+        logger.info("🔗 AppDelegate: didFinishLaunchingWithOptions")
+
+        // Verify CloudKit sharing is enabled
+        let sharingSupported = Bundle.main.object(forInfoDictionaryKey: "CKSharingSupported") as? Bool ?? false
+        logger.info("🔗 CKSharingSupported: \(sharingSupported)")
+
+        let urlSchemes = (Bundle.main.object(forInfoDictionaryKey: "CFBundleURLTypes") as? [[String: Any]])?.flatMap {
+            ($0["CFBundleURLSchemes"] as? [String]) ?? []
+        } ?? []
+        logger.info("🔗 Registered URL schemes: \(urlSchemes)")
+
+        // Note: CloudKit share metadata and URL contexts are handled via UIScene lifecycle
+        // in configurationForConnecting:options: and CloudKitSceneDelegate
+
         // Initialize WatchConnectivity session as early as possible (Apple best practice)
         _ = WatchSyncService.shared
 
