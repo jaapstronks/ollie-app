@@ -24,10 +24,17 @@ final class TodayStatusViewModel {
     // MARK: - Persisted Dismissals (7-day cooldown)
 
     /// Persisted dismissal for walk target nudge (7-day cooldown, survives app restart)
+    /// Note: We use a separate tracked property to trigger UI updates since @AppStorage
+    /// doesn't participate in @Observable tracking.
     @ObservationIgnored @AppStorage("walkTargetNudgeDismissedDate") private var walkTargetNudgeDismissedTimestamp: Double = 0
 
+    /// Tracked property to trigger UI re-render when dismissal changes
+    private var walkTargetNudgeDismissedVersion: Int = 0
+
     private var dismissedWalkTargetNudgeDate: Date? {
-        walkTargetNudgeDismissedTimestamp > 0 ? Date(timeIntervalSince1970: walkTargetNudgeDismissedTimestamp) : nil
+        // Reference tracked version to participate in observation
+        _ = walkTargetNudgeDismissedVersion
+        return walkTargetNudgeDismissedTimestamp > 0 ? Date(timeIntervalSince1970: walkTargetNudgeDismissedTimestamp) : nil
     }
 
     // MARK: - Sheet State
@@ -105,6 +112,7 @@ final class TodayStatusViewModel {
 
     func dismissWalkTargetNudge() {
         walkTargetNudgeDismissedTimestamp = Date().timeIntervalSince1970
+        walkTargetNudgeDismissedVersion += 1
     }
 
     // MARK: - Grooming Nudge
