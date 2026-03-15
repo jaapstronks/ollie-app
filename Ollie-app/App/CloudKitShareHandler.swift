@@ -68,15 +68,21 @@ enum CloudKitShareHandler {
 
     /// Process any pending CloudKit share that came through scene connection
     static func processPendingShare(profileStore: ProfileStore) async {
+        logger.info("🔗 processPendingShare called")
+
         // Check for pre-fetched metadata first (most reliable)
         if let metadata = PendingShareMetadata.shared.metadata {
             logger.info("🔗 Processing pending CloudKit share metadata")
+            logger.info("🔗   Share URL: \(metadata.share.url?.absoluteString ?? "nil")")
+            logger.info("🔗   Container: \(metadata.containerIdentifier)")
             PendingShareMetadata.shared.metadata = nil
 
             let ownerName = metadata.ownerIdentity.nameComponents?.formatted() ?? "someone"
+            logger.info("🔗   Owner: \(ownerName)")
 
             if profileStore.hasExistingPrivateProfile() {
                 let existingName = profileStore.profile?.name ?? ""
+                logger.info("🔗   User has existing profile '\(existingName)', showing warning")
                 showExistingProfileWarning(
                     existingName: existingName,
                     ownerName: ownerName,
@@ -84,12 +90,15 @@ enum CloudKitShareHandler {
                     profileStore: profileStore
                 )
             } else {
+                logger.info("🔗   No existing profile, accepting share directly")
                 await acceptShareInvitation(
                     metadata: metadata,
                     profileStore: profileStore
                 )
             }
             return
+        } else {
+            logger.info("🔗   No pending metadata found")
         }
 
         // Fall back to pending URL if no metadata
@@ -97,6 +106,8 @@ enum CloudKitShareHandler {
             logger.info("🔗 Processing pending CloudKit share URL: \(url.absoluteString)")
             PendingShareMetadata.shared.pendingURL = nil
             await handleShareURL(url, profileStore: profileStore)
+        } else {
+            logger.info("🔗   No pending URL found either")
         }
     }
 
@@ -192,27 +203,46 @@ enum CloudKitShareHandler {
 
             NotificationCenter.default.post(name: .cloudKitShareAccepted, object: nil)
 
-            let importedSharedDogName: String?
+            // Wait for the shared profile to appear
+            let importedProfile: PuppyProfile?
             if let profileStore {
-                importedSharedDogName = await profileStore.awaitNewlySharedProfile(
-                    previousSharedProfileIDs: previousSharedProfileIDs,
-                    timeoutSeconds: 30
-                )?.name
-            } else {
-                importedSharedDogName = await waitForSharedProfileName(
+                importedProfile = await profileStore.awaitNewlySharedProfile(
                     previousSharedProfileIDs: previousSharedProfileIDs,
                     timeoutSeconds: 30
                 )
+            } else {
+                // Fallback: just wait for name (legacy path)
+                let name = await waitForSharedProfileName(
+                    previousSharedProfileIDs: previousSharedProfileIDs,
+                    timeoutSeconds: 30
+                )
+                importedProfile = name != nil ? profileStore?.profiles.first { $0.name == name && $0.ownership == .shared } : nil
+            }
+
+            // Set default role to helper for the shared profile
+            if let profile = importedProfile {
+                UserIdentityStore.shared.setDefaultRoleForSharedProfile(profile.id)
+                logger.info("Set default role (helper) for shared profile: \(profile.name)")
             }
 
             acceptingAlert.dismiss(animated: true) {
-                let successAlert = UIAlertController(
-                    title: importedSharedDogName == nil ? Strings.CloudSharing.shareAccepted : Strings.CloudSharing.sharedDogReadyTitle,
-                    message: importedSharedDogName.map { Strings.CloudSharing.sharedDogReadyMessage(name: $0) } ?? Strings.CloudSharing.shareAcceptedSyncingMessage,
-                    preferredStyle: .alert
-                )
-                successAlert.addAction(UIAlertAction(title: Strings.Common.ok, style: .default))
-                presentAlert(successAlert)
+                if let profile = importedProfile {
+                    // Post notification for role selection UI
+                    NotificationCenter.default.post(
+                        name: .showRoleSelectionForSharedProfile,
+                        object: nil,
+                        userInfo: ["profileId": profile.id, "dogName": profile.name]
+                    )
+                } else {
+                    // Fallback: show simple success alert if profile not found
+                    let successAlert = UIAlertController(
+                        title: Strings.CloudSharing.shareAccepted,
+                        message: Strings.CloudSharing.shareAcceptedSyncingMessage,
+                        preferredStyle: .alert
+                    )
+                    successAlert.addAction(UIAlertAction(title: Strings.Common.ok, style: .default))
+                    presentAlert(successAlert)
+                }
             }
 
             logger.info("✅ Share accepted successfully")

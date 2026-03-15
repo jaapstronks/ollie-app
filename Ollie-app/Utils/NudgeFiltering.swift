@@ -3,7 +3,8 @@
 //  Ollie-app
 //
 //  Utilities for filtering nudges and reminders based on user's responsibility level
-//  and enabled nudge categories.
+//  and enabled nudge categories. Settings are per-profile (each user can have different
+//  roles for different dogs).
 //
 
 import SwiftUI
@@ -13,7 +14,7 @@ import OtisShared
 
 extension View {
     /// Conditionally shows this view based on whether the nudge category is enabled
-    /// for the current user. If the category is disabled, the view is hidden.
+    /// for the active profile. If the category is disabled, the view is hidden.
     ///
     /// Usage:
     /// ```swift
@@ -22,7 +23,7 @@ extension View {
     /// ```
     @MainActor @ViewBuilder
     func visibleForNudge(_ category: NudgeCategory) -> some View {
-        if UserIdentityStore.shared.shouldShowNudge(category) {
+        if NudgeFilteringHelper.isNudgeEnabled(category) {
             self
         }
     }
@@ -31,10 +32,10 @@ extension View {
 // MARK: - Nudge Category Helpers
 
 extension NudgeCategory {
-    /// Check if this category is enabled for the current user
+    /// Check if this category is enabled for the active profile
     @MainActor
     var isEnabledForCurrentUser: Bool {
-        UserIdentityStore.shared.shouldShowNudge(self)
+        NudgeFilteringHelper.isNudgeEnabled(self)
     }
 }
 
@@ -42,12 +43,31 @@ extension NudgeCategory {
 
 /// Helper to filter an array of items based on their associated nudge category
 extension Array {
-    /// Filter items where the given category is enabled for the current user
+    /// Filter items where the given category is enabled for the active profile
     @MainActor
     func filterByNudge(_ category: NudgeCategory) -> [Element] {
-        guard UserIdentityStore.shared.shouldShowNudge(category) else {
+        guard NudgeFilteringHelper.isNudgeEnabled(category) else {
             return []
         }
         return self
+    }
+}
+
+// MARK: - Helper
+
+/// Internal helper to check nudge visibility for the active profile
+@MainActor
+enum NudgeFilteringHelper {
+    /// Check if a nudge category is enabled for the active profile
+    static func isNudgeEnabled(_ category: NudgeCategory) -> Bool {
+        guard let profile = ProfileStoreProvider.shared.store.activeProfile else {
+            // Fallback to global setting if no active profile
+            return UserIdentityStore.shared.shouldShowNudge(category)
+        }
+        return UserIdentityStore.shared.shouldShowNudge(
+            category,
+            for: profile.id,
+            ownership: profile.ownership
+        )
     }
 }

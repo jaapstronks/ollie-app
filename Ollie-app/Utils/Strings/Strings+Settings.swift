@@ -101,7 +101,7 @@ extension Strings {
         static let viewAppTour = String(localized: "View App Tour", table: table)
         static let viewAppTourDescription = String(localized: "Take a guided tour of the app features.", table: table)
 
-        // Nudge preferences
+        // Nudge preferences (per-dog settings)
         static let nudgePreferences = String(localized: "What You See", table: table)
         static let yourRole = String(localized: "Your role", table: table)
         static let roleDescription = String(localized: "This sets sensible defaults for what you'll see. You can customize further below.", table: table)
@@ -111,6 +111,10 @@ extension Strings {
         static func resetNudgesFooter(_ role: String) -> String {
             String(localized: "Restore the default settings for your role (\(role)).", table: table)
         }
+        static func settingsForDog(name: String) -> String {
+            String(localized: "Settings for \(name)", table: table)
+        }
+        static let sharedWithYou = String(localized: "Shared with you", table: table)
     }
 
     // MARK: - Exercise Edit View

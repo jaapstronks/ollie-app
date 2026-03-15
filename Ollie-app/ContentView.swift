@@ -38,6 +38,9 @@ struct ContentView: View {
     @State private var showOtisPlusSheet = false
     @State private var showPhaseTransitionSheet = false
     @State private var showUserProfileSetupSheet = false
+    @State private var showRoleSelectionSheet = false
+    @State private var roleSelectionProfileId: UUID?
+    @State private var roleSelectionDogName: String = ""
     @AppStorage(UserPreferences.Key.lastSelectedTab.rawValue) private var selectedTabRawValue = MainTab.today.rawValue
     @AppStorage(UserPreferences.Key.needsFirstSessionHandoff.rawValue) private var needsFirstSessionHandoff = false
     @AppStorage(UserPreferences.Key.hasCompletedOnboarding.rawValue) private var hasCompletedOnboarding = false
@@ -169,10 +172,43 @@ struct ContentView: View {
                 showSharedProfileWelcome = true
             }
         }
+        // Role selection after share acceptance
+        .onReceive(NotificationCenter.default.publisher(for: .showRoleSelectionForSharedProfile)) { notification in
+            if let profileId = notification.userInfo?["profileId"] as? UUID,
+               let dogName = notification.userInfo?["dogName"] as? String {
+                roleSelectionProfileId = profileId
+                roleSelectionDogName = dogName
+                // Small delay for share acceptance alert to dismiss
+                Task { @MainActor in
+                    try? await Task.sleep(for: .seconds(0.5))
+                    showRoleSelectionSheet = true
+                }
+            }
+        }
         .alert(Strings.CloudSharing.sharedDogReadyTitle, isPresented: $showSharedProfileWelcome) {
             Button(Strings.Common.ok, role: .cancel) {}
         } message: {
             Text(Strings.CloudSharing.sharedDogReadyMessage(name: sharedProfileWelcomeName ?? Strings.CloudSharing.sharedData))
+        }
+        // Role selection sheet for shared profiles
+        .sheet(isPresented: $showRoleSelectionSheet) {
+            if let profileId = roleSelectionProfileId {
+                RoleSelectionSheet(
+                    dogName: roleSelectionDogName,
+                    profileId: profileId,
+                    onComplete: {
+                        showRoleSelectionSheet = false
+                        // Check if user profile needs setup
+                        if UserIdentityStore.shared.needsProfileSetup {
+                            Task { @MainActor in
+                                try? await Task.sleep(for: .seconds(0.3))
+                                showUserProfileSetupSheet = true
+                            }
+                        }
+                    }
+                )
+                .interactiveDismissDisabled()
+            }
         }
         // Sheet for adding a new profile (multi-puppy)
         .fullScreenCover(isPresented: $showAddProfileOnboarding) {

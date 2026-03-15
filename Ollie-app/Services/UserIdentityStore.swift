@@ -42,6 +42,8 @@ public final class UserIdentityStore {
     @ObservationIgnored private let logger = Logger.otis(category: "UserIdentityStore")
     @ObservationIgnored private let container: CKContainer
     @ObservationIgnored private let userDefaultsKey = "otis.user.identity"
+    @ObservationIgnored private let profileRoleKeyPrefix = "otis.profile.role."
+    @ObservationIgnored private let profileNudgesKeyPrefix = "otis.profile.nudges."
 
     /// Profile store reference for CloudKit sharing (set during app setup)
     @ObservationIgnored private weak var profileStore: ProfileStore?
@@ -309,6 +311,84 @@ public final class UserIdentityStore {
     /// Check if a nudge category should be shown for the current user
     public func shouldShowNudge(_ category: NudgeCategory) -> Bool {
         currentIdentity?.shouldShowNudge(category) ?? true
+    }
+
+    // MARK: - Per-Profile Role Settings
+
+    /// Get the user's responsibility level for a specific profile
+    /// Returns stored value or default based on profile ownership
+    public func responsibilityLevel(for profileId: UUID, ownership: ProfileOwnership = .owned) -> ResponsibilityLevel {
+        let key = profileRoleKeyPrefix + profileId.uuidString
+        if let rawValue = UserDefaults.standard.string(forKey: key),
+           let level = ResponsibilityLevel(rawValue: rawValue) {
+            return level
+        }
+        // Default: caregiver for owned dogs, helper for shared dogs
+        return ownership == .owned ? .caregiver : .helper
+    }
+
+    /// Get the user's enabled nudges for a specific profile
+    /// Returns stored value or defaults based on responsibility level
+    public func enabledNudges(for profileId: UUID, ownership: ProfileOwnership = .owned) -> Set<NudgeCategory> {
+        let key = profileNudgesKeyPrefix + profileId.uuidString
+        if let data = UserDefaults.standard.data(forKey: key),
+           let nudges = try? JSONDecoder().decode(Set<NudgeCategory>.self, from: data) {
+            return nudges
+        }
+        // Default based on responsibility level
+        let level = responsibilityLevel(for: profileId, ownership: ownership)
+        return level.defaultEnabledNudges
+    }
+
+    /// Update the user's responsibility level for a specific profile
+    /// This also resets enabled nudges to the new level's defaults
+    public func updateResponsibilityLevel(_ level: ResponsibilityLevel, for profileId: UUID) {
+        let roleKey = profileRoleKeyPrefix + profileId.uuidString
+        let nudgesKey = profileNudgesKeyPrefix + profileId.uuidString
+
+        UserDefaults.standard.set(level.rawValue, forKey: roleKey)
+
+        // Reset nudges to new level's defaults
+        if let data = try? JSONEncoder().encode(level.defaultEnabledNudges) {
+            UserDefaults.standard.set(data, forKey: nudgesKey)
+        }
+
+        logger.info("Updated responsibility level for profile \(profileId.uuidString) to: \(level.rawValue)")
+    }
+
+    /// Update which nudge categories are enabled for a specific profile
+    public func updateEnabledNudges(_ nudges: Set<NudgeCategory>, for profileId: UUID) {
+        let key = profileNudgesKeyPrefix + profileId.uuidString
+        if let data = try? JSONEncoder().encode(nudges) {
+            UserDefaults.standard.set(data, forKey: key)
+        }
+        logger.info("Updated enabled nudges for profile \(profileId.uuidString)")
+    }
+
+    /// Toggle a single nudge category on or off for a specific profile
+    public func toggleNudge(_ category: NudgeCategory, enabled: Bool, for profileId: UUID, ownership: ProfileOwnership = .owned) {
+        var nudges = enabledNudges(for: profileId, ownership: ownership)
+        if enabled {
+            nudges.insert(category)
+        } else {
+            nudges.remove(category)
+        }
+        updateEnabledNudges(nudges, for: profileId)
+    }
+
+    /// Check if a nudge category should be shown for the active profile
+    public func shouldShowNudge(_ category: NudgeCategory, for profileId: UUID, ownership: ProfileOwnership = .owned) -> Bool {
+        enabledNudges(for: profileId, ownership: ownership).contains(category)
+    }
+
+    /// Set default role for a newly created owned profile (caregiver)
+    public func setDefaultRoleForOwnedProfile(_ profileId: UUID) {
+        updateResponsibilityLevel(.caregiver, for: profileId)
+    }
+
+    /// Set default role for a newly accepted shared profile (helper)
+    public func setDefaultRoleForSharedProfile(_ profileId: UUID) {
+        updateResponsibilityLevel(.helper, for: profileId)
     }
 
     // MARK: - Persistence

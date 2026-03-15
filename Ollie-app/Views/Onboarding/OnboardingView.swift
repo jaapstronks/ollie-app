@@ -285,7 +285,8 @@ struct OnboardingView: View {
 
                 OnboardingUserProfileStep(
                     onNext: { navigateToStep(14) },
-                    onSkip: { navigateToStep(14) }
+                    onSkip: { navigateToStep(14) },
+                    activeProfileId: profileStore.activeProfileId
                 ).tag(13)
 
                 OnboardingTrialStartStep(
@@ -398,6 +399,9 @@ struct OnboardingView: View {
             // Use createProfile for multi-puppy (checks subscription limits)
             let success = profileStore.createProfile(profile)
             if success {
+                // Set default role as caregiver for owned profiles
+                UserIdentityStore.shared.setDefaultRoleForOwnedProfile(profile.id)
+
                 // Switch to the new profile
                 profileStore.switchToProfile(profile.id)
                 // Skip permission screens when adding a profile (already granted)
@@ -413,6 +417,10 @@ struct OnboardingView: View {
         } else {
             // First profile - use saveProfile
             profileStore.saveProfile(profile)
+
+            // Set default role as caregiver for owned profiles
+            UserIdentityStore.shared.setDefaultRoleForOwnedProfile(profile.id)
+
             Analytics.trackProfileCreated(
                 profileId: profile.id,
                 hasBreed: !breedToSave.isEmpty,

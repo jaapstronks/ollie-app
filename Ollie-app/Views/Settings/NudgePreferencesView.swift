@@ -2,8 +2,10 @@
 //  NudgePreferencesView.swift
 //  Ollie-app
 //
-//  Settings view for configuring which nudges and reminders the user sees.
-//  Helpers see fewer administrative nudges (appointments, medications) by default.
+//  Settings view for configuring which nudges and reminders the user sees
+//  for the active dog profile. Settings are per-dog - each user can have
+//  different roles for different dogs (e.g., caregiver for their own dog,
+//  helper for a shared dog).
 //
 
 import SwiftUI
@@ -11,16 +13,58 @@ import OtisShared
 
 struct NudgePreferencesView: View {
     var userIdentityStore: UserIdentityStore
+    var profileStore: ProfileStore
     @Environment(\.dismiss) private var dismiss
+
+    /// The profile we're editing settings for
+    private var activeProfile: PuppyProfile? {
+        profileStore.activeProfile
+    }
 
     var body: some View {
         Form {
+            if let profile = activeProfile {
+                profileHeaderSection(profile)
+            }
             responsibilitySection
             nudgeCategoriesSection
             resetSection
         }
         .navigationTitle(Strings.Settings.nudgePreferences)
         .navigationBarTitleDisplayMode(.inline)
+    }
+
+    // MARK: - Profile Header
+
+    private func profileHeaderSection(_ profile: PuppyProfile) -> some View {
+        Section {
+            HStack(spacing: 12) {
+                // Dog avatar
+                if let photoFilename = profile.profilePhotoFilename,
+                   let image = ProfilePhotoStore.shared.load(filename: photoFilename) {
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 44, height: 44)
+                        .clipShape(Circle())
+                } else {
+                    Image(systemName: "pawprint.circle.fill")
+                        .font(.system(size: 44))
+                        .foregroundStyle(Color.otisAccent)
+                }
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(Strings.Settings.settingsForDog(name: profile.name))
+                        .font(.headline)
+                    if profile.ownership == .shared {
+                        Text(Strings.Settings.sharedWithYou)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+            }
+            .padding(.vertical, 4)
+        }
     }
 
     // MARK: - Responsibility Section
@@ -32,7 +76,9 @@ struct NudgePreferencesView: View {
                     level: level,
                     isSelected: currentLevel == level,
                     onSelect: {
-                        userIdentityStore.updateResponsibilityLevel(level)
+                        if let profileId = activeProfile?.id {
+                            userIdentityStore.updateResponsibilityLevel(level, for: profileId)
+                        }
                         HapticFeedback.light()
                     }
                 )
@@ -87,25 +133,31 @@ struct NudgePreferencesView: View {
     // MARK: - Helpers
 
     private var currentLevel: ResponsibilityLevel {
-        userIdentityStore.currentIdentity?.responsibilityLevel ?? .caregiver
+        guard let profile = activeProfile else { return .caregiver }
+        return userIdentityStore.responsibilityLevel(for: profile.id, ownership: profile.ownership)
     }
 
     private var currentNudges: Set<NudgeCategory> {
-        userIdentityStore.currentIdentity?.enabledNudges ?? Set(NudgeCategory.allCases)
+        guard let profile = activeProfile else { return Set(NudgeCategory.allCases) }
+        return userIdentityStore.enabledNudges(for: profile.id, ownership: profile.ownership)
     }
 
     private func binding(for category: NudgeCategory) -> Binding<Bool> {
         Binding(
             get: { currentNudges.contains(category) },
             set: { enabled in
-                userIdentityStore.toggleNudge(category, enabled: enabled)
+                if let profile = activeProfile {
+                    userIdentityStore.toggleNudge(category, enabled: enabled, for: profile.id, ownership: profile.ownership)
+                }
                 HapticFeedback.light()
             }
         )
     }
 
     private func resetToDefaults() {
-        userIdentityStore.updateEnabledNudges(currentLevel.defaultEnabledNudges)
+        if let profileId = activeProfile?.id {
+            userIdentityStore.updateEnabledNudges(currentLevel.defaultEnabledNudges, for: profileId)
+        }
         HapticFeedback.success()
     }
 }
@@ -151,6 +203,9 @@ private struct ResponsibilityOptionRow: View {
 
 #Preview {
     NavigationStack {
-        NudgePreferencesView(userIdentityStore: .shared)
+        NudgePreferencesView(
+            userIdentityStore: .shared,
+            profileStore: ProfileStoreProvider.shared.store
+        )
     }
 }

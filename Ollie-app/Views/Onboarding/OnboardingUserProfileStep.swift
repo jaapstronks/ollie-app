@@ -13,6 +13,7 @@ import OtisShared
 struct OnboardingUserProfileStep: View {
     let onNext: () -> Void
     let onSkip: () -> Void
+    var activeProfileId: UUID?
 
     @State private var userIdentityStore = UserIdentityStore.shared
 
@@ -282,7 +283,13 @@ struct OnboardingUserProfileStep: View {
             // Only pre-fill name if it's not the default "Me"
             name = identity.name == Strings.UserProfile.me ? "" : identity.name
             selectedColorHex = identity.colorHex
-            selectedRole = identity.responsibilityLevel
+
+            // Load role for the active profile (per-dog setting)
+            if let profileId = activeProfileId {
+                selectedRole = userIdentityStore.responsibilityLevel(for: profileId)
+            } else {
+                selectedRole = .caregiver
+            }
 
             if let avatarData = identity.avatarData {
                 avatarImage = UIImage(data: avatarData)
@@ -300,7 +307,11 @@ struct OnboardingUserProfileStep: View {
 
         userIdentityStore.updateName(trimmedName)
         userIdentityStore.updateColor(selectedColorHex)
-        userIdentityStore.updateResponsibilityLevel(selectedRole)
+
+        // Save role for the active profile (per-dog setting)
+        if let profileId = activeProfileId {
+            userIdentityStore.updateResponsibilityLevel(selectedRole, for: profileId)
+        }
 
         if let image = avatarImage {
             let resized = image.resizedToFit(maxDimension: 200)
@@ -396,6 +407,7 @@ private extension UIImage {
 #Preview {
     OnboardingUserProfileStep(
         onNext: {},
-        onSkip: {}
+        onSkip: {},
+        activeProfileId: UUID()
     )
 }

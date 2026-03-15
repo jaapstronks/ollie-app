@@ -45,7 +45,8 @@ public final class CloudKitService {
     public private(set) var isSyncing = false
 
     /// The owner's zone ID when user is a participant (used for media fetches)
-    @ObservationIgnored private var sharedZoneOwnerName: String?
+    /// This is the owner's actual CloudKit user record name (e.g., "_abc123...")
+    @ObservationIgnored public private(set) var sharedZoneOwnerName: String?
 
     /// The current user's actual CloudKit record ID (not __defaultOwner__)
     /// This is needed for storing photo ownership so other users can download
@@ -321,11 +322,16 @@ public final class CloudKitService {
     }
 
     /// Download a profile photo from CloudKit
+    /// - Parameters:
+    ///   - profileId: Profile ID to download photo for
+    ///   - destinationURL: Where to save the photo
+    ///   - ownerName: Optional zone owner name. Required when downloading photos from a shared profile.
     public func downloadProfilePhoto(
         profileId: UUID,
-        to destinationURL: URL
+        to destinationURL: URL,
+        ownerName: String? = nil
     ) async throws -> Bool {
-        try await profilePhotoService.downloadPhoto(profileId: profileId, to: destinationURL)
+        try await profilePhotoService.downloadPhoto(profileId: profileId, to: destinationURL, ownerName: ownerName)
     }
 
     /// Delete a profile photo from CloudKit
@@ -343,7 +349,11 @@ public final class CloudKitService {
 
 public extension Notification.Name {
     static let cloudKitShareAccepted = Notification.Name("cloudKitShareAccepted")
+    static let cloudKitShareReceived = Notification.Name("cloudKitShareReceived")
     static let shareAccessRevoked = Notification.Name("shareAccessRevoked")
+    /// Posted after share acceptance to trigger role selection UI
+    /// userInfo: ["profileId": UUID, "dogName": String]
+    static let showRoleSelectionForSharedProfile = Notification.Name("showRoleSelectionForSharedProfile")
 }
 
 // MARK: - Error Types

@@ -212,15 +212,15 @@ struct AppSettingsView: View {
                 .padding(.vertical, 4)
             }
 
-            // Nudge preferences (what this user sees)
+            // Nudge preferences (what this user sees for the active dog)
             NavigationLink {
-                NudgePreferencesView(userIdentityStore: userIdentityStore)
+                NudgePreferencesView(userIdentityStore: userIdentityStore, profileStore: profileStore)
             } label: {
                 HStack {
                     Label(Strings.Settings.nudgePreferences, systemImage: "bell.badge")
                     Spacer()
-                    if let identity = userIdentityStore.currentIdentity {
-                        Text(identity.responsibilityLevel.label)
+                    if let profile = profileStore.activeProfile {
+                        Text(userIdentityStore.responsibilityLevel(for: profile.id, ownership: profile.ownership).label)
                             .foregroundStyle(.secondary)
                     }
                 }

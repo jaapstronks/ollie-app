@@ -42,6 +42,7 @@ extension Strings {
         static let great = String(localized: "Great!", table: table)
         static let gotIt = String(localized: "Got it", table: table)
         static let skip = String(localized: "Skip", table: table)
+        static let continue_ = String(localized: "Continue", table: table)
         static let archive = String(localized: "Archive", table: table)
         static let note = String(localized: "Note", table: table)
         static let selectAll = String(localized: "Select all", table: table)
