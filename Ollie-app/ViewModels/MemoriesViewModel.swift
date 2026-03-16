@@ -132,8 +132,19 @@ class MemoriesViewModel {
 
         let events = eventStore.getEvents(from: startOfTargetDay, to: endOfTargetDay)
 
-        // Filter to memorable events only
-        let memorableEvents = events.filter { $0.type.isMemorableEvent }
+        // Filter events based on time frame:
+        // - Week/Month: only moments (photos/videos)
+        // - Year: moments + mastery milestones (accomplishments)
+        let memorableEvents = events.filter { event in
+            if event.type.isMomentEvent {
+                // Moments (photos) are always shown
+                return true
+            } else if event.type.isMasteryEvent {
+                // Mastery/milestone events only shown for 1-year-ago memories
+                return timeFrame == .year
+            }
+            return false
+        }
 
         if memorableEvents.isEmpty {
             memoryItem = nil

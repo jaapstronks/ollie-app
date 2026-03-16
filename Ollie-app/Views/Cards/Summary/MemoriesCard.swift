@@ -20,6 +20,25 @@ struct MemoriesCard: View {
     @State private var selectedEvent: PuppyEvent?
     @State private var isVisible: Bool = true
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(ProfileStore.self) private var profileStore
+
+    /// The dog's name for display in mastery memories
+    private var dogName: String {
+        profileStore.profile?.name ?? ""
+    }
+
+    /// Whether the current memory is a mastery/milestone event
+    private var isMasteryMemory: Bool {
+        viewModel.memoryItem?.event.type.isMasteryEvent == true
+    }
+
+    /// The appropriate time frame label (special for mastery events)
+    private var timeFrameLabel: String {
+        if isMasteryMemory && viewModel.timeFrame == .year {
+            return Strings.Memories.justOneYearAgo
+        }
+        return viewModel.timeFrame.label
+    }
 
     /// Whether the card was dismissed today
     private var isDismissedToday: Bool {
@@ -91,7 +110,7 @@ struct MemoriesCard: View {
                         HStack(spacing: 4) {
                             Image(systemName: "clock.arrow.circlepath")
                                 .font(.caption2)
-                            Text(viewModel.timeFrame.label)
+                            Text(timeFrameLabel)
                                 .font(.caption)
                                 .fontWeight(.medium)
                         }
@@ -185,7 +204,7 @@ struct MemoriesCard: View {
                 // Content
                 VStack(alignment: .leading, spacing: 2) {
                     HStack(spacing: 4) {
-                        Text(viewModel.timeFrame.label)
+                        Text(timeFrameLabel)
                             .font(.caption)
                             .fontWeight(.medium)
                             .foregroundStyle(.secondary)
@@ -285,7 +304,17 @@ struct MemoriesCard: View {
             }
             return event.type.label
 
-        case .milestone, .moment:
+        case .milestone:
+            // For mastery milestones, use special copy: "Max mastered sit!"
+            if let skill = event.note, !skill.isEmpty, !dogName.isEmpty {
+                return Strings.Memories.masteredSkill(name: dogName, skill: skill)
+            } else if let skill = event.note, !skill.isEmpty {
+                // Fallback without dog name
+                return skill
+            }
+            return event.type.label
+
+        case .moment:
             return event.type.label
 
         default:
@@ -420,9 +449,11 @@ private struct MemoryPhotoView: View {
 
 #Preview {
     let eventStore = EventStore()
+    let profileStore = ProfileStore()
 
     return VStack {
         MemoriesCard(viewModel: MemoriesViewModel(eventStore: eventStore))
     }
     .padding()
+    .environment(profileStore)
 }
