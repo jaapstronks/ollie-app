@@ -11,8 +11,34 @@ Native iOS app (SwiftUI, Swift) for tracking daily puppy/dog events. Works for a
 - **Models/** — Data types (`PuppyEvent`, `EventType`, `PuppyProfile`, `MealSchedule`, etc.)
 - **ViewModels/** — Business logic, state management (`TimelineViewModel`) — use `@Observable`
 - **Views/** — SwiftUI views, composable and small
-- **Services/** — Data persistence stores (`EventStore`, `ProfileStore`, etc.) — use `@Observable`
+- **Services/** — Organized into subdirectories (see below)
 - **Utils/** — Helpers, extensions, constants
+
+### Services Folder Structure
+```
+Services/
+├── AI/              — AI orchestration, nudges, context building
+├── Analytics/       — Analytics, crash reporting
+├── Discovery/       — Location discovery (dog parks, amenities)
+├── Features/        — Feature services (walks, achievements, export)
+├── Health/          — Health/wellness services
+├── Integration/     — External APIs (weather, maps, breed)
+├── Media/           — Photo/media handling
+├── Notifications/   — Notification schedulers
+├── Onboarding/      — First week experience
+├── Sharing/         — Sharing services
+├── Stores/          — Core Data CRUD stores (`*Store.swift`)
+├── Subscription/    — Premium features
+├── Sync/            — CloudKit sync, migrations
+├── Timeline/        — Timeline services
+├── Training/        — Training engine
+└── [root]           — Core infrastructure (PersistenceController, etc.)
+```
+
+**Naming conventions:**
+- `*Store` — Core Data CRUD operations (e.g., `EventStore`, `ProfileStore`)
+- `*Service` — Business logic, external integrations (e.g., `WeatherService`)
+- Acceptable variants: `*Manager`, `*Provider`, `*Builder`, `*Generator` for specific patterns
 
 ### State Management (IMPORTANT)
 
@@ -48,33 +74,41 @@ class ProfileStore: ObservableObject {
 @EnvironmentObject var profileStore: ProfileStore
 ```
 
-### CloudKit Sync Architecture
+### CloudKit Sync Architecture (CKSyncEngine)
 
-CloudKit notifications flow through `CloudKitSyncCoordinator`:
-1. Debounces rapid-fire notifications
-2. Each store checks if its data ACTUALLY changed before reloading
-3. Avoids cascade reloads and infinite loops
+Ollie uses **CKSyncEngine** (iOS 17+, WWDC23) for CloudKit sync instead of NSPersistentCloudKitContainer. This provides sub-second sync, manual triggers, and direct CloudKit control.
 
-**Every store handling CloudKit changes must implement change detection:**
+**Key components** (in `OtisShared/Sources/OtisShared/CloudKit/`):
+- **SyncCoordinator** — Central singleton managing private + shared database sync
+- **SyncEngine** — Wrapper around Apple's CKSyncEngine (one per database)
+- **CKRecordConvertible** — Protocol for Core Data ↔ CKRecord conversion
+- **EntitySyncHandler** — Protocol for entity-specific sync handling
+
+**When saving/deleting entities:**
 ```swift
-func handleRemoteChange() {
-    let previousIds = Set(items.map { $0.id })
-    let freshItems = fetchFromCoreData()
+// Save to Core Data first
+try? viewContext.save()
 
-    // Skip if nothing changed
-    if Set(freshItems.map { $0.id }) == previousIds {
-        return
-    }
+// Then queue for CloudKit sync
+SyncCoordinator.shared.markPendingSave(entity)
 
-    items = freshItems
-}
+// For deletions: queue BEFORE deleting locally
+SyncCoordinator.shared.markPendingDelete(entity)
+viewContext.delete(entity)
 ```
 
-**Never save to Core Data inside a sync handler** — this triggers new notifications and creates loops.
+**Manual sync triggers:**
+```swift
+await SyncCoordinator.shared.fetchChanges()  // Pull-to-refresh
+await SyncCoordinator.shared.sendChanges()   // Sync now
+await SyncCoordinator.shared.sync()          // Full sync
+```
+
+See `docs/ARCHITECTURE.md` for detailed sync flow diagrams and conflict resolution.
 
 ### Data Model
 
-All data is stored in **Core Data with CloudKit** sync via `NSPersistentCloudKitContainer`.
+All data is stored in **Core Data** locally, with CloudKit sync via **CKSyncEngine**.
 
 **PuppyProfile** — stored in Core Data, provides computed properties: `ageInWeeks`, `ageInMonths`, `daysHome`, `maxExerciseMinutes`.
 
@@ -93,10 +127,11 @@ All data is stored in **Core Data with CloudKit** sync via `NSPersistentCloudKit
 **Event types:** `eten`, `drinken`, `plassen`, `poepen`, `slapen`, `ontwaken`, `uitlaten`, `tuin`, `training`, `bench`, `sociaal`, `milestone`, `gedrag`, `gewicht`, `moment`
 
 ### Storage
-- **Core Data with CloudKit** — `NSPersistentCloudKitContainer` for sync
-- Private store: user's own data
-- Shared store: data shared between family/partner accounts
-- CloudKit sync handled by `CloudKitSyncCoordinator`
+- **Core Data** — `NSPersistentContainer` for local persistence (NOT CloudKit container)
+- **CKSyncEngine** — Handles CloudKit sync (iOS 17+, sub-second sync)
+- Private database: user's own data
+- Shared database: data shared with family/partner via CKShare
+- **SyncCoordinator** — Central orchestrator for both private and shared sync engines
 - Media files stored locally with CloudKit sync via `MediaCloudService`
 
 ### Constants
@@ -164,7 +199,24 @@ eventType.label  // Returns localized string
 12. **AI insights** — morning briefings, health analysis, training guidance (Otis+)
 
 ## Business Logic
-Calculation modules in `Calculations/` and `OtisShared/Sources/OtisShared/Calculations/`:
+
+### Calculations Architecture
+
+Calculations are split between two folders based on dependency requirements:
+
+**`OtisShared/Sources/OtisShared/Calculations/`** — Shared package (17 files)
+- Pure calculation logic with no iOS-specific dependencies
+- Used by main app, widgets, and watch app
+- Examples: `GapCalculations`, `SleepCalculations`, `WalkCalculations`, `StreakCalculations`
+
+**`Ollie-app/Calculations/`** — App-specific (10 files)
+- Calculations that depend on iOS-only types or app services
+- Can extend shared calculations with iOS-specific functionality
+- Examples: `PredictionCalculations`, `NudgeCalculations`, `StreakCalculations+iOS` (extends shared)
+
+**Rule:** If a calculation can run without iOS-specific imports, put it in `OtisShared`. Only use `Ollie-app/Calculations/` when you need UIKit, app-specific services, or Core Data entities.
+
+### Key Calculation Modules
 - Gap analysis — potty gap tracking, median/average intervals
 - Predictions — next potty prediction with trigger adjustments
 - Sleep analysis — night sleep, nap tracking, session building
