@@ -300,46 +300,52 @@ struct TodayView: View {
         TodayStatusCardsSection(
             viewModel: viewModel,
             weatherService: weatherService,
-            appointmentNudgeCandidate: statusViewModel.appointmentNudgeCandidate,
-            crateTrainingMastered: statusViewModel.crateTrainingMastered,
-            shouldShowPottyStatusCard: statusViewModel.shouldShowPottyStatusCard,
-            shouldShowCrateNudge: statusViewModel.shouldShowCrateNudge,
-            shouldShowWalkTargetNudge: statusViewModel.shouldShowWalkTargetNudge,
-            shouldShowAppointmentNudgeNapContext: statusViewModel.shouldShowAppointmentNudgeNapContext,
-            overdueGroomingActivities: statusViewModel.overdueGroomingActivities,
-            onNavigateToTrain: onNavigateToTrain,
-            onDismissCrateNudge: { statusViewModel.dismissCrateNudge() },
-            onDismissWalkTargetNudge: { statusViewModel.dismissWalkTargetNudge() },
-            onDismissGroomingNudge: { statusViewModel.dismissGroomingNudge() },
-            onDismissAppointmentNudge: { statusViewModel.dismissAppointmentNudge(for: $0) },
-            onMarkAppointmentDone: { candidate in
-                statusViewModel.milestoneToComplete = candidate.milestone
-            },
-            onCreateAppointmentPrefill: { statusViewModel.createAppointmentPrefill(for: $0) },
-            onMarkGroomingComplete: { activity in
-                statusViewModel.markGroomingComplete(activity)
-            },
-            onViewAllGrooming: {
-                viewModel.sheetCoordinator.presentSheet(.groomingQuickLog())
-            },
-            onShowMonthRecap: { statusViewModel.showMonthRecapSheet = true },
-            onShowYearRecap: { statusViewModel.showYearRecapSheet = true },
-            onAddPhoto: {
-                // Open moment source picker (camera or photo library)
-                viewModel.sheetCoordinator.presentSheet(.momentSourcePicker)
-            },
-            onInviteFamily: {
-                // Navigate to settings where user can access sharing
-                viewModel.sheetCoordinator.presentSheet(.settings)
-            },
-            mostRecentMoment: statusViewModel.mostRecentMoment,
-            shouldShowRecentMomentCard: statusViewModel.shouldShowRecentMomentCard,
-            onNavigateToDiary: {
-                onNavigateToDiary?()
-            },
-            onDismissRecentMoment: {
-                statusViewModel.dismissRecentMomentCard()
-            }
+            config: StatusCardsConfig(
+                appointmentNudgeCandidate: statusViewModel.appointmentNudgeCandidate,
+                crateTrainingMastered: statusViewModel.crateTrainingMastered,
+                shouldShowPottyStatusCard: statusViewModel.shouldShowPottyStatusCard,
+                shouldShowCrateNudge: statusViewModel.shouldShowCrateNudge,
+                shouldShowWalkTargetNudge: statusViewModel.shouldShowWalkTargetNudge,
+                shouldShowAppointmentNudgeNapContext: statusViewModel.shouldShowAppointmentNudgeNapContext,
+                overdueGroomingActivities: statusViewModel.overdueGroomingActivities,
+                mostRecentMoment: statusViewModel.mostRecentMoment,
+                shouldShowRecentMomentCard: statusViewModel.shouldShowRecentMomentCard
+            ),
+            callbacks: StatusCardsCallbacks(
+                nudge: .init(
+                    onDismissCrateNudge: { statusViewModel.dismissCrateNudge() },
+                    onDismissWalkTargetNudge: { statusViewModel.dismissWalkTargetNudge() },
+                    onDismissGroomingNudge: { statusViewModel.dismissGroomingNudge() },
+                    onDismissAppointmentNudge: { statusViewModel.dismissAppointmentNudge(for: $0) },
+                    onMarkAppointmentDone: { candidate in
+                        statusViewModel.milestoneToComplete = candidate.milestone
+                    },
+                    onCreateAppointmentPrefill: { statusViewModel.createAppointmentPrefill(for: $0) },
+                    onMarkGroomingComplete: { activity in
+                        statusViewModel.markGroomingComplete(activity)
+                    },
+                    onViewAllGrooming: {
+                        viewModel.sheetCoordinator.presentSheet(.groomingQuickLog())
+                    }
+                ),
+                recap: .init(
+                    onShowMonthRecap: { statusViewModel.showMonthRecapSheet = true },
+                    onShowYearRecap: { statusViewModel.showYearRecapSheet = true }
+                ),
+                firstWeek: .init(
+                    onAddPhoto: {
+                        viewModel.sheetCoordinator.presentSheet(.momentSourcePicker)
+                    },
+                    onInviteFamily: {
+                        viewModel.sheetCoordinator.presentSheet(.settings)
+                    }
+                ),
+                recentMoment: .init(
+                    onNavigateToDiary: { onNavigateToDiary?() },
+                    onDismiss: { statusViewModel.dismissRecentMomentCard() }
+                ),
+                onNavigateToTrain: onNavigateToTrain
+            )
         )
         .sheet(item: $statusViewModel.milestoneToComplete) { milestone in
             MilestoneCompletionSheet(

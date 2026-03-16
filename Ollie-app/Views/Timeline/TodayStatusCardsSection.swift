@@ -8,10 +8,8 @@
 import OtisShared
 import SwiftUI
 
-/// Status cards section showing current puppy state and actionable items
-struct TodayStatusCardsSection: View {
-    @Bindable var viewModel: TimelineViewModel
-    let weatherService: WeatherService
+/// Configuration for status cards visibility and data
+struct StatusCardsConfig {
     let appointmentNudgeCandidate: AppointmentNudgeCandidate?
     let crateTrainingMastered: Bool
     let shouldShowPottyStatusCard: Bool
@@ -19,31 +17,38 @@ struct TodayStatusCardsSection: View {
     let shouldShowWalkTargetNudge: Bool
     let shouldShowAppointmentNudgeNapContext: Bool
     let overdueGroomingActivities: [GroomingActivity]
-    var onNavigateToTrain: (() -> Void)?
-
-    // Nudge dismissal callbacks
-    var onDismissCrateNudge: () -> Void
-    var onDismissWalkTargetNudge: () -> Void
-    var onDismissGroomingNudge: () -> Void
-    var onDismissAppointmentNudge: (String) -> Void
-    var onMarkAppointmentDone: (AppointmentNudgeCandidate) -> Void
-    var onCreateAppointmentPrefill: (AppointmentNudgeCandidate) -> AppointmentPrefill?
-    var onMarkGroomingComplete: (GroomingActivity) -> Void
-    var onViewAllGrooming: () -> Void
-
-    // Recap callbacks
-    var onShowMonthRecap: () -> Void
-    var onShowYearRecap: () -> Void
-
-    // First week prompt callbacks
-    var onAddPhoto: () -> Void
-    var onInviteFamily: () -> Void
-
-    // Recent moment card
     let mostRecentMoment: PuppyEvent?
     let shouldShowRecentMomentCard: Bool
-    var onNavigateToDiary: () -> Void
-    var onDismissRecentMoment: () -> Void
+
+    init(
+        appointmentNudgeCandidate: AppointmentNudgeCandidate? = nil,
+        crateTrainingMastered: Bool = false,
+        shouldShowPottyStatusCard: Bool = true,
+        shouldShowCrateNudge: Bool = false,
+        shouldShowWalkTargetNudge: Bool = false,
+        shouldShowAppointmentNudgeNapContext: Bool = false,
+        overdueGroomingActivities: [GroomingActivity] = [],
+        mostRecentMoment: PuppyEvent? = nil,
+        shouldShowRecentMomentCard: Bool = false
+    ) {
+        self.appointmentNudgeCandidate = appointmentNudgeCandidate
+        self.crateTrainingMastered = crateTrainingMastered
+        self.shouldShowPottyStatusCard = shouldShowPottyStatusCard
+        self.shouldShowCrateNudge = shouldShowCrateNudge
+        self.shouldShowWalkTargetNudge = shouldShowWalkTargetNudge
+        self.shouldShowAppointmentNudgeNapContext = shouldShowAppointmentNudgeNapContext
+        self.overdueGroomingActivities = overdueGroomingActivities
+        self.mostRecentMoment = mostRecentMoment
+        self.shouldShowRecentMomentCard = shouldShowRecentMomentCard
+    }
+}
+
+/// Status cards section showing current puppy state and actionable items
+struct TodayStatusCardsSection: View {
+    @Bindable var viewModel: TimelineViewModel
+    let weatherService: WeatherService
+    let config: StatusCardsConfig
+    let callbacks: StatusCardsCallbacks
 
     private let trialManager = TrialManager.shared
     private let firstWeekService = FirstWeekExperienceService.shared
@@ -52,57 +57,13 @@ struct TodayStatusCardsSection: View {
     init(
         viewModel: TimelineViewModel,
         weatherService: WeatherService,
-        appointmentNudgeCandidate: AppointmentNudgeCandidate?,
-        crateTrainingMastered: Bool,
-        shouldShowPottyStatusCard: Bool,
-        shouldShowCrateNudge: Bool,
-        shouldShowWalkTargetNudge: Bool,
-        shouldShowAppointmentNudgeNapContext: Bool,
-        overdueGroomingActivities: [GroomingActivity],
-        onNavigateToTrain: (() -> Void)? = nil,
-        onDismissCrateNudge: @escaping () -> Void,
-        onDismissWalkTargetNudge: @escaping () -> Void,
-        onDismissGroomingNudge: @escaping () -> Void,
-        onDismissAppointmentNudge: @escaping (String) -> Void,
-        onMarkAppointmentDone: @escaping (AppointmentNudgeCandidate) -> Void,
-        onCreateAppointmentPrefill: @escaping (AppointmentNudgeCandidate) -> AppointmentPrefill?,
-        onMarkGroomingComplete: @escaping (GroomingActivity) -> Void,
-        onViewAllGrooming: @escaping () -> Void,
-        onShowMonthRecap: @escaping () -> Void,
-        onShowYearRecap: @escaping () -> Void,
-        onAddPhoto: @escaping () -> Void,
-        onInviteFamily: @escaping () -> Void,
-        mostRecentMoment: PuppyEvent? = nil,
-        shouldShowRecentMomentCard: Bool = false,
-        onNavigateToDiary: @escaping () -> Void,
-        onDismissRecentMoment: @escaping () -> Void
+        config: StatusCardsConfig,
+        callbacks: StatusCardsCallbacks
     ) {
         self._viewModel = Bindable(viewModel)
         self.weatherService = weatherService
-        self.appointmentNudgeCandidate = appointmentNudgeCandidate
-        self.crateTrainingMastered = crateTrainingMastered
-        self.shouldShowPottyStatusCard = shouldShowPottyStatusCard
-        self.shouldShowCrateNudge = shouldShowCrateNudge
-        self.shouldShowWalkTargetNudge = shouldShowWalkTargetNudge
-        self.shouldShowAppointmentNudgeNapContext = shouldShowAppointmentNudgeNapContext
-        self.overdueGroomingActivities = overdueGroomingActivities
-        self.onNavigateToTrain = onNavigateToTrain
-        self.onDismissCrateNudge = onDismissCrateNudge
-        self.onDismissWalkTargetNudge = onDismissWalkTargetNudge
-        self.onDismissGroomingNudge = onDismissGroomingNudge
-        self.onDismissAppointmentNudge = onDismissAppointmentNudge
-        self.onMarkAppointmentDone = onMarkAppointmentDone
-        self.onCreateAppointmentPrefill = onCreateAppointmentPrefill
-        self.onMarkGroomingComplete = onMarkGroomingComplete
-        self.onViewAllGrooming = onViewAllGrooming
-        self.onShowMonthRecap = onShowMonthRecap
-        self.onShowYearRecap = onShowYearRecap
-        self.onAddPhoto = onAddPhoto
-        self.onInviteFamily = onInviteFamily
-        self.mostRecentMoment = mostRecentMoment
-        self.shouldShowRecentMomentCard = shouldShowRecentMomentCard
-        self.onNavigateToDiary = onNavigateToDiary
-        self.onDismissRecentMoment = onDismissRecentMoment
+        self.config = config
+        self.callbacks = callbacks
     }
 
     var body: some View {
@@ -272,7 +233,7 @@ private extension TodayStatusCardsSection {
                     puppyName: profile.name,
                     photoEvents: photoEvents,
                     stats: stats,
-                    onTap: onShowMonthRecap
+                    onTap: callbacks.recap.onShowMonthRecap
                 )
                 .animatedAppear(delay: 0.12)
             }
@@ -296,7 +257,7 @@ private extension TodayStatusCardsSection {
                     year: recapYear,
                     photoEvents: photoEvents,
                     stats: yearStats,
-                    onTap: onShowYearRecap
+                    onTap: callbacks.recap.onShowYearRecap
                 )
                 .animatedAppear(delay: 0.14)
             }
@@ -305,13 +266,13 @@ private extension TodayStatusCardsSection {
 
     @ViewBuilder
     func recentMomentCard(_ combinedState: CombinedSleepPottyState) -> some View {
-        if shouldShowRecentMomentCard,
+        if config.shouldShowRecentMomentCard,
            !combinedState.shouldShowFirstRunCard,
-           let moment = mostRecentMoment {
+           let moment = config.mostRecentMoment {
             RecentMomentCard(
                 event: moment,
-                onNavigateToDiary: onNavigateToDiary,
-                onDismiss: onDismissRecentMoment
+                onNavigateToDiary: callbacks.recentMoment.onNavigateToDiary,
+                onDismiss: callbacks.recentMoment.onDismiss
             )
             .animatedAppear(delay: 0.15)
         }
@@ -378,7 +339,7 @@ private extension TodayStatusCardsSection {
 
     @ViewBuilder
     func normalPottyCard(_ combinedState: CombinedSleepPottyState) -> some View {
-        if !combinedState.shouldHidePottyCard && shouldShowPottyStatusCard {
+        if !combinedState.shouldHidePottyCard && config.shouldShowPottyStatusCard {
             let aiStatusCopy = viewModel.aiEnhancedPottyStatusCopy
             PottyStatusCard(
                 prediction: viewModel.pottyPrediction,
@@ -410,13 +371,13 @@ private extension TodayStatusCardsSection {
 
     @ViewBuilder
     func crateNudgeCard(_ combinedState: CombinedSleepPottyState) -> some View {
-        if shouldShowCrateNudge && !combinedState.shouldShowFirstRunCard {
+        if config.shouldShowCrateNudge && !combinedState.shouldShowFirstRunCard {
             CrateNudgeCard(
                 puppyName: viewModel.puppyName,
                 onStartCrateNap: {
                     viewModel.sheetCoordinator.presentSheet(.startActivity(.nap, preselectedLocation: .crate))
                 },
-                onDismiss: onDismissCrateNudge
+                onDismiss: callbacks.nudge.onDismissCrateNudge
             )
             .animatedAppear(delay: 0.05)
         }
@@ -424,7 +385,7 @@ private extension TodayStatusCardsSection {
 
     @ViewBuilder
     func walkTargetNudgeCard(_ combinedState: CombinedSleepPottyState) -> some View {
-        if shouldShowWalkTargetNudge && !combinedState.shouldShowFirstRunCard,
+        if config.shouldShowWalkTargetNudge && !combinedState.shouldShowFirstRunCard,
            let stats = viewModel.walkStats {
             WalkTargetNudgeCard(
                 actualAverage: stats.averageWalksPerDay,
@@ -432,7 +393,7 @@ private extension TodayStatusCardsSection {
                 onAdjust: {
                     viewModel.sheetCoordinator.presentSheet(.walkScheduleEditor)
                 },
-                onDismiss: onDismissWalkTargetNudge
+                onDismiss: callbacks.nudge.onDismissWalkTargetNudge
             )
             .visibleForNudge(.walks)
             .animatedAppear(delay: 0.08)
@@ -441,15 +402,15 @@ private extension TodayStatusCardsSection {
 
     @ViewBuilder
     func groomingNudgeCard(_ combinedState: CombinedSleepPottyState) -> some View {
-        if !overdueGroomingActivities.isEmpty && !combinedState.shouldShowFirstRunCard {
+        if !config.overdueGroomingActivities.isEmpty && !combinedState.shouldShowFirstRunCard {
             GroomingNudgeCard(
-                activities: overdueGroomingActivities,
+                activities: config.overdueGroomingActivities,
                 puppyName: viewModel.puppyName,
                 onMarkComplete: { activity in
-                    onMarkGroomingComplete(activity)
+                    callbacks.nudge.onMarkGroomingComplete(activity)
                 },
-                onDismiss: onDismissGroomingNudge,
-                onViewAll: onViewAllGrooming
+                onDismiss: callbacks.nudge.onDismissGroomingNudge,
+                onViewAll: callbacks.nudge.onViewAllGrooming
             )
             .visibleForNudge(.grooming)
             .animatedAppear(delay: 0.1)
@@ -458,22 +419,22 @@ private extension TodayStatusCardsSection {
 
     @ViewBuilder
     func appointmentNudgeCard(_ combinedState: CombinedSleepPottyState) -> some View {
-        if let candidate = appointmentNudgeCandidate, !combinedState.shouldShowFirstRunCard {
+        if let candidate = config.appointmentNudgeCandidate, !combinedState.shouldShowFirstRunCard {
             AppointmentNudgeCard(
                 candidate: candidate,
                 puppyName: viewModel.puppyName,
-                showNapContext: shouldShowAppointmentNudgeNapContext,
+                showNapContext: config.shouldShowAppointmentNudgeNapContext,
                 vetContact: contactStore.vetContactWithPhone,
                 onSchedule: {
-                    if let prefill = onCreateAppointmentPrefill(candidate) {
+                    if let prefill = callbacks.nudge.onCreateAppointmentPrefill(candidate) {
                         viewModel.sheetCoordinator.presentSheet(.addAppointmentWithPrefill(prefill))
                     }
                 },
                 onAlreadyDone: {
-                    onMarkAppointmentDone(candidate)
+                    callbacks.nudge.onMarkAppointmentDone(candidate)
                 },
                 onDismiss: {
-                    onDismissAppointmentNudge(candidate.milestone.labelKey)
+                    callbacks.nudge.onDismissAppointmentNudge(candidate.milestone.labelKey)
                 },
                 onCallVet: ContactUtilities.callPhoneNumber
             )
@@ -501,7 +462,7 @@ private extension TodayStatusCardsSection {
            !combinedState.shouldShowFirstRunCard {
             PhotoPromptCard(
                 puppyName: viewModel.puppyName,
-                onAddPhoto: onAddPhoto,
+                onAddPhoto: callbacks.firstWeek.onAddPhoto,
                 onDismiss: {
                     firstWeekService.dismissPhotoPrompt()
                 }
@@ -517,7 +478,7 @@ private extension TodayStatusCardsSection {
             FamilyInvitePromptCard(
                 puppyName: viewModel.puppyName,
                 onInvite: {
-                    onInviteFamily()
+                    callbacks.firstWeek.onInviteFamily()
                     firstWeekService.markFamilyInviteSent()
                 },
                 onDismiss: {
@@ -627,7 +588,7 @@ private extension TodayStatusCardsSection {
                 weatherService: weatherService,
                 precomputedSeparated: separated,
                 isSleeping: isSleeping,
-                onNavigateToSocialization: onNavigateToTrain
+                onNavigateToSocialization: callbacks.onNavigateToTrain
             )
         }
     }
