@@ -259,3 +259,193 @@ struct SFDogPlayArea: Codable {
         case longitude
     }
 }
+
+// MARK: - Washington D.C. ArcGIS Response Models
+
+struct DCArcGISResponse: Codable {
+    let features: [DCFeature]
+}
+
+struct DCFeature: Codable {
+    let attributes: DCAttributes
+    let geometry: ArcGISRingGeometry?
+}
+
+struct DCAttributes: Codable {
+    let OBJECTID: Int?
+    let NAME: String?
+    let ADDRESS: String?
+    let ZIPCODE: String?
+}
+
+// MARK: - Phoenix ArcGIS Response Models
+
+struct PhoenixArcGISResponse: Codable {
+    let features: [PhoenixFeature]
+}
+
+struct PhoenixFeature: Codable {
+    let attributes: PhoenixAttributes
+    let geometry: ArcGISPointGeometry?
+}
+
+struct PhoenixAttributes: Codable {
+    let OBJECTID: Int?
+    let PARK_NAME: String?
+    let PARK_ADDRESS: String?
+    let ACRES: Double?
+}
+
+// MARK: - Generic ArcGIS Geometry Types
+
+struct ArcGISPointGeometry: Codable {
+    let x: Double?
+    let y: Double?
+}
+
+struct ArcGISRingGeometry: Codable {
+    let rings: [[[Double]]]?
+}
+
+// MARK: - Vancouver CKAN Response Models
+
+struct VancouverCKANResponse: Codable {
+    let records: [VancouverRecord]
+}
+
+struct VancouverRecord: Codable {
+    let park_id: Int?
+    let name: String?
+    let hectare: Double?
+    let geom: VancouverGeometry?
+
+    private enum CodingKeys: String, CodingKey {
+        case park_id
+        case name
+        case hectare
+        case geom
+    }
+}
+
+struct VancouverGeometry: Codable {
+    let type: String?
+    let coordinates: [Double]?
+}
+
+// MARK: - Calgary Socrata Response Models
+
+struct CalgaryParkSite: Codable {
+    let class_type: String?
+    let park_type: String?
+    let park_name: String?
+    let address: String?
+    let latitude: String?
+    let longitude: String?
+
+    private enum CodingKeys: String, CodingKey {
+        case class_type
+        case park_type
+        case park_name
+        case address
+        case latitude
+        case longitude
+    }
+}
+
+// MARK: - Sydney ArcGIS Response Models
+
+struct SydneyArcGISResponse: Codable {
+    let features: [SydneyFeature]
+}
+
+struct SydneyFeature: Codable {
+    let attributes: SydneyAttributes
+    let geometry: ArcGISPointGeometry?
+}
+
+struct SydneyAttributes: Codable {
+    let OBJECTID: Int?
+    let park_name: String?
+    let category: String?
+    let address: String?
+    let fenced: String?
+}
+
+// MARK: - Canberra (ACT) ArcGIS Response Models
+
+struct CanberraArcGISResponse: Codable {
+    let features: [CanberraFeature]
+}
+
+struct CanberraFeature: Codable {
+    let attributes: CanberraAttributes
+    let geometry: ArcGISPointGeometry?
+}
+
+struct CanberraAttributes: Codable {
+    let OBJECTID: Int?
+    let DOG_PARK_NAME: String?
+    let SUBURB: String?
+    let FENCED: String?
+}
+
+// MARK: - Vienna WFS Response Models
+
+struct ViennaWFSResponse: Codable {
+    let type: String
+    let features: [ViennaFeature]
+}
+
+struct ViennaFeature: Codable {
+    let type: String
+    let id: String?
+    let properties: ViennaProperties
+    let geometry: GeoJSONGeometry
+}
+
+struct ViennaProperties: Codable {
+    let OBJECTID: Int?
+    let BEZEICHNUNG: String?
+    let BEZIRK: Int?
+    let ADRESSE: String?
+    let FLAECHE: Double?
+    let TYP: String?
+
+    private enum CodingKeys: String, CodingKey {
+        case OBJECTID
+        case BEZEICHNUNG
+        case BEZIRK
+        case ADRESSE
+        case FLAECHE
+        case TYP
+    }
+}
+
+// MARK: - Brussels Open Data Response Models
+
+struct BrusselsResponse: Codable {
+    let results: [BrusselsRecord]
+}
+
+struct BrusselsRecord: Codable {
+    let name_fr: String?
+    let name_nl: String?
+    let name_en: String?
+    let address_fr: String?
+    let address_nl: String?
+    let geo_point_2d: BrusselsGeoPoint?
+
+    private enum CodingKeys: String, CodingKey {
+        case name_fr
+        case name_nl
+        case name_en
+        case address_fr
+        case address_nl
+        case geo_point_2d
+    }
+}
+
+struct BrusselsGeoPoint: Codable {
+    let lat: Double
+    let lon: Double
+}
