@@ -291,6 +291,7 @@ struct EmptyMomentsView: View {
 
             Spacer()
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding()
         .accessibilityElement(children: .combine)
         .accessibilityLabel(Strings.MomentsGallery.noPhotos)
