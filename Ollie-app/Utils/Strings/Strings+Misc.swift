@@ -156,11 +156,6 @@ extension Strings {
         nonisolated static let parseError = String(localized: "Could not parse data", table: table)
     }
 
-    // MARK: - Streaks
-    enum StreakMessages {
-        static let startAgain = String(localized: "Start again!", table: table)
-    }
-
     // MARK: - Celebration Messages
     enum Celebration {
         static func outdoorStreakToday(count: Int, puppyName: String) -> String {
@@ -178,46 +173,6 @@ extension Strings {
                 return String(localized: "Great job!", table: table)
             } else {
                 return String(localized: "\(count) in a row!", table: table)
-            }
-        }
-    }
-
-    // MARK: - Potty Progress Summary Card
-    enum PottyProgress {
-        static func streakCount(_ count: Int) -> String {
-            if count == 1 {
-                return String(localized: "1 in a row", table: table)
-            } else {
-                return String(localized: "\(count) in a row", table: table)
-            }
-        }
-
-        static func poopCountWithExpected(count: Int, lower: Int, upper: Int) -> String {
-            if lower == upper {
-                return String(localized: "\(count) poops (\(lower) expected)", table: table)
-            } else {
-                return String(localized: "\(count) poops (\(lower)-\(upper) expected)", table: table)
-            }
-        }
-
-        static func poopCountSimple(_ count: Int) -> String {
-            if count == 1 {
-                return String(localized: "1 poop", table: table)
-            } else {
-                return String(localized: "\(count) poops", table: table)
-            }
-        }
-
-        // Accessibility
-        static func streakAccessibility(_ count: Int) -> String {
-            String(localized: "\(count) outdoor pees in a row", table: table)
-        }
-
-        static func poopAccessibility(count: Int, hasPattern: Bool, lower: Int, upper: Int) -> String {
-            if hasPattern {
-                return String(localized: "\(count) poops today, \(lower) to \(upper) expected", table: table)
-            } else {
-                return String(localized: "\(count) poops today", table: table)
             }
         }
     }

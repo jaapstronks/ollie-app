@@ -90,13 +90,10 @@ struct SentimentCheckInContainer: View {
                 Text(Strings.Sentiment.onboardingTitle)
                     .font(.headline)
                 Spacer()
-                Button {
+                CardDismissButton {
                     withAnimation {
                         isDismissed = true
                     }
-                } label: {
-                    Image(systemName: "xmark")
-                        .foregroundStyle(.secondary)
                 }
             }
 

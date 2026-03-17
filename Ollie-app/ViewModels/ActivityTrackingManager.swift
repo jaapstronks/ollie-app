@@ -5,6 +5,7 @@
 //  Manages activity tracking state and logic (walks and naps)
 //
 
+import ActivityKit
 import Combine
 import Foundation
 import OtisShared
@@ -63,6 +64,10 @@ class ActivityTrackingManager {
     @ObservationIgnored
     var onDeleteSleepEvent: ((UUID) -> PuppyEvent?)?
 
+    /// Callback to get the puppy name for Live Activities
+    @ObservationIgnored
+    var getPuppyName: (() -> String)?
+
     /// Whether a walk is currently in progress
     var isWalkInProgress: Bool {
         currentActivity?.type == .walk
@@ -96,8 +101,38 @@ class ActivityTrackingManager {
             napLocation: napLocation
         )
 
+        // Start Live Activity for naps
+        if type == .nap, let sessionId = sleepSessionId {
+            startNapLiveActivity(startTime: startTime, activityId: sessionId)
+        }
+
         onDismiss?()
         HapticFeedback.success()
+    }
+
+    // MARK: - Live Activity Support
+
+    /// Start a nap Live Activity
+    private func startNapLiveActivity(startTime: Date, activityId: UUID) {
+        guard #available(iOS 16.1, *) else {
+            print("⚠️ [LiveActivity] iOS 16.1+ required for Live Activities")
+            return
+        }
+
+        let puppyName = getPuppyName?() ?? "Puppy"
+        print("🌙 [LiveActivity] Starting nap Live Activity for \(puppyName)")
+        LiveActivityManager.shared.startNapActivity(
+            puppyName: puppyName,
+            startTime: startTime,
+            activityId: activityId
+        )
+    }
+
+    /// End the current nap Live Activity
+    private func endNapLiveActivity() {
+        guard #available(iOS 16.1, *) else { return }
+
+        LiveActivityManager.shared.endNapActivity()
     }
 
     /// Update the start time of the current activity
@@ -116,6 +151,9 @@ class ActivityTrackingManager {
         let duration = max(1, Int(endTime.timeIntervalSince(activity.startTime) / 60))
 
         if activity.type == .nap {
+            // End the Live Activity
+            endNapLiveActivity()
+
             // For naps, don't log a wake event - caller will update the sleep event with duration
             currentActivity = nil
             onDismiss?()
@@ -141,10 +179,11 @@ class ActivityTrackingManager {
 
     /// Cancel/discard the current activity without logging
     func cancelActivity() -> (shouldDeleteSleep: Bool, sessionId: UUID?)? {
-        // If cancelling a nap, need to delete the sleep event
+        // If cancelling a nap, need to delete the sleep event and end Live Activity
         if let activity = currentActivity,
            activity.type == .nap,
            let sessionId = activity.sleepSessionId {
+            endNapLiveActivity()
             currentActivity = nil
             onDismiss?()
             return (true, sessionId)
@@ -161,6 +200,10 @@ class ActivityTrackingManager {
         guard let activity = currentActivity, activity.type == .nap else {
             return nil
         }
+
+        // End the Live Activity
+        endNapLiveActivity()
+
         let sessionId = activity.sleepSessionId
         currentActivity = nil
         return sessionId

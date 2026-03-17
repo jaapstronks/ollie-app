@@ -2,17 +2,25 @@
 //  PersistenceController.swift
 //  Otis-app
 //
-//  Core Data persistence with NSPersistentCloudKitContainer for automatic CloudKit sync.
-//  Uses two-store architecture: private store for owner data, shared store for participant data.
+//  Core Data persistence with LOCAL-ONLY storage.
+//  CloudKit sync is handled separately by CKSyncEngine via SyncCoordinator.
 //
-//  IMPORTANT: Includes iCloud availability checking and fallback to local-only storage
-//  to protect against data loss when iCloud becomes unavailable (iOS 18+ issue).
+//  Architecture:
+//  - NSPersistentContainer for local SQLite storage (NOT NSPersistentCloudKitContainer)
+//  - Two stores: private (user's data) and shared (data from partner)
+//  - SyncCoordinator handles CKSyncEngine-based CloudKit sync
+//  - This separation provides faster sync (sub-second vs 1-5 min) and better control
+//
+//  Migration Note:
+//  Previously used NSPersistentCloudKitContainer which has sync delays and
+//  limited control. CKSyncEngine (iOS 17+) gives us manual sync triggers,
+//  explicit conflict resolution, and better error visibility.
 //
 
 @preconcurrency import CoreData
 import CloudKit
 
-/// Manages Core Data persistence with automatic CloudKit synchronization
+/// Manages Core Data persistence (local-only, CloudKit sync handled by SyncCoordinator)
 final class PersistenceController: @unchecked Sendable {
 
     // MARK: - Singleton
@@ -22,25 +30,24 @@ final class PersistenceController: @unchecked Sendable {
 
     // MARK: - Container
 
-    let container: NSPersistentCloudKitContainer
+    /// Local-only Core Data container (NOT CloudKit-enabled)
+    /// CloudKit sync is handled by CKSyncEngine via SyncCoordinator
+    let container: NSPersistentContainer
 
     // MARK: - Store References
 
     private var privateStore: NSPersistentStore?
     private var sharedStore: NSPersistentStore?
 
-    // MARK: - CloudKit Container Identifier
+    // MARK: - Identifiers
 
-    nonisolated private static let cloudKitContainerIdentifier = "iCloud.nl.jaapstronks.Otis"
+    nonisolated static let cloudKitContainerIdentifier = "iCloud.nl.jaapstronks.Otis"
     nonisolated private static let appGroupIdentifier = "group.jaapstronks.Otis"
 
     // MARK: - iCloud Availability
 
     /// Whether iCloud is currently available for sync
     private(set) var isCloudKitAvailable: Bool = false
-
-    /// Whether we're running in local-only mode (fallback when iCloud unavailable)
-    private(set) var isLocalOnlyMode: Bool = false
 
     /// Whether we're running with in-memory storage only (fallback when app group unavailable)
     /// Data will NOT persist between app launches in this mode
@@ -64,23 +71,19 @@ final class PersistenceController: @unchecked Sendable {
     // MARK: - Initialization
 
     nonisolated init(inMemory: Bool = false) {
-        container = NSPersistentCloudKitContainer(name: "Ollie")
+        // Use regular NSPersistentContainer (not CloudKit-enabled)
+        // CloudKit sync is handled by CKSyncEngine via SyncCoordinator
+        container = NSPersistentContainer(name: "Ollie")
 
-        // Use fast synchronous check only (ubiquityIdentityToken) to avoid blocking main thread.
-        // The async CKContainer.accountStatus() check is deferred to background.
+        // Check iCloud availability (for SyncCoordinator to use)
         let iCloudAvailable = Self.checkiCloudAccountStatusSync()
         isCloudKitAvailable = iCloudAvailable
 
-        // Configure stores
+        // Configure stores (all local-only)
         if inMemory {
             configureInMemoryStore()
-        } else if iCloudAvailable {
-            configurePersistentStores()
         } else {
-            // Fallback to local-only mode when iCloud is unavailable
-            print("iCloud not available - using local-only storage")
-            isLocalOnlyMode = true
-            configureLocalOnlyStore()
+            configurePersistentStores()
         }
 
         // Load stores (callback is synchronous for local SQLite stores)
@@ -89,11 +92,6 @@ final class PersistenceController: @unchecked Sendable {
         // Configure view context
         container.viewContext.automaticallyMergesChangesFromParent = true
         container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
-
-        // Track remote changes (only useful when CloudKit is enabled)
-        if iCloudAvailable {
-            setupRemoteChangeTracking()
-        }
 
         // Listen for iCloud account changes
         setupAccountChangeNotifications()
@@ -168,8 +166,7 @@ final class PersistenceController: @unchecked Sendable {
 
             if !newStatus && isCloudKitAvailable {
                 // User signed out of iCloud while app was running
-                // NSPersistentCloudKitContainer may clear data - this is the iOS 18+ issue
-                print("WARNING: iCloud account signed out - data may be affected")
+                print("WARNING: iCloud account signed out - sync will be paused")
 
                 // Post notification so UI can inform user
                 await MainActor.run {
@@ -191,35 +188,11 @@ final class PersistenceController: @unchecked Sendable {
         container.persistentStoreDescriptions = [description]
     }
 
-    /// Configure local-only SQLite store without CloudKit sync
-    /// Used as fallback when iCloud is unavailable to prevent data loss
-    nonisolated private func configureLocalOnlyStore() {
-        guard let storeURL = Self.storeURL(for: "Otis-local.sqlite") else {
-            // Fallback to in-memory store if app group container is unavailable
-            // This prevents crashes while still allowing the app to function
-            print("ERROR: Unable to resolve app group container URL for local store - falling back to in-memory storage")
-            isInMemoryFallbackMode = true
-            configureInMemoryStore()
-            return
-        }
-
-        let description = NSPersistentStoreDescription(url: storeURL)
-        description.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
-
-        // IMPORTANT: No CloudKit options - this is a local-only store
-        // Data will be preserved even if user signs out/in of iCloud
-        description.cloudKitContainerOptions = nil
-
-        container.persistentStoreDescriptions = [description]
-
-        print("Local-only store configured:")
-        print("  URL: \(storeURL)")
-        print("  Note: CloudKit sync disabled - data stored locally only")
-    }
-
+    /// Configure local-only SQLite stores for private and shared data.
+    /// CloudKit sync is handled by SyncCoordinator/CKSyncEngine, not Core Data.
     nonisolated private func configurePersistentStores() {
-        guard let storeURL = Self.storeURL(for: "Otis.sqlite"),
-              let sharedStoreURL = Self.storeURL(for: "Otis-shared.sqlite") else {
+        guard let storeURL = Self.storeURL(for: "Ollie.sqlite"),
+              let sharedStoreURL = Self.storeURL(for: "Ollie-shared.sqlite") else {
             // Fallback to in-memory store if app group container is unavailable
             // This prevents crashes while still allowing the app to function
             print("ERROR: Unable to resolve app group container URL - falling back to in-memory storage")
@@ -228,31 +201,135 @@ final class PersistenceController: @unchecked Sendable {
             return
         }
 
+        // Migration: Check if we need to migrate from old Application Support location
+        Self.migrateFromLegacyStoreIfNeeded(to: storeURL)
+
         // Private store description (owner's data)
+        // NO CloudKit options - sync handled by CKSyncEngine
         let privateDescription = NSPersistentStoreDescription(url: storeURL)
         privateDescription.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
-        privateDescription.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
 
-        // CloudKit options for private database
-        let privateCloudKitOptions = NSPersistentCloudKitContainerOptions(containerIdentifier: Self.cloudKitContainerIdentifier)
-        privateCloudKitOptions.databaseScope = .private
-        privateDescription.cloudKitContainerOptions = privateCloudKitOptions
-
-        // Shared store description (participant's view of shared data)
+        // Shared store description (partner's data synced from CloudKit shared database)
+        // NO CloudKit options - sync handled by CKSyncEngine
         let sharedDescription = NSPersistentStoreDescription(url: sharedStoreURL)
         sharedDescription.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
-        sharedDescription.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
-
-        // CloudKit options for shared database
-        let sharedCloudKitOptions = NSPersistentCloudKitContainerOptions(containerIdentifier: Self.cloudKitContainerIdentifier)
-        sharedCloudKitOptions.databaseScope = .shared
-        sharedDescription.cloudKitContainerOptions = sharedCloudKitOptions
 
         container.persistentStoreDescriptions = [privateDescription, sharedDescription]
 
-        print("Store URLs configured:")
+        print("Local Core Data stores configured:")
         print("  Private: \(storeURL)")
         print("  Shared: \(sharedStoreURL)")
+        print("  Note: CloudKit sync handled by CKSyncEngine via SyncCoordinator")
+    }
+
+    // MARK: - Legacy Store Migration
+
+    /// Migrate data from old Application Support location to app group container
+    /// This handles the transition from NSPersistentCloudKitContainer to CKSyncEngine
+    nonisolated private static func migrateFromLegacyStoreIfNeeded(to newStoreURL: URL) {
+        let fileManager = FileManager.default
+
+        print("Migration: Checking for legacy store migration...")
+        print("Migration: Target URL: \(newStoreURL.path)")
+
+        // Check if new store already has data (migration already done or fresh install)
+        if fileManager.fileExists(atPath: newStoreURL.path) {
+            let fileSize = (try? fileManager.attributesOfItem(atPath: newStoreURL.path)[.size] as? Int) ?? 0
+            print("Migration: App group store exists, size: \(fileSize) bytes")
+            if fileSize > 32768 { // SQLite header + some data (more than just empty DB)
+                print("Migration: Store appears to have data, skipping migration")
+                return
+            }
+        } else {
+            print("Migration: App group store does not exist yet")
+        }
+
+        // Look for legacy store in Application Support
+        guard let appSupportURL = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first else {
+            print("Migration: Could not find Application Support directory")
+            return
+        }
+
+        print("Migration: Searching in Application Support: \(appSupportURL.path)")
+
+        // List all files in Application Support for debugging
+        if let contents = try? fileManager.contentsOfDirectory(atPath: appSupportURL.path) {
+            print("Migration: Application Support contents: \(contents)")
+        }
+
+        // Try multiple possible legacy store names
+        let possibleLegacyNames = ["Ollie.sqlite", "Otis.sqlite", "Ollie-app.sqlite"]
+        var legacyStoreURL: URL?
+
+        for name in possibleLegacyNames {
+            let candidateURL = appSupportURL.appendingPathComponent(name)
+            if fileManager.fileExists(atPath: candidateURL.path) {
+                let size = (try? fileManager.attributesOfItem(atPath: candidateURL.path)[.size] as? Int) ?? 0
+                legacyStoreURL = candidateURL
+                print("Migration: Found legacy store at \(candidateURL.path) (\(size) bytes)")
+                break
+            }
+        }
+
+        // Also check app group container for any other sqlite files
+        if let appGroupURL = fileManager.containerURL(forSecurityApplicationGroupIdentifier: appGroupIdentifier) {
+            print("Migration: App group container: \(appGroupURL.path)")
+            if let contents = try? fileManager.contentsOfDirectory(atPath: appGroupURL.path) {
+                print("Migration: App group contents: \(contents)")
+                for file in contents where file.contains("sqlite") {
+                    let fileURL = appGroupURL.appendingPathComponent(file)
+                    let size = (try? fileManager.attributesOfItem(atPath: fileURL.path)[.size] as? Int) ?? 0
+                    print("Migration: Found SQLite file: \(file) (\(size) bytes)")
+                }
+            }
+        }
+
+        guard let sourceURL = legacyStoreURL else {
+            print("Migration: No legacy store found in Application Support")
+            return
+        }
+
+        // Delete empty target store if it exists (so we can copy)
+        if fileManager.fileExists(atPath: newStoreURL.path) {
+            do {
+                try fileManager.removeItem(at: newStoreURL)
+                print("Migration: Removed empty target store")
+            } catch {
+                print("Migration: Could not remove empty target store: \(error)")
+            }
+        }
+
+        // Copy the legacy store and its associated files (-wal, -shm)
+        print("Migration: Copying legacy store to app group container...")
+
+        do {
+            // Copy main SQLite file
+            try fileManager.copyItem(at: sourceURL, to: newStoreURL)
+            print("Migration: Copied main store file")
+
+            // Copy WAL file if exists
+            let walSource = sourceURL.deletingPathExtension().appendingPathExtension("sqlite-wal")
+            let walDest = newStoreURL.deletingPathExtension().appendingPathExtension("sqlite-wal")
+            if fileManager.fileExists(atPath: walSource.path) {
+                try? fileManager.removeItem(at: walDest)
+                try fileManager.copyItem(at: walSource, to: walDest)
+                print("Migration: Copied WAL file")
+            }
+
+            // Copy SHM file if exists
+            let shmSource = sourceURL.deletingPathExtension().appendingPathExtension("sqlite-shm")
+            let shmDest = newStoreURL.deletingPathExtension().appendingPathExtension("sqlite-shm")
+            if fileManager.fileExists(atPath: shmSource.path) {
+                try? fileManager.removeItem(at: shmDest)
+                try fileManager.copyItem(at: shmSource, to: shmDest)
+                print("Migration: Copied SHM file")
+            }
+
+            print("Migration: Successfully migrated legacy store to app group container")
+
+        } catch {
+            print("Migration ERROR: Failed to copy legacy store: \(error.localizedDescription)")
+        }
     }
 
     nonisolated private func loadStores() {
@@ -280,9 +357,9 @@ final class PersistenceController: @unchecked Sendable {
 
             print("Store loaded: \(url.lastPathComponent)")
 
-            if url.lastPathComponent == "Otis.sqlite" {
+            if url.lastPathComponent == "Ollie.sqlite" {
                 self?.privateStore = self?.container.persistentStoreCoordinator.persistentStore(for: url)
-            } else if url.lastPathComponent == "Otis-shared.sqlite" {
+            } else if url.lastPathComponent == "Ollie-shared.sqlite" {
                 self?.sharedStore = self?.container.persistentStoreCoordinator.persistentStore(for: url)
             }
         }
@@ -298,32 +375,6 @@ final class PersistenceController: @unchecked Sendable {
             return nil
         }
         return containerURL.appendingPathComponent(filename)
-    }
-
-    // MARK: - Remote Change Tracking
-
-    nonisolated private func setupRemoteChangeTracking() {
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(processRemoteStoreChange),
-            name: .NSPersistentStoreRemoteChange,
-            object: container.persistentStoreCoordinator
-        )
-    }
-
-    @objc private func processRemoteStoreChange(_ notification: Notification) {
-        // Process persistent history to update local cache
-        // This is called automatically by NSPersistentCloudKitContainer
-        Task {
-            await processRemoteNotification()
-        }
-    }
-
-    /// Process remote notification for background fetch
-    @MainActor
-    func processRemoteNotification() async {
-        // Force context refresh to pick up remote changes
-        viewContext.refreshAllObjects()
     }
 
     // MARK: - Store Access Helpers
@@ -370,54 +421,13 @@ final class PersistenceController: @unchecked Sendable {
         }
     }
 
-    // MARK: - Sharing Support
+    // MARK: - Context Refresh
 
-    /// Share objects using NSPersistentCloudKitContainer
-    func share(_ objects: [NSManagedObject], to share: CKShare?) async throws -> CKShare {
-        let (_, ckShare, _) = try await container.share(objects, to: share)
-        return ckShare
-    }
-
-    /// Accept a share invitation
-    func acceptShareInvitation(from metadata: CKShare.Metadata) async throws {
-        guard let sharedStore = sharedStore else {
-            print("ERROR: Shared store unavailable when accepting share invitation")
-            throw PersistenceError.sharedStoreUnavailable
-        }
-
-        print("Accepting share invitation into shared store...")
-        print("  Share record ID: \(metadata.share.recordID)")
-        print("  Zone: \(metadata.share.recordID.zoneID.zoneName)")
-        print("  Owner: \(metadata.share.recordID.zoneID.ownerName)")
-        print("  Container: \(metadata.containerIdentifier)")
-
-        try await container.acceptShareInvitations(from: [metadata], into: sharedStore)
-
-        print("Share invitation accepted successfully")
-
-        // Force the view context to refresh and pick up any new shared records
-        await MainActor.run {
-            viewContext.refreshAllObjects()
-        }
-
-        // Give CloudKit a moment to sync the shared records
-        try? await Task.sleep(for: .seconds(2))
-
-        // Refresh again after delay
-        await MainActor.run {
-            viewContext.refreshAllObjects()
-        }
-
-        // Log what we have in the shared store now
-        let request = NSFetchRequest<NSManagedObject>(entityName: "CDPuppyProfile")
-        request.affectedStores = [sharedStore]
-        let sharedProfileCount = (try? viewContext.count(for: request)) ?? 0
-        print("After share acceptance: found \(sharedProfileCount) profile(s) in shared store")
-    }
-
-    /// Get shares for objects
-    func fetchShares(matching objectIDs: [NSManagedObjectID]) throws -> [NSManagedObjectID: CKShare] {
-        try container.fetchShares(matching: objectIDs)
+    /// Refresh the view context to pick up changes from CKSyncEngine
+    /// Called by SyncCoordinator when remote changes are fetched
+    @MainActor
+    func refreshAfterRemoteChanges() {
+        viewContext.refreshAllObjects()
     }
 
     // MARK: - Save

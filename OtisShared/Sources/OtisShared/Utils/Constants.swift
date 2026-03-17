@@ -43,6 +43,7 @@ public enum Constants {
     /// Media storage
     public static let mediaDirectoryName = "media"
     public static let thumbnailDirectoryName = "thumbnails"
+    public static let profilePhotosDirectoryName = "ProfilePhotos"
     public static let thumbnailSize: CGFloat = 200
     public static let maxPhotoSize: CGFloat = 1920
 

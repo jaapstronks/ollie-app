@@ -62,11 +62,4 @@ extension Strings {
         public static var cannotShareAsParticipant: String { String(localized: "You cannot share as a participant", bundle: Strings.bundle) }
         public static var couldNotLoadShare: String { String(localized: "Could not load share", bundle: Strings.bundle) }
     }
-
-    // MARK: - CloudKit Setup
-    public enum CloudKitSetup {
-        public static func setupFailed(_ error: String) -> String {
-            String(localized: "Setup failed: \(error)", bundle: Strings.bundle)
-        }
-    }
 }

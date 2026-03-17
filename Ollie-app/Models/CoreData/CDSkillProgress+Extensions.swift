@@ -47,6 +47,7 @@ extension CDSkillProgress {
         // Encode complex types as JSON data
         self.recentSessionsData = try? Self.encoder.encode(progress.recentSessions)
         self.practicedContextsData = try? Self.encoder.encode(progress.practicedContexts)
+        self.phaseLocationMatrixData = try? Self.encoder.encode(progress.phaseLocationMatrix)
     }
 
     /// Create a new CDSkillProgress from a SkillProgress struct
@@ -89,6 +90,11 @@ extension CDSkillProgress {
             practicedContexts = (try? Self.decoder.decode([TrainingContext].self, from: data)) ?? []
         }
 
+        var phaseLocationMatrix: [PhaseLocationCell] = []
+        if let data = self.phaseLocationMatrixData {
+            phaseLocationMatrix = (try? Self.decoder.decode([PhaseLocationCell].self, from: data)) ?? []
+        }
+
         return SkillProgress(
             id: id,
             skillId: skillId,
@@ -107,6 +113,7 @@ extension CDSkillProgress {
             lastPracticedAt: self.lastPracticedAt,
             isInMaintenanceMode: self.isInMaintenanceMode,
             practicedContexts: practicedContexts,
+            phaseLocationMatrix: phaseLocationMatrix,
             createdAt: createdAt,
             modifiedAt: modifiedAt
         )

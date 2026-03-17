@@ -299,7 +299,13 @@ struct DogSettingsCard: View {
             loadedImage = nil
             return
         }
-        loadedImage = await ProfilePhotoStore.shared.loadAsync(filename: filename)
+        // Use the version that can download from CloudKit if photo is missing locally
+        // For shared profiles, this will download from the owner's zone
+        loadedImage = await ProfilePhotoStore.shared.loadAsync(
+            filename: filename,
+            profileId: profile.id,
+            isSharedProfile: profile.ownership == .shared
+        )
     }
 }
 

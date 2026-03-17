@@ -63,6 +63,83 @@ public let testMilestoneID = UUID(uuidString: "AA000000-0000-0000-0000-000000000
 /// Test photo event ID (for photo sync testing)
 public let testPhotoEventID = UUID(uuidString: "AA000000-0000-0000-0000-000000000022")!
 
+// MARK: - Additional Entity Test IDs
+
+/// Test IDs for all entity types (Phase 1.2 testing)
+public enum TestEntityID: String, CaseIterable {
+    case walkSpot = "AA000000-0000-0000-0000-000000000030"
+    case dogContact = "AA000000-0000-0000-0000-000000000031"
+    case dogAppointment = "AA000000-0000-0000-0000-000000000032"
+    case document = "AA000000-0000-0000-0000-000000000033"
+    case exposure = "AA000000-0000-0000-0000-000000000034"
+    case comfortableItem = "AA000000-0000-0000-0000-000000000035"
+    case earlyMilestone = "AA000000-0000-0000-0000-000000000036"
+    case medicationCompletion = "AA000000-0000-0000-0000-000000000037"
+    case routineItem = "AA000000-0000-0000-0000-000000000038"
+    case weightGoal = "AA000000-0000-0000-0000-000000000039"
+    case bodyConditionScore = "AA000000-0000-0000-0000-00000000003A"
+    case groomingActivity = "AA000000-0000-0000-0000-00000000003B"
+    case enrichmentActivity = "AA000000-0000-0000-0000-00000000003C"
+    case skillProgress = "AA000000-0000-0000-0000-00000000003D"
+    case masteredSkill = "AA000000-0000-0000-0000-00000000003E"
+    case regressionLog = "AA000000-0000-0000-0000-00000000003F"
+    case exploredTile = "AA000000-0000-0000-0000-000000000040"
+    case userIdentity = "AA000000-0000-0000-0000-000000000041"
+    case userSentimentCheckIn = "AA000000-0000-0000-0000-000000000042"
+
+    public var uuid: UUID {
+        UUID(uuidString: rawValue)!
+    }
+
+    public var entityName: String {
+        switch self {
+        case .walkSpot: return "CDWalkSpot"
+        case .dogContact: return "CDDogContact"
+        case .dogAppointment: return "CDDogAppointment"
+        case .document: return "CDDocument"
+        case .exposure: return "CDExposure"
+        case .comfortableItem: return "CDComfortableItem"
+        case .earlyMilestone: return "CDEarlyMilestone"
+        case .medicationCompletion: return "CDMedicationCompletion"
+        case .routineItem: return "CDRoutineItem"
+        case .weightGoal: return "CDWeightGoal"
+        case .bodyConditionScore: return "CDBodyConditionScore"
+        case .groomingActivity: return "CDGroomingActivity"
+        case .enrichmentActivity: return "CDEnrichmentActivity"
+        case .skillProgress: return "CDSkillProgress"
+        case .masteredSkill: return "CDMasteredSkill"
+        case .regressionLog: return "CDRegressionLog"
+        case .exploredTile: return "CDExploredTile"
+        case .userIdentity: return "CDUserIdentity"
+        case .userSentimentCheckIn: return "CDUserSentimentCheckIn"
+        }
+    }
+
+    public var displayName: String {
+        switch self {
+        case .walkSpot: return "Walk Spot"
+        case .dogContact: return "Contact"
+        case .dogAppointment: return "Appointment"
+        case .document: return "Document"
+        case .exposure: return "Exposure"
+        case .comfortableItem: return "Comfortable Item"
+        case .earlyMilestone: return "Early Milestone"
+        case .medicationCompletion: return "Medication"
+        case .routineItem: return "Routine"
+        case .weightGoal: return "Weight Goal"
+        case .bodyConditionScore: return "Body Score"
+        case .groomingActivity: return "Grooming"
+        case .enrichmentActivity: return "Enrichment"
+        case .skillProgress: return "Skill Progress"
+        case .masteredSkill: return "Mastered Skill"
+        case .regressionLog: return "Regression Log"
+        case .exploredTile: return "Explored Tile"
+        case .userIdentity: return "User Identity"
+        case .userSentimentCheckIn: return "Sentiment"
+        }
+    }
+}
+
 // MARK: - Test Profile Name
 
 /// Name used for test profiles - easy to identify in UI
@@ -178,6 +255,237 @@ public struct SyncTestFixtures {
         return measurement
     }
 
+    // MARK: - Milestone
+
+    /// Create a test milestone
+    @discardableResult
+    public static func createTestMilestone(
+        in context: NSManagedObjectContext,
+        for profile: NSManagedObject
+    ) -> NSManagedObject {
+        let entityName = "CDMilestone"
+        let entity = NSEntityDescription.entity(forEntityName: entityName, in: context)!
+        let milestone = NSManagedObject(entity: entity, insertInto: context)
+        let now = Date()
+
+        milestone.setValue(testMilestoneID, forKey: "id")
+        milestone.setValue("test.milestone.label", forKey: "labelKey")
+        milestone.setValue("test.milestone.detail", forKey: "detailKey")
+        milestone.setValue("health", forKey: "category")
+        milestone.setValue("star.fill", forKey: "icon")
+        milestone.setValue(false, forKey: "isCompleted")
+        milestone.setValue(true, forKey: "isCustom")
+        milestone.setValue(false, forKey: "isRecurring")
+        milestone.setValue(0, forKey: "sortOrder")
+        milestone.setValue(now, forKey: "createdAt")
+        milestone.setValue(now, forKey: "modifiedAt")
+        milestone.setValue(profile, forKey: "profile")
+
+        return milestone
+    }
+
+    // MARK: - All Additional Entities
+
+    /// Create a test entity of the specified type
+    @discardableResult
+    public static func createTestEntity(
+        _ entityType: TestEntityID,
+        in context: NSManagedObjectContext,
+        for profile: NSManagedObject,
+        userIdentity: NSManagedObject? = nil
+    ) -> NSManagedObject {
+        let entity = NSEntityDescription.entity(forEntityName: entityType.entityName, in: context)!
+        let obj = NSManagedObject(entity: entity, insertInto: context)
+        let now = Date()
+
+        // Common fields
+        obj.setValue(entityType.uuid, forKey: "id")
+        obj.setValue(now, forKey: "modifiedAt")
+
+        // Entity-specific fields
+        switch entityType {
+        case .walkSpot:
+            obj.setValue("Test Walk Spot", forKey: "name")
+            obj.setValue("park", forKey: "category")
+            obj.setValue(52.3676, forKey: "latitude")
+            obj.setValue(4.9041, forKey: "longitude")
+            obj.setValue(false, forKey: "isFavorite")
+            obj.setValue(1, forKey: "visitCount")
+            obj.setValue(now, forKey: "createdAt")
+            // WalkSpot doesn't have profile relationship
+
+        case .dogContact:
+            obj.setValue("Test Vet Contact", forKey: "name")
+            obj.setValue("vet", forKey: "contactType")
+            obj.setValue("test@example.com", forKey: "email")
+            obj.setValue("+31612345678", forKey: "phone")
+            obj.setValue(now, forKey: "createdAt")
+            // DogContact doesn't have profile relationship
+
+        case .dogAppointment:
+            obj.setValue("Test Vet Appointment", forKey: "title")
+            obj.setValue("vet", forKey: "appointmentType")
+            let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: now)!
+            obj.setValue(tomorrow, forKey: "startDate")
+            obj.setValue(false, forKey: "isAllDay")
+            obj.setValue(false, forKey: "isCompleted")
+            obj.setValue(now, forKey: "createdAt")
+            obj.setValue(profile, forKey: "profile")
+
+        case .document:
+            obj.setValue("Test Document", forKey: "title")
+            obj.setValue("vaccination", forKey: "type")
+            obj.setValue(now, forKey: "documentDate")
+            obj.setValue(now, forKey: "createdAt")
+            obj.setValue(profile, forKey: "profile")
+
+        case .exposure:
+            obj.setValue("test-exposure-item", forKey: "itemId")
+            obj.setValue(now, forKey: "date")
+            obj.setValue("close", forKey: "distance")
+            obj.setValue("positive", forKey: "reaction")
+            obj.setValue(now, forKey: "createdAt")
+            obj.setValue(profile, forKey: "profile")
+
+        case .comfortableItem:
+            obj.setValue("test-comfort-item", forKey: "itemId")
+            obj.setValue(now, forKey: "comfortableAt")
+            obj.setValue("gradual", forKey: "method")
+            obj.setValue(profile, forKey: "profile")
+
+        case .earlyMilestone:
+            obj.setValue("test-early-milestone", forKey: "milestoneId")
+            obj.setValue(now, forKey: "achievedAt")
+            obj.setValue(profile, forKey: "profile")
+
+        case .medicationCompletion:
+            obj.setValue(UUID(), forKey: "medicationId")
+            obj.setValue(UUID(), forKey: "timeId")
+            obj.setValue(now, forKey: "date")
+            obj.setValue(now, forKey: "completedAt")
+            obj.setValue(profile, forKey: "profile")
+
+        case .routineItem:
+            obj.setValue("Test Routine", forKey: "label")
+            obj.setValue(now, forKey: "time")
+            obj.setValue("care", forKey: "category")
+            obj.setValue(true, forKey: "isEnabled")
+            obj.setValue(0, forKey: "sortOrder")
+            obj.setValue(now, forKey: "createdAt")
+            obj.setValue(profile, forKey: "profile")
+
+        case .weightGoal:
+            obj.setValue(12.0, forKey: "targetWeightKg")
+            obj.setValue(8.5, forKey: "startWeightKg")
+            obj.setValue(now, forKey: "startDate")
+            let targetDate = Calendar.current.date(byAdding: .month, value: 3, to: now)!
+            obj.setValue(targetDate, forKey: "targetDate")
+            obj.setValue(true, forKey: "isActive")
+            obj.setValue(now, forKey: "createdAt")
+            obj.setValue(profile, forKey: "profile")
+
+        case .bodyConditionScore:
+            obj.setValue(5, forKey: "score")
+            obj.setValue("Test BCS assessment", forKey: "note")
+            obj.setValue(now, forKey: "createdAt")
+            obj.setValue(profile, forKey: "profile")
+
+        case .groomingActivity:
+            obj.setValue("brushing", forKey: "type")
+            obj.setValue(7, forKey: "intervalDays")
+            obj.setValue(now, forKey: "lastCompleted")
+            obj.setValue(true, forKey: "isEnabled")
+            obj.setValue(now, forKey: "createdAt")
+            obj.setValue(profile, forKey: "profile")
+
+        case .enrichmentActivity:
+            obj.setValue("puzzle", forKey: "type")
+            obj.setValue(now, forKey: "completedAt")
+            obj.setValue(15, forKey: "durationMinutes")
+            obj.setValue(now, forKey: "createdAt")
+            obj.setValue(profile, forKey: "profile")
+
+        case .skillProgress:
+            obj.setValue("sit", forKey: "skillId")
+            obj.setValue("learning", forKey: "phase")
+            obj.setValue(1, forKey: "durationLevel")
+            obj.setValue(1, forKey: "distanceLevel")
+            obj.setValue(1, forKey: "distractionLevel")
+            obj.setValue(0.5, forKey: "confidenceScore")
+            obj.setValue(10, forKey: "totalSuccessReps")
+            obj.setValue(2, forKey: "totalFailedReps")
+            obj.setValue(now, forKey: "lastPracticedAt")
+            obj.setValue(now, forKey: "createdAt")
+            obj.setValue(profile, forKey: "profile")
+
+        case .masteredSkill:
+            obj.setValue("down", forKey: "skillId")
+            obj.setValue(now, forKey: "masteredAt")
+            obj.setValue(profile, forKey: "profile")
+
+        case .regressionLog:
+            obj.setValue("stay", forKey: "skillId")
+            obj.setValue(now, forKey: "occurredAt")
+            obj.setValue(2, forKey: "previousTier")
+            obj.setValue(0.6, forKey: "successRateAtFailure")
+            obj.setValue(now, forKey: "createdAt")
+            // RegressionLog doesn't have profile relationship
+
+        case .exploredTile:
+            obj.setValue("52.3676_4.9041_16", forKey: "tileKey")
+            obj.setValue(1, forKey: "walkCount")
+            obj.setValue(now, forKey: "firstExploredAt")
+            obj.setValue(now, forKey: "lastExploredAt")
+            obj.setValue(now, forKey: "createdAt")
+            obj.setValue(profile, forKey: "profile")
+
+        case .userIdentity:
+            obj.setValue("Test User", forKey: "name")
+            obj.setValue("#FF5733", forKey: "colorHex")
+            obj.setValue("primary", forKey: "responsibilityLevel")
+            obj.setValue(now, forKey: "createdAt")
+            obj.setValue(profile, forKey: "profile")
+
+        case .userSentimentCheckIn:
+            obj.setValue("general", forKey: "category")
+            obj.setValue(4, forKey: "score")
+            obj.setValue(now, forKey: "date")
+            obj.setValue(now, forKey: "createdAt")
+            if let identity = userIdentity {
+                obj.setValue(identity, forKey: "userIdentity")
+            }
+        }
+
+        return obj
+    }
+
+    /// Create all additional test entities (beyond profile/events/weight)
+    @discardableResult
+    public static func createAllTestEntities(
+        in context: NSManagedObjectContext,
+        for profile: NSManagedObject
+    ) -> [TestEntityID: NSManagedObject] {
+        var entities: [TestEntityID: NSManagedObject] = [:]
+
+        // Create UserIdentity first since UserSentimentCheckIn depends on it
+        var userIdentity: NSManagedObject?
+
+        for entityType in TestEntityID.allCases {
+            if entityType == .userIdentity {
+                let identity = createTestEntity(entityType, in: context, for: profile)
+                userIdentity = identity
+                entities[entityType] = identity
+            } else if entityType == .userSentimentCheckIn {
+                let checkIn = createTestEntity(entityType, in: context, for: profile, userIdentity: userIdentity)
+                entities[entityType] = checkIn
+            } else {
+                entities[entityType] = createTestEntity(entityType, in: context, for: profile)
+            }
+        }
+
+        return entities
+    }
+
     // MARK: - Photo Event (for photo sync testing)
 
     /// Create a test event with a photo for photo sync testing
@@ -206,6 +514,83 @@ public struct SyncTestFixtures {
 
         return event
     }
+
+    #if os(iOS)
+    /// Create a test photo event with an actual test image file saved to disk
+    /// - Returns: Tuple of (event, localPhotoURL) for photo upload testing
+    public static func createTestPhotoEventWithImage(
+        in context: NSManagedObjectContext,
+        for profile: NSManagedObject
+    ) -> (event: NSManagedObject, photoURL: URL)? {
+        // Create the test image data
+        guard let imageData = createTestImageData() else {
+            print("[SyncTestFixtures] Failed to create test image data")
+            return nil
+        }
+
+        // Save to media directory
+        guard let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            print("[SyncTestFixtures] Failed to get documents directory")
+            return nil
+        }
+
+        let mediaDir = documentsURL.appendingPathComponent("Media", isDirectory: true)
+
+        // Ensure directory exists
+        do {
+            try FileManager.default.createDirectory(at: mediaDir, withIntermediateDirectories: true)
+        } catch {
+            print("[SyncTestFixtures] Failed to create media directory: \(error)")
+            return nil
+        }
+
+        // Use predictable filename based on test event ID
+        let filename = "test-photo-\(testPhotoEventID.uuidString).png"
+        let photoURL = mediaDir.appendingPathComponent(filename)
+
+        // Save image data
+        do {
+            try imageData.write(to: photoURL)
+        } catch {
+            print("[SyncTestFixtures] Failed to save test image: \(error)")
+            return nil
+        }
+
+        // Create the event with the photo path
+        let relativePath = "Media/\(filename)"
+        let event = createTestPhotoEvent(in: context, for: profile, photoFilename: relativePath)
+
+        return (event, photoURL)
+    }
+
+    /// Check if test photo event exists
+    public static func testPhotoEventExists(in context: NSManagedObjectContext) -> Bool {
+        let fetch = NSFetchRequest<NSManagedObject>(entityName: "CDPuppyEvent")
+        fetch.predicate = NSPredicate(format: "id == %@", testPhotoEventID as CVarArg)
+        fetch.fetchLimit = 1
+
+        do {
+            return try context.count(for: fetch) > 0
+        } catch {
+            return false
+        }
+    }
+
+    /// Get the local URL for the test photo file
+    public static func testPhotoLocalURL() -> URL? {
+        guard let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            return nil
+        }
+        let filename = "test-photo-\(testPhotoEventID.uuidString).png"
+        return documentsURL.appendingPathComponent("Media/\(filename)")
+    }
+
+    /// Delete test photo file from local storage
+    public static func deleteTestPhotoFile() {
+        guard let photoURL = testPhotoLocalURL() else { return }
+        try? FileManager.default.removeItem(at: photoURL)
+    }
+    #endif
 
     // MARK: - Full Test Data Set
 
@@ -251,6 +636,38 @@ public struct SyncTestFixtures {
         } catch {
             print("[SyncTestFixtures] Failed to delete test events: \(error)")
         }
+
+        // Delete all additional test entities
+        for entityType in TestEntityID.allCases {
+            deleteTestEntity(entityType, in: context)
+        }
+
+        // Delete test milestone
+        let milestoneFetch = NSFetchRequest<NSManagedObject>(entityName: "CDMilestone")
+        milestoneFetch.predicate = NSPredicate(format: "id == %@", testMilestoneID as CVarArg)
+        do {
+            let milestones = try context.fetch(milestoneFetch)
+            for milestone in milestones {
+                context.delete(milestone)
+            }
+        } catch {
+            print("[SyncTestFixtures] Failed to delete test milestone: \(error)")
+        }
+    }
+
+    /// Delete a specific test entity type
+    public static func deleteTestEntity(_ entityType: TestEntityID, in context: NSManagedObjectContext) {
+        let fetch = NSFetchRequest<NSManagedObject>(entityName: entityType.entityName)
+        fetch.predicate = NSPredicate(format: "id == %@", entityType.uuid as CVarArg)
+
+        do {
+            let entities = try context.fetch(fetch)
+            for entity in entities {
+                context.delete(entity)
+            }
+        } catch {
+            print("[SyncTestFixtures] Failed to delete test \(entityType.entityName): \(error)")
+        }
     }
 
     // MARK: - Verification
@@ -280,6 +697,33 @@ public struct SyncTestFixtures {
         } catch {
             return 0
         }
+    }
+
+    /// Check if a specific test entity exists
+    public static func testEntityExists(_ entityType: TestEntityID, in context: NSManagedObjectContext) -> Bool {
+        let fetch = NSFetchRequest<NSManagedObject>(entityName: entityType.entityName)
+        fetch.predicate = NSPredicate(format: "id == %@", entityType.uuid as CVarArg)
+        fetch.fetchLimit = 1
+
+        do {
+            return try context.count(for: fetch) > 0
+        } catch {
+            return false
+        }
+    }
+
+    /// Get a map of which test entities exist
+    public static func existingTestEntities(in context: NSManagedObjectContext) -> [TestEntityID: Bool] {
+        var result: [TestEntityID: Bool] = [:]
+        for entityType in TestEntityID.allCases {
+            result[entityType] = testEntityExists(entityType, in: context)
+        }
+        return result
+    }
+
+    /// Get count of additional test entities that exist
+    public static func additionalTestEntityCount(in context: NSManagedObjectContext) -> Int {
+        TestEntityID.allCases.filter { testEntityExists($0, in: context) }.count
     }
 
     // MARK: - Log Filter Helpers

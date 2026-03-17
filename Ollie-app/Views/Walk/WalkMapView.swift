@@ -13,13 +13,19 @@ import SwiftUI
 struct WalkMapView: View {
     @Bindable var viewModel: TimelineViewModel
     @Environment(WalkTrackingService.self) var trackingService
+    @Environment(ExplorationStore.self) var explorationStore
     @Environment(\.dismiss) private var dismiss
+
+    @AppStorage("fogOfWarEnabled") private var fogEnabled = true
 
     @State private var cameraPosition: MapCameraPosition = .userLocation(fallback: .automatic)
     @State private var isFollowingUser = true
     @State private var peeCount = 0
     @State private var poopCount = 0
     @State private var showEndConfirmation = false
+
+    // Map tracking for fog overlay
+    @State private var mapRect: MKMapRect = .world
 
     var body: some View {
         ZStack {
@@ -56,37 +62,62 @@ struct WalkMapView: View {
     // MARK: - Map View
 
     private var mapView: some View {
-        Map(position: $cameraPosition, interactionModes: .all) {
-            // User location
-            UserAnnotation()
+        ZStack {
+            Map(position: $cameraPosition, interactionModes: .all) {
+                // User location
+                UserAnnotation()
 
-            // Route polyline
-            if let route = trackingService.currentRoute, route.coordinates.count >= 2 {
-                MapPolyline(coordinates: route.coordinates.map(\.coordinate))
-                    .stroke(.green, lineWidth: 4)
+                // Route polyline
+                if let route = trackingService.currentRoute, route.coordinates.count >= 2 {
+                    MapPolyline(coordinates: route.coordinates.map(\.coordinate))
+                        .stroke(.green, lineWidth: 4)
+                }
+
+                // Potty markers would go here when we add event locations
             }
+            .mapStyle(.standard(elevation: .realistic))
+            .mapControls {
+                MapCompass()
+                MapScaleView()
+            }
+            .onChange(of: trackingService.currentLocation) { _, newLocation in
+                if let location = newLocation {
+                    // Record coordinate for fog reveal
+                    if fogEnabled {
+                        let isNewTile = explorationStore.recordCoordinate(location.coordinate)
+                        if isNewTile {
+                            HapticFeedback.light()
+                        }
+                    }
 
-            // Potty markers would go here when we add event locations
-        }
-        .mapStyle(.standard(elevation: .realistic))
-        .mapControls {
-            MapCompass()
-            MapScaleView()
-        }
-        .onChange(of: trackingService.currentLocation) { _, newLocation in
-            if isFollowingUser, let location = newLocation {
-                withAnimation(.easeInOut(duration: 0.3)) {
-                    cameraPosition = .camera(MapCamera(
-                        centerCoordinate: location.coordinate,
-                        distance: 500,
-                        heading: location.course >= 0 ? location.course : 0
-                    ))
+                    // Follow user if enabled
+                    if isFollowingUser {
+                        withAnimation(.easeInOut(duration: 0.3)) {
+                            cameraPosition = .camera(MapCamera(
+                                centerCoordinate: location.coordinate,
+                                distance: 500,
+                                heading: location.course >= 0 ? location.course : 0
+                            ))
+                        }
+                    }
                 }
             }
-        }
-        .onMapCameraChange { context in
-            // Stop following if user manually moves the map
-            // (This is a simplification - could be more sophisticated)
+            .onMapCameraChange { context in
+                // Track map rect and size for fog overlay
+                mapRect = context.rect
+            }
+
+            // Fog of war overlay
+            if fogEnabled {
+                GeometryReader { geometry in
+                    FogOfWarOverlay(
+                        explorationStore: explorationStore,
+                        mapRect: mapRect,
+                        mapSize: geometry.size,
+                        currentPathCoordinates: trackingService.currentRoute?.coordinates.map(\.coordinate) ?? []
+                    )
+                }
+            }
         }
     }
 
@@ -113,22 +144,22 @@ struct WalkMapView: View {
                 // Duration
                 VStack(spacing: 2) {
                     Text(trackingService.formattedLiveDurationLong)
-                        .font(.system(size: 28, weight: .semibold, design: .rounded))
+                        .font(.system(size: 20, weight: .semibold, design: .rounded))
                         .monospacedDigit()
                     Text(Strings.WalkMap.duration)
-                        .font(.caption)
+                        .font(.caption2)
                         .foregroundStyle(.secondary)
                 }
 
                 Divider()
-                    .frame(height: 40)
+                    .frame(height: 32)
 
                 // Distance
                 VStack(spacing: 2) {
                     Text(trackingService.formattedLiveDistance)
-                        .font(.system(size: 28, weight: .semibold, design: .rounded))
+                        .font(.system(size: 20, weight: .semibold, design: .rounded))
                     Text(Strings.WalkMap.distance)
-                        .font(.caption)
+                        .font(.caption2)
                         .foregroundStyle(.secondary)
                 }
 
@@ -288,10 +319,12 @@ struct WalkMapView: View {
             didPoop: false  // Already logged individually
         )
 
-        // TODO: Save route to Core Data / associate with walk event
+        // Save exploration data
         if let route = route {
-            // For now, just log the stats
-            print("Walk completed: \(route.formattedDistance()), \(route.formattedDuration)")
+            explorationStore.recordWalkRoute(route)
+        } else {
+            // Persist any pending tiles even without a full route
+            explorationStore.persistPendingTiles()
         }
 
         dismiss()
@@ -306,4 +339,5 @@ struct WalkMapView: View {
         profileStore: ProfileStore()
     ))
     .environment(WalkTrackingService())
+    .environment(ExplorationStore())
 }

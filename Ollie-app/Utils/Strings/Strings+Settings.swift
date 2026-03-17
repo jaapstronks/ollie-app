@@ -444,13 +444,6 @@ extension Strings {
         static let accessDenied = String(localized: "Could not access the selected folder", table: table)
     }
 
-    // MARK: - CloudKit Setup
-    enum CloudKitSetup {
-        static func setupFailed(_ error: String) -> String {
-            String(localized: "Setup failed: \(error)", table: table)
-        }
-    }
-
     // MARK: - Units
     enum Units {
         static let celsius = String(localized: "Celsius (°C)", table: table)

@@ -74,6 +74,11 @@ public struct SkillProgress: Codable, Identifiable, Sendable, Equatable {
     /// Locations/environments where this skill has been practiced
     public var practicedContexts: [TrainingContext]
 
+    // MARK: - Practice Matrix (Phase x Location)
+
+    /// Practice matrix tracking progress for each phase at each location
+    public var phaseLocationMatrix: [PhaseLocationCell]
+
     // MARK: - Timestamps
 
     public var createdAt: Date
@@ -158,6 +163,7 @@ public struct SkillProgress: Codable, Identifiable, Sendable, Equatable {
         lastPracticedAt: Date? = nil,
         isInMaintenanceMode: Bool = false,
         practicedContexts: [TrainingContext] = [],
+        phaseLocationMatrix: [PhaseLocationCell] = [],
         createdAt: Date = Date(),
         modifiedAt: Date? = nil
     ) {
@@ -174,6 +180,7 @@ public struct SkillProgress: Codable, Identifiable, Sendable, Equatable {
         self.lastPracticedAt = lastPracticedAt
         self.isInMaintenanceMode = isInMaintenanceMode
         self.practicedContexts = practicedContexts
+        self.phaseLocationMatrix = phaseLocationMatrix
         self.createdAt = createdAt
         self.modifiedAt = modifiedAt ?? createdAt
     }
@@ -194,6 +201,7 @@ public struct SkillProgress: Codable, Identifiable, Sendable, Equatable {
         case lastPracticedAt = "last_practiced_at"
         case isInMaintenanceMode = "is_in_maintenance_mode"
         case practicedContexts = "practiced_contexts"
+        case phaseLocationMatrix = "phase_location_matrix"
         case createdAt = "created_at"
         case modifiedAt = "modified_at"
     }
@@ -388,5 +396,141 @@ extension SkillProgress {
             maintenanceTier = min(maintenanceTier + 1, 6)
             scheduleNextReview()
         }
+    }
+}
+
+// MARK: - Phase Location Matrix Methods
+
+extension SkillProgress {
+
+    /// Get cell for a specific phase and location
+    public func cell(for phaseId: String, location: LocationTier) -> PhaseLocationCell? {
+        phaseLocationMatrix.first { $0.phaseId == phaseId && $0.location == location }
+    }
+
+    /// Update cell state for a specific phase and location
+    public mutating func updateCell(phaseId: String, location: LocationTier, state: PhaseLocationState) {
+        if let index = phaseLocationMatrix.firstIndex(where: { $0.phaseId == phaseId && $0.location == location }) {
+            phaseLocationMatrix[index].state = state
+            if state == .inProgress || state == .mastered {
+                phaseLocationMatrix[index].lastPracticedAt = Date()
+            }
+        } else {
+            // Create if doesn't exist
+            let newCell = PhaseLocationCell(
+                phaseId: phaseId,
+                location: location,
+                state: state,
+                lastPracticedAt: (state == .inProgress || state == .mastered) ? Date() : nil
+            )
+            phaseLocationMatrix.append(newCell)
+        }
+        modifiedAt = Date()
+    }
+
+    /// Initialize matrix with phase IDs (creates cells for all phases x locations)
+    public mutating func initializeMatrix(phaseIds: [String]) {
+        // Don't re-initialize if already populated
+        guard phaseLocationMatrix.isEmpty else { return }
+
+        for (index, phaseId) in phaseIds.enumerated() {
+            for location in LocationTier.allCases {
+                // First phase, inside = notStarted (unlocked)
+                // Everything else starts locked
+                let initialState: PhaseLocationState
+                if index == 0 && location == .inside {
+                    initialState = .notStarted
+                } else {
+                    initialState = .locked
+                }
+
+                let cell = PhaseLocationCell(
+                    phaseId: phaseId,
+                    location: location,
+                    state: initialState
+                )
+                phaseLocationMatrix.append(cell)
+            }
+        }
+        modifiedAt = Date()
+    }
+
+    /// Recalculate unlock states based on mastery progression
+    /// Unlock logic: Phase N, Inside unlocks when Phase N-1 mastered Inside
+    /// Phase N, Outside unlocks when Phase N mastered Inside
+    public mutating func recalculateUnlockStates(phaseIds: [String]) {
+        for (index, phaseId) in phaseIds.enumerated() {
+            // Inside cell unlock logic
+            let insideCell = cell(for: phaseId, location: .inside)
+            let shouldInsideBeUnlocked: Bool
+            if index == 0 {
+                // First phase inside is always unlocked
+                shouldInsideBeUnlocked = true
+            } else {
+                // Subsequent phases unlock when previous phase mastered inside
+                let prevPhaseId = phaseIds[index - 1]
+                let prevInsideCell = cell(for: prevPhaseId, location: .inside)
+                shouldInsideBeUnlocked = prevInsideCell?.state == .mastered
+            }
+
+            // If should be unlocked but is locked, change to notStarted
+            if shouldInsideBeUnlocked && insideCell?.state == .locked {
+                updateCell(phaseId: phaseId, location: .inside, state: .notStarted)
+            }
+
+            // Outside cell unlock logic
+            let outsideCell = cell(for: phaseId, location: .outside)
+            let currentInsideCell = cell(for: phaseId, location: .inside)
+            let shouldOutsideBeUnlocked = currentInsideCell?.state == .mastered
+
+            // If should be unlocked but is locked, change to notStarted
+            if shouldOutsideBeUnlocked && outsideCell?.state == .locked {
+                updateCell(phaseId: phaseId, location: .outside, state: .notStarted)
+            }
+        }
+    }
+
+    /// Get suggested next cell to practice (first available cell in progression order)
+    public func suggestedNextCell(phaseIds: [String]) -> (phaseId: String, location: LocationTier)? {
+        for phaseId in phaseIds {
+            // Check inside first
+            if let insideCell = cell(for: phaseId, location: .inside) {
+                if insideCell.state == .notStarted || insideCell.state == .inProgress {
+                    return (phaseId, .inside)
+                }
+            }
+
+            // Then check outside
+            if let outsideCell = cell(for: phaseId, location: .outside) {
+                if outsideCell.state == .notStarted || outsideCell.state == .inProgress {
+                    return (phaseId, .outside)
+                }
+            }
+        }
+        return nil
+    }
+
+    /// Count of mastered cells
+    public var masteredCellCount: Int {
+        phaseLocationMatrix.filter { $0.state == .mastered }.count
+    }
+
+    /// Total cell count
+    public var totalCellCount: Int {
+        phaseLocationMatrix.count
+    }
+
+    /// Whether all cells are mastered
+    public var isFullyMastered: Bool {
+        !phaseLocationMatrix.isEmpty && phaseLocationMatrix.allSatisfy { $0.state == .mastered }
+    }
+
+    /// Count of mastered phases (both inside and outside mastered)
+    public func masteredPhaseCount(phaseIds: [String]) -> Int {
+        phaseIds.filter { phaseId in
+            let insideMastered = cell(for: phaseId, location: .inside)?.state == .mastered
+            let outsideMastered = cell(for: phaseId, location: .outside)?.state == .mastered
+            return insideMastered && outsideMastered
+        }.count
     }
 }

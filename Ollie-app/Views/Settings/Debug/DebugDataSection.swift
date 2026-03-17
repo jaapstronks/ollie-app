@@ -29,6 +29,8 @@ struct DebugDataSection: View {
     @State private var cacheCleared = false
     @State private var sharedDBResult: String?
     @State private var isCheckingSharedDB = false
+    @State private var isResettingSharedSync = false
+    @State private var sharedSyncResetResult: String?
 
     var body: some View {
         Section {
@@ -112,6 +114,26 @@ struct DebugDataSection: View {
                     .foregroundStyle(result.contains("Error") || result.contains("0 zones") ? .red : .green)
             }
 
+            // Reset shared sync state (fixes stale sync state issues)
+            Button {
+                Task { await resetSharedSyncState() }
+            } label: {
+                HStack {
+                    Label("Reset Shared Sync State", systemImage: "arrow.counterclockwise.icloud")
+                    if isResettingSharedSync {
+                        Spacer()
+                        ProgressView()
+                    }
+                }
+            }
+            .disabled(isResettingSharedSync)
+
+            if let result = sharedSyncResetResult {
+                Text(result)
+                    .font(.caption)
+                    .foregroundStyle(result.contains("Error") ? .red : .green)
+            }
+
             // Clear discovery cache
             Button {
                 clearDiscoveryCache()
@@ -187,24 +209,22 @@ struct DebugDataSection: View {
         let context = PersistenceController.shared.viewContext
         let profiles = CDPuppyProfile.fetchAllProfiles(in: context)
 
-        guard let profile = profiles.first else {
+        guard !profiles.isEmpty else {
             sharingResult = "Error: No profile found"
             isResettingSharing = false
             return
         }
 
         do {
-            // Check if there's a share
-            let shares = try PersistenceController.shared.fetchShares(matching: [profile.objectID])
-
-            guard let share = shares[profile.objectID] else {
+            // Check if there's a share using CloudKitService
+            guard let share = CloudKitService.shared.currentShare else {
                 sharingResult = "No active share found"
                 isResettingSharing = false
                 return
             }
 
             // Delete the share from CloudKit
-            let container = CKContainer(identifier: "iCloud.nl.jaapstronks.Otis")
+            let container = CKContainer(identifier: PersistenceController.cloudKitContainerIdentifier)
             let privateDatabase = container.privateCloudDatabase
 
             try await privateDatabase.deleteRecord(withID: share.recordID)
@@ -415,29 +435,23 @@ struct DebugDataSection: View {
             diagnosticInfo.append("Orphans: \(orphans.count)")
         }
 
-        // Check CloudKit sharing state
+        // Check CloudKit sharing state via CloudKitService
         print("\n=== CLOUDKIT SHARING STATE ===")
-        for profile in profiles {
-            do {
-                let shares = try PersistenceController.shared.fetchShares(matching: [profile.objectID])
-                if let share = shares[profile.objectID] {
-                    print("Profile '\(profile.name ?? "?")' has CKShare:")
-                    print("  Share URL: \(share.url?.absoluteString ?? "none")")
-                    print("  Participants: \(share.participants.count)")
-                    for participant in share.participants {
-                        let role = participant.role == .owner ? "owner" : "participant"
-                        let status = participant.acceptanceStatus == .accepted ? "accepted" : "pending"
-                        print("    - \(participant.userIdentity.nameComponents?.formatted() ?? "unknown") (\(role), \(status))")
-                    }
-                    diagnosticInfo.append("Share: active with \(share.participants.count) participants")
-                } else {
-                    print("Profile '\(profile.name ?? "?")' has NO CKShare")
-                    diagnosticInfo.append("Share: none")
-                }
-            } catch {
-                print("Error checking share: \(error)")
+        if let share = CloudKitService.shared.currentShare {
+            print("Active CKShare found:")
+            print("  Share URL: \(share.url?.absoluteString ?? "none")")
+            print("  Participants: \(share.participants.count)")
+            for participant in share.participants {
+                let role = participant.role == .owner ? "owner" : "participant"
+                let status = participant.acceptanceStatus == .accepted ? "accepted" : "pending"
+                print("    - \(participant.userIdentity.nameComponents?.formatted() ?? "unknown") (\(role), \(status))")
             }
+            diagnosticInfo.append("Share: active with \(share.participants.count) participants")
+        } else {
+            print("No active CKShare")
+            diagnosticInfo.append("Share: none")
         }
+        print("Is participant: \(CloudKitService.shared.isParticipant)")
         print("=== END SHARING STATE ===")
 
         // Save changes
@@ -522,7 +536,7 @@ struct DebugDataSection: View {
             results.append("Private DB shares: \(shareRecords.count)")
             print("Found \(shareRecords.count) CKShare record(s)")
 
-            for (recordID, result) in shareRecords {
+            for (_, result) in shareRecords {
                 switch result {
                 case .success(let record):
                     if let share = record as? CKShare {
@@ -558,6 +572,32 @@ struct DebugDataSection: View {
 
         sharedDBResult = results.joined(separator: "\n")
         isCheckingSharedDB = false
+    }
+
+    // MARK: - Reset Shared Sync State
+
+    private func resetSharedSyncState() async {
+        isResettingSharedSync = true
+        sharedSyncResetResult = nil
+
+        // Clear tombstones first
+        SyncCoordinator.shared.clearAllTombstones()
+
+        // Reset shared sync engine state and re-fetch
+        await SyncCoordinator.shared.resetSharedSyncState()
+
+        // Check how many profiles we got
+        let context = PersistenceController.shared.viewContext
+        if let sharedStore = PersistenceController.shared.getSharedStore() {
+            let request = NSFetchRequest<NSManagedObject>(entityName: "CDPuppyProfile")
+            request.affectedStores = [sharedStore]
+            let count = (try? context.count(for: request)) ?? 0
+            sharedSyncResetResult = "Reset complete. Shared profiles: \(count)"
+        } else {
+            sharedSyncResetResult = "Reset complete. (No shared store)"
+        }
+
+        isResettingSharedSync = false
     }
 
     // MARK: - Clear Discovery Cache

@@ -94,7 +94,7 @@ extension Strings {
         static let weekRecapTitle = String(localized: "Your week", table: table)
         static let weekRecapReady = String(localized: "Your week recap is ready!", table: table)
         static let viewWeekRecap = String(localized: "View week recap", table: table)
-        static let weekSheetTitle = String(localized: "Weekly Recap", table: table)
+        static let weekSheetTitle = String(localized: "Weekly Recap Title", table: table)
         static let weekWith = String(localized: "week with", table: table)
 
         // Week-specific labels

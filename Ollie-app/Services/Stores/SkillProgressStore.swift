@@ -450,4 +450,123 @@ final class SkillProgressStore: BaseStore, ProfileAccessible {
 
         logger.info("Migrated \(masteredSkills.count) mastered skills to progress tracking")
     }
+
+    // MARK: - Practice Matrix Operations
+
+    /// Update a cell in the phase x location matrix
+    func updateMatrixCell(
+        skillId: String,
+        phaseId: String,
+        location: LocationTier,
+        state: PhaseLocationState
+    ) {
+        var progress = getOrCreateProgress(for: skillId)
+        progress.updateCell(phaseId: phaseId, location: location, state: state)
+
+        // Recalculate unlock states when a cell is mastered
+        if state == .mastered {
+            // We need phase IDs to recalculate - extract from current matrix
+            let phaseIds = Array(Set(progress.phaseLocationMatrix.map(\.phaseId)))
+            progress.recalculateUnlockStates(phaseIds: phaseIds)
+        }
+
+        saveProgress(progress)
+
+        logger.info("Updated matrix cell \(phaseId)/\(location.rawValue) to \(state.rawValue) for \(skillId)")
+    }
+
+    /// Initialize matrix for a skill with given phase IDs
+    func initializeMatrix(skillId: String, phaseIds: [String]) {
+        var progress = getOrCreateProgress(for: skillId)
+
+        // Only initialize if not already done
+        guard progress.phaseLocationMatrix.isEmpty else {
+            logger.debug("Matrix already initialized for \(skillId)")
+            return
+        }
+
+        progress.initializeMatrix(phaseIds: phaseIds)
+        saveProgress(progress)
+
+        logger.info("Initialized matrix with \(phaseIds.count) phases for \(skillId)")
+    }
+
+    /// Get suggested next cell to practice for a skill
+    func suggestedNextCell(for skillId: String, phaseIds: [String]) -> (phaseId: String, location: LocationTier)? {
+        let progress = self.progress(for: skillId)
+        return progress.suggestedNextCell(phaseIds: phaseIds)
+    }
+
+    /// Recalculate unlock states based on current mastery
+    func recalculateUnlockStates(for skillId: String, phaseIds: [String]) {
+        var progress = getOrCreateProgress(for: skillId)
+        progress.recalculateUnlockStates(phaseIds: phaseIds)
+        saveProgress(progress)
+    }
+
+    /// Migrate existing progress to matrix based on current phase
+    /// Called when user opens a skill for first time after update
+    func migrateToMatrix(skillId: String, phaseIds: [String]) {
+        var progress = getOrCreateProgress(for: skillId)
+
+        // Skip if already has matrix
+        guard progress.phaseLocationMatrix.isEmpty else { return }
+
+        // Initialize empty matrix first
+        progress.initializeMatrix(phaseIds: phaseIds)
+
+        // Based on current phase, estimate matrix progress
+        switch progress.phase {
+        case .notStarted:
+            // First phase, inside = notStarted (already set by initializeMatrix)
+            break
+
+        case .luring:
+            // In luring phase - first phase being practiced
+            if let firstPhaseId = phaseIds.first {
+                progress.updateCell(phaseId: firstPhaseId, location: .inside, state: .inProgress)
+            }
+
+        case .addingCue:
+            // Past luring - assume first phase mastered inside
+            if let firstPhaseId = phaseIds.first {
+                progress.updateCell(phaseId: firstPhaseId, location: .inside, state: .mastered)
+                if phaseIds.count > 1 {
+                    progress.updateCell(phaseId: phaseIds[1], location: .inside, state: .inProgress)
+                }
+            }
+
+        case .proofing:
+            // Proofing - multiple phases likely done
+            let masteredCount = min(2, phaseIds.count)
+            for i in 0..<masteredCount {
+                progress.updateCell(phaseId: phaseIds[i], location: .inside, state: .mastered)
+            }
+            if masteredCount < phaseIds.count {
+                progress.updateCell(phaseId: phaseIds[masteredCount], location: .inside, state: .inProgress)
+            }
+
+        case .generalizing:
+            // Generalizing - most phases mastered inside, some outside
+            for i in 0..<phaseIds.count {
+                progress.updateCell(phaseId: phaseIds[i], location: .inside, state: .mastered)
+                if i < phaseIds.count / 2 {
+                    progress.updateCell(phaseId: phaseIds[i], location: .outside, state: .mastered)
+                }
+            }
+
+        case .maintaining, .needsWork:
+            // Mastered or needs work - assume all done
+            for phaseId in phaseIds {
+                progress.updateCell(phaseId: phaseId, location: .inside, state: .mastered)
+                progress.updateCell(phaseId: phaseId, location: .outside, state: .mastered)
+            }
+        }
+
+        // Recalculate unlocks
+        progress.recalculateUnlockStates(phaseIds: phaseIds)
+
+        saveProgress(progress)
+        logger.info("Migrated \(skillId) to matrix based on phase \(progress.phase.rawValue)")
+    }
 }

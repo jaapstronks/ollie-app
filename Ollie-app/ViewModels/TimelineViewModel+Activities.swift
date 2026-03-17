@@ -6,6 +6,7 @@
 //  Extracted from TimelineViewModel to improve code organization
 //
 
+import ActivityKit
 import Foundation
 import OtisShared
 import SwiftUI
@@ -32,6 +33,34 @@ extension TimelineViewModel {
     /// Whether any activity is in progress
     var hasActivityInProgress: Bool {
         activityManager.currentActivity != nil
+    }
+}
+
+// MARK: - Live Activity Helpers
+
+extension TimelineViewModel {
+
+    /// Check for and handle pending wake-ups from the Live Activity "Wake Up" button
+    /// Call this when the app becomes active or enters foreground
+    func checkForPendingLiveActivityActions() {
+        guard #available(iOS 16.1, *) else { return }
+
+        // Check for pending wake-up from nap Live Activity
+        LiveActivityManager.shared.handlePendingWakeUp { [weak self] _ in
+            // Log the wake-up at current time
+            self?.logWakeUp(time: Date())
+        }
+    }
+
+    /// Clean up orphaned Live Activities that don't match the current app state
+    /// Call this on app launch
+    func cleanupOrphanedLiveActivities() {
+        guard #available(iOS 16.1, *) else { return }
+
+        let currentActivityId = activityManager.currentActivity?.sleepSessionId
+        LiveActivityManager.shared.cleanupOrphanedActivities(
+            currentInProgressActivityId: currentActivityId
+        )
     }
 }
 

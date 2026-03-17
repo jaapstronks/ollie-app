@@ -173,12 +173,12 @@ struct Day7ValueSummaryCard: View {
 
             // Stats row
             HStack(spacing: 16) {
-                StatPill(
+                TrialStatPill(
                     icon: "chart.line.uptrend.xyaxis",
                     text: Strings.Trial.day7PatternsLearned(cachedPatternsLearned)
                 )
 
-                StatPill(
+                TrialStatPill(
                     icon: "lightbulb.fill",
                     text: Strings.Trial.day7InsightsGenerated(cachedInsightsGenerated)
                 )
@@ -230,7 +230,7 @@ struct Day7ValueSummaryCard: View {
 }
 
 /// Small pill showing a stat with icon
-private struct StatPill: View {
+private struct TrialStatPill: View {
     let icon: String
     let text: String
 

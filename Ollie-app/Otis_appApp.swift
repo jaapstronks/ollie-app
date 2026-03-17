@@ -36,6 +36,7 @@ struct OtisApp: App {
     @State private var appointmentStore = AppointmentStore()
     @State private var weightStore = WeightStore()
     @State private var skillProgressStore = SkillProgressStore()
+    @State private var trainingTheoryStore = TrainingTheoryStore()
     @State private var regressionLogStore = RegressionLogStore()
     @State private var routineStore = RoutineStore()
     @State private var subscriptionManager = SubscriptionManager.shared
@@ -44,6 +45,7 @@ struct OtisApp: App {
     @State private var unitPreferences = UnitPreferences.shared
     @State private var trainingMasteryStore = TrainingMasteryStore.shared
     @State private var walkTrackingService = WalkTrackingService()
+    @State private var explorationStore = ExplorationStore()
     private var cloudKit = CloudKitService.shared
     private let dailyAggregateService = DailyAggregateService.shared
     @State private var toastManager = ToastManager()
@@ -94,6 +96,7 @@ struct OtisApp: App {
                 .environment(weightStore)
                 .environment(subscriptionManager)
                 .environment(skillProgressStore)
+                .environment(trainingTheoryStore)
                 .environment(cloudKit)
                 .environment(atmosphereProvider)
                 .environment(foodRecallService)
@@ -101,6 +104,7 @@ struct OtisApp: App {
                 .environment(unitPreferences)
                 .environment(trainingMasteryStore)
                 .environment(walkTrackingService)
+                .environment(explorationStore)
                 .environment(momentsViewModel)
                 .environment(placesMapViewModel)
                 .toastContainer()
@@ -125,6 +129,9 @@ struct OtisApp: App {
                 .onReceive(NotificationCenter.default.publisher(for: .shareAccessRevoked)) { _ in
                     handleShareAccessRevoked()
                 }
+                .onReceive(NotificationCenter.default.publisher(for: .cloudKitShareReceived)) { notification in
+                    handleShareReceived(notification)
+                }
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
                     ReviewService.shared.recordAppActive()
                     Analytics.trackDay2ReturnIfEligible(profileId: profileStore.profile?.id)
@@ -146,8 +153,108 @@ struct OtisApp: App {
 
 private extension OtisApp {
 
+    /// Initialize the CKSyncEngine-based sync coordinator
+    @MainActor
+    func initializeSyncCoordinator(persistence: PersistenceController) async {
+        let logger = Logger.otis(category: "App")
+        logger.info("Initializing SyncCoordinator...")
+
+        // Configure with Core Data context
+        SyncCoordinator.shared.configure(with: persistence.viewContext)
+
+        // Register all entity handlers
+        SyncCoordinator.shared.registerAllHandlers()
+
+        // Wire up store assignment for shared records
+        // This ensures records from the shared CloudKit database go to the shared Core Data store
+        SyncCoordinator.shared.getSharedStore = { [weak persistence] in
+            persistence?.getSharedStore()
+        }
+
+        // Set up callback to refresh stores when remote changes arrive
+        // Capture all stores that need refreshing
+        let milStore = milestoneStore
+        let contactStore = contactStore
+        let socStore = socializationStore
+        let spotStore = spotStore
+        let medStore = medicationStore
+        let docStore = documentStore
+        let apptStore = appointmentStore
+        let wgtStore = weightStore
+        let rtStore = routineStore
+        let skillStore = skillProgressStore
+        let explStore = explorationStore
+
+        SyncCoordinator.shared.onRemoteChanges = { [weak profileStore, weak eventStore] in
+            Task { @MainActor in
+                // First load profiles so relationships can be resolved
+                profileStore?.loadAllProfiles()
+                // Link any newly synced orphaned events to the current profile
+                profileStore?.migrateOrphanedEventsIfNeeded()
+
+                // Refresh all stores that depend on profile
+                await eventStore?.refreshFromCloud()
+                milStore.performInitialLoad()
+                contactStore.performInitialLoad()
+                socStore.performInitialLoad()
+                spotStore.performInitialLoad()
+                medStore.performInitialLoad()
+                docStore.performInitialLoad()
+                apptStore.performInitialLoad()
+                wgtStore.performInitialLoad()
+                rtStore.performInitialLoad()
+                skillStore.performInitialLoad()
+                explStore.performInitialLoad()
+            }
+        }
+
+        // Start the sync engines
+        await SyncCoordinator.shared.start()
+
+        // Schedule initial fetch after a brief delay to avoid CKSyncEngine delegate callback issues
+        // CKSyncEngine doesn't allow awaiting fetchChanges from within its delegate chain
+        logger.info("SyncCoordinator initialized, scheduling initial fetch...")
+
+        scheduleInitialCloudKitFetch(persistence: persistence)
+    }
+
+    /// Schedule initial CloudKit fetch in a way that avoids CKSyncEngine delegate callback deadlocks
+    nonisolated func scheduleInitialCloudKitFetch(persistence: PersistenceController) {
+        // Use DispatchQueue to break out of the CKSyncEngine delegate callback chain
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            Task { @MainActor in
+                let logger = Logger.otis(category: "App")
+                logger.info("Fetching changes from CloudKit...")
+
+                await SyncCoordinator.shared.fetchChanges()
+
+                // Save any fetched data
+                if persistence.viewContext.hasChanges {
+                    do {
+                        try persistence.save()
+                        logger.info("Saved fetched CloudKit data to Core Data")
+                    } catch {
+                        logger.error("Failed to save fetched CloudKit data: \(error.localizedDescription)")
+                    }
+                }
+
+                logger.info("Initial CloudKit fetch complete")
+            }
+        }
+    }
+
     func performInitialSetup() async {
         let logger = Logger.otis(category: "App")
+
+        // Debug: Check if there's pending share metadata
+        if let pendingMetadata = PendingShareMetadata.shared.metadata {
+            logger.info("🔗 STARTUP: Found pending share METADATA - will process after CloudKit setup")
+            logger.info("🔗   Container: \(pendingMetadata.containerIdentifier)")
+        } else if let pendingURL = PendingShareMetadata.shared.pendingURL {
+            logger.info("🔗 STARTUP: Found pending share URL: \(pendingURL.absoluteString)")
+        } else {
+            logger.info("🔗 STARTUP: No pending share metadata or URL found")
+        }
 
         // Start app launch transaction for Sentry performance monitoring
         let launchTransaction = CrashReporter.startTransaction(name: "App Launch", operation: "app.launch")
@@ -182,6 +289,7 @@ private extension OtisApp {
         skillProgressStore.configureProfileStore(profileStore)
         milestoneStore.configureProfileStore(profileStore)
         UserIdentityStore.shared.configureProfileStore(profileStore)
+        explorationStore.configureProfileStore(profileStore)
         wireupSpan?.finish()
 
         // Seed default milestones (local operation, fast)
@@ -231,6 +339,10 @@ private extension OtisApp {
         async let cloudKitTask: Void = {
             await CloudKitService.shared.setup()
             await UserIdentityStore.shared.setup()
+
+            // Initialize CKSyncEngine-based sync
+            await initializeSyncCoordinator(persistence: persistence)
+
             await profStore.initialSync()
         }()
 
@@ -321,6 +433,27 @@ private extension OtisApp {
             .compactMap { $0 as? UIWindowScene }
             .first?.windows.first?.rootViewController?
             .present(alert, animated: true)
+    }
+
+    func handleShareReceived(_ notification: Notification) {
+        let logger = Logger.otis(category: "App")
+        logger.info("🔗 Received cloudKitShareReceived notification - processing with correct ProfileStore")
+
+        // Get the metadata from the notification or from pending storage
+        guard let metadata = notification.object as? CKShare.Metadata ?? PendingShareMetadata.shared.metadata else {
+            logger.error("🔗 No share metadata found in notification or pending storage")
+            return
+        }
+
+        // Clear the pending metadata since we're processing it now
+        PendingShareMetadata.shared.metadata = nil
+
+        Task {
+            await CloudKitShareHandler.acceptShareInvitation(
+                metadata: metadata,
+                profileStore: profileStore
+            )
+        }
     }
 
     func handleOpenURL(_ url: URL) {

@@ -33,12 +33,7 @@ struct SentimentCheckInCard: View {
                 Text(Strings.Sentiment.checkInTitle)
                     .font(.headline)
                 Spacer()
-                Button {
-                    onDismiss()
-                } label: {
-                    Image(systemName: "xmark")
-                        .foregroundStyle(.secondary)
-                }
+                CardDismissButton(action: onDismiss)
             }
 
             // Context summary

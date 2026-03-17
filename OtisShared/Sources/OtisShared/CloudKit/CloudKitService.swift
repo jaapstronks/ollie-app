@@ -2,8 +2,9 @@
 //  CloudKitService.swift
 //  OtisShared
 //
-//  Simplified CloudKit service for sharing functionality with Core Data
-//  Sync is handled automatically by NSPersistentCloudKitContainer
+//  CloudKit service for sharing functionality.
+//  Data sync is handled by CKSyncEngine via SyncCoordinator (iOS 17+).
+//  This service handles: sharing, share acceptance, and media (photos)
 //
 
 import Foundation
@@ -11,8 +12,8 @@ import CloudKit
 import CoreData
 import os
 
-/// Manages CloudKit sharing with Core Data
-/// Note: Data sync is automatic via NSPersistentCloudKitContainer
+/// Manages CloudKit sharing
+/// Data sync is handled by CKSyncEngine via SyncCoordinator (not NSPersistentCloudKitContainer)
 /// This service handles: sharing, share acceptance, and media (photos)
 @Observable
 @MainActor
@@ -193,17 +194,21 @@ public final class CloudKitService {
     }
 
     /// Refresh share state from CloudKit using the profile managed object
+    /// The container parameter is kept for API compatibility but is no longer used
+    /// (sharing now uses direct CloudKit APIs, not NSPersistentCloudKitContainer)
     public func refreshShareState(
         for profile: NSManagedObject,
-        using persistentContainer: NSPersistentCloudKitContainer
+        using persistentContainer: Any
     ) async {
         await shareManager.refreshShareState(for: profile, using: persistentContainer)
     }
 
     /// Get or create a share for the profile
+    /// The container parameter is kept for API compatibility but is no longer used
+    /// (sharing now uses direct CloudKit APIs, not NSPersistentCloudKitContainer)
     public func getOrCreateShare(
         for profile: NSManagedObject,
-        using persistentContainer: NSPersistentCloudKitContainer
+        using persistentContainer: Any
     ) async throws -> CKShare {
         try await shareManager.getOrCreateShare(for: profile, using: persistentContainer)
     }
@@ -215,8 +220,49 @@ public final class CloudKitService {
 
     // MARK: - Share Acceptance
 
+    /// Accept a CloudKit share invitation
+    /// Uses direct CloudKit API (CKAcceptSharesOperation) instead of NSPersistentCloudKitContainer
+    public func acceptShareInvitation(from metadata: CKShare.Metadata) async throws {
+        logger.info("Accepting share invitation...")
+        logger.info("  Share record ID: \(metadata.share.recordID)")
+        logger.info("  Zone: \(metadata.share.recordID.zoneID.zoneName)")
+        logger.info("  Owner: \(metadata.share.recordID.zoneID.ownerName)")
+        logger.info("  Container: \(metadata.containerIdentifier)")
+
+        return try await withCheckedThrowingContinuation { continuation in
+            let operation = CKAcceptSharesOperation(shareMetadatas: [metadata])
+
+            operation.perShareResultBlock = { [weak self] shareMetadata, result in
+                guard let self else { return }
+
+                switch result {
+                case .success(let acceptedShare):
+                    logger.info("Share accepted successfully")
+                    logger.info("  Share URL: \(acceptedShare.url?.absoluteString ?? "none")")
+                case .failure(let error):
+                    logger.error("Failed to accept share: \(error.localizedDescription)")
+                }
+            }
+
+            operation.acceptSharesResultBlock = { [weak self] result in
+                guard let self else { return }
+
+                switch result {
+                case .success:
+                    logger.info("Share invitation accepted successfully")
+                    continuation.resume()
+                case .failure(let error):
+                    logger.error("Share acceptance failed: \(error.localizedDescription)")
+                    continuation.resume(throwing: error)
+                }
+            }
+
+            operation.qualityOfService = .userInitiated
+            container.add(operation)
+        }
+    }
+
     /// Mark the user as a participant after share acceptance
-    /// Call this after accepting a share via PersistenceController.acceptShareInvitation
     public func markAsParticipant() {
         isParticipant = true
         logger.info("Marked as participant after share acceptance")
@@ -229,11 +275,12 @@ public final class CloudKitService {
         container
     }
 
-    // MARK: - Media Service
+    // MARK: - Asset Services
 
-    /// Media service for photo operations (CKAsset handling)
-    @ObservationIgnored public lazy var mediaService: MediaCloudService = {
-        MediaCloudService(
+    /// Lazily create an AssetCloudService with the given configuration
+    private func createAssetService(config: AssetCloudConfig) -> AssetCloudService {
+        AssetCloudService(
+            config: config,
             deviceID: deviceID,
             getDatabase: { [weak self] in
                 guard let self = self else { return CKContainer.default().privateCloudDatabase }
@@ -243,8 +290,6 @@ public final class CloudKitService {
                 guard let self = self else {
                     return CKRecordZone.ID(zoneName: "com.apple.coredata.cloudkit.zone", ownerName: CKCurrentUserDefaultName)
                 }
-                // For participants, use the shared zone's owner name
-                // For owners, use CKCurrentUserDefaultName
                 let ownerName = self.isParticipant ? (self.sharedZoneOwnerName ?? CKCurrentUserDefaultName) : CKCurrentUserDefaultName
                 return CKRecordZone.ID(zoneName: self.zoneName, ownerName: ownerName)
             },
@@ -255,31 +300,16 @@ public final class CloudKitService {
                 self?.currentUserRecordName
             }
         )
+    }
+
+    /// Media service for photo operations (event photos)
+    @ObservationIgnored public lazy var mediaService: AssetCloudService = {
+        createAssetService(config: .eventMedia)
     }()
 
-    // MARK: - Profile Photo Service
-
     /// Profile photo service for syncing profile photos via CloudKit
-    @ObservationIgnored public lazy var profilePhotoService: ProfilePhotoCloudService = {
-        ProfilePhotoCloudService(
-            deviceID: deviceID,
-            getDatabase: { [weak self] in
-                guard let self = self else { return CKContainer.default().privateCloudDatabase }
-                return self.isParticipant ? self.sharedDatabase : self.privateDatabase
-            },
-            getZoneID: { [weak self] in
-                guard let self = self else {
-                    return CKRecordZone.ID(zoneName: "com.apple.coredata.cloudkit.zone", ownerName: CKCurrentUserDefaultName)
-                }
-                // For participants, use the shared zone's owner name
-                // For owners, use CKCurrentUserDefaultName
-                let ownerName = self.isParticipant ? (self.sharedZoneOwnerName ?? CKCurrentUserDefaultName) : CKCurrentUserDefaultName
-                return CKRecordZone.ID(zoneName: self.zoneName, ownerName: ownerName)
-            },
-            isCloudAvailable: { [weak self] in
-                self?.isCloudAvailable ?? false
-            }
-        )
+    @ObservationIgnored public lazy var profilePhotoService: AssetCloudService = {
+        createAssetService(config: .profilePhoto)
     }()
 
     // MARK: - Photo Operations
@@ -289,8 +319,8 @@ public final class CloudKitService {
     public func uploadPhoto(
         localURL: URL,
         eventId: UUID
-    ) async throws -> MediaCloudService.UploadResult {
-        try await mediaService.uploadPhoto(localURL: localURL, eventId: eventId)
+    ) async throws -> AssetUploadResult {
+        try await mediaService.upload(localURL: localURL, entityId: eventId)
     }
 
     /// Download a photo from CloudKit
@@ -303,12 +333,12 @@ public final class CloudKitService {
         to destinationURL: URL,
         ownerName: String? = nil
     ) async throws -> Bool {
-        try await mediaService.downloadPhoto(eventId: eventId, to: destinationURL, ownerName: ownerName)
+        try await mediaService.download(entityId: eventId, to: destinationURL, ownerName: ownerName)
     }
 
     /// Delete a photo from CloudKit
     public func deletePhoto(eventId: UUID) async throws {
-        try await mediaService.deletePhoto(eventId: eventId)
+        try await mediaService.delete(entityId: eventId)
     }
 
     // MARK: - Profile Photo Operations
@@ -318,7 +348,8 @@ public final class CloudKitService {
         localURL: URL,
         profileId: UUID
     ) async throws -> CKRecord.ID {
-        try await profilePhotoService.uploadPhoto(localURL: localURL, profileId: profileId)
+        let result = try await profilePhotoService.upload(localURL: localURL, entityId: profileId)
+        return result.recordID
     }
 
     /// Download a profile photo from CloudKit
@@ -331,17 +362,17 @@ public final class CloudKitService {
         to destinationURL: URL,
         ownerName: String? = nil
     ) async throws -> Bool {
-        try await profilePhotoService.downloadPhoto(profileId: profileId, to: destinationURL, ownerName: ownerName)
+        try await profilePhotoService.download(entityId: profileId, to: destinationURL, ownerName: ownerName)
     }
 
     /// Delete a profile photo from CloudKit
     public func deleteProfilePhoto(profileId: UUID) async throws {
-        try await profilePhotoService.deletePhoto(profileId: profileId)
+        try await profilePhotoService.delete(entityId: profileId)
     }
 
     /// Check if a profile photo exists in CloudKit
     public func profilePhotoExists(profileId: UUID) async throws -> Bool {
-        try await profilePhotoService.photoExists(profileId: profileId)
+        try await profilePhotoService.exists(entityId: profileId)
     }
 }
 

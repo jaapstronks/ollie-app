@@ -37,12 +37,7 @@ struct HealthCheckInCard: View {
                 Text(Strings.HealthLogging.healthCheckIn)
                     .font(.headline)
                 Spacer()
-                Button {
-                    onDismiss()
-                } label: {
-                    Image(systemName: "xmark")
-                        .foregroundStyle(.secondary)
-                }
+                CardDismissButton(action: onDismiss)
             }
 
             // Context summary

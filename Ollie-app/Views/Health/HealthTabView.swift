@@ -126,6 +126,7 @@ struct HealthTabView: View {
                     .animatedAppear(delay: 0.30)
                 }
                 .padding()
+                .clipped()
             }
             .scrollBounceBehavior(.basedOnSize, axes: .horizontal)
             .navigationTitle(Strings.Tabs.health)

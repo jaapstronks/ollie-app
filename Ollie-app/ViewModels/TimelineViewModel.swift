@@ -70,6 +70,10 @@ class TimelineViewModel {
     /// REACTIVITY FIX: Ensures sleep status card updates instantly after logging wake-up
     private(set) var cachedSleepState: SleepState = .unknown
 
+    /// Cached potty prediction - updated immediately when events change
+    /// REACTIVITY FIX: Ensures potty status card updates instantly after logging potty
+    private(set) var cachedPottyPrediction: PottyPrediction?
+
     /// Cached separated upcoming items - updated only when events/forecasts change
     /// PERFORMANCE: Avoids UpcomingCalculations + AI reordering on every view render
     private(set) var cachedSeparatedItems: (actionable: [ActionableItem], upcoming: [UpcomingItem]) = ([], [])
@@ -678,6 +682,16 @@ class TimelineViewModel {
         // REACTIVITY FIX: Update sleep state immediately for status card content
         // This ensures the sleep card shows correct state (sleeping vs awake) after logging
         self.cachedSleepState = SleepCalculations.currentSleepState(events: freshRecentEvents)
+
+        // REACTIVITY FIX: Update potty prediction immediately for instant card updates
+        // This ensures the potty status card updates/hides instantly after logging potty
+        if let profile = profileStore.profile {
+            self.cachedPottyPrediction = PredictionCalculations.calculatePrediction(
+                events: freshRecentEvents,
+                config: profile.predictionConfig,
+                gapStats: cachedGapStats
+            )
+        }
     }
 
     /// Notify to refresh notifications

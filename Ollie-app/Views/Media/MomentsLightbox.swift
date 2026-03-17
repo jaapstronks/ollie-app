@@ -3,6 +3,7 @@
 //  Ollie-app
 //
 //  Full-screen photo gallery using ScrollView + scrollTargetBehavior (iOS 17+)
+//  No GeometryReader - uses containerRelativeFrame for automatic page sizing
 //
 
 import SwiftUI
@@ -17,7 +18,6 @@ struct MomentsLightbox: View {
 
     @Environment(EventStore.self) private var eventStore
     @Environment(ProfileStore.self) private var profileStore
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     @State private var localEvents: [PuppyEvent]
     @State private var currentEventID: UUID?
@@ -37,7 +37,7 @@ struct MomentsLightbox: View {
         self.onDismiss = onDismiss
         self.onDelete = onDelete
         self._localEvents = State(initialValue: photoEvents)
-        // Initialize currentEventID - always set to a valid value
+        // Initialize currentEventID
         let validIndex = min(max(0, selectedIndex.wrappedValue), max(0, photoEvents.count - 1))
         if !photoEvents.isEmpty {
             self._currentEventID = State(initialValue: photoEvents[validIndex].id)
@@ -53,30 +53,36 @@ struct MomentsLightbox: View {
     }
 
     var body: some View {
-        GeometryReader { geometry in
-            ZStack {
-                // Background
-                Color.black
+        ZStack {
+            // Background - extends into safe area
+            Color.black
+                .ignoresSafeArea()
 
-                // Ambient glow from current image
-                if let image = loadedImages[currentEvent.id] {
-                    Image(uiImage: image)
-                        .resizable()
-                        .scaledToFill()
-                        .blur(radius: 80)
-                        .opacity(0.2)
-                        .scaleEffect(1.5)
-                }
+            // Ambient glow from current image - extends into safe area
+            if let image = loadedImages[currentEvent.id] {
+                Image(uiImage: image)
+                    .resizable()
+                    .scaledToFill()
+                    .blur(radius: 80)
+                    .opacity(0.2)
+                    .scaleEffect(1.5)
+                    .ignoresSafeArea()
+            }
 
-                // Main carousel using ScrollView + scrollTargetBehavior
+            // Main content - respects safe area naturally
+            VStack(spacing: 0) {
+                // Top navigation bar
+                topNavigationBar
+                    .padding(.horizontal, 16)
+                    .padding(.top, 8)
+
+                // Photo carousel - takes remaining space
                 ScrollView(.horizontal) {
                     LazyHStack(spacing: 0) {
                         ForEach(localEvents) { event in
                             MomentPageView(
                                 event: event,
-                                loadedImage: loadedImages[event.id],
-                                safeAreaTop: geometry.safeAreaInsets.top,
-                                safeAreaBottom: geometry.safeAreaInsets.bottom
+                                loadedImage: loadedImages[event.id]
                             )
                             .containerRelativeFrame(.horizontal)
                             .id(event.id)
@@ -88,33 +94,22 @@ struct MomentsLightbox: View {
                 .scrollPosition(id: $currentEventID)
                 .scrollIndicators(.hidden)
 
-                // Fixed overlay controls
-                VStack(spacing: 0) {
-                    // Top bar
-                    topNavigationBar
-                        .padding(.horizontal, 16)
-                        .padding(.top, geometry.safeAreaInsets.top + 8)
+                // Bottom info card
+                bottomInfoCard
+                    .padding(.horizontal, 16)
+                    .padding(.top, 8)
+                    .padding(.bottom, 8)
 
-                    Spacer()
-
-                    // Bottom info card
-                    bottomInfoCard
-                        .padding(.horizontal, 16)
-                        .padding(.bottom, 8)
-
-                    // Page indicator dots
-                    if localEvents.count > 1 {
-                        pageIndicator
-                            .padding(.bottom, geometry.safeAreaInsets.bottom + 16)
-                    } else {
-                        Spacer().frame(height: geometry.safeAreaInsets.bottom + 16)
-                    }
+                // Page indicator dots
+                if localEvents.count > 1 {
+                    pageIndicator
+                        .padding(.bottom, 16)
+                } else {
+                    Spacer().frame(height: 16)
                 }
             }
         }
-        .ignoresSafeArea()
         .onChange(of: currentEventID) { _, newID in
-            // Sync selectedIndex when scroll position changes
             if let newID, let index = localEvents.firstIndex(where: { $0.id == newID }) {
                 selectedIndex = index
             }
@@ -147,7 +142,6 @@ struct MomentsLightbox: View {
         .task {
             await preloadImages()
         }
-        // Accessibility: adjustable trait for carousel navigation
         .accessibilityAdjustableAction { direction in
             switch direction {
             case .increment:
@@ -306,7 +300,6 @@ struct MomentsLightbox: View {
         if localEvents.isEmpty {
             onDismiss()
         } else {
-            // Move to next photo, or previous if we deleted the last one
             let newIndex = min(deletedIndex, localEvents.count - 1)
             currentEventID = localEvents[newIndex].id
             selectedIndex = newIndex
@@ -333,39 +326,28 @@ struct MomentsLightbox: View {
 private struct MomentPageView: View {
     let event: PuppyEvent
     let loadedImage: UIImage?
-    let safeAreaTop: CGFloat
-    let safeAreaBottom: CGFloat
-
-    // Space needed for overlay controls
-    private var topControlsHeight: CGFloat { 56 + safeAreaTop }
-    private var bottomControlsHeight: CGFloat { 180 + safeAreaBottom }
 
     var body: some View {
-        VStack(spacing: 0) {
-            // Top spacing for controls
+        VStack {
             Spacer()
-                .frame(height: topControlsHeight)
 
-            // Photo
+            // Photo - centered, aspect-fit
             if let uiImage = loadedImage {
                 Image(uiImage: uiImage)
                     .resizable()
                     .scaledToFit()
                     .clipShape(RoundedRectangle(cornerRadius: 16))
                     .shadow(color: .black.opacity(0.3), radius: 20, y: 10)
-                    .padding(.horizontal, 20)
             } else {
                 RoundedRectangle(cornerRadius: 16)
                     .fill(.ultraThinMaterial)
                     .aspectRatio(3/4, contentMode: .fit)
                     .overlay(ProgressView().tint(.white))
-                    .padding(.horizontal, 20)
             }
 
-            // Bottom spacing for controls
             Spacer()
-                .frame(height: bottomControlsHeight)
         }
+        .padding(.horizontal, 20)
         .accessibilityElement(children: .combine)
         .accessibilityLabel(Strings.MediaPreview.photoOf(event.type.label))
         .accessibilityHint("Swipe left or right to browse moments")

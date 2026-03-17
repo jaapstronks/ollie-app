@@ -50,12 +50,41 @@ class MomentsViewModel {
 
     /// Check if there are new photo events that should be added to our list
     private func checkForNewPhotoEvents() {
-        // Get today's events with photos that we don't already have
-        let newEvents = paginationService.findNewPhotoEvents(from: eventStore.events)
+        // First check today's events (most common case for new photos)
+        let todayNewEvents = paginationService.findNewPhotoEvents(from: eventStore.events)
+
+        if !todayNewEvents.isEmpty {
+            addNewEventsToGallery(todayNewEvents)
+            return
+        }
+
+        // If no new events from today, check the full date range asynchronously
+        // This handles photos with EXIF dates from the past
+        Task {
+            await checkForNewPhotoEventsAsync()
+        }
+    }
+
+    /// Async check for new photo events across the full date range
+    /// Handles photos selected from library with past dates
+    private func checkForNewPhotoEventsAsync() async {
+        let calendar = Calendar.current
+        let today = Date()
+        guard let startDate = calendar.date(byAdding: .year, value: -1, to: today) else { return }
+
+        // Query for all photo events in the pagination range
+        let allPhotoEvents = await eventStore.getEventsWithMediaAsync(from: startDate, to: today)
+
+        // Find events not in our loaded set
+        let newEvents = allPhotoEvents.filter { !paginationService.loadedEventIds.contains($0.id) }
 
         guard !newEvents.isEmpty else { return }
 
-        // Add new events to our list
+        addNewEventsToGallery(newEvents)
+    }
+
+    /// Add new photo events to the gallery and update state
+    private func addNewEventsToGallery(_ newEvents: [PuppyEvent]) {
         for event in newEvents {
             events.insert(event, at: 0)
             paginationService.markAsLoaded(event.id)

@@ -125,11 +125,25 @@ extension Strings {
     // MARK: - Walk Target Nudge
     enum WalkNudge {
         static let title = String(localized: "Walk schedule review", table: table)
-        static func subtitle(actual: String, target: Int) -> String {
-            String(localized: "You're averaging \(actual) walks/day, but your target is \(target). Adjust?", table: table)
+
+        /// Formats the average into natural language like "about 5" or "5 to 6"
+        static func formatAverage(_ average: Double) -> String {
+            let rounded = Int(average.rounded())
+            let decimal = average - Double(Int(average))
+
+            // 4.8-5.2 → "about 5", 5.3-5.8 → "5 to 6"
+            if decimal >= 0.3 && decimal <= 0.8 {
+                return String(localized: "\(rounded) to \(rounded + 1)", table: table, comment: "Range format like '5 to 6'")
+            } else {
+                return String(localized: "about \(rounded)", table: table, comment: "Approximate format like 'about 5'")
+            }
         }
-        static let keepTarget = String(localized: "Keep target", table: table)
-        static let adjustSchedule = String(localized: "Adjust schedule", table: table)
+
+        static func subtitle(actual: String, target: Int) -> String {
+            String(localized: "You log \(actual) walks per day, but your target is \(target). Adjust?", table: table)
+        }
+        static let keepTarget = String(localized: "Keep it", table: table)
+        static let adjustSchedule = String(localized: "Adjust", table: table)
     }
 
     // MARK: - Walk Summary Card

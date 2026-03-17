@@ -48,8 +48,15 @@ extension TimelineViewModel {
     }
 
     /// Current potty prediction with urgency level and triggers
-    /// PERFORMANCE: Uses cached events to avoid synchronous Core Data fetch
+    /// REACTIVITY FIX: Returns cachedPottyPrediction which is updated immediately when events change
+    /// This ensures potty status card updates/hides instantly after logging potty events
     var pottyPrediction: PottyPrediction {
+        // Use cached value that's updated immediately in syncEventsFromStore()
+        if let cached = cachedPottyPrediction {
+            return cached
+        }
+
+        // Fallback for initial load before first sync
         guard let profile = profileStore.profile else {
             return PottyPrediction(
                 urgency: .unknown,

@@ -42,65 +42,102 @@ xcrun simctl spawn <UDID> log stream --predicate 'subsystem=="nl.jaapstronks.Oti
 
 ### 1.2 All Entity Types Sync
 
-Test that each entity type syncs correctly:
+The debug UI now supports creating and testing all 22 entity types with predictable test IDs.
 
-| Entity | Create | Sync | Verify in CloudKit |
-|--------|--------|------|-------------------|
-| CDPuppyProfile | [ ] | [ ] | [ ] |
-| CDPuppyEvent (all types) | [ ] | [ ] | [ ] |
-| CDWeightMeasurement | [ ] | [ ] | [ ] |
-| CDMilestone | [ ] | [ ] | [ ] |
-| CDDocument | [ ] | [ ] | [ ] |
-| CDDogAppointment | [ ] | [ ] | [ ] |
-| CDWalkSpot | [ ] | [ ] | [ ] |
-| CDDogContact | [ ] | [ ] | [ ] |
-| CDExposure (socialization) | [ ] | [ ] | [ ] |
-| CDComfortableItem | [ ] | [ ] | [ ] |
-| CDEarlyMilestone | [ ] | [ ] | [ ] |
-| CDMedicationCompletion | [ ] | [ ] | [ ] |
-| CDRoutineItem | [ ] | [ ] | [ ] |
-| CDWeightGoal | [ ] | [ ] | [ ] |
-| CDBodyConditionScore | [ ] | [ ] | [ ] |
-| CDGroomingActivity | [ ] | [ ] | [ ] |
-| CDEnrichmentActivity | [ ] | [ ] | [ ] |
-| CDSkillProgress | [ ] | [ ] | [ ] |
-| CDMasteredSkill | [ ] | [ ] | [ ] |
-| CDRegressionLog | [ ] | [ ] | [ ] |
-| CDExploredTile | [ ] | [ ] | [ ] |
-| CDUserIdentity | [ ] | [ ] | [ ] |
-| CDUserSentimentCheckIn | [ ] | [ ] | [ ] |
+**Quick Testing Workflow:**
+1. Start log capture: `./scripts/sync-test.sh -t`
+2. In app: Settings > Developer Tools > Sync Testing
+3. Tap "Create Basic Test Data" (creates profile + 8 events + weight)
+4. Tap "Create All Entity Types" (creates all 19 additional entities)
+5. Tap "Force Full Sync"
+6. Watch logs for `[QUEUE]` → `[SENT]` for each entity type
+7. Verify in CloudKit Dashboard
 
-**How to test each:**
-1. Create an instance of the entity in the app
-2. Watch logs for `[QUEUE]` and `[SENT]` with the record type
-3. Verify in CloudKit Dashboard
+**Or test individually:**
+- Expand "Additional Entities" disclosure group
+- Tap "Create" next to any entity type to create just that one
+- Tap "Force Full Sync" to sync it
+
+| Entity | Test ID | Status |
+|--------|---------|--------|
+| CDPuppyProfile | AA000000-...-000001 | [ ] |
+| CDPuppyEvent (8 types) | AA000000-...-000010-17 | [ ] |
+| CDWeightMeasurement | AA000000-...-000020 | [ ] |
+| CDMilestone | AA000000-...-000021 | [ ] |
+| CDWalkSpot | AA000000-...-000030 | [ ] |
+| CDDogContact | AA000000-...-000031 | [ ] |
+| CDDogAppointment | AA000000-...-000032 | [ ] |
+| CDDocument | AA000000-...-000033 | [ ] |
+| CDExposure | AA000000-...-000034 | [ ] |
+| CDComfortableItem | AA000000-...-000035 | [ ] |
+| CDEarlyMilestone | AA000000-...-000036 | [ ] |
+| CDMedicationCompletion | AA000000-...-000037 | [ ] |
+| CDRoutineItem | AA000000-...-000038 | [ ] |
+| CDWeightGoal | AA000000-...-000039 | [ ] |
+| CDBodyConditionScore | AA000000-...-00003A | [ ] |
+| CDGroomingActivity | AA000000-...-00003B | [ ] |
+| CDEnrichmentActivity | AA000000-...-00003C | [ ] |
+| CDSkillProgress | AA000000-...-00003D | [ ] |
+| CDMasteredSkill | AA000000-...-00003E | [ ] |
+| CDRegressionLog | AA000000-...-00003F | [ ] |
+| CDExploredTile | AA000000-...-000040 | [ ] |
+| CDUserIdentity | AA000000-...-000041 | [ ] |
+| CDUserSentimentCheckIn | AA000000-...-000042 | [ ] |
+
+**What to verify for each:**
+1. `[QUEUE] [PRIV] [AA000000]` appears in logs when created
+2. `[SENT] [PRIV] [AA000000]` appears after sync
+3. Record visible in CloudKit Dashboard with correct fields
 
 ---
 
 ## Phase 2: Photo/Image Sync (Moments)
 
-### 2.1 Photo Upload Test
-1. [ ] Create a new Moment event
-2. [ ] Attach a photo from library or camera
-3. [ ] Watch for `[PHOTO]` phase logs
-4. [ ] Verify photo uploads to CloudKit as CKAsset
-5. [ ] Check CloudKit Dashboard for the asset
+The debug UI now supports photo sync testing with a test image (100x100 red square with "TEST" text).
+
+**Log filter for photo operations:**
+```bash
+./scripts/sync-test.sh -p PHOTO
+# Or manually:
+xcrun simctl spawn booted log stream --predicate 'subsystem=="nl.jaapstronks.Otis" AND message CONTAINS "[PHOTO]"' --level debug
+```
+
+### 2.1 Photo Upload Test (via Debug UI)
+1. [ ] Start photo log capture: `./scripts/sync-test.sh -p PHOTO`
+2. [ ] In app: Settings > Developer Tools > Sync Testing
+3. [ ] Expand "Photo Sync (Phase 2)" section
+4. [ ] Tap "Create Photo Event" (creates event + 100x100 test image)
+5. [ ] Tap "Upload Photo to CloudKit"
+6. [ ] Watch logs for:
+   - `[PHOTO] [QUEUED] [AA000000]` - Photo queued
+   - `[PHOTO] [UPLOADING] [AA000000]` - Upload started
+   - `[PHOTO] [UPLOADED] [AA000000]` - Upload confirmed
+7. [ ] Check CloudKit Dashboard for EventMedia record
+
+**Expected CloudKit Record:**
+- Record Type: `EventMedia`
+- Record Name: `media-AA000000-0000-0000-0000-000000000022`
+- Fields: `eventId`, `photoAsset`, `deviceId`, `uploadedAt`
 
 ### 2.2 Photo Download Test (requires second device/simulator)
-1. [ ] On Device A: Create Moment with photo, sync
+1. [ ] On Device A: Complete 2.1 (create + upload photo)
 2. [ ] On Device B: Sign into same iCloud account
 3. [ ] Verify photo downloads automatically
-4. [ ] Check for `[PHOTO] [DOWNLOADED]` logs
+4. [ ] Check for `[PHOTO] [DOWNLOADING]` and `[PHOTO] [DOWNLOADED]` logs
 
 ### 2.3 Profile Photo Sync
 1. [ ] Set a profile photo for a dog
 2. [ ] Verify upload via `[PHOTO]` logs
 3. [ ] On second device, verify photo appears
 
+**Expected CloudKit Record:**
+- Record Type: `ProfilePhoto`
+- Record Name: `profile-photo-{profileId}`
+
 ### 2.4 Thumbnail Generation
-1. [ ] Add high-resolution photo
-2. [ ] Verify thumbnail is generated and synced
-3. [ ] Check that both full and thumbnail exist in CloudKit
+1. [ ] Add high-resolution photo via normal app flow
+2. [ ] Verify thumbnail is generated locally
+3. [ ] Check that both full and thumbnail paths are set on event
 
 ---
 

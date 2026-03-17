@@ -158,3 +158,71 @@ public struct SessionOutcome: Codable, Equatable, Sendable {
         successRate >= 0.8
     }
 }
+
+// MARK: - Location Tier
+
+/// Simplified location tiers for practice matrix (inside vs outside)
+public enum LocationTier: String, Codable, CaseIterable, Sendable {
+    case inside   // Home, indoor public spaces
+    case outside  // Garden, street, park (copy explains to vary)
+
+    public var labelKey: String {
+        rawValue
+    }
+
+    public var icon: String {
+        switch self {
+        case .inside: return "house.fill"
+        case .outside: return "leaf.fill"
+        }
+    }
+}
+
+// MARK: - Phase Location State
+
+/// State of a cell in the phase x location practice matrix
+public enum PhaseLocationState: String, Codable, Sendable {
+    case locked      // Prior phase not mastered inside yet
+    case notStarted  // Available but not attempted
+    case inProgress  // Practiced but not mastered
+    case mastered    // Dog reliably performs here
+
+    public var labelKey: String {
+        rawValue
+    }
+
+    public var icon: String {
+        switch self {
+        case .locked: return "lock.fill"
+        case .notStarted: return "circle"
+        case .inProgress: return "circle.lefthalf.filled"
+        case .mastered: return "checkmark.circle.fill"
+        }
+    }
+}
+
+// MARK: - Phase Location Cell
+
+/// Individual cell in the phase x location practice matrix
+public struct PhaseLocationCell: Codable, Identifiable, Sendable, Equatable {
+    public var phaseId: String
+    public var location: LocationTier
+    public var state: PhaseLocationState
+    public var lastPracticedAt: Date?
+
+    public var id: String {
+        "\(phaseId)_\(location.rawValue)"
+    }
+
+    public init(
+        phaseId: String,
+        location: LocationTier,
+        state: PhaseLocationState = .notStarted,
+        lastPracticedAt: Date? = nil
+    ) {
+        self.phaseId = phaseId
+        self.location = location
+        self.state = state
+        self.lastPracticedAt = lastPracticedAt
+    }
+}

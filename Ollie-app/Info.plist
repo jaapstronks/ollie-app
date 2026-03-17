@@ -57,5 +57,7 @@
 	</array>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Save shareable cards to your photo library</string>
+	<key>NSSupportsLiveActivities</key>
+	<true/>
 </dict>
 </plist>

@@ -17,5 +17,6 @@ struct OtisWidgetBundle: WidgetBundle {
         StatusDashboardWidget() // Smart dashboard with sleep/meal/walk status
         MomentStatusWidget()    // Latest moment + current status with predictions
         StartWalkWidget()       // Lock screen button to start walks
+        NapLiveActivityWidget() // Nap Live Activity for Dynamic Island
     }
 }

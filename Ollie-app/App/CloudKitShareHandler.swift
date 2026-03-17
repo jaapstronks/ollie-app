@@ -184,7 +184,7 @@ enum CloudKitShareHandler {
             logger.info("Previous shared profile IDs: \(previousSharedProfileIDs)")
 
             logger.info("Calling acceptShareInvitation...")
-            try await PersistenceController.shared.acceptShareInvitation(from: metadata)
+            try await CloudKitService.shared.acceptShareInvitation(from: metadata)
             logger.info("acceptShareInvitation completed successfully")
 
             CloudKitService.shared.markAsParticipant()

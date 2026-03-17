@@ -32,15 +32,16 @@ extension SyncCoordinator: SyncEngineDelegate {
         }
 
         // Debug: log what records are being requested
-        logger.info("Processing \(pendingChanges.count) pending changes:")
+        let db: SyncDatabase = syncEngine === sharedEngine ? .sharedDB : .privateDB
+        logger.syncBatch("Processing pending changes", count: pendingChanges.count, phase: .send, database: db)
         for change in pendingChanges {
             switch change {
             case .saveRecord(let recordID):
-                logger.info("  SAVE: \(recordID.recordName)")
+                logger.syncEventFull("Preparing for upload", recordName: recordID.recordName, phase: .send, database: db)
             case .deleteRecord(let recordID):
-                logger.info("  DELETE: \(recordID.recordName)")
+                logger.syncEventFull("Preparing deletion", recordName: recordID.recordName, phase: .delete, database: db)
             @unknown default:
-                logger.info("  UNKNOWN change type")
+                logger.info("[SEND] [\(db.rawValue)] Unknown change type")
             }
         }
 
@@ -111,8 +112,31 @@ extension SyncCoordinator: SyncEngineDelegate {
         let isShared = syncEngine === sharedEngine
         let targetStore: NSPersistentStore? = isShared ? getSharedStore?() : nil
 
-        // Process modifications
-        for modification in changes.modifications {
+        // Structured logging for received records
+        let db: SyncDatabase = isShared ? .sharedDB : .privateDB
+        let storeStatus = targetStore != nil ? "assigned" : "nil"
+        logger.syncBatch("Received modifications (store: \(storeStatus))", count: changes.modifications.count, phase: .receive, database: db)
+        if !changes.deletions.isEmpty {
+            logger.syncBatch("Received deletions", count: changes.deletions.count, phase: .receive, database: db)
+        }
+
+        // Sort modifications to process profiles before events (and other entities)
+        // This ensures profiles exist when we try to link events to them
+        let sortedModifications = changes.modifications.sorted { mod1, mod2 in
+            let type1 = mod1.record.recordType
+            let type2 = mod2.record.recordType
+            // Profiles have highest priority (sort first)
+            if type1 == RecordType.puppyProfile && type2 != RecordType.puppyProfile {
+                return true
+            }
+            if type2 == RecordType.puppyProfile && type1 != RecordType.puppyProfile {
+                return false
+            }
+            return false // Keep relative order for same-priority items
+        }
+
+        // Process modifications (profiles first, then everything else)
+        for modification in sortedModifications {
             let record = modification.record
             let recordType = record.recordType
 
@@ -120,6 +144,9 @@ extension SyncCoordinator: SyncEngineDelegate {
                 logger.warning("No handler for record type: \(recordType)")
                 continue
             }
+
+            // Log each record as it's applied
+            logger.syncEventFull("Applying \(recordType)", recordName: record.recordID.recordName, phase: .apply, database: db)
 
             await handler.handleFetchedRecord(record, in: viewContext, isShared: isShared, targetStore: targetStore)
         }
@@ -133,6 +160,7 @@ extension SyncCoordinator: SyncEngineDelegate {
                 continue
             }
 
+            logger.syncEventFull("Applying deletion \(recordType)", recordName: deletion.recordID.recordName, phase: .delete, database: db)
             await handler.handleDeletedRecord(
                 recordID: deletion.recordID.recordName,
                 in: viewContext
@@ -167,8 +195,15 @@ extension SyncCoordinator: SyncEngineDelegate {
         _ changes: CKSyncEngine.Event.FetchedDatabaseChanges,
         for syncEngine: SyncEngine
     ) async {
+        let engineType = syncEngine === sharedEngine ? "SHARED" : "PRIVATE"
+
+        // Log zone modifications (includes newly discovered zones)
+        for modification in changes.modifications {
+            logger.info("[\(engineType)] Zone discovered/modified: \(modification.zoneID.zoneName), owner: \(modification.zoneID.ownerName)")
+        }
+
         for deletion in changes.deletions {
-            logger.info("Zone deleted: \(deletion.zoneID.zoneName), reason: \(String(describing: deletion.reason))")
+            logger.info("[\(engineType)] Zone deleted: \(deletion.zoneID.zoneName), reason: \(String(describing: deletion.reason))")
 
             switch deletion.reason {
             case .purged:
@@ -195,9 +230,17 @@ extension SyncCoordinator: SyncEngineDelegate {
     ) async {
         guard let viewContext = viewContext else { return }
 
+        let db: SyncDatabase = syncEngine === sharedEngine ? .sharedDB : .privateDB
+
+        // Log successful sends
+        if !changes.savedRecords.isEmpty {
+            logger.syncBatch("Successfully sent", count: changes.savedRecords.count, phase: .sent, database: db)
+        }
+
         // Update system fields for saved records
         for savedRecord in changes.savedRecords {
             let recordType = savedRecord.recordType
+            logger.syncEventFull("Confirmed \(recordType)", recordName: savedRecord.recordID.recordName, phase: .sent, database: db)
             guard let handler = entityHandlers[recordType] else { continue }
             await handler.handleSentRecord(savedRecord, in: viewContext)
         }
@@ -206,7 +249,7 @@ extension SyncCoordinator: SyncEngineDelegate {
         for failure in changes.failedRecordSaves {
             let recordID = failure.record.recordID
             let error = failure.error
-            logger.error("Failed to save record \(recordID.recordName): \(error.localizedDescription)")
+            logger.syncEventFull("FAILED: \(error.localizedDescription)", recordName: recordID.recordName, phase: .error, database: db)
 
             switch error.code {
             case .serverRecordChanged:
@@ -216,7 +259,7 @@ extension SyncCoordinator: SyncEngineDelegate {
                     let targetStore: NSPersistentStore? = isShared ? getSharedStore?() : nil
                     if let handler = entityHandlers[recordType] {
                         await handler.handleFetchedRecord(serverRecord, in: viewContext, isShared: isShared, targetStore: targetStore)
-                        logger.info("Resolved conflict for \(recordID.recordName) by accepting server version")
+                        logger.syncEventFull("Conflict resolved (server wins)", recordName: recordID.recordName, phase: .conflict, database: db)
                     }
                 }
 

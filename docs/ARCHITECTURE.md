@@ -102,9 +102,214 @@ struct ProfileDisplayView: View {
 
 ## CloudKit Sync Architecture
 
-### The Problem We Solved
+### CKSyncEngine (iOS 17+)
 
-Previously, each store independently listened to CloudKit notifications:
+Ollie uses **CKSyncEngine** (introduced iOS 17, WWDC23) instead of NSPersistentCloudKitContainer. This provides:
+
+- **Sub-second sync** when conditions allow (vs 1-5 minute delays with NSPersistentCloudKitContainer)
+- **Manual sync triggers** for pull-to-refresh, widget updates, Watch sync
+- **Explicit conflict resolution** - we control how conflicts are resolved
+- **Better error visibility** - all errors are surfaced to the app
+- **Direct CloudKit control** - enables webhooks, server-to-server APIs, Siri/Shortcuts integration
+
+### Architecture Overview
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                        SyncCoordinator                          │
+│                    (Central orchestrator)                       │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│   ┌─────────────────────┐    ┌─────────────────────┐           │
+│   │   SyncEngine        │    │   SyncEngine        │           │
+│   │   (Private DB)      │    │   (Shared DB)       │           │
+│   │                     │    │                     │           │
+│   │ ┌─────────────────┐ │    │ ┌─────────────────┐ │           │
+│   │ │ CKSyncEngine    │ │    │ │ CKSyncEngine    │ │           │
+│   │ │ (Apple API)     │ │    │ │ (Apple API)     │ │           │
+│   │ └─────────────────┘ │    │ └─────────────────┘ │           │
+│   └─────────────────────┘    └─────────────────────┘           │
+│                                                                  │
+├─────────────────────────────────────────────────────────────────┤
+│                     Entity Handlers                              │
+│   ProfileSyncHandler, EventSyncHandler, MedicationSyncHandler...│
+│   (Convert Core Data ↔ CKRecord)                                │
+└─────────────────────────────────────────────────────────────────┘
+                              ↕
+┌─────────────────────────────────────────────────────────────────┐
+│              Core Data (Local Persistence Only)                  │
+│              NSPersistentContainer (NOT CloudKit)               │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### Key Components
+
+**SyncCoordinator** (`OtisShared/CloudKit/SyncCoordinator.swift`):
+- Singleton managing both private and shared database sync engines
+- Registers entity handlers for each Core Data entity type
+- Provides `markPendingSave()` / `markPendingDelete()` for stores to queue changes
+- Handles account changes (sign in/out/switch)
+
+**SyncEngine** (`OtisShared/CloudKit/SyncEngine.swift`):
+- Wrapper around Apple's CKSyncEngine
+- One instance per database (private + shared)
+- Handles state persistence, push notifications, scheduler tasks
+- Provides manual sync: `fetchChanges()`, `sendChanges()`
+
+**CKRecordConvertible** (`OtisShared/CloudKit/CKRecordConvertible.swift`):
+- Protocol for entities that sync via CKSyncEngine
+- Defines `toCKRecord()` and `update(from:)` for conversion
+- Stores system fields for conflict detection
+
+**EntitySyncHandler**:
+- Protocol for handling sync of specific entity types
+- Fetches CKRecords for pending saves
+- Applies fetched records to Core Data
+- Handles deletions
+
+### Sync Flow
+
+**Sending Changes:**
+```
+1. Store saves to Core Data
+2. Store calls SyncCoordinator.markPendingSave(entity)
+3. SyncCoordinator queues the change with appropriate SyncEngine
+4. CKSyncEngine consults system scheduler
+5. When ready, CKSyncEngine asks delegate for next batch
+6. EntityHandler converts Core Data → CKRecord
+7. CKSyncEngine sends to server
+8. On success/failure, delegate updates system fields
+```
+
+**Fetching Changes:**
+```
+1. CloudKit sends push notification
+2. CKSyncEngine receives and schedules fetch
+3. System scheduler approves fetch
+4. CKSyncEngine fetches from server
+5. Delegate receives fetched records
+6. EntityHandler converts CKRecord → Core Data
+7. Stores are notified of changes
+```
+
+### Usage in Stores
+
+```swift
+@Observable
+@MainActor
+class EventStore {
+    func saveEvent(_ event: CDPuppyEvent) {
+        // Save to Core Data
+        try? viewContext.save()
+
+        // Queue for CloudKit sync
+        SyncCoordinator.shared.markPendingSave(event)
+    }
+
+    func deleteEvent(_ event: CDPuppyEvent) {
+        // Queue deletion for CloudKit BEFORE deleting locally
+        SyncCoordinator.shared.markPendingDelete(event)
+
+        // Then delete from Core Data
+        viewContext.delete(event)
+        try? viewContext.save()
+    }
+}
+```
+
+### Manual Sync Triggers
+
+```swift
+// Pull-to-refresh
+await SyncCoordinator.shared.fetchChanges()
+
+// Sync now button
+await SyncCoordinator.shared.sendChanges()
+
+// Full sync (send + fetch)
+await SyncCoordinator.shared.sync()
+```
+
+### Conflict Resolution
+
+When the server has a newer version (serverRecordChanged error):
+1. CKSyncEngine provides the server's version
+2. EntityHandler applies server version to local Core Data
+3. Local changes are lost (server wins by default)
+4. For critical data, implement custom merge logic in EntityHandler
+
+### Account Change Handling
+
+SyncCoordinator handles iCloud account changes per Apple's recommendations:
+
+**Sign In:**
+- Enable sync and fetch all data from CloudKit
+
+**Sign Out:**
+- Disable sync
+- Delete all locally synced data (prevents data leaking to wrong account)
+- Reset pending changes count
+
+**Account Switch:**
+- Delete locally synced data
+- Re-enable sync
+- Fetch all data for new account
+
+**Zone Purge (left share):**
+- Delete local data associated with that zone
+- Notify observers of changes
+
+Entity handlers implement `handleAccountSignOut()` and `handleZonePurge()` for entity-specific cleanup.
+
+### Two-Database Architecture
+
+- **Private Database**: User's own data (profile, events, settings)
+- **Shared Database**: Data shared with family/partner via CKShare
+
+Each database has its own SyncEngine instance. The SyncCoordinator manages both.
+
+### State Persistence
+
+CKSyncEngine requires persisting state to survive app restarts:
+
+```swift
+// State is stored in UserDefaults
+private var stateKey: String {
+    "SyncEngineState_\(configuration.identifier)"
+}
+
+// Saved on every state update event
+func handleEvent(_ event: CKSyncEngine.Event, ...) {
+    case .stateUpdate(let stateUpdate):
+        saveStateSerialization(stateUpdate.stateSerialization)
+}
+```
+
+### Why Not NSPersistentCloudKitContainer?
+
+NSPersistentCloudKitContainer is simpler but has limitations:
+- **Sync delays**: 1-5 minutes typical, sometimes longer
+- **No manual triggers**: Can't force sync for widgets, Watch, etc.
+- **Opaque errors**: Hard to debug sync issues
+- **No direct CloudKit access**: Can't use webhooks, server APIs
+- **Shared database quirks**: Complex setup for family sharing
+
+CKSyncEngine gives us control while still handling the hard parts (scheduling, retries, state tracking).
+
+### References
+
+- [WWDC23: Sync to iCloud with CKSyncEngine](https://developer.apple.com/videos/play/wwdc2023/10188/)
+- [CKSyncEngine Documentation](https://developer.apple.com/documentation/cloudkit/cksyncengine)
+
+---
+
+## Legacy: CloudKitSyncCoordinator (Pre-CKSyncEngine)
+
+> **Note**: This section documents the previous approach using NSPersistentCloudKitContainer. It's kept for reference during migration.
+
+### The Problem
+
+When using NSPersistentCloudKitContainer, stores independently listened to CloudKit notifications:
 ```
 CloudKit Notification
     ├─→ EventStore.handleRemoteChange() → full reload
@@ -118,7 +323,7 @@ This caused:
 - Notifications fire for WAL checkpoints (local operations), not just actual remote changes
 - Core Data saves trigger new notifications → infinite loops
 
-### The Solution
+### Legacy Solution
 
 ```
 CloudKit Notification (NSPersistentStoreRemoteChange)

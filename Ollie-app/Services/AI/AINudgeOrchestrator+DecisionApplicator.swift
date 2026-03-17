@@ -23,9 +23,35 @@ extension AINudgeOrchestrator {
         // not here (this runs on every view render)
         let canApply = !AINudgeRollout.isShadowMode && decision.confidence >= 0.65
         if canApply {
+            // Language validation: if user's locale is non-English but AI returned
+            // what looks like English, fall back to the localized baseline
+            let currentLocale = Locale.current.language.languageCode?.identifier ?? "en"
+            if currentLocale != "en" && looksLikeEnglish(decision.headline) {
+                return (baselineTitle, baselineSubtitle)
+            }
             return (decision.headline, decision.subtitle ?? baselineSubtitle)
         }
         return (baselineTitle, baselineSubtitle)
+    }
+
+    /// Simple heuristic to detect if AI-generated text is likely English
+    /// when user expected a different language
+    private func looksLikeEnglish(_ text: String) -> Bool {
+        let lowercased = text.lowercased()
+        // Common English phrases that shouldn't appear in translated text
+        let englishPatterns = [
+            "needs to pee",
+            "needs to go",
+            "pee soon",
+            "pee now",
+            "just peed",
+            "minutes ago",
+            "hours ago",
+            "time for",
+            "ready for",
+            "overdue"
+        ]
+        return englishPatterns.contains { lowercased.contains($0) }
     }
 
     func applyOrFallbackOrdering(
