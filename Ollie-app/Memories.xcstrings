@@ -33,6 +33,12 @@
             "state": "translated",
             "value": "+%lld Mer"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+%lld meer"
+          }
         }
       },
       "extractionState": "manual"
@@ -68,6 +74,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "1 Månad sedan"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 maand geleden"
           }
         }
       },
@@ -147,6 +159,12 @@
             "state": "translated",
             "value": "1 År sedan"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 jaar geleden"
+          }
         }
       },
       "extractionState": "manual"
@@ -183,6 +201,12 @@
             "state": "translated",
             "value": "Inga händelser recorded"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geen gebeurtenissen gelogd"
+          }
         }
       },
       "extractionState": "manual"
@@ -218,6 +242,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "På denna Dag"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Op deze dag"
           }
         }
       },
