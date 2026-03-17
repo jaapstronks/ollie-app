@@ -694,6 +694,28 @@
         }
       }
     },
+    "A clicker": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Een clicker"
+          }
+        }
+      }
+    },
+    "A consistent sound that marks the exact moment of success. You can use a word instead, but avoid \"yes!\" — you say it often in daily life, which dilutes its meaning. A clicker is clear and unmistakable.": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Een consistent geluid dat het exacte moment van succes markeert. Je kunt ook een woord gebruiken, maar vermijd \"ja!\" — je zegt het vaak in het dagelijks leven, wat de betekenis verwatert. Een clicker is helder en onmiskenbaar."
+          }
+        }
+      }
+    },
     "A cozy den that helps with everything": {
       "extractionState": "manual",
       "localizations": {
@@ -723,17 +745,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Laatst een paar ongelukjes binnen. Wil je de zindelijkheidsbegeleiding heractiveren?"
-          }
-        }
-      }
-    },
-    "A marker": {
-      "extractionState": "manual",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Een marker"
           }
         }
       }
@@ -3298,17 +3309,6 @@
         }
       }
     },
-    "Each skill will walk you through the specifics. For now, just have these ready.": {
-      "extractionState": "manual",
-      "localizations": {
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Elke vaardigheid leidt je door de details. Zorg nu gewoon dat je deze klaar hebt."
-          }
-        }
-      }
-    },
     "Environment progression:": {
       "extractionState": "manual",
       "localizations": {
@@ -3445,6 +3445,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Verwacht wat terugval - het is normaal"
+          }
+        }
+      }
+    },
+    "Expect to Fumble": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verwacht te blunderen"
           }
         }
       }
@@ -4607,6 +4618,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Dit is wat de meeste mensen fout doen:"
+          }
+        }
+      }
+    },
+    "Here's what to expect:": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dit kun je verwachten:"
           }
         }
       }
@@ -6884,6 +6906,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Beheerste sectie"
+          }
+        }
+      }
+    },
+    "Meanwhile, your dog will pick this up faster than you expect. They're wired for it.": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ondertussen pikt je hond dit sneller op dan je verwacht. Ze zijn ervoor gemaakt."
           }
         }
       }
@@ -13317,6 +13350,18 @@
         }
       }
     },
+    "Training Theory": {
+      "comment": "The title of the section that lists the training foundations.",
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trainingstheorie"
+          }
+        }
+      }
+    },
     "Training for too long - puppies have 2-3 minute attention spans. Keep sessions short and fun": {
       "comment": "Tip for the 'Training' section, emphasizing the importance of keeping training sessions short and engaging.",
       "extractionState": "manual",
@@ -14237,6 +14282,17 @@
         }
       }
     },
+    "We'll cover how to use each tool when you start your first skill. Just have these ready.": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "We leggen uit hoe je elk hulpmiddel gebruikt wanneer je aan je eerste vaardigheid begint. Zorg dat je deze klaar hebt."
+          }
+        }
+      }
+    },
     "Week %lld": {
       "extractionState": "stale",
       "localizations": {
@@ -14574,6 +14630,17 @@
         }
       }
     },
+    "You'll click at the wrong moment. You'll say the cue too early. You'll forget the treats. You'll get the timing wrong.": {
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je zult op het verkeerde moment klikken. Je zegt de cue te vroeg. Je vergeet de snoepjes. Je timing klopt niet."
+          }
+        }
+      }
+    },
     "You're about to build something incredible.": {
       "extractionState": "manual",
       "localizations": {
@@ -14760,13 +14827,13 @@
         }
       }
     },
-    "Your dog's regular food, not fancy treats. Why? Motivation. Save special treats for one thing only: emergency recall.": {
+    "Your dog's regular food, not fancy treats. Dogs naturally want to work for their food — and if you rely on special treats, you'll be feeding them candy all day. Save high-value treats for one thing only: emergency recall.": {
       "extractionState": "manual",
       "localizations": {
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Het gewone voer van je hond, geen luxe snoepjes. Waarom? Motivatie. Bewaar speciale snoepjes voor slechts één ding: noodoproep."
+            "value": "Het gewone voer van je hond, geen luxe snoepjes. Honden willen van nature werken voor hun eten — en als je afhankelijk wordt van speciale snoepjes, voer je ze de hele dag snoep. Bewaar hoogwaardige traktaties voor slechts één ding: noodoproep."
           }
         }
       }
