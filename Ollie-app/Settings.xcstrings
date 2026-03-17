@@ -1308,6 +1308,47 @@
         }
       }
     },
+    "Choose your role with %@. This affects which reminders you'll see.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wähle deine Rolle mit %@. Das beeinflusst, welche Erinnerungen du siehst."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elige tu rol con %@. Esto afecta qué recordatorios verás."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisis ton rôle avec %@. Cela affecte les rappels que tu verras."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scegli il tuo ruolo con %@. Questo influenza quali promemoria vedrai."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kies je rol met %@. Dit bepaalt welke herinneringen je ziet."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Välj din roll med %@. Detta påverkar vilka påminnelser du ser."
+          }
+        }
+      }
+    },
     "CloudKit is not available": {
       "extractionState": "stale",
       "localizations": {
@@ -1510,6 +1551,12 @@
             "state": "translated",
             "value": "Impossibile creare i file di esportazione."
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kon exportbestanden niet aanmaken."
+          }
         }
       }
     },
@@ -1539,6 +1586,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Impossibile codificare i dati %@."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kon %@ gegevens niet coderen."
           }
         }
       }
@@ -1900,6 +1953,7 @@
       }
     },
     "Deleting your only profile will return you to the start screen.": {
+      "extractionState": "stale",
       "localizations": {
         "de": {
           "stringUnit": {
@@ -2730,6 +2784,12 @@
             "state": "translated",
             "value": "Esportazione fallita: %@"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Export mislukt: %@"
+          }
         }
       }
     },
@@ -2759,6 +2819,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Esportazione appuntamenti..."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Afspraken exporteren..."
           }
         }
       }
@@ -2790,6 +2856,12 @@
             "state": "translated",
             "value": "Esportazione contatti..."
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contacten exporteren..."
+          }
         }
       }
     },
@@ -2819,6 +2891,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Esportazione documenti..."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Documenten exporteren..."
           }
         }
       }
@@ -2850,6 +2928,12 @@
             "state": "translated",
             "value": "Esportazione eventi..."
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gebeurtenissen exporteren..."
+          }
         }
       }
     },
@@ -2879,6 +2963,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Esportazione traguardi..."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mijlpalen exporteren..."
           }
         }
       }
@@ -2910,6 +3000,12 @@
             "state": "translated",
             "value": "Esportazione foto..."
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Foto's exporteren..."
+          }
         }
       }
     },
@@ -2939,6 +3035,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Esportazione luoghi..."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plekken exporteren..."
           }
         }
       }
@@ -2970,6 +3072,12 @@
             "state": "translated",
             "value": "Esportazione foto profilo..."
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Profielfoto exporteren..."
+          }
         }
       }
     },
@@ -3000,6 +3108,12 @@
             "state": "translated",
             "value": "Esportazione profilo..."
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Profiel exporteren..."
+          }
         }
       }
     },
@@ -3029,6 +3143,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Esportazione socializzazione..."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Socialisatie exporteren..."
           }
         }
       }
@@ -3165,6 +3285,12 @@
             "state": "translated",
             "value": "Completamento esportazione..."
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Export afronden..."
+          }
         }
       }
     },
@@ -3240,8 +3366,16 @@
     },
     "Great start. You can edit these details later in Settings.": {
       "comment": "Confirmation subtitle in the onboarding flow, indicating that the user can edit their details later.",
+      "extractionState": "manual",
       "isCommentAutoGenerated": true,
-      "extractionState": "manual"
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Goede start. Je kunt deze details later bewerken in Instellingen."
+          }
+        }
+      }
     },
     "Health & Documents": {
       "extractionState": "stale",
@@ -3397,6 +3531,47 @@
           "stringUnit": {
             "state": "translated",
             "value": "Pälsvårdsschema hemma"
+          }
+        }
+      }
+    },
+    "How involved are you?": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wie stark bist du involviert?"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¿Qué tan involucrado estás?"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "À quel point es-tu impliqué ?"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quanto sei coinvolto?"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hoe betrokken ben je?"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hur involverad är du?"
           }
         }
       }
@@ -4850,7 +5025,15 @@
     },
     "No profile found. Please create a profile first.": {
       "comment": "Error message displayed when there is no user profile to export.",
-      "isCommentAutoGenerated": true
+      "isCommentAutoGenerated": true,
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geen profiel gevonden. Maak eerst een profiel aan."
+          }
+        }
+      }
     },
     "No puppy profile found. Please create a profile first.": {
       "comment": "Error message displayed when there is no puppy profile to export.",
@@ -5025,8 +5208,16 @@
     },
     "Notification Preferences": {
       "comment": "A section header for adjusting notification preferences.",
+      "extractionState": "manual",
       "isCommentAutoGenerated": true,
-      "extractionState": "manual"
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meldingsvoorkeuren"
+          }
+        }
+      }
     },
     "Notifications": {
       "extractionState": "stale",
@@ -5516,6 +5707,12 @@
             "state": "translated",
             "value": "Preparazione esportazione..."
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Export voorbereiden..."
+          }
         }
       }
     },
@@ -5766,8 +5963,16 @@
     },
     "Reminder settings updated": {
       "comment": "Confirmation message displayed when the user updates their reminder settings.",
+      "extractionState": "manual",
       "isCommentAutoGenerated": true,
-      "extractionState": "manual"
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Herinneringsinstellingen bijgewerkt"
+          }
+        }
+      }
     },
     "Reminder when %@ has been awake too long.": {
       "extractionState": "stale",
@@ -8345,6 +8550,7 @@
     },
     "You're now viewing %@. You can switch dogs anytime in Settings.": {
       "comment": "A message shown when a user accepts a share invitation from another user, indicating that their profile has been updated to include the shared dog. The argument is the name of the shared dog.",
+      "extractionState": "manual",
       "isCommentAutoGenerated": true,
       "localizations": {
         "nl": {
@@ -8353,8 +8559,7 @@
             "value": "Je bekijkt nu %@. Je kunt op elk moment van hond wisselen in Instellingen."
           }
         }
-      },
-      "extractionState": "manual"
+      }
     },
     "You're viewing someone else's data": {
       "extractionState": "stale",
