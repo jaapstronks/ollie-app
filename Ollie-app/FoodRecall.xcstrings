@@ -522,6 +522,12 @@
             "state": "translated",
             "value": "Recall Alerts"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terugroepwaarschuwingen"
+          }
         }
       },
       "extractionState": "manual"
@@ -558,6 +564,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Recall Detaljer"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terugroepdetails"
           }
         }
       },
@@ -606,6 +618,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Välj Brands"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selecteer merken"
           }
         }
       },

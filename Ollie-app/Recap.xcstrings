@@ -2,12 +2,18 @@
   "sourceLanguage": "en",
   "strings": {
     "%@ total": {
-      "extractionState": "stale",
+      "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "%@ total"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ totaal"
           }
         }
       }
@@ -32,40 +38,58 @@
       "extractionState": "manual"
     },
     "%lld of %lld days": {
-      "extractionState": "stale",
+      "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "%lld of %lld days"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld van %lld dagen"
+          }
         }
       }
     },
     "%lld photos": {
-      "extractionState": "stale",
+      "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "%lld photos"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld foto's"
+          }
         }
       }
     },
     "%lld social meetups": {
-      "extractionState": "stale",
+      "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "%lld social meetups"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld sociale ontmoetingen"
+          }
         }
       }
     },
     "%lld training sessions": {
-      "extractionState": "stale",
+      "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
@@ -82,7 +106,7 @@
       }
     },
     "%lld walks": {
-      "extractionState": "stale",
+      "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
@@ -99,40 +123,58 @@
       }
     },
     "%lld%% outdoors": {
-      "extractionState": "stale",
+      "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "%lld%% outdoors"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld%% buiten"
+          }
         }
       }
     },
     "1 photo": {
-      "extractionState": "stale",
+      "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "1 photo"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 foto"
+          }
         }
       }
     },
     "1 social meetup": {
-      "extractionState": "stale",
+      "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "1 social meetup"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 sociale ontmoeting"
+          }
         }
       }
     },
     "1 training session": {
-      "extractionState": "stale",
+      "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
@@ -149,7 +191,7 @@
       }
     },
     "1 walk": {
-      "extractionState": "stale",
+      "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
@@ -248,34 +290,52 @@
       }
     },
     "Moments": {
-      "extractionState": "stale",
+      "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Moments"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Momenten"
+          }
         }
       }
     },
     "Month almost complete": {
-      "extractionState": "stale",
+      "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Month almost complete"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Maand bijna voltooid"
+          }
         }
       }
     },
     "Monthly Recap": {
-      "extractionState": "stale",
+      "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Monthly Recap"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Maandoverzicht"
           }
         }
       }
@@ -294,56 +354,86 @@
       }
     },
     "Monthly recap for %@: %lld walks, %lld training sessions": {
-      "extractionState": "stale",
+      "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Monthly recap for %@: %lld walks, %lld training sessions"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Maandoverzicht voor %@: %lld wandelingen, %lld trainingssessies"
+          }
         }
       }
     },
     "Next month": {
-      "extractionState": "stale",
+      "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Next month"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Volgende maand"
+          }
         }
       }
     },
     "No activity logged this month": {
-      "extractionState": "stale",
+      "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "No activity logged this month"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geen activiteit gelogd deze maand"
+          }
         }
       }
     },
     "No monthly recaps available yet": {
-      "extractionState": "stale",
+      "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "No monthly recaps available yet"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nog geen maandoverzichten beschikbaar"
+          }
         }
       }
     },
     "No photos this month": {
-      "extractionState": "stale",
+      "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "No photos this month"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geen foto's deze maand"
           }
         }
       }
@@ -405,12 +495,18 @@
       }
     },
     "Previous month": {
-      "extractionState": "stale",
+      "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Previous month"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vorige maand"
           }
         }
       }
@@ -429,23 +525,35 @@
       }
     },
     "Select month": {
-      "extractionState": "stale",
+      "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Select month"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selecteer maand"
+          }
         }
       }
     },
     "Share": {
-      "extractionState": "stale",
+      "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Share"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delen"
           }
         }
       }
@@ -496,15 +604,29 @@
     "Tap to preview the active celebration style": {
       "comment": "A footer label under the \"Preview\" section of the celebration settings view, instructing the user to tap to preview the active celebration style.",
       "isCommentAutoGenerated": true,
-      "extractionState": "manual"
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tik om de actieve vieringsstijl te bekijken"
+          }
+        }
+      }
     },
     "View recap": {
-      "extractionState": "stale",
+      "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "View recap"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bekijk overzicht"
           }
         }
       }
@@ -512,12 +634,28 @@
     "View week recap": {
       "comment": "Text for a button that allows the user to view their weekly recap.",
       "isCommentAutoGenerated": true,
-      "extractionState": "manual"
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bekijk weekoverzicht"
+          }
+        }
+      }
     },
     "View year recap": {
       "comment": "Text for a button that allows a user to view their year recap.",
       "isCommentAutoGenerated": true,
-      "extractionState": "manual"
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bekijk jaaroverzicht"
+          }
+        }
+      }
     },
     "Week %lld": {
       "extractionState": "manual",
@@ -541,22 +679,17 @@
         }
       }
     },
-    "Weekly Recap": {
+    "Weekly Recap Title": {
       "comment": "Title of the weekly recap screen.",
       "isCommentAutoGenerated": true,
       "extractionState": "manual",
       "localizations": {
-        "nl": {
+        "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Weekoverzicht"
+            "value": "Weekly Recap"
           }
-        }
-      }
-    },
-    "Weekly recap": {
-      "extractionState": "manual",
-      "localizations": {
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
@@ -568,31 +701,59 @@
     "Weekly recap card": {
       "comment": "A description of a card type that shows a user's weekly recap.",
       "isCommentAutoGenerated": true,
-      "extractionState": "manual"
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wekelijkse overzichtskaart"
+          }
+        }
+      }
     },
     "Year in Review": {
       "comment": "Titles for the year recap card.",
       "isCommentAutoGenerated": true,
-      "extractionState": "manual"
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jaaroverzicht"
+          }
+        }
+      }
     },
     "Your month with": {
-      "extractionState": "stale",
+      "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Your month with"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je maand met"
+          }
         }
       }
     },
     "Your recap is ready!": {
-      "extractionState": "stale",
+      "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Your recap is ready!"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je overzicht is klaar!"
           }
         }
       }
@@ -600,20 +761,42 @@
     "Your week recap is ready!": {
       "comment": "Text displayed in a notification when a weekly recap is ready.",
       "isCommentAutoGenerated": true,
-      "extractionState": "manual"
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je weekoverzicht is klaar!"
+          }
+        }
+      }
     },
     "Your year recap is ready!": {
       "comment": "Text displayed in a notification when a year recap is ready.",
       "isCommentAutoGenerated": true,
-      "extractionState": "manual"
+      "extractionState": "manual",
+      "localizations": {
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je jaaroverzicht is klaar!"
+          }
+        }
+      }
     },
     "month with": {
-      "extractionState": "stale",
+      "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "month with"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "maand met"
           }
         }
       }

@@ -1,361 +1,373 @@
 {
-  "sourceLanguage" : "en",
-  "strings" : {
-    "CFBundleDisplayName" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Otis"
+  "sourceLanguage": "en",
+  "strings": {
+    "CFBundleDisplayName": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Otis"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Otis"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis"
           }
         },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Otis"
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis"
           }
         },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Otis"
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis"
           }
         },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Otis"
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis"
           }
         },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Otis"
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis"
           }
         }
       }
     },
-    "CFBundleName" : {
-      "comment" : "Bundle name",
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ollie-app"
+    "CFBundleName": {
+      "comment": "Bundle name",
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ollie-app"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Ollie-app"
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Ollie-app"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ollie-app"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ollie-app"
           }
         },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ollie-app"
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ollie-app"
           }
         },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ollie-app"
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ollie-app"
           }
         },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ollie-app"
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ollie-app"
           }
         },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ollie-app"
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ollie-app"
           }
         }
       }
     },
-    "NSCalendarsFullAccessUsageDescription" : {
-      "comment" : "Privacy - Calendars Full Access Usage Description",
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Otis nutzt deinen Kalender, um Erinnerungen für kommende Meilensteine wie Impfungen und Tierarztbesuche hinzuzufügen."
+    "NSCalendarsFullAccessUsageDescription": {
+      "comment": "Privacy - Calendars Full Access Usage Description",
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis nutzt deinen Kalender, um Erinnerungen für kommende Meilensteine wie Impfungen und Tierarztbesuche hinzuzufügen."
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Otis uses your calendar to add reminders for upcoming milestones like vaccinations and vet visits."
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Otis uses your calendar to add reminders for upcoming milestones like vaccinations and vet visits."
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Otis usa tu calendario para agregar recordatorios de eventos importantes como vacunas y visitas al veterinario."
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis usa tu calendario para agregar recordatorios de eventos importantes como vacunas y visitas al veterinario."
           }
         },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Otis utilise votre calendrier pour ajouter des rappels pour les événements importants comme les vaccinations et les visites vétérinaires."
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis utilise votre calendrier pour ajouter des rappels pour les événements importants comme les vaccinations et les visites vétérinaires."
           }
         },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Otis usa il tuo calendario per aggiungere promemoria per eventi importanti come vaccinazioni e visite dal veterinario."
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis usa il tuo calendario per aggiungere promemoria per eventi importanti come vaccinazioni e visite dal veterinario."
           }
         },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Otis gebruikt je agenda om herinneringen toe te voegen voor belangrijke mijlpalen zoals vaccinaties en dierenartsbezoeken."
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis gebruikt je agenda om herinneringen toe te voegen voor belangrijke mijlpalen zoals vaccinaties en dierenartsbezoeken."
           }
         },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Otis använder din kalender för att lägga till påminnelser för kommande milstolpar som vaccinationer och veterinärbesök."
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis använder din kalender för att lägga till påminnelser för kommande milstolpar som vaccinationer och veterinärbesök."
           }
         }
       }
     },
-    "NSCameraUsageDescription" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Otis möchte die Kamera verwenden, um Fotos von deinem Welpen zu machen."
+    "NSCameraUsageDescription": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis möchte die Kamera verwenden, um Fotos von deinem Welpen zu machen."
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Otis wants to use the camera to take photos of your puppy."
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis wants to use the camera to take photos of your puppy."
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Otis quiere usar la camara para tomar fotos de tu cachorro."
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis quiere usar la camara para tomar fotos de tu cachorro."
           }
         },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Otis souhaite utiliser l'appareil photo pour prendre des photos de votre chiot."
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis souhaite utiliser l'appareil photo pour prendre des photos de votre chiot."
           }
         },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Otis vuole usare la fotocamera per scattare foto del tuo cucciolo."
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis vuole usare la fotocamera per scattare foto del tuo cucciolo."
           }
         },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Otis wil de camera gebruiken om foto's van je puppy te maken."
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis wil de camera gebruiken om foto's van je puppy te maken."
           }
         },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Otis vill använda kameran för att ta foton av din valp."
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis vill använda kameran för att ta foton av din valp."
           }
         }
       }
     },
-    "NSContactsUsageDescription" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Otis nutzt deine Kontakte, um schnell Daten von Tierarzt, Hundefriseur oder Hundesitter zu importieren."
+    "NSContactsUsageDescription": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis nutzt deine Kontakte, um schnell Daten von Tierarzt, Hundefriseur oder Hundesitter zu importieren."
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Otis uses your contacts to quickly import your vet, groomer, or pet sitter details."
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis uses your contacts to quickly import your vet, groomer, or pet sitter details."
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Otis usa tus contactos para importar rapidamente los datos de tu veterinario, peluquero o cuidador de mascotas."
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis usa tus contactos para importar rapidamente los datos de tu veterinario, peluquero o cuidador de mascotas."
           }
         },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Otis utilise vos contacts pour importer rapidement les coordonnées de votre vétérinaire, toiletteur ou gardien d'animaux."
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis utilise vos contacts pour importer rapidement les coordonnées de votre vétérinaire, toiletteur ou gardien d'animaux."
           }
         },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Otis usa i tuoi contatti per importare rapidamente i dati del veterinario, toelettatore o dog sitter."
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis usa i tuoi contatti per importare rapidamente i dati del veterinario, toelettatore o dog sitter."
           }
         },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Otis gebruikt je contacten om snel gegevens van je dierenarts, trimsalon of oppas te importeren."
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis gebruikt je contacten om snel gegevens van je dierenarts, trimsalon of oppas te importeren."
           }
         },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Otis använder dina kontakter för att snabbt importera uppgifter om din veterinär, hundtrimmare eller hundsittare."
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis använder dina kontakter för att snabbt importera uppgifter om din veterinär, hundtrimmare eller hundsittare."
           }
         }
       }
     },
-    "NSLocationAlwaysAndWhenInUseUsageDescription" : {
-      "comment" : "Privacy - Location Always and When In Use Usage Description",
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Otis tracks your location during walks to show your route on the map, even when the app is in the background."
+    "NSLocationAlwaysAndWhenInUseUsageDescription": {
+      "comment": "Privacy - Location Always and When In Use Usage Description",
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Otis tracks your location during walks to show your route on the map, even when the app is in the background."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "We gebruiken je locatie om wandelingen te volgen, nabijgelegen hondenparken te vinden en je dagelijkse avonturen met je pup in kaart te brengen."
           }
         }
       }
     },
-    "NSLocationWhenInUseUsageDescription" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Otis nutzt deinen Standort, um Spaziergang-Orte zu speichern, damit du Spaziergänge an deinen Lieblingsorten einfach protokollieren kannst."
+    "NSLocationWhenInUseUsageDescription": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis nutzt deinen Standort, um Spaziergang-Orte zu speichern, damit du Spaziergänge an deinen Lieblingsorten einfach protokollieren kannst."
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Otis uses your location to save walk spots so you can easily log walks at your favorite places."
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis uses your location to save walk spots so you can easily log walks at your favorite places."
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Otis usa tu ubicacion para guardar lugares de paseo y que puedas registrar facilmente los paseos en tus lugares favoritos."
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis usa tu ubicacion para guardar lugares de paseo y que puedas registrar facilmente los paseos en tus lugares favoritos."
           }
         },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Otis utilise votre position pour enregistrer vos lieux de promenade afin que vous puissiez facilement noter vos balades dans vos endroits préférés."
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis utilise votre position pour enregistrer vos lieux de promenade afin que vous puissiez facilement noter vos balades dans vos endroits préférés."
           }
         },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Otis usa la tua posizione per salvare i luoghi delle passeggiate, cosi puoi registrare facilmente le uscite nei tuoi posti preferiti."
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis usa la tua posizione per salvare i luoghi delle passeggiate, cosi puoi registrare facilmente le uscite nei tuoi posti preferiti."
           }
         },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Otis gebruikt je locatie om wandelplekken op te slaan zodat je makkelijk wandelingen kunt loggen op je favoriete plekken."
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis gebruikt je locatie om wandelplekken op te slaan zodat je makkelijk wandelingen kunt loggen op je favoriete plekken."
           }
         },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Otis använder din plats för att spara promenadplatser så att du enkelt kan logga promenader på dina favoritställen."
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis använder din plats för att spara promenadplatser så att du enkelt kan logga promenader på dina favoritställen."
           }
         }
       }
     },
-    "NSPhotoLibraryAddUsageDescription" : {
-      "comment" : "Privacy - Photo Library Additions Usage Description",
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Save shareable cards to your photo library"
+    "NSPhotoLibraryAddUsageDescription": {
+      "comment": "Privacy - Photo Library Additions Usage Description",
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Save shareable cards to your photo library"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "We slaan foto's van je pup op in je fotobibliotheek zodat je ze kunt delen en bewaren."
           }
         }
       }
     },
-    "NSPhotoLibraryUsageDescription" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Otis möchte Zugriff auf deine Fotos, um Momente hinzuzufügen."
+    "NSPhotoLibraryUsageDescription": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis möchte Zugriff auf deine Fotos, um Momente hinzuzufügen."
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Otis wants access to your photos to add moments."
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis wants access to your photos to add moments."
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Otis quiere acceder a tus fotos para agregar momentos."
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis quiere acceder a tus fotos para agregar momentos."
           }
         },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Otis souhaite accéder à vos photos pour ajouter des moments."
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis souhaite accéder à vos photos pour ajouter des moments."
           }
         },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Otis vuole accedere alle tue foto per aggiungere momenti."
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis vuole accedere alle tue foto per aggiungere momenti."
           }
         },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Otis wil toegang tot je foto's om momenten toe te voegen."
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis wil toegang tot je foto's om momenten toe te voegen."
           }
         },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Otis vill ha åtkomst till dina foton för att lägga till ögonblick."
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otis vill ha åtkomst till dina foton för att lägga till ögonblick."
           }
         }
       }
     }
   },
-  "version" : "1.0"
+  "version": "1.0"
 }

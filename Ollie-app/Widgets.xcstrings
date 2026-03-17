@@ -72,7 +72,7 @@
       }
     },
     "%@ needs to pee now!": {
-      "extractionState": "stale",
+      "extractionState": "manual",
       "localizations": {
         "de": {
           "stringUnit": {
@@ -107,7 +107,7 @@
       }
     },
     "%@ needs to pee soon!": {
-      "extractionState": "stale",
+      "extractionState": "manual",
       "localizations": {
         "de": {
           "stringUnit": {

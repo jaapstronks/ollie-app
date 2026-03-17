@@ -5063,6 +5063,12 @@
             "state": "translated",
             "value": "Nessun profilo cucciolo trovato. Crea prima un profilo."
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geen puppyprofiel gevonden. Maak eerst een profiel aan."
+          }
         }
       }
     },

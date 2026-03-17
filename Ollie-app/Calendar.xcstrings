@@ -139,6 +139,12 @@
             "state": "translated",
             "value": "Alla Dag"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hele dag"
+          }
         }
       },
       "extractionState": "manual"
@@ -245,6 +251,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Kalender access denied. Please enable Kalender access I Inställningar."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Agendatoegang geweigerd. Schakel agendatoegang in via Instellingen."
           }
         }
       },
@@ -388,6 +400,12 @@
             "state": "translated",
             "value": "Misslyckades med att remove Händelse: %@"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verwijderen van gebeurtenis mislukt: %@"
+          }
         }
       },
       "extractionState": "manual"
@@ -425,6 +443,12 @@
             "state": "translated",
             "value": "Misslyckades med att Spara Händelse: %@"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Opslaan van gebeurtenis mislukt: %@"
+          }
         }
       },
       "extractionState": "manual"
@@ -461,6 +485,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Invalid Milstolpe Datum."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ongeldige mijlpaaldatum."
           }
         }
       },

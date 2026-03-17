@@ -4,22 +4,22 @@
     "%@'s birth date": {
       "extractionState": "stale",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geburtsdatum von %@"
+          }
+        },
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Fecha de nacimiento de %@"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Geboortedatum van %@"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Geburtsdatum von %@"
+            "value": "Date de naissance de %@"
           }
         },
         "it": {
@@ -28,10 +28,10 @@
             "value": "Data di nascita di %@"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Date de naissance de %@"
+            "value": "Geboortedatum van %@"
           }
         }
       }
@@ -39,22 +39,22 @@
     "%lld days home": {
       "extractionState": "stale",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld Tage zu Hause"
+          }
+        },
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "%lld días en casa"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld dagen thuis"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld Tage zu Hause"
+            "value": "%lld jours à la maison"
           }
         },
         "it": {
@@ -63,10 +63,10 @@
             "value": "%lld giorni a casa"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld jours à la maison"
+            "value": "%lld dagen thuis"
           }
         }
       }
@@ -74,22 +74,22 @@
     "%lld months old": {
       "extractionState": "stale",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld Monate alt"
+          }
+        },
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "%lld meses de edad"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld maanden oud"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld Monate alt"
+            "value": "%lld mois"
           }
         },
         "it": {
@@ -98,10 +98,10 @@
             "value": "%lld mesi"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld mois"
+            "value": "%lld maanden oud"
           }
         }
       }
@@ -109,22 +109,22 @@
     "%lld weeks old": {
       "extractionState": "stale",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld Wochen alt"
+          }
+        },
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "%lld semanas de edad"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld weken oud"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld Wochen alt"
+            "value": "%lld semaines"
           }
         },
         "it": {
@@ -133,10 +133,10 @@
             "value": "%lld settimane"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld semaines"
+            "value": "%lld weken oud"
           }
         }
       }
@@ -144,22 +144,22 @@
     "1 month old": {
       "extractionState": "stale",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 Monat alt"
+          }
+        },
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "1 mes de edad"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "1 maand oud"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "1 Monat alt"
+            "value": "1 mois"
           }
         },
         "it": {
@@ -168,10 +168,10 @@
             "value": "1 mese"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "1 mois"
+            "value": "1 maand oud"
           }
         }
       }
@@ -179,22 +179,22 @@
     "Add a photo of %@?": {
       "extractionState": "stale",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ein Foto von %@ hinzufügen?"
+          }
+        },
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "¿Agregar una foto de %@?"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Foto van %@ toevoegen?"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ein Foto von %@ hinzufügen?"
+            "value": "Ajouter une photo de %@ ?"
           }
         },
         "it": {
@@ -203,15 +203,16 @@
             "value": "Aggiungere una foto di %@?"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ajouter une photo de %@ ?"
+            "value": "Foto van %@ toevoegen?"
           }
         }
       }
     },
     "Add my dog": {
+      "extractionState": "stale",
       "localizations": {
         "de": {
           "stringUnit": {
@@ -246,6 +247,7 @@
       }
     },
     "Add my own dog instead": {
+      "extractionState": "stale",
       "localizations": {
         "de": {
           "stringUnit": {
@@ -282,22 +284,22 @@
     "All milestones completed!": {
       "extractionState": "stale",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alle Meilensteine erreicht!"
+          }
+        },
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "¡Todos los hitos completados!"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Alle mijlpalen behaald!"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Alle Meilensteine erreicht!"
+            "value": "Toutes les étapes accomplies !"
           }
         },
         "it": {
@@ -306,10 +308,10 @@
             "value": "Tutti i traguardi completati!"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Toutes les étapes accomplies !"
+            "value": "Alle mijlpalen behaald!"
           }
         }
       }
@@ -317,22 +319,22 @@
     "Already in the deep end?": {
       "extractionState": "stale",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schon mittendrin?"
+          }
+        },
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "¿Ya en plena aventura?"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Al midden in het avontuur?"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Schon mittendrin?"
+            "value": "Déjà dans le bain ?"
           }
         },
         "it": {
@@ -341,10 +343,10 @@
             "value": "Gia nel pieno dell'avventura?"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Déjà dans le bain ?"
+            "value": "Al midden in het avontuur?"
           }
         }
       }
@@ -352,19 +354,19 @@
     "Beagle, Cocker Spaniel, Border Collie": {
       "extractionState": "stale",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beagle, Cocker Spaniel, Border Collie"
+          }
+        },
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Beagle, Cocker Spaniel, Border Collie"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Beagle, Cocker Spaniel, Border Collie"
-          }
-        },
-        "de": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
             "value": "Beagle, Cocker Spaniel, Border Collie"
@@ -376,7 +378,7 @@
             "value": "Beagle, Cocker Spaniel, Border Collie"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
             "value": "Beagle, Cocker Spaniel, Border Collie"
@@ -387,22 +389,22 @@
     "Bernese Mountain Dog, Great Dane, Saint Bernard": {
       "extractionState": "stale",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Berner Sennenhund, Deutsche Dogge, Bernhardiner"
+          }
+        },
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Boyero de Berna, Gran Danés, San Bernardo"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Berner Sennenhond, Duitse Dog, Sint-Bernard"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Berner Sennenhund, Deutsche Dogge, Bernhardiner"
+            "value": "Bouvier Bernois, Dogue Allemand, Saint-Bernard"
           }
         },
         "it": {
@@ -411,10 +413,10 @@
             "value": "Bovaro del Bernese, Alano, San Bernardo"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Bouvier Bernois, Dogue Allemand, Saint-Bernard"
+            "value": "Berner Sennenhond, Duitse Dog, Sint-Bernard"
           }
         }
       }
@@ -422,22 +424,16 @@
     "Birth date": {
       "extractionState": "stale",
       "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fecha de nacimiento"
-          }
-        },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Geboortedatum"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Geburtsdatum"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fecha de nacimiento"
           }
         },
         "fr": {
@@ -451,28 +447,34 @@
             "state": "translated",
             "value": "Data di nascita"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geboortedatum"
+          }
         }
       }
     },
     "Born": {
       "extractionState": "stale",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geboren"
+          }
+        },
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Nacido"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Geboren"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Geboren"
+            "value": "Né"
           }
         },
         "it": {
@@ -481,10 +483,10 @@
             "value": "Nato"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Né"
+            "value": "Geboren"
           }
         }
       }
@@ -492,22 +494,22 @@
     "Breed (optional)": {
       "extractionState": "stale",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rasse (optional)"
+          }
+        },
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Raza (opcional)"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ras (optioneel)"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Rasse (optional)"
+            "value": "Race (facultatif)"
           }
         },
         "it": {
@@ -516,15 +518,86 @@
             "value": "Razza (opzionale)"
           }
         },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ras (optioneel)"
+          }
+        }
+      }
+    },
+    "Came home": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eingezogen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Llegó a casa"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Race (facultatif)"
+            "value": "Arrivée à la maison"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Arrivo a casa"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Thuisgekomen"
+          }
+        }
+      }
+    },
+    "Chihuahua, Maltese, Yorkshire Terrier": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chihuahua, Malteser, Yorkshire Terrier"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chihuahua, Maltés, Yorkshire Terrier"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chihuahua, Maltais, Yorkshire Terrier"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chihuahua, Maltese, Yorkshire Terrier"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chihuahua, Maltezer, Yorkshire Terrier"
           }
         }
       }
     },
     "Create a profile for your pup": {
+      "extractionState": "stale",
       "localizations": {
         "de": {
           "stringUnit": {
@@ -558,95 +631,25 @@
         }
       }
     },
-    "Came home": {
-      "extractionState": "stale",
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Llegó a casa"
-          }
-        },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Thuisgekomen"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Eingezogen"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Arrivo a casa"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Arrivée à la maison"
-          }
-        }
-      }
-    },
-    "Chihuahua, Maltese, Yorkshire Terrier": {
-      "extractionState": "stale",
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Chihuahua, Maltés, Yorkshire Terrier"
-          }
-        },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Chihuahua, Maltezer, Yorkshire Terrier"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Chihuahua, Malteser, Yorkshire Terrier"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Chihuahua, Maltese, Yorkshire Terrier"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Chihuahua, Maltais, Yorkshire Terrier"
-          }
-        }
-      }
-    },
     "Date %@ came home": {
       "extractionState": "stale",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Datum an dem %@ eingezogen ist"
+          }
+        },
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Fecha en que %@ llegó a casa"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Datum dat %@ thuiskwam"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Datum an dem %@ eingezogen ist"
+            "value": "Date d'arrivée de %@ à la maison"
           }
         },
         "it": {
@@ -655,10 +658,10 @@
             "value": "Data in cui %@ e arrivato a casa"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Date d'arrivée de %@ à la maison"
+            "value": "Datum dat %@ thuiskwam"
           }
         }
       }
@@ -666,22 +669,22 @@
     "Date %@ will come home": {
       "extractionState": "stale",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Datum an dem %@ einzieht"
+          }
+        },
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Fecha en que %@ llegará a casa"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Datum dat %@ thuiskomt"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Datum an dem %@ einzieht"
+            "value": "Date d'arrivée prévue de %@"
           }
         },
         "it": {
@@ -690,15 +693,16 @@
             "value": "Data in cui %@ arrivera a casa"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Date d'arrivée prévue de %@"
+            "value": "Datum dat %@ thuiskomt"
           }
         }
       }
     },
     "Don't have a link yet? Ask them to share from Settings → Family Sharing.": {
+      "extractionState": "stale",
       "localizations": {
         "de": {
           "stringUnit": {
@@ -735,22 +739,22 @@
     "Enable Location": {
       "extractionState": "stale",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Standort aktivieren"
+          }
+        },
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Activar ubicación"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Locatie inschakelen"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Standort aktivieren"
+            "value": "Activer la localisation"
           }
         },
         "it": {
@@ -759,10 +763,10 @@
             "value": "Abilita posizione"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Activer la localisation"
+            "value": "Locatie inschakelen"
           }
         }
       }
@@ -770,22 +774,22 @@
     "Enable Notifications": {
       "extractionState": "stale",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mitteilungen aktivieren"
+          }
+        },
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Activar notificaciones"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Meldingen inschakelen"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mitteilungen aktivieren"
+            "value": "Activer les notifications"
           }
         },
         "it": {
@@ -794,10 +798,10 @@
             "value": "Abilita notifiche"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Activer les notifications"
+            "value": "Meldingen inschakelen"
           }
         }
       }
@@ -805,22 +809,22 @@
     "Enter custom": {
       "extractionState": "stale",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eigene eingeben"
+          }
+        },
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Introducir manualmente"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zelf invoeren"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Eigene eingeben"
+            "value": "Entrer manuellement"
           }
         },
         "it": {
@@ -829,10 +833,10 @@
             "value": "Inserisci personalizzato"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Entrer manuellement"
+            "value": "Zelf invoeren"
           }
         }
       }
@@ -840,22 +844,22 @@
     "Enter your puppy's name": {
       "extractionState": "stale",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Name deines Welpen eingeben"
+          }
+        },
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Introduce el nombre de tu cachorro"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Voer de naam van je pup in"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Name deines Welpen eingeben"
+            "value": "Entrez le nom de votre chiot"
           }
         },
         "it": {
@@ -864,10 +868,10 @@
             "value": "Inserisci il nome del tuo cucciolo"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Entrez le nom de votre chiot"
+            "value": "Voer de naam van je pup in"
           }
         }
       }
@@ -875,25 +879,13 @@
     "Extra large (>45kg)": {
       "extractionState": "stale",
       "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Extra grande (>45kg)"
-          }
-        },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Extra groot (>45kg)"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Sehr gross (>45kg)"
           }
         },
-        "it": {
+        "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Extra grande (>45kg)"
@@ -904,28 +896,40 @@
             "state": "translated",
             "value": "Très grand (>45 kg)"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Extra grande (>45kg)"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Extra groot (>45kg)"
+          }
         }
       }
     },
     "Get Started": {
       "extractionState": "stale",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Los geht's"
+          }
+        },
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Comenzar"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Aan de slag"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Los geht's"
+            "value": "Commencer"
           }
         },
         "it": {
@@ -934,10 +938,10 @@
             "value": "Inizia"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Commencer"
+            "value": "Aan de slag"
           }
         }
       }
@@ -945,22 +949,16 @@
     "Home date": {
       "extractionState": "stale",
       "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fecha de llegada"
-          }
-        },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Thuiskomst"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Einzugsdatum"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fecha de llegada"
           }
         },
         "fr": {
@@ -974,28 +972,34 @@
             "state": "translated",
             "value": "Data arrivo a casa"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Thuiskomst"
+          }
         }
       }
     },
     "How big will %@ get?": {
       "extractionState": "stale",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wie gross wird %@?"
+          }
+        },
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "¿Qué tamaño tendrá %@?"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Hoe groot wordt %@?"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wie gross wird %@?"
+            "value": "Quelle taille fera %@ ?"
           }
         },
         "it": {
@@ -1004,10 +1008,10 @@
             "value": "Quanto diventera grande %@?"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Quelle taille fera %@ ?"
+            "value": "Hoe groot wordt %@?"
           }
         }
       }
@@ -1015,22 +1019,22 @@
     "Is %@ already home?": {
       "extractionState": "stale",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ist %@ schon zu Hause?"
+          }
+        },
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "¿%@ ya está en casa?"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Is %@ al thuis?"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ist %@ schon zu Hause?"
+            "value": "%@ est-il déjà à la maison ?"
           }
         },
         "it": {
@@ -1039,15 +1043,16 @@
             "value": "%@ e gia a casa?"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@ est-il déjà à la maison ?"
+            "value": "Is %@ al thuis?"
           }
         }
       }
     },
     "Join a shared dog": {
+      "extractionState": "stale",
       "localizations": {
         "de": {
           "stringUnit": {
@@ -1084,22 +1089,22 @@
     "Just start tracking. Patterns emerge fast.": {
       "extractionState": "stale",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Einfach anfangen zu tracken. Muster zeigen sich schnell."
+          }
+        },
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Solo empieza a registrar. Los patrones aparecen rápido."
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ga gewoon beginnen. Patronen worden snel zichtbaar."
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Einfach anfangen zu tracken. Muster zeigen sich schnell."
+            "value": "Commencez simplement à suivre. Les habitudes apparaissent vite."
           }
         },
         "it": {
@@ -1108,10 +1113,10 @@
             "value": "Inizia a registrare. I modelli emergono rapidamente."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Commencez simplement à suivre. Les habitudes apparaissent vite."
+            "value": "Ga gewoon beginnen. Patronen worden snel zichtbaar."
           }
         }
       }
@@ -1119,22 +1124,22 @@
     "Labrador, Golden Retriever, German Shepherd": {
       "extractionState": "stale",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Labrador, Golden Retriever, Deutscher Schäferhund"
+          }
+        },
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Labrador, Golden Retriever, Pastor Alemán"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Labrador, Golden Retriever, Duitse Herder"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Labrador, Golden Retriever, Deutscher Schäferhund"
+            "value": "Labrador, Golden Retriever, Berger Allemand"
           }
         },
         "it": {
@@ -1143,10 +1148,10 @@
             "value": "Labrador, Golden Retriever, Pastore Tedesco"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Labrador, Golden Retriever, Berger Allemand"
+            "value": "Labrador, Golden Retriever, Duitse Herder"
           }
         }
       }
@@ -1154,25 +1159,13 @@
     "Large (25-45kg)": {
       "extractionState": "stale",
       "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Grande (25-45kg)"
-          }
-        },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Groot (25-45kg)"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Gross (25-45kg)"
           }
         },
-        "it": {
+        "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Grande (25-45kg)"
@@ -1183,28 +1176,40 @@
             "state": "translated",
             "value": "Grand (25-45 kg)"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Grande (25-45kg)"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Groot (25-45kg)"
+          }
         }
       }
     },
     "Let's Go!": {
       "extractionState": "stale",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Los geht's!"
+          }
+        },
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "¡Vamos!"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Laten we beginnen!"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Los geht's!"
+            "value": "C'est parti !"
           }
         },
         "it": {
@@ -1213,10 +1218,10 @@
             "value": "Andiamo!"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "C'est parti !"
+            "value": "Laten we beginnen!"
           }
         }
       }
@@ -1224,22 +1229,22 @@
     "Maybe later": {
       "extractionState": "stale",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vielleicht später"
+          }
+        },
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Quizás más tarde"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Misschien later"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vielleicht später"
+            "value": "Peut-être plus tard"
           }
         },
         "it": {
@@ -1248,10 +1253,10 @@
             "value": "Forse piu tardi"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Peut-être plus tard"
+            "value": "Misschien later"
           }
         }
       }
@@ -1259,22 +1264,22 @@
     "Meal time alerts": {
       "extractionState": "stale",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fütterungszeit-Benachrichtigungen"
+          }
+        },
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Alertas de hora de comida"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Waarschuwingen voor maaltijden"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fütterungszeit-Benachrichtigungen"
+            "value": "Alertes heures de repas"
           }
         },
         "it": {
@@ -1283,10 +1288,10 @@
             "value": "Avvisi orario pappa"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Alertes heures de repas"
+            "value": "Waarschuwingen voor maaltijden"
           }
         }
       }
@@ -1294,22 +1299,22 @@
     "Medium (10-25kg)": {
       "extractionState": "stale",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mittel (10-25kg)"
+          }
+        },
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Mediano (10-25kg)"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Middelgroot (10-25kg)"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mittel (10-25kg)"
+            "value": "Moyen (10-25 kg)"
           }
         },
         "it": {
@@ -1318,10 +1323,10 @@
             "value": "Medio (10-25kg)"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Moyen (10-25 kg)"
+            "value": "Middelgroot (10-25kg)"
           }
         }
       }
@@ -1329,22 +1334,16 @@
     "Moments": {
       "extractionState": "stale",
       "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Momentos"
-          }
-        },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Momenten"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Momente"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Momentos"
           }
         },
         "fr": {
@@ -1358,28 +1357,28 @@
             "state": "translated",
             "value": "Momenti"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Momenten"
+          }
         }
       }
     },
     "Name": {
       "extractionState": "stale",
       "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nombre"
-          }
-        },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Naam"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Name"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nombre"
           }
         },
         "fr": {
@@ -1393,28 +1392,34 @@
             "state": "translated",
             "value": "Nome"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Naam"
+          }
         }
       }
     },
     "Nap reminders when awake too long": {
       "extractionState": "stale",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nickerchen-Erinnerungen wenn zu lange wach"
+          }
+        },
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Recordatorios de siesta cuando está despierto demasiado tiempo"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dutje-herinneringen als te lang wakker"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nickerchen-Erinnerungen wenn zu lange wach"
+            "value": "Rappels de sieste quand éveillé trop longtemps"
           }
         },
         "it": {
@@ -1423,10 +1428,10 @@
             "value": "Promemoria nanna quando sveglio troppo a lungo"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Rappels de sieste quand éveillé trop longtemps"
+            "value": "Dutje-herinneringen als te lang wakker"
           }
         }
       }
@@ -1434,22 +1439,22 @@
     "Never miss a potty break": {
       "extractionState": "stale",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nie mehr eine Pipipipause verpassen"
+          }
+        },
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Nunca te pierdas un descanso para hacer pipí"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Mis nooit meer een plasmoment"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nie mehr eine Pipipipause verpassen"
+            "value": "Ne manquez jamais une pause pipi"
           }
         },
         "it": {
@@ -1458,10 +1463,10 @@
             "value": "Non perdere mai un momento pipi"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ne manquez jamais une pause pipi"
+            "value": "Mis nooit meer een plasmoment"
           }
         }
       }
@@ -1469,22 +1474,22 @@
     "Next up": {
       "extractionState": "stale",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Als Nächstes"
+          }
+        },
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Próximamente"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Binnenkort"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Als Nächstes"
+            "value": "À venir"
           }
         },
         "it": {
@@ -1493,10 +1498,10 @@
             "value": "Prossimo"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "À venir"
+            "value": "Binnenkort"
           }
         }
       }
@@ -1504,22 +1509,22 @@
     "No upcoming milestones": {
       "extractionState": "stale",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine anstehenden Meilensteine"
+          }
+        },
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Sin hitos próximos"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Geen komende mijlpalen"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Keine anstehenden Meilensteine"
+            "value": "Pas d'étapes à venir"
           }
         },
         "it": {
@@ -1528,10 +1533,10 @@
             "value": "Nessun traguardo in arrivo"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pas d'étapes à venir"
+            "value": "Geen komende mijlpalen"
           }
         }
       }
@@ -1539,22 +1544,22 @@
     "Not Now": {
       "extractionState": "stale",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nicht jetzt"
+          }
+        },
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Ahora no"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nu niet"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nicht jetzt"
+            "value": "Pas maintenant"
           }
         },
         "it": {
@@ -1563,10 +1568,10 @@
             "value": "Non ora"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pas maintenant"
+            "value": "Nu niet"
           }
         }
       }
@@ -1574,22 +1579,22 @@
     "Not yet, I'm expecting %@": {
       "extractionState": "stale",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Noch nicht, ich erwarte %@"
+          }
+        },
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Todavía no, estoy esperando a %@"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nog niet, ik verwacht %@"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Noch nicht, ich erwarte %@"
+            "value": "Pas encore, j'attends %@"
           }
         },
         "it": {
@@ -1598,15 +1603,16 @@
             "value": "Non ancora, aspetto %@"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pas encore, j'attends %@"
+            "value": "Nog niet, ik verwacht %@"
           }
         }
       }
     },
     "Open the invite link you received from the dog's owner.": {
+      "extractionState": "stale",
       "localizations": {
         "de": {
           "stringUnit": {
@@ -1643,22 +1649,22 @@
     "Other / Unknown": {
       "extractionState": "stale",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Andere / Unbekannt"
+          }
+        },
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Otro / Desconocido"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Anders / Onbekend"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Andere / Unbekannt"
+            "value": "Autre / Inconnu"
           }
         },
         "it": {
@@ -1667,10 +1673,10 @@
             "value": "Altro / Sconosciuto"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Autre / Inconnu"
+            "value": "Anders / Onbekend"
           }
         }
       }
@@ -1678,22 +1684,22 @@
     "Overdue": {
       "extractionState": "stale",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Überfällig"
+          }
+        },
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Atrasado"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Te laat"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Überfällig"
+            "value": "En retard"
           }
         },
         "it": {
@@ -1702,10 +1708,10 @@
             "value": "In ritardo"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "En retard"
+            "value": "Te laat"
           }
         }
       }
@@ -1713,19 +1719,13 @@
     "Plan": {
       "extractionState": "stale",
       "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Plan"
-          }
-        },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Plan"
-          }
-        },
         "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plan"
+          }
+        },
+        "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Plan"
@@ -1742,28 +1742,34 @@
             "state": "translated",
             "value": "Piano"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plan"
+          }
         }
       }
     },
     "Potty reminders based on patterns": {
       "extractionState": "stale",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pipi-Erinnerungen basierend auf Mustern"
+          }
+        },
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Recordatorios de pipí basados en patrones"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plasherinneringen op basis van patronen"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pipi-Erinnerungen basierend auf Mustern"
+            "value": "Rappels de besoins basés sur les habitudes"
           }
         },
         "it": {
@@ -1772,10 +1778,10 @@
             "value": "Promemoria pipi basati sui modelli"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Rappels de besoins basés sur les habitudes"
+            "value": "Plasherinneringen op basis van patronen"
           }
         }
       }
@@ -1783,22 +1789,22 @@
     "Preparing for your puppy?": {
       "extractionState": "stale",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bereitest du dich auf deinen Welpen vor?"
+          }
+        },
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "¿Preparándote para tu cachorro?"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Voorbereiden op je pup?"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bereitest du dich auf deinen Welpen vor?"
+            "value": "Vous préparez l'arrivée de votre chiot ?"
           }
         },
         "it": {
@@ -1807,10 +1813,10 @@
             "value": "Ti stai preparando per il tuo cucciolo?"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Vous préparez l'arrivée de votre chiot ?"
+            "value": "Voorbereiden op je pup?"
           }
         }
       }
@@ -1818,22 +1824,22 @@
     "Puppy age": {
       "extractionState": "stale",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Welpenalter"
+          }
+        },
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Edad del cachorro"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Leeftijd pup"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Welpenalter"
+            "value": "Âge du chiot"
           }
         },
         "it": {
@@ -1842,15 +1848,51 @@
             "value": "Eta del cucciolo"
           }
         },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Leeftijd pup"
+          }
+        }
+      }
+    },
+    "Ready to begin!": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bereit loszulegen!"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¡Listo para empezar!"
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Âge du chiot"
+            "value": "Prêt à commencer !"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pronto per iniziare!"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Klaar om te beginnen!"
           }
         }
       }
     },
     "Ready to join?": {
+      "extractionState": "stale",
       "localizations": {
         "de": {
           "stringUnit": {
@@ -1884,60 +1926,25 @@
         }
       }
     },
-    "Ready to begin!": {
-      "extractionState": "stale",
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "¡Listo para empezar!"
-          }
-        },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Klaar om te beginnen!"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bereit loszulegen!"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pronto per iniziare!"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Prêt à commencer !"
-          }
-        }
-      }
-    },
     "Save and revisit walk spots": {
       "extractionState": "stale",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spazierwege speichern und wieder besuchen"
+          }
+        },
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Guarda y revisita lugares de paseo"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Bewaar en herbezoek wandelplekken"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Spazierwege speichern und wieder besuchen"
+            "value": "Enregistrez et revisitez vos lieux de promenade"
           }
         },
         "it": {
@@ -1946,10 +1953,10 @@
             "value": "Salva e rivedi i posti delle passeggiate"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Enregistrez et revisitez vos lieux de promenade"
+            "value": "Bewaar en herbezoek wandelplekken"
           }
         }
       }
@@ -1957,22 +1964,22 @@
     "Save favorite spots and get weather forecasts for your walks.": {
       "extractionState": "stale",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lieblingsplätze speichern und Wettervorhersagen für Spaziergänge erhalten."
+          }
+        },
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Guarda lugares favoritos y obtén pronósticos del clima para tus paseos."
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Bewaar favoriete plekjes en krijg weersverwachtingen voor je wandelingen."
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Lieblingsplätze speichern und Wettervorhersagen für Spaziergänge erhalten."
+            "value": "Enregistrez vos endroits préférés et consultez les prévisions météo pour vos promenades."
           }
         },
         "it": {
@@ -1981,10 +1988,10 @@
             "value": "Salva i posti preferiti e ottieni le previsioni meteo per le passeggiate."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Enregistrez vos endroits préférés et consultez les prévisions météo pour vos promenades."
+            "value": "Bewaar favoriete plekjes en krijg weersverwachtingen voor je wandelingen."
           }
         }
       }
@@ -1992,22 +1999,22 @@
     "See all moments": {
       "extractionState": "stale",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alle Momente anzeigen"
+          }
+        },
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Ver todos los momentos"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Bekijk alle momenten"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Alle Momente anzeigen"
+            "value": "Voir tous les moments"
           }
         },
         "it": {
@@ -2016,10 +2023,10 @@
             "value": "Vedi tutti i momenti"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Voir tous les moments"
+            "value": "Bekijk alle momenten"
           }
         }
       }
@@ -2027,22 +2034,16 @@
     "Skip": {
       "extractionState": "stale",
       "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Omitir"
-          }
-        },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Overslaan"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Überspringen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Omitir"
           }
         },
         "fr": {
@@ -2056,28 +2057,34 @@
             "state": "translated",
             "value": "Salta"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Overslaan"
+          }
         }
       }
     },
     "Small (<10kg)": {
       "extractionState": "stale",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Klein (<10kg)"
+          }
+        },
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Pequeño (<10kg)"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Klein (<10kg)"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Klein (<10kg)"
+            "value": "Petit (<10 kg)"
           }
         },
         "it": {
@@ -2086,10 +2093,10 @@
             "value": "Piccolo (<10kg)"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Petit (<10 kg)"
+            "value": "Klein (<10kg)"
           }
         }
       }
@@ -2097,22 +2104,22 @@
     "Smart reminders help you stay ahead of your puppy's needs.": {
       "extractionState": "stale",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Intelligente Erinnerungen helfen dir, den Bedürfnissen deines Welpen voraus zu sein."
+          }
+        },
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Los recordatorios inteligentes te ayudan a anticiparte a las necesidades de tu cachorro."
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slimme herinneringen helpen je vooruit te blijven op de behoeften van je pup."
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Intelligente Erinnerungen helfen dir, den Bedürfnissen deines Welpen voraus zu sein."
+            "value": "Des rappels intelligents vous aident à anticiper les besoins de votre chiot."
           }
         },
         "it": {
@@ -2121,15 +2128,16 @@
             "value": "I promemoria intelligenti ti aiutano ad anticipare i bisogni del tuo cucciolo."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Des rappels intelligents vous aident à anticiper les besoins de votre chiot."
+            "value": "Slimme herinneringen helpen je vooruit te blijven op de behoeften van je pup."
           }
         }
       }
     },
     "Someone invited you to co-manage their pup": {
+      "extractionState": "stale",
       "localizations": {
         "de": {
           "stringUnit": {
@@ -2166,22 +2174,22 @@
     "Start logging from day one. You'll thank yourself in week two.": {
       "extractionState": "stale",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ab Tag eins erfassen. Du wirst dir in Woche zwei danken."
+          }
+        },
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Empieza a registrar desde el primer día. Te lo agradecerás en la segunda semana."
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Begin met loggen vanaf dag een. Je bedankt jezelf in week twee."
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ab Tag eins erfassen. Du wirst dir in Woche zwei danken."
+            "value": "Commencez à enregistrer dès le premier jour. Vous vous en féliciterez la deuxième semaine."
           }
         },
         "it": {
@@ -2190,10 +2198,10 @@
             "value": "Inizia a registrare dal primo giorno. Te ne sarai grato nella seconda settimana."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Commencez à enregistrer dès le premier jour. Vous vous en féliciterez la deuxième semaine."
+            "value": "Begin met loggen vanaf dag een. Je bedankt jezelf in week twee."
           }
         }
       }
@@ -2201,22 +2209,22 @@
     "Take a picture!": {
       "extractionState": "stale",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mach ein Foto!"
+          }
+        },
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "¡Toma una foto!"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Maak een foto!"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mach ein Foto!"
+            "value": "Prenez une photo !"
           }
         },
         "it": {
@@ -2225,16 +2233,17 @@
             "value": "Scatta una foto!"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Prenez une photo !"
+            "value": "Maak een foto!"
           }
         }
       }
     },
     "The Beginning": {
       "comment": "Title of a section in the memory book that describes the beginning of a dog's life.",
+      "extractionState": "manual",
       "isCommentAutoGenerated": true,
       "localizations": {
         "de": {
@@ -2266,29 +2275,34 @@
             "state": "translated",
             "value": "The Beginning"
           }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Het begin"
+          }
         }
-      },
-      "extractionState": "manual"
+      }
     },
     "This is optional — you can always add one later.": {
       "extractionState": "stale",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Das ist optional — du kannst später jederzeit ein Foto hinzufügen."
+          }
+        },
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Esto es opcional — siempre puedes agregar una después."
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dit is optioneel — je kunt later altijd een foto toevoegen."
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Das ist optional — du kannst später jederzeit ein Foto hinzufügen."
+            "value": "C'est facultatif — vous pourrez toujours en ajouter une plus tard."
           }
         },
         "it": {
@@ -2297,10 +2311,10 @@
             "value": "Questo e opzionale — puoi sempre aggiungerne una dopo."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "C'est facultatif — vous pourrez toujours en ajouter une plus tard."
+            "value": "Dit is optioneel — je kunt later altijd een foto toevoegen."
           }
         }
       }
@@ -2308,22 +2322,22 @@
     "Track meals, potty, sleep & walks — and actually understand what your puppy needs.": {
       "extractionState": "stale",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erfasse Mahlzeiten, Pipi, Schlaf & Spaziergänge — und verstehe endlich was dein Welpe braucht."
+          }
+        },
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Registra comidas, pipí, sueño y paseos — y entiende realmente lo que tu cachorro necesita."
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Houd maaltijden, plasjes, slaap en wandelingen bij — en begrijp eindelijk wat je pup nodig heeft."
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Erfasse Mahlzeiten, Pipi, Schlaf & Spaziergänge — und verstehe endlich was dein Welpe braucht."
+            "value": "Suivez les repas, les besoins, le sommeil et les promenades — et comprenez vraiment les besoins de votre chiot."
           }
         },
         "it": {
@@ -2332,10 +2346,10 @@
             "value": "Registra pappa, pipi, nanna e passeggiate — e capisci davvero di cosa ha bisogno il tuo cucciolo."
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Suivez les repas, les besoins, le sommeil et les promenades — et comprenez vraiment les besoins de votre chiot."
+            "value": "Houd maaltijden, plasjes, slaap en wandelingen bij — en begrijp eindelijk wat je pup nodig heeft."
           }
         }
       }
@@ -2343,22 +2357,22 @@
     "Track routes and distances": {
       "extractionState": "stale",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Routen und Entfernungen verfolgen"
+          }
+        },
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Registra rutas y distancias"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Routes en afstanden volgen"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Routen und Entfernungen verfolgen"
+            "value": "Suivez les itinéraires et distances"
           }
         },
         "it": {
@@ -2367,10 +2381,10 @@
             "value": "Segui percorsi e distanze"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Suivez les itinéraires et distances"
+            "value": "Routes en afstanden volgen"
           }
         }
       }
@@ -2378,22 +2392,22 @@
     "Track walks & check weather": {
       "extractionState": "stale",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spaziergänge verfolgen & Wetter prüfen"
+          }
+        },
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Registra paseos y consulta el clima"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wandelingen volgen & weer bekijken"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Spaziergänge verfolgen & Wetter prüfen"
+            "value": "Suivez les promenades et consultez la météo"
           }
         },
         "it": {
@@ -2402,10 +2416,10 @@
             "value": "Segui le passeggiate e controlla il meteo"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Suivez les promenades et consultez la météo"
+            "value": "Wandelingen volgen & weer bekijken"
           }
         }
       }
@@ -2413,22 +2427,22 @@
     "Upcoming milestones": {
       "extractionState": "stale",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anstehende Meilensteine"
+          }
+        },
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Próximos hitos"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Komende mijlpalen"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Anstehende Meilensteine"
+            "value": "Prochaines étapes"
           }
         },
         "it": {
@@ -2437,15 +2451,16 @@
             "value": "Prossimi traguardi"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Prochaines étapes"
+            "value": "Komende mijlpalen"
           }
         }
       }
     },
     "Waiting for invite link...": {
+      "extractionState": "stale",
       "localizations": {
         "de": {
           "stringUnit": {
@@ -2482,22 +2497,22 @@
     "Weather forecasts for planning": {
       "extractionState": "stale",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wettervorhersagen zur Planung"
+          }
+        },
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Pronósticos del clima para planificar"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Weersverwachtingen voor planning"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wettervorhersagen zur Planung"
+            "value": "Prévisions météo pour planifier"
           }
         },
         "it": {
@@ -2506,10 +2521,10 @@
             "value": "Previsioni meteo per pianificare"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Prévisions météo pour planifier"
+            "value": "Weersverwachtingen voor planning"
           }
         }
       }
@@ -2552,22 +2567,22 @@
     "What breed is %@?": {
       "extractionState": "stale",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Welche Rasse ist %@?"
+          }
+        },
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "¿De qué raza es %@?"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wat voor ras is %@?"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Welche Rasse ist %@?"
+            "value": "Quelle est la race de %@ ?"
           }
         },
         "it": {
@@ -2576,10 +2591,10 @@
             "value": "Che razza e %@?"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Quelle est la race de %@ ?"
+            "value": "Wat voor ras is %@?"
           }
         }
       }
@@ -2587,22 +2602,22 @@
     "What does %@ look like?": {
       "extractionState": "stale",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wie sieht %@ aus?"
+          }
+        },
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "¿Cómo es %@?"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Hoe ziet %@ eruit?"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wie sieht %@ aus?"
+            "value": "À quoi ressemble %@ ?"
           }
         },
         "it": {
@@ -2611,10 +2626,10 @@
             "value": "Che aspetto ha %@?"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "À quoi ressemble %@ ?"
+            "value": "Hoe ziet %@ eruit?"
           }
         }
       }
@@ -2622,22 +2637,22 @@
     "What's your puppy's name?": {
       "extractionState": "stale",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wie heisst dein Welpe?"
+          }
+        },
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "¿Cómo se llama tu cachorro?"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Hoe heet je pup?"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wie heisst dein Welpe?"
+            "value": "Quel est le nom de votre chiot ?"
           }
         },
         "it": {
@@ -2646,10 +2661,10 @@
             "value": "Come si chiama il tuo cucciolo?"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Quel est le nom de votre chiot ?"
+            "value": "Hoe heet je pup?"
           }
         }
       }
@@ -2657,22 +2672,22 @@
     "When did %@ come home?": {
       "extractionState": "stale",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wann ist %@ eingezogen?"
+          }
+        },
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "¿Cuándo llegó %@ a casa?"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wanneer is %@ thuisgekomen?"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wann ist %@ eingezogen?"
+            "value": "Quand %@ est-il arrivé à la maison ?"
           }
         },
         "it": {
@@ -2681,10 +2696,10 @@
             "value": "Quando e arrivato a casa %@?"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Quand %@ est-il arrivé à la maison ?"
+            "value": "Wanneer is %@ thuisgekomen?"
           }
         }
       }
@@ -2692,22 +2707,22 @@
     "When was %@ born?": {
       "extractionState": "stale",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wann wurde %@ geboren?"
+          }
+        },
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "¿Cuándo nació %@?"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wanneer is %@ geboren?"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wann wurde %@ geboren?"
+            "value": "Quand %@ est-il né ?"
           }
         },
         "it": {
@@ -2716,10 +2731,10 @@
             "value": "Quando e nato %@?"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Quand %@ est-il né ?"
+            "value": "Wanneer is %@ geboren?"
           }
         }
       }
@@ -2727,22 +2742,22 @@
     "When will %@ come home?": {
       "extractionState": "stale",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wann zieht %@ ein?"
+          }
+        },
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "¿Cuándo llegará %@ a casa?"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wanneer komt %@ thuis?"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wann zieht %@ ein?"
+            "value": "Quand %@ arrivera-t-il à la maison ?"
           }
         },
         "it": {
@@ -2751,10 +2766,10 @@
             "value": "Quando arrivera a casa %@?"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Quand %@ arrivera-t-il à la maison ?"
+            "value": "Wanneer komt %@ thuis?"
           }
         }
       }
@@ -2762,22 +2777,22 @@
     "Yes, %@ is home": {
       "extractionState": "stale",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ja, %@ ist zu Hause"
+          }
+        },
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Sí, %@ está en casa"
           }
         },
-        "nl": {
+        "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ja, %@ is thuis"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ja, %@ ist zu Hause"
+            "value": "Oui, %@ est à la maison"
           }
         },
         "it": {
@@ -2786,14 +2801,14 @@
             "value": "Si, %@ e a casa"
           }
         },
-        "fr": {
+        "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Oui, %@ est à la maison"
+            "value": "Ja, %@ is thuis"
           }
         }
       }
     }
   },
-  "version": "1.0"
+  "version": "1.1"
 }
