@@ -537,6 +537,18 @@
     "Start walk in ${applicationName}" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringSet" : {
+            "state" : "translated",
+            "values" : [
+              "Starte Spaziergang in ${applicationName}",
+              "Starte einen Spaziergang mit meinem Welpen in ${applicationName}",
+              "Lass uns spazieren gehen in ${applicationName}",
+              "Spaziergang beginnen in ${applicationName}",
+              "Wir gehen spazieren in ${applicationName}"
+            ]
+          }
+        },
         "en" : {
           "stringSet" : {
             "state" : "new",
@@ -546,6 +558,18 @@
               "Let's go for a walk in ${applicationName}",
               "Begin walk in ${applicationName}",
               "Going for a walk in ${applicationName}"
+            ]
+          }
+        },
+        "nl" : {
+          "stringSet" : {
+            "state" : "translated",
+            "values" : [
+              "Start wandeling in ${applicationName}",
+              "Start een wandeling met mijn puppy in ${applicationName}",
+              "Laten we gaan wandelen in ${applicationName}",
+              "Begin wandeling in ${applicationName}",
+              "We gaan wandelen in ${applicationName}"
             ]
           }
         }
