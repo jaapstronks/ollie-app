@@ -14,14 +14,23 @@ import OtisShared
 struct DevToolsView: View {
     @Environment(ProfileStore.self) var profileStore
     @Environment(EventStore.self) var eventStore
+    @Environment(SkillProgressStore.self) var skillProgressStore
+    @Environment(SocializationStore.self) var socializationStore
+    @Environment(MilestoneStore.self) var milestoneStore
 
     // Celebration debug settings
     @AppStorage(UserPreferences.Key.forceCelebrateEveryLog.rawValue) private var forceCelebrateEveryLog = false
+
+    // Fog of war settings
+    @AppStorage("fogOfWarEnabled") private var fogOfWarEnabled = true
 
     var body: some View {
         Form {
             // Subscription override (uses existing DebugSubscriptionSection)
             DebugSubscriptionSection()
+
+            // Fog of war
+            fogOfWarSection
 
             // Celebration testing
             celebrationDebugSection
@@ -35,10 +44,35 @@ struct DevToolsView: View {
             // Data management (import from web app, reset)
             DebugDataSection()
 
+            // Progress reset (training, socialization, milestones)
+            DebugProgressResetSection()
+
+            // Sync testing with predictable test data
+            if #available(iOS 17.0, *) {
+                SyncTestSection()
+            }
+
             // Build info
             buildInfoSection
         }
         .navigationTitle("Developer Tools")
+    }
+
+    // MARK: - Fog of War Section
+
+    private var fogOfWarSection: some View {
+        Section {
+            Toggle(isOn: $fogOfWarEnabled) {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(Strings.Exploration.fogOverlayToggle)
+                    Text(Strings.Exploration.fogOverlayDescription)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            }
+        } header: {
+            Label(Strings.Exploration.sectionTitle, systemImage: "map.fill")
+        }
     }
 
     // MARK: - Celebration Debug Section
@@ -82,6 +116,9 @@ struct DevToolsView: View {
         DevToolsView()
             .environment(ProfileStore())
             .environment(EventStore())
+            .environment(SkillProgressStore())
+            .environment(SocializationStore())
+            .environment(MilestoneStore())
     }
 }
 
