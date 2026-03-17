@@ -169,6 +169,7 @@ struct SocializationJourneyCard: View {
                         Text(Strings.Socialization.logExposure)
                             .font(.subheadline)
                             .fontWeight(.medium)
+                            .lineLimit(1)
                     }
                     .padding(.horizontal, 14)
                     .padding(.vertical, 8)
@@ -186,14 +187,13 @@ struct SocializationJourneyCard: View {
                         Text(Strings.Socialization.seeAllItems)
                             .font(.subheadline)
                             .fontWeight(.medium)
+                            .lineLimit(1)
                         Image(systemName: "chevron.right")
                             .font(.caption)
                     }
                     .foregroundStyle(.pink)
                 }
                 .buttonStyle(.plain)
-
-                Spacer()
             }
         }
     }
@@ -221,6 +221,7 @@ struct SocializationJourneyCard: View {
                         Text(Strings.Socialization.logExposure)
                             .font(.subheadline)
                             .fontWeight(.medium)
+                            .lineLimit(1)
                     }
                     .padding(.horizontal, 14)
                     .padding(.vertical, 8)
@@ -237,10 +238,9 @@ struct SocializationJourneyCard: View {
                         .font(.subheadline)
                         .fontWeight(.medium)
                         .foregroundStyle(.pink)
+                        .lineLimit(1)
                 }
                 .buttonStyle(.plain)
-
-                Spacer()
             }
         }
     }
