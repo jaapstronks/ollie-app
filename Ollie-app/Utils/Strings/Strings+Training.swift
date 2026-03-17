@@ -338,40 +338,40 @@ extension Strings {
             // Operant Conditioning
             enum Operant {
                 static let title = String(localized: "Operant Conditioning", table: table)
-                static let subtitle = String(localized: "Learning through self-discovery", table: table)
-                static let explanation = String(localized: "In operant conditioning, you stay passive while your puppy self-discovers the desired behavior. When they do something right, you mark it with a click and reward. This creates deep, lasting learning because the puppy figured it out themselves.", table: table)
-                static let point1 = String(localized: "You stay quiet and still — no luring, no gestures", table: table)
-                static let point2 = String(localized: "Wait patiently for the behavior to happen naturally", table: table)
-                static let point3 = String(localized: "Click the exact moment you see the correct behavior", table: table)
-                static let point4 = String(localized: "Creates stronger, more reliable learning than luring", table: table)
+                static let subtitle = String(localized: "The dog figures it out themselves", table: table)
+                static let explanation = String(localized: "You do nothing except observe and click for desired behavior. Hands behind your back. No luring, no pushing, no verbal cues. You simply wait. The dog figures things out on its own, and you mark the moment it happens. This creates deep, lasting learning.", table: table)
+                static let point1 = String(localized: "Train in a low-stimulus environment — living room, no distractions", table: table)
+                static let point2 = String(localized: "You are passive. Wait patiently for the behavior to happen", table: table)
+                static let point3 = String(localized: "Click the exact moment you see correct behavior", table: table)
+                static let point4 = String(localized: "Add the verbal command LAST — only after reliable in multiple environments", table: table)
                 static let exampleTitle = String(localized: "Teaching \"Watch Me\"", table: table)
-                static let exampleText = String(localized: "Sit quietly with your hands behind your back. Don't call your puppy or make any sounds. Just wait. Eventually, they'll look at your face out of curiosity. The instant they make eye contact — click and treat! After several repetitions, they'll start offering eye contact more and more.", table: table)
+                static let exampleText = String(localized: "Sit on the floor at puppy's level. Hands behind your back. No sounds. Just wait. Eventually, they'll glance at your face. Click that instant and treat. Throw the treat behind them so they reset. Repeat. They'll start offering eye contact more and more.", table: table)
             }
 
             // Classical Conditioning
             enum Classical {
                 static let title = String(localized: "Classical Conditioning", table: table)
-                static let subtitle = String(localized: "Learning through guidance", table: table)
-                static let explanation = String(localized: "In classical conditioning, you actively guide your puppy into position using a food lure. This produces faster initial learning, making it great for physical positions like sit and down. The puppy follows the treat, and you reward when they reach the correct position.", table: table)
-                static let point1 = String(localized: "Hold a treat close to your puppy's nose", table: table)
-                static let point2 = String(localized: "Move the treat slowly to guide them into position", table: table)
+                static let subtitle = String(localized: "You guide with a food lure", table: table)
+                static let explanation = String(localized: "You actively guide the dog with a treat in your hand. The luring motion becomes the hand signal from the start. No verbal commands during training — work only with hand signals. Words come last, after the behavior is reliable.", table: table)
+                static let point1 = String(localized: "Hold a treat at your puppy's nose and guide them slowly", table: table)
+                static let point2 = String(localized: "The hand signal is introduced immediately — the lure IS the signal", table: table)
                 static let point3 = String(localized: "Click when they reach the desired position", table: table)
-                static let point4 = String(localized: "Gradually fade the lure into a hand signal", table: table)
+                static let point4 = String(localized: "No verbal commands. Hand signals can't be repeated 'louder'", table: table)
                 static let exampleTitle = String(localized: "Teaching \"Sit\"", table: table)
-                static let exampleText = String(localized: "Hold a treat at your puppy's nose level. Slowly move it toward their EARS (not over their head). Their nose follows up, and their bottom goes down naturally. Click the moment their bottom touches the floor, then give the treat.", table: table)
+                static let exampleText = String(localized: "Treat on nose. Move slowly toward the EARS (not over the head). Nose follows up, bottom goes down. Click the moment they sit. The final hand signal: hand rises beside your face — visible even in a winter coat.", table: table)
             }
 
             // Click Timing
             enum Timing {
                 static let title = String(localized: "Click Timing", table: table)
-                static let subtitle = String(localized: "The moment that matters most", table: table)
-                static let explanation = String(localized: "The click is a marker signal that tells your puppy exactly when they did something right. It bridges the gap between the behavior and the reward. Timing is everything — you must click at the precise moment the correct behavior happens, not a second before or after.", table: table)
+                static let subtitle = String(localized: "The click ends the exercise", table: table)
+                static let explanation = String(localized: "The click marks the exact moment of correct behavior. It signals 'well done, you can relax now.' Don't expect the dog to hold position after clicking. Every click MUST be followed by a treat — clicking without treating destroys the association.", table: table)
                 static let point1 = String(localized: "Click at the EXACT moment of correct behavior", table: table)
                 static let point2 = String(localized: "Always follow a click with a treat within 1-2 seconds", table: table)
-                static let point3 = String(localized: "Never click without treating — this breaks the association", table: table)
-                static let point4 = String(localized: "If you click by accident, still give a treat", table: table)
+                static let point3 = String(localized: "Never click without treating — this is a fundamental rule", table: table)
+                static let point4 = String(localized: "If you click by accident, still give a treat to maintain the association", table: table)
                 static let exampleTitle = String(localized: "Marking \"Sit\"", table: table)
-                static let exampleText = String(localized: "As your puppy's bottom touches the floor, you click THAT instant — not when they're halfway down, not when they've been sitting for a second. The click captures the exact moment. Then you have 1-2 seconds to deliver the treat. The click buys you that time.", table: table)
+                static let exampleText = String(localized: "As your puppy's bottom touches the floor, click THAT instant — not halfway down, not after they've been sitting. The click captures the moment. Then deliver the treat within 1-2 seconds. The click buys you that time.", table: table)
             }
         }
 
@@ -476,6 +476,75 @@ extension Strings {
             static let stepBackIfStrugglingDescription = String(localized: "If your dog struggles, go back to an easier step. Success builds confidence.", table: table)
         }
 
+        // MARK: - Practice Matrix
+        enum Matrix {
+            // Location tiers
+            static let inside = String(localized: "Inside", table: table)
+            static let outside = String(localized: "Outside", table: table)
+
+            // Cell states
+            static let locked = String(localized: "Locked", table: table)
+            static let notStarted = String(localized: "Not started", table: table)
+            static let inProgress = String(localized: "In progress", table: table)
+            static let mastered = String(localized: "Mastered", table: table)
+
+            // Progress
+            static func phasesProgress(mastered: Int, total: Int) -> String {
+                String(localized: "\(mastered) of \(total) phases mastered", table: table)
+            }
+            static let allPhasesMastered = String(localized: "All phases mastered!", table: table)
+            static let legend = String(localized: "Legend", table: table)
+
+            // Suggested next
+            static let suggestedNext = String(localized: "Suggested next", table: table)
+            static let tapToPractice = String(localized: "Tap to practice", table: table)
+
+            // Theory flow
+            static let alreadyKnowThis = String(localized: "I already know this", table: table)
+            static let startPracticing = String(localized: "Start Practicing", table: table)
+            static let rereadTheory = String(localized: "Re-read theory", table: table)
+            static func readingProgress(read: Int, total: Int) -> String {
+                String(localized: "\(read) of \(total) pages read", table: table)
+            }
+            static func phaseNumber(_ number: Int) -> String {
+                String(localized: "Phase \(number)", table: table)
+            }
+
+            // Practice cell sheet
+            static let practiceDetails = String(localized: "Practice Details", table: table)
+            static let quickReminder = String(localized: "Quick Reminder", table: table)
+            static let buildingOn = String(localized: "Building on", table: table)
+            static let iPracticedThis = String(localized: "I practiced this", table: table)
+            static let myDogHasMastered = String(localized: "My dog has mastered this", table: table)
+            static let stillMastered = String(localized: "Still mastered", table: table)
+            static let unmarkMastered = String(localized: "Unmark mastered", table: table)
+            static let practiceAnyway = String(localized: "Practice anyway", table: table)
+            static let cellLocked = String(localized: "This cell is locked", table: table)
+            static let cellLockedExplanation = String(localized: "Complete the previous step first, or tap 'Practice anyway' to override.", table: table)
+            static func lastPracticed(_ relativeTime: String) -> String {
+                String(localized: "Last practiced \(relativeTime)", table: table)
+            }
+
+            // Skill phases page (redesigned)
+            static let learnTheory = String(localized: "Learn the Theory", table: table)
+            static let theoryComplete = String(localized: "Complete", table: table)
+            static let theoryNotStarted = String(localized: "Not started yet", table: table)
+            static func masterPhaseFirst(_ phaseName: String) -> String {
+                String(localized: "Master \(phaseName) inside first", table: table)
+            }
+            static let yourProgress = String(localized: "Your Progress", table: table)
+            static let howToDoIt = String(localized: "How to do it", table: table)
+            static let neverPracticed = String(localized: "Never practiced", table: table)
+            static let logPractice = String(localized: "Log practice session", table: table)
+            static let markInProgress = String(localized: "Mark in progress", table: table)
+            static let markMastered = String(localized: "Mark as mastered", table: table)
+            static let masteredDescription = String(localized: "Your dog performs this reliably in this environment", table: table)
+            static let practiceAnywayDescription = String(localized: "Skip the recommended order", table: table)
+            static let lockedDescription = String(localized: "Complete the inside location first", table: table)
+            static let insideLocation = String(localized: "Inside (home, indoor spaces)", table: table)
+            static let outsideLocation = String(localized: "Outside (garden, street, park)", table: table)
+        }
+
         // MARK: - Progression
         enum Progression {
             static let nextUp = String(localized: "Next Up", table: table)
@@ -520,41 +589,51 @@ extension Strings {
             // Operant vs Classical
             static let methodsTitle = String(localized: "Training Methods", table: table)
             static let operantTitle = String(localized: "Operant (Passive)", table: table)
-            static let operantDescription = String(localized: "Trainer stays inactive while dog self-discovers the behavior. Creates deeper, longer-lasting learning. Used for: attention, wait, stay.", table: table)
+            static let operantDescription = String(localized: "You stay passive — hands behind your back, no luring, no pushing, no verbal cues. You simply wait and observe. The dog figures things out on their own, and you click for desired behavior. Creates deeper, lasting learning. Best for: attention, calm behaviors.", table: table)
             static let classicalTitle = String(localized: "Classical (Active)", table: table)
-            static let classicalDescription = String(localized: "Trainer guides the dog with a food lure. Produces faster initial learning. Used for: sit, down, come.", table: table)
+            static let classicalDescription = String(localized: "You actively guide the dog with a food lure in your hand. The luring motion becomes the hand signal. Can be used in stimulating environments. Produces faster initial learning. Best for: sit, down, follow exercises.", table: table)
 
             // Core Principles
             static let timingTitle = String(localized: "Timing", table: table)
-            static let timingDescription = String(localized: "The click marks the exact moment of correct behavior. Always reward within 1-2 seconds of clicking.", table: table)
+            static let timingDescription = String(localized: "The click marks the exact moment of correct behavior. Always reward within 1-2 seconds. If you click by accident, still give a treat — maintaining the association is paramount.", table: table)
 
             static let neverClickTitle = String(localized: "Never Click Without Reward", table: table)
-            static let neverClickDescription = String(localized: "Every click must be followed by a treat. Clicking without rewarding breaks the association and confuses your dog.", table: table)
+            static let neverClickDescription = String(localized: "Every single click MUST be followed by a treat. Clicking without treating destroys the association you've built. This is a fundamental rule.", table: table)
 
-            static let commandTimingTitle = String(localized: "Command Timing", table: table)
-            static let commandTimingDescription = String(localized: "Say the cue word AS the behavior is happening, not before. Your dog learns to associate the word with the action.", table: table)
+            static let commandTimingTitle = String(localized: "Why Hand Signals First", table: table)
+            static let commandTimingDescription = String(localized: "Work with hand signals, not words. Humans misuse words — we repeat, escalate, add pressure ('sit, sit, SIT!'). Hand signals can't be made 'louder' or more forceful. Add verbal cues only AFTER the behavior is reliable.", table: table)
 
             static let environmentTitle = String(localized: "Environment Progression", table: table)
-            static let environmentDescription = String(localized: "Start in low-distraction areas. Only increase difficulty after your dog succeeds consistently. If struggling, step back to an easier context.", table: table)
+            static let environmentDescription = String(localized: "1) Living room, 2) Kitchen, 3) Garden/doorstep, 4) Quiet street, 5) Park, 6) Beach/busy areas. Only move to a new environment when the previous one is solid. If struggling in a new place, go back to step 1.", table: table)
 
             static let sessionLengthTitle = String(localized: "Session Guidelines", table: table)
-            static let sessionLengthDescription = String(localized: "Do 2-3 short training sessions daily. Don't train continuously during walks. Reduce daily food ration by 1/3 when using treats heavily.", table: table)
+            static let sessionLengthDescription = String(localized: "2-3 short sessions daily (5 minutes each). Don't train during the whole walk — dedicate training to short focused sessions. Walks are for experiencing the world.", table: table)
 
-            static let stepBackTitle = String(localized: "Step Back When Needed", table: table)
-            static let stepBackDescription = String(localized: "If your dog fails more than twice in a row, make the exercise easier. Success builds confidence and keeps training fun.", table: table)
+            static let stepBackTitle = String(localized: "The Step-Back Principle", table: table)
+            static let stepBackDescription = String(localized: "Every exercise has a starting step and an end goal. If a behavior works perfectly at home but falls apart elsewhere — go back to step 1. A dog who has done 'down' perfectly for two years may refuse in snow because it feels strange. Never forget the first steps — they're your fallback.", table: table)
+
+            static let variableRewardTitle = String(localized: "Variable Reward", table: table)
+            static let variableRewardDescription = String(localized: "If a behavior is no longer rewarded, it disappears. If variably rewarded (sometimes yes, sometimes no), it persists forever — the 'slot machine effect' keeps dogs eager. Phase out constant rewards, but never stop rewarding entirely.", table: table)
+
+            static let releaseWordTitle = String(localized: "Release Word", table: table)
+            static let releaseWordDescription = String(localized: "Train a release word ('free') to signal 'you're off duty'. Toss treats in the grass and say 'free, free, free' as your dog sniffs. During free time, keep saying it so the dog links the behavior to the word.", table: table)
         }
 
         // MARK: - Equipment Guidance
         enum Equipment {
             static let sectionTitle = String(localized: "Equipment", table: table)
             static let leashTitle = String(localized: "Leash", table: table)
-            static let leashDescription = String(localized: "Use a standard 1.8-2m leash. Avoid retractable leashes - they teach pulling and can cause injuries.", table: table)
+            static let leashDescription = String(localized: "1.8–2 meters, fixed length. No retractable leashes — they teach pulling, can drop and scare your puppy, and offer zero control.", table: table)
             static let collarTitle = String(localized: "Collar", table: table)
-            static let collarDescription = String(localized: "A regular flat collar that fits snugly - two fingers should fit underneath. Remove for crate time.", table: table)
+            static let collarDescription = String(localized: "Regular flat collar. Two fingers should fit underneath. Always have a collar on even if using a harness — some exercises require the collar, and harnesses can twist.", table: table)
+            static let harnessTitle = String(localized: "Harness", table: table)
+            static let harnessDescription = String(localized: "Fine to use, but always have a regular collar on as well. Some exercises require collar control — harnesses can twist sideways and dogs can escape.", table: table)
             static let clickerTitle = String(localized: "Clicker", table: table)
-            static let clickerDescription = String(localized: "Muffle the sound initially by putting it in your pocket. Some puppies find the loud click startling at first.", table: table)
+            static let clickerDescription = String(localized: "Clicker in left hand, treats in right hand. Muffle it initially (under a cushion, in your pocket) — gradually expose your puppy to the full volume.", table: table)
             static let treatsTitle = String(localized: "Treats", table: table)
-            static let treatsDescription = String(localized: "Use small, soft, high-value treats. Training treats should be tiny - pea-sized or smaller.", table: table)
+            static let treatsDescription = String(localized: "Use your puppy's regular kibble for everyday training — not fancy treats. A different brand/flavor of kibble works for harder environments. Reserve special treats (chicken, cheese) ONLY for recall training.", table: table)
+            static let treatMotivationTitle = String(localized: "Food Motivation", table: table)
+            static let treatMotivationDescription = String(localized: "Feed from your fingers, not a bowl — your puppy earns food through training. If they won't work for kibble, they're too 'wealthy'. A motivated dog progresses fast.", table: table)
         }
 
         // MARK: - Training Guides
@@ -668,7 +747,7 @@ extension Strings {
         // MARK: - Crate Training
         enum CrateTraining {
             static let sectionTitle = String(localized: "Crate Training", table: table)
-            static let subtitle = String(localized: "A cozy den that helps with everything", table: table)
+            static let subtitle = String(localized: "A tool for rest and independence — not a punishment", table: table)
 
             // Stats
             static func crateNapPercentage(_ percent: Int) -> String {
@@ -680,17 +759,18 @@ extension Strings {
             static let benefitsTitle = String(localized: "Why it helps", table: table)
             static let benefitPotty = String(localized: "Puppies avoid soiling their sleeping area, making potty training faster", table: table)
             static let benefitSelfSoothe = String(localized: "They learn to settle and self-soothe instead of getting overtired and hyper", table: table)
-            static let benefitSeparation = String(localized: "Prevents separation anxiety by teaching them to be calm alone for short periods", table: table)
+            static let benefitSeparation = String(localized: "Teaches that being separate from you is normal and safe — preventing separation anxiety", table: table)
             static let benefitSafeSpace = String(localized: "Gives them a safe retreat when visitors come or when life gets overwhelming", table: table)
             static let benefitLongerNaps = String(localized: "Crate naps are usually longer and more restorative", table: table)
+            static let benefitIndependence = String(localized: "Dogs who follow you everywhere (room to room, up and down stairs) learn the opposite of independence. The crate prevents this.", table: table)
 
             // Tips
             static let tipsTitle = String(localized: "Getting started", table: table)
             static let tipCozy = String(localized: "Make it cozy with a blanket and safe chew toy", table: table)
             static let tipMeals = String(localized: "Feed meals in the crate so it becomes a positive place", table: table)
-            static let tipTired = String(localized: "Put them in when tired - after play or a walk works best", table: table)
+            static let tipTired = String(localized: "Put them in when tired — after play or a walk works best", table: table)
             static let tipStayClose = String(localized: "Stay nearby when they whimper. They're learning, not suffering", table: table)
-            static let tipNoCrying = String(localized: "Don't let them out while crying - wait for a quiet moment", table: table)
+            static let tipNoCrying = String(localized: "If your dog screams in the crate, that means you're using it too little, not that it doesn't work. Put them in more often — it gets calmer with use.", table: table)
             static let tipShortFirst = String(localized: "Start with short periods and gradually increase", table: table)
 
             // Encouragement
@@ -730,20 +810,20 @@ extension Strings {
         enum Skills {
             // MARK: - Clicker
             static let clickerName = String(localized: "Clicker", table: table)
-            static let clickerDescription = String(localized: "The clicker is a marker signal that tells your puppy exactly when they did something right. It bridges the gap between the behavior and the reward.", table: table)
-            static let clickerDoneWhen = String(localized: "Your puppy immediately looks at you or your hand when they hear the click, expecting a treat.", table: table)
-            static let clickerHowTo1 = String(localized: "Muffle the clicker initially (in your pocket or hand) - the sound can startle some puppies", table: table)
-            static let clickerHowTo2 = String(localized: "Click once, then give a treat within 1-2 seconds", table: table)
-            static let clickerHowTo3 = String(localized: "Repeat 10-15 times per session - your puppy should start anticipating treats", table: table)
-            static let clickerHowTo4 = String(localized: "Test: click when puppy looks away. If they turn to you expecting food, it's working", table: table)
-            static let clickerHowTo5 = String(localized: "The click must ALWAYS be followed by a treat - this is a fundamental rule", table: table)
-            static let clickerTip1 = String(localized: "Keep sessions short (2-3 minutes)", table: table)
-            static let clickerTip2 = String(localized: "Use high-value, pea-sized treats", table: table)
-            static let clickerTip3 = String(localized: "Never click to get attention - click only to mark correct behavior", table: table)
-            static let clickerTip4 = String(localized: "If you click by accident, still give a treat to maintain the association", table: table)
-            static let clickerMistake1 = String(localized: "Clicking without giving a treat afterwards", table: table)
-            static let clickerMistake2 = String(localized: "Using the clicker to get your dog's attention", table: table)
-            static let clickerMistake3 = String(localized: "Delaying the treat more than 2 seconds after clicking", table: table)
+            static let clickerDescription = String(localized: "The clicker is a marker signal that tells your puppy exactly when they did something right. It bridges the gap between the behavior and the reward. You can use a clicker OR a marker word like 'yes' — but pick one, not both.", table: table)
+            static let clickerDoneWhen = String(localized: "Test it: let your puppy wander to another room, then click. If they come running back expecting a treat, the clicker is properly conditioned.", table: table)
+            static let clickerHowTo1 = String(localized: "Muffle the clicker initially — put it under a cushion, wrap it in a scarf, or hold it in your pocket. The sound can overwhelm some puppies.", table: table)
+            static let clickerHowTo2 = String(localized: "Click once, then give a treat within 1-2 seconds. Click → treat, click → treat. Build the association.", table: table)
+            static let clickerHowTo3 = String(localized: "Repeat 10-15 times per session. Your puppy should start perking up and looking expectant when they hear the click.", table: table)
+            static let clickerHowTo4 = String(localized: "Gradually expose your puppy to the full volume of the clicker over several sessions as they become comfortable.", table: table)
+            static let clickerHowTo5 = String(localized: "Test: let your puppy wander away, then click. If they come running back expecting food, the clicker is conditioned. This is a one-time test — don't use the clicker as a recall tool.", table: table)
+            static let clickerTip1 = String(localized: "Every single click MUST be followed by a treat. Clicking without treating destroys the association you've built.", table: table)
+            static let clickerTip2 = String(localized: "Use your puppy's regular kibble for training — save special treats exclusively for recall training.", table: table)
+            static let clickerTip3 = String(localized: "The clicker is not permanent. Once a behavior is solid across many environments, you can phase it out. But variable reward continues for life.", table: table)
+            static let clickerTip4 = String(localized: "If you click by accident, still give a treat — maintaining the association is more important than perfect timing.", table: table)
+            static let clickerMistake1 = String(localized: "Clicking without giving a treat — this breaks the entire system", table: table)
+            static let clickerMistake2 = String(localized: "Using the clicker to get attention or call your dog — it's only for marking correct behavior", table: table)
+            static let clickerMistake3 = String(localized: "Mixing clicker and marker word — choose one method and stick with it", table: table)
 
             // MARK: - Name Recognition
             static let nameRecognitionName = String(localized: "Name Recognition", table: table)
@@ -805,19 +885,19 @@ extension Strings {
 
             // MARK: - Sit
             static let sitName = String(localized: "Sit", table: table)
-            static let sitDescription = String(localized: "The easiest and most useful command. A puppy who sits can't jump up at the same time - it replaces unwanted behavior naturally. You'll use this dozens of times every day.", table: table)
-            static let sitDoneWhen = String(localized: "Your puppy sits on verbal cue alone in various environments, and holds the sit until released.", table: table)
+            static let sitDescription = String(localized: "Trained with classical conditioning (luring). No verbal commands during training — work only with hand signals. The hand signal is introduced immediately, becoming the cue from the start.", table: table)
+            static let sitDoneWhen = String(localized: "Your puppy sits on hand signal (hand rises beside your face, palm forward) from any distance. The silhouette is visible even in a winter coat.", table: table)
             // Phase 1: Lure to Position
-            static let sitHowTo1 = String(localized: "Hold a treat between thumb and finger, right at your puppy's nose level. Let them sniff but not grab it.", table: table)
-            static let sitHowTo2 = String(localized: "Move your hand slowly up and slightly back, over their head toward their ears. Their nose follows up, bottom goes down naturally.", table: table)
-            static let sitHowTo3 = String(localized: "The moment their bottom touches the floor: mark ('yes!' or click) and give the treat. Repeat 5-8 times per session.", table: table)
-            // Phase 2: Capture & Strengthen
-            static let sitHowTo4 = String(localized: "Between sessions, watch for natural sits. When your puppy sits on their own, mark and reward immediately - this reinforces the behavior throughout the day.", table: table)
-            static let sitHowTo5 = String(localized: "Continue until your puppy sits reliably with the lure gesture (8 out of 10 times). This usually takes a few days of consistent practice.", table: table)
-            // Phase 3: Add Verbal Cue
-            static let sitHowTo6 = String(localized: "Say 'sit' clearly in a normal voice, then immediately make the lure gesture. Mark and reward when they sit.", table: table)
-            static let sitHowTo7 = String(localized: "After 10-20 repetitions, say 'sit' and wait 2 seconds before helping with the gesture. Give them a chance to respond to the word alone.", table: table)
-            static let sitHowTo8 = String(localized: "Gradually fade the lure gesture into a subtle hand signal. Final signal: hand rises beside your face - a clear silhouette visible from any distance.", table: table)
+            static let sitHowTo1 = String(localized: "Treat on nose. Move it slowly up and slightly back, toward the EARS (not toward the tail, or the dog walks backward). Click the moment they start shifting weight backward.", table: table)
+            static let sitHowTo2 = String(localized: "Hand slightly above the nose (~10-15 cm). No longer touching the nose. The dog follows the visual of the hand going up, sits. Click and treat.", table: table)
+            static let sitHowTo3 = String(localized: "Hand starts at your side, sweeps up to a 90° angle (elbow to armpit). This becomes the final hand signal. No longer going to the dog's nose — it simply rises beside your face.", table: table)
+            // Phase 2: Reinforce
+            static let sitHowTo4 = String(localized: "Between sessions, watch for natural sits. Mark and reward immediately. This reinforces the behavior throughout the day.", table: table)
+            static let sitHowTo5 = String(localized: "Continue until reliable with the hand signal (8 out of 10 times). Only move to the next step when effortless — no ambiguity, no hesitation.", table: table)
+            // Phase 3: Add Verbal Cue (only after hand signal is reliable)
+            static let sitHowTo6 = String(localized: "Add verbal cue LAST, only after the hand signal works in multiple environments. Say 'sit' as the dog is about to sit (during the action), not before.", table: table)
+            static let sitHowTo7 = String(localized: "Test: say 'sit' when the dog is distracted. If they sit → it's trained. If not → go back to hand signal practice.", table: table)
+            static let sitHowTo8 = String(localized: "Final hand signal: hand rises beside your face, palm forward. This is visible from any distance, even with a coat on. Children naturally throw hands up — dogs will sit for that gesture.", table: table)
             // Phase 4: Proof with 3 D's
             static let sitHowTo9 = String(localized: "Build Duration: Start with 1 second, then 2, then 5. Reward multiple times while they hold the sit - don't just reward when they get up.", table: table)
             static let sitHowTo10 = String(localized: "Add Distance: Take one step back while they sit. Return and reward. Gradually increase to several meters, always returning to reward.", table: table)
@@ -837,25 +917,25 @@ extension Strings {
 
             // MARK: - Watch Me
             static let watchMeName = String(localized: "Watch Me", table: table)
-            static let watchMeDescription = String(localized: "An operant (passive) skill where your puppy self-discovers that looking at you is rewarding. Creates deep, reliable attention.", table: table)
-            static let watchMeDoneWhen = String(localized: "Your puppy looks at you on command, even with distractions like your arms held out to the sides.", table: table)
-            static let watchMeHowTo1 = String(localized: "Sit at puppy's level with clicker and treats ready. Hands behind your back - no lure, no gestures, no sounds. Wait.", table: table)
-            static let watchMeHowTo2 = String(localized: "Click the instant your puppy looks at your face/eyes. Treat immediately.", table: table)
-            static let watchMeHowTo3 = String(localized: "To reset: toss a treat to the side or behind them. Wait for them to look back at you. Repeat 10-20 times.", table: table)
-            static let watchMeHowTo4 = String(localized: "Raise position: sit on a chair so puppy must look UP to make eye contact. Repeat the capture process.", table: table)
-            static let watchMeHowTo5 = String(localized: "Stand with arms held out to sides. Click ONLY when puppy looks at your face, not your hands.", table: table)
-            static let watchMeHowTo6 = String(localized: "Add cue: Say 'watch me' exactly AS the eye contact happens - the cue should precede the click by a fraction of a second.", table: table)
-            static let watchMeHowTo7 = String(localized: "Test: Say 'watch me' first, then wait. If puppy looks, it's working. If not, go back to step 6.", table: table)
-            static let watchMeHowTo8 = String(localized: "Build duration: Start at 1 second of eye contact before clicking. Gradually extend to 3-5 seconds.", table: table)
-            static let watchMeHowTo9 = String(localized: "Add distance: Give the cue while standing further away. Start in low-distraction areas.", table: table)
-            static let watchMeHowTo10 = String(localized: "Proof with distractions: Practice near other people, with treats visible, and eventually near other dogs (at distance first).", table: table)
-            static let watchMeTip1 = String(localized: "This is operant: let them discover it, don't guide them", table: table)
-            static let watchMeTip2 = String(localized: "If puppy stares constantly, toss the treat behind them to break eye contact", table: table)
-            static let watchMeTip3 = String(localized: "Practice in increasingly distracting environments", table: table)
-            static let watchMeTip4 = String(localized: "The 3 D's: Always reduce one D when increasing another (e.g., shorter duration when adding distance)", table: table)
-            static let watchMeMistake1 = String(localized: "Holding a treat near your face (this becomes a bribe, not learned behavior)", table: table)
-            static let watchMeMistake2 = String(localized: "Making noises or calling to get attention", table: table)
-            static let watchMeMistake3 = String(localized: "Adding the verbal cue too early before behavior is reliable", table: table)
+            static let watchMeDescription = String(localized: "Trained purely with operant conditioning (passive). You do nothing except observe and click for eye contact. Because your puppy figures it out themselves, this creates deep, lasting learning.", table: table)
+            static let watchMeDoneWhen = String(localized: "When your puppy is sniffing the ground and you say 'look', they immediately look up at your face. Test this — if they respond, it's trained.", table: table)
+            static let watchMeHowTo1 = String(localized: "Get on your puppy's level. Sit on the floor. For small dogs, put them on the couch while you sit on the floor so you're at eye level.", table: table)
+            static let watchMeHowTo2 = String(localized: "Treats in right hand, clicker in left. Both hands behind your back. Say nothing. Don't make sounds. Don't move your hands. Don't lure. Just wait.", table: table)
+            static let watchMeHowTo3 = String(localized: "The instant your puppy makes eye contact — click and treat. Even a split-second glance at your face counts.", table: table)
+            static let watchMeHowTo4 = String(localized: "Throw the treat away so your puppy has to move to get it, then naturally resets. This prevents learning attention only while sitting.", table: table)
+            static let watchMeHowTo5 = String(localized: "Repeat. They'll look at your hands, look around, sniff — and eventually glance at your face again. Click that moment.", table: table)
+            static let watchMeHowTo6 = String(localized: "Gradually increase duration. Once reliable, wait for 1 second of eye contact before clicking. Then 2. Then 3.", table: table)
+            static let watchMeHowTo7 = String(localized: "Change your position. Floor → chair → standing. At each stage, your puppy needs to find your face at a new height.", table: table)
+            static let watchMeHowTo8 = String(localized: "Arms out to the sides. Your puppy must choose: look at the hands (where treats come from) or look at your face. Reward only face contact.", table: table)
+            static let watchMeHowTo9 = String(localized: "Add the verbal cue only AFTER reliable eye contact in multiple environments. Say 'look' during the action toward your face, not while looking elsewhere.", table: table)
+            static let watchMeHowTo10 = String(localized: "Test: when your puppy is sniffing and not looking, say the cue. If they look up → trained. If not → back to the previous step.", table: table)
+            static let watchMeTip1 = String(localized: "You are passive. Hands behind your back. No luring, no pushing, no verbal cues. You simply wait and reward eye contact.", table: table)
+            static let watchMeTip2 = String(localized: "Train in a low-stimulus environment. Living room, no distractions. Your puppy needs to focus one-on-one.", table: table)
+            static let watchMeTip3 = String(localized: "If your puppy keeps going behind you, sit with your back against a wall or couch.", table: table)
+            static let watchMeTip4 = String(localized: "Don't worry about sit vs stand vs down — position doesn't matter, only the eye contact.", table: table)
+            static let watchMeMistake1 = String(localized: "Holding a treat near your face — this becomes a bribe, not genuine learned behavior", table: table)
+            static let watchMeMistake2 = String(localized: "Making sounds or calling to get attention — stay completely passive", table: table)
+            static let watchMeMistake3 = String(localized: "Adding the verbal cue before the behavior is reliable in multiple environments", table: table)
 
             // MARK: - Touch
             static let touchName = String(localized: "Touch", table: table)
@@ -873,42 +953,49 @@ extension Strings {
 
             // MARK: - Loose Leash Walking
             static let looseLeashName = String(localized: "Loose Leash Walking", table: table)
-            static let looseLeashDescription = String(localized: "Walk nicely on a loose leash without pulling. Makes walks enjoyable for both of you.", table: table)
-            static let looseLeashDoneWhen = String(localized: "Your puppy can walk 10 meters on a loose leash with moderate distractions.", table: table)
-            static let looseLeashHowTo1 = String(localized: "Step off with your left foot (this signals movement). Take only 1-2 steps initially.", table: table)
-            static let looseLeashHowTo2 = String(localized: "Click while moving forward as puppy follows beside you. Stop immediately and treat from your left hand at your side.", table: table)
-            static let looseLeashHowTo3 = String(localized: "As puppy eats the treat, step off again. Click for following, stop and treat. High frequency initially: every 1-2 steps.", table: table)
-            static let looseLeashHowTo4 = String(localized: "Build anticipation: puppy learns being at your left side predicts treats. Use visual markers (cones, sidewalk cracks) to remind yourself to click/treat.", table: table)
-            static let looseLeashHowTo5 = String(localized: "Gradually increase steps between clicks: 3 steps, then 5, then 7. Vary randomly - sometimes 1 step, sometimes 5.", table: table)
-            static let looseLeashHowTo6 = String(localized: "Always stop to treat - don't try to treat while walking. This teaches the stop-and-reward pattern clearly.", table: table)
-            static let looseLeashHowTo7 = String(localized: "When puppy reliably anticipates position, add verbal cue 'let's go' BEFORE stepping off.", table: table)
-            static let looseLeashHowTo8 = String(localized: "Say cue, then step off with left foot. Always cue before movement begins - this becomes your walking command.", table: table)
-            static let looseLeashHowTo9 = String(localized: "Practice in the least distracting environment first. Then progress: different rooms, hallways, quiet outdoor areas.", table: table)
-            static let looseLeashHowTo10 = String(localized: "If puppy pulls, stop immediately. Wait for loose leash, then cue and continue. Change direction frequently to keep attention on you.", table: table)
-            static let looseLeashTip1 = String(localized: "This takes weeks to master - be patient", table: table)
-            static let looseLeashTip2 = String(localized: "Tired puppies walk better - play or train first to take the edge off", table: table)
-            static let looseLeashTip3 = String(localized: "Use a front-clip harness if pulling is severe - it redirects forward motion", table: table)
-            static let looseLeashTip4 = String(localized: "The 3 D's: Duration, Distance, Distraction - only increase one at a time", table: table)
-            static let looseLeashMistake1 = String(localized: "Using a retractable leash (teaches pulling and is dangerous)", table: table)
-            static let looseLeashMistake2 = String(localized: "Pulling back on the leash when the dog pulls (creates opposition reflex)", table: table)
-            static let looseLeashMistake3 = String(localized: "Trying to treat while walking (confuses the stop-and-reward pattern)", table: table)
+            static let looseLeashDescription = String(localized: "The goal: your dog walks beside you, looking up at your face, on a loose leash. This is classical conditioning — you actively guide with food. The final test: 10 meters with eye contact and hand behind your back.", table: table)
+            static let looseLeashDoneWhen = String(localized: "Your puppy walks 10 straight meters beside you, looking at your face with the hand behind your back, before you need to reward.", table: table)
+            // Phase 1: Hand on nose, walking backward
+            static let looseLeashHowTo1 = String(localized: "Hold your hand low enough that your puppy doesn't need to jump — even very low for small/young dogs. Keep about 30 cm from your knee so they walk beside you with space, not against your leg.", table: table)
+            static let looseLeashHowTo2 = String(localized: "Start walking BACKWARD with the treat on their nose. Click → stop → give treat → wait until they finish eating → then walk again. Keep your hand loaded with treats.", table: table)
+            static let looseLeashHowTo3 = String(localized: "Short sessions: 5 minutes in the living room, then stop. Multiple short sessions throughout the day work better than one long one.", table: table)
+            // Phase 2: Hand up high
+            static let looseLeashHowTo4 = String(localized: "Pull your hand straight out to the side and UP — level with your face, not hip height. The dog must look up toward your face, not follow a low hand.", table: table)
+            static let looseLeashHowTo5 = String(localized: "After each click and treat, restart from step 1: walk 2-3 steps with hand low on nose, then bring it up high again. Sometimes reward at step 1, sometimes skip to the high position.", table: table)
+            // Phase 3: Rotation and removing the hand
+            static let looseLeashHowTo6 = String(localized: "The rotation: with arm stretched to the right, rotate your LEFT shoulder inward. Your hand stays in exactly the same place — the dog doesn't notice any change. Practice: put your hand against a wall (hand can't move), then rotate your body.", table: table)
+            static let looseLeashHowTo7 = String(localized: "Move your hand across your chest (right shoulder to left shoulder) then behind your back. This removes the hand from sight so your dog looks at your FACE instead.", table: table)
+            // Phase 4: Eye contact while walking
+            static let looseLeashHowTo8 = String(localized: "Once the hand is behind your back, click and reward for eye contact. You should be able to walk at least 10 straight meters with your dog looking at your face before moving to forward starts.", table: table)
+            // Phase 5: Forward start
+            static let looseLeashHowTo9 = String(localized: "Instead of starting by walking backward, step forward with your LEFT leg (closest to the dog). Sweep the treat hand toward their nose, bring it to your shoulder, then behind your back.", table: table)
+            static let looseLeashHowTo10 = String(localized: "Progression: master indoors first, then the doorstep, then quiet streets, then busier environments. Stop training indoors once it works there — the goal is outdoor obedience.", table: table)
+            static let looseLeashTip1 = String(localized: "Stand STILL when you reward. Click → stop → treat → wait → walk again. Don't keep reaching into your pocket between reps — keep your hand loaded.", table: table)
+            static let looseLeashTip2 = String(localized: "If your dog jumps, your hand is too high. If they lose interest, lower the hand and make it easier.", table: table)
+            static let looseLeashTip3 = String(localized: "Don't train during the whole walk. Dedicate training to short, focused sessions. Walks are for experiencing the world.", table: table)
+            static let looseLeashTip4 = String(localized: "Use a standard 1.8-2m leash. Never use retractable leashes — they teach pulling, can drop and scare your puppy, and offer zero control.", table: table)
+            static let looseLeashMistake1 = String(localized: "Using a retractable leash — teaches pulling and is dangerous", table: table)
+            static let looseLeashMistake2 = String(localized: "Hand too low (dog doesn't look up) or too high (dog jumps)", table: table)
+            static let looseLeashMistake3 = String(localized: "Trying to treat while walking — always stop to treat so the pattern is clear", table: table)
 
             // MARK: - Down
             static let downName = String(localized: "Down", table: table)
-            static let downDescription = String(localized: "A classical skill using a lure to guide your puppy into a lying position. Essential for settling and calm behavior.", table: table)
-            static let downDoneWhen = String(localized: "Your puppy lies down on a hand signal from standing position, with a clear sweep from your navel to the side.", table: table)
-            static let downHowTo1 = String(localized: "Lure from nose slowly down. Click at chest height, treat. Continue to ground, click when lying, treat", table: table)
-            static let downHowTo2 = String(localized: "Tether puppy (table leg). Lure diagonally down and away - puppy can't follow, must lie down. Wait patiently", table: table)
-            static let downHowTo3 = String(localized: "Extend distance: sweep hand from nose to ground, 0.5m away from puppy. Click when lying", table: table)
-            static let downHowTo4 = String(localized: "Raise signal height gradually: ankle → knee → hip → standing. At each level, wait for the down", table: table)
-            static let downHowTo5 = String(localized: "Final signal: from standing, sweep hand from navel to side - a clear silhouette visible from distance", table: table)
-            static let downTip1 = String(localized: "The tether prevents frustration from pushing forward", table: table)
-            static let downTip2 = String(localized: "Reward small progress - head lowering, one elbow down", table: table)
-            static let downTip3 = String(localized: "If puppy doesn't lie down, wait patiently - let them figure it out", table: table)
-            static let downTip4 = String(localized: "Create a clear silhouette so the signal is visible even with a winter jacket", table: table)
-            static let downMistake1 = String(localized: "Pulling the treat too far away (puppy stands up instead)", table: table)
-            static let downMistake2 = String(localized: "Waiting for perfect position instead of rewarding progress", table: table)
-            static let downMistake3 = String(localized: "Physically pushing the dog into position", table: table)
+            static let downDescription = String(localized: "More complex than sit. Trained with classical conditioning (luring), starting from a sit. Uses the tether technique to teach that lying down — not nose-pushing — earns the reward.", table: table)
+            static let downDoneWhen = String(localized: "Your puppy lies down on a hand signal (sweep from navel sideways) from a standing position. The signal is a clear silhouette visible even in a winter coat.", table: table)
+            static let downHowTo1 = String(localized: "Start from sit. Bring the treat to the nose, then slowly straight down toward the ground, ending between the front paws. Keep the line straight down — if your hand drifts forward, the dog stands up.", table: table)
+            static let downHowTo2 = String(localized: "Don't let your puppy push your hand away. Maintain gentle contact. They'll try to lick and dig at your fingers — hold steady. Click for any downward movement: nose dipping, an elbow bending, weight shifting.", table: table)
+            static let downHowTo3 = String(localized: "Tether technique: put your foot on the leash so your puppy can't reach your hand. Lure toward the ground but keep your hand just out of reach (~5 cm gap). They'll eventually slide into a down to get closer.", table: table)
+            static let downHowTo4 = String(localized: "This teaches that lying down earns the reward — not the nose-pushing and licking. Only progress when the tethered down is smooth.", table: table)
+            static let downHowTo5 = String(localized: "Build height gradually: ankle → knee → hip → waist. At each level, your puppy must think 'that gesture means go down.' Be patient at each transition.", table: table)
+            static let downHowTo6 = String(localized: "Final signal: from waist height, sweep your hand sideways (not pulled behind your body). This creates a clear silhouette visible from any distance.", table: table)
+            static let downHowTo7 = String(localized: "Build duration: after the down, move your hand down to ankle quickly, then back up. Your puppy thinks the hand is still near and stays put. Return route = same as exit route (sneak hand down behind legs).", table: table)
+            static let downTip1 = String(localized: "Dachshunds: their neck is longer than their legs — they can look at your hand at ground level while standing. Every increment is tiny. More patience needed.", table: table)
+            static let downTip2 = String(localized: "French Bulldogs: limited neck flexibility. They may stick their butt up as they dive their head down. More patience needed.", table: table)
+            static let downTip3 = String(localized: "If luring doesn't work, switch to operant/shaping: click for any movement toward the ground — nose dipping, one elbow bending, looking down. No pushing.", table: table)
+            static let downTip4 = String(localized: "To keep your dog in a down (e.g., at a restaurant): wrap the leash under your foot so they physically can't stand.", table: table)
+            static let downMistake1 = String(localized: "Moving your hand forward (away from the dog) instead of straight down — they'll stand up to follow", table: table)
+            static let downMistake2 = String(localized: "Not using the tether — the puppy learns that pushing/licking works instead of lying down", table: table)
+            static let downMistake3 = String(localized: "Physically pushing the dog into position — this creates resistance, not learning", table: table)
 
             // MARK: - Come (Magic Word Recall)
             static let comeName = String(localized: "Magic Recall", table: table)
@@ -927,8 +1014,8 @@ extension Strings {
             static let comeHowTo8 = String(localized: "When your dog runs to you, make it a HUGE celebration. Jackpot treats, praise, petting — the works. This should feel like winning the lottery to them.", table: table)
             static let comeHowTo9 = String(localized: "Gradually increase distance. When reliable, progress to standing (but still with open arms and excitement). Eventually, you can be more casual, but always reward generously.", table: table)
             // Phase 4: Proof and Progress
-            static let comeHowTo10 = String(localized: "Practice in new locations: backyard, front yard, quiet park. Always use a long line until 100% reliable. Vary the distance and your body position.", table: table)
-            static let comeHowTo11 = String(localized: "Add mild distractions gradually. Call when sniffing, exploring, or watching (but not chasing) other dogs. The magic word should cut through anything.", table: table)
+            static let comeHowTo10 = String(localized: "Once reliable, add a sit after they arrive. One treat for coming, one treat for sitting. This prevents the 'drive-by' where your dog runs past you.", table: table)
+            static let comeHowTo11 = String(localized: "Add distractions gradually. Put a snuffle mat on the ground, let your dog engage with it, then call the magic word. Click when they turn around → reward immediately. The magic word must cut through anything.", table: table)
             static let comeHowTo12 = String(localized: "Keep the magic word special: use it sparingly (a few times per week), always reward with high-value treats, and never use it for anything unpleasant. This word stays powerful for life.", table: table)
             // Tips by phase
             static let comeTip1 = String(localized: "The magic word works because it's never 'polluted' by everyday use. Your dog's name and 'come' have been said thousands of times with no reward — they've learned to tune them out", table: table)
@@ -945,17 +1032,19 @@ extension Strings {
 
             // MARK: - Wait
             static let waitName = String(localized: "Wait", table: table)
-            static let waitDescription = String(localized: "Short-term stay - puppy pauses briefly at doors, before meals, etc.", table: table)
-            static let waitDoneWhen = String(localized: "Your puppy waits for 10 seconds at doors and before meals.", table: table)
-            static let waitHowTo1 = String(localized: "Put puppy in sit", table: table)
-            static let waitHowTo2 = String(localized: "Show palm and say 'wait'", table: table)
-            static let waitHowTo3 = String(localized: "Take one small step back", table: table)
-            static let waitHowTo4 = String(localized: "Return and treat before they move", table: table)
-            static let waitHowTo5 = String(localized: "Gradually increase distance and duration", table: table)
-            static let waitTip1 = String(localized: "This is different from 'stay' - shorter and more casual", table: table)
-            static let waitTip2 = String(localized: "Great for safety at doors and curbs", table: table)
-            static let waitTip3 = String(localized: "Release with 'okay' or 'free'", table: table)
-            static let waitTip4 = String(localized: "Practice before putting food bowl down", table: table)
+            static let waitDescription = String(localized: "Short-term boundary training — puppy pauses at doors and before meals. The goal is that they wait naturally, not that they're commanded into position.", table: table)
+            static let waitDoneWhen = String(localized: "Your puppy waits at doors without trying to rush through, and waits calmly while you lower the food bowl.", table: table)
+            // Door manners
+            static let waitHowTo1 = String(localized: "Door training: open the door. If your puppy tries to rush through — close it immediately. No verbal cue needed yet.", table: table)
+            static let waitHowTo2 = String(localized: "Open again. Dog tries again → close. Repeat until your puppy hesitates and looks at you instead of bolting.", table: table)
+            static let waitHowTo3 = String(localized: "This is practical safety training — you don't want a dog bolting out the front door into traffic.", table: table)
+            // Food bowl manners
+            static let waitHowTo4 = String(localized: "Food bowl training: put a few kibbles in the bowl, lower it toward the ground. If puppy dives → pull the bowl up. Wait 20 seconds.", table: table)
+            static let waitHowTo5 = String(localized: "Lower again — they'll wait slightly longer this time. Repeat until they look at you instead of diving. Then give a release word ('free') and set the bowl down.", table: table)
+            static let waitTip1 = String(localized: "No verbal command needed for door/bowl training. The consequence (door closes, bowl rises) teaches the boundary.", table: table)
+            static let waitTip2 = String(localized: "For hyper dogs at mealtime: put them on leash. If they bark → time-out (20 seconds). Bring back, try again. Train during evening meals first.", table: table)
+            static let waitTip3 = String(localized: "Release with 'free' or 'okay' — this signals 'you can go now'.", table: table)
+            static let waitTip4 = String(localized: "Once the behavior is reliable, you can add the verbal cue 'wait' to formalize it.", table: table)
 
             // MARK: - Place
             static let placeName = String(localized: "Place", table: table)
@@ -973,17 +1062,18 @@ extension Strings {
 
             // MARK: - Stay
             static let stayName = String(localized: "Stay", table: table)
-            static let stayDescription = String(localized: "Long-duration stay - puppy remains in position until released.", table: table)
-            static let stayDoneWhen = String(localized: "Your puppy stays for 30 seconds while you walk 5 meters away.", table: table)
-            static let stayHowTo1 = String(localized: "Start from sit or down", table: table)
-            static let stayHowTo2 = String(localized: "Add duration first (stay close but longer)", table: table)
-            static let stayHowTo3 = String(localized: "Then add distance (stay far but shorter)", table: table)
-            static let stayHowTo4 = String(localized: "Return to puppy before releasing", table: table)
-            static let stayHowTo5 = String(localized: "Add distractions last", table: table)
-            static let stayTip1 = String(localized: "The three Ds: Duration, Distance, Distraction - increase one at a time", table: table)
-            static let stayTip2 = String(localized: "Always return to puppy - don't call them to break stay", table: table)
-            static let stayTip3 = String(localized: "If they break, simply reset without punishment", table: table)
-            static let stayTip4 = String(localized: "This takes months to master - be patient", table: table)
+            static let stayDescription = String(localized: "Long-duration stay that teaches independence. The 'Passive Stay' method: you give NO commands — the dog self-discovers that settling earns rewards.", table: table)
+            static let stayDoneWhen = String(localized: "Your puppy stays calmly for several minutes while you walk away, and understands that you always come back.", table: table)
+            // Passive Stay method
+            static let stayHowTo1 = String(localized: "Tie your dog to something sturdy (table leg, radiator) with a SHORT leash — just enough to stand, sit, and lie down. No commands.", table: table)
+            static let stayHowTo2 = String(localized: "Walk 3-5 meters away, with your BACK to the dog. Watch via a mirror or phone camera.", table: table)
+            static let stayHowTo3 = String(localized: "The moment they sit or lie down → click → turn around → walk back → reward. Toss a treat behind them so they can sniff briefly.", table: table)
+            static let stayHowTo4 = String(localized: "Repeat 3 times per session, same location. Do 3-4 sessions per day with breaks. No words during the exercise.", table: table)
+            static let stayHowTo5 = String(localized: "Short leash = less room to sniff = runs out of things to do faster = settles sooner. Don't pace back and forth (creates nervousness) — just stand still.", table: table)
+            static let stayTip1 = String(localized: "Only AFTER the dog reliably understands the pattern do you add a 'stay' cue. First master it at one location, then introduce a second.", table: table)
+            static let stayTip2 = String(localized: "Real-world use: tie dog to a tree at a friend's house, to a post outside a shop. They learn you always come back — reducing separation anxiety.", table: table)
+            static let stayTip3 = String(localized: "If they break, simply reset without punishment. The consequence is: you don't come back and reward yet.", table: table)
+            static let stayTip4 = String(localized: "This teaches general independence — being separate from you is normal and safe.", table: table)
         }
     }
 }
