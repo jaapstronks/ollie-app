@@ -14,7 +14,9 @@ struct TrainingView: View {
 
     @State private var trainingStore = TrainingPlanStore()
     @State private var progressStore = TrainingProgressStore()
+    @State private var foundationsStore = FoundationsProgressStore()
     @Environment(SkillProgressStore.self) var skillProgressStore
+    @Environment(TrainingTheoryStore.self) var trainingTheoryStore
     @Environment(SubscriptionManager.self) var subscriptionManager
 
     @State private var selectedSkill: Skill?
@@ -29,6 +31,7 @@ struct TrainingView: View {
     @State private var showOtisPlusSheet = false
     @State private var skillForRefresher: Skill?
     @State private var skillWithPrerequisiteWarning: SkillProgressInfo?
+    @State private var activeFoundationsModule: FoundationsModule?
 
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -36,6 +39,34 @@ struct TrainingView: View {
     // First-visit tip tracking
     @AppStorage("hasSeenTrainingSkillsTip") private var hasSeenTrainingSkillsTip = false
 
+    /// Check if foundations module 1 is complete (gates skills training)
+    private var isFoundationsComplete: Bool {
+        foundationsStore.isGettingStartedComplete
+    }
+
+    /// Count of mastered skills for suggesting module 2
+    private var masteredSkillCount: Int {
+        enhancedSkillsWithStatus.filter { $0.status == .mastered }.count
+    }
+
+    /// Check if any skill has reached proofing phase (for suggesting module 3)
+    private var hasReachedProofingPhase: Bool {
+        // Check if any skill has phase 3+ mastered inside
+        skillProgressStore.allProgress.contains { progress in
+            let matrix = progress.phaseLocationMatrix
+            // If any phase index >= 2 (0-indexed, so phase 3+) has inside mastered
+            return matrix.contains { cell in
+                if case .mastered = cell.state {
+                    // Check if this is phase 3 or later
+                    let phaseIndex = matrix.firstIndex { $0.id == cell.id }.map { $0 / 2 } ?? 0
+                    return phaseIndex >= 2 && cell.location == .inside
+                }
+                return false
+            }
+        }
+    }
+
+    // Legacy: Keep for backwards compatibility during migration
     private var isPreparationComplete: Bool {
         guard let plan = trainingStore.trainingPlan else { return false }
         return progressStore.isPreparationComplete(requiredItems: plan.preparationItems)
@@ -91,19 +122,22 @@ struct TrainingView: View {
                     )
                 }
 
-                // 1. Preparation Section (gated)
-                if !isPreparationComplete {
-                    if let plan = trainingStore.trainingPlan {
-                        PreparationSection(
-                            progressStore: progressStore,
-                            preparationItems: plan.preparationItems
-                        )
+                // 1. Foundations Section (always visible, module 1 gates skills)
+                FoundationsSection(
+                    foundationsStore: foundationsStore,
+                    masteredSkillCount: masteredSkillCount,
+                    hasReachedProofingPhase: hasReachedProofingPhase,
+                    onModuleTap: { module in
+                        activeFoundationsModule = module
                     }
+                )
 
+                // 2. Skills content (gated by foundations module 1)
+                if !isFoundationsComplete {
                     // Show locked message for training content
-                    preparationLockedMessage
+                    foundationsLockedMessage
                 } else {
-                    // 2. Training content (only if preparation complete)
+                    // Training content (only if foundations complete)
                     trainingContent
                 }
             }
@@ -117,6 +151,9 @@ struct TrainingView: View {
         }
         .task {
             await trainingStore.initialSync()
+
+            // Migrate from old preparation checklist if needed
+            foundationsStore.migrateFromPreparation(progressStore: progressStore)
         }
         // Full-screen training session (clicker or simple based on skill type)
         .fullScreenCover(item: $activeTrainingSkill) { skill in
@@ -183,7 +220,8 @@ struct TrainingView: View {
                     skillForDetailSheet = nil
                 },
                 progressStore: progressStore,
-                skillProgressStore: skillProgressStore
+                skillProgressStore: skillProgressStore,
+                theoryStore: trainingTheoryStore
             )
             .presentationDetents([.large])
         }
@@ -287,6 +325,24 @@ struct TrainingView: View {
             )
             .presentationDetents([.medium, .large])
         }
+        // Foundations module sheet
+        .sheet(item: $activeFoundationsModule) { module in
+            FoundationsFlowSheet(
+                module: module,
+                foundationsStore: foundationsStore,
+                onComplete: {
+                    foundationsStore.markComplete(moduleId: module.id)
+                    activeFoundationsModule = nil
+                },
+                onSkip: {
+                    foundationsStore.markSkipped(moduleId: module.id)
+                    activeFoundationsModule = nil
+                },
+                onDismiss: {
+                    activeFoundationsModule = nil
+                }
+            )
+        }
         // Prerequisite warning alert (soft-lock instead of hard-lock)
         .alert(
             Strings.Training.Progression.skipPrerequisitesTitle,
@@ -310,19 +366,28 @@ struct TrainingView: View {
         }
     }
 
-    // MARK: - Preparation Locked Message
+    // MARK: - Foundations Locked Message
 
-    private var preparationLockedMessage: some View {
-        HStack(spacing: 12) {
-            Image(systemName: "lock.fill")
-                .font(.title3)
-                .foregroundStyle(.tertiary)
+    private var foundationsLockedMessage: some View {
+        VStack(spacing: 12) {
+            HStack(spacing: 12) {
+                Image(systemName: "lock.fill")
+                    .font(.title3)
+                    .foregroundStyle(.tertiary)
 
-            Text(Strings.Training.Progression.preparationRequired)
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(Strings.Training.Foundations.skillsLocked)
+                        .font(.subheadline)
+                        .fontWeight(.medium)
+                        .foregroundStyle(.primary)
 
-            Spacer()
+                    Text(Strings.Training.Foundations.completeGettingStarted)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+
+                Spacer()
+            }
         }
         .padding()
         .background(
@@ -583,5 +648,7 @@ struct TrainingView: View {
     NavigationStack {
         TrainingView(eventStore: EventStore())
             .environment(SubscriptionManager.shared)
+            .environment(SkillProgressStore())
+            .environment(TrainingTheoryStore())
     }
 }

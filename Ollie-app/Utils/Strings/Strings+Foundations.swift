@@ -74,10 +74,10 @@ extension Strings.Training {
             static let quizIntro = String(localized: "Before we begin, let's find out what you already know.", table: foundationsTable)
 
             static let quiz1Question = String(localized: "To teach your dog to look at you, say \"look at me\" repeatedly until they glance at your face, then give a treat.", table: foundationsTable)
-            static let quiz1Explanation = String(localized: "Your dog doesn't understand English. When you say \"look at me\" while they're sniffing the floor, they associate those words with... sniffing the floor. The command becomes meaningless noise.\n\nThe right way? Wait silently until they happen to look at you. Mark it (\"Yes!\" or click) and treat. Only after they reliably offer eye contact do you add the words — saying \"look\" as they're looking.", table: foundationsTable)
+            static let quiz1Explanation = String(localized: "Your dog doesn't understand English. When you say \"look at me\" while they're sniffing the floor, they associate those words with... sniffing the floor. The command becomes meaningless noise.\n\nIt works the other way around: first you teach them to offer the behavior, then you add the verbal cue. You'll learn exactly how soon enough!", table: foundationsTable)
 
             static let quiz2Question = String(localized: "Your dog is chewing your slipper. You say \"let go! let go!\" until they drop it, then praise them. This teaches them \"let go.\"", table: foundationsTable)
-            static let quiz2Explanation = String(localized: "Even worse — you've accidentally taught them that \"let go\" means biting! They heard those words while biting, so now \"let go\" is associated with the action of biting down.\n\nThe right way? Get them to release (with a trade, or by waiting), then say \"let go\" as they're releasing. Reward. Repeat. The word gets attached to the action of releasing.", table: foundationsTable)
+            static let quiz2Explanation = String(localized: "Even worse — you've accidentally taught them that \"let go\" means biting! They heard those words while biting, so now \"let go\" is associated with the action of biting down.\n\nIt works the other way around: first you teach them to release, then you add the verbal cue. You'll learn exactly how soon enough!", table: foundationsTable)
 
             // Page 3: The Big Secret
             static let secretTitle = String(localized: "The Big Secret", table: foundationsTable)
@@ -94,11 +94,11 @@ extension Strings.Training {
 
             static let secretClosing = String(localized: "That's it. The rest is practice.", table: foundationsTable)
 
-            // Page 4: It's Harder for You
-            static let harderTitle = String(localized: "It's Harder for You", table: foundationsTable)
-            static let harderHeading = String(localized: "Let's be honest:", table: foundationsTable)
-            static let harderPara1 = String(localized: "The tricky part isn't your dog. It's you.", table: foundationsTable)
-            static let harderPara2 = String(localized: "Your dog will pick this up faster than you expect. They're wired for it. But you'll fumble. You'll click at the wrong moment. You'll say the cue too early. You'll forget the treats.", table: foundationsTable)
+            // Page 4: Expect to Fumble
+            static let harderTitle = String(localized: "Expect to Fumble", table: foundationsTable)
+            static let harderHeading = String(localized: "Here's what to expect:", table: foundationsTable)
+            static let harderPara1 = String(localized: "You'll click at the wrong moment. You'll say the cue too early. You'll forget the treats. You'll get the timing wrong.", table: foundationsTable)
+            static let harderPara2 = String(localized: "Meanwhile, your dog will pick this up faster than you expect. They're wired for it.", table: foundationsTable)
             static let harderHighlight = String(localized: "That's completely fine.", table: foundationsTable)
             static let harderPara3 = String(localized: "Dogs are forgiving. They don't need perfection — they need consistency. If you're roughly right, roughly often, they'll figure out the pattern.", table: foundationsTable)
 
@@ -114,11 +114,11 @@ extension Strings.Training {
             static let toolkitTitle = String(localized: "What You'll Need", table: foundationsTable)
             static let toolkitIntro = String(localized: "Your training toolkit:", table: foundationsTable)
 
-            static let toolMarkerTitle = String(localized: "A marker", table: foundationsTable)
-            static let toolMarkerDesc = String(localized: "Clicker or the word \"yes!\" — pick one, stick with it", table: foundationsTable)
+            static let toolMarkerTitle = String(localized: "A clicker", table: foundationsTable)
+            static let toolMarkerDesc = String(localized: "A consistent sound that marks the exact moment of success. You can use a word instead, but avoid \"yes!\" — you say it often in daily life, which dilutes its meaning. A clicker is clear and unmistakable.", table: foundationsTable)
 
             static let toolKibbleTitle = String(localized: "Kibble", table: foundationsTable)
-            static let toolKibbleDesc = String(localized: "Your dog's regular food, not fancy treats. Why? Motivation. Save special treats for one thing only: emergency recall.", table: foundationsTable)
+            static let toolKibbleDesc = String(localized: "Your dog's regular food, not fancy treats. Dogs naturally want to work for their food — and if you rely on special treats, you'll be feeding them candy all day. Save high-value treats for one thing only: emergency recall.", table: foundationsTable)
 
             static let toolLeashTitle = String(localized: "Collar & leash", table: foundationsTable)
             static let toolLeashDesc = String(localized: "A simple flat collar and a 2m fixed-length leash. No retractables.", table: foundationsTable)
@@ -126,7 +126,7 @@ extension Strings.Training {
             static let toolSpaceTitle = String(localized: "A quiet space", table: foundationsTable)
             static let toolSpaceDesc = String(localized: "Start where there are no distractions. Your living room is perfect.", table: foundationsTable)
 
-            static let toolkitClosing = String(localized: "Each skill will walk you through the specifics. For now, just have these ready.", table: foundationsTable)
+            static let toolkitClosing = String(localized: "We'll cover how to use each tool when you start your first skill. Just have these ready.", table: foundationsTable)
 
             // Page 6: Let's Begin
             static let beginTitle = String(localized: "Let's begin", table: foundationsTable)
@@ -164,7 +164,7 @@ extension Strings.Training {
             static let wordTrapOptionA = String(localized: "That they should sit faster", table: foundationsTable)
             static let wordTrapOptionB = String(localized: "That the command is \"sit-sit-SIT-with-anger\"", table: foundationsTable)
             static let wordTrapOptionC = String(localized: "That you're frustrated (but nothing about sitting)", table: foundationsTable)
-            static let wordTrapExplanation = String(localized: "Your dog doesn't understand that you're repeating yourself. They think \"sit-sit-SIT\" is one long command. And they're learning that the cue involves you sounding increasingly upset.\n\nThis is why we use hand signals first. Hand signals can't be \"shouted.\" You can't make them louder or angrier. They stay consistent.\n\nAdd words only after the hand signal is rock solid. One word. Once. Then wait.", table: foundationsTable)
+            static let wordTrapExplanation = String(localized: "Your dog doesn't understand that you're repeating yourself. They think \"sit-sit-SIT\" is one long command. And they're learning that the cue involves you sounding increasingly upset.\n\nThere's a better way — one that doesn't involve words at all (at first). You'll discover the secret soon!", table: foundationsTable)
 
             // Page 3: Step-Back Rule
             static let stepBackTitle = String(localized: "The Step-Back Rule", table: foundationsTable)
@@ -220,7 +220,7 @@ extension Strings.Training {
             static let threeDsOptionA = String(localized: "Keep them the same", table: foundationsTable)
             static let threeDsOptionB = String(localized: "Increase them too — challenge the dog", table: foundationsTable)
             static let threeDsOptionC = String(localized: "Make them easier", table: foundationsTable)
-            static let threeDsExplanation = String(localized: "When one variable gets harder, the others get easier. Training at the park for the first time? Keep duration short, stay close, and expect less. You're not testing them — you're teaching them that this skill works here too.", table: foundationsTable)
+            static let threeDsExplanation = String(localized: "When one variable gets harder, the others should get easier. You're not testing your dog — you're setting them up for success. We'll show you exactly how this works when you start practicing!", table: foundationsTable)
 
             // Page 2: Why Dogs Forget
             static let forgetTitle = String(localized: "Why Dogs \"Forget\"", table: foundationsTable)
